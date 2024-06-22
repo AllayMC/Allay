@@ -11,16 +11,15 @@ public interface EnchantmentType {
 
     Identifier getIdentifier();
 
-    short getId();
+    int getId();
 
-    short getMaxLevel();
+    int getMaxLevel();
 
     Rarity getRarity();
 
-    EnchantmentInstance createInstance(short level);
+    EnchantmentInstance createInstance(int level);
 
-    default boolean checkCompatibility(EnchantmentType other) {
-        // TODO
-        return true;
+    default boolean checkIncompatible(EnchantmentType other) {
+        return false;
     }
 }

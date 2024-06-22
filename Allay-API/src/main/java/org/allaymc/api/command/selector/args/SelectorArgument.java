@@ -15,24 +15,24 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * 此接口描述了一个选择器参数<p/>
+ * This interface describes a selector argument.
  */
-
-
 public interface SelectorArgument extends Comparable<SelectorArgument> {
     /**
-     * 根据给定的参数表返回特定的{@code List<Predicate<Entity>>}
+     * Returns a specific {@code List<Predicate<Entity>>} based on the given arguments table.
      *
-     * @param arguments    参数列表
-     * @param selectorType 选择器类型
-     * @param sender       命令发送者
-     * @param basePos      若此参数解析需要用到相对坐标，则应该以此坐标为依据<p/>
-     *                     若此参数需要修改参照坐标(例如x,y,z参数)，则应当在这个参数上修改<p/>
-     *                     在一条解析链上的参数只会使用一个Location对象
+     * @param arguments    the arguments list
+     * @param selectorType the selector type
+     * @param sender       the command sender
+     * @param basePos      if this argument parsing requires relative coordinates, it should be based on this coordinate.
+     *                     <p>
+     *                     If this parameter needs to modify the reference coordinates (such as x, y, z parameters), it should be modified on this parameter.
+     *                     <p>
+     *                     Only one Location object will be used on a parsing chain.
      *
      * @return {@code Predicate<Entity>}
      *
-     * @throws SelectorSyntaxException 当解析出错
+     * @throws SelectorSyntaxException when parsing error occurs
      */
     @Nullable
     default Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3f basePos, String... arguments) throws SelectorSyntaxException {
@@ -40,59 +40,66 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
     }
 
     /**
-     * 仅当方法isFilter()返回true时调用此方法<p/>
-     * 方法返回的实体集合将传递到下一个参数
+     * This method is called only when {@code isFilter()} method returns true.
+     * <p>
+     * The entity collection returned by this method will be passed to the next parameter.
      *
-     * @param arguments    参数列表
-     * @param selectorType 选择器类型
-     * @param sender       命令发送者
-     * @param basePos      若此参数解析需要用到相对坐标，则应该以此坐标为依据<p/>
-     *                     若此参数需要修改参照坐标(例如x,y,z参数)，则应当在这个参数上修改<p/>
-     *                     在一条解析链上的参数只会使用一个Location对象
+     * @param arguments    the arguments list
+     * @param selectorType the selector type
+     * @param sender       the command sender
+     * @param basePos      if this argument parsing requires relative coordinates, it should be based on this coordinate.
+     *                     <p>
+     *                     If this parameter needs to modify the reference coordinates (such as x, y, z parameters), it should be modified on this parameter.
+     *                     <p>
+     *                     Only one Location object will be used on a parsing chain.
      *
-     * @return 实体过滤器
+     * @return entity filter
      *
-     * @throws SelectorSyntaxException 当解析出错
+     * @throws SelectorSyntaxException when parsing error occurs
      */
     default Function<List<Entity>, List<Entity>> getFilter(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
         return null;
     }
 
     /**
-     * 获取此参数的名称
+     * Gets the name of this argument.
      *
-     * @return 参数名称
+     * @return argument name
      */
     String getKeyName();
 
     /**
-     * 解析优先级定义了各个参数的解析顺序<p/>
-     * 优先级越高(数字越小)的参数，其越先被解析，且其解析结果将会影响下个参数的解析
+     * Parsing priority defines the parsing order of each parameter.
+     * <p>
+     * The higher the priority (the smaller the number), the earlier the parameter is parsed, and its parsing result will affect the parsing of the next parameter.
      *
-     * @return 此参数的解析优先级
+     * @return the parsing priority of this argument
      */
     int getPriority();
 
     /**
-     * 是否启用过滤器模式<p/>
-     * 若一个参数为过滤器模式，解析器将不会调用getPredicate()方法而是调用filter()方法<p/>
-     * 这意味着参数将对到达此参数节点的所有实体进行检测，而不是相对于单个实体进行检测<p/>
-     * 对于部分参数（例如"c"），需要启用此功能
+     * Whether filter mode is enabled.
+     * <p>
+     * If a parameter is in filter mode, the parser will not call {@code getPredicate()} method but {@code filter()} method instead.
+     * <p>
+     * This means the parameter will check all entities reaching this parameter node instead of relative to a single entity.
+     * <p>
+     * For some parameters (e.g., "c"), this feature needs to be enabled.
      *
-     * @return 是否启用过滤器模式
+     * @return whether filter mode is enabled
      */
     default boolean isFilter() {
         return false;
     }
 
     /**
-     * 若一个参数有默认值（即此方法返回非null值），则在解析时若给定参数表中没有此参数，会以此默认值参与解析
+     * If a parameter has a default value (i.e., this method returns a non-null value), it will participate in parsing if this parameter is not present in the given argument table.
      *
-     * @param values       参数列表
-     * @param selectorType 选择器类型
-     * @param sender       命令执行者
+     * @param values       the argument map
+     * @param selectorType the selector type
+     * @param sender       the command executor
      *
-     * @return 此参数的默认值
+     * @return the default value of this argument
      */
     @Nullable
     default String getDefaultValue(Map<String, List<String>> values, SelectorType selectorType, CommandSender sender) {

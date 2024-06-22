@@ -10,8 +10,8 @@ import org.allaymc.api.item.tag.ItemTag;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class ItemTagDescriptor implements ItemDescriptor {
     protected ItemTag itemTag;
 

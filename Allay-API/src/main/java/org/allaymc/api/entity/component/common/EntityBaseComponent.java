@@ -47,6 +47,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     float STOP_MOVEMENT_FACTOR = 0f;
     float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
 
+    private static boolean isWaterType(BlockType<?> blockType) {
+        return blockType == BlockTypes.FLOWING_WATER_TYPE || blockType == BlockTypes.WATER_TYPE;
+    }
+
     EntityType<? extends Entity> getEntityType();
 
     String getDisplayName();
@@ -68,11 +72,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     Location3fc getLocation();
 
     /**
-     * Set the location before the entity is spawned <br>
-     * This method is usually used when you want to spawn the entity at a specific location <br>
-     * Then you need to set the entity's location before spawn the entity <br>
-     * @throws IllegalStateException if the entity is already spawned
+     * Set the location before the entity is spawned.
+     * <p>
+     * This method is usually used when you want to spawn the entity at a specific location.
+     * <p>
+     * Then you need to set the entity's location before spawn the entity.
+     *
      * @param location The location you want to set
+     *
+     * @throws IllegalStateException if the entity is already spawned
      */
     void setLocationBeforeSpawn(Location3fc location);
 
@@ -263,7 +271,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     /**
      * Given yaw, if the movement multiplier is not 0, the entity will move towards the direction specified by yaw. <p>
-     * See: <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
+     *
+     * @see <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
      */
     default float getMovementFactor() {
         return STOP_MOVEMENT_FACTOR;
@@ -297,10 +306,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     }
 
     default BlockFace getHorizontalFace() {
-        double rotation = getLocation().yaw() % 360;
-        if (rotation < 0) {
-            rotation += 360.0;
-        }
+        var rotation = getLocation().yaw() % 360;
+        if (rotation < 0) rotation += 360.0;
 
         if (45 <= rotation && rotation < 135) {
             return BlockFace.WEST;
@@ -356,26 +363,19 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
         int fy = (int) loc.y();
         int fz = (int) loc.z();
         var blockType = getDimension().getBlockState(fx, fy, fz).getBlockType();
-        if (isWaterType(blockType)) {
-            return true;
-        }
+        if (isWaterType(blockType)) return true;
+
         blockType = getDimension().getBlockState(fx, fy, fz, 1).getBlockType();
-        if (isWaterType(blockType)) {
-            return true;
-        }
-        return false;
+        return isWaterType(blockType);
     }
 
     /**
-     * @param player The player who interacted with the entity, can be null
+     * @param player    The player who interacted with the entity, can be null
      * @param itemStack The item used to interact with the entity
-     * @return true if the interaction is successful
+     *
+     * @return {@code true} if the interaction is successful
      */
     default boolean onInteract(EntityPlayer player, ItemStack itemStack) {
         return false;
-    }
-
-    private static boolean isWaterType(BlockType<?> blockType) {
-        return blockType == BlockTypes.FLOWING_WATER_TYPE || blockType == BlockTypes.WATER_TYPE;
     }
 }

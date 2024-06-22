@@ -34,9 +34,7 @@ import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 import org.joml.primitives.AABBfc;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
@@ -87,13 +85,11 @@ public interface Dimension {
     }
 
     default Entity getEntityByRuntimeId(long runtimeId) {
-        for (var chunk : getChunkService().getLoadedChunks()) {
-            var entity = chunk.getEntities().get(runtimeId);
-            if (entity != null) {
-                return entity;
-            }
-        }
-        return null;
+        return getChunkService().getLoadedChunks().stream()
+                .map(chunk -> chunk.getEntities().get(runtimeId))
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
     default void addPlayer(EntityPlayer player) {
@@ -149,24 +145,19 @@ public interface Dimension {
 
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, PlayerInteractInfo placementInfo) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null) {
-            chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
-        }
-        int xIndex = x & 15;
-        int zIndex = z & 15;
-        BlockState oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
+        if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
 
-        Position3i blockPos = new Position3i(x, y, z, this);
+        var xIndex = x & 15;
+        var zIndex = z & 15;
+        var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
+
+        var blockPos = new Position3i(x, y, z, this);
         blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
         oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
 
-        if (update) {
-            updateAround(x, y, z);
-        }
-        if (send) {
-            chunk.sendChunkPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
-        }
+        if (update) updateAround(x, y, z);
+        if (send) chunk.sendChunkPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
     }
 
     default void sendBlockUpdateTo(BlockState blockState, Vector3ic pos, int layer, EntityPlayer player) {
@@ -192,29 +183,29 @@ public interface Dimension {
     default BlockState getBlockState(int x, int y, int z, int layer) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
             return AIR_TYPE.getDefaultState();
+
         var chunk = getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null) {
-            chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
-        }
+        if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
     default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
         if (sizeX < 1 || sizeY < 1 || sizeZ < 1) return Utils.EMPTY_BLOCK_STATE_ARRAY_3D;
-        BlockState[][][] blockStates = new BlockState[sizeX][sizeY][sizeZ];
-        int startX = x >> 4;
-        int endX = (x + sizeX - 1) >> 4;
-        int startZ = z >> 4;
-        int endZ = (z + sizeZ - 1) >> 4;
 
+        var blockStates = new BlockState[sizeX][sizeY][sizeZ];
+
+        var startX = x >> 4;
+        var endX = (x + sizeX - 1) >> 4;
+        var startZ = z >> 4;
+        var endZ = (z + sizeZ - 1) >> 4;
         for (int chunkX = startX; chunkX <= endX; chunkX++) {
             for (int chunkZ = startZ; chunkZ <= endZ; chunkZ++) {
-                final int cX = chunkX << 4;
-                final int cZ = chunkZ << 4;
-                int localStartX = Math.max(x - cX, 0);
-                int localStartZ = Math.max(z - cZ, 0);
-                int localEndX = Math.min(x + sizeX - cX, 16);
-                int localEndZ = Math.min(z + sizeZ - cZ, 16);
+                var cX = chunkX << 4;
+                var cZ = chunkZ << 4;
+                var localStartX = Math.max(x - cX, 0);
+                var localStartZ = Math.max(z - cZ, 0);
+                var localEndX = Math.min(x + sizeX - cX, 16);
+                var localEndZ = Math.min(z + sizeZ - cZ, 16);
 
                 var chunk = getChunkService().getChunk(chunkX, chunkZ);
                 if (chunk != null) {
@@ -222,8 +213,8 @@ public interface Dimension {
                         for (int localX = localStartX; localX < localEndX; localX++) {
                             for (int globalY = y; globalY < y + sizeY; globalY++) {
                                 for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
-                                    int globalX = cX + localX;
-                                    int globalZ = cZ + localZ;
+                                    var globalX = cX + localX;
+                                    var globalZ = cZ + localZ;
                                     blockStates[globalX - x][globalY - y][globalZ - z] = c.getBlockState(localX, globalY, localZ, layer);
                                 }
                             }
@@ -234,8 +225,8 @@ public interface Dimension {
                     for (int localX = localStartX; localX < localEndX; localX++) {
                         for (int globalY = y; globalY < y + sizeY; globalY++) {
                             for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
-                                int globalX = cX + localX;
-                                int globalZ = cZ + localZ;
+                                var globalX = cX + localX;
+                                var globalZ = cZ + localZ;
                                 blockStates[globalX - x][globalY - y][globalZ - z] = air;
                             }
                         }
@@ -256,16 +247,16 @@ public interface Dimension {
     }
 
     default BlockState[][][] getCollidingBlocks(AABBfc aabb, int layer, boolean ignoreCollision) {
-        int maxX = (int) Math.ceil(aabb.maxX());
-        int maxY = (int) Math.ceil(aabb.maxY());
-        int maxZ = (int) Math.ceil(aabb.maxZ());
-        int minX = (int) Math.floor(aabb.minX());
-        int minY = (int) Math.floor(aabb.minY());
-        int minZ = (int) Math.floor(aabb.minZ());
+        var maxX = (int) Math.ceil(aabb.maxX());
+        var maxY = (int) Math.ceil(aabb.maxY());
+        var maxZ = (int) Math.ceil(aabb.maxZ());
+        var minX = (int) Math.floor(aabb.minX());
+        var minY = (int) Math.floor(aabb.minY());
+        var minZ = (int) Math.floor(aabb.minZ());
         var blockStates = getBlockStates(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ, layer);
         boolean notEmpty = false;
         if (!ignoreCollision) {
-            //过滤掉没有碰撞的方块
+            // Filter out blocks without collision
             for (int x = 0; x < blockStates.length; x++) {
                 for (int y = 0; y < blockStates[x].length; y++) {
                     for (int z = 0; z < blockStates[x][y].length; z++) {
@@ -286,6 +277,7 @@ public interface Dimension {
     default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType, int data) {
         var chunk = getChunkService().getChunk((int) x >> 4, (int) z >> 4);
         if (chunk == null) return;
+
         var levelEventPacket = new LevelEventPacket();
         levelEventPacket.setPosition(Vector3f.from(x, y, z));
         levelEventPacket.setType(levelEventType);
@@ -300,31 +292,20 @@ public interface Dimension {
     default void updateAroundIgnoreFace(Vector3ic pos, BlockFace... ignoreFaces) {
         for (var face : BlockFace.values()) {
             if (ignoreFaces != null && ignoreFaces.length > 0) {
-                var ignore = false;
-                for (var ignoreFace : ignoreFaces) {
-                    if (ignoreFace == face) {
-                        ignore = true;
-                        break;
-                    }
-                }
-                if (ignore) {
-                    continue;
-                }
+                var ignore = Arrays.stream(ignoreFaces).anyMatch(ignoreFace -> ignoreFace == face);
+                if (ignore) continue;
             }
+
             updateAtFace(pos, face);
         }
     }
 
     default void updateAround(int x, int y, int z) {
-        for (var face : BlockFace.values()) {
-            updateAtFace(x, y, z, face);
-        }
+        for (var face : BlockFace.values()) updateAtFace(x, y, z, face);
     }
 
     default void updateAround(Vector3ic pos) {
-        for (var face : BlockFace.values()) {
-            updateAtFace(pos, face);
-        }
+        for (var face : BlockFace.values()) updateAtFace(pos, face);
     }
 
     default void updateAtFace(int x, int y, int z, BlockFace face) {
@@ -351,7 +332,7 @@ public interface Dimension {
      * @see #getNeighboursBlockState(org.joml.Vector3ic)
      */
     default BlockStateWithPos[] getNeighboursBlockState(int x, int y, int z) {
-        BlockStateWithPos[] result = new BlockStateWithPos[6];
+        var result = new BlockStateWithPos[6];
         for (int i = 0; i < BlockFace.values().length; i++) {
             var offsetPos = BlockFace.values()[i].offsetPos(x, y, z);
             var neighborBlockState = getBlockState(offsetPos.x(), offsetPos.y(), offsetPos.z(), 0);
@@ -374,9 +355,7 @@ public interface Dimension {
 
     default BlockEntity getBlockEntity(int x, int y, int z) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null) {
-            chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
-        }
+        if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
         return chunk.getBlockEntity(x & 15, y, z & 15);
     }
 
@@ -401,9 +380,7 @@ public interface Dimension {
     }
 
     default void broadcastPacket(BedrockPacket packet) {
-        for (var player : getPlayers()) {
-            player.sendPacket(packet);
-        }
+        getPlayers().forEach(player -> player.sendPacket(packet));
     }
 
     default void addSound(float x, float y, float z, String sound) {
@@ -414,7 +391,7 @@ public interface Dimension {
         Preconditions.checkArgument(volume >= 0 && volume <= 1, "Sound volume must be between 0 and 1");
         Preconditions.checkArgument(pitch >= 0, "Sound pitch must be higher than 0");
 
-        PlaySoundPacket packet = new PlaySoundPacket();
+        var packet = new PlaySoundPacket();
         packet.setSound(sound);
         packet.setVolume(volume);
         packet.setPitch(pitch);

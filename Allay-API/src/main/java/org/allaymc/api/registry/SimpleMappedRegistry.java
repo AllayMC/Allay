@@ -91,7 +91,7 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
 
     @Override
     public MAPPING getContent() {
-        return mappings;
+        return this.mappings;
     }
 
     @Override

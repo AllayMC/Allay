@@ -16,24 +16,25 @@ public record Pow2BitArray(BitArrayVersion version, int size, int[] words) imple
         this.size = size;
         this.version = version;
         this.words = words;
-        int expectedWordsLength = GenericMath.ceil((float) size / version.entriesPerWord);
+
+        var expectedWordsLength = GenericMath.ceil((float) size / version.entriesPerWord);
         if (words.length != expectedWordsLength) {
             throw new IllegalArgumentException("Invalid length given for storage, got: " + words.length +
-                    " but expected: " + expectedWordsLength);
+                                               " but expected: " + expectedWordsLength);
         }
     }
 
     public void set(int index, int value) {
-        final int bitIndex = index * this.version.bits;
-        final int arrayIndex = bitIndex >> 5;
-        final int offset = bitIndex & 31;
+        var bitIndex = index * this.version.bits;
+        var arrayIndex = bitIndex >> 5;
+        var offset = bitIndex & 31;
         this.words[arrayIndex] = this.words[arrayIndex] & ~(this.version.maxEntryValue << offset) | (value & this.version.maxEntryValue) << offset;
     }
 
     public int get(int index) {
-        final int bitIndex = index * this.version.bits;
-        final int arrayIndex = bitIndex >> 5;
-        final int wordOffset = bitIndex & 31;
+        var bitIndex = index * this.version.bits;
+        var arrayIndex = bitIndex >> 5;
+        var wordOffset = bitIndex & 31;
         return this.words[arrayIndex] >>> wordOffset & this.version.maxEntryValue;
     }
 

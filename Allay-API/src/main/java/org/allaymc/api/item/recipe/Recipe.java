@@ -12,14 +12,14 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeDa
  */
 public interface Recipe {
     /**
-     * @param input 输入
+     * @param input Input
      *
-     * @return 输入是否匹配配方
+     * @return Whether the input matches the recipe
      */
     boolean match(Input input);
 
     /**
-     * @return 此配方的输出
+     * @return The outputs of this recipe
      */
     ItemStack[] getOutputs();
 

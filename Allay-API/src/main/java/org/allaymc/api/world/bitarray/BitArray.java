@@ -30,5 +30,4 @@ public interface BitArray {
     BitArrayVersion version();
 
     BitArray copy();
-
 }

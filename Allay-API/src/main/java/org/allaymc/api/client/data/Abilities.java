@@ -23,6 +23,7 @@ import static org.allaymc.api.perm.tree.PermTree.PermChangeType.ADD;
  *
  * @author daoge_cmd
  */
+@Getter
 public final class Abilities {
 
     public static final float DEFAULT_WALK_SPEED = 0.1f;
@@ -32,12 +33,9 @@ public final class Abilities {
 
     private final EntityPlayer player;
 
-    @Getter
     private float walkSpeed = DEFAULT_WALK_SPEED;
-    @Getter
     private float flySpeed = DEFAULT_FLY_SPEED;
 
-    @Getter
     private boolean dirty = false;
 
     public Abilities(EntityPlayer player) {
@@ -56,7 +54,7 @@ public final class Abilities {
 
     public void applyGameType(GameType gameType) {
         var tree = player.getPermTree();
-        // 只设置必须设置的权限
+        // Set only necessary permissions
         tree.setPerm(PermKeys.BUILD, gameType != GameType.SPECTATOR);
         tree.setPerm(PermKeys.MINE, gameType != GameType.SPECTATOR);
         tree.setPerm(PermKeys.DOORS_AND_SWITCHES, gameType != GameType.SPECTATOR);
@@ -64,12 +62,13 @@ public final class Abilities {
         tree.setPerm(PermKeys.ATTACK_PLAYERS, gameType != GameType.SPECTATOR);
         tree.setPerm(PermKeys.ATTACK_MOBS, gameType != GameType.SPECTATOR);
         tree.setPerm(PermKeys.MAY_FLY, gameType != GameType.SURVIVAL && gameType != GameType.ADVENTURE);
-        // 不需要管SUMMON_LIGHTNING和CHAT，让插件可以控制而不会在切换模式后重置
-        // 以下的几个能力不需要集成到权限树里面
+        // Do not need to manage SUMMON_LIGHTNING and CHAT;
+        // allow plugins to control without resetting after mode switch
+        // The following abilities do not need to be integrated into the permission tree
         set(Ability.NO_CLIP, gameType == GameType.SPECTATOR);
         set(Ability.FLYING, gameType == GameType.SPECTATOR);
         set(Ability.INSTABUILD, gameType == GameType.CREATIVE);
-        // 这边设置这个OPERATOR_COMMANDS的目的仅仅是让OP客户端能显示快捷指令
+        // The purpose of setting OPERATOR_COMMANDS here is solely to allow OP clients to display quick commands
         set(Ability.OPERATOR_COMMANDS, player.isOp());
         set(Ability.TELEPORT, true);
         dirty = true;
@@ -136,10 +135,11 @@ public final class Abilities {
     private UpdateAbilitiesPacket createUpdateAbilitiesPacket() {
         UpdateAbilitiesPacket updateAbilitiesPacket = new UpdateAbilitiesPacket();
         updateAbilitiesPacket.setUniqueEntityId(player.getRuntimeId());
-        // 这边设置的命令权限其实没啥用，主要作用是让op能拥有快捷指令选项
-        // 若此玩家没有指定命令的权限，命令描述压根就不会发到客户端
+        // The command permissions set here are actually not very useful;
+        // their main function is to allow OPs to have quick command options
+        // If this player does not have specific command permissions, the command description won't even be sent to the client
         updateAbilitiesPacket.setCommandPermission(player.isOp() ? CommandPermission.GAME_DIRECTORS : CommandPermission.ANY);
-        // TODO: 检查旧的写法原因
+        // TODO: Check reasons for the old writing style
         updateAbilitiesPacket.setPlayerPermission(player.isOp() /*&& player.getGameType() != GameType.SPECTATOR*/ ? PlayerPermission.OPERATOR : PlayerPermission.MEMBER);
         return updateAbilitiesPacket;
     }

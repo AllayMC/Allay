@@ -36,8 +36,8 @@ public interface Permissible {
         return this;
     }
 
-    default Permissible setPerm(String perm, boolean value) {
-        if (value) addPerm(perm);
+    default Permissible setPerm(String perm, boolean add) {
+        if (add) addPerm(perm);
         else removePerm(perm);
         return this;
     }

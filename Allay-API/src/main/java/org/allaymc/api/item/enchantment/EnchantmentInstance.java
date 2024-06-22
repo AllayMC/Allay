@@ -11,16 +11,16 @@ public interface EnchantmentInstance {
 
     EnchantmentType getType();
 
-    short getLevel();
+    int getLevel();
 
-    default EnchantmentInstance setLevel(short level) {
+    default EnchantmentInstance setLevel(int level) {
         return getType().createInstance(level);
     }
 
     default NbtMap saveNBT() {
         return NbtMap.builder()
-                .putShort("id", getType().getId())
-                .putShort("lvl", getLevel())
+                .putShort("id", (short) getType().getId())
+                .putShort("lvl", (short) getLevel())
                 .build();
     }
 }

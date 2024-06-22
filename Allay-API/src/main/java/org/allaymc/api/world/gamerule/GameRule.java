@@ -1,5 +1,6 @@
 package org.allaymc.api.world.gamerule;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 
@@ -11,8 +12,8 @@ import java.util.Arrays;
  * @author Jukebox | Cool_Loong
  */
 @Getter
+@AllArgsConstructor
 public enum GameRule {
-
     COMMAND_BLOCKS_ENABLED("commandBlocksEnabled", true, Type.BOOLEAN),
     COMMAND_BLOCK_OUTPUT("commandBlockOutput", true, Type.BOOLEAN),
     DO_DAYLIGHT_CYCLE("doDaylightCycle", true, Type.BOOLEAN),
@@ -51,15 +52,11 @@ public enum GameRule {
     private final Object defaultValue;
     private final Type type;
 
-    GameRule(String name, Object defaultValue, Type type) {
-        this.name = name;
-        this.defaultValue = defaultValue;
-        this.type = type;
-    }
-
-
     public static GameRule fromName(String name) {
-        return Arrays.stream(values()).filter(gameRule -> gameRule.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return Arrays.stream(values())
+                .filter(gameRule -> gameRule.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public static boolean parseByteToBoolean(byte value) {

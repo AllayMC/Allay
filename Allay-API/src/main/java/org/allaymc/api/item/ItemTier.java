@@ -1,5 +1,6 @@
 package org.allaymc.api.item;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.item.tag.ItemTag;
 
@@ -10,6 +11,8 @@ import static org.allaymc.api.data.VanillaItemTags.*;
  *
  * @author daoge_cmd
  */
+@Getter
+@AllArgsConstructor
 public enum ItemTier {
     WOODEN(WOODEN_TIER),
     STONE(STONE_TIER),
@@ -18,15 +21,9 @@ public enum ItemTier {
     NETHERITE(NETHERITE_TIER),
     GOLD(GOLDEN_TIER);
 
-    public static final ItemTier[] ORDER_OF_QUALITY =
-            {GOLD, NETHERITE, DIAMOND, IRON, STONE, WOODEN};
+    public static final ItemTier[] ORDER_OF_QUALITY = {GOLD, NETHERITE, DIAMOND, IRON, STONE, WOODEN};
 
-    @Getter
     private final ItemTag itemTag;
-
-    ItemTier(ItemTag itemTag) {
-        this.itemTag = itemTag;
-    }
 
     public boolean isBetterThan(ItemTier tier) {
         return this.ordinal() > tier.ordinal();

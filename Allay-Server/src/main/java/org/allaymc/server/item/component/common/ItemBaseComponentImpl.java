@@ -352,7 +352,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public short getEnchantmentLevel(EnchantmentType enchantmentType) {
+    public int getEnchantmentLevel(EnchantmentType enchantmentType) {
         var instance =  enchantments.get(enchantmentType);
         return instance == null ? 0 : instance.getLevel();
     }

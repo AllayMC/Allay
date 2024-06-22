@@ -72,7 +72,7 @@ public interface I18n {
         if (VANILLA_LANG_NAMESPACE.equals(namespace)) {
             String left;
             if (keyInfo.hasStarter) {
-                // 保留 '%'
+                // Preserve '%'
                 left = tr.substring(0, keyInfo.startIndex + 1);
             } else {
                 left = "";

@@ -32,9 +32,11 @@ public interface ComponentInjector<T> {
     ComponentInjector<T> interfaceClass(Class<T> interfaceClass);
 
     /**
-     * Bind a set of implementations for the injector <br>
-     * When the dynamic class is instantiated, the component instance will be obtained from the Provider <br>
-     * If there are multiple implementation methods for a method to be injected, they will be executed in the order in the component list <p>
+     * Bind a set of implementations for the injector.
+     * <p>
+     * When the dynamic class is instantiated, the component instance will be obtained from the Provider.
+     * <p>
+     * If there are multiple implementation methods for a method to be injected, they will be executed in the order in the component list
      * and the return value is the return value of the last executed method
      *
      * @param providers component providers
@@ -46,7 +48,8 @@ public interface ComponentInjector<T> {
     ComponentInjector<T> useCachedClass(Class<T> cachedClass);
 
     /**
-     * Build the class<br/>
+     * Build the class.
+     * <p>
      * Note that we guarantee that the returned class implements the {@link ComponentedObject} interface
      *
      * @return the class

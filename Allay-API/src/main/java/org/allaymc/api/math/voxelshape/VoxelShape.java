@@ -1,5 +1,7 @@
 package org.allaymc.api.math.voxelshape;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
 import org.joml.Vector3fc;
@@ -8,6 +10,7 @@ import org.joml.primitives.AABBfc;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 2023/8/26
@@ -15,22 +18,24 @@ import java.util.Set;
  * @author daoge_cmd
  */
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VoxelShape {
-    private final Set<AABBfc> vacancies;
     private final Set<AABBfc> solids;
-
-    private VoxelShape(Set<AABBfc> solids, Set<AABBfc> vacancies) {
-        this.solids = solids;
-        this.vacancies = vacancies;
-    }
+    private final Set<AABBfc> vacancies;
 
     public static VoxelShapeBuilder builder() {
         return new VoxelShapeBuilder();
     }
 
     public AABBf unionAABB() {
-        float minX = Float.MAX_VALUE, minY = Float.MAX_VALUE, minZ = Float.MAX_VALUE;
-        float maxX = -Float.MAX_VALUE, maxY = -Float.MAX_VALUE, maxZ = -Float.MAX_VALUE;
+        float
+                minX = Float.MAX_VALUE,
+                minY = Float.MAX_VALUE,
+                minZ = Float.MAX_VALUE;
+        float
+                maxX = -Float.MAX_VALUE,
+                maxY = -Float.MAX_VALUE,
+                maxZ = -Float.MAX_VALUE;
         for (var solid : solids) {
             if (solid.minX() < minX) minX = solid.minX();
             if (solid.minY() < minY) minY = solid.minY();
@@ -46,51 +51,51 @@ public final class VoxelShape {
     }
 
     public VoxelShape rotate(BlockFace face) {
-        var newVacancies = new HashSet<AABBfc>();
-        var newSolids = new HashSet<AABBfc>();
-        vacancies.forEach(vacancy -> newVacancies.add(face.rotateAABB(vacancy)));
-        solids.forEach(solid -> newSolids.add(face.rotateAABB(solid)));
+        Set<AABBfc> newSolids = solids.stream()
+                .map(face::rotateAABB)
+                .collect(Collectors.toSet());
+        Set<AABBfc> newVacancies = vacancies.stream()
+                .map(face::rotateAABB)
+                .collect(Collectors.toSet());
         return new VoxelShape(newSolids, newVacancies);
     }
 
     public VoxelShape translate(float x, float y, float z) {
-        var newVacancies = new HashSet<AABBfc>();
-        var newSolids = new HashSet<AABBfc>();
-        vacancies.forEach(vacancy -> newVacancies.add(vacancy.translate(x, y, z, new AABBf())));
-        solids.forEach(solid -> newSolids.add(solid.translate(x, y, z, new AABBf())));
+        Set<AABBfc> newSolids = solids.stream()
+                .map(solid -> solid.translate(x, y, z, new AABBf()))
+                .collect(Collectors.toSet());
+        Set<AABBfc> newVacancies = vacancies.stream()
+                .map(vacancy -> vacancy.translate(x, y, z, new AABBf()))
+                .collect(Collectors.toSet());
         return new VoxelShape(newSolids, newVacancies);
     }
 
     public VoxelShape translate(Vector3fc vec) {
-        var newVacancies = new HashSet<AABBfc>();
-        var newSolids = new HashSet<AABBfc>();
-        vacancies.forEach(vacancy -> newVacancies.add(vacancy.translate(vec, new AABBf())));
-        solids.forEach(solid -> newSolids.add(solid.translate(vec, new AABBf())));
+        Set<AABBfc> newSolids = solids.stream()
+                .map(solid -> solid.translate(vec, new AABBf()))
+                .collect(Collectors.toSet());
+        Set<AABBfc> newVacancies = vacancies.stream()
+                .map(vacancy -> vacancy.translate(vec, new AABBf()))
+                .collect(Collectors.toSet());
         return new VoxelShape(newSolids, newVacancies);
     }
 
     public boolean intersectsAABB(AABBfc other) {
-        AABBf aabb = unionAABB();
-        if (!aabb.intersectsAABB(other))
-            return false;
+        var aabb = unionAABB();
+        if (!aabb.intersectsAABB(other)) return false;
+
         other.intersection(aabb, aabb);
-        if (vacancies.stream().anyMatch(vacancy -> vacancy.containsAABB(aabb))) {
-            return false;
-        }
+        if (vacancies.stream().anyMatch(vacancy -> vacancy.containsAABB(aabb))) return false;
         return solids.stream().anyMatch(solid -> solid.intersectsAABB(aabb));
     }
 
     public boolean intersectsPoint(Vector3fc vec) {
-        if (vacancies.stream().anyMatch(vacancy -> vacancy.containsPoint(vec))) {
-            return false;
-        }
+        if (vacancies.stream().anyMatch(vacancy -> vacancy.containsPoint(vec))) return false;
         return solids.stream().anyMatch(solid -> solid.containsPoint(vec));
     }
 
     public boolean intersectsPoint(float x, float y, float z) {
-        if (vacancies.stream().anyMatch(vacancy -> vacancy.containsPoint(x, y, z))) {
-            return false;
-        }
+        if (vacancies.stream().anyMatch(vacancy -> vacancy.containsPoint(x, y, z))) return false;
         return solids.stream().anyMatch(solid -> solid.containsPoint(x, y, z));
     }
 

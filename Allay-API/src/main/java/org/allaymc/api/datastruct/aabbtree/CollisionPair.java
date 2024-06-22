@@ -19,7 +19,7 @@ public record CollisionPair<T extends HasAABB & HasLongId>(T objectA, T objectB)
         }
         CollisionPair<?> that = (CollisionPair<?>) o;
         return (Objects.equals(objectA.getLongId(), that.objectA.getLongId()) || Objects.equals(objectA.getLongId(), that.objectB.getLongId())) &&
-                (Objects.equals(objectB.getLongId(), that.objectB.getLongId()) || Objects.equals(objectB.getLongId(), that.objectA.getLongId()));
+               (Objects.equals(objectB.getLongId(), that.objectB.getLongId()) || Objects.equals(objectB.getLongId(), that.objectA.getLongId()));
     }
 
     @Override

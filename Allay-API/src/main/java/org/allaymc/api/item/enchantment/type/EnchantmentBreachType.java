@@ -1,6 +1,7 @@
 package org.allaymc.api.item.enchantment.type;
 
 import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
+import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
 
@@ -11,8 +12,15 @@ import org.allaymc.api.utils.Identifier;
  */
 public class EnchantmentBreachType extends AbstractEnchantmentType {
     public static final EnchantmentBreachType BREACH_TYPE = new EnchantmentBreachType();
+
     private EnchantmentBreachType() {
-        // TODO: Check rarity
-        super(new Identifier("minecraft:breach"), 40, 4, Rarity.VERY_RARE);
+        super(new Identifier("minecraft:breach"), 40, 4, Rarity.RARE);
+    }
+
+    @Override
+    public boolean checkIncompatible(EnchantmentType other) {
+        return other instanceof EnchantmentDensityType ||
+               other instanceof EnchantmentBaneOfArthropodsType ||
+               other instanceof EnchantmentSmiteType;
     }
 }

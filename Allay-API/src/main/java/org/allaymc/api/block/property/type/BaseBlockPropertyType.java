@@ -1,5 +1,7 @@
 package org.allaymc.api.block.property.type;
 
+import lombok.Getter;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -8,6 +10,7 @@ import java.util.Objects;
  *
  * @author daoge_cmd
  */
+@Getter
 public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPropertyType<DATATYPE> permits BooleanPropertyType, EnumPropertyType, IntPropertyType {
 
     protected final String name;
@@ -16,30 +19,9 @@ public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPro
     protected final byte bitSize;
 
     protected BaseBlockPropertyType(String name, List<DATATYPE> validValues, DATATYPE defaultValue, byte bitSize) {
-        Objects.requireNonNull(defaultValue);
         this.name = name;
         this.validValues = validValues;
-        this.defaultValue = defaultValue;
+        this.defaultValue = Objects.requireNonNull(defaultValue);
         this.bitSize = bitSize;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public DATATYPE getDefaultValue() {
-        return defaultValue;
-    }
-
-    @Override
-    public List<DATATYPE> getValidValues() {
-        return validValues;
-    }
-
-    @Override
-    public byte getBitSize() {
-        return bitSize;
     }
 }

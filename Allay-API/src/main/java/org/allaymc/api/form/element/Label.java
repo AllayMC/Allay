@@ -11,6 +11,7 @@ public final class Label extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "label";
+
     @Getter
     private final String text;
 

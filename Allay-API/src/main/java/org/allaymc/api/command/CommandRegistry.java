@@ -25,10 +25,10 @@ public interface CommandRegistry extends MappedRegistry<String, Command, Map<Str
     Command unregister(String name);
 
     /**
-     * @param sender 命令发送者
-     * @param cmd    命令，不包含斜杠
+     * @param sender The command sender
+     * @param cmd    The command, without the slash (/)
      *
-     * @return 命令执行结果
+     * @return The command execution result
      */
     CommandResult execute(CommandSender sender, String cmd);
 }

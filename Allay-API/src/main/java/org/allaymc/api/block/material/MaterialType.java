@@ -6,5 +6,4 @@ package org.allaymc.api.block.material;
  * @author daoge_cmd
  */
 public record MaterialType(String name) {
-
 }

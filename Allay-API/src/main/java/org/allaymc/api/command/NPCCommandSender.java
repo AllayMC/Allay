@@ -22,6 +22,7 @@ import java.util.UUID;
 public class NPCCommandSender implements CommandSender {
 
     private static final CommandOriginData NPC_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
+
     protected EntityNpc npc;
     protected EntityPlayer initiator;
 

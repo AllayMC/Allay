@@ -12,9 +12,7 @@ import java.util.Map;
 public interface EntityOperate {
     void addEntity(Entity entity);
 
-
     Entity removeEntity(Long runtimeId);
-
 
     default Entity removeEntity(Entity entity) {
         return removeEntity(entity.getRuntimeId());

@@ -14,6 +14,7 @@ public final class Dropdown extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "dropdown";
+
     @Getter
     private final String text;
     @Getter

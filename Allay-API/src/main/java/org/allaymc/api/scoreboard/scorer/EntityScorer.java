@@ -1,5 +1,6 @@
 package org.allaymc.api.scoreboard.scorer;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.scoreboard.Scoreboard;
@@ -12,16 +13,13 @@ import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
  * @author daoge_cmd
  */
 @Getter
+@AllArgsConstructor
 public final class EntityScorer implements Scorer {
 
     private final long uniqueId;
 
-    public EntityScorer(long uniqueId) {
-        this.uniqueId = uniqueId;
-    }
-
     public EntityScorer(Entity entity) {
-        this.uniqueId = entity.getUniqueId();
+        this(entity.getUniqueId());
     }
 
     @Override
@@ -49,6 +47,12 @@ public final class EntityScorer implements Scorer {
 
     @Override
     public ScoreInfo toNetworkInfo(Scoreboard scoreboard, ScoreboardLine line) {
-        return new ScoreInfo(line.getLineId(), scoreboard.getObjectiveName(), line.getScore(), ScoreInfo.ScorerType.ENTITY, uniqueId);
+        return new ScoreInfo(
+                line.getLineId(),
+                scoreboard.getObjectiveName(),
+                line.getScore(),
+                ScoreInfo.ScorerType.ENTITY,
+                uniqueId
+        );
     }
 }

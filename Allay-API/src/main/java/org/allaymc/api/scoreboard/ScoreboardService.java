@@ -21,12 +21,14 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Manages and stores a batch of scoreboards
+ * <p>
+ * This interface is for /scoreboard command;
+ * if you just want to display information, please operate directly on the scoreboard object
+ * <p>
  * Allay Project 2024/2/28
  *
  * @author daoge_cmd
- * <p>
- * 管理，储存一批计分板 <br>
- * 此接口面向/scoreboard命令，若只是想要显示信息，请直接操作scoreboard对象
  */
 @Getter
 public final class ScoreboardService {
@@ -45,14 +47,12 @@ public final class ScoreboardService {
 
     public boolean add(Scoreboard scoreboard) {
         // TODO: event
-//        var event = new ScoreboardObjectiveChangeEvent(scoreboard, ScoreboardObjectiveChangeEvent.ActionType.ADD);
-//        Server.getInstance().getPluginManager().callEvent(event);
-//        if (event.isCancelled()) {
-//            return false;
-//        }
+        //       var event = new ScoreboardObjectiveChangeEvent(scoreboard, ScoreboardObjectiveChangeEvent.ActionType.ADD);
+        //       Server.getInstance().getPluginManager().callEvent(event);
+        //       if (event.isCancelled()) return false;
         scoreboards.put(scoreboard.getObjectiveName(), scoreboard);
         // TODO: soft enum
-//        CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(UpdateSoftEnumPacket.Type.ADD, scoreboard.getObjectiveName());
+        //       CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(UpdateSoftEnumPacket.Type.ADD, scoreboard.getObjectiveName());
         return true;
     }
 
@@ -64,13 +64,11 @@ public final class ScoreboardService {
         var removed = scoreboards.remove(objectiveName);
         if (removed == null) return false;
         // TODO: event
-//        var event = new ScoreboardObjectiveChangeEvent(removed, ScoreboardObjectiveChangeEvent.ActionType.REMOVE);
-//        Server.getInstance().getPluginManager().callEvent(event);
-//        if (event.isCancelled()) {
-//            return false;
-//        }
+        //       var event = new ScoreboardObjectiveChangeEvent(removed, ScoreboardObjectiveChangeEvent.ActionType.REMOVE);
+        //       Server.getInstance().getPluginManager().callEvent(event);
+        //       if (event.isCancelled()) return false;
         // TODO: soft enum
-//        CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(UpdateSoftEnumPacket.Type.REMOVE, objectiveName);
+        //       CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(UpdateSoftEnumPacket.Type.REMOVE, objectiveName);
         viewers.forEach(viewer -> viewer.removeScoreboard(removed));
         display.forEach((slot, scoreboard) -> {
             if (scoreboard != null && scoreboard.getObjectiveName().equals(objectiveName)) {
@@ -129,7 +127,7 @@ public final class ScoreboardService {
     }
 
     public void read() {
-        //新建一个列表避免迭代冲突
+        // Create a new list to avoid iteration conflicts
         new ArrayList<>(scoreboards.values()).forEach(this::remove);
         this.display.keySet().forEach(this::clearDisplaySlot);
 

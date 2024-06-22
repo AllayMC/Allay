@@ -84,7 +84,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
         var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);
         var dimension = blockState.pos().dimension();
         if (usedItem != null && usedItem.hasEnchantment(EnchantmentSilkTouchType.SILK_TOUCH_TYPE)) {
-            // 精准采集, 直接掉落方块本身
+            // Silk Touch, directly drop the block itself
             dimension.dropItem(getSilkTouchDrop(blockState), dropPos);
             return;
         }

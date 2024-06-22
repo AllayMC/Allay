@@ -1,5 +1,6 @@
 package org.allaymc.api.eventbus.event;
 
+import lombok.Getter;
 import org.allaymc.api.eventbus.EventException;
 
 /**
@@ -8,11 +9,8 @@ import org.allaymc.api.eventbus.EventException;
  * @author daoge_cmd
  */
 public abstract class Event {
+    @Getter
     private boolean cancelled = false;
-
-    public boolean isCancelled() {
-        return cancelled;
-    }
 
     public void setCancelled(boolean value) {
         if (!(this instanceof CancellableEvent)) {

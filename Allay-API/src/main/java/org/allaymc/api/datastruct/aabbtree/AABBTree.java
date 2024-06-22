@@ -135,16 +135,16 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             right.assignChild(AABBTreeNode.RIGHT_CHILD, rightLeftChild.getIndex());
             node.assignChild(AABBTreeNode.RIGHT_CHILD, rightRightChild.getIndex());
             rightRightChild.setParent(node.getIndex());
-            left.getAABB().union(rightRightChild.getAABB(), node.getAABB());
-            node.getAABB().union(rightLeftChild.getAABB(), right.getAABB());
+            left.getAabb().union(rightRightChild.getAabb(), node.getAabb());
+            node.getAabb().union(rightLeftChild.getAabb(), right.getAabb());
             node.setHeight(1 + max(left.getHeight(), rightRightChild.getHeight()));
             right.setHeight(1 + max(node.getHeight(), rightLeftChild.getHeight()));
         } else {
             right.assignChild(AABBTreeNode.RIGHT_CHILD, rightRightChild.getIndex());
             node.assignChild(AABBTreeNode.RIGHT_CHILD, rightLeftChild.getIndex());
             rightLeftChild.setParent(node.getIndex());
-            left.getAABB().union(rightLeftChild.getAABB(), node.getAABB());
-            node.getAABB().union(rightRightChild.getAABB(), right.getAABB());
+            left.getAabb().union(rightLeftChild.getAabb(), node.getAabb());
+            node.getAabb().union(rightRightChild.getAabb(), right.getAabb());
             node.setHeight(1 + max(left.getHeight(), rightLeftChild.getHeight()));
             right.setHeight(1 + max(node.getHeight(), rightRightChild.getHeight()));
         }
@@ -175,16 +175,16 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             left.assignChild(AABBTreeNode.RIGHT_CHILD, leftLeftChild.getIndex());
             node.assignChild(AABBTreeNode.LEFT_CHILD, leftRightChild.getIndex());
             leftRightChild.setParent(node.getIndex());
-            right.getAABB().union(leftRightChild.getAABB(), node.getAABB());
-            node.getAABB().union(leftLeftChild.getAABB(), left.getAABB());
+            right.getAabb().union(leftRightChild.getAabb(), node.getAabb());
+            node.getAabb().union(leftLeftChild.getAabb(), left.getAabb());
             node.setHeight(1 + max(right.getHeight(), leftRightChild.getHeight()));
             left.setHeight(1 + max(node.getHeight(), leftLeftChild.getHeight()));
         } else {
             left.assignChild(AABBTreeNode.RIGHT_CHILD, leftRightChild.getIndex());
             node.assignChild(AABBTreeNode.LEFT_CHILD, leftLeftChild.getIndex());
             leftLeftChild.setParent(node.getIndex());
-            right.getAABB().union(leftLeftChild.getAABB(), node.getAABB());
-            node.getAABB().union(leftRightChild.getAABB(), left.getAABB());
+            right.getAabb().union(leftLeftChild.getAabb(), node.getAabb());
+            node.getAabb().union(leftRightChild.getAabb(), left.getAabb());
             node.setHeight(1 + max(right.getHeight(), leftLeftChild.getHeight()));
             left.setHeight(1 + max(node.getHeight(), leftRightChild.getHeight()));
         }
@@ -220,7 +220,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             AABBTreeNode<T> right = getNodeAt(node.getRightChild());
 
             node.setHeight(1 + max(left.getHeight(), right.getHeight()));
-            left.getAABB().union(right.getAABB(), node.getAABB());
+            left.getAabb().union(right.getAabb(), node.getAabb());
 
             node = node.getParent() == AABBTreeNode.INVALID_NODE_INDEX ? null : getNodeAt(node.getParent());
         }
@@ -230,13 +230,13 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
         AABBTreeNode<T> nodeToAdd = getNodeAt(node);
         AABBTreeNode<T> parentNode = getNodeAt(root);
 
-        AABBf nodeToAddAABB = nodeToAdd.getAABB();
+        AABBf nodeToAddAABB = nodeToAdd.getAabb();
 
         while (!parentNode.isLeaf()) {
             AABBTreeNode<T> leftChild = getNodeAt(parentNode.getLeftChild());
             AABBTreeNode<T> rightChild = getNodeAt(parentNode.getRightChild());
-            AABBf aabbA = leftChild.getAABB();
-            AABBf aabbB = rightChild.getAABB();
+            AABBf aabbA = leftChild.getAabb();
+            AABBf aabbB = rightChild.getAabb();
 
             AABBTreeHeuristicFunction.HeuristicResult heuristicResult = insertionHeuristicFunction
                     .getInsertionHeuristic(aabbA, aabbB, nodeToAdd.getData(), nodeToAddAABB);
@@ -260,7 +260,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
                                               List<CollisionPair<T>> result) {
         Deque<Integer> stack = new ArrayDeque<>();
         stack.offer(root);
-        AABBf overlapWith = nodeToTest.getAABB();
+        AABBf overlapWith = nodeToTest.getAabb();
 
         while (!stack.isEmpty()) {
             int nodeIndex = stack.pop();
@@ -269,7 +269,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             }
 
             AABBTreeNode<T> node = getNodeAt(nodeIndex);
-            AABBf nodeAABB = node.getAABB();
+            AABBf nodeAABB = node.getAabb();
             if (nodeAABB.intersectsAABB(overlapWith)) {
                 if (node.isLeaf() && node.getIndex() != nodeToTest.getIndex()) {
                     T nodeData = node.getData();
@@ -422,7 +422,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             if (nodeIndex == AABBTreeNode.INVALID_NODE_INDEX) continue;
 
             AABBTreeNode<T> node = getNodeAt(nodeIndex);
-            AABBf nodeAABB = node.getAABB();
+            AABBf nodeAABB = node.getAabb();
             if (nodeTest.test(nodeAABB)) {
                 if (node.isLeaf()) {
                     T nodeData = node.getData();

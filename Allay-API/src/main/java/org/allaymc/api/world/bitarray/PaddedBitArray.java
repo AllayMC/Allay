@@ -16,24 +16,25 @@ public record PaddedBitArray(BitArrayVersion version, int size, int[] words) imp
         this.size = size;
         this.version = version;
         this.words = words;
-        int expectedWordsLength = GenericMath.ceil((float) size / version.entriesPerWord);
+
+        var expectedWordsLength = GenericMath.ceil((float) size / version.entriesPerWord);
         if (words.length != expectedWordsLength) {
             throw new IllegalArgumentException("Invalid length given for storage, got: " + words.length +
-                    " but expected: " + expectedWordsLength);
+                                               " but expected: " + expectedWordsLength);
         }
     }
 
     @Override
     public void set(int index, int value) {
-        final int arrayIndex = index / this.version.entriesPerWord;
-        final int offset = (index % this.version.entriesPerWord) * this.version.bits;
+        var arrayIndex = index / this.version.entriesPerWord;
+        var offset = (index % this.version.entriesPerWord) * this.version.bits;
         this.words[arrayIndex] = this.words[arrayIndex] & ~(this.version.maxEntryValue << offset) | (value & this.version.maxEntryValue) << offset;
     }
 
     @Override
     public int get(int index) {
-        final int arrayIndex = index / this.version.entriesPerWord;
-        final int offset = (index % this.version.entriesPerWord) * this.version.bits;
+        var arrayIndex = index / this.version.entriesPerWord;
+        var offset = (index % this.version.entriesPerWord) * this.version.bits;
         return (this.words[arrayIndex] >>> offset) & this.version.maxEntryValue;
     }
 

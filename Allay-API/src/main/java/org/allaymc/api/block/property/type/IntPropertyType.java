@@ -1,5 +1,6 @@
 package org.allaymc.api.block.property.type;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.allaymc.api.utils.Utils;
 
@@ -10,22 +11,20 @@ import java.util.stream.IntStream;
  *
  * @author daoge_cmd
  */
+@Getter
 public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
-
+    @Getter(AccessLevel.NONE)
     private final IntPropertyValue[] cachedValues;
-    @Getter
-    private final int min;
-    @Getter
-    private final int max;
+    private final int min, max;
 
     private IntPropertyType(String name, int min, int max, Integer defaultData) {
         super(name, IntStream.range(min, max + 1).boxed().toList(), defaultData, Utils.computeRequiredBits(max - min + 1));
         this.min = min;
         this.max = max;
-        cachedValues = new IntPropertyValue[max + 1 - min];
+
+        this.cachedValues = new IntPropertyValue[max + 1 - min];
         for (int i = min; i <= max; i++) {
-            IntPropertyValue value = new IntPropertyValue(i);
-            cachedValues[i] = value;
+            this.cachedValues[i] = new IntPropertyValue(i);
         }
     }
 

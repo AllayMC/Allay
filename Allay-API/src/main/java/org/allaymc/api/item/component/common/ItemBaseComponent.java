@@ -1,7 +1,6 @@
 package org.allaymc.api.item.component.common;
 
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -13,7 +12,6 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.util.Collection;
@@ -90,7 +88,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * This method should handle reducing item count, durability, etc., on successful use.
      * No need to send item updates separately as the caller will handle it.
      * <p>
-     * Note: Placing blocks will not invoke this method. <br>
+     * Note: Placing blocks will not invoke this method.
      *
      * @return true if successfully used
      */
@@ -101,8 +99,8 @@ public interface ItemBaseComponent extends ItemComponent {
     /**
      * Attempt to place a block using this item, regardless of whether this item is a block item.
      *
-     * @return true if the block is successfully placed,
-     * false if placement fails (reasons: not a block item, placement check fails, event is canceled)
+     * @return {@code true} if the block is successfully placed,
+     * {@code false} if placement fails (reasons: not a block item, placement check fails, event is canceled)
      */
     default boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         return false;
@@ -145,7 +143,7 @@ public interface ItemBaseComponent extends ItemComponent {
 
     boolean hasEnchantment(EnchantmentType enchantmentType);
 
-    short getEnchantmentLevel(EnchantmentType enchantmentType);
+    int getEnchantmentLevel(EnchantmentType enchantmentType);
 
     Collection<EnchantmentInstance> getEnchantments();
 
@@ -216,7 +214,7 @@ public interface ItemBaseComponent extends ItemComponent {
 
     default EnchantmentType getIncompatibleEnchantmentType(EnchantmentType type) {
         for (var enchantmentInstance : getEnchantments()) {
-            if (!enchantmentInstance.getType().checkCompatibility(type)) {
+            if (enchantmentInstance.getType().checkIncompatible(type)) {
                 return enchantmentInstance.getType();
             }
         }

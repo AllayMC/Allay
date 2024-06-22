@@ -5,36 +5,37 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 /**
+ * Describes a scoreboard tracking object
+ * <p>
  * Allay Project 2024/2/27
  *
  * @author daoge_cmd
- * <p>
- * 描述一个计分板追踪对象
  */
 public sealed interface Scorer permits EntityScorer, PlayerScorer, FakeScorer {
 
     /**
-     * 获取追踪对象类型
+     * Get the type of tracking object
      *
-     * @return 追踪对象类型
+     * @return The type of tracking object
      */
     ScoreInfo.ScorerType getScorerType();
 
     /**
-     * 获取名称
+     * Get the name
      *
-     * @return 追踪对象类型
+     * @return The name of the tracking object
      */
     String getName();
 
     /**
-     * 内部方法
-     * 转换到network信息
+     * Internal method
+     * <p>
+     * Convert to network information
      *
-     * @param scoreboard 所属计分板
-     * @param line       所属行
+     * @param scoreboard The associated scoreboard
+     * @param line       The associated line
      *
-     * @return network信息
+     * @return The network information
      */
     ScoreInfo toNetworkInfo(Scoreboard scoreboard, ScoreboardLine line);
 }

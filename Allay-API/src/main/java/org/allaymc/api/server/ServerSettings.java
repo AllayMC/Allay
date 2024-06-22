@@ -11,9 +11,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
 
-/**
- * Server settings
- */
 @Getter
 @Accessors(fluent = true)
 public class ServerSettings extends OkaeriConfig {
@@ -70,9 +67,10 @@ public class ServerSettings extends OkaeriConfig {
     @Getter
     @Accessors(fluent = true)
     public static class NetworkSettings extends OkaeriConfig {
-
+        @Comment("Server ip")
         private String ip = "127.0.0.1";
 
+        @Comment("Server port")
         private int port = 19132;
 
         @CustomKey("xbox-auth")

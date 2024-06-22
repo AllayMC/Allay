@@ -29,9 +29,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
-/**
- * The server interface
- */
 public interface Server extends TaskCreator, CommandSender {
 
     ApiInstanceHolder<Server> INSTANCE = ApiInstanceHolder.create();
@@ -81,12 +78,10 @@ public interface Server extends TaskCreator, CommandSender {
     Map<UUID, EntityPlayer> getOnlinePlayers();
 
     default EntityPlayer findOnlinePlayerByName(String playerName) {
-        for (var player : getOnlinePlayers().values()) {
-            if (player.getCommandSenderName().equals(playerName)) {
-                return player;
-            }
-        }
-        return null;
+        return getOnlinePlayers().values().stream()
+                .filter(player -> player.getCommandSenderName().equals(playerName))
+                .findFirst()
+                .orElse(null);
     }
 
     void onConnect(BedrockServerSession session);
@@ -191,11 +186,9 @@ public interface Server extends TaskCreator, CommandSender {
     ScoreboardService getScoreboardService();
 
     default EntityPlayer getOnlinePlayerByName(String name) {
-        for (var player : getOnlinePlayers().values()) {
-            if (player.getOriginName().equals(name)) {
-                return player;
-            }
-        }
-        return null;
+        return getOnlinePlayers().values().stream()
+                .filter(player -> player.getOriginName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 }

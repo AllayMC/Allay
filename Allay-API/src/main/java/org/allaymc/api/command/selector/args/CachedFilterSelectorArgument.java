@@ -15,15 +15,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 /**
- * 与{@link CachedSimpleSelectorArgument}类似，但是适用于过滤器模式。此处不做过多解释<p/>
+ * Similar to {@link CachedSimpleSelectorArgument}, but designed for filter mode. No further explanation is provided here.<p/>
  *
  * @see CachedSimpleSelectorArgument
  */
-
-
 public abstract class CachedFilterSelectorArgument implements SelectorArgument {
-
-    Cache<Set<String>, Function<List<Entity>, List<Entity>>> cache;
+    private final Cache<Set<String>, Function<List<Entity>, List<Entity>>> cache;
 
     public CachedFilterSelectorArgument() {
         this.cache = provideCacheService();
@@ -45,13 +42,14 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
     }
 
     /**
-     * 当未在缓存中找到解析结果时，则调用此方法对参数进行解析
+     * Called when parsing the parameters if the parsing result is not found in the cache
      */
     protected abstract Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException;
 
     /**
-     * 初始化缓存时调用此方法<p/>
-     * 若需要自己的缓存实现，则可覆写此方法
+     * Called when initializing the cache
+     * <p>
+     * Override this method if you need your own cache implementation
      *
      * @return {@code Cache<Set<String>, Function<List<Entity>, List<Entity>>>}
      */

@@ -6,9 +6,6 @@ package org.allaymc.api.eventbus;
  * @author daoge_cmd
  */
 public class EventException extends RuntimeException {
-    public EventException() {
-    }
-
     public EventException(String message) {
         super(message);
     }

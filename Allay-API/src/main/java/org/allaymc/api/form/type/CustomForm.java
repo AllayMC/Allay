@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 public final class CustomForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "custom_form";
+
     private final List<CustomFormElement> content = new ArrayList<>();
     private String title = "";
     private ImageData icon;

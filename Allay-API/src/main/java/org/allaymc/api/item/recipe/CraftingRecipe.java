@@ -1,12 +1,14 @@
 package org.allaymc.api.item.recipe;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.component.common.ItemBaseComponent;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,16 +17,17 @@ import java.util.UUID;
  *
  * @author daoge_cmd
  */
+@Getter
 public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueRecipe, IdentifiedRecipe, NetworkRecipe {
     protected Identifier identifier;
     protected ItemStack[] outputs;
     protected String tag;
     protected int networkId;
     protected UUID uuid;
-    // 配方优先级，当出现多个匹配配方时客户端需要根据优先级决定使用哪个配方
-    // 服务端实现并不需要用到此参数，但是客户端需要
-    @Getter
+    // Recipe priority: when multiple matching recipes are available, the client decides which one to use based on this priority
+    // This parameter is not required for server-side implementation but is necessary for clients
     protected int priority;
+    @Getter(AccessLevel.NONE)
     protected RecipeData networkRecipeDataCache;
 
     protected CraftingRecipe(Identifier identifier, ItemStack[] outputs, String tag, UUID uuid, int priority) {
@@ -36,42 +39,12 @@ public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueReci
         this.priority = priority;
     }
 
-
-    @Override
-    public Identifier getIdentifier() {
-        return identifier;
-    }
-
-    @Override
-    public ItemStack[] getOutputs() {
-        return outputs;
-    }
-
-    @Override
-    public String getTag() {
-        return tag;
-    }
-
-    @Override
-    public int getNetworkId() {
-        return networkId;
-    }
-
-    @Override
-    public UUID getUUID() {
-        return uuid;
-    }
-
     @Override
     public RecipeData toNetworkRecipeData() {
         return networkRecipeDataCache;
     }
 
     protected List<ItemData> buildNetworkOutputs() {
-        List<ItemData> results = new ArrayList<>();
-        for (var output : outputs) {
-            results.add(output.toNetworkItemData());
-        }
-        return results;
+        return Arrays.stream(outputs).map(ItemBaseComponent::toNetworkItemData).toList();
     }
 }

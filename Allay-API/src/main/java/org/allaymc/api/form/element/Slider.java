@@ -12,6 +12,7 @@ public final class Slider extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "slider";
+
     @Getter
     private final String text;
     @Getter

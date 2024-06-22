@@ -4,9 +4,7 @@ import com.google.common.base.Objects;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
-import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.PaletteUtils;
 import org.allaymc.api.world.bitarray.BitArray;
@@ -15,13 +13,13 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.cloudburstmc.blockstateupdater.BlockStateUpdaters;
 import org.cloudburstmc.blockstateupdater.util.tagupdater.CompoundTagUpdaterContext;
 import org.cloudburstmc.nbt.NBTInputStream;
-import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
 import org.cloudburstmc.protocol.common.util.VarInts;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -32,6 +30,7 @@ import java.util.TreeMap;
  */
 public final class Palette<V> {
     private static final byte COPY_LAST_FLAG_HEADER = (byte) (0x7F << 1) | 1;
+
     private final List<V> palette;
     private BitArray bitArray;
 
@@ -40,9 +39,7 @@ public final class Palette<V> {
     }
 
     public Palette(V first, BitArrayVersion version) {
-        this.bitArray = version.createArray(Chunk.SECTION_SIZE);
-        this.palette = new ReferenceArrayList<>(16);
-        this.palette.add(first);
+        this(first, new ReferenceArrayList<>(16), version);
     }
 
     public Palette(V first, List<V> palette, BitArrayVersion version) {
@@ -72,7 +69,7 @@ public final class Palette<V> {
     }
 
     public void set(int index, V value) {
-        final int paletteIndex = this.paletteIndexFor(value);
+        var paletteIndex = this.paletteIndexFor(value);
         this.bitArray.set(index, paletteIndex);
     }
 
@@ -88,16 +85,18 @@ public final class Palette<V> {
 
     public void readFromNetwork(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer) {
         readWords(byteBuf, readBitArrayVersion(byteBuf));
-        final int size = this.bitArray.readSizeFromNetwork(byteBuf);
+        var size = this.bitArray.readSizeFromNetwork(byteBuf);
         for (int i = 0; i < size; i++) this.palette.add(deserializer.deserialize(VarInts.readInt(byteBuf)));
     }
 
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
         byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), false));
         for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
+
         byteBuf.writeIntLE(this.palette.size());
-        try (final ByteBufOutputStream bufOutputStream = new ByteBufOutputStream(byteBuf);
-             final NBTOutputStream outputStream = NbtUtils.createWriterLE(bufOutputStream)) {
+
+        try (var bufOutputStream = new ByteBufOutputStream(byteBuf);
+             var outputStream = NbtUtils.createWriterLE(bufOutputStream)) {
             for (V value : this.palette) outputStream.writeTag(serializer.serialize(value));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -111,6 +110,7 @@ public final class Palette<V> {
         byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), true));
         for (int word : this.bitArray.words())
             byteBuf.writeIntLE(word);
+
         byteBuf.writeIntLE(this.palette.size());
         for (V value : this.palette) {
             byteBuf.writeIntLE(serializer.serialize(value));
@@ -118,14 +118,13 @@ public final class Palette<V> {
     }
 
     public void readFromStorageRuntime(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer, Palette<V> last) {
-        final short header = byteBuf.readUnsignedByte();
-
+        var header = byteBuf.readUnsignedByte();
         if (hasCopyLastFlag(header)) {
             last.copyTo(this);
             return;
         }
 
-        final BitArrayVersion version = Palette.getVersionFromPaletteHeader(header);
+        var version = Palette.getVersionFromPaletteHeader(header);
         if (version == BitArrayVersion.V0) {
             this.bitArray = version.createArray(Chunk.SECTION_SIZE, null);
             this.palette.clear();
@@ -136,24 +135,25 @@ public final class Palette<V> {
 
         readWords(byteBuf, version);
 
-        final int paletteSize = byteBuf.readIntLE();
+        var paletteSize = byteBuf.readIntLE();
         for (int i = 0; i < paletteSize; i++) this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
     }
 
     public void readFromStoragePersistent(ByteBuf byteBuf, RuntimeDataDeserializer<V> deserializer) {
-        try (final ByteBufInputStream bufInputStream = new ByteBufInputStream(byteBuf);
-             final LittleEndianDataInputStream input = new LittleEndianDataInputStream(bufInputStream);
-             final NBTInputStream nbtInputStream = new NBTInputStream(input)) {
-            final BitArrayVersion bversion = readBitArrayVersion(byteBuf);
-            if (bversion == BitArrayVersion.V0) {
-                this.bitArray = bversion.createArray(Chunk.SECTION_SIZE, null);
+        try (var bufInputStream = new ByteBufInputStream(byteBuf);
+             var input = new LittleEndianDataInputStream(bufInputStream);
+             var nbtInputStream = new NBTInputStream(input)) {
+            var bitArrayVersion = readBitArrayVersion(byteBuf);
+            if (bitArrayVersion == BitArrayVersion.V0) {
+                this.bitArray = bitArrayVersion.createArray(Chunk.SECTION_SIZE, null);
                 this.palette.clear();
                 addBlockPalette(byteBuf, deserializer, input, nbtInputStream);
                 this.onResize(BitArrayVersion.V2);
                 return;
             }
-            readWords(byteBuf, bversion);
-            final int paletteSize = byteBuf.readIntLE();
+
+            readWords(byteBuf, bitArrayVersion);
+            var paletteSize = byteBuf.readIntLE();
             for (int i = 0; i < paletteSize; i++) {
                 addBlockPalette(byteBuf, deserializer, input, nbtInputStream);
             }
@@ -162,16 +162,18 @@ public final class Palette<V> {
         }
     }
 
-    private void addBlockPalette(ByteBuf byteBuf,
-                                 RuntimeDataDeserializer<V> deserializer,
-                                 LittleEndianDataInputStream input,
-                                 NBTInputStream nbtInputStream) throws IOException {
-        Pair<Integer, SemVersion> p = PaletteUtils.fastReadBlockHash(input, byteBuf);
-        if (p.left() == null) {
-            NbtMap oldNbtMap = (NbtMap) nbtInputStream.readTag();
-            SemVersion semVersion = p.right();
-            int version = CompoundTagUpdaterContext.makeVersion(semVersion.major(), semVersion.minor(), semVersion.patch());
-            NbtMap newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, version);
+    private void addBlockPalette(
+            ByteBuf byteBuf,
+            RuntimeDataDeserializer<V> deserializer,
+            LittleEndianDataInputStream input,
+            NBTInputStream nbtInputStream
+    ) throws IOException {
+        var pair = PaletteUtils.fastReadBlockHash(input, byteBuf);
+        if (pair.left() == null) {
+            var oldNbtMap = (NbtMap) nbtInputStream.readTag();
+            var semVersion = pair.right();
+            var version = CompoundTagUpdaterContext.makeVersion(semVersion.major(), semVersion.minor(), semVersion.patch());
+            var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, version);
             var states = new TreeMap<>(newNbtMap.getCompound("states"));
             var tag = NbtMap.builder()
                     .putString("name", newNbtMap.getString("name"))
@@ -179,20 +181,20 @@ public final class Palette<V> {
                     .build();
             this.palette.add(deserializer.deserialize(HashUtils.fnv1a_32_nbt(tag)));
         } else {
-            this.palette.add(deserializer.deserialize(p.left()));
+            this.palette.add(deserializer.deserialize(pair.left()));
         }
     }
 
     public int paletteIndexFor(V value) {
-        int index = this.palette.indexOf(value);
+        var index = this.palette.indexOf(value);
         if (index != -1) return index;
 
         index = this.palette.size();
         this.palette.add(value);
 
-        final BitArrayVersion version = this.bitArray.version();
+        var version = this.bitArray.version();
         if (index > version.maxEntryValue) {
-            final BitArrayVersion next = version.next;
+            var next = version.next;
             if (next != null) this.onResize(next);
         }
 
@@ -200,12 +202,9 @@ public final class Palette<V> {
     }
 
     public boolean isEmpty() {
-        if (this.palette.size() == 1) {
-            for (int word : this.bitArray.words())
-                if (Integer.toUnsignedLong(word) != 0L)
-                    return false;
-            return true;
-        } else return false;
+        if (this.palette.size() == 1)
+            return Arrays.stream(this.bitArray.words()).noneMatch(word -> Integer.toUnsignedLong(word) != 0L);
+        else return false;
     }
 
     public void copyTo(Palette<V> palette) {
@@ -219,6 +218,7 @@ public final class Palette<V> {
             byteBuf.writeByte(COPY_LAST_FLAG_HEADER);
             return true;
         }
+
         return false;
     }
 
@@ -228,34 +228,35 @@ public final class Palette<V> {
             byteBuf.writeIntLE(0);
             return true;
         }
+
         return false;
     }
 
     private void writeWords(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer) {
         byteBuf.writeByte(getPaletteHeader(this.bitArray.version(), true));
         for (int word : this.bitArray.words()) byteBuf.writeIntLE(word);
+
         if (this.bitArray.writeSizeToNetwork(byteBuf, this.palette.size())) {
-            for (V value : this.palette)
-                VarInts.writeInt(byteBuf, serializer.serialize(value));
+            this.palette.forEach(value -> VarInts.writeInt(byteBuf, serializer.serialize(value)));
         }
     }
 
     private BitArrayVersion readBitArrayVersion(ByteBuf byteBuf) {
-        short header = byteBuf.readUnsignedByte();
+        var header = byteBuf.readUnsignedByte();
         return Palette.getVersionFromPaletteHeader(header);
     }
 
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
-        final int wordCount = version.getWordsForSize(Chunk.SECTION_SIZE);
-        final int[] words = new int[wordCount];
-        for (int i = 0; i < wordCount; i++) words[i] = byteBuf.readIntLE();
+        var wordCount = version.getWordsForSize(Chunk.SECTION_SIZE);
+        var words = new int[wordCount];
+        Arrays.setAll(words, i -> byteBuf.readIntLE());
 
         this.bitArray = version.createArray(Chunk.SECTION_SIZE, words);
         this.palette.clear();
     }
 
     private void onResize(BitArrayVersion version) {
-        final BitArray newBitArray = version.createArray(Chunk.SECTION_SIZE);
+        var newBitArray = version.createArray(Chunk.SECTION_SIZE);
         for (int i = 0; i < Chunk.SECTION_SIZE; i++)
             newBitArray.set(i, this.bitArray.get(i));
 

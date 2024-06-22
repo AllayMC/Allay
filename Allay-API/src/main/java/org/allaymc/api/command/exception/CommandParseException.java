@@ -6,9 +6,6 @@ package org.allaymc.api.command.exception;
  * @author daoge_cmd
  */
 public class CommandParseException extends RuntimeException {
-    public CommandParseException() {
-    }
-
     public CommandParseException(String message) {
         super(message);
     }

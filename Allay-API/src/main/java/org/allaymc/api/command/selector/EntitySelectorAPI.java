@@ -24,30 +24,32 @@ public interface EntitySelectorAPI {
     }
 
     /**
-     * 通过给定的命令发送者和目标选择器文本匹配实体
+     * Matches entities based on the given command sender and target selector token.
      *
-     * @param sender 命令发送者
-     * @param token  目标选择器文本
+     * @param sender the command sender
+     * @param token  the target selector token
      *
-     * @return 目标实体
+     * @return the list of matched entities
+     *
+     * @throws SelectorSyntaxException if there is a syntax error in the selector token
      */
     List<Entity> matchEntities(CommandSender sender, String token) throws SelectorSyntaxException;
 
     /**
-     * 检查给定文本是否是合法目标选择器
+     * Checks if the given token is a valid target selector.
      *
-     * @param token 给定文本
+     * @param token the token to check
      *
-     * @return 是否是合法目标选择器
+     * @return true if the token is a valid target selector, false otherwise
      */
     boolean checkValid(String token);
 
     /**
-     * 注册一个选择器参数
+     * Registers a selector argument.
      *
-     * @param argument 选择器参数对象
+     * @param argument the selector argument to register
      *
-     * @return 是否注册成功（若已存在相同key值的选择器参数则注册失败，返回false）
+     * @return true if registration is successful (returns false if an argument with the same key already exists)
      */
     boolean registerArgument(SelectorArgument argument);
 }

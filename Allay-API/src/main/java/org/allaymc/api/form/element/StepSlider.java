@@ -14,6 +14,7 @@ public final class StepSlider extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "step_slider";
+
     @Getter
     private final String text;
     @Getter

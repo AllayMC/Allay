@@ -15,7 +15,7 @@ public interface NetworkRecipe extends Recipe {
     }
 
     /**
-     * @return 配方的唯一网络id，由内部分配
+     * @return The unique network ID of the recipe, assigned internally.
      */
     int getNetworkId();
 }

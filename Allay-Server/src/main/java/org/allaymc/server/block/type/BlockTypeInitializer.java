@@ -162,7 +162,7 @@ public final class BlockTypeInitializer {
     }
 
     public static void initLargeFern() {
-        // TODO: 需要适配
+        // TODO: Needs adaptation
         BlockTypes.LARGE_FERN_TYPE = BlockTypeBuilder
                 .builder(BlockLargeFernBehavior.class)
                 .vanillaBlock(VanillaBlockId.LARGE_FERN)

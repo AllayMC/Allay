@@ -1,8 +1,9 @@
 package org.allaymc.api.scheduler;
 
 /**
- * Describes a task creator (eg: plugin) <br/>
- * Each time a task is executed, the creator of the task is first checked to be valid, and if not, the task is canceled <br/>
+ * Describes a task creator (eg: plugin)
+ * <p>
+ * Each time a task is executed, the creator of the task is first checked to be valid, and if not, the task is canceled
  * <p>
  * Allay Project 2023/3/12
  *

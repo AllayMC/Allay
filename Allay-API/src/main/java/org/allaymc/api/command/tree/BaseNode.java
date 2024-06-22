@@ -70,17 +70,17 @@ public abstract class BaseNode implements CommandNode {
 
     @Override
     public CommandNode optional() {
-        // 无需重复设置
+        // No need to set again if already optional
         if (optional) return this;
-        //一个节点下只能有一个可选参数
+        // A node can only have one optional leaf
         if (parent.getOptionalLeaf() != null) {
             throw new IllegalArgumentException("A node can only have one optional leaf node");
         }
         this.optional = true;
         parent.setOptionalLeaf(this);
-        // 若节点是可选的，则最小参数消耗为0，否则为1（不允许非可选节点不消耗参数）
+        // If the node is optional, minimum argument cost is 0, otherwise it's 1
         setMinArgCostBranch(optional ? 0 : 1);
-        // 更新分支最小参数消耗（optional不影响最大参数消耗）
+        // Update minimum argument cost for branches (optional does not affect maximum argument cost)
         updateMinArgCostBranch(this);
         return this;
     }
@@ -129,7 +129,7 @@ public abstract class BaseNode implements CommandNode {
         } else {
             var optionalLeaf = getOptionalLeaf();
             if (optionalLeaf != null) {
-                // 忽略RootNode，所以说索引为optionalLeaf.depth() - 1
+                // Ignore RootNode, so the index is optionalLeaf.depth() - 1
                 context.putResult(optionalLeaf.getDefaultValue());
                 return optionalLeaf;
             }
@@ -155,8 +155,8 @@ public abstract class BaseNode implements CommandNode {
         leaf.setDepth(depth + 1);
         leaf.setMaxArgCostBranch(leaf.getMaxArgCost());
         updateMaxArgCostBranch(leaf);
-        // 可选参数后不能有非可选参数
-        // 分支最小参数消耗在optional()中更新
+        // Optional parameters cannot be followed by non-optional parameters
+        // Minimum argument cost for branches is updated in optional()
         if (optional) {
             leaf.optional();
         }

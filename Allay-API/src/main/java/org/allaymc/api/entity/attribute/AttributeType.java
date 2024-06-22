@@ -1,5 +1,8 @@
 package org.allaymc.api.entity.attribute;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,9 +11,11 @@ import java.util.Map;
  *
  * @author JukeboxMC | daoge_cmd
  */
+@Getter
+@AllArgsConstructor
 public enum AttributeType {
 
-    //Base Entity
+    // Base Entity
     ABSORPTION("minecraft:absorption", 0, Float.MAX_VALUE, 0),
     KNOCKBACK_RESISTANCE("minecraft:knockback_resistance", 0, 1, 0.6f),
     HEALTH("minecraft:health", 0, 20, 20),
@@ -20,13 +25,13 @@ public enum AttributeType {
     LUCK("minecraft:luck", -1024, 1024, 0),
     FALL_DAMAGE("minecraft:fall_damage", 0, Float.MAX_VALUE, 1),
 
-    //Horse
+    // Horse
     HORSE_JUMP_STRENGTH("minecraft:horse.jump_strength", 0, 20, 0.7f),
 
-    //Zombie
+    // Zombie
     ZOMBIE_SPAWN_REINFORCEMENTS("minecraft:zombie.spawn_reinforcements", 0, 1, 0),
 
-    //Player
+    // Player
     PLAYER_HUNGER("minecraft:player.hunger", 0, 20, 20),
     PLAYER_SATURATION("minecraft:player.saturation", 0, 20, 20),
     PLAYER_EXHAUSTION("minecraft:player.exhaustion", 0, 5, 0.41f),
@@ -36,7 +41,7 @@ public enum AttributeType {
     private static final Map<String, AttributeType> KEY_LOOK_UP = new HashMap<>();
 
     static {
-        for (AttributeType attributeType : values()) {
+        for (var attributeType : values()) {
             KEY_LOOK_UP.put(attributeType.key, attributeType);
         }
     }
@@ -45,13 +50,6 @@ public enum AttributeType {
     private final float minValue;
     private final float maxValue;
     private final float defaultValue;
-
-    AttributeType(String key, float minValue, float maxValue, float defaultValue) {
-        this.key = key;
-        this.minValue = minValue;
-        this.maxValue = maxValue;
-        this.defaultValue = defaultValue;
-    }
 
     public static AttributeType byKey(String key) {
         return KEY_LOOK_UP.get(key);

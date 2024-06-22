@@ -20,12 +20,12 @@ import static org.cloudburstmc.protocol.bedrock.data.GameType.SPECTATOR;
 public final class AdventureSettings {
 
     private final EntityPlayer player;
+
     private boolean noPVM = false;
     private boolean noMVP = false;
     private boolean immutableWorld = false;
     private boolean showNameTags = true;
     private boolean autoJump = true;
-    @Getter
     private boolean dirty = false;
 
     public AdventureSettings(EntityPlayer player) {

@@ -10,7 +10,8 @@ public enum ZlibProviderType {
     JavaZlibThreadLocal;
 
     public ZlibProvider of(CompressionType type, int level) {
-        return this == ZlibProviderType.LibDeflateThreadLocal ? new LibDeflateThreadLocal(type, level) : new JavaZibThreadLocal(type, level);
-
+        return this == ZlibProviderType.LibDeflateThreadLocal ?
+                new LibDeflateThreadLocal(type, level) :
+                new JavaZibThreadLocal(type, level);
     }
 }

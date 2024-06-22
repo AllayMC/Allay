@@ -44,7 +44,7 @@ public enum BitArrayVersion {
 
     public static BitArrayVersion forBitsCeil(int bits) {
         for (int i = VALUES.length - 1; i >= 0; i--) {
-            final BitArrayVersion version = VALUES[i];
+            var version = VALUES[i];
             if (version.bits >= bits) return version;
         }
 
@@ -67,5 +67,4 @@ public enum BitArrayVersion {
         else
             return new Pow2BitArray(this, size, words);
     }
-
 }

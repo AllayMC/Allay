@@ -1,13 +1,10 @@
 package org.allaymc.api.scheduler;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.server.Server;
 
 import java.util.concurrent.ExecutorService;
 
 /**
- * scheduler
- * <p>
  * Allay Project 2023/3/12
  *
  * @author daoge_cmd

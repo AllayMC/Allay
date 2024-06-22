@@ -1,5 +1,7 @@
 package org.allaymc.api.block.property.type;
 
+import lombok.Getter;
+
 import java.util.List;
 
 /**
@@ -43,17 +45,12 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
     }
 
     public final class BooleanPropertyValue extends BlockPropertyValue<Boolean, BooleanPropertyType, Byte> {
-
+        @Getter
         private final int index;
 
         BooleanPropertyValue(Boolean value) {
             super(BooleanPropertyType.this, value);
-            index = value ? 1 : 0;
-        }
-
-        @Override
-        public int getIndex() {
-            return index;
+            this.index = value ? 1 : 0;
         }
 
         @Override

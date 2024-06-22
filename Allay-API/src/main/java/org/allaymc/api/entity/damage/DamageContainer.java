@@ -1,10 +1,10 @@
 package org.allaymc.api.entity.damage;
 
-import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 /**
@@ -15,6 +15,7 @@ import java.util.function.UnaryOperator;
 @Getter
 public class DamageContainer {
     public static final int DEFAULT_DAMAGE_COOL_DOWN = 10;
+
     protected Entity attacker;
     protected DamageType damageType;
     protected float sourceDamage;
@@ -29,10 +30,9 @@ public class DamageContainer {
 
     public DamageContainer(Entity attacker, DamageType damageType, float sourceDamage) {
         // attacker is nullable
-        Preconditions.checkNotNull(damageType);
         this.attacker = attacker;
         if (attacker != null) this.critical = attacker.canCriticalAttack();
-        this.damageType = damageType;
+        this.damageType = Objects.requireNonNull(damageType);
         this.sourceDamage = sourceDamage;
         this.finalDamage = sourceDamage;
     }

@@ -1,5 +1,6 @@
 package org.allaymc.api.scoreboard.scorer;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scoreboard.Scoreboard;
@@ -17,22 +18,19 @@ import static org.cloudburstmc.protocol.bedrock.data.ScoreInfo.ScorerType.PLAYER
  * @author daoge_cmd
  */
 @Getter
+@AllArgsConstructor
 public final class PlayerScorer implements Scorer {
 
-    // 使用uuid而不是uniqueId方便获取玩家对象
-    // 这在本质上没有区别，因为玩家的uniqueId是根据uuid生成的
+    // Use UUID instead of uniqueId for convenience in obtaining player objects
+    // This is essentially the same, as the player's uniqueId is generated from the UUID
     private final UUID uuid;
 
-    public PlayerScorer(UUID uuid) {
-        this.uuid = uuid;
-    }
-
     public PlayerScorer(String uuid) {
-        this.uuid = UUID.fromString(uuid);
+        this(UUID.fromString(uuid));
     }
 
     public PlayerScorer(EntityPlayer player) {
-        this.uuid = player.getUUID();
+        this(player.getUUID());
     }
 
     public EntityPlayer getPlayer() {
@@ -64,20 +62,21 @@ public final class PlayerScorer implements Scorer {
 
     @Override
     public String getName() {
-        return Server.getInstance().getOnlinePlayers().get(uuid) == null ? String.valueOf(uuid.getMostSignificantBits()) : Server.getInstance().getOnlinePlayers().get(uuid).getOriginName();
+        return Server.getInstance().getOnlinePlayers().get(uuid) == null ?
+                String.valueOf(uuid.getMostSignificantBits()) :
+                Server.getInstance().getOnlinePlayers().get(uuid).getOriginName();
     }
 
     @Override
     public ScoreInfo toNetworkInfo(Scoreboard scoreboard, ScoreboardLine line) {
         if (uuid == null) return null;
         var player = Server.getInstance().getOnlinePlayers().get(uuid);
-        return player != null ?
-                new ScoreInfo(
-                        line.getLineId(),
-                        scoreboard.getObjectiveName(),
-                        line.getScore(),
-                        PLAYER,
-                        player.getRuntimeId()
-                ) : null;
+        return player != null ? new ScoreInfo(
+                line.getLineId(),
+                scoreboard.getObjectiveName(),
+                line.getScore(),
+                PLAYER,
+                player.getRuntimeId()
+        ) : null;
     }
 }

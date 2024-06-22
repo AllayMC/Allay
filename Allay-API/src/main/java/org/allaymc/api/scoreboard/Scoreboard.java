@@ -13,27 +13,28 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-
+import java.util.stream.Collectors;
 
 @Getter
 public final class Scoreboard {
     /**
-     * 此计分板的标识名称
+     * The identifier name of this scoreboard
      */
     private final String objectiveName;
     /**
-     * 此计分板的显示名称
+     * The display name of this scoreboard
      */
     private final String displayName;
     /**
-     * 此计分板的 “准则” (eg: dummy)
+     * The "criteria" of this scoreboard (e.g., dummy)
      */
     private final String criteriaName;
     private final Map<DisplaySlot, Set<ScoreboardViewer>> viewers = new ConcurrentHashMap<>();
     private final Map<Scorer, ScoreboardLine> lines = new ConcurrentHashMap<>();
     /**
-     * 此计分板的排序规则 <br>
-     * 排序动作由客户端执行，所以说服务端不需要去处理排序
+     * The sorting rule of this scoreboard
+     * <p>
+     * The sorting action is performed by the client, so the server does not need to handle sorting
      */
     @Setter
     private SortOrder sortOrder;
@@ -64,7 +65,7 @@ public final class Scoreboard {
     }
 
     /**
-     * @return 此计分板的所有观察者
+     * @return All viewers of this scoreboard
      */
     public Set<ScoreboardViewer> getAllViewers() {
         var all = new HashSet<ScoreboardViewer>();
@@ -73,39 +74,39 @@ public final class Scoreboard {
     }
 
     /**
-     * @param slot 目标槽位
+     * @param slot Target slot
      *
-     * @return 此计分板目标槽位的观察者
+     * @return Viewers of the target slot of this scoreboard
      */
     public Set<ScoreboardViewer> getViewers(DisplaySlot slot) {
         return this.viewers.get(slot);
     }
 
     /**
-     * 删除此计分板目标槽位中的某个观察者
+     * Remove a specific viewer from the target slot of this scoreboard
      *
-     * @param viewer 目标观察者
-     * @param slot   目标槽位
+     * @param viewer Target viewer
+     * @param slot   Target slot
      *
-     * @return 是否删除成功
+     * @return Whether the removal was successful
      */
     public boolean removeViewer(ScoreboardViewer viewer, DisplaySlot slot) {
-        boolean removed = this.viewers.get(slot).remove(viewer);
+        var removed = this.viewers.get(slot).remove(viewer);
         if (removed) viewer.hideScoreboardSlot(slot);
         return removed;
     }
 
     /**
-     * 向此计分板目标槽位中添加一个观察者
+     * Add a viewer to the target slot of this scoreboard
      *
-     * @param viewer 目标观察者
-     * @param slot   目标槽位
+     * @param viewer Target viewer
+     * @param slot   Target slot
      *
-     * @return 是否添加成功
+     * @return Whether the addition was successful
      */
     public boolean addViewer(ScoreboardViewer viewer, DisplaySlot slot) {
         removeInvalidViewers();
-        boolean added = this.viewers.get(slot).add(viewer);
+        var added = this.viewers.get(slot).add(viewer);
         if (added) viewer.displayScoreboard(this, slot);
         return added;
     }
@@ -115,53 +116,50 @@ public final class Scoreboard {
      */
     private void removeInvalidViewers() {
         this.viewers.forEach((slot, slotViewers) -> {
-            var invalid = new HashSet<ScoreboardViewer>();
-            slotViewers.forEach(viewer -> {
-                if (!viewer.isScoreboardViewerValid()) {
-                    invalid.add(viewer);
-                }
-            });
+            var invalid = slotViewers.stream()
+                    .filter(viewer -> !viewer.isScoreboardViewerValid())
+                    .collect(Collectors.toSet());
             slotViewers.removeAll(invalid);
         });
     }
 
     /**
-     * 检查此计分板目标槽位中是否有特定观察者
+     * Check if a specific viewer exists in the target slot of this scoreboard
      *
-     * @param viewer 目标观察者
-     * @param slot   目标槽位
+     * @param viewer Target viewer
+     * @param slot   Target slot
      *
-     * @return 是否存在
+     * @return Whether it exists
      */
     public boolean containViewer(ScoreboardViewer viewer, DisplaySlot slot) {
         return this.viewers.get(slot).contains(viewer);
     }
 
     /**
-     * 获取追踪对象在此计分板上对应的行（如果存在）
+     * Get the line corresponding to the tracker in this scoreboard (if it exists)
      *
-     * @param scorer 追踪对象
+     * @param scorer Tracker
      *
-     * @return 对应行
+     * @return Corresponding line
      */
     public @Nullable ScoreboardLine getLine(Scorer scorer) {
         return this.lines.get(scorer);
     }
 
     /**
-     * 为此计分板添加一个行
+     * Add a line to this scoreboard
      *
-     * @param line 目标行
+     * @param line Target line
      *
-     * @return 是否添加成功
+     * @return Whether the addition was successful
      */
     public boolean addLine(ScoreboardLine line) {
         if (wouldCallEvent()) {
             // TODO: event
-//            var event = new ScoreboardLineChangeEvent(this, line, line.getScore(), line.getScore(), ScoreboardLineChangeEvent.ActionType.ADD_LINE);
-//            Server.getInstance().getPluginManager().callEvent(event);
-//            if (event.isCancelled()) return false;
-//            line = event.getLine();
+            //       var event = new ScoreboardLineChangeEvent(this, line, line.getScore(), line.getScore(), ScoreboardLineChangeEvent.ActionType.ADD_LINE);
+            //       Server.getInstance().getPluginManager().callEvent(event);
+            //       if (event.isCancelled()) return false;
+            //       line = event.getLine();
         }
         this.lines.put(line.getScorer(), line);
         updateScore(line);
@@ -169,24 +167,24 @@ public final class Scoreboard {
     }
 
     /**
-     * 为此计分板添加一个行
+     * Add a line to this scoreboard
      *
-     * @param scorer 追踪对象
-     * @param score  分数
+     * @param scorer Tracker
+     * @param score  Score
      *
-     * @return 是否添加成功
+     * @return Whether the addition was successful
      */
     public boolean addLine(Scorer scorer, int score) {
         return addLine(new ScoreboardLine(this, scorer, score));
     }
 
     /**
-     * 为插件提供的便捷的计分板显示接口
+     * Convenient interface for plugins to display scores
      *
-     * @param text  FakeScorer的名称
-     * @param score 分数
+     * @param text  Name of FakeScorer
+     * @param score Score
      *
-     * @return 是否添加成功
+     * @return Whether the addition was successful
      */
     public boolean addLine(String text, int score) {
         var fakeScorer = new FakeScorer(text);
@@ -194,21 +192,23 @@ public final class Scoreboard {
     }
 
     /**
-     * 删除追踪对象在此计分板上对应的行（如果存在）
+     * Remove the line corresponding to the tracker in this scoreboard (if it exists)
      *
-     * @param scorer 目标追踪对象
+     * @param scorer Target tracker
      *
-     * @return 是否删除成功
+     * @return Whether the removal was successful
      */
     public boolean removeLine(Scorer scorer) {
         if (lines.isEmpty()) return false;
+
         var removed = lines.get(scorer);
         if (removed == null) return false;
+
         if (wouldCallEvent()) {
             // TODO: event
-//            var event = new ScoreboardLineChangeEvent(this, removed, removed.getScore(), removed.getScore(), ScoreboardLineChangeEvent.ActionType.REMOVE_LINE);
-//            Server.getInstance().getPluginManager().callEvent(event);
-//            if (event.isCancelled()) return false;
+            //       var event = new ScoreboardLineChangeEvent(this, removed, removed.getScore(), removed.getScore(), ScoreboardLineChangeEvent.ActionType.REMOVE_LINE);
+            //       Server.getInstance().getPluginManager().callEvent(event);
+            //       if (event.isCancelled()) return false;
         }
         this.lines.remove(scorer);
         getAllViewers().forEach(viewer -> viewer.removeScoreboardLine(removed));
@@ -216,69 +216,70 @@ public final class Scoreboard {
     }
 
     /**
-     * 删除计分板所有行
+     * Remove all lines from the scoreboard
      *
-     * @param send 是否发送到观察者
+     * @param send Whether to send to viewers
      *
-     * @return 是否删除成功
+     * @return Whether the removal was successful
      */
     public boolean removeAllLines(boolean send) {
         if (lines.isEmpty()) return false;
         if (wouldCallEvent()) {
             // TODO: event
-//            var event = new ScoreboardLineChangeEvent(this, null, 0, 0, ScoreboardLineChangeEvent.ActionType.REMOVE_ALL_LINES);
-//            Server.getInstance().getPluginManager().callEvent(event);
-//            if (event.isCancelled()) return false;
+            //       var event = new ScoreboardLineChangeEvent(this, null, 0, 0, ScoreboardLineChangeEvent.ActionType.REMOVE_ALL_LINES);
+            //       Server.getInstance().getPluginManager().callEvent(event);
+            //       if (event.isCancelled()) return false;
         }
-        if (send) {
-            this.lines.keySet().forEach(this::removeLine);
-        } else {
-            this.lines.clear();
-        }
+        if (send) this.lines.keySet().forEach(this::removeLine);
+        else this.lines.clear();
         return true;
     }
 
     /**
-     * 检查追踪对象在此计分板上是否有记录
+     * Check if the tracker has a record in this scoreboard
      *
-     * @param scorer 目标追踪对象
+     * @param scorer Target tracker
      *
-     * @return 是否存在
+     * @return Whether it exists
      */
     public boolean containLine(Scorer scorer) {
         return this.lines.containsKey(scorer);
     }
 
     /**
-     * 向所有观察者发送新的分数 <br>
+     * Send new scores to all viewers <br>
      *
-     * @param update 需要更新的行
+     * @param update Line to update
      */
     public void updateScore(ScoreboardLine update) {
         getAllViewers().forEach(viewer -> viewer.updateScore(update));
     }
 
     /**
-     * 向所有观察者重新发送此计分板以及行信息 <br>
-     * 例如当对计分板进行了大量的更改后，调用此方法 <br>
-     * 可节省大量带宽
+     * Resend this scoreboard and line information to all viewers
+     * <p>
+     * For example, after making a lot of changes to the scoreboard, call this method
+     * <p>
+     * It can save a lot of bandwidth
      */
     public void resend() {
         getAllViewers().forEach(viewer -> viewer.removeScoreboard(this));
 
-        this.viewers.forEach((slot, slotViewers) -> {
-            slotViewers.forEach(slotViewer -> {
-                slotViewer.displayScoreboard(this, slot);
-            });
-        });
+        this.viewers.forEach((slot, slotViewers) ->
+                slotViewers.forEach(slotViewer ->
+                        slotViewer.displayScoreboard(this, slot)
+                )
+        );
     }
 
     /**
-     * 为插件提供的快捷接口 <br>
-     * 按照List顺序设置计分板的内容 (使用FakeScorer作为追踪对象) <br>
-     * 会覆盖之前的所有行 <br>
+     * Convenient interface for plugins
+     * <p>
+     * Set the content of the scoreboard in the order of the List (using FakeScorer as the tracker)
+     * <p>
+     * It will overwrite all previous lines
      *
-     * @param lines 需要设置的字符串内容
+     * @param lines String content to set
      */
     public void setLines(List<String> lines) {
         removeAllLines(false);
@@ -291,10 +292,10 @@ public final class Scoreboard {
     }
 
     /**
-     * 按照List顺序设置计分板的内容 <br>
-     * 会覆盖之前的所有行 <br>
+     * Set the content of the scoreboard in the order of the List <br>
+     * It will overwrite all previous lines <br>
      *
-     * @param lines 需要设置的行内容
+     * @param lines Line content to set
      */
     public void setLines(Collection<ScoreboardLine> lines) {
         removeAllLines(false);
@@ -303,7 +304,7 @@ public final class Scoreboard {
     }
 
     /**
-     * @return 对此计分板的更改是否会产生事件
+     * @return Whether changes to this scoreboard will trigger events
      */
     public boolean wouldCallEvent() {
         return Server.getInstance().getScoreboardService().contain(this);

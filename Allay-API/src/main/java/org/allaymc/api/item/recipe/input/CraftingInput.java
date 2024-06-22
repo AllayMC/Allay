@@ -12,7 +12,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
  */
 @Getter
 public class CraftingInput implements Input {
-    // 我们规定左上角物品索引为[0][0]，坐标轴为[行][列]
+    // We define the top-left item index as [0][0], with the coordinate system as [row][column]
     protected ItemStack[][] items;
 
     // 3x3

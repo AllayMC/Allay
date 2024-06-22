@@ -124,7 +124,13 @@ public class Skin {
     }
 
     public static String legacyGeometryName(String geometryName) {
-        return "{\"geometry\" : {\"default\" : \"" + geometryName + "\"}}";
+        return """
+                {
+                  "geometry": {
+                    "default": "%s"
+                  }
+                }
+                """.formatted(geometryName);
     }
 
     public static Image parseBufferedImage(BufferedImage image) {
@@ -232,8 +238,8 @@ public class Skin {
 
     private boolean isValidSkin() {
         return skinId != null && !skinId.trim().isEmpty() &&
-                skinData != null && skinData.width() >= 64 && skinData.height() >= 32 &&
-                skinData.data().length >= SINGLE_SKIN_SIZE;
+               skinData != null && skinData.width() >= 64 && skinData.height() >= 32 &&
+               skinData.data().length >= SINGLE_SKIN_SIZE;
     }
 
     private boolean isValidResourcePatch() {

@@ -20,6 +20,8 @@ import java.util.Map;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, ScoreboardViewer {
 
+    double BLOCK_INTERACT_MAX_DV_DIFF = 2.0;
+
     boolean isSprinting();
 
     void setSprinting(boolean sprinting);
@@ -40,9 +42,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void setCrawling(boolean crawling);
 
-    void setInteractingBlock(boolean interactingBlock);
-
     boolean isInteractingBlock();
+
+    void setInteractingBlock(boolean interactingBlock);
 
     int getHandSlot();
 
@@ -129,15 +131,13 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void showForm(Form form);
 
-    double BLOCK_INTERACT_MAX_DV_DIFF = 2.0;
-
     default boolean canInteract(float x, float y, float z) {
         var maxDistance = getMaxInteractDistance();
         var location = getLocation();
         if (location.distanceSquared(x, y, z) > maxDistance * maxDistance) return false;
 
         var dv = MathUtils.JOMLVecToCBVec(MathUtils.getDirectionVector(location.yaw(), location.pitch()));
-        org.cloudburstmc.math.vector.Vector3f target = org.cloudburstmc.math.vector.Vector3f.from(x - location.x(), y - location.y(), z - location.z()).normalize();
+        var target = org.cloudburstmc.math.vector.Vector3f.from(x - location.x(), y - location.y(), z - location.z()).normalize();
         var delta = dv.sub(target);
         var diff = delta.dot(delta);
         return diff < BLOCK_INTERACT_MAX_DV_DIFF;

@@ -41,7 +41,7 @@ public class PackManifest {
         try {
             return JSONUtils.from(loader.getFile(PATH), PackManifest.class);
         } catch (IllegalStateException | IOException exception) {
-            log.error("Failed to load " + loader.getLocation(), exception);
+            log.error("Failed to load {}", loader.getLocation(), exception);
             return null;
         }
     }
@@ -50,9 +50,9 @@ public class PackManifest {
         if (this.formatVersion == null || this.header == null || this.modules == null) return false;
 
         return this.header.description != null &&
-                this.header.name != null &&
-                this.header.uuid != null &&
-                this.header.version != null;
+               this.header.name != null &&
+               this.header.uuid != null &&
+               this.header.version != null;
     }
 
     public enum Capability {

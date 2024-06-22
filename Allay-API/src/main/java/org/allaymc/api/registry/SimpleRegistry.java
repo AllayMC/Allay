@@ -82,7 +82,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
 
     @Override
     public CONTENT getContent() {
-        return content;
+        return this.content;
     }
 
     @Override

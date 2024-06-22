@@ -26,7 +26,6 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
      *
      * @return the value registered by the given key.
      */
-
     default VALUE get(KEY key) {
         return getContent().get(key);
     }
@@ -41,12 +40,8 @@ public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> ext
      * @return the mapped value from the given key if present
      */
     default <U> Optional<U> map(KEY key, Function<? super VALUE, ? extends U> mapper) {
-        VALUE value = this.get(key);
-        if (value == null) {
-            return Optional.empty();
-        } else {
-            return Optional.ofNullable(mapper.apply(value));
-        }
+        var value = this.get(key);
+        return value == null ? Optional.empty() : Optional.ofNullable(mapper.apply(value));
     }
 
     /**

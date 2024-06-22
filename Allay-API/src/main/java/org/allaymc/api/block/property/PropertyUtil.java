@@ -1,5 +1,6 @@
 package org.allaymc.api.block.property;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
 
@@ -8,6 +9,7 @@ import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
  *
  * @author daoge_cmd
  */
+@UtilityClass
 public class PropertyUtil {
     public static MinecraftCardinalDirection toMinecraftCardinalDirection(BlockFace face) {
         return switch (face) {

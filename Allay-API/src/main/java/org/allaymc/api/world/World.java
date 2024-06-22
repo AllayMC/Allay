@@ -70,9 +70,7 @@ public interface World {
 
     @ApiStatus.Internal
     default void sendTime(Collection<EntityPlayer> players) {
-        for (var player : players) {
-            sendTime(player);
-        }
+        players.forEach(this::sendTime);
     }
 
     void setTime(long time);
@@ -91,9 +89,7 @@ public interface World {
     <V> V getGameRule(GameRule gameRule);
 
     default void broadcastPacket(BedrockPacket packet) {
-        for (var dim : getDimensions().values()) {
-            dim.broadcastPacket(packet);
-        }
+        getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
     }
 
     EventBus getEventBus();

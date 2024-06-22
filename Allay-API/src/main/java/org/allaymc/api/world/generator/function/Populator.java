@@ -9,6 +9,6 @@ import java.util.function.Function;
  *
  * @author daoge_cmd
  */
-public interface Populator extends Function<PopulateContext, Boolean>, GenerateFunction  {
+public interface Populator extends Function<PopulateContext, Boolean>, GenerateFunction {
 
 }

@@ -41,7 +41,6 @@ import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.eventbus.AllayEventBus;
-import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
@@ -329,8 +328,8 @@ public final class AllayServer implements Server {
         entry.setEntityId(entityId);
         entry.setName(name);
         entry.setXuid(xuid);
-        entry.setPlatformChatId(deviceInfo.getDeviceName());
-        entry.setBuildPlatform(deviceInfo.getDevice().getId());
+        entry.setPlatformChatId(deviceInfo.deviceName());
+        entry.setBuildPlatform(deviceInfo.device().getId());
         entry.setSkin(skin.toNetwork());
         entry.setTrustedSkin(skin.isTrusted());
         playerListPacket.getEntries().add(entry);

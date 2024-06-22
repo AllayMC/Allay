@@ -22,7 +22,8 @@ public record PluginContainer(
             PluginDescriptor descriptor,
             PluginLoader loader,
             Path dataFolder,
-            I18n i18n) {
+            I18n i18n
+    ) {
         var pluginContainer = new PluginContainer(plugin, descriptor, loader, dataFolder, i18n);
         plugin.setPluginContainer(pluginContainer);
         return pluginContainer;

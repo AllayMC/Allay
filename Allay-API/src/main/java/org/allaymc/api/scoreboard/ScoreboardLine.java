@@ -7,12 +7,13 @@ import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ * A single line on the scoreboard
+ * <p>
+ * Composed of {@link Scorer} and score
+ * <p>
  * Allay Project 2024/2/27
  *
  * @author daoge_cmd
- * <p>
- * 计分板上的单个行 <br>
- * 由{@link Scorer}和分数组成
  */
 @Getter
 public final class ScoreboardLine {
@@ -20,20 +21,17 @@ public final class ScoreboardLine {
     private static final AtomicLong LINE_ID_COUNTER = new AtomicLong(0);
 
     /**
-     * 此计分行所属的计分板
+     * The scoreboard to which this score line belongs
      */
     private final Scoreboard scoreboard;
     /**
-     * 追踪对象
+     * Tracker
      */
     private final Scorer scorer;
     /**
-     * 行id, 客户端通过此id标识计分板上的每个行
+     * Line ID, each line on the scoreboard is identified by this ID on the client
      */
     private final long lineId;
-    /**
-     * 分数
-     */
     private int score;
 
     public ScoreboardLine(Scoreboard scoreboard, Scorer scorer) {
@@ -50,12 +48,10 @@ public final class ScoreboardLine {
     public boolean setScore(int score) {
         if (scoreboard.wouldCallEvent()) {
             // TODO: event
-//            var event = new ScoreboardLineChangeEvent(scoreboard, this, score, this.score, ScoreboardLineChangeEvent.ActionType.SCORE_CHANGE);
-//            Server.getInstance().getPluginManager().callEvent(event);
-//            if (event.isCancelled()) {
-//                return false;
-//            }
-//            score = event.getNewValue();
+            //       var event = new ScoreboardLineChangeEvent(scoreboard, this, score, this.score, ScoreboardLineChangeEvent.ActionType.SCORE_CHANGE);
+            //       Server.getInstance().getPluginManager().callEvent(event);
+            //       if (event.isCancelled()) return false;
+            //       score = event.getNewValue();
         }
         this.score = score;
         updateScore();
@@ -63,38 +59,38 @@ public final class ScoreboardLine {
     }
 
     /**
-     * 增加分数
+     * Increase the score
      *
-     * @param addition 增加量
+     * @param addition Amount to increase
      *
-     * @return 是否成功（事件被撤回就会false）
+     * @return Whether it was successful (false if the event was cancelled)
      */
     public boolean addScore(int addition) {
         return setScore(getScore() + addition);
     }
 
     /**
-     * 减少分数
+     * Decrease the score
      *
-     * @param reduction 减少量
+     * @param reduction Amount to decrease
      *
-     * @return 是否成功（事件被撤回就会false）
+     * @return Whether it was successful (false if the event was cancelled)
      */
     public boolean removeScore(int reduction) {
         return setScore(getScore() - reduction);
     }
 
     /**
-     * 转换到network信息
+     * Convert to network information
      *
-     * @return network信息
+     * @return Network information
      */
     public ScoreInfo toNetworkInfo() {
         return getScorer().toNetworkInfo(getScoreboard(), this);
     }
 
     /**
-     * 通知所属计分板对象更新此行信息
+     * Notify the owning scoreboard object to update this line information
      */
     private void updateScore() {
         scoreboard.updateScore(this);

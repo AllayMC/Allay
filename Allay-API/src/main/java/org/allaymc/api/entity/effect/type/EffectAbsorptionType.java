@@ -11,7 +11,6 @@ import java.awt.*;
  * @author daoge_cmd
  */
 public class EffectAbsorptionType extends AbstractEffectType {
-
     public static final EffectAbsorptionType ABSORPTION_TYPE = new EffectAbsorptionType();
 
     private EffectAbsorptionType() {

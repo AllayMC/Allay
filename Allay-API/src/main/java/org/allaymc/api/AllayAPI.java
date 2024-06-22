@@ -85,23 +85,22 @@ public final class AllayAPI {
      */
     @SuppressWarnings("unchecked")
     public void implement(String coreName) throws MissingImplementationException {
-        if (!i18nSet) {
-            throw new MissingImplementationException("Missing i18n implementation!");
-        }
-        for (Map.Entry<Class<?>, ApiBindingAction<?>> entry : bindings.entrySet()) {
-            if (entry.getValue() == null) {
+        if (!i18nSet) throw new MissingImplementationException("Missing i18n implementation!");
+        for (var entry : bindings.entrySet()) {
+            if (entry.getValue() == null)
                 throw new MissingImplementationException("Missing binding for " + entry.getKey().getName());
-            }
+
             var apiInstance = entry.getValue().bindingAction.get();
-            Consumer<Object> consumer = (Consumer<Object>) consumers.get(entry.getKey());
-            if (consumer == null) {
+            var consumer = (Consumer<Object>) consumers.get(entry.getKey());
+            if (consumer == null)
                 throw new MissingRequirementException("Missing requirement for " + entry.getKey().getName());
-            }
+
             consumer.accept(apiInstance);
             if (entry.getValue().afterBound != null) {
                 ((Consumer<Object>) entry.getValue().afterBound).accept(apiInstance);
             }
         }
+
         this.coreName = coreName;
         log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, coreName, API_VERSION));
         implemented = true;
@@ -119,9 +118,7 @@ public final class AllayAPI {
      */
     public <T> void requireImpl(Class<T> api, Consumer<T> apiInstanceConsumer) {
         bindings.put(api, null);
-        if (apiInstanceConsumer != null) {
-            consumers.put(api, apiInstanceConsumer);
-        }
+        if (apiInstanceConsumer != null) consumers.put(api, apiInstanceConsumer);
     }
 
     public <T> void bind(Class<T> api, Supplier<T> supplier) {
@@ -212,6 +209,5 @@ public final class AllayAPI {
         requireImpl(PackRegistry.class, PackRegistry.REGISTRY::set);
     }
 
-    private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {
-    }
+    private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {}
 }

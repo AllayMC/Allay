@@ -18,7 +18,7 @@ public class Metadata {
     private final EntityDataMap entityDataMap = new EntityDataMap();
 
     public <T> Metadata set(EntityDataType<T> entityData, T value) {
-        T oldValue = this.entityDataMap.get(entityData);
+        var oldValue = this.entityDataMap.get(entityData);
         if (!Objects.equals(oldValue, value)) {
             this.entityDataMap.put(entityData, value);
         }
@@ -30,7 +30,7 @@ public class Metadata {
     }
 
     public Metadata set(EntityFlag entityFlag, boolean value) {
-        boolean oldValue = this.get(entityFlag);
+        var oldValue = this.get(entityFlag);
         if (oldValue != value) {
             this.entityDataMap.setFlag(entityFlag, value);
         }

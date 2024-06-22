@@ -6,9 +6,6 @@ package org.allaymc.api.form;
  * @author daoge_cmd
  */
 public class FormException extends RuntimeException {
-    public FormException() {
-    }
-
     public FormException(String message) {
         super(message);
     }

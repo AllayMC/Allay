@@ -1,6 +1,8 @@
 package org.allaymc.api.blockentity.init;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -13,17 +15,13 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
  *
  * @author daoge_cmd
  */
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEntityInitInfo<T> {
     private final Dimension dimension;
     private final NbtMap nbt;
     @Getter
     @Setter
     private BlockEntityType<T> blockEntityType;
-
-    protected SimpleBlockEntityInitInfo(Dimension dimension, NbtMap nbt) {
-        this.dimension = dimension;
-        this.nbt = nbt;
-    }
 
     public static Builder builder() {
         return new Builder();

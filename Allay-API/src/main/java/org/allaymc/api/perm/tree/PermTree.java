@@ -6,7 +6,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -92,13 +91,12 @@ public interface PermTree {
 
     default NbtMap saveNBT() {
         var builder = NbtMap.builder();
-        var list = new ArrayList<String>();
-        for (var leaf : getLeaves()) {
-            list.add(leaf.getFullName());
-        }
+        var list = getLeaves().stream().map(PermNode::getFullName).toList();
         builder.putList("Perms", NbtType.STRING, list);
+
         if (getParent() != null)
             builder.putString("Parent", getParent().getName());
+
         builder.put(
                 "PermLevel",
                 containsSubSet(OPERATOR) ? OPERATOR.getName() :
@@ -113,8 +111,7 @@ public interface PermTree {
     }
 
     default void loadNBT(NbtMap nbt, boolean callListener) {
-        for (var perm : nbt.getList("Perms", NbtType.STRING))
-            addPerm(perm, callListener);
+        nbt.getList("Perms", NbtType.STRING).forEach(perm -> addPerm(perm, callListener));
         copyFrom(DefaultPermissions.byName(nbt.getString("PermLevel")));
     }
 

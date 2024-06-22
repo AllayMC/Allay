@@ -1,6 +1,7 @@
 package org.allaymc.api.item.recipe;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.recipe.input.CraftingInput;
@@ -12,6 +13,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.Shapeles
 import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptorWithCount;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +25,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
  * @author daoge_cmd
  */
 public class ShapelessRecipe extends CraftingRecipe {
-
+    @Getter
     protected ItemDescriptor[] ingredients;
 
     @Builder
@@ -35,17 +37,13 @@ public class ShapelessRecipe extends CraftingRecipe {
 
     @Override
     public boolean match(Input input) {
-        CraftingInput craftingInput;
-        if (input instanceof CraftingInput c) {
-            craftingInput = c;
-        } else return false;
+        if (!(input instanceof CraftingInput craftingInput)) return false;
 
         var inputItems = collectNonAirItems(craftingInput.getFlattenItems());
-        if (inputItems.size() != ingredients.length) {
-            return false;
-        }
+        if (inputItems.size() != ingredients.length) return false;
 
-        List<ItemStack> itemPool = new ArrayList<>(inputItems);
+        var itemPool = new ArrayList<>(inputItems);
+
         var checkCount = ingredients.length;
         for (var ingredient : ingredients) {
             var index = findItem(itemPool, ingredient);
@@ -54,17 +52,12 @@ public class ShapelessRecipe extends CraftingRecipe {
                 checkCount--;
             }
         }
+
         return checkCount == 0 && itemPool.isEmpty();
     }
 
     protected List<ItemStack> collectNonAirItems(ItemStack[] items) {
-        var result = new ArrayList<ItemStack>();
-        for (var item : items) {
-            if (item.getItemType() != AIR_TYPE) {
-                result.add(item);
-            }
-        }
-        return result;
+        return Arrays.stream(items).filter(item -> item.getItemType() != AIR_TYPE).toList();
     }
 
     protected int findItem(List<ItemStack> itemPool, ItemDescriptor target) {
@@ -91,14 +84,8 @@ public class ShapelessRecipe extends CraftingRecipe {
     }
 
     protected List<ItemDescriptorWithCount> buildNetworkIngredients() {
-        var result = new ArrayList<ItemDescriptorWithCount>();
-        for (var ingredient : ingredients) {
-            result.add(new ItemDescriptorWithCount(ingredient.toNetwork(), 1));
-        }
-        return result;
-    }
-
-    public ItemDescriptor[] getIngredients() {
-        return ingredients;
+        return Arrays.stream(ingredients)
+                .map(ingredient -> new ItemDescriptorWithCount(ingredient.toNetwork(), 1))
+                .toList();
     }
 }

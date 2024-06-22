@@ -7,7 +7,8 @@ package org.allaymc.api.item.recipe;
  */
 public interface TaggedRecipe extends Recipe {
     /**
-     * @return 这个配方所适用的合成类型。例如，工作台配方应具有 "crafting_table" tag
+     * @return The tag indicating the crafting type applicable to this recipe.
+     * For example, a crafting table recipe should have the "crafting_table" tag.
      */
     String getTag();
 }

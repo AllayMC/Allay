@@ -9,5 +9,4 @@ import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderCo
  * @author daoge_cmd
  */
 public interface BlockEntityBarrel extends BlockEntity, BlockEntityContainerHolderComponent {
-
 }

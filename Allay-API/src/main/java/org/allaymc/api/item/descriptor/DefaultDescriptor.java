@@ -10,8 +10,8 @@ import org.allaymc.api.item.type.ItemType;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class DefaultDescriptor implements ItemDescriptor {
 
     public static final int WILDCARD_META = 32767;
@@ -26,7 +26,7 @@ public class DefaultDescriptor implements ItemDescriptor {
     @Override
     public boolean match(ItemStack itemStack) {
         return itemStack.getItemType().getIdentifier().equals(itemType.getIdentifier()) &&
-                (meta == WILDCARD_META || itemStack.getMeta() == meta);
+               (meta == WILDCARD_META || itemStack.getMeta() == meta);
     }
 
     @Override

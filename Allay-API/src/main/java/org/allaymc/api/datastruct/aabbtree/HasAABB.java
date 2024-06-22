@@ -8,6 +8,5 @@ import org.joml.primitives.AABBf;
  * @author daoge_cmd
  */
 public interface HasAABB {
-
     AABBf copyOffsetAABBTo(AABBf dest);
 }

@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 public final class ModalForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "modal";
+
     private String title = "";
     private String content = "";
     @SerializedName("button1")
@@ -67,11 +68,8 @@ public final class ModalForm extends Form {
             return;
         }
         onResponse.accept(data);
-        if (data.equals("true")) {
-            onTrue.run();
-        } else {
-            onFalse.run();
-        }
+        if (data.equals("true")) onTrue.run();
+        else onFalse.run();
     }
 
     @Override

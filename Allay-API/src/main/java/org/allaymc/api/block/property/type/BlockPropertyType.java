@@ -1,5 +1,6 @@
 package org.allaymc.api.block.property.type;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -46,15 +47,11 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
 
     @Getter
     @ToString
+    @AllArgsConstructor
     abstract sealed class BlockPropertyValue<DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>, SERIALIZED_DATATYPE> permits BooleanPropertyType.BooleanPropertyValue, EnumPropertyType.EnumPropertyValue, IntPropertyType.IntPropertyValue {
 
         protected final PROPERTY propertyType;
         protected final DATATYPE value;
-
-        BlockPropertyValue(PROPERTY propertyType, DATATYPE value) {
-            this.propertyType = propertyType;
-            this.value = value;
-        }
 
         public abstract int getIndex();
 

@@ -97,8 +97,8 @@ public class BlockAttributes {
     @Builder.Default
     protected boolean pushesUpFallingBlocks = false;
     /**
-     * 此方块状态是否可以被徒手挖取
-     * 若可以，则玩家在非创造模式下可以使用任何工具挖取此方块并产生掉落物
+     * Whether this block state can be harvested by hand
+     * If true, players in non-creative mode can use any tool to mine this block and produce drops
      */
     @Builder.Default
     protected boolean canHarvestWithHand = true;

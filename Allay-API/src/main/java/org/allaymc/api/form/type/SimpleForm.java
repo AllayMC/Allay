@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 public final class SimpleForm extends Form {
     @SuppressWarnings("unused")
     private final String type = "form";
+
     private final List<Button> buttons = new ArrayList<>();
     private String title = "";
     private String content = "";
@@ -72,11 +73,11 @@ public final class SimpleForm extends Form {
         try {
             buttonIndex = Integer.parseInt(data);
         } catch (Exception e) {
-            log.warn("Invalid simple form response: " + data);
+            log.warn("Invalid simple form response: {}", data);
             return;
         }
         if (buttonIndex >= this.buttons.size()) {
-            log.warn("Button index out of range: " + buttonIndex);
+            log.warn("Button index out of range: {}", buttonIndex);
             return;
         }
         var button = this.buttons.get(buttonIndex);

@@ -62,7 +62,7 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
                     try {
                         type = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(dataEntry.getString("name"), ":", "")[1].toUpperCase());
                     } catch (IllegalArgumentException ignore) {
-                        log.error("Unknown block name: " + dataEntry.getString("name"));
+                        log.error("Unknown block name: {}", dataEntry.getString("name"));
                         continue;
                     }
                     var blockAttributes = BlockAttributes.fromNBT(dataEntry);

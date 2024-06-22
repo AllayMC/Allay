@@ -9,6 +9,5 @@ public interface ComponentInitInfo {
 
     ComponentInitInfo EMPTY = new Empty();
 
-    class Empty implements ComponentInitInfo {
-    }
+    class Empty implements ComponentInitInfo {}
 }

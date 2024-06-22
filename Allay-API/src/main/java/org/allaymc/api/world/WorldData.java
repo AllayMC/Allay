@@ -356,6 +356,5 @@ public class WorldData {
 
     @Value
     @Builder
-    public static class WorldPolicies {
-    }
+    public static class WorldPolicies {}
 }

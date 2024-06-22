@@ -13,8 +13,7 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
  * @author daoge_cmd
  */
 public abstract class OtherChunkAccessibleContext extends Context {
-
-    private static BlockState AIR = BlockTypes.AIR_TYPE.getDefaultState();
+    private static final BlockState AIR = BlockTypes.AIR_TYPE.getDefaultState();
 
     @Getter
     protected ChunkAccessible chunkAccessor;
@@ -29,19 +28,21 @@ public abstract class OtherChunkAccessibleContext extends Context {
     }
 
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
-        if(isInCurrentChunk(x, y, z)) {
+        if (isInCurrentChunk(x, y, z)) {
             currentChunk.setBlockState(x & 15, y, z & 15, blockState, layer);
             return;
         }
+
         setBlockStateInOtherChunk(x, y, z, blockState, layer);
     }
 
     private void setBlockStateInOtherChunk(int x, int y, int z, BlockState blockState, int layer) {
         var chunk = chunkAccessor.getChunk(x >> 4, z >> 4);
         if (chunk == null) return;
+
         chunk.setBlockState(x & 15, y, z & 15, blockState, layer);
         if (chunk.isLoaded()) {
-            // 区块已经载入世界了，所以需要发送方块更新包
+            // The chunk has been loaded into the world, so we need to send a block update packet
             chunk.addChunkPacket(Dimension.createBlockUpdatePacket(blockState, x, y, z, layer));
         }
     }
@@ -51,16 +52,14 @@ public abstract class OtherChunkAccessibleContext extends Context {
     }
 
     public BlockState getBlockState(int x, int y, int z, int layer) {
-        if(isInCurrentChunk(x, y, z)) {
-            return currentChunk.getBlockState(x & 15, y, z & 15, layer);
-        }
-        return getBlockStateInOtherChunk(x, y, z, layer);
+        return isInCurrentChunk(x, y, z) ?
+                currentChunk.getBlockState(x & 15, y, z & 15, layer) :
+                getBlockStateInOtherChunk(x, y, z, layer);
     }
 
     private BlockState getBlockStateInOtherChunk(int x, int y, int z, int layer) {
         var chunk = chunkAccessor.getChunk(x >> 4, z >> 4);
-        if (chunk == null) return AIR;
-        return chunk.getBlockState(x & 15, y, z & 15, layer);
+        return chunk == null ? AIR : chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
     private boolean isInCurrentChunk(int x, int y, int z) {

@@ -264,13 +264,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         addPlayerPacket.setUniqueEntityId(runtimeId);
         addPlayerPacket.setUuid(networkComponent.getLoginData().getUuid());
         addPlayerPacket.setUsername(networkComponent.getOriginName());
-        addPlayerPacket.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().getDeviceId());
+        addPlayerPacket.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().deviceId());
         addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
         addPlayerPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         addPlayerPacket.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         addPlayerPacket.setGameType(gameType);
         addPlayerPacket.getMetadata().putAll(this.metadata.getEntityDataMap());
-        addPlayerPacket.setDeviceId(networkComponent.getLoginData().getDeviceInfo().getDeviceId());
+        addPlayerPacket.setDeviceId(networkComponent.getLoginData().getDeviceInfo().deviceId());
         addPlayerPacket.setHand(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().toNetworkItemData());
         return addPlayerPacket;
     }

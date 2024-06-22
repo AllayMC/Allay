@@ -1,5 +1,6 @@
 package org.allaymc.api.client.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -8,8 +9,8 @@ import lombok.Getter;
  * @author LucGamesYT | daoge_cmd
  */
 @Getter
+@AllArgsConstructor
 public enum Device {
-
     UNKNOWN(-1),
     ANDROID(1),
     IOS(2),
@@ -27,10 +28,6 @@ public enum Device {
     WINDOWS_PHONE(14);
 
     private final int id;
-
-    Device(int id) {
-        this.id = id;
-    }
 
     public static Device getDevice(int id) {
         return switch (id) {

@@ -6,7 +6,6 @@ package org.allaymc.api.client.data;
  * @author LucGamesYT | daoge_cmd
  */
 public enum UIProfile {
-
     CLASSIC,
     POCKET;
 
@@ -17,5 +16,4 @@ public enum UIProfile {
             default -> null;
         };
     }
-
 }

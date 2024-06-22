@@ -1,10 +1,6 @@
 package org.allaymc.api.command.selector;
 
-
 public class SelectorSyntaxException extends Exception {
-
-    public SelectorSyntaxException() {}
-
     public SelectorSyntaxException(String message) {
         super(message);
     }
@@ -26,7 +22,7 @@ public class SelectorSyntaxException extends Exception {
         var builder = new StringBuilder(super.getMessage());
         Throwable t = this;
         while (t.getCause() != null) {
-            //到达最底层
+            // Reached the bottom level
             t = t.getCause();
             builder.append("\n");
             builder.append("§cCaused by ");

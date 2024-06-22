@@ -1,26 +1,30 @@
 package org.allaymc.api.scoreboard.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * Scoreboard display slot enum
+ * <p>
  * Allay Project 2024/2/27
  *
  * @author daoge_cmd
- * <p>
- * Scoreboard display slot enum
  */
+@Getter
+@AllArgsConstructor
 public enum DisplaySlot {
-    // Right side of player's screen
+    /**
+     * Right side of player's screen
+     */
     SIDEBAR("sidebar"),
-    // Player list
+    /**
+     * Player list
+     */
     LIST("list"),
-    // Below the player's name tag
+    /**
+     * Below the player's name tag
+     */
     BELOW_NAME("belowname");
 
-    @Getter
     private final String slotName;
-
-    DisplaySlot(String slotName) {
-        this.slotName = slotName;
-    }
 }

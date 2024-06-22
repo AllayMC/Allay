@@ -12,6 +12,7 @@ public final class Input extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "input";
+
     @Getter
     private final String text;
     @Getter

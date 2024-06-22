@@ -1,5 +1,6 @@
 package org.allaymc.api.scoreboard.scorer;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
@@ -11,13 +12,10 @@ import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
  * @author daoge_cmd
  */
 @Getter
+@AllArgsConstructor
 public final class FakeScorer implements Scorer {
 
     private final String fakeName;
-
-    public FakeScorer(String fakeName) {
-        this.fakeName = fakeName;
-    }
 
     @Override
     public ScoreInfo.ScorerType getScorerType() {
@@ -44,6 +42,6 @@ public final class FakeScorer implements Scorer {
 
     @Override
     public ScoreInfo toNetworkInfo(Scoreboard scoreboard, ScoreboardLine line) {
-        return new ScoreInfo(line.getLineId(), scoreboard.getObjectiveName(), line.getScore(), getFakeName());
+        return new ScoreInfo(line.getLineId(), scoreboard.getObjectiveName(), line.getScore(), fakeName);
     }
 }

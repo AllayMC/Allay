@@ -8,9 +8,8 @@ import java.util.UUID;
  * @author daoge_cmd
  */
 public interface UniqueRecipe extends Recipe {
-
     /**
-     * @return 配方的UUID
+     * @return The UUID of the recipe
      */
-    UUID getUUID();
+    UUID getUuid();
 }

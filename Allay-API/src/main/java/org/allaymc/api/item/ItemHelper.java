@@ -1,5 +1,6 @@
 package org.allaymc.api.item;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
@@ -7,6 +8,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -14,6 +16,7 @@ import java.util.Objects;
  *
  * @author daoge_cmd
  */
+@UtilityClass
 public final class ItemHelper {
     public static ItemStack fromNBT(NbtMap nbt) {
         int count = nbt.getByte("Count");
@@ -26,20 +29,22 @@ public final class ItemHelper {
                         .count(count)
                         .meta(meta)
                         .extraTag(nbt.getCompound("tag"))
-                        .build());
+                        .build()
+        );
     }
 
     /**
-     * 获取物品的物品等级 <br>
-     * @return ItemTier对象, 或者null如果此物品不存在物品等级
+     * Get the item tier of an item.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return The {@link ItemTier} object, or {@code null} if the item does not have an item tier.
      */
     public static ItemTier getItemTier(ItemType<?> itemType) {
-        for (var tier : ItemTier.ORDER_OF_QUALITY) {
-            if (itemType.hasItemTag(tier.getItemTag())) {
-                return tier;
-            }
-        }
-        return null;
+        return Arrays.stream(ItemTier.ORDER_OF_QUALITY)
+                .filter(tier -> itemType.hasItemTag(tier.getItemTag()))
+                .findFirst()
+                .orElse(null);
     }
 
     public static boolean isTool(ItemType<?> itemType) {

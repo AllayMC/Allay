@@ -9,8 +9,8 @@ import org.allaymc.api.item.ItemStack;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class ItemDescriptorWithCount {
     protected ItemDescriptor itemDescriptor;
     protected int count;

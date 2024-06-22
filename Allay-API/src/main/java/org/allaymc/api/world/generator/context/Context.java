@@ -1,5 +1,6 @@
 package org.allaymc.api.world.generator.context;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.UnsafeChunk;
@@ -9,13 +10,10 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
  *
  * @author daoge_cmd
  */
+@Getter
+@AllArgsConstructor
 public abstract class Context {
-    @Getter
     protected UnsafeChunk currentChunk;
-
-    public Context(UnsafeChunk currentChunk) {
-        this.currentChunk = currentChunk;
-    }
 
     public DimensionInfo getDimensionInfo() {
         return currentChunk.getDimensionInfo();

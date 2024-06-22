@@ -44,7 +44,6 @@ public interface ComponentProvider<T extends Component> {
     }
 
     @SneakyThrows
-
     static Identifier findComponentIdentifier(Class<?> clazz) {
         Identifier identifier = null;
         while (identifier == null) {
@@ -56,7 +55,6 @@ public interface ComponentProvider<T extends Component> {
     }
 
     @SneakyThrows
-
     static Identifier findComponentIdentifierInCertainClass(Class<?> clazz) {
         for (var field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(ComponentIdentifier.class) && Identifier.class == field.getType() && isStatic(field.getModifiers())) {
@@ -72,15 +70,14 @@ public interface ComponentProvider<T extends Component> {
     Class<?> getComponentClass();
 
     @SneakyThrows
-
     default Identifier findComponentIdentifier() {
         return findComponentIdentifier(getComponentClass());
     }
 
+    @Getter
     @AllArgsConstructor
     class SimpleComponentProvider<T extends Component, I extends ComponentInitInfo> implements ComponentProvider<T> {
         private Function<I, T> provider;
-        @Getter
         private Class<?> componentClass;
 
         @Override

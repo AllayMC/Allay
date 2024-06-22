@@ -15,14 +15,12 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 /**
- * 可缓存的目标选择器参数基类<p/>
- * 若一个选择器的参数返回的{@code List<Predicate<Entity>>}不具有时效性，则可继承此类实现对解析结果的缓存，提高性能
+ * Cachable base class for target selector arguments
+ * <p>
+ * If a selector argument returns {@code List<Predicate<Entity>>} without expiration, you can inherit from this class to cache the parsing results for better performance.
  */
-
-
 public abstract class CachedSimpleSelectorArgument implements SelectorArgument {
-
-    Cache<Set<String>, Predicate<Entity>> cache;
+    private final Cache<Set<String>, Predicate<Entity>> cache;
 
     public CachedSimpleSelectorArgument() {
         this.cache = provideCacheService();
@@ -39,13 +37,14 @@ public abstract class CachedSimpleSelectorArgument implements SelectorArgument {
     }
 
     /**
-     * 当未在缓存中找到解析结果时，则调用此方法对参数进行解析
+     * Called when parsing the parameters if the parsing result is not found in the cache
      */
     protected abstract Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException;
 
     /**
-     * 初始化缓存时调用此方法<p/>
-     * 若需要自己的缓存实现，则可覆写此方法
+     * Called when initializing the cache
+     * <p>
+     * Override this method if you need your own cache implementation
      *
      * @return {@code Cache<Set<String>, Predicate<Entity>>}
      */

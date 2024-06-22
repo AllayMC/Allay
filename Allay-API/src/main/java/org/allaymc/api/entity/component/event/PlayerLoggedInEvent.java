@@ -11,6 +11,5 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlayerLoggedInEvent extends Event {
-
     public static final PlayerLoggedInEvent INSTANCE = new PlayerLoggedInEvent();
 }

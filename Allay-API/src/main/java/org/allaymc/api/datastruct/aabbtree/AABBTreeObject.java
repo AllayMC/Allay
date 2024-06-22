@@ -1,5 +1,7 @@
 package org.allaymc.api.datastruct.aabbtree;
 
+import lombok.AllArgsConstructor;
+
 import java.util.Objects;
 
 /**
@@ -7,14 +9,11 @@ import java.util.Objects;
  *
  * @author daoge_cmd
  */
+@AllArgsConstructor
 final class AABBTreeObject<E extends HasLongId> {
     private final E data;
 
-    private AABBTreeObject(E data) {
-        this.data = data;
-    }
-
-    static <E extends HasLongId> AABBTreeObject<E> create(E data) {
+    public static <E extends HasLongId> AABBTreeObject<E> create(E data) {
         return new AABBTreeObject<>(data);
     }
 
@@ -35,7 +34,7 @@ final class AABBTreeObject<E extends HasLongId> {
         return Objects.hash(data.getLongId());
     }
 
-    E getData() {
+    public E getData() {
         return data;
     }
 }

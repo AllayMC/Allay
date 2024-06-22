@@ -31,11 +31,15 @@ public interface Chunk extends UnsafeChunk {
 
     @UnmodifiableView
     default Set<EntityPlayer> getPlayerChunkLoaders() {
-        return getChunkLoaders().stream().filter(EntityPlayer.class::isInstance).map(EntityPlayer.class::cast).collect(Collectors.toSet());
+        return getChunkLoaders().stream()
+                .filter(EntityPlayer.class::isInstance)
+                .map(EntityPlayer.class::cast)
+                .collect(Collectors.toSet());
     }
 
     /**
      * Set the callback to be called when the chunk is loaded into the world
+     *
      * @param callback the callback
      */
     @ApiStatus.Internal

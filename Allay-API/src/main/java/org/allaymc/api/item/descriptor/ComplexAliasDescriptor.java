@@ -5,7 +5,7 @@ import org.allaymc.api.item.type.ItemType;
 /**
  * Allay Project 2023/11/26
  * <p>
- * TODO: 目前暂时不知道ComplexAliasDescriptor和DefaultDescriptor有什么区别
+ * TODO: Currently unsure of the differences between {@link ComplexAliasDescriptor} and {@link DefaultDescriptor}.
  *
  * @author daoge_cmd
  */

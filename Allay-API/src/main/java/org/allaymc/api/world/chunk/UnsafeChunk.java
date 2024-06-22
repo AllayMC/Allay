@@ -31,7 +31,7 @@ public interface UnsafeChunk {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(y >= 0 && y <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
-        //The bedrock chunk order is xzy,the chunk order of java version is yzx
+        // The bedrock chunk order is xzy,the chunk order of java version is yzx
         return (x << 8) + (z << 4) + y;
     }
 
@@ -70,7 +70,7 @@ public interface UnsafeChunk {
     void afterSetChunk(Dimension dimension);
 
     /**
-     * Gets Chunk section , range -1 -> -4 , 0 -> 59
+     * Gets Chunk section, range -1 -> -4, 0 -> 59
      * <p>
      * Since the array index starts at 0, the maximum value is 59
      *
@@ -82,7 +82,7 @@ public interface UnsafeChunk {
     ChunkSection getSection(int sectionY);
 
     /**
-     * Gets Chunk section , range -1 -> -4 , 0 -> 59
+     * Gets Chunk section, range -1 -> -4, 0 -> 59
      * <p>
      * Since the array index starts at 0, the maximum value is 59
      *
@@ -94,7 +94,7 @@ public interface UnsafeChunk {
     ChunkSection getOrCreateSection(int sectionY);
 
     /**
-     * Gets Chunk section , range -1 -> -4 , 0 -> 59
+     * Gets Chunk section, range -1 -> -4, 0 -> 59
      * <p>
      * Since the array index starts at 0, the maximum value is 59
      *
@@ -127,7 +127,7 @@ public interface UnsafeChunk {
     void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height);
 
     /**
-     * Different from getHeight(), all values in the short[] array returned by this method are
+     * @return Different from getHeight(), all values in the short[] array returned by this method are
      * greater than or equal to 0 (can be understood as getHeight() - minHeight())
      */
     short[] getHeightArray();

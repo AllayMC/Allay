@@ -12,7 +12,8 @@ import org.allaymc.api.data.VanillaBlockPropertyTypes;
 /**
  * Allay Project 2024/6/18
  * <p>
- * 适用于两格高的可掉落小麦种子的植物
+ * Suitable for two-block high plants that can drop wheat seeds
+ *
  * @author daoge_cmd
  */
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "upper_block_bit")
@@ -34,7 +35,8 @@ public class BlockTallWheatSeedDropableBaseComponentImpl extends BlockWheatSeedD
             willBreak = notSamePlant(dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())));
         } else {
             willBreak = notSamePlant(dimension.getBlockState(BlockFace.UP.offsetPos(current.pos())));
-            if (!willBreak) willBreak = isPlaceableBlock(dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())).getBlockType());
+            if (!willBreak)
+                willBreak = isPlaceableBlock(dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())).getBlockType());
         }
         return willBreak;
     }

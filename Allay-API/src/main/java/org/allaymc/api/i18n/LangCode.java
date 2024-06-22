@@ -1,5 +1,8 @@
 package org.allaymc.api.i18n;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum LangCode {
     en_US("English (United States)"),
     en_GB("English (United Kingdom)"),
@@ -32,11 +35,8 @@ public enum LangCode {
     uk_UA("Українська (Україна)");
 
     private static final LangCode[] VALUES = values();
-    private final String string;
 
-    LangCode(String string) {
-        this.string = string;
-    }
+    private final String string;
 
     public static LangCode byName(String name) {
         return byName(name, true);

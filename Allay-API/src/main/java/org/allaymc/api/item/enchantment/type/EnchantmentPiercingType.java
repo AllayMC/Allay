@@ -1,6 +1,7 @@
 package org.allaymc.api.item.enchantment.type;
 
 import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
+import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
 
@@ -13,5 +14,10 @@ public class EnchantmentPiercingType extends AbstractEnchantmentType {
 
     private EnchantmentPiercingType() {
         super(new Identifier("minecraft:piercing"), 34, 4, Rarity.COMMON);
+    }
+
+    @Override
+    public boolean checkIncompatible(EnchantmentType other) {
+        return other instanceof EnchantmentMultishotType;
     }
 }

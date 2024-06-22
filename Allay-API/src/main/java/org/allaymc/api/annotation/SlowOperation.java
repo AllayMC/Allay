@@ -6,7 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * An annotation used to mark a method as being slow or blocking a thread <br>
+ * An annotation used to mark a method as being slow or blocking a thread
+ * <p>
  * It usually means that you may need to call it asynchronously
  * <p>
  * Allay Project 2023/7/8

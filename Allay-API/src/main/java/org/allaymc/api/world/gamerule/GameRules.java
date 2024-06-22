@@ -5,7 +5,11 @@ import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.packet.GameRulesChangedPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 2023/3/4
@@ -17,7 +21,6 @@ public class GameRules {
 
     private final Map<GameRule, Object> gameRules = new HashMap<>();
 
-    // Used as dirty flag
     private boolean dirty;
 
     public GameRules() {
@@ -58,10 +61,8 @@ public class GameRules {
     }
 
     public List<GameRuleData<?>> toNetworkGameRuleData() {
-        List<GameRuleData<?>> gameRuleData = new ArrayList<>();
-        for (var entry : this.getGameRules().entrySet()) {
-            gameRuleData.add(new GameRuleData<>(entry.getKey().getName(), entry.getValue()));
-        }
-        return gameRuleData;
+        return this.getGameRules().entrySet().stream()
+                .map(entry -> new GameRuleData<>(entry.getKey().getName(), entry.getValue()))
+                .collect(Collectors.toList());
     }
 }

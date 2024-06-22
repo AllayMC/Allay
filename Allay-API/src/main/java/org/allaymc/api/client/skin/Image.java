@@ -6,7 +6,6 @@ package org.allaymc.api.client.skin;
  * @author LucGamesYT | daoge_cmd
  */
 public record Image(int width, int height, byte[] data) {
-
     public static Image getImage(byte[] data) {
         return switch (data.length) {
             case Skin.SINGLE_SKIN_SIZE -> new Image(64, 32, data);

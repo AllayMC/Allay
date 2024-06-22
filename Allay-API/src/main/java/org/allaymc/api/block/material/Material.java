@@ -24,9 +24,9 @@ public record Material(
         MaterialType materialType,
         boolean canBeMovingBlock,
         boolean canHavePrecipitation,
-        //isAlwaysDestroyable为true时，表示方块可以被任何物品破坏(甚至是空手)而不产生挖掘惩罚
-        //部分方块（例如石头，黑曜石）不可以被徒手挖去。若强行挖取它们，挖掘速度会受到惩罚(baseTime增大5倍，正常是1.5倍)
-        //请注意，isAlwaysDestroyable为true不代表方块一定可以掉落为物品！
+        // When isAlwaysDestroyable is true, it means the block can be destroyed by any item (even bare hands) without incurring a mining penalty.
+        // Some blocks (such as stone and obsidian) cannot be mined by hand. If you try to mine them, the mining speed will be penalized (baseTime increased by 5 times, normally it's 1.5 times).
+        // Note that isAlwaysDestroyable being true does not mean the block will necessarily drop as an item!
         boolean isAlwaysDestroyable,
         boolean isLiquid,
         boolean isSolid,

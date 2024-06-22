@@ -59,8 +59,10 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Check if the block can keep existing when a neighbor block updates.
+     *
      * @param current The current block
-     * @param face The face of the current block that is being updated
+     * @param face    The face of the current block that is being updated
+     *
      * @return true if the block can keep existing, false if the block should be broken
      */
     default boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
@@ -96,10 +98,7 @@ public interface BlockBaseComponent extends BlockComponent {
      *
      * @return true if the block is placed successfully, false if failed
      */
-    boolean place(
-            Dimension dimension, BlockState blockState,
-            Vector3ic placeBlockPos,
-            PlayerInteractInfo placementInfo);
+    boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
 
     /**
      * Called when a block is placed.
@@ -120,9 +119,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return true
      * If false is returned, the useItemOn method of the player's item will continue to be called
      */
-    boolean onInteract(
-            ItemStack itemStack, Dimension dimension,
-            PlayerInteractInfo interactInfo);
+    boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo);
 
     /**
      * Called when a block is replaced.

@@ -21,7 +21,7 @@ public class SimpleBiMappedRegistry<LEFT, RIGHT> implements BiMappedRegistry<LEF
 
     @Override
     public BiMap<LEFT, RIGHT> getContent() {
-        return mappings;
+        return this.mappings;
     }
 
     @Override

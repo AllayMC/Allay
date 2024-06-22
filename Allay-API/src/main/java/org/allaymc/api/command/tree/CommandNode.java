@@ -30,21 +30,23 @@ public interface CommandNode {
     Object getDefaultValue();
 
     /**
-     * @return 选中这个分支后消耗的最小参数数量
+     * @return The minimum number of arguments consumed after selecting this branch
      */
     int getMinArgCostBranch();
 
     void setMinArgCostBranch(int minArgCostBranch);
 
     /**
-     * @return 选中这个分支后后消耗的最大参数数量
+     * @return The maximum number of arguments consumed after selecting this branch
      */
     int getMaxArgCostBranch();
 
     void setMaxArgCostBranch(int maxArgCostBranch);
 
     /**
-     * @return 这个node最多会消耗几个参数，可以返回一个足够大的数来表示无穷
+     * @return The maximum number of arguments this node can consume;
+     * <p>
+     * return a sufficiently large number to indicate infinity
      */
     default int getMaxArgCost() {
         return 1;

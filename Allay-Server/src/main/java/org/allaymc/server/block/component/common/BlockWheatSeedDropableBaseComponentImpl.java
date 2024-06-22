@@ -11,8 +11,6 @@ import org.allaymc.server.block.PlaceableBlockHelper;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.allaymc.api.block.type.BlockTypes.*;
-
 /**
  * Allay Project 2024/6/18
  *
@@ -26,7 +24,7 @@ public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentI
     @Override
     public ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
         var rand = ThreadLocalRandom.current();
-        // 有1/8的几率掉落种子
+        // Has a 1/8 chance to drop seeds
         if (rand.nextInt(8) == 0) {
             return new ItemStack[]{ItemTypes.WHEAT_SEEDS_TYPE.createItemStack()};
         }

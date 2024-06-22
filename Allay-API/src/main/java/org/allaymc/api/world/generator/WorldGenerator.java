@@ -25,11 +25,14 @@ public interface WorldGenerator {
     }
 
     /**
-     * 生成一个区块 <br>
-     * 此方法可能被任意线程调用，故实现应确保线程安全
-     * @param x 区块x坐标
-     * @param z 区块z坐标
-     * @return 生成的区块
+     * Generate a chunk.
+     * <p>
+     * This method may be called by any thread, so implementations should ensure thread safety.
+     *
+     * @param x chunk x coordinate
+     * @param z chunk z coordinate
+     *
+     * @return generated chunk
      */
     CompletableFuture<Chunk> generateChunk(int x, int z);
 
@@ -39,10 +42,10 @@ public interface WorldGenerator {
 
     String getPreset();
 
+    Dimension getDimension();
+
     void setDimension(Dimension dimension);
 
-    Dimension getDimension();
-    
     interface WorldGeneratorBuilder {
         WorldGeneratorBuilder name(String name);
 

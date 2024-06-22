@@ -26,52 +26,47 @@ public interface CommandSender extends TextReceiver, Permissible {
     default void handleResult(CommandResult result) {
         if (result.context() == null) return;
         if (getCmdExecuteLocation().dimension().getWorld().getWorldData().getGameRule(GameRule.SEND_COMMAND_FEEDBACK)) {
+            var status = result.status();
+            var outputs = result.context().getOutputs().toArray(TrContainer[]::new);
             if (result.isSuccess()) {
-                Server.getInstance().broadcastCommandOutputs(this, result.status(), result.context().getOutputs().toArray(TrContainer[]::new));
+                Server.getInstance().broadcastCommandOutputs(this, status, outputs);
             } else {
-                // 如果报错了就只给自己发消息
-                sendCommandOutputs(this, result.status(), result.context().getOutputs().toArray(TrContainer[]::new));
+                // If there is an error, only send message to oneself
+                sendCommandOutputs(this, status, outputs);
             }
         }
     }
 
     /**
-     * @return 发送者是否为玩家<br>whether the sender is a player
+     * @return Whether the sender is a player
      */
     default boolean isPlayer() {
         return false;
     }
 
     /**
-     * 请使用这个方法来检查发送者是否是一个实体，而不是使用代码{@code "xxx instanceof Entity"}.<br>
-     * 因为发送者可能不是{@code "Entity"}的一个实例，但实际上它是以一个实体的身份执行命令(例如：{@code "ExecutorCommandSender"})
-     * <p>
-     * please use this method to check whether the sender is an entity instead of using code {@code "xxx instanceof Entity"} <br>
-     * because the sender may not an instance of {@code "Entity"} but in fact it is executing commands identity as an entity(eg: {@code "ExecutorCommandSender"})
+     * Please use this method to check whether the sender is an entity instead of using code {@code "xxx instanceof Entity"}.
+     * Because the sender may not be an instance of {@code "Entity"} but is executing commands as an entity (e.g., {@code "ExecutorCommandSender"}).
      *
-     * @return 发送者是否为实体<br>whether the sender is an entity
+     * @return Whether the sender is an entity
      */
     default boolean isEntity() {
         return false;
     }
 
     /**
-     * 如果发送者是一个实体，返回执行该命令的实体.
-     * <p>
-     * return the entity who execute the command if the sender is a entity.
+     * If the sender is an entity, returns the entity executing the command.
      *
-     * @return 实体对象<br>Entity instance
+     * @return Entity instance
      */
     default Entity asEntity() {
         return null;
     }
 
     /**
-     * 如果发送者是一个玩家，返回执行该命令的玩家.
-     * <p>
-     * return the player who execute the command if the sender is a player.
+     * If the sender is a player, returns the player executing the command.
      *
-     * @return 玩家对象<br>Player instance
+     * @return Player instance
      */
     default EntityPlayer asPlayer() {
         return null;

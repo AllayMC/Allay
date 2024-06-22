@@ -1,5 +1,6 @@
 package org.allaymc.api.block.property.type;
 
+import lombok.Getter;
 import org.allaymc.api.utils.Utils;
 
 import java.util.Arrays;
@@ -51,22 +52,17 @@ public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockProperty
     }
 
     public final class EnumPropertyValue extends BlockPropertyValue<T, EnumPropertyType<T>, String> {
-
+        @Getter
         private final String serializedValue;
 
         EnumPropertyValue(T value) {
             super(EnumPropertyType.this, value);
-            serializedValue = value.name().toLowerCase();
+            this.serializedValue = value.name().toLowerCase();
         }
 
         @Override
         public int getIndex() {
             return value.ordinal();
-        }
-
-        @Override
-        public String getSerializedValue() {
-            return serializedValue;
         }
 
         @Override

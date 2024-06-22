@@ -6,7 +6,6 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 public record SemVersion(int major, int minor, int patch, int revision, int build) {
-
     public static SemVersion from(int[] versions) {
         if (versions.length == 0) {
             return new SemVersion(0, 0, 0, 0, 0);

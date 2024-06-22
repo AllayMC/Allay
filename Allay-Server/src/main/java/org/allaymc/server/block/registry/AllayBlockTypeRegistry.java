@@ -1,15 +1,16 @@
 package org.allaymc.server.block.registry;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
 import org.allaymc.server.block.type.BlockTypeDefaultInitializer;
 import org.allaymc.server.block.type.BlockTypeInitializer;
@@ -29,8 +30,22 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>> implements BlockTypeRegistry {
+    @Getter
+    private final List<BlockDefinition> blockDefinitions = new ArrayList<>();
+
     public AllayBlockTypeRegistry() {
         super(null, input -> new ConcurrentHashMap<>());
+    }
+
+    private static void callInitializer(Method method, ProgressBar progressBar) {
+        try {
+            method.invoke(null);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (progressBar != null)
+                progressBar.step();
+        }
     }
 
     @SneakyThrows
@@ -49,24 +64,6 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
         }
         rebuildDefinitionList();
         log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADED, defaultInitializers.size()));
-    }
-
-    private static void callInitializer(Method method, ProgressBar progressBar) {
-        try {
-            method.invoke(null);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (progressBar != null)
-                progressBar.step();
-        }
-    }
-
-    private final List<BlockDefinition> blockDefinitions = new ArrayList<>();
-
-    @Override
-    public List<BlockDefinition> getBlockDefinitions() {
-        return blockDefinitions;
     }
 
     private void rebuildDefinitionList() {

@@ -1,5 +1,6 @@
 package org.allaymc.api.datastruct.aabbtree;
 
+import lombok.experimental.UtilityClass;
 import org.joml.primitives.AABBf;
 
 /**
@@ -7,12 +8,8 @@ import org.joml.primitives.AABBf;
  *
  * @author daoge_cmd
  */
+@UtilityClass
 public final class AABBUtils {
-
-    private AABBUtils() {
-
-    }
-
     public static float getWidth(AABBf aabb) {
         return aabb.maxX - aabb.minX;
     }
@@ -26,9 +23,9 @@ public final class AABBUtils {
     }
 
     public static float getArea(AABBf aabb) {
-        final float width = getWidth(aabb);
-        final float height = getHeight(aabb);
-        final float depth = getDepth(aabb);
+        var width = getWidth(aabb);
+        var height = getHeight(aabb);
+        var depth = getDepth(aabb);
         return 2.0f * (width * height + width * depth + height * depth);
     }
 }

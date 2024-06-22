@@ -15,7 +15,7 @@ public class SimpleDoubleKeyMappedRegistry<K1, K2, VALUE> implements DoubleKeyMa
 
     @Override
     public MapPair<K1, K2, VALUE> getContent() {
-        return mapPair;
+        return this.mapPair;
     }
 
     @Override

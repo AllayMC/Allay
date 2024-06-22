@@ -9,9 +9,9 @@ import lombok.Setter;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 public final class SimpleEffectInstance implements EffectInstance {
     private final EffectType type;
     private int amplifier;

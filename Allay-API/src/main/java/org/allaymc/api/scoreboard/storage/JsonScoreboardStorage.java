@@ -8,7 +8,6 @@ import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.EntityScorer;
 import org.allaymc.api.scoreboard.scorer.FakeScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
-import org.allaymc.api.scoreboard.scorer.Scorer;
 import org.allaymc.api.utils.config.Config;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
@@ -48,12 +47,12 @@ public class JsonScoreboardStorage implements ScoreboardStorage {
 
     @Override
     public void save(Collection<Scoreboard> scoreboards) {
-        for (var scoreboard : scoreboards) save(scoreboard);
+        scoreboards.forEach(this::save);
     }
 
     @Override
     public void saveDisplay(Map<DisplaySlot, Scoreboard> display) {
-        for (Map.Entry<DisplaySlot, Scoreboard> entry : display.entrySet()) {
+        for (var entry : display.entrySet()) {
             json.set("display." + entry.getKey().name(), entry.getValue() != null ? entry.getValue().getObjectiveName() : null);
         }
         json.save();
@@ -108,8 +107,9 @@ public class JsonScoreboardStorage implements ScoreboardStorage {
         map.put("displayName", scoreboard.getDisplayName());
         map.put("criteriaName", scoreboard.getCriteriaName());
         map.put("sortOrder", scoreboard.getSortOrder().name());
+
         List<Map<String, Object>> lines = new ArrayList<>();
-        for (ScoreboardLine line : scoreboard.getLines().values()) {
+        for (var line : scoreboard.getLines().values()) {
             Map<String, Object> data = new HashMap<>();
             data.put("score", line.getScore());
             data.put("scorerType", line.getScorer().getScorerType().name());
@@ -120,20 +120,22 @@ public class JsonScoreboardStorage implements ScoreboardStorage {
             });
             lines.add(data);
         }
+
         map.put("lines", lines);
         return map;
     }
 
     private Scoreboard deserializeFromMap(Map<String, Object> map) {
-        String objectiveName = map.get("objectiveName").toString();
-        String displayName = map.get("displayName").toString();
-        String criteriaName = map.get("criteriaName").toString();
-        SortOrder sortOrder = SortOrder.valueOf(map.get("sortOrder").toString());
-        Scoreboard scoreboard = new Scoreboard(objectiveName, displayName, criteriaName, sortOrder);
-        for (Map<String, Object> line : (List<Map<String, Object>>) map.get("lines")) {
-            int score = ((Double) line.get("score")).intValue();
+        var objectiveName = map.get("objectiveName").toString();
+        var displayName = map.get("displayName").toString();
+        var criteriaName = map.get("criteriaName").toString();
+        var sortOrder = SortOrder.valueOf(map.get("sortOrder").toString());
+
+        var scoreboard = new Scoreboard(objectiveName, displayName, criteriaName, sortOrder);
+        for (var line : (List<Map<String, Object>>) map.get("lines")) {
+            var score = ((Double) line.get("score")).intValue();
             var name = (String) line.get("name");
-            Scorer scorer = switch (ScoreInfo.ScorerType.valueOf(line.get("scorerType").toString())) {
+            var scorer = switch (ScoreInfo.ScorerType.valueOf(line.get("scorerType").toString())) {
                 case PLAYER -> new PlayerScorer(UUID.fromString(name));
                 case ENTITY -> new EntityScorer(Long.parseLong(name));
                 case FAKE -> new FakeScorer(name);
@@ -141,6 +143,7 @@ public class JsonScoreboardStorage implements ScoreboardStorage {
             };
             scoreboard.addLine(new ScoreboardLine(scoreboard, scorer, score));
         }
+
         return scoreboard;
     }
 }

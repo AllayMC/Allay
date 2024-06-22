@@ -6,9 +6,6 @@ package org.allaymc.server.block.type;
  * @author daoge_cmd
  */
 public class BlockTypeBuildException extends RuntimeException {
-    public BlockTypeBuildException() {
-    }
-
     public BlockTypeBuildException(String message) {
         super(message);
     }

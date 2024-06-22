@@ -8,10 +8,10 @@ import org.joml.Vector3ic;
 /**
  * Allay Project 2024/6/20
  *
- * @param player The player who is placing the block
+ * @param player        The player who is placing the block
  * @param clickBlockPos The block that the player clicked on
- * @param clickPos The precise pos where the player clicked
- * @param blockFace The face of the block that the player clicked on
+ * @param clickPos      The precise pos where the player clicked
+ * @param blockFace     The face of the block that the player clicked on
  *
  * @author daoge_cmd
  */

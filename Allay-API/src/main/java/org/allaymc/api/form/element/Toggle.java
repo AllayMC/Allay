@@ -12,6 +12,7 @@ public final class Toggle extends CustomFormElement {
 
     @SuppressWarnings("unused")
     private final String type = "toggle";
+
     @Getter
     private final String text;
     @Getter

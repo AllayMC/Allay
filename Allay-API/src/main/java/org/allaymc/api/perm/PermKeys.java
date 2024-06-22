@@ -16,6 +16,7 @@ public interface PermKeys {
     String MAY_FLY = "ability.mayfly";
     String SUMMON_LIGHTNING = "ability.summon_lightning";
     String MUTED = "ability.muted";
+
     // Vanilla adventure settings
     String PVM = "adventure_setting.pvm";
     String MVP = "adventure_setting.mvp";

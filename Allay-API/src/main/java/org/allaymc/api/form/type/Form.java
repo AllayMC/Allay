@@ -12,6 +12,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
 
     protected static final Gson GSON = new Gson();
+
     protected transient Runnable onClose = () -> {};
     @Getter
     protected transient Object response;
