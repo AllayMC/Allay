@@ -7,6 +7,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.server.block.PlaceableBlockHelper;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -40,14 +41,6 @@ public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentI
     }
 
     protected boolean isPlaceableBlock(BlockType<?> block) {
-        return block == GRASS_BLOCK_TYPE ||
-               block == MYCELIUM_TYPE ||
-               block == PODZOL_TYPE ||
-               block == DIRT_TYPE ||
-               block == DIRT_WITH_ROOTS_TYPE ||
-               block == FARMLAND_TYPE ||
-               block == MUD_TYPE ||
-               block == MUDDY_MANGROVE_ROOTS_TYPE ||
-               block == MOSS_BLOCK_TYPE;
+        return PlaceableBlockHelper.isPlantPlaceableBlock(block);
     }
 }
