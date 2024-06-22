@@ -21,10 +21,13 @@ import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerOpenPacket;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryContentPacket;
 import org.cloudburstmc.protocol.bedrock.packet.InventorySlotPacket;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.allaymc.api.container.FullContainerType.CRAFTING_GRID;
 
 /**
  * Allay Project 2023/9/23
@@ -91,10 +94,26 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     @Override
     public void onOpen(byte assignedId, Container container) {
+        sendContainerOpenPacket(assignedId, container);
+        registerOpenedContainer(assignedId, container);
+
+        var containerType = container.getContainerType();
+        //We should send the container's contents to client if the container is not held by the entity
+        if (containerHolderComponent.getContainer(containerType) == null) {
+            sendContents(container);
+        }
+    }
+
+    protected void registerOpenedContainer(byte assignedId, Container container) {
+        idToContainer.put(assignedId, container);
+        typeToContainer.put(container.getContainerType(), container);
+        container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.put(slotType, container.getContainerType()));
+    }
+
+    private void sendContainerOpenPacket(byte assignedId, Container container) {
         var containerOpenPacket = new ContainerOpenPacket();
         containerOpenPacket.setId(assignedId);
-        var containerType = container.getContainerType();
-        containerOpenPacket.setType(containerType.toNetworkType());
+        containerOpenPacket.setType(container.getContainerType().toNetworkType());
         if (container.hasBlockPos()) {
             containerOpenPacket.setBlockPosition(MathUtils.JOMLVecToCBVec(container.getBlockPos()));
         } else {
@@ -102,28 +121,26 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
             containerOpenPacket.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
         }
         networkComponent.sendPacket(containerOpenPacket);
-
-        idToContainer.put(assignedId, container);
-        typeToContainer.put(container.getContainerType(), container);
-        container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.put(slotType, container.getContainerType()));
-
-        //We should send the container's contents to client if the container is not held by the entity
-        if (containerHolderComponent.getContainer(containerType) == null) {
-            sendContents(container);
-        }
     }
 
     @Override
     public void onClose(byte assignedId, Container container) {
         if (!idToContainer.containsKey(assignedId))
             throw new IllegalArgumentException("Trying to close a container which is not opened! Type: " + container.getContainerType());
+        sendContainerClosePacket(assignedId, container);
+        unregisterOpenedContainer(assignedId, container);
+    }
+
+    protected void unregisterOpenedContainer(byte assignedId, Container container) {
+        typeToContainer.remove(idToContainer.remove(assignedId).getContainerType());
+        container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.remove(slotType));
+    }
+
+    protected void sendContainerClosePacket(byte assignedId, Container container) {
         var containerClosePacket = new ContainerClosePacket();
         containerClosePacket.setId(assignedId);
         containerClosePacket.setType(container.getContainerType().toNetworkType());
         networkComponent.sendPacket(containerClosePacket);
-
-        typeToContainer.remove(idToContainer.remove(assignedId).getContainerType());
-        container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.remove(slotType));
     }
 
     @Override
@@ -133,18 +150,43 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-
     public <T extends Container> T getOpenedContainer(FullContainerType<T> type) {
-        return (T) typeToContainer.get(type);
+        // 特判: 如果玩家打开了背包，则他也同步打开了一系列其他容器，尽管没有注册
+        Container container = null;
+        if (isPlayerInventoryOpened()) {
+            if (
+                    type == FullContainerType.ARMOR ||
+                    type == FullContainerType.OFFHAND ||
+                    type == CRAFTING_GRID
+            ) {
+                container = containerHolderComponent.getContainer(type);
+            }
+        }
+        if (container == null) container = typeToContainer.get(type);
+        return (T) container;
     }
 
     @Override
     public <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType) {
-        return (T) getOpenedContainer(slotTypeToFullType.get(slotType));
+        // 同上，需要特判
+        FullContainerType<?> fullType = null;
+        if (isPlayerInventoryOpened()) {
+            fullType = switch (slotType) {
+                case ARMOR -> FullContainerType.ARMOR;
+                case OFFHAND -> FullContainerType.OFFHAND;
+                case CRAFTING_INPUT -> FullContainerType.CRAFTING_GRID;
+                default -> null;
+            };
+        }
+        if (fullType == null) fullType = slotTypeToFullType.get(slotType);
+        return (T) getOpenedContainer(fullType);
+    }
+
+    protected boolean isPlayerInventoryOpened() {
+        return typeToContainer.get(FullContainerType.PLAYER_INVENTORY) != null;
     }
 
     @Override
-
     public Container getOpenedContainer(byte id) {
         return idToContainer.get(id);
     }

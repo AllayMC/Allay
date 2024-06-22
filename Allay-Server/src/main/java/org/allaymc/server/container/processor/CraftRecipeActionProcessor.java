@@ -29,7 +29,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
 
     @Override
     public ActionResponse handle(CraftRecipeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        CraftingContainer craftingContainer = player.getContainer(FullContainerType.CRAFTING_TABLE);
+        CraftingContainer craftingContainer = player.getOpenedContainer(FullContainerType.CRAFTING_TABLE);
         if (craftingContainer == null) {
             // The player is not opening a crafting table, using crafting grid instead
             craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
