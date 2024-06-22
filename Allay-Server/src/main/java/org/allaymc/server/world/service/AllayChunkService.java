@@ -190,7 +190,6 @@ public final class AllayChunkService implements ChunkService {
                 .thenApply(preparedChunk -> {
                     preparedChunk.beforeSetChunk(dimension);
                     setChunk(x, z, preparedChunk);
-                    preparedChunk.onChunkSet();
                     preparedChunk.afterSetChunk(dimension);
                     future.complete(preparedChunk);
                     loadingChunks.remove(hashXZ);
