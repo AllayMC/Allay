@@ -34,7 +34,7 @@ public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentI
 
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (face != BlockFace.UP && face != BlockFace.DOWN) return false;
+        if (face != BlockFace.UP && face != BlockFace.DOWN) return true;
         var blockUnder = current.pos().dimension().getBlockState(BlockFace.DOWN.offsetPos(current.pos()));
         return isPlaceableBlock(blockUnder.getBlockType());
     }

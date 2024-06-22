@@ -26,7 +26,7 @@ public class BlockTallWheatSeedDropableBaseComponentImpl extends BlockWheatSeedD
         if (!super.canKeepExisting(current, neighbor, face)) {
             return false;
         }
-        if (face != BlockFace.UP && face != BlockFace.DOWN) return false;
+        if (face != BlockFace.UP && face != BlockFace.DOWN) return true;
         var dimension = current.pos().dimension();
         var isUpperBlock = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT);
         var willBreak = false;
