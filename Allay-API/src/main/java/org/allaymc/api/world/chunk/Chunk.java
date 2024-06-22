@@ -41,12 +41,6 @@ public interface Chunk extends UnsafeChunk {
     @ApiStatus.Internal
     void setChunkSetCallback(Runnable callback);
 
-    /**
-     * Called when the chunk is loaded into the world
-     */
-    @ApiStatus.Internal
-    void onChunkSet();
-
     void addChunkLoader(ChunkLoader chunkLoader);
 
     void removeChunkLoader(ChunkLoader chunkLoader);

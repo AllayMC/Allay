@@ -533,6 +533,8 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void afterSetChunk(Dimension dimension) {
+        chunkSetCallback.run();
+        loaded = true;
         unsafeChunk.afterSetChunk(dimension);
     }
 
@@ -582,12 +584,6 @@ public class AllayChunk implements Chunk {
     @Override
     public void setChunkSetCallback(Runnable callback) {
         this.chunkSetCallback = callback;
-    }
-
-    @Override
-    public void onChunkSet() {
-        chunkSetCallback.run();
-        loaded = true;
     }
 
     @Override

@@ -101,6 +101,9 @@ public class AllayStringUtils {
     }
 
     public static Map<String, String> parseOptions(String preset) {
+        if (preset.isBlank()) {
+            return Collections.emptyMap();
+        }
         var splits = fastSplit(preset, ";");
         var options = new HashMap<String, String>();
         for(var split : splits) {
