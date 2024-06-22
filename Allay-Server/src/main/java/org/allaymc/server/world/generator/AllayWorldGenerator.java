@@ -141,8 +141,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
     }
 
     private boolean tryEnterPopulationStage(int x, int z) {
-        // 相邻区块噪声都已生成或已载入世界
-        // 且本区块以及相邻区块都没锁
+        // 要求本区块和相邻区块噪声都已生成或已载入世界且没有锁
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 var chunkHash = HashUtils.hashXZ(x + i, z + j);
@@ -153,10 +152,12 @@ public final class AllayWorldGenerator implements WorldGenerator {
                 if (noiseFuture == null) {
                     // 区块噪声未生成
                     if (dimension.getChunkService().getChunk(chunkHash) == null) {
+                        // 区块不是已加载状态
                         getOrCreateNoiseFuture(x + i, z + j);
                         return false;
                     }
                 } else if (!noiseFuture.isDone()) {
+                    // 区块噪声没有生成完毕
                     return false;
                 }
             }

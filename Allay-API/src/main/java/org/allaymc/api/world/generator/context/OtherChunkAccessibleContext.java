@@ -60,7 +60,7 @@ public abstract class OtherChunkAccessibleContext extends Context {
     private BlockState getBlockStateInOtherChunk(int x, int y, int z, int layer) {
         var chunk = chunkAccessor.getChunk(x >> 4, z >> 4);
         if (chunk == null) return AIR;
-        return chunk.getBlockState(x & 15, y, z & 15);
+        return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
     private boolean isInCurrentChunk(int x, int y, int z) {
