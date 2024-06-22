@@ -290,6 +290,26 @@ public final class AllayWorldGenerator implements WorldGenerator {
             // 只能访问相邻的区块
             return Math.abs(x - currentChunk.getX()) <= 1 && Math.abs(z - currentChunk.getZ()) <= 1;
         }
+
+        @Override
+        public int minChunkZ() {
+            return currentChunk.getZ() - 1;
+        }
+
+        @Override
+        public int minChunkX() {
+            return currentChunk.getX() - 1;
+        }
+
+        @Override
+        public int maxChunkZ() {
+            return currentChunk.getZ() + 1;
+        }
+
+        @Override
+        public int maxChunkX() {
+            return currentChunk.getX() + 1;
+        }
     }
 
     protected static final class AllayWorldGeneratorBuilder implements WorldGenerator.WorldGeneratorBuilder {
