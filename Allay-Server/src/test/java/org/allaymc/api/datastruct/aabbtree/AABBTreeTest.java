@@ -274,7 +274,7 @@ public class AABBTreeTest {
 
       // Then
       assertEquals(1, result.size());
-      assertEquals(2, result.get(0).getLongId());
+      assertEquals(2, result.getFirst().getLongId());
    }
 
    @Test
@@ -296,7 +296,7 @@ public class AABBTreeTest {
       // Then
       assertEquals(2, result.size());
       assertEquals(1, filteredResult.size());
-      assertEquals(1, filteredResult.get(0).getLongId());
+      assertEquals(1, filteredResult.getFirst().getLongId());
    }
 
    @Test
@@ -317,7 +317,7 @@ public class AABBTreeTest {
 
       // Then
       assertEquals(1, pairs.size());
-      CollisionPair<TestEntity> collisionPair = pairs.get(0);
+      CollisionPair<TestEntity> collisionPair = pairs.getFirst();
       assertEquals(givenPair, collisionPair);
    }
 
@@ -344,7 +344,7 @@ public class AABBTreeTest {
       // Then
       assertEquals(2, pairs.size());
       assertEquals(1, filteredPairs.size());
-      CollisionPair<TestEntity> filteredCollisionPair = filteredPairs.get(0);
+      CollisionPair<TestEntity> filteredCollisionPair = filteredPairs.getFirst();
       assertEquals(givenPair, filteredCollisionPair);
    }
 
@@ -364,7 +364,7 @@ public class AABBTreeTest {
 
       // Then
       assertEquals(1, intersecting.size());
-      assertEquals(1L, intersecting.get(0).getLongId());
+      assertEquals(1L, intersecting.getFirst().getLongId());
    }
 
    @Test
@@ -385,7 +385,7 @@ public class AABBTreeTest {
       // Then
       assertEquals(INVALID_NODE_INDEX, node.getLeftChild());
       assertEquals(INVALID_NODE_INDEX, node.getRightChild());
-      assertEquals(new AABBf(), node.getAABB());
+      assertEquals(new AABBf(), node.getAabb());
       assertEquals(INVALID_NODE_INDEX, node.getParent());
       assertEquals(0, node.getHeight());
       assertNull(node.getData());

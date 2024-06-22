@@ -11,6 +11,8 @@ import java.util.Map;
  * Allay Project 2023/10/21
  *
  * @author daoge_cmd
+ *
+ * @see <a href="https://minecraft.wiki/w/Enchanting#Summary_of_enchantments">Enchantments List<a/>
  */
 @Getter
 public abstract class AbstractEnchantmentType implements EnchantmentType {
