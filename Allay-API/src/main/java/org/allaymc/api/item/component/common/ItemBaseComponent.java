@@ -3,6 +3,7 @@ package org.allaymc.api.item.component.common;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
@@ -152,6 +153,20 @@ public interface ItemBaseComponent extends ItemComponent {
     void removeEnchantment(EnchantmentType enchantmentType);
 
     void removeAllEnchantments();
+
+    /**
+     * Called when the item is used to break a block.
+     * @param block The block being broken
+     * @param entity The entity breaking the block
+     */
+    default void onBreakBlock(BlockState block, Entity entity) {}
+
+    /**
+     * Called when the item is used to attack an entity.
+     * @param attacker The entity attacking
+     * @param victim The entity being attacked
+     */
+    default void onAttackEntity(Entity attacker, Entity victim) {}
 
     /**
      * Get the break time bonus for breaking a block with this item.

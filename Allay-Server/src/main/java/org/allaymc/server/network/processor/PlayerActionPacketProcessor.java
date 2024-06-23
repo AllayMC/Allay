@@ -56,7 +56,9 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 pk.setPosition(Vector3f.from(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f));
                 pk.setData(oldState.blockStateHash());
                 player.getCurrentChunk().addChunkPacket(pk);
-                world.breakBlock(pos.getX(), pos.getY(), pos.getZ(), player.getItemInHand(), player);
+                var itemInHand = player.getItemInHand();
+                world.breakBlock(pos.getX(), pos.getY(), pos.getZ(), itemInHand, player);
+                itemInHand.onBreakBlock(oldState, player);
                 yield PacketSignal.HANDLED;
             }
             case START_ITEM_USE_ON -> {

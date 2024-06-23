@@ -153,7 +153,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var currentTime = player.getWorld().getTick();
         if (Math.abs(currentTime - stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
             var world = player.getDimension();
-            world.breakBlock(breakBlockX, breakBlockY, breakBlockZ, player.getItemInHand(), player);
+            var itemInHand = player.getItemInHand();
+            world.breakBlock(breakBlockX, breakBlockY, breakBlockZ, itemInHand, player);
+            itemInHand.onBreakBlock(breakBlock, player);
         } else {
             log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakingTime, currentTime);
         }

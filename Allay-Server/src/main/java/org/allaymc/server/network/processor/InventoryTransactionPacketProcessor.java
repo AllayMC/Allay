@@ -97,7 +97,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         var damage = itemInHand.calculateAttackDamage();
                         if (damage == 0) damage = 1;
                         var damageContainer = DamageContainer.entityAttack(player, damage);
-                        damageable.attack(damageContainer);
+                        if (damageable.attack(damageContainer)) {
+                            itemInHand.onAttackEntity(player, target);
+                        }
                     }
                 }
                 player.sendItemInHandUpdate();
