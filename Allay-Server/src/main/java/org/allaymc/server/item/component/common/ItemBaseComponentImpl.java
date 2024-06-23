@@ -10,9 +10,8 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaMaterialTypes;
-import org.allaymc.api.item.component.event.ItemLoadExtraTagEvent;
-import org.allaymc.api.item.component.event.ItemPlacedAsBlockEvent;
-import org.allaymc.api.item.component.event.ItemSaveExtraTagEvent;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.item.component.event.*;
 import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -375,6 +374,16 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     public void removeAllEnchantments() {
         enchantments.clear();
+    }
+
+    @Override
+    public void onBreakBlock(BlockState block, Entity breaker) {
+        manager.callEvent(new ItemBreakBlockEvent(block, breaker));
+    }
+
+    @Override
+    public void onAttackEntity(Entity attacker, Entity victim) {
+        manager.callEvent(new ItemAttackEntityEvent(attacker, victim));
     }
 
     // 记录那些对工具品质有要求的方块的正确工具集合

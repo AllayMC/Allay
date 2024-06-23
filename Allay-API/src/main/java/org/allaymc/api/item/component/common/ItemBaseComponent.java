@@ -157,16 +157,16 @@ public interface ItemBaseComponent extends ItemComponent {
     /**
      * Called when the item is used to break a block.
      * @param block The block being broken
-     * @param entity The entity breaking the block
+     * @param breaker The entity breaking the block
      */
-    default void onBreakBlock(BlockState block, Entity entity) {}
+    void onBreakBlock(BlockState block, Entity breaker);
 
     /**
      * Called when the item is used to attack an entity.
      * @param attacker The entity attacking
      * @param victim The entity being attacked
      */
-    default void onAttackEntity(Entity attacker, Entity victim) {}
+    void onAttackEntity(Entity attacker, Entity victim);
 
     /**
      * Get the break time bonus for breaking a block with this item.
