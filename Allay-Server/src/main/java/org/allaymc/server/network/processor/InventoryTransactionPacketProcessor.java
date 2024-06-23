@@ -1,6 +1,7 @@
 package org.allaymc.server.network.processor;
 
 import com.google.common.base.Preconditions;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
@@ -21,6 +22,7 @@ import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
  *
  * @author Cool_Loong
  */
+@Slf4j
 public class InventoryTransactionPacketProcessor extends PacketProcessor<InventoryTransactionPacket> {
     public static final int ITEM_USE_CLICK_BLOCK = 0;
     public static final int ITEM_USE_CLICK_AIR = 1;
@@ -112,6 +114,10 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
             }
             case NORMAL -> {
+                if (packet.getActions().size() != 2) {
+                    log.warn("Expected two actions for dropping an item, got {}", packet.getActions().size());
+                    return;
+                }
                 for (var action : packet.getActions()) {
                     if (action.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) {
                         if (action.getSource().getFlag().equals(InventorySource.Flag.DROP_ITEM)) {
