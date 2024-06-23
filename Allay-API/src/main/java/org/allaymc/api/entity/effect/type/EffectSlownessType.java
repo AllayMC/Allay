@@ -14,6 +14,6 @@ public class EffectSlownessType extends AbstractEffectType {
     public static final EffectSlownessType SLOWNESS_TYPE = new EffectSlownessType();
 
     private EffectSlownessType() {
-        super(2, new Identifier("minecraft:slowness"), new Color(90, 108, 129), true);
+        super(2, new Identifier("minecraft:slowness"), new Color(139, 175, 224), true);
     }
 }

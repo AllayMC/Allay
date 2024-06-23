@@ -14,6 +14,6 @@ public class EffectSlowFallingType extends AbstractEffectType {
     public static final EffectSlowFallingType SLOW_FALLING_TYPE = new EffectSlowFallingType();
 
     private EffectSlowFallingType() {
-        super(27, new Identifier("minecraft:slow_falling"), new Color(206, 255, 255));
+        super(27, new Identifier("minecraft:slow_falling"), new Color(243, 207, 185));
     }
 }

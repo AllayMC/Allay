@@ -14,6 +14,6 @@ public class EffectJumpBoostType extends AbstractEffectType {
     public static final EffectJumpBoostType JUMP_BOOST_TYPE = new EffectJumpBoostType();
 
     private EffectJumpBoostType() {
-        super(8, new Identifier("minecraft:jump_boost"), new Color(34, 255, 76));
+        super(8, new Identifier("minecraft:jump_boost"), new Color(253, 255, 132));
     }
 }

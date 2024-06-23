@@ -14,6 +14,6 @@ public class EffectBlindnessType extends AbstractEffectType {
     public static final EffectBlindnessType BLINDNESS_TYPE = new EffectBlindnessType();
 
     private EffectBlindnessType() {
-        super(15, new Identifier("minecraft:blindness"), new Color(191, 192, 192), true);
+        super(15, new Identifier("minecraft:blindness"), new Color(31, 31, 35), true);
     }
 }

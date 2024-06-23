@@ -14,6 +14,6 @@ public class EffectWaterBreathingType extends AbstractEffectType {
     public static final EffectWaterBreathingType WATER_BREATHING_TYPE = new EffectWaterBreathingType();
 
     private EffectWaterBreathingType() {
-        super(13, new Identifier("minecraft:water_breathing"), new Color(46, 82, 153));
+        super(13, new Identifier("minecraft:water_breathing"), new Color(152, 218, 192));
     }
 }

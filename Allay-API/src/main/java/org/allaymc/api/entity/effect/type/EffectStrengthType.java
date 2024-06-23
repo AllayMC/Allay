@@ -14,6 +14,6 @@ public class EffectStrengthType extends AbstractEffectType {
     public static final EffectStrengthType STRENGTH_TYPE = new EffectStrengthType();
 
     private EffectStrengthType() {
-        super(5, new Identifier("minecraft:strength"), new Color(147, 36, 35));
+        super(5, new Identifier("minecraft:strength"), new Color(255, 199, 0));
     }
 }

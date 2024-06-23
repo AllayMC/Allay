@@ -14,6 +14,6 @@ public class EffectFireResistanceType extends AbstractEffectType {
     public static final EffectFireResistanceType FIRE_RESISTANCE_TYPE = new EffectFireResistanceType();
 
     private EffectFireResistanceType() {
-        super(12, new Identifier("minecraft:fire_resistance"), new Color(228, 154, 58));
+        super(12, new Identifier("minecraft:fire_resistance"), new Color(255, 153, 0));
     }
 }

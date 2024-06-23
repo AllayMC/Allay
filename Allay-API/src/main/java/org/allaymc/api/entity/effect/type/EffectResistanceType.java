@@ -14,6 +14,6 @@ public class EffectResistanceType extends AbstractEffectType {
     public static final EffectResistanceType RESISTANCE_TYPE = new EffectResistanceType();
 
     private EffectResistanceType() {
-        super(11, new Identifier("minecraft:resistance"), new Color(153, 69, 58));
+        super(11, new Identifier("minecraft:resistance"), new Color(145, 70, 240));
     }
 }

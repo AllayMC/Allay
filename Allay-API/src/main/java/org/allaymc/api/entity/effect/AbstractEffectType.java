@@ -9,6 +9,7 @@ import java.awt.*;
  * Allay Project 2023/10/27
  *
  * @author daoge_cmd
+ * @see <a href="https://minecraft.wiki/w/Effect#Effect_list">Effect list</a>
  */
 @Getter
 public abstract class AbstractEffectType implements EffectType {

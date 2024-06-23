@@ -14,6 +14,6 @@ public class EffectAbsorptionType extends AbstractEffectType {
     public static final EffectAbsorptionType ABSORPTION_TYPE = new EffectAbsorptionType();
 
     private EffectAbsorptionType() {
-        super(22, new Identifier("minecraft:absorption"), new Color(36, 107, 251));
+        super(22, new Identifier("minecraft:absorption"), new Color(37, 82, 165));
     }
 }

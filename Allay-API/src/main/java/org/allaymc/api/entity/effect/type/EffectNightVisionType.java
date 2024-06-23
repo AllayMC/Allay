@@ -14,6 +14,6 @@ public class EffectNightVisionType extends AbstractEffectType {
     public static final EffectNightVisionType NIGHT_VISION_TYPE = new EffectNightVisionType();
 
     private EffectNightVisionType() {
-        super(16, new Identifier("minecraft:night_vision"), new Color(0, 0, 139));
+        super(16, new Identifier("minecraft:night_vision"), new Color(194, 255, 102));
     }
 }

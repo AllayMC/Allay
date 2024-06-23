@@ -14,6 +14,6 @@ public class EffectWitherType extends AbstractEffectType {
     public static final EffectWitherType WITHER_TYPE = new EffectWitherType();
 
     private EffectWitherType() {
-        super(20, new Identifier("minecraft:wither"), new Color(53, 42, 39), true);
+        super(20, new Identifier("minecraft:wither"), new Color(115, 97, 86), true);
     }
 }

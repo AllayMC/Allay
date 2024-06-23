@@ -14,6 +14,6 @@ public class EffectSpeedType extends AbstractEffectType {
     public static final EffectSpeedType SPEED_TYPE = new EffectSpeedType();
 
     private EffectSpeedType() {
-        super(1, new Identifier("minecraft:speed"), new Color(124, 175, 198));
+        super(1, new Identifier("minecraft:speed"), new Color(51, 235, 255));
     }
 }

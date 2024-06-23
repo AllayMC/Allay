@@ -14,6 +14,6 @@ public class EffectPoisonType extends AbstractEffectType {
     public static final EffectPoisonType POISON_TYPE = new EffectPoisonType();
 
     private EffectPoisonType() {
-        super(19, new Identifier("minecraft:poison"), new Color(78, 147, 49), true);
+        super(19, new Identifier("minecraft:poison"), new Color(135, 163, 99), true);
     }
 }

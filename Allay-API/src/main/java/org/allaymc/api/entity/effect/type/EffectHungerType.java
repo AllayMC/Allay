@@ -14,6 +14,6 @@ public class EffectHungerType extends AbstractEffectType {
     public static final EffectHungerType HUNGER_TYPE = new EffectHungerType();
 
     private EffectHungerType() {
-        super(17, new Identifier("minecraft:hunger"), new Color(46, 139, 87), true);
+        super(17, new Identifier("minecraft:hunger"), new Color(88, 118, 83), true);
     }
 }
