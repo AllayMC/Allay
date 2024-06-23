@@ -17,19 +17,14 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
+@Getter
 public class AllayCommandContext implements CommandContext {
-    @Getter
     protected Command command;
-    @Getter
     protected CommandSender sender;
-    @Getter
     protected int currentArgIndex = 0;
-    @Getter
     protected int currentResultIndex = 0;
-    @Getter
     protected String[] args;
     protected Map<Integer, Object> results;
-    @Getter
     protected List<TrContainer> outputs;
 
     public AllayCommandContext(Command command, CommandSender sender, String[] args) {
@@ -47,9 +42,7 @@ public class AllayCommandContext implements CommandContext {
 
     @Override
     public String popArg() {
-        if (!haveUnhandledArg()) {
-            throw new CommandParseException("No more args!");
-        }
+        if (!haveUnhandledArg()) throw new CommandParseException("No more args!");
         return args[currentArgIndex++];
     }
 

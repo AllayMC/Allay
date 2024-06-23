@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.component.common;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -12,15 +11,11 @@ import org.allaymc.api.entity.component.event.EntityLoadNBTEvent;
 import org.allaymc.api.entity.component.event.EntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.eventbus.EventHandler;
-import org.cloudburstmc.nbt.NbtMap;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -49,13 +44,14 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     @EventHandler
     private void onLoadNBT(EntityLoadNBTEvent event) {
         var nbt = event.getNbt();
-        if (nbt.containsKey("Attributes")) {
-            for (NbtMap compound : nbt.getList("Attributes", NbtType.COMPOUND)) {
-                var attribute = Attribute.fromNBT(compound);
+        nbt.listenForList("Attributes", NbtType.COMPOUND, attributesNbt -> {
+            attributesNbt.forEach(attributeNbt -> {
+                var attribute = Attribute.fromNBT(attributeNbt);
                 attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
-            }
+            });
+
             sendAttributesToClient();
-        }
+        });
     }
 
     @EventHandler
@@ -84,7 +80,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @Override
     public void setAttribute(AttributeType attributeType, float value) {
-        Attribute attribute = this.attributes.get(attributeType);
+        var attribute = this.attributes.get(attributeType);
         if (attribute != null) attribute.setCurrentValue(value);
         sendAttributesToClient();
     }

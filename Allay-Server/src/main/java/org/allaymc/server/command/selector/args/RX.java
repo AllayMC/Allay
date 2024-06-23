@@ -15,7 +15,8 @@ public class RX extends CachedSimpleSelectorArgument {
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
-        final var rx = Double.parseDouble(arguments[0]);
+
+        var rx = Double.parseDouble(arguments[0]);
         if (!ParseUtils.checkBetween(-90d, 90d, rx))
             throw new SelectorSyntaxException("RX out of bound (-90 - 90): " + rx);
         return entity -> entity.getLocation().pitch() <= rx;

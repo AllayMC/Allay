@@ -21,7 +21,7 @@ public class UnbanIPCommand extends SimpleCommand {
         tree.getRoot()
                 .str("ip")
                 .exec(context -> {
-                    String ip = context.getFirstResult();
+                    String ip = context.getResult(0);
                     if (Server.getInstance().unbanIP(ip)) {
                         context.addOutput(TrKeys.M_COMMANDS_UNBANIP_SUCCESS, ip);
                         return context.success();

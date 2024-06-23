@@ -16,17 +16,18 @@ import static org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType.RESOURC
  */
 public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcessor<ResourcePackChunkRequestPacket> {
     @Override
-    public BedrockPacketType getPacketType() {
-        return RESOURCE_PACK_CHUNK_REQUEST;
-    }
-
-    @Override
     public void handle(EntityPlayer player, ResourcePackChunkRequestPacket packet) {
         var pack = PackRegistry.getRegistry().get(packet.getPackId());
         if (pack == null) {
             player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_RESOURCEPACK);
             return;
         }
+
         player.sendPacket(pack.getChunkDataPacket(packet.getChunkIndex()));
+    }
+
+    @Override
+    public BedrockPacketType getPacketType() {
+        return RESOURCE_PACK_CHUNK_REQUEST;
     }
 }

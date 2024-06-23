@@ -11,7 +11,6 @@ import org.allaymc.api.eventbus.event.Event;
  *
  * @author daoge_cmd
  */
-
 @Getter
 @Setter
 @AllArgsConstructor

@@ -5,9 +5,8 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.i18n.TrKeys;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 2024/2/25
@@ -27,13 +26,15 @@ public class TagCommand extends SimpleCommand {
                 .enums("operation", "add", "remove")
                 .str("name")
                 .exec(context -> {
-                    List<Entity> entities = context.getFirstResult();
+                    List<Entity> entities = context.getResult(0);
                     if (entities.isEmpty()) {
                         context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
                         return context.fail();
                     }
-                    String operation = context.getSecondResult();
-                    String tag = context.getThirdResult();
+
+                    String operation = context.getResult(1);
+                    String tag = context.getResult(2);
+
                     var successCount = 0;
                     switch (operation) {
                         case "add" -> {
@@ -41,10 +42,12 @@ public class TagCommand extends SimpleCommand {
                                 var success = entity.addTag(tag);
                                 if (success) successCount++;
                             }
+
                             if (successCount == 0) {
                                 context.addError("%" + TrKeys.M_COMMANDS_TAG_ADD_FAILED);
                                 return context.fail();
                             }
+
                             if (entities.size() == 1) {
                                 context.addOutput(TrKeys.M_COMMANDS_TAG_ADD_SUCCESS_SINGLE, tag, entities.getFirst().getDisplayName());
                             } else {
@@ -56,10 +59,12 @@ public class TagCommand extends SimpleCommand {
                                 var success = entity.removeTag(tag);
                                 if (success) successCount++;
                             }
+
                             if (successCount == 0) {
                                 context.addError("%" + TrKeys.M_COMMANDS_TAG_REMOVE_FAILED);
                                 return context.fail();
                             }
+
                             if (entities.size() == 1) {
                                 context.addOutput(TrKeys.M_COMMANDS_TAG_REMOVE_SUCCESS_SINGLE, tag, entities.getFirst().getDisplayName());
                             } else {
@@ -67,34 +72,38 @@ public class TagCommand extends SimpleCommand {
                             }
                         }
                     }
+
                     return context.success(successCount);
                 })
                 .up(2)
                 .key("list")
                 .exec(context -> {
-                    List<Entity> entities = context.getFirstResult();
+                    List<Entity> entities = context.getResult(0);
                     if (entities.isEmpty()) {
                         context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
                         return context.fail();
                     }
-                    Set<String> tagSet = new HashSet<>();
-                    for (var entity : entities) {
-                        tagSet.addAll(entity.getTags());
-                    }
-                    String tagStr = String.join(" ", tagSet);
-                    if (tagSet.isEmpty()) {
+
+                    var tags = entities.stream()
+                            .flatMap(entity -> entity.getTags().stream())
+                            .collect(Collectors.toSet());
+
+                    String tagStr = String.join(" ", tags);
+                    if (tags.isEmpty()) {
                         if (entities.size() == 1) {
                             context.addError("%" + TrKeys.M_COMMANDS_TAG_LIST_SINGLE_EMPTY, entities.getFirst().getDisplayName());
                         } else {
                             context.addError("%" + TrKeys.M_COMMANDS_TAG_LIST_MULTIPLE_EMPTY, entities.size());
                         }
+
                         return context.fail();
                     } else {
                         if (entities.size() == 1) {
-                            context.addOutput(TrKeys.M_COMMANDS_TAG_LIST_SINGLE_SUCCESS, entities.getFirst().getCommandSenderName(), tagSet.size(), tagStr);
+                            context.addOutput(TrKeys.M_COMMANDS_TAG_LIST_SINGLE_SUCCESS, entities.getFirst().getCommandSenderName(), tags.size(), tagStr);
                         } else {
-                            context.addOutput(TrKeys.M_COMMANDS_TAG_LIST_MULTIPLE_SUCCESS, entities.size(), tagSet.size(), tagStr);
+                            context.addOutput(TrKeys.M_COMMANDS_TAG_LIST_MULTIPLE_SUCCESS, entities.size(), tags.size(), tagStr);
                         }
+
                         return context.success();
                     }
                 });

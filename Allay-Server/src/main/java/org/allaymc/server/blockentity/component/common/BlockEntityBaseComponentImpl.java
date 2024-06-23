@@ -1,5 +1,6 @@
 package org.allaymc.server.blockentity.component.common;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.allaymc.api.block.component.event.BlockOnInteractEvent;
 import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
@@ -25,15 +26,16 @@ import org.cloudburstmc.nbt.NbtMap;
  *
  * @author daoge_cmd
  */
+@Getter
 public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements BlockEntityBaseComponent {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
 
+    @Getter(AccessLevel.NONE)
     @Manager
     protected ComponentManager<T> manager;
 
     protected BlockEntityType<T> blockEntityType;
-    @Getter
     protected Position3ic position;
     protected String customName = "";
 
@@ -45,11 +47,6 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
         loadNBT(((BlockEntityInitInfo<?>) initInfo).nbt());
-    }
-
-    @Override
-    public BlockEntityType<? extends BlockEntity> getBlockEntityType() {
-        return blockEntityType;
     }
 
     @Override

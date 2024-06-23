@@ -44,8 +44,9 @@ public class AllayDimension implements Dimension {
     protected final EntityService entityService;
     protected final DimensionInfo dimensionInfo;
     protected final World world;
-    protected final Set<EntityPlayer> players;
-    protected final Set<EntityPlayer> unmodifiablePlayersView;
+
+    protected final Set<EntityPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    protected final Set<EntityPlayer> unmodifiablePlayersView = Collections.unmodifiableSet(this.players);
 
     public AllayDimension(World world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
@@ -56,8 +57,6 @@ public class AllayDimension implements Dimension {
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
-        this.players = Collections.newSetFromMap(new ConcurrentHashMap<>());
-        this.unmodifiablePlayersView = Collections.unmodifiableSet(players);
     }
 
     @Override
@@ -83,15 +82,15 @@ public class AllayDimension implements Dimension {
     @Override
     public void removePlayer(EntityPlayer player, Runnable runnable) {
         if (player.isSpawned()) {
-            // 玩家死亡后重生到另外一个维度时，玩家实体已经被卸载
-            // 所以说在卸载玩家实体时，需要先检查玩家实体是否生成
+            // When the player respawns to another dimension after death, the player entity has already been unloaded
+            // Therefore, when unloading the player entity, we need to check if the player entity has been spawned
             entityService.removeEntity(player, runnable);
             chunkService.removeChunkLoader(player);
             players.remove(player);
         } else {
             chunkService.removeChunkLoader(player);
             players.remove(player);
-            // 直接运行回调
+            // Run the callback directly
             runnable.run();
         }
     }
@@ -109,6 +108,7 @@ public class AllayDimension implements Dimension {
             log.warn("Trying to break air block at x={}, y={}, z={}", x, y, z);
             return;
         }
+
         var pk = new LevelEventPacket();
         pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
         pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));

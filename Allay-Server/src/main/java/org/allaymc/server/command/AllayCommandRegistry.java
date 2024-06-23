@@ -58,6 +58,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new ScoreboardCommand());
         register(new TimeCommand());
         register(new EnchantCommand());
+        register(new EffectCommand());
     }
 
     @Override
@@ -80,23 +81,27 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         var event = new CommandExecuteEvent(sender, cmd);
         Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) return CommandResult.fail();
+
         var spilt = spiltCommandArgs(cmd);
-        var cmdName = spilt.pop(); // Command name
-        var command = this.findCommand(cmdName);
+        var commandName = spilt.pop();
+
+        var command = this.findCommand(commandName);
         if (command == null) {
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
+            sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, commandName);
             return CommandResult.fail();
         }
+
         if (!sender.hasPerm(command.getPermissions())) {
-            sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, cmdName);
+            sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, commandName);
             return CommandResult.fail();
         }
+
         try {
             var result = command.execute(sender, spilt.toArray(Utils.EMPTY_STRING_ARRAY));
             sender.handleResult(result);
             return result;
         } catch (Throwable t) {
-            log.error("Error while execute command " + cmdName, t);
+            log.error("Error while execute command {}", commandName, t);
             sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_EXCEPTION);
             return CommandResult.fail();
         }

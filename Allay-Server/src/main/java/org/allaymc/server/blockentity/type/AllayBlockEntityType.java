@@ -44,14 +44,17 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
     protected String name;
 
     @SneakyThrows
-    protected AllayBlockEntityType(Class<T> interfaceClass,
-                                   List<ComponentProvider<? extends BlockEntityComponent>> componentProviders,
-                                   String name) {
+    protected AllayBlockEntityType(
+            Class<T> interfaceClass,
+            List<ComponentProvider<? extends BlockEntityComponent>> componentProviders,
+            String name
+    ) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
         this.name = name;
+
         try {
-            ArrayList<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
+            List<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
             injectedClass = new AllayComponentInjector<T>()
                     .interfaceClass(interfaceClass)
                     .component(components)
@@ -60,8 +63,13 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         } catch (Exception e) {
             throw new EntityTypeBuildException("Failed to create block entity type!", e);
         }
-        FastMemberLoader fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
-        this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class), fastMemberLoader, false);
+
+        var fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
+        this.constructor = FastConstructor.create(
+                injectedClass.getConstructor(ComponentInitInfo.class),
+                fastMemberLoader,
+                false
+        );
     }
 
     public static <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> builder(Class<T> interfaceClass) {

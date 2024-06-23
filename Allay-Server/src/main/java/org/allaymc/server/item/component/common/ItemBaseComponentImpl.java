@@ -1,38 +1,43 @@
 package org.allaymc.server.item.component.common;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.component.annotation.Manager;
-import org.allaymc.api.component.interfaces.ComponentManager;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.data.VanillaMaterialTypes;
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.item.component.event.*;
-import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
-import org.allaymc.api.item.enchantment.type.EnchantmentUnbreakingType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.component.interfaces.ComponentManager;
+import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
+import org.allaymc.api.data.VanillaMaterialTypes;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.common.ItemAttributeComponent;
 import org.allaymc.api.item.component.common.ItemBaseComponent;
+import org.allaymc.api.item.component.event.*;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
+import org.allaymc.api.item.enchantment.type.EnchantmentUnbreakingType;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
-import org.cloudburstmc.nbt.*;
+import org.allaymc.server.utils.ResourceUtils;
+import org.cloudburstmc.nbt.NbtList;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.joml.Vector3ic;
@@ -55,28 +60,63 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
+    // TODO: Due to differences between server-side and client-side block placement checks,
+    //  which cannot be synchronized 100%, "block swallowing" phenomenon may occur.
+    //  Here, the check is temporarily disabled.
+    protected static final boolean DO_BLOCK_PLACING_CHECK = false;
+
+    // Stores the correct tool sets for blocks that require tool quality
+    private static final EnumMap<VanillaBlockId, VanillaItemId[]> CORRECT_TOOL_SPECIAL_MAP = new EnumMap<>(VanillaBlockId.class);
     private static int STACK_NETWORK_ID_COUNTER = 1;
 
-    public static int getCurrentStackNetworkIdCounter() {
-        return STACK_NETWORK_ID_COUNTER;
+    static {
+        try (var reader = NbtUtils.createGZIPReader(
+                new BufferedInputStream(ResourceUtils.getResource("block_correct_tool_special.nbt"))
+        )) {
+            var nbtMap = (NbtMap) reader.readTag();
+            nbtMap.forEach((k, v) -> {
+                var blockId = VanillaBlockId.fromIdentifier(new Identifier(k));
+                var list = (NbtList<String>) v;
+                var tools = list.stream()
+                        .map(itemId -> VanillaItemId.fromIdentifier(new Identifier(itemId)))
+                        .toArray(VanillaItemId[]::new);
+                CORRECT_TOOL_SPECIAL_MAP.put(blockId, tools);
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Dependency
     protected ItemAttributeComponent attributeComponent;
+
     @ComponentedObject
     protected T thisItemStack;
+
     @Manager
     protected ComponentManager<T> manager;
 
+    @Getter
     protected ItemType<T> itemType;
+    @Getter
     protected int count;
+    @Getter
     protected int meta;
+    @Getter
     protected int durability;
+    @Getter
+    @Setter
     protected String customName = "";
+    @Getter
+    @Setter
     protected List<String> lore = new ArrayList<>();
     protected Map<EnchantmentType, EnchantmentInstance> enchantments = new HashMap<>();
     //TODO: item lock type
+    @Getter
+    @Setter
     protected NbtMap customNBTContent = NbtMap.EMPTY;
+    @Getter
+    @Setter
     protected int stackNetworkId;
 
     public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
@@ -93,6 +133,10 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         }
     }
 
+    public static int getCurrentStackNetworkIdCounter() {
+        return STACK_NETWORK_ID_COUNTER;
+    }
+
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
         loadExtraTag(((ItemStackInitInfo<?>) initInfo).extraTag());
@@ -101,33 +145,20 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     public void loadExtraTag(NbtMap extraTag) {
         this.durability = extraTag.getInt("Damage", 0);
-        if (extraTag.containsKey("display")) {
-            var displayTag = extraTag.getCompound("display");
-            this.customName = displayTag.getString("Name");
+        extraTag.listenForCompound("display", displayNbt -> {
+            this.customName = displayNbt.getString("Name");
             this.lore = extraTag.getList("Lore", NbtType.STRING);
-        }
-        if (extraTag.containsKey("ench")) {
-            extraTag.getList("ench", NbtType.COMPOUND).forEach(tag -> {
-                var enchantment = EnchantmentHelper.fromNBT(tag);
-                this.enchantments.put(enchantment.getType(), enchantment);
-            });
-        }
-        if (extraTag.containsKey("CustomNBT")) {
-            this.customNBTContent = extraTag.getCompound("CustomNBT");
-        }
+        });
+
+        extraTag.listenForList("ench", NbtType.COMPOUND, enchsNbt -> enchsNbt.forEach(enchNbt -> {
+            var enchantment = EnchantmentHelper.fromNBT(enchNbt);
+            this.enchantments.put(enchantment.getType(), enchantment);
+        }));
+
+        extraTag.listenForCompound("CustomNBT", customNbt -> this.customNBTContent = customNbt);
 
         var event = new ItemLoadExtraTagEvent(extraTag);
         manager.callEvent(event);
-    }
-
-    @Override
-    public ItemType<? extends ItemStack> getItemType() {
-        return itemType;
-    }
-
-    @Override
-    public int getCount() {
-        return count;
     }
 
     @Override
@@ -137,20 +168,10 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public int getMeta() {
-        return meta;
-    }
-
-    @Override
     public void setMeta(int meta) {
         if (meta < 0)
             throw new IllegalArgumentException("Meta must bigger than zero!");
         this.meta = meta;
-    }
-
-    @Override
-    public int getDurability() {
-        return durability;
     }
 
     @Override
@@ -162,30 +183,11 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public boolean willDamageItem() {
-        float level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING_TYPE);
+        var level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING_TYPE);
         if (level == 0) return true;
-        float possibility = 1f / (level + 1f);
+
+        var possibility = 1f / (level + 1f);
         return ThreadLocalRandom.current().nextFloat() <= possibility;
-    }
-
-    @Override
-    public String getCustomName() {
-        return customName;
-    }
-
-    @Override
-    public void setCustomName(String customName) {
-        this.customName = customName;
-    }
-
-    @Override
-    public List<String> getLore() {
-        return lore;
-    }
-
-    @Override
-    public void setLore(List<String> lore) {
-        this.lore = lore;
     }
 
     @Override
@@ -197,31 +199,19 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public ItemData toNetworkItemData() {
-        if (itemType == ItemTypes.AIR_TYPE) {
-            return ItemData.AIR;
-        } else {
-            var blockState = toBlockState();
-            return ItemData
-                    .builder()
-                    .definition(itemType.toNetworkDefinition())
-                    .blockDefinition(blockState != null ? blockState.toNetworkBlockDefinition() : () -> 0)
-                    .count(count)
-                    .damage(meta)
-                    .tag(saveExtraTag())
-                    .usingNetId(hasStackNetworkId())
-                    .netId(stackNetworkId)
-                    .build();
-        }
-    }
+        if (itemType == ItemTypes.AIR_TYPE) return ItemData.AIR;
 
-    @Override
-    public int getStackNetworkId() {
-        return stackNetworkId;
-    }
-
-    @Override
-    public void setStackNetworkId(int newStackNetworkId) {
-        this.stackNetworkId = newStackNetworkId;
+        var blockState = toBlockState();
+        return ItemData
+                .builder()
+                .definition(itemType.toNetworkDefinition())
+                .blockDefinition(blockState != null ? blockState.toNetworkBlockDefinition() : () -> 0)
+                .count(count)
+                .damage(meta)
+                .tag(saveExtraTag())
+                .usingNetId(hasStackNetworkId())
+                .netId(stackNetworkId)
+                .build();
     }
 
     @Override
@@ -247,34 +237,25 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public NbtMap saveExtraTag() {
-        NbtMapBuilder nbtBuilder = NbtMap.builder();
-        if (durability != 0) {
-            nbtBuilder.putInt("Damage", durability);
-        }
+        var nbtBuilder = NbtMap.builder();
+        if (durability != 0) nbtBuilder.putInt("Damage", durability);
 
-        NbtMapBuilder displayBuilder = NbtMap.builder();
-        if (!this.customName.isEmpty()) {
-            displayBuilder.put("Name", this.customName);
-        }
-        if (!this.lore.isEmpty()) {
-            displayBuilder.putList("Lore", NbtType.STRING, this.lore);
-        }
-        if (!displayBuilder.isEmpty()) {
-            nbtBuilder.putCompound("display", displayBuilder.build());
-        }
+        var displayBuilder = NbtMap.builder();
+        if (!this.customName.isEmpty()) displayBuilder.put("Name", this.customName);
+        if (!this.lore.isEmpty()) displayBuilder.putList("Lore", NbtType.STRING, this.lore);
+        if (!displayBuilder.isEmpty()) nbtBuilder.putCompound("display", displayBuilder.build());
+
         if (!enchantments.isEmpty()) {
-            List<NbtMap> enchantmentNBT = new ArrayList<>();
-            for (var enchantment : this.enchantments.values()) {
-                enchantmentNBT.add(enchantment.saveNBT());
-            }
+            var enchantmentNBT = this.enchantments.values().stream()
+                    .map(EnchantmentInstance::saveNBT)
+                    .toList();
             nbtBuilder.putList("ench", NbtType.COMPOUND, enchantmentNBT);
         }
+
         //TODO: item lock type
 
         // Custom NBT content
-        if (!customNBTContent.isEmpty()) {
-            nbtBuilder.put("CustomNBT", customNBTContent);
-        }
+        if (!customNBTContent.isEmpty()) nbtBuilder.put("CustomNBT", customNBTContent);
 
         var event = new ItemSaveExtraTagEvent(nbtBuilder);
         manager.callEvent(event);
@@ -283,32 +264,19 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public NbtMap getCustomNBTContent() {
-        return customNBTContent;
-    }
-
-    @Override
-    public void setCustomNBTContent(NbtMap customNBTContent) {
-        this.customNBTContent = customNBTContent;
-    }
-
-    @Override
     public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        if (thisItemStack.getItemType().getBlockType() == null)
-            return false;
+        if (thisItemStack.getItemType().getBlockType() == null) return false;
         var blockState = thisItemStack.toBlockState();
         return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo);
     }
-
-    // TODO: 由于服务端侧方块放置检查与客户端方块放置检查不能做到100%同步，会导致“吞方块”现象出现，这里先关闭检查
-    protected static final boolean DO_BLOCK_PLACING_CHECK = false;
 
     protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         var player = placementInfo.player();
         if (player != null && DO_BLOCK_PLACING_CHECK && hasEntityCollision(dimension, placeBlockPos, blockState))
             return false;
-        BlockType<?> blockType = blockState.getBlockType();
-        boolean result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
+
+        var blockType = blockState.getBlockType();
+        var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
         if (result) {
             tryConsumeItem(player);
             var event = new ItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
@@ -323,12 +291,11 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {
-        var blockAABB = blockState.getBehavior().getBlockAttributes(blockState)
-                .computeOffsetVoxelShape(
-                        placePos.x(),
-                        placePos.y(),
-                        placePos.z()
-                );
+        var blockAABB = blockState.getBehavior().getBlockAttributes(blockState).computeOffsetVoxelShape(
+                placePos.x(),
+                placePos.y(),
+                placePos.z()
+        );
         return !dimension.getEntityPhysicsService().computeCollidingEntities(blockAABB).isEmpty();
     }
 
@@ -336,13 +303,14 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     public boolean canMerge(ItemStack itemStack, boolean ignoreCount) {
         var extraTag1 = saveExtraTag();
         if (extraTag1 == null) extraTag1 = NbtMap.EMPTY;
+
         var extraTag2 = itemStack.saveExtraTag();
         if (extraTag2 == null) extraTag2 = NbtMap.EMPTY;
         return itemStack.getItemType() == getItemType() &&
-                itemStack.getMeta() == getMeta() &&
-                (ignoreCount || count + itemStack.getCount() <= attributeComponent.getItemAttributes().maxStackSize()) &&
-                extraTag1.equals(extraTag2) &&
-                itemStack.toBlockState() == toBlockState();
+               itemStack.getMeta() == getMeta() &&
+               (ignoreCount || count + itemStack.getCount() <= attributeComponent.getItemAttributes().maxStackSize()) &&
+               extraTag1.equals(extraTag2) &&
+               itemStack.toBlockState() == toBlockState();
     }
 
     @Override
@@ -362,7 +330,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public int getEnchantmentLevel(EnchantmentType enchantmentType) {
-        var instance =  enchantments.get(enchantmentType);
+        var instance = enchantments.get(enchantmentType);
         return instance == null ? 0 : instance.getLevel();
     }
 
@@ -372,7 +340,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public void addEnchantment(EnchantmentType enchantmentType, short level) {
+    public void addEnchantment(EnchantmentType enchantmentType, int level) {
         enchantments.put(enchantmentType, new SimpleEnchantmentInstance(enchantmentType, level));
     }
 
@@ -399,105 +367,68 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     public boolean isBroken() {
         var maxDamage = attributeComponent.getItemAttributes().maxDamage();
-        if (maxDamage == 0) {
-            // This item does not support durability
-            return false;
-        }
+        // This item does not support durability
+        if (maxDamage == 0) return false;
         return durability >= maxDamage;
-    }
-
-    // 记录那些对工具品质有要求的方块的正确工具集合
-    private static final EnumMap<VanillaBlockId, VanillaItemId[]> CORRECT_TOOL_SPECIAL_MAP = new EnumMap<>(VanillaBlockId.class);
-
-    static {
-        try (var reader = NbtUtils.createGZIPReader(
-                new BufferedInputStream(
-                        Objects.requireNonNull(
-                                ItemBaseComponentImpl
-                                        .class
-                                        .getClassLoader()
-                                        .getResourceAsStream("block_correct_tool_special.nbt"),
-                                "block_correct_tool_special.nbt is missing!"
-                        )
-                )
-        )) {
-            var nbtMap = (NbtMap) reader.readTag();
-            nbtMap.forEach((k, v) -> {
-                var blockId = VanillaBlockId.fromIdentifier(new Identifier(k));
-                var list = (NbtList<String>) v;
-                VanillaItemId[] tools = list.stream().map(itemId -> VanillaItemId.fromIdentifier(new Identifier(itemId))).toArray(VanillaItemId[]::new);
-                CORRECT_TOOL_SPECIAL_MAP.put(blockId, tools);
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
     public boolean isCorrectToolFor(BlockState blockState) {
-        var it = getItemType();
-        var bt = blockState.getBlockType();
-        var vanillaItemId = VanillaItemId.fromIdentifier(it.getIdentifier());
-        var vanillaBlockId = VanillaBlockId.fromIdentifier(bt.getIdentifier());
+        var blockType = blockState.getBlockType();
+        var vanillaItemId = VanillaItemId.fromIdentifier(itemType.getIdentifier());
+        var vanillaBlockId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
         if (vanillaItemId != null && vanillaBlockId != null) {
             var specialCorrectTools = CORRECT_TOOL_SPECIAL_MAP.get(vanillaBlockId);
-            if (specialCorrectTools != null) {
-                for (var tool : specialCorrectTools) {
-                    if (tool == vanillaItemId) {
-                        return true;
-                    }
-                }
-                return false;
-            }
+            if (specialCorrectTools != null)
+                return Arrays.stream(specialCorrectTools).anyMatch(tool -> tool == vanillaItemId);
         }
-        var mt = blockState.getBlockType().getMaterial().materialType();
-        if (it == ItemTypes.SHEARS_TYPE) {
+
+        var materialType = blockState.getBlockType().getMaterial().materialType();
+        if (itemType == ItemTypes.SHEARS_TYPE) {
+            if (blockType == BlockTypes.VINE_TYPE || blockType == BlockTypes.GLOW_LICHEN_TYPE) return true;
+
+            return materialType == VanillaMaterialTypes.CLOTH ||
+                   materialType == VanillaMaterialTypes.LEAVES ||
+                   materialType == VanillaMaterialTypes.PLANT ||
+                   materialType == VanillaMaterialTypes.WEB;
+        }
+
+        if (isAxe(itemType)) return materialType == VanillaMaterialTypes.WOOD;
+
+        if (isShovel(itemType)) return materialType == VanillaMaterialTypes.DIRT ||
+                                       materialType == VanillaMaterialTypes.CLAY ||
+                                       materialType == VanillaMaterialTypes.SAND ||
+                                       materialType == VanillaMaterialTypes.SNOW ||
+                                       materialType == VanillaMaterialTypes.TOPSNOW;
+        if (isHoe(itemType)) {
             if (
-                    bt == BlockTypes.VINE_TYPE ||
-                            bt == BlockTypes.GLOW_LICHEN_TYPE
+                    blockType == BlockTypes.DRIED_KELP_BLOCK_TYPE ||
+                    blockType == BlockTypes.HAY_BLOCK_TYPE ||
+                    blockType == BlockTypes.TARGET_TYPE ||
+                    blockType == BlockTypes.SPONGE_TYPE ||
+                    blockType == BlockTypes.MOSS_BLOCK_TYPE
             ) return true;
-            return mt == VanillaMaterialTypes.CLOTH ||
-                    mt == VanillaMaterialTypes.LEAVES ||
-                    mt == VanillaMaterialTypes.PLANT ||
-                    mt == VanillaMaterialTypes.WEB;
+
+            return materialType == VanillaMaterialTypes.LEAVES ||
+                   materialType == VanillaMaterialTypes.NETHERWART ||
+                   materialType == VanillaMaterialTypes.SCULK;
         }
-        if (isAxe(it)) {
-            return mt == VanillaMaterialTypes.WOOD;
-        }
-        if (isShovel(it)) {
-            return mt == VanillaMaterialTypes.DIRT ||
-                    mt == VanillaMaterialTypes.CLAY ||
-                    mt == VanillaMaterialTypes.SAND ||
-                    mt == VanillaMaterialTypes.SNOW ||
-                    mt == VanillaMaterialTypes.TOPSNOW;
-        }
-        if (isHoe(it)) {
+
+        if (isSword(itemType)) {
             if (
-                    bt == BlockTypes.DRIED_KELP_BLOCK_TYPE ||
-                            bt == BlockTypes.HAY_BLOCK_TYPE ||
-                            bt == BlockTypes.TARGET_TYPE ||
-                            bt == BlockTypes.SPONGE_TYPE ||
-                            bt == BlockTypes.MOSS_BLOCK_TYPE
+                    blockType == BlockTypes.BAMBOO_TYPE ||
+                    blockType == BlockTypes.BAMBOO_SAPLING_TYPE ||
+                    blockType == BlockTypes.COCOA_TYPE ||
+                    blockType == BlockTypes.HAY_BLOCK_TYPE ||
+                    blockType == BlockTypes.VINE_TYPE ||
+                    blockType == BlockTypes.GLOW_LICHEN_TYPE
             ) return true;
-            return mt == VanillaMaterialTypes.LEAVES ||
-                    mt == VanillaMaterialTypes.NETHERWART ||
-                    mt == VanillaMaterialTypes.SCULK;
+
+            return materialType == VanillaMaterialTypes.VEGETABLE ||
+                   materialType == VanillaMaterialTypes.LEAVES ||
+                   materialType == VanillaMaterialTypes.WEB;
         }
-        if (isSword(it)) {
-            if (
-                    bt == BlockTypes.BAMBOO_TYPE ||
-                            bt == BlockTypes.BAMBOO_SAPLING_TYPE ||
-                            bt == BlockTypes.COCOA_TYPE ||
-                            bt == BlockTypes.HAY_BLOCK_TYPE ||
-                            bt == BlockTypes.VINE_TYPE ||
-                            bt == BlockTypes.GLOW_LICHEN_TYPE
-            ) return true;
-            return mt == VanillaMaterialTypes.VEGETABLE ||
-                    mt == VanillaMaterialTypes.LEAVES ||
-                    mt == VanillaMaterialTypes.WEB;
-        }
+
         return false;
     }
-
-
 }

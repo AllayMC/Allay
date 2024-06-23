@@ -2,17 +2,15 @@ package org.allaymc.server.world.generator;
 
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.context.NoiseContext;
 import org.allaymc.api.world.generator.function.Noiser;
 
 import java.util.ArrayList;
 
-import static org.allaymc.api.block.type.BlockTypes.BEDROCK_TYPE;
-import static org.allaymc.api.block.type.BlockTypes.DIRT_TYPE;
-import static org.allaymc.api.block.type.BlockTypes.GRASS_BLOCK_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
  * Allay Project 2023/7/8

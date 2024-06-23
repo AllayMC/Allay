@@ -73,13 +73,17 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
         try (var stream = Files.newDirectoryStream(PACKS_PATH)) {
             for (var zipPack : stream) {
                 if (!PackUtils.isZipPack(zipPack)) continue;
+
                 var keyPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".key");
                 if (Files.exists(keyPath)) continue;
+
                 log.info(I18n.get().tr(TrKeys.A_PACK_ENCRYPTING, zipPack.getFileName()));
                 var backupPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".bak");
                 Files.copy(zipPack, backupPath, StandardCopyOption.REPLACE_EXISTING);
+
                 var tmpPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".tmp");
                 Files.deleteIfExists(tmpPath);
+
                 String key;
                 try {
                     Files.move(zipPack, tmpPath);
@@ -87,6 +91,7 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
                 } finally {
                     Files.delete(tmpPath);
                 }
+
                 Files.writeString(keyPath, key);
                 log.info(I18n.get().tr(TrKeys.A_PACK_ENCRYPTED, zipPack.getFileName(), key));
             }
@@ -103,8 +108,10 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
         try (var stream = Files.newDirectoryStream(path)) {
             for (var entry : stream) {
                 if (isExcludedFormat(entry)) continue;
+
                 var loader = this.findLoader(entry);
                 if (loader == null) continue;
+
                 foundedLoaders.add(loader);
             }
         } catch (IOException exception) {
@@ -116,6 +123,7 @@ public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID
         for (var loader : foundedLoaders) {
             var manifest = PackManifest.load(loader);
             if (manifest == null || !manifest.isValid()) continue;
+
             log.info(I18n.get().tr(TrKeys.A_PACK_LOADING_ENTRY, manifest.getHeader().getName()));
             loader2manifest.put(loader, manifest);
         }

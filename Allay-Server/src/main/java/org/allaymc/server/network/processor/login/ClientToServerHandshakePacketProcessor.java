@@ -14,14 +14,14 @@ import org.cloudburstmc.protocol.bedrock.packet.ClientToServerHandshakePacket;
 @Slf4j
 public class ClientToServerHandshakePacketProcessor extends ILoginPacketProcessor<ClientToServerHandshakePacket> {
     @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.CLIENT_TO_SERVER_HANDSHAKE;
+    public void handle(EntityPlayer player, ClientToServerHandshakePacket packet) {
+        if (player.isNetworkEncryptionEnabled()) player.completeLogin();
+        else
+            log.warn("Client {} sent ClientToServerHandshakePacket without encryption enabled", player.getOriginName());
     }
 
     @Override
-    public void handle(EntityPlayer player, ClientToServerHandshakePacket packet) {
-        if (player.isNetworkEncryptionEnabled()) player.completeLogin();
-        else log.warn("Client " + player.getOriginName() + " sent ClientToServerHandshakePacket without encryption enabled");
-        return;
+    public BedrockPacketType getPacketType() {
+        return BedrockPacketType.CLIENT_TO_SERVER_HANDSHAKE;
     }
 }

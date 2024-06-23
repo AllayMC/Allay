@@ -1,7 +1,6 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.Container;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -21,26 +20,25 @@ import java.util.Map;
 @Slf4j
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
     @Override
-    public ItemStackRequestActionType getType() {
-        return ItemStackRequestActionType.SWAP;
-    }
-
-    @Override
     public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        Container sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
-        Container destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
+        var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
+        var destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
+
         var sourceSlot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
         var destinationSlot = destinationContainer.fromNetworkSlotIndex(action.getDestination().getSlot());
+
         var sourceItem = sourceContainer.getItemStack(sourceSlot);
-        var destinationItem = destinationContainer.getItemStack(destinationSlot);
         if (failToValidateStackNetworkId(sourceItem.getStackNetworkId(), action.getSource().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }
+
+        var destinationItem = destinationContainer.getItemStack(destinationSlot);
         if (failToValidateStackNetworkId(destinationItem.getStackNetworkId(), action.getDestination().getStackNetworkId())) {
             log.warn("mismatch stack network id!");
             return error();
         }
+
         sourceContainer.setItemStack(sourceSlot, destinationItem);
         destinationContainer.setItemStack(destinationSlot, sourceItem);
         return new ActionResponse(
@@ -74,5 +72,10 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                         )
                 )
         );
+    }
+
+    @Override
+    public ItemStackRequestActionType getType() {
+        return ItemStackRequestActionType.SWAP;
     }
 }

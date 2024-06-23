@@ -1,7 +1,6 @@
 package org.allaymc.server.entity.component.common;
 
 import lombok.Getter;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
@@ -12,6 +11,7 @@ import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.event.EntityFallEvent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
@@ -25,12 +25,15 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_damage_component");
+
     @Dependency
     protected EntityBaseComponent baseComponent;
     @Dependency
     protected EntityAttributeComponent attributeComponent;
+
     @ComponentedObject
     protected Entity entity;
+
     @Getter
     protected DamageContainer lastDamage;
     @Getter
@@ -39,6 +42,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public boolean attack(DamageContainer damage) {
         if (!canAttack(damage)) return false;
+
         var currentTime = baseComponent.getWorld().getTick();
         if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return false;
 

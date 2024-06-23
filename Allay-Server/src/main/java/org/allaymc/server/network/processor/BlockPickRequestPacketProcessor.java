@@ -19,28 +19,32 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
     @Override
     public void handleSync(EntityPlayer player, BlockPickRequestPacket packet) {
         if (player.getGameType() != GameType.CREATIVE) {
-            log.warn("Player " + player.getOriginName() + " tried to pick block in non-creative mode!");
+            log.warn("Player {} tried to pick block in non-creative mode!", player.getOriginName());
             return;
         }
+
         var pos = packet.getBlockPosition();
         // TODO: includeBlockEntityData
         var includeBlockEntityData = packet.isAddUserData();
         var block = player.getLocation().dimension().getBlockState(pos.getX(), pos.getY(), pos.getZ());
         if (block.getBlockType() == BlockTypes.AIR_TYPE) {
-            log.warn("Player " + player.getOriginName() + " tried to pick air!");
+            log.warn("Player {} tried to pick air!", player.getOriginName());
             return;
         }
+
         var item = block.toItemStack();
         item.setCount(item.getItemAttributes().maxStackSize());
+
         var inventory = player.getContainer(FullContainerType.PLAYER_INVENTORY);
         // Foreach hot bar
-        int minEmptySlot = -1;
-        boolean success = false;
+        var minEmptySlot = -1;
+        var success = false;
         for (int slot = 0; slot <= 9; slot++) {
             if (inventory.isEmpty(slot) && minEmptySlot == -1) {
                 minEmptySlot = slot;
                 continue;
             }
+
             var hotBarItem = inventory.getItemStack(slot);
             if (hotBarItem.canMerge(item)) {
                 hotBarItem.setCount(hotBarItem.getItemAttributes().maxStackSize());
@@ -48,14 +52,11 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
                 success = true;
             }
         }
-        if (!success) {
-            if (minEmptySlot != -1) {
-                inventory.setItemStack(minEmptySlot, item);
-            } else {
-                // Hot bar is full
-                inventory.setItemInHand(item);
-            }
-        }
+
+        if (success) return;
+
+        if (minEmptySlot != -1) inventory.setItemStack(minEmptySlot, item);
+        else inventory.setItemInHand(item); // Hot bar is full
     }
 
     @Override

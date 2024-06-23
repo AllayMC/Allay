@@ -18,7 +18,6 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3f;
 
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -78,7 +77,8 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     private void onInteract(BlockOnInteractEvent event) {
         var player = event.getInteractInfo().player();
         if (player == null || player.isSneaking()) return;
-        Objects.requireNonNull(container).addViewer(player);
+
+        container.addViewer(player);
         event.setSuccess(true);
     }
 
@@ -89,9 +89,11 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     @EventHandler
     private void onReplace(BlockOnReplaceEvent event) {
         if (!dropItemWhenBreak()) return;
+
         var pos = event.getCurrentBlockState().pos();
         var dimension = pos.dimension();
         var rand = ThreadLocalRandom.current();
+
         container.removeAllViewers();
         for (var itemStack : container.getItemStacks()) {
             if (itemStack == Container.EMPTY_SLOT_PLACE_HOLDER) continue;
@@ -101,6 +103,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
                     pos.z() + rand.nextFloat(0.5f) + 0.25f)
             );
         }
+
         container.clearAllSlots();
     }
 
@@ -113,9 +116,8 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     public <T extends Container> T getContainerBySlotType(ContainerSlotType slotType) {
         // BlockEntityContainerHolder can only hold one container in its lifetime
         // So we only need to check the slotType which caller provided
-        if (!container.getContainerType().heldSlotTypes().contains(slotType)) {
+        if (!container.getContainerType().heldSlotTypes().contains(slotType))
             throw new IllegalArgumentException("The container " + container.getContainerType() + " does not have the slot type " + slotType);
-        }
         return (T) container;
     }
 }

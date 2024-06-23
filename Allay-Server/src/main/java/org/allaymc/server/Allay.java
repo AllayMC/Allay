@@ -70,12 +70,11 @@ import org.allaymc.server.world.storage.AllayWorldStorageFactory;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
-import java.lang.reflect.Method;
-
 @Slf4j
 public final class Allay {
 
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
+
     public static Dashboard DASHBOARD;
 
     public static void main(String[] args) {
@@ -84,9 +83,8 @@ public final class Allay {
         System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // Enable async logging
         initI18n();
         // Check if the environment is headless
-        if (isHeadless()) {
-            Server.SETTINGS.genericSettings().enableGui(false);
-        }
+        if (isHeadless()) Server.SETTINGS.genericSettings().enableGui(false);
+
         if (Server.SETTINGS.genericSettings().enableGui()) {
             try {
                 DASHBOARD = Dashboard.getInstance();
@@ -95,6 +93,7 @@ public final class Allay {
                 Server.SETTINGS.genericSettings().enableGui(false);
             }
         }
+
         log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING));
         try {
             initAllayAPI();
@@ -103,6 +102,7 @@ public final class Allay {
             log.error("Cannot init Allay API!", e);
             System.exit(1);
         }
+
         try {
             Server.getInstance().start(startTime);
         } catch (Exception e) {
@@ -113,11 +113,10 @@ public final class Allay {
 
     private static boolean isHeadless() {
         try {
-            Class<?> graphicsEnv = Class.forName("java.awt.GraphicsEnvironment");
-            Method isHeadless = graphicsEnv.getDeclaredMethod("isHeadless");
+            var graphicsEnv = Class.forName("java.awt.GraphicsEnvironment");
+            var isHeadless = graphicsEnv.getDeclaredMethod("isHeadless");
             return (boolean) isHeadless.invoke(null);
         } catch (Exception ignore) {}
-
         return true;
     }
 
@@ -196,8 +195,7 @@ public final class Allay {
 
     @VisibleForTesting
     public static void initI18n() {
-        if (I18n.get() == null) {
-            AllayAPI.getInstance().bindI18n(new AllayI18n(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
-        }
+        if (I18n.get() != null) return;
+        AllayAPI.getInstance().bindI18n(new AllayI18n(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
     }
 }

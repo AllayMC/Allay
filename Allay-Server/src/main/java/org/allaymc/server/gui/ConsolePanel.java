@@ -28,16 +28,19 @@ package org.allaymc.server.gui;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import javax.swing.text.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.io.Serial;
 
 /**
+ * This class was based on this <a href="https://stackoverflow.com/a/6899478/5299903">code</a>
+ * <p>
  * Allay Project 2024/5/25
  *
  * @author daoge_cmd
- *
- * This class was based on this <a href="https://stackoverflow.com/a/6899478/5299903">code</a>
  */
 @Slf4j
 public class ConsolePanel extends JTextPane {
@@ -46,48 +49,49 @@ public class ConsolePanel extends JTextPane {
     private static final long serialVersionUID = 1L;
 
     private static Color colorCurrent = ANSIColor.RESET.getColor();
-    private String remaining = "";
     int currentLength = 0; // Used to let ProgressBars work
+    private String remaining = "";
 
     /**
      * Append the given string in the given color to the text pane
-     *  @param c The color
-     * @param s The text
+     *
+     * @param color The color
+     * @param text  The text
      */
-    private void append(Color c, String s) {
-        StyleContext sc = StyleContext.getDefaultStyleContext();
-        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c);
-        int len = getDocument().getLength();
+    private void append(Color color, String text) {
+        var sc = StyleContext.getDefaultStyleContext();
+        var attribute = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
+        var len = getDocument().getLength();
 
-        if(s.contains("\r")) {
-            // We have a carriage so we should be at the front of the line
-            boolean haveNewline = s.contains("\n");
-            if(haveNewline) {
+        if (text.contains("\r")) {
+            // We have a carriage, so we should be at the front of the line
+            if (text.contains("\n")) {
                 // We're good to normally add to the document
                 try {
-                    getDocument().insertString(len, s, aset);
+                    getDocument().insertString(len, text, attribute);
                 } catch (BadLocationException e) {
                     log.error("Error while appending text to console", e);
                 }
+
                 currentLength = 0;
                 return;
             }
 
             // There's no newline, we should erase our progress to the start
             try {
-                getDocument().remove(len-currentLength, currentLength);
-                getDocument().insertString(len-currentLength, s, aset);
-                currentLength = s.length();
+                getDocument().remove(len - currentLength, currentLength);
+                getDocument().insertString(len - currentLength, text, attribute);
+                currentLength = text.length();
             } catch (BadLocationException e) {
                 log.error("Error while removing text from console, most likely has to do with printing weirdly", e);
             }
             return;
         }
 
-        currentLength += s.length();
+        currentLength += text.length();
 
         try {
-            getDocument().insertString(len, s, aset);
+            getDocument().insertString(len, text, attribute);
         } catch (BadLocationException e) {
             log.error("Error while appending text to console", e);
         }
@@ -96,15 +100,15 @@ public class ConsolePanel extends JTextPane {
     /**
      * Extract the ANSI color codes from the string and add each part to the text pane
      *
-     * @param s The text to parse
+     * @param text The text to parse
      */
-    public void appendANSI(String s) { // convert ANSI color codes first
+    public void appendANSI(String text) { // convert ANSI color codes first
         int aPos = 0;   // current char position in addString
         int aIndex; // index of next Escape sequence
         int mIndex; // index of "m" terminating Escape sequence
         String tmpString;
         boolean stillSearching = true; // true until no more Escape sequences
-        String addString = remaining + s;
+        String addString = remaining + text;
         remaining = "";
 
         if (!addString.isEmpty()) {
@@ -121,7 +125,6 @@ public class ConsolePanel extends JTextPane {
                 aPos = aIndex; // aPos is now at the beginning of the first escape sequence
             }
 
-
             // while there's text in the input buffer
             while (stillSearching) {
                 mIndex = addString.indexOf("m", aPos); // find the end of the escape sequence
@@ -130,7 +133,7 @@ public class ConsolePanel extends JTextPane {
                     stillSearching = false;
                     continue;
                 } else {
-                    tmpString = addString.substring(aPos, mIndex+1);
+                    tmpString = addString.substring(aPos, mIndex + 1);
                     colorCurrent = ANSIColor.fromANSI(tmpString).getColor();
                 }
                 aPos = mIndex + 1;
@@ -149,7 +152,6 @@ public class ConsolePanel extends JTextPane {
                 tmpString = addString.substring(aPos, aIndex);
                 aPos = aIndex;
                 append(colorCurrent, tmpString);
-
             }
         }
     }

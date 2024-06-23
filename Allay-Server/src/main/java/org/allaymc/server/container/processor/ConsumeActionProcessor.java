@@ -27,24 +27,29 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
         var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
         var sourceStackNetworkId = action.getSource().getStackNetworkId();
         var slot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
+
         var count = action.getCount();
         if (count == 0) {
             log.warn("cannot consume 0 items!");
             return error();
         }
+
         var item = sourceContainer.getItemStack(slot);
         if (failToValidateStackNetworkId(item.getStackNetworkId(), sourceStackNetworkId)) {
             log.warn("mismatch stack network id!");
             return error();
         }
+
         if (item.getItemType() == AIR_TYPE) {
             log.warn("cannot consume an air!");
             return error();
         }
+
         if (item.getCount() < count) {
             log.warn("cannot consume more items than the current amount!");
             return error();
         }
+
         if (item.getCount() > count) {
             item.setCount(item.getCount() - count);
             sourceContainer.onSlotChange(slot);
@@ -52,6 +57,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
             item = Container.EMPTY_SLOT_PLACE_HOLDER;
             sourceContainer.clearSlot(slot);
         }
+
         return new ActionResponse(
                 true,
                 List.of(

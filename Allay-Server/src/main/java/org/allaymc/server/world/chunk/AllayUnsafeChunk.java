@@ -12,7 +12,6 @@ import org.allaymc.api.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityHelper;
-import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
@@ -29,10 +28,10 @@ import org.jetbrains.annotations.UnmodifiableView;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
+import java.util.stream.Collectors;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 
@@ -40,71 +39,39 @@ import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AllayUnsafeChunk implements UnsafeChunk {
     private static final AtomicReferenceFieldUpdater<AllayUnsafeChunk, ChunkState> STATE_FIELD = AtomicReferenceFieldUpdater.newUpdater(AllayUnsafeChunk.class, ChunkState.class, "state");
-    protected volatile ChunkState state;
-    protected final int x;
-    protected final int z;
+
+    @Getter
+    protected final int x, z;
+    @Getter
     protected final DimensionInfo dimensionInfo;
+    @Getter
     protected final ChunkSection[] sections;
     protected final HeightMap heightMap;
     protected final Map<Long, Entity> entities;
     protected final Map<Integer, BlockEntity> blockEntities;
+    @Getter
+    protected volatile ChunkState state;
+
     protected List<NbtMap> entityNbtList;
     protected List<NbtMap> blockEntityNbtList;
 
     private AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        this.x = chunkX;
-        this.z = chunkZ;
-        this.dimensionInfo = dimensionInfo;
-        this.state = ChunkState.EMPTY;
-        this.heightMap = new HeightMap();
-        this.sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
-        this.entities = new Long2ObjectOpenHashMap<>();
-        this.blockEntities = new Int2ObjectNonBlockingMap<>();
+        this(
+                chunkX,
+                chunkZ,
+                dimensionInfo,
+                new ChunkSection[dimensionInfo.chunkSectionSize()],
+                new HeightMap(),
+                new Long2ObjectOpenHashMap<>(),
+                new Int2ObjectNonBlockingMap<>(),
+                ChunkState.EMPTY,
+                null,
+                null
+        );
     }
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public void beforeSetChunk(Dimension dimension) {
-        if (blockEntityNbtList != null && !blockEntityNbtList.isEmpty()) {
-            for (var nbt : blockEntityNbtList) {
-                BlockEntity blockEntity = BlockEntityHelper.fromNBT(dimension, nbt);
-                if (blockEntity == null) continue;
-                Position3ic position = blockEntity.getPosition();
-                var key = HashUtils.hashChunkXYZ(position.x() & 15, position.y(), position.z() & 15);
-                this.blockEntities.put(key, blockEntity);
-            }
-            blockEntityNbtList = null;
-        }
-    }
-
-    @Override
-    public void afterSetChunk(Dimension dimension) {
-        if (entityNbtList != null && !entityNbtList.isEmpty()) {
-            for (var nbt : entityNbtList) {
-                Entity entity = EntityHelper.fromNBT(dimension, nbt);
-                if (entity == null) continue;
-                dimension.getEntityService().addEntity(entity);
-            }
-            entityNbtList = null;
-        }
-    }
-
-    @Override
-    public void setState(ChunkState next) {
-        ChunkState curr;
-        do {
-            curr = STATE_FIELD.get(this);
-            Preconditions.checkState(curr.ordinal() <= next.ordinal(), "invalid state transition: %s => %s", curr, next);
-        } while (!STATE_FIELD.compareAndSet(this, curr, next));
-    }
-
-    private void checkXYZ(int x, int y, int z) {
-        Preconditions.checkArgument(x >= 0 && x <= 15);
-        Preconditions.checkArgument(y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight());
-        Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
     private static void checkXZ(int x, int z) {
@@ -113,55 +80,81 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    @ApiStatus.Internal
-    public ChunkSection[] getSections() {
-        return sections;
+    public void beforeSetChunk(Dimension dimension) {
+        if (blockEntityNbtList != null && !blockEntityNbtList.isEmpty()) {
+            for (var nbt : blockEntityNbtList) {
+                var blockEntity = BlockEntityHelper.fromNBT(dimension, nbt);
+                if (blockEntity == null) continue;
+
+                var position = blockEntity.getPosition();
+                var key = HashUtils.hashChunkXYZ(position.x() & 15, position.y(), position.z() & 15);
+                this.blockEntities.put(key, blockEntity);
+            }
+
+            blockEntityNbtList = null;
+        }
+    }
+
+    @Override
+    public void afterSetChunk(Dimension dimension) {
+        if (entityNbtList != null && !entityNbtList.isEmpty()) {
+            for (var nbt : entityNbtList) {
+                var entity = EntityHelper.fromNBT(dimension, nbt);
+                if (entity == null) continue;
+                dimension.getEntityService().addEntity(entity);
+            }
+            entityNbtList = null;
+        }
+    }
+
+    private void checkXYZ(int x, int y, int z) {
+        Preconditions.checkArgument(x >= 0 && x <= 15);
+        Preconditions.checkArgument(y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight());
+        Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
     @ApiStatus.Internal
-
+    @Override
     public ChunkSection getSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
         return sections[sectionY - this.getDimensionInfo().minSectionY()];
     }
 
     @ApiStatus.Internal
+    @Override
     public ChunkSection getOrCreateSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
-        int minSectionY = this.getDimensionInfo().minSectionY();
-        int offsetY = sectionY - minSectionY;
+
+        var minSectionY = this.getDimensionInfo().minSectionY();
+        var offsetY = sectionY - minSectionY;
         for (int i = 0; i <= offsetY; i++) {
             if (sections[i] == null) {
                 sections[i] = new ChunkSection((byte) (i + minSectionY));
             }
         }
+
         return sections[offsetY];
     }
-
-    //基岩版3d-data保存heightMap是以0为索引保存的，所以这里需要减去/加上世界最小值，详情查看
-    //Bedrock Edition 3d-data saves the height map start from index of 0, so need to subtract/add the world minimum height here, see for details:
-    //https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
 
     @UnmodifiableView
     @Override
     public Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
-        var sectionBlockEntities = new HashSet<BlockEntity>();
-        for (var entry : getBlockEntities().entrySet()) {
-            var blockEntity = entry.getValue();
-            if (blockEntity.getPosition().y() >> 4 == sectionY) {
-                sectionBlockEntities.add(blockEntity);
-            }
-        }
-        return Collections.unmodifiableCollection(sectionBlockEntities);
+        return getBlockEntities().values().stream()
+                .filter(blockEntity -> blockEntity.getPosition().y() >> 4 == sectionY)
+                .collect(Collectors.toUnmodifiableSet());
     }
 
+    // Bedrock Edition 3d-data saves the height map starting from index 0, so adjustments are made here to accommodate the world's minimum height. For details, see:
+    // https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
+    @Override
     public int getHeight(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
         return this.heightMap.get(x, z) + dimensionInfo.minHeight();
     }
 
+    @Override
     public void setHeight(int x, int z, int height) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
@@ -169,27 +162,22 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.heightMap.set(x, z, (short) (height - dimensionInfo.minHeight()));
     }
 
+    @Override
     public BlockState getBlockState(int x, int y, int z, int layer) {
         if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
             return AIR_TYPE.getDefaultState();
+
         checkXZ(x, z);
-        ChunkSection section = this.getSection(y >> 4);
-        BlockState blockState;
-        if (section == null) {
-            blockState = AIR_TYPE.getDefaultState();
-        } else {
-            blockState = section.getBlockState(x, y & 0xf, z, layer);
-        }
-        return blockState;
+        var section = this.getSection(y >> 4);
+        return section == null ? AIR_TYPE.getDefaultState() : section.getBlockState(x, y & 0xf, z, layer);
     }
 
+    @Override
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
         checkXYZ(x, y, z);
-        int sectionY = y >> 4;
-        ChunkSection section = this.getSection(sectionY);
-        if (section == null) {
-            section = this.getOrCreateSection(sectionY);
-        }
+        var sectionY = y >> 4;
+        var section = this.getSection(sectionY);
+        if (section == null) section = this.getOrCreateSection(sectionY);
         section.setBlockState(x, y & 0xf, z, blockState, layer);
     }
 
@@ -198,22 +186,26 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return this.heightMap.getHeights();
     }
 
+    @Override
     public int getBlockLight(int x, int y, int z) {
         checkXYZ(x, y, z);
-        ChunkSection section = this.getSection(y >> 4);
+        var section = this.getSection(y >> 4);
         return section == null ? 0 : section.getBlockLight(x, y & 0xf, z);
     }
 
+    @Override
     public int getSkyLight(int x, int y, int z) {
         checkXYZ(x, y, z);
-        ChunkSection section = this.getSection(y >> 4);
+        var section = this.getSection(y >> 4);
         return section == null ? 0 : section.getSkyLight(x, y & 0xf, z);
     }
 
+    @Override
     public void setBlockLight(int x, int y, int z, int light) {
         this.getOrCreateSection(y >> 4).setBlockLight(x, y & 0xf, z, (byte) light);
     }
 
+    @Override
     public void setSkyLight(int x, int y, int z, int light) {
         checkXYZ(x, y, z);
         this.getOrCreateSection(y >> 4).setSkyLight(x, y & 0xf, z, (byte) light);
@@ -234,7 +226,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         Preconditions.checkNotNull(entity);
         entities.put(entity.getRuntimeId(), entity);
     }
-
 
     public Entity removeEntity(long runtimeId) {
         return entities.remove(runtimeId);
@@ -278,34 +269,27 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return new AllayChunk(this);
     }
 
-    public ChunkState getState() {
-        return state;
+    @Override
+    public void setState(ChunkState next) {
+        ChunkState curr;
+        do {
+            curr = STATE_FIELD.get(this);
+            Preconditions.checkState(curr.ordinal() <= next.ordinal(), "invalid state transition: %s => %s", curr, next);
+        } while (!STATE_FIELD.compareAndSet(this, curr, next));
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getZ() {
-        return z;
-    }
-
-    public DimensionInfo getDimensionInfo() {
-        return dimensionInfo;
-    }
-
+    @SuppressWarnings("UnusedReturnValue")
     @Getter
     public static class Builder {
-        ChunkState state;
-        int chunkZ;
-        int chunkX;
-        DimensionInfo dimensionInfo;
-        ChunkSection[] sections;
-        HeightMap heightMap;
-        Map<Long, Entity> entities;
-        Map<Integer, BlockEntity> blockEntities;
-        List<NbtMap> entitiyList;
-        List<NbtMap> blockEntitiyList;
+        private ChunkState state;
+        private int chunkX, chunkZ;
+        private DimensionInfo dimensionInfo;
+        private ChunkSection[] sections;
+        private HeightMap heightMap;
+        private Map<Long, Entity> entities;
+        private Map<Integer, BlockEntity> blockEntities;
+        private List<NbtMap> entitiyList;
+        private List<NbtMap> blockEntitiyList;
 
         public Builder chunkX(int chunkX) {
             this.chunkX = chunkX;
@@ -355,7 +339,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             if (entities == null) entities = new Long2ObjectNonBlockingMap<>();
             if (blockEntities == null) blockEntities = new Int2ObjectNonBlockingMap<>();
             return new AllayUnsafeChunk(
-                    state,
                     chunkX,
                     chunkZ,
                     dimensionInfo,
@@ -363,6 +346,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     heightMap,
                     entities,
                     blockEntities,
+                    state,
                     entitiyList,
                     blockEntitiyList
             );

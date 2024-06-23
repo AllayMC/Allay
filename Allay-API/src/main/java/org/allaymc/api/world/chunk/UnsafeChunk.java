@@ -138,7 +138,7 @@ public interface UnsafeChunk {
      * @param x the x
      * @param z the z
      *
-     * @return the height  -64~319
+     * @return the height -64~319
      */
     int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
 

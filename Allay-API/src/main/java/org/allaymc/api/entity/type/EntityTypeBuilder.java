@@ -49,7 +49,7 @@ public interface EntityTypeBuilder<T extends Entity, C extends EntityComponent> 
     EntityTypeBuilder<T, C> addComponent(Function<EntityInitInfo<T>, EntityComponent> provider, Class<?> componentClass);
 
     default EntityTypeBuilder<T, C> addComponent(Supplier<EntityComponent> supplier, Class<?> componentClass) {
-        return addComponent(unused -> supplier.get(), componentClass);
+        return addComponent($ -> supplier.get(), componentClass);
     }
 
     EntityTypeBuilder<T, C> addComponent(ComponentProvider<EntityComponent> componentProvider);

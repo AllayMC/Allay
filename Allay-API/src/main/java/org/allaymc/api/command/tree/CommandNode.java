@@ -5,6 +5,7 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -193,7 +194,7 @@ public interface CommandNode {
     }
 
     default CommandNode enums(String name, Class<? extends Enum<?>> enumClass) {
-        Enum<?>[] enumConstants = enumClass.getEnumConstants();
+        var enumConstants = enumClass.getEnumConstants();
         var values = new String[enumConstants.length];
         for (int index = 0; index < enumConstants.length; index++) {
             var e = enumConstants[index];
@@ -276,5 +277,13 @@ public interface CommandNode {
 
     default CommandNode enchantmentNode(String name, EnchantmentType defaultValue) {
         return addLeaf(getFactory().enchantmentNode(name, this, defaultValue));
+    }
+
+    default CommandNode effectNode(String name) {
+        return effectNode(name, null);
+    }
+
+    default CommandNode effectNode(String name, EffectType defaultValue) {
+        return addLeaf(getFactory().effectNode(name, this, defaultValue));
     }
 }

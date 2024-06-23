@@ -1,5 +1,6 @@
 package org.allaymc.server.item.type;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.component.tool.ItemAxeComponent;
 import org.allaymc.api.item.component.tool.ItemHoeComponent;
@@ -8,32 +9,11 @@ import org.allaymc.api.item.component.tool.ItemShovelComponent;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemCauldronStack;
 import org.allaymc.api.item.interfaces.axe.*;
-import org.allaymc.api.item.interfaces.boots.ItemChainmailBootsStack;
-import org.allaymc.api.item.interfaces.boots.ItemDiamondBootsStack;
-import org.allaymc.api.item.interfaces.boots.ItemGoldenBootsStack;
-import org.allaymc.api.item.interfaces.boots.ItemIronBootsStack;
-import org.allaymc.api.item.interfaces.boots.ItemLeatherBootsStack;
-import org.allaymc.api.item.interfaces.boots.ItemNetheriteBootsStack;
-import org.allaymc.api.item.interfaces.chestplate.ItemChainmailChestplateStack;
-import org.allaymc.api.item.interfaces.chestplate.ItemDiamondChestplateStack;
-import org.allaymc.api.item.interfaces.chestplate.ItemGoldenChestplateStack;
-import org.allaymc.api.item.interfaces.chestplate.ItemIronChestplateStack;
-import org.allaymc.api.item.interfaces.chestplate.ItemLeatherChestplateStack;
-import org.allaymc.api.item.interfaces.chestplate.ItemNetheriteChestplateStack;
-import org.allaymc.api.item.interfaces.helmet.ItemChainmailHelmetStack;
-import org.allaymc.api.item.interfaces.helmet.ItemDiamondHelmetStack;
-import org.allaymc.api.item.interfaces.helmet.ItemGoldenHelmetStack;
-import org.allaymc.api.item.interfaces.helmet.ItemIronHelmetStack;
-import org.allaymc.api.item.interfaces.helmet.ItemLeatherHelmetStack;
-import org.allaymc.api.item.interfaces.helmet.ItemNetheriteHelmetStack;
-import org.allaymc.api.item.interfaces.helmet.ItemTurtleHelmetStack;
+import org.allaymc.api.item.interfaces.boots.*;
+import org.allaymc.api.item.interfaces.chestplate.*;
+import org.allaymc.api.item.interfaces.helmet.*;
 import org.allaymc.api.item.interfaces.hoe.*;
-import org.allaymc.api.item.interfaces.leggings.ItemChainmailLeggingsStack;
-import org.allaymc.api.item.interfaces.leggings.ItemDiamondLeggingsStack;
-import org.allaymc.api.item.interfaces.leggings.ItemGoldenLeggingsStack;
-import org.allaymc.api.item.interfaces.leggings.ItemIronLeggingsStack;
-import org.allaymc.api.item.interfaces.leggings.ItemLeatherLeggingsStack;
-import org.allaymc.api.item.interfaces.leggings.ItemNetheriteLeggingsStack;
+import org.allaymc.api.item.interfaces.leggings.*;
 import org.allaymc.api.item.interfaces.pickaxe.*;
 import org.allaymc.api.item.interfaces.shovel.*;
 import org.allaymc.api.item.interfaces.shulkerbox.*;
@@ -51,6 +31,8 @@ import org.allaymc.server.item.component.tool.*;
  *
  * @author daoge_cmd
  */
+@SuppressWarnings("unused")
+@UtilityClass
 public final class ItemTypeInitializer {
 
     public static void initSword() {

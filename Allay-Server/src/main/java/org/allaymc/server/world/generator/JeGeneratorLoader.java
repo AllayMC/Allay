@@ -15,8 +15,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class JeGeneratorLoader {
-    private static final AtomicBoolean loaded = new AtomicBoolean(false);
     public static final String WORK_PATH = "jegenerator";
+    private static final AtomicBoolean loaded = new AtomicBoolean(false);
     private static MethodHandle OVERWORLD;
     private static MethodHandle NETHER;
     private static MethodHandle THE_END;

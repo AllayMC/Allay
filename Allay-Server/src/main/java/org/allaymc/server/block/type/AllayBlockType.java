@@ -44,6 +44,7 @@ import org.allaymc.server.block.component.common.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
+import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -59,31 +60,21 @@ import static org.allaymc.api.component.interfaces.ComponentProvider.findCompone
  *
  * @author daoge_cmd | Cool_Loong
  */
+@Getter
 public final class AllayBlockType<T extends BlockBehavior> implements BlockType<T> {
-    @Getter
     private final Class<T> interfaceClass;
-    @Getter
     private final List<BlockComponent> components;
-    @Getter
     private final Map<String, BlockPropertyType<?>> properties;
-    @Getter
     private final Identifier identifier;
-    @Getter
-    private final Map<Integer, BlockState> blockStateHashMap;
-    @Getter
-    private final Map<Long, BlockState> specialValueMap;
-    @Getter
-    private final byte specialValueBits;
-    @Getter
     private final Set<BlockTag> blockTags;
-    @Getter
     private final Material material;
     private final ItemType<?> blockItemType;
+    private final Map<Integer, BlockState> blockStateHashMap;
+    private final byte specialValueBits;
+    private final Map<Long, BlockState> specialValueMap;
+
     private Class<T> injectedClass;
-    @Getter
     private BlockState defaultState;
-    private Map<Integer, Integer> hashToMeta;
-    @Getter
     private T blockBehavior;
 
     private AllayBlockType(
@@ -113,7 +104,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                     blockStateHashMap
                             .values()
                             .stream()
-                            .collect(Collectors.toMap(BlockState::specialValue, Function.identity(), (v1, v2) -> v1, Long2ObjectOpenHashMap::new))
+                            .collect(Collectors.toMap(
+                                    BlockState::specialValue,
+                                    Function.identity(),
+                                    (v1, v2) -> v1, Long2ObjectOpenHashMap::new)
+                            )
             );
         } else {
             this.specialValueMap = null;
@@ -210,12 +205,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 this.identifier,
                 properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList())
         );
-        for (var s : blockStates.values()) {
-            if (s.blockStateHash() == defaultStateHash) {
-                this.defaultState = s;
-                break;
-            }
-        }
+
+        this.defaultState = blockStates.values().stream()
+                .filter(s -> s.blockStateHash() == defaultStateHash)
+                .findFirst()
+                .orElse(this.defaultState);
 
         return Collections.unmodifiableMap(blockStates);
     }
@@ -286,10 +280,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public @UnmodifiableView Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues() {
-            return Collections.unmodifiableMap(Arrays.stream(blockPropertyValues).collect(
-                    LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>::new,
-                    (hashMap, blockPropertyValue) -> hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue),
-                    LinkedHashMap::putAll));
+            var hashMap = new LinkedHashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
+            for (var blockPropertyValue : blockPropertyValues) {
+                hashMap.put(blockPropertyValue.getPropertyType(), blockPropertyValue);
+            }
+
+            return Collections.unmodifiableMap(hashMap);
         }
 
         @Override
@@ -361,7 +357,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             var bits = blockType.getSpecialValueBits();
             if (bits <= 64) {
                 var specialValueMap = blockType.getSpecialValueMap();
-                assert specialValueMap != null;
+                Objects.requireNonNull(specialValueMap);
                 return specialValueMap.get(computeSpecialValue(bits, values));
             } else {
                 return blockType.getBlockStateHashMap().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), values));
@@ -372,21 +368,19 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     @Slf4j
     public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
         // Use array instead of set to reduce memory usage
-        protected static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS;
+        protected static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS = new HashMap<>();
 
         static {
             Map<VanillaBlockId, Set<BlockTag>> blockId2tags = new HashMap<>();
-            JsonParser.parseReader(new InputStreamReader(Objects.requireNonNull(AllayBlockType.class.getClassLoader().getResourceAsStream("block_tags.json"))))
-                    .getAsJsonObject()
-                    .entrySet()
-                    .forEach(entry -> {
-                        var tag = VanillaBlockTags.getTagByName(entry.getKey());
-                        entry.getValue().getAsJsonArray().forEach(blockId -> {
-                            var id = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(blockId.getAsString(), ":", "")[1].toUpperCase());
-                            blockId2tags.computeIfAbsent(id, unused -> new HashSet<>()).add(tag);
-                        });
-                    });
-            VANILLA_BLOCK_TAGS = new HashMap<>();
+            var element = JsonParser.parseReader(new InputStreamReader(ResourceUtils.getResource("block_tags.json")));
+            element.getAsJsonObject().entrySet().forEach(entry -> {
+                var tag = VanillaBlockTags.getTagByName(entry.getKey());
+                entry.getValue().getAsJsonArray().forEach(blockId -> {
+                    var id = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(blockId.getAsString(), ":", "")[1].toUpperCase());
+                    blockId2tags.computeIfAbsent(id, $ -> new HashSet<>()).add(tag);
+                });
+            });
+
             blockId2tags.forEach((id, tags) -> VANILLA_BLOCK_TAGS.put(id, tags.toArray(new BlockTag[0])));
         }
 

@@ -1,7 +1,6 @@
 package org.allaymc.server.item.component.armor;
 
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
@@ -9,7 +8,6 @@ import org.allaymc.api.item.enchantment.type.EnchantmentUnbreakingType;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
-import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -39,9 +37,10 @@ public class ItemArmorBaseComponentImpl<T extends ItemStack> extends ItemBaseCom
 
     @Override
     public boolean willDamageItem() {
-        float level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING_TYPE);
+        var level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING_TYPE);
         if (level == 0) return true;
-        float possibility = 0.6f + 0.4f / (level + 1f);
+
+        var possibility = 0.6f + 0.4f / (level + 1f);
         return ThreadLocalRandom.current().nextFloat() <= possibility;
     }
 

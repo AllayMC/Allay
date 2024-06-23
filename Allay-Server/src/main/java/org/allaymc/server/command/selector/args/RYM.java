@@ -15,7 +15,8 @@ public class RYM extends CachedSimpleSelectorArgument {
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
-        final var rym = Double.parseDouble(arguments[0]);
+
+        var rym = Double.parseDouble(arguments[0]);
         if (!ParseUtils.checkBetween(-180d, 180d, rym))
             throw new SelectorSyntaxException("RX out of bound (-180 - 180): " + rym);
         return entity -> ((entity.getLocation().yaw() + 90) % 360 - 180) >= rym;

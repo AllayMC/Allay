@@ -30,7 +30,7 @@ public class GameModeCommand extends SimpleCommand {
                 .playerTarget("players")
                 .optional()
                 .exec(context -> {
-                    GameType gameType = context.getFirstResult();
+                    GameType gameType = context.getResult(0);
                     List<EntityPlayer> players = new ArrayList<>();
                     if (context.getArgCount() == 1) {
                         // target arg is missing
@@ -42,15 +42,17 @@ public class GameModeCommand extends SimpleCommand {
                         }
                     } else {
                         // target arg is filled, check if the target is matched
-                        players.addAll(context.getSecondResult());
+                        players.addAll(context.getResult(1));
                         if (players.isEmpty()) {
                             context.addNoTargetMatchError();
                             return context.fail();
                         }
                     }
+
                     for (var player : players) {
                         var gameTypeName = I18n.get().tr(player.getLangCode(), CommonEnum.getGameTypeTrKey(gameType));
                         player.setGameType(gameType);
+
                         if (player == context.getSender()) {
                             context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_SELF, gameTypeName);
                         } else {
@@ -58,6 +60,7 @@ public class GameModeCommand extends SimpleCommand {
                             context.sendWhisperTo(player, TrKeys.M_GAMEMODE_CHANGED, gameTypeName);
                         }
                     }
+
                     return context.success();
                 });
     }

@@ -6,9 +6,6 @@ package org.allaymc.server.entity.type;
  * @author daoge_cmd
  */
 public class EntityTypeBuildException extends RuntimeException {
-    public EntityTypeBuildException() {
-    }
-
     public EntityTypeBuildException(String message) {
         super(message);
     }

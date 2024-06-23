@@ -1,5 +1,7 @@
 package org.allaymc.server.i18n;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.I18nLoader;
@@ -20,7 +22,12 @@ import static org.allaymc.api.i18n.I18n.isValidKeyCharacter;
 @Slf4j
 public class AllayI18n implements I18n {
 
+    public static final String DISORDERED_PARAM_S = "%s";
+    public static final String DISORDERED_PARAM_D = "%d";
+
     protected EnumMap<LangCode, Map<String, String>> langMap = new EnumMap<>(LangCode.class);
+    @Getter
+    @Setter
     protected LangCode defaultLangCode;
     protected I18nLoader i18NLoader;
 
@@ -28,6 +35,7 @@ public class AllayI18n implements I18n {
         this.i18NLoader = i18NLoader;
         this.defaultLangCode = defaultLangCode;
         setDefaultLangCode(defaultLangCode);
+
         for (var langCode : LangCode.values()) {
             try {
                 langMap.put(langCode, i18NLoader.getLangMap(langCode));
@@ -105,9 +113,6 @@ public class AllayI18n implements I18n {
         return new KeyInfo(startIndex, index - 1, colonIndex, keyBuilder.toString(), hasStarter);
     }
 
-    public static final String DISORDERED_PARAM_S = "%s";
-    public static final String DISORDERED_PARAM_D = "%d";
-
     protected int findUnorderedParamIndex(String str) {
         var indexS = str.indexOf(DISORDERED_PARAM_S);
         var indexD = str.indexOf(DISORDERED_PARAM_D);
@@ -134,15 +139,5 @@ public class AllayI18n implements I18n {
         if (lang == null) lang = langMap.get(FALLBACK_LANG).get(keyInfo.key());
         if (lang == null) return tr;
         return new StringBuilder(tr).replace(keyInfo.startIndex(), keyInfo.endIndex() + 1, lang).toString();
-    }
-
-    @Override
-    public void setDefaultLangCode(LangCode defaultLangCode) {
-        this.defaultLangCode = defaultLangCode;
-    }
-
-    @Override
-    public LangCode getDefaultLangCode() {
-        return defaultLangCode;
     }
 }

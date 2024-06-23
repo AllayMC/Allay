@@ -40,7 +40,7 @@ public class TargetNode extends BaseNode {
             if (player != null) {
                 entities = Lists.newArrayList(player);
             } else {
-                // 未找到目标不认为是非法的，这在一些命令里面有特殊用处 (eg: /testfor)
+                // Not finding a target isn't considered invalid; this has special uses in some commands (e.g., /testfor)
                 entities = Collections.emptyList();
             }
         }

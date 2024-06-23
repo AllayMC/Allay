@@ -10,6 +10,8 @@ import org.allaymc.api.datastruct.aabbtree.AABBOverlapFilter;
 import org.allaymc.api.datastruct.aabbtree.AABBTree;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.effect.type.EffectSlownessType;
+import org.allaymc.api.entity.effect.type.EffectSpeedType;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
@@ -17,30 +19,24 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.EntityPhysicsService;
-import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
+import org.allaymc.server.network.processor.PlayerAuthInputPacketProcessor;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.floor;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+import static java.lang.Math.*;
 import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRICTION;
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 import static org.allaymc.api.utils.MathUtils.isInRange;
 
 /**
- * Allay Project 2023/8/5 <br>
  * Special thanks to <a href="https://www.mcpk.wiki">MCPK Wiki</a>
+ * <p>
+ * Allay Project 2023/8/5
  *
  * @author daoge_cmd
  */
@@ -99,9 +95,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 // 1. The entity is not stuck in the block
                 if (entity.computeEntityCollisionMotion()) computeEntityCollisionMotion(entity);
                 entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
-                if (applyMotion(entity)) {
-                    updatedEntities.put(entity.getRuntimeId(), entity);
-                }
+                if (applyMotion(entity)) updatedEntities.put(entity.getRuntimeId(), entity);
                 // Apply friction, gravity etc...
                 updateMotion(entity);
             } else if (entity.computeBlockCollisionMotion()) {
@@ -129,9 +123,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     protected void computeBlockCollisionMotion(Entity entity, BlockState[][][] collidedBlocks) {
         // 1. Find out the block state which entity collided most
         var aabb = entity.getOffsetAABB();
-        int minX = (int) Math.floor(aabb.minX());
-        int minY = (int) Math.floor(aabb.minY());
-        int minZ = (int) Math.floor(aabb.minZ());
+        var minX = (int) Math.floor(aabb.minX());
+        var minY = (int) Math.floor(aabb.minY());
+        var minZ = (int) Math.floor(aabb.minZ());
         int targetX = 0, targetY = 0, targetZ = 0;
         float V = 0;
         for (int ox = 0, blocksLength = collidedBlocks.length; ox < blocksLength; ox++) {
@@ -211,7 +205,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     /**
-     * See: <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
+     * @see <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
      */
     protected void updateMotion(Entity entity) {
         var motion = entity.getMotion();
@@ -220,8 +214,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         // 1. Multiplier factors
         var movementFactor = entity.getMovementFactor();
 
-        // TODO: Effects Multiplier factor
-        var effectFactor = 1F;
+        var speedLevel = entity.getEffectLevel(EffectSpeedType.SPEED_TYPE);
+        var slownessLevel = entity.getEffectLevel(EffectSlownessType.SLOWNESS_TYPE);
+
+        var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
 
         var slipperinessMultiplier = blockUnder != null ?
                 blockUnder.getBlockType().getBlockBehavior().getBlockAttributes(blockUnder).friction() :
@@ -241,6 +237,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         var newMx = (float) (momentumMx + acceleration * Math.sin(yaw));
         var newMz = (float) (momentumMz + acceleration * Math.cos(yaw));
+
         // Skip sprint jump boost because this service does not handle player
 
         var newMy = (motion.y() - (entity.hasGravity() ? entity.getGravity() : 0f)) * DRAG_FACTOR;
@@ -404,8 +401,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     // Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
     protected boolean notValidEntityArea(AABBf extendAABB) {
         return (extendAABB.minY < dimension.getDimensionInfo().minHeight()) &&
-                !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
-                !dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
+               !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
+               !dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
     }
 
     protected boolean tryStepping(Vector3f pos, AABBf aabb, float stepHeight, boolean positive, boolean xAxis) {
@@ -452,16 +449,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var queue = entry.getValue();
             while (!queue.isEmpty()) {
                 var scheduledMove = queue.poll();
-                var entity = scheduledMove.entity;
+                var entity = scheduledMove.entity();
                 // The entity may have been removed
-                if (!entities.containsKey(entity.getRuntimeId())) {
-                    continue;
-                }
+                if (!entities.containsKey(entity.getRuntimeId())) continue;
                 // Calculate delta pos (motion)
-                var motion = scheduledMove.newLoc.sub(entity.getLocation(), new Vector3f());
+                var motion = scheduledMove.newLoc().sub(entity.getLocation(), new Vector3f());
                 entity.setMotion(motion);
-                if (updateEntityLocation(scheduledMove.entity, scheduledMove.newLoc))
-                    entityAABBTree.update(scheduledMove.entity);
+                if (updateEntityLocation(entity, scheduledMove.newLoc()))
+                    entityAABBTree.update(entity);
                 // ScheduledMove is not calculated by the server, but we need to calculate the onGround status
                 // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
                 var aabb = scheduledMove.entity.getOffsetAABB();
@@ -502,15 +497,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     /**
      * Please note that this method usually been called asynchronously <p/>
-     * See {@link org.allaymc.server.network.processor.PlayerAuthInputPacketProcessor#handleAsync}
+     * See {@link PlayerAuthInputPacketProcessor#handleAsync}
      */
     @Override
     public void offerScheduledMove(Entity entity, Location3fc newLoc) {
-        if (!entities.containsKey(entity.getRuntimeId())) {
-            return;
-        }
+        if (!entities.containsKey(entity.getRuntimeId())) return;
         if (entity.getLocation().equals(newLoc)) return;
-        scheduledMoveQueue.computeIfAbsent(entity.getRuntimeId(), k -> new ConcurrentLinkedQueue<>()).offer(new ScheduledMove(entity, newLoc));
+        scheduledMoveQueue.computeIfAbsent(entity.getRuntimeId(), $ -> new ConcurrentLinkedQueue<>()).offer(new ScheduledMove(entity, newLoc));
     }
 
     @Override

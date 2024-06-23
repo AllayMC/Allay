@@ -15,7 +15,8 @@ public class RY extends CachedSimpleSelectorArgument {
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
-        final var ry = Double.parseDouble(arguments[0]);
+
+        var ry = Double.parseDouble(arguments[0]);
         if (!ParseUtils.checkBetween(-180d, 180d, ry))
             throw new SelectorSyntaxException("RX out of bound (-180 - 180): " + ry);
         // Get the yaw range 0, 360, while the range defined in the original version is -180, 180. Therefore, subtract 180

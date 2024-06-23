@@ -13,16 +13,17 @@ import java.util.function.Predicate;
 public class Name extends CachedSimpleSelectorArgument {
     @Override
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) {
-        final var have = new ArrayList<String>();
-        final var dontHave = new ArrayList<String>();
+        var have = new ArrayList<String>();
+        var dontHave = new ArrayList<String>();
         for (var name : arguments) {
-            boolean reversed = ParseUtils.checkReversed(name);
+            var reversed = ParseUtils.checkReversed(name);
             if (reversed) {
                 name = name.substring(1);
                 dontHave.add(name);
             } else have.add(name);
         }
-        return entity -> have.stream().allMatch(name -> entity.getCommandSenderName().equals(name)) && dontHave.stream().noneMatch(name -> entity.getCommandSenderName().equals(name));
+        return entity -> have.stream().allMatch(name -> entity.getCommandSenderName().equals(name)) &&
+                         dontHave.stream().noneMatch(name -> entity.getCommandSenderName().equals(name));
     }
 
     @Override

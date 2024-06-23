@@ -48,31 +48,31 @@ public class AllayNetworkServer implements NetworkServer {
 
     @Override
     public void start() {
-        final var settings = Server.SETTINGS;
-        final int nettyThreadNumber = settings.networkSettings().networkThreadNumber();
+        var settings = Server.SETTINGS;
+        var nettyThreadNumber = settings.networkSettings().networkThreadNumber();
         Preconditions.checkArgument(nettyThreadNumber >= 0);
 
         this.pong = initPong(settings);
         this.bindAddress = new InetSocketAddress(settings.networkSettings().ip(), settings.networkSettings().port());
 
         var threadFactory = new ThreadFactoryBuilder().setNameFormat("Netty Server IO #%d").setDaemon(true).build();
-        Class<? extends DatagramChannel> oclass;
-        EventLoopGroup eventloopgroup;
+        Class<? extends DatagramChannel> datagramChannelClass;
+        EventLoopGroup eventLoopGroup;
         if (Epoll.isAvailable()) {
-            oclass = EpollDatagramChannel.class;
-            eventloopgroup = new EpollEventLoopGroup(nettyThreadNumber, threadFactory);
+            datagramChannelClass = EpollDatagramChannel.class;
+            eventLoopGroup = new EpollEventLoopGroup(nettyThreadNumber, threadFactory);
         } else if (KQueue.isAvailable()) {
-            oclass = KQueueDatagramChannel.class;
-            eventloopgroup = new KQueueEventLoopGroup(nettyThreadNumber, threadFactory);
+            datagramChannelClass = KQueueDatagramChannel.class;
+            eventLoopGroup = new KQueueEventLoopGroup(nettyThreadNumber, threadFactory);
         } else {
-            oclass = NioDatagramChannel.class;
-            eventloopgroup = new NioEventLoopGroup(nettyThreadNumber, threadFactory);
+            datagramChannelClass = NioDatagramChannel.class;
+            eventLoopGroup = new NioEventLoopGroup(nettyThreadNumber, threadFactory);
         }
 
         this.channel = new ServerBootstrap()
-                .channelFactory(RakChannelFactory.server(oclass))
+                .channelFactory(RakChannelFactory.server(datagramChannelClass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
-                .group(eventloopgroup)
+                .group(eventLoopGroup)
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
@@ -130,6 +130,6 @@ public class AllayNetworkServer implements NetworkServer {
                 .gameType(settings.genericSettings().defaultGameType().name())
                 .protocolVersion(PACKET_CODEC.getProtocolVersion())
                 .ipv4Port(settings.networkSettings().port())
-                .ipv6Port(settings.networkSettings().port());//TODO: ipv6
+                .ipv6Port(settings.networkSettings().port()); // TODO: ipv6
     }
 }

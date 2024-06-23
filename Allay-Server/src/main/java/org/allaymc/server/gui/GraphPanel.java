@@ -44,19 +44,23 @@ public final class GraphPanel extends JPanel {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final static int padding = 10;
-    private final static int labelPadding = 25;
-    private final static int pointWidth = 4;
-    private final static int numberYDivisions = 20;
-    private final static Color textColor = Color.WHITE;
-    private final static Color backgroundColor = new Color(40, 40, 40);
+    private static final int PADDING = 10;
+    private static final int LABEL_PADDING = 25;
+    private static final int POINT_WIDTH = 4;
+    private static final int NUMBER_Y_DIVISIONS = 20;
+
+    private static final Color TEXT_COLOR = Color.WHITE;
+    private static final Color BACKGROUND_COLOR = new Color(40, 40, 40);
+    private static final Color GRID_COLOR = Color.GRAY;
+
+    private static final Stroke GRAPH_STROKE = new BasicStroke(2f);
+
+    private static final int MAX_SCORE_THRESHOLD = 100;
+    private static final int MIN_SCORE_THRESHOLD = 0;
+
     private final Color lineColor = new Color(44, 102, 230, 200);
     private final Color pointColor = new Color(44, 102, 230, 200);
-    private final static Color gridColor = Color.GRAY;
-    private static final Stroke graphStroke = new BasicStroke(2f);
     private final List<Integer> values = new ArrayList<>();
-    private final static int MAX_SCORE_THRESHOLD = 100;
-    private final static int MIN_SCORE_THRESHOLD = 0;
     private int minScore = MIN_SCORE_THRESHOLD;
     private int maxScore = MAX_SCORE_THRESHOLD;
     @Setter
@@ -65,7 +69,7 @@ public final class GraphPanel extends JPanel {
     private String xLabel = "";
 
     public GraphPanel() {
-        setPreferredSize(new Dimension(700 - (padding * 2), 700 - (padding * 2)));
+        setPreferredSize(new Dimension(700 - (PADDING * 2), 700 - (PADDING * 2)));
     }
 
     public void setValues(Collection<Integer> newValues) {
@@ -86,40 +90,42 @@ public final class GraphPanel extends JPanel {
             graphics.drawString("Graphics is not Graphics2D, unable to render", 0, 0);
             return;
         }
+
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        final int length = values.size();
-        final int width = getWidth();
-        final int height = getHeight();
-        final int maxScore = getMaxScore();
-        final int minScore = getMinScore();
-        final int scoreRange = maxScore - minScore;
+        var length = values.size();
+        var width = getWidth();
+        var height = getHeight();
+        var maxScore = this.maxScore;
+        var minScore = this.minScore;
+        var scoreRange = maxScore - minScore;
 
         // draw background
-        g.setColor(backgroundColor);
+        g.setColor(BACKGROUND_COLOR);
         g.fillRect(
-                padding + labelPadding,
-                padding,
-                width - (2 * padding) - labelPadding,
-                height - 2 * padding - labelPadding);
+                PADDING + LABEL_PADDING,
+                PADDING,
+                width - (2 * PADDING) - LABEL_PADDING,
+                height - 2 * PADDING - LABEL_PADDING
+        );
         g.setColor(Color.BLACK);
 
-        final FontMetrics fontMetrics = g.getFontMetrics();
-        final int fontHeight = fontMetrics.getHeight();
+        var fontMetrics = g.getFontMetrics();
+        var fontHeight = fontMetrics.getHeight();
 
         // create hatch marks and grid lines for y-axis.
-        for (int i = 0; i < numberYDivisions + 1; i++) {
-            final int x1 = padding + labelPadding;
-            final int x2 = pointWidth + padding + labelPadding;
-            final int y = height - ((i * (height - padding * 2 - labelPadding)) / numberYDivisions + padding + labelPadding);
+        for (int i = 0; i < NUMBER_Y_DIVISIONS + 1; i++) {
+            var x1 = PADDING + LABEL_PADDING;
+            var x2 = POINT_WIDTH + PADDING + LABEL_PADDING;
+            var y = height - ((i * (height - PADDING * 2 - LABEL_PADDING)) / NUMBER_Y_DIVISIONS + PADDING + LABEL_PADDING);
             if (length > 0) {
-                g.setColor(gridColor);
-                g.drawLine(padding + labelPadding + 1 + pointWidth, y, width - padding, y);
+                g.setColor(GRID_COLOR);
+                g.drawLine(PADDING + LABEL_PADDING + 1 + POINT_WIDTH, y, width - PADDING, y);
 
-                g.setColor(textColor);
-                final int tickValue = minScore + ((scoreRange * i) / numberYDivisions);
-                final String yLabel = tickValue + "";
-                final int labelWidth = fontMetrics.stringWidth(yLabel);
+                g.setColor(TEXT_COLOR);
+                var tickValue = minScore + ((scoreRange * i) / NUMBER_Y_DIVISIONS);
+                var yLabel = tickValue + "";
+                var labelWidth = fontMetrics.stringWidth(yLabel);
                 g.drawString(yLabel, x1 - labelWidth - 5, y + (fontHeight / 2) - 3);
             }
             g.drawLine(x1, y, x2, y);
@@ -128,12 +134,12 @@ public final class GraphPanel extends JPanel {
         // and for x-axis
         if (length > 1) {
             for (int i = 0; i < length; i++) {
-                final int x = i * (width - padding * 2 - labelPadding) / (length - 1) + padding + labelPadding;
-                final int y1 = height - padding - labelPadding;
-                final int y2 = y1 - pointWidth;
+                var x = i * (width - PADDING * 2 - LABEL_PADDING) / (length - 1) + PADDING + LABEL_PADDING;
+                var y1 = height - PADDING - LABEL_PADDING;
+                var y2 = y1 - POINT_WIDTH;
                 if ((i % ((int) ((length / 20.0)) + 1)) == 0) {
-                    g.setColor(gridColor);
-                    g.drawLine(x, height - padding - labelPadding - 1 - pointWidth, x, padding);
+                    g.setColor(GRID_COLOR);
+                    g.drawLine(x, height - PADDING - LABEL_PADDING - 1 - POINT_WIDTH, x, PADDING);
 
                     g.setColor(Color.BLACK);
                 }
@@ -142,66 +148,60 @@ public final class GraphPanel extends JPanel {
         }
 
         // create x and y axes
-        g.drawLine(padding + labelPadding, height - padding - labelPadding, padding + labelPadding, padding);
-        g.drawLine(padding + labelPadding, height - padding - labelPadding, width - padding, height - padding - labelPadding);
+        g.drawLine(PADDING + LABEL_PADDING, height - PADDING - LABEL_PADDING, PADDING + LABEL_PADDING, PADDING);
+        g.drawLine(PADDING + LABEL_PADDING, height - PADDING - LABEL_PADDING, width - PADDING, height - PADDING - LABEL_PADDING);
 
-        g.setColor(textColor);
-        final int labelWidth = fontMetrics.stringWidth(xLabel);
-        final int labelX = ((padding + labelPadding) + (width - padding)) / 2;
-        final int labelY = height - padding - labelPadding;
+        g.setColor(TEXT_COLOR);
+        var labelWidth = fontMetrics.stringWidth(xLabel);
+        var labelX = ((PADDING + LABEL_PADDING) + (width - PADDING)) / 2;
+        var labelY = height - PADDING - LABEL_PADDING;
         g.drawString(xLabel, labelX - labelWidth / 2, labelY + fontHeight + 3);
 
-        final Stroke oldStroke = g.getStroke();
+        var oldStroke = g.getStroke();
         g.setColor(lineColor);
-        g.setStroke(graphStroke);
+        g.setStroke(GRAPH_STROKE);
 
-        final double xScale = ((double) width - (2 * padding) - labelPadding) / (length - 1);
-        final double yScale = ((double) height - 2 * padding - labelPadding) / scoreRange;
+        var xScale = ((double) width - (2 * PADDING) - LABEL_PADDING) / (length - 1);
+        var yScale = ((double) height - 2 * PADDING - LABEL_PADDING) / scoreRange;
 
-        final List<Point> graphPoints = new ArrayList<>(length);
+        List<Point> graphPoints = new ArrayList<>(length);
         for (int i = 0; i < length; i++) {
-            final int x1 = (int) (i * xScale + padding + labelPadding);
-            final int y1 = (int) ((maxScore - values.get(i)) * yScale + padding);
+            var x1 = (int) (i * xScale + PADDING + LABEL_PADDING);
+            var y1 = (int) ((maxScore - values.get(i)) * yScale + PADDING);
             graphPoints.add(new Point(x1, y1));
         }
 
         for (int i = 0; i < graphPoints.size() - 1; i++) {
-            final int x1 = graphPoints.get(i).x;
-            final int y1 = graphPoints.get(i).y;
-            final int x2 = graphPoints.get(i + 1).x;
-            final int y2 = graphPoints.get(i + 1).y;
+            var x1 = graphPoints.get(i).x;
+            var y1 = graphPoints.get(i).y;
+            var x2 = graphPoints.get(i + 1).x;
+            var y2 = graphPoints.get(i + 1).y;
             g.drawLine(x1, y1, x2, y2);
         }
 
-        boolean drawDots = width > (length * pointWidth);
+        var drawDots = width > (length * POINT_WIDTH);
         if (drawDots) {
             g.setStroke(oldStroke);
             g.setColor(pointColor);
             for (Point graphPoint : graphPoints) {
-                final int x = graphPoint.x - pointWidth / 2;
-                final int y = graphPoint.y - pointWidth / 2;
+                var x = graphPoint.x - POINT_WIDTH / 2;
+                var y = graphPoint.y - POINT_WIDTH / 2;
                 //noinspection SuspiciousNameCombination
-                g.fillOval(x, y, pointWidth, pointWidth);
+                g.fillOval(x, y, POINT_WIDTH, POINT_WIDTH);
             }
         }
     }
 
-    private int getMinScore() {
-        return minScore;
-    }
-
-    private int getMaxScore() {
-        return maxScore;
-    }
-
     private void calculateExtremum() {
         if (!variableExtreme) return;
+
         minScore = Integer.MAX_VALUE;
         maxScore = Integer.MIN_VALUE;
         for (int value : values) {
             minScore = Math.min(minScore, value);
             maxScore = Math.max(maxScore, value);
         }
+
         minScore = Math.min(MIN_SCORE_THRESHOLD, minScore);
         maxScore = (int) Math.max(MAX_SCORE_THRESHOLD, maxScore * 1.2);
     }

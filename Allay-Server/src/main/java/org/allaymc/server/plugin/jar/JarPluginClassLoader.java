@@ -34,6 +34,7 @@ public class JarPluginClassLoader extends URLClassLoader {
         } catch (ClassNotFoundException ignored) {
             // Ignored: we'll try others
         }
+
         if (checkOther) {
             for (JarPluginClassLoader loader : LOADERS) {
                 if (loader == this) continue;
@@ -44,6 +45,7 @@ public class JarPluginClassLoader extends URLClassLoader {
                 }
             }
         }
+
         throw new ClassNotFoundException(name);
     }
 }

@@ -1,5 +1,6 @@
 package org.allaymc.server.entity.type;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -9,11 +10,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
 import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.item.EntityItemBaseComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerContainerHolderComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerContainerViewerComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerDamageComponentImpl;
-import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.component.player.*;
 
 import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicEntityAttributes;
 import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicPlayerAttributes;
@@ -23,6 +20,8 @@ import static org.allaymc.api.entity.component.common.EntityAttributeComponent.b
  *
  * @author daoge_cmd
  */
+@SuppressWarnings("unused")
+@UtilityClass
 public final class EntityTypeInitializer {
     public static void initItem() {
         EntityTypes.ITEM_TYPE = EntityTypeBuilder

@@ -16,11 +16,6 @@ import java.util.UUID;
  */
 public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProcessor<ResourcePackClientResponsePacket> {
     @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.RESOURCE_PACK_CLIENT_RESPONSE;
-    }
-
-    @Override
     public void handle(EntityPlayer player, ResourcePackClientResponsePacket packet) {
         switch (packet.getStatus()) {
             case SEND_PACKS -> {
@@ -38,5 +33,10 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
             case COMPLETED -> player.initializePlayer();
             default -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
         }
+    }
+
+    @Override
+    public BedrockPacketType getPacketType() {
+        return BedrockPacketType.RESOURCE_PACK_CLIENT_RESPONSE;
     }
 }

@@ -24,11 +24,12 @@ public class TestforCommand extends SimpleCommand {
         tree.getRoot()
                 .target("victim")
                 .exec(context -> {
-                    List<Entity> entities = context.getFirstResult();
+                    List<Entity> entities = context.getResult(0);
                     if (entities.isEmpty()) {
                         context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
                         return context.fail();
                     }
+
                     context.addOutput(TrKeys.M_COMMANDS_TESTFOR_SUCCESS, entities.stream().map(entity -> {
                         var name = entity.getDisplayName();
                         if (name.isBlank()) name = entity.getEntityType().getIdentifier().toString();

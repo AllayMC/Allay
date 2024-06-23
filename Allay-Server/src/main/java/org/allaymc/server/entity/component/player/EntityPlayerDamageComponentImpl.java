@@ -18,9 +18,8 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
     @Override
     public boolean canAttack(DamageContainer damage) {
         var gameType = baseComponent.getGameType();
-        if (gameType == GameType.SPECTATOR || gameType == GameType.CREATIVE) {
+        if (gameType == GameType.SPECTATOR || gameType == GameType.CREATIVE)
             return damage.getDamageType() == DamageContainer.DamageType.API;
-        }
         return true;
     }
 

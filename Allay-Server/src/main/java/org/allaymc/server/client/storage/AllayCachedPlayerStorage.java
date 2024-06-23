@@ -1,6 +1,5 @@
 package org.allaymc.server.client.storage;
 
-import lombok.AllArgsConstructor;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.client.storage.PlayerStorage;
 
@@ -28,13 +27,12 @@ public class AllayCachedPlayerStorage implements PlayerStorage {
     @Override
     public void tick(long currentTick) {
         this.currentTick = currentTick;
-        for (var e : cache.entrySet()) {
-            var dataEntry = e.getValue();
-            if (currentTick - dataEntry.createTick > CACHE_TIME) {
-                cache.remove(e.getKey());
-                playerStorage.savePlayerData(e.getKey(), dataEntry.playerData);
+        cache.forEach((key, dataEntry) -> {
+            if (currentTick - dataEntry.createTick() > CACHE_TIME) {
+                cache.remove(key);
+                playerStorage.savePlayerData(key, dataEntry.playerData());
             }
-        }
+        });
     }
 
     @Override
@@ -67,17 +65,11 @@ public class AllayCachedPlayerStorage implements PlayerStorage {
 
     @Override
     public void close() {
-        for (var e : cache.entrySet()) {
-            var dataEntry = e.getValue();
-            cache.remove(e.getKey());
-            playerStorage.savePlayerData(e.getKey(), dataEntry.playerData);
-        }
+        cache.forEach((key, dataEntry) -> {
+            cache.remove(key);
+            playerStorage.savePlayerData(key, dataEntry.playerData);
+        });
     }
 
-    @AllArgsConstructor
-    protected static class DataEntry {
-        long createTick;
-        PlayerData playerData;
-    }
-
+    protected record DataEntry(long createTick, PlayerData playerData) {}
 }

@@ -1,12 +1,12 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.palette.BlockStateHashPalette;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
@@ -14,6 +14,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
@@ -47,6 +48,7 @@ public class GameTestCommand extends SimpleCommand {
                         context.addOutput(TextFormat.RED + "Unknown block state hash!");
                         return context.fail();
                     }
+
                     player.getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(blockState.toItemStack());
                     return context.success();
                 }, SenderType.PLAYER)
@@ -70,15 +72,18 @@ public class GameTestCommand extends SimpleCommand {
                     String key = context.getResult(1);
                     String lang = context.getResult(2);
                     List<String> args = context.getResult(3);
+
                     LangCode langCode;
                     if (lang.isEmpty()) langCode = I18n.FALLBACK_LANG;
                     else langCode = LangCode.byName(lang, true);
+
                     try {
                         player.sendText(I18n.get().tr(langCode, key, args));
                     } catch (Throwable t) {
                         context.addOutput(TextFormat.RED + "Unknown key!");
                         return context.fail();
                     }
+
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -97,12 +102,13 @@ public class GameTestCommand extends SimpleCommand {
                 .intNum("count", 1)
                 .optional()
                 .exec((context, player) -> {
-                    var entityType = EntityTypeRegistry.getRegistry().get(new Identifier((String)context.getResult(1)));
+                    var entityType = EntityTypeRegistry.getRegistry().get(new Identifier((String) context.getResult(1)));
                     int count = context.getResult(2);
                     if (entityType == null) {
                         context.addOutput(TextFormat.RED + "Unknown entity type!");
                         return context.fail();
                     }
+
                     for (var i = 1; i <= count; i++) {
                         var dim = player.getLocation().dimension();
                         var loc = player.getLocation();
@@ -114,17 +120,17 @@ public class GameTestCommand extends SimpleCommand {
                         );
                         dim.getEntityService().addEntity(entity);
                     }
+
                     context.addOutput("§aSpawned " + count + " " + entityType.getIdentifier().toString());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
                 .key("cleare")
                 .exec((context, player) -> {
-                    player.getLocation().dimension().getEntities().values().forEach(entity -> {
-                        if (!(entity instanceof EntityPlayer)) {
-                            entity.despawn();
-                        }
-                    });
+                    player.getLocation().dimension().getEntities().values().stream()
+                            .filter(entity -> !(entity instanceof EntityPlayer))
+                            .forEach(EntityBaseComponent::despawn);
+
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -137,6 +143,7 @@ public class GameTestCommand extends SimpleCommand {
                         context.addOutput(TextFormat.RED + "" + e);
                         return context.fail();
                     }
+
                     JSONUtils.toFile("cmd_pk_allay.json", cmdPk, writer -> writer.setIndent("  "));
                     return context.success();
                 }, SenderType.PLAYER)
@@ -151,12 +158,11 @@ public class GameTestCommand extends SimpleCommand {
                 .str("perm")
                 .bool("value")
                 .exec((context) -> {
-                    String perm = context.getSecondResult();
-                    boolean value = context.getThirdResult();
+                    String perm = context.getResult(1);
+                    boolean value = context.getResult(2);
                     context.getSender().setPerm(perm, value);
                     context.addOutput("Perm " + perm + " was set to " + value);
                     return context.success();
                 });
-
     }
 }

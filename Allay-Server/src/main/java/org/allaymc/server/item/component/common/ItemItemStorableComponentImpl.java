@@ -1,5 +1,6 @@
 package org.allaymc.server.item.component.common;
 
+import lombok.Setter;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.common.ItemItemStorableComponent;
@@ -19,40 +20,31 @@ import java.util.List;
  * @author daoge_cmd
  */
 public class ItemItemStorableComponentImpl implements ItemItemStorableComponent {
-
+    @Setter
     protected List<NbtMap> storedItems = List.of();
 
     @EventHandler
     protected void onLoadExtraTag(ItemLoadExtraTagEvent event) {
         var extraTag = event.getExtraTag();
-        if (extraTag.containsKey("Items")) {
-            storedItems = extraTag.getList("Items", NbtType.COMPOUND);
-        }
+        extraTag.listenForList("Items", NbtType.COMPOUND, itemsNbt -> storedItems = itemsNbt);
     }
 
     @EventHandler
     protected void onSaveExtraTag(ItemSaveExtraTagEvent event) {
         var builder = event.getExtraTag();
-        if (!storedItems.isEmpty()) {
-            builder.put("Items", storedItems);
-        }
+        if (!storedItems.isEmpty()) builder.put("Items", storedItems);
     }
 
     @EventHandler
     protected void onPlacedAsBlock(ItemPlacedAsBlockEvent event) {
         var blockEntity = event.getDimension().getBlockEntity(event.getPlaceBlockPos());
-        if (blockEntity instanceof BlockEntityContainerHolderComponent containerHolderComponent) {
-            containerHolderComponent.getContainer().loadNBT(storedItems);
+        if (blockEntity instanceof BlockEntityContainerHolderComponent component) {
+            component.getContainer().loadNBT(storedItems);
         }
     }
 
     @Override
     public @UnmodifiableView List<NbtMap> getStoredItems() {
         return Collections.unmodifiableList(storedItems);
-    }
-
-    @Override
-    public void setStoredItems(List<NbtMap> items) {
-        storedItems = items;
     }
 }

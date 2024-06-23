@@ -26,16 +26,11 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     public static final Pattern NAME_PATTERN = Pattern.compile("^(?! )([a-zA-Z0-9_ ]{2,15}[a-zA-Z0-9_])(?<! )$");
 
     @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.LOGIN;
-    }
-
-    @Override
     public void handle(EntityPlayer player, LoginPacket packet) {
         var loginData = LoginData.decode(packet);
         player.setLoginData(loginData);
-        var server = Server.getInstance();
 
+        var server = Server.getInstance();
         if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.isWhitelisted(player.getOriginName())) {
             player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED);
             return;
@@ -103,8 +98,13 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             player.getClientSession().enableEncryption(encryptionSecretKey);
             // completeLogin() when client send back ClientToServerHandshakePacket
         } catch (Exception exception) {
-            log.warn("Failed to initialize encryption for client " + name, exception);
+            log.warn("Failed to initialize encryption for client {}", name, exception);
             player.disconnect("disconnectionScreen.internalError");
         }
+    }
+
+    @Override
+    public BedrockPacketType getPacketType() {
+        return BedrockPacketType.LOGIN;
     }
 }

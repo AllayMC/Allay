@@ -17,21 +17,14 @@ import org.allaymc.server.utils.LevelDBKeyUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.iq80.leveldb.CompressionType;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
-import org.iq80.leveldb.WriteBatch;
 import org.joml.Vector3i;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -45,6 +38,8 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
+    private static final byte[] levelDatMagic = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
+
     private final Path path;
     private final DB db;
     private WorldData worldDataCache;
@@ -58,14 +53,15 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     }
 
     public AllayLevelDBWorldStorage(Path path, Options options) throws WorldStorageException {
-        String worldName = path.getName(path.getNameCount() - 1).toString();
-        File file = path.toFile();
+        var worldName = path.getName(path.getNameCount() - 1).toString();
+        var file = path.toFile();
         if (!file.exists()) file.mkdirs();
         this.path = path;
+
         worldDataCache = readWorldData();
         if (worldDataCache == null) initWorldData(worldName);
 
-        File dbFolder = path.resolve("db").toFile();
+        var dbFolder = path.resolve("db").toFile();
         try {
             if (!dbFolder.exists()) dbFolder.mkdirs();
             db = net.daporkchop.ldbjni.LevelDB.PROVIDER.open(dbFolder, options);
@@ -75,7 +71,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     }
 
     private void initWorldData(String worldName) {
-        File levelDat = path.resolve("level.dat").toFile();
+        var levelDat = path.resolve("level.dat").toFile();
         try {
             // noinspection ResultOfMethodCallIgnored
             levelDat.createNewFile();
@@ -96,24 +92,23 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
     @Override
     public Chunk readChunkSynchronously(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
-        AllayUnsafeChunk.Builder builder = AllayUnsafeChunk.builder()
+        var builder = AllayUnsafeChunk.builder()
                 .chunkX(x)
                 .chunkZ(z)
                 .dimensionInfo(dimensionInfo);
-        byte[] versionValue = this.db.get(LevelDBKeyUtils.VERSION.getKey(x, z, dimensionInfo));
-        if (versionValue == null) {
+        var versionValue = this.db.get(LevelDBKeyUtils.VERSION.getKey(x, z, dimensionInfo));
+        if (versionValue == null)
             versionValue = this.db.get(LevelDBKeyUtils.LEGACY_VERSION.getKey(x, z, dimensionInfo));
-        }
-        if (versionValue == null) {
-            return builder.build().toSafeChunk();
-        }
-        byte[] finalized = this.db.get(LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
+        if (versionValue == null) return builder.build().toSafeChunk();
+
+        var finalized = this.db.get(LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
         if (finalized == null) {
             builder.state(ChunkState.FINISHED);
         } else {
             // TODO: ChunkState枚举有变化，检查这行代码是否依然可用
             builder.state(ChunkState.values()[Unpooled.wrappedBuffer(finalized).readIntLE() + 1]);
         }
+
         LevelDBChunkSerializer.INSTANCE.deserialize(this.db, builder);
         return builder.build().toSafeChunk();
     }
@@ -121,7 +116,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException {
         return CompletableFuture.runAsync(() -> {
-            try (WriteBatch writeBatch = this.db.createWriteBatch()) {
+            try (var writeBatch = this.db.createWriteBatch()) {
                 chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, c));
                 this.db.write(writeBatch);
             } catch (IOException e) {
@@ -130,15 +125,11 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         }, Server.getInstance().getVirtualThreadPool());
     }
 
-    private static final byte[] levelDatMagic = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
-
     @Override
     public boolean containChunk(int x, int z, DimensionInfo dimensionInfo) {
         for (int ySection = dimensionInfo.minSectionY(); ySection <= dimensionInfo.maxSectionY(); ySection++) {
-            byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(x, z, ySection, dimensionInfo));
-            if (bytes != null) {
-                return true;
-            }
+            var bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(x, z, ySection, dimensionInfo));
+            if (bytes != null) return true;
         }
         return false;
     }
@@ -146,12 +137,12 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
     @Override
     public synchronized void writeWorldData(WorldData worldData) {
-        File levelDat = path.resolve("level.dat").toFile();
+        var levelDat = path.resolve("level.dat").toFile();
         try (var output = new FileOutputStream(levelDat)) {
-            if (levelDat.exists()) {
+            if (levelDat.exists())
                 Files.copy(path.resolve("level.dat"), path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
-            }
-            output.write(levelDatMagic);//magic number
+
+            output.write(levelDatMagic); // magic numbers
             var nbtOutputStream = NbtUtils.createWriterLE(output);
             nbtOutputStream.writeTag(createWorldDataNBT(worldData));
             worldDataCache = worldData;
@@ -162,10 +153,10 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
     @Override
     public synchronized WorldData readWorldData() throws WorldStorageException {
-        File levelDat = path.resolve("level.dat").toFile();
+        var levelDat = path.resolve("level.dat").toFile();
         if (!levelDat.exists()) return null;
         try (var input = new FileInputStream(levelDat)) {
-            //The first 8 bytes are magic number
+            // The first 8 bytes are magic number
             input.skip(8);
             NBTInputStream readerLE = NbtUtils.createReaderLE(new ByteArrayInputStream(input.readAllBytes()));
             NbtMap d = (NbtMap) readerLE.readTag();
@@ -329,8 +320,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     }
 
     private NbtMap createWorldDataNBT(WorldData worldData) {
-        NbtMapBuilder builder = NbtMap.builder();
-
+        var builder = NbtMap.builder();
         builder.putString("BiomeOverride", worldData.getBiomeOverride());
         builder.putBoolean("CenterMapsToOrigin", worldData.isCenterMapsToOrigin());
         builder.putBoolean("ConfirmedPlatformLockedContent", worldData.isConfirmedPlatformLockedContent());
@@ -363,7 +353,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         builder.putLong("Time", worldData.getTime());
         builder.putInt("WorldVersion", worldData.getWorldVersion());
         builder.putInt("XBLBroadcastIntent", worldData.getXBLBroadcastIntent());
-        NbtMap abilities = NbtMap.builder()
+        var abilities = NbtMap.builder()
                 .putBoolean("attackmobs", worldData.getAbilities().isAttackMobs())
                 .putBoolean("attackplayers", worldData.getAbilities().isAttackPlayers())
                 .putBoolean("build", worldData.getAbilities().isBuild())
@@ -380,7 +370,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                 .putFloat("flySpeed", worldData.getAbilities().getFlySpeed())
                 .putFloat("walkSpeed", worldData.getAbilities().getWalkSpeed())
                 .build();
-        NbtMap experiments = NbtMap.builder()
+        var experiments = NbtMap.builder()
                 .putBoolean("cameras", worldData.getExperiments().isCameras())
                 .putBoolean("data_driven_biomes", worldData.getExperiments().isDataDrivenBiomes())
                 .putBoolean("data_driven_items", worldData.getExperiments().isDataDrivenItems())

@@ -14,24 +14,21 @@ import org.cloudburstmc.protocol.bedrock.packet.SetLocalPlayerAsInitializedPacke
  * @author daoge_cmd
  */
 public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProcessor<SetLocalPlayerAsInitializedPacket> {
-
-    @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.SET_LOCAL_PLAYER_AS_INITIALIZED;
-    }
-
     @Override
     public void handle(EntityPlayer player, SetLocalPlayerAsInitializedPacket packet) {
         var event = new PlayerInitializedEvent(player);
         Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
-        }
+        if (event.isCancelled()) player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
         // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,
         // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
         // Otherwise the client will snap into the ground
         player.sendLocationToSelf();
         player.setInitialized();
-        Server.getInstance().broadcastTr("§e%minecraft:multiplayer.player.joined", player.getOriginName());
+        Server.getInstance().broadcastTr(TrKeys.M_MULTIPLAYER_PLAYER_JOINED, player.getOriginName());
+    }
+
+    @Override
+    public BedrockPacketType getPacketType() {
+        return BedrockPacketType.SET_LOCAL_PLAYER_AS_INITIALIZED;
     }
 }

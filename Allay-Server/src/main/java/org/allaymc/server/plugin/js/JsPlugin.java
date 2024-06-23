@@ -44,7 +44,7 @@ public class JsPlugin extends Plugin {
                 .allowExperimentalOptions(true)
                 .option("js.esm-eval-returns-exports", "true");
         if (chromeDebugPort > 0) {
-            logger.info("Debug mode for js plugin " + pluginContainer.descriptor().getName() + " is enabled. Port: " + chromeDebugPort);
+            logger.info("Debug mode for js plugin {} is enabled. Port: {}", pluginContainer.descriptor().getName(), chromeDebugPort);
             // Debug mode is enabled
             cbd.option("inspect", String.valueOf(chromeDebugPort))
                     .option("inspect.Path", pluginContainer.descriptor().getName())
@@ -53,7 +53,9 @@ public class JsPlugin extends Plugin {
                     .option("inspect.SourcePath", pluginContainer.loader().getPluginPath().toFile().getAbsolutePath());
         }
         jsContext = cbd.build();
+
         initGlobalMembers();
+
         var entranceJsFileName = pluginContainer.descriptor().getEntrance();
         var path = pluginContainer.loader().getPluginPath().resolve(entranceJsFileName);
         jsExport = jsContext.eval(

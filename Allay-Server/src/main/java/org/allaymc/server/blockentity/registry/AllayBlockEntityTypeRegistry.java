@@ -12,10 +12,10 @@ import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.ReflectionUtils;
 import org.allaymc.server.blockentity.type.BlockEntityTypeInitializer;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.allaymc.server.utils.ResourceUtils.callInitializer;
 
 /**
  * Allay Project 2023/9/15
@@ -41,16 +41,5 @@ public class AllayBlockEntityTypeRegistry extends SimpleMappedRegistry<String, B
             initializers.forEach(method -> callInitializer(method, progressBar));
         }
         log.info(I18n.get().tr(TrKeys.A_BLOCKENTITYTYPE_LOADED, initializers.size()));
-    }
-
-    private static void callInitializer(Method method, ProgressBar progressBar) {
-        try {
-            method.invoke(null);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (progressBar != null)
-                progressBar.step();
-        }
     }
 }

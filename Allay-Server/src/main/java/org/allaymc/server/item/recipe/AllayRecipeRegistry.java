@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.ComplexAliasDescriptor;
@@ -14,13 +13,10 @@ import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.recipe.NetworkRecipe;
-import org.allaymc.api.item.recipe.Recipe;
-import org.allaymc.api.item.recipe.RecipeRegistry;
-import org.allaymc.api.item.recipe.ShapedRecipe;
-import org.allaymc.api.item.recipe.ShapelessRecipe;
+import org.allaymc.api.item.recipe.*;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.utils.AllayNbtUtils;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.item.type.AllayItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
@@ -28,15 +24,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeDa
 import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Allay Project 2023/11/25
@@ -55,6 +43,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     public void registerVanillaRecipes() {
         var stream = AllayItemType.class.getClassLoader().getResourceAsStream("recipes.json");
         if (stream == null) return;
+
         var array = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject().get("recipes").getAsJsonArray();
         try (var pgbar = ProgressBar
                 .builder()
@@ -68,10 +57,12 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 switch (CraftingDataType.byId(obj.get("type").getAsInt())) {
                     case SHAPELESS -> registerShapeless(parseShapeless(obj));
                     case SHAPED -> registerShaped(parseShaped(obj));
-                    case FURNACE, FURNACE_DATA, MULTI, SHULKER_BOX, SHAPELESS_CHEMISTRY, SHAPED_CHEMISTRY, SMITHING_TRANSFORM, SMITHING_TRIM -> {
+                    case FURNACE, FURNACE_DATA, MULTI, SHULKER_BOX, SHAPELESS_CHEMISTRY, SHAPED_CHEMISTRY,
+                         SMITHING_TRANSFORM, SMITHING_TRIM -> {
                         // TODO
                     }
-                    default -> throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
+                    default ->
+                            throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
                 }
 
                 // furnace recipes don't have both id and uuid
@@ -146,7 +137,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     }
 
     private ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
-        return switch(jsonObject.get("type").getAsString()) {
+        return switch (jsonObject.get("type").getAsString()) {
             case "default" -> {
                 var itemId = new Identifier(jsonObject.get("itemId").getAsString());
                 var itemType = ItemTypeRegistry.getRegistry().get(itemId);

@@ -8,10 +8,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumConstraint;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Allay Project 2023/12/29
@@ -50,20 +47,13 @@ public class EnumNode extends BaseNode {
     @Override
     public boolean match(CommandContext context) {
         var arg = context.queryArg();
-        boolean matched = false;
-        for (String value : values) {
-            if (customEquals(value, arg)) {
-                matched = true;
-                break;
-            }
-        }
+        var matched = Arrays.stream(values).anyMatch(value -> customEquals(value, arg));
         if (matched) {
             context.putResult(argToResult(arg));
             context.popArg();
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     protected Object argToResult(String arg) {

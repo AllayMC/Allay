@@ -16,7 +16,7 @@ import java.util.function.Function;
  */
 public class AllayWorldGeneratorFactory extends SimpleMappedRegistry<String, Function<String, WorldGenerator>, Map<String, Function<String, WorldGenerator>>> implements WorldGeneratorFactory {
     public AllayWorldGeneratorFactory() {
-        super(null, unused -> new ConcurrentHashMap<>());
+        super(null, $ -> new ConcurrentHashMap<>());
         init();
     }
 
@@ -24,8 +24,8 @@ public class AllayWorldGeneratorFactory extends SimpleMappedRegistry<String, Fun
         register("VOID", preset -> WorldGenerator.builder().name("VOID").preset(preset).build());
         register("FLAT", preset -> WorldGenerator.builder().name("FLAT").noisers(new FlatNoiser()).preset(preset).build());
         // TODO: Pass preset to je generator loader
-        register("JEGEN_OVERWORLD", preset -> JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD));
-        register("JEGEN_NETHER", preset -> JeGeneratorLoader.getJeGenerator(DimensionInfo.NETHER));
-        register("JEGEN_END", preset -> JeGeneratorLoader.getJeGenerator(DimensionInfo.THE_END));
+        register("JEGEN_OVERWORLD", $ -> JeGeneratorLoader.getJeGenerator(DimensionInfo.OVERWORLD));
+        register("JEGEN_NETHER", $ -> JeGeneratorLoader.getJeGenerator(DimensionInfo.NETHER));
+        register("JEGEN_END", $ -> JeGeneratorLoader.getJeGenerator(DimensionInfo.THE_END));
     }
 }

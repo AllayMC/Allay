@@ -59,11 +59,7 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.primitives.AABBf;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -101,6 +97,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Setter
     protected Location3ic spawnPoint;
     protected boolean awaitingDimensionChangeACK;
+    @Getter
+    @Setter
     protected boolean interactingBlock;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
@@ -173,6 +171,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     protected void tryPickUpItems() {
         if (dead || !spawned || willBeDespawnedNextTick) return;
+
         var dimension = location.dimension;
         // pick up items
         var pickUpArea = new AABBf(
@@ -326,16 +325,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void setInteractingBlock(boolean interactingBlock) {
-        this.interactingBlock = interactingBlock;
-    }
-
-    @Override
-    public boolean isInteractingBlock() {
-        return interactingBlock;
-    }
-
-    @Override
     public int getHandSlot() {
         return containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getHandSlot();
     }
@@ -343,6 +332,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void setHandSlot(int handSlot) {
         Preconditions.checkArgument(handSlot >= 0 && handSlot <= 8);
+
         var inv = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
         inv.setHandSlot(handSlot);
         var itemStack = inv.getItemStack(handSlot);
@@ -399,18 +389,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        if (nbt.containsKey("Perm")) {
-            permTree.loadNBT(nbt.getCompound("Perm"), true);
-        }
-        if (nbt.containsKey("Offhand")) {
-            containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(nbt.getList("Offhand", NbtType.COMPOUND));
-        }
-        if (nbt.containsKey("Inventory")) {
-            containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).loadNBT(nbt.getList("Inventory", NbtType.COMPOUND));
-        }
-        if (nbt.containsKey("Armor")) {
-            containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(nbt.getList("Armor", NbtType.COMPOUND));
-        }
+        nbt.listenForCompound("Perm", permNbt -> this.permTree.loadNBT(permNbt, true));
+        nbt.listenForList("Offhand", NbtType.COMPOUND, offhandNbt ->
+                containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(offhandNbt)
+        );
+        nbt.listenForList("Inventory", NbtType.COMPOUND, inventoryNbt ->
+                containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).loadNBT(inventoryNbt)
+        );
+        nbt.listenForList("Armor", NbtType.COMPOUND, armorNbt ->
+                containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(armorNbt)
+        );
     }
 
     @Override
@@ -535,9 +523,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void onChunkOutOfRange(Set<Long> chunkHashes) {
-        chunkHashes
-                .stream()
-                .map(location.dimension.getChunkService()::getChunk).filter(Objects::nonNull)
+        chunkHashes.stream()
+                .map(location.dimension.getChunkService()::getChunk)
+                .filter(Objects::nonNull)
                 .forEach(chunk -> {
                     chunk.despawnEntitiesFrom(thisEntity);
                     chunk.removeChunkLoader(thisEntity);

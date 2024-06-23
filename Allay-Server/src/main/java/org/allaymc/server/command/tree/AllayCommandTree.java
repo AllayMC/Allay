@@ -39,13 +39,8 @@ public class AllayCommandTree implements CommandTree {
     }
 
     protected void findLeaf(CommandNode node, List<CommandNode> dest) {
-        if (node.isLeaf()) {
-            dest.add(node);
-        } else {
-            for (var leaf : node.getLeaves()) {
-                findLeaf(leaf, dest);
-            }
-        }
+        if (node.isLeaf()) dest.add(node);
+        else node.getLeaves().forEach(leaf -> findLeaf(leaf, dest));
     }
 
     @Override
@@ -61,8 +56,10 @@ public class AllayCommandTree implements CommandTree {
                 context.addSyntaxError();
                 return context.fail();
             }
+
             return node.applyExecutor(context);
         }
+
         var nextNode = node.nextNode(context);
         if (nextNode == null) {
             context.addSyntaxError();

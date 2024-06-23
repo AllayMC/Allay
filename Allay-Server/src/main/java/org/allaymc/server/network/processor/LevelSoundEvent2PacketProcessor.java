@@ -14,15 +14,14 @@ import org.cloudburstmc.protocol.common.PacketSignal;
  */
 public class LevelSoundEvent2PacketProcessor extends PacketProcessor<LevelSoundEvent2Packet> {
     @Override
-    public BedrockPacketType getPacketType() {
-        return BedrockPacketType.LEVEL_SOUND_EVENT_2;
+    public PacketSignal handleAsync(EntityPlayer player, LevelSoundEvent2Packet packet) {
+        if (player.getGameType() != GameType.SPECTATOR)
+            player.getCurrentChunk().addChunkPacket(packet);
+        return PacketSignal.HANDLED;
     }
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, LevelSoundEvent2Packet packet) {
-        if (player.getGameType() != GameType.SPECTATOR) {
-            player.getCurrentChunk().addChunkPacket(packet);
-        }
-        return PacketSignal.HANDLED;
+    public BedrockPacketType getPacketType() {
+        return BedrockPacketType.LEVEL_SOUND_EVENT_2;
     }
 }

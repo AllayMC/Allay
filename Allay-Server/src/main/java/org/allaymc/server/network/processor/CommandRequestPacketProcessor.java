@@ -7,7 +7,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.CommandRequestPacket;
 
 public class CommandRequestPacketProcessor extends PacketProcessor<CommandRequestPacket> {
-
     @Override
     public void handleSync(EntityPlayer player, CommandRequestPacket packet) {
         // The packet returns `/command args`, this gets rid of the `/` at the start

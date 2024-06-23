@@ -8,6 +8,8 @@ import io.netty.buffer.Unpooled;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -35,27 +37,22 @@ import java.util.function.Predicate;
  */
 @ThreadSafe
 @Slf4j
+@RequiredArgsConstructor
 public class AllayChunk implements Chunk {
     protected final AllayUnsafeChunk unsafeChunk;
-    protected final StampedLock blockLock;
-    protected final StampedLock heightAndBiomeLock;
-    protected final StampedLock lightLock;
-    protected final Set<ChunkLoader> chunkLoaders;
-    protected final Queue<ChunkPacketEntry> chunkPacketQueue;
-    // 区块是否已载入世界
+
+    protected final StampedLock blockLock = new StampedLock();
+    protected final StampedLock heightAndBiomeLock = new StampedLock();
+    protected final StampedLock lightLock = new StampedLock();
+    // No need to use concurrent-safe set as addChunkLoader() & removeChunkLoader() are only used in AllayChunkService which is single-thread
+    protected final Set<ChunkLoader> chunkLoaders = new ObjectOpenHashSet<>();
+    protected final Queue<ChunkPacketEntry> chunkPacketQueue = PlatformDependent.newMpscQueue();
+
+    // Whether the chunk has been loaded into the world
     @Getter
     protected boolean loaded = false;
+    @Setter
     protected Runnable chunkSetCallback = () -> {};
-
-    public AllayChunk(AllayUnsafeChunk unsafeChunk) {
-        this.unsafeChunk = unsafeChunk;
-        this.blockLock = new StampedLock();
-        this.heightAndBiomeLock = new StampedLock();
-        this.lightLock = new StampedLock();
-        this.chunkPacketQueue = PlatformDependent.newMpscQueue();
-        // No need to use concurrent-safe set as addChunkLoader() & removeChunkLoader() are only used in AllayChunkService which is single-thread
-        this.chunkLoaders = new ObjectOpenHashSet<>();
-    }
 
     private static void checkXZ(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
@@ -70,11 +67,11 @@ public class AllayChunk implements Chunk {
 
     @Override
     public short[] getHeightArray() {
-        long stamp = heightAndBiomeLock.tryOptimisticRead();
+        var stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
             for (; ; stamp = heightAndBiomeLock.readLock()) {
                 if (stamp == 0L) continue;
-                short[] result = unsafeChunk.getHeightArray();
+                var result = unsafeChunk.getHeightArray();
                 if (!heightAndBiomeLock.validate(stamp)) continue;
                 return result;
             }
@@ -86,11 +83,11 @@ public class AllayChunk implements Chunk {
     @Override
     public int getHeight(int x, int z) {
         checkXZ(x, z);
-        long stamp = heightAndBiomeLock.tryOptimisticRead();
+        var stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
             for (; ; stamp = heightAndBiomeLock.readLock()) {
                 if (stamp == 0L) continue;
-                int result = unsafeChunk.getHeight(x, z);
+                var result = unsafeChunk.getHeight(x, z);
                 if (!heightAndBiomeLock.validate(stamp)) continue;
                 return result;
             }
@@ -103,7 +100,7 @@ public class AllayChunk implements Chunk {
     public void setHeight(int x, int z, int height) {
         checkXZ(x, z);
         Preconditions.checkArgument(height >= -512 && height <= 511);
-        long stamp = heightAndBiomeLock.writeLock();
+        var stamp = heightAndBiomeLock.writeLock();
         try {
             unsafeChunk.setHeight(x, z, height);
         } finally {
@@ -116,11 +113,11 @@ public class AllayChunk implements Chunk {
         checkXZ(x, z);
         Preconditions.checkArgument(expectedValue >= -512 && expectedValue <= 511);
         Preconditions.checkArgument(newValue >= -512 && newValue <= 511);
-        long stamp = heightAndBiomeLock.tryOptimisticRead();
+        var stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
             for (; ; stamp = heightAndBiomeLock.writeLock()) {
                 if (stamp == 0L) continue;
-                int oldValue = unsafeChunk.getHeight(x, z);
+                var oldValue = unsafeChunk.getHeight(x, z);
                 if (!heightAndBiomeLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = heightAndBiomeLock.tryConvertToWriteLock(stamp);
@@ -138,11 +135,11 @@ public class AllayChunk implements Chunk {
         // Do not check y here, as if y is invalid we will return air
         // See test AllayChunkTest.testInvalidGetBlockStateMethodCall()
         checkXZ(x, z);
-        long stamp = blockLock.tryOptimisticRead();
+        var stamp = blockLock.tryOptimisticRead();
         try {
             for (; ; stamp = blockLock.readLock()) {
                 if (stamp == 0L) continue;
-                BlockState result = unsafeChunk.getBlockState(x, y, z, layer);
+                var result = unsafeChunk.getBlockState(x, y, z, layer);
                 if (!blockLock.validate(stamp)) continue;
                 return result;
             }
@@ -154,7 +151,7 @@ public class AllayChunk implements Chunk {
     @Override
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
         checkXYZ(x, y, z);
-        long stamp = blockLock.writeLock();
+        var stamp = blockLock.writeLock();
         try {
             unsafeChunk.setBlockState(x, y, z, blockState, layer);
         } finally {
@@ -165,11 +162,11 @@ public class AllayChunk implements Chunk {
     @Override
     public void compareAndSetBiome(int x, int y, int z, BiomeType expectedValue, BiomeType newValue) {
         checkXYZ(x, y, z);
-        long stamp = heightAndBiomeLock.tryOptimisticRead();
+        var stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
             for (; ; stamp = heightAndBiomeLock.writeLock()) {
                 if (stamp == 0L) continue;
-                BiomeType oldValue = unsafeChunk.getBiome(x, y, z);
+                var oldValue = unsafeChunk.getBiome(x, y, z);
                 if (!heightAndBiomeLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = heightAndBiomeLock.tryConvertToWriteLock(stamp);
@@ -185,7 +182,7 @@ public class AllayChunk implements Chunk {
     @Override
     public BiomeType getBiome(int x, int y, int z) {
         checkXYZ(x, y, z);
-        long stamp = heightAndBiomeLock.tryOptimisticRead();
+        var stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
             for (; ; stamp = heightAndBiomeLock.readLock()) {
                 if (stamp == 0L) continue;
@@ -201,7 +198,7 @@ public class AllayChunk implements Chunk {
     @Override
     public void setBiome(int x, int y, int z, BiomeType biomeType) {
         checkXYZ(x, y, z);
-        long stamp = heightAndBiomeLock.writeLock();
+        var stamp = heightAndBiomeLock.writeLock();
         try {
             unsafeChunk.setBiome(x, y, z, biomeType);
         } finally {
@@ -212,11 +209,11 @@ public class AllayChunk implements Chunk {
     @Override
     public void compareAndSetBlock(int x, int y, int z, BlockState expectedValue, BlockState newValue, int layer) {
         checkXYZ(x, y, z);
-        long stamp = blockLock.tryOptimisticRead();
+        var stamp = blockLock.tryOptimisticRead();
         try {
             for (; ; stamp = blockLock.writeLock()) {
                 if (stamp == 0L) continue;
-                BlockState oldValue = unsafeChunk.getBlockState(x, y, z, layer);
+                var oldValue = unsafeChunk.getBlockState(x, y, z, layer);
                 if (!blockLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = blockLock.tryConvertToWriteLock(stamp);
@@ -232,11 +229,11 @@ public class AllayChunk implements Chunk {
     @Override
     public int getBlockLight(int x, int y, int z) {
         checkXYZ(x, y, z);
-        long stamp = lightLock.tryOptimisticRead();
+        var stamp = lightLock.tryOptimisticRead();
         try {
             for (; ; stamp = lightLock.readLock()) {
                 if (stamp == 0L) continue;
-                int result = unsafeChunk.getBlockLight(x, y, z);
+                var result = unsafeChunk.getBlockLight(x, y, z);
                 if (!lightLock.validate(stamp)) continue;
                 return result;
             }
@@ -248,7 +245,7 @@ public class AllayChunk implements Chunk {
     @Override
     public void setBlockLight(int x, int y, int z, int light) {
         checkXYZ(x, y, z);
-        long stamp = lightLock.writeLock();
+        var stamp = lightLock.writeLock();
         try {
             unsafeChunk.setBlockLight(x, y, z, light);
         } finally {
@@ -260,11 +257,11 @@ public class AllayChunk implements Chunk {
     public void compareAndSetBlockLight(int x, int y, int z, int expectedValue, int newValue) {
         checkXYZ(x, y, z);
         checkXZ(expectedValue, newValue);
-        long stamp = lightLock.tryOptimisticRead();
+        var stamp = lightLock.tryOptimisticRead();
         try {
             for (; ; stamp = lightLock.writeLock()) {
                 if (stamp == 0L) continue;
-                int oldValue = unsafeChunk.getBlockLight(x, y, z);
+                var oldValue = unsafeChunk.getBlockLight(x, y, z);
                 if (!lightLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = lightLock.tryConvertToWriteLock(stamp);
@@ -280,11 +277,11 @@ public class AllayChunk implements Chunk {
     @Override
     public int getSkyLight(int x, int y, int z) {
         checkXYZ(x, y, z);
-        long stamp = lightLock.tryOptimisticRead();
+        var stamp = lightLock.tryOptimisticRead();
         try {
             for (; ; stamp = lightLock.readLock()) {
                 if (stamp == 0L) continue;
-                int result = unsafeChunk.getSkyLight(x, y, z);
+                var result = unsafeChunk.getSkyLight(x, y, z);
                 if (!lightLock.validate(stamp)) continue;
                 return result;
             }
@@ -296,7 +293,7 @@ public class AllayChunk implements Chunk {
     @Override
     public void setSkyLight(int x, int y, int z, int light) {
         checkXYZ(x, y, z);
-        long stamp = lightLock.writeLock();
+        var stamp = lightLock.writeLock();
         try {
             unsafeChunk.setSkyLight(x, y, z, light);
         } finally {
@@ -308,11 +305,11 @@ public class AllayChunk implements Chunk {
     public void compareAndSetSkyLight(int x, int y, int z, int expectedValue, int newValue) {
         checkXYZ(x, y, z);
         checkXZ(expectedValue, newValue);
-        long stamp = lightLock.tryOptimisticRead();
+        var stamp = lightLock.tryOptimisticRead();
         try {
             for (; ; stamp = lightLock.writeLock()) {
                 if (stamp == 0L) continue;
-                int oldValue = unsafeChunk.getSkyLight(x, y, z);
+                var oldValue = unsafeChunk.getSkyLight(x, y, z);
                 if (!lightLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = lightLock.tryConvertToWriteLock(stamp);
@@ -327,9 +324,9 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void batchProcess(UnsafeChunkOperate operate) {
-        long stamp1 = blockLock.writeLock();
-        long stamp2 = heightAndBiomeLock.writeLock();
-        long stamp3 = lightLock.writeLock();
+        var stamp1 = blockLock.writeLock();
+        var stamp2 = heightAndBiomeLock.writeLock();
+        var stamp3 = lightLock.writeLock();
         try {
             operate.run(this.unsafeChunk);
         } finally {
@@ -376,11 +373,12 @@ public class AllayChunk implements Chunk {
     }
 
     private void fillNullSections() {
-        long stamp = blockLock.writeLock();
+        var stamp = blockLock.writeLock();
         try {
-            for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
+            var dimensionInfo = getDimensionInfo();
+            for (int i = dimensionInfo.minSectionY(); i <= dimensionInfo.maxSectionY(); i++) {
                 if (unsafeChunk.getSection(i) == null) {
-                    unsafeChunk.getSections()[i - getDimensionInfo().minSectionY()] = new ChunkSection((byte)i);
+                    unsafeChunk.getSections()[i - dimensionInfo.minSectionY()] = new ChunkSection((byte) i);
                 }
             }
         } finally {
@@ -394,7 +392,7 @@ public class AllayChunk implements Chunk {
             writeToNetwork0(byteBuf);
             return byteBuf;
         } catch (Throwable t) {
-            log.error("Error while encoding chunk(x=" + getX() + ", z=" + getZ() + ")!", t);
+            log.error("Error while encoding chunk(x={}, z={})!", getX(), getZ(), t);
             byteBuf.release();
             throw t;
         }
@@ -408,9 +406,7 @@ public class AllayChunk implements Chunk {
             Objects.requireNonNull(getSection(i)).writeToNetwork(byteBuf);
         }
         // Write biomes
-        for (var section : getSections()) {
-            section.biomes().writeToNetwork(byteBuf, BiomeType::getId);
-        }
+        Arrays.stream(getSections()).forEach(section -> section.biomes().writeToNetwork(byteBuf, BiomeType::getId));
         byteBuf.writeByte(0); // edu- border blocks
         // Write block entities
         var blockEntities = getBlockEntities().values();
@@ -420,7 +416,7 @@ public class AllayChunk implements Chunk {
                     writer.writeTag(blockEntity.saveNBT());
                 }
             } catch (IOException e) {
-                log.error("Error while encoding block entities in chunk(x=" + getX() + ", z=" + getZ() + ")!", e);
+                log.error("Error while encoding block entities in chunk(x={}, z={})!", getX(), getZ(), e);
             }
         }
     }
@@ -465,7 +461,6 @@ public class AllayChunk implements Chunk {
         unsafeChunk.addEntity(entity);
     }
 
-
     @ApiStatus.Internal
     public Entity removeEntity(long runtimeId) {
         return unsafeChunk.removeEntity(runtimeId);
@@ -502,16 +497,15 @@ public class AllayChunk implements Chunk {
         return unsafeChunk.getEntity(runtimeId);
     }
 
-    @Override
-
     @ApiStatus.Internal
+    @Override
     public ChunkSection getSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
-        long stamp = blockLock.tryOptimisticRead();
+        var stamp = blockLock.tryOptimisticRead();
         try {
             for (; ; stamp = blockLock.readLock()) {
                 if (stamp == 0L) continue;
-                ChunkSection section = unsafeChunk.getSection(sectionY);
+                var section = unsafeChunk.getSection(sectionY);
                 if (!blockLock.validate(stamp)) continue;
                 return section;
             }
@@ -542,7 +536,7 @@ public class AllayChunk implements Chunk {
     @ApiStatus.Internal
     public ChunkSection getOrCreateSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
-        long stamp = blockLock.writeLock();
+        var stamp = blockLock.writeLock();
         try {
             return unsafeChunk.getOrCreateSection(sectionY);
         } finally {
@@ -561,7 +555,7 @@ public class AllayChunk implements Chunk {
         if (chunkPacketQueue.isEmpty()) return;
         ChunkPacketEntry entry;
         while ((entry = chunkPacketQueue.poll()) != null) {
-            sendChunkPacket(entry.packet, entry.chunkLoaderPredicate);
+            sendChunkPacket(entry.packet(), entry.chunkLoaderPredicate());
         }
     }
 
@@ -582,11 +576,6 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void setChunkSetCallback(Runnable callback) {
-        this.chunkSetCallback = callback;
-    }
-
-    @Override
     public void addChunkLoader(ChunkLoader chunkLoader) {
         chunkLoaders.add(chunkLoader);
     }
@@ -603,20 +592,15 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void sendChunkPacket(BedrockPacket packet) {
-        for (ChunkLoader chunkLoader : chunkLoaders) {
-            chunkLoader.handleChunkPacket(packet);
-        }
+        chunkLoaders.forEach(chunkLoader -> chunkLoader.handleChunkPacket(packet));
     }
 
     @Override
     public void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {
-        for (ChunkLoader chunkLoader : chunkLoaders) {
-            if (chunkLoaderPredicate == null || chunkLoaderPredicate.test(chunkLoader)) {
-                chunkLoader.handleChunkPacket(packet);
-            }
-        }
+        chunkLoaders.stream()
+                .filter(chunkLoader -> chunkLoaderPredicate == null || chunkLoaderPredicate.test(chunkLoader))
+                .forEach(chunkLoader -> chunkLoader.handleChunkPacket(packet));
     }
 
-    protected record ChunkPacketEntry(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {
-    }
+    protected record ChunkPacketEntry(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {}
 }

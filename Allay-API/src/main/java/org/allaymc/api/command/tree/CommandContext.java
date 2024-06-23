@@ -128,48 +128,4 @@ public interface CommandContext {
     }
 
     <T> T getResult(int index);
-
-    default <T> T getFirstResult() {
-        return getResult(0);
-    }
-
-    default <T> T getSecondResult() {
-        return getResult(1);
-    }
-
-    default <T> T getThirdResult() {
-        return getResult(2);
-    }
-
-    default <T> T getFourthResult() {
-        return getResult(3);
-    }
-
-    default <T> T getFifthResult() {
-        return getResult(4);
-    }
-
-    default <T> T getSixthResult() {
-        return getResult(5);
-    }
-
-    default <T> T getSeventhResult() {
-        return getResult(6);
-    }
-
-    default <T> T getEighthResult() {
-        return getResult(7);
-    }
-
-    default <T> T getNinthResult() {
-        return getResult(8);
-    }
-
-    default <T> T getTenthResult() {
-        return getResult(9);
-    }
-
-    default <T> T getEleventhResult() {
-        return getResult(10);
-    }
 }

@@ -6,11 +6,11 @@ import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.world.biome.BiomeData;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
+import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.MutableNbtMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
-import java.io.InputStream;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,14 +30,14 @@ public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, Biom
 
     @SneakyThrows
     private void loadVanillaBiomeDefinition() {
-        try (InputStream stream = AllayBiomeTypeRegistry.class.getClassLoader().getResourceAsStream("biome_definitions.nbt")) {
-            assert stream != null;
+        try (var stream = ResourceUtils.getResource("biome_definitions.nbt")) {
             biomeDefinition = MutableNbtMap.from((NbtMap) NbtUtils.createGZIPReader(stream).readTag());
+
             int i = 0;
             for (var biome : biomeDefinition.entrySet()) {
                 var type = VanillaBiomeId.values()[i];
-                NbtMap value = (NbtMap) biome.getValue();
-                BiomeData data = NbtUtils.createRecordFromNBT(BiomeData.class, value);
+                var value = (NbtMap) biome.getValue();
+                var data = NbtUtils.createRecordFromNBT(BiomeData.class, value);
                 super.register(type, data);
                 i++;
             }

@@ -10,9 +10,9 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 
 /**
- * Allay Project 2024/6/18
- * <p>
  * Suitable for two-block high plants that can drop wheat seeds
+ * <p>
+ * Allay Project 2024/6/18
  *
  * @author daoge_cmd
  */
@@ -24,10 +24,9 @@ public class BlockTallWheatSeedDropableBaseComponentImpl extends BlockWheatSeedD
 
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (!super.canKeepExisting(current, neighbor, face)) {
-            return false;
-        }
+        if (!super.canKeepExisting(current, neighbor, face)) return false;
         if (face != BlockFace.UP && face != BlockFace.DOWN) return true;
+
         var dimension = current.pos().dimension();
         var isUpperBlock = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT);
         var willBreak = false;

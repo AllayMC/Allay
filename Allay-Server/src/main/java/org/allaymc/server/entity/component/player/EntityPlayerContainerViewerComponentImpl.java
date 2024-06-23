@@ -4,7 +4,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
@@ -14,6 +13,7 @@ import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.common.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
@@ -21,7 +21,6 @@ import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerOpenPacket;
 import org.cloudburstmc.protocol.bedrock.packet.InventoryContentPacket;
 import org.cloudburstmc.protocol.bedrock.packet.InventorySlotPacket;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.HashMap;
@@ -33,7 +32,7 @@ import static org.allaymc.api.container.FullContainerType.CRAFTING_GRID;
  * Allay Project 2023/9/23
  *
  * @author daoge_cmd
- */ //<editor-fold desc="EntityPlayerContainerViewerComponentImpl">
+ */
 public class EntityPlayerContainerViewerComponentImpl implements EntityContainerViewerComponent {
 
     @ComponentIdentifier
@@ -53,9 +52,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     @Override
     public byte assignInventoryId() {
-        if (idCounter + 1 >= 100) {
-            idCounter = 1;
-        }
+        if (idCounter + 1 >= 100) idCounter = 1;
         return idCounter++;
     }
 
@@ -98,7 +95,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         registerOpenedContainer(assignedId, container);
 
         var containerType = container.getContainerType();
-        //We should send the container's contents to client if the container is not held by the entity
+        // We should send the container's contents to client if the container is not held by the entity
         if (containerHolderComponent.getContainer(containerType) == null) {
             sendContents(container);
         }
@@ -151,7 +148,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     @Override
     public <T extends Container> T getOpenedContainer(FullContainerType<T> type) {
-        // 特判: 如果玩家打开了背包，则他也同步打开了一系列其他容器，尽管没有注册
+        // Special case: If the player opens their inventory, they also implicitly open a series of other containers, even if not registered
         Container container = null;
         if (isPlayerInventoryOpened()) {
             if (
@@ -162,13 +159,14 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
                 container = containerHolderComponent.getContainer(type);
             }
         }
+
         if (container == null) container = typeToContainer.get(type);
         return (T) container;
     }
 
     @Override
     public <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType) {
-        // 同上，需要特判
+        // Similarly, special case handling needed
         FullContainerType<?> fullType = null;
         if (isPlayerInventoryOpened()) {
             fullType = switch (slotType) {
@@ -178,6 +176,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
                 default -> null;
             };
         }
+
         if (fullType == null) fullType = slotTypeToFullType.get(slotType);
         return (T) getOpenedContainer(fullType);
     }

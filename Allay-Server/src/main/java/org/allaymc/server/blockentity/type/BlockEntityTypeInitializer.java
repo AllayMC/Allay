@@ -1,5 +1,6 @@
 package org.allaymc.server.blockentity.type;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
 import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
@@ -19,6 +20,7 @@ import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBox
  *
  * @author daoge_cmd
  */
+@UtilityClass
 public final class BlockEntityTypeInitializer {
     public static void initBarrel() {
         BlockEntityTypes.BARREL_TYPE = BlockEntityTypeBuilder

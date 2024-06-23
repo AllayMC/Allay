@@ -15,7 +15,8 @@ public class R implements SelectorArgument {
     public Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3f basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
-        final var r = Double.parseDouble(arguments[0]);
+
+        var r = Double.parseDouble(arguments[0]);
         return entity -> entity.getLocation().distanceSquared(basePos) < Math.pow(r, 2);
     }
 

@@ -13,10 +13,10 @@ import java.util.function.Predicate;
 public class Tag extends CachedSimpleSelectorArgument {
     @Override
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) {
-        final var have = new ArrayList<String>();
-        final var dontHave = new ArrayList<String>();
+        var have = new ArrayList<String>();
+        var dontHave = new ArrayList<String>();
         for (var tag : arguments) {
-            boolean reversed = ParseUtils.checkReversed(tag);
+            var reversed = ParseUtils.checkReversed(tag);
             if (reversed) {
                 tag = tag.substring(1);
                 dontHave.add(tag);

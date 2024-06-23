@@ -53,7 +53,7 @@ public interface ItemTypeBuilder<T extends ItemStack, C extends ItemComponent> {
     ItemTypeBuilder<T, C> addComponent(Function<ItemStackInitInfo<T>, C> provider, Class<?> componentClass);
 
     default ItemTypeBuilder<T, C> addComponent(Supplier<C> supplier, Class<?> componentClass) {
-        return addComponent(unused -> supplier.get(), componentClass);
+        return addComponent($ -> supplier.get(), componentClass);
     }
 
     ItemTypeBuilder<T, C> addComponent(ComponentProvider<ItemComponent> componentProvider);

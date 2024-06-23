@@ -6,9 +6,6 @@ package org.allaymc.server.item.type;
  * @author daoge_cmd
  */
 public class ItemTypeBuildException extends RuntimeException {
-    public ItemTypeBuildException() {
-    }
-
     public ItemTypeBuildException(String message) {
         super(message);
     }

@@ -3,6 +3,7 @@ package org.allaymc.server.world.service;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
@@ -36,6 +37,7 @@ import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
  * @author daoge_cmd
  */
 @Slf4j
+@RequiredArgsConstructor
 public final class AllayChunkService implements ChunkService {
 
     private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
@@ -45,11 +47,6 @@ public final class AllayChunkService implements ChunkService {
     private final WorldStorage worldStorage;
     private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
     private final Set<Long> keepLoadingChunks = Sets.newConcurrentHashSet();
-
-    public AllayChunkService(Dimension dimension, WorldStorage worldStorage) {
-        this.dimension = dimension;
-        this.worldStorage = worldStorage;
-    }
 
     @Override
     public void tick() {
@@ -85,7 +82,7 @@ public final class AllayChunkService implements ChunkService {
         unusedChunkClearCountDown.replaceAll((chunkHash, countDown) -> countDown - 1);
         // Remove countdown ended unused chunks
         unusedChunkClearCountDown.entrySet().removeIf(entry -> {
-            boolean shouldRemove = entry.getValue() == 0;
+            var shouldRemove = entry.getValue() == 0;
             if (shouldRemove) {
                 unloadChunk(entry.getKey());
             }
@@ -93,13 +90,11 @@ public final class AllayChunkService implements ChunkService {
         });
 
         // Add unused chunk to the clear countdown map
-        for (var entry : loadedChunks.entrySet()) {
-            Long chunkHash = entry.getKey();
-            var loadedChunk = entry.getValue();
+        loadedChunks.forEach((chunkHash, loadedChunk) -> {
             if (loadedChunk.getChunkLoaderCount() == 0 && !keepLoadingChunks.contains(chunkHash) && !unusedChunkClearCountDown.containsKey(chunkHash)) {
                 unusedChunkClearCountDown.put(chunkHash, Server.SETTINGS.worldSettings().removeUnneededChunkCycle());
             }
-        }
+        });
     }
 
     private void setChunk(int x, int z, Chunk chunk) {
@@ -132,9 +127,7 @@ public final class AllayChunkService implements ChunkService {
     @Override
     public CompletableFuture<Chunk> getOrLoadChunk(int x, int z) {
         var chunk = getChunk(x, z);
-        if (chunk != null) {
-            return CompletableFuture.completedFuture(chunk);
-        }
+        if (chunk != null) return CompletableFuture.completedFuture(chunk);
         return loadChunk(x, z);
     }
 
@@ -153,48 +146,43 @@ public final class AllayChunkService implements ChunkService {
         }
 
         // When all the CompletableFutures are completed, return a new CompletableFuture
-        return CompletableFuture.allOf(futureSet.toArray(new CompletableFuture[0]))
-                .thenApplyAsync(v -> futureSet.stream()
+        return CompletableFuture.allOf(futureSet.toArray(new CompletableFuture[0])).thenApplyAsync($ ->
+                futureSet.stream()
                         .map(CompletableFuture::join)
-                        .collect(Collectors.toSet()), Server.getInstance().getVirtualThreadPool());
+                        .collect(Collectors.toSet()), Server.getInstance().getVirtualThreadPool()
+        );
     }
 
     @Override
     public CompletableFuture<Chunk> loadChunk(int x, int z) {
         var hashXZ = HashUtils.hashXZ(x, z);
-        if (isChunkLoaded(hashXZ)) {
-            throw new IllegalStateException("Chunk is already loaded");
-        }
+        if (isChunkLoaded(hashXZ)) throw new IllegalStateException("Chunk is already loaded");
+
         var future = new CompletableFuture<Chunk>();
-        // 只有一个线程可以成功向loadingChunks中写入future，其他线程将获取到写入成功线程的future
+        // Only one thread can successfully put future into loadingChunks, other threads will get the successfully written thread's future
         var presentValue = loadingChunks.putIfAbsent(hashXZ, future);
-        if (presentValue != null) {
-            return presentValue;
-        }
-        worldStorage.readChunk(x, z, dimension.getDimensionInfo())
-                .exceptionally(t -> {
-                    log.error("Error while reading chunk ({},{}) !", x, z, t);
-                    return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-                })
-                .thenCompose(chunk -> {
-                    if (chunk.getState() != FINISHED) {
-                        // 只要未完全加载好都重新加载
-                        return getWorldGenerator().generateChunk(x, z);
-                    }
-                    return CompletableFuture.completedFuture(chunk);
-                    })
-                .exceptionally(t -> {
-                    log.error("Error while generating chunk ({},{}) !", x, z, t);
-                    return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-                })
-                .thenApply(preparedChunk -> {
-                    preparedChunk.beforeSetChunk(dimension);
-                    setChunk(x, z, preparedChunk);
-                    preparedChunk.afterSetChunk(dimension);
-                    future.complete(preparedChunk);
-                    loadingChunks.remove(hashXZ);
-                    return preparedChunk;
-                });
+        if (presentValue != null) return presentValue;
+
+        worldStorage.readChunk(x, z, dimension.getDimensionInfo()).exceptionally(t -> {
+            log.error("Error while reading chunk ({},{}) !", x, z, t);
+            return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+        }).thenCompose(chunk -> {
+            if (chunk.getState() != FINISHED) {
+                // Re-generate chunk if it's not fully loaded
+                return getWorldGenerator().generateChunk(x, z);
+            }
+            return CompletableFuture.completedFuture(chunk);
+        }).exceptionally(t -> {
+            log.error("Error while generating chunk ({},{}) !", x, z, t);
+            return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+        }).thenApply(preparedChunk -> {
+            preparedChunk.beforeSetChunk(dimension);
+            setChunk(x, z, preparedChunk);
+            preparedChunk.afterSetChunk(dimension);
+            future.complete(preparedChunk);
+            loadingChunks.remove(hashXZ);
+            return preparedChunk;
+        });
         return future;
     }
 
@@ -284,9 +272,8 @@ public final class AllayChunkService implements ChunkService {
 
     public void unloadChunk(long chunkHash) {
         var chunk = getChunk(chunkHash);
-        if (chunk == null) {
-            return;
-        }
+        if (chunk == null) return;
+
         loadedChunks.remove(chunkHash);
         chunk.save(worldStorage);
         chunk.getEntities().forEach((runtimeId, entity) -> {
@@ -305,7 +292,7 @@ public final class AllayChunkService implements ChunkService {
         private final LongComparator chunkDistanceComparatorHashed = new LongComparator() {
             @Override
             public int compare(long chunkHash1, long chunkHash2) {
-                Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
+                var floor = MathUtils.floor(chunkLoader.getLocation());
                 var loaderChunkX = floor.x >> 4;
                 var loaderChunkZ = floor.z >> 4;
                 var chunkDX1 = loaderChunkX - HashUtils.getXFromHashXZ(chunkHash1);
@@ -322,7 +309,7 @@ public final class AllayChunkService implements ChunkService {
         private final Comparator<Chunk> chunkDistanceComparator = new Comparator<>() {
             @Override
             public int compare(Chunk c1, Chunk c2) {
-                Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
+                var floor = MathUtils.floor(chunkLoader.getLocation());
                 var loaderChunkX = floor.x >> 4;
                 var loaderChunkZ = floor.z >> 4;
                 var chunkDX1 = loaderChunkX - c1.getX();
@@ -334,7 +321,6 @@ public final class AllayChunkService implements ChunkService {
                         chunkDX1 * chunkDX1 + chunkDZ1 * chunkDZ1,
                         chunkDX2 * chunkDX2 + chunkDZ2 * chunkDZ2
                 );
-
             }
         };
         // Save all chunk hash values that have been sent in the last tick
@@ -358,15 +344,14 @@ public final class AllayChunkService implements ChunkService {
 
         public void onRemoved() {
             chunkLoader.onChunkOutOfRange(sentChunks);
-            if (asyncChunkSendingManager != null) {
+            if (asyncChunkSendingManager != null)
                 asyncChunkSendingManager.stop();
-            }
         }
 
         public void tick() {
             if (!chunkLoader.isLoaderActive()) return;
             long currentLoaderChunkPosHashed;
-            Vector3i floor = MathUtils.floor(chunkLoader.getLocation());
+            var floor = MathUtils.floor(chunkLoader.getLocation());
             if ((currentLoaderChunkPosHashed = HashUtils.hashXZ(floor.x >> 4, floor.z >> 4)) != lastLoaderChunkPosHashed) {
                 lastLoaderChunkPosHashed = currentLoaderChunkPosHashed;
                 updateInRadiusChunks(floor);
@@ -393,7 +378,7 @@ public final class AllayChunkService implements ChunkService {
         }
 
         private void removeOutOfRadiusChunks() {
-            Sets.SetView<Long> difference = Sets.difference(sentChunks, inRadiusChunks);
+            var difference = Sets.difference(sentChunks, inRadiusChunks);
             // Unload chunks out of range
             chunkLoader.onChunkOutOfRange(difference);
             // The intersection of sentChunks and inRadiusChunks
@@ -403,7 +388,7 @@ public final class AllayChunkService implements ChunkService {
         private void updateChunkSendingQueue() {
             chunkSendingQueue.clear();
             // Blocks that have already been sent will not be resent
-            Sets.SetView<Long> difference = Sets.difference(inRadiusChunks, sentChunks);
+            var difference = Sets.difference(inRadiusChunks, sentChunks);
             difference.stream().sorted(chunkDistanceComparatorHashed).forEachOrdered(v -> chunkSendingQueue.enqueue(v.longValue()));
         }
 
@@ -413,18 +398,19 @@ public final class AllayChunkService implements ChunkService {
             int triedSendChunkCount = 0;
             do {
                 triedSendChunkCount++;
-                long chunkHash = chunkSendingQueue.dequeueLong();
+                var chunkHash = chunkSendingQueue.dequeueLong();
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
-                    if (isChunkUnloaded(chunkHash)) {
+                    if (isChunkUnloaded(chunkHash))
                         loadChunk(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash));
-                    }
                     chunkSendingQueue.enqueue(chunkHash);
                     continue;
                 }
+
                 chunk.addChunkLoader(chunkLoader);
                 chunkReadyToSend.put(chunkHash, chunk);
             } while (!chunkSendingQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
+
             if (!chunkReadyToSend.isEmpty()) {
                 chunkLoader.publishClientChunkUpdate();
                 var chunkSendingStrategy = Server.SETTINGS.worldSettings().chunkSendingStrategy();
@@ -434,19 +420,21 @@ public final class AllayChunkService implements ChunkService {
                     // Because the encoding of sub-chunk lcp is very quick
                     chunkSendingStrategy = SYNC;
                 }
+
                 if (chunkSendingStrategy == ASYNC) {
                     asyncChunkSendingManager.addChunk(chunkReadyToSend.values());
                 } else {
                     // Priority is given to sending chunks that are close to the chunk loader
                     var lcpStream = chunkReadyToSend.values().stream();
-                    lcpStream.sorted(chunkDistanceComparator).forEachOrdered(
-                            chunk -> {
-                                var lcp = useSubChunkSendingSystem ? chunk.createSubChunkLevelChunkPacket() : chunk.createFullLevelChunkPacketChunk();
-                                chunkLoader.sendLevelChunkPacket(lcp);
-                                chunkLoader.onChunkInRangeSent(chunk);
-                            }
-                    );
+                    lcpStream.sorted(chunkDistanceComparator).forEachOrdered(chunk -> {
+                        var lcp = useSubChunkSendingSystem ?
+                                chunk.createSubChunkLevelChunkPacket() :
+                                chunk.createFullLevelChunkPacketChunk();
+                        chunkLoader.sendLevelChunkPacket(lcp);
+                        chunkLoader.onChunkInRangeSent(chunk);
+                    });
                 }
+
                 sentChunks.addAll(chunkReadyToSend.keySet());
             }
         }
@@ -457,6 +445,7 @@ public final class AllayChunkService implements ChunkService {
 
         private class AsyncChunkSendingManager {
             private static final int DEFAULT_INITIAL_CAPACITY = 11;
+
             private final PriorityBlockingQueue<Chunk> chunkSendingQueue = new PriorityBlockingQueue<>(DEFAULT_INITIAL_CAPACITY, chunkDistanceComparator);
             private final GameLoop loop = GameLoop.builder().loopCountPerSec(20).onTick(gl -> tick()).build();
 

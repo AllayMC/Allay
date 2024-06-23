@@ -15,21 +15,12 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.server.command.selector.args.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
 
-import static org.allaymc.api.command.selector.SelectorType.NEAREST_PLAYER;
-import static org.allaymc.api.command.selector.SelectorType.NPC_INITIATOR;
-import static org.allaymc.api.command.selector.SelectorType.RANDOM_PLAYER;
-import static org.allaymc.api.command.selector.SelectorType.SELF;
-import static org.allaymc.api.command.selector.SelectorType.parseSelectorType;
+import static org.allaymc.api.command.selector.SelectorType.*;
 
 /**
  * Allay Project 2024/2/25
@@ -41,11 +32,17 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
     /**
      * Pre-parsing cache for target selector text
      */
-    private static final Cache<String, Map<String, List<String>>> ARGS_CACHE = Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();
-    private static final Cache<String, Boolean> MATCHES_CACHE = Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();
+    private static final Cache<String, Map<String, List<String>>> ARGS_CACHE = Caffeine.newBuilder()
+            .maximumSize(65535)
+            .expireAfterAccess(1, TimeUnit.MINUTES)
+            .build();
+    private static final Cache<String, Boolean> MATCHES_CACHE = Caffeine.newBuilder()
+            .maximumSize(65535)
+            .expireAfterAccess(1, TimeUnit.MINUTES)
+            .build();
 
-    Map<String, SelectorArgument> registry = new HashMap<>();
-    List<SelectorArgument> orderedArgs = new ArrayList<>();
+    private final Map<String, SelectorArgument> registry = new HashMap<>();
+    private final List<SelectorArgument> orderedArgs = new ArrayList<>();
 
     public AllayEntitySelectorAPI() {
         registerDefaultArguments();
@@ -80,19 +77,22 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         // First confirm from the cache that it is not an illegal selector
         if (cachedMatches != null && !cachedMatches)
             throw new SelectorSyntaxException("Malformed entity selector token");
-        Matcher matcher = ENTITY_SELECTOR.matcher(token);
+
+        var matcher = ENTITY_SELECTOR.matcher(token);
         // Illegal target selector text
         if (!matcher.matches()) {
             // Record the illegal selector to the cache
             MATCHES_CACHE.put(token, false);
             throw new SelectorSyntaxException("Malformed entity selector token");
         }
+
         // Query if there is a pre-parsing result. If not, parse
-        Map<String, List<String>> arguments = ARGS_CACHE.getIfPresent(token);
+        var arguments = ARGS_CACHE.getIfPresent(token);
         if (arguments == null) {
             arguments = parseArgumentMap(matcher.group(2));
             ARGS_CACHE.put(token, arguments);
         }
+
         // Get the cloned location information of the executor
         var senderLocation = new Location3f(sender.getCmdExecuteLocation());
         // Get the selector type
@@ -107,18 +107,20 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
                 // There is no entity that meets the condition.
             else return Lists.newArrayList();
         }
+
         // If the NPC triggers the selector, only the player who triggers the NPC dialogue is processed
         if (selectorType == NPC_INITIATOR) {
             if (sender instanceof NPCCommandSender npc)
                 entities = Lists.newArrayList(npc.getInitiator());
-            else
-                return Lists.newArrayList();
+            else return Lists.newArrayList();
         }
+
         // For the player type selector that is determined, exclude entities that are not players
         switch (selectorType) {
             case ALL_PLAYERS, NEAREST_PLAYER -> entities.removeIf(e -> !(e instanceof EntityPlayer));
             default -> {}
         }
+
         // There is no entity that meets the condition, return
         if (entities.isEmpty()) return entities;
         // Refer to the coordinates
@@ -131,8 +133,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
                     else if (arg.getDefaultValue(arguments, selectorType, sender) != null)
                         predicate = arg.getPredicate(selectorType, sender, senderLocation, arg.getDefaultValue(arguments, selectorType, sender));
                     else continue;
-                    if (predicate == null)
-                        continue;
+                    if (predicate == null) continue;
                     entities.removeIf(entity -> !predicate.test(entity));
                 } else {
                     if (arguments.containsKey(arg.getKeyName()))
@@ -145,6 +146,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
             // There is no entity that meets the condition, return
             if (entities.isEmpty()) return entities;
         }
+
         // Randomly select one
         if (selectorType == RANDOM_PLAYER && !entities.isEmpty()) {
             var index = ThreadLocalRandom.current().nextInt(entities.size()) + 1;
@@ -157,12 +159,13 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
                 }
                 i++;
             }
+
             return Lists.newArrayList(currentEntity);
         }
         // Select the closest player
         if (selectorType == NEAREST_PLAYER && entities.size() != 1) {
             Entity nearest = null;
-            float min = Float.MAX_VALUE;
+            var min = Float.MAX_VALUE;
             for (var entity : entities) {
                 var distanceSquared = 0f;
                 if ((distanceSquared = senderLocation.distanceSquared(entity.getLocation())) < min) {
@@ -170,8 +173,10 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
                     nearest = entity;
                 }
             }
+
             entities = Lists.newArrayList(nearest);
         }
+
         return entities;
     }
 
@@ -188,6 +193,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
             Collections.sort(orderedArgs);
             return true;
         }
+
         return false;
     }
 
@@ -195,10 +201,10 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         Map<String, List<String>> args = Maps.newHashMap();
 
         if (inputArguments != null) {
-            for (String arg : separateArguments(inputArguments)) {
+            for (var arg : separateArguments(inputArguments)) {
                 var split = AllayStringUtils.fastSplit(arg, ARGUMENT_JOINER, 2);
-                String argName = split.get(0);
 
+                var argName = split.get(0);
                 if (!registry.containsKey(argName)) {
                     throw new SelectorSyntaxException("Unknown selector argument: " + argName);
                 }
@@ -224,9 +230,9 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
                 result.add(inputArguments.substring(start, i));
                 start = i + 1;
             }
-            if (inputArguments.charAt(i) == '{') {
-                go_on = true;
-            }
+
+            if (inputArguments.charAt(i) == '{') go_on = true;
+
             if (inputArguments.charAt(i) == '}') {
                 go_on = false;
                 i++;

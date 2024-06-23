@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Allay Project 2023/8/4
@@ -17,20 +16,21 @@ import java.util.stream.Collectors;
  */
 @UtilityClass
 public class ReflectionUtils {
-    public List<String> getAllClasses(String packageName) {
+    public static List<String> getAllClasses(String packageName) {
         try {
-            ClassPath classPath = ClassPath.from(ClassLoader.getSystemClassLoader());
-            return new ArrayList<>(classPath.getTopLevelClassesRecursive(packageName).stream().map(ClassPath.ClassInfo::getName).toList());
+            var classPath = ClassPath.from(ClassLoader.getSystemClassLoader());
+            return classPath.getTopLevelClassesRecursive(packageName).stream()
+                    .map(ClassPath.ClassInfo::getName)
+                    .toList();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
-    public List<Field> getAllFields(Class<?> clazz) {
+    public static List<Field> getAllFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
-        Class<?> current = clazz;
 
+        var current = clazz;
         while (current != null) {
             Collections.addAll(fields, current.getDeclaredFields());
             current = current.getSuperclass();
@@ -39,33 +39,34 @@ public class ReflectionUtils {
         return fields;
     }
 
-    public List<Method> getAllMethods(Class<?> clazz) {
+    public static List<Method> getAllMethods(Class<?> clazz) {
         Map<String, Method> methods = new HashMap<>();
-        Class<?> current = clazz;
 
+        var current = clazz;
         while (current != null) {
-            for (Method method : current.getDeclaredMethods()) {
-                String signature = buildMethodSignature(method);
+            for (var method : current.getDeclaredMethods()) {
+                var signature = buildMethodSignature(method);
                 methods.putIfAbsent(signature, method);
             }
+
             current = current.getSuperclass();
         }
 
         return new ArrayList<>(methods.values());
     }
 
-    public String buildMethodSignature(Method method) {
+    public static String buildMethodSignature(Method method) {
         return method.getName() + Arrays.toString(method.getParameterTypes());
     }
 
-    public List<Method> getAllStaticVoidParameterlessMethods(Class<?> clazz) {
+    public static List<Method> getAllStaticVoidParameterlessMethods(Class<?> clazz) {
         return Arrays.stream(clazz.getMethods()).filter(method -> {
             // return if not a static method
             if (!Modifier.isStatic(method.getModifiers())) return false;
             // return if not a void method
             if (method.getReturnType() != void.class) return false;
             return method.getParameterCount() == 0;
-        }).collect(Collectors.toList());
+        }).toList();
     }
 }
 

@@ -25,17 +25,17 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
             } else {
                 loginFailedPacket.setStatus(PlayStatusPacket.Status.LOGIN_FAILED_CLIENT_OLD);
             }
+
             player.sendPacketImmediately(loginFailedPacket);
             return;
         }
+
         var settingsPacket = new NetworkSettingsPacket();
         settingsPacket.setCompressionAlgorithm(Server.SETTINGS.networkSettings().compressionAlgorithm());
         // NOTICE: We don't need to set the compression threshold after MCBE 1.20.60
         player.sendPacketImmediately(settingsPacket);
         // NOTICE: The NetworkSettingsPacket shouldn't be compressed
         player.getClientSession().setCompression(settingsPacket.getCompressionAlgorithm());
-        return;
-
     }
 
     @Override

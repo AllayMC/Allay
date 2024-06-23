@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
@@ -26,7 +27,7 @@ public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Inte
 
     @SneakyThrows
     public void init() {
-        log.info(I18n.get().tr("allay:enchtype.loading"));
+        log.info(I18n.get().tr(TrKeys.A_ENCHTYPE_LOADING));
         var classes = ReflectionUtils.getAllClasses("org.allaymc.api.item.enchantment.type");
         try (var pgbar = ProgressBar
                 .builder()
@@ -39,6 +40,6 @@ public class AllayEnchantmentRegistry extends SimpleDoubleKeyMappedRegistry<Inte
                 pgbar.step();
             }
         }
-        log.info(I18n.get().tr("allay:enchtype.loaded", classes.size()));
+        log.info(I18n.get().tr(TrKeys.A_ENCHTYPE_LOADED, classes.size()));
     }
 }

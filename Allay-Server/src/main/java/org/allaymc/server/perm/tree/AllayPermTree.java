@@ -1,17 +1,14 @@
 package org.allaymc.server.perm.tree;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.allaymc.api.perm.tree.PermNode;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 import static org.allaymc.api.perm.DefaultPermissions.OPERATOR;
@@ -24,23 +21,20 @@ import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;
  * @author daoge_cmd
  */
 @Getter
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class AllayPermTree implements PermTree {
+    protected final String name;
     @Getter
     protected PermTree parent;
     protected PermNode root = new AllayRootPermNode("ROOT");
     protected Map<String, Consumer<PermChangeType>> listeners = new HashMap<>();
-    protected final String name;
-
-    protected AllayPermTree(String name) {
-        this.name = name;
-    }
 
     public static PermTree create(String name) {
         return new AllayPermTree(name);
     }
 
     public static PermTree create() {
-        return new AllayPermTree("");
+        return create("");
     }
 
     @Override
@@ -61,28 +55,22 @@ public class AllayPermTree implements PermTree {
     @Override
     public void notifyAllPermListeners() {
         var leaves = getLeaves();
-        // 当存在parent时，parent的权限也会被考虑
-        // 但是parent的监听器不会被调用
+        // When there is a parent, the parent's permissions are also considered
+        // But the parent's listeners are not invoked
         if (parent != null) leaves.addAll(parent.getLeaves());
-        for (var leaf : leaves) {
-            String perm = leaf.getFullName();
-            callListener(perm, ADD);
-        }
+        leaves.forEach(leaf -> callListener(leaf.getFullName(), ADD));
     }
 
     @Override
     public boolean hasPerm(String perm) {
-        if (parent != null && parent.hasPerm(perm)) {
-            return true;
-        }
+        if (parent != null && parent.hasPerm(perm)) return true;
         var spilt = new LinkedList<>(AllayStringUtils.fastSplit(perm, "."));
         var node = root;
         while (!spilt.isEmpty()) {
             var nodeName = spilt.pop();
             var hasMatch = false;
-            if (node.getLeaves().isEmpty()) {
-                return false;
-            }
+            if (node.getLeaves().isEmpty()) return false;
+
             for (var leaf : node.getLeaves()) {
                 if (leaf.canMatch(nodeName)) {
                     node = leaf;
@@ -90,18 +78,16 @@ public class AllayPermTree implements PermTree {
                     break;
                 }
             }
-            if (!hasMatch) {
-                return false;
-            }
+
+            if (!hasMatch) return false;
         }
+
         return true;
     }
 
     @Override
     public PermTree addPerm(String perm, boolean callListener) {
-        if (parent != null && parent.hasPerm(perm)) {
-            return this;
-        }
+        if (parent != null && parent.hasPerm(perm)) return this;
         var spilt = new LinkedList<>(AllayStringUtils.fastSplit(perm, "."));
         var node = root;
         while (!spilt.isEmpty()) {
@@ -116,13 +102,13 @@ public class AllayPermTree implements PermTree {
                     }
                 }
             }
+
             if (!hasMatch) {
                 node = node.addLeaf(nodeName);
-                if (callListener) {
-                    callListener(perm, ADD);
-                }
+                if (callListener) callListener(perm, ADD);
             }
         }
+
         return this;
     }
 
@@ -133,36 +119,33 @@ public class AllayPermTree implements PermTree {
         while (!spilt.isEmpty()) {
             var nodeName = spilt.pop();
             var hasMatch = false;
-            if (!node.getLeaves().isEmpty()) {
-                for (var leaf : node.getLeaves()) {
-                    if (leaf.canMatch(nodeName)) {
-                        if (spilt.isEmpty()) {
-                            if (callListener) {
-                                callListener(perm, REMOVE);
-                            }
-                            node.getLeaves().remove(leaf);
-                            return this;
-                        } else {
-                            node = leaf;
-                            hasMatch = true;
-                            break;
-                        }
-                    }
+            if (node.getLeaves().isEmpty()) return this;
+
+            for (var leaf : node.getLeaves()) {
+                if (!leaf.canMatch(nodeName)) continue;
+                if (spilt.isEmpty()) {
+                    if (callListener) callListener(perm, REMOVE);
+                    node.getLeaves().remove(leaf);
+                    return this;
+                } else {
+                    node = leaf;
+                    hasMatch = true;
+                    break;
                 }
             }
-            if (!hasMatch) {
-                return this;
-            }
+
+            if (!hasMatch) return this;
         }
+
         return this;
     }
 
     @Override
     public PermTree copyFrom(PermTree parent) {
         this.listeners.putAll(parent.getPermListeners(true));
-        for (var leaf : parent.getLeaves(true)) {
-            addPerm(leaf.getFullName());
-        }
+        parent.getLeaves(true).stream()
+                .map(PermNode::getFullName)
+                .forEach(this::addPerm);
         return this;
     }
 
@@ -170,7 +153,9 @@ public class AllayPermTree implements PermTree {
     public PermTree extendFrom(PermTree parent, boolean callListener) {
         this.parent = parent;
         if (callListener)
-            parent.getLeaves(true).stream().map(PermNode::getFullName).forEach(perm -> callListener(perm, ADD));
+            parent.getLeaves(true).stream()
+                    .map(PermNode::getFullName)
+                    .forEach(perm -> callListener(perm, ADD));
         return this;
     }
 
@@ -202,9 +187,7 @@ public class AllayPermTree implements PermTree {
 
     @Override
     public void clear() {
-        for (var leaf : getLeaves()) {
-            removePerm(leaf.getFullName());
-        }
+        getLeaves().stream().map(PermNode::getFullName).forEach(this::removePerm);
     }
 
     @Override
@@ -213,13 +196,8 @@ public class AllayPermTree implements PermTree {
     }
 
     protected void findLeaf(PermNode node, List<PermNode> dest) {
-        if (node.isLeaf()) {
-            dest.add(node);
-        } else {
-            for (var leaf : node.getLeaves()) {
-                findLeaf(leaf, dest);
-            }
-        }
+        if (node.isLeaf()) dest.add(node);
+        else node.getLeaves().forEach(leaf -> findLeaf(leaf, dest));
     }
 
     protected void callListener(String perm, PermChangeType type) {

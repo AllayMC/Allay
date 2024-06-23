@@ -1,5 +1,6 @@
 package org.allaymc.server.block.type;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.interfaces.glass.BlockGlassBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
@@ -28,8 +29,8 @@ import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
  *
  * @author daoge_cmd
  */
+@UtilityClass
 public final class BlockTypeInitializer {
-
     public static void initShulkerBox() {
         BlockTypes.YELLOW_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockYellowShulkerBoxBehavior.class)

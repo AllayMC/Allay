@@ -1,9 +1,9 @@
 package org.allaymc.server.entity.type;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
@@ -14,6 +14,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
@@ -34,32 +35,41 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     protected final FastConstructor<T> constructor;
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
+    @Getter
     protected List<ComponentProvider<? extends EntityComponent>> componentProviders;
+    @Getter
     protected Identifier identifier;
 
     @SneakyThrows
-    protected AllayEntityType(Class<T> interfaceClass,
-                              List<ComponentProvider<? extends EntityComponent>> componentProviders,
-                              Identifier identifier) {
+    protected AllayEntityType(
+            Class<T> interfaceClass,
+            List<ComponentProvider<? extends EntityComponent>> componentProviders,
+            Identifier identifier
+    ) {
         this.interfaceClass = interfaceClass;
         this.componentProviders = componentProviders;
         this.identifier = identifier;
+
         try {
-            ArrayList<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
-            injectedClass = new AllayComponentInjector<T>()
+            List<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
+            this.injectedClass = new AllayComponentInjector<T>()
                     .interfaceClass(interfaceClass)
                     .component(components)
-                    .inject(false);//todo custom entity is always update
+                    .inject(false); // todo custom entity is always update
         } catch (Exception e) {
             throw new EntityTypeBuildException("Failed to create entity type!", e);
         }
-        FastMemberLoader fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
-        this.constructor = FastConstructor.create(injectedClass.getConstructor(ComponentInitInfo.class), fastMemberLoader, false);
+
+        var fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
+        this.constructor = FastConstructor.create(
+                this.injectedClass.getConstructor(ComponentInitInfo.class),
+                fastMemberLoader,
+                false
+        );
     }
 
-    @Override
-    public List<ComponentProvider<? extends EntityComponent>> getComponentProviders() {
-        return componentProviders;
+    public static <T extends Entity> EntityTypeBuilder<T, EntityComponent> builder(Class<T> interfaceClass) {
+        return new Builder<>(interfaceClass);
     }
 
     @SneakyThrows
@@ -67,15 +77,6 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
     public T createEntity(EntityInitInfo<T> info) {
         info.setEntityType(this);
         return (T) constructor.invoke(info);
-    }
-
-    @Override
-    public Identifier getIdentifier() {
-        return identifier;
-    }
-
-    public static <T extends Entity> EntityTypeBuilder<T, EntityComponent> builder(Class<T> interfaceClass) {
-        return new Builder<>(interfaceClass);
     }
 
     public static class Builder<T extends Entity> implements EntityTypeBuilder<T, EntityComponent> {

@@ -15,8 +15,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public class SimpleContainerActionProcessorHolder implements ContainerActionProcessorHolder {
-
-    EnumMap<ItemStackRequestActionType, ContainerActionProcessor<?>> PROCESSORS = new EnumMap<>(ItemStackRequestActionType.class);
+    private static final EnumMap<ItemStackRequestActionType, ContainerActionProcessor<?>> PROCESSORS = new EnumMap<>(ItemStackRequestActionType.class);
 
     @Override
     public <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type) {

@@ -16,7 +16,8 @@ public class RM implements SelectorArgument {
     public @Nullable Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3f basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
-        final var rm = Double.parseDouble(arguments[0]);
+
+        var rm = Double.parseDouble(arguments[0]);
         return entity -> entity.getLocation().distanceSquared(basePos) > Math.pow(rm, 2);
     }
 

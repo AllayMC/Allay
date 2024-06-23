@@ -21,7 +21,7 @@ public class BanCommand extends SimpleCommand {
         tree.getRoot()
                 .str("nameOrUUID")
                 .exec(context -> {
-                    String nameOrUUID = context.getFirstResult();
+                    String nameOrUUID = context.getResult(0);
                     if (Server.getInstance().ban(nameOrUUID)) {
                         context.addOutput(TrKeys.M_COMMANDS_BAN_SUCCESS, nameOrUUID);
                         return context.success();

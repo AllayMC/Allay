@@ -21,7 +21,7 @@ public class UnbanCommand extends SimpleCommand {
         tree.getRoot()
                 .str("nameOrUUID")
                 .exec(context -> {
-                    String nameOrUUID = context.getFirstResult();
+                    String nameOrUUID = context.getResult(0);
                     if (Server.getInstance().unban(nameOrUUID)) {
                         context.addOutput(TrKeys.M_COMMANDS_UNBAN_SUCCESS, nameOrUUID);
                         return context.success();

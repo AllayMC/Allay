@@ -1,6 +1,7 @@
 package org.allaymc.server.block.attribute;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.BlockAttributes;
@@ -9,6 +10,7 @@ import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -17,7 +19,6 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -31,22 +32,12 @@ public final class AllayVanillaBlockAttributeRegistry extends SimpleMappedRegist
         super(null, loader);
     }
 
+    @AllArgsConstructor
     public static class Loader implements RegistryLoader<Void, Map<VanillaBlockId, Map<Integer, BlockAttributes>>> {
-
         protected Supplier<InputStream> streamSupplier;
 
-        public Loader(Supplier<InputStream> streamSupplier) {
-            this.streamSupplier = streamSupplier;
-        }
-
         public Loader() {
-            this(() -> new BufferedInputStream(
-                    Objects.requireNonNull(
-                            AllayVanillaBlockAttributeRegistry.class
-                                    .getClassLoader()
-                                    .getResourceAsStream("block_attributes.nbt"),
-                            "block_attributes.nbt is missing!")
-            ));
+            this(() -> new BufferedInputStream(ResourceUtils.getResource("block_attributes.nbt")));
         }
 
         @SneakyThrows

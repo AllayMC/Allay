@@ -88,7 +88,7 @@ public final class Dashboard {
                 // Show the focused plugin's information
                 JPopupMenu popupMenu = new JPopupMenu();
                 JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_INFO));
-                infoItem.addActionListener(unused -> {
+                infoItem.addActionListener($ -> {
                     if (pluginTable.getSelectedRow() == -1) return;
                     // Get the plugin
                     String pluginName = (String) pluginTable.getValueAt(pluginTable.getSelectedRow(), 0);
@@ -116,7 +116,7 @@ public final class Dashboard {
                 JPopupMenu popupMenu = new JPopupMenu();
 
                 JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_INFO));
-                infoItem.addActionListener(unused -> {
+                infoItem.addActionListener($ -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
@@ -135,7 +135,7 @@ public final class Dashboard {
                 popupMenu.add(infoItem);
 
                 JMenuItem kickItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_PLAYER_KICK));
-                kickItem.addActionListener(unused -> {
+                kickItem.addActionListener($ -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
@@ -145,7 +145,7 @@ public final class Dashboard {
                 popupMenu.add(kickItem);
 
                 JMenuItem banItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_PLAYER_BAN));
-                banItem.addActionListener(unused -> {
+                banItem.addActionListener($ -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
@@ -155,7 +155,7 @@ public final class Dashboard {
                 popupMenu.add(banItem);
 
                 JMenuItem banIpItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_PLAYER_BANIP));
-                banIpItem.addActionListener(unused -> {
+                banIpItem.addActionListener($ -> {
                     if (playerTable.getSelectedRow() == -1) return;
                     // Get the player
                     String playerName = (String) playerTable.getValueAt(playerTable.getSelectedRow(), 0);
@@ -174,7 +174,7 @@ public final class Dashboard {
                 JPopupMenu popupMenu = new JPopupMenu();
 
                 JMenuItem changeFontSizeItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_CONSOLE_CHANGEFONTSIZE));
-                changeFontSizeItem.addActionListener(unused -> {
+                changeFontSizeItem.addActionListener($ -> {
                     String input = JOptionPane.showInputDialog(I18n.get().tr(TrKeys.A_GUI_CONSOLE_CHANGEFONTSIZE_DIALOG), consolePane.getFont().getSize());
                     if (input == null) return;
                     try {
@@ -187,7 +187,7 @@ public final class Dashboard {
                 popupMenu.add(changeFontSizeItem);
 
                 JMenuItem clearItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_CONSOLE_CLEAR));
-                clearItem.addActionListener(unused -> consolePane.setText(""));
+                clearItem.addActionListener($ -> consolePane.setText(""));
                 popupMenu.add(clearItem);
 
                 popupMenu.show(e.getComponent(), e.getX(), e.getY());

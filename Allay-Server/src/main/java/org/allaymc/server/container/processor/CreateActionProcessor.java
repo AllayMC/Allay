@@ -20,20 +20,21 @@ import static org.allaymc.server.container.processor.CraftRecipeActionProcessor.
 @Slf4j
 public class CreateActionProcessor implements ContainerActionProcessor<CreateAction> {
     @Override
-    public ItemStackRequestActionType getType() {
-        return ItemStackRequestActionType.CREATE;
-    }
-
-    @Override
     public ActionResponse handle(CreateAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        Recipe recipe = (Recipe) dataPool.get(RECIPE_DATA_KEY);
+        var recipe = (Recipe) dataPool.get(RECIPE_DATA_KEY);
         if (recipe == null) {
             log.warn("Recipe not found in data pool!");
             return error();
         }
+
         var output = recipe.getOutputs()[action.getSlot()];
         var createdOutput = player.getContainer(CREATED_OUTPUT);
         createdOutput.setItemStack(0, output);
         return null;
+    }
+
+    @Override
+    public ItemStackRequestActionType getType() {
+        return ItemStackRequestActionType.CREATE;
     }
 }

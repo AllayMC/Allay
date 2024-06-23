@@ -15,9 +15,8 @@ public class RequestChunkRadiusPacketProcessor extends PacketProcessor<RequestCh
     public void handleSync(EntityPlayer player, RequestChunkRadiusPacket packet) {
         var radius = packet.getRadius();
         var maxRadius = packet.getMaxRadius();
-        if (radius > maxRadius) {
+        if (radius > maxRadius)
             radius = maxRadius;
-        }
         player.setChunkLoadingRadius(radius);
     }
 

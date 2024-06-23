@@ -15,21 +15,20 @@ import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
-
 @Slf4j
 public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
     @Override
     public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet) {
         return switch (packet.getAction()) {
             case RESPAWN -> {
-                // 玩家还没死透
+                // Player is not fully dead
                 if (!player.canBeSpawned()) yield PacketSignal.HANDLED;
+
                 var spawnPoint = player.getSpawnPoint();
                 var spawnDimension = spawnPoint.dimension();
                 var oldDimension = player.getDimension();
                 if (oldDimension != spawnDimension) {
-                    // 重生维度和玩家当前维度不同，需要将玩家从旧的维度删除
+                    // Respawn dimension and player's current dimension are different, need to remove player from the old dimension
                     oldDimension.removePlayer(player, () -> {
                         prepareForRespawn(player, spawnPoint);
                         spawnDimension.addPlayer(player, () -> afterRespawn(player, spawnPoint));
@@ -49,6 +48,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                     log.warn("Player {} tried to creative destroy block in non-creative mode", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
+
                 var pos = packet.getBlockPosition();
                 var world = player.getDimension();
                 var oldState = world.getBlockState(pos.getX(), pos.getY(), pos.getZ());
@@ -57,6 +57,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 pk.setPosition(Vector3f.from(pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f));
                 pk.setData(oldState.blockStateHash());
                 player.getCurrentChunk().addChunkPacket(pk);
+
                 var itemInHand = player.getItemInHand();
                 world.breakBlock(pos.getX(), pos.getY(), pos.getZ(), itemInHand, player);
                 itemInHand.onBreakBlock(oldState, player);
@@ -72,6 +73,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                     log.warn("Player {} tried to start item use on without stopping", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
+
                 player.setInteractingBlock(true);
                 yield PacketSignal.HANDLED;
             }
@@ -80,6 +82,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                     log.warn("Player {} tried to stop item use on without starting", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
+
                 player.setInteractingBlock(false);
                 yield PacketSignal.HANDLED;
             }
@@ -95,7 +98,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
 
     private void afterRespawn(EntityPlayer player, Location3ic spawnPoint) {
         var spawnDimension = spawnPoint.dimension();
-        // tp一下防止玩家掉到奇怪的地方
+        // Teleport to prevent the player from falling into strange places
         player.teleport(new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), spawnDimension));
         player.setSprinting(false);
         player.setSneaking(false);

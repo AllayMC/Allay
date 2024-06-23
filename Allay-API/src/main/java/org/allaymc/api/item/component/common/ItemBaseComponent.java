@@ -43,9 +43,9 @@ public interface ItemBaseComponent extends ItemComponent {
 
     int getDurability();
 
-    boolean isBroken();
-
     void setDurability(int durability);
+
+    boolean isBroken();
 
     default void increaseDurability(int addition) {
         setDurability(getDurability() + addition);
@@ -156,7 +156,7 @@ public interface ItemBaseComponent extends ItemComponent {
 
     Collection<EnchantmentInstance> getEnchantments();
 
-    void addEnchantment(EnchantmentType enchantmentType, short level);
+    void addEnchantment(EnchantmentType enchantmentType, int level);
 
     void removeEnchantment(EnchantmentType enchantmentType);
 
@@ -164,15 +164,17 @@ public interface ItemBaseComponent extends ItemComponent {
 
     /**
      * Called when the item is used to break a block.
-     * @param block The block being broken
+     *
+     * @param block   The block being broken
      * @param breaker The entity breaking the block
      */
     void onBreakBlock(BlockState block, Entity breaker);
 
     /**
      * Called when the item is used to attack an entity.
+     *
      * @param attacker The entity attacking
-     * @param victim The entity being attacked
+     * @param victim   The entity being attacked
      */
     void onAttackEntity(Entity attacker, Entity victim);
 
@@ -236,11 +238,10 @@ public interface ItemBaseComponent extends ItemComponent {
     }
 
     default EnchantmentType getIncompatibleEnchantmentType(EnchantmentType type) {
-        for (var enchantmentInstance : getEnchantments()) {
-            if (enchantmentInstance.getType().checkIncompatible(type)) {
-                return enchantmentInstance.getType();
-            }
-        }
-        return null;
+        return getEnchantments().stream()
+                .filter(enchantmentInstance -> enchantmentInstance.getType().checkIncompatible(type))
+                .findFirst()
+                .map(EnchantmentInstance::getType)
+                .orElse(null);
     }
 }

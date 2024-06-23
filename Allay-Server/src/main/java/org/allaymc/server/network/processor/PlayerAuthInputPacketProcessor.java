@@ -8,7 +8,9 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.protocol.bedrock.data.*;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
+import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
@@ -18,7 +20,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 import static org.cloudburstmc.protocol.bedrock.data.LevelEvent.*;
 
 /**
@@ -29,16 +30,31 @@ import static org.cloudburstmc.protocol.bedrock.data.LevelEvent.*;
 @Slf4j
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
+    // Since block actions are processed asynchronously, a tolerance of 3 ticks is normal
+    protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = 3;
+
+    protected int breakBlockX = Integer.MAX_VALUE;
+    protected int breakBlockY = Integer.MAX_VALUE;
+    protected int breakBlockZ = Integer.MAX_VALUE;
+
+    protected int breakFaceId;
+    protected BlockState breakBlock;
+
+    protected long startBreakingTime; // Ticks
+    protected double needBreakingTime; // Seconds
+    protected double stopBreakingTime; // Ticks
+
+    private static boolean isInvalidGameType(EntityPlayer player) {
+        return player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR;
+    }
+
     protected void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
         var world = player.getLocation().dimension();
-        world.getEntityPhysicsService().offerScheduledMove(
-                player,
-                new Location3f(
-                        newPos.getX(), newPos.getY(), newPos.getZ(),
-                        newRot.getX(), newRot.getY(), newRot.getZ(),
-                        world
-                )
-        );
+        world.getEntityPhysicsService().offerScheduledMove(player, new Location3f(
+                newPos.getX(), newPos.getY(), newPos.getZ(),
+                newRot.getX(), newRot.getY(), newRot.getZ(),
+                world
+        ));
     }
 
     protected void handleBlockAction(EntityPlayer player, List<PlayerBlockActionData> blockActions) {
@@ -54,16 +70,18 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     }
                 }
             }
+
             switch (action.getAction()) {
                 case START_BREAK -> {
                     if (isInvalidGameType(player)) continue;
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
                 case BLOCK_CONTINUE_DESTROY -> {
-                    // 当玩家破坏一个方块一半时转而破坏另一个方块
+                    // When a player switches to breaking another block halfway through breaking one
                     if (isInvalidGameType(player)) continue;
-                    // HACK: 客户端不知道为什么会在BLOCK_PREDICT_DESTROY前发个无意义的BLOCK_CONTINUE_DESTROY，应该是bug，这里忽略掉
+                    // HACK: The client for some reason sends a meaningless BLOCK_CONTINUE_DESTROY before BLOCK_PREDICT_DESTROY, presumably a bug, so ignore it here
                     if (breakBlockX == pos.getX() && breakBlockY == pos.getY() && breakBlockZ == pos.getZ()) continue;
+
                     stopBreak(player);
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
                 }
@@ -72,26 +90,13 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     completeBreak(player, pos.getX(), pos.getY(), pos.getZ());
                 }
                 case ABORT_BREAK -> {
-                    // 挖掘中断
+                    // Digging interrupted
                     if (isInvalidGameType(player)) continue;
                     stopBreak(player);
                 }
             }
         }
     }
-
-    private static boolean isInvalidGameType(EntityPlayer player) {
-        return player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR;
-    }
-
-    protected int breakBlockX = Integer.MAX_VALUE;
-    protected int breakBlockY = Integer.MAX_VALUE;
-    protected int breakBlockZ = Integer.MAX_VALUE;
-    protected int breakFaceId;
-    protected BlockState breakBlock;
-    protected long startBreakingTime; // Ticks
-    protected double needBreakingTime; // Seconds
-    protected double stopBreakingTime; // Ticks
 
     protected boolean isBreakingBlock() {
         return breakBlock != null;
@@ -102,18 +107,23 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             log.warn("Player {} tried to start breaking a block while already breaking one", player.getOriginName());
             stopBreak(player);
         }
+
         if (breakBlockX == x && breakBlockY == y && breakBlockZ == z) {
             log.warn("Player {} tried to start breaking the same block twice", player.getOriginName());
             return;
         }
+
         breakBlockX = x;
         breakBlockY = y;
         breakBlockZ = z;
+
         breakFaceId = blockFaceId;
         breakBlock = player.getDimension().getBlockState(x, y, z);
+
         startBreakingTime = player.getWorld().getTick();
         needBreakingTime = breakBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
         stopBreakingTime = startBreakingTime + needBreakingTime * 20.0d;
+
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_START_BREAK);
         pk.setPosition(Vector3f.from(x, y, z));
@@ -131,26 +141,26 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_STOP_BREAK);
         pk.setPosition(Vector3f.from(breakBlockX, breakBlockY, breakBlockZ));
-        pk.setData(0);
         player.getCurrentChunk().addChunkPacket(pk);
+
         breakBlockX = Integer.MAX_VALUE;
         breakBlockY = Integer.MAX_VALUE;
         breakBlockZ = Integer.MAX_VALUE;
+
         breakFaceId = 0;
         breakBlock = null;
+
         startBreakingTime = 0;
         needBreakingTime = 0;
         stopBreakingTime = 0;
     }
-
-    // 由于是异步处理的block action，故有3gt的误差为正常现象
-    protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = 3;
 
     protected void completeBreak(EntityPlayer player, int x, int y, int z) {
         if (breakBlockX != x || breakBlockY != y || breakBlockZ != z) {
             log.warn("Player {} tried to complete breaking a different block", player.getOriginName());
             return;
         }
+
         var currentTime = player.getWorld().getTick();
         if (Math.abs(currentTime - stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
             var world = player.getDimension();
@@ -165,6 +175,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         } else {
             log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakingTime, currentTime);
         }
+
         stopBreak(player);
     }
 
@@ -196,7 +207,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected void updateBreakingTime(EntityPlayer player) {
         var newBreakingTime = breakBlock.getBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
         if (needBreakingTime == newBreakingTime) return;
-        // 破坏时间有变化，进行修正
+        // Breaking time has changed, make adjustments
         var currentTime = player.getWorld().getTick();
         var timeLeft = stopBreakingTime - currentTime;
         stopBreakingTime = currentTime + (timeLeft / needBreakingTime) * newBreakingTime;

@@ -74,6 +74,7 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
                         40
                 );
             }
+
             container.clearAllSlots();
         }
     }

@@ -25,9 +25,11 @@
 
 package org.allaymc.server.gui;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
@@ -35,6 +37,8 @@ import java.util.regex.Pattern;
  *
  * @author daoge_cmd
  */
+@Getter
+@AllArgsConstructor
 public enum ANSIColor {
     // Normal colors
     BLACK("(0;)?30(0;)?m", Color.getHSBColor(0.000f, 0.000f, 0.000f)),
@@ -62,22 +66,12 @@ public enum ANSIColor {
     private static final String PREFIX = Pattern.quote("\u001B[");
 
     private final String ANSICode;
-
-    @Getter
     private final Color color;
 
-    ANSIColor(String ANSICode, Color color) {
-        this.ANSICode = ANSICode;
-        this.color = color;
-    }
-
     public static ANSIColor fromANSI(String code) {
-        for (ANSIColor value : VALUES) {
-            if (code.matches(PREFIX + value.ANSICode)) {
-                return value;
-            }
-        }
-
-        return B_WHITE;
+        return Arrays.stream(VALUES)
+                .filter(value -> code.matches(PREFIX + value.ANSICode))
+                .findFirst()
+                .orElse(B_WHITE);
     }
 }

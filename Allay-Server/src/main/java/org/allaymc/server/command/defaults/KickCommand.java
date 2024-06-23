@@ -22,7 +22,7 @@ public class KickCommand extends SimpleCommand {
                 // TODO: Should use target(), but target() can only match players in default world
                 .str("player")
                 .exec(context -> {
-                    String name = context.getSecondResult();
+                    String name = context.getResult(0);
                     for (var player : Server.getInstance().getOnlinePlayers().values()) {
                         if (player.getCommandSenderName().equals(name)) {
                             player.disconnect("You are kicked");
@@ -30,6 +30,7 @@ public class KickCommand extends SimpleCommand {
                             return context.success();
                         }
                     }
+
                     context.addError("Unknown player: " + name);
                     return context.fail();
                 });

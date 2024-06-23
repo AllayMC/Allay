@@ -98,7 +98,9 @@ public class ParseUtils {
     }
 
     /**
-     * Parse the game mode number from the given game mode string<p/>This method matches the parameter with the predefined value of the original selector parameter m
+     * Parse the game mode number from the given game mode string
+     * <p>
+     * This method matches the parameter with the predefined value of the original selector parameter m
      *
      * @param token String
      *
@@ -111,7 +113,7 @@ public class ParseUtils {
             case "a", "adventure", "2" -> 2;
             case "spectator", "6" -> 6;
             case "d", "default" -> Server.SETTINGS.genericSettings().defaultGameType().ordinal();
-            default -> throw new SelectorSyntaxException("Unknown gamemode token: " + token);
+            default -> throw new SelectorSyntaxException("Unknown GameMode token: " + token);
         };
     }
 }

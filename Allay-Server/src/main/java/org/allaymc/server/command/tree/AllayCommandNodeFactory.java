@@ -3,6 +3,7 @@ package org.allaymc.server.command.tree;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.server.command.tree.node.*;
@@ -115,5 +116,10 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     @Override
     public CommandNode enchantmentNode(String name, CommandNode parent, EnchantmentType defaultValue) {
         return new EnchantmentNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode effectNode(String name, CommandNode parent, EffectType defaultValue) {
+        return new EffectNode(name, parent, defaultValue);
     }
 }

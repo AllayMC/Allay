@@ -8,7 +8,6 @@ import org.allaymc.api.entity.EntityHelper;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.exception.WorldStorageException;
-import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
@@ -24,11 +23,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
+ * TODO: optimize it for better memory footprint
+ * <p>
  * Allay Project 2023/7/1
  *
  * @author daoge_cmd
- *
- * TODO: optimize it for better memory footprint
  */
 @NotThreadSafe
 public class AllayNonPersistentWorldStorage implements WorldStorage {
@@ -48,23 +47,22 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
 
     @Override
     public Chunk readChunkSynchronously(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
-        Dimension dimension = Server.getInstance().getWorldPool().getWorld(worldData.getName()).getDimension(dimensionInfo.dimensionId());
-        long l = HashUtils.hashXZ(x, z);
-        var chunk = chunks.get(l);
-        if (chunk == null) {
+        var dimension = Server.getInstance().getWorldPool().getWorld(worldData.getName()).getDimension(dimensionInfo.dimensionId());
+        var hash = HashUtils.hashXZ(x, z);
+        var chunk = chunks.get(hash);
+        if (chunk == null)
             chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimensionInfo).toSafeChunk();
-        }
-        readEntities(l).stream().map(nbt -> EntityHelper.fromNBT(dimension, nbt)).forEach(e -> dimension.getEntityService().addEntity(e));
-        readBlockEntities(l).stream().map(nbt -> BlockEntityHelper.fromNBT(dimension, nbt)).forEach(chunk::addBlockEntity);
+        readEntities(hash).stream().map(nbt -> EntityHelper.fromNBT(dimension, nbt)).forEach(e -> dimension.getEntityService().addEntity(e));
+        readBlockEntities(hash).stream().map(nbt -> BlockEntityHelper.fromNBT(dimension, nbt)).forEach(chunk::addBlockEntity);
         return chunk;
     }
 
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) {
-        long l = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
-        chunks.put(l, chunk);
-        writeEntities(l, chunk.getEntities().values());
-        writeBlockEntities(l, chunk.getBlockEntities().values());
+        var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
+        chunks.put(hash, chunk);
+        writeEntities(hash, chunk.getEntities().values());
+        writeBlockEntities(hash, chunk.getBlockEntities().values());
         return CompletableFuture.completedFuture(null);
     }
 

@@ -37,9 +37,7 @@ public final class JSPluginProxyLogger implements ProxyObject {
         var sb = new StringBuilder();
         for (int i = 0, valuesLength = values.length; i < valuesLength; i++) {
             var each = values[i];
-            if (i != 0) {
-                sb.append(' ');
-            }
+            if (i != 0) sb.append(' ');
             sb.append(each.toString());
         }
         return sb.toString();
@@ -83,7 +81,11 @@ public final class JSPluginProxyLogger implements ProxyObject {
 
     @Override
     public boolean hasMember(String key) {
-        return "log".equals(key) || "info".equals(key) || "warn".equals(key) || "error".equals(key) || "debug".equals(key);
+        return "log".equals(key) ||
+               "info".equals(key) ||
+               "warn".equals(key) ||
+               "error".equals(key) ||
+               "debug".equals(key);
     }
 
     @Override

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -29,6 +28,7 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.server.network.processor.AllayPacketProcessorHolder;
@@ -44,14 +44,7 @@ import org.cloudburstmc.protocol.bedrock.data.GamePublishSetting;
 import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.packet.AvailableEntityIdentifiersPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketHandler;
-import org.cloudburstmc.protocol.bedrock.packet.BiomeDefinitionListPacket;
-import org.cloudburstmc.protocol.bedrock.packet.CreativeContentPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PlayStatusPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SetEntityDataPacket;
-import org.cloudburstmc.protocol.bedrock.packet.StartGamePacket;
+import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
@@ -77,6 +70,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
 
+    protected final Server server = Server.getInstance();
+
+    @Getter
+    protected final PacketProcessorHolder packetProcessorHolder = new AllayPacketProcessorHolder();
+
     @Getter
     protected boolean loggedIn = false;
     @Getter
@@ -92,11 +90,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected String disconnectReason = null;
     protected boolean hideDisconnectReason = false;
     protected AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
-
-    protected final Server server = Server.getInstance();
-    @Getter
-    protected final PacketProcessorHolder packetProcessorHolder = new AllayPacketProcessorHolder();
-
     @Manager
     protected ComponentManager<EntityPlayer> manager;
     @ComponentedObject
@@ -159,14 +152,16 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             public PacketSignal handlePacket(BedrockPacket packet) {
                 var processor = packetProcessorHolder.getProcessor(packet);
                 if (processor == null) {
-                    log.warn("Received a packet without packet handler: " + packet);
+                    log.warn("Received a packet without packet handler: {}", packet);
                     return PacketSignal.HANDLED;
                 }
+
                 if (processor.handleAsync(player, packet) != PacketSignal.HANDLED) {
                     var world = player.getWorld();
                     Preconditions.checkNotNull(world, "Player that is not in any world cannot handle sync packet");
                     world.addSyncPacketToQueue(player, packet);
                 }
+
                 return PacketSignal.HANDLED;
             }
 
@@ -179,10 +174,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void onChunkInRangeSent() {
-        if (doFirstSpawnChunkThreshold.get() > 0) {
-            if (doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
-                doFirstSpawn();
-            }
+        if (doFirstSpawnChunkThreshold.get() > 0 && doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
+            doFirstSpawn();
         }
     }
 
@@ -366,8 +359,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         Location3ic spawnPoint;
         var spawnWorld = server.getWorldPool().getWorld(playerData.getSpawnPointWorldName());
         if (spawnWorld == null) {
-            // 出生点所在的世界不存在
-            // 使用全局出生点替代
+            // The world where the spawn point is located does not exist
+            // Using global spawn point instead
             spawnPoint = server.getWorldPool().getGlobalSpawnPoint();
             playerData.setSpawnPoint(spawnPoint);
             playerData.setSpawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName());

@@ -1,5 +1,7 @@
 package org.allaymc.server.component.injector;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
@@ -9,18 +11,14 @@ import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.DoNotInject;
 import org.allaymc.api.component.annotation.Manager;
-import org.allaymc.api.component.interfaces.Component;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.api.component.interfaces.ComponentInjector;
-import org.allaymc.api.component.interfaces.ComponentManager;
-import org.allaymc.api.component.interfaces.ComponentProvider;
+import org.allaymc.api.component.interfaces.*;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
 import org.allaymc.api.utils.exception.ComponentInjectException;
 import org.allaymc.server.eventbus.AllayEventBus;
@@ -31,18 +29,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
-import static net.bytebuddy.matcher.ElementMatchers.is;
-import static net.bytebuddy.matcher.ElementMatchers.isDefaultConstructor;
-import static net.bytebuddy.matcher.ElementMatchers.named;
+import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
  * The default injector which use byte-buddy
@@ -53,14 +42,13 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
  */
 public class AllayComponentInjector<T> implements ComponentInjector<T> {
     public static final String INITIALIZER_FIELD_NAME = "initializer";
+
     protected static final String COMPONENT_LIST_FIELD_NAME = "components";
     protected static final String INIT_METHOD_NAME = "initComponents";
+
     protected Class<T> interfaceClass;
     protected Class<T> injectedClass;
     protected List<ComponentProvider<? extends Component>> componentProviders = new ArrayList<>();
-
-    public AllayComponentInjector() {
-    }
 
     @Override
     public ComponentInjector<T> interfaceClass(Class<T> interfaceClass) {
@@ -91,6 +79,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             checkComponentDuplicate();
             injectedClass = buildClass();
         }
+
         injectInitializer();
         return injectedClass;
     }
@@ -106,64 +95,63 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         }
     }
 
-    @SuppressWarnings("unchecked")
     protected Class<T> buildClass() {
         var bb = new ByteBuddy().subclass(interfaceClass);
         var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
+
         int num = 0;
         for (var provider : componentProviders) {
             var fieldName = "f" + num++;
             componentFieldNameMapping.put(provider, fieldName);
             bb = bb.defineField(fieldName, provider.getComponentClass(), Visibility.PRIVATE);
         }
+
         bb = bb.defineField(COMPONENT_LIST_FIELD_NAME, List.class, Modifier.STATIC | Modifier.PRIVATE);
         bb = buildInitializer(bb);
         bb = buildConstructor(bb);
+
         for (var methodShouldBeInject : Arrays.stream(interfaceClass.getMethods()).filter(method -> {
-            //Do not inject methods that are annotated with @DoNotInject
-            if (method.isAnnotationPresent(DoNotInject.class)) {
-                //This method must be a default method, as there won't be implementation for it
-                if (!method.isDefault())
-                    throw new ComponentInjectException("Annotation @DoNotInject must be used in a default method: " + interfaceClass.getName() + "::" + method.getName());
-                return false;
-            } else return true;
+            // Do not inject methods that are annotated with @DoNotInject
+            if (!method.isAnnotationPresent(DoNotInject.class)) return true;
+
+            // This method must be a default method, as there won't be implementation for it
+            if (!method.isDefault())
+                throw new ComponentInjectException("Annotation @DoNotInject must be used in a default method: " + interfaceClass.getName() + "::" + method.getName());
+            return false;
         }).toList()) {
             Implementation.Composable methodDelegation = null;
             for (var provider : componentProviders) {
                 var componentFieldName = componentFieldNameMapping.get(provider);
                 try {
-                    Method methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
-                    if (methodImpl.equals(methodShouldBeInject)) {
-                        //This method must be a default method, and the component implementation doesn't override it
-                        //So that we don't need to handle it, as it has a default implementation
-                        continue;
-                    }
+                    var methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
+                    //This method must be a default method, and the component implementation doesn't override it
+                    //So that we don't need to handle it, as it has a default implementation
+                    if (methodImpl.equals(methodShouldBeInject)) continue;
+
                     if (methodDelegation == null)
                         methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
                     else
                         throw new ComponentInjectException("Duplicate implementation for method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
-                } catch (NoSuchMethodException ignored) {
-                }
+                } catch (NoSuchMethodException ignored) {}
             }
+
             if (methodDelegation == null) {
-                if (methodShouldBeInject.isDefault()) {
-                    //We do not enforce require a implementation for a method which is default
-                    continue;
-                } else {
-                    throw new ComponentInjectException("Missing implementation for method: " + interfaceClass.getSimpleName() + "::" + methodShouldBeInject.getName());
-                }
+                //We do not enforce require an implementation for a method which is default
+                if (methodShouldBeInject.isDefault()) continue;
+                throw new ComponentInjectException("Missing implementation for method: " + interfaceClass.getSimpleName() + "::" + methodShouldBeInject.getName());
             }
-            bb = bb.method(is(methodShouldBeInject))
-                    .intercept(methodDelegation);
+
+            bb = bb.method(is(methodShouldBeInject)).intercept(methodDelegation);
         }
+
         bb = afterInject(componentProviders, bb);
         try (var unloaded = bb.make()) {
             // Why not directly use DynamicType.Unloaded#load for loading?
             // This method loads a class into a subclass of InjectionClassLoader, and each dynamically generated class resides in a different class loader. This complicates the use of Fast-Reflect to optimize constructor efficiency because the init method within the constructor cannot access this class.
             // Their class loaders are different.
-            Map<TypeDescription, File> map = unloaded.saveIn(ComponentClassCacheUtils.CACHE_ROOT_PATH.toFile());
+            var map = unloaded.saveIn(ComponentClassCacheUtils.CACHE_ROOT_PATH.toFile());
             @SuppressWarnings("OptionalGetWithoutIsPresent")
-            Map.Entry<TypeDescription, File> pair = map.entrySet().stream().findFirst().get();
+            var pair = map.entrySet().stream().findFirst().get();
             // The simple class name of the interface to the dynamically generated implemented class name.
             ComponentClassCacheUtils.addCacheMapping(interfaceClass.getSimpleName(), pair.getKey().getName());
             return ComponentClassCacheUtils.getCacheClass(interfaceClass);
@@ -174,7 +162,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     protected void injectInitializer() {
         try {
-            Field initializer = injectedClass.getDeclaredField(AllayComponentInjector.INITIALIZER_FIELD_NAME);
+            var initializer = injectedClass.getDeclaredField(AllayComponentInjector.INITIALIZER_FIELD_NAME);
             initializer.setAccessible(true);
             //inject initializer instance
             initializer.set(injectedClass, new AllayComponentInjector.Initializer<T>(componentProviders));
@@ -193,12 +181,11 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     protected DynamicType.Builder<T> buildConstructor(DynamicType.Builder<T> bb) {
         try {
-            //Default constructor
-            bb = bb.constructor(isDefaultConstructor())
-                    .intercept(MethodCall.invoke(Object.class.getDeclaredConstructor())
-                            .andThen(MethodCall.invoke(named(INIT_METHOD_NAME)).withThis().with(ComponentInitInfo.EMPTY))
-                    );
-            //Constructor with ComponentInitInfo
+            // Default constructor
+            bb = bb.constructor(isDefaultConstructor()).intercept(MethodCall.invoke(Object.class.getDeclaredConstructor())
+                    .andThen(MethodCall.invoke(named(INIT_METHOD_NAME)).withThis().with(ComponentInitInfo.EMPTY))
+            );
+            // Constructor with ComponentInitInfo
             bb = bb.defineConstructor(Visibility.PUBLIC)
                     .withParameters(ComponentInitInfo.class)
                     .intercept(MethodCall.invoke(Object.class.getDeclaredConstructor())
@@ -207,6 +194,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+
         return bb;
     }
 
@@ -218,23 +206,16 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         return bb;
     }
 
+    @Getter
+    @RequiredArgsConstructor
     protected static class AllayComponentManager<T> implements ComponentManager<T> {
 
-        EventBus eventBus = new AllayEventBus();
-        T componentedObject;
-
-        public AllayComponentManager(T componentedObject) {
-            this.componentedObject = componentedObject;
-        }
+        protected final EventBus eventBus = new AllayEventBus();
+        protected final T componentedObject;
 
         @Override
         public <E extends Event> E callEvent(E event) {
             return eventBus.callEvent(event);
-        }
-
-        @Override
-        public T getComponentedObject() {
-            return componentedObject;
         }
     }
 
@@ -245,18 +226,21 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
         public Initializer(List<ComponentProvider<? extends Component>> componentProviders) {
             var componentFieldNameMapping = new HashMap<ComponentProvider<?>, String>();
+
             int num = 0;
             for (var provider : componentProviders) {
                 var fieldName = "f" + num++;
                 componentFieldNameMapping.put(provider, fieldName);
             }
+
             this.componentProviders = componentProviders;
             this.componentFieldNameMapping = componentFieldNameMapping;
         }
 
         public void init(T instance, ComponentInitInfo initInfo) {
-            List<? extends Component> components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
+            var components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
             injectComponentInstances(instance, components);
+
             var componentManager = new AllayComponentManager<>(instance);
             injectComponentManagerAndSetUpEventHandlers(componentManager, components);
             injectComponentedObject(instance, components);
@@ -265,31 +249,32 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
         protected void injectComponentedObject(T instance, List<? extends Component> components) {
             for (var component : components) {
-                for (var field : ReflectionUtils.getAllFields(component.getClass())) {
-                    if (field.isAnnotationPresent(ComponentedObject.class)) {
-                        try {
-                            field.setAccessible(true);
-                            field.set(component, instance);
-                        } catch (IllegalAccessException e) {
-                            throw new ComponentInjectException("Cannot inject componented object to component: " + component.getClass().getName(), e);
-                        }
-                    }
-                }
+                ReflectionUtils.getAllFields(component.getClass()).stream()
+                        .filter(field -> field.isAnnotationPresent(ComponentedObject.class))
+                        .forEach(field -> {
+                            try {
+                                field.setAccessible(true);
+                                field.set(component, instance);
+                            } catch (IllegalAccessException e) {
+                                throw new ComponentInjectException("Cannot inject componented object to component: " + component.getClass().getName(), e);
+                            }
+                        });
             }
         }
 
         protected void injectComponentManagerAndSetUpEventHandlers(AllayComponentManager<T> manager, List<? extends Component> components) {
             for (var component : components) {
-                for (var field : ReflectionUtils.getAllFields(component.getClass())) {
-                    if (field.isAnnotationPresent(Manager.class)) {
-                        try {
-                            field.setAccessible(true);
-                            field.set(component, manager);
-                        } catch (IllegalAccessException e) {
-                            throw new ComponentInjectException("Cannot inject component manager to component: " + component.getClass().getName(), e);
-                        }
-                    }
-                }
+                ReflectionUtils.getAllFields(component.getClass()).stream()
+                        .filter(field -> field.isAnnotationPresent(Manager.class))
+                        .forEach(field -> {
+                            try {
+                                field.setAccessible(true);
+                                field.set(component, manager);
+                            } catch (IllegalAccessException e) {
+                                throw new ComponentInjectException("Cannot inject component manager to component: " + component.getClass().getName(), e);
+                            }
+                        });
+
                 manager.eventBus.registerListener(component);
             }
         }
@@ -303,6 +288,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
                 } finally {
                     componentListField.setAccessible(false);
                 }
+
                 for (int index = 0; index < components.size(); index++) {
                     var provider = componentProviders.get(index);
                     var component = components.get(index);

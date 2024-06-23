@@ -34,16 +34,18 @@ public class PluginCommand extends SimpleCommand {
                 .str("pluginName")
                 .exec(context -> {
                     var manager = Server.getInstance().getPluginManager();
-                    String name = context.getSecondResult();
+                    String name = context.getResult(1);
                     if (!manager.isPluginEnabled(name)) {
                         context.addError("Plugin " + name + " is not enabled!");
                         return context.fail();
                     }
+
                     var plugin = manager.getPlugin(name).plugin();
                     if (!plugin.isReloadable()) {
                         context.addOutput("§cPlugin " + name + " is not reloadable!");
                         return context.fail();
                     }
+
                     plugin.reload();
                     context.addOutput("§aPlugin " + name + " has been reloaded");
                     return context.success();
@@ -57,6 +59,7 @@ public class PluginCommand extends SimpleCommand {
                             plugin.plugin().reload();
                         }
                     }
+
                     context.addOutput("§aAll reloadable plugins have been reloaded");
                     return context.success();
                 });

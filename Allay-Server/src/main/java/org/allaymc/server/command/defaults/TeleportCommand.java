@@ -26,13 +26,14 @@ public class TeleportCommand extends SimpleCommand {
                 .target("targets")
                 .pos("pos")
                 .exec(context -> {
-                    List<Entity> targets = context.getFirstResult();
-                    Vector3f pos = context.getSecondResult();
+                    List<Entity> targets = context.getResult(0);
+                    Vector3f pos = context.getResult(1);
                     var loc = new Location3f(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
                     for (Entity target : targets) {
                         target.teleport(loc);
                         context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, target.getDisplayName(), pos.x, pos.y, pos.z);
                     }
+
                     return context.success();
                 });
     }

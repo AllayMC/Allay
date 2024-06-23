@@ -18,6 +18,7 @@ import org.cloudburstmc.nbt.NbtMap;
 @EqualsAndHashCode
 public class ItemAttributes {
     public static ItemAttributes DEFAULT = ItemAttributes.builder().build();
+
     @Builder.Default
     protected int armorValue = 0;
     @Builder.Default
@@ -44,7 +45,7 @@ public class ItemAttributes {
     protected String itemColorName = "";
     @Builder.Default
     protected int itemColorRGB = 0;
-    // TODO: 当前此数据代表的不是最大耐久值，怀疑导出器有问题，需要修复
+    // TODO: This data currently does not represent the maximum durability value, suspecting an issue with the exporter, needs fixing
     @Builder.Default
     protected int maxDamage = 0;
     @Builder.Default

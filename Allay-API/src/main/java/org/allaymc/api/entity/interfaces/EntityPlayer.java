@@ -9,8 +9,6 @@ import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
-import org.allaymc.api.entity.init.SimpleEntityInitInfo;
-import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.world.player.PlayerThrowItemEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.MathUtils;
@@ -87,7 +85,7 @@ public interface EntityPlayer extends
     default void dropItemInPlayerPos(ItemStack itemStack) {
         var playerLoc = getLocation();
         var dimension = playerLoc.dimension();
-        dimension.dropItem(itemStack, playerLoc.add(0,  + this.getEyeHeight() - 0.25f, 0, new Vector3f()), MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f), 40);
+        dimension.dropItem(itemStack, playerLoc.add(0, this.getEyeHeight() - 0.25f, 0, new Vector3f()), MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f), 40);
     }
 
     default ItemStack getItemInHand() {

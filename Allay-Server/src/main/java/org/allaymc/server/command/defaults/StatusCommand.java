@@ -11,8 +11,6 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.Dimension;
 import oshi.SystemInfo;
-import oshi.driver.windows.wmi.Win32ComputerSystem;
-import oshi.hardware.NetworkIF;
 import oshi.util.platform.windows.WmiQueryHandler;
 
 import java.io.File;
@@ -20,7 +18,6 @@ import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -76,47 +73,27 @@ public class StatusCommand extends SimpleCommand {
         super("status", TrKeys.A_COMMAND_STATUS_DESCRIPTION);
     }
 
-    @Override
-    public void prepareCommandTree(CommandTree tree) {
-        tree.getRoot()
-                .bool("full", false)
-                .optional()
-                .exec(context -> {
-                    boolean full = context.getFirstResult();
-                    context.addOutput(TextFormat.GREEN + "---- " + TextFormat.WHITE + "Server Status" + TextFormat.GREEN + " ----");
-                    printUpTimeInfo(context);
-                    printMemoryUsageInfo(context);
-                    printOnlinePlayerInfo(context);
-                    printWorldInfo(context);
-                    if (full) {
-                        printOperationSystemAndJVMInfo(context);
-                        printNetworkInfo(context);
-                        printCPUInfo(context);
-                        printOperationSystemMemoryInfo(context);
-                    }
-                    return context.success();
-                });
-    }
-
     protected static void printOperationSystemMemoryInfo(CommandContext context) {
         context.addOutput(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "Operation System Memory Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
         var globalMemory = SYSTEM_INFO.getHardware().getMemory();
         var virtualMemory = globalMemory.getVirtualMemory();
         // Physical Memory
-        long allPhysicalMemory = globalMemory.getTotal() / 1000;
-        long usedPhysicalMemory = (globalMemory.getTotal() - globalMemory.getAvailable()) / 1000;
-        double usage = (double) usedPhysicalMemory / allPhysicalMemory * 100;
+        var allPhysicalMemory = globalMemory.getTotal() / 1000;
+        var usedPhysicalMemory = (globalMemory.getTotal() - globalMemory.getAvailable()) / 1000;
+        var usage = (double) usedPhysicalMemory / allPhysicalMemory * 100;
         var usageColor = TextFormat.GREEN;
         if (usage > 85) usageColor = TextFormat.GOLD;
         context.addOutput(TextFormat.GOLD + "OS memory: ");
         context.addOutput(TextFormat.GOLD + "  Physical memory: " + TextFormat.GREEN + usageColor + toMB(usedPhysicalMemory) + " / " + toMB(allPhysicalMemory) + ". (" + round(usage, 2) + "%)");
+
         // Virtual Memory
-        long allVirtualMemory = virtualMemory.getVirtualMax() / 1000;
-        long usedVirtualMemory = virtualMemory.getVirtualInUse() / 1000;
+        var allVirtualMemory = virtualMemory.getVirtualMax() / 1000;
+        var usedVirtualMemory = virtualMemory.getVirtualInUse() / 1000;
         usage = (double) usedVirtualMemory / allVirtualMemory * 100;
         usageColor = TextFormat.GREEN;
         if (usage > 85) usageColor = TextFormat.GOLD;
         context.addOutput(TextFormat.GOLD + "  Virtual memory: " + TextFormat.GREEN + usageColor + toMB(usedVirtualMemory) + " / " + toMB(allVirtualMemory) + ". (" + round(usage, 2) + "%)");
+
         // Hardware
         var physicalMemories = globalMemory.getPhysicalMemory();
         if (!physicalMemories.isEmpty()) context.addOutput(TextFormat.GOLD + "  Hardware list: ");
@@ -165,8 +142,8 @@ public class StatusCommand extends SimpleCommand {
         var mxBean = ManagementFactory.getRuntimeMXBean();
         context.addOutput(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "OS & JVM Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
         context.addOutput(TextFormat.GOLD + "OS: " + TextFormat.AQUA + os.getFamily() + " " + os.getManufacturer() + " " +
-                           os.getVersionInfo().getVersion() + " " + os.getVersionInfo().getCodeName() + " " + os.getBitness() + "bit, " +
-                           "build " + os.getVersionInfo().getBuildNumber());
+                          os.getVersionInfo().getVersion() + " " + os.getVersionInfo().getCodeName() + " " + os.getBitness() + "bit, " +
+                          "build " + os.getVersionInfo().getBuildNumber());
         context.addOutput(TextFormat.GOLD + "JVM: " + TextFormat.AQUA + mxBean.getVmName() + " " + mxBean.getVmVendor() + " " + mxBean.getVmVersion());
         try {
             var vm = detectVM();
@@ -194,29 +171,32 @@ public class StatusCommand extends SimpleCommand {
     }
 
     protected static void printUpTimeInfo(CommandContext context) {
-        long time = System.currentTimeMillis() - Server.getInstance().getStartTime();
+        var time = System.currentTimeMillis() - Server.getInstance().getStartTime();
         context.addOutput(TextFormat.GOLD + "Uptime: " + formatUptime(time));
     }
 
     protected static void printMemoryUsageInfo(CommandContext context) {
-        Runtime runtime = Runtime.getRuntime();
-        double totalMB = round(((double) runtime.totalMemory()) / 1024 / 1024, 2);
-        double usedMB = round((double) (runtime.totalMemory() - runtime.freeMemory()) / 1024 / 1024, 2);
-        double maxMB = round(((double) runtime.maxMemory()) / 1024 / 1024, 2);
-        double usage = usedMB / maxMB * 100;
-        TextFormat usageColor = TextFormat.GREEN;
+        var runtime = Runtime.getRuntime();
+        var totalMB = round(((double) runtime.totalMemory()) / 1024 / 1024, 2);
+        var usedMB = round((double) (runtime.totalMemory() - runtime.freeMemory()) / 1024 / 1024, 2);
+        var maxMB = round(((double) runtime.maxMemory()) / 1024 / 1024, 2);
+        var usage = usedMB / maxMB * 100;
+
+        var usageColor = TextFormat.GREEN;
         if (usage > 85) usageColor = TextFormat.GOLD;
+
         context.addOutput(TextFormat.GOLD + "Used VM memory: " + usageColor + usedMB + " MB. (" + round(usage, 2) + "%)");
         context.addOutput(TextFormat.GOLD + "Total VM memory: " + TextFormat.RED + totalMB + " MB.");
         context.addOutput(TextFormat.GOLD + "Maximum JVM memory: " + TextFormat.RED + maxMB + " MB.");
     }
 
     protected static void printOnlinePlayerInfo(CommandContext context) {
-        Server server = Server.getInstance();
-        TextFormat playerColor = TextFormat.GREEN;
+        var server = Server.getInstance();
+        var playerColor = TextFormat.GREEN;
         if (((float) server.getOnlinePlayerCount() / (float) server.getNetworkServer().getMaxPlayerCount()) > 0.85) {
             playerColor = TextFormat.GOLD;
         }
+
         context.addOutput(TextFormat.GOLD + "Players: " + playerColor + server.getOnlinePlayers().size() + TextFormat.GREEN + " online, " +
                           TextFormat.RED + server.getNetworkServer().getMaxPlayerCount() + TextFormat.GREEN + " max. ");
     }
@@ -256,61 +236,55 @@ public class StatusCommand extends SimpleCommand {
     protected static String detectVM() {
         var hardware = SYSTEM_INFO.getHardware();
 
-        // CPU型号检测
+        // CPU model detection
         var vmVendor = VM_VENDOR.get(hardware.getProcessor().getProcessorIdentifier().getVendor().trim());
-        if (vmVendor != null) {
-            return vmVendor;
-        }
+        if (vmVendor != null) return vmVendor;
 
-        // MAC地址检测
-        List<NetworkIF> networkIFs = hardware.getNetworkIFs();
-        for (NetworkIF nif : networkIFs) {
-            String mac = nif.getMacaddr().toUpperCase();
-            String oui = mac.length() > 7 ? mac.substring(0, 8) : mac;
+        // MAC address detection
+        var networkIFs = hardware.getNetworkIFs();
+        for (var nif : networkIFs) {
+            var mac = nif.getMacaddr().toUpperCase();
+            var oui = mac.length() > 7 ? mac.substring(0, 8) : mac;
             var vmMac = VM_MAC.get(oui);
             if (vmMac != null) return vmMac;
         }
 
-        // 模型检测
-        String model = hardware.getComputerSystem().getModel();
-        for (String vm : VM_MODEL_ARRAY) {
-            if (model.contains(vm)) {
-                return vm;
-            }
+        // Model detection
+        var model = hardware.getComputerSystem().getModel();
+        for (var vm : VM_MODEL_ARRAY) {
+            if (model.contains(vm)) return vm;
         }
-        String manufacturer = hardware.getComputerSystem().getManufacturer();
+
+        var manufacturer = hardware.getComputerSystem().getManufacturer();
         if ("Microsoft Corporation".equals(manufacturer) && "Virtual Machine".equals(model)) {
             return "Microsoft Hyper-V";
         }
 
-        //内存型号检测
+        // Memory manufacturer detection
         if (hardware.getMemory().getPhysicalMemory().getFirst().getManufacturer().equals("QEMU")) {
             return "QEMU";
         }
 
-        //检查Windows系统参数
-        //Wmi虚拟机查询只能在Windows上使用，Linux上不执行这个部分即可
+        // Check Windows system parameters
+        // WMI virtual machine query only on Windows
         if (System.getProperties().getProperty("os.name").toUpperCase().contains("WINDOWS")) {
-            WbemcliUtil.WmiQuery<Win32ComputerSystem.ComputerSystemProperty> computerSystemQuery = new WbemcliUtil.WmiQuery("Win32_ComputerSystem", ComputerSystemEntry.class);
-            WbemcliUtil.WmiResult result = WmiQueryHandler.createInstance().queryWMI(computerSystemQuery);
+            var computerSystemQuery = new WbemcliUtil.WmiQuery("Win32_ComputerSystem", ComputerSystemEntry.class);
+            var result = WmiQueryHandler.createInstance().queryWMI(computerSystemQuery);
             var tmp = result.getValue(ComputerSystemEntry.HYPERVISORPRESENT, 0);
             if (tmp != null && tmp.toString().equals("true")) {
                 return "Hyper-V";
             }
         } else {
-            //检查是否在Docker容器中
-            //Docker检查只在非Windows上执行
+            // Check for Docker container
+            // Docker check only on non-Windows systems
             var file = new File("/.dockerenv");
-            if (file.exists()) {
-                return "Docker Container";
-            }
+            if (file.exists()) return "Docker Container";
+
             var cgroupFile = new File("/proc/1/cgroup");
             if (cgroupFile.exists()) {
                 try (var lineStream = Files.lines(cgroupFile.toPath())) {
                     var searchResult = lineStream.filter(line -> line.contains("docker") || line.contains("lxc"));
-                    if (searchResult.findAny().isPresent()) {
-                        return "Docker Container";
-                    }
+                    if (searchResult.findAny().isPresent()) return "Docker Container";
                 } catch (IOException e) {
                     log.error("Error while checking docker", e);
                 }
@@ -318,6 +292,28 @@ public class StatusCommand extends SimpleCommand {
         }
 
         return null;
+    }
+
+    @Override
+    public void prepareCommandTree(CommandTree tree) {
+        tree.getRoot()
+                .bool("full", false)
+                .optional()
+                .exec(context -> {
+                    boolean full = context.getResult(0);
+                    context.addOutput(TextFormat.GREEN + "---- " + TextFormat.WHITE + "Server Status" + TextFormat.GREEN + " ----");
+                    printUpTimeInfo(context);
+                    printMemoryUsageInfo(context);
+                    printOnlinePlayerInfo(context);
+                    printWorldInfo(context);
+                    if (full) {
+                        printOperationSystemAndJVMInfo(context);
+                        printNetworkInfo(context);
+                        printCPUInfo(context);
+                        printOperationSystemMemoryInfo(context);
+                    }
+                    return context.success();
+                });
     }
 
     protected enum ComputerSystemEntry {

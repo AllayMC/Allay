@@ -28,9 +28,8 @@ public class KeyNode extends BaseNode {
 
     protected String checkKey(String key) {
         var lowerCase = key.toLowerCase(Locale.ROOT);
-        if (lowerCase.equals(key)) {
-            return key;
-        }
+        if (lowerCase.equals(key)) return key;
+
         log.warn("Upper case character is not allowed in command key! key: {}", key);
         return lowerCase;
     }

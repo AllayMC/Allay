@@ -16,6 +16,13 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class BooleanNode extends BaseNode {
+    public static Map<String, Set<CommandEnumConstraint>> BOOLEAN_ENUM_DATA_VALUE = Map.of(
+            "true", Set.of(),
+            "false", Set.of()
+    );
+
+    public static CommandEnumData BOOLEAN_ENUM_DATA = new CommandEnumData("Boolean", BOOLEAN_ENUM_DATA_VALUE, false);
+
     public BooleanNode(String name, CommandNode parent, boolean defaultValue) {
         super(name, parent, defaultValue);
     }
@@ -33,13 +40,6 @@ public class BooleanNode extends BaseNode {
         context.popArg();
         return true;
     }
-
-    public static Map<String, Set<CommandEnumConstraint>> BOOLEAN_ENUM_DATA_VALUE = Map.of(
-            "true", Set.of(),
-            "false", Set.of()
-    );
-
-    public static CommandEnumData BOOLEAN_ENUM_DATA = new CommandEnumData("Boolean", BOOLEAN_ENUM_DATA_VALUE, false);
 
     @Override
     public CommandParamData toNetworkData() {

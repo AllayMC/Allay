@@ -22,17 +22,20 @@ public class OpCommand extends SimpleCommand {
                 .str("playerName")
                 .exec(context -> {
                     // TODO: Support offline player
-                    String playerName = context.getFirstResult();
+                    String playerName = context.getResult(0);
                     var player = Server.getInstance().findOnlinePlayerByName(playerName);
                     if (player == null) {
                         context.addError("%" + TrKeys.M_COMMANDS_GENERIC_PLAYER_NOTFOUND);
                         return context.fail();
                     }
+
                     if (player.isOp()) {
                         context.addError("%" + TrKeys.M_COMMANDS_OP_FAILED, playerName);
                         return context.fail();
                     }
+
                     player.setOp(true);
+
                     context.addOutput(TrKeys.M_COMMANDS_OP_SUCCESS, playerName);
                     player.sendTr(TrKeys.M_COMMANDS_OP_MESSAGE);
                     return context.success();

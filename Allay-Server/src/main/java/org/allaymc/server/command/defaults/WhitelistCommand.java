@@ -22,8 +22,8 @@ public class WhitelistCommand extends SimpleCommand {
                 .enums("operation", "add", "remove")
                 .str("nameOrUUID")
                 .exec(context -> {
-                    String operation = context.getFirstResult();
-                    String nameOrUUID = context.getSecondResult();
+                    String operation = context.getResult(0);
+                    String nameOrUUID = context.getResult(1);
                     switch (operation) {
                         case "add" -> {
                             if (Server.getInstance().addToWhitelist(nameOrUUID)) {
@@ -53,12 +53,10 @@ public class WhitelistCommand extends SimpleCommand {
                 .key("list")
                 .exec(context -> {
                     var whitelist = Server.getInstance().getWhitelistedPlayers();
-                    var onlineCount = 0;
-                    for (var player : Server.getInstance().getOnlinePlayers().values()) {
-                        if (whitelist.contains(player.getUUID()) || whitelist.contains(player.getOriginName())) {
-                            onlineCount++;
-                        }
-                    }
+                    var onlineCount = (int) Server.getInstance().getOnlinePlayers().values().stream()
+                            .filter(player -> whitelist.contains(player.getUUID().toString()) ||
+                                              whitelist.contains(player.getOriginName()))
+                            .count();
                     context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_LIST, whitelist.size(), onlineCount);
                     context.addOutput(String.join(", ", whitelist));
                     return context.success();
@@ -67,11 +65,10 @@ public class WhitelistCommand extends SimpleCommand {
                 .key("enable")
                 .exec(context -> {
                     Server.SETTINGS.genericSettings().isWhitelisted(true);
-                    for (var player : Server.getInstance().getOnlinePlayers().values()) {
-                        if (!Server.getInstance().isWhitelisted(player.getUUID().toString()) && !Server.getInstance().isWhitelisted(player.getOriginName())) {
-                            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED);
-                        }
-                    }
+                    Server.getInstance().getOnlinePlayers().values().stream()
+                            .filter(player -> !Server.getInstance().isWhitelisted(player.getUUID().toString()) &&
+                                              !Server.getInstance().isWhitelisted(player.getOriginName()))
+                            .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
                     context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_ENABLED);
                     return context.success();
                 })

@@ -6,10 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
@@ -30,11 +31,10 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
     private static final Map<BlockType<?>, Map<Integer, Integer>> BLOCK_STATE_HASH_TO_META_MAP = new HashMap<>();
 
     public void init() {
-        // Load item_meta_block_state_bimap.nbt
-        try (var reader = NbtUtils.createGZIPReader(Objects.requireNonNull(AllayVanillaItemMetaBlockStateBiMap.class.getClassLoader().getResourceAsStream("item_meta_block_state_bimap.nbt")))) {
+        try (var reader = NbtUtils.createGZIPReader(ResourceUtils.getResource("item_meta_block_state_bimap.nbt"))) {
             var nbt = (NbtMap) reader.readTag();
             nbt.forEach((itemIdentifier, metaToHash) -> {
-                ItemType<?> itemType = ItemTypeRegistry.getRegistry().get(new Identifier(itemIdentifier));
+                var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(itemIdentifier));
                 Objects.requireNonNull(itemType, "Cannot find item type by identifier: " + itemIdentifier);
                 var metaToHashMap = (NbtMap) metaToHash;
                 metaToHashMap.forEach((meta, blockStateHash) -> {
@@ -54,20 +54,12 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
     @Override
     public Function<Integer, BlockState> getMetaToBlockStateMapper(ItemType<?> itemType) {
         var map = ITEM_TYPE_TO_META_MAP.get(itemType);
-        if (map != null) {
-            return map::get;
-        } else {
-            return unused -> itemType.getBlockType().getDefaultState();
-        }
+        return map != null ? map::get : ($ -> itemType.getBlockType().getDefaultState());
     }
 
     @Override
     public Function<Integer, Integer> getBlockStateHashToMetaMapper(BlockType<?> blockType) {
         var map = BLOCK_STATE_HASH_TO_META_MAP.get(blockType);
-        if (map != null) {
-            return map::get;
-        } else {
-            return unused -> 0;
-        }
+        return map != null ? map::get : ($ -> 0);
     }
 }

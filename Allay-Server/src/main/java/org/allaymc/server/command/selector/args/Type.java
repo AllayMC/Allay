@@ -17,15 +17,16 @@ public class Type extends CachedSimpleSelectorArgument {
 
     @Override
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) {
-        final var have = new ArrayList<String>();
-        final var dontHave = new ArrayList<String>();
+        var have = new ArrayList<String>();
+        var dontHave = new ArrayList<String>();
         for (var type : arguments) {
-            boolean reversed = ParseUtils.checkReversed(type);
+            var reversed = ParseUtils.checkReversed(type);
             if (reversed) {
                 dontHave.add(type);
             } else have.add(type);
         }
-        return entity -> have.stream().allMatch(type -> checkType(entity, type)) && dontHave.stream().noneMatch(type -> checkType(entity, type));
+        return entity -> have.stream().allMatch(type -> checkType(entity, type)) &&
+                         dontHave.stream().noneMatch(type -> checkType(entity, type));
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.allaymc.server.world;
 import com.google.common.collect.Sets;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.server.misc.WorldLoadEvent;
 import org.allaymc.api.i18n.I18n;
@@ -33,17 +34,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class AllayWorldPool implements WorldPool {
     public static final Path WORLDS_FOLDER = Path.of("worlds");
     public static final String SETTINGS_FILE_NAME = "world-settings.yml";
+
     private static final Set<Object> ALL_WORLDS_LISTENERS = Sets.newConcurrentHashSet();
     private final Map<String, World> worlds = new ConcurrentHashMap<>();
+    @Getter
     private WorldSettings worldConfig;
 
     public AllayWorldPool() {
         loadWorldConfig();
-    }
-
-    @Override
-    public WorldSettings getWorldConfig() {
-        return worldConfig;
     }
 
     @Override
@@ -71,11 +69,14 @@ public final class AllayWorldPool implements WorldPool {
     @Override
     public void loadWorld(String name, WorldSettings.WorldEntry settings) {
         if (!settings.enable()) return;
+
         log.info(I18n.get().tr(TrKeys.A_WORLD_LOADING, name));
         if (worlds.containsKey(name))
             throw new IllegalArgumentException("World " + name + " already exists");
+
         var overworldSettings = settings.overworld();
         Preconditions.checkNotNull(overworldSettings, "A world must has overworld dimension");
+
         var netherSettings = settings.nether();
         var theEndSettings = settings.theEnd();
         var storage = WorldStorageFactory.getFactory().createWorldStorage(settings.storageType(), WORLDS_FOLDER.resolve(name));
@@ -88,10 +89,12 @@ public final class AllayWorldPool implements WorldPool {
             var nether = new AllayDimension(world, WorldGeneratorFactory.getFactory().createWorldGenerator(netherSettings.generatorType(), netherSettings.generatorPreset()), DimensionInfo.NETHER);
             world.setDimension(nether);
         }
+
         if (theEndSettings != null) {
             var theEnd = new AllayDimension(world, WorldGeneratorFactory.getFactory().createWorldGenerator(theEndSettings.generatorType(), theEndSettings.generatorPreset()), DimensionInfo.THE_END);
             world.setDimension(theEnd);
         }
+
         ALL_WORLDS_LISTENERS.forEach(world.getEventBus()::registerListener);
         if (addWorld(world)) {
             log.info(I18n.get().tr(TrKeys.A_WORLD_LOADED, name));
@@ -103,30 +106,30 @@ public final class AllayWorldPool implements WorldPool {
     }
 
     private void loadWorldConfig() {
-        worldConfig = ConfigManager.create(WorldSettings.class, it -> {
+        worldConfig = Objects.requireNonNull(ConfigManager.create(WorldSettings.class, it -> {
             it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
             it.withBindFile(WORLDS_FOLDER.resolve(SETTINGS_FILE_NAME)); // specify Path, File or pathname
             it.withRemoveOrphans(true); // automatic removal of undeclared keys
             it.saveDefaults(); // save file if it does not exist
             it.load(true); // load and save to update comments/new fields
-        });
+        }));
+
         int changeNumber = 0;
-        for (var f : Objects.requireNonNull(WORLDS_FOLDER.toFile().listFiles(File::isDirectory))) {
-            if (!worldConfig.worlds().containsKey(f.getName())) {
-                WorldSettings.WorldEntry worldEntry = WorldSettings.WorldEntry.builder()
+        for (var file : Objects.requireNonNull(WORLDS_FOLDER.toFile().listFiles(File::isDirectory))) {
+            if (!worldConfig.worlds().containsKey(file.getName())) {
+                var worldEntry = WorldSettings.WorldEntry.builder()
                         .enable(true)
                         .overworld(new WorldSettings.WorldEntry.DimensionSettings("VOID", ""))
                         .nether(null)
                         .theEnd(null)
                         .storageType("LEVELDB")
                         .build();
-                worldConfig.worlds().put(f.getName(), worldEntry);
+                worldConfig.worlds().put(file.getName(), worldEntry);
                 changeNumber++;
             }
         }
-        if (changeNumber != 0) {
-            worldConfig.save();
-        }
+
+        if (changeNumber != 0) worldConfig.save();
     }
 
     @Override
@@ -143,6 +146,7 @@ public final class AllayWorldPool implements WorldPool {
         var event = new WorldLoadEvent(world);
         Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) return false;
+
         worlds.put(world.getWorldData().getName(), world);
         world.startTick();
         return true;

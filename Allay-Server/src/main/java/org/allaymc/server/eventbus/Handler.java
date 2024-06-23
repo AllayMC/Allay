@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutorService;
  */
 public class Handler {
     protected static final Map<ClassLoader, FastMemberLoader> FAST_MEMBER_LOADERS = new ConcurrentHashMap<>();
+
     protected final FastMethod method;
     protected final Object instance;
     protected final boolean async;
@@ -28,7 +29,8 @@ public class Handler {
                 method,
                 FAST_MEMBER_LOADERS.computeIfAbsent(
                         instance.getClass().getClassLoader(),
-                        FastMemberLoader::new),
+                        FastMemberLoader::new
+                ),
                 true
         );
         this.instance = instance;

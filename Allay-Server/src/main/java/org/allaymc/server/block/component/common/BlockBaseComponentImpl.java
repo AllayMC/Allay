@@ -78,8 +78,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
-        if (!isDroppable(blockState, usedItem, player))
-            return;
+        if (!isDroppable(blockState, usedItem, player)) return;
 
         var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);
         var dimension = blockState.pos().dimension();

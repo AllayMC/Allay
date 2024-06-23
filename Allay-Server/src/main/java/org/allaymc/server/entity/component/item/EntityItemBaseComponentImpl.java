@@ -1,5 +1,7 @@
 package org.allaymc.server.entity.component.item;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
@@ -22,9 +24,12 @@ import static org.allaymc.api.item.ItemHelper.fromNBT;
  *
  * @author daoge_cmd
  */
+@Setter
+@Getter
 public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityItem> implements EntityItemBaseComponent {
 
     public static final int MAX_AGE = 6000;
+
     protected ItemStack itemStack;
     protected int pickupDelay = 10;
     protected int age;
@@ -52,14 +57,11 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     public void tick() {
         super.tick();
-        // update age
         if (age != -1) {
             age++;
-            if (age >= MAX_AGE) {
-                despawn();
-            }
+            if (age >= MAX_AGE) despawn();
         }
-        // update pick up delay
+
         if (pickupDelay > 0) pickupDelay--;
     }
 
@@ -88,38 +90,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        if (nbt.containsKey("Item"))
-            itemStack = fromNBT(nbt.getCompound("Item"));
-    }
-
-    @Override
-    public ItemStack getItemStack() {
-        return itemStack;
-    }
-
-    @Override
-    public void setItemStack(ItemStack itemStack) {
-        this.itemStack = itemStack;
-    }
-
-    @Override
-    public int getPickupDelay() {
-        return pickupDelay;
-    }
-
-    @Override
-    public void setPickupDelay(int delay) {
-        this.pickupDelay = delay;
-    }
-
-    @Override
-    public int getAge() {
-        return age;
-    }
-
-    @Override
-    public void setAge(int age) {
-        this.age = age;
+        nbt.listenForCompound("Item", itemNbt -> this.itemStack = fromNBT(itemNbt));
     }
 
     @Override

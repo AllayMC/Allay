@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
@@ -43,11 +45,9 @@ import static org.allaymc.api.block.type.BlockTypes.UNKNOWN_TYPE;
  * @author Cool_Loong
  */
 @Slf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LevelDBChunkSerializer {
     public static final LevelDBChunkSerializer INSTANCE = new LevelDBChunkSerializer();
-
-    private LevelDBChunkSerializer() {
-    }
 
     public void serialize(WriteBatch writeBatch, UnsafeChunk chunk) {
         serializeBlock(writeBatch, chunk);

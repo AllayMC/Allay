@@ -10,8 +10,10 @@ import org.allaymc.api.utils.TextFormat;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2024/2/24
  * TODO: I18N
+ * <p>
+ * Allay Project 2024/2/24
+ *
  * @author daoge_cmd
  */
 public class WorldCommand extends SimpleCommand {
@@ -42,18 +44,20 @@ public class WorldCommand extends SimpleCommand {
                 .str("world")
                 .intNum("dimId")
                 .exec((context, player) -> {
-                    String worldName = context.getSecondResult();
-                    int dimId = context.getThirdResult();
+                    String worldName = context.getResult(1);
+                    int dimId = context.getResult(2);
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
                         context.addOutput(TextFormat.RED + "Unknown world: " + worldName);
                         return context.fail();
                     }
+
                     var dim = world.getDimension(dimId);
                     if (dim == null) {
                         context.addOutput(TextFormat.RED + "Unknown dimension: " + dimId);
                         return context.fail();
                     }
+
                     player.teleport(new Location3f(0, 64, 0, dim));
                     context.addOutput("Teleported to " + worldName + ":" + dimId);
                     return context.success();

@@ -2,6 +2,7 @@ package org.allaymc.api.command.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -61,4 +62,6 @@ public interface CommandNodeFactory {
     CommandNode wildcardTarget(String name, CommandNode parent, String defaultValue);
 
     CommandNode enchantmentNode(String name, CommandNode parent, EnchantmentType defaultValue);
+
+    CommandNode effectNode(String name, CommandNode parent, EffectType defaultValue);
 }

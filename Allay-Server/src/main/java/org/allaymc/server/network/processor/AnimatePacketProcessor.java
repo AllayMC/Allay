@@ -18,6 +18,7 @@ public class AnimatePacketProcessor extends PacketProcessor<AnimatePacket> {
             player.getCurrentChunk().addChunkPacket(packet, chunkLoader -> chunkLoader != player);
             return PacketSignal.HANDLED;
         }
+
         return PacketSignal.UNHANDLED;
     }
 

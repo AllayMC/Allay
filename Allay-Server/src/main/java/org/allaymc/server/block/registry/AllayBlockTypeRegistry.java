@@ -16,12 +16,12 @@ import org.allaymc.server.block.type.BlockTypeDefaultInitializer;
 import org.allaymc.server.block.type.BlockTypeInitializer;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.allaymc.server.utils.ResourceUtils.callInitializer;
 
 /**
  * Allay Project 2023/3/26
@@ -35,17 +35,6 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
 
     public AllayBlockTypeRegistry() {
         super(null, input -> new ConcurrentHashMap<>());
-    }
-
-    private static void callInitializer(Method method, ProgressBar progressBar) {
-        try {
-            method.invoke(null);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (progressBar != null)
-                progressBar.step();
-        }
     }
 
     @SneakyThrows

@@ -11,6 +11,7 @@ import org.allaymc.server.plugin.js.JsPluginLoader;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 2024/2/8
@@ -28,6 +29,9 @@ public class AllayPluginManager implements PluginManager {
     protected Map<String, PluginContainer> enabledPlugins = new HashMap<>();
     protected List<String> pluginsSortedList;
 
+    protected Map<String, PluginDescriptor> descriptors;
+    protected Map<String, PluginLoader> loaders;
+
     public AllayPluginManager() {
         registerSource(new DefaultPluginSource());
         // Only for testing example-plugin-js more convenient
@@ -39,9 +43,6 @@ public class AllayPluginManager implements PluginManager {
         registerLoaderFactory(new JsPluginLoader.JsPluginLoaderFactory());
     }
 
-    protected Map<String, PluginDescriptor> descriptors;
-    protected Map<String, PluginLoader> loaders;
-
     @Override
     public void loadPlugins(PluginLoadOrder order) {
         if (descriptors == null) {
@@ -49,7 +50,7 @@ public class AllayPluginManager implements PluginManager {
             loaders = new HashMap<>();
 
             // 1. Load possible plugin paths from plugin sources
-            Set<Path> paths = findPluginPaths();
+            var paths = findPluginPaths();
 
             // 2. Find and use plugin loader to load plugin descriptor for each plugin path
             findLoadersAndLoadDescriptors(paths, descriptors, loaders);
@@ -66,34 +67,38 @@ public class AllayPluginManager implements PluginManager {
         for (var path : paths) {
             var loader = findLoader(path);
             if (loader == null) continue;
+
             var descriptor = loader.loadDescriptor();
             var name = descriptor.getName();
             if (descriptors.containsKey(name)) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_DUPLICATE, name));
                 continue;
             }
+
             descriptors.put(name, descriptor);
             loaders.put(name, loader);
         }
     }
 
     protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders, PluginLoadOrder order) {
-        Iterator<String> iterator = pluginsSortedList.iterator();
+        var iterator = pluginsSortedList.iterator();
         start:
         while (iterator.hasNext()) {
             var s = iterator.next();
             var descriptor = descriptors.get(s);
             if (descriptor.getOrder() != order) continue;
+
             var loader = loaders.get(s);
-            for (var e : descriptor.getDependencies()) {
-                if (!plugins.containsKey(e.name())) {
-                    if (!e.optional()) {
-                        log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), e.name()));
-                        iterator.remove();
-                        continue start;
-                    }
+            for (var dependency : descriptor.getDependencies()) {
+                if (plugins.containsKey(dependency.name())) continue;
+
+                if (!dependency.optional()) {
+                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
+                    iterator.remove();
+                    continue start;
                 }
             }
+
             PluginContainer pluginContainer;
             try {
                 pluginContainer = loader.loadPlugin();
@@ -101,6 +106,7 @@ public class AllayPluginManager implements PluginManager {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName()), e);
                 continue;
             }
+
             plugins.put(descriptor.getName(), pluginContainer);
             pluginContainer.plugin().onLoad();
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_LOADING, descriptor.getName()));
@@ -112,26 +118,23 @@ public class AllayPluginManager implements PluginManager {
         dag.addAll(descriptors.keySet());
         for (var descriptor : descriptors.values()) {
             for (var dependency : descriptor.getDependencies()) {
-                String name = dependency.name();
-                //add dependency plugin to DAG
+                var name = dependency.name();
+                // add dependency plugin to DAG
                 dag.add(name);
                 try {
                     dag.setBefore(name, descriptor.getName());//set ref
                 } catch (DAGCycleException e) {
-                    log.error("Circular dependencies appear in plugin {}: " + e.getMessage() + "The plugin will skip loading!", descriptor.getName());
+                    log.error("Circular dependencies appear in plugin {}: {}The plugin will skip loading!", descriptor.getName(), e.getMessage());
                     dag.remove(descriptor.getName());
                 }
             }
         }
+
         pluginsSortedList = dag.getSortedList();
     }
 
     protected Set<Path> findPluginPaths() {
-        Set<Path> paths = new HashSet<>();
-        for (var source : sources) {
-            paths.addAll(source.find());
-        }
-        return paths;
+        return sources.stream().flatMap(source -> source.find().stream()).collect(Collectors.toSet());
     }
 
     @Override
@@ -139,6 +142,7 @@ public class AllayPluginManager implements PluginManager {
         for (var s : pluginsSortedList) {
             var pluginContainer = getPlugin(s);
             if (isPluginEnabled(pluginContainer.descriptor().getName())) return;
+
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
@@ -147,6 +151,7 @@ public class AllayPluginManager implements PluginManager {
             } catch (Exception e) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }
+
             enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
         }
     }
@@ -197,9 +202,10 @@ public class AllayPluginManager implements PluginManager {
     }
 
     protected PluginLoader findLoader(Path pluginPath) {
-        for (var loaderFactory : loaderFactories) {
-            if (loaderFactory.canLoad(pluginPath)) return loaderFactory.create(pluginPath);
-        }
-        return null;
+        return loaderFactories.stream()
+                .filter(loaderFactory -> loaderFactory.canLoad(pluginPath))
+                .findFirst()
+                .map(loaderFactory -> loaderFactory.create(pluginPath))
+                .orElse(null);
     }
 }

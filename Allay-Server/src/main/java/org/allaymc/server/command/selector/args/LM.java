@@ -16,7 +16,8 @@ public class LM extends CachedSimpleSelectorArgument {
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
-        final var lm = Integer.parseInt(arguments[0]);
+
+        var lm = Integer.parseInt(arguments[0]);
         return entity -> entity instanceof EntityPlayer player && player.getExperienceLevel() >= lm;
     }
 

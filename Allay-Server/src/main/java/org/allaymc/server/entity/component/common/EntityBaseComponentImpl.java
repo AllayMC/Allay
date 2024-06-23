@@ -2,8 +2,8 @@ package org.allaymc.server.entity.component.common;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
@@ -32,6 +32,7 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -47,30 +48,14 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.cloudburstmc.protocol.bedrock.packet.AddEntityPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.MobEffectPacket;
-import org.cloudburstmc.protocol.bedrock.packet.MoveEntityAbsolutePacket;
-import org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket;
-import org.cloudburstmc.protocol.bedrock.packet.RemoveEntityPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SetEntityDataPacket;
-import org.cloudburstmc.protocol.bedrock.packet.SetEntityMotionPacket;
-import org.jetbrains.annotations.ApiStatus;
+import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -78,14 +63,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.min;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector2f;
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_HEAD_YAW;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_PITCH;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_X;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_Y;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_YAW;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.HAS_Z;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.ON_GROUND;
-import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.TELEPORTING;
+import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
  * Allay Project 2023/5/26
@@ -102,32 +80,45 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(0);
 
+    private static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
+
+    @Getter
     protected final Location3f location;
     protected final Location3f locLastSent = new Location3f(0, 0, 0, null);
     @Getter
     protected final long runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
+    @Getter
+    protected final Metadata metadata;
     // Will be reset in method loadUniqueId()
     @Getter
     protected long uniqueId = Long.MAX_VALUE;
-    protected final Metadata metadata;
     @Manager
     protected ComponentManager<T> manager;
     @ComponentedObject
     protected T thisEntity;
     @Dependency(soft = true)
     protected EntityAttributeComponent attributeComponent;
+    @Getter
     protected EntityType<T> entityType;
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
     protected Map<EffectType, EffectInstance> effects = new HashMap<>();
     protected Vector3f motion = new Vector3f();
+    @Getter
     protected boolean onGround = true;
+    @Setter
     protected boolean willBeDespawnedNextTick = false;
+    @Setter
     protected boolean willBeSpawnedNextTick = false;
+    @Getter
+    @Setter
     protected boolean spawned;
+    @Getter
     protected boolean dead;
     protected int deadTimer;
-    protected float fallDistance = 0f;
     @Getter
+    protected float fallDistance;
+    @Getter
+    @Setter
     protected String displayName;
     protected Set<String> tags = new HashSet<>();
 
@@ -221,21 +212,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public EntityType<? extends Entity> getEntityType() {
-        return entityType;
-    }
-
-    @Override
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    @Override
-    public Location3fc getLocation() {
-        return location;
-    }
-
-    @Override
     public void setLocationBeforeSpawn(Location3fc location) {
         if (!canBeSpawnedIgnoreLocation()) {
             throw new IllegalStateException("Trying to set location of an entity which cannot being spawned!");
@@ -248,6 +224,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             if (this.fallDistance < 0) this.fallDistance = 0;
             this.fallDistance -= location.y() - this.location.y();
         }
+
         this.location.set(location);
         this.location.setYaw(location.yaw());
         this.location.setHeadYaw(location.headYaw());
@@ -266,11 +243,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public boolean isDead() {
-        return dead;
-    }
-
-    @Override
     public void despawn() {
         getDimension().getEntityService().removeEntity(thisEntity);
     }
@@ -281,24 +253,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public void setWillBeDespawnedNextTick(boolean willBeDespawnedNextTick) {
-        this.willBeDespawnedNextTick = willBeDespawnedNextTick;
-    }
-
-    @Override
-    public boolean isSpawned() {
-        return spawned;
-    }
-
-    @Override
-    public void setSpawned(boolean spawned) {
-        this.spawned = spawned;
-    }
-
-    @Override
     public boolean canBeSpawned() {
-        return location.x != Integer.MAX_VALUE && location.y != Integer.MAX_VALUE && location.z != Integer.MAX_VALUE &&
-               location.dimension != null && canBeSpawnedIgnoreLocation();
+        return location.x != Integer.MAX_VALUE &&
+               location.y != Integer.MAX_VALUE &&
+               location.z != Integer.MAX_VALUE &&
+               location.dimension != null &&
+               canBeSpawnedIgnoreLocation();
     }
 
     protected boolean canBeSpawnedIgnoreLocation() {
@@ -308,11 +268,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public boolean willBeSpawnedNextTick() {
         return willBeSpawnedNextTick;
-    }
-
-    @Override
-    public void setWillBeSpawnedNextTick(boolean willBeSpawnedNextTick) {
-        this.willBeSpawnedNextTick = willBeSpawnedNextTick;
     }
 
     @Override
@@ -331,6 +286,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             if (oldChunk != null) ((AllayChunk) oldChunk).removeEntity(runtimeId);
             else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
         }
+
         var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
         if (newChunk != null) ((AllayChunk) newChunk).addEntity(thisEntity);
         else {
@@ -347,10 +303,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             log.warn("Trying to teleport an entity whose dimension is null! Entity: {}", thisEntity);
             return;
         }
+
         if (!this.spawned) {
             log.warn("Trying to teleport an entity which is not spawned! Entity: {}", thisEntity);
             return;
         }
+
         var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target));
         var currentWorld = this.getWorld();
         var targetWorld = target.dimension().getWorld();
@@ -383,13 +341,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     @Override
-    public Metadata getMetadata() {
-        return metadata;
-    }
-
-    @Override
     public void sendEntityData(EntityDataType<?>... dataTypes) {
         if (viewers.isEmpty()) return;
+
         var pk = new SetEntityDataPacket();
         pk.setRuntimeEntityId(runtimeId);
         for (EntityDataType<?> type : dataTypes) {
@@ -402,6 +356,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void sendEntityFlags(EntityFlag... flags) {
         if (viewers.isEmpty()) return;
+
         var pk = new SetEntityDataPacket();
         pk.setRuntimeEntityId(runtimeId);
         for (EntityFlag flag : flags) {
@@ -436,11 +391,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void setMotion(Vector3fc motion) {
         this.motion = new Vector3f(motion);
-    }
-
-    @Override
-    public boolean isOnGround() {
-        return onGround;
     }
 
     @Override
@@ -655,22 +605,21 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             var pos = readVector3f(nbt, "Pos", "x", "y", "z");
             location.set(pos.x, pos.y, pos.z);
         }
+
         if (nbt.containsKey("Rotation")) {
             var rot = readVector2f(nbt, "Rotation", "yaw", "pitch");
             location.setYaw(rot.x);
             location.setPitch(rot.y);
         }
+
         if (nbt.containsKey("Motion")) {
-            // What? mot!
-            var mot = readVector3f(nbt, "Motion", "dx", "dy", "dz");
-            motion.set(mot);
+            var motion = readVector3f(nbt, "Motion", "dx", "dy", "dz");
+            this.motion.set(motion);
         }
-        if (nbt.containsKey("OnGround")) {
-            onGround = nbt.getBoolean("OnGround");
-        }
-        if (nbt.containsKey("Tags")) {
-            tags.addAll(nbt.getList("Tags", NbtType.STRING));
-        }
+
+        nbt.listenForBoolean("OnGround", onGround -> this.onGround = onGround);
+        nbt.listenForList("Tags", NbtType.STRING, tags -> this.tags.addAll(tags));
+
         loadUniqueId(nbt);
         var event = new EntityLoadNBTEvent(nbt);
         manager.callEvent(event);
@@ -678,15 +627,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     protected void loadUniqueId(NbtMap nbt) {
         if (nbt.containsKey("UniqueID")) {
-            uniqueId = nbt.getLong("UniqueID");
+            this.uniqueId = nbt.getLong("UniqueID");
             return;
         }
-        uniqueId = UUID.randomUUID().getMostSignificantBits();
-    }
 
-    @Override
-    public float getFallDistance() {
-        return fallDistance;
+        this.uniqueId = UUID.randomUUID().getMostSignificantBits();
     }
 
     @Override
@@ -779,10 +724,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         return getDisplayName();
     }
 
-    private static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
-
     @Override
-    public CommandOriginData getCommandOriginData(){
+    public CommandOriginData getCommandOriginData() {
         return ENTITY_COMMAND_ORIGIN_DATA;
     }
 

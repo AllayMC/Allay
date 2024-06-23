@@ -18,12 +18,13 @@ public class C extends CachedFilterSelectorArgument {
     public Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
-        final var c = Integer.parseInt(arguments[0]);
+
+        var c = Integer.parseInt(arguments[0]);
         if (c == 0) throw new SelectorSyntaxException("C cannot be zero!");
+
         return entities -> {
             entities.sort(Comparator.comparingDouble(e -> e.getLocation().distanceSquared(basePos)));
-            if (c < 0)
-                Collections.reverse(entities);
+            if (c < 0) Collections.reverse(entities);
             return entities.subList(0, Math.abs(c));
         };
     }

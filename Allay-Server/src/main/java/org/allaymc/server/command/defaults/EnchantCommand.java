@@ -26,28 +26,30 @@ public class EnchantCommand extends SimpleCommand {
         tree.getRoot()
                 .playerTarget("player")
                 .enchantmentNode("enchantmentName")
-                .shortNum("level")
+                .intNum("level")
                 .exec(ctx -> {
-                    Collection<EntityPlayer> players = ctx.getFirstResult();
-                    EnchantmentType enchantmentType = ctx.getSecondResult();
-                    short level = ctx.getThirdResult();
+                    Collection<EntityPlayer> players = ctx.getResult(0);
+                    EnchantmentType enchantmentType = ctx.getResult(1);
+                    int level = ctx.getResult(2);
+
                     for (var player : players) {
                         var item = player.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
                         if (item == Container.EMPTY_SLOT_PLACE_HOLDER) {
-                            // 手上没东西
                             ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_NOITEM);
                             return ctx.fail();
                         }
+
                         var incompatibleEnchantmentType = item.getIncompatibleEnchantmentType(enchantmentType);
                         if (incompatibleEnchantmentType != null) {
-                            // 新附魔和已有附魔有冲突
                             ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_CANTCOMBINE, incompatibleEnchantmentType.getIdentifier(), enchantmentType.getIdentifier());
                             return ctx.fail();
                         }
+
                         item.addEnchantment(enchantmentType, level);
                         player.sendItemInHandUpdate();
                         ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_SUCCESS, enchantmentType.getIdentifier());
                     }
+
                     return ctx.success();
                 });
     }

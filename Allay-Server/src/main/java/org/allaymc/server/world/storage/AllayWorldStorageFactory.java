@@ -16,12 +16,12 @@ import java.util.function.Function;
  */
 public class AllayWorldStorageFactory extends SimpleMappedRegistry<String, Function<Path, WorldStorage>, Map<String, Function<Path, WorldStorage>>> implements WorldStorageFactory {
     public AllayWorldStorageFactory() {
-        super(null, unused -> new ConcurrentHashMap<>());
+        super(null, $ -> new ConcurrentHashMap<>());
         init();
     }
 
     protected void init() {
-        register("NON_PERSISTENT", unused -> new AllayNonPersistentWorldStorage());
+        register("NON_PERSISTENT", $ -> new AllayNonPersistentWorldStorage());
         register("LEVELDB", AllayLevelDBWorldStorage::new);
     }
 }

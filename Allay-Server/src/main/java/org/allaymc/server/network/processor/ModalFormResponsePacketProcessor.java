@@ -19,15 +19,17 @@ public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormR
     public void handleSync(EntityPlayer player, ModalFormResponsePacket packet) {
         var id = packet.getFormId();
         var form = player.removeForm(id);
-        boolean isServerSettingsForm = false;
+        var isServerSettingsForm = false;
         if (form == null) {
             form = player.getServerSettingForm(id);
             if (form == null) {
                 log.warn("Received response for unknown form from player {}: {}", player.getOriginName(), packet.getFormId());
                 return;
             }
+
             isServerSettingsForm = true;
         }
+
         form.handleResponse(packet.getFormData() != null ? packet.getFormData().trim() : null);
         if (isServerSettingsForm) {
             ((CustomForm) form).syncDefaultValueToResponse();
