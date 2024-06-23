@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -156,6 +157,11 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             var itemInHand = player.getItemInHand();
             world.breakBlock(breakBlockX, breakBlockY, breakBlockZ, itemInHand, player);
             itemInHand.onBreakBlock(breakBlock, player);
+            if (itemInHand.isBroken()) {
+                player.setItemInHand(ItemTypes.AIR_TYPE.createItemStack());
+            } else {
+                player.sendItemInHandUpdate();
+            }
         } else {
             log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakingTime, currentTime);
         }

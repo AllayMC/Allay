@@ -83,7 +83,10 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 var target = player.getDimension().getEntityByRuntimeId(packet.getRuntimeEntityId());
                 Preconditions.checkNotNull(target, "Player " + player.getOriginName() + " try to attack a entity which doesn't exist! Entity id: " + packet.getRuntimeEntityId());
                 switch (packet.getActionType()) {
-                    case ITEM_USE_ON_ENTITY_INTERACT -> target.onInteract(player, player.getItemInHand());
+                    case ITEM_USE_ON_ENTITY_INTERACT -> {
+                        target.onInteract(player, player.getItemInHand());
+                        player.sendItemInHandUpdate();
+                    }
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
                         EntityDamageComponent damageable;
                         if (target instanceof EntityDamageComponent cast) {
@@ -99,10 +102,14 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         var damageContainer = DamageContainer.entityAttack(player, damage);
                         if (damageable.attack(damageContainer)) {
                             itemInHand.onAttackEntity(player, target);
+                            if (itemInHand.isBroken()) {
+                                player.setItemInHand(AIR_TYPE.createItemStack());
+                            } else {
+                                player.sendItemInHandUpdate();
+                            }
                         }
                     }
                 }
-                player.sendItemInHandUpdate();
             }
             case NORMAL -> {
                 for (var action : packet.getActions()) {

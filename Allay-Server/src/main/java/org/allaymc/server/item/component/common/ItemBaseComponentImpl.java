@@ -13,6 +13,7 @@ import org.allaymc.api.data.VanillaMaterialTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.component.event.*;
 import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
+import org.allaymc.api.item.enchantment.type.EnchantmentUnbreakingType;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
@@ -39,6 +40,7 @@ import org.joml.Vector3ic;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.item.ItemHelper.*;
 
@@ -156,6 +158,14 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (durability < 0)
             throw new IllegalArgumentException("Durability must bigger than zero!");
         this.durability = durability;
+    }
+
+    @Override
+    public boolean willDamageItem() {
+        float level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING_TYPE);
+        if (level == 0) return true;
+        float possibility = 1f / (level + 1f);
+        return ThreadLocalRandom.current().nextFloat() <= possibility;
     }
 
     @Override
@@ -384,6 +394,16 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     public void onAttackEntity(Entity attacker, Entity victim) {
         manager.callEvent(new ItemAttackEntityEvent(attacker, victim));
+    }
+
+    @Override
+    public boolean isBroken() {
+        var maxDamage = attributeComponent.getItemAttributes().maxDamage();
+        if (maxDamage == 0) {
+            // This item does not support durability
+            return false;
+        }
+        return durability >= maxDamage;
     }
 
     // 记录那些对工具品质有要求的方块的正确工具集合

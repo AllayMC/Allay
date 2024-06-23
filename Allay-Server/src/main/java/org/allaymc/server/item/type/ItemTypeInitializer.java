@@ -1,8 +1,13 @@
 package org.allaymc.server.item.type;
 
 import org.allaymc.api.data.VanillaItemId;
+import org.allaymc.api.item.component.tool.ItemAxeComponent;
+import org.allaymc.api.item.component.tool.ItemHoeComponent;
+import org.allaymc.api.item.component.tool.ItemPickaxeComponent;
+import org.allaymc.api.item.component.tool.ItemShovelComponent;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemCauldronStack;
+import org.allaymc.api.item.interfaces.axe.*;
 import org.allaymc.api.item.interfaces.boots.ItemChainmailBootsStack;
 import org.allaymc.api.item.interfaces.boots.ItemDiamondBootsStack;
 import org.allaymc.api.item.interfaces.boots.ItemGoldenBootsStack;
@@ -22,19 +27,24 @@ import org.allaymc.api.item.interfaces.helmet.ItemIronHelmetStack;
 import org.allaymc.api.item.interfaces.helmet.ItemLeatherHelmetStack;
 import org.allaymc.api.item.interfaces.helmet.ItemNetheriteHelmetStack;
 import org.allaymc.api.item.interfaces.helmet.ItemTurtleHelmetStack;
+import org.allaymc.api.item.interfaces.hoe.*;
 import org.allaymc.api.item.interfaces.leggings.ItemChainmailLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemDiamondLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemGoldenLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemIronLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemLeatherLeggingsStack;
 import org.allaymc.api.item.interfaces.leggings.ItemNetheriteLeggingsStack;
+import org.allaymc.api.item.interfaces.pickaxe.*;
+import org.allaymc.api.item.interfaces.shovel.*;
 import org.allaymc.api.item.interfaces.shulkerbox.*;
+import org.allaymc.api.item.interfaces.sword.*;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.air.ItemAirBaseComponentImpl;
 import org.allaymc.server.item.component.armor.ItemArmorBaseComponentImpl;
 import org.allaymc.server.item.component.cauldron.ItemCauldronBaseComponentImpl;
 import org.allaymc.server.item.component.common.ItemItemStorableComponentImpl;
+import org.allaymc.server.item.component.tool.*;
 
 /**
  * Allay Project 2024/3/9
@@ -42,6 +52,171 @@ import org.allaymc.server.item.component.common.ItemItemStorableComponentImpl;
  * @author daoge_cmd
  */
 public final class ItemTypeInitializer {
+
+    public static void initSword() {
+        ItemTypes.DIAMOND_SWORD_TYPE = ItemTypeBuilder
+                .builder(ItemDiamondSwordStack.class)
+                .vanillaItem(VanillaItemId.DIAMOND_SWORD)
+                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
+                .build();
+        ItemTypes.GOLDEN_SWORD_TYPE = ItemTypeBuilder
+                .builder(ItemGoldenSwordStack.class)
+                .vanillaItem(VanillaItemId.GOLDEN_SWORD)
+                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
+                .build();
+        ItemTypes.IRON_SWORD_TYPE = ItemTypeBuilder
+                .builder(ItemIronSwordStack.class)
+                .vanillaItem(VanillaItemId.IRON_SWORD)
+                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
+                .build();
+        ItemTypes.NETHERITE_SWORD_TYPE = ItemTypeBuilder
+                .builder(ItemNetheriteSwordStack.class)
+                .vanillaItem(VanillaItemId.NETHERITE_SWORD)
+                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
+                .build();
+        ItemTypes.STONE_SWORD_TYPE = ItemTypeBuilder
+                .builder(ItemStoneSwordStack.class)
+                .vanillaItem(VanillaItemId.STONE_SWORD)
+                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
+                .build();
+        ItemTypes.WOODEN_SWORD_TYPE = ItemTypeBuilder
+                .builder(ItemWoodenSwordStack.class)
+                .vanillaItem(VanillaItemId.WOODEN_SWORD)
+                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
+                .build();
+    }
+
+    public static void initPickaxe() {
+        ItemTypes.DIAMOND_PICKAXE_TYPE = ItemTypeBuilder
+                .builder(ItemDiamondPickaxeStack.class)
+                .vanillaItem(VanillaItemId.DIAMOND_PICKAXE)
+                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
+                .build();
+        ItemTypes.GOLDEN_PICKAXE_TYPE = ItemTypeBuilder
+                .builder(ItemGoldenPickaxeStack.class)
+                .vanillaItem(VanillaItemId.GOLDEN_PICKAXE)
+                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
+                .build();
+        ItemTypes.IRON_PICKAXE_TYPE = ItemTypeBuilder
+                .builder(ItemIronPickaxeStack.class)
+                .vanillaItem(VanillaItemId.IRON_PICKAXE)
+                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
+                .build();
+        ItemTypes.NETHERITE_PICKAXE_TYPE = ItemTypeBuilder
+                .builder(ItemNetheritePickaxeStack.class)
+                .vanillaItem(VanillaItemId.NETHERITE_PICKAXE)
+                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
+                .build();
+        ItemTypes.STONE_PICKAXE_TYPE = ItemTypeBuilder
+                .builder(ItemStonePickaxeStack.class)
+                .vanillaItem(VanillaItemId.STONE_PICKAXE)
+                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
+                .build();
+        ItemTypes.WOODEN_PICKAXE_TYPE = ItemTypeBuilder
+                .builder(ItemWoodenPickaxeStack.class)
+                .vanillaItem(VanillaItemId.WOODEN_PICKAXE)
+                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
+                .build();
+    }
+
+    public static void initAxe() {
+        ItemTypes.DIAMOND_AXE_TYPE = ItemTypeBuilder
+                .builder(ItemDiamondAxeStack.class)
+                .vanillaItem(VanillaItemId.DIAMOND_AXE)
+                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
+                .build();
+        ItemTypes.GOLDEN_AXE_TYPE = ItemTypeBuilder
+                .builder(ItemGoldenAxeStack.class)
+                .vanillaItem(VanillaItemId.GOLDEN_AXE)
+                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
+                .build();
+        ItemTypes.IRON_AXE_TYPE = ItemTypeBuilder
+                .builder(ItemIronAxeStack.class)
+                .vanillaItem(VanillaItemId.IRON_AXE)
+                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
+                .build();
+        ItemTypes.NETHERITE_AXE_TYPE = ItemTypeBuilder
+                .builder(ItemNetheriteAxeStack.class)
+                .vanillaItem(VanillaItemId.NETHERITE_AXE)
+                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
+                .build();
+        ItemTypes.STONE_AXE_TYPE = ItemTypeBuilder
+                .builder(ItemStoneAxeStack.class)
+                .vanillaItem(VanillaItemId.STONE_AXE)
+                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
+                .build();
+        ItemTypes.WOODEN_AXE_TYPE = ItemTypeBuilder
+                .builder(ItemWoodenAxeStack.class)
+                .vanillaItem(VanillaItemId.WOODEN_AXE)
+                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
+                .build();
+    }
+
+    public static void initShovel() {
+        ItemTypes.DIAMOND_SHOVEL_TYPE = ItemTypeBuilder
+                .builder(ItemDiamondShovelStack.class)
+                .vanillaItem(VanillaItemId.DIAMOND_SHOVEL)
+                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
+                .build();
+        ItemTypes.GOLDEN_SHOVEL_TYPE = ItemTypeBuilder
+                .builder(ItemGoldenShovelStack.class)
+                .vanillaItem(VanillaItemId.GOLDEN_SHOVEL)
+                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
+                .build();
+        ItemTypes.IRON_SHOVEL_TYPE = ItemTypeBuilder
+                .builder(ItemIronShovelStack.class)
+                .vanillaItem(VanillaItemId.IRON_SHOVEL)
+                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
+                .build();
+        ItemTypes.NETHERITE_SHOVEL_TYPE = ItemTypeBuilder
+                .builder(ItemNetheriteShovelStack.class)
+                .vanillaItem(VanillaItemId.NETHERITE_SHOVEL)
+                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
+                .build();
+        ItemTypes.STONE_SHOVEL_TYPE = ItemTypeBuilder
+                .builder(ItemStoneShovelStack.class)
+                .vanillaItem(VanillaItemId.STONE_SHOVEL)
+                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
+                .build();
+        ItemTypes.WOODEN_SHOVEL_TYPE = ItemTypeBuilder
+                .builder(ItemWoodenShovelStack.class)
+                .vanillaItem(VanillaItemId.WOODEN_SHOVEL)
+                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
+                .build();
+    }
+
+    public static void initHoe() {
+        ItemTypes.DIAMOND_HOE_TYPE = ItemTypeBuilder
+                .builder(ItemDiamondHoeStack.class)
+                .vanillaItem(VanillaItemId.DIAMOND_HOE)
+                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
+                .build();
+        ItemTypes.GOLDEN_HOE_TYPE = ItemTypeBuilder
+                .builder(ItemGoldenHoeStack.class)
+                .vanillaItem(VanillaItemId.GOLDEN_HOE)
+                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
+                .build();
+        ItemTypes.IRON_HOE_TYPE = ItemTypeBuilder
+                .builder(ItemIronHoeStack.class)
+                .vanillaItem(VanillaItemId.IRON_HOE)
+                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
+                .build();
+        ItemTypes.NETHERITE_HOE_TYPE = ItemTypeBuilder
+                .builder(ItemNetheriteHoeStack.class)
+                .vanillaItem(VanillaItemId.NETHERITE_HOE)
+                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
+                .build();
+        ItemTypes.STONE_HOE_TYPE = ItemTypeBuilder
+                .builder(ItemStoneHoeStack.class)
+                .vanillaItem(VanillaItemId.STONE_HOE)
+                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
+                .build();
+        ItemTypes.WOODEN_HOE_TYPE = ItemTypeBuilder
+                .builder(ItemWoodenHoeStack.class)
+                .vanillaItem(VanillaItemId.WOODEN_HOE)
+                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
+                .build();
+    }
 
     public static void initShulkerBox() {
         ItemTypes.BLACK_SHULKER_BOX_TYPE = ItemTypeBuilder

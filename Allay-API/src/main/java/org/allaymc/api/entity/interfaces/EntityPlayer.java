@@ -94,6 +94,10 @@ public interface EntityPlayer extends
         return getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand();
     }
 
+    default void setItemInHand(ItemStack itemStack) {
+        getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(itemStack);
+    }
+
     default void sendItemInHandUpdate() {
         var inv = getContainer(FullContainerType.PLAYER_INVENTORY);
         var itemStack = inv.getItemInHand();

@@ -43,7 +43,15 @@ public interface ItemBaseComponent extends ItemComponent {
 
     int getDurability();
 
+    boolean isBroken();
+
     void setDurability(int durability);
+
+    default void increaseDurability(int addition) {
+        setDurability(getDurability() + addition);
+    }
+
+    boolean willDamageItem();
 
     String getCustomName();
 

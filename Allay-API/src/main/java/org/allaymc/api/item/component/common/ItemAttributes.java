@@ -44,6 +44,7 @@ public class ItemAttributes {
     protected String itemColorName = "";
     @Builder.Default
     protected int itemColorRGB = 0;
+    // TODO: 当前此数据代表的不是最大耐久值，怀疑导出器有问题，需要修复
     @Builder.Default
     protected int maxDamage = 0;
     @Builder.Default
