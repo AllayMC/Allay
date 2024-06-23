@@ -199,5 +199,10 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*ChestplateStack"), "chestplate");
         registerSubPackage(Pattern.compile(".*LeggingsStack"), "leggings");
         registerSubPackage(Pattern.compile(".*BootsStack"), "boots");
+        registerSubPackage(Pattern.compile(".*SwordStack"), "sword");
+        registerSubPackage(Pattern.compile(".*PickaxeStack"), "pickaxe");
+        registerSubPackage(Pattern.compile(".*ShovelStack"), "shovel");
+        registerSubPackage(Pattern.compile(".*HoeStack"), "hoe");
+        registerSubPackage(Pattern.compile(".*AxeStack"), "axe");
     }
 }
