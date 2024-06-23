@@ -13,10 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/12/29
@@ -166,7 +163,7 @@ public class CommandTreeTest {
         tree.getRoot()
                 .pos("pos")
                 .exec(context -> {
-                    dest.set((Vector3f)context.getFirstResult());
+                    dest.set((Vector3f) context.getResult(0));
                     return context.success();
                 });
         tree.parse(mockSender, new String[]{"11", "45", "14"});
