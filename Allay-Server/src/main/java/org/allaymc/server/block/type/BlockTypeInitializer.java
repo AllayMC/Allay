@@ -22,6 +22,7 @@ import org.allaymc.server.block.component.glass.BlockGlassBaseComponentImpl;
 import org.allaymc.server.block.component.grassblock.BlockGrassBlockBaseComponentImpl;
 import org.allaymc.server.block.component.shulkerbox.BlockShulkerBoxBaseComponentImpl;
 import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
+import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 
 /**
@@ -29,6 +30,7 @@ import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
  *
  * @author daoge_cmd
  */
+@SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
     public static void initShulkerBox() {
@@ -768,61 +770,47 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static void initColoredTorchBp() {
+    public static void initColoredTorch() {
         BlockTypes.COLORED_TORCH_BP_TYPE = BlockTypeBuilder
                 .builder(BlockColoredTorchBpBehavior.class)
                 .vanillaBlock(VanillaBlockId.COLORED_TORCH_BP)
                 .setProperties(VanillaBlockPropertyTypes.COLOR_BIT, VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockColoredTorchBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initColoredTorchRg() {
         BlockTypes.COLORED_TORCH_RG_TYPE = BlockTypeBuilder
                 .builder(BlockColoredTorchRgBehavior.class)
                 .vanillaBlock(VanillaBlockId.COLORED_TORCH_RG)
                 .setProperties(VanillaBlockPropertyTypes.COLOR_BIT, VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockColoredTorchBaseComponentImpl::new)
                 .build();
     }
 
-    public static void initRedstoneTorch() {
+    public static void initTorch() {
         BlockTypes.REDSTONE_TORCH_TYPE = BlockTypeBuilder
                 .builder(BlockRedstoneTorchBehavior.class)
                 .vanillaBlock(VanillaBlockId.REDSTONE_TORCH)
                 .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initSoulTorch() {
         BlockTypes.SOUL_TORCH_TYPE = BlockTypeBuilder
                 .builder(BlockSoulTorchBehavior.class)
                 .vanillaBlock(VanillaBlockId.SOUL_TORCH)
                 .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initTorch() {
         BlockTypes.TORCH_TYPE = BlockTypeBuilder
                 .builder(BlockTorchBehavior.class)
                 .vanillaBlock(VanillaBlockId.TORCH)
                 .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
-    }
 
-    public static void initUnderwaterTorch() {
         BlockTypes.UNDERWATER_TORCH_TYPE = BlockTypeBuilder
                 .builder(BlockUnderwaterTorchBehavior.class)
                 .vanillaBlock(VanillaBlockId.UNDERWATER_TORCH)
                 .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initUnlitRedstoneTorch() {
         BlockTypes.UNLIT_REDSTONE_TORCH_TYPE = BlockTypeBuilder
                 .builder(BlockUnlitRedstoneTorchBehavior.class)
                 .vanillaBlock(VanillaBlockId.UNLIT_REDSTONE_TORCH)

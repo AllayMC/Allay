@@ -49,8 +49,6 @@ import org.allaymc.server.world.AllayWorldPool;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
@@ -64,19 +62,19 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.allaymc.api.entity.type.EntityTypes.PLAYER_TYPE;
 
 @Slf4j
 public final class AllayServer implements Server {
-    private final boolean DEBUG = Server.SETTINGS.genericSettings().debug();
+    private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
+
+    private static volatile AllayServer instance;
+
+    private final boolean debug = Server.SETTINGS.genericSettings().debug();
+
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
@@ -85,8 +83,9 @@ public final class AllayServer implements Server {
     @Getter
     private final PlayerStorage playerStorage =
             Server.SETTINGS.storageSettings().savePlayerData() ?
-            new AllayNBTFilePlayerStorage(Path.of("players")) :
-            AllayEmptyPlayerStorage.INSTANCE;
+                    new AllayNBTFilePlayerStorage(Path.of("players")) :
+                    AllayEmptyPlayerStorage.INSTANCE;
+
     // Thread pool for executing CPU-intensive tasks
     @Getter
     private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(
@@ -99,24 +98,9 @@ public final class AllayServer implements Server {
     // Thread pool for executing I/O-intensive tasks
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
-    @Getter
-    private CommandRegistry commandRegistry;
-    @Getter
-    private PluginManager pluginManager;
-    @Getter
-    private Scheduler scheduler;
-    @Getter
-    private NetworkServer networkServer;
-    private Thread terminalConsoleThread;
-    private AllayTerminalConsole terminalConsole;
-    private static volatile AllayServer instance;
-    private long nextPlayerDataAutoSaveTime = 0;
+
     @Getter
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
-    @Getter
-    private ScoreboardService scoreboardService;
-    @Getter
-    private long startTime;
     private final BanInfo banInfo = ConfigManager.create(BanInfo.class, it -> {
         it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
         it.withBindFile("ban-info.yml"); // specify Path, File or pathname
@@ -131,6 +115,19 @@ public final class AllayServer implements Server {
         it.saveDefaults(); // save file if it does not exist
         it.load(true); // load and save to update comments/new fields
     });
+    @Getter
+    private CommandRegistry commandRegistry;
+    @Getter
+    private PluginManager pluginManager;
+    @Getter
+    private Scheduler scheduler;
+    @Getter
+    private NetworkServer networkServer;
+
+    private Thread terminalConsoleThread;
+    private AllayTerminalConsole terminalConsole;
+
+    private long nextPlayerDataAutoSaveTime = 0;
 
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
@@ -140,10 +137,12 @@ public final class AllayServer implements Server {
                 } catch (Throwable throwable) {
                     log.error("Error while ticking server", throwable);
                 }
-            })
-            .build();
+            }).build();
 
-    private AllayServer() {}
+    @Getter
+    private ScoreboardService scoreboardService;
+    @Getter
+    private long startTime;
 
     public static AllayServer getInstance() {
         if (instance == null) {
@@ -153,19 +152,21 @@ public final class AllayServer implements Server {
                 }
             }
         }
+
         return instance;
     }
 
     @SneakyThrows
     @Override
     public void start(long timeMillis) {
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        Configuration log4jConfig = ctx.getConfiguration();
-        LoggerConfig loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
-        if (DEBUG && Level.TRACE.isLessSpecificThan(loggerConfig.getLevel())) {
+        var ctx = (LoggerContext) LogManager.getContext(false);
+        var log4jConfig = ctx.getConfiguration();
+        var loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
+        if (debug && Level.TRACE.isLessSpecificThan(loggerConfig.getLevel())) {
             loggerConfig.setLevel(Level.TRACE);
             ctx.updateLoggers();
         }
+
         Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
             @Override
             public void run() {
@@ -173,23 +174,38 @@ public final class AllayServer implements Server {
                 shutdown();
             }
         });
+
         initTerminalConsole();
+
         pluginManager = new AllayPluginManager();
         pluginManager.loadPlugins(PluginLoadOrder.START_UP);
+
         worldPool.loadWorlds();
         var cmdDataPath = Path.of("command_data");
         if (!Files.exists(cmdDataPath)) Files.createDirectory(cmdDataPath);
-        scoreboardService = new ScoreboardService(this, new JsonScoreboardStorage(Path.of("command_data/scoreboards.json")));
+
+        scoreboardService = new ScoreboardService(
+                this,
+                new JsonScoreboardStorage(Path.of("command_data/scoreboards.json"))
+        );
         commandRegistry = new AllayCommandRegistry();
         commandRegistry.registerDefaultCommands();
         networkServer = new AllayNetworkServer(this);
         scheduler = new AllayScheduler();
+
         pluginManager.loadPlugins(PluginLoadOrder.POST_WORLD);
         pluginManager.enablePlugins();
+
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         networkServer.start();
         startTime = System.currentTimeMillis();
-        sendTr(TrKeys.A_NETWORK_SERVER_STARTED, SETTINGS.networkSettings().ip(), String.valueOf(SETTINGS.networkSettings().port()), String.valueOf(startTime - timeMillis));
+        sendTr(
+                TrKeys.A_NETWORK_SERVER_STARTED,
+                SETTINGS.networkSettings().ip(),
+                String.valueOf(SETTINGS.networkSettings().port()),
+                String.valueOf(startTime - timeMillis)
+        );
+
         if (SETTINGS.genericSettings().enableGui()) Allay.DASHBOARD.serverStarted();
         gameLoop.startLoop();
     }
@@ -237,6 +253,7 @@ public final class AllayServer implements Server {
         banInfo.save();
         whitelist.save();
         scoreboardService.save();
+
         // Start a thread to handle server shutdown
         Thread.ofPlatform().start(() -> {
             try {
@@ -248,6 +265,7 @@ public final class AllayServer implements Server {
                 virtualThreadPool.shutdownNow();
                 computeThreadPool.shutdownNow();
             }
+
             System.exit(0);
         });
     }
@@ -319,12 +337,15 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void addToPlayerList(UUID uuid, long entityId,
-                                String name, DeviceInfo deviceInfo,
-                                String xuid, Skin skin) {
+    public void addToPlayerList(
+            UUID uuid, long entityId,
+            String name, DeviceInfo deviceInfo,
+            String xuid, Skin skin
+    ) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.ADD);
-        PlayerListPacket.Entry entry = new PlayerListPacket.Entry(uuid);
+
+        var entry = new PlayerListPacket.Entry(uuid);
         entry.setEntityId(entityId);
         entry.setName(name);
         entry.setXuid(xuid);
@@ -332,8 +353,10 @@ public final class AllayServer implements Server {
         entry.setBuildPlatform(deviceInfo.device().getId());
         entry.setSkin(skin.toNetwork());
         entry.setTrustedSkin(skin.isTrusted());
+
         playerListPacket.getEntries().add(entry);
         playerListEntryMap.put(uuid, entry);
+
         broadcastPacket(playerListPacket);
     }
 
@@ -343,6 +366,7 @@ public final class AllayServer implements Server {
         playerListPacket.setAction(PlayerListPacket.Action.REMOVE);
         playerListPacket.getEntries().add(new PlayerListPacket.Entry(player.getLoginData().getUuid()));
         broadcastPacket(playerListPacket);
+
         playerListEntryMap.remove(player.getLoginData().getUuid());
     }
 
@@ -352,6 +376,7 @@ public final class AllayServer implements Server {
         playerListPacket.setAction(PlayerListPacket.Action.REMOVE);
         playerListPacket.getEntries().add(new PlayerListPacket.Entry(uuid));
         broadcastPacket(playerListPacket);
+
         playerListEntryMap.remove(uuid);
     }
 
@@ -367,9 +392,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void broadcastPacket(BedrockPacket packet) {
-        for (var player : players.values()) {
-            player.sendPacket(packet);
-        }
+        players.values().forEach(player -> player.sendPacket(packet));
     }
 
     @Override
@@ -397,11 +420,10 @@ public final class AllayServer implements Server {
     @Override
     public boolean ban(String uuidOrName) {
         if (!banInfo.bannedPlayers().add(uuidOrName)) return false;
-        for (var player : players.values()) {
-            if (player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName)) {
-                player.disconnect("You are banned!");
-            }
-        }
+        players.values().stream()
+                .filter(player -> player.getUUID().toString().equals(uuidOrName) ||
+                                  player.getOriginName().equals(uuidOrName))
+                .forEach(player -> player.disconnect("You are banned!"));
         return true;
     }
 
@@ -423,11 +445,9 @@ public final class AllayServer implements Server {
     @Override
     public boolean banIP(String ip) {
         if (!banInfo.bannedIps().add(ip)) return false;
-        for (var player : players.values()) {
-            if (AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0].equals(ip)) {
-                player.disconnect("Your IP is banned!");
-            }
-        }
+        players.values().stream()
+                .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
+                .forEach(player -> player.disconnect("Your IP is banned!"));
         return true;
     }
 
@@ -454,11 +474,10 @@ public final class AllayServer implements Server {
     @Override
     public boolean removeFromWhitelist(String uuidOrName) {
         if (!whitelist.whitelist().remove(uuidOrName)) return false;
-        for (var player : players.values()) {
-            if (player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName)) {
-                player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED);
-            }
-        }
+        players.values().stream()
+                .filter(player -> player.getUUID().toString().equals(uuidOrName) ||
+                                  player.getOriginName().equals(uuidOrName))
+                .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
         return true;
     }
 
@@ -481,7 +500,7 @@ public final class AllayServer implements Server {
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         for (var output : outputs) {
-            log.info("[" + sender.getCommandSenderName() + "] " + (status <= 0 ? "§c" : "") + I18n.get().tr(output.str(), output.args()));
+            log.info("[{}] {}{}", sender.getCommandSenderName(), status <= 0 ? "§c" : "", I18n.get().tr(output.str(), output.args()));
         }
     }
 
@@ -494,8 +513,6 @@ public final class AllayServer implements Server {
     public String getCommandSenderName() {
         return "Server";
     }
-
-    private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
 
     @Override
     public CommandOriginData getCommandOriginData() {

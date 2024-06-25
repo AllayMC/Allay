@@ -19,6 +19,7 @@ public abstract class CommonShapes {
     // Stairs
     public static final Map<BlockFace, VoxelShape> UPWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
     public static final Map<BlockFace, VoxelShape> DOWNWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
+
     private static final VoxelShape UPWARDS_STAIR_SHAPE = VoxelShape.builder()
             .solid(0, 0, 0, 1, 1, 1)
             .vacancy(0, 0.5f, 0, 0.5f, 1, 1)

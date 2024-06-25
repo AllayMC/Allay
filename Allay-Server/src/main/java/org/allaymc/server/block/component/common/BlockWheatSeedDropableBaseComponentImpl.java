@@ -7,9 +7,10 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.server.block.PlaceableBlockHelper;
 
 import java.util.concurrent.ThreadLocalRandom;
+
+import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
  * Allay Project 2024/6/18
@@ -35,10 +36,19 @@ public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentI
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         if (face != BlockFace.UP && face != BlockFace.DOWN) return true;
         var blockUnder = current.pos().dimension().getBlockState(BlockFace.DOWN.offsetPos(current.pos()));
-        return isPlaceableBlock(blockUnder.getBlockType());
+        return this.canPlaceOnBlock(blockUnder.getBlockType());
     }
 
-    protected boolean isPlaceableBlock(BlockType<?> block) {
-        return PlaceableBlockHelper.isPlantPlaceableBlock(block);
+    @Override
+    public boolean canPlaceOnBlock(BlockType<?> blockType) {
+        return blockType == GRASS_BLOCK_TYPE ||
+               blockType == MYCELIUM_TYPE ||
+               blockType == PODZOL_TYPE ||
+               blockType == DIRT_TYPE ||
+               blockType == DIRT_WITH_ROOTS_TYPE ||
+               blockType == FARMLAND_TYPE ||
+               blockType == MUD_TYPE ||
+               blockType == MUDDY_MANGROVE_ROOTS_TYPE ||
+               blockType == MOSS_BLOCK_TYPE;
     }
 }

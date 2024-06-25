@@ -58,14 +58,26 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Check if the block can keep existing when a neighbor block updates.
+     * Check if the block can remain in its current position when a neighboring block updates.
      *
-     * @param current The current block
-     * @param face    The face of the current block that is being updated
+     * @param current  The current block.
+     * @param neighbor The neighboring block that is causing the update.
+     * @param face     The face of the current block that is being updated.
      *
-     * @return true if the block can keep existing, false if the block should be broken
+     * @return {@code true} if the block can remain in its current position, {@code false} if the block should be broken.
      */
     default boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        return true;
+    }
+
+    /**
+     * Check if the block can be placed on the specified block type.
+     *
+     * @param blockType The type of the block on which this block is being placed.
+     *
+     * @return {@code true} if the block can be placed on the specified block type, {@code false} otherwise.
+     */
+    default boolean canPlaceOnBlock(BlockType<?> blockType) {
         return true;
     }
 
@@ -199,8 +211,8 @@ public interface BlockBaseComponent extends BlockComponent {
 
         // Calculate break time
         // TODO: Further validation of the algorithm is needed
-        var baseTime = ((isCorrectTool || isAlwaysDestroyable) ? 1.5 : 5.0) * blockHardness;
-        var speed = 1.0d / baseTime;
+        var baseTime = ((isCorrectTool || isAlwaysDestroyable) ? 1.5 : 5d) * blockHardness;
+        var speed = 1d / baseTime;
         if (isCorrectTool) {
             // Tool level (wooden, stone, iron, etc...) bonus
             speed *= usedItem.getBreakTimeBonus(blockState);
@@ -212,14 +224,14 @@ public interface BlockBaseComponent extends BlockComponent {
         }
 
         // Entity haste potion effect bonus
-        speed *= 1.0d + (0.2d * hasteEffectLevel);
+        speed *= 1d + (0.2d * hasteEffectLevel);
         // Entity mining fatigue effect negative bonus
         if (miningFatigueLevel != 0) speed /= Math.pow(miningFatigueLevel, 3);
         // In water but no underwater speed mining effect
         if (isInWater && !hasAquaAffinity) speed *= 0.2d;
         // In midair
         if (!isInWater && !isOnGround) speed *= 0.2d;
-        return 1.0d / speed;
+        return 1d / speed;
     }
 
     private void checkBlockType(BlockState blockState) {
