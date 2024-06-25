@@ -443,7 +443,7 @@ public class Location3d extends Position3d implements Location3dc {
     }
 
     @Override
-    public Location3d div(Vector3d v) {
+    public Location3d div(Vector3dc v) {
         super.div(v);
         return this;
     }
