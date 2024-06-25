@@ -392,7 +392,7 @@ public class Position3d extends Vector3d implements Position3dc {
     }
 
     @Override
-    public Position3d div(Vector3d v) {
+    public Position3d div(Vector3dc v) {
         super.div(v);
         return this;
     }
