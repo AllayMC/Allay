@@ -146,4 +146,10 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     default double getMaxInteractDistance() {
         return getGameType() == GameType.CREATIVE ? 13 : 7;
     }
+
+    float DEFAULT_MOVEMENT_SPEED = 0.1f;
+
+    void setMovementSpeed(float speed);
+
+    float getMovementSpeed();
 }

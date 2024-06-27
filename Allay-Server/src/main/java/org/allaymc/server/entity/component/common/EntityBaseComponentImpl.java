@@ -121,6 +121,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Setter
     protected String displayName;
     protected Set<String> tags = new HashSet<>();
+    @Getter
+    protected float absorption;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info) {
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
@@ -790,5 +792,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @UnmodifiableView
     public Set<String> getTags() {
         return Collections.unmodifiableSet(tags);
+    }
+
+    @Override
+    public void setAbsorption(float absorption) {
+        this.absorption = absorption;
     }
 }

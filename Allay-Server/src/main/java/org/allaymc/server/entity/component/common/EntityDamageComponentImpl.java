@@ -49,7 +49,15 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         lastDamage = damage;
         lastDamageTime = currentTime;
 
+        // Critical hit
         damage.updateFinalDamage(d -> d * (damage.isCritical() ? 1.5f : 1f));
+
+        // Damage absorption
+        var absorption = baseComponent.getAbsorption();
+        if (absorption > 0) {
+            baseComponent.setAbsorption(Math.max(0, absorption - damage.getFinalDamage()));
+            damage.updateFinalDamage(d -> Math.max(0, d - absorption));
+        }
 
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
         baseComponent.applyEntityEvent(EntityEventType.HURT, 2);

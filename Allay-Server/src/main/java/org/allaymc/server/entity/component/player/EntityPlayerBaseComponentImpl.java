@@ -16,6 +16,7 @@ import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
 import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
@@ -103,6 +104,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
     protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();
+    @Getter
+    protected float movementSpeed = DEFAULT_MOVEMENT_SPEED;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
         super(info);
@@ -645,6 +648,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         networkComponent.sendPacket(packet);
     }
 
+    @Override
+    public void setMovementSpeed(float speed) {
+        movementSpeed = speed;
+        attributeComponent.setAttribute(AttributeType.MOVEMENT, movementSpeed);
+    }
+
     protected int assignFormId() {
         return formIdCounter.getAndIncrement();
     }
@@ -734,5 +743,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected void sendMobEffectPacket(MobEffectPacket packet) {
         super.sendMobEffectPacket(packet);
         networkComponent.sendPacket(packet);
+    }
+
+    @Override
+    public void setAbsorption(float absorption) {
+        super.setAbsorption(absorption);
+        attributeComponent.setAttribute(AttributeType.ABSORPTION, absorption);
     }
 }
