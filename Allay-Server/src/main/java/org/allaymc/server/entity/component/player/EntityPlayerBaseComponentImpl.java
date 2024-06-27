@@ -729,4 +729,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public boolean isScoreboardViewerValid() {
         return !networkComponent.isDisconnected();
     }
+
+    @Override
+    protected void sendMobEffectPacket(MobEffectPacket packet) {
+        super.sendMobEffectPacket(packet);
+        networkComponent.sendPacket(packet);
+    }
 }

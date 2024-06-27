@@ -669,7 +669,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         mobEffectPk.setParticles(effectInstance.isVisible());
         mobEffectPk.setDuration(effectInstance.getDuration());
         mobEffectPk.setEvent(old == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
-        sendPacketToViewers(mobEffectPk);
+        sendMobEffectPacket(mobEffectPk);
     }
 
     @Override
@@ -682,8 +682,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             mobEffectPk.setRuntimeEntityId(runtimeId);
             mobEffectPk.setEffectId(effectType.getId());
             mobEffectPk.setEvent(MobEffectPacket.Event.REMOVE);
-            sendPacketToViewers(mobEffectPk);
+            sendMobEffectPacket(mobEffectPk);
         }
+    }
+
+    protected void sendMobEffectPacket(MobEffectPacket packet) {
+        sendPacketToViewers(packet);
     }
 
     @Override
