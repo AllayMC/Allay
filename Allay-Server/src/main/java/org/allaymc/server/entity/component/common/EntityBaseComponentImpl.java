@@ -591,6 +591,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         if (!tags.isEmpty()) {
             builder.putList("Tags", NbtType.STRING, new ArrayList<>(tags));
         }
+        if (!effects.isEmpty()) {
+            builder.putList("ActiveEffects", NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
+        }
         saveUniqueId(builder);
         var event = new EntitySaveNBTEvent(builder);
         manager.callEvent(event);
@@ -621,6 +624,12 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
         nbt.listenForBoolean("OnGround", onGround -> this.onGround = onGround);
         nbt.listenForList("Tags", NbtType.STRING, tags -> this.tags.addAll(tags));
+        nbt.listenForList("ActiveEffects", NbtType.COMPOUND, activeEffects -> {
+            for (NbtMap activeEffect : activeEffects) {
+                var effectInstance = EffectInstance.fromNBT(activeEffect);
+                addEffect(effectInstance);
+            }
+        });
 
         loadUniqueId(nbt);
         var event = new EntityLoadNBTEvent(nbt);
