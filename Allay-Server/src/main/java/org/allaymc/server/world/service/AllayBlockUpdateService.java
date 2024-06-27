@@ -59,7 +59,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
             );
             if (layer1.getBehavior() instanceof BlockLiquidComponent) {
                 layer1.getBehavior().onNeighborUpdate(
-                        new BlockStateWithPos(layer1, new Position3i(pos, dimension), 0),
+                        new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1),
                         neighborBlockStateWithPos,
                         blockFace
                 );
