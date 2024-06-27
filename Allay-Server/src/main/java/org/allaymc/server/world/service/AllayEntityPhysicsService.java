@@ -183,23 +183,28 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     protected void computeEntityCollisionMotion(Entity entity) {
         var collidedEntities = getCachedEntityCollidingResult(entity);
         collidedEntities.removeIf(e -> !e.computeEntityCollisionMotion());
+
         var collisionMotion = new Vector3f(0, 0, 0);
-        var loc = entity.getLocation();
-        float r = entity.getPushSpeedReduction();
+
+        var location = entity.getLocation();
+        var pushSpeedReduction = entity.getPushSpeedReduction();
         for (var other : collidedEntities) {
             // https://github.com/lovexyn0827/Discovering-Minecraft/blob/master/Minecraft%E5%AE%9E%E4%BD%93%E8%BF%90%E5%8A%A8%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%BA%94%E7%94%A8/5-Chapter-5.md
             var ol = other.getLocation();
             var direction = new Vector3f(entity.getLocation()).sub(other.getLocation(), new Vector3f()).normalize();
-            float distance = max(abs(ol.x() - loc.x()), abs(ol.z() - loc.z()));
-            float k = 0.05f * r;
+            var distance = max(abs(ol.x() - location.x()), abs(ol.z() - location.z()));
             if (distance <= 0.01) continue;
+
+            var k = 0.05f * pushSpeedReduction;
             if (distance <= 1) {
                 k *= MathUtils.fastFloatInverseSqrt(distance);
             } else {
                 k /= distance;
             }
+
             collisionMotion.add(direction.mul(k));
         }
+
         collisionMotion.setComponent(1, 0);
         entity.addMotion(collisionMotion);
     }
@@ -209,7 +214,11 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      */
     protected void updateMotion(Entity entity) {
         var motion = entity.getMotion();
-        var blockUnder = dimension.getBlockState((int) entity.getLocation().x(), (int) (entity.getLocation().y() - 0.5), (int) entity.getLocation().z());
+        var blockUnder = dimension.getBlockState(
+                (int) entity.getLocation().x(),
+                (int) (entity.getLocation().y() - 0.5),
+                (int) entity.getLocation().z()
+        );
 
         // 1. Multiplier factors
         var movementFactor = entity.getMovementFactor();
@@ -220,7 +229,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
 
         var slipperinessMultiplier = blockUnder != null ?
-                blockUnder.getBlockType().getBlockBehavior().getBlockAttributes(blockUnder).friction() :
+                blockUnder.getBlockAttributes().friction() :
                 DEFAULT_FRICTION;
 
         var momentumMx = motion.x() * slipperinessMultiplier * MOMENTUM_FACTOR;
