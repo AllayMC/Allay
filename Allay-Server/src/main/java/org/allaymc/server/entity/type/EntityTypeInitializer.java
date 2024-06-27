@@ -2,6 +2,7 @@ package org.allaymc.server.entity.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaEntityId;
+import org.allaymc.api.entity.interfaces.EntityFallingBlock;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityVillagerV2;
@@ -9,6 +10,7 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
 import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
+import org.allaymc.server.entity.component.fallingblock.EntityFallingBlockBaseComponentImpl;
 import org.allaymc.server.entity.component.item.EntityItemBaseComponentImpl;
 import org.allaymc.server.entity.component.player.*;
 
@@ -23,6 +25,14 @@ import static org.allaymc.api.entity.component.common.EntityAttributeComponent.b
 @SuppressWarnings("unused")
 @UtilityClass
 public final class EntityTypeInitializer {
+    public static void initFallingBlock() {
+        EntityTypes.FALLING_BLOCK_TYPE = EntityTypeBuilder
+                .builder(EntityFallingBlock.class)
+                .vanillaEntity(VanillaEntityId.FALLING_BLOCK)
+                .addComponent(EntityFallingBlockBaseComponentImpl::new, EntityFallingBlockBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initItem() {
         EntityTypes.ITEM_TYPE = EntityTypeBuilder
                 .builder(EntityItem.class)

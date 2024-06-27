@@ -728,13 +728,11 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             int b = (color[2] / count) & 0xff;
 
             this.metadata.set(EntityDataTypes.EFFECT_COLOR, (r << 16) + (g << 8) + b);
-            this.metadata.set(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
         } else {
             this.metadata.set(EntityDataTypes.EFFECT_COLOR, 0);
-            this.metadata.set(EntityDataTypes.EFFECT_AMBIENCE, (byte) 0);
         }
 
-        sendEntityData(EntityDataTypes.EFFECT_COLOR, EntityDataTypes.EFFECT_AMBIENCE);
+        sendEntityData(EntityDataTypes.EFFECT_COLOR);
     }
 
     @Override
