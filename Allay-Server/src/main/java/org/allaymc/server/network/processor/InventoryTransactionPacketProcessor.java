@@ -52,7 +52,6 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         );
                         if (player.isInteractingBlock()) {
                             itemStack.useItemOn(dimension, placeBlockPos, interactInfo);
-                            break;
                         }
 
                         if (!interactedBlock.getBehavior().onInteract(itemStack, dimension, interactInfo)) {
