@@ -30,6 +30,18 @@ public class EffectCommand extends SimpleCommand {
                     Collection<EntityPlayer> players = context.getResult(0);
                     EffectType effectType = context.getResult(1);
                     int seconds = context.getResult(2);
+                    if (seconds == 0) {
+                        // Remove effect
+                        players.forEach(player -> {
+                            player.removeEffect(effectType);
+                            context.addOutput(
+                                    TrKeys.M_COMMANDS_EFFECT_SUCCESS_REMOVED,
+                                    effectType.getIdentifier().path(), // TODO: I18N
+                                    player.getDisplayName()
+                            );
+                        });
+                        return context.success();
+                    }
                     int time = seconds * 20; // because effect duration in ticks
                     int amplifier = context.getResult(3);
                     boolean hideParticles = context.getResult(4);
