@@ -110,6 +110,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     return;
                 }
 
+                // TODO: The current implementation is buggy
                 for (var action : packet.getActions()) {
                     if (!action.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) continue;
                     if (!action.getSource().getFlag().equals(InventorySource.Flag.DROP_ITEM)) continue;
