@@ -1,5 +1,7 @@
 package org.allaymc.api.entity.effect;
 
+import org.cloudburstmc.nbt.NbtMap;
+
 /**
  * Allay Project 2023/10/27
  *
@@ -20,4 +22,6 @@ public interface EffectInstance {
     int getDuration();
 
     void setDuration(int duration);
+
+    NbtMap saveNBT();
 }
