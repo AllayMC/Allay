@@ -694,8 +694,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void removeAllEffects() {
-        // Use for-each instead of forEach() to prevent ConcurrentModificationException
-        for (EffectType effectType : this.effects.keySet()) {
+        // Prevent ConcurrentModificationException
+        for (EffectType effectType : this.effects.keySet().toArray(EffectType[]::new)) {
             removeEffect(effectType);
         }
     }
