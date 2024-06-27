@@ -692,7 +692,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void removeAllEffects() {
-        this.effects.keySet().forEach(this::removeEffect);
+        // Use for-each instead of forEach() to prevent ConcurrentModificationException
+        for (EffectType effectType : this.effects.keySet()) {
+            removeEffect(effectType);
+        }
     }
 
     protected void calculateEffectColor() {

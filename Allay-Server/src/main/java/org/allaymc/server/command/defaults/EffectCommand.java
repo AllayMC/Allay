@@ -29,12 +29,13 @@ public class EffectCommand extends SimpleCommand {
                 .exec(context -> {
                     Collection<EntityPlayer> players = context.getResult(0);
                     EffectType effectType = context.getResult(1);
-                    int seconds = (int) context.getResult(2) * 20; // because effect duration in ticks
+                    int seconds = context.getResult(2);
+                    int time = seconds * 20; // because effect duration in ticks
                     int amplifier = context.getResult(3);
                     boolean hideParticles = context.getResult(4);
 
                     players.forEach(player -> {
-                        player.addEffect(effectType.createInstance(amplifier, seconds, !hideParticles));
+                        player.addEffect(effectType.createInstance(amplifier, time, !hideParticles));
                         context.addOutput(
                                 TrKeys.M_COMMANDS_EFFECT_SUCCESS,
                                 effectType.getIdentifier().path(), // TODO: I18N
@@ -46,8 +47,7 @@ public class EffectCommand extends SimpleCommand {
 
                     return context.success();
                 })
-                .root()
-                .playerTarget("player")
+                .up(4)
                 .key("clear")
                 .exec(context -> {
                     Collection<EntityPlayer> players = context.getResult(0);
