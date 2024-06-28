@@ -4,11 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
+import org.joml.Vector3f;
 import org.joml.Vector3ic;
 
 /**
@@ -29,10 +31,15 @@ public class ItemSpawnEggBaseComponentImpl<T extends ItemStack> extends ItemBase
         identifier = new Identifier(identifier.toString().replace("_spawn_egg", ""));
 
         var entityType = EntityTypeRegistry.getRegistry().get(identifier);
+        if (entityType == EntityTypes.VILLAGER_TYPE) entityType = EntityTypes.VILLAGER_V2_TYPE;
         var entity = entityType.createEntity(
                 SimpleEntityInitInfo.builder()
                         .dimension(dimension)
-                        .pos(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z())
+                        .pos(interactInfo.clickPos().add(
+                                interactInfo.clickBlockPos().x(),
+                                interactInfo.clickBlockPos().y(),
+                                interactInfo.clickBlockPos().z(),
+                                new Vector3f()))
                         .build()
         );
         dimension.getEntityService().addEntity(entity);

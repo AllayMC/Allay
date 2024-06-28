@@ -52,19 +52,18 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         );
                         if (player.isInteractingBlock()) {
                             itemStack.useItemOn(dimension, placeBlockPos, interactInfo);
-                        }
+                            if (!interactedBlock.getBehavior().onInteract(itemStack, dimension, interactInfo)) {
+                                // Player interaction with the block was unsuccessful, possibly the plugin rolled back the event, need to override the client block change
+                                // Override the block change that was clicked
+                                var blockStateClicked = dimension.getBlockState(clickBlockPos);
+                                dimension.sendBlockUpdateTo(blockStateClicked, clickBlockPos, 0, player);
 
-                        if (!interactedBlock.getBehavior().onInteract(itemStack, dimension, interactInfo)) {
-                            // Player interaction with the block was unsuccessful, possibly the plugin rolled back the event, need to override the client block change
-                            // Override the block change that was clicked
-                            var blockStateClicked = dimension.getBlockState(clickBlockPos);
-                            dimension.sendBlockUpdateTo(blockStateClicked, clickBlockPos, 0, player);
-
-                            // Player places a block
-                            if (itemStack.getItemType() == AIR_TYPE) break;
-                            if (!itemStack.placeBlock(dimension, placeBlockPos, interactInfo)) {
-                                var blockStateReplaced = dimension.getBlockState(placeBlockPos);
-                                dimension.sendBlockUpdateTo(blockStateReplaced, placeBlockPos, 0, player);
+                                // Player places a block
+                                if (itemStack.getItemType() == AIR_TYPE) break;
+                                if (!itemStack.placeBlock(dimension, placeBlockPos, interactInfo)) {
+                                    var blockStateReplaced = dimension.getBlockState(placeBlockPos);
+                                    dimension.sendBlockUpdateTo(blockStateReplaced, placeBlockPos, 0, player);
+                                }
                             }
                         }
                     }
