@@ -12,7 +12,7 @@ import org.joml.primitives.AABBf;
  * @author daoge_cmd
  */
 public interface Entity extends
-        EntityBaseComponent, EntityAttributeComponent,
+        EntityBaseComponent,
         HasAABB, HasLongId {
 
     @Override
