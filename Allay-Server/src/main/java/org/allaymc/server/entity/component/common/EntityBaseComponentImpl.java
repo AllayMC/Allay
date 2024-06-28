@@ -177,17 +177,23 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void tick() {
         checkDead();
+        updateEffect();
+    }
+
+    protected void updateEffect() {
+        if (effects.isEmpty()) return;
+        for (var effect : effects.values().toArray(EffectInstance[]::new)) {
+            effect.setDuration(effect.getDuration() - 1);
+            if (effect.getDuration() <= 0) {
+                removeEffect(effect.getType());
+            }
+        }
     }
 
     protected void checkDead() {
         if (attributeComponent == null) return;
         if (attributeComponent.getHealth() == 0 && !dead) {
-            var event = new EntityDieEvent(thisEntity);
-            getWorld().getEventBus().callEvent(event);
-            manager.callEvent(new org.allaymc.api.entity.component.event.EntityDieEvent());
-            dead = true;
-            deadTimer = DEFAULT_DEAD_TIMER;
-            applyEntityEvent(EntityEventType.DEATH, 0);
+            onDie();
         }
         if (dead) {
             if (deadTimer > 0) deadTimer--;
@@ -200,6 +206,16 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
                 dead = false;
             }
         }
+    }
+
+    protected void onDie() {
+        var event = new EntityDieEvent(thisEntity);
+        getWorld().getEventBus().callEvent(event);
+        manager.callEvent(new org.allaymc.api.entity.component.event.EntityDieEvent());
+        dead = true;
+        deadTimer = DEFAULT_DEAD_TIMER;
+        applyEntityEvent(EntityEventType.DEATH, 0);
+        removeAllEffects();
     }
 
     protected void spawnDeadParticle() {
