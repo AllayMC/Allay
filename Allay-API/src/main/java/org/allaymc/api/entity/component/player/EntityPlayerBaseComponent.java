@@ -42,9 +42,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void setCrawling(boolean crawling);
 
-    boolean isInteractingBlock();
+    boolean isUsingItem();
 
-    void setInteractingBlock(boolean interactingBlock);
+    void setUsingItem(boolean usingItemOnBlock);
 
     int getHandSlot();
 

@@ -100,7 +100,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected boolean awaitingDimensionChangeACK;
     @Getter
     @Setter
-    protected boolean interactingBlock;
+    protected boolean usingItem;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
     protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();

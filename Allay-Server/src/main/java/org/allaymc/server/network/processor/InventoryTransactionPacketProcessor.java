@@ -50,8 +50,12 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 player, clickBlockPos,
                                 clickPos, blockFace
                         );
-                        if (player.isInteractingBlock()) {
-                            itemStack.useItemOn(dimension, placeBlockPos, interactInfo);
+                        itemStack.rightClickItemOn(dimension, placeBlockPos, interactInfo);
+                        if (player.isUsingItem()) {
+                            if (itemStack.useItemOn(dimension, placeBlockPos, interactInfo)) {
+                                // Using item on the block successfully, no need to call BlockBehavior::onInteract()
+                                break;
+                            }
                             if (!interactedBlock.getBehavior().onInteract(itemStack, dimension, interactInfo)) {
                                 // Player interaction with the block was unsuccessful, possibly the plugin rolled back the event, need to override the client block change
                                 // Override the block change that was clicked
@@ -65,6 +69,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                     dimension.sendBlockUpdateTo(blockStateReplaced, placeBlockPos, 0, player);
                                 }
                             }
+
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {

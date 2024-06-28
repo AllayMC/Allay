@@ -69,21 +69,21 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 yield PacketSignal.HANDLED;
             }
             case START_ITEM_USE_ON -> {
-                if (player.isInteractingBlock()) {
+                if (player.isUsingItem()) {
                     log.warn("Player {} tried to start item use on without stopping", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
 
-                player.setInteractingBlock(true);
+                player.setUsingItem(true);
                 yield PacketSignal.HANDLED;
             }
             case STOP_ITEM_USE_ON -> {
-                if (!player.isInteractingBlock()) {
+                if (!player.isUsingItem()) {
                     log.warn("Player {} tried to stop item use on without starting", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
 
-                player.setInteractingBlock(false);
+                player.setUsingItem(false);
                 yield PacketSignal.HANDLED;
             }
             default -> PacketSignal.UNHANDLED;

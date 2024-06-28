@@ -92,8 +92,17 @@ public interface ItemBaseComponent extends ItemComponent {
     void loadExtraTag(NbtMap extraTag);
 
     /**
+     * Called when player right-click a block no matter the return value of player.isUsingItem()
+     * @param dimension The dimension the player is in
+     * @param placeBlockPos The position of the block being right-clicked
+     * @param interactInfo Information about the interaction
+     */
+    default void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {}
+
+    /**
      * Attempt to use this item on a block.
      * <p>
+     * This method will be called only when client think "he can" use the item. In other words, when player.isUsingItem() return true.
      * This method should handle reducing item count, durability, etc., on successful use.
      * No need to send item updates separately as the caller will handle it.
      * <p>
