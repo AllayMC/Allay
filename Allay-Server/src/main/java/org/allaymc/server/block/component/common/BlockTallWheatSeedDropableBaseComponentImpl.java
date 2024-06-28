@@ -37,7 +37,7 @@ public class BlockTallWheatSeedDropableBaseComponentImpl extends BlockWheatSeedD
             if (!willBreak)
                 willBreak = this.canPlaceOnBlock(dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())).getBlockType());
         }
-        return willBreak;
+        return !willBreak;
     }
 
     protected boolean notSamePlant(BlockState downBlock) {
