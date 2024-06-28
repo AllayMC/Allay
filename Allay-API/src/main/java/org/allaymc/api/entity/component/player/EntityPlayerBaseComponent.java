@@ -22,6 +22,8 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     double BLOCK_INTERACT_MAX_DV_DIFF = 2.0;
 
+    float DEFAULT_MOVEMENT_SPEED = 0.1f;
+
     boolean isSprinting();
 
     void setSprinting(boolean sprinting);
@@ -147,9 +149,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
         return getGameType() == GameType.CREATIVE ? 13 : 7;
     }
 
-    float DEFAULT_MOVEMENT_SPEED = 0.1f;
+    float getMovementSpeed();
 
     void setMovementSpeed(float speed);
-
-    float getMovementSpeed();
 }

@@ -114,12 +114,13 @@ public class AllayDimension implements Dimension {
         pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));
         pk.setData(block.blockStateHash());
         getChunkService().getChunkByLevelPos(x, z).addChunkPacket(pk);
+
         block.getBehavior().onBreak(
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
-                usedItem,
-                player
+                usedItem, player
         );
         setBlockState(x, y, z, AIR_TYPE.getDefaultState());
+        player.setFoodExhaustionLevel(player.getFoodExhaustionLevel() + 0.005f);
     }
 
     @Override

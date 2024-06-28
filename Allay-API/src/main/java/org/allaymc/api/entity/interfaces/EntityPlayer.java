@@ -5,10 +5,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
+import org.allaymc.api.entity.component.player.*;
 import org.allaymc.api.eventbus.event.world.player.PlayerThrowItemEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.MathUtils;
@@ -29,7 +26,13 @@ public interface EntityPlayer extends
         EntityPlayerAttributeComponent,
         EntityPlayerContainerHolderComponent,
         EntityContainerViewerComponent,
-        EntityDamageComponent {
+        EntityDamageComponent,
+        EntityPlayerHungerComponent {
+
+    @Override
+    default void tick() {
+        Entity.super.tick();
+    }
 
     default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
         var container = getOpenedContainer(slotType);
@@ -50,13 +53,11 @@ public interface EntityPlayer extends
     default boolean tryDropItem(FullContainerType<?> containerType, int slot, int count) {
         var container = getReachableContainer(containerType);
         if (container == null) return false;
+
         var item = container.getItemStack(slot);
-        if (item.getItemType() == AIR_TYPE) {
-            return false;
-        }
-        if (item.getCount() < count) {
-            return false;
-        }
+        if (item.getItemType() == AIR_TYPE) return false;
+        if (item.getCount() < count) return false;
+
         forceDropItem(container, slot, count);
         return true;
     }
@@ -65,9 +66,8 @@ public interface EntityPlayer extends
         var item = container.getItemStack(slot);
         var event = new PlayerThrowItemEvent(this, item);
         getWorld().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+        if (event.isCancelled()) return;
+
         ItemStack droppedItemStack;
         if (item.getCount() > count) {
             item.setCount(item.getCount() - count);
@@ -79,13 +79,19 @@ public interface EntityPlayer extends
             item = EMPTY_SLOT_PLACE_HOLDER;
             container.setItemStack(slot, item);
         }
+
         dropItemInPlayerPos(droppedItemStack);
     }
 
     default void dropItemInPlayerPos(ItemStack itemStack) {
         var playerLoc = getLocation();
         var dimension = playerLoc.dimension();
-        dimension.dropItem(itemStack, playerLoc.add(0, this.getEyeHeight() - 0.25f, 0, new Vector3f()), MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f), 40);
+        dimension.dropItem(
+                itemStack,
+                playerLoc.add(0, this.getEyeHeight() - 0.25f, 0, new Vector3f()),
+                MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f),
+                40
+        );
     }
 
     default ItemStack getItemInHand() {
