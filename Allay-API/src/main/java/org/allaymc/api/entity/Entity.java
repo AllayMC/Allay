@@ -2,6 +2,7 @@ package org.allaymc.api.entity;
 
 import org.allaymc.api.datastruct.aabbtree.HasAABB;
 import org.allaymc.api.datastruct.aabbtree.HasLongId;
+import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.joml.primitives.AABBf;
 
@@ -11,7 +12,7 @@ import org.joml.primitives.AABBf;
  * @author daoge_cmd
  */
 public interface Entity extends
-        EntityBaseComponent,
+        EntityBaseComponent, EntityAttributeComponent,
         HasAABB, HasLongId {
 
     @Override

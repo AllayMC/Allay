@@ -379,7 +379,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
         return false;
     }
 
-    void setAbsorption(float absorption);
-
     float getAbsorption();
+
+    void setAbsorption(float absorption);
 }

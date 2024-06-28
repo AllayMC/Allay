@@ -4,7 +4,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.utils.Identifier;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
 import java.awt.*;
