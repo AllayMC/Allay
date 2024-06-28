@@ -1,11 +1,13 @@
 package org.allaymc.exampleplugin;
 
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.server.Server;
+import org.joml.Vector3i;
 
 import java.util.ArrayList;
 
@@ -46,12 +48,13 @@ public class ServerEventListener {
             list.add("Online: §a" + Server.getInstance().getOnlinePlayerCount() + "/" + Server.getInstance().getNetworkServer().getMaxPlayerCount());
             list.add("Time: §a" + player.getWorld().getWorldData().getTime());
             list.add("World: §a" + player.getWorld().getWorldData().getName());
-            list.add("DimId: §a" + player.getDimension().getDimensionInfo().dimensionId());
             if (!player.isInWorld()) return true;
             var loc = player.getLocation();
             var chunk = player.getCurrentChunk();
             int cx = chunk.getX();
             int cz = chunk.getZ();
+            var blockUnder = player.getDimension().getBlockState(BlockFace.DOWN.offsetPos((int) loc.x(), (int) loc.y(), (int) loc.z()));
+            list.add("BlockUnder: §a" + blockUnder.getBlockType().getIdentifier().path());
             list.add("Chunk: §a" + cx + ", " + cz);
             list.add("Loaded: §a" + player.getDimension().getChunkService().getLoadedChunks().size());
             list.add("Loading: §a" + player.getDimension().getChunkService().getLoadingChunks().size());
