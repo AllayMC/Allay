@@ -16,6 +16,8 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
+import java.util.Objects;
+
 /**
  * Allay Project 27/06/2024
  *
@@ -36,6 +38,8 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     @Override
     protected void initMetadata() {
         super.initMetadata();
+        Objects.requireNonNull(blockState, "blockState must not be null");
+
         this.metadata.set(EntityFlag.FIRE_IMMUNE, true);
         this.metadata.set(EntityDataTypes.VARIANT, blockState.blockStateHash());
     }
@@ -52,25 +56,27 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             aliveTick++;
             if (aliveTick > MAX_ALIVE_TICKS) {
                 aliveTick = 0;
-                despawnFromAll();
-                getDimension().addLevelEvent(
-                        location.x(), location.y(), location.z(),
-                        LevelEvent.BLOCK_UPDATE_BREAK, blockState.blockStateHash()
-                );
-                getDimension().getEntityService().removeEntity(thisEntity);
-                getDimension().dropItem(blockState.toItemStack(), location);
+                getDimension().getEntityService().removeEntity(thisEntity, () -> {
+                    despawnFromAll();
+                    getDimension().addLevelEvent(
+                            location.x(), location.y(), location.z(),
+                            LevelEvent.BLOCK_UPDATE_BREAK, blockState.blockStateHash()
+                    );
+                    getDimension().dropItem(blockState.toItemStack(), location);
+                });
             }
         }
 
         if (isOnGround()) {
-            getDimension().setBlockState(
-                    (int) location.x(),
-                    (int) location.y(),
-                    (int) location.z(),
-                    blockState
-            );
-            despawnFromAll();
-            getDimension().getEntityService().removeEntity(thisEntity);
+            getDimension().getEntityService().removeEntity(thisEntity, () -> {
+                getDimension().setBlockState(
+                        (int) location.x(),
+                        (int) location.y(),
+                        (int) location.z(),
+                        blockState
+                );
+                despawnFromAll();
+            });
         }
     }
 

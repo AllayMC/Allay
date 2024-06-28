@@ -28,24 +28,33 @@ public class BlockFallableComponentImpl extends BlockBaseComponentImpl implement
 
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        super.onNeighborUpdate(current, neighbor, face); // TODO
+        super.onNeighborUpdate(current, neighbor, face);
+
+        var pos = current.pos();
+        var dimension = pos.dimension();
+        spawnFallingEntity(dimension, pos, current.blockState());
     }
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        var down0 = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos)).getBlockType();
-        var down1 = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos), 1).getBlockType();
+        if (spawnFallingEntity(dimension, placeBlockPos, blockState)) return true;
+        return super.place(dimension, blockState, placeBlockPos, placementInfo);
+    }
+
+    protected boolean spawnFallingEntity(Dimension dimension, Vector3ic pos, BlockState blockState) {
+        var down0 = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType();
+        var down1 = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos), 1).getBlockType();
         if (invalidDownBlock(down0, down1)) {
-            dimension.getEntityService().addEntity(createFallingEntity(dimension, placeBlockPos, blockState), () -> {
+            dimension.getEntityService().addEntity(createFallingEntity(dimension, pos, blockState), () -> {
                 dimension.setBlockState(
-                        placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), BlockTypes.AIR_TYPE.getDefaultState(),
-                        0, true, true
+                        pos.x(), pos.y(), pos.z(),
+                        BlockTypes.AIR_TYPE.getDefaultState()
                 );
             });
             return true;
         }
 
-        return super.place(dimension, blockState, placeBlockPos, placementInfo);
+        return false;
     }
 
     protected boolean invalidDownBlock(BlockType<?> down0, BlockType<?> down1) {
