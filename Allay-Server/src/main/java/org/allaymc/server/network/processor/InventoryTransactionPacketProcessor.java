@@ -69,7 +69,6 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                     dimension.sendBlockUpdateTo(blockStateReplaced, placeBlockPos, 0, player);
                                 }
                             }
-
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
@@ -114,11 +113,16 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
 
                 // TODO: The current implementation is buggy
-                for (var action : packet.getActions()) {
-                    if (!action.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) continue;
-                    if (!action.getSource().getFlag().equals(InventorySource.Flag.DROP_ITEM)) continue;
+                var first = packet.getActions().getFirst();
+                var last = packet.getActions().getLast();
+                if (
+                        first.getSource().getType() == InventorySource.Type.WORLD_INTERACTION &&
+                        first.getSource().getFlag() == InventorySource.Flag.DROP_ITEM &&
+                        last.getSource().getType() == InventorySource.Type.CONTAINER &&
+                        last.getSource().getFlag() == InventorySource.Flag.NONE
+                ) {
                     // Do not ask me why Mojang still use the old item transaction pk even the server-auth inv was enabled
-                    var count = action.getToItem().getCount();
+                    var count = first.getToItem().getCount();
                     player.tryDropItemInHand(count);
                 }
             }
