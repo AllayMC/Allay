@@ -1,6 +1,7 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.palette.BlockStateHashPalette;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
@@ -10,6 +11,7 @@ import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.registry.EntityTypeRegistry;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
@@ -17,6 +19,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
+import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 
 import java.io.IOException;
@@ -151,6 +154,21 @@ public class GameTestCommand extends SimpleCommand {
                 .key("suicide")
                 .exec((context, player) -> {
                     player.attack(114514);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("fallblock")
+                .exec((context, player) -> {
+                    var entity = EntityTypes.FALLING_BLOCK_TYPE.createEntity(
+                            SimpleEntityInitInfo.builder()
+                                    .loc(player.getLocation())
+                                    .nbt(NbtMap.builder()
+                                            .putInt("BlockStateHash", BlockTypes.SAND_TYPE.getDefaultState().blockStateHash())
+                                            .build()
+                                    )
+                                    .build()
+                    );
+                    player.getDimension().getEntityService().addEntity(entity);
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()

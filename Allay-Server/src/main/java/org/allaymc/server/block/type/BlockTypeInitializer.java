@@ -15,11 +15,13 @@ import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.barrel.BlockBarrelBaseComponentImpl;
 import org.allaymc.server.block.component.chest.BlockChestBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
+import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallWheatSeedDropableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockWheatSeedDropableBaseComponentImpl;
 import org.allaymc.server.block.component.craftingtable.BlockCraftingTableBaseComponentImpl;
 import org.allaymc.server.block.component.glass.BlockGlassBaseComponentImpl;
 import org.allaymc.server.block.component.grassblock.BlockGrassBlockBaseComponentImpl;
+import org.allaymc.server.block.component.sand.BlockSandBaseComponentImpl;
 import org.allaymc.server.block.component.shulkerbox.BlockShulkerBoxBaseComponentImpl;
 import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
@@ -33,6 +35,23 @@ import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
+    public static void initGravel() {
+        BlockTypes.GRAVEL_TYPE = BlockTypeBuilder
+                .builder(BlockGravelBehavior.class)
+                .vanillaBlock(VanillaBlockId.GRAVEL)
+                .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initSand() {
+        BlockTypes.SAND_TYPE = BlockTypeBuilder
+                .builder(BlockSandBehavior.class)
+                .vanillaBlock(VanillaBlockId.SAND)
+                .setProperties(VanillaBlockPropertyTypes.SAND_TYPE)
+                .setBlockBaseComponentSupplier(BlockSandBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initShulkerBox() {
         BlockTypes.YELLOW_SHULKER_BOX_TYPE = BlockTypeBuilder
                 .builder(BlockYellowShulkerBoxBehavior.class)
@@ -210,7 +229,7 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static void initAcaciaStairs() {
+    public static void initStairs() {
         BlockTypes.ACACIA_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockAcaciaStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.ACACIA_STAIRS)
@@ -218,9 +237,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initAndesiteStairs() {
         BlockTypes.ANDESITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockAndesiteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.ANDESITE_STAIRS)
@@ -228,9 +244,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initBambooMosaicStairs() {
         BlockTypes.BAMBOO_MOSAIC_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBambooMosaicStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_STAIRS)
@@ -238,9 +251,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initBambooStairs() {
         BlockTypes.BAMBOO_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBambooStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BAMBOO_STAIRS)
@@ -248,9 +258,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initBirchStairs() {
         BlockTypes.BIRCH_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBirchStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BIRCH_STAIRS)
@@ -258,9 +265,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initBlackstoneStairs() {
         BlockTypes.BLACKSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBlackstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BLACKSTONE_STAIRS)
@@ -268,9 +272,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initBrickStairs() {
         BlockTypes.BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BRICK_STAIRS)
@@ -278,9 +279,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initCherryStairs() {
         BlockTypes.CHERRY_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockCherryStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.CHERRY_STAIRS)
@@ -288,9 +286,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initCobbledDeepslateStairs() {
         BlockTypes.COBBLED_DEEPSLATE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockCobbledDeepslateStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE_STAIRS)
@@ -298,9 +293,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initCrimsonStairs() {
         BlockTypes.CRIMSON_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockCrimsonStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.CRIMSON_STAIRS)
@@ -308,9 +300,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initCutCopperStairs() {
         BlockTypes.CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.CUT_COPPER_STAIRS)
@@ -318,9 +307,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initDarkOakStairs() {
         BlockTypes.DARK_OAK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDarkOakStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DARK_OAK_STAIRS)
@@ -328,9 +314,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initDarkPrismarineStairs() {
         BlockTypes.DARK_PRISMARINE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDarkPrismarineStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DARK_PRISMARINE_STAIRS)
@@ -338,9 +321,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initDeepslateBrickStairs() {
         BlockTypes.DEEPSLATE_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDeepslateBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DEEPSLATE_BRICK_STAIRS)
@@ -348,9 +328,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initDeepslateTileStairs() {
         BlockTypes.DEEPSLATE_TILE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDeepslateTileStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DEEPSLATE_TILE_STAIRS)
@@ -358,9 +335,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initDioriteStairs() {
         BlockTypes.DIORITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDioriteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DIORITE_STAIRS)
@@ -368,9 +342,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initEndBrickStairs() {
         BlockTypes.END_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockEndBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.END_BRICK_STAIRS)
@@ -378,9 +349,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initExposedCutCopperStairs() {
         BlockTypes.EXPOSED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockExposedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.EXPOSED_CUT_COPPER_STAIRS)
@@ -388,9 +356,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initGraniteStairs() {
         BlockTypes.GRANITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockGraniteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.GRANITE_STAIRS)
@@ -398,9 +363,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initJungleStairs() {
         BlockTypes.JUNGLE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockJungleStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.JUNGLE_STAIRS)
@@ -408,9 +370,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initMangroveStairs() {
         BlockTypes.MANGROVE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockMangroveStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.MANGROVE_STAIRS)
@@ -418,9 +377,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initMossyCobblestoneStairs() {
         BlockTypes.MOSSY_COBBLESTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockMossyCobblestoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.MOSSY_COBBLESTONE_STAIRS)
@@ -428,9 +384,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initMossyStoneBrickStairs() {
         BlockTypes.MOSSY_STONE_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockMossyStoneBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.MOSSY_STONE_BRICK_STAIRS)
@@ -438,9 +391,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initMudBrickStairs() {
         BlockTypes.MUD_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockMudBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.MUD_BRICK_STAIRS)
@@ -448,9 +398,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initNetherBrickStairs() {
         BlockTypes.NETHER_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockNetherBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.NETHER_BRICK_STAIRS)
@@ -458,9 +405,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initNormalStoneStairs() {
         BlockTypes.NORMAL_STONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockNormalStoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.NORMAL_STONE_STAIRS)
@@ -468,9 +412,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initOakStairs() {
         BlockTypes.OAK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockOakStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.OAK_STAIRS)
@@ -478,9 +419,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initOxidizedCutCopperStairs() {
         BlockTypes.OXIDIZED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockOxidizedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.OXIDIZED_CUT_COPPER_STAIRS)
@@ -488,9 +426,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPolishedAndesiteStairs() {
         BlockTypes.POLISHED_ANDESITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedAndesiteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_ANDESITE_STAIRS)
@@ -498,9 +433,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPolishedBlackstoneBrickStairs() {
         BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedBlackstoneBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICK_STAIRS)
@@ -508,9 +440,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPolishedBlackstoneStairs() {
         BlockTypes.POLISHED_BLACKSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedBlackstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_STAIRS)
@@ -518,9 +447,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPolishedDeepslateStairs() {
         BlockTypes.POLISHED_DEEPSLATE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedDeepslateStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_STAIRS)
@@ -528,9 +454,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPolishedDioriteStairs() {
         BlockTypes.POLISHED_DIORITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedDioriteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_DIORITE_STAIRS)
@@ -538,9 +461,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPolishedGraniteStairs() {
         BlockTypes.POLISHED_GRANITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedGraniteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_GRANITE_STAIRS)
@@ -548,9 +468,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPolishedTuffStairs() {
         BlockTypes.POLISHED_TUFF_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedTuffStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_TUFF_STAIRS)
@@ -558,9 +475,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPrismarineBricksStairs() {
         BlockTypes.PRISMARINE_BRICKS_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPrismarineBricksStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.PRISMARINE_BRICKS_STAIRS)
@@ -568,9 +482,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPrismarineStairs() {
         BlockTypes.PRISMARINE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPrismarineStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.PRISMARINE_STAIRS)
@@ -578,9 +489,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initPurpurStairs() {
         BlockTypes.PURPUR_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPurpurStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.PURPUR_STAIRS)
@@ -588,9 +496,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initQuartzStairs() {
         BlockTypes.QUARTZ_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockQuartzStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.QUARTZ_STAIRS)
@@ -598,9 +503,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initRedNetherBrickStairs() {
         BlockTypes.RED_NETHER_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockRedNetherBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.RED_NETHER_BRICK_STAIRS)
@@ -608,9 +510,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initRedSandstoneStairs() {
         BlockTypes.RED_SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockRedSandstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.RED_SANDSTONE_STAIRS)
@@ -618,9 +517,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initSandstoneStair() {
         BlockTypes.SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSandstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SANDSTONE_STAIRS)
@@ -628,9 +524,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initSmoothQuartzStairs() {
         BlockTypes.SMOOTH_QUARTZ_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSmoothQuartzStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SMOOTH_QUARTZ_STAIRS)
@@ -638,9 +531,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initSmoothRedSandstoneStairs() {
         BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSmoothRedSandstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SMOOTH_RED_SANDSTONE_STAIRS)
@@ -648,9 +538,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initSmoothSandstoneStairs() {
         BlockTypes.SMOOTH_SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSmoothSandstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SMOOTH_SANDSTONE_STAIRS)
@@ -658,9 +545,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initSpruceStairs() {
         BlockTypes.SPRUCE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSpruceStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SPRUCE_STAIRS)
@@ -668,9 +552,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initStoneBrickStair() {
         BlockTypes.STONE_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockStoneBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.STONE_BRICK_STAIRS)
@@ -678,9 +559,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initStoneStairs() {
         BlockTypes.STONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockStoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.STONE_STAIRS)
@@ -688,9 +566,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initTuffBrickStairs() {
         BlockTypes.TUFF_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockTuffBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.TUFF_BRICK_STAIRS)
@@ -698,9 +573,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initTuffStairs() {
         BlockTypes.TUFF_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockTuffStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.TUFF_STAIRS)
@@ -708,9 +580,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initWarpedStairs() {
         BlockTypes.WARPED_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWarpedStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WARPED_STAIRS)
@@ -718,9 +587,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initWaxedCutCopperStairs() {
         BlockTypes.WAXED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWaxedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WAXED_CUT_COPPER_STAIRS)
@@ -728,9 +594,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initWaxedExposedCutCopperStairs() {
         BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWaxedExposedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS)
@@ -738,9 +601,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initWaxedOxidizedCutCopperStairs() {
         BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWaxedOxidizedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
@@ -748,9 +608,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initWaxedWeatheredCutCopperStairs() {
         BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWaxedWeatheredCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS)
@@ -758,9 +615,6 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initWeatheredCutCopperStairs() {
         BlockTypes.WEATHERED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWeatheredCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WEATHERED_CUT_COPPER_STAIRS)
