@@ -15,6 +15,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3ic;
 
 import java.util.Map;
 
@@ -133,7 +134,11 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void showForm(Form form);
 
-    default boolean canInteract(float x, float y, float z) {
+    default boolean canReach(Vector3ic pos) {
+        return canReach(pos.x(), pos.y(), pos.z());
+    }
+
+    default boolean canReach(float x, float y, float z) {
         var maxDistance = getMaxInteractDistance();
         var location = getLocation();
         if (location.distanceSquared(x, y, z) > maxDistance * maxDistance) return false;

@@ -62,13 +62,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void handleBlockAction(EntityPlayer player, List<PlayerBlockActionData> blockActions) {
-        if (blockActions.isEmpty()) return;
         for (var action : blockActions) {
             var pos = action.getBlockPosition();
             // Check interact distance
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
-                    if (!player.canInteract(pos.getX(), pos.getY(), pos.getZ())) {
+                    if (!player.canReach(pos.getX(), pos.getY(), pos.getZ())) {
                         log.warn("Player {} tried to break a block out of reach", player.getOriginName());
                         continue;
                     }
@@ -202,7 +201,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void checkInteractDistance(EntityPlayer player) {
-        if (!player.canInteract(breakBlockX, breakBlockY, breakBlockZ)) {
+        if (!player.canReach(breakBlockX, breakBlockY, breakBlockZ)) {
             log.warn("Player {} tried to interact with a block out of reach", player.getOriginName());
             stopBreak(player);
         }
