@@ -20,7 +20,7 @@ import java.util.Map;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, ScoreboardViewer {
 
-    double BLOCK_INTERACT_MAX_DV_DIFF = 2d;
+    double BLOCK_INTERACT_MAX_DV_DIFF = 4d;
 
     float DEFAULT_MOVEMENT_SPEED = 0.1f;
 
