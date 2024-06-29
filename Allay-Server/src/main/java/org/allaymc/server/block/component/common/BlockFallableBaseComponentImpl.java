@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component.common;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.common.BlockFallableComponent;
+import org.allaymc.api.block.component.common.BlockFallableBaseComponent;
 import org.allaymc.api.block.component.common.BlockLiquidComponent;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
@@ -21,8 +21,8 @@ import org.joml.Vector3ic;
  *
  * @author IWareQ
  */
-public class BlockFallableComponentImpl extends BlockBaseComponentImpl implements BlockFallableComponent {
-    public BlockFallableComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl implements BlockFallableBaseComponent {
+    public BlockFallableBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 

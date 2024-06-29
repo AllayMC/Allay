@@ -9,7 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.common.BlockFallableComponentImpl;
+import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**
@@ -18,7 +18,7 @@ import org.joml.Vector3ic;
  * @author IWareQ
  */
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "sand_type")
-public class BlockSandBaseComponentImpl extends BlockFallableComponentImpl {
+public class BlockSandBaseComponentImpl extends BlockFallableBaseComponentImpl {
     public BlockSandBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }

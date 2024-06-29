@@ -15,7 +15,7 @@ import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.barrel.BlockBarrelBaseComponentImpl;
 import org.allaymc.server.block.component.chest.BlockChestBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
-import org.allaymc.server.block.component.common.BlockFallableComponentImpl;
+import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallWheatSeedDropableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockWheatSeedDropableBaseComponentImpl;
 import org.allaymc.server.block.component.craftingtable.BlockCraftingTableBaseComponentImpl;
@@ -39,7 +39,7 @@ public final class BlockTypeInitializer {
         BlockTypes.GRAVEL_TYPE = BlockTypeBuilder
                 .builder(BlockGravelBehavior.class)
                 .vanillaBlock(VanillaBlockId.GRAVEL)
-                .setBlockBaseComponentSupplier(BlockFallableComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
                 .build();
     }
 
