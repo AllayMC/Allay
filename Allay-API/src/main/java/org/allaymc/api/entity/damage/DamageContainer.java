@@ -45,6 +45,10 @@ public class DamageContainer {
         return new DamageContainer(attacker, DamageType.ENTITY_ATTACK, sourceDamage);
     }
 
+    public static DamageContainer starve(float sourceDamage) {
+        return new DamageContainer(null, DamageType.STARVE, sourceDamage);
+    }
+
     public boolean hasCustomKnockback() {
         return customKnockback != -1;
     }

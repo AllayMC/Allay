@@ -227,6 +227,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case STOP_GLIDING -> player.setGliding(false);
                 case START_CRAWLING -> player.setCrawling(true);
                 case STOP_CRAWLING -> player.setCrawling(false);
+                case START_JUMPING -> {
+                    if (player.isDead()) return;
+                    player.exhaust(player.isSprinting() ? 0.2f : 0.05f);
+                }
             }
         }
     }

@@ -6,8 +6,10 @@ import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.world.Difficulty;
 
 /**
  * Allay Project 28/06/2024
@@ -25,55 +27,88 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     protected EntityPlayer player;
 
     private int foodLevel = 20;
-    private int foodSaturationLevel = 20;
+    private int foodSaturationLevel = 5;
 
     private float foodTickTimer;
-    private float foodExhaustionLevel = 5;
+    private float foodExhaustionLevel;
 
     @Override
-    public void tick() {
-        if (player.isSpawned()) {
-            var needSend = false;
+    public void tick0() {
+        if (!player.isSpawned() || player.isDead()) return;
 
-            var hunger = player.getAttribute(AttributeType.PLAYER_HUNGER);
-            if (hunger.getCurrentValue() != foodLevel) {
-                hunger.setCurrentValue(foodLevel);
-                needSend = true;
-            }
-
-            var saturation = player.getAttribute(AttributeType.PLAYER_SATURATION);
-            if (saturation.getCurrentValue() != foodSaturationLevel) {
-                saturation.setCurrentValue(foodSaturationLevel);
-                needSend = true;
-            }
-
-            var exhaustion = player.getAttribute(AttributeType.PLAYER_EXHAUSTION);
-            if (exhaustion.getCurrentValue() != foodExhaustionLevel) {
-                exhaustion.setCurrentValue(foodExhaustionLevel);
-                needSend = true;
-            }
-
-            if (needSend) player.sendAttributesToClient();
+        foodTickTimer++;
+        if (foodTickTimer >= 80) foodTickTimer = 0;
+        if (foodTickTimer % 10 == 0) {
+            if (player.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL) setFoodLevel(foodLevel + 1);
+            if (foodLevel == 20 && foodSaturationLevel > 0 && foodTickTimer % 20 == 0) regenerate(false);
         }
+
+        if (foodTickTimer == 0) {
+            if (foodLevel >= 18) regenerate(true);
+            else if (foodLevel == 0) {
+                if (player.getHealth() > 2) player.attack(DamageContainer.starve(1));
+            }
+        }
+
+        if (foodLevel <= 6 && player.isSprinting()) {
+            player.setSprinting(false);
+        }
+
+        syncFood();
+    }
+
+    private void syncFood() {
+        var needSend = false;
+
+        var hunger = player.getAttribute(AttributeType.PLAYER_HUNGER);
+        if (hunger.getCurrentValue() != foodLevel) {
+            hunger.setCurrentValue(foodLevel);
+            needSend = true;
+        }
+
+        var saturation = player.getAttribute(AttributeType.PLAYER_SATURATION);
+        if (saturation.getCurrentValue() != foodSaturationLevel) {
+            saturation.setCurrentValue(foodSaturationLevel);
+            needSend = true;
+        }
+
+        var exhaustion = player.getAttribute(AttributeType.PLAYER_EXHAUSTION);
+        if (exhaustion.getCurrentValue() != foodExhaustionLevel) {
+            exhaustion.setCurrentValue(foodExhaustionLevel);
+            needSend = true;
+        }
+
+        if (needSend) player.sendAttributesToClient();
+    }
+
+    @Override
+    public void exhaust(float level) {
+        this.foodExhaustionLevel += level;
+        while (this.foodExhaustionLevel >= 4) {
+            this.foodExhaustionLevel -= 4;
+
+            if (this.foodSaturationLevel > 0) {
+                this.foodSaturationLevel = Math.max(--this.foodSaturationLevel, 0);
+            } else {
+                this.foodLevel = Math.max(--this.foodLevel, 0);
+            }
+        }
+    }
+
+    private void regenerate(boolean exhaust) {
+        if (player.getHealth() == player.getMaxHealth()) return;
+
+        // TODO: normal heal method
+        player.setHealth(player.getHealth() + 1);
+        if (exhaust) player.exhaust(6);
+    }
+
+    public void setFoodLevel(int foodLevel) {
+        this.foodLevel = Math.max(Math.min(foodLevel, 20), 0);
     }
 
     @Override
     public void setFoodTickTimer(float foodTickTimer) {
         this.foodTickTimer = Math.max(foodTickTimer, 0);
-    }
-
-    @Override
-    public void setFoodExhaustionLevel(float foodExhaustionLevel) {
-        while (foodExhaustionLevel >= 4) {
-            foodExhaustionLevel -= 4;
-
-            if (this.foodSaturationLevel > 0) {
-                this.foodSaturationLevel--;
-            } else {
-                this.foodLevel = Math.max(--this.foodLevel, 0);
-            }
-        }
-
-        this.foodExhaustionLevel = foodExhaustionLevel;
     }
 }

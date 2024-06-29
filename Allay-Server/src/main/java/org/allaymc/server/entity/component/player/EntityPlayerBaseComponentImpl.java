@@ -168,7 +168,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         super.tick();
         syncData();
         tryPickUpItems();
-        hungerComponent.tick();
+        hungerComponent.tick0();
     }
 
     protected void syncData() {

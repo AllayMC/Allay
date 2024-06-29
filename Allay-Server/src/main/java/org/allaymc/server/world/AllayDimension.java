@@ -120,7 +120,7 @@ public class AllayDimension implements Dimension {
                 usedItem, player
         );
         setBlockState(x, y, z, AIR_TYPE.getDefaultState());
-        player.setFoodExhaustionLevel(player.getFoodExhaustionLevel() + 0.005f);
+        player.exhaust(0.005f);
     }
 
     @Override

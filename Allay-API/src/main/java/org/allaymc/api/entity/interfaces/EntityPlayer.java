@@ -29,11 +29,6 @@ public interface EntityPlayer extends
         EntityDamageComponent,
         EntityPlayerHungerComponent {
 
-    @Override
-    default void tick() {
-        Entity.super.tick();
-    }
-
     default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
         var container = getOpenedContainer(slotType);
         if (container == null) container = getContainer(slotType);
