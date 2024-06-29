@@ -468,10 +468,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                     entityAABBTree.update(entity);
                 // ScheduledMove is not calculated by the server, but we need to calculate the onGround status
                 // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
-//                var aabb = scheduledMove.entity.getOffsetAABB();
-//                aabb.minY -= FAT_AABB_MARGIN;
-//                entity.setOnGround(dimension.getCollidingBlocks(aabb) != null);
-                entity.setOnGround(abs(motion.y()) == 0);
+                var aabb = scheduledMove.entity.getOffsetAABB();
+                aabb.minY -= FAT_AABB_MARGIN;
+                entity.setOnGround(dimension.getCollidingBlocks(aabb) != null);
             }
         }
     }
