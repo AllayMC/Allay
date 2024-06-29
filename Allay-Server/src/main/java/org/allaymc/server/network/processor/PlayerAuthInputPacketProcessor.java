@@ -210,7 +210,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         // Breaking time has changed, make adjustments
         var currentTime = player.getWorld().getTick();
         var timeLeft = stopBreakingTime - currentTime;
-        stopBreakingTime = currentTime + (timeLeft / needBreakingTime) * newBreakingTime;
+        stopBreakingTime = currentTime + timeLeft * (needBreakingTime / newBreakingTime);
         needBreakingTime = newBreakingTime;
     }
 
