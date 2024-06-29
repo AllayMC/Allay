@@ -20,7 +20,9 @@ import java.util.Map;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, ScoreboardViewer {
 
-    double BLOCK_INTERACT_MAX_DV_DIFF = 2.0;
+    double BLOCK_INTERACT_MAX_DV_DIFF = 2d;
+
+    float DEFAULT_MOVEMENT_SPEED = 0.1f;
 
     boolean isSprinting();
 
@@ -147,9 +149,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
         return getGameType() == GameType.CREATIVE ? 13 : 7;
     }
 
-    float DEFAULT_MOVEMENT_SPEED = 0.1f;
+    float getMovementSpeed();
 
     void setMovementSpeed(float speed);
-
-    float getMovementSpeed();
 }

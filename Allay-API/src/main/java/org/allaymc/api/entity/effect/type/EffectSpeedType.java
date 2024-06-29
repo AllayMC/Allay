@@ -5,7 +5,6 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.Identifier;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 
 import java.awt.*;
 
@@ -24,13 +23,16 @@ public class EffectSpeedType extends AbstractEffectType {
     @Override
     public void onAdd(Entity entity, EffectInstance effectInstance) {
         if (!(entity instanceof EntityPlayer player)) return;
-        var amplifier = effectInstance.getAmplifier();
-        player.setMovementSpeed(EntityPlayer.DEFAULT_MOVEMENT_SPEED * (1 + 0.2f * (amplifier + 1)));
+        var amplifier = effectInstance.getAmplifier() + 1;
+        var speed = 1 + amplifier * 0.2f;
+        player.setMovementSpeed(player.getMovementSpeed() * speed);
     }
 
     @Override
     public void onRemove(Entity entity, EffectInstance effectInstance) {
         if (!(entity instanceof EntityPlayer player)) return;
-        player.setMovementSpeed(EntityPlayer.DEFAULT_MOVEMENT_SPEED);
+        var amplifier = effectInstance.getAmplifier() + 1;
+        var speed = 1 + amplifier * 0.2f;
+        player.setMovementSpeed(player.getMovementSpeed() / speed);
     }
 }

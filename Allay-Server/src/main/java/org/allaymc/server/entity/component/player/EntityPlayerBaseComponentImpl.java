@@ -284,6 +284,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void setSprinting(boolean sprinting) {
+        if (sprinting == isSprinting()) return;
+
+        var speed = getMovementSpeed();
+        if (sprinting) speed *= 1.3f;
+        else speed /= 1.3f;
+
+        setMovementSpeed(speed);
+
         setAndSendEntityFlag(EntityFlag.SPRINTING, sprinting);
     }
 

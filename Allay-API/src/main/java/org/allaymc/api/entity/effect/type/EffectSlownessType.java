@@ -23,13 +23,18 @@ public class EffectSlownessType extends AbstractEffectType {
     @Override
     public void onAdd(Entity entity, EffectInstance effectInstance) {
         if (!(entity instanceof EntityPlayer player)) return;
-        var amplifier = effectInstance.getAmplifier();
-        player.setMovementSpeed(EntityPlayer.DEFAULT_MOVEMENT_SPEED * (1 - 0.15f * (amplifier + 1)));
+        var amplifier = effectInstance.getAmplifier() + 1;
+        var slowness = 1 - amplifier * 0.15f;
+        if (slowness <= 0) slowness = 0.00001f;
+        player.setMovementSpeed(player.getMovementSpeed() * slowness);
     }
 
     @Override
     public void onRemove(Entity entity, EffectInstance effectInstance) {
         if (!(entity instanceof EntityPlayer player)) return;
-        player.setMovementSpeed(EntityPlayer.DEFAULT_MOVEMENT_SPEED);
+        var amplifier = effectInstance.getAmplifier() + 1;
+        var slowness = 1 - amplifier * 0.15f;
+        if (slowness <= 0) slowness = 0.00001f;
+        player.setMovementSpeed(player.getMovementSpeed() / slowness);
     }
 }
