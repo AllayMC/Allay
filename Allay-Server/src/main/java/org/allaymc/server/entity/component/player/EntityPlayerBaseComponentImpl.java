@@ -755,6 +755,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void setAbsorption(float absorption) {
+        if (this.absorption == absorption) return;
         super.setAbsorption(absorption);
         attributeComponent.setAttribute(AttributeType.ABSORPTION, absorption);
     }

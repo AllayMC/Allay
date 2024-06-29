@@ -23,16 +23,16 @@ public class EffectSpeedType extends AbstractEffectType {
     @Override
     public void onAdd(Entity entity, EffectInstance effectInstance) {
         if (!(entity instanceof EntityPlayer player)) return;
-        var amplifier = effectInstance.getAmplifier() + 1;
-        var speed = 1 + amplifier * 0.2f;
+        var level = effectInstance.getLevel();
+        var speed = 1 + level * 0.2f;
         player.setMovementSpeed(player.getMovementSpeed() * speed);
     }
 
     @Override
     public void onRemove(Entity entity, EffectInstance effectInstance) {
         if (!(entity instanceof EntityPlayer player)) return;
-        var amplifier = effectInstance.getAmplifier() + 1;
-        var speed = 1 + amplifier * 0.2f;
+        var level = effectInstance.getLevel();
+        var speed = 1 + level * 0.2f;
         player.setMovementSpeed(player.getMovementSpeed() / speed);
     }
 }

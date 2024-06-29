@@ -10,11 +10,24 @@ import org.cloudburstmc.nbt.NbtMap;
  */
 public interface EffectInstance {
 
+    static EffectInstance fromNBT(NbtMap nbt) {
+        var effectType = EffectRegistry.getRegistry().getByK1((int) nbt.getByte("Id"));
+        Preconditions.checkNotNull(effectType, "Effect type not found for id: " + nbt.getByte("Id") + "!");
+        int amplifier = nbt.getByte("Amplifier");
+        int duration = nbt.getInt("Duration");
+        boolean visible = nbt.getBoolean("ShowParticles");
+        return new SimpleEffectInstance(effectType, amplifier, duration, visible);
+    }
+
     EffectType getType();
 
     int getAmplifier();
 
     void setAmplifier(int amplifier);
+
+    default int getLevel() {
+        return getAmplifier() + 1;
+    }
 
     boolean isVisible();
 
@@ -25,13 +38,4 @@ public interface EffectInstance {
     void setDuration(int duration);
 
     NbtMap saveNBT();
-
-    static EffectInstance fromNBT(NbtMap nbt) {
-        var effectType = EffectRegistry.getRegistry().getByK1((int) nbt.getByte("Id"));
-        Preconditions.checkNotNull(effectType, "Effect type not found for id: " + nbt.getByte("Id") + "!");
-        int amplifier = nbt.getByte("Amplifier");
-        int duration = nbt.getInt("Duration");
-        boolean visible = nbt.getBoolean("ShowParticles");
-        return new SimpleEffectInstance(effectType, amplifier, duration, visible);
-    }
 }

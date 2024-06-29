@@ -21,11 +21,7 @@ public class EffectAbsorptionType extends AbstractEffectType {
 
     @Override
     public void onAdd(Entity entity, EffectInstance effectInstance) {
-        var amplifier = effectInstance.getAmplifier() + 1;
-        var newValue = amplifier * 4;
-        if (newValue > entity.getAbsorption()) {
-            entity.setAbsorption(newValue);
-        }
+        entity.setAbsorption(effectInstance.getLevel() * 4);
     }
 
     @Override
