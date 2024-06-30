@@ -319,11 +319,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     @Override
-    public ItemStack copy() {
-        return copy(true);
-    }
-
-    @Override
     public float calculateAttackDamage() {
         return attributeComponent.getItemAttributes().attackDamage();
     }

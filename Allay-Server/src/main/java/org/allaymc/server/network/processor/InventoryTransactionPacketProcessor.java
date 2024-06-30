@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -108,18 +109,32 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
             }
             case NORMAL -> {
+                // When the ItemStackRequest system is used, this transaction type is used for dropping items by pressing Q.
+                // I don't know why they don't just use ItemStackRequest for that too, which already supports dropping items by
+                // clicking them outside an open inventory menu, but for now it is what it is.
+                // Fortunately, this means we can be much stricter about the validation criteria.
+                // For more details, see item_throwing.md
                 if (packet.getActions().size() != 2) {
                     log.warn("Expected two actions for dropping an item, got {}", packet.getActions().size());
                     return;
                 }
 
-                // TODO: The current implementation is buggy
-                for (var action : packet.getActions()) {
-                    if (!action.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) continue;
-                    if (!action.getSource().getFlag().equals(InventorySource.Flag.DROP_ITEM)) continue;
-                    // Do not ask me why Mojang still use the old item transaction pk even the server-auth inv was enabled
-                    var count = action.getToItem().getCount();
-                    player.tryDropItemInHand(count);
+                var worldInteractionAction = packet.getActions().getFirst();
+                if (!worldInteractionAction.getSource().getType().equals(InventorySource.Type.WORLD_INTERACTION)) {
+                    log.warn("Expected WORLD_INTERACTION action type, got {}", worldInteractionAction.getSource().getType());
+                    return;
+                }
+                var containerAction = packet.getActions().getLast();
+                if (!containerAction.getSource().getType().equals(InventorySource.Type.CONTAINER)) {
+                    log.warn("Expected CONTAINER action type, got {}", containerAction.getSource().getType());
+                    return;
+                }
+
+                var dropSlot = containerAction.getSlot();
+                var dropCount = containerAction.getFromItem().getCount() - containerAction.getToItem().getCount();
+
+                if (!player.tryDropItem(FullContainerType.PLAYER_INVENTORY, dropSlot, dropCount)) {
+                    log.warn("Failed to drop item from slot {} with count {}", dropSlot, dropCount);
                 }
             }
         }

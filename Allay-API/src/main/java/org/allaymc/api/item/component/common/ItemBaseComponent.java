@@ -76,10 +76,12 @@ public interface ItemBaseComponent extends ItemComponent {
     int assignNewStackNetworkId();
 
     default void clearStackNetworkId() {
-        setStackNetworkId(0);
+        setStackNetworkId(EMPTY_STACK_NETWORK_ID);
     }
 
-    ItemStack copy();
+    default ItemStack copy() {
+        return copy(true);
+    }
 
     ItemStack copy(boolean newStackNetworkId);
 
