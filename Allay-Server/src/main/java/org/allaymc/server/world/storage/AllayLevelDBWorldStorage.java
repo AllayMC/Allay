@@ -38,7 +38,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
-    private static final byte[] levelDatMagic = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
+    private static final byte[] LEVEL_DAT_MAGIC = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
 
     private final Path path;
     private final DB db;
@@ -55,7 +55,9 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     public AllayLevelDBWorldStorage(Path path, Options options) throws WorldStorageException {
         var worldName = path.getName(path.getNameCount() - 1).toString();
         var file = path.toFile();
-        if (!file.exists()) file.mkdirs();
+        if (!file.exists() && !file.mkdirs()) {
+            throw new WorldStorageException("Failed to create world directory!");
+        }
         this.path = path;
 
         worldDataCache = readWorldData();
@@ -63,7 +65,9 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
         var dbFolder = path.resolve("db").toFile();
         try {
-            if (!dbFolder.exists()) dbFolder.mkdirs();
+            if (!dbFolder.exists() && !dbFolder.mkdirs()) {
+                throw new WorldStorageException("Failed to create world database directory!");
+            }
             db = net.daporkchop.ldbjni.LevelDB.PROVIDER.open(dbFolder, options);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -134,7 +138,6 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         return false;
     }
 
-
     @Override
     public synchronized void writeWorldData(WorldData worldData) {
         var levelDat = path.resolve("level.dat").toFile();
@@ -142,9 +145,9 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
             if (levelDat.exists())
                 Files.copy(path.resolve("level.dat"), path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
 
-            output.write(levelDatMagic); // magic numbers
+            output.write(LEVEL_DAT_MAGIC);
             var nbtOutputStream = NbtUtils.createWriterLE(output);
-            nbtOutputStream.writeTag(createWorldDataNBT(worldData));
+            nbtOutputStream.writeTag(writeWorldDataToNBT(worldData));
             worldDataCache = worldData;
         } catch (IOException e) {
             throw new WorldStorageException(e);
@@ -157,145 +160,12 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         if (!levelDat.exists()) return null;
         try (var input = new FileInputStream(levelDat)) {
             // The first 8 bytes are magic number
+            // noinspection ResultOfMethodCallIgnored
             input.skip(8);
             NBTInputStream readerLE = NbtUtils.createReaderLE(new ByteArrayInputStream(input.readAllBytes()));
-            NbtMap d = (NbtMap) readerLE.readTag();
+            NbtMap nbt = (NbtMap) readerLE.readTag();
             readerLE.close();
-            NbtMap abilities = d.getCompound("abilities");
-            NbtMap experiments = d.getCompound("experiments");
-            GameRules gameRules = new GameRules();
-            gameRules.put(GameRule.COMMAND_BLOCK_OUTPUT, d.getBoolean("commandblockoutput"));
-            gameRules.put(GameRule.COMMAND_BLOCKS_ENABLED, d.getBoolean("commandblocksenabled"));
-            gameRules.put(GameRule.DO_DAYLIGHT_CYCLE, d.getBoolean("dodaylightcycle"));
-            gameRules.put(GameRule.DO_ENTITY_DROPS, d.getBoolean("doentitydrops"));
-            gameRules.put(GameRule.DO_FIRE_TICK, d.getBoolean("dofiretick"));
-            gameRules.put(GameRule.DO_IMMEDIATE_RESPAWN, d.getBoolean("doimmediaterespawn"));
-            gameRules.put(GameRule.DO_INSOMNIA, d.getBoolean("doinsomnia"));
-            gameRules.put(GameRule.DO_LIMITED_CRAFTING, d.getBoolean("dolimitedcrafting"));
-            gameRules.put(GameRule.DO_MOB_LOOT, d.getBoolean("domobloot"));
-            gameRules.put(GameRule.DO_MOB_SPAWNING, d.getBoolean("domobspawning"));
-            gameRules.put(GameRule.DO_TILE_DROPS, d.getBoolean("dotiledrops"));
-            gameRules.put(GameRule.DO_WEATHER_CYCLE, d.getBoolean("doweathercycle"));
-            gameRules.put(GameRule.DROWNING_DAMAGE, d.getBoolean("drowningdamage"));
-            gameRules.put(GameRule.FALL_DAMAGE, d.getBoolean("falldamage"));
-            gameRules.put(GameRule.FIRE_DAMAGE, d.getBoolean("firedamage"));
-            gameRules.put(GameRule.FREEZE_DAMAGE, d.getBoolean("freezedamage"));
-            gameRules.put(GameRule.FUNCTION_COMMAND_LIMIT, d.getInt("functioncommandlimit"));
-            gameRules.put(GameRule.KEEP_INVENTORY, d.getBoolean("keepinventory"));
-            gameRules.put(GameRule.MAX_COMMAND_CHAIN_LENGTH, d.getInt("maxcommandchainlength"));
-            gameRules.put(GameRule.MOB_GRIEFING, d.getBoolean("mobgriefing"));
-            gameRules.put(GameRule.NATURAL_REGENERATION, d.getBoolean("naturalregeneration"));
-            gameRules.put(GameRule.PVP, d.getBoolean("pvp"));
-            gameRules.put(GameRule.RESPAWN_BLOCKS_EXPLODE, d.getBoolean("respawnblocksexplode"));
-            gameRules.put(GameRule.SEND_COMMAND_FEEDBACK, d.getBoolean("sendcommandfeedback"));
-            gameRules.put(GameRule.SHOW_BORDER_EFFECT, d.getBoolean("showbordereffect"));
-            gameRules.put(GameRule.SHOW_COORDINATES, d.getBoolean("showcoordinates"));
-            gameRules.put(GameRule.SHOW_DEATH_MESSAGES, d.getBoolean("showdeathmessages"));
-            gameRules.put(GameRule.SHOW_TAGS, d.getBoolean("showtags"));
-            gameRules.put(GameRule.SPAWN_RADIUS, d.getInt("spawnradius"));
-            gameRules.put(GameRule.TNT_EXPLODES, d.getBoolean("tntexplodes"));
-            gameRules.put(GameRule.TNT_EXPLOSION_DROP_DECAY, d.getBoolean("tntexplosiondropdecay"));
-            gameRules.put(GameRule.SHOW_DAYS_PLAYED, d.getBoolean("showdaysplayed"));
-            return WorldData.builder()
-                    .biomeOverride(d.getString("BiomeOverride"))
-                    .centerMapsToOrigin(d.getBoolean("CenterMapsToOrigin"))
-                    .confirmedPlatformLockedContent(d.getBoolean("ConfirmedPlatformLockedContent"))
-                    .difficulty(Difficulty.from(d.getInt("Difficulty")))
-                    .flatWorldLayers(d.getString("FlatWorldLayers"))
-                    .forceGameType(d.getBoolean("ForceGameType"))
-                    .gameType(GameType.from(d.getInt("GameType")))
-                    .generator(d.getInt("Generator"))
-                    .inventoryVersion(d.getString("InventoryVersion"))
-                    .LANBroadcast(d.getBoolean("LANBroadcast"))
-                    .LANBroadcastIntent(d.getBoolean("LANBroadcastIntent"))
-                    .lastPlayed(d.getLong("LastPlayed"))
-                    .name(d.getString("LevelName"))
-                    .limitedWorldOriginPoint(new Vector3i(d.getInt("LimitedWorldOriginX"), d.getInt("LimitedWorldOriginY"), d.getInt("LimitedWorldOriginZ")))
-                    .minimumCompatibleClientVersion(SemVersion.from(d.getIntArray("MinimumCompatibleClientVersion")))
-                    .multiplayerGame(d.getBoolean("MultiplayerGame"))
-                    .multiplayerGameIntent(d.getBoolean("MultiplayerGameIntent"))
-                    .netherScale(d.getInt("NetherScale"))
-                    .networkVersion(d.getInt("NetworkVersion"))
-                    .platform(d.getInt("Platform"))
-                    .platformBroadcastIntent(d.getInt("PlatformBroadcastIntent"))
-                    .randomSeed(d.getLong("RandomSeed"))
-                    .spawnV1Villagers(d.getBoolean("SpawnV1Villagers"))
-                    .spawnPoint(new Vector3i(d.getInt("SpawnX"), d.getInt("SpawnY"), d.getInt("SpawnZ")))
-                    .storageVersion(d.getInt("StorageVersion"))
-                    .time(d.getLong("Time"))
-                    .worldVersion(d.getInt("WorldVersion"))
-                    .XBLBroadcastIntent(d.getInt("XBLBroadcastIntent"))
-                    .abilities(WorldData.Abilities.builder()
-                            .attackMobs(abilities.getBoolean("attackmobs"))
-                            .attackPlayers(abilities.getBoolean("attackplayers"))
-                            .build(abilities.getBoolean("build"))
-                            .doorsAndSwitches(abilities.getBoolean("doorsandswitches"))
-                            .flySpeed(abilities.getFloat("flySpeed"))
-                            .flying(abilities.getBoolean("flying"))
-                            .instaBuild(abilities.getBoolean("instabuild"))
-                            .invulnerable(abilities.getBoolean("invulnerable"))
-                            .lightning(abilities.getBoolean("lightning"))
-                            .mayFly(abilities.getBoolean("mayfly"))
-                            .mine(abilities.getBoolean("mine"))
-                            .op(abilities.getBoolean("op"))
-                            .openContainers(abilities.getBoolean("opencontainers"))
-                            .teleport(abilities.getBoolean("teleport"))
-                            .walkSpeed(abilities.getFloat("walkSpeed"))
-                            .build())
-                    .baseGameVersion(d.getString("baseGameVersion"))
-                    .bonusChestEnabled(d.getBoolean("bonusChestEnabled"))
-                    .bonusChestSpawned(d.getBoolean("bonusChestSpawned"))
-                    .cheatsEnabled(d.getBoolean("cheatsEnabled"))
-                    .commandsEnabled(d.getBoolean("commandsEnabled"))
-                    .gameRules(gameRules)
-                    .currentTick(d.getLong("currentTick"))
-                    .daylightCycle(d.getInt("daylightCycle"))
-                    .editorWorldType(d.getInt("editorWorldType"))
-                    .eduOffer(d.getInt("eduOffer"))
-                    .educationFeaturesEnabled(d.getBoolean("educationFeaturesEnabled"))
-                    .experiments(WorldData.Experiments.builder()
-                            .cameras(experiments.getBoolean("cameras"))
-                            .dataDrivenBiomes(experiments.getBoolean("data_driven_biomes"))
-                            .dataDrivenItems(experiments.getBoolean("data_driven_items"))
-                            .experimentalMolangFeatures(experiments.getBoolean("experimental_molang_features"))
-                            .experimentsEverUsed(experiments.getBoolean("experiments_ever_used"))
-                            .savedWithToggledExperiments(experiments.getBoolean("saved_with_toggled_experiments"))
-                            .upcomingCreatorFeatures(experiments.getBoolean("upcoming_creator_features"))
-                            .villagerTradesRebalance(experiments.getBoolean("villager_trades_rebalance"))
-                            .build())
-                    .hasBeenLoadedInCreative(d.getBoolean("hasBeenLoadedInCreative"))
-                    .hasLockedBehaviorPack(d.getBoolean("hasLockedBehaviorPack"))
-                    .hasLockedResourcePack(d.getBoolean("hasLockedResourcePack"))
-                    .immutableWorld(d.getBoolean("immutableWorld"))
-                    .isCreatedInEditor(d.getBoolean("isCreatedInEditor"))
-                    .isExportedFromEditor(d.getBoolean("isExportedFromEditor"))
-                    .isFromLockedTemplate(d.getBoolean("isFromLockedTemplate"))
-                    .isFromWorldTemplate(d.getBoolean("isFromWorldTemplate"))
-                    .isRandomSeedAllowed(d.getBoolean("isRandomSeedAllowed"))
-                    .isSingleUseWorld(d.getBoolean("isSingleUseWorld"))
-                    .isWorldTemplateOptionLocked(d.getBoolean("isWorldTemplateOptionLocked"))
-                    .lastOpenedWithVersion(SemVersion.from(d.getIntArray("lastOpenedWithVersion")))
-                    .lightningLevel(d.getFloat("lightningLevel"))
-                    .lightningTime(d.getInt("lightningTime"))
-                    .limitedWorldDepth(d.getInt("limitedWorldDepth"))
-                    .limitedWorldWidth(d.getInt("limitedWorldWidth"))
-                    .permissionsLevel(d.getInt("permissionsLevel"))
-                    .playerPermissionsLevel(d.getInt("playerPermissionsLevel"))
-                    .playersSleepingPercentage(d.getInt("playerssleepingpercentage"))
-                    .prid(d.getString("prid"))
-                    .rainLevel(d.getFloat("rainLevel"))
-                    .rainTime(d.getInt("rainTime"))
-                    .randomTickSpeed(d.getInt("randomtickspeed"))
-                    .recipesUnlock(d.getBoolean("recipesunlock"))
-                    .requiresCopiedPackRemovalCheck(d.getBoolean("requiresCopiedPackRemovalCheck"))
-                    .serverChunkTickRange(d.getInt("serverChunkTickRange"))
-                    .spawnMobs(d.getBoolean("spawnMobs"))
-                    .startWithMapEnabled(d.getBoolean("startWithMapEnabled"))
-                    .texturePacksRequired(d.getBoolean("texturePacksRequired"))
-                    .useMsaGamertagsOnly(d.getBoolean("useMsaGamertagsOnly"))
-                    .worldStartCount(d.getLong("worldStartCount"))
-                    .worldPolicies(WorldData.WorldPolicies.builder().build())
-                    .build();
+            return readWorldDataFromNBT(nbt);
         } catch (FileNotFoundException e) {
             log.error("level.dat file does not exist!");
         } catch (IOException e) {
@@ -303,6 +173,154 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
             return null;
         }
         throw new RuntimeException("level.dat is null!");
+    }
+
+    private WorldData readWorldDataFromNBT(NbtMap nbt) {
+        return WorldData.builder()
+                .biomeOverride(nbt.getString("BiomeOverride"))
+                .centerMapsToOrigin(nbt.getBoolean("CenterMapsToOrigin"))
+                .confirmedPlatformLockedContent(nbt.getBoolean("ConfirmedPlatformLockedContent"))
+                .difficulty(Difficulty.from(nbt.getInt("Difficulty")))
+                .flatWorldLayers(nbt.getString("FlatWorldLayers"))
+                .forceGameType(nbt.getBoolean("ForceGameType"))
+                .gameType(GameType.from(nbt.getInt("GameType")))
+                .generator(nbt.getInt("Generator"))
+                .inventoryVersion(nbt.getString("InventoryVersion"))
+                .LANBroadcast(nbt.getBoolean("LANBroadcast"))
+                .LANBroadcastIntent(nbt.getBoolean("LANBroadcastIntent"))
+                .lastPlayed(nbt.getLong("LastPlayed"))
+                .name(nbt.getString("LevelName"))
+                .limitedWorldOriginPoint(new Vector3i(nbt.getInt("LimitedWorldOriginX"), nbt.getInt("LimitedWorldOriginY"), nbt.getInt("LimitedWorldOriginZ")))
+                .minimumCompatibleClientVersion(SemVersion.from(nbt.getIntArray("MinimumCompatibleClientVersion")))
+                .multiplayerGame(nbt.getBoolean("MultiplayerGame"))
+                .multiplayerGameIntent(nbt.getBoolean("MultiplayerGameIntent"))
+                .netherScale(nbt.getInt("NetherScale"))
+                .networkVersion(nbt.getInt("NetworkVersion"))
+                .platform(nbt.getInt("Platform"))
+                .platformBroadcastIntent(nbt.getInt("PlatformBroadcastIntent"))
+                .randomSeed(nbt.getLong("RandomSeed"))
+                .spawnV1Villagers(nbt.getBoolean("SpawnV1Villagers"))
+                .spawnPoint(new Vector3i(nbt.getInt("SpawnX"), nbt.getInt("SpawnY"), nbt.getInt("SpawnZ")))
+                .storageVersion(nbt.getInt("StorageVersion"))
+                .time(nbt.getLong("Time"))
+                .worldVersion(nbt.getInt("WorldVersion"))
+                .XBLBroadcastIntent(nbt.getInt("XBLBroadcastIntent"))
+                .abilities(readAbilities(nbt.getCompound("abilities")))
+                .baseGameVersion(nbt.getString("baseGameVersion"))
+                .bonusChestEnabled(nbt.getBoolean("bonusChestEnabled"))
+                .bonusChestSpawned(nbt.getBoolean("bonusChestSpawned"))
+                .cheatsEnabled(nbt.getBoolean("cheatsEnabled"))
+                .commandsEnabled(nbt.getBoolean("commandsEnabled"))
+                .gameRules(readGameRules(nbt))
+                .currentTick(nbt.getLong("currentTick"))
+                .daylightCycle(nbt.getInt("daylightCycle"))
+                .editorWorldType(nbt.getInt("editorWorldType"))
+                .eduOffer(nbt.getInt("eduOffer"))
+                .educationFeaturesEnabled(nbt.getBoolean("educationFeaturesEnabled"))
+                .experiments(readExperiments(nbt.getCompound("experiments")))
+                .hasBeenLoadedInCreative(nbt.getBoolean("hasBeenLoadedInCreative"))
+                .hasLockedBehaviorPack(nbt.getBoolean("hasLockedBehaviorPack"))
+                .hasLockedResourcePack(nbt.getBoolean("hasLockedResourcePack"))
+                .immutableWorld(nbt.getBoolean("immutableWorld"))
+                .isCreatedInEditor(nbt.getBoolean("isCreatedInEditor"))
+                .isExportedFromEditor(nbt.getBoolean("isExportedFromEditor"))
+                .isFromLockedTemplate(nbt.getBoolean("isFromLockedTemplate"))
+                .isFromWorldTemplate(nbt.getBoolean("isFromWorldTemplate"))
+                .isRandomSeedAllowed(nbt.getBoolean("isRandomSeedAllowed"))
+                .isSingleUseWorld(nbt.getBoolean("isSingleUseWorld"))
+                .isWorldTemplateOptionLocked(nbt.getBoolean("isWorldTemplateOptionLocked"))
+                .lastOpenedWithVersion(SemVersion.from(nbt.getIntArray("lastOpenedWithVersion")))
+                .lightningLevel(nbt.getFloat("lightningLevel"))
+                .lightningTime(nbt.getInt("lightningTime"))
+                .limitedWorldDepth(nbt.getInt("limitedWorldDepth"))
+                .limitedWorldWidth(nbt.getInt("limitedWorldWidth"))
+                .permissionsLevel(nbt.getInt("permissionsLevel"))
+                .playerPermissionsLevel(nbt.getInt("playerPermissionsLevel"))
+                .playersSleepingPercentage(nbt.getInt("playerssleepingpercentage"))
+                .prid(nbt.getString("prid"))
+                .rainLevel(nbt.getFloat("rainLevel"))
+                .rainTime(nbt.getInt("rainTime"))
+                .randomTickSpeed(nbt.getInt("randomtickspeed"))
+                .recipesUnlock(nbt.getBoolean("recipesunlock"))
+                .requiresCopiedPackRemovalCheck(nbt.getBoolean("requiresCopiedPackRemovalCheck"))
+                .serverChunkTickRange(nbt.getInt("serverChunkTickRange"))
+                .spawnMobs(nbt.getBoolean("spawnMobs"))
+                .startWithMapEnabled(nbt.getBoolean("startWithMapEnabled"))
+                .texturePacksRequired(nbt.getBoolean("texturePacksRequired"))
+                .useMsaGamertagsOnly(nbt.getBoolean("useMsaGamertagsOnly"))
+                .worldStartCount(nbt.getLong("worldStartCount"))
+                .worldPolicies(WorldData.WorldPolicies.builder().build())
+                .build();
+    }
+
+    private WorldData.Experiments readExperiments(NbtMap experiments) {
+        return WorldData.Experiments.builder()
+                .cameras(experiments.getBoolean("cameras"))
+                .dataDrivenBiomes(experiments.getBoolean("data_driven_biomes"))
+                .dataDrivenItems(experiments.getBoolean("data_driven_items"))
+                .experimentalMolangFeatures(experiments.getBoolean("experimental_molang_features"))
+                .experimentsEverUsed(experiments.getBoolean("experiments_ever_used"))
+                .savedWithToggledExperiments(experiments.getBoolean("saved_with_toggled_experiments"))
+                .upcomingCreatorFeatures(experiments.getBoolean("upcoming_creator_features"))
+                .villagerTradesRebalance(experiments.getBoolean("villager_trades_rebalance"))
+                .build();
+    }
+
+    private WorldData.Abilities readAbilities(NbtMap abilities) {
+        return WorldData.Abilities.builder()
+                .attackMobs(abilities.getBoolean("attackmobs"))
+                .attackPlayers(abilities.getBoolean("attackplayers"))
+                .build(abilities.getBoolean("build"))
+                .doorsAndSwitches(abilities.getBoolean("doorsandswitches"))
+                .flySpeed(abilities.getFloat("flySpeed"))
+                .flying(abilities.getBoolean("flying"))
+                .instaBuild(abilities.getBoolean("instabuild"))
+                .invulnerable(abilities.getBoolean("invulnerable"))
+                .lightning(abilities.getBoolean("lightning"))
+                .mayFly(abilities.getBoolean("mayfly"))
+                .mine(abilities.getBoolean("mine"))
+                .op(abilities.getBoolean("op"))
+                .openContainers(abilities.getBoolean("opencontainers"))
+                .teleport(abilities.getBoolean("teleport"))
+                .walkSpeed(abilities.getFloat("walkSpeed"))
+                .build();
+    }
+
+    private GameRules readGameRules(NbtMap nbt) {
+        GameRules gameRules = new GameRules();
+        gameRules.put(GameRule.COMMAND_BLOCK_OUTPUT, nbt.getBoolean("commandblockoutput"));
+        gameRules.put(GameRule.COMMAND_BLOCKS_ENABLED, nbt.getBoolean("commandblocksenabled"));
+        gameRules.put(GameRule.DO_DAYLIGHT_CYCLE, nbt.getBoolean("dodaylightcycle"));
+        gameRules.put(GameRule.DO_ENTITY_DROPS, nbt.getBoolean("doentitydrops"));
+        gameRules.put(GameRule.DO_FIRE_TICK, nbt.getBoolean("dofiretick"));
+        gameRules.put(GameRule.DO_IMMEDIATE_RESPAWN, nbt.getBoolean("doimmediaterespawn"));
+        gameRules.put(GameRule.DO_INSOMNIA, nbt.getBoolean("doinsomnia"));
+        gameRules.put(GameRule.DO_LIMITED_CRAFTING, nbt.getBoolean("dolimitedcrafting"));
+        gameRules.put(GameRule.DO_MOB_LOOT, nbt.getBoolean("domobloot"));
+        gameRules.put(GameRule.DO_MOB_SPAWNING, nbt.getBoolean("domobspawning"));
+        gameRules.put(GameRule.DO_TILE_DROPS, nbt.getBoolean("dotiledrops"));
+        gameRules.put(GameRule.DO_WEATHER_CYCLE, nbt.getBoolean("doweathercycle"));
+        gameRules.put(GameRule.DROWNING_DAMAGE, nbt.getBoolean("drowningdamage"));
+        gameRules.put(GameRule.FALL_DAMAGE, nbt.getBoolean("falldamage"));
+        gameRules.put(GameRule.FIRE_DAMAGE, nbt.getBoolean("firedamage"));
+        gameRules.put(GameRule.FREEZE_DAMAGE, nbt.getBoolean("freezedamage"));
+        gameRules.put(GameRule.FUNCTION_COMMAND_LIMIT, nbt.getInt("functioncommandlimit"));
+        gameRules.put(GameRule.KEEP_INVENTORY, nbt.getBoolean("keepinventory"));
+        gameRules.put(GameRule.MAX_COMMAND_CHAIN_LENGTH, nbt.getInt("maxcommandchainlength"));
+        gameRules.put(GameRule.MOB_GRIEFING, nbt.getBoolean("mobgriefing"));
+        gameRules.put(GameRule.NATURAL_REGENERATION, nbt.getBoolean("naturalregeneration"));
+        gameRules.put(GameRule.PVP, nbt.getBoolean("pvp"));
+        gameRules.put(GameRule.RESPAWN_BLOCKS_EXPLODE, nbt.getBoolean("respawnblocksexplode"));
+        gameRules.put(GameRule.SEND_COMMAND_FEEDBACK, nbt.getBoolean("sendcommandfeedback"));
+        gameRules.put(GameRule.SHOW_BORDER_EFFECT, nbt.getBoolean("showbordereffect"));
+        gameRules.put(GameRule.SHOW_COORDINATES, nbt.getBoolean("showcoordinates"));
+        gameRules.put(GameRule.SHOW_DEATH_MESSAGES, nbt.getBoolean("showdeathmessages"));
+        gameRules.put(GameRule.SHOW_TAGS, nbt.getBoolean("showtags"));
+        gameRules.put(GameRule.SPAWN_RADIUS, nbt.getInt("spawnradius"));
+        gameRules.put(GameRule.TNT_EXPLODES, nbt.getBoolean("tntexplodes"));
+        gameRules.put(GameRule.TNT_EXPLOSION_DROP_DECAY, nbt.getBoolean("tntexplosiondropdecay"));
+        gameRules.put(GameRule.SHOW_DAYS_PLAYED, nbt.getBoolean("showdaysplayed"));
+        return gameRules;
     }
 
     @Override
@@ -319,7 +337,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         }
     }
 
-    private NbtMap createWorldDataNBT(WorldData worldData) {
+    private NbtMap writeWorldDataToNBT(WorldData worldData) {
         var builder = NbtMap.builder();
         builder.putString("BiomeOverride", worldData.getBiomeOverride());
         builder.putBoolean("CenterMapsToOrigin", worldData.isCenterMapsToOrigin());
@@ -353,36 +371,8 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         builder.putLong("Time", worldData.getTime());
         builder.putInt("WorldVersion", worldData.getWorldVersion());
         builder.putInt("XBLBroadcastIntent", worldData.getXBLBroadcastIntent());
-        var abilities = NbtMap.builder()
-                .putBoolean("attackmobs", worldData.getAbilities().isAttackMobs())
-                .putBoolean("attackplayers", worldData.getAbilities().isAttackPlayers())
-                .putBoolean("build", worldData.getAbilities().isBuild())
-                .putBoolean("doorsandswitches", worldData.getAbilities().isDoorsAndSwitches())
-                .putBoolean("flying", worldData.getAbilities().isFlying())
-                .putBoolean("instabuild", worldData.getAbilities().isInstaBuild())
-                .putBoolean("invulnerable", worldData.getAbilities().isInvulnerable())
-                .putBoolean("lightning", worldData.getAbilities().isLightning())
-                .putBoolean("mayfly", worldData.getAbilities().isMayFly())
-                .putBoolean("mine", worldData.getAbilities().isMine())
-                .putBoolean("op", worldData.getAbilities().isOp())
-                .putBoolean("opencontainers", worldData.getAbilities().isOpenContainers())
-                .putBoolean("teleport", worldData.getAbilities().isTeleport())
-                .putFloat("flySpeed", worldData.getAbilities().getFlySpeed())
-                .putFloat("walkSpeed", worldData.getAbilities().getWalkSpeed())
-                .build();
-        var experiments = NbtMap.builder()
-                .putBoolean("cameras", worldData.getExperiments().isCameras())
-                .putBoolean("data_driven_biomes", worldData.getExperiments().isDataDrivenBiomes())
-                .putBoolean("data_driven_items", worldData.getExperiments().isDataDrivenItems())
-                .putBoolean("experimental_molang_features", worldData.getExperiments().isExperimentalMolangFeatures())
-                .putBoolean("experiments_ever_used", worldData.getExperiments().isExperimentsEverUsed())
-                .putBoolean("gametest", worldData.getExperiments().isGametest())
-                .putBoolean("saved_with_toggled_experiments", worldData.getExperiments().isSavedWithToggledExperiments())
-                .putBoolean("upcoming_creator_features", worldData.getExperiments().isUpcomingCreatorFeatures())
-                .putBoolean("villager_trades_rebalance", worldData.getExperiments().isVillagerTradesRebalance())
-                .build();
-        builder.put("abilities", abilities);
-        builder.put("experiments", experiments);
+        builder.put("abilities", writeAbilities(worldData));
+        builder.put("experiments", writeExperiments(worldData));
 
         builder.putBoolean("bonusChestEnabled", worldData.isBonusChestEnabled());
         builder.putBoolean("bonusChestSpawned", worldData.isBonusChestSpawned());
@@ -427,6 +417,40 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         builder.put("tntexplosiondropdecay", worldData.getGameRules().get(GameRule.TNT_EXPLOSION_DROP_DECAY));
         builder.put("showdaysplayed", worldData.getGameRules().get(GameRule.SHOW_DAYS_PLAYED));
         return builder.build();
+    }
+
+    private NbtMap writeExperiments(WorldData worldData) {
+        return NbtMap.builder()
+                .putBoolean("cameras", worldData.getExperiments().isCameras())
+                .putBoolean("data_driven_biomes", worldData.getExperiments().isDataDrivenBiomes())
+                .putBoolean("data_driven_items", worldData.getExperiments().isDataDrivenItems())
+                .putBoolean("experimental_molang_features", worldData.getExperiments().isExperimentalMolangFeatures())
+                .putBoolean("experiments_ever_used", worldData.getExperiments().isExperimentsEverUsed())
+                .putBoolean("gametest", worldData.getExperiments().isGametest())
+                .putBoolean("saved_with_toggled_experiments", worldData.getExperiments().isSavedWithToggledExperiments())
+                .putBoolean("upcoming_creator_features", worldData.getExperiments().isUpcomingCreatorFeatures())
+                .putBoolean("villager_trades_rebalance", worldData.getExperiments().isVillagerTradesRebalance())
+                .build();
+    }
+
+    private NbtMap writeAbilities(WorldData worldData) {
+        return NbtMap.builder()
+                .putBoolean("attackmobs", worldData.getAbilities().isAttackMobs())
+                .putBoolean("attackplayers", worldData.getAbilities().isAttackPlayers())
+                .putBoolean("build", worldData.getAbilities().isBuild())
+                .putBoolean("doorsandswitches", worldData.getAbilities().isDoorsAndSwitches())
+                .putBoolean("flying", worldData.getAbilities().isFlying())
+                .putBoolean("instabuild", worldData.getAbilities().isInstaBuild())
+                .putBoolean("invulnerable", worldData.getAbilities().isInvulnerable())
+                .putBoolean("lightning", worldData.getAbilities().isLightning())
+                .putBoolean("mayfly", worldData.getAbilities().isMayFly())
+                .putBoolean("mine", worldData.getAbilities().isMine())
+                .putBoolean("op", worldData.getAbilities().isOp())
+                .putBoolean("opencontainers", worldData.getAbilities().isOpenContainers())
+                .putBoolean("teleport", worldData.getAbilities().isTeleport())
+                .putFloat("flySpeed", worldData.getAbilities().getFlySpeed())
+                .putFloat("walkSpeed", worldData.getAbilities().getWalkSpeed())
+                .build();
     }
 
     @Override
