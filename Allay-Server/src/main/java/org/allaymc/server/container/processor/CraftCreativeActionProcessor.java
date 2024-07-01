@@ -20,7 +20,7 @@ import java.util.Map;
 public class CraftCreativeActionProcessor implements ContainerActionProcessor<CraftCreativeAction> {
     @Override
     public ActionResponse handle(CraftCreativeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        if (player.getGameType() != GameType.CREATIVE || player.getGameType() != GameType.SPECTATOR)
+        if (player.getGameType() != GameType.CREATIVE && player.getGameType() != GameType.SPECTATOR)
             return error();
 
         var item = CreativeItemRegistry.getRegistry().get(action.getCreativeItemNetworkId() - 1);
