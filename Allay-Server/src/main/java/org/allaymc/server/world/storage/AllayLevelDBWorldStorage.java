@@ -39,7 +39,10 @@ import java.util.concurrent.CompletableFuture;
 public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     private static final byte[] LEVEL_DAT_MAGIC = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
     private static final int LATEST_CHUNK_VERSION = 40;
-
+    private static final int VANILLA_CHUNK_STATE_NEW = 0;
+    private static final int VANILLA_CHUNK_STATE_GENERATED = 1;
+    private static final int VANILLA_CHUNK_STATE_POPULATED = 2;
+    private static final int VANILLA_CHUNK_STATE_FINISHED = 3;
     private final Path path;
     private final DB db;
     private WorldData worldDataCache;
@@ -51,7 +54,6 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                 .blockSize(64 * 1024)
         );
     }
-
     public AllayLevelDBWorldStorage(Path path, Options options) throws WorldStorageException {
         var worldName = path.getName(path.getNameCount() - 1).toString();
         var file = path.toFile();
@@ -93,11 +95,6 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
         return CompletableFuture.supplyAsync(() -> readChunkSynchronously(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool());
     }
-
-    private static final int VANILLA_CHUNK_STATE_NEW = 0;
-    private static final int VANILLA_CHUNK_STATE_GENERATED = 1;
-    private static final int VANILLA_CHUNK_STATE_POPULATED = 2;
-    private static final int VANILLA_CHUNK_STATE_FINISHED = 3;
 
     @Override
     public Chunk readChunkSynchronously(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
