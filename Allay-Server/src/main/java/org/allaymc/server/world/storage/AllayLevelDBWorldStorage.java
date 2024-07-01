@@ -38,6 +38,7 @@ import java.util.concurrent.CompletableFuture;
 @Slf4j
 public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     private static final byte[] LEVEL_DAT_MAGIC = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
+    private static final int LATEST_CHUNK_VERSION = 40;
 
     private final Path path;
     private final DB db;
@@ -93,6 +94,11 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         return CompletableFuture.supplyAsync(() -> readChunkSynchronously(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool());
     }
 
+    private static final int VANILLA_CHUNK_STATE_NEW = 0;
+    private static final int VANILLA_CHUNK_STATE_GENERATED = 1;
+    private static final int VANILLA_CHUNK_STATE_POPULATED = 2;
+    private static final int VANILLA_CHUNK_STATE_FINISHED = 3;
+
     @Override
     public Chunk readChunkSynchronously(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
         var builder = AllayUnsafeChunk.builder()
@@ -108,8 +114,9 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         if (chunkState == null) {
             builder.state(ChunkState.FINISHED);
         } else {
-            // TODO: ChunkState枚举有变化，检查这行代码是否依然可用
-            builder.state(ChunkState.values()[Unpooled.wrappedBuffer(chunkState).readIntLE() + 1]);
+            // NOTICE: Chunk states used in allay are different from vanilla state
+            // We just regenerate the chunk unless the state value is FINISHED
+            builder.state((Unpooled.wrappedBuffer(chunkState).readIntLE() + 1) == VANILLA_CHUNK_STATE_FINISHED ? ChunkState.FINISHED : ChunkState.EMPTY);
         }
 
         LevelDBChunkSerializer.INSTANCE.deserialize(this.db, builder);
@@ -124,6 +131,13 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     @Override
     public void writeChunkSynchronously(Chunk chunk) throws WorldStorageException {
         try (var writeBatch = this.db.createWriteBatch()) {
+            writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{LATEST_CHUNK_VERSION});
+            writeBatch.put(
+                    LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
+                    Unpooled.buffer(4)
+                            .writeIntLE((chunk.getState() == ChunkState.FINISHED ? VANILLA_CHUNK_STATE_FINISHED : VANILLA_CHUNK_STATE_NEW) - 1)
+                            .array()
+            );
             chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, c));
             this.db.write(writeBatch);
         } catch (IOException e) {
