@@ -79,10 +79,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     Abilities getAbilities();
 
-    default void setWalkSpeed(float walkSpeed) {
-        getAbilities().setWalkSpeed(walkSpeed);
-    }
-
     default void setFlySpeed(float flySpeed) {
         getAbilities().setFlySpeed(flySpeed);
     }

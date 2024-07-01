@@ -59,11 +59,16 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
 
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) {
+        writeChunkSynchronously(chunk);
+        return CompletableFuture.completedFuture(null);
+    }
+
+    @Override
+    public void writeChunkSynchronously(Chunk chunk) throws WorldStorageException {
         var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
         chunks.put(hash, chunk);
         writeEntities(hash, chunk.getEntities().values());
         writeBlockEntities(hash, chunk.getBlockEntities().values());
-        return CompletableFuture.completedFuture(null);
     }
 
     protected Set<NbtMap> readEntities(long chunkHash) throws WorldStorageException {
