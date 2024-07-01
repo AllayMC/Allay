@@ -104,12 +104,12 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
             versionValue = this.db.get(LevelDBKeyUtils.LEGACY_VERSION.getKey(x, z, dimensionInfo));
         if (versionValue == null) return builder.build().toSafeChunk();
 
-        var finalized = this.db.get(LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
-        if (finalized == null) {
+        var chunkState = this.db.get(LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
+        if (chunkState == null) {
             builder.state(ChunkState.FINISHED);
         } else {
             // TODO: ChunkState枚举有变化，检查这行代码是否依然可用
-            builder.state(ChunkState.values()[Unpooled.wrappedBuffer(finalized).readIntLE() + 1]);
+            builder.state(ChunkState.values()[Unpooled.wrappedBuffer(chunkState).readIntLE() + 1]);
         }
 
         LevelDBChunkSerializer.INSTANCE.deserialize(this.db, builder);
@@ -118,14 +118,17 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException {
-        return CompletableFuture.runAsync(() -> {
-            try (var writeBatch = this.db.createWriteBatch()) {
-                chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, c));
-                this.db.write(writeBatch);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }, Server.getInstance().getVirtualThreadPool());
+        return CompletableFuture.runAsync(() -> writeChunkSynchronously(chunk), Server.getInstance().getVirtualThreadPool());
+    }
+
+    @Override
+    public void writeChunkSynchronously(Chunk chunk) throws WorldStorageException {
+        try (var writeBatch = this.db.createWriteBatch()) {
+            chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, c));
+            this.db.write(writeBatch);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
