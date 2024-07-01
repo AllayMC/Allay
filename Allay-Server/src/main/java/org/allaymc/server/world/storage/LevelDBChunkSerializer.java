@@ -62,7 +62,6 @@ public class LevelDBChunkSerializer {
         deserializeEntityAndBlockEntity(db, builder);
     }
 
-    //serialize chunk section
     private void serializeBlock(WriteBatch writeBatch, UnsafeChunk chunk) {
         for (int ySection = chunk.getDimensionInfo().minSectionY(); ySection <= chunk.getDimensionInfo().maxSectionY(); ySection++) {
             ChunkSection section = chunk.getSection(ySection);
@@ -84,7 +83,6 @@ public class LevelDBChunkSerializer {
         }
     }
 
-    //serialize chunk section
     private void deserializeBlock(DB db, AllayUnsafeChunk.Builder builder) {
         DimensionInfo dimensionInfo = builder.getDimensionInfo();
         ChunkSection[] sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
@@ -134,9 +132,7 @@ public class LevelDBChunkSerializer {
         builder.sections(sections);
     }
 
-    //write biomeAndHeight
     private void serializeHeightAndBiome(WriteBatch writeBatch, UnsafeChunk chunk) {
-        //Write biomeAndHeight
         ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
             for (short height : chunk.getHeightArray()) {
@@ -155,7 +151,6 @@ public class LevelDBChunkSerializer {
         }
     }
 
-    //read biomeAndHeight
     private void deserializeHeightAndBiome(DB db, AllayUnsafeChunk.Builder builder) {
         ByteBuf heightAndBiomesBuffer = null;
         try {
