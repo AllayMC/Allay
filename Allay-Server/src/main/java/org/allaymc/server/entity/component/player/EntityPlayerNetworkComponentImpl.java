@@ -287,11 +287,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
         startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
         startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
-        startGamePacket.setSeed(spawnWorld.getWorldData().getRandomSeed());
+        // We don't send world send to client for security reason
+        startGamePacket.setSeed(0L);
         startGamePacket.setDimensionId(dimension.getDimensionInfo().dimensionId());
         startGamePacket.setGeneratorId(dimension.getWorldGenerator().getType().getId());
         startGamePacket.setLevelGameType(spawnWorld.getWorldData().getGameType());
         startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
+        // TODO: add it to server-settings.yml
         startGamePacket.setTrustingPlayers(true);
         startGamePacket.setLevelName(Server.SETTINGS.genericSettings().motd());
         startGamePacket.setLevelId("");
@@ -303,8 +305,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setItemDefinitions(ItemTypeRegistry.getRegistry().getItemDefinitions());
         startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
         startGamePacket.setServerAuthoritativeBlockBreaking(true);
+        // TODO: add it to server-settings.yml
         startGamePacket.setCommandsEnabled(true);
         startGamePacket.setMultiplayerGame(true);
+        // TODO: add it to server-settings.yml
         startGamePacket.setBroadcastingToLan(true);
         startGamePacket.setMultiplayerCorrelationId(UUID.randomUUID().toString());
         startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
