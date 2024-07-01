@@ -1,9 +1,0 @@
-{
-  "entrance": "org.allaymc.spark.AllaySparkPlugin",
-  "name": "spark",
-  "description": "${description}",
-  "version": "${version}",
-  "authors": [
-    "IWareQ"
-  ]
-}
