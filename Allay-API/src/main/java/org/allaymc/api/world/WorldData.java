@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import org.allaymc.api.datastruct.SemVersion;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -62,7 +63,7 @@ public class WorldData {
     @Builder.Default
     int generator = 1;
     @Builder.Default
-    String inventoryVersion = "1.20.40";
+    String inventoryVersion = ProtocolInfo.getMinecraftVersionStr();
     @Builder.Default
     boolean LANBroadcast = true;
     @Builder.Default
@@ -74,13 +75,7 @@ public class WorldData {
     @Builder.Default
     org.joml.Vector3ic limitedWorldOriginPoint = new Vector3i(0, 64, 0);
     @Builder.Default
-    SemVersion minimumCompatibleClientVersion = new SemVersion(
-            1,
-            20,
-            40,
-            0,
-            0
-    );
+    SemVersion minimumCompatibleClientVersion = ProtocolInfo.MINECRAFT_VERSION;
     @Builder.Default
     boolean multiplayerGame = true;
     @Builder.Default
@@ -88,13 +83,13 @@ public class WorldData {
     @Builder.Default
     int netherScale = 8;
     @Builder.Default
-    int networkVersion = 622;
+    int networkVersion = ProtocolInfo.PACKET_CODEC.getProtocolVersion();
     @Builder.Default
     int platform = 2;
     @Builder.Default
     int platformBroadcastIntent = 0;
     @Builder.Default
-    long randomSeed = 1811906518383890446L;
+    long randomSeed = 0L;
     @Builder.Default
     boolean spawnV1Villagers = false;
     @Builder.Default
@@ -156,13 +151,7 @@ public class WorldData {
     @Builder.Default
     boolean isWorldTemplateOptionLocked = false;
     @Builder.Default
-    SemVersion lastOpenedWithVersion = new SemVersion(
-            1,
-            20,
-            40,
-            1,
-            0
-    );
+    SemVersion lastOpenedWithVersion = ProtocolInfo.MINECRAFT_VERSION;
     @Builder.Default
     float lightningLevel = 0.0f;
     @Builder.Default
