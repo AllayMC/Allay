@@ -24,14 +24,42 @@ public class WorldData {
     public static final long TIME_SUNRISE = 23000;
     public static final long TIME_FULL = 24000;
 
+    // NOTICE: The following values won't be written into the file
+    World world;
+
+    // NOTICE: The following values are used
+    @Builder.Default
+    Difficulty difficulty = Difficulty.from(1);
+    @Builder.Default
+    boolean forceGameType = false;
+    @Builder.Default
+    org.cloudburstmc.protocol.bedrock.data.GameType gameType = GameType.from(1);
+    @Builder.Default
+    String name = "Bedrock level";
+    @Builder.Default
+    org.joml.Vector3ic spawnPoint = new Vector3i(0, 64, 0);
+    @Builder.Default
+    long time = 0L;
+    @Builder.Default
+    GameRules gameRules = new GameRules();
+
+    // NOTICE: The following properties are unused, however we keep them for vanilla compatibility reason
+    @Builder.Default
+    org.joml.Vector3ic limitedWorldOriginPoint = new Vector3i(0, 64, 0);
+    @Builder.Default
+    SemVersion minimumCompatibleClientVersion = ProtocolInfo.MINECRAFT_VERSION;
+    @Builder.Default
+    boolean LANBroadcast = true;
+    @Builder.Default
+    boolean LANBroadcastIntent = true;
+    @Builder.Default
+    long lastPlayed = 0L;
     @Builder.Default
     String biomeOverride = "";
     @Builder.Default
     boolean centerMapsToOrigin = false;
     @Builder.Default
     boolean confirmedPlatformLockedContent = false;
-    @Builder.Default
-    Difficulty difficulty = Difficulty.from(1);
     @Builder.Default
     @Language("JSON")
     String flatWorldLayers = """
@@ -57,25 +85,9 @@ public class WorldData {
             }
             """;
     @Builder.Default
-    boolean forceGameType = false;
-    @Builder.Default
-    org.cloudburstmc.protocol.bedrock.data.GameType gameType = GameType.from(1);
-    @Builder.Default
     int generator = 1;
     @Builder.Default
     String inventoryVersion = ProtocolInfo.getMinecraftVersionStr();
-    @Builder.Default
-    boolean LANBroadcast = true;
-    @Builder.Default
-    boolean LANBroadcastIntent = true;
-    @Builder.Default
-    long lastPlayed = 0L;
-    @Builder.Default
-    String name = "Bedrock level";
-    @Builder.Default
-    org.joml.Vector3ic limitedWorldOriginPoint = new Vector3i(0, 64, 0);
-    @Builder.Default
-    SemVersion minimumCompatibleClientVersion = ProtocolInfo.MINECRAFT_VERSION;
     @Builder.Default
     boolean multiplayerGame = true;
     @Builder.Default
@@ -93,11 +105,7 @@ public class WorldData {
     @Builder.Default
     boolean spawnV1Villagers = false;
     @Builder.Default
-    org.joml.Vector3ic spawnPoint = new Vector3i(0, 64, 0);
-    @Builder.Default
     int storageVersion = 10;
-    @Builder.Default
-    long time = 0L;
     @Builder.Default
     int worldVersion = 1;
     @Builder.Default
@@ -114,8 +122,6 @@ public class WorldData {
     boolean cheatsEnabled = false;
     @Builder.Default
     boolean commandsEnabled = true;
-    @Builder.Default
-    GameRules gameRules = new GameRules();
     @Builder.Default
     long currentTick = 0L;
     @Builder.Default
@@ -192,7 +198,6 @@ public class WorldData {
     long worldStartCount = 0L;
     @Builder.Default
     WorldPolicies worldPolicies = new WorldPolicies();
-    World world;
 
     public synchronized GameType getGameType() {
         return gameType;
