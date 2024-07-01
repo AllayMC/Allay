@@ -2,6 +2,7 @@ package org.allaymc.api.world.gamerule;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 
 import java.util.Arrays;
@@ -73,6 +74,6 @@ public enum GameRule {
 
     public enum Type {
         INT,
-        BOOLEAN
+        BOOLEAN;
     }
 }

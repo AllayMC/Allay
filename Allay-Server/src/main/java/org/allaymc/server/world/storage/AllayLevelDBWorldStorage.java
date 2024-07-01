@@ -10,7 +10,6 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
-import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.storage.NativeFileWorldStorage;
 import org.allaymc.server.utils.LevelDBKeyUtils;
@@ -61,7 +60,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         this.path = path;
 
         worldDataCache = readWorldData();
-        if (worldDataCache == null) initWorldData(worldName);
+        if (worldDataCache == null) createWorldData(worldName);
 
         var dbFolder = path.resolve("db").toFile();
         try {
@@ -74,7 +73,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         }
     }
 
-    private void initWorldData(String worldName) {
+    private void createWorldData(String worldName) {
         var levelDat = path.resolve("level.dat").toFile();
         try {
             // noinspection ResultOfMethodCallIgnored
@@ -211,7 +210,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                 .bonusChestSpawned(nbt.getBoolean("bonusChestSpawned"))
                 .cheatsEnabled(nbt.getBoolean("cheatsEnabled"))
                 .commandsEnabled(nbt.getBoolean("commandsEnabled"))
-                .gameRules(readGameRules(nbt))
+                .gameRules(GameRules.readFromNBT(nbt))
                 .currentTick(nbt.getLong("currentTick"))
                 .daylightCycle(nbt.getInt("daylightCycle"))
                 .editorWorldType(nbt.getInt("editorWorldType"))
@@ -286,43 +285,6 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                 .build();
     }
 
-    private GameRules readGameRules(NbtMap nbt) {
-        GameRules gameRules = new GameRules();
-        gameRules.put(GameRule.COMMAND_BLOCK_OUTPUT, nbt.getBoolean("commandblockoutput"));
-        gameRules.put(GameRule.COMMAND_BLOCKS_ENABLED, nbt.getBoolean("commandblocksenabled"));
-        gameRules.put(GameRule.DO_DAYLIGHT_CYCLE, nbt.getBoolean("dodaylightcycle"));
-        gameRules.put(GameRule.DO_ENTITY_DROPS, nbt.getBoolean("doentitydrops"));
-        gameRules.put(GameRule.DO_FIRE_TICK, nbt.getBoolean("dofiretick"));
-        gameRules.put(GameRule.DO_IMMEDIATE_RESPAWN, nbt.getBoolean("doimmediaterespawn"));
-        gameRules.put(GameRule.DO_INSOMNIA, nbt.getBoolean("doinsomnia"));
-        gameRules.put(GameRule.DO_LIMITED_CRAFTING, nbt.getBoolean("dolimitedcrafting"));
-        gameRules.put(GameRule.DO_MOB_LOOT, nbt.getBoolean("domobloot"));
-        gameRules.put(GameRule.DO_MOB_SPAWNING, nbt.getBoolean("domobspawning"));
-        gameRules.put(GameRule.DO_TILE_DROPS, nbt.getBoolean("dotiledrops"));
-        gameRules.put(GameRule.DO_WEATHER_CYCLE, nbt.getBoolean("doweathercycle"));
-        gameRules.put(GameRule.DROWNING_DAMAGE, nbt.getBoolean("drowningdamage"));
-        gameRules.put(GameRule.FALL_DAMAGE, nbt.getBoolean("falldamage"));
-        gameRules.put(GameRule.FIRE_DAMAGE, nbt.getBoolean("firedamage"));
-        gameRules.put(GameRule.FREEZE_DAMAGE, nbt.getBoolean("freezedamage"));
-        gameRules.put(GameRule.FUNCTION_COMMAND_LIMIT, nbt.getInt("functioncommandlimit"));
-        gameRules.put(GameRule.KEEP_INVENTORY, nbt.getBoolean("keepinventory"));
-        gameRules.put(GameRule.MAX_COMMAND_CHAIN_LENGTH, nbt.getInt("maxcommandchainlength"));
-        gameRules.put(GameRule.MOB_GRIEFING, nbt.getBoolean("mobgriefing"));
-        gameRules.put(GameRule.NATURAL_REGENERATION, nbt.getBoolean("naturalregeneration"));
-        gameRules.put(GameRule.PVP, nbt.getBoolean("pvp"));
-        gameRules.put(GameRule.RESPAWN_BLOCKS_EXPLODE, nbt.getBoolean("respawnblocksexplode"));
-        gameRules.put(GameRule.SEND_COMMAND_FEEDBACK, nbt.getBoolean("sendcommandfeedback"));
-        gameRules.put(GameRule.SHOW_BORDER_EFFECT, nbt.getBoolean("showbordereffect"));
-        gameRules.put(GameRule.SHOW_COORDINATES, nbt.getBoolean("showcoordinates"));
-        gameRules.put(GameRule.SHOW_DEATH_MESSAGES, nbt.getBoolean("showdeathmessages"));
-        gameRules.put(GameRule.SHOW_TAGS, nbt.getBoolean("showtags"));
-        gameRules.put(GameRule.SPAWN_RADIUS, nbt.getInt("spawnradius"));
-        gameRules.put(GameRule.TNT_EXPLODES, nbt.getBoolean("tntexplodes"));
-        gameRules.put(GameRule.TNT_EXPLOSION_DROP_DECAY, nbt.getBoolean("tntexplosiondropdecay"));
-        gameRules.put(GameRule.SHOW_DAYS_PLAYED, nbt.getBoolean("showdaysplayed"));
-        return gameRules;
-    }
-
     @Override
     public WorldData getWorldDataCache() {
         return worldDataCache;
@@ -384,38 +346,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         builder.putInt("eduOffer", worldData.getEduOffer());
         builder.putBoolean("educationFeaturesEnabled", worldData.isEducationFeaturesEnabled());
 
-        builder.put("commandblockoutput", worldData.getGameRules().get(GameRule.COMMAND_BLOCK_OUTPUT));
-        builder.put("commandblocksenabled", worldData.getGameRules().get(GameRule.COMMAND_BLOCKS_ENABLED));
-        builder.put("dodaylightcycle", worldData.getGameRules().get(GameRule.DO_DAYLIGHT_CYCLE));
-        builder.put("doentitydrops", worldData.getGameRules().get(GameRule.DO_ENTITY_DROPS));
-        builder.put("dofiretick", worldData.getGameRules().get(GameRule.DO_FIRE_TICK));
-        builder.put("doimmediaterespawn", worldData.getGameRules().get(GameRule.DO_IMMEDIATE_RESPAWN));
-        builder.put("doinsomnia", worldData.getGameRules().get(GameRule.DO_INSOMNIA));
-        builder.put("dolimitedcrafting", worldData.getGameRules().get(GameRule.DO_LIMITED_CRAFTING));
-        builder.put("domobloot", worldData.getGameRules().get(GameRule.DO_MOB_LOOT));
-        builder.put("domobspawning", worldData.getGameRules().get(GameRule.DO_MOB_SPAWNING));
-        builder.put("dotiledrops", worldData.getGameRules().get(GameRule.DO_TILE_DROPS));
-        builder.put("doweathercycle", worldData.getGameRules().get(GameRule.DO_WEATHER_CYCLE));
-        builder.put("drowningdamage", worldData.getGameRules().get(GameRule.DROWNING_DAMAGE));
-        builder.put("falldamage", worldData.getGameRules().get(GameRule.FALL_DAMAGE));
-        builder.put("firedamage", worldData.getGameRules().get(GameRule.FIRE_DAMAGE));
-        builder.put("freezedamage", worldData.getGameRules().get(GameRule.FREEZE_DAMAGE));
-        builder.put("functioncommandlimit", worldData.getGameRules().get(GameRule.FUNCTION_COMMAND_LIMIT));
-        builder.put("keepinventory", worldData.getGameRules().get(GameRule.KEEP_INVENTORY));
-        builder.put("maxcommandchainlength", worldData.getGameRules().get(GameRule.MAX_COMMAND_CHAIN_LENGTH));
-        builder.put("mobgriefing", worldData.getGameRules().get(GameRule.MOB_GRIEFING));
-        builder.put("naturalregeneration", worldData.getGameRules().get(GameRule.NATURAL_REGENERATION));
-        builder.put("pvp", worldData.getGameRules().get(GameRule.PVP));
-        builder.put("respawnblocksexplode", worldData.getGameRules().get(GameRule.RESPAWN_BLOCKS_EXPLODE));
-        builder.put("sendcommandfeedback", worldData.getGameRules().get(GameRule.SEND_COMMAND_FEEDBACK));
-        builder.put("showbordereffect", worldData.getGameRules().get(GameRule.SHOW_BORDER_EFFECT));
-        builder.put("showcoordinates", worldData.getGameRules().get(GameRule.SHOW_COORDINATES));
-        builder.put("showdeathmessages", worldData.getGameRules().get(GameRule.SHOW_DEATH_MESSAGES));
-        builder.put("showtags", worldData.getGameRules().get(GameRule.SHOW_TAGS));
-        builder.put("spawnradius", worldData.getGameRules().get(GameRule.SPAWN_RADIUS));
-        builder.put("tntexplodes", worldData.getGameRules().get(GameRule.TNT_EXPLODES));
-        builder.put("tntexplosiondropdecay", worldData.getGameRules().get(GameRule.TNT_EXPLOSION_DROP_DECAY));
-        builder.put("showdaysplayed", worldData.getGameRules().get(GameRule.SHOW_DAYS_PLAYED));
+        worldData.getGameRules().writeToNBT(builder);
         return builder.build();
     }
 
