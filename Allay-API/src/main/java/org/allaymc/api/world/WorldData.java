@@ -199,7 +199,7 @@ public class WorldData {
     @Builder.Default
     WorldPolicies worldPolicies = new WorldPolicies();
 
-    public synchronized GameType getGameType() {
+    public GameType getGameType() {
         return gameType;
     }
 
@@ -207,7 +207,7 @@ public class WorldData {
         this.gameType = gameType;
     }
 
-    public synchronized String getName() {
+    public String getName() {
         return name;
     }
 
@@ -215,7 +215,7 @@ public class WorldData {
         this.name = name;
     }
 
-    public synchronized Difficulty getDifficulty() {
+    public Difficulty getDifficulty() {
         return difficulty;
     }
 
@@ -223,7 +223,7 @@ public class WorldData {
         this.difficulty = difficulty;
     }
 
-    public synchronized long getTime() {
+    public long getTime() {
         return time;
     }
 
@@ -263,7 +263,7 @@ public class WorldData {
     /**
      * The overworld default spawn point
      */
-    public synchronized Vector3ic getSpawnPoint() {
+    public Vector3ic getSpawnPoint() {
         return spawnPoint;
     }
 
