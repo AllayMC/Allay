@@ -11,71 +11,71 @@ import org.allaymc.api.block.tag.BlockTag;
  * @author daoge_cmd
  */
 public interface VanillaBlockTags {
-  Map<String, BlockTag> NAME_TO_TAG = new HashMap<>();
+   Map<String, BlockTag> NAME_TO_TAG = new HashMap<>();
 
-  BlockTag CROP = create("minecraft:crop");
+   BlockTag CROP = create("minecraft:crop");
 
-  BlockTag LOG = create("log");
+   BlockTag FERTILIZE_AREA = create("minecraft:fertilize_area");
 
-  BlockTag STONE_PICK_DIGGABLE = create("stone_pick_diggable");
+   BlockTag MOB_SPAWNER = create("minecraft:mob_spawner");
 
-  BlockTag GRASS = create("grass");
+   BlockTag DIRT = create("minecraft:dirt");
 
-  BlockTag OAK = create("oak");
+   BlockTag DIAMOND_PICK_DIGGABLE = create("minecraft:diamond_pick_diggable");
 
-  BlockTag WOOD = create("wood");
+   BlockTag GRAVEL = create("minecraft:gravel");
 
-  BlockTag DARK_OAK = create("dark_oak");
+   BlockTag WATER = create("minecraft:water");
 
-  BlockTag FERTILIZE_AREA = create("fertilize_area");
+   BlockTag GRASS = create("minecraft:grass");
 
-  BlockTag SPRUCE = create("spruce");
+   BlockTag BIRCH = create("minecraft:birch");
 
-  BlockTag TRAPDOORS = create("trapdoors");
+   BlockTag JUNGLE = create("minecraft:jungle");
 
-  BlockTag IRON_PICK_DIGGABLE = create("iron_pick_diggable");
+   BlockTag ACACIA = create("minecraft:acacia");
 
-  BlockTag BIRCH = create("birch");
+   BlockTag DARK_OAK = create("minecraft:dark_oak");
 
-  BlockTag RAIL = create("rail");
+   BlockTag LOG = create("minecraft:log");
 
-  BlockTag DIRT = create("dirt");
+   BlockTag WOOD = create("minecraft:wood");
 
-  BlockTag METAL = create("metal");
+   BlockTag TEXT_SIGN = create("minecraft:text_sign");
 
-  BlockTag TEXT_SIGN = create("text_sign");
+   BlockTag PLANT = create("minecraft:plant");
 
-  BlockTag WATER = create("water");
+   BlockTag IRON_PICK_DIGGABLE = create("minecraft:iron_pick_diggable");
 
-  BlockTag DIAMOND_PICK_DIGGABLE = create("diamond_pick_diggable");
+   BlockTag PUMPKIN = create("minecraft:pumpkin");
 
-  BlockTag STONE = create("stone");
+   BlockTag SPRUCE = create("minecraft:spruce");
 
-  BlockTag GRAVEL = create("gravel");
+   BlockTag OAK = create("minecraft:oak");
 
-  BlockTag SAND = create("sand");
+   BlockTag STONE = create("minecraft:stone");
 
-  BlockTag SNOW = create("snow");
+   BlockTag SAND = create("minecraft:sand");
 
-  BlockTag PLANT = create("plant");
+   BlockTag SNOW = create("minecraft:snow");
 
-  BlockTag ACACIA = create("acacia");
+   BlockTag METAL = create("minecraft:metal");
 
-  BlockTag NOT_FEATURE_REPLACEABLE = create("not_feature_replaceable");
+   BlockTag NOT_FEATURE_REPLACEABLE = create("minecraft:not_feature_replaceable");
 
-  BlockTag JUNGLE = create("jungle");
+   BlockTag TRAPDOORS = create("minecraft:trapdoors");
 
-  BlockTag MOB_SPAWNER = create("mob_spawner");
+   BlockTag STONE_PICK_DIGGABLE = create("minecraft:stone_pick_diggable");
 
-  BlockTag PUMPKIN = create("pumpkin");
+   BlockTag RAIL = create("minecraft:rail");
 
-  static BlockTag create(String name) {
-    var tag = new BlockTag(name);
-    NAME_TO_TAG.put(name, tag);
-    return tag;
-  }
+   static BlockTag create(String name) {
+      var tag = new BlockTag(name);
+      NAME_TO_TAG.put(name, tag);
+      return tag;
+   }
 
-  static BlockTag getTagByName(String name) {
-    return NAME_TO_TAG.get(name);
-  }
+   static BlockTag getTagByName(String name) {
+      return NAME_TO_TAG.get(name);
+   }
 }

@@ -10,7 +10,6 @@ import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.utils.ResourceUtils;
 
@@ -48,14 +47,16 @@ public final class AllayVanillaBlockStateDataRegistry extends SimpleMappedRegist
                 var loaded = new EnumMap<VanillaBlockId, Map<Integer, BlockStateData>>(VanillaBlockId.class);
                 JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> {
                     var obj = entry.getAsJsonObject();
-                    VanillaBlockId type = VanillaBlockId.fromIdentifier(new Identifier(obj.get("name").getAsString()));
+                    var type = VanillaBlockId.fromIdentifier(new Identifier(obj.get("name").getAsString()));
                     if (type == null) {
                         log.warn("Unknown block id: {}", obj.get("name").getAsString());
                         return;
                     }
+
                     var blockStateData = BlockStateData.fromJson(obj.toString());
                     if (!loaded.containsKey(type))
                         loaded.put(type, new Int2ObjectOpenHashMap<>());
+
                     loaded.get(type).put(obj.get("blockStateHash").getAsInt(), blockStateData);
                 });
                 log.info("Loaded vanilla block attribute data registry successfully");

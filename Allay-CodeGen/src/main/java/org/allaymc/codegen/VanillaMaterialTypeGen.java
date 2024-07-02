@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Allay Project 2024/6/11
@@ -70,10 +73,8 @@ public class VanillaMaterialTypeGen {
                                 .addStatement("return NAME_TO_MATERIAL_TYPE.get(name)")
                                 .build()
                 );
-        var fieldNames = new HashSet<String>();
         for (var key : KEYS) {
             var fieldName = StringUtils.fastTwoPartSplit(key, ":", "")[1].toUpperCase();
-            fieldNames.add(fieldName);
             codeBuilder.addField(
                     FieldSpec
                             .builder(MATERIAL_TYPE_CLASS, fieldName)
@@ -83,7 +84,9 @@ public class VanillaMaterialTypeGen {
             );
         }
 
-        var javaFile = JavaFile.builder("org.allaymc.api.data", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("org.allaymc.api.data", codeBuilder.build())
+                .indent("   ")
+                .build();
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/data/VanillaMaterialTypes.java"), javaFile.toString());
     }
 }

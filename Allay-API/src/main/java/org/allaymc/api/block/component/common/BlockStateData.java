@@ -29,7 +29,7 @@ import java.awt.*;
 public class BlockStateData {
 
     /**
-     * See: <a href="https://www.mcpk.wiki/wiki/Slipperiness">Slipperiness</a>
+     * @see <a href="https://www.mcpk.wiki/wiki/Slipperiness">Slipperiness</a>
      */
     public static final float DEFAULT_FRICTION = 0.6f;
 
@@ -79,12 +79,12 @@ public class BlockStateData {
     @Builder.Default
     protected float thickness = 0;
 
-    public boolean hasCollision() {
-        return !collisionShape.getSolids().isEmpty();
-    }
-
     public static BlockStateData fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockStateData.class);
+    }
+
+    public boolean hasCollision() {
+        return !collisionShape.getSolids().isEmpty();
     }
 
     public VoxelShape computeOffsetCollisionShape(float x, float y, float z) {

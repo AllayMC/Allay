@@ -2,38 +2,38 @@
   "minecraft:acacia_button": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_door": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_double_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_fence": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_fence_gate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_leaves": {
@@ -42,72 +42,72 @@
   "minecraft:acacia_log": {
     "material": "Wood",
     "tags": [
-      "wood",
-      "log",
-      "acacia"
+      "minecraft:wood",
+      "minecraft:log",
+      "minecraft:acacia"
     ]
   },
   "minecraft:acacia_planks": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_pressure_plate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_sapling": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:acacia_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_stairs": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors",
-      "wood"
+      "minecraft:trapdoors",
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:acacia_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:activator_rail": {
     "material": "Decoration",
     "tags": [
-      "rail"
+      "minecraft:rail"
     ]
   },
   "minecraft:air": {
@@ -116,7 +116,7 @@
   "minecraft:allium": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:allow": {
@@ -162,7 +162,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:andesite_stairs": {
@@ -199,7 +199,7 @@
   "minecraft:azure_bluet": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:bamboo": {
@@ -211,7 +211,7 @@
   "minecraft:bamboo_button": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:bamboo_door": {
@@ -226,14 +226,14 @@
   "minecraft:bamboo_fence_gate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:bamboo_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:bamboo_mosaic": {
@@ -254,7 +254,7 @@
   "minecraft:bamboo_pressure_plate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:bamboo_sapling": {
@@ -269,28 +269,28 @@
   "minecraft:bamboo_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:bamboo_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors",
-      "wood"
+      "minecraft:trapdoors",
+      "minecraft:wood"
     ]
   },
   "minecraft:bamboo_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:barrel": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:barrier": {
@@ -324,7 +324,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "not_feature_replaceable"
+      "minecraft:not_feature_replaceable"
     ]
   },
   "minecraft:bee_nest": {
@@ -356,38 +356,38 @@
   "minecraft:birch_button": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_door": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_double_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_fence": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_fence_gate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_leaves": {
@@ -396,66 +396,66 @@
   "minecraft:birch_log": {
     "material": "Wood",
     "tags": [
-      "wood",
-      "log",
-      "birch"
+      "minecraft:wood",
+      "minecraft:log",
+      "minecraft:birch"
     ]
   },
   "minecraft:birch_planks": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_pressure_plate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_sapling": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:birch_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_stairs": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors",
-      "wood"
+      "minecraft:trapdoors",
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:birch_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:black_candle": {
@@ -621,7 +621,7 @@
   "minecraft:blue_orchid": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:blue_shulker_box": {
@@ -711,7 +711,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:brick_slab": {
@@ -725,7 +725,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:brick_stairs": {
@@ -877,7 +877,7 @@
   "minecraft:carved_pumpkin": {
     "material": "Vegetable",
     "tags": [
-      "pumpkin"
+      "minecraft:pumpkin"
     ]
   },
   "minecraft:cauldron": {
@@ -891,7 +891,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "metal"
+      "minecraft:metal"
     ]
   },
   "minecraft:cave_vines": {
@@ -950,7 +950,7 @@
   "minecraft:cherry_button": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:cherry_door": {
@@ -965,14 +965,14 @@
   "minecraft:cherry_fence_gate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:cherry_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:cherry_leaves": {
@@ -981,7 +981,7 @@
   "minecraft:cherry_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:cherry_planks": {
@@ -990,7 +990,7 @@
   "minecraft:cherry_pressure_plate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:cherry_sapling": {
@@ -1005,40 +1005,40 @@
   "minecraft:cherry_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:cherry_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors",
-      "wood"
+      "minecraft:trapdoors",
+      "minecraft:wood"
     ]
   },
   "minecraft:cherry_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:cherry_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:chest": {
     "material": "Wood",
     "tags": [
-      "not_feature_replaceable"
+      "minecraft:not_feature_replaceable"
     ]
   },
   "minecraft:chiseled_bookshelf": {
     "material": "Wood",
     "tags": [
-      "not_feature_replaceable"
+      "minecraft:not_feature_replaceable"
     ]
   },
   "minecraft:chiseled_copper": {
@@ -1050,7 +1050,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:chiseled_deepslate": {
@@ -1142,8 +1142,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "iron_pick_diggable",
-      "diamond_pick_diggable"
+      "minecraft:iron_pick_diggable",
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:cobbled_deepslate": {
@@ -1212,7 +1212,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:cobblestone_slab": {
@@ -1226,7 +1226,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:cobblestone_wall": {
@@ -1240,7 +1240,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:cocoa": {
@@ -1278,7 +1278,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:copper_bulb": {
@@ -1292,7 +1292,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:copper_door": {
@@ -1315,7 +1315,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:copper_ore": {
@@ -1327,7 +1327,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:copper_trapdoor": {
@@ -1341,7 +1341,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:coral_fan_hang": {
@@ -1356,7 +1356,7 @@
   "minecraft:cornflower": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:cracked_deepslate_bricks": {
@@ -1436,8 +1436,8 @@
   "minecraft:crimson_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:crimson_hyphae": {
@@ -1454,7 +1454,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:crimson_planks": {
@@ -1475,7 +1475,7 @@
   "minecraft:crimson_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign"
+      "minecraft:text_sign"
     ]
   },
   "minecraft:crimson_stem": {
@@ -1484,13 +1484,13 @@
   "minecraft:crimson_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:crimson_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign"
+      "minecraft:text_sign"
     ]
   },
   "minecraft:crying_obsidian": {
@@ -1509,7 +1509,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:cut_copper_slab": {
@@ -1530,7 +1530,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:cyan_candle": {
@@ -1593,38 +1593,38 @@
   "minecraft:dark_oak_button": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_door": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_double_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_fence": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_fence_gate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_leaves": {
@@ -1633,52 +1633,52 @@
   "minecraft:dark_oak_log": {
     "material": "Wood",
     "tags": [
-      "wood",
-      "log",
-      "dark_oak"
+      "minecraft:wood",
+      "minecraft:log",
+      "minecraft:dark_oak"
     ]
   },
   "minecraft:dark_oak_planks": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_pressure_plate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_sapling": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:dark_oak_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_stairs": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors",
-      "wood"
+      "minecraft:trapdoors",
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_oak_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:dark_prismarine_stairs": {
@@ -1695,15 +1695,15 @@
   "minecraft:darkoak_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:darkoak_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:daylight_detector": {
@@ -1880,8 +1880,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "iron_pick_diggable",
-      "diamond_pick_diggable"
+      "minecraft:iron_pick_diggable",
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:deepslate_copper_ore": {
@@ -1893,7 +1893,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:deepslate_diamond_ore": {
@@ -1904,8 +1904,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "diamond_pick_diggable",
-      "iron_pick_diggable"
+      "minecraft:diamond_pick_diggable",
+      "minecraft:iron_pick_diggable"
     ]
   },
   "minecraft:deepslate_emerald_ore": {
@@ -1916,8 +1916,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "diamond_pick_diggable",
-      "iron_pick_diggable"
+      "minecraft:diamond_pick_diggable",
+      "minecraft:iron_pick_diggable"
     ]
   },
   "minecraft:deepslate_gold_ore": {
@@ -1928,8 +1928,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "iron_pick_diggable",
-      "diamond_pick_diggable"
+      "minecraft:iron_pick_diggable",
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:deepslate_iron_ore": {
@@ -1941,8 +1941,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "iron_pick_diggable",
-      "diamond_pick_diggable"
+      "minecraft:iron_pick_diggable",
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:deepslate_lapis_ore": {
@@ -1962,8 +1962,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "diamond_pick_diggable",
-      "iron_pick_diggable"
+      "minecraft:diamond_pick_diggable",
+      "minecraft:iron_pick_diggable"
     ]
   },
   "minecraft:deepslate_tile_double_slab": {
@@ -2027,7 +2027,7 @@
   "minecraft:detector_rail": {
     "material": "Decoration",
     "tags": [
-      "rail"
+      "minecraft:rail"
     ]
   },
   "minecraft:diamond_block": {
@@ -2046,8 +2046,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "diamond_pick_diggable",
-      "iron_pick_diggable"
+      "minecraft:diamond_pick_diggable",
+      "minecraft:iron_pick_diggable"
     ]
   },
   "minecraft:diorite": {
@@ -2061,7 +2061,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:diorite_stairs": {
@@ -2078,14 +2078,14 @@
   "minecraft:dirt": {
     "material": "Dirt",
     "tags": [
-      "grass",
-      "dirt"
+      "minecraft:grass",
+      "minecraft:dirt"
     ]
   },
   "minecraft:dirt_with_roots": {
     "material": "Dirt",
     "tags": [
-      "dirt"
+      "minecraft:dirt"
     ]
   },
   "minecraft:dispenser": {
@@ -2119,7 +2119,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:double_stone_block_slab2": {
@@ -2180,7 +2180,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:dropper": {
@@ -2567,8 +2567,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "diamond_pick_diggable",
-      "iron_pick_diggable"
+      "minecraft:diamond_pick_diggable",
+      "minecraft:iron_pick_diggable"
     ]
   },
   "minecraft:enchanting_table": {
@@ -2621,7 +2621,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "not_feature_replaceable"
+      "minecraft:not_feature_replaceable"
     ]
   },
   "minecraft:end_rod": {
@@ -2658,7 +2658,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:exposed_copper": {
@@ -2670,7 +2670,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:exposed_copper_bulb": {
@@ -2684,7 +2684,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:exposed_copper_door": {
@@ -2707,7 +2707,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:exposed_copper_trapdoor": {
@@ -2721,7 +2721,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:exposed_cut_copper": {
@@ -2733,7 +2733,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:exposed_cut_copper_slab": {
@@ -2754,7 +2754,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:exposed_double_cut_copper_slab": {
@@ -2769,13 +2769,13 @@
   "minecraft:farmland": {
     "material": "Dirt",
     "tags": [
-      "dirt"
+      "minecraft:dirt"
     ]
   },
   "minecraft:fence_gate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:fern": {
@@ -2804,7 +2804,7 @@
   "minecraft:fletching_table": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:flower_pot": {
@@ -2819,7 +2819,7 @@
   "minecraft:flowing_water": {
     "material": "Water",
     "tags": [
-      "water"
+      "minecraft:water"
     ]
   },
   "minecraft:frame": {
@@ -2883,7 +2883,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "metal"
+      "minecraft:metal"
     ]
   },
   "minecraft:gold_ore": {
@@ -2894,14 +2894,14 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "iron_pick_diggable",
-      "diamond_pick_diggable"
+      "minecraft:iron_pick_diggable",
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:golden_rail": {
     "material": "Decoration",
     "tags": [
-      "rail"
+      "minecraft:rail"
     ]
   },
   "minecraft:granite": {
@@ -2915,7 +2915,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:granite_stairs": {
@@ -2932,21 +2932,21 @@
   "minecraft:grass_block": {
     "material": "Dirt",
     "tags": [
-      "grass",
-      "fertilize_area",
-      "dirt"
+      "minecraft:grass",
+      "minecraft:fertilize_area",
+      "minecraft:dirt"
     ]
   },
   "minecraft:grass_path": {
     "material": "Dirt",
     "tags": [
-      "grass"
+      "minecraft:grass"
     ]
   },
   "minecraft:gravel": {
     "material": "Sand",
     "tags": [
-      "gravel"
+      "minecraft:gravel"
     ]
   },
   "minecraft:gray_candle": {
@@ -3283,7 +3283,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "metal"
+      "minecraft:metal"
     ]
   },
   "minecraft:iron_block": {
@@ -3295,7 +3295,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "metal"
+      "minecraft:metal"
     ]
   },
   "minecraft:iron_door": {
@@ -3309,7 +3309,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "metal"
+      "minecraft:metal"
     ]
   },
   "minecraft:iron_ore": {
@@ -3321,8 +3321,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "iron_pick_diggable",
-      "diamond_pick_diggable"
+      "minecraft:iron_pick_diggable",
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:iron_trapdoor": {
@@ -3336,7 +3336,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:jigsaw": {
@@ -3356,38 +3356,38 @@
   "minecraft:jungle_button": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_door": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_double_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_fence": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_fence_gate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_leaves": {
@@ -3396,66 +3396,66 @@
   "minecraft:jungle_log": {
     "material": "Wood",
     "tags": [
-      "wood",
-      "log",
-      "jungle"
+      "minecraft:wood",
+      "minecraft:log",
+      "minecraft:jungle"
     ]
   },
   "minecraft:jungle_planks": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_pressure_plate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_sapling": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:jungle_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_stairs": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors",
-      "wood"
+      "minecraft:trapdoors",
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:jungle_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:kelp": {
@@ -3464,7 +3464,7 @@
   "minecraft:ladder": {
     "material": "Decoration",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:lantern": {
@@ -3496,8 +3496,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "iron_pick_diggable",
-      "diamond_pick_diggable"
+      "minecraft:iron_pick_diggable",
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:large_amethyst_bud": {
@@ -3514,7 +3514,7 @@
   "minecraft:large_fern": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:lava": {
@@ -3655,13 +3655,13 @@
   "minecraft:lilac": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:lily_of_the_valley": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:lime_candle": {
@@ -3740,8 +3740,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "diamond_pick_diggable",
-      "iron_pick_diggable"
+      "minecraft:diamond_pick_diggable",
+      "minecraft:iron_pick_diggable"
     ]
   },
   "minecraft:lit_furnace": {
@@ -3758,7 +3758,7 @@
   "minecraft:lit_pumpkin": {
     "material": "Vegetable",
     "tags": [
-      "pumpkin"
+      "minecraft:pumpkin"
     ]
   },
   "minecraft:lit_redstone_lamp": {
@@ -3772,8 +3772,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "diamond_pick_diggable",
-      "iron_pick_diggable"
+      "minecraft:diamond_pick_diggable",
+      "minecraft:iron_pick_diggable"
     ]
   },
   "minecraft:lit_smoker": {
@@ -3872,7 +3872,7 @@
   "minecraft:mangrove_button": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:mangrove_door": {
@@ -3887,14 +3887,14 @@
   "minecraft:mangrove_fence_gate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:mangrove_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:mangrove_leaves": {
@@ -3903,7 +3903,7 @@
   "minecraft:mangrove_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:mangrove_planks": {
@@ -3912,7 +3912,7 @@
   "minecraft:mangrove_pressure_plate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:mangrove_propagule": {
@@ -3930,28 +3930,28 @@
   "minecraft:mangrove_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:mangrove_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors",
-      "wood"
+      "minecraft:trapdoors",
+      "minecraft:wood"
     ]
   },
   "minecraft:mangrove_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:mangrove_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:medium_amethyst_bud": {
@@ -3982,8 +3982,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "mob_spawner",
-      "not_feature_replaceable"
+      "minecraft:mob_spawner",
+      "minecraft:not_feature_replaceable"
     ]
   },
   "minecraft:monster_egg": {
@@ -3992,8 +3992,8 @@
   "minecraft:moss_block": {
     "material": "Dirt",
     "tags": [
-      "fertilize_area",
-      "dirt"
+      "minecraft:fertilize_area",
+      "minecraft:dirt"
     ]
   },
   "minecraft:moss_carpet": {
@@ -4010,7 +4010,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:mossy_cobblestone_stairs": {
@@ -4049,7 +4049,7 @@
   "minecraft:mud": {
     "material": "Dirt",
     "tags": [
-      "dirt"
+      "minecraft:dirt"
     ]
   },
   "minecraft:mud_brick_double_slab": {
@@ -4110,13 +4110,13 @@
   "minecraft:muddy_mangrove_roots": {
     "material": "Root",
     "tags": [
-      "dirt"
+      "minecraft:dirt"
     ]
   },
   "minecraft:mycelium": {
     "material": "Dirt",
     "tags": [
-      "dirt"
+      "minecraft:dirt"
     ]
   },
   "minecraft:nether_brick": {
@@ -4152,7 +4152,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:nether_brick_stairs": {
@@ -4232,20 +4232,20 @@
   "minecraft:oak_double_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:oak_fence": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:oak_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:oak_leaves": {
@@ -4254,39 +4254,39 @@
   "minecraft:oak_log": {
     "material": "Wood",
     "tags": [
-      "wood",
-      "log",
-      "oak"
+      "minecraft:wood",
+      "minecraft:log",
+      "minecraft:oak"
     ]
   },
   "minecraft:oak_planks": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:oak_sapling": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:oak_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:oak_stairs": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:oak_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:observer": {
@@ -4307,7 +4307,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "diamond_pick_diggable"
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:ochre_froglight": {
@@ -4370,7 +4370,7 @@
   "minecraft:orange_tulip": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:orange_wool": {
@@ -4379,7 +4379,7 @@
   "minecraft:oxeye_daisy": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:oxidized_chiseled_copper": {
@@ -4391,7 +4391,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:oxidized_copper": {
@@ -4403,7 +4403,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:oxidized_copper_bulb": {
@@ -4417,7 +4417,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:oxidized_copper_door": {
@@ -4440,7 +4440,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:oxidized_copper_trapdoor": {
@@ -4454,7 +4454,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:oxidized_cut_copper": {
@@ -4466,7 +4466,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:oxidized_cut_copper_slab": {
@@ -4487,7 +4487,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:oxidized_double_cut_copper_slab": {
@@ -4511,7 +4511,7 @@
   "minecraft:peony": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:petrified_oak_slab": {
@@ -4525,7 +4525,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:pink_candle": {
@@ -4588,7 +4588,7 @@
   "minecraft:pink_tulip": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:pink_wool": {
@@ -4604,19 +4604,19 @@
     "material": "Plant",
     "tags": [
       "minecraft:crop",
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:pitcher_plant": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:podzol": {
     "material": "Dirt",
     "tags": [
-      "dirt"
+      "minecraft:dirt"
     ]
   },
   "minecraft:pointed_dripstone": {
@@ -4633,7 +4633,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:polished_andesite_stairs": {
@@ -4856,7 +4856,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:polished_diorite_stairs": {
@@ -4881,7 +4881,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:polished_granite_stairs": {
@@ -4953,7 +4953,7 @@
   "minecraft:poppy": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:portal": {
@@ -5010,7 +5010,7 @@
   "minecraft:pumpkin": {
     "material": "Vegetable",
     "tags": [
-      "pumpkin"
+      "minecraft:pumpkin"
     ]
   },
   "minecraft:pumpkin_stem": {
@@ -5139,7 +5139,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:quartz_stairs": {
@@ -5156,7 +5156,7 @@
   "minecraft:rail": {
     "material": "Decoration",
     "tags": [
-      "rail"
+      "minecraft:rail"
     ]
   },
   "minecraft:raw_copper_block": {
@@ -5168,7 +5168,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:raw_gold_block": {
@@ -5179,8 +5179,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "iron_pick_diggable",
-      "diamond_pick_diggable"
+      "minecraft:iron_pick_diggable",
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:raw_iron_block": {
@@ -5192,8 +5192,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "iron_pick_diggable",
-      "diamond_pick_diggable"
+      "minecraft:iron_pick_diggable",
+      "minecraft:diamond_pick_diggable"
     ]
   },
   "minecraft:red_candle": {
@@ -5303,7 +5303,7 @@
   "minecraft:red_tulip": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:red_wool": {
@@ -5331,8 +5331,8 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "diamond_pick_diggable",
-      "iron_pick_diggable"
+      "minecraft:diamond_pick_diggable",
+      "minecraft:iron_pick_diggable"
     ]
   },
   "minecraft:redstone_torch": {
@@ -5371,13 +5371,13 @@
   "minecraft:rose_bush": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:sand": {
     "material": "Sand",
     "tags": [
-      "sand"
+      "minecraft:sand"
     ]
   },
   "minecraft:sandstone": {
@@ -5402,7 +5402,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:sandstone_stairs": {
@@ -5483,7 +5483,7 @@
   "minecraft:smithing_table": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:smoker": {
@@ -5563,7 +5563,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:sniffer_egg": {
@@ -5591,7 +5591,7 @@
       "minecraft:netherite_shovel"
     ],
     "tags": [
-      "snow"
+      "minecraft:snow"
     ]
   },
   "minecraft:soul_campfire": {
@@ -5629,38 +5629,38 @@
   "minecraft:spruce_button": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_door": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_double_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_fence": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_fence_gate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_leaves": {
@@ -5669,66 +5669,66 @@
   "minecraft:spruce_log": {
     "material": "Wood",
     "tags": [
-      "wood",
-      "log",
-      "spruce"
+      "minecraft:wood",
+      "minecraft:log",
+      "minecraft:spruce"
     ]
   },
   "minecraft:spruce_planks": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_pressure_plate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_sapling": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:spruce_slab": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_stairs": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors",
-      "wood"
+      "minecraft:trapdoors",
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:spruce_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:standing_banner": {
@@ -5737,8 +5737,8 @@
   "minecraft:standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:sticky_piston": {
@@ -5758,7 +5758,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:stone_block_slab2": {
@@ -5805,7 +5805,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:stone_brick_stairs": {
@@ -5830,7 +5830,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:stone_pressure_plate": {
@@ -5844,7 +5844,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:stone_stairs": {
@@ -5858,7 +5858,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone"
+      "minecraft:stone"
     ]
   },
   "minecraft:stonebrick": {
@@ -5897,13 +5897,13 @@
   "minecraft:stripped_acacia_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_acacia_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_bamboo_block": {
@@ -5912,25 +5912,25 @@
   "minecraft:stripped_birch_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_birch_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_cherry_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_cherry_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_crimson_hyphae": {
@@ -5942,61 +5942,61 @@
   "minecraft:stripped_dark_oak_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_dark_oak_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_jungle_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_jungle_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_mangrove_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_mangrove_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_oak_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_oak_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_spruce_log": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_spruce_wood": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:stripped_warped_hyphae": {
@@ -6022,19 +6022,19 @@
   "minecraft:sunflower": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:suspicious_gravel": {
     "material": "Sand",
     "tags": [
-      "gravel"
+      "minecraft:gravel"
     ]
   },
   "minecraft:suspicious_sand": {
     "material": "Sand",
     "tags": [
-      "sand"
+      "minecraft:sand"
     ]
   },
   "minecraft:sweet_berry_bush": {
@@ -6046,7 +6046,7 @@
   "minecraft:tall_grass": {
     "material": "Plant",
     "tags": [
-      "plant"
+      "minecraft:plant"
     ]
   },
   "minecraft:target": {
@@ -6073,8 +6073,8 @@
   "minecraft:trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors",
-      "wood"
+      "minecraft:trapdoors",
+      "minecraft:wood"
     ]
   },
   "minecraft:trapped_chest": {
@@ -6083,7 +6083,7 @@
   "minecraft:trial_spawner": {
     "material": "ReinforcedStone",
     "tags": [
-      "not_feature_replaceable"
+      "minecraft:not_feature_replaceable"
     ]
   },
   "minecraft:trip_wire": {
@@ -6246,7 +6246,7 @@
   "minecraft:vault": {
     "material": "ReinforcedStone",
     "tags": [
-      "not_feature_replaceable"
+      "minecraft:not_feature_replaceable"
     ]
   },
   "minecraft:verdant_froglight": {
@@ -6261,8 +6261,8 @@
   "minecraft:wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:warped_button": {
@@ -6286,8 +6286,8 @@
   "minecraft:warped_hanging_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign",
-      "wood"
+      "minecraft:text_sign",
+      "minecraft:wood"
     ]
   },
   "minecraft:warped_hyphae": {
@@ -6304,7 +6304,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:warped_planks": {
@@ -6325,7 +6325,7 @@
   "minecraft:warped_standing_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign"
+      "minecraft:text_sign"
     ]
   },
   "minecraft:warped_stem": {
@@ -6334,13 +6334,13 @@
   "minecraft:warped_trapdoor": {
     "material": "Wood",
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:warped_wall_sign": {
     "material": "Wood",
     "tags": [
-      "text_sign"
+      "minecraft:text_sign"
     ]
   },
   "minecraft:warped_wart_block": {
@@ -6349,7 +6349,7 @@
   "minecraft:water": {
     "material": "Water",
     "tags": [
-      "water"
+      "minecraft:water"
     ]
   },
   "minecraft:waterlily": {
@@ -6364,7 +6364,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_copper": {
@@ -6376,7 +6376,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_copper_bulb": {
@@ -6390,7 +6390,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_copper_door": {
@@ -6413,7 +6413,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_copper_trapdoor": {
@@ -6427,7 +6427,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:waxed_cut_copper": {
@@ -6439,7 +6439,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_cut_copper_slab": {
@@ -6460,7 +6460,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_double_cut_copper_slab": {
@@ -6481,7 +6481,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_exposed_copper": {
@@ -6493,7 +6493,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_exposed_copper_bulb": {
@@ -6507,7 +6507,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_exposed_copper_door": {
@@ -6530,7 +6530,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_exposed_copper_trapdoor": {
@@ -6544,7 +6544,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:waxed_exposed_cut_copper": {
@@ -6556,7 +6556,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_exposed_cut_copper_slab": {
@@ -6577,7 +6577,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_exposed_double_cut_copper_slab": {
@@ -6598,7 +6598,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_oxidized_copper": {
@@ -6610,7 +6610,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_oxidized_copper_bulb": {
@@ -6624,7 +6624,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_oxidized_copper_door": {
@@ -6647,7 +6647,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_oxidized_copper_trapdoor": {
@@ -6661,7 +6661,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:waxed_oxidized_cut_copper": {
@@ -6673,7 +6673,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_oxidized_cut_copper_slab": {
@@ -6685,7 +6685,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_oxidized_cut_copper_stairs": {
@@ -6697,7 +6697,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_oxidized_double_cut_copper_slab": {
@@ -6709,7 +6709,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_weathered_chiseled_copper": {
@@ -6721,7 +6721,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_weathered_copper": {
@@ -6733,7 +6733,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_weathered_copper_bulb": {
@@ -6747,7 +6747,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_weathered_copper_door": {
@@ -6770,7 +6770,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_weathered_copper_trapdoor": {
@@ -6784,7 +6784,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:waxed_weathered_cut_copper": {
@@ -6796,7 +6796,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_weathered_cut_copper_slab": {
@@ -6817,7 +6817,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:waxed_weathered_double_cut_copper_slab": {
@@ -6838,7 +6838,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:weathered_copper": {
@@ -6850,7 +6850,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:weathered_copper_bulb": {
@@ -6864,7 +6864,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:weathered_copper_door": {
@@ -6887,7 +6887,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:weathered_copper_trapdoor": {
@@ -6901,7 +6901,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "trapdoors"
+      "minecraft:trapdoors"
     ]
   },
   "minecraft:weathered_cut_copper": {
@@ -6913,7 +6913,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:weathered_cut_copper_slab": {
@@ -6934,7 +6934,7 @@
       "minecraft:netherite_pickaxe"
     ],
     "tags": [
-      "stone_pick_diggable"
+      "minecraft:stone_pick_diggable"
     ]
   },
   "minecraft:weathered_double_cut_copper_slab": {
@@ -7025,7 +7025,7 @@
   "minecraft:white_tulip": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:white_wool": {
@@ -7037,19 +7037,19 @@
   "minecraft:wooden_button": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:wooden_door": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:wooden_pressure_plate": {
     "material": "Wood",
     "tags": [
-      "wood"
+      "minecraft:wood"
     ]
   },
   "minecraft:yellow_candle": {
@@ -7078,7 +7078,7 @@
   "minecraft:yellow_flower": {
     "material": "Plant",
     "tags": [
-      "fertilize_area"
+      "minecraft:fertilize_area"
     ]
   },
   "minecraft:yellow_glazed_terracotta": {
