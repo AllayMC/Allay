@@ -3,17 +3,12 @@ package org.allaymc.codegen;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.VanillaItemId;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.nbt.NbtUtils;
 
 import javax.lang.model.element.Modifier;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 /**
@@ -23,8 +18,6 @@ import java.util.regex.Pattern;
  */
 public class VanillaItemInterfaceGen extends BaseInterfaceGen {
 
-    public static final Map<String, NbtMap> MAPPED_ITEM_DATA = new TreeMap<>();
-    public static final Path ITEM_DATA_FILE_PATH = Path.of(CodeGen.DATA_PATH + "item_data.nbt");
     public static final ClassName ITEM_STACK_CLASS_NAME = ClassName.get("org.allaymc.api.item", "ItemStack");
     public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaItemId");
     public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemType");
@@ -38,15 +31,6 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
                                     "Allay Project <br>\n")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
-
-    static {
-        try {
-            NbtMap reader = (NbtMap) NbtUtils.createGZIPReader(Files.newInputStream(ITEM_DATA_FILE_PATH)).readTag();
-            reader.getList("item", NbtType.COMPOUND).forEach(item -> MAPPED_ITEM_DATA.put(item.getString("name"), item));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static void main(String[] args) {
         // NOTICE: Please run VanillaItemIdEnumGen.generate() first before running this method

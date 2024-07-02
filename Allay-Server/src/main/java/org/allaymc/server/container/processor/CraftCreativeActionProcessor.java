@@ -30,7 +30,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
         }
 
         item = item.copy(true);
-        item.setCount(item.getItemAttributes().maxStackSize());
+        item.setCount(item.getItemData().maxStackSize());
         player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, item);
         // Taking items from the creative inventory does not require a response
         return null;

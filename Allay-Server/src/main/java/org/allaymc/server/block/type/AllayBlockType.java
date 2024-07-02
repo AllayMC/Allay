@@ -398,10 +398,10 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
             this.identifier = vanillaBlockId.getIdentifier();
-            var attributeMap = VanillaBlockStateDataRegistry.getRegistry().get(vanillaBlockId);
-            if (attributeMap == null)
-                throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
-            components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(attributeMap));
+            var dataMap = VanillaBlockStateDataRegistry.getRegistry().get(vanillaBlockId);
+            if (dataMap == null)
+                throw new BlockTypeBuildException("Cannot find vanilla block data component for " + vanillaBlockId + " from vanilla block data registry!");
+            components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
             var tags = InternalBlockTypeData.getBlockTags(vanillaBlockId);
             if (tags != null) setBlockTags(tags);
             setMaterial(MaterialRegistry.getRegistry().get(InternalBlockTypeData.getMaterialType(vanillaBlockId)));

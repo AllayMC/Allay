@@ -1,14 +1,17 @@
 package org.allaymc.codegen;
 
+import com.google.gson.JsonParser;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.StringUtils;
 
 import javax.lang.model.element.Modifier;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static org.allaymc.codegen.VanillaItemInterfaceGen.MAPPED_ITEM_DATA;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -17,6 +20,8 @@ import static org.allaymc.codegen.VanillaItemInterfaceGen.MAPPED_ITEM_DATA;
  * @author daoge_cmd
  */
 public class VanillaItemIdEnumGen {
+    public static final Map<String, Integer> ITEM_NAME_TO_ID = new TreeMap<>();
+    public static final Path ITEM_DATA_FILE_PATH = Path.of(CodeGen.DATA_PATH + "items.json");
     private static final ClassName VANILLA_ITEM_ID_CLASS = ClassName.get("org.allaymc.api.data", "VanillaItemId");
     private static final ClassName IDENTIFIER_CLASS = ClassName.get("org.allaymc.api.utils", "Identifier");
     private static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
@@ -27,6 +32,17 @@ public class VanillaItemIdEnumGen {
             @author daoge_cmd | Cool_Loong
             """;
     private static final String PACKAGE_NAME = "org.allaymc.api.data";
+
+    static {
+        try {
+            var reader = new InputStreamReader(Files.newInputStream(ITEM_DATA_FILE_PATH));
+            JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
+                ITEM_NAME_TO_ID.put(entry.getKey(), entry.getValue().getAsJsonObject().get("id").getAsInt());
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void main(String[] args) {
         generate();
@@ -62,7 +78,7 @@ public class VanillaItemIdEnumGen {
                 .addParameter(IDENTIFIER_CLASS, "identifier")
                 .addCode("""
                         try{
-                            return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH));
+                            return valueOf(identifier.path().replace(".", "_").toUpperCase(java.util.Locale.ENGLISH));
                         }catch(IllegalArgumentException ignore){
                             return null;
                         }""")
@@ -79,12 +95,12 @@ public class VanillaItemIdEnumGen {
     }
 
     private static void addEnums(TypeSpec.Builder codeBuilder) {
-        for (var entry : MAPPED_ITEM_DATA.entrySet()) {
+        for (var entry : ITEM_NAME_TO_ID.entrySet()) {
             var split = StringUtils.fastTwoPartSplit(
                     StringUtils.fastTwoPartSplit(entry.getKey(), ":", "")[1],
                     ".", "");
             var valueName = split[0].isBlank() ? split[1].toUpperCase() : split[0].toUpperCase() + "_" + split[1].toUpperCase();
-            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue().getShort("id")).build());
+            codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue()).build());
         }
     }
 

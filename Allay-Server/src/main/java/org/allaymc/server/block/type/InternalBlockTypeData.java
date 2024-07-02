@@ -7,7 +7,6 @@ import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaMaterialTypes;
-import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.utils.ResourceUtils;
@@ -37,7 +36,7 @@ public final class InternalBlockTypeData {
     static {
         try (var reader = new InputStreamReader(new BufferedInputStream(ResourceUtils.getResource("block_types.json")))) {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
-                var id = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(entry.getKey(), ":", "")[1].toUpperCase());
+                var id = VanillaBlockId.fromIdentifier(new Identifier(entry.getKey()));
                 var obj = entry.getValue().getAsJsonObject();
                 // Material
                 var materialType = VanillaMaterialTypes.getMaterialTypeByName(obj.get("material").getAsString());

@@ -29,7 +29,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         }
 
         var item = block.toItemStack();
-        item.setCount(item.getItemAttributes().maxStackSize());
+        item.setCount(item.getItemData().maxStackSize());
 
         var inventory = player.getContainer(FullContainerType.PLAYER_INVENTORY);
         // Foreach hot bar
@@ -43,7 +43,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
 
             var hotBarItem = inventory.getItemStack(slot);
             if (hotBarItem.canMerge(item)) {
-                hotBarItem.setCount(hotBarItem.getItemAttributes().maxStackSize());
+                hotBarItem.setCount(hotBarItem.getItemData().maxStackSize());
                 inventory.onSlotChange(slot);
                 success = true;
             }

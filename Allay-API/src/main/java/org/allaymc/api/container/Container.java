@@ -144,15 +144,15 @@ public interface Container {
                 }
                 continue;
             }
-            if (content.getCount() != content.getItemAttributes().maxStackSize() && content.canMerge(itemStack, true)) {
-                if (content.getCount() + itemStack.getCount() <= content.getItemAttributes().maxStackSize()) {
+            if (content.getCount() != content.getItemData().maxStackSize() && content.canMerge(itemStack, true)) {
+                if (content.getCount() + itemStack.getCount() <= content.getItemData().maxStackSize()) {
                     content.setCount(content.getCount() + itemStack.getCount());
                     itemStack.setCount(0);
                 } else {
                     int count = itemStack.getCount();
-                    int completion = content.getItemAttributes().maxStackSize() - content.getCount();
+                    int completion = content.getItemData().maxStackSize() - content.getCount();
                     itemStack.setCount(count - completion);
-                    content.setCount(content.getItemAttributes().maxStackSize());
+                    content.setCount(content.getItemData().maxStackSize());
                 }
                 onSlotChange(index);
                 return index;

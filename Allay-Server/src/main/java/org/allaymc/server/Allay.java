@@ -25,7 +25,7 @@ import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
-import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
+import org.allaymc.api.item.registry.VanillaItemDataRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.perm.tree.PermTree;
@@ -36,10 +36,10 @@ import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorFactory;
 import org.allaymc.api.world.storage.WorldStorageFactory;
-import org.allaymc.server.block.registry.AllayMaterialRegistry;
-import org.allaymc.server.block.registry.AllayVanillaBlockStateDataRegistry;
 import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
 import org.allaymc.server.block.registry.AllayBlockTypeRegistry;
+import org.allaymc.server.block.registry.AllayMaterialRegistry;
+import org.allaymc.server.block.registry.AllayVanillaBlockStateDataRegistry;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.blockentity.registry.AllayBlockEntityTypeRegistry;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
@@ -55,7 +55,7 @@ import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
-import org.allaymc.server.item.attribute.AllayVanillaItemAttributeRegistry;
+import org.allaymc.server.item.attribute.AllayVanillaItemDataRegistry;
 import org.allaymc.server.item.enchantment.AllayEnchantmentRegistry;
 import org.allaymc.server.item.recipe.AllayRecipeRegistry;
 import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
@@ -146,7 +146,7 @@ public final class Allay {
         // Item
         api.bind(EnchantmentRegistry.class, AllayEnchantmentRegistry::new, instance -> ((AllayEnchantmentRegistry) instance).init());
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
-        api.bind(VanillaItemAttributeRegistry.class, () -> new AllayVanillaItemAttributeRegistry(new AllayVanillaItemAttributeRegistry.Loader()));
+        api.bind(VanillaItemDataRegistry.class, () -> new AllayVanillaItemDataRegistry(new AllayVanillaItemDataRegistry.Loader()));
         api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());
 
         // BlockEntity

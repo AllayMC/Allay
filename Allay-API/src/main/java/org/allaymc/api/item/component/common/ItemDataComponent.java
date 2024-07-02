@@ -7,6 +7,6 @@ import org.allaymc.api.item.component.ItemComponent;
  *
  * @author daoge_cmd
  */
-public interface ItemAttributeComponent extends ItemComponent {
-    ItemAttributes getItemAttributes();
+public interface ItemDataComponent extends ItemComponent {
+    ItemData getItemData();
 }
