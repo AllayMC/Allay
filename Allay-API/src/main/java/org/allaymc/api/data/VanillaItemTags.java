@@ -65,8 +65,6 @@ public interface VanillaItemTags {
 
   ItemTag IS_FOOD = create("minecraft:is_food");
 
-  ItemTag PIGLIN_LOVED = create("minecraft:piglin_loved");
-
   ItemTag GOLDEN_TIER = create("minecraft:golden_tier");
 
   ItemTag IS_FISH = create("minecraft:is_fish");
@@ -84,8 +82,6 @@ public interface VanillaItemTags {
   ItemTag VIBRATION_DAMPER = create("minecraft:vibration_damper");
 
   ItemTag LEATHER_TIER = create("minecraft:leather_tier");
-
-  ItemTag CHEST_BOAT = create("minecraft:chest_boat");
 
   ItemTag BOATS = create("minecraft:boats");
 
@@ -108,8 +104,6 @@ public interface VanillaItemTags {
   ItemTag IS_TRIDENT = create("minecraft:is_trident");
 
   ItemTag CHAINMAIL_TIER = create("minecraft:chainmail_tier");
-
-  ItemTag PIGLIN_REPELLENTS = create("minecraft:piglin_repellents");
 
   ItemTag HANGING_ACTOR = create("minecraft:hanging_actor");
 

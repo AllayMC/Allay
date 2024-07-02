@@ -31,8 +31,6 @@ public interface VanillaBlockTags {
 
   BlockTag SPRUCE = create("spruce");
 
-  BlockTag GOLD_PICK_DIGGABLE = create("gold_pick_diggable");
-
   BlockTag TRAPDOORS = create("trapdoors");
 
   BlockTag IRON_PICK_DIGGABLE = create("iron_pick_diggable");
@@ -60,8 +58,6 @@ public interface VanillaBlockTags {
   BlockTag SNOW = create("snow");
 
   BlockTag PLANT = create("plant");
-
-  BlockTag WOOD_PICK_DIGGABLE = create("wood_pick_diggable");
 
   BlockTag ACACIA = create("acacia");
 

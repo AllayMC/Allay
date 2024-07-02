@@ -57,7 +57,6 @@
         "minecraft:oxeye_daisy",
         "minecraft:red_tulip"
     ],
-    "gold_pick_diggable": [],
     "grass": [
         "minecraft:dirt",
         "minecraft:grass_block",
@@ -445,6 +444,5 @@
         "minecraft:cherry_fence_gate",
         "minecraft:ladder",
         "minecraft:stripped_mangrove_log"
-    ],
-    "wood_pick_diggable": []
+    ]
 }
