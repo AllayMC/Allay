@@ -24,7 +24,6 @@ public class ItemData {
     protected int attackDamage = 0;
     @Builder.Default
     protected boolean isDamageable = false;
-    // TODO: This data currently does not represent the maximum durability value, suspecting an issue with the exporter, needs fixing
     @Builder.Default
     protected int maxDamage = 0;
     @Builder.Default

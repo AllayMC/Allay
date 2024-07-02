@@ -371,11 +371,13 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
         if (isAxe(itemType)) return materialType == VanillaMaterialTypes.WOOD;
 
-        if (isShovel(itemType)) return materialType == VanillaMaterialTypes.DIRT ||
-                                       materialType == VanillaMaterialTypes.CLAY ||
-                                       materialType == VanillaMaterialTypes.SAND ||
-                                       materialType == VanillaMaterialTypes.SNOW ||
-                                       materialType == VanillaMaterialTypes.TOPSNOW;
+        if (isShovel(itemType))
+            return materialType == VanillaMaterialTypes.DIRT ||
+                   materialType == VanillaMaterialTypes.CLAY ||
+                   materialType == VanillaMaterialTypes.SAND ||
+                   materialType == VanillaMaterialTypes.SNOW ||
+                   materialType == VanillaMaterialTypes.TOPSNOW;
+
         if (isHoe(itemType)) {
             if (
                     blockType == BlockTypes.DRIED_KELP_BLOCK_TYPE ||
