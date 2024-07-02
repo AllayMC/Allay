@@ -1,6 +1,6 @@
 package org.allaymc.api.block;
 
-import org.allaymc.api.block.component.common.BlockAttributeComponent;
+import org.allaymc.api.block.component.common.BlockStateDataComponent;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 
 /**
@@ -10,5 +10,5 @@ import org.allaymc.api.block.component.common.BlockBaseComponent;
  */
 public interface BlockBehavior extends
         BlockBaseComponent,
-        BlockAttributeComponent {
+        BlockStateDataComponent {
 }

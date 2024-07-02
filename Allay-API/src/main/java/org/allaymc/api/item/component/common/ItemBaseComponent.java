@@ -238,7 +238,7 @@ public interface ItemBaseComponent extends ItemComponent {
         // Blocks with hardness of 0 can be instantly broken
         if (blockHardness == 0) return true;
         if (getItemType().hasItemTag(IS_SWORD)) {
-            // Swords can instantly break bamboo
+            // Swords can break bamboo instantly
             return blockState.getBlockType() == BlockTypes.BAMBOO_TYPE;
         }
         return false;

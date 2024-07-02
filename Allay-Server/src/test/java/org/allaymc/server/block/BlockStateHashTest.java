@@ -1,7 +1,8 @@
 package org.allaymc.server.block;
 
+import com.google.gson.JsonParser;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
-import org.allaymc.server.block.attribute.AllayVanillaBlockAttributeRegistry;
+import org.allaymc.server.block.attribute.AllayVanillaBlockStateDataRegistry;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -28,23 +30,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(AllayTestExtension.class)
 class BlockStateHashTest {
 
-    static Map<Integer, NbtMap> BLOCK_ATTRIBUTES = new HashMap<>();
+    static Map<Integer, Object> BLOCK_STATE_DATA = new HashMap<>();
 
     @BeforeAll
     static void load() {
-        try {
-            var list = ((NbtMap) NbtUtils.createGZIPReader(
-                    new BufferedInputStream(
-                            Objects.requireNonNull(
-                                    AllayVanillaBlockAttributeRegistry.class
-                                            .getClassLoader()
-                                            .getResourceAsStream("block_attributes.nbt"),
-                                    "block_attributes.nbt is missing!")
-                    )
-            ).readTag()).getList("block", NbtType.COMPOUND);
-            for (var blockAttr : list) {
-                BLOCK_ATTRIBUTES.put(blockAttr.getInt("blockStateHash"), blockAttr);
-            }
+        try (var reader = new InputStreamReader(
+                Objects.requireNonNull(
+                        AllayVanillaBlockStateDataRegistry.class
+                                .getClassLoader()
+                                .getResourceAsStream("block_states.json"),
+                        "block_states.json is missing!"))
+        ) {
+            JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> BLOCK_STATE_DATA.put(entry.getAsJsonObject().get("blockStateHash").getAsInt(), entry));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,11 +49,11 @@ class BlockStateHashTest {
 
     @Test
     void testAllHashes() {
-        for (var expectedHash : BLOCK_ATTRIBUTES.keySet()) {
+        for (var expectedHash : BLOCK_STATE_DATA.keySet()) {
             assertNotNull(BlockStateHashPalette.getRegistry().get(expectedHash));
         }
         for (var computedHash : BlockStateHashPalette.getRegistry().getContent().keySet()) {
-            assertNotNull(BLOCK_ATTRIBUTES.get(computedHash));
+            assertNotNull(BLOCK_STATE_DATA.get(computedHash));
         }
     }
 }

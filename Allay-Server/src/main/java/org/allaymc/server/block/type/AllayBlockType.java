@@ -16,7 +16,7 @@ import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
+import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -38,7 +38,7 @@ import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.BlockComponentInjectException;
-import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
+import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
@@ -410,10 +410,10 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
             this.identifier = vanillaBlockId.getIdentifier();
-            var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
+            var attributeMap = VanillaBlockStateDataRegistry.getRegistry().get(vanillaBlockId);
             if (attributeMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
-            components.put(BlockAttributeComponentImpl.IDENTIFIER, BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap));
+            components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(attributeMap));
             var tags = VANILLA_BLOCK_TAGS.get(vanillaBlockId);
             if (tags != null) setBlockTags(tags);
             setMaterial(Material.getVanillaBlockMaterial(vanillaBlockId));
@@ -491,8 +491,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemType, blockTags, material);
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
                 listComponents.add(blockBaseComponentSupplier.apply(type));
-            if (!components.containsKey(BlockAttributeComponentImpl.IDENTIFIER))
-                listComponents.add(BlockAttributeComponentImpl.ofDefault());
+            if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER))
+                listComponents.add(BlockStateDataComponentImpl.ofDefault());
             List<ComponentProvider<? extends Component>> componentProviders = listComponents.stream().map(singleton -> {
                 var currentClass = singleton.getClass();
                 //For anonymous class, we give it's super class to component provider
