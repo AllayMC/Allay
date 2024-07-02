@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
+import org.allaymc.api.block.registry.MaterialRegistry;
 import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
@@ -35,7 +36,8 @@ import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorFactory;
 import org.allaymc.api.world.storage.WorldStorageFactory;
-import org.allaymc.server.block.attribute.AllayVanillaBlockStateDataRegistry;
+import org.allaymc.server.block.registry.AllayMaterialRegistry;
+import org.allaymc.server.block.registry.AllayVanillaBlockStateDataRegistry;
 import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
 import org.allaymc.server.block.registry.AllayBlockTypeRegistry;
 import org.allaymc.server.block.type.AllayBlockType;
@@ -152,6 +154,7 @@ public final class Allay {
         api.bind(BlockEntityTypeRegistry.class, AllayBlockEntityTypeRegistry::new, instance -> ((AllayBlockEntityTypeRegistry) instance).init());
 
         // Block
+        api.bind(MaterialRegistry.class, () -> new AllayMaterialRegistry(new AllayMaterialRegistry.Loader()));
         api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
         api.bind(VanillaBlockStateDataRegistry.class, () -> new AllayVanillaBlockStateDataRegistry(new AllayVanillaBlockStateDataRegistry.Loader()));
         api.bind(BlockStateHashPalette.class, AllayBlockStateHashPalette::new);

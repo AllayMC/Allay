@@ -1,4 +1,4 @@
-package org.allaymc.server.block.attribute;
+package org.allaymc.server.block.registry;
 
 import com.google.gson.JsonParser;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;

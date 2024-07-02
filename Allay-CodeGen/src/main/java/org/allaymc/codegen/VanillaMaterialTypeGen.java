@@ -1,13 +1,13 @@
 package org.allaymc.codegen;
 
+import com.google.gson.JsonParser;
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.StringUtils;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -18,7 +18,7 @@ import java.util.*;
  * @author daoge_cmd
  */
 public class VanillaMaterialTypeGen {
-    static final Path BLOCK_MATERIAL_DATA_FILE_PATH = Path.of(CodeGen.DATA_PATH + "block_material_data.nbt");
+    static final Path MATERIAL_DATA_FILE_PATH = Path.of(CodeGen.DATA_PATH + "materials.json");
     static final ClassName MATERIAL_TYPE_CLASS = ClassName.get("org.allaymc.api.block.material", "MaterialType");
     static final Set<String> KEYS = new HashSet<>();
     static final String JAVA_DOC = """
@@ -28,9 +28,8 @@ public class VanillaMaterialTypeGen {
             """;
 
     static {
-        try (var reader = NbtUtils.createGZIPReader(Files.newInputStream(BLOCK_MATERIAL_DATA_FILE_PATH))) {
-            var nbtMap = (NbtMap) reader.readTag();
-            nbtMap.forEach((k, v) -> KEYS.add(((NbtMap)v).getString("materialType")));
+        try (var reader = new InputStreamReader(Files.newInputStream(MATERIAL_DATA_FILE_PATH))) {
+            JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> KEYS.add(entry.getKey()));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -2,16 +2,12 @@ package org.allaymc.server.block;
 
 import com.google.gson.JsonParser;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
-import org.allaymc.server.block.attribute.AllayVanillaBlockStateDataRegistry;
+import org.allaymc.server.block.registry.AllayVanillaBlockStateDataRegistry;
 import org.allaymc.testutils.AllayTestExtension;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.nbt.NbtUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;

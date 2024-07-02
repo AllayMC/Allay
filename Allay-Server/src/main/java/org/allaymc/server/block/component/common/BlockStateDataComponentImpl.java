@@ -25,7 +25,7 @@ import java.util.function.Supplier;
 public class BlockStateDataComponentImpl implements BlockStateDataComponent {
 
     @ComponentIdentifier
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_attribute_component");
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_state_data_component");
 
     protected static final BlockStateDataComponentImpl DEFAULT = BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.DEFAULT);
 

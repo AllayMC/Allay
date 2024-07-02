@@ -13,9 +13,11 @@ import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.common.CustomBlockComponent;
 import org.allaymc.api.block.material.Material;
+import org.allaymc.api.block.material.MaterialType;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
+import org.allaymc.api.block.registry.MaterialRegistry;
 import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
@@ -48,6 +50,8 @@ import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Function;
@@ -367,22 +371,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     @Slf4j
     public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
-        // Use array instead of set to reduce memory usage
-        protected static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS = new HashMap<>();
-
-        static {
-            Map<VanillaBlockId, Set<BlockTag>> blockId2tags = new HashMap<>();
-            var element = JsonParser.parseReader(new InputStreamReader(ResourceUtils.getResource("block_tags.json")));
-            element.getAsJsonObject().entrySet().forEach(entry -> {
-                var tag = VanillaBlockTags.getTagByName(entry.getKey());
-                entry.getValue().getAsJsonArray().forEach(blockId -> {
-                    var id = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(blockId.getAsString(), ":", "")[1].toUpperCase());
-                    blockId2tags.computeIfAbsent(id, $ -> new HashSet<>()).add(tag);
-                });
-            });
-
-            blockId2tags.forEach((id, tags) -> VANILLA_BLOCK_TAGS.put(id, tags.toArray(new BlockTag[0])));
-        }
 
         protected Class<T> interfaceClass;
         protected Map<Identifier, BlockComponent> components = new HashMap<>();
@@ -414,9 +402,9 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             if (attributeMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
             components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(attributeMap));
-            var tags = VANILLA_BLOCK_TAGS.get(vanillaBlockId);
+            var tags = InternalBlockTypeData.getBlockTags(vanillaBlockId);
             if (tags != null) setBlockTags(tags);
-            setMaterial(Material.getVanillaBlockMaterial(vanillaBlockId));
+            setMaterial(MaterialRegistry.getRegistry().get(InternalBlockTypeData.getMaterialType(vanillaBlockId)));
             return this;
         }
 
