@@ -28,7 +28,6 @@ class BlockStateDataTest {
             {
                     "burnOdds": 0,
                     "canContainLiquid": false,
-                    "canDropWithAnyTool": false,
                     "collisionShape": [
                         0.0005,
                         0.0005,
@@ -53,7 +52,6 @@ class BlockStateDataTest {
         var blockAttributes = BlockStateData.fromJson(json);
         assertEquals(0, blockAttributes.burnOdds());
         assertFalse(blockAttributes.canContainLiquid());
-        assertFalse(blockAttributes.canDropWithAnyTool());
 //        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.collisionShape().unionAABB().minX()));
 //        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.collisionShape().unionAABB().minY()));
 //        assertEquals(Float.toHexString(0.0005f), Float.toHexString(blockAttributes.collisionShape().unionAABB().minZ()));

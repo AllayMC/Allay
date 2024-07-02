@@ -61,8 +61,6 @@ public class BlockStateData {
     @Builder.Default
     protected boolean canContainLiquid = false;
     @Builder.Default
-    protected boolean canDropWithAnyTool = true;
-    @Builder.Default
     protected VoxelShape collisionShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
     @Builder.Default
     protected float hardness = 1;
