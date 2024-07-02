@@ -139,7 +139,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                     var currentY = minY + oy;
                     var currentZ = minZ + oz;
                     var intersection = blockState
-                            .getBlockAttributes()
+                            .getBlockStateData()
                             .computeOffsetCollisionShape(currentX, currentY, currentZ)
                             .unionAABB()
                             .intersection(aabb);
@@ -229,7 +229,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
 
         var slipperinessMultiplier = blockUnder != null ?
-                blockUnder.getBlockAttributes().friction() :
+                blockUnder.getBlockStateData().friction() :
                 DEFAULT_FRICTION;
 
         var momentumMx = motion.x() * slipperinessMultiplier * MOMENTUM_FACTOR;
@@ -439,7 +439,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                     BlockState blockState = sub2[oz];
                     if (blockState == null) continue;
                     float current;
-                    var unionAABB = blockState.getBlockAttributes().collisionShape().unionAABB();
+                    var unionAABB = blockState.getBlockStateData().collisionShape().unionAABB();
                     switch (axis) {
                         case X -> current = unionAABB.lengthX() + start + ox;
                         case Y -> current = unionAABB.lengthY() + start + oy;

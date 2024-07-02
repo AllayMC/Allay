@@ -660,7 +660,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void setMovementSpeed(float speed) {
         movementSpeed = speed;
         attributeComponent.setAttribute(AttributeType.MOVEMENT, movementSpeed);
-        abilities.setWalkSpeed(speed);
+        // NOTICE: abilities.setWalkSpeed(speed) shouldn't be called otherwise player can't sprint
     }
 
     protected int assignFormId() {

@@ -67,7 +67,7 @@ public interface BlockState {
         return getBlockType().getBlockBehavior();
     }
 
-    default BlockStateData getBlockAttributes() {
+    default BlockStateData getBlockStateData() {
         return getBehavior().getBlockStateData(this);
     }
 }

@@ -234,7 +234,7 @@ public interface ItemBaseComponent extends ItemComponent {
     boolean isCorrectToolFor(BlockState blockState);
 
     default boolean canInstantBreak(BlockState blockState) {
-        double blockHardness = blockState.getBlockAttributes().hardness();
+        double blockHardness = blockState.getBlockStateData().hardness();
         // Blocks with hardness of 0 can be instantly broken
         if (blockHardness == 0) return true;
         if (getItemType().hasItemTag(IS_SWORD)) {

@@ -71,16 +71,23 @@ public class GameRules {
     public void writeToNBT(NbtMapBuilder builder) {
         for (Map.Entry<GameRule, Object> entry : this.gameRules.entrySet()) {
             // Lower case name should be used for key
-            builder.put(entry.getKey().getName().toLowerCase(), entry.getValue());
+            var key = entry.getKey().getName().toLowerCase();
+            switch (entry.getKey().getType()) {
+                case INT -> builder.putInt(key, (Integer) entry.getValue());
+                case BOOLEAN -> builder.putBoolean(key, (Boolean) entry.getValue());
+            }
         }
     }
 
     public static GameRules readFromNBT(NbtMap nbt) {
         Map<GameRule, Object> gameRules = new HashMap<>();
         for (GameRule gameRule : GameRule.values()) {
-            Object value = nbt.get(gameRule.getName().toLowerCase());
-            if (value != null) {
-                gameRules.put(gameRule, value);
+            var key = gameRule.getName().toLowerCase();
+            if (nbt.containsKey(key)) {
+                switch (gameRule.getType()) {
+                    case INT -> gameRules.put(gameRule, nbt.getInt(key));
+                    case BOOLEAN -> gameRules.put(gameRule, nbt.getBoolean(key));
+                }
             }
         }
         return new GameRules(gameRules);
