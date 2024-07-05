@@ -178,27 +178,27 @@ public class BlockPropertyTypeGen {
         globalJson.put("differentSizePropertyTypes", new ArrayList<>(differentSizePropertyTypes));
         globalJson.put("specialBlockTypes", specialBlockTypes);
 
-        writeJSONObject("build/block_property_types.json", globalJson);
+        writeJSONObject(globalJson);
         log.info("Block property type data have been saved to Allay-Data/resources/unpacked/block_property_types.json");
     }
 
-    private static void writeJSONObject(String filePath, Object json) {
+    private static void writeJSONObject(Object obj) {
         Gson gson = new GsonBuilder().setPrettyPrinting().setNumberToNumberStrategy(JsonReader::nextLong).setObjectToNumberStrategy(JsonReader::nextLong).create();
-        String json1 = gson.toJson(json);
+        String json = gson.toJson(obj);
         try {
-            Files.deleteIfExists(Path.of(filePath));
-            Files.writeString(Path.of(filePath), json1, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
-            Files.writeString(Path.of("Allay-Data/resources/unpacked/block_property_types.json"), json1, StandardCharsets.UTF_8, StandardOpenOption.WRITE);
+            Path path = Path.of("Allay-Data/resources/unpacked/block_property_types.json");
+            Files.deleteIfExists(path);
+            Files.writeString(path, json, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     static class PropertyType {
-        String serializationName;
-        String blockName;
+        final String serializationName;
+        final String blockName;
+        final Set<String> values = new HashSet<>();
         String valueType = "";
-        Set<String> values = new HashSet<>();
 
         PropertyType(String blockName, String serializationName) {
             this.blockName = blockName;
