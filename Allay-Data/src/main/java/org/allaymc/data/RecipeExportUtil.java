@@ -42,6 +42,7 @@ import java.util.*;
  *
  * @author Kaooot | Cool_Loong
  */
+@Deprecated
 public class RecipeExportUtil {
     private static final BedrockCodec CODEC = ProtocolInfo.PACKET_CODEC;
     private static final Int2ObjectOpenHashMap<String> ITEM_RUNTIME_ID_TO_IDENTIFIER = new Int2ObjectOpenHashMap<>();
