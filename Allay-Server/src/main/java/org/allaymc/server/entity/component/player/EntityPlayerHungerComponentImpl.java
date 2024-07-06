@@ -90,9 +90,18 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
             if (this.foodSaturationLevel > 0) {
                 this.foodSaturationLevel = Math.max(--this.foodSaturationLevel, 0);
             } else {
-                this.foodLevel = Math.max(--this.foodLevel, 0);
+                this.setFoodLevel(this.foodLevel - 1);
             }
         }
+    }
+
+    @Override
+    public void saturate(int food, int saturation) {
+        this.setFoodLevel(this.foodLevel + food);
+
+        this.foodSaturationLevel += saturation;
+        if (this.foodSaturationLevel > this.foodLevel)
+            this.foodSaturationLevel = this.foodLevel;
     }
 
     private void regenerate(boolean exhaust) {

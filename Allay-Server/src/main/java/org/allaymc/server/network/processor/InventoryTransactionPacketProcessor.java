@@ -124,6 +124,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     log.warn("Expected WORLD_INTERACTION action type, got {}", worldInteractionAction.getSource().getType());
                     return;
                 }
+
                 var containerAction = packet.getActions().getLast();
                 if (!containerAction.getSource().getType().equals(InventorySource.Type.CONTAINER)) {
                     log.warn("Expected CONTAINER action type, got {}", containerAction.getSource().getType());
@@ -132,7 +133,6 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                 var dropSlot = containerAction.getSlot();
                 var dropCount = containerAction.getFromItem().getCount() - containerAction.getToItem().getCount();
-
                 if (!player.tryDropItem(FullContainerType.PLAYER_INVENTORY, dropSlot, dropCount)) {
                     log.warn("Failed to drop item from slot {} with count {}", dropSlot, dropCount);
                 }

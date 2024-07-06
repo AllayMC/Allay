@@ -8,9 +8,11 @@ import org.allaymc.api.entity.component.EntityComponent;
  * @author IWareQ
  */
 public interface EntityPlayerHungerComponent extends EntityComponent {
-    default void tick0() {}
+    default void tick0() {} // TODO: rename to normal name
 
     void exhaust(float level);
+
+    void saturate(int food, int saturation);
 
     int getFoodLevel();
 

@@ -12,7 +12,6 @@ import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3f;
 
-import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
 import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
 
 /**
@@ -71,8 +70,7 @@ public interface EntityPlayer extends
             droppedItemStack.setCount(count);
         } else {
             droppedItemStack = item;
-            item = EMPTY_SLOT_PLACE_HOLDER;
-            container.setItemStack(slot, item);
+            container.clearSlot(slot);
         }
 
         dropItemInPlayerPos(droppedItemStack);
