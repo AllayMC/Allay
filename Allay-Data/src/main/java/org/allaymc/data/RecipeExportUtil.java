@@ -260,7 +260,7 @@ public class RecipeExportUtil {
         String tag = null;
 
         if (itemData.getTag() != null) {
-            tag = AllayNbtUtils.nbtToBase64(itemData.getTag());
+            tag = AllayNbtUtils.nbtToBase64LE(itemData.getTag());
         }
 
         if (damage != null && (damage == 0 || damage == -1)) {

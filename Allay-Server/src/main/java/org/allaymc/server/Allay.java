@@ -57,7 +57,7 @@ import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.attribute.AllayVanillaItemDataRegistry;
 import org.allaymc.server.item.enchantment.AllayEnchantmentRegistry;
-import org.allaymc.server.item.recipe.AllayRecipeRegistry;
+import org.allaymc.server.item.registry.AllayRecipeRegistry;
 import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
 import org.allaymc.server.item.registry.AllayItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;

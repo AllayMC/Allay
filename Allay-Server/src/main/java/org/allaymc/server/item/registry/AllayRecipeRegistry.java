@@ -1,4 +1,4 @@
-package org.allaymc.server.item.recipe;
+package org.allaymc.server.item.registry;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -8,7 +8,6 @@ import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.ComplexAliasDescriptor;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
@@ -19,7 +18,6 @@ import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.item.type.AllayItemType;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
@@ -44,33 +42,45 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         var stream = AllayItemType.class.getClassLoader().getResourceAsStream("recipes.json");
         if (stream == null) return;
 
-        var array = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject().get("recipes").getAsJsonArray();
+        var obj = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
+        var shapedRecipes = obj.getAsJsonArray("shaped");
+        var shapelessRecipes = obj.getAsJsonArray("shapeless");
+        var initialMax = shapedRecipes.size() + shapelessRecipes.size();
         try (var pgbar = ProgressBar
                 .builder()
-                .setInitialMax(array.size())
+                .setInitialMax(initialMax)
                 .setTaskName("Loading Vanilla Recipes")
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .build()) {
-            for (var entry : array) {
-                var obj = entry.getAsJsonObject();
-
-                switch (CraftingDataType.byId(obj.get("type").getAsInt())) {
-                    case SHAPELESS -> registerShapeless(parseShapeless(obj));
-                    case SHAPED -> registerShaped(parseShaped(obj));
-                    case FURNACE, FURNACE_DATA, MULTI, SHULKER_BOX, SHAPELESS_CHEMISTRY, SHAPED_CHEMISTRY,
-                         SMITHING_TRANSFORM, SMITHING_TRIM -> {
-                        // TODO
-                    }
-                    default ->
-                            throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
-                }
-
-                // furnace recipes don't have both id and uuid
-                pgbar.setExtraMessage(
-                        obj.has("id") ? obj.get("id").getAsString() :
-                                obj.has("uuid") ? obj.get("uuid").getAsString() : "");
+            for (var shapedRecipe : shapedRecipes) {
+                registerShaped(parseShaped(shapedRecipe.getAsJsonObject()));
                 pgbar.step();
             }
+
+            for (var shapelessRecipe : shapelessRecipes) {
+                registerShapeless(parseShapeless(shapelessRecipe.getAsJsonObject()));
+                pgbar.step();
+            }
+//            for (var entry : array) {
+//                var obj = entry.getAsJsonObject();
+//
+//                switch (CraftingDataType.byId(obj.get("type").getAsInt())) {
+//                    case SHAPELESS -> registerShapeless(parseShapeless(obj));
+//                    case SHAPED -> registerShaped(parseShaped(obj));
+//                    case FURNACE, FURNACE_DATA, MULTI, SHULKER_BOX, SHAPELESS_CHEMISTRY, SHAPED_CHEMISTRY,
+//                         SMITHING_TRANSFORM, SMITHING_TRIM -> {
+//                        // TODO
+//                    }
+//                    default ->
+//                            throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
+//                }
+//
+//                // furnace recipes don't have both id and uuid
+//                pgbar.setExtraMessage(
+//                        obj.has("id") ? obj.get("id").getAsString() :
+//                                obj.has("uuid") ? obj.get("uuid").getAsString() : "");
+//                pgbar.step();
+//            }
         }
     }
 
@@ -87,7 +97,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 .ingredients(ingredients.toArray(ItemDescriptor[]::new))
                 .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
                 .outputs(parseOutputs(obj).toArray(ItemStack[]::new))
-                .tag(obj.get("block").getAsString())
+                .tag(obj.get("tag").getAsString())
                 .uuid(UUID.fromString(obj.get("uuid").getAsString()))
                 .build();
     }
@@ -95,7 +105,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     private ShapedRecipe parseShaped(JsonObject obj) {
         // Pattern
         List<String> patternList = new ArrayList<>();
-        obj.getAsJsonArray("shape").forEach(line -> {
+        obj.getAsJsonArray("pattern").forEach(line -> {
             patternList.add(line.getAsString());
         });
 
@@ -115,15 +125,14 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 .pattern(ShapedRecipe.PatternHelper.build(patternList))
                 .keys(keys)
                 .outputs(parseOutputs(obj).toArray(ItemStack[]::new))
-                .tag(obj.get("block").getAsString())
+                .tag(obj.get("tag").getAsString())
                 .uuid(UUID.fromString(obj.get("uuid").getAsString()))
                 .build();
     }
 
 
     private List<ItemStack> parseOutputs(JsonObject obj) {
-        // Outputs
-        // Multi output is possible
+        // Multi outputs is possible
         List<ItemStack> outputs = new ArrayList<>();
         var outputJson = obj.get("output");
         if (outputJson.isJsonObject()) {
@@ -137,40 +146,44 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     }
 
     private ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
-        return switch (jsonObject.get("type").getAsString()) {
-            case "default" -> {
-                var itemId = new Identifier(jsonObject.get("itemId").getAsString());
+        return switch (parseItemDescriptorType(jsonObject)) {
+            case DEFAULT -> {
+                Identifier itemId = new Identifier(jsonObject.get("item").getAsString());
                 var itemType = ItemTypeRegistry.getRegistry().get(itemId);
-                // meta (data) field is optional
-                if (jsonObject.has("auxValue")) {
-                    var meta = jsonObject.get("auxValue").getAsInt();
-                    yield new DefaultDescriptor(itemType, meta);
+                // "data" field only exists in default item descriptor
+                var meta = jsonObject.get("data");
+                if (meta != null) {
+                    yield new DefaultDescriptor(itemType, meta.getAsInt());
                 } else {
                     yield new DefaultDescriptor(itemType);
                 }
             }
-            case "complex_alias" -> {
-                var name = new Identifier(jsonObject.get("name").getAsString());
-                var itemType = ItemTypeRegistry.getRegistry().get(name);
-                yield new ComplexAliasDescriptor(itemType);
-            }
-            case "item_tag" -> {
-                var tagId = jsonObject.get("itemTag").getAsString();
+            case ITEM_TAG -> {
+                var tagId = jsonObject.get("tag").getAsString();
                 var itemTag = VanillaItemTags.getTagByName(tagId);
                 Objects.requireNonNull(itemTag, "Unknown item tag: " + tagId);
                 yield new ItemTagDescriptor(itemTag);
             }
-            default -> throw new IllegalStateException("Unexpected value: " + jsonObject.get("type").getAsString());
         };
     }
 
+    private ItemDescriptorType parseItemDescriptorType(JsonObject jsonObject) {
+        if (jsonObject.has("tag")) return ItemDescriptorType.ITEM_TAG;
+        else return ItemDescriptorType.DEFAULT;
+    }
+
+    private enum ItemDescriptorType {
+        DEFAULT,
+        ITEM_TAG
+    }
+
     private ItemStack parseOutput(JsonObject jsonObject) {
-        var itemId = new Identifier(jsonObject.get("id").getAsString());
+        var itemId = new Identifier(jsonObject.get("item").getAsString());
         var itemType = ItemTypeRegistry.getRegistry().get(itemId);
         Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
         var count = jsonObject.get("count").getAsInt();
-        var meta = jsonObject.has("damage") ? jsonObject.get("damage").getAsInt() : 0;
-        var nbtMap = jsonObject.has("nbt_b64") ? AllayNbtUtils.base64ToNbt(jsonObject.get("nbt_b64").getAsString()) : NbtMap.EMPTY;
+        var meta = jsonObject.has("data") ? jsonObject.get("data").getAsInt() : 0;
+        var nbtMap = jsonObject.has("nbt") ? AllayNbtUtils.base64ToNbt(jsonObject.get("nbt").getAsString()) : NbtMap.EMPTY;
         return itemType.createItemStack(
                 SimpleItemStackInitInfo
                         .builder()
