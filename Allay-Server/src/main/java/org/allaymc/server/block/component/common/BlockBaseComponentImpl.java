@@ -61,7 +61,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
-        // TODO: check whether the old block can be replaced
+        var oldBlockState = dimension.getBlockState(placeBlockPos);
+        if (!oldBlockState.getBlockType().getMaterial().isReplaceable()) return false;
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }

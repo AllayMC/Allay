@@ -1,18 +1,6 @@
 package org.allaymc.api.block.material;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaMaterialTypes;
-import org.allaymc.api.utils.Identifier;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
-
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Allay Project 2024/6/11

@@ -44,8 +44,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
-                        var placeBlockPos = Objects.requireNonNull(blockFace).offsetPos(clickBlockPos);
                         var dimension = player.getDimension();
+                        var clickedBlockStateReplaceable = dimension.getBlockState(clickBlockPos).getBlockType().getMaterial().isReplaceable();
+                        var placeBlockPos = clickedBlockStateReplaceable ? clickBlockPos : Objects.requireNonNull(blockFace).offsetPos(clickBlockPos);
                         var interactedBlock = world.getBlockState(clickBlockPos);
                         var interactInfo = new PlayerInteractInfo(
                                 player, clickBlockPos,
