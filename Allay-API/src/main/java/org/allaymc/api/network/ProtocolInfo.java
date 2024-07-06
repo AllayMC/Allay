@@ -17,4 +17,8 @@ public final class ProtocolInfo {
                                                               (MINECRAFT_VERSION.patch() << 8); // patch
 
     public static final int BLOCK_STATE_VERSION = BLOCK_STATE_VERSION_NO_REVISION | MINECRAFT_VERSION.revision(); // revision
+
+    public static String getMinecraftVersionStr() {
+        return MINECRAFT_VERSION.major() + "." + MINECRAFT_VERSION.minor() + "." + MINECRAFT_VERSION.patch();
+    }
 }

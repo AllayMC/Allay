@@ -9,18 +9,19 @@ import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
+import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3f;
+import org.joml.Vector3ic;
 
 import java.util.Map;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, ScoreboardViewer {
 
-    double BLOCK_INTERACT_MAX_DV_DIFF = 2.0;
+    double BLOCK_INTERACT_MAX_DV_DIFF = 4d;
 
     float DEFAULT_MOVEMENT_SPEED = 0.1f;
 
@@ -78,10 +79,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     Abilities getAbilities();
 
-    default void setWalkSpeed(float walkSpeed) {
-        getAbilities().setWalkSpeed(walkSpeed);
-    }
-
     default void setFlySpeed(float flySpeed) {
         getAbilities().setFlySpeed(flySpeed);
     }
@@ -133,23 +130,24 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void showForm(Form form);
 
-    default boolean canInteract(float x, float y, float z) {
+    default boolean canReach(Vector3ic pos) {
+        return canReach(pos.x(), pos.y(), pos.z());
+    }
+
+    default boolean canReach(float x, float y, float z) {
         var maxDistance = getMaxInteractDistance();
         var location = getLocation();
         if (location.distanceSquared(x, y, z) > maxDistance * maxDistance) return false;
 
-        var eyePos = location.add(0f, getEyeHeight(), 0f, new Vector3f());
-        return eyePos.sub(x, y, z).length() <= maxDistance && !isDead();
-
-        /*var dv = MathUtils.JOMLVecToCBVec(MathUtils.getDirectionVector(location.yaw(), location.pitch()));
+        var dv = MathUtils.JOMLVecToCBVec(MathUtils.getDirectionVector(location.yaw(), location.pitch()));
         var target = org.cloudburstmc.math.vector.Vector3f.from(x - location.x(), y - location.y(), z - location.z()).normalize();
         var delta = dv.sub(target);
         var diff = delta.dot(delta);
-        return diff < BLOCK_INTERACT_MAX_DV_DIFF;*/
+        return diff < BLOCK_INTERACT_MAX_DV_DIFF;
     }
 
     default double getMaxInteractDistance() {
-        return getGameType() == GameType.CREATIVE ? 14d : 8d;
+        return getGameType() == GameType.CREATIVE ? 13 : 7;
     }
 
     float getMovementSpeed();

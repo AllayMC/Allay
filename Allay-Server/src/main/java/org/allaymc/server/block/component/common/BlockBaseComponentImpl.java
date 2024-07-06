@@ -61,7 +61,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
-        // TODO: check whether the old block can be replaced
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
@@ -97,7 +96,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
         if (player != null && player.getGameType() == GameType.CREATIVE) return false;
-        return blockState.blockState().getBlockAttributes().canHarvestWithHand() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
+        return blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
     }
 
     @Override

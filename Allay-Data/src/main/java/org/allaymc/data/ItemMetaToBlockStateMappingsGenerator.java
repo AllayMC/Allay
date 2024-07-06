@@ -1,7 +1,9 @@
 package org.allaymc.data;
 
 import lombok.SneakyThrows;
+import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
 
 import java.io.FileInputStream;
@@ -9,6 +11,7 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,19 +24,18 @@ public class ItemMetaToBlockStateMappingsGenerator {
     public static void main(String[] args) {
         //                                                itemId       meta blockStateHash
         var itemMetaToBlockStateHashFullMap = new HashMap<String, Map<String, Object>>();
-        NbtMap creativeItemsNBT;
+        List<NbtMap> items;
         try (var reader = NbtUtils.createGZIPReader(new FileInputStream(Path.of("Allay-Data/resources/creative_items.nbt").toFile()))) {
-            creativeItemsNBT = (NbtMap) reader.readTag();
+            items = ((NbtMap) reader.readTag()).getList("items", NbtType.COMPOUND);
         }
         // Build full mappings
-        creativeItemsNBT.forEach((key, value) -> {
-            var obj = (NbtMap) value;
+        items.forEach(obj -> {
             if (!obj.containsKey("blockStateHash")) {
                 return;
             }
             var blockStateHash = obj.getInt("blockStateHash");
             var itemIdentifier = obj.getString("name");
-            var meta = obj.getInt("damage");
+            var meta = obj.getShort("damage");
             if (!itemMetaToBlockStateHashFullMap.containsKey(itemIdentifier)) {
                 itemMetaToBlockStateHashFullMap.put(itemIdentifier, new HashMap<>());
             }

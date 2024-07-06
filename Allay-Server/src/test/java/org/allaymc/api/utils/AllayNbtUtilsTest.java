@@ -13,18 +13,32 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class AllayNbtUtilsTest {
 
-    static String NBT_BASE_64 = "CgAAAQgAdGVzdEZsYWcBAA==";
+    static String NBT_BASE64_LE = "CgAAAQgAdGVzdEZsYWcBAA==";
+    static String NBT_BASE64 = "CgAAAQAIdGVzdEZsYWcBAA==";
 
     @Test
     void nbtToBase64() {
         var nbtMap = NbtMap.builder().putBoolean("testFlag", true).build();
         var nbtB64 = AllayNbtUtils.nbtToBase64(nbtMap);
-        assertEquals("CgAAAQgAdGVzdEZsYWcBAA==", nbtB64);
+        assertEquals(NBT_BASE64, nbtB64);
+    }
+
+    @Test
+    void nbtToBase64LE() {
+        var nbtMap = NbtMap.builder().putBoolean("testFlag", true).build();
+        var nbtB64 = AllayNbtUtils.nbtToBase64LE(nbtMap);
+        assertEquals(NBT_BASE64_LE, nbtB64);
     }
 
     @Test
     void base64ToNbt() {
-        var nbtMap = AllayNbtUtils.base64ToNbt(NBT_BASE_64);
+        var nbtMap = AllayNbtUtils.base64ToNbt(NBT_BASE64);
+        assertTrue(nbtMap.getBoolean("testFlag"));
+    }
+
+    @Test
+    void base64ToNbtLE() {
+        var nbtMap = AllayNbtUtils.base64ToNbtLE(NBT_BASE64_LE);
         assertTrue(nbtMap.getBoolean("testFlag"));
     }
 

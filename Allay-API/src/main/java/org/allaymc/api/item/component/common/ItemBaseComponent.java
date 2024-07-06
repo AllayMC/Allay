@@ -76,10 +76,12 @@ public interface ItemBaseComponent extends ItemComponent {
     int assignNewStackNetworkId();
 
     default void clearStackNetworkId() {
-        setStackNetworkId(0);
+        setStackNetworkId(EMPTY_STACK_NETWORK_ID);
     }
 
-    ItemStack copy();
+    default ItemStack copy() {
+        return copy(true);
+    }
 
     ItemStack copy(boolean newStackNetworkId);
 
@@ -232,11 +234,11 @@ public interface ItemBaseComponent extends ItemComponent {
     boolean isCorrectToolFor(BlockState blockState);
 
     default boolean canInstantBreak(BlockState blockState) {
-        double blockHardness = blockState.getBlockAttributes().hardness();
+        double blockHardness = blockState.getBlockStateData().hardness();
         // Blocks with hardness of 0 can be instantly broken
         if (blockHardness == 0) return true;
         if (getItemType().hasItemTag(IS_SWORD)) {
-            // Swords can instantly break bamboo
+            // Swords can break bamboo instantly
             return blockState.getBlockType() == BlockTypes.BAMBOO_TYPE;
         }
         return false;

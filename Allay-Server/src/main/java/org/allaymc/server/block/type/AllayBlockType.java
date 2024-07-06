@@ -1,7 +1,6 @@
 package org.allaymc.server.block.type;
 
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonParser;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -16,7 +15,8 @@ import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.block.registry.VanillaBlockAttributeRegistry;
+import org.allaymc.api.block.registry.MaterialRegistry;
+import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -25,7 +25,6 @@ import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
@@ -33,22 +32,19 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.BlockComponentInjectException;
-import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
+import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -367,22 +363,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     @Slf4j
     public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
-        // Use array instead of set to reduce memory usage
-        protected static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS = new HashMap<>();
-
-        static {
-            Map<VanillaBlockId, Set<BlockTag>> blockId2tags = new HashMap<>();
-            var element = JsonParser.parseReader(new InputStreamReader(ResourceUtils.getResource("block_tags.json")));
-            element.getAsJsonObject().entrySet().forEach(entry -> {
-                var tag = VanillaBlockTags.getTagByName(entry.getKey());
-                entry.getValue().getAsJsonArray().forEach(blockId -> {
-                    var id = VanillaBlockId.valueOf(AllayStringUtils.fastTwoPartSplit(blockId.getAsString(), ":", "")[1].toUpperCase());
-                    blockId2tags.computeIfAbsent(id, $ -> new HashSet<>()).add(tag);
-                });
-            });
-
-            blockId2tags.forEach((id, tags) -> VANILLA_BLOCK_TAGS.put(id, tags.toArray(new BlockTag[0])));
-        }
 
         protected Class<T> interfaceClass;
         protected Map<Identifier, BlockComponent> components = new HashMap<>();
@@ -410,13 +390,13 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
             this.identifier = vanillaBlockId.getIdentifier();
-            var attributeMap = VanillaBlockAttributeRegistry.getRegistry().get(vanillaBlockId);
-            if (attributeMap == null)
-                throw new BlockTypeBuildException("Cannot find vanilla block attribute component for " + vanillaBlockId + " from vanilla block attribute registry!");
-            components.put(BlockAttributeComponentImpl.IDENTIFIER, BlockAttributeComponentImpl.ofMappedBlockStateHash(attributeMap));
-            var tags = VANILLA_BLOCK_TAGS.get(vanillaBlockId);
+            var dataMap = VanillaBlockStateDataRegistry.getRegistry().get(vanillaBlockId);
+            if (dataMap == null)
+                throw new BlockTypeBuildException("Cannot find vanilla block data component for " + vanillaBlockId + " from vanilla block data registry!");
+            components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
+            var tags = InternalBlockTypeData.getBlockTags(vanillaBlockId);
             if (tags != null) setBlockTags(tags);
-            setMaterial(Material.getVanillaBlockMaterial(vanillaBlockId));
+            setMaterial(MaterialRegistry.getRegistry().get(InternalBlockTypeData.getMaterialType(vanillaBlockId)));
             return this;
         }
 
@@ -491,8 +471,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemType, blockTags, material);
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
                 listComponents.add(blockBaseComponentSupplier.apply(type));
-            if (!components.containsKey(BlockAttributeComponentImpl.IDENTIFIER))
-                listComponents.add(BlockAttributeComponentImpl.ofDefault());
+            if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER))
+                listComponents.add(BlockStateDataComponentImpl.ofDefault());
             List<ComponentProvider<? extends Component>> componentProviders = listComponents.stream().map(singleton -> {
                 var currentClass = singleton.getClass();
                 //For anonymous class, we give it's super class to component provider

@@ -31,7 +31,11 @@ import static org.cloudburstmc.protocol.bedrock.data.LevelEvent.*;
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
     // Since block actions are processed asynchronously, a tolerance of 3 ticks is normal
-    protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = 3;
+    // TODO: Accurate breaking time calculations when player keeping jumping
+    // The current implementation will work fine in most cases
+    // But it doesn't work out the same breaking time as the client when player keep jumping
+    // It is hard for us to calculate the exact breaking time when player keep jumping
+    protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = Integer.MAX_VALUE;
 
     protected int breakBlockX = Integer.MAX_VALUE;
     protected int breakBlockY = Integer.MAX_VALUE;
@@ -58,13 +62,12 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void handleBlockAction(EntityPlayer player, List<PlayerBlockActionData> blockActions) {
-        if (blockActions.isEmpty()) return;
         for (var action : blockActions) {
             var pos = action.getBlockPosition();
             // Check interact distance
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
-                    if (!player.canInteract(pos.getX(), pos.getY(), pos.getZ())) {
+                    if (!player.canReach(pos.getX(), pos.getY(), pos.getZ())) {
                         log.warn("Player {} tried to break a block out of reach", player.getOriginName());
                         continue;
                     }
@@ -198,7 +201,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void checkInteractDistance(EntityPlayer player) {
-        if (!player.canInteract(breakBlockX, breakBlockY, breakBlockZ)) {
+        if (!player.canReach(breakBlockX, breakBlockY, breakBlockZ)) {
             log.warn("Player {} tried to interact with a block out of reach", player.getOriginName());
             stopBreak(player);
         }
@@ -210,7 +213,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         // Breaking time has changed, make adjustments
         var currentTime = player.getWorld().getTick();
         var timeLeft = stopBreakingTime - currentTime;
-        stopBreakingTime = currentTime + (timeLeft / needBreakingTime) * newBreakingTime;
+        stopBreakingTime = currentTime + timeLeft * (needBreakingTime / newBreakingTime);
         needBreakingTime = newBreakingTime;
     }
 

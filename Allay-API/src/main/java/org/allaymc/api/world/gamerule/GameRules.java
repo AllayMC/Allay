@@ -1,6 +1,8 @@
 package org.allaymc.api.world.gamerule;
 
 import org.allaymc.api.world.World;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import org.cloudburstmc.protocol.bedrock.packet.GameRulesChangedPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -64,5 +66,30 @@ public class GameRules {
         return this.getGameRules().entrySet().stream()
                 .map(entry -> new GameRuleData<>(entry.getKey().getName(), entry.getValue()))
                 .collect(Collectors.toList());
+    }
+
+    public void writeToNBT(NbtMapBuilder builder) {
+        for (Map.Entry<GameRule, Object> entry : this.gameRules.entrySet()) {
+            // Lower case name should be used for key
+            var key = entry.getKey().getName().toLowerCase();
+            switch (entry.getKey().getType()) {
+                case INT -> builder.putInt(key, (Integer) entry.getValue());
+                case BOOLEAN -> builder.putBoolean(key, (Boolean) entry.getValue());
+            }
+        }
+    }
+
+    public static GameRules readFromNBT(NbtMap nbt) {
+        Map<GameRule, Object> gameRules = new HashMap<>();
+        for (GameRule gameRule : GameRule.values()) {
+            var key = gameRule.getName().toLowerCase();
+            if (nbt.containsKey(key)) {
+                switch (gameRule.getType()) {
+                    case INT -> gameRules.put(gameRule, nbt.getInt(key));
+                    case BOOLEAN -> gameRules.put(gameRule, nbt.getBoolean(key));
+                }
+            }
+        }
+        return new GameRules(gameRules);
     }
 }

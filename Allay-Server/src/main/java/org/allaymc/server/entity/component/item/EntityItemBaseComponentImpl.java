@@ -18,6 +18,7 @@ import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
 import static org.allaymc.api.item.ItemHelper.fromNBT;
+import static org.allaymc.api.item.component.common.ItemBaseComponent.EMPTY_STACK_NETWORK_ID;
 
 /**
  * Allay Project 2023/9/23
@@ -38,8 +39,11 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
         super(info);
     }
 
-    public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info, ItemStack itemStack) {
-        super(info);
+    public void setItemStack(ItemStack itemStack) {
+        // Stack network id shouldn't be kept
+        if (itemStack != null) {
+            itemStack.clearStackNetworkId();
+        }
         this.itemStack = itemStack;
     }
 

@@ -288,6 +288,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void setSprinting(boolean sprinting) {
+        if (sprinting == isSprinting()) return;
+
+        var speed = getMovementSpeed();
+        if (sprinting) speed *= 1.3f;
+        else speed /= 1.3f;
+
+        setMovementSpeed(speed);
+
         setAndSendEntityFlag(EntityFlag.SPRINTING, sprinting);
     }
 
@@ -656,6 +664,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void setMovementSpeed(float speed) {
         movementSpeed = speed;
         attributeComponent.setAttribute(AttributeType.MOVEMENT, movementSpeed);
+        // NOTICE: abilities.setWalkSpeed(speed) shouldn't be called otherwise player can't sprint
     }
 
     protected int assignFormId() {
@@ -751,6 +760,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void setAbsorption(float absorption) {
+        if (this.absorption == absorption) return;
         super.setAbsorption(absorption);
         attributeComponent.setAttribute(AttributeType.ABSORPTION, absorption);
     }

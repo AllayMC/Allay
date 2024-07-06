@@ -3227,7 +3227,7 @@ public enum VanillaItemId {
 
   public static VanillaItemId fromIdentifier(Identifier identifier) {
     try{
-        return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH));
+        return valueOf(identifier.path().replace(".", "_").toUpperCase(java.util.Locale.ENGLISH));
     }catch(IllegalArgumentException ignore){
         return null;
     }
