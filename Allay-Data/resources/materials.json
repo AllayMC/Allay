@@ -365,7 +365,7 @@
     "isAlwaysDestroyable": true,
     "isLiquid": false,
     "isNeverBuildable": false,
-    "isReplaceable": true,
+    "isReplaceable": false,
     "isSolid": false,
     "isSolidBlocking": false,
     "isSuperHot": false,
