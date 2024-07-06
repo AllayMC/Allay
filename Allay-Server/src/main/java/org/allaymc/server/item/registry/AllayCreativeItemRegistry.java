@@ -14,12 +14,14 @@ import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
@@ -61,28 +63,27 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
         public Map<Integer, ItemStack> load(Void input) {
             log.info(I18n.get().tr(TrKeys.A_CREATIVEITEM_LOADING));
             var map = new TreeMap<Integer, ItemStack>();
-            NbtMap nbt;
             try (var reader = NbtUtils.createGZIPReader(inputStreamSupplier.get())) {
-                nbt = (NbtMap) reader.readTag();
+                var nbt = (NbtMap) reader.readTag();
+                var items = nbt.getList("items", NbtType.COMPOUND);
+                for (int i = 0; i < items.size(); i++) {
+                    var item = items.get(i);
+                    var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(item.getString("name")));
+                    Objects.requireNonNull(itemType, "itemType cannot be null!");
+
+                    int meta = item.getShort("damage");
+                    var tag = item.getCompound("tag", NbtMap.builder().build());
+                    map.put(i, itemType.createItemStack(
+                            SimpleItemStackInitInfo
+                                    .builder()
+                                    .count(1)
+                                    .meta(meta)
+                                    .extraTag(tag)
+                                    .stackNetworkId(i + 1)
+                                    .build()
+                    ));
+                }
             }
-            nbt.forEach((key, value) -> {
-                var index = Integer.parseInt(key);
-                var obj = (NbtMap) value;
-                var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(obj.getString("name")));
-                int meta = obj.getInt("damage");
-                var tag = obj.getCompound("tag", NbtMap.builder().build());
-                assert itemType != null;
-                var itemStack = itemType.createItemStack(
-                        SimpleItemStackInitInfo
-                                .builder()
-                                .count(1)
-                                .meta(meta)
-                                .extraTag(tag)
-                                .stackNetworkId(index + 1)
-                                .build()
-                );
-                map.put(index, itemStack);
-            });
             log.info(I18n.get().tr(TrKeys.A_CREATIVEITEM_LOADED));
             return Collections.synchronizedMap(map);
         }

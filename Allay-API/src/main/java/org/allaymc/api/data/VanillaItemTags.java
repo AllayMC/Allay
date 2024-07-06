@@ -11,135 +11,129 @@ import org.allaymc.api.item.tag.ItemTag;
  * @author daoge_cmd
  */
 public interface VanillaItemTags {
-  Map<String, ItemTag> NAME_TO_TAG = new HashMap<>();
+   Map<String, ItemTag> NAME_TO_TAG = new HashMap<>();
 
-  ItemTag IS_TOOL = create("minecraft:is_tool");
+   ItemTag IS_TOOL = create("minecraft:is_tool");
 
-  ItemTag STONE_TOOL_MATERIALS = create("minecraft:stone_tool_materials");
+   ItemTag STONE_TOOL_MATERIALS = create("minecraft:stone_tool_materials");
 
-  ItemTag CRIMSON_STEMS = create("minecraft:crimson_stems");
+   ItemTag CRIMSON_STEMS = create("minecraft:crimson_stems");
 
-  ItemTag IS_PICKAXE = create("minecraft:is_pickaxe");
+   ItemTag IS_PICKAXE = create("minecraft:is_pickaxe");
 
-  ItemTag TRIMMABLE_ARMORS = create("minecraft:trimmable_armors");
+   ItemTag TRIMMABLE_ARMORS = create("minecraft:trimmable_armors");
 
-  ItemTag IS_HOE = create("minecraft:is_hoe");
+   ItemTag IS_HOE = create("minecraft:is_hoe");
 
-  ItemTag BOOKSHELF_BOOKS = create("minecraft:bookshelf_books");
+   ItemTag BOOKSHELF_BOOKS = create("minecraft:bookshelf_books");
 
-  ItemTag PLANKS = create("minecraft:planks");
+   ItemTag PLANKS = create("minecraft:planks");
 
-  ItemTag ARROW = create("minecraft:arrow");
+   ItemTag ARROW = create("minecraft:arrow");
 
-  ItemTag BOAT = create("minecraft:boat");
+   ItemTag BOAT = create("minecraft:boat");
 
-  ItemTag IS_SWORD = create("minecraft:is_sword");
+   ItemTag IS_SWORD = create("minecraft:is_sword");
 
-  ItemTag TRANSFORMABLE_ITEMS = create("minecraft:transformable_items");
+   ItemTag TRANSFORMABLE_ITEMS = create("minecraft:transformable_items");
 
-  ItemTag STONE_BRICKS = create("minecraft:stone_bricks");
+   ItemTag STONE_BRICKS = create("minecraft:stone_bricks");
 
-  ItemTag DOOR = create("minecraft:door");
+   ItemTag DOOR = create("minecraft:door");
 
-  ItemTag COALS = create("minecraft:coals");
+   ItemTag COALS = create("minecraft:coals");
 
-  ItemTag WOODEN_SLABS = create("minecraft:wooden_slabs");
+   ItemTag WOODEN_SLABS = create("minecraft:wooden_slabs");
 
-  ItemTag BANNER = create("minecraft:banner");
+   ItemTag BANNER = create("minecraft:banner");
 
-  ItemTag IS_COOKED = create("minecraft:is_cooked");
+   ItemTag IS_COOKED = create("minecraft:is_cooked");
 
-  ItemTag SPAWN_EGG = create("minecraft:spawn_egg");
+   ItemTag SPAWN_EGG = create("minecraft:spawn_egg");
 
-  ItemTag LOGS_THAT_BURN = create("minecraft:logs_that_burn");
+   ItemTag LOGS_THAT_BURN = create("minecraft:logs_that_burn");
 
-  ItemTag IS_MEAT = create("minecraft:is_meat");
+   ItemTag IS_MEAT = create("minecraft:is_meat");
 
-  ItemTag SAND = create("minecraft:sand");
+   ItemTag SAND = create("minecraft:sand");
 
-  ItemTag DIAMOND_TIER = create("minecraft:diamond_tier");
+   ItemTag DIAMOND_TIER = create("minecraft:diamond_tier");
 
-  ItemTag STONE_CRAFTING_MATERIALS = create("minecraft:stone_crafting_materials");
+   ItemTag STONE_CRAFTING_MATERIALS = create("minecraft:stone_crafting_materials");
 
-  ItemTag TRIM_TEMPLATES = create("minecraft:trim_templates");
+   ItemTag TRIM_TEMPLATES = create("minecraft:trim_templates");
 
-  ItemTag IS_FOOD = create("minecraft:is_food");
+   ItemTag IS_FOOD = create("minecraft:is_food");
 
-  ItemTag PIGLIN_LOVED = create("minecraft:piglin_loved");
+   ItemTag GOLDEN_TIER = create("minecraft:golden_tier");
 
-  ItemTag GOLDEN_TIER = create("minecraft:golden_tier");
+   ItemTag IS_FISH = create("minecraft:is_fish");
 
-  ItemTag IS_FISH = create("minecraft:is_fish");
+   ItemTag SOUL_FIRE_BASE_BLOCKS = create("minecraft:soul_fire_base_blocks");
 
-  ItemTag SOUL_FIRE_BASE_BLOCKS = create("minecraft:soul_fire_base_blocks");
+   ItemTag IS_SHOVEL = create("minecraft:is_shovel");
 
-  ItemTag IS_SHOVEL = create("minecraft:is_shovel");
+   ItemTag TRIM_MATERIALS = create("minecraft:trim_materials");
 
-  ItemTag TRIM_MATERIALS = create("minecraft:trim_materials");
+   ItemTag TRANSFORM_MATERIALS = create("minecraft:transform_materials");
 
-  ItemTag TRANSFORM_MATERIALS = create("minecraft:transform_materials");
+   ItemTag DECORATED_POT_SHERDS = create("minecraft:decorated_pot_sherds");
 
-  ItemTag DECORATED_POT_SHERDS = create("minecraft:decorated_pot_sherds");
+   ItemTag VIBRATION_DAMPER = create("minecraft:vibration_damper");
 
-  ItemTag VIBRATION_DAMPER = create("minecraft:vibration_damper");
+   ItemTag LEATHER_TIER = create("minecraft:leather_tier");
 
-  ItemTag LEATHER_TIER = create("minecraft:leather_tier");
+   ItemTag BOATS = create("minecraft:boats");
 
-  ItemTag CHEST_BOAT = create("minecraft:chest_boat");
+   ItemTag MANGROVE_LOGS = create("minecraft:mangrove_logs");
 
-  ItemTag BOATS = create("minecraft:boats");
+   ItemTag WOODEN_TIER = create("minecraft:wooden_tier");
 
-  ItemTag MANGROVE_LOGS = create("minecraft:mangrove_logs");
+   ItemTag TRANSFORM_TEMPLATES = create("minecraft:transform_templates");
 
-  ItemTag WOODEN_TIER = create("minecraft:wooden_tier");
+   ItemTag IS_ARMOR = create("minecraft:is_armor");
 
-  ItemTag TRANSFORM_TEMPLATES = create("minecraft:transform_templates");
+   ItemTag LOGS = create("minecraft:logs");
 
-  ItemTag IS_ARMOR = create("minecraft:is_armor");
+   ItemTag HANGING_SIGN = create("minecraft:hanging_sign");
 
-  ItemTag LOGS = create("minecraft:logs");
+   ItemTag LECTERN_BOOKS = create("minecraft:lectern_books");
 
-  ItemTag HANGING_SIGN = create("minecraft:hanging_sign");
+   ItemTag IRON_TIER = create("minecraft:iron_tier");
 
-  ItemTag LECTERN_BOOKS = create("minecraft:lectern_books");
+   ItemTag IS_TRIDENT = create("minecraft:is_trident");
 
-  ItemTag IRON_TIER = create("minecraft:iron_tier");
+   ItemTag CHAINMAIL_TIER = create("minecraft:chainmail_tier");
 
-  ItemTag IS_TRIDENT = create("minecraft:is_trident");
+   ItemTag HANGING_ACTOR = create("minecraft:hanging_actor");
 
-  ItemTag CHAINMAIL_TIER = create("minecraft:chainmail_tier");
+   ItemTag IS_MINECART = create("minecraft:is_minecart");
 
-  ItemTag PIGLIN_REPELLENTS = create("minecraft:piglin_repellents");
+   ItemTag WOOL = create("minecraft:wool");
 
-  ItemTag HANGING_ACTOR = create("minecraft:hanging_actor");
+   ItemTag SIGN = create("minecraft:sign");
 
-  ItemTag IS_MINECART = create("minecraft:is_minecart");
+   ItemTag STONE_TIER = create("minecraft:stone_tier");
 
-  ItemTag WOOL = create("minecraft:wool");
+   ItemTag WARPED_STEMS = create("minecraft:warped_stems");
 
-  ItemTag SIGN = create("minecraft:sign");
+   ItemTag DIGGER = create("minecraft:digger");
 
-  ItemTag STONE_TIER = create("minecraft:stone_tier");
+   ItemTag NETHERITE_TIER = create("minecraft:netherite_tier");
 
-  ItemTag WARPED_STEMS = create("minecraft:warped_stems");
+   ItemTag MUSIC_DISC = create("minecraft:music_disc");
 
-  ItemTag DIGGER = create("minecraft:digger");
+   ItemTag HORSE_ARMOR = create("minecraft:horse_armor");
 
-  ItemTag NETHERITE_TIER = create("minecraft:netherite_tier");
+   ItemTag IS_AXE = create("minecraft:is_axe");
 
-  ItemTag MUSIC_DISC = create("minecraft:music_disc");
+   static ItemTag create(String name) {
+      var tag = new ItemTag(name);
+      NAME_TO_TAG.put(name, tag);
+      return tag;
+   }
 
-  ItemTag HORSE_ARMOR = create("minecraft:horse_armor");
-
-  ItemTag IS_AXE = create("minecraft:is_axe");
-
-  static ItemTag create(String name) {
-    var tag = new ItemTag(name);
-    NAME_TO_TAG.put(name, tag);
-    return tag;
-  }
-
-  static ItemTag getTagByName(String name) {
-    return NAME_TO_TAG.get(name);
-  }
+   static ItemTag getTagByName(String name) {
+      return NAME_TO_TAG.get(name);
+   }
 }

@@ -14,7 +14,7 @@ import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.barrel.BlockBarrelBaseComponentImpl;
 import org.allaymc.server.block.component.chest.BlockChestBaseComponentImpl;
-import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
+import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallWheatSeedDropableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockWheatSeedDropableBaseComponentImpl;
@@ -234,392 +234,392 @@ public final class BlockTypeInitializer {
                 .builder(BlockAcaciaStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.ACACIA_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.ANDESITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockAndesiteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.ANDESITE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BAMBOO_MOSAIC_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBambooMosaicStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BAMBOO_MOSAIC_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BAMBOO_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBambooStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BAMBOO_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BIRCH_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBirchStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BIRCH_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BLACKSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBlackstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BLACKSTONE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.CHERRY_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockCherryStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.CHERRY_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.COBBLED_DEEPSLATE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockCobbledDeepslateStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.COBBLED_DEEPSLATE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.CRIMSON_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockCrimsonStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.CRIMSON_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.CUT_COPPER_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DARK_OAK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDarkOakStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DARK_OAK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DARK_PRISMARINE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDarkPrismarineStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DARK_PRISMARINE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DEEPSLATE_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDeepslateBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DEEPSLATE_BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DEEPSLATE_TILE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDeepslateTileStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DEEPSLATE_TILE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DIORITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockDioriteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.DIORITE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.END_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockEndBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.END_BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.EXPOSED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockExposedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.EXPOSED_CUT_COPPER_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.GRANITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockGraniteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.GRANITE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.JUNGLE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockJungleStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.JUNGLE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.MANGROVE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockMangroveStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.MANGROVE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.MOSSY_COBBLESTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockMossyCobblestoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.MOSSY_COBBLESTONE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.MOSSY_STONE_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockMossyStoneBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.MOSSY_STONE_BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.MUD_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockMudBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.MUD_BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.NETHER_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockNetherBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.NETHER_BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.NORMAL_STONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockNormalStoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.NORMAL_STONE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.OAK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockOakStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.OAK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.OXIDIZED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockOxidizedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.OXIDIZED_CUT_COPPER_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_ANDESITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedAndesiteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_ANDESITE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedBlackstoneBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_BLACKSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedBlackstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_BLACKSTONE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_DEEPSLATE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedDeepslateStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_DEEPSLATE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_DIORITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedDioriteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_DIORITE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_GRANITE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedGraniteStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_GRANITE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_TUFF_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPolishedTuffStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.POLISHED_TUFF_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.PRISMARINE_BRICKS_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPrismarineBricksStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.PRISMARINE_BRICKS_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.PRISMARINE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPrismarineStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.PRISMARINE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.PURPUR_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockPurpurStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.PURPUR_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.QUARTZ_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockQuartzStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.QUARTZ_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.RED_NETHER_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockRedNetherBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.RED_NETHER_BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.RED_SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockRedSandstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.RED_SANDSTONE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSandstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SANDSTONE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SMOOTH_QUARTZ_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSmoothQuartzStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SMOOTH_QUARTZ_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSmoothRedSandstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SMOOTH_RED_SANDSTONE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SMOOTH_SANDSTONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSmoothSandstoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SMOOTH_SANDSTONE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SPRUCE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockSpruceStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.SPRUCE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.STONE_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockStoneBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.STONE_BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.STONE_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockStoneStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.STONE_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.TUFF_BRICK_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockTuffBrickStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.TUFF_BRICK_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.TUFF_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockTuffStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.TUFF_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WARPED_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWarpedStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WARPED_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WAXED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWaxedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WAXED_CUT_COPPER_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWaxedExposedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWaxedOxidizedCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWaxedWeatheredCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WEATHERED_CUT_COPPER_STAIRS_TYPE = BlockTypeBuilder
                 .builder(BlockWeatheredCutCopperStairsBehavior.class)
                 .vanillaBlock(VanillaBlockId.WEATHERED_CUT_COPPER_STAIRS)
                 .setProperties(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, VanillaBlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockAttributeComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
     }

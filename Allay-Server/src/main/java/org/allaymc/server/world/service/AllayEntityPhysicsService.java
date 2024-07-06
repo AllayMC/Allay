@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.lang.Math.*;
-import static org.allaymc.api.block.component.common.BlockAttributes.DEFAULT_FRICTION;
+import static org.allaymc.api.block.component.common.BlockStateData.DEFAULT_FRICTION;
 import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
 import static org.allaymc.api.utils.MathUtils.isInRange;
 
@@ -139,8 +139,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                     var currentY = minY + oy;
                     var currentZ = minZ + oz;
                     var intersection = blockState
-                            .getBlockAttributes()
-                            .computeOffsetVoxelShape(currentX, currentY, currentZ)
+                            .getBlockStateData()
+                            .computeOffsetCollisionShape(currentX, currentY, currentZ)
                             .unionAABB()
                             .intersection(aabb);
                     var currentV = intersection.lengthX() * intersection.lengthY() * intersection.lengthZ();
@@ -229,7 +229,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
 
         var slipperinessMultiplier = blockUnder != null ?
-                blockUnder.getBlockAttributes().friction() :
+                blockUnder.getBlockStateData().friction() :
                 DEFAULT_FRICTION;
 
         var momentumMx = motion.x() * slipperinessMultiplier * MOMENTUM_FACTOR;
@@ -439,7 +439,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                     BlockState blockState = sub2[oz];
                     if (blockState == null) continue;
                     float current;
-                    var unionAABB = blockState.getBlockAttributes().voxelShape().unionAABB();
+                    var unionAABB = blockState.getBlockStateData().collisionShape().unionAABB();
                     switch (axis) {
                         case X -> current = unionAABB.lengthX() + start + ox;
                         case Y -> current = unionAABB.lengthY() + start + oy;

@@ -3,8 +3,12 @@ package org.allaymc.api.utils;
 import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.tag.ItemTag;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +26,10 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class Utils {
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
     public static final BlockState[][][] EMPTY_BLOCK_STATE_ARRAY_3D = new BlockState[0][0][0];
+    public static final BlockTag[] EMPTY_BLOCK_TAG_ARRAY = new BlockTag[0];
+    public static final ItemTag[] EMPTY_ITEM_TAG_ARRAY = new ItemTag[0];
+    public static final VanillaItemId[] EMPTY_VANILLA_ITEM_ID_ARRAY = new VanillaItemId[0];
+    public static final VanillaBlockId[] EMPTY_VANILLA_BLOCK_ID_ARRAY = new VanillaBlockId[0];
     public static final ItemStack[] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0];
 
     public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {

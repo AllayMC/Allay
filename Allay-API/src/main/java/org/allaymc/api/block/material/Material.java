@@ -10,6 +10,8 @@ import org.cloudburstmc.nbt.NbtUtils;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -22,50 +24,18 @@ import java.util.Objects;
 @Slf4j
 public record Material(
         MaterialType materialType,
-        boolean canBeMovingBlock,
-        boolean canHavePrecipitation,
+        boolean blocksMotion,
+        boolean blocksPrecipitation,
         // When isAlwaysDestroyable is true, it means the block can be destroyed by any item (even bare hands) without incurring a mining penalty.
         // Some blocks (such as stone and obsidian) cannot be mined by hand. If you try to mine them, the mining speed will be penalized (baseTime increased by 5 times, normally it's 1.5 times).
-        // Note that isAlwaysDestroyable being true does not mean the block will necessarily drop as an item!
         boolean isAlwaysDestroyable,
         boolean isLiquid,
+        boolean isNeverBuildable,
+        boolean isReplaceable,
         boolean isSolid,
         boolean isSolidBlocking,
         boolean isSuperHot,
         float translucency
 ) {
-    private static final EnumMap<VanillaBlockId, Material> VANILLA_BLOCK_MATERIALS = new EnumMap<>(VanillaBlockId.class);
 
-    static {
-        var stream = new BufferedInputStream(
-                Objects.requireNonNull(
-                        Material.class
-                                .getClassLoader()
-                                .getResourceAsStream("block_material_data.nbt"),
-                        "block_material_data.nbt is missing!")
-        );
-        try (var reader = NbtUtils.createGZIPReader(stream)) {
-            var nbtMap = (NbtMap) reader.readTag();
-            nbtMap.forEach((k, v) -> {
-                var material = (NbtMap) v;
-                VANILLA_BLOCK_MATERIALS.put(VanillaBlockId.fromIdentifier(new Identifier(k)), new Material(
-                        VanillaMaterialTypes.getMaterialTypeByName(material.getString("materialType")),
-                        material.getBoolean("canBeMovingBlock"),
-                        material.getBoolean("canHavePrecipitation"),
-                        material.getBoolean("isAlwaysDestroyable"),
-                        material.getBoolean("isLiquid"),
-                        material.getBoolean("isSolid"),
-                        material.getBoolean("isSolidBlocking"),
-                        material.getBoolean("isSuperHot"),
-                        material.getFloat("translucency")
-                ));
-            });
-        } catch (IOException e) {
-            log.error("Failed to load block material data", e);
-        }
-    }
-
-    public static Material getVanillaBlockMaterial(VanillaBlockId blockId) {
-        return VANILLA_BLOCK_MATERIALS.get(blockId);
-    }
 }

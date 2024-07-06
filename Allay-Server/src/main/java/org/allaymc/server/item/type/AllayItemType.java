@@ -1,6 +1,5 @@
 package org.allaymc.server.item.type;
 
-import com.google.gson.JsonParser;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
@@ -12,26 +11,22 @@ import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
-import org.allaymc.api.item.registry.VanillaItemAttributeRegistry;
+import org.allaymc.api.item.registry.VanillaItemDataRegistry;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.component.injector.AllayComponentInjector;
-import org.allaymc.server.item.component.common.ItemAttributeComponentImpl;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
+import org.allaymc.server.item.component.common.ItemDataComponentImpl;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import org.allaymc.server.utils.ResourceUtils;
 
-import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Function;
 
@@ -113,23 +108,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
     @ToString
     public static class Builder<T extends ItemStack> implements ItemTypeBuilder<T, ItemComponent> {
-        // Use array instead of set to reduce memory usage
-        protected static final Map<VanillaItemId, ItemTag[]> VANILLA_ITEM_TAGS = new HashMap<>();
 
         protected static int CUSTOM_ITEM_RUNTIME_ID_COUNTER = 10000;
-
-        static {
-            Map<VanillaItemId, Set<ItemTag>> itemId2tags = new HashMap<>();
-            var element = JsonParser.parseReader(new InputStreamReader(ResourceUtils.getResource("item_tags.json")));
-            element.getAsJsonObject().entrySet().forEach(entry -> {
-                var tag = VanillaItemTags.getTagByName(entry.getKey());
-                entry.getValue().getAsJsonArray().forEach(itemId -> {
-                    var id = VanillaItemId.valueOf(AllayStringUtils.fastTwoPartSplit(itemId.getAsString(), ":", "")[1].toUpperCase());
-                    itemId2tags.computeIfAbsent(id, $ -> new HashSet<>()).add(tag);
-                });
-            });
-            itemId2tags.forEach((id, tags) -> VANILLA_ITEM_TAGS.put(id, tags.toArray(new ItemTag[0])));
-        }
 
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders = new HashMap<>();
@@ -155,15 +135,15 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             this.runtimeId = vanillaItemId.getRuntimeId();
 
             // Attributes for vanilla item
-            var attributes = VanillaItemAttributeRegistry.getRegistry().get(vanillaItemId);
-            if (attributes == null)
-                throw new ItemTypeBuildException("Cannot find vanilla item attribute component for " + vanillaItemId + " from vanilla item attribute registry!");
+            var itemData = VanillaItemDataRegistry.getRegistry().get(vanillaItemId);
+            if (itemData == null)
+                throw new ItemTypeBuildException("Cannot find vanilla item data component for " + vanillaItemId + " from vanilla item attribute registry!");
 
-            var attributeComponent = new ItemAttributeComponentImpl(attributes);
-            componentProviders.put(ItemAttributeComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
+            var attributeComponent = new ItemDataComponentImpl(itemData);
+            componentProviders.put(ItemDataComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
 
             // Tags for vanilla item
-            var tags = VANILLA_ITEM_TAGS.get(vanillaItemId);
+            var tags = InternalItemTypeData.getItemTags(vanillaItemId);
             if (tags != null) setItemTags(tags);
             return this;
         }
@@ -210,8 +190,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER))
                 addComponent(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class);
 
-            if (!componentProviders.containsKey(ItemAttributeComponentImpl.IDENTIFIER))
-                addComponent($ -> ItemAttributeComponentImpl.ofDefault(), ItemAttributeComponentImpl.class);
+            if (!componentProviders.containsKey(ItemDataComponentImpl.IDENTIFIER))
+                addComponent($ -> ItemDataComponentImpl.ofDefault(), ItemDataComponentImpl.class);
 
             if (identifier == null) throw new ItemTypeBuildException("identifier cannot be null!");
 

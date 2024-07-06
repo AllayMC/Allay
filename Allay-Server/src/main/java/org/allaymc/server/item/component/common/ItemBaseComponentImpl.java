@@ -19,8 +19,8 @@ import org.allaymc.api.data.VanillaMaterialTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.common.ItemAttributeComponent;
 import org.allaymc.api.item.component.common.ItemBaseComponent;
+import org.allaymc.api.item.component.common.ItemDataComponent;
 import org.allaymc.api.item.component.event.*;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
@@ -33,17 +33,13 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.utils.ResourceUtils;
-import org.cloudburstmc.nbt.NbtList;
+import org.allaymc.server.block.type.InternalBlockTypeData;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.joml.Vector3ic;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -65,30 +61,10 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     //  Here, the check is temporarily disabled.
     protected static final boolean DO_BLOCK_PLACING_CHECK = false;
 
-    // Stores the correct tool sets for blocks that require tool quality
-    private static final EnumMap<VanillaBlockId, VanillaItemId[]> CORRECT_TOOL_SPECIAL_MAP = new EnumMap<>(VanillaBlockId.class);
     private static int STACK_NETWORK_ID_COUNTER = 1;
 
-    static {
-        try (var reader = NbtUtils.createGZIPReader(
-                new BufferedInputStream(ResourceUtils.getResource("block_correct_tool_special.nbt"))
-        )) {
-            var nbtMap = (NbtMap) reader.readTag();
-            nbtMap.forEach((k, v) -> {
-                var blockId = VanillaBlockId.fromIdentifier(new Identifier(k));
-                var list = (NbtList<String>) v;
-                var tools = list.stream()
-                        .map(itemId -> VanillaItemId.fromIdentifier(new Identifier(itemId)))
-                        .toArray(VanillaItemId[]::new);
-                CORRECT_TOOL_SPECIAL_MAP.put(blockId, tools);
-            });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Dependency
-    protected ItemAttributeComponent attributeComponent;
+    protected ItemDataComponent attributeComponent;
 
     @ComponentedObject
     protected T thisItemStack;
@@ -296,7 +272,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     }
 
     protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {
-        var blockAABB = blockState.getBehavior().getBlockAttributes(blockState).computeOffsetVoxelShape(
+        var blockAABB = blockState.getBehavior().getBlockStateData(blockState).computeOffsetCollisionShape(
                 placePos.x(),
                 placePos.y(),
                 placePos.z()
@@ -313,14 +289,14 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (extraTag2 == null) extraTag2 = NbtMap.EMPTY;
         return itemStack.getItemType() == getItemType() &&
                itemStack.getMeta() == getMeta() &&
-               (ignoreCount || count + itemStack.getCount() <= attributeComponent.getItemAttributes().maxStackSize()) &&
+               (ignoreCount || count + itemStack.getCount() <= attributeComponent.getItemData().maxStackSize()) &&
                extraTag1.equals(extraTag2) &&
                itemStack.toBlockState() == toBlockState();
     }
 
     @Override
     public float calculateAttackDamage() {
-        return attributeComponent.getItemAttributes().attackDamage();
+        return attributeComponent.getItemData().attackDamage();
     }
 
     @Override
@@ -366,7 +342,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public boolean isBroken() {
-        var maxDamage = attributeComponent.getItemAttributes().maxDamage();
+        var maxDamage = attributeComponent.getItemData().maxDamage();
         // This item does not support durability
         if (maxDamage == 0) return false;
         return durability >= maxDamage;
@@ -378,9 +354,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         var vanillaItemId = VanillaItemId.fromIdentifier(itemType.getIdentifier());
         var vanillaBlockId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
         if (vanillaItemId != null && vanillaBlockId != null) {
-            var specialCorrectTools = CORRECT_TOOL_SPECIAL_MAP.get(vanillaBlockId);
-            if (specialCorrectTools != null)
-                return Arrays.stream(specialCorrectTools).anyMatch(tool -> tool == vanillaItemId);
+            var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
+            if (specialTools != null)
+                return Arrays.stream(specialTools).anyMatch(tool -> tool == vanillaItemId);
         }
 
         var materialType = blockState.getBlockType().getMaterial().materialType();
@@ -395,11 +371,13 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
         if (isAxe(itemType)) return materialType == VanillaMaterialTypes.WOOD;
 
-        if (isShovel(itemType)) return materialType == VanillaMaterialTypes.DIRT ||
-                                       materialType == VanillaMaterialTypes.CLAY ||
-                                       materialType == VanillaMaterialTypes.SAND ||
-                                       materialType == VanillaMaterialTypes.SNOW ||
-                                       materialType == VanillaMaterialTypes.TOPSNOW;
+        if (isShovel(itemType))
+            return materialType == VanillaMaterialTypes.DIRT ||
+                   materialType == VanillaMaterialTypes.CLAY ||
+                   materialType == VanillaMaterialTypes.SAND ||
+                   materialType == VanillaMaterialTypes.SNOW ||
+                   materialType == VanillaMaterialTypes.TOPSNOW;
+
         if (isHoe(itemType)) {
             if (
                     blockType == BlockTypes.DRIED_KELP_BLOCK_TYPE ||

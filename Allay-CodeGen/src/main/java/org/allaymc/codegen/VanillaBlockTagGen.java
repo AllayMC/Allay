@@ -76,10 +76,8 @@ public class VanillaBlockTagGen {
                                 .addStatement("return NAME_TO_TAG.get(name)")
                                 .build()
                 );
-        var fieldNames = new HashSet<String>();
         for (var key : KEYS) {
             var fieldName = StringUtils.fastTwoPartSplit(key, ":", "")[1].toUpperCase();
-            fieldNames.add(fieldName);
             codeBuilder.addField(
                     FieldSpec
                             .builder(BLOCK_TAG_CLASS, fieldName)
@@ -89,7 +87,9 @@ public class VanillaBlockTagGen {
             );
         }
 
-        var javaFile = JavaFile.builder("org.allaymc.api.data", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("org.allaymc.api.data", codeBuilder.build())
+                .indent("   ")
+                .build();
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/data/VanillaBlockTags.java"), javaFile.toString());
     }
 }

@@ -1,9 +1,6 @@
 package org.allaymc.server.block.type;
 
-import org.allaymc.api.block.component.common.BlockAttributes;
-import org.allaymc.api.block.interfaces.candle.BlockBlueCandleBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockCoralFanBehavior;
-import org.allaymc.api.block.interfaces.wall.BlockCobbledDeepslateWallBehavior;
+import org.allaymc.api.block.component.common.BlockStateData;
 import org.allaymc.api.block.property.enums.*;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BooleanPropertyType;
@@ -14,7 +11,7 @@ import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.server.block.component.TestComponentImpl;
 import org.allaymc.server.block.component.TestComponentImplV2;
 import org.allaymc.server.block.component.TestCustomBlockComponentImpl;
-import org.allaymc.server.block.component.common.BlockAttributeComponentImpl;
+import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -53,7 +50,7 @@ class AllayBlockTypeTest {
                         TEST_ENUM_PROPERTY_TYPE)
                 .setComponents(List.of(
                         new TestComponentImpl(),
-                        BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.builder().burnChance(2).build())))
+                        BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.builder().burnOdds(2).build())))
                 .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                 .build();
         testBlockType2 = AllayBlockType
@@ -65,7 +62,7 @@ class AllayBlockTypeTest {
                         TEST_ENUM_PROPERTY_TYPE)
                 .setComponents(List.of(
                         new TestComponentImpl(),
-                        BlockAttributeComponentImpl.ofDirectDynamic(blockState -> BlockAttributes.builder().burnChance(3).build())))
+                        BlockStateDataComponentImpl.ofDirectDynamic(blockState -> BlockStateData.builder().burnOdds(3).build())))
                 .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                 .build();
     }
@@ -82,7 +79,7 @@ class AllayBlockTypeTest {
                                 TEST_ENUM_PROPERTY_TYPE)
                         .setComponents(List.of(
                                 new TestComponentImplV2(),
-                                BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT)
+                                BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.DEFAULT)
                         ))
                         .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                         .build()
@@ -130,7 +127,7 @@ class AllayBlockTypeTest {
                                 TEST_ENUM_PROPERTY_TYPE)
                         .setComponents(List.of(
                                 new TestComponentImpl(),
-                                BlockAttributeComponentImpl.ofGlobalStatic(BlockAttributes.DEFAULT)
+                                BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.DEFAULT)
                         ))
                         .build()
         );
@@ -154,8 +151,8 @@ class AllayBlockTypeTest {
 
     @Test
     void testBlockAttributes() {
-        assertEquals(2, testBlockType1.getBlockBehavior().getBlockAttributes(testBlockType1.getDefaultState()).burnChance());
-        assertEquals(3, testBlockType2.getBlockBehavior().getBlockAttributes(testBlockType2.getDefaultState()).burnChance());
+        assertEquals(2, testBlockType1.getBlockBehavior().getBlockStateData(testBlockType1.getDefaultState()).burnOdds());
+        assertEquals(3, testBlockType2.getBlockBehavior().getBlockStateData(testBlockType2.getDefaultState()).burnOdds());
     }
 
     @Test

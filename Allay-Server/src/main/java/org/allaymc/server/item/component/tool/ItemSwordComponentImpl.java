@@ -23,7 +23,7 @@ public class ItemSwordComponentImpl implements ItemSwordComponent {
         var entity = event.getBreaker();
         if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) return;
 
-        var hardness = event.getBlock().getBlockAttributes().hardness();
+        var hardness = event.getBlock().getBlockStateData().hardness();
         if (hardness == 0) return;
 
         if (!baseComponent.willDamageItem()) return;
