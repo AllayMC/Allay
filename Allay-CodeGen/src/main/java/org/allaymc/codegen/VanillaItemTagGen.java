@@ -20,7 +20,8 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class VanillaItemTagGen {
-    static final Path ITEM_TAGS_FILE_PATH = Path.of(CodeGen.DATA_PATH + "item_tags.json");
+    static final Path ITEM_TAGS_FILE_PATH = Path.of(CodeGen.DATA_PATH + "unpacked/item_tags.json");
+    static final Path ITEM_TAGS_CUSTOM_FILE_PATH = Path.of(CodeGen.DATA_PATH + "item_tags_custom.json");
     static final ClassName ITEM_TAG_CLASS = ClassName.get("org.allaymc.api.item.tag", "ItemTag");
     static final Set<String> KEYS = new HashSet<>();
     static final String JAVA_DOC = """
@@ -33,6 +34,11 @@ public class VanillaItemTagGen {
         try {
             JsonParser
                     .parseReader(Files.newBufferedReader(ITEM_TAGS_FILE_PATH))
+                    .getAsJsonObject()
+                    .entrySet()
+                    .forEach(entry -> KEYS.add(entry.getKey()));
+            JsonParser
+                    .parseReader(Files.newBufferedReader(ITEM_TAGS_CUSTOM_FILE_PATH))
                     .getAsJsonObject()
                     .entrySet()
                     .forEach(entry -> KEYS.add(entry.getKey()));

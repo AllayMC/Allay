@@ -12,10 +12,7 @@ import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
-import org.allaymc.api.data.VanillaMaterialTypes;
+import org.allaymc.api.data.*;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
@@ -252,7 +249,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
             return false;
 
         var oldBlockState = dimension.getBlockState(placeBlockPos);
-        if (!oldBlockState.getBlockType().getMaterial().isReplaceable()) return false;
+        if (!oldBlockState.getBlockType().hasBlockTag(VanillaBlockTags.REPLACEABLE)) return false;
 
         var blockType = blockState.getBlockType();
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);

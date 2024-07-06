@@ -19,11 +19,9 @@ public record Material(
         boolean isAlwaysDestroyable,
         boolean isLiquid,
         boolean isNeverBuildable,
-        boolean isReplaceable,
         boolean isSolid,
         boolean isSolidBlocking,
         boolean isSuperHot,
         float translucency
 ) {
-
 }

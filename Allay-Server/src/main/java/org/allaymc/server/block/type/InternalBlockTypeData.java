@@ -14,9 +14,7 @@ import org.allaymc.server.utils.ResourceUtils;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Allay Project 2024/7/2
@@ -27,6 +25,8 @@ public final class InternalBlockTypeData {
 
     // Use array instead of set to reduce memory usage
     private static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS = new HashMap<>();
+
+    private static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS_CUSTOM = new HashMap<>();
 
     private static final Map<VanillaBlockId, MaterialType> VANILLA_BLOCK_MATERIAL_TYPES = new HashMap<>();
 
@@ -67,6 +67,30 @@ public final class InternalBlockTypeData {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        try (var reader = new InputStreamReader(new BufferedInputStream(ResourceUtils.getResource("block_tags_custom.json")))) {
+            var map = new HashMap<VanillaBlockId, Set<BlockTag>>();
+            JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
+                var tag = VanillaBlockTags.getTagByName(entry.getKey());
+                for (var obj : entry.getValue().getAsJsonArray()) {
+                    var blockId = obj.getAsString();
+                    var id = VanillaBlockId.fromIdentifier(new Identifier(blockId));
+                    map.computeIfAbsent(id, k -> new HashSet<>()).add(tag);
+                }
+            });
+            map.forEach((id, tags) -> {
+                var blockTags = new BlockTag[tags.size()];
+                var i = 0;
+                for (var tag : tags) {
+                    blockTags[i++] = tag;
+                }
+                VANILLA_BLOCK_TAGS_CUSTOM.put(id, blockTags);
+            });
+            for (var id : VanillaBlockId.values()) {
+                VANILLA_BLOCK_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_BLOCK_TAG_ARRAY);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static MaterialType getMaterialType(VanillaBlockId id) {
@@ -74,7 +98,12 @@ public final class InternalBlockTypeData {
     }
 
     public static BlockTag[] getBlockTags(VanillaBlockId id) {
-        return VANILLA_BLOCK_TAGS.get(id);
+        var vanilla = VANILLA_BLOCK_TAGS.get(id);
+        var custom = VANILLA_BLOCK_TAGS_CUSTOM.get(id);
+        var tags = new BlockTag[vanilla.length + custom.length];
+        System.arraycopy(vanilla, 0, tags, 0, vanilla.length);
+        System.arraycopy(custom, 0, tags, vanilla.length, custom.length);
+        return tags;
     }
 
     public static VanillaItemId[] getSpecialTools(VanillaBlockId id) {

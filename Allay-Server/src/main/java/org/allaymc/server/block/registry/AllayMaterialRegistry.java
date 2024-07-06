@@ -59,7 +59,6 @@ public class AllayMaterialRegistry extends SimpleMappedRegistry<MaterialType, Ma
                             obj.get("isAlwaysDestroyable").getAsBoolean(),
                             obj.get("isLiquid").getAsBoolean(),
                             obj.get("isNeverBuildable").getAsBoolean(),
-                            obj.get("isReplaceable").getAsBoolean(),
                             obj.get("isSolid").getAsBoolean(),
                             obj.get("isSolidBlocking").getAsBoolean(),
                             obj.get("isSuperHot").getAsBoolean(),

@@ -20,7 +20,8 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class VanillaBlockTagGen {
-    static final Path BLOCK_TAGS_FILE_PATH = Path.of(CodeGen.DATA_PATH + "block_tags.json");
+    static final Path BLOCK_TAGS_FILE_PATH = Path.of(CodeGen.DATA_PATH + "unpacked/block_tags.json");
+    static final Path BLOCK_TAGS_CUSTOM_FILE_PATH = Path.of(CodeGen.DATA_PATH + "block_tags_custom.json");
     static final ClassName BLOCK_TAG_CLASS = ClassName.get("org.allaymc.api.block.tag", "BlockTag");
     static final Set<String> KEYS = new HashSet<>();
     static final String JAVA_DOC = """
@@ -33,6 +34,11 @@ public class VanillaBlockTagGen {
         try {
             JsonParser
                     .parseReader(Files.newBufferedReader(BLOCK_TAGS_FILE_PATH))
+                    .getAsJsonObject()
+                    .entrySet()
+                    .forEach(entry -> KEYS.add(entry.getKey()));
+            JsonParser
+                    .parseReader(Files.newBufferedReader(BLOCK_TAGS_CUSTOM_FILE_PATH))
                     .getAsJsonObject()
                     .entrySet()
                     .forEach(entry -> KEYS.add(entry.getKey()));

@@ -61,6 +61,8 @@ public interface VanillaBlockTags {
 
    BlockTag METAL = create("minecraft:metal");
 
+   BlockTag REPLACEABLE = create("minecraft:replaceable");
+
    BlockTag NOT_FEATURE_REPLACEABLE = create("minecraft:not_feature_replaceable");
 
    BlockTag TRAPDOORS = create("minecraft:trapdoors");

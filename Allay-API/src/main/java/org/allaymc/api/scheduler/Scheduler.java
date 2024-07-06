@@ -30,6 +30,13 @@ public interface Scheduler {
         }, 0);
     }
 
+    default void runLaterAsync(TaskCreator creator, Runnable runnable) {
+        scheduleDelayed(creator, () -> {
+            runnable.run();
+            return true;
+        }, 0, true);
+    }
+
     default void scheduleDelayed(TaskCreator creator, Task task, int delay) {
         scheduleDelayed(creator, task, delay, false);
     }
