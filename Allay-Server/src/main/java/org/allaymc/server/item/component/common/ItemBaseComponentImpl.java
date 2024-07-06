@@ -251,6 +251,9 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         if (player != null && DO_BLOCK_PLACING_CHECK && hasEntityCollision(dimension, placeBlockPos, blockState))
             return false;
 
+        var oldBlockState = dimension.getBlockState(placeBlockPos);
+        if (!oldBlockState.getBlockType().getMaterial().isReplaceable()) return false;
+
         var blockType = blockState.getBlockType();
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
         if (result) {
