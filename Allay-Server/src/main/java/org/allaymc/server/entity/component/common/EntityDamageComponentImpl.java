@@ -60,6 +60,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             damage.updateFinalDamage(d -> Math.max(0, d - absorption));
         }
 
+        if (entity instanceof EntityPlayerHungerComponent hungerComponent)
+            hungerComponent.exhaust(0.1f);
+
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
         baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
 

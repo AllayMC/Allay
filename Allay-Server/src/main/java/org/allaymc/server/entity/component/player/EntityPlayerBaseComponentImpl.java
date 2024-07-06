@@ -260,6 +260,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
         var loc = new Location3f(newLoc);
         loc.add(0, getBaseOffset(), 0f);
+
+        if (!teleporting) {
+            var exhaust = 0f;
+            var distance = getLocation().distance(newLoc);
+            if (isSwimming()) exhaust += 0.01f * distance;
+            if (isSprinting()) exhaust += 0.1f * distance;
+            thisEntity.exhaust(exhaust);
+        }
+
         super.broadcastMoveToViewers(loc, teleporting);
     }
 
