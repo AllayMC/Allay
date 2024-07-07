@@ -53,8 +53,8 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 clickPos, blockFace
                         );
                         itemStack.rightClickItemOn(dimension, placeBlockPos, interactInfo);
-                        if (player.isUsingItem()) {
-                            if (itemStack.useItemOn(dimension, placeBlockPos, interactInfo)) {
+                        if (player.isUsingItemOnBlock()) {
+                            if (itemStack.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
                                 // Using item on the block successfully, no need to call BlockBehavior::onInteract()
                                 break;
                             }
@@ -74,9 +74,16 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
-                        if (!itemStack.useItemInAir(player)) break;
-                        if (!player.hasAction()) player.setAction(true);
-                        player.setAction(false);
+                        if (!player.isUsingItemInAir()) {
+                            if (itemStack.canUseItemInAir(player)) {
+                                // Start using item
+                                player.setUsingItemInAir(true);
+                            }
+                        } else if (player.isUsingItemInAir()) {
+                            // Item used
+                            itemStack.useItemInAir(player, player.getItemUsingInAirTime());
+                            player.setUsingItemInAir(false);
+                        }
                     }
                 }
 

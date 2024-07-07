@@ -94,7 +94,7 @@ public interface ItemBaseComponent extends ItemComponent {
     void loadExtraTag(NbtMap extraTag);
 
     /**
-     * Called when player right-click a block no matter the return value of player.isUsingItem()
+     * Called when player right-click a block no matter the return value of player.isUsingItemOnBlock()
      * @param dimension The dimension the player is in
      * @param placeBlockPos The position of the block being right-clicked
      * @param interactInfo Information about the interaction
@@ -104,7 +104,7 @@ public interface ItemBaseComponent extends ItemComponent {
     /**
      * Attempt to use this item on a block.
      * <p>
-     * This method will be called only when client think "he can" use the item. In other words, when player.isUsingItem() return true.
+     * This method will be called only when client think "he can" use the item. In other words, when player.isUsingItemOnBlock() return true.
      * This method should handle reducing item count, durability, etc., on successful use.
      * No need to send item updates separately as the caller will handle it.
      * <p>
@@ -112,7 +112,7 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @return true if successfully used
      */
-    default boolean useItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+    default boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         return false;
     }
 
@@ -126,17 +126,26 @@ public interface ItemBaseComponent extends ItemComponent {
         return false;
     }
 
-    default boolean useItemInAir(EntityPlayer player) {
-        return false;
-    }
+    /**
+     * 当玩家准备使用物品前调用
+     * @param player 准备使用物品的玩家
+     * @return 此物品是否可以使用
+     */
+    boolean canUseItemInAir(EntityPlayer player);
+
+    /**
+     * 当玩家认为他已经使用完一个物品时调用
+     * @param player 使用物品的玩家
+     * @param usedTime 花费的时间
+     * @return 物品是否被使用
+     */
+    boolean useItemInAir(EntityPlayer player, long usedTime);
 
     default boolean canMerge(ItemStack itemStack) {
         return canMerge(itemStack, false);
     }
 
     boolean canMerge(ItemStack itemStack, boolean ignoreCount);
-
-    // TODO: boolean useInAir();
 
     default NbtMap saveNBT() {
         var builder = NbtMap.builder()

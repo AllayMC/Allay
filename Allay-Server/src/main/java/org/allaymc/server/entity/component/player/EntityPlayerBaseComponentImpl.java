@@ -103,7 +103,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected boolean awaitingDimensionChangeACK;
     @Getter
     @Setter
-    protected boolean usingItem;
+    protected boolean usingItemOnBlock;
+    protected long startUingItemInAirTime = -1;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
     protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();
@@ -348,6 +349,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
     }
 
+    public long getStartUingItemInAirTime() {
+        if (!isUsingItemInAir()) {
+            log.warn("Trying to get a player's start action time who doesn't have action!");
+        }
+        return startUingItemInAirTime;
+    }
+
+    @Override
+    public long getItemUsingInAirTime() {
+        if (!isUsingItemInAir()) {
+            log.warn("Trying to get a player's action time who doesn't have action!");
+        }
+        return thisEntity.getWorld().getTick() - startUingItemInAirTime;
+    }
+
     @Override
     public int getHandSlot() {
         return containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getHandSlot();
@@ -478,6 +494,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void sendLocationToSelf() {
         networkComponent.sendPacket(createMovePacket(location, true));
+    }
+
+    @Override
+    public boolean isUsingItemInAir() {
+        return getMetadata().get(EntityFlag.USING_ITEM);
+    }
+
+    @Override
+    public void setUsingItemInAir(boolean value) {
+        setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
+        this.startUingItemInAirTime = value ? thisEntity.getWorld().getTick() : -1;
     }
 
     @Override

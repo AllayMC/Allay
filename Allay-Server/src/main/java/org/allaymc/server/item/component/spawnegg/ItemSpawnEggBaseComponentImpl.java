@@ -25,7 +25,7 @@ public class ItemSpawnEggBaseComponentImpl<T extends ItemStack> extends ItemBase
     }
 
     @Override
-    public boolean useItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+    public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) return false;
         var identifier = thisItemStack.getItemType().getIdentifier();
         identifier = new Identifier(identifier.toString().replace("_spawn_egg", ""));

@@ -12,7 +12,6 @@ import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3ic;
@@ -45,9 +44,28 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void setCrawling(boolean crawling);
 
-    boolean isUsingItem();
+    boolean isUsingItemOnBlock();
 
-    void setUsingItem(boolean usingItemOnBlock);
+    void setUsingItemOnBlock(boolean usingItemOnBlock);
+
+    /**
+     * 吃食物或者使用弩等会被认为是在使用物品
+     * 注意和usingItemOnBlock区分！使用物品和方块无关！
+     * @return 玩家是否在使用物品
+     */
+    boolean isUsingItemInAir();
+
+    void setUsingItemInAir(boolean value);
+
+    /**
+     * @return 返回玩家最近一次开始使用物品的时间
+     */
+    long getStartUingItemInAirTime();
+
+    /**
+     * @return 返回玩家使用了多久物品，单位为gt
+     */
+    long getItemUsingInAirTime();
 
     int getHandSlot();
 
@@ -98,16 +116,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setSpawnPoint(Location3ic spawnPoint);
 
     void sendLocationToSelf();
-
-    default boolean hasAction() {
-        return getMetadata().get(EntityFlag.USING_ITEM);
-    }
-
-    default void setAction(boolean value) {
-        if (value != hasAction()) {
-            setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
-        }
-    }
 
     @ApiStatus.Internal
     void sendDimensionChangeSuccess();

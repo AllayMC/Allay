@@ -116,6 +116,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
 
     @Override
     public void setFoodLevel(int foodLevel) {
+        // TODO: event
         this.foodLevel = Math.max(Math.min(foodLevel, MAX_FOOD_LEVEL), 0);
     }
 
