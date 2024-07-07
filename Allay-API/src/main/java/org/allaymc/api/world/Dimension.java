@@ -24,10 +24,8 @@ import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
-import org.cloudburstmc.protocol.bedrock.packet.PlaySoundPacket;
-import org.cloudburstmc.protocol.bedrock.packet.UpdateBlockPacket;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3fc;
@@ -283,6 +281,28 @@ public interface Dimension {
         levelEventPacket.setType(levelEventType);
         levelEventPacket.setData(data);
         chunk.sendChunkPacket(levelEventPacket);
+    }
+
+    default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent) {
+        addLevelSoundEvent(x, y, z, soundEvent, -1);
+    }
+
+    default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent, int extraData) {
+        addLevelSoundEvent(x, y, z, soundEvent, extraData, "", false, false);
+    }
+
+    default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent, int extraData, String identifier, boolean babySound, boolean relativeVolumeDisabled) {
+        var chunk = getChunkService().getChunk((int) x >> 4, (int) z >> 4);
+        if (chunk == null) return;
+
+        var levelSoundEventPacket = new LevelSoundEventPacket();
+        levelSoundEventPacket.setSound(soundEvent);
+        levelSoundEventPacket.setPosition(Vector3f.from(x, y, z));
+        levelSoundEventPacket.setExtraData(extraData);
+        levelSoundEventPacket.setIdentifier(identifier);
+        levelSoundEventPacket.setBabySound(babySound);
+        levelSoundEventPacket.setRelativeVolumeDisabled(relativeVolumeDisabled);
+        chunk.sendChunkPacket(levelSoundEventPacket);
     }
 
     default void updateAroundIgnoreFace(int x, int y, int z, BlockFace... ignoreFaces) {

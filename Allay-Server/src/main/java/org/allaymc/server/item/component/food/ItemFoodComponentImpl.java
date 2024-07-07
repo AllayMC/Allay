@@ -7,6 +7,9 @@ import org.allaymc.api.item.component.event.ItemTryUseEvent;
 import org.allaymc.api.item.component.event.ItemUsedEvent;
 import org.allaymc.api.item.component.food.ItemFoodComponent;
 import org.allaymc.api.item.type.ItemTypes;
+import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
+import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 
 /**
  * Allay Project 07/07/2024
@@ -35,6 +38,8 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
     @Override
     public void onEaten(EntityPlayer player) {
         player.saturate(this.foodPoints, this.saturationPoints);
+        var pos = player.getLocation();
+        player.getDimension().addLevelSoundEvent(pos.x(), pos.y(), pos.z(), SoundEvent.BURP);
     }
 
     @EventHandler
