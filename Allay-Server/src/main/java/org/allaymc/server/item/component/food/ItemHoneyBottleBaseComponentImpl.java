@@ -10,7 +10,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
  */
 public class ItemHoneyBottleBaseComponentImpl extends ItemFoodComponentImpl {
     public ItemHoneyBottleBaseComponentImpl() {
-        super(6, 1.2f);
+        super(6, 1.2f, 40);
     }
 
     @Override

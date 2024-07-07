@@ -283,7 +283,7 @@ public final class ItemTypeInitializer {
                 .builder(ItemDriedKelpStack.class)
                 .vanillaItem(VanillaItemId.DRIED_KELP)
                 .addComponent(
-                        $ -> new ItemFoodComponentImpl(1, 0.2f),
+                        $ -> new ItemFoodComponentImpl(1, 0.2f, 16),
                         ItemFoodComponentImpl.class
                 )
                 .build();
