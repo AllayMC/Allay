@@ -120,7 +120,8 @@ public class AllayDimension implements Dimension {
                 usedItem, player
         );
         setBlockState(x, y, z, AIR_TYPE.getDefaultState());
-        player.exhaust(0.005f);
+
+        if (player != null) player.exhaust(0.005f);
     }
 
     @Override
