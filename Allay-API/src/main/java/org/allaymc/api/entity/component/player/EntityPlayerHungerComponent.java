@@ -29,4 +29,6 @@ public interface EntityPlayerHungerComponent extends EntityComponent {
     float getFoodExhaustionLevel();
 
     void setFoodExhaustionLevel(float foodExhaustionLevel);
+
+    boolean canEat();
 }

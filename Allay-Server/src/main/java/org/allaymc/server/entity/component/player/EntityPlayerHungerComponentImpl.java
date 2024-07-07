@@ -10,6 +10,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Difficulty;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 /**
  * Allay Project 28/06/2024
@@ -22,11 +23,12 @@ import org.allaymc.api.world.Difficulty;
 public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerComponent {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_hunger_component");
+    private static final int MAX_FOOD_LEVEL = 20;
 
     @ComponentedObject
     protected EntityPlayer player;
 
-    private int foodLevel = 20;
+    private int foodLevel = MAX_FOOD_LEVEL;
     private float foodSaturationLevel = 5f;
 
     private float foodTickTimer;
@@ -40,7 +42,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
         if (foodTickTimer >= 80) foodTickTimer = 0;
         if (foodTickTimer % 10 == 0) {
             if (player.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL) setFoodLevel(foodLevel + 1);
-            if (foodLevel == 20 && foodSaturationLevel > 0 && foodTickTimer % 20 == 0) regenerate(false);
+            if (foodLevel == MAX_FOOD_LEVEL && foodSaturationLevel > 0 && foodTickTimer % 20 == 0) regenerate(false);
         }
 
         if (foodTickTimer == 0) {
@@ -54,10 +56,10 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
             player.setSprinting(false);
         }
 
-        syncFood();
+        syncFoodData();
     }
 
-    private void syncFood() {
+    private void syncFoodData() {
         var needSend = false;
 
         var hunger = player.getAttribute(AttributeType.PLAYER_HUNGER);
@@ -114,11 +116,16 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
 
     @Override
     public void setFoodLevel(int foodLevel) {
-        this.foodLevel = Math.max(Math.min(foodLevel, 20), 0);
+        this.foodLevel = Math.max(Math.min(foodLevel, MAX_FOOD_LEVEL), 0);
     }
 
     @Override
     public void setFoodTickTimer(float foodTickTimer) {
         this.foodTickTimer = Math.max(foodTickTimer, 0);
+    }
+
+    @Override
+    public boolean canEat() {
+        return getFoodLevel() < MAX_FOOD_LEVEL || player.getGameType() == GameType.CREATIVE || player.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL;
     }
 }
