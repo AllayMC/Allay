@@ -29,6 +29,7 @@ public class EntityEventPacketProcessor extends PacketProcessor<EntityEventPacke
                 forwardPacket.setRuntimeEntityId(player.getRuntimeId());
                 forwardPacket.setType(EntityEventType.EATING_ITEM);
                 forwardPacket.setData(packet.getData());
+                player.sendPacket(forwardPacket);
                 player.sendPacketToViewers(forwardPacket);
 
                 yield PacketSignal.HANDLED;
