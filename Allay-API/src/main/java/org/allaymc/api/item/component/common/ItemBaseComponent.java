@@ -141,6 +141,11 @@ public interface ItemBaseComponent extends ItemComponent {
      */
     boolean useItemInAir(EntityPlayer player, long usedTime);
 
+    /**
+     * 当玩家右键物品一段时间后释放物品时调用
+     */
+    default void releaseUsingItem(EntityPlayer player, long usedTime) {}
+
     default boolean canMerge(ItemStack itemStack) {
         return canMerge(itemStack, false);
     }

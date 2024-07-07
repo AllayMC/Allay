@@ -504,7 +504,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void setUsingItemInAir(boolean value) {
         setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
-        this.startUingItemInAirTime = value ? thisEntity.getWorld().getTick() : -1;
+        if (value) {
+            this.startUingItemInAirTime = thisEntity.getWorld().getTick();
+        }
     }
 
     @Override

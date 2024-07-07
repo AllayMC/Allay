@@ -32,6 +32,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
     public static final int ITEM_USE_ON_ENTITY_INTERACT = 0;
     public static final int ITEM_USE_ON_ENTITY_ATTACK = 1;
 
+    public static final int ITEM_RELEASE_RELEASE = 0;
+    public static final int ITEM_RELEASE_CONSUME = 1;
+
     @Override
     public void handleSync(EntityPlayer player, InventoryTransactionPacket packet) {
         var transactionType = packet.getTransactionType();
@@ -88,6 +91,20 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
 
                 player.sendItemInHandUpdate();
+            }
+            case ITEM_RELEASE -> {
+                switch (packet.getActionType()) {
+                    case ITEM_RELEASE_RELEASE -> {
+                        player.getItemInHand().releaseUsingItem(player, player.getItemUsingInAirTime());
+                        // 玩家吃东西中断时，ITEM_USE_CLICK_AIR并不会发送
+                        // 然而ITEM_RELEASE_RELEASE总是会在玩家停止使用物品时发送，无论是否使用成功
+                        // 所以我们在收到ITEM_RELEASE_RELEASE时也刷新玩家物品使用状态，作为ITEM_USE_CLICK_AIR的补充
+                        player.setUsingItemInAir(false);
+                    }
+                    case ITEM_RELEASE_CONSUME -> {
+                        // TODO: It seems that this value is deprecated
+                    }
+                }
             }
             case ITEM_USE_ON_ENTITY -> {
                 var target = player.getDimension().getEntityByRuntimeId(packet.getRuntimeEntityId());
