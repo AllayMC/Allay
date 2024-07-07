@@ -27,7 +27,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     protected EntityPlayer player;
 
     private int foodLevel = 20;
-    private int foodSaturationLevel = 5;
+    private float foodSaturationLevel = 5f;
 
     private float foodTickTimer;
     private float foodExhaustionLevel;
@@ -88,7 +88,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
             this.foodExhaustionLevel -= 4;
 
             if (this.foodSaturationLevel > 0) {
-                this.foodSaturationLevel = Math.max(--this.foodSaturationLevel, 0);
+                this.foodSaturationLevel = Math.max(this.foodSaturationLevel - 1, 0);
             } else {
                 this.setFoodLevel(this.foodLevel - 1);
             }
@@ -96,7 +96,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     }
 
     @Override
-    public void saturate(int food, int saturation) {
+    public void saturate(int food, float saturation) {
         this.setFoodLevel(this.foodLevel + food);
 
         this.foodSaturationLevel += saturation;
@@ -112,6 +112,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
         if (exhaust) player.exhaust(6);
     }
 
+    @Override
     public void setFoodLevel(int foodLevel) {
         this.foodLevel = Math.max(Math.min(foodLevel, 20), 0);
     }

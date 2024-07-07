@@ -12,15 +12,15 @@ public interface EntityPlayerHungerComponent extends EntityComponent {
 
     void exhaust(float level);
 
-    void saturate(int food, int saturation);
+    void saturate(int food, float saturation);
 
     int getFoodLevel();
 
     void setFoodLevel(int foodLevel);
 
-    int getFoodSaturationLevel();
+    float getFoodSaturationLevel();
 
-    void setFoodSaturationLevel(int saturationLevel);
+    void setFoodSaturationLevel(float saturationLevel);
 
     float getFoodTickTimer();
 
