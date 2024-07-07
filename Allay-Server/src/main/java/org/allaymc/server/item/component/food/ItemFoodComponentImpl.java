@@ -7,6 +7,7 @@ import org.allaymc.api.item.component.event.ItemTryUseEvent;
 import org.allaymc.api.item.component.event.ItemUsedEvent;
 import org.allaymc.api.item.component.food.ItemFoodComponent;
 import org.allaymc.api.item.type.ItemTypes;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
@@ -56,6 +57,7 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
 
         var player = event.getPlayer();
         onEaten(player);
+        if (player.getGameType() == GameType.CREATIVE) return;
         var itemInHand = player.getItemInHand();
         if (itemInHand.getCount() == 1) player.setItemInHand(ItemTypes.AIR_TYPE.createItemStack());
         else itemInHand.setCount(itemInHand.getCount() - 1);
