@@ -8,7 +8,7 @@ import org.allaymc.api.entity.component.EntityComponent;
  * @author IWareQ
  */
 public interface EntityPlayerHungerComponent extends EntityComponent {
-    default void tick0() {} // TODO: rename to normal name
+    void tick();
 
     void exhaust(float level);
 

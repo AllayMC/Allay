@@ -33,7 +33,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     private float foodExhaustionLevel;
 
     @Override
-    public void tick0() {
+    public void tick() {
         if (!player.isSpawned() || player.isDead()) return;
 
         foodTickTimer++;
