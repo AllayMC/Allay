@@ -2,17 +2,15 @@ package org.allaymc.server.item.component.food;
 
 import org.allaymc.api.entity.effect.type.EffectHungerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemRottenFleshStack;
 
 /**
  * Allay Project 07/07/2024
  *
  * @author IWareQ
  */
-public class ItemRottenFleshBaseComponentImpl extends ItemFoodBaseComponentImpl<ItemRottenFleshStack> {
-    public ItemRottenFleshBaseComponentImpl(ItemStackInitInfo<ItemRottenFleshStack> initInfo) {
-        super(initInfo, 4, 0.8f);
+public class ItemRottenFleshBaseComponentImpl extends ItemFoodComponentImpl {
+    public ItemRottenFleshBaseComponentImpl() {
+        super(4, 0.8f);
     }
 
     @Override

@@ -3,17 +3,15 @@ package org.allaymc.server.item.component.food;
 import org.allaymc.api.entity.effect.type.EffectAbsorptionType;
 import org.allaymc.api.entity.effect.type.EffectRegenerationType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemGoldenAppleStack;
 
 /**
  * Allay Project 07/07/2024
  *
  * @author IWareQ
  */
-public class ItemGoldenAppleBaseComponentImpl extends ItemFoodBaseComponentImpl<ItemGoldenAppleStack> {
-    public ItemGoldenAppleBaseComponentImpl(ItemStackInitInfo<ItemGoldenAppleStack> initInfo) {
-        super(initInfo, 4, 9.6f);
+public class ItemGoldenAppleBaseComponentImpl extends ItemFoodComponentImpl {
+    public ItemGoldenAppleBaseComponentImpl() {
+        super(4, 9.6f);
     }
 
     @Override

@@ -2,8 +2,6 @@ package org.allaymc.server.item.component.food;
 
 import org.allaymc.api.block.component.common.BlockLiquidComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemChorusFruitStack;
 import org.allaymc.api.math.location.Location3f;
 import org.joml.Vector3f;
 
@@ -14,9 +12,9 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author IWareQ, PowerNukkitX
  */
-public class ItemChorusFruitBaseComponentImpl extends ItemFoodBaseComponentImpl<ItemChorusFruitStack> {
-    public ItemChorusFruitBaseComponentImpl(ItemStackInitInfo<ItemChorusFruitStack> initInfo) {
-        super(initInfo, 4, 2.4f);
+public class ItemChorusFruitBaseComponentImpl extends ItemFoodComponentImpl {
+    public ItemChorusFruitBaseComponentImpl() {
+        super(4, 2.4f);
     }
 
     @Override

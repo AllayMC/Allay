@@ -2,17 +2,15 @@ package org.allaymc.server.item.component.food;
 
 import org.allaymc.api.entity.effect.type.EffectPoisonType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemSpiderEyeStack;
 
 /**
  * Allay Project 07/07/2024
  *
  * @author IWareQ
  */
-public class ItemSpiderEyeBaseComponentImpl extends ItemFoodBaseComponentImpl<ItemSpiderEyeStack> {
-    public ItemSpiderEyeBaseComponentImpl(ItemStackInitInfo<ItemSpiderEyeStack> initInfo) {
-        super(initInfo, 2, 3.2f);
+public class ItemSpiderEyeBaseComponentImpl extends ItemFoodComponentImpl {
+    public ItemSpiderEyeBaseComponentImpl() {
+        super(2, 3.2f);
     }
 
     @Override

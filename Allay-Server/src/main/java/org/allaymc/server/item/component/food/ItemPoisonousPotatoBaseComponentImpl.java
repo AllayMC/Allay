@@ -2,17 +2,15 @@ package org.allaymc.server.item.component.food;
 
 import org.allaymc.api.entity.effect.type.EffectPoisonType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemPoisonousPotatoStack;
 
 /**
  * Allay Project 07/07/2024
  *
  * @author IWareQ
  */
-public class ItemPoisonousPotatoBaseComponentImpl extends ItemFoodBaseComponentImpl<ItemPoisonousPotatoStack> {
-    public ItemPoisonousPotatoBaseComponentImpl(ItemStackInitInfo<ItemPoisonousPotatoStack> initInfo) {
-        super(initInfo, 2, 1.2f);
+public class ItemPoisonousPotatoBaseComponentImpl extends ItemFoodComponentImpl {
+    public ItemPoisonousPotatoBaseComponentImpl() {
+        super(2, 1.2f);
     }
 
     @Override

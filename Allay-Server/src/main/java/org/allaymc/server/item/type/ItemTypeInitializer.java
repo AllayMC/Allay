@@ -43,8 +43,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemTropicalFishStack.class)
                 .vanillaItem(VanillaItemId.TROPICAL_FISH)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 1, 0.2f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(1, 0.2f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -54,8 +54,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemSweetBerriesStack.class)
                 .vanillaItem(VanillaItemId.SWEET_BERRIES)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 2, 1.2f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(2, 1.2f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -65,8 +65,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCookedBeefStack.class)
                 .vanillaItem(VanillaItemId.COOKED_BEEF)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 8, 12.8f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(8, 12.8f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -92,8 +92,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemSalmonStack.class)
                 .vanillaItem(VanillaItemId.SALMON)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 2, 0.4f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(2, 0.4f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -103,8 +103,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemRabbitStack.class)
                 .vanillaItem(VanillaItemId.RABBIT)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 3, 1.8f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(3, 1.8f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -114,8 +114,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemPorkchopStack.class)
                 .vanillaItem(VanillaItemId.PORKCHOP)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 3, 1.8f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(3, 1.8f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -125,8 +125,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemMuttonStack.class)
                 .vanillaItem(VanillaItemId.MUTTON)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 2, 1.2f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(2, 1.2f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -136,8 +136,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCodStack.class)
                 .vanillaItem(VanillaItemId.COD)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 2, 0.4f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(2, 0.4f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -155,8 +155,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemBeefStack.class)
                 .vanillaItem(VanillaItemId.BEEF)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 3, 1.8f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(3, 1.8f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -166,8 +166,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemRabbitStewStack.class)
                 .vanillaItem(VanillaItemId.RABBIT_STEW)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 10, 12f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(10, 12f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -177,8 +177,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemPumpkinPieStack.class)
                 .vanillaItem(VanillaItemId.PUMPKIN_PIE)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 8, 4.8f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(8, 4.8f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -196,8 +196,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemPotatoStack.class)
                 .vanillaItem(VanillaItemId.POTATO)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 1, 0.6f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(1, 0.6f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -215,8 +215,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemMushroomStewStack.class)
                 .vanillaItem(VanillaItemId.MUSHROOM_STEW)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 6, 7.2f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(6, 7.2f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -226,8 +226,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemMelonSliceStack.class)
                 .vanillaItem(VanillaItemId.MELON_SLICE)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 2, 1.2f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(2, 1.2f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -245,8 +245,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemGoldenCarrotStack.class)
                 .vanillaItem(VanillaItemId.GOLDEN_CARROT)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 6, 14.4f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(6, 14.4f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -256,8 +256,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemGlowBerriesStack.class)
                 .vanillaItem(VanillaItemId.GLOW_BERRIES)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 2, 0.4f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(2, 0.4f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -283,8 +283,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemDriedKelpStack.class)
                 .vanillaItem(VanillaItemId.DRIED_KELP)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 1, 0.2f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(1, 0.2f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -294,8 +294,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCookieStack.class)
                 .vanillaItem(VanillaItemId.COOKIE)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 2, 0.4f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(2, 0.4f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -305,8 +305,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCookedSalmonStack.class)
                 .vanillaItem(VanillaItemId.COOKED_SALMON)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 6, 9.6f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(6, 9.6f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -316,8 +316,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCookedRabbitStack.class)
                 .vanillaItem(VanillaItemId.COOKED_RABBIT)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 5, 6f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(5, 6f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -327,8 +327,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCookedPorkchopStack.class)
                 .vanillaItem(VanillaItemId.COOKED_PORKCHOP)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 8, 12.8f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(8, 12.8f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -338,8 +338,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCookedMuttonStack.class)
                 .vanillaItem(VanillaItemId.COOKED_MUTTON)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 6, 9.6f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(6, 9.6f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -349,8 +349,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCookedCodStack.class)
                 .vanillaItem(VanillaItemId.COOKED_COD)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 5, 6f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(5, 6f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -360,8 +360,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCookedChickenStack.class)
                 .vanillaItem(VanillaItemId.COOKED_CHICKEN)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 6, 7.2f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(6, 7.2f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -379,8 +379,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemCarrotStack.class)
                 .vanillaItem(VanillaItemId.CARROT)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 3, 3.6f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(3, 3.6f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -390,8 +390,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemBreadStack.class)
                 .vanillaItem(VanillaItemId.BREAD)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 5, 6f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(5, 6f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -401,8 +401,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemBeetrootSoupStack.class)
                 .vanillaItem(VanillaItemId.BEETROOT_SOUP)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 6, 7.2f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(6, 7.2f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -412,8 +412,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemBeetrootStack.class)
                 .vanillaItem(VanillaItemId.BEETROOT)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 1, 1.2f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(1, 1.2f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -423,8 +423,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemBakedPotatoStack.class)
                 .vanillaItem(VanillaItemId.BAKED_POTATO)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 6, 6f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(6, 6f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }
@@ -434,8 +434,8 @@ public final class ItemTypeInitializer {
                 .builder(ItemAppleStack.class)
                 .vanillaItem(VanillaItemId.APPLE)
                 .addComponent(
-                        initInfo -> new ItemFoodBaseComponentImpl<>(initInfo, 4, 2.4f),
-                        ItemFoodBaseComponentImpl.class
+                        $ -> new ItemFoodComponentImpl(4, 2.4f),
+                        ItemFoodComponentImpl.class
                 )
                 .build();
     }

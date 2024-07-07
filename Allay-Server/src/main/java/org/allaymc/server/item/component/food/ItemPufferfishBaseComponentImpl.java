@@ -4,17 +4,15 @@ import org.allaymc.api.entity.effect.type.EffectHungerType;
 import org.allaymc.api.entity.effect.type.EffectNauseaType;
 import org.allaymc.api.entity.effect.type.EffectPoisonType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemPufferfishStack;
 
 /**
  * Allay Project 07/07/2024
  *
  * @author IWareQ
  */
-public class ItemPufferfishBaseComponentImpl extends ItemFoodBaseComponentImpl<ItemPufferfishStack> {
-    public ItemPufferfishBaseComponentImpl(ItemStackInitInfo<ItemPufferfishStack> initInfo) {
-        super(initInfo, 1, 0.2f);
+public class ItemPufferfishBaseComponentImpl extends ItemFoodComponentImpl {
+    public ItemPufferfishBaseComponentImpl() {
+        super(1, 0.2f);
     }
 
     @Override

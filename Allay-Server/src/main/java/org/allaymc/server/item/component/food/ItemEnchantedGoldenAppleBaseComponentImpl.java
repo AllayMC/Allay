@@ -5,17 +5,15 @@ import org.allaymc.api.entity.effect.type.EffectFireResistanceType;
 import org.allaymc.api.entity.effect.type.EffectRegenerationType;
 import org.allaymc.api.entity.effect.type.EffectResistanceType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemEnchantedGoldenAppleStack;
 
 /**
  * Allay Project 07/07/2024
  *
  * @author IWareQ
  */
-public class ItemEnchantedGoldenAppleBaseComponentImpl extends ItemFoodBaseComponentImpl<ItemEnchantedGoldenAppleStack> {
-    public ItemEnchantedGoldenAppleBaseComponentImpl(ItemStackInitInfo<ItemEnchantedGoldenAppleStack> initInfo) {
-        super(initInfo, 4, 9.6f);
+public class ItemEnchantedGoldenAppleBaseComponentImpl extends ItemFoodComponentImpl {
+    public ItemEnchantedGoldenAppleBaseComponentImpl() {
+        super(4, 9.6f);
     }
 
     @Override
