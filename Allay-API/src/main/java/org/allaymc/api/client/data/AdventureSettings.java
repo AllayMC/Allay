@@ -26,6 +26,7 @@ public final class AdventureSettings {
     private boolean immutableWorld = false;
     private boolean showNameTags = true;
     private boolean autoJump = true;
+
     private boolean dirty = false;
 
     public AdventureSettings(EntityPlayer player) {
@@ -71,7 +72,7 @@ public final class AdventureSettings {
 
     public void sync() {
         if (!dirty) return;
-        UpdateAdventureSettingsPacket packet = new UpdateAdventureSettingsPacket();
+        var packet = new UpdateAdventureSettingsPacket();
         packet.setAutoJump(autoJump);
         packet.setImmutableWorld(immutableWorld);
         packet.setNoMvP(noMVP);

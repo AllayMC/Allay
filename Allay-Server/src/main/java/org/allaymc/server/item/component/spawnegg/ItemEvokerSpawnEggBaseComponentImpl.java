@@ -22,7 +22,7 @@ public class ItemEvokerSpawnEggBaseComponentImpl extends ItemBaseComponentImpl<I
     }
 
     @Override
-    public boolean useItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+    public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) return false;
         var entity = EntityTypes.EVOCATION_ILLAGER_TYPE.createEntity(
                 SimpleEntityInitInfo.builder()

@@ -6,8 +6,7 @@ import org.allaymc.api.item.component.tool.ItemAxeComponent;
 import org.allaymc.api.item.component.tool.ItemHoeComponent;
 import org.allaymc.api.item.component.tool.ItemPickaxeComponent;
 import org.allaymc.api.item.component.tool.ItemShovelComponent;
-import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.interfaces.ItemCauldronStack;
+import org.allaymc.api.item.interfaces.*;
 import org.allaymc.api.item.interfaces.axe.*;
 import org.allaymc.api.item.interfaces.boots.*;
 import org.allaymc.api.item.interfaces.chestplate.*;
@@ -25,6 +24,7 @@ import org.allaymc.server.item.component.air.ItemAirBaseComponentImpl;
 import org.allaymc.server.item.component.armor.ItemArmorBaseComponentImpl;
 import org.allaymc.server.item.component.cauldron.ItemCauldronBaseComponentImpl;
 import org.allaymc.server.item.component.common.ItemItemStorableComponentImpl;
+import org.allaymc.server.item.component.food.*;
 import org.allaymc.server.item.component.spawnegg.ItemEvokerSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.spawnegg.ItemSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.spawnegg.ItemTropicalFishSpawnEggBaseComponentImpl;
@@ -38,6 +38,408 @@ import org.allaymc.server.item.component.tool.*;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class ItemTypeInitializer {
+    public static void initTropicalFish() {
+        ItemTypes.TROPICAL_FISH_TYPE = ItemTypeBuilder
+                .builder(ItemTropicalFishStack.class)
+                .vanillaItem(VanillaItemId.TROPICAL_FISH)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(1, 0.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initSweetBerries() {
+        ItemTypes.SWEET_BERRIES_TYPE = ItemTypeBuilder
+                .builder(ItemSweetBerriesStack.class)
+                .vanillaItem(VanillaItemId.SWEET_BERRIES)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(2, 1.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initCookedBeef() {
+        ItemTypes.COOKED_BEEF_TYPE = ItemTypeBuilder
+                .builder(ItemCookedBeefStack.class)
+                .vanillaItem(VanillaItemId.COOKED_BEEF)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(8, 12.8f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initSpiderEye() {
+        ItemTypes.SPIDER_EYE_TYPE = ItemTypeBuilder
+                .builder(ItemSpiderEyeStack.class)
+                .vanillaItem(VanillaItemId.SPIDER_EYE)
+                .addComponent(ItemSpiderEyeBaseComponentImpl::new, ItemSpiderEyeBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initRottenFlesh() {
+        ItemTypes.ROTTEN_FLESH_TYPE = ItemTypeBuilder
+                .builder(ItemRottenFleshStack.class)
+                .vanillaItem(VanillaItemId.ROTTEN_FLESH)
+                .addComponent(ItemRottenFleshBaseComponentImpl::new, ItemRottenFleshBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initSalmon() {
+        ItemTypes.SALMON_TYPE = ItemTypeBuilder
+                .builder(ItemSalmonStack.class)
+                .vanillaItem(VanillaItemId.SALMON)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(2, 0.4f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initRabbit() {
+        ItemTypes.RABBIT_TYPE = ItemTypeBuilder
+                .builder(ItemRabbitStack.class)
+                .vanillaItem(VanillaItemId.RABBIT)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(3, 1.8f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initPorkchop() {
+        ItemTypes.PORKCHOP_TYPE = ItemTypeBuilder
+                .builder(ItemPorkchopStack.class)
+                .vanillaItem(VanillaItemId.PORKCHOP)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(3, 1.8f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initMutton() {
+        ItemTypes.MUTTON_TYPE = ItemTypeBuilder
+                .builder(ItemMuttonStack.class)
+                .vanillaItem(VanillaItemId.MUTTON)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(2, 1.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initCod() {
+        ItemTypes.COD_TYPE = ItemTypeBuilder
+                .builder(ItemCodStack.class)
+                .vanillaItem(VanillaItemId.COD)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(2, 0.4f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initChicken() {
+        ItemTypes.CHICKEN_TYPE = ItemTypeBuilder
+                .builder(ItemChickenStack.class)
+                .vanillaItem(VanillaItemId.CHICKEN)
+                .addComponent(ItemChickenBaseComponentImpl::new, ItemChickenBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initBeef() {
+        ItemTypes.BEEF_TYPE = ItemTypeBuilder
+                .builder(ItemBeefStack.class)
+                .vanillaItem(VanillaItemId.BEEF)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(3, 1.8f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initRabbitStew() {
+        ItemTypes.RABBIT_STEW_TYPE = ItemTypeBuilder
+                .builder(ItemRabbitStewStack.class)
+                .vanillaItem(VanillaItemId.RABBIT_STEW)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(10, 12f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initPumpkinPie() {
+        ItemTypes.PUMPKIN_PIE_TYPE = ItemTypeBuilder
+                .builder(ItemPumpkinPieStack.class)
+                .vanillaItem(VanillaItemId.PUMPKIN_PIE)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(8, 4.8f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initPufferfish() {
+        ItemTypes.PUFFERFISH_TYPE = ItemTypeBuilder
+                .builder(ItemPufferfishStack.class)
+                .vanillaItem(VanillaItemId.PUFFERFISH)
+                .addComponent(ItemPufferfishBaseComponentImpl::new, ItemPufferfishBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initPotato() {
+        ItemTypes.POTATO_TYPE = ItemTypeBuilder
+                .builder(ItemPotatoStack.class)
+                .vanillaItem(VanillaItemId.POTATO)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(1, 0.6f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initPoisonousPotato() {
+        ItemTypes.POISONOUS_POTATO_TYPE = ItemTypeBuilder
+                .builder(ItemPoisonousPotatoStack.class)
+                .vanillaItem(VanillaItemId.POISONOUS_POTATO)
+                .addComponent(ItemPoisonousPotatoBaseComponentImpl::new, ItemPoisonousPotatoBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initMushroomStew() {
+        ItemTypes.MUSHROOM_STEW_TYPE = ItemTypeBuilder
+                .builder(ItemMushroomStewStack.class)
+                .vanillaItem(VanillaItemId.MUSHROOM_STEW)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(6, 7.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initMelonSlice() {
+        ItemTypes.MELON_SLICE_TYPE = ItemTypeBuilder
+                .builder(ItemMelonSliceStack.class)
+                .vanillaItem(VanillaItemId.MELON_SLICE)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(2, 1.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initHoneyBottle() {
+        ItemTypes.HONEY_BOTTLE_TYPE = ItemTypeBuilder
+                .builder(ItemHoneyBottleStack.class)
+                .vanillaItem(VanillaItemId.HONEY_BOTTLE)
+                .addComponent(ItemHoneyBottleBaseComponentImpl::new, ItemHoneyBottleBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initGoldenCarrot() {
+        ItemTypes.GOLDEN_CARROT_TYPE = ItemTypeBuilder
+                .builder(ItemGoldenCarrotStack.class)
+                .vanillaItem(VanillaItemId.GOLDEN_CARROT)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(6, 14.4f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initGlowBerries() {
+        ItemTypes.GLOW_BERRIES_TYPE = ItemTypeBuilder
+                .builder(ItemGlowBerriesStack.class)
+                .vanillaItem(VanillaItemId.GLOW_BERRIES)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(2, 0.4f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initGoldenApple() {
+        ItemTypes.GOLDEN_APPLE_TYPE = ItemTypeBuilder
+                .builder(ItemGoldenAppleStack.class)
+                .vanillaItem(VanillaItemId.GOLDEN_APPLE)
+                .addComponent(ItemGoldenAppleBaseComponentImpl::new, ItemGoldenAppleBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initEnchantedGoldenApple() {
+        ItemTypes.ENCHANTED_GOLDEN_APPLE_TYPE = ItemTypeBuilder
+                .builder(ItemEnchantedGoldenAppleStack.class)
+                .vanillaItem(VanillaItemId.ENCHANTED_GOLDEN_APPLE)
+                .addComponent(ItemEnchantedGoldenAppleBaseComponentImpl::new, ItemEnchantedGoldenAppleBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initDriedKelp() {
+        ItemTypes.DRIED_KELP_TYPE = ItemTypeBuilder
+                .builder(ItemDriedKelpStack.class)
+                .vanillaItem(VanillaItemId.DRIED_KELP)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(1, 0.2f, 16),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initCookie() {
+        ItemTypes.COOKIE_TYPE = ItemTypeBuilder
+                .builder(ItemCookieStack.class)
+                .vanillaItem(VanillaItemId.COOKIE)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(2, 0.4f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initCookedSalmon() {
+        ItemTypes.COOKED_SALMON_TYPE = ItemTypeBuilder
+                .builder(ItemCookedSalmonStack.class)
+                .vanillaItem(VanillaItemId.COOKED_SALMON)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(6, 9.6f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initCookedRabbit() {
+        ItemTypes.COOKED_RABBIT_TYPE = ItemTypeBuilder
+                .builder(ItemCookedRabbitStack.class)
+                .vanillaItem(VanillaItemId.COOKED_RABBIT)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(5, 6f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initCookedPorkchop() {
+        ItemTypes.COOKED_PORKCHOP_TYPE = ItemTypeBuilder
+                .builder(ItemCookedPorkchopStack.class)
+                .vanillaItem(VanillaItemId.COOKED_PORKCHOP)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(8, 12.8f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initCookedMutton() {
+        ItemTypes.COOKED_MUTTON_TYPE = ItemTypeBuilder
+                .builder(ItemCookedMuttonStack.class)
+                .vanillaItem(VanillaItemId.COOKED_MUTTON)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(6, 9.6f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initCookedCod() {
+        ItemTypes.COOKED_COD_TYPE = ItemTypeBuilder
+                .builder(ItemCookedCodStack.class)
+                .vanillaItem(VanillaItemId.COOKED_COD)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(5, 6f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initCookedChicken() {
+        ItemTypes.COOKED_CHICKEN_TYPE = ItemTypeBuilder
+                .builder(ItemCookedChickenStack.class)
+                .vanillaItem(VanillaItemId.COOKED_CHICKEN)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(6, 7.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initChorusFruit() {
+        ItemTypes.CHORUS_FRUIT_TYPE = ItemTypeBuilder
+                .builder(ItemChorusFruitStack.class)
+                .vanillaItem(VanillaItemId.CHORUS_FRUIT)
+                .addComponent(ItemChorusFruitBaseComponentImpl::new, ItemChorusFruitBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initCarrot() {
+        ItemTypes.CARROT_TYPE = ItemTypeBuilder
+                .builder(ItemCarrotStack.class)
+                .vanillaItem(VanillaItemId.CARROT)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(3, 3.6f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initBread() {
+        ItemTypes.BREAD_TYPE = ItemTypeBuilder
+                .builder(ItemBreadStack.class)
+                .vanillaItem(VanillaItemId.BREAD)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(5, 6f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initBeetrootSoup() {
+        ItemTypes.BEETROOT_SOUP_TYPE = ItemTypeBuilder
+                .builder(ItemBeetrootSoupStack.class)
+                .vanillaItem(VanillaItemId.BEETROOT_SOUP)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(6, 7.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initBeetroot() {
+        ItemTypes.BEETROOT_TYPE = ItemTypeBuilder
+                .builder(ItemBeetrootStack.class)
+                .vanillaItem(VanillaItemId.BEETROOT)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(1, 1.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initBakedPotato() {
+        ItemTypes.BAKED_POTATO_TYPE = ItemTypeBuilder
+                .builder(ItemBakedPotatoStack.class)
+                .vanillaItem(VanillaItemId.BAKED_POTATO)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(6, 6f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
+    public static void initApple() {
+        ItemTypes.APPLE_TYPE = ItemTypeBuilder
+                .builder(ItemAppleStack.class)
+                .vanillaItem(VanillaItemId.APPLE)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(4, 2.4f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
+    }
+
     public static void initSpawnEgg() {
         ItemTypes.AGENT_SPAWN_EGG_TYPE = ItemTypeBuilder
                 .builder(ItemAgentSpawnEggStack.class)

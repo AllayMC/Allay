@@ -23,14 +23,15 @@ public class ItemArmorBaseComponentImpl<T extends ItemStack> extends ItemBaseCom
     }
 
     @Override
-    public boolean useItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+    public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) return false;
         equipArmor(interactInfo.player(), thisItemStack);
         return true;
     }
 
     @Override
-    public boolean useItemInAir(EntityPlayer player) {
+    public boolean useItemInAir(EntityPlayer player, long usedTime) {
+        if (super.useItemInAir(player, usedTime)) return true;
         equipArmor(player, thisItemStack);
         return true;
     }

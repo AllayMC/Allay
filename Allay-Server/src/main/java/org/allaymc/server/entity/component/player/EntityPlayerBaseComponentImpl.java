@@ -21,6 +21,7 @@ import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
 import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -78,6 +79,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
     protected EntityPlayerNetworkComponent networkComponent;
+    @Dependency
+    protected EntityPlayerHungerComponent hungerComponent;
     @Getter
     protected GameType gameType = GameType.CREATIVE;
     @Getter
@@ -100,7 +103,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected boolean awaitingDimensionChangeACK;
     @Getter
     @Setter
-    protected boolean usingItem;
+    protected boolean usingItemOnBlock;
+    protected long startUingItemInAirTime = -1;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
     protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();
@@ -165,6 +169,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         super.tick();
         syncData();
         tryPickUpItems();
+        hungerComponent.tickHunger();
     }
 
     protected void syncData() {
@@ -256,6 +261,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
         var loc = new Location3f(newLoc);
         loc.add(0, getBaseOffset(), 0f);
+
+        if (!teleporting) {
+            var exhaust = 0f;
+            var distance = getLocation().distance(newLoc);
+            if (isSwimming()) exhaust += 0.01f * distance;
+            if (isSprinting()) exhaust += 0.1f * distance;
+            thisEntity.exhaust(exhaust);
+        }
+
         super.broadcastMoveToViewers(loc, teleporting);
     }
 
@@ -333,6 +347,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void setCrawling(boolean crawling) {
         setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
+    }
+
+    public long getStartUingItemInAirTime() {
+        if (!isUsingItemInAir()) {
+            log.warn("Trying to get a player's start action time who doesn't have action!");
+        }
+        return startUingItemInAirTime;
+    }
+
+    @Override
+    public long getItemUsingInAirTime() {
+        if (!isUsingItemInAir()) {
+            log.warn("Trying to get a player's action time who doesn't have action!");
+        }
+        return thisEntity.getWorld().getTick() - startUingItemInAirTime;
     }
 
     @Override
@@ -465,6 +494,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void sendLocationToSelf() {
         networkComponent.sendPacket(createMovePacket(location, true));
+    }
+
+    @Override
+    public boolean isUsingItemInAir() {
+        return getMetadata().get(EntityFlag.USING_ITEM);
+    }
+
+    @Override
+    public void setUsingItemInAir(boolean value) {
+        setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
+        if (value) {
+            this.startUingItemInAirTime = thisEntity.getWorld().getTick();
+        }
     }
 
     @Override

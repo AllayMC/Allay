@@ -177,13 +177,14 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void tick() {
         checkDead();
-        updateEffect();
+        tickEffects();
     }
 
-    protected void updateEffect() {
+    protected void tickEffects() {
         if (effects.isEmpty()) return;
         for (var effect : effects.values().toArray(EffectInstance[]::new)) {
             effect.setDuration(effect.getDuration() - 1);
+            effect.getType().onTick(thisEntity, effect);
             if (effect.getDuration() <= 0) {
                 removeEffect(effect.getType());
             }
@@ -688,7 +689,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     public void addEffect(EffectInstance effectInstance) {
         var old = effects.put(effectInstance.getType(), effectInstance);
         effectInstance.getType().onAdd(thisEntity, effectInstance);
-        if (old == null) calculateEffectColor();
+
         var mobEffectPk = new MobEffectPacket();
         mobEffectPk.setRuntimeEntityId(runtimeId);
         mobEffectPk.setEffectId(effectInstance.getType().getId());
@@ -697,6 +698,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         mobEffectPk.setDuration(effectInstance.getDuration());
         mobEffectPk.setEvent(old == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
         sendMobEffectPacket(mobEffectPk);
+
+        if (old == null) calculateEffectColor();
     }
 
     @Override
@@ -704,12 +707,14 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var removed = effects.remove(effectType);
         if (removed != null) {
             effectType.onRemove(thisEntity, removed);
-            calculateEffectColor();
+
             var mobEffectPk = new MobEffectPacket();
             mobEffectPk.setRuntimeEntityId(runtimeId);
             mobEffectPk.setEffectId(effectType.getId());
             mobEffectPk.setEvent(MobEffectPacket.Event.REMOVE);
             sendMobEffectPacket(mobEffectPk);
+
+            calculateEffectColor();
         }
     }
 
@@ -728,14 +733,15 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected void calculateEffectColor() {
         int[] color = new int[3];
         int count = 0;
-        for (var effectInstance : this.effects.values()) {
-            if (effectInstance.isVisible()) {
-                var c = effectInstance.getType().getColor();
-                color[0] += c.getRed() * (effectInstance.getAmplifier() + 1);
-                color[1] += c.getGreen() * (effectInstance.getAmplifier() + 1);
-                color[2] += c.getBlue() * (effectInstance.getAmplifier() + 1);
-                count += effectInstance.getAmplifier() + 1;
-            }
+        for (var effect : this.effects.values()) {
+            if (!effect.isVisible()) continue;
+
+            var c = effect.getType().getColor();
+            var level = effect.getLevel();
+            color[0] += c.getRed() * level;
+            color[1] += c.getGreen() * level;
+            color[2] += c.getBlue() * level;
+            count += level;
         }
 
         if (count > 0) {

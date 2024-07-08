@@ -243,6 +243,20 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo);
     }
 
+    @Override
+    public boolean canUseItemInAir(EntityPlayer player) {
+        var event = new ItemTryUseEvent(player, false);
+        manager.callEvent(event);
+        return event.isCanBeUsed();
+    }
+
+    @Override
+    public boolean useItemInAir(EntityPlayer player, long usedTime) {
+        var event = new ItemUsedEvent(player, usedTime, false);
+        manager.callEvent(event);
+        return event.isCanBeUsed();
+    }
+
     protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         var player = placementInfo.player();
         if (player != null && DO_BLOCK_PLACING_CHECK && hasEntityCollision(dimension, placeBlockPos, blockState))
