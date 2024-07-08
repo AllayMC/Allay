@@ -5,6 +5,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.type.ItemType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3fc;
 
@@ -64,4 +65,6 @@ public interface CommandNodeFactory {
     CommandNode enchantmentNode(String name, CommandNode parent, EnchantmentType defaultValue);
 
     CommandNode effectNode(String name, CommandNode parent, EffectType defaultValue);
+
+    CommandNode itemTypeNode(String name, CommandNode parent, ItemType<?> defaultValue);
 }

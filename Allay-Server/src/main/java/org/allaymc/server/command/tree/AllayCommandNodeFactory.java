@@ -6,6 +6,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.server.command.tree.node.*;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3fc;
@@ -121,5 +122,10 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     @Override
     public CommandNode effectNode(String name, CommandNode parent, EffectType defaultValue) {
         return new EffectNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode itemTypeNode(String name, CommandNode parent, ItemType<?> defaultValue) {
+        return new ItemTypeNode(name, parent, defaultValue);
     }
 }
