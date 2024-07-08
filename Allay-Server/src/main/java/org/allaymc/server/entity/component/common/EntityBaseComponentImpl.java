@@ -258,7 +258,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public World getWorld() {
-        return location.dimension.getWorld();
+        return location.dimension != null ? location.dimension.getWorld() : null;
     }
 
     @Override

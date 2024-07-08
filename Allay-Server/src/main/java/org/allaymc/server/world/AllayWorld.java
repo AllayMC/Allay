@@ -106,7 +106,7 @@ public class AllayWorld implements World {
                 PacketQueueEntry entry;
                 int count = 0;
                 while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
-                    entry.player().handleDataPacket(entry.packet());
+                    entry.player().handleDataPacket(entry.packet(), entry.time());
                     count++;
                 }
                 // Before client disconnect, there may be other packets which are not handled
@@ -134,8 +134,8 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet) {
-        packetQueue.add(new PacketQueueEntry(player, packet));
+    public void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time) {
+        packetQueue.add(new PacketQueueEntry(player, packet, time));
     }
 
     @Override
@@ -254,5 +254,5 @@ public class AllayWorld implements World {
         getWorldStorage().close();
     }
 
-    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet) {}
+    protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}
 }

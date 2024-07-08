@@ -15,11 +15,11 @@ import org.allaymc.api.entity.effect.type.EffectSpeedType;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
+import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.EntityPhysicsService;
-import org.allaymc.server.network.processor.PlayerAuthInputPacketProcessor;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
@@ -506,7 +506,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     /**
      * Please note that this method usually been called asynchronously <p/>
-     * See {@link PlayerAuthInputPacketProcessor#handleAsync}
+     * See {@link PacketProcessor#handleAsync}
      */
     @Override
     public void offerScheduledMove(Entity entity, Location3fc newLoc) {

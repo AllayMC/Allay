@@ -14,7 +14,7 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayerSkinPacket;
 public class PlayerSkinPacketProcessor extends PacketProcessor<PlayerSkinPacket> {
 
     @Override
-    public void handleSync(EntityPlayer player, PlayerSkinPacket packet) {
+    public void handleSync(EntityPlayer player, PlayerSkinPacket packet, long receiveTime) {
         player.setSkin(Skin.fromNetwork(packet.getSkin()));
     }
 

@@ -10,7 +10,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, RespawnPacket packet) {
+    public PacketSignal handleAsync(EntityPlayer player, RespawnPacket packet, long receiveTime) {
         if (packet.getState() != RespawnPacket.State.CLIENT_READY) return PacketSignal.HANDLED;
 
         var respawnPacket = new RespawnPacket();

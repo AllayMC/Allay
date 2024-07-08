@@ -55,7 +55,11 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     boolean isUsingItemInAir();
 
-    void setUsingItemInAir(boolean value);
+    void setUsingItemInAir(boolean value, long time);
+
+    default void setUsingItemInAir(boolean value) {
+        setUsingItemInAir(value, getWorld().getTick());
+    }
 
     /**
      * @return 返回玩家最近一次开始使用物品的时间
@@ -64,8 +68,13 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     /**
      * @return 返回玩家使用了多久物品，单位为gt
+     * @param currentTime 当前时间
      */
-    long getItemUsingInAirTime();
+    long getItemUsingInAirTime(long currentTime);
+
+    default long getItemUsingInAirTime() {
+        return getItemUsingInAirTime(getWorld().getTick());
+    }
 
     int getHandSlot();
 

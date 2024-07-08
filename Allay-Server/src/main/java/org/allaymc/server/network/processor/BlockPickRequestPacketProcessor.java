@@ -18,7 +18,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;
 @Slf4j
 public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRequestPacket> {
     @Override
-    public void handleSync(EntityPlayer player, BlockPickRequestPacket packet) {
+    public void handleSync(EntityPlayer player, BlockPickRequestPacket packet, long receiveTime) {
         var blockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
         if (!player.canReach(blockPos) || player.getGameType() != GameType.CREATIVE) return;
 

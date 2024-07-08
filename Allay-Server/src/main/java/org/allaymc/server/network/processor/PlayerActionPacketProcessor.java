@@ -18,7 +18,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 @Slf4j
 public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet) {
+    public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet, long receiveTime) {
         return switch (packet.getAction()) {
             case RESPAWN -> {
                 // Player is not fully dead

@@ -16,7 +16,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class ServerSettingsRequestProcessor extends PacketProcessor<ServerSettingsRequestPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, ServerSettingsRequestPacket packet) {
+    public PacketSignal handleAsync(EntityPlayer player, ServerSettingsRequestPacket packet, long receiveTime) {
         // Geyser: fixes https://bugs.mojang.com/browse/MCPE-94012 because of the delay
         player.getWorld().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
             player.getServerSettingForms().forEach((id, form) -> {

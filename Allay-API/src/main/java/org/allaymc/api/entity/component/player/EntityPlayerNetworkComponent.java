@@ -89,7 +89,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
     boolean isLoggedIn();
 
     @ApiStatus.Internal
-    void handleDataPacket(BedrockPacket packet);
+    void handleDataPacket(BedrockPacket packet, long time);
 
     BedrockServerSession getClientSession();
 

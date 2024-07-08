@@ -12,12 +12,12 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 // Add a 'I' prefix to prevent having same name to LoginPacketProcessor
 public abstract class ILoginPacketProcessor<T extends BedrockPacket> extends PacketProcessor<T> {
     @Override
-    public void handleSync(EntityPlayer player, T packet) {
+    public void handleSync(EntityPlayer player, T packet, long receiveTime) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, T packet) {
+    public PacketSignal handleAsync(EntityPlayer player, T packet, long receiveTime) {
         handle(player, packet);
         return PacketSignal.HANDLED;
     }

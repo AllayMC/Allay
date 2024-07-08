@@ -13,7 +13,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
  */
 public class AnimatePacketProcessor extends PacketProcessor<AnimatePacket> {
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, AnimatePacket packet) {
+    public PacketSignal handleAsync(EntityPlayer player, AnimatePacket packet, long receiveTime) {
         if (packet.getAction() == AnimatePacket.Action.SWING_ARM) {
             player.getCurrentChunk().addChunkPacket(packet, chunkLoader -> chunkLoader != player);
             return PacketSignal.HANDLED;

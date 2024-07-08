@@ -357,8 +357,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public long getItemUsingInAirTime() {
-        return thisEntity.getWorld().getTick() - startUingItemInAirTime;
+    public long getItemUsingInAirTime(long currentTime) {
+        return currentTime - startUingItemInAirTime;
     }
 
     @Override
@@ -499,10 +499,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
-    public void setUsingItemInAir(boolean value) {
+    public void setUsingItemInAir(boolean value, long time) {
         setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
         if (value) {
-            this.startUingItemInAirTime = thisEntity.getWorld().getTick();
+            this.startUingItemInAirTime = time;
         }
     }
 

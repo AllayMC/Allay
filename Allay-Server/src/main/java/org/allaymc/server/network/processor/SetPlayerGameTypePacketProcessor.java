@@ -14,7 +14,7 @@ import org.cloudburstmc.protocol.bedrock.packet.SetPlayerGameTypePacket;
 public class SetPlayerGameTypePacketProcessor extends PacketProcessor<SetPlayerGameTypePacket> {
 
     @Override
-    public void handleSync(EntityPlayer player, SetPlayerGameTypePacket packet) {
+    public void handleSync(EntityPlayer player, SetPlayerGameTypePacket packet, long receiveTime) {
         if (!player.isOp()) return;
         player.setGameType(GameType.from(packet.getGamemode()));
     }

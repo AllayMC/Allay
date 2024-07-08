@@ -79,7 +79,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
     }
 
     @Override
-    public void handleSync(EntityPlayer player, SubChunkRequestPacket packet) {
+    public void handleSync(EntityPlayer player, SubChunkRequestPacket packet, long receiveTime) {
         List<SubChunkData> responseData = new ArrayList<>();
         var centerPosition = packet.getSubChunkPosition();
         var positionOffsets = packet.getPositionOffsets();

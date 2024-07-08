@@ -61,7 +61,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         ));
     }
 
-    protected void handleBlockAction(EntityPlayer player, List<PlayerBlockActionData> blockActions) {
+    protected void handleBlockAction(EntityPlayer player, List<PlayerBlockActionData> blockActions, long time) {
         for (var action : blockActions) {
             var pos = action.getBlockPosition();
             // Check interact distance
@@ -77,7 +77,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             switch (action.getAction()) {
                 case START_BREAK -> {
                     if (isInvalidGameType(player)) continue;
-                    startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
+                    startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace(), time);
                 }
                 case BLOCK_CONTINUE_DESTROY -> {
                     // When a player switches to breaking another block halfway through breaking one
@@ -86,7 +86,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     if (breakBlockX == pos.getX() && breakBlockY == pos.getY() && breakBlockZ == pos.getZ()) continue;
 
                     stopBreak(player);
-                    startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace());
+                    startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace(), time);
                 }
                 case BLOCK_PREDICT_DESTROY -> {
                     if (isInvalidGameType(player)) continue;
@@ -105,7 +105,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         return breakBlock != null;
     }
 
-    protected void startBreak(EntityPlayer player, int x, int y, int z, int blockFaceId) {
+    protected void startBreak(EntityPlayer player, int x, int y, int z, int blockFaceId, long startBreakingTime) {
         if (breakBlock != null) {
             log.warn("Player {} tried to start breaking a block while already breaking one", player.getOriginName());
             stopBreak(player);
@@ -123,7 +123,6 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         breakFaceId = blockFaceId;
         breakBlock = player.getDimension().getBlockState(x, y, z);
 
-        startBreakingTime = player.getWorld().getTick();
         needBreakingTime = breakBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
         stopBreakingTime = startBreakingTime + needBreakingTime * 20.0d;
 
@@ -132,7 +131,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         pk.setPosition(Vector3f.from(x, y, z));
         pk.setData(toNetworkBreakTime(needBreakingTime));
         player.getCurrentChunk().addChunkPacket(pk);
-        sendBreakingPracticeAndTime(player);
+        sendBreakingPracticeAndTime(player, startBreakingTime);
     }
 
     protected int toNetworkBreakTime(double breakTime) {
@@ -182,8 +181,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         stopBreak(player);
     }
 
-    protected void sendBreakingPracticeAndTime(EntityPlayer player) {
-        updateBreakingTime(player);
+    protected void sendBreakingPracticeAndTime(EntityPlayer player, long currentTime) {
+        updateBreakingTime(player, currentTime);
 
         var pk1 = new LevelEventPacket();
         pk1.setType(PARTICLE_CRACK_BLOCK);
@@ -207,11 +206,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
     }
 
-    protected void updateBreakingTime(EntityPlayer player) {
+    protected void updateBreakingTime(EntityPlayer player, long currentTime) {
         var newBreakingTime = breakBlock.getBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
         if (needBreakingTime == newBreakingTime) return;
         // Breaking time has changed, make adjustments
-        var currentTime = player.getWorld().getTick();
         var timeLeft = stopBreakingTime - currentTime;
         stopBreakingTime = currentTime + timeLeft * (needBreakingTime / newBreakingTime);
         needBreakingTime = newBreakingTime;
@@ -239,18 +237,18 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     @Override
-    public void handleSync(EntityPlayer player, PlayerAuthInputPacket packet) {
+    public void handleSync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
         handleInputData(player, packet.getInputData());
     }
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket packet) {
+    public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
         if (notReadyForInput(player)) return PacketSignal.HANDLED;
         // The pos which client sends to the server is higher than the actual coordinates (one base offset)
         handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
-        handleBlockAction(player, packet.getPlayerActions());
+        handleBlockAction(player, packet.getPlayerActions(), receiveTime);
         if (isBreakingBlock()) {
-            sendBreakingPracticeAndTime(player);
+            sendBreakingPracticeAndTime(player, receiveTime);
             checkInteractDistance(player);
         }
         return PacketSignal.UNHANDLED;

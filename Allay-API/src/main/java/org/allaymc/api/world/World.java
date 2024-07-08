@@ -20,9 +20,8 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface World {
-
     @ApiStatus.Internal
-    void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet);
+    void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time);
 
     Thread getThread();
 

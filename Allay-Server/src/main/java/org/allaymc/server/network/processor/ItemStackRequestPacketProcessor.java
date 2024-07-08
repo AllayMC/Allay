@@ -34,7 +34,7 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
     }
 
     @Override
-    public void handleSync(EntityPlayer player, ItemStackRequestPacket packet) {
+    public void handleSync(EntityPlayer player, ItemStackRequestPacket packet, long receiveTime) {
         List<ItemStackResponse> encodedResponses = new LinkedList<>();
         label:
         for (var request : packet.getRequests()) {

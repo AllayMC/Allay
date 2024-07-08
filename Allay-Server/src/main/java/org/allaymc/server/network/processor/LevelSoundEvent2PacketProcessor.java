@@ -14,7 +14,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
  */
 public class LevelSoundEvent2PacketProcessor extends PacketProcessor<LevelSoundEvent2Packet> {
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, LevelSoundEvent2Packet packet) {
+    public PacketSignal handleAsync(EntityPlayer player, LevelSoundEvent2Packet packet, long receiveTime) {
         if (player.getGameType() != GameType.SPECTATOR)
             player.getCurrentChunk().addChunkPacket(packet);
         return PacketSignal.HANDLED;

@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
  */
 public class ContainerClosePacketProcessor extends PacketProcessor<ContainerClosePacket> {
     @Override
-    public void handleSync(EntityPlayer player, ContainerClosePacket packet) {
+    public void handleSync(EntityPlayer player, ContainerClosePacket packet, long receiveTime) {
         var opened = player.getOpenedContainer(packet.getId());
         if (opened == null) throw new IllegalStateException("Player is not viewing an inventory");
         opened.removeViewer(player);

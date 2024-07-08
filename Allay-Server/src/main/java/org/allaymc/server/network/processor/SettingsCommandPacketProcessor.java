@@ -13,7 +13,7 @@ import org.cloudburstmc.protocol.bedrock.packet.SettingsCommandPacket;
  */
 public class SettingsCommandPacketProcessor extends PacketProcessor<SettingsCommandPacket> {
     @Override
-    public void handleSync(EntityPlayer player, SettingsCommandPacket packet) {
+    public void handleSync(EntityPlayer player, SettingsCommandPacket packet, long receiveTime) {
         Server.getInstance().getCommandRegistry().execute(player, packet.getCommand().substring(1));
     }
 

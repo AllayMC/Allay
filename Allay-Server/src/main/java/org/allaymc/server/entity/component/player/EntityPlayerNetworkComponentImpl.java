@@ -105,10 +105,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected BedrockServerSession session;
 
     @Override
-    public void handleDataPacket(BedrockPacket packet) {
+    public void handleDataPacket(BedrockPacket packet, long time) {
         var processor = packetProcessorHolder.getProcessor(packet);
         // processor won't be null as we have checked it the time it arrived
-        processor.handleSync(player, packet);
+        processor.handleSync(player, packet, time);
     }
 
     @Override
@@ -156,10 +156,19 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     return PacketSignal.HANDLED;
                 }
 
-                if (processor.handleAsync(player, packet) != PacketSignal.HANDLED) {
-                    var world = player.getWorld();
+                long time;
+                var world = player.getWorld();
+                if (world != null) {
+                    time = world.getTick();
+                } else {
+                    // If player is not in any world, use server tick instead
+                    time = Server.getInstance().getTick();
+                }
+                if (processor.handleAsync(player, packet, time) != PacketSignal.HANDLED) {
+                    // Packet processors should make sure that PacketProcessor.handleSync() won't be called
+                    // if player is not in any world
                     Preconditions.checkNotNull(world, "Player that is not in any world cannot handle sync packet");
-                    world.addSyncPacketToQueue(player, packet);
+                    world.addSyncPacketToQueue(player, packet, time);
                 }
 
                 return PacketSignal.HANDLED;

@@ -16,7 +16,7 @@ import org.cloudburstmc.protocol.bedrock.packet.ModalFormResponsePacket;
 public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormResponsePacket> {
 
     @Override
-    public void handleSync(EntityPlayer player, ModalFormResponsePacket packet) {
+    public void handleSync(EntityPlayer player, ModalFormResponsePacket packet, long receiveTime) {
         var id = packet.getFormId();
         var form = player.removeForm(id);
         var isServerSettingsForm = false;

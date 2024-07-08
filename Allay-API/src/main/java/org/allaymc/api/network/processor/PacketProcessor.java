@@ -11,11 +11,11 @@ import org.cloudburstmc.protocol.common.PacketSignal;
  * @author Cool_Loong
  */
 public abstract class PacketProcessor<T extends BedrockPacket> {
-    public void handleSync(EntityPlayer player, T packet) {
+    public void handleSync(EntityPlayer player, T packet, long receiveTime) {
         // Do nothing
     }
 
-    public PacketSignal handleAsync(EntityPlayer player, T packet) {
+    public PacketSignal handleAsync(EntityPlayer player, T packet, long receiveTime) {
         return PacketSignal.UNHANDLED;
     }
 

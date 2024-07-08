@@ -17,7 +17,7 @@ import org.cloudburstmc.protocol.common.PacketSignal;
 public class EntityEventPacketProcessor extends PacketProcessor<EntityEventPacket> {
 
     @Override
-    public PacketSignal handleAsync(EntityPlayer player, EntityEventPacket packet) {
+    public PacketSignal handleAsync(EntityPlayer player, EntityEventPacket packet, long receiveTime) {
         return switch (packet.getType()) {
             case EATING_ITEM -> {
                 if (packet.getData() == 0 || packet.getRuntimeEntityId() != player.getRuntimeId()) {
