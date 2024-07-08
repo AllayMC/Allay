@@ -85,6 +85,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
 
     @Override
     public void exhaust(float level) {
+        if (player.getGameType() == GameType.CREATIVE) return;
         this.foodExhaustionLevel += level;
         while (this.foodExhaustionLevel >= 4) {
             this.foodExhaustionLevel -= 4;
