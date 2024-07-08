@@ -358,9 +358,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public long getItemUsingInAirTime() {
-        if (!isUsingItemInAir()) {
-            log.warn("Trying to get a player's action time who doesn't have action!");
-        }
         return thisEntity.getWorld().getTick() - startUingItemInAirTime;
     }
 
