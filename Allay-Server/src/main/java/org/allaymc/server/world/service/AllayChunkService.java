@@ -61,7 +61,13 @@ public final class AllayChunkService implements ChunkService {
     }
 
     private void tickChunks() {
-        loadedChunks.values().forEach(Chunk::tick);
+        for (Chunk chunk : loadedChunks.values()) {
+            try {
+                chunk.tick();
+            } catch (Throwable t) {
+                log.error("Error while ticking chunk({}, {})!", chunk.getX(), chunk.getZ(), t);
+            }
+        }
     }
 
     private void sendChunkPackets() {
@@ -70,7 +76,13 @@ public final class AllayChunkService implements ChunkService {
 
     private void tickChunkLoaders() {
         // NOTICE: There is no need to use parallel stream here
-        chunkLoaderManagers.values().forEach(ChunkLoaderManager::tick);
+        for (ChunkLoaderManager chunkLoaderManager : chunkLoaderManagers.values()) {
+            try {
+                chunkLoaderManager.tick();
+            } catch (Throwable t) {
+                log.error("Error while ticking chunk loader {}!", chunkLoaderManager.chunkLoader);
+            }
+        }
     }
 
     private void removeUnusedChunks() {
