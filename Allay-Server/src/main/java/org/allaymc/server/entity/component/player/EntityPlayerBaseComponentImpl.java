@@ -135,6 +135,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
+    protected void initMetadata() {
+        super.initMetadata();
+        // Player name is always shown
+        metadata.set(EntityFlag.ALWAYS_SHOW_NAME, true);
+    }
+
+    @Override
     protected void saveUniqueId(NbtMapBuilder builder) {
         // Do nothing
     }
