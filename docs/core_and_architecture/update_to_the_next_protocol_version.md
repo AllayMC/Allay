@@ -2,45 +2,43 @@
 comments: true
 ---
 
-TODO: need update
-
-This tutorial will detail the general process for completing a protocol version update in Allay. There may be many
-special cases in practice, so reliance solely on this document may not be sufficient.
+This tutorial will detail the general process Allay uses to complete a protocol version update.
+In practice, many special situations may arise, and you should not rely entirely on this document.
 
 ## 1. Update Extractor
 
-Allay relies on LeviLamina to export the massive data required from BDS. Therefore, before updating Allay, we need to
-update Allay's exporter, **DataExtractor**.
-
-Generally, the workload shouldn't be particularly large. There may be some functions added or removed internally in the
-new version of BDS, which will require manual handling.
-
-There are many pitfalls in **DataExtractor**, which will be detailed later.
+Allay utilizes **Endstone DevTools** to export the necessary large amounts of data from BDS.
+Therefore, before updating Allay, we need to update [Endstone](https://github.com/EndstoneMC/endstone).
 
 ## 2. Update the First Batch of Resource Files
 
-Resource file updates have a specific order. All of Allay's resource files are stored in the `Allay-Data/resources`
-directory.
+Resource files must be updated in a specific order.
+Allay's resource files are stored in the `Allay-Data/resources` directory.
 
-If not specifically stated, the default root directory is `Allay-Data/resources`.
+Unless otherwise specified, the default root directory is `Allay-Data/resources`.
 
 **Step one, directly update the following files:**
 
-- biome_definitions.nbt
-- block_attributes.nbt
+- biome_definitions.nbt (obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData))
+- block_states.json
 - creative_items.nbt
-- entity_identifiers.nbt
-- item_data.nbt
-- item_tags.json
+- entity_identifiers.nbt (obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData))
+- items.json
+- materials.json
+- block_tags_custom.json (this file is manually maintained; check if any block IDs need updating)
+- item_tags_custom.json (this file is manually maintained; check if any item IDs need updating)
 
 **Step two, update the files under the unpacked directory**:
 
-Although these files will not be packaged into the jar, they will be used during the code generation phase:
+Although these files will not be included in the final jar, they will be used during the code generation process:
 
+- block_tags.json
+- item_tags.json
 - block_palette.nbt
-- block_property_types.json
-- biome_id_and_type.json (this file rarely changes)
-- entity_id_map.json (obtained from **pmmp/BedrockData** or manually updated, this file rarely changes)
+- block_property_types.json (run `BlockPropertyTypeGen` under `Allay-Data` after updating `block_palette.nbt`)
+- biome_id_and_type.json (this file does not change often)
+- entity_id_map.json (obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData) or manually updated; this
+  file rarely changes)
 
 **Step three, update lang files**:
 
@@ -63,7 +61,8 @@ file usually doesn't change much in minor updates.
 **Step two, check if there are any new entities in `entity_id_map.json`**. If so, first run `VanillaEntityIdEnumGen`,
 then run `VanillaEntityInterfaceGen`. This file usually doesn't change much in minor updates.
 
-**Step three, check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `VanillaItemTagGen` or `VanillaBlockTagGen`.
+**Step three, check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `VanillaItemTagGen`
+or `VanillaBlockTagGen`.
 
 **Step four, check for changes in `block_property_types.json`**. If changes exist, run `VanillaBlockPropertyTypeGen`.
 
@@ -96,23 +95,16 @@ operation, but the workload is less than before:
 
 ## 4. Update Dependencies
 
-Update the protocol library `Cloudburst/Protocol` and the block state updater `CloudburstMC/BlockStateUpdater` to the
-latest version.
+Update the protocol library [Cloudburst/Protocol](https://github.com/CloudburstMC/Protocol) and the block state
+updater [CloudburstMC/BlockStateUpdater](https://github.com/CloudburstMC/BlockStateUpdater) to the latest version.
 
 ## 5. Update `Allay-API/src/main/java/org/allaymc/api/network/ProtocolInfo.java`
 
-You need to update `PACKET_CODEC` and `MINECRAFT_VERSION` in `ProtocolInfo`, with reference to **pmmp** for
-updating `MINECRAFT_VERSION`. Ensure that the dependencies have been updated before this step!
+You need to update the `PACKET_CODEC` and `MINECRAFT_VERSION` in `ProtocolInfo`. Refer
+to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP) for updating `MINECRAFT_VERSION`.
+Make sure the dependency libraries are updated before this!
 
-## 6. Generate recipes.json (Recipe File)
+## 6. Test and Complete the Update
 
-**Copy `crafting_data_packet.bin` to `Allay-Data/resources` and run `RecipeExportUtil`**. Before running this, ensure
-that you have correctly completed the updates for blocks and items! Remember to delete the old files before running!
-
-If all goes well, `Allay-Data/resources/recipes.json` will be updated. With this, all resource files have been updated.
-Remove the previously copied `crafting_data_packet.bin`.
-
-## 7. Testing and Completion of Update
-
-Run `gradle test` to ensure that nothing has been broken, then update the client and test on the server (this is
-crucial!). Update completed.
+Run `gradle test` to ensure nothing is broken, then update the client and test on the server (this is very important!).
+The update is now complete.
