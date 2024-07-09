@@ -36,7 +36,11 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
 
     @Override
     public void tickHunger() {
-        if (!player.isSpawned() || player.isDead()) return;
+        if (
+                !player.isSpawned() || player.isDead() ||
+                player.getGameType() == GameType.CREATIVE ||
+                player.getGameType() == GameType.SPECTATOR
+        ) return;
 
         foodTickTimer++;
         if (foodTickTimer >= 80) foodTickTimer = 0;

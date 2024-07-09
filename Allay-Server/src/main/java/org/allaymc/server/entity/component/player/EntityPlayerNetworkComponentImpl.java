@@ -36,6 +36,7 @@ import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.AuthoritativeMovementMode;
@@ -403,6 +404,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public int getPing() {
-        return (int) this.session.getPeer().getChannel().pipeline().get(RakSessionCodec.class).getPing();
+        var rakServerChannel = (RakServerChannel) session.getPeer().getChannel().parent();
+        var childChannel = rakServerChannel.getChildChannel(session.getSocketAddress());
+        var rakSessionCodec = childChannel.rakPipeline().get(RakSessionCodec.class);
+        return (int) rakSessionCodec.getPing();
     }
 }
