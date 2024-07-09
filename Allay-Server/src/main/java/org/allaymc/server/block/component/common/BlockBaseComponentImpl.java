@@ -15,14 +15,19 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
+import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentSilkTouchType;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.type.InternalBlockTypeData;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3f;
 import org.joml.Vector3ic;
+
+import java.util.Arrays;
 
 /**
  * Allay Project 2023/4/8
@@ -96,6 +101,19 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
         if (player != null && player.getGameType() == GameType.CREATIVE) return false;
+
+        if (usedItem != null) {
+            var vanillaItemId = VanillaItemId.fromIdentifier(usedItem.getItemType().getIdentifier());
+            var vanillaBlockId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
+            if (vanillaItemId != null && vanillaBlockId != null) {
+                var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
+                if (specialTools != null) {
+                    // We only check the block's special tools if this block has special tool list
+                    return Arrays.stream(specialTools).anyMatch(tool -> tool == vanillaItemId);
+                }
+            }
+        }
+
         return blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
     }
 

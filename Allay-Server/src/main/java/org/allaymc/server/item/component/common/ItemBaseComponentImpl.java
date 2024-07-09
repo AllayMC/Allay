@@ -362,13 +362,6 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Override
     public boolean isCorrectToolFor(BlockState blockState) {
         var blockType = blockState.getBlockType();
-        var vanillaItemId = VanillaItemId.fromIdentifier(itemType.getIdentifier());
-        var vanillaBlockId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
-        if (vanillaItemId != null && vanillaBlockId != null) {
-            var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
-            if (specialTools != null)
-                return Arrays.stream(specialTools).anyMatch(tool -> tool == vanillaItemId);
-        }
 
         var materialType = blockState.getBlockType().getMaterial().materialType();
         if (itemType == ItemTypes.SHEARS_TYPE) {
