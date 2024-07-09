@@ -3,6 +3,7 @@ package org.allaymc.server.block.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.interfaces.glass.BlockGlassBehavior;
+import org.allaymc.api.block.interfaces.leaves.*;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
 import org.allaymc.api.block.interfaces.torch.*;
@@ -21,6 +22,7 @@ import org.allaymc.server.block.component.common.BlockWheatSeedDropableBaseCompo
 import org.allaymc.server.block.component.craftingtable.BlockCraftingTableBaseComponentImpl;
 import org.allaymc.server.block.component.glass.BlockGlassBaseComponentImpl;
 import org.allaymc.server.block.component.grassblock.BlockGrassBlockBaseComponentImpl;
+import org.allaymc.server.block.component.leaves.BlockLeavesBaseComponentImpl;
 import org.allaymc.server.block.component.sand.BlockSandBaseComponentImpl;
 import org.allaymc.server.block.component.shulkerbox.BlockShulkerBoxBaseComponentImpl;
 import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
@@ -35,6 +37,63 @@ import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
+    public static void initLeaves() {
+        BlockTypes.ACACIA_LEAVES_TYPE = BlockTypeBuilder
+                .builder(BlockAcaciaLeavesBehavior.class)
+                .vanillaBlock(VanillaBlockId.ACACIA_LEAVES)
+                .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
+        BlockTypes.AZALEA_LEAVES_TYPE = BlockTypeBuilder
+                .builder(BlockAzaleaLeavesBehavior.class)
+                .vanillaBlock(VanillaBlockId.AZALEA_LEAVES)
+                .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
+        BlockTypes.BIRCH_LEAVES_TYPE = BlockTypeBuilder
+                .builder(BlockBirchLeavesBehavior.class)
+                .vanillaBlock(VanillaBlockId.BIRCH_LEAVES)
+                .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
+        BlockTypes.CHERRY_LEAVES_TYPE = BlockTypeBuilder
+                .builder(BlockCherryLeavesBehavior.class)
+                .vanillaBlock(VanillaBlockId.CHERRY_LEAVES)
+                .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
+        BlockTypes.DARK_OAK_LEAVES_TYPE = BlockTypeBuilder
+                .builder(BlockDarkOakLeavesBehavior.class)
+                .vanillaBlock(VanillaBlockId.DARK_OAK_LEAVES)
+                .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
+        BlockTypes.JUNGLE_LEAVES_TYPE = BlockTypeBuilder
+                .builder(BlockJungleLeavesBehavior.class)
+                .vanillaBlock(VanillaBlockId.JUNGLE_LEAVES)
+                .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
+        BlockTypes.MANGROVE_LEAVES_TYPE = BlockTypeBuilder
+                .builder(BlockMangroveLeavesBehavior.class)
+                .vanillaBlock(VanillaBlockId.MANGROVE_LEAVES)
+                .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
+        BlockTypes.OAK_LEAVES_TYPE = BlockTypeBuilder
+                .builder(BlockOakLeavesBehavior.class)
+                .vanillaBlock(VanillaBlockId.OAK_LEAVES)
+                .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
+        BlockTypes.SPRUCE_LEAVES_TYPE = BlockTypeBuilder
+                .builder(BlockSpruceLeavesBehavior.class)
+                .vanillaBlock(VanillaBlockId.SPRUCE_LEAVES)
+                .setProperties(VanillaBlockPropertyTypes.PERSISTENT_BIT, VanillaBlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initGravel() {
         BlockTypes.GRAVEL_TYPE = BlockTypeBuilder
                 .builder(BlockGravelBehavior.class)

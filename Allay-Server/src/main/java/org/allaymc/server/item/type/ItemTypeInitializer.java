@@ -13,6 +13,7 @@ import org.allaymc.api.item.interfaces.chestplate.*;
 import org.allaymc.api.item.interfaces.egg.*;
 import org.allaymc.api.item.interfaces.helmet.*;
 import org.allaymc.api.item.interfaces.hoe.*;
+import org.allaymc.api.item.interfaces.leaves.ItemAcaciaLeavesStack;
 import org.allaymc.api.item.interfaces.leggings.*;
 import org.allaymc.api.item.interfaces.pickaxe.*;
 import org.allaymc.api.item.interfaces.shovel.*;
@@ -1124,55 +1125,37 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
-    public static void initChainmailHelmet() {
+    public static void initHelmets() {
         ItemTypes.CHAINMAIL_HELMET_TYPE = ItemTypeBuilder
                 .builder(ItemChainmailHelmetStack.class)
                 .vanillaItem(VanillaItemId.CHAINMAIL_HELMET)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initDiamondHelmet() {
         ItemTypes.DIAMOND_HELMET_TYPE = ItemTypeBuilder
                 .builder(ItemDiamondHelmetStack.class)
                 .vanillaItem(VanillaItemId.DIAMOND_HELMET)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initGoldenHelmet() {
         ItemTypes.GOLDEN_HELMET_TYPE = ItemTypeBuilder
                 .builder(ItemGoldenHelmetStack.class)
                 .vanillaItem(VanillaItemId.GOLDEN_HELMET)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initIronHelmet() {
         ItemTypes.IRON_HELMET_TYPE = ItemTypeBuilder
                 .builder(ItemIronHelmetStack.class)
                 .vanillaItem(VanillaItemId.IRON_HELMET)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initLeatherHelmet() {
         ItemTypes.LEATHER_HELMET_TYPE = ItemTypeBuilder
                 .builder(ItemLeatherHelmetStack.class)
                 .vanillaItem(VanillaItemId.LEATHER_HELMET)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initNetheriteHelmet() {
         ItemTypes.NETHERITE_HELMET_TYPE = ItemTypeBuilder
                 .builder(ItemNetheriteHelmetStack.class)
                 .vanillaItem(VanillaItemId.NETHERITE_HELMET)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initTurtleHelmet() {
         ItemTypes.TURTLE_HELMET_TYPE = ItemTypeBuilder
                 .builder(ItemTurtleHelmetStack.class)
                 .vanillaItem(VanillaItemId.TURTLE_HELMET)
@@ -1180,47 +1163,33 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
-    public static void initChainmailChestplate() {
+
+    public static void initChestplates() {
         ItemTypes.CHAINMAIL_CHESTPLATE_TYPE = ItemTypeBuilder
                 .builder(ItemChainmailChestplateStack.class)
                 .vanillaItem(VanillaItemId.CHAINMAIL_CHESTPLATE)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initDiamondChestplate() {
         ItemTypes.DIAMOND_CHESTPLATE_TYPE = ItemTypeBuilder
                 .builder(ItemDiamondChestplateStack.class)
                 .vanillaItem(VanillaItemId.DIAMOND_CHESTPLATE)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initGoldenChestplate() {
         ItemTypes.GOLDEN_CHESTPLATE_TYPE = ItemTypeBuilder
                 .builder(ItemGoldenChestplateStack.class)
                 .vanillaItem(VanillaItemId.GOLDEN_CHESTPLATE)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initIronChestplate() {
         ItemTypes.IRON_CHESTPLATE_TYPE = ItemTypeBuilder
                 .builder(ItemIronChestplateStack.class)
                 .vanillaItem(VanillaItemId.IRON_CHESTPLATE)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initLeatherChestplate() {
         ItemTypes.LEATHER_CHESTPLATE_TYPE = ItemTypeBuilder
                 .builder(ItemLeatherChestplateStack.class)
                 .vanillaItem(VanillaItemId.LEATHER_CHESTPLATE)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initNetheriteChestplate() {
         ItemTypes.NETHERITE_CHESTPLATE_TYPE = ItemTypeBuilder
                 .builder(ItemNetheriteChestplateStack.class)
                 .vanillaItem(VanillaItemId.NETHERITE_CHESTPLATE)
@@ -1228,47 +1197,32 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
-    public static void initChainmailLeggings() {
+    public static void initLeggings() {
         ItemTypes.CHAINMAIL_LEGGINGS_TYPE = ItemTypeBuilder
                 .builder(ItemChainmailLeggingsStack.class)
                 .vanillaItem(VanillaItemId.CHAINMAIL_LEGGINGS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initDiamondLeggings() {
         ItemTypes.DIAMOND_LEGGINGS_TYPE = ItemTypeBuilder
                 .builder(ItemDiamondLeggingsStack.class)
                 .vanillaItem(VanillaItemId.DIAMOND_LEGGINGS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initGoldenLeggings() {
         ItemTypes.GOLDEN_LEGGINGS_TYPE = ItemTypeBuilder
                 .builder(ItemGoldenLeggingsStack.class)
                 .vanillaItem(VanillaItemId.GOLDEN_LEGGINGS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initIronLeggings() {
         ItemTypes.IRON_LEGGINGS_TYPE = ItemTypeBuilder
                 .builder(ItemIronLeggingsStack.class)
                 .vanillaItem(VanillaItemId.IRON_LEGGINGS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initLeatherLeggings() {
         ItemTypes.LEATHER_LEGGINGS_TYPE = ItemTypeBuilder
                 .builder(ItemLeatherLeggingsStack.class)
                 .vanillaItem(VanillaItemId.LEATHER_LEGGINGS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initNetheriteLeggings() {
         ItemTypes.NETHERITE_LEGGINGS_TYPE = ItemTypeBuilder
                 .builder(ItemNetheriteLeggingsStack.class)
                 .vanillaItem(VanillaItemId.NETHERITE_LEGGINGS)
@@ -1276,47 +1230,32 @@ public final class ItemTypeInitializer {
                 .build();
     }
 
-    public static void initChainmailBoots() {
+    public static void initBoots() {
         ItemTypes.CHAINMAIL_BOOTS_TYPE = ItemTypeBuilder
                 .builder(ItemChainmailBootsStack.class)
                 .vanillaItem(VanillaItemId.CHAINMAIL_BOOTS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initDiamondBoots() {
         ItemTypes.DIAMOND_BOOTS_TYPE = ItemTypeBuilder
                 .builder(ItemDiamondBootsStack.class)
                 .vanillaItem(VanillaItemId.DIAMOND_BOOTS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initGoldenBoots() {
         ItemTypes.GOLDEN_BOOTS_TYPE = ItemTypeBuilder
                 .builder(ItemGoldenBootsStack.class)
                 .vanillaItem(VanillaItemId.GOLDEN_BOOTS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initIronBoots() {
         ItemTypes.IRON_BOOTS_TYPE = ItemTypeBuilder
                 .builder(ItemIronBootsStack.class)
                 .vanillaItem(VanillaItemId.IRON_BOOTS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initLeatherBoots() {
         ItemTypes.LEATHER_BOOTS_TYPE = ItemTypeBuilder
                 .builder(ItemLeatherBootsStack.class)
                 .vanillaItem(VanillaItemId.LEATHER_BOOTS)
                 .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initNetheriteBoots() {
         ItemTypes.NETHERITE_BOOTS_TYPE = ItemTypeBuilder
                 .builder(ItemNetheriteBootsStack.class)
                 .vanillaItem(VanillaItemId.NETHERITE_BOOTS)
