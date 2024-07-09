@@ -101,19 +101,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
         if (player != null && player.getGameType() == GameType.CREATIVE) return false;
-
-        if (usedItem != null) {
-            var vanillaItemId = VanillaItemId.fromIdentifier(usedItem.getItemType().getIdentifier());
-            var vanillaBlockId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
-            if (vanillaItemId != null && vanillaBlockId != null) {
-                var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
-                if (specialTools != null) {
-                    // We only check the block's special tools if this block has special tool list
-                    return Arrays.stream(specialTools).anyMatch(tool -> tool == vanillaItemId);
-                }
-            }
-        }
-
         return blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
     }
 
