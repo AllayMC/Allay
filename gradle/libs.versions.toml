@@ -25,7 +25,7 @@ disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.16.1" }
 # bytecode
-bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.17" }
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.18" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 # K-V DataBase
