@@ -7,7 +7,6 @@ import org.allaymc.api.form.Forms;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.server.Server;
-import org.joml.Vector3i;
 
 import java.util.ArrayList;
 
@@ -64,6 +63,7 @@ public class ServerEventListener {
                 // y坐标超出范围了
                 list.add("Biome: §aN/A");
             }
+            list.add("Ping: " + player.getPing());
             scoreboard.setLines(list);
             return true;
         }, 20);
