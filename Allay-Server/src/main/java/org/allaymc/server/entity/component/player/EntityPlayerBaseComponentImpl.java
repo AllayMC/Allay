@@ -56,6 +56,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
@@ -138,7 +139,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected void initMetadata() {
         super.initMetadata();
         // Player name is always shown
-        metadata.set(EntityFlag.ALWAYS_SHOW_NAME, true);
+        metadata.set(EntityDataTypes.NAMETAG_ALWAYS_SHOW, (byte) 1);
     }
 
     @Override
