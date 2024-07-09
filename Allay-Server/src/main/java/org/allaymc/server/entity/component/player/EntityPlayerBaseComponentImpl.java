@@ -105,7 +105,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Getter
     @Setter
     protected boolean usingItemOnBlock;
-    protected long startUingItemInAirTime = -1;
+    protected long startUsingItemInAirTime = -1;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
     protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();
@@ -361,16 +361,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
     }
 
-    public long getStartUingItemInAirTime() {
+    public long getStartUsingItemInAirTime() {
         if (!isUsingItemInAir()) {
             log.warn("Trying to get a player's start action time who doesn't have action!");
         }
-        return startUingItemInAirTime;
+        return startUsingItemInAirTime;
     }
 
     @Override
     public long getItemUsingInAirTime(long currentTime) {
-        return currentTime - startUingItemInAirTime;
+        return currentTime - startUsingItemInAirTime;
     }
 
     @Override
@@ -514,7 +514,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void setUsingItemInAir(boolean value, long time) {
         setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
         if (value) {
-            this.startUingItemInAirTime = time;
+            this.startUsingItemInAirTime = time;
         }
     }
 

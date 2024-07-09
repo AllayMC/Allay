@@ -64,7 +64,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     /**
      * @return 返回玩家最近一次开始使用物品的时间
      */
-    long getStartUingItemInAirTime();
+    long getStartUsingItemInAirTime();
 
     /**
      * @return 返回玩家使用了多久物品，单位为gt
