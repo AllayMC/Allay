@@ -291,7 +291,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public boolean canMerge(ItemStack itemStack, boolean ignoreCount) {
-        if (itemStack == null) return false;
+        Objects.requireNonNull(itemStack);
 
         var extraTag1 = saveExtraTag();
         if (extraTag1 == null) extraTag1 = NbtMap.EMPTY;
