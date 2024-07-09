@@ -258,7 +258,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void spawnTo(EntityPlayer player) {
-        if (thisEntity != player) super.spawnTo(player);
+        if (thisEntity != player) {
+            super.spawnTo(player);
+        }
     }
 
     @Override
