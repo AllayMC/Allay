@@ -198,6 +198,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 .toList();
         for (var entityItem : entityItems) {
             var item = entityItem.getItemStack();
+            if (item == null) continue; // Have been picked by others
             var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY));
             var slot = inventory.tryAddItem(item);
             if (slot != -1) {
@@ -206,6 +207,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                     takeItemEntityPacket.setRuntimeEntityId(runtimeId);
                     takeItemEntityPacket.setItemRuntimeEntityId(entityItem.getRuntimeId());
                     Objects.requireNonNull(dimension.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(takeItemEntityPacket);
+                    // Set item to null to prevent others from picking this item twice
                     entityItem.setItemStack(null);
                     dimension.getEntityService().removeEntity(entityItem);
                 }
