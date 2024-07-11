@@ -5,6 +5,7 @@ import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.TextFormat;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.SetLocalPlayerAsInitializedPacket;
 
@@ -24,7 +25,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         // Otherwise the client will snap into the ground
         player.sendLocationToSelf();
         player.setInitialized();
-        Server.getInstance().broadcastTr(TrKeys.M_MULTIPLAYER_PLAYER_JOINED, player.getOriginName());
+        Server.getInstance().broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED, player.getOriginName());
     }
 
     @Override

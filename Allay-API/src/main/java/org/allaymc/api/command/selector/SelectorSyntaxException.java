@@ -1,5 +1,7 @@
 package org.allaymc.api.command.selector;
 
+import org.allaymc.api.utils.TextFormat;
+
 public class SelectorSyntaxException extends Exception {
     public SelectorSyntaxException(String message) {
         super(message);
@@ -25,7 +27,7 @@ public class SelectorSyntaxException extends Exception {
             // Reached the bottom level
             t = t.getCause();
             builder.append("\n");
-            builder.append("§cCaused by ");
+            builder.append(TextFormat.RED).append("Caused by ");
             builder.append(t.getClass().getSimpleName());
             builder.append(": ");
             builder.append(t.getMessage());

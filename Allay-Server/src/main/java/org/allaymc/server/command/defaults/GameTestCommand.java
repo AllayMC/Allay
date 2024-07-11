@@ -48,7 +48,7 @@ public class GameTestCommand extends SimpleCommand {
                     int blockStateHash = context.getResult(1);
                     var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
                     if (blockState == null) {
-                        context.addOutput(TextFormat.RED + "Unknown block state hash!");
+                        context.addError("Unknown block state hash!");
                         return context.fail();
                     }
 
@@ -61,7 +61,7 @@ public class GameTestCommand extends SimpleCommand {
                     player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
                     player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
                     player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
-                    context.addOutput("§aInventory is refreshed!");
+                    context.addOutput("Inventory is refreshed!");
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -124,7 +124,7 @@ public class GameTestCommand extends SimpleCommand {
                         dim.getEntityService().addEntity(entity);
                     }
 
-                    context.addOutput("§aSpawned " + count + " " + entityType.getIdentifier().toString());
+                    context.addOutput("Spawned " + count + " " + entityType.getIdentifier().toString());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()

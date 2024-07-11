@@ -1,142 +1,49 @@
 package org.allaymc.api.utils;
 
-import com.google.common.collect.Maps;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 /**
+ * All supported formatting values for chat and console.
+ * <p>
  * Allay Project 2024/2/13
  *
  * @author daoge_cmd | Nukkit
- * <p>
- * All supported formatting values for chat and console.
+ * @see <a href="https://minecraft.wiki/w/Formatting_codes#Color_codes">Color codes</a>
  */
 public enum TextFormat {
-    /**
-     * Represents black.
-     */
     BLACK('0', 0x00),
-    /**
-     * Represents dark blue.
-     */
     DARK_BLUE('1', 0x1),
-    /**
-     * Represents dark green.
-     */
     DARK_GREEN('2', 0x2),
-    /**
-     * Represents dark blue (aqua).
-     */
     DARK_AQUA('3', 0x3),
-    /**
-     * Represents dark red.
-     */
     DARK_RED('4', 0x4),
-    /**
-     * Represents dark purple.
-     */
     DARK_PURPLE('5', 0x5),
-    /**
-     * Represents gold.
-     */
     GOLD('6', 0x6),
-    /**
-     * Represents gray.
-     */
     GRAY('7', 0x7),
-    /**
-     * Represents dark gray.
-     */
     DARK_GRAY('8', 0x8),
-    /**
-     * Represents blue.
-     */
     BLUE('9', 0x9),
-    /**
-     * Represents green.
-     */
     GREEN('a', 0xA),
-    /**
-     * Represents aqua.
-     */
     AQUA('b', 0xB),
-    /**
-     * Represents red.
-     */
     RED('c', 0xC),
-    /**
-     * Represents light purple.
-     */
     LIGHT_PURPLE('d', 0xD),
-    /**
-     * Represents yellow.
-     */
     YELLOW('e', 0xE),
-    /**
-     * Represents white.
-     */
     WHITE('f', 0xF),
-    /**
-     * Represents minecoins gold.
-     */
     MINECOIN_GOLD('g', 0x16),
-    /**
-     * Represents material quartz.
-     */
     MATERIAL_QUARTZ('h', 0x17),
-    /**
-     * Represents material iron.
-     */
     MATERIAL_IRON('i', 0x18),
-    /**
-     * Represents material netherite.
-     */
     MATERIAL_NETHERITE('j', 0x19),
-    /**
-     * Represents material redstone.
-     */
     MATERIAL_REDSTONE('m', 0x20),
-    /**
-     * Represents material copper.
-     */
     MATERIAL_COPPER('n', 0x21),
-    /**
-     * Represents material gold.
-     */
     MATERIAL_GOLD('p', 0x22),
-    /**
-     * Represents material emerald.
-     */
     MATERIAL_EMERALD('q', 0x23),
-    /**
-     * Represents material diamond.
-     */
     MATERIAL_DIAMOND('s', 0x24),
-    /**
-     * Represents material lapis.
-     */
     MATERIAL_LAPIS('t', 0x25),
-    /**
-     * Represents material amethyst.
-     */
     MATERIAL_AMETHYST('u', 0x26),
-    /**
-     * Makes the text obfuscated.
-     */
     OBFUSCATED('k', 0x10, true),
-    /**
-     * Makes the text bold.
-     */
     BOLD('l', 0x11, true),
-    /**
-     * Makes the text italic.
-     */
     ITALIC('o', 0x14, true),
-    /**
-     * Resets all previous chat colors or formats.
-     */
     RESET('r', 0x15);
 
     /**
@@ -146,7 +53,8 @@ public enum TextFormat {
     public static final char ESCAPE = '§';
 
     private static final Pattern CLEAN_PATTERN = Pattern.compile("(?i)" + ESCAPE + "[0-9A-LO-U]");
-    private final static Map<Integer, TextFormat> BY_ID = Maps.newTreeMap();
+
+    private final static Map<Integer, TextFormat> BY_ID = new TreeMap<>();
     private final static Map<Character, TextFormat> BY_CHAR = new HashMap<>();
 
     static {
@@ -178,7 +86,7 @@ public enum TextFormat {
      * @param intCode Code to check
      *
      * @return Associative {@link TextFormat} with the given code,
-     * or null if it doesn't exist
+     * or {@code null} if it doesn't exist
      */
     public static TextFormat getById(int intCode) {
         return BY_ID.get(intCode);
@@ -190,7 +98,7 @@ public enum TextFormat {
      * @param code Code to check
      *
      * @return Associative {@link TextFormat} with the given code,
-     * or null if it doesn't exist
+     * or {@code null} if it doesn't exist
      */
     public static TextFormat getByChar(char code) {
         return BY_CHAR.get(code);
@@ -202,13 +110,10 @@ public enum TextFormat {
      * @param code Code to check
      *
      * @return Associative {@link TextFormat} with the given code,
-     * or null if it doesn't exist
+     * or {@code null} if it doesn't exist
      */
     public static TextFormat getByChar(String code) {
-        if (code == null || code.length() <= 1) {
-            return null;
-        }
-
+        if (code == null || code.length() <= 1) return null;
         return BY_CHAR.get(code.charAt(0));
     }
 
@@ -219,20 +124,18 @@ public enum TextFormat {
      *
      * @return A copy of the input string, without any formatting.
      */
-    public static String clean(final String input) {
+    public static String clean(String input) {
         return clean(input, false);
     }
 
-    public static String clean(final String input, final boolean recursive) {
-        if (input == null) {
-            return null;
-        }
+    public static String clean(String input, boolean recursive) {
+        if (input == null) return null;
 
-        String result = CLEAN_PATTERN.matcher(input).replaceAll("");
-
+        var result = CLEAN_PATTERN.matcher(input).replaceAll("");
         if (recursive && CLEAN_PATTERN.matcher(result).find()) {
             return clean(result, true);
         }
+
         return result;
     }
 
@@ -248,14 +151,15 @@ public enum TextFormat {
      * @return Text containing the TextFormat.ESCAPE format code character.
      */
     public static String colorize(char altFormatChar, String textToTranslate) {
-        char[] b = textToTranslate.toCharArray();
-        for (int i = 0; i < b.length - 1; i++) {
-            if (b[i] == altFormatChar && "0123456789AaBbCcDdEeFfGgHhIiJjMmNnPpQqSsTtUuKkLlOoRr".indexOf(b[i + 1]) > -1) {
-                b[i] = TextFormat.ESCAPE;
-                b[i + 1] = Character.toLowerCase(b[i + 1]);
+        var text = textToTranslate.toCharArray();
+        for (int i = 0; i < text.length - 1; i++) {
+            if (text[i] == altFormatChar && "0123456789AaBbCcDdEeFfGgHhIiJjMmNnPpQqSsTtUuKkLlOoRr".indexOf(text[i + 1]) > -1) {
+                text[i] = TextFormat.ESCAPE;
+                text[i + 1] = Character.toLowerCase(text[i + 1]);
             }
         }
-        return new String(b);
+
+        return new String(text);
     }
 
     /**
@@ -290,14 +194,11 @@ public enum TextFormat {
                 char c = input.charAt(index + 1);
                 TextFormat color = getByChar(c);
 
-                if (color != null) {
-                    result.insert(0, color);
+                if (color == null) continue;
+                result.insert(0, color);
 
-                    // Once we find a color or reset we can stop searching
-                    if (color.isColor() || color.equals(RESET)) {
-                        break;
-                    }
-                }
+                // Once we find a color or reset we can stop searching
+                if (color.isColor() || color.equals(RESET)) break;
             }
         }
 

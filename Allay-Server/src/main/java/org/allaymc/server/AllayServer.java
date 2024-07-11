@@ -35,6 +35,7 @@ import org.allaymc.api.server.Whitelist;
 import org.allaymc.api.utils.AllayComputeThread;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.GameLoop;
+import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
@@ -307,7 +308,7 @@ public final class AllayServer implements Server {
     public void onDisconnect(EntityPlayer player, String reason) {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
         if (player.isInitialized()) {
-            broadcastTr("§e%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
+            broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
         }
         if (player.isSpawned()) {
             this.getPlayerStorage().savePlayerData(player);
@@ -500,7 +501,7 @@ public final class AllayServer implements Server {
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
         for (var output : outputs) {
-            log.info("[{}] {}{}", sender.getCommandSenderName(), status <= 0 ? "§c" : "", I18n.get().tr(output.str(), output.args()));
+            log.info("[{}] {}{}", sender.getCommandSenderName(), status <= 0 ? TextFormat.RED : "", I18n.get().tr(output.str(), output.args()));
         }
     }
 

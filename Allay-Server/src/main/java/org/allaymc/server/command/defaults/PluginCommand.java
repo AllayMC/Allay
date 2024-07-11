@@ -4,6 +4,7 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.TextFormat;
 
 /**
  * Allay Project 2024/2/9
@@ -26,7 +27,7 @@ public class PluginCommand extends SimpleCommand {
                             .getPluginManager()
                             .getEnabledPlugins()
                             .keySet());
-                    context.addOutput("Enabled plugins: §a" + str);
+                    context.addOutput("Enabled plugins: " + TextFormat.GREEN + str);
                     return context.success();
                 })
                 .root()
@@ -42,12 +43,12 @@ public class PluginCommand extends SimpleCommand {
 
                     var plugin = manager.getPlugin(name).plugin();
                     if (!plugin.isReloadable()) {
-                        context.addOutput("§cPlugin " + name + " is not reloadable!");
+                        context.addError("Plugin " + name + " is not reloadable!");
                         return context.fail();
                     }
 
                     plugin.reload();
-                    context.addOutput("§aPlugin " + name + " has been reloaded");
+                    context.addOutput(TextFormat.GREEN + "Plugin " + name + " has been reloaded");
                     return context.success();
                 })
                 .root()
@@ -60,7 +61,7 @@ public class PluginCommand extends SimpleCommand {
                         }
                     }
 
-                    context.addOutput("§aAll reloadable plugins have been reloaded");
+                    context.addOutput(TextFormat.GREEN + "All reloadable plugins have been reloaded");
                     return context.success();
                 });
     }
