@@ -9,18 +9,16 @@ import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
-import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3f;
 import org.joml.Vector3ic;
 
 import java.util.Map;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, ScoreboardViewer {
-
-    double BLOCK_INTERACT_MAX_DV_DIFF = 4d;
 
     float DEFAULT_MOVEMENT_SPEED = 0.1f;
 
@@ -49,26 +47,28 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setUsingItemOnBlock(boolean usingItemOnBlock);
 
     /**
-     * 吃食物或者使用弩等会被认为是在使用物品
-     * 注意和usingItemOnBlock区分！使用物品和方块无关！
-     * @return 玩家是否在使用物品
+     * Eating food or using a crossbow is considered using an item.
+     * Note the distinction from {@code usingItemOnBlock}! Using an item is unrelated to blocks!
+     *
+     * @return Whether the player is using an item
      */
     boolean isUsingItemInAir();
-
-    void setUsingItemInAir(boolean value, long time);
 
     default void setUsingItemInAir(boolean value) {
         setUsingItemInAir(value, getWorld().getTick());
     }
 
+    void setUsingItemInAir(boolean value, long time);
+
     /**
-     * @return 返回玩家最近一次开始使用物品的时间
+     * @return Returns the time when the player most recently started using an item
      */
     long getStartUsingItemInAirTime();
 
     /**
-     * @return 返回玩家使用了多久物品，单位为gt
-     * @param currentTime 当前时间
+     * @param currentTime The current time
+     *
+     * @return Returns how long the player has been using the item, in gt
      */
     long getItemUsingInAirTime(long currentTime);
 
@@ -156,15 +156,12 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
         var location = getLocation();
         if (location.distanceSquared(x, y, z) > maxDistance * maxDistance) return false;
 
-        var dv = MathUtils.JOMLVecToCBVec(MathUtils.getDirectionVector(location.yaw(), location.pitch()));
-        var target = org.cloudburstmc.math.vector.Vector3f.from(x - location.x(), y - location.y(), z - location.z()).normalize();
-        var delta = dv.sub(target);
-        var diff = delta.dot(delta);
-        return diff < BLOCK_INTERACT_MAX_DV_DIFF;
+        var eyePos = location.add(0f, getEyeHeight(), 0f, new Vector3f());
+        return eyePos.sub(x, y, z).length() <= maxDistance && !isDead();
     }
 
     default double getMaxInteractDistance() {
-        return getGameType() == GameType.CREATIVE ? 13 : 7;
+        return getGameType() == GameType.CREATIVE ? 14d : 8d;
     }
 
     float getMovementSpeed();
