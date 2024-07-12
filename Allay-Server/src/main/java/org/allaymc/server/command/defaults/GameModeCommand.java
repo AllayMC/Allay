@@ -56,7 +56,7 @@ public class GameModeCommand extends SimpleCommand {
                         if (player == context.getSender()) {
                             context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_SELF, gameTypeName);
                         } else {
-                            context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_OTHER, gameTypeName);
+                            context.addOutput(TrKeys.M_COMMANDS_GAMEMODE_SUCCESS_OTHER, gameTypeName, player.getOriginName());
                             context.sendWhisperTo(player, TrKeys.M_GAMEMODE_CHANGED, gameTypeName);
                         }
                     }
