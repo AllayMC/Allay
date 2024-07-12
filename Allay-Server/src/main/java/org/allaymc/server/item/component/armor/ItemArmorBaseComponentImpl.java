@@ -37,6 +37,11 @@ public class ItemArmorBaseComponentImpl<T extends ItemStack> extends ItemBaseCom
     }
 
     @Override
+    public boolean canUseItemInAir(EntityPlayer player) {
+        return true;
+    }
+
+    @Override
     public boolean willDamageItem() {
         var level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING_TYPE);
         if (level == 0) return true;
