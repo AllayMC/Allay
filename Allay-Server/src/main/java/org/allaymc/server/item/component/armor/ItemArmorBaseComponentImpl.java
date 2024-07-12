@@ -30,15 +30,8 @@ public class ItemArmorBaseComponentImpl<T extends ItemStack> extends ItemBaseCom
     }
 
     @Override
-    public boolean useItemInAir(EntityPlayer player, long usedTime) {
-        if (super.useItemInAir(player, usedTime)) return true;
+    public void clickItemInAir(EntityPlayer player) {
         equipArmor(player, thisItemStack);
-        return true;
-    }
-
-    @Override
-    public boolean canUseItemInAir(EntityPlayer player) {
-        return true;
     }
 
     @Override

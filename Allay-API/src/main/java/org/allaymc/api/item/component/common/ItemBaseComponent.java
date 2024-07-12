@@ -94,17 +94,18 @@ public interface ItemBaseComponent extends ItemComponent {
     void loadExtraTag(NbtMap extraTag);
 
     /**
-     * Called when player right-click a block no matter the return value of player.isUsingItemOnBlock()
-     * @param dimension The dimension the player is in
+     * Called when player right-click a block no matter the return value of {@code player.isUsingItemOnBlock()}
+     *
+     * @param dimension     The dimension the player is in
      * @param placeBlockPos The position of the block being right-clicked
-     * @param interactInfo Information about the interaction
+     * @param interactInfo  Information about the interaction
      */
     default void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {}
 
     /**
      * Attempt to use this item on a block.
      * <p>
-     * This method will be called only when client think "he can" use the item. In other words, when player.isUsingItemOnBlock() return true.
+     * This method will be called only when client think "he can" use the item. In other words, when {@code player.isUsingItemOnBlock()} return {@code true}.
      * This method should handle reducing item count, durability, etc., on successful use.
      * No need to send item updates separately as the caller will handle it.
      * <p>
@@ -127,22 +128,33 @@ public interface ItemBaseComponent extends ItemComponent {
     }
 
     /**
-     * 当玩家准备使用物品前调用
-     * @param player 准备使用物品的玩家
-     * @return 此物品是否可以使用
+     * Called when the player clicked item in air
+     *
+     * @param player The player who clicked
+     */
+    default void clickItemInAir(EntityPlayer player) {}
+
+    /**
+     * Called before the player prepares to use the item
+     *
+     * @param player The player preparing to use the item
+     *
+     * @return Whether this item can be used
      */
     boolean canUseItemInAir(EntityPlayer player);
 
     /**
-     * 当玩家认为他已经使用完一个物品时调用
-     * @param player 使用物品的玩家
-     * @param usedTime 花费的时间
-     * @return 物品是否被使用
+     * Called when the player thinks he has finished using an item
+     *
+     * @param player   The player using the item
+     * @param usedTime The time spent
+     *
+     * @return Whether the item was used
      */
     boolean useItemInAir(EntityPlayer player, long usedTime);
 
     /**
-     * 当玩家右键物品一段时间后释放物品时调用
+     * Called when the player releases the item after holding right-click for a period
      */
     default void releaseUsingItem(EntityPlayer player, long usedTime) {}
 
