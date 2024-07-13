@@ -1,5 +1,7 @@
 package org.allaymc.server.block.component.torch;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.EnumBiMap;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;
 import org.allaymc.api.block.component.common.BlockLiquidComponent;
@@ -16,10 +18,19 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
-import java.util.Objects;
-
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "torch_facing_direction")
 public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
+    private static final BiMap<BlockFace, TorchFacingDirection> map = EnumBiMap.create(BlockFace.class, TorchFacingDirection.class);
+
+    static {
+        map.put(BlockFace.DOWN, TorchFacingDirection.UNKNOWN);
+        map.put(BlockFace.UP, TorchFacingDirection.TOP);
+        map.put(BlockFace.NORTH, TorchFacingDirection.SOUTH);
+        map.put(BlockFace.SOUTH, TorchFacingDirection.NORTH);
+        map.put(BlockFace.WEST, TorchFacingDirection.EAST);
+        map.put(BlockFace.EAST, TorchFacingDirection.WEST);
+    }
+
     public BlockTorchBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -33,7 +44,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var oldBlock = dimension.getBlockState(placeBlockPos);
-        var torchFace = computeTorchFacingDirection(placementInfo.blockFace());
+        var torchFace = map.get(placementInfo.blockFace());
 
         // TODO: Replace when a method appears to check whether the block can be replaced
         if (
@@ -59,24 +70,14 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         if (face == BlockFace.UP) return true;
-        var block = current.pos().dimension().getBlockState(face.offsetPos(current.pos()));
+        var torchFacingDirection = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION);
+        var blockFace = map.inverse().get(torchFacingDirection);
+        var block = current.pos().dimension().getBlockState(blockFace.opposite().offsetPos(current.pos()));
         return this.canPlaceOnBlock(block.getBlockType());
     }
 
     @Override
     public boolean canPlaceOnBlock(BlockType<?> blockType) {
         return blockType.getMaterial().isSolid();
-    }
-
-    protected TorchFacingDirection computeTorchFacingDirection(BlockFace blockFace) {
-        var torchFace = TorchFacingDirection.UNKNOWN;
-        switch (Objects.requireNonNull(blockFace)) {
-            case UP -> torchFace = TorchFacingDirection.TOP;
-            case WEST -> torchFace = TorchFacingDirection.EAST;
-            case EAST -> torchFace = TorchFacingDirection.WEST;
-            case NORTH -> torchFace = TorchFacingDirection.SOUTH;
-            case SOUTH -> torchFace = TorchFacingDirection.NORTH;
-        }
-        return torchFace;
     }
 }
