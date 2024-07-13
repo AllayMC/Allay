@@ -29,11 +29,11 @@ public class WorldData {
 
     // NOTICE: The following values are used
     @Builder.Default
-    Difficulty difficulty = Difficulty.from(1);
+    Difficulty difficulty = Difficulty.EASY;
     @Builder.Default
     boolean forceGameType = false;
     @Builder.Default
-    org.cloudburstmc.protocol.bedrock.data.GameType gameType = GameType.from(1);
+    org.cloudburstmc.protocol.bedrock.data.GameType gameType = GameType.CREATIVE;
     @Builder.Default
     String name = "Bedrock level";
     @Builder.Default

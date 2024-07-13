@@ -23,6 +23,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerComponent {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_hunger_component");
+
     private static final int MAX_FOOD_LEVEL = 20;
 
     @ComponentedObject
@@ -30,9 +31,9 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
 
     private int foodLevel = MAX_FOOD_LEVEL;
     private float foodSaturationLevel = 5f;
-
-    private float foodTickTimer;
     private float foodExhaustionLevel;
+
+    private int foodTickTimer;
 
     @Override
     public void tickHunger() {
@@ -44,15 +45,24 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
 
         foodTickTimer++;
         if (foodTickTimer >= 80) foodTickTimer = 0;
-        if (foodTickTimer % 10 == 0) {
-            if (player.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL) setFoodLevel(foodLevel + 1);
-            if (foodLevel == MAX_FOOD_LEVEL && foodSaturationLevel > 0 && foodTickTimer % 20 == 0) regenerate(false);
+
+        var difficulty = player.getWorld().getWorldData().getDifficulty();
+        if (difficulty == Difficulty.PEACEFUL && foodTickTimer % 10 == 0) {
+            setFoodLevel(foodLevel + 1);
+
+            if (foodTickTimer % 20 == 0) regenerate(false);
         }
 
-        if (foodTickTimer == 0) {
+        if (foodTickTimer == 0 && difficulty != Difficulty.PEACEFUL) {
             if (foodLevel >= 18) regenerate(true);
             else if (foodLevel == 0) {
-                if (player.getHealth() > 2) player.attack(DamageContainer.starve(1));
+                if (
+                        (difficulty == Difficulty.EASY && player.getHealth() > 10) ||
+                        (difficulty == Difficulty.NORMAL && player.getHealth() > 1) ||
+                        difficulty == Difficulty.HARD
+                ) {
+                    player.attack(DamageContainer.starve(1));
+                }
             }
         }
 
@@ -114,9 +124,16 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     private void regenerate(boolean exhaust) {
         if (player.getHealth() == player.getMaxHealth()) return;
 
-        // TODO: normal heal method
+        // TODO: normal heal method with event
         player.setHealth(player.getHealth() + 1);
         if (exhaust) player.exhaust(6);
+    }
+
+    @Override
+    public boolean canEat() {
+        return getFoodLevel() < MAX_FOOD_LEVEL ||
+               player.getGameType() == GameType.CREATIVE ||
+               player.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL;
     }
 
     @Override
@@ -126,12 +143,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     }
 
     @Override
-    public void setFoodTickTimer(float foodTickTimer) {
+    public void setFoodTickTimer(int foodTickTimer) {
         this.foodTickTimer = Math.max(foodTickTimer, 0);
-    }
-
-    @Override
-    public boolean canEat() {
-        return getFoodLevel() < MAX_FOOD_LEVEL || player.getGameType() == GameType.CREATIVE || player.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL;
     }
 }

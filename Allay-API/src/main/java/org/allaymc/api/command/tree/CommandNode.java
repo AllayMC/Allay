@@ -9,6 +9,7 @@ import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.world.Difficulty;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
@@ -294,5 +295,13 @@ public interface CommandNode {
 
     default CommandNode itemTypeNode(String name, ItemType<?> defaultValue) {
         return addLeaf(getFactory().itemTypeNode(name, this, defaultValue));
+    }
+
+    default CommandNode difficultyNode(String name) {
+        return difficultyNode(name, null);
+    }
+
+    default CommandNode difficultyNode(String name, Difficulty defaultValue) {
+        return addLeaf(getFactory().difficultyNode(name, this, defaultValue));
     }
 }

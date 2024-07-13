@@ -6,6 +6,7 @@ import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.world.Difficulty;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3fc;
 
@@ -67,4 +68,6 @@ public interface CommandNodeFactory {
     CommandNode effectNode(String name, CommandNode parent, EffectType defaultValue);
 
     CommandNode itemTypeNode(String name, CommandNode parent, ItemType<?> defaultValue);
+
+    CommandNode difficultyNode(String name, CommandNode parent, Difficulty defaultValue);
 }

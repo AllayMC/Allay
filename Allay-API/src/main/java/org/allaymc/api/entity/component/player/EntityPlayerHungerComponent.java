@@ -14,6 +14,8 @@ public interface EntityPlayerHungerComponent extends EntityComponent {
 
     void saturate(int food, float saturation);
 
+    boolean canEat();
+
     int getFoodLevel();
 
     void setFoodLevel(int foodLevel);
@@ -22,13 +24,11 @@ public interface EntityPlayerHungerComponent extends EntityComponent {
 
     void setFoodSaturationLevel(float saturationLevel);
 
-    float getFoodTickTimer();
-
-    void setFoodTickTimer(float foodTickTimer);
-
     float getFoodExhaustionLevel();
 
     void setFoodExhaustionLevel(float foodExhaustionLevel);
 
-    boolean canEat();
+    int getFoodTickTimer();
+
+    void setFoodTickTimer(int foodTickTimer);
 }

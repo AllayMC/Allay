@@ -92,4 +92,12 @@ public interface World {
     }
 
     EventBus getEventBus();
+
+    default Difficulty getDifficulty() {
+        return getWorldData().getDifficulty();
+    }
+
+    default void setDifficulty(Difficulty difficulty) {
+        getWorldData().setDifficulty(difficulty);
+    }
 }

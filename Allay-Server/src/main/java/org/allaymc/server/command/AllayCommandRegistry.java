@@ -30,7 +30,7 @@ import static org.allaymc.api.utils.AllayStringUtils.spiltCommandArgs;
 public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, Map<String, Command>> implements CommandRegistry {
 
     public AllayCommandRegistry() {
-        super(null, i -> new ConcurrentHashMap<>());
+        super(null, $ -> new ConcurrentHashMap<>());
     }
 
     @Override
@@ -60,6 +60,7 @@ public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, 
         register(new EnchantCommand());
         register(new EffectCommand());
         register(new GiveCommand());
+        register(new DifficultyCommand());
     }
 
     @Override

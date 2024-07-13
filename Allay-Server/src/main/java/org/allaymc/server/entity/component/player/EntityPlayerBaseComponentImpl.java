@@ -432,6 +432,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                         "Armor",
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(FullContainerType.ARMOR).saveNBT())
+                .putFloat("foodExhaustionLevel", hungerComponent.getFoodExhaustionLevel())
+                .putInt("foodLevel", hungerComponent.getFoodLevel())
+                .putFloat("foodSaturationLevel", hungerComponent.getFoodSaturationLevel())
+                .putInt("foodTickTimer", hungerComponent.getFoodTickTimer())
                 .build();
     }
 
@@ -448,6 +452,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         nbt.listenForList("Armor", NbtType.COMPOUND, armorNbt ->
                 containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(armorNbt)
         );
+        nbt.listenForFloat("foodExhaustionLevel", hungerComponent::setFoodExhaustionLevel);
+        nbt.listenForInt("foodLevel", hungerComponent::setFoodLevel);
+        nbt.listenForFloat("foodSaturationLevel", hungerComponent::setFoodSaturationLevel);
+        nbt.listenForInt("foodTickTimer", hungerComponent::setFoodTickTimer);
     }
 
     @Override
