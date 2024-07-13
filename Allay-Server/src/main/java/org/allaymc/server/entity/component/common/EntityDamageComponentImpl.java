@@ -97,7 +97,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         if (!hasFallDamage()) return;
         if (!((boolean) baseComponent.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;
 
-        var damage = event.getFallDistance() - 3;
+        var damage = Math.round(event.getFallDistance() - 3);
         if (damage > 0) this.attack(new DamageContainer(entity, DamageContainer.DamageType.FALL, damage));
     }
 }
