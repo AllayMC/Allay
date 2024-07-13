@@ -731,30 +731,36 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     }
 
     protected void calculateEffectColor() {
-        int[] color = new int[3];
-        int count = 0;
+        var colors = new int[3];
+        var count = 0;
+        var visibleEffects = 0L;
         for (var effect : this.effects.values()) {
             if (!effect.isVisible()) continue;
 
             var c = effect.getType().getColor();
             var level = effect.getLevel();
-            color[0] += c.getRed() * level;
-            color[1] += c.getGreen() * level;
-            color[2] += c.getBlue() * level;
+            colors[0] += c.getRed() * level;
+            colors[1] += c.getGreen() * level;
+            colors[2] += c.getBlue() * level;
             count += level;
+
+            visibleEffects |= 1L << effect.getType().getId();
         }
 
         if (count > 0) {
-            int r = (color[0] / count) & 0xff;
-            int g = (color[1] / count) & 0xff;
-            int b = (color[2] / count) & 0xff;
+            var r = (colors[0] / count) & 0xff;
+            var g = (colors[1] / count) & 0xff;
+            var b = (colors[2] / count) & 0xff;
 
             this.metadata.set(EntityDataTypes.EFFECT_COLOR, (r << 16) + (g << 8) + b);
         } else {
             this.metadata.set(EntityDataTypes.EFFECT_COLOR, 0);
         }
 
+        this.metadata.set(EntityDataTypes.VISIBLE_MOB_EFFECTS, visibleEffects);
+
         sendEntityData(EntityDataTypes.EFFECT_COLOR);
+        sendEntityData(EntityDataTypes.VISIBLE_MOB_EFFECTS);
     }
 
     @Override
