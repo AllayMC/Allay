@@ -367,7 +367,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         var vanillaBlockId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
         if (vanillaItemId != null && vanillaBlockId != null) {
             var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
-            if (specialTools != null)
+            if (specialTools.length != 0)
                 return Arrays.stream(specialTools).anyMatch(tool -> tool == vanillaItemId);
         }
 

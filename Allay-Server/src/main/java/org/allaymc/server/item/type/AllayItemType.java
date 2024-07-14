@@ -144,7 +144,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
 
             // Tags for vanilla item
             var tags = InternalItemTypeData.getItemTags(vanillaItemId);
-            if (tags != null) setItemTags(tags);
+            if (tags.length != 0) setItemTags(tags);
             return this;
         }
 
