@@ -135,15 +135,22 @@ public interface Container {
             throw new IllegalArgumentException("minSlotIndex or maxSlotIndex is out of range");
         }
         var minEmptySlot = -1;
+        // Find out the min empty slot
+        for (int index = minSlotIndex; index <= maxSlotIndex; index++) {
+            if (itemStacks[index] == Container.EMPTY_SLOT_PLACE_HOLDER) {
+                minEmptySlot = index;
+                break;
+            }
+        }
         // First, try to merge with other item stack
         for (int index = minSlotIndex; index <= maxSlotIndex; index++) {
             var content = itemStacks[index];
-            if (content == Container.EMPTY_SLOT_PLACE_HOLDER) {
-                if (minEmptySlot == -1) {
-                    minEmptySlot = index;
-                }
-                continue;
-            }
+//            if (content == Container.EMPTY_SLOT_PLACE_HOLDER) {
+//                if (minEmptySlot == -1) {
+//                    minEmptySlot = index;
+//                }
+//                continue;
+//            }
             if (content.getCount() != content.getItemData().maxStackSize() && content.canMerge(itemStack, true)) {
                 if (content.getCount() + itemStack.getCount() <= content.getItemData().maxStackSize()) {
                     content.setCount(content.getCount() + itemStack.getCount());
@@ -155,7 +162,9 @@ public interface Container {
                     content.setCount(content.getItemData().maxStackSize());
                 }
                 onSlotChange(index);
-                return index;
+                if (itemStack.getCount() == 0) {
+                    return index;
+                }
             }
         }
         // Second, put the item on an empty slot (if exists)
