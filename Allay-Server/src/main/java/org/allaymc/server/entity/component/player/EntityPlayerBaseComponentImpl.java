@@ -720,6 +720,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void closeAllForms() {
         var pk = new ClientboundCloseFormPacket();
         networkComponent.sendPacket(pk);
+        forms.clear();
     }
 
     @Override
