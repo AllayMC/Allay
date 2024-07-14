@@ -44,7 +44,7 @@ javapoet = { group = "com.squareup", name = "javapoet", version = "1.13.0" }
 reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
 fastreflect = { group = "com.github.AllayMC", name = "fast-reflection", version = "8733a599fa" }
 # Math computing
-joml = { group = "org.joml", name = "joml", version = "1.10.6" }
+joml = { group = "org.joml", name = "joml", version = "1.10.7" }
 joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.10.0" }
 # Netty epoll
 netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.111.Final" }
