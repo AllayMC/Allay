@@ -1,4 +1,4 @@
-package org.allaymc.api.block.component.annotation;
+package org.allaymc.api.block.component;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.utils.exception.BlockComponentInjectException;

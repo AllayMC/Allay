@@ -1,4 +1,4 @@
-package org.allaymc.api.entity.component.item;
+package org.allaymc.api.entity.component;
 
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.item.ItemStack;

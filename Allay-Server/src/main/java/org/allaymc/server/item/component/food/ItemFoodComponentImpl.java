@@ -5,12 +5,10 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.event.ItemTryUseEvent;
 import org.allaymc.api.item.component.event.ItemUsedEvent;
-import org.allaymc.api.item.component.food.ItemFoodComponent;
+import org.allaymc.api.item.component.ItemFoodComponent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 
 /**
  * Allay Project 07/07/2024

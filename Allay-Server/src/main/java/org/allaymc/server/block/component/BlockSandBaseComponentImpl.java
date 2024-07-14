@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.annotation.RequireBlockProperty;
+import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.SandType;
 import org.allaymc.api.block.property.type.BlockPropertyType;

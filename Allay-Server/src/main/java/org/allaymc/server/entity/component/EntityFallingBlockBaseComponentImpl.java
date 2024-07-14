@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.component.fallingblock.EntityFallingBlockBaseComponent;
+import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityFallingBlock;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;

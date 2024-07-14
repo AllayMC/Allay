@@ -3,7 +3,7 @@ package org.allaymc.server.block.component.torch;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.EnumBiMap;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.annotation.RequireBlockProperty;
+import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.BlockLiquidComponent;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;

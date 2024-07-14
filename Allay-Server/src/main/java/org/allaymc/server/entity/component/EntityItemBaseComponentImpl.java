@@ -3,7 +3,7 @@ package org.allaymc.server.entity.component;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
+import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.type.EntityTypes;

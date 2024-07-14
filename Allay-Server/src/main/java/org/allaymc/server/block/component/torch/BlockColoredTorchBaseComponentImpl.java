@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component.torch;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.annotation.RequireBlockProperty;
+import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 

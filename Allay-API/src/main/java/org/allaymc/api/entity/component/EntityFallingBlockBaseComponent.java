@@ -1,4 +1,4 @@
-package org.allaymc.api.entity.component.fallingblock;
+package org.allaymc.api.entity.component;
 
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;

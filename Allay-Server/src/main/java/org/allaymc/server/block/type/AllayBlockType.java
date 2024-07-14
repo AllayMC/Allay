@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
-import org.allaymc.api.block.component.annotation.RequireBlockProperty;
+import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.common.CustomBlockComponent;
 import org.allaymc.api.block.material.Material;

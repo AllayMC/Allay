@@ -19,7 +19,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
-import org.allaymc.api.entity.component.item.EntityItemBaseComponent;
+import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;

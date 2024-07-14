@@ -1,7 +1,6 @@
-package org.allaymc.api.item.component.food;
+package org.allaymc.api.item.component;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.component.ItemComponent;
 
 /**
  * Allay Project 06/07/2024
