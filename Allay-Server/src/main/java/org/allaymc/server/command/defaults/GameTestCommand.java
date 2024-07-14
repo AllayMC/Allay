@@ -21,6 +21,7 @@ import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
+import org.joml.Vector3f;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -188,6 +189,15 @@ public class GameTestCommand extends SimpleCommand {
                     context.getSender().setPerm(perm, value);
                     context.addOutput("Perm " + perm + " was set to " + value);
                     return context.success();
-                });
+                })
+                .root()
+                .key("applymotion")
+                .floatNum("mx")
+                .floatNum("my")
+                .floatNum("mz")
+                .exec((context, player) -> {
+                    player.letClientApplyMotion(new Vector3f(context.getResult(1), context.getResult(2), context.getResult(3)));
+                    return context.success();
+                }, SenderType.PLAYER);
     }
 }

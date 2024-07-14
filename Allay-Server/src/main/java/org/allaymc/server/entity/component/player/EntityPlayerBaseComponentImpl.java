@@ -60,6 +60,7 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 
 import java.util.*;
@@ -826,5 +827,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         if (this.absorption == absorption) return;
         super.setAbsorption(absorption);
         attributeComponent.setAttribute(AttributeType.ABSORPTION, absorption);
+    }
+
+    @Override
+    public void knockback(Vector3fc source, float kb) {
+        var kbMotion = calculateKnockbackMotion(source, kb);
+        letClientApplyMotion(kbMotion);
+    }
+
+    @Override
+    public void letClientApplyMotion(Vector3fc motion) {
+        var pk = new SetEntityMotionPacket();
+        pk.setMotion(MathUtils.JOMLVecToCBVec(motion));
+        pk.setRuntimeEntityId(runtimeId);
+        networkComponent.sendPacket(pk);
     }
 }

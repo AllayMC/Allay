@@ -460,6 +460,10 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void knockback(Vector3fc source, float kb) {
+        motion = calculateKnockbackMotion(source, kb);
+    }
+
+    protected Vector3f calculateKnockbackMotion(Vector3fc source, float kb) {
         Vector3f vec;
         if (getLocation().distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
             // Generate a random kb direction if distance <= 0.01m
@@ -471,7 +475,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             vec = getLocation().sub(source, new Vector3f()).normalize().mul(kb);
             vec.y = 0;
         }
-        motion = new Vector3f(
+        return new Vector3f(
                 motion.x / 2f + vec.x,
                 min(motion.y / 2 + kb, kb),
                 motion.z / 2f + vec.z

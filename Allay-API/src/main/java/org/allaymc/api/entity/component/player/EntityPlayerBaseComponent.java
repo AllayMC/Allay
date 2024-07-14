@@ -14,6 +14,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.util.Map;
@@ -182,4 +183,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     float getMovementSpeed();
 
     void setMovementSpeed(float speed);
+
+    void letClientApplyMotion(Vector3fc motion);
 }
