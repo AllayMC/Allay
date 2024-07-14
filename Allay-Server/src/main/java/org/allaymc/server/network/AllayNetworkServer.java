@@ -23,6 +23,7 @@ import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
+import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
@@ -78,6 +79,7 @@ public class AllayNetworkServer implements NetworkServer {
                     protected void initSession(BedrockServerSession session) {
                         session.setLogging(true);
                         session.setCodec(PACKET_CODEC);
+                        session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
                         server.onConnect(session);
                     }
                 })
