@@ -7,6 +7,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.processor.PacketProcessor;
+import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
@@ -44,9 +45,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected int breakFaceId;
     protected BlockState breakBlock;
 
-    protected long startBreakingTime; // Ticks
-    protected double needBreakingTime; // Seconds
-    protected double stopBreakingTime; // Ticks
+    protected long startBreakTime; // Ticks
+    protected double needBreakTime; // Seconds
+    protected double stopBreakTime; // Ticks
 
     private static boolean isInvalidGameType(EntityPlayer player) {
         return player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR;
@@ -67,7 +68,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             // Check interact distance
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
-                    if (!player.canReach(pos.getX(), pos.getY(), pos.getZ())) {
+                    if (!player.canReachBlock(MathUtils.CBVecToJOMLVec(pos))) {
                         log.warn("Player {} tried to break a block out of reach", player.getOriginName());
                         continue;
                     }
@@ -123,20 +124,20 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         breakFaceId = blockFaceId;
         breakBlock = player.getDimension().getBlockState(x, y, z);
 
-        needBreakingTime = breakBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
-        stopBreakingTime = startBreakingTime + needBreakingTime * 20.0d;
+        needBreakTime = breakBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
+        stopBreakTime = startBreakingTime + needBreakTime * 20.0d;
 
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_START_BREAK);
         pk.setPosition(Vector3f.from(x, y, z));
-        pk.setData(toNetworkBreakTime(needBreakingTime));
+        pk.setData(toNetworkBreakTime(needBreakTime));
         player.getCurrentChunk().addChunkPacket(pk);
         sendBreakingPracticeAndTime(player, startBreakingTime);
     }
 
     protected int toNetworkBreakTime(double breakTime) {
         if (breakTime == 0) return 65535;
-        return (int) (65535 / (needBreakingTime * 20));
+        return (int) (65535 / (needBreakTime * 20));
     }
 
     protected void stopBreak(EntityPlayer player) {
@@ -152,9 +153,9 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         breakFaceId = 0;
         breakBlock = null;
 
-        startBreakingTime = 0;
-        needBreakingTime = 0;
-        stopBreakingTime = 0;
+        startBreakTime = 0;
+        needBreakTime = 0;
+        stopBreakTime = 0;
     }
 
     protected void completeBreak(EntityPlayer player, int x, int y, int z) {
@@ -164,7 +165,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
 
         var currentTime = player.getWorld().getTick();
-        if (Math.abs(currentTime - stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
+        if (Math.abs(currentTime - stopBreakTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
             var world = player.getDimension();
             var itemInHand = player.getItemInHand();
             world.breakBlock(breakBlockX, breakBlockY, breakBlockZ, itemInHand, player);
@@ -175,7 +176,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 player.sendItemInHandUpdate();
             }
         } else {
-            log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakingTime, currentTime);
+            log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakTime, currentTime);
         }
 
         stopBreak(player);
@@ -193,14 +194,14 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var pk2 = new LevelEventPacket();
         pk2.setType(BLOCK_UPDATE_BREAK);
         pk2.setPosition(Vector3f.from(breakBlockX, breakBlockY, breakBlockZ));
-        pk2.setData(toNetworkBreakTime(needBreakingTime));
+        pk2.setData(toNetworkBreakTime(needBreakTime));
 
         player.getCurrentChunk().addChunkPacket(pk1);
         player.getCurrentChunk().addChunkPacket(pk2);
     }
 
     protected void checkInteractDistance(EntityPlayer player) {
-        if (!player.canReach(breakBlockX, breakBlockY, breakBlockZ)) {
+        if (!player.canReach(breakBlockX + 0.5f, breakBlockY + 0.5f, breakBlockZ + 0.5f)) {
             log.warn("Player {} tried to interact with a block out of reach", player.getOriginName());
             stopBreak(player);
         }
@@ -208,11 +209,11 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected void updateBreakingTime(EntityPlayer player, long currentTime) {
         var newBreakingTime = breakBlock.getBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
-        if (needBreakingTime == newBreakingTime) return;
+        if (needBreakTime == newBreakingTime) return;
         // Breaking time has changed, make adjustments
-        var timeLeft = stopBreakingTime - currentTime;
-        stopBreakingTime = currentTime + timeLeft * (needBreakingTime / newBreakingTime);
-        needBreakingTime = newBreakingTime;
+        var timeLeft = stopBreakTime - currentTime;
+        stopBreakTime = currentTime + timeLeft * (needBreakTime / newBreakingTime);
+        needBreakTime = newBreakingTime;
     }
 
     protected void handleInputData(EntityPlayer player, Set<PlayerAuthInputData> inputData) {

@@ -147,21 +147,34 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void showForm(Form form);
 
-    default boolean canReach(Vector3ic pos) {
-        return canReach(pos.x(), pos.y(), pos.z());
+    default boolean canReachBlock(Vector3ic pos) {
+        return canReach(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f);
     }
 
     default boolean canReach(float x, float y, float z) {
+        if (isDead()) return false;
         var maxDistance = getMaxInteractDistance();
-        var location = getLocation();
-        if (location.distanceSquared(x, y, z) > maxDistance * maxDistance) return false;
-
-        var eyePos = location.add(0f, getEyeHeight(), 0f, new Vector3f());
-        return eyePos.sub(x, y, z).length() <= maxDistance && !isDead();
+        // Check whether there is a point that inside of the player's AABB
+        // And can reach the provided pos
+        var aabb = getOffsetAABB();
+        float[] aabbXs = new float[] {aabb.minX(), aabb.maxX()};
+        float[] aabbYs = new float[] {aabb.minY(), aabb.maxY()};
+        float[] aabbZs = new float[] {aabb.minZ(), aabb.maxZ()};
+        for (var aabbX : aabbXs) {
+            for (var aabbY : aabbYs) {
+                for (var aabbZ : aabbZs) {
+                    if (new Vector3f(aabbX, aabbY, aabbZ).distanceSquared(x, y, z) <= maxDistance * maxDistance) {
+                        return true;
+                    }
+                }
+            }
+        }
+        // TODO: check yaw and pitch
+        return false;
     }
 
     default double getMaxInteractDistance() {
-        return getGameType() == GameType.CREATIVE ? 14d : 8d;
+        return getGameType() == GameType.CREATIVE ? 13d : 7d;
     }
 
     float getMovementSpeed();

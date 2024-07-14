@@ -272,7 +272,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
         var loc = new Location3f(newLoc);
-        loc.add(0, getBaseOffset(), 0f);
+        // base offset seems not being used in move packet
+//        loc.add(0, getBaseOffset(), 0f);
 
         if (!teleporting) {
             var exhaust = 0f;
@@ -293,7 +294,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         addPlayerPacket.setUuid(networkComponent.getLoginData().getUuid());
         addPlayerPacket.setUsername(networkComponent.getOriginName());
         addPlayerPacket.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().deviceId());
-        addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
+        addPlayerPacket.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
         addPlayerPacket.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         addPlayerPacket.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         addPlayerPacket.setGameType(gameType);

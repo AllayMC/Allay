@@ -20,7 +20,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
     @Override
     public void handleSync(EntityPlayer player, BlockPickRequestPacket packet, long receiveTime) {
         var blockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
-        if (!player.canReach(blockPos) || player.getGameType() != GameType.CREATIVE) return;
+        if (!player.canReachBlock(blockPos) || player.getGameType() != GameType.CREATIVE) return;
 
         var block = player.getLocation().dimension().getBlockState(blockPos);
         if (block.getBlockType() == BlockTypes.AIR_TYPE) {
