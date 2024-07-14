@@ -55,7 +55,7 @@ public class PaletteUtils {
                     if (name.equals("version")) {
                         int version = input.readInt();
                         byteBuf.resetReaderIndex();
-                        if (version != ProtocolInfo.BLOCK_STATE_VERSION) {
+                        if (version != ProtocolInfo.BLOCK_STATE_VERSION_NUM) {
                             return Pair.of(null, getSemVersion(version));
                         }
                         byte[] result = new byte[end - byteBuf.readerIndex()];

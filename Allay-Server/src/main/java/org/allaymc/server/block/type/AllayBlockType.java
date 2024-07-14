@@ -243,7 +243,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return NbtMap.builder()
                     .putString("name", blockType.getIdentifier().toString())
                     .putCompound("states", NbtMap.fromMap(states))
-                    .putInt("version", ProtocolInfo.BLOCK_STATE_VERSION)
+                    .putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NUM)
                     .build();
         }
 
