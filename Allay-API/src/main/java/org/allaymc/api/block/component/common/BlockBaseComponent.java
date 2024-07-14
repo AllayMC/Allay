@@ -156,7 +156,7 @@ public interface BlockBaseComponent extends BlockComponent {
     default ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
         // TODO: Fortune
         if (getBlockType().getItemType() != null)
-            return new ItemStack[]{blockState.blockState().toItemStack()};
+            return new ItemStack[]{getSilkTouchDrop(blockState)};
 
         return Utils.EMPTY_ITEM_STACK_ARRAY;
     }

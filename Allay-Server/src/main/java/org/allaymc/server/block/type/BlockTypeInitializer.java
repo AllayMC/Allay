@@ -15,8 +15,8 @@ import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.barrel.BlockBarrelBaseComponentImpl;
 import org.allaymc.server.block.component.chest.BlockChestBaseComponentImpl;
-import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
+import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallWheatSeedDropableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockWheatSeedDropableBaseComponentImpl;
 import org.allaymc.server.block.component.craftingtable.BlockCraftingTableBaseComponentImpl;
@@ -26,6 +26,7 @@ import org.allaymc.server.block.component.leaves.BlockLeavesBaseComponentImpl;
 import org.allaymc.server.block.component.sand.BlockSandBaseComponentImpl;
 import org.allaymc.server.block.component.shulkerbox.BlockShulkerBoxBaseComponentImpl;
 import org.allaymc.server.block.component.stairs.BlockStairsBaseComponentImpl;
+import org.allaymc.server.block.component.stone.BlockStoneBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 
@@ -37,6 +38,14 @@ import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
+    public static void initStone() {
+        BlockTypes.STONE_TYPE = BlockTypeBuilder
+                .builder(BlockStoneBehavior.class)
+                .vanillaBlock(VanillaBlockId.STONE)
+                .setBlockBaseComponentSupplier(BlockStoneBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initLeaves() {
         BlockTypes.ACACIA_LEAVES_TYPE = BlockTypeBuilder
                 .builder(BlockAcaciaLeavesBehavior.class)
