@@ -95,13 +95,13 @@ public final class Dashboard {
                     var pluginDescriptor = Server.getInstance().getPluginManager().getPlugin(pluginName).descriptor();
                     JOptionPane.showMessageDialog(null,
                             I18n.get().tr(TrKeys.A_GUI_PLUGIN_NAME) + ": " + pluginDescriptor.getName() + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_ENTRANCE) + ": " + pluginDescriptor.getEntrance() + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_ORDER) + ": " + pluginDescriptor.getOrder() + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_DESCRIPTION) + ": " + pluginDescriptor.getDescription() + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_VERSION) + ": " + pluginDescriptor.getVersion() + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_AUTHORS) + ": " + String.join(", ", pluginDescriptor.getAuthors()) + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_DEPENDENCIES) + ": " + pluginDescriptor.getDependencies().stream().map(PluginDependency::name).collect(Collectors.joining(", ")) + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLUGIN_WEBSITE) + ": " + pluginDescriptor.getWebsite(),
+                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_ENTRANCE) + ": " + pluginDescriptor.getEntrance() + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_ORDER) + ": " + pluginDescriptor.getOrder() + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_DESCRIPTION) + ": " + pluginDescriptor.getDescription() + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_VERSION) + ": " + pluginDescriptor.getVersion() + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_AUTHORS) + ": " + String.join(", ", pluginDescriptor.getAuthors()) + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_DEPENDENCIES) + ": " + pluginDescriptor.getDependencies().stream().map(PluginDependency::name).collect(Collectors.joining(", ")) + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_WEBSITE) + ": " + pluginDescriptor.getWebsite(),
                             I18n.get().tr(TrKeys.A_GUI_PLUGIN_INFO),
                             JOptionPane.INFORMATION_MESSAGE);
                 });
@@ -124,11 +124,11 @@ public final class Dashboard {
                     var pos = player.getLocation();
                     JOptionPane.showMessageDialog(null,
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_NAME) + ": " + player.getOriginName() + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_ADDRESS) + ": " + player.getClientSession().getSocketAddress().toString() + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID) + ": " + player.getUUID().toString() + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getName() + "\n" +
-                                    I18n.get().tr(TrKeys.A_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionInfo().dimensionId(),
+                            I18n.get().tr(TrKeys.A_GUI_PLAYER_ADDRESS) + ": " + player.getClientSession().getSocketAddress().toString() + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID) + ": " + player.getUUID().toString() + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getName() + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionInfo().dimensionId(),
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_INFO),
                             JOptionPane.INFORMATION_MESSAGE);
                 });
@@ -513,8 +513,10 @@ public final class Dashboard {
     private class CommandListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String cmd = cmdInput.getText();
+            var cmd = cmdInput.getText().trim();
             cmdInput.setText(""); // clear the input
+            if (cmd.isEmpty()) return;
+
             appendTextToConsole(cmd + "\n"); // show what was run in the console
             var server = Server.getInstance();
             server.getScheduler().runLater(server, () -> server.getCommandRegistry().execute(Server.getInstance(), cmd));
