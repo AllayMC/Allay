@@ -20,62 +20,159 @@ import java.util.Set;
 
 /**
  * Allay Project 2023/3/19
- *
+ * <p>
+ * Interface representing a type of block.
  * @author daoge_cmd
  */
 public interface BlockType<T extends BlockBehavior> extends Identified {
 
+    /**
+     * Gets the block behavior associated with this block type.
+     *
+     * @return the block behavior.
+     */
     T getBlockBehavior();
 
+    /**
+     * Gets the list of components associated with this block type.
+     *
+     * @return the list of block components.
+     */
     List<? extends BlockComponent> getComponents();
 
+    /**
+     * Gets the properties of this block type.
+     *
+     * @return an unmodifiable view of the map of block property types.
+     */
     @UnmodifiableView
     Map<String, BlockPropertyType<?>> getProperties();
 
+    /**
+     * Gets all possible states of this block type.
+     *
+     * @return an unmodifiable view of the collection of all block states.
+     */
     @UnmodifiableView
     Collection<BlockState> getAllStates();
 
+    /**
+     * Gets the hash map which contains all states of this block type.
+     * The key is block state's hash.
+     *
+     * @return an unmodifiable view of the map of block states by their hash.
+     */
     @UnmodifiableView
     Map<Integer, BlockState> getBlockStateHashMap();
 
+    /**
+     * Gets the special value map of block states.
+     * The key is block state's special value.
+     *
+     * @return an unmodifiable view of the map of block states by their special values.
+     */
     @UnmodifiableView
     Map<Long, BlockState> getSpecialValueMap();
 
+    /**
+     * Gets the number of bits used for special values.
+     *
+     * @return the number of special value bits.
+     */
     byte getSpecialValueBits();
 
+    /**
+     * Gets the default state of this block type.
+     *
+     * @return the default block state.
+     */
     BlockState getDefaultState();
 
+    /**
+     * Gets the item identifier for this block type.
+     *
+     * @return the item identifier.
+     */
     default Identifier getItemIdentifier() {
         return getItemType().getIdentifier();
     }
 
+    /**
+     * Gets the item type associated with this block type.
+     *
+     * @return the item type.
+     */
     ItemType<?> getItemType();
 
+    /**
+     * Creates a block state from the given list of property values.
+     *
+     * @param propertyValues the list of property values.
+     * @return the block state, or null if the given property values is invalid
+     */
     BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
+    /**
+     * Creates a block state from the given block state hash.
+     *
+     * @param blockStateHash the block state hash.
+     * @return the block state, or null if the given block state hash is invalid
+     */
     default BlockState ofState(int blockStateHash) {
         return getBlockStateHashMap().get(blockStateHash);
     }
 
+    /**
+     * Creates a block state from the given array of property values.
+     *
+     * @param propertyValues the array of property values.
+     * @return the block state, or null if the given property values is invalid
+     */
     default BlockState ofState(BlockPropertyType.BlockPropertyValue<?, ?, ?>... propertyValues) {
         return ofState(List.of(propertyValues));
     }
 
+    /**
+     * Registers this block type to the given registry.
+     *
+     * @param registry the block type registry.
+     */
     default void register(BlockTypeRegistry registry) {
         registry.register(getIdentifier(), this);
     }
 
+    /**
+     * Registers all block states of this block type to the given palette.
+     *
+     * @param registry the block state hash palette.
+     */
     default void register(BlockStateHashPalette registry) {
         for (var s : getBlockStateHashMap().values()) {
             registry.register(s.blockStateHash(), s);
         }
     }
 
+    /**
+     * Gets the set of tags associated with this block type.
+     *
+     * @return an unmodifiable set of block tags.
+     */
     @Unmodifiable
     Set<BlockTag> getBlockTags();
 
+    /**
+     * Gets the material of this block type.
+     *
+     * @return the material.
+     */
     Material getMaterial();
 
+    /**
+     * Checks if this block type has the specified tag.
+     *
+     * @param blockTag the block tag.
+     * @return true if the block type has the tag, false otherwise.
+     */
     default boolean hasBlockTag(BlockTag blockTag) {
         return getBlockTags().contains(blockTag);
     }
