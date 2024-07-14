@@ -147,6 +147,8 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     void showForm(Form form);
 
+    void closeAllForms();
+
     default boolean canReachBlock(Vector3ic pos) {
         return canReach(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f);
     }

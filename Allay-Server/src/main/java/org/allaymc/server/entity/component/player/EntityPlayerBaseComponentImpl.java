@@ -717,6 +717,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @Override
+    public void closeAllForms() {
+        var pk = new ClientboundCloseFormPacket();
+        networkComponent.sendPacket(pk);
+    }
+
+    @Override
     public void setMovementSpeed(float speed) {
         movementSpeed = speed;
         attributeComponent.setAttribute(AttributeType.MOVEMENT, movementSpeed);
