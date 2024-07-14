@@ -2,6 +2,7 @@ package org.allaymc.api.plugin;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.scheduler.Scheduler;
@@ -15,6 +16,7 @@ import org.allaymc.api.server.Server;
  */
 @Getter
 @Setter
+@Slf4j
 public abstract class Plugin implements TaskCreator {
 
     protected PluginContainer pluginContainer;
@@ -50,18 +52,11 @@ public abstract class Plugin implements TaskCreator {
     }
 
     /**
-     * Reload the plugin and load it again.
-     * This is different from simply calling onEnable()/onDisable().
-     * The default implementation of this method calls the onLoad() method to simulate the entire process of the plugin being read and enabled.
-     * <p>
-     * We do not allow this method to be overridden because for a plugin with good code quality, there should be no need to override this method.
+     * When the plugin reloading, call
      */
-    public final void reload() {
+    public void reload() {
         if (!isReloadable()) throw new UnsupportedOperationException("This plugin is not a reloadable plugin!");
-        onDisable();
-        onUnload();
-        onLoad();
-        onEnable();
+        else log.warn("Plugin {} is marked as reloadable but do nothing in reload() method!", pluginContainer.descriptor().getName());
     }
 
     public Server getServer() {

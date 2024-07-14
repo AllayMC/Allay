@@ -11,22 +11,13 @@ comments: true
 - 不编写插件卸载逻辑，导致插件卸载后此插件注册的监听器，命令，定时任务依旧可用
 - ...
 
-结合以上原因，对于一个Jar插件，我们默认其不能热重载。尽管如此，我们依然允许用户将其插件标记为”可热重载的“，这通过覆写方法`Plugin.isReloadable()`并返回`true`实现
+结合以上原因，对于一个Jar插件，我们默认其不能热重载。尽管如此，我们依然允许用户将其插件标记为”可热重载的“，
+这通过覆写方法`Plugin.isReloadable()`并返回`true`实现
 
 请记住，覆写了方法`Plugin.isReloadable()`并返回`true`之后并不代表你的插件就支持热重载。你仍需要确保你的代码支持热重载。
-在介绍如何让你的插件支持热重载之前，我们先来看看`Plugin.reload()`方法会做什么：
+你需要覆写方法`Plugin.reload()`并在此方法内完成热重载工作，具体细节将在稍后说明
+若仅仅覆写了方法`Plugin.isReloadable()`而没有覆写`Plugin.reload()`，控制台将输出一段警告
 
-```java
-public final void reload() {
-    if (!isReloadable()) throw new UnsupportedOperationException("This plugin is not a reloadable plugin!");
-    onDisable();
-    onUnload();
-    onLoad();
-    onEnable();
-}
-```
-
-`Plugin.reload()`方法会模拟插件完全卸载再加载的全过程。
 早些年在Nukkit圈有一种奇妙的操作，由于Nukkit不会对插件文件加写锁，用户修改代码并重新编译后 用新的jar文件覆盖原来的jar文件，
 并调用插件的`reload()`方法，新的代码会奇迹般的奏效。我承认这确实很方便（事实上我也干过），但是在Allay中Jar插件不允许这么干。
 
@@ -34,16 +25,8 @@ public final void reload() {
 
 ## 让你的插件支持热重载
 
-**确保与插件功能有关的操作位于`onEnable()`方法**，例如：
-
-- 注册监听器
-- 注册定时任务
-- 注册命令
-- ...
-
-**确保在`onDisable()`方法解注册了插件注册的所有内容**
-
-即使遵守了以上内容，我们仍然不能保证你的插件可以正确热重载。**对于Jar插件，最好的办法就是不支持热重载**，重新开服并不需要耗费多少时间。
+- 覆写方法`Plugin.isReloadable()`并返回`true`。
+- 覆写方法`Plugin.reload()`。对于简单的插件，最常见的操作就是重新读取插件配置文件。
 
 ## JavaScript插件的热重载
 

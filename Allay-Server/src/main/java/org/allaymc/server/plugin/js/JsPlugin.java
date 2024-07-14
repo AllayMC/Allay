@@ -94,6 +94,14 @@ public class JsPlugin extends Plugin {
         return true;
     }
 
+    @Override
+    public void reload() {
+        onDisable();
+        onUnload();
+        onLoad();
+        onEnable();
+    }
+
     protected void tryCallJsFunction(String onLoad) {
         var func = jsExport.getMember(onLoad);
         if (func != null && func.canExecute())

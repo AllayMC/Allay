@@ -18,22 +18,12 @@ Considering the above reasons, for a Jar plugin, we default that it cannot be ho
 users to mark their plugins as "reloadable", which is achieved by overriding the `Plugin.isReloadable()` method and
 returning `true`.
 
-Please note that overriding the `Plugin.isReloadable()` method and returning `true` does not mean your plugin supports
-hot reload. You still need to ensure that your code supports hot reload. Before introducing how to make your plugin
-support hot reload, let's first see what the `Plugin.reload()` method does:
+Keep in mind that overriding the method 'Plugin.isReloadable()' and returning 'true' doesn't mean that your plugin supports hot reloading.
+You still need to make sure your code supports hot reloading.
+You'll need to override the 'Plugin.reload() method, and the details will be introduced later.
+If you only override the method 'Plugin.isReloadable() without overwriting 'Plugin.reload()', the console will output a warning
 
-```java
-public final void reload() {
-    if (!isReloadable()) throw new UnsupportedOperationException("This plugin is not a reloadable plugin!");
-    onDisable();
-    onUnload();
-    onLoad();
-    onEnable();
-}
-```
-
-The `Plugin.reload()` method simulates the complete process of uninstalling and reloading the plugin. There used to be a
-wonderful operation in the Nukkit community years ago. Since Nukkit does not lock plugin files for writing, users modify
+There used to be a wonderful operation in the Nukkit community years ago. Since Nukkit does not lock plugin files for writing, users modify
 the code, recompile it, replace the original jar file with the new one, and call the plugin's `reload()` method. The new
 code miraculously takes effect. I admit that this is indeed very convenient (in fact, I have done it myself), but in
 Allay, Jar plugins are not allowed to do so.
@@ -42,17 +32,8 @@ Remember, for Jar plugins, calling the `reload()` method **does not mean it is a
 
 ## Making Your Plugin Support Hot Reload
 
-**Ensure that operations related to plugin functionality are in the `onEnable()` method**, such as:
-
-- Registering listeners
-- Registering scheduled tasks
-- Registering commands
-- ...
-
-**Ensure that all content registered by the plugin is unregistered in the `onDisable()` method**.
-
-Even if the above is followed, we still cannot guarantee that your plugin can be hot reloaded correctly. **For Jar
-plugins, the best way is not to support hot reload**, as restarting the server does not take much time.
+- Override the method 'Plugin.isReloadable() and return 'true'.
+- Override the method 'Plugin.reload()'. For simple plug-ins, the most common action is to re-read the plug-in configuration file.
 
 ## Hot Reload for JavaScript Plugins
 
