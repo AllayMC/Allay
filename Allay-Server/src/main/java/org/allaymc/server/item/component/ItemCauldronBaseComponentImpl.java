@@ -1,4 +1,4 @@
-package org.allaymc.server.item.component.cauldron;
+package org.allaymc.server.item.component;
 
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.item.init.ItemStackInitInfo;

@@ -1,4 +1,4 @@
-package org.allaymc.server.entity.component.item;
+package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +18,6 @@ import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
 import static org.allaymc.api.item.ItemHelper.fromNBT;
-import static org.allaymc.api.item.component.common.ItemBaseComponent.EMPTY_STACK_NETWORK_ID;
 
 /**
  * Allay Project 2023/9/23

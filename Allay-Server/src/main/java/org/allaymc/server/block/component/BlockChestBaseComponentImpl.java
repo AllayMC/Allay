@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.chest;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.annotation.RequireBlockProperty;

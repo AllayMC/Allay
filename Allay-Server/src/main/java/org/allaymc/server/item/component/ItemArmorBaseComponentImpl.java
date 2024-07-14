@@ -1,4 +1,4 @@
-package org.allaymc.server.item.component.armor;
+package org.allaymc.server.item.component;
 
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.container.FullContainerType;

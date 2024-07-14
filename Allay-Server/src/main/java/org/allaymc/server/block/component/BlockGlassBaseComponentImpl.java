@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.glass;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockStateWithPos;

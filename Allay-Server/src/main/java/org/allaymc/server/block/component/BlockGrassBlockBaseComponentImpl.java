@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.grassblock;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockStateWithPos;

@@ -1,4 +1,4 @@
-package org.allaymc.server.item.component.air;
+package org.allaymc.server.item.component;
 
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;

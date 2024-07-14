@@ -1,4 +1,4 @@
-package org.allaymc.server.blockentity.component.barrel;
+package org.allaymc.server.blockentity.component;
 
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;

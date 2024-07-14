@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.craftingtable;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;

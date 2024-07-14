@@ -331,7 +331,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setWorldEditor(false);
         startGamePacket.setChatRestrictionLevel(ChatRestrictionLevel.NONE);
         startGamePacket.setSpawnBiomeType(SpawnBiomeType.DEFAULT);
-        startGamePacket.setCustomBiomeName("");
+        startGamePacket.setCustomBiomeName("plains");
         startGamePacket.setEducationProductionId("");
         startGamePacket.setForceExperimentalGameplay(OptionalBoolean.empty());
         startGamePacket.setBlockNetworkIdsHashed(true);
