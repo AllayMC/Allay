@@ -166,6 +166,14 @@ public interface Dimension {
         player.sendPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
     }
 
+    default BlockState getBlockState(Vector3fc pos) {
+        return getBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), 0);
+    }
+
+    default BlockState getBlockState(Vector3fc pos, int layer) {
+        return getBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), layer);
+    }
+
     default BlockState getBlockState(Vector3ic pos) {
         return getBlockState(pos.x(), pos.y(), pos.z(), 0);
     }

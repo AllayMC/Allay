@@ -122,6 +122,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected String displayName;
     protected Set<String> tags = new HashSet<>();
     @Getter
+    @Setter
     protected float absorption;
 
     public EntityBaseComponentImpl(EntityInitInfo<T> info) {
@@ -682,12 +683,14 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public int getEffectLevel(EffectType effectType) {
         var effect = effects.get(effectType);
-        return effect == null ? 0 : effect.getAmplifier() + 1;
+        return effect == null ? 0 : effect.getLevel();
     }
 
     @Override
     public void addEffect(EffectInstance effectInstance) {
         var old = effects.put(effectInstance.getType(), effectInstance);
+        if (old != null) old.getType().onRemove(thisEntity, old);
+
         effectInstance.getType().onAdd(thisEntity, effectInstance);
 
         var mobEffectPk = new MobEffectPacket();
@@ -699,7 +702,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         mobEffectPk.setEvent(old == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
         sendMobEffectPacket(mobEffectPk);
 
-        if (old == null) calculateEffectColor();
+        if (old == null) syncVisibleEffects();
     }
 
     @Override
@@ -714,7 +717,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             mobEffectPk.setEvent(MobEffectPacket.Event.REMOVE);
             sendMobEffectPacket(mobEffectPk);
 
-            calculateEffectColor();
+            syncVisibleEffects();
         }
     }
 
@@ -730,37 +733,15 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         }
     }
 
-    protected void calculateEffectColor() {
-        var colors = new int[3];
-        var count = 0;
-        var visibleEffects = 0L;
+    protected void syncVisibleEffects() {
+        long visibleEffects = 0L;
         for (var effect : this.effects.values()) {
             if (!effect.isVisible()) continue;
-
-            var c = effect.getType().getColor();
-            var level = effect.getLevel();
-            colors[0] += c.getRed() * level;
-            colors[1] += c.getGreen() * level;
-            colors[2] += c.getBlue() * level;
-            count += level;
-
             visibleEffects |= 1L << effect.getType().getId();
         }
 
-        if (count > 0) {
-            var r = (colors[0] / count) & 0xff;
-            var g = (colors[1] / count) & 0xff;
-            var b = (colors[2] / count) & 0xff;
-
-            this.metadata.set(EntityDataTypes.EFFECT_COLOR, (r << 16) + (g << 8) + b);
-        } else {
-            this.metadata.set(EntityDataTypes.EFFECT_COLOR, 0);
-        }
-
-        this.metadata.set(EntityDataTypes.VISIBLE_MOB_EFFECTS, visibleEffects);
-
-        sendEntityData(EntityDataTypes.EFFECT_COLOR);
-        sendEntityData(EntityDataTypes.VISIBLE_MOB_EFFECTS);
+        // TODO: need send to player and viewers if this player
+        setAndSendEntityData(EntityDataTypes.VISIBLE_MOB_EFFECTS, visibleEffects);
     }
 
     @Override
@@ -827,10 +808,5 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @UnmodifiableView
     public Set<String> getTags() {
         return Collections.unmodifiableSet(tags);
-    }
-
-    @Override
-    public void setAbsorption(float absorption) {
-        this.absorption = absorption;
     }
 }

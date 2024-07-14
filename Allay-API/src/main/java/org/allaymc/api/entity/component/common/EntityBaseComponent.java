@@ -23,7 +23,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -360,13 +359,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     default boolean isInWater() {
         var loc = getLocation();
-        int fx = (int) loc.x();
-        int fy = (int) loc.y();
-        int fz = (int) loc.z();
-        var blockType = getDimension().getBlockState(fx, fy, fz).getBlockType();
+        var blockType = getDimension().getBlockState(loc).getBlockType();
         if (isWaterType(blockType)) return true;
 
-        blockType = getDimension().getBlockState(fx, fy, fz, 1).getBlockType();
+        blockType = getDimension().getBlockState(loc, 1).getBlockType();
         return isWaterType(blockType);
     }
 
