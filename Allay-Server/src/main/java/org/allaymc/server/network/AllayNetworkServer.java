@@ -79,7 +79,6 @@ public class AllayNetworkServer implements NetworkServer {
                     protected void initSession(BedrockServerSession session) {
                         session.setLogging(true);
                         session.setCodec(PACKET_CODEC);
-                        session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
                         server.onConnect(session);
                     }
                 })
