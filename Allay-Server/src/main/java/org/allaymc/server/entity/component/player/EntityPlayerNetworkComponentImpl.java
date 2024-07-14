@@ -122,6 +122,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             // cheaters will be able to create a lot of fake clients and make the server OOM
             onDisconnect();
             server.onDisconnect(player, disconnectReason);
+            disconnectReason = null;
         }
     }
 
