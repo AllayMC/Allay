@@ -142,15 +142,9 @@ public interface Container {
                 break;
             }
         }
-        // First, try to merge with other item stack
+        // Firstly, try to merge with other item stack
         for (int index = minSlotIndex; index <= maxSlotIndex; index++) {
             var content = itemStacks[index];
-//            if (content == Container.EMPTY_SLOT_PLACE_HOLDER) {
-//                if (minEmptySlot == -1) {
-//                    minEmptySlot = index;
-//                }
-//                continue;
-//            }
             if (content.getCount() != content.getItemData().maxStackSize() && content.canMerge(itemStack, true)) {
                 if (content.getCount() + itemStack.getCount() <= content.getItemData().maxStackSize()) {
                     content.setCount(content.getCount() + itemStack.getCount());
@@ -167,7 +161,7 @@ public interface Container {
                 }
             }
         }
-        // Second, put the item on an empty slot (if exists)
+        // Secondly, put the item on an empty slot (if exists)
         if (minEmptySlot != -1) {
             setItemStack(minEmptySlot, itemStack.copy());
             itemStack.setCount(0);

@@ -36,6 +36,7 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
+import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
@@ -301,18 +302,39 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var oldChunkZ = (int) oldLoc.z() >> 4;
         var newChunkX = (int) newLoc.x() >> 4;
         var newChunkZ = (int) newLoc.z() >> 4;
-        if (this.location.dimension != null && (oldChunkX != newChunkX || oldChunkZ != newChunkZ)) {
-            var oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
-            if (oldChunk != null) ((AllayChunk) oldChunk).removeEntity(runtimeId);
-            else log.debug("Old chunk {} {} is null while moving entity!", oldChunkX, oldChunkZ);
-        }
+        if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
+            // Current chunk changed
+            Chunk oldChunk = null;
+            if (this.location.dimension != null) {
+                oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
+                // It is possible that the oldChunk is null
+                // For example, when spawning an entity, the entity's old location is meaningless
+                if (oldChunk != null) {
+                    ((AllayChunk) oldChunk).removeEntity(runtimeId);
+                }
+            }
 
-        var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-        if (newChunk != null) ((AllayChunk) newChunk).addEntity(thisEntity);
-        else {
-            // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
-            // moving to an unloaded chunk will result in the loss of the entity
-            log.debug("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
+            var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
+            if (newChunk != null) {
+                ((AllayChunk) newChunk).addEntity(thisEntity);
+                Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
+                Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
+                samePlayers.retainAll(oldChunkPlayers);
+                for (var player : oldChunkPlayers) {
+                    if (!samePlayers.contains(player) && player != thisEntity) {
+                        despawnFrom(player);
+                    }
+                }
+                for (var player : newChunk.getPlayerChunkLoaders()) {
+                    if (!samePlayers.contains(player) && player != thisEntity) {
+                        spawnTo(player);
+                    }
+                }
+            } else {
+                // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
+                // moving to an unloaded chunk will result in the loss of the entity
+                log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
+            }
         }
     }
 
