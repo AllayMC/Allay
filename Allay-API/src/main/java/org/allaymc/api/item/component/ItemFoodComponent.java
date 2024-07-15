@@ -10,6 +10,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 public interface ItemFoodComponent extends ItemComponent {
     void onEaten(EntityPlayer player);
 
+    boolean canBeAlwaysEaten();
+
     int getFoodPoints();
 
     float getSaturationPoints();

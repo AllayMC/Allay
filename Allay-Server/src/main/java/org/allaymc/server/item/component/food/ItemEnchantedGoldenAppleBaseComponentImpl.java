@@ -24,4 +24,9 @@ public class ItemEnchantedGoldenAppleBaseComponentImpl extends ItemFoodComponent
         player.addEffect(EffectResistanceType.RESISTANCE_TYPE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
         player.addEffect(EffectFireResistanceType.FIRE_RESISTANCE_TYPE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
     }
+
+    @Override
+    public boolean canBeAlwaysEaten() {
+        return true;
+    }
 }
