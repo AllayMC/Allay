@@ -61,3 +61,16 @@ jobs:
         with:
           name: Allay-Server
           path: Allay-Server/build/libs/Allay-Server-*-all.jar
+      # Publish to minebbs
+      - name: Update MineBBS Infomation
+        uses: fjogeleit/http-request-action@v1
+        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        with:
+          url: 'https://api.minebbs.com/api/openapi/v1/resources/8815/update'
+          method: 'POST'
+          customHeaders: '{"Authorization": "Bearer ${{ secrets.MINEBBS_API_KEY }}"}'
+          contentType: 'application/json'
+          data: '{"title": "${{ github.ref_name }}-${{ steps.vars.outputs.sha_short }}", "description": "${{ steps.get-changelog.outputs.changelog }}", "new_version": "${{ steps.time.outputs.time }}", "file_url": "https://github.com/AllayMC/Allay"}'
+          escapeData: 'true'
+          preventFailureOnNoResponse: 'true'
+          ignoreStatusCodes: '400,404,401,403,500,502,503,504'
