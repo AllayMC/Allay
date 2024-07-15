@@ -22,7 +22,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # support for ipv6
+      # Support for ipv6
       - name: Set up WARP
         uses: fscarmen/warp-on-actions@v1.1
         if: contains(github.ref_name, 'master')
@@ -49,6 +49,7 @@ jobs:
         with:
           directory: .jacoco/test/
           token: ${{ secrets.CODECOV_TOKEN }}
+      # Upload artifacts
       - name: Upload Allay-API
         uses: actions/upload-artifact@v4
         if: success() && contains(github.ref_name, 'master')
@@ -61,6 +62,21 @@ jobs:
         with:
           name: Allay-Server
           path: Allay-Server/build/libs/Allay-Server-*-all.jar
+      # Generate information
+      - name: Get Short SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - name: Format ChangeLog
+        id: get-changelog
+        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        run: echo "changelog=${{ github.event.commits[0].message }}" >> $GITHUB_OUTPUT
+      - name: Get Time
+        id: time
+        uses: nanzm/get-time-action@v1.1
+        if: github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        with:
+          timeZone: 8
+          format: 'YYYY/MM/DD-HH:mm:ss'
       # Publish to minebbs
       - name: Update MineBBS Infomation
         uses: fjogeleit/http-request-action@v1
