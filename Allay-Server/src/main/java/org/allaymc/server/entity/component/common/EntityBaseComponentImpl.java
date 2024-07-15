@@ -385,27 +385,29 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void sendEntityData(EntityDataType<?>... dataTypes) {
         if (viewers.isEmpty()) return;
-
-        var pk = new SetEntityDataPacket();
-        pk.setRuntimeEntityId(runtimeId);
-        for (EntityDataType<?> type : dataTypes) {
-            pk.getMetadata().put(type, metadata.getEntityDataMap().get(type));
-        }
-        pk.setTick(this.getWorld().getTick());
-        sendPacketToViewers(pk);
+        sendPacketToViewers(createSetEntityDataPacket(dataTypes, new EntityFlag[0]));
     }
 
     @Override
     public void sendEntityFlags(EntityFlag... flags) {
         if (viewers.isEmpty()) return;
+        sendPacketToViewers(createSetEntityDataPacket(new EntityDataType<?>[0], flags));
+    }
 
-        var pk = new SetEntityDataPacket();
-        pk.setRuntimeEntityId(runtimeId);
-        for (EntityFlag flag : flags) {
-            pk.getMetadata().setFlag(flag, metadata.get(flag));
+    protected SetEntityDataPacket createSetEntityDataPacket(EntityDataType<?>[] dataTypes, EntityFlag[] flags) {
+        var packet = new SetEntityDataPacket();
+        packet.setRuntimeEntityId(runtimeId);
+
+        var metadata = packet.getMetadata();
+        for (var type : dataTypes) {
+            metadata.put(type, this.metadata.get(type));
         }
-        pk.setTick(this.getWorld().getTick());
-        sendPacketToViewers(pk);
+        for (var flag : flags) {
+            metadata.setFlag(flag, this.metadata.get(flag));
+        }
+
+        packet.setTick(this.getWorld().getTick());
+        return packet;
     }
 
     @Override
@@ -766,7 +768,6 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             visibleEffects |= 1L << effect.getType().getId();
         }
 
-        // TODO: need send to player and viewers if this player
         setAndSendEntityData(EntityDataTypes.VISIBLE_MOB_EFFECTS, visibleEffects);
     }
 

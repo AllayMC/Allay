@@ -3,8 +3,6 @@ package org.allaymc.api.entity.effect;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.utils.Identifier;
 
-import java.awt.*;
-
 /**
  * Allay Project 2023/10/27
  *
@@ -14,8 +12,6 @@ public interface EffectType {
     int getId();
 
     Identifier getIdentifier();
-
-    Color getColor();
 
     EffectInstance createInstance(int amplifier, int duration, boolean visible);
 

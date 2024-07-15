@@ -31,6 +31,7 @@ import static org.allaymc.api.item.ItemHelper.isSword;
 public interface BlockBaseComponent extends BlockComponent {
     /**
      * Get the block type
+     *
      * @return block type
      */
     BlockType<? extends BlockBehavior> getBlockType();
@@ -41,13 +42,14 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Update a specific property of a specific block
+     *
      * @param propertyType the property type needs to be updated
-     * @param value the new property value
-     * @param x block's x coordinate
-     * @param y block's y coordinate
-     * @param z block's z coordinate
-     * @param dimension the dimension which the block is in
-     * @param layer the layer which contains the block
+     * @param value        the new property value
+     * @param x            block's x coordinate
+     * @param y            block's y coordinate
+     * @param z            block's z coordinate
+     * @param dimension    the dimension which the block is in
+     * @param layer        the layer which contains the block
      */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, Dimension dimension, int layer) {
         var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
@@ -101,6 +103,7 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Called when the block encounters random tick update
+     *
      * @param blockState the block
      */
     void onRandomUpdate(BlockStateWithPos blockState);
@@ -168,8 +171,10 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Get the block's drops when it is broke by item normally
+     *
      * @param blockState the block being broke
-     * @param usedItem the item used to break the block
+     * @param usedItem   the item used to break the block
+     *
      * @return the drops
      */
     default ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
@@ -182,7 +187,9 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Get the block's drops when it is broke by an item which has silk touch enchantment
+     *
      * @param blockState the block which is being broke
+     *
      * @return the drops
      */
     default ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
@@ -195,9 +202,11 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Calculate how long can break a specific block state
+     *
      * @param blockState the specific block state, must belong to this block type
-     * @param usedItem the item used, can be null
-     * @param entity the entity who break the block, can be null
+     * @param usedItem   the item used, can be null
+     * @param entity     the entity who break the block, can be null
+     *
      * @return the time (second)
      */
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
@@ -265,13 +274,14 @@ public interface BlockBaseComponent extends BlockComponent {
         return 1d / speed;
     }
 
-    private static double speedBonusByEfficiency(int efficiencyLevel) {
+    private double speedBonusByEfficiency(int efficiencyLevel) {
         if (efficiencyLevel == 0) return 0;
         return efficiencyLevel * efficiencyLevel + 1;
     }
 
     /**
      * Check if the provided block state is belong to this block type
+     *
      * @param blockState the block state you want to check
      */
     private void checkBlockType(BlockState blockState) {

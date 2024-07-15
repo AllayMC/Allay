@@ -17,9 +17,9 @@ import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
+import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
-import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
@@ -56,6 +56,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -841,5 +842,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         pk.setMotion(MathUtils.JOMLVecToCBVec(motion));
         pk.setRuntimeEntityId(runtimeId);
         networkComponent.sendPacket(pk);
+    }
+
+    @Override
+    public void sendEntityData(EntityDataType<?>... dataTypes) {
+        super.sendEntityData(dataTypes);
+        networkComponent.sendPacket(createSetEntityDataPacket(dataTypes, new EntityFlag[0]));
     }
 }
