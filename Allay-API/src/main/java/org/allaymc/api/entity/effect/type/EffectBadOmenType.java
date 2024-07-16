@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectBadOmenType extends AbstractEffectType {
-    public static final EffectBadOmenType BAD_OMEN = new EffectBadOmenType();
-
-    private EffectBadOmenType() {
+    public EffectBadOmenType() {
         super(28, new Identifier("minecraft:bad_omen"), true);
     }
 }

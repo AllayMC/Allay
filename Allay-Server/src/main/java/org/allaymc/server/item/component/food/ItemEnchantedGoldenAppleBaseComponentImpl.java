@@ -1,9 +1,6 @@
 package org.allaymc.server.item.component.food;
 
-import org.allaymc.api.entity.effect.type.EffectAbsorptionType;
-import org.allaymc.api.entity.effect.type.EffectFireResistanceType;
-import org.allaymc.api.entity.effect.type.EffectRegenerationType;
-import org.allaymc.api.entity.effect.type.EffectResistanceType;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
@@ -19,10 +16,10 @@ public class ItemEnchantedGoldenAppleBaseComponentImpl extends ItemFoodComponent
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        player.addEffect(EffectRegenerationType.REGENERATION.createInstance(4, 30 * 20)); // 5 lvl, 30 seconds
-        player.addEffect(EffectAbsorptionType.ABSORPTION.createInstance(3, 60 * 2 * 20)); // 4 lvl, 2 minutes
-        player.addEffect(EffectResistanceType.RESISTANCE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
-        player.addEffect(EffectFireResistanceType.FIRE_RESISTANCE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
+        player.addEffect(EffectTypes.REGENERATION.createInstance(4, 30 * 20)); // 5 lvl, 30 seconds
+        player.addEffect(EffectTypes.ABSORPTION.createInstance(3, 60 * 2 * 20)); // 4 lvl, 2 minutes
+        player.addEffect(EffectTypes.RESISTANCE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
+        player.addEffect(EffectTypes.FIRE_RESISTANCE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
     }
 
     @Override

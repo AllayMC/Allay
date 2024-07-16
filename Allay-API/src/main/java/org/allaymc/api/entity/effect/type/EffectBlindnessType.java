@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectBlindnessType extends AbstractEffectType {
-    public static final EffectBlindnessType BLINDNESS = new EffectBlindnessType();
-
-    private EffectBlindnessType() {
+    public EffectBlindnessType() {
         super(15, new Identifier("minecraft:blindness"), true);
     }
 }

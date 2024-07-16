@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author IWareQ
  */
 public class EffectOozingType extends AbstractEffectType {
-    public static final EffectOozingType OOZING = new EffectOozingType();
-
-    private EffectOozingType() {
+    public EffectOozingType() {
         super(34, new Identifier("minecraft:oozing"), true);
     }
 }

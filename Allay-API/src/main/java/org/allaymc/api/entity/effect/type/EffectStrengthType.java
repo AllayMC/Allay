@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectStrengthType extends AbstractEffectType {
-    public static final EffectStrengthType STRENGTH = new EffectStrengthType();
-
-    private EffectStrengthType() {
+    public EffectStrengthType() {
         super(5, new Identifier("minecraft:strength"));
     }
 }

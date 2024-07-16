@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectJumpBoostType extends AbstractEffectType {
-    public static final EffectJumpBoostType JUMP_BOOST = new EffectJumpBoostType();
-
-    private EffectJumpBoostType() {
+    public EffectJumpBoostType() {
         super(8, new Identifier("minecraft:jump_boost"));
     }
 }

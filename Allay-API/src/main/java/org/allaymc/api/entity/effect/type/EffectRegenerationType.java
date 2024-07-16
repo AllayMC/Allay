@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectRegenerationType extends AbstractEffectType {
-    public static final EffectRegenerationType REGENERATION = new EffectRegenerationType();
-
-    private EffectRegenerationType() {
+    public EffectRegenerationType() {
         super(10, new Identifier("minecraft:regeneration"));
     }
 }

@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectHasteType extends AbstractEffectType {
-    public static final EffectHasteType HASTE = new EffectHasteType();
-
-    private EffectHasteType() {
+    public EffectHasteType() {
         super(3, new Identifier("minecraft:haste"));
     }
 }
