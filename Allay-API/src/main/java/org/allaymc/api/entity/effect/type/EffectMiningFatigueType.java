@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectMiningFatigueType extends AbstractEffectType {
-    public static final EffectMiningFatigueType MINING_FATIGUE = new EffectMiningFatigueType();
-
-    private EffectMiningFatigueType() {
+    public EffectMiningFatigueType() {
         super(4, new Identifier("minecraft:mining_fatigue"), true);
     }
 }
