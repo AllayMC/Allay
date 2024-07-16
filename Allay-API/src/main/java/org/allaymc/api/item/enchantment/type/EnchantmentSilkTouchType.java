@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentSilkTouchType extends AbstractEnchantmentType {
-    public static final EnchantmentSilkTouchType SILK_TOUCH = new EnchantmentSilkTouchType();
-
-    private EnchantmentSilkTouchType() {
+    public EnchantmentSilkTouchType() {
         super(new Identifier("minecraft:silk_touch"), 16, 1, Rarity.VERY_RARE);
     }
 

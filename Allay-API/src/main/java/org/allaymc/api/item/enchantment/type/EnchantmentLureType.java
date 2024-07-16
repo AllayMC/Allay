@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentLureType extends AbstractEnchantmentType {
-    public static final EnchantmentLureType LURE = new EnchantmentLureType();
-
-    private EnchantmentLureType() {
+    public EnchantmentLureType() {
         super(new Identifier("minecraft:lure"), 24, 3, Rarity.RARE);
     }
 }

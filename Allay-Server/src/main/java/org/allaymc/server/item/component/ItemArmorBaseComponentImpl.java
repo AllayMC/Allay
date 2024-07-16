@@ -4,7 +4,7 @@ import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.type.EnchantmentUnbreakingType;
+import org.allaymc.api.item.enchantment.EnchantmentTypes;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
@@ -36,7 +36,7 @@ public class ItemArmorBaseComponentImpl<T extends ItemStack> extends ItemBaseCom
 
     @Override
     public boolean willDamageItem() {
-        var level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING);
+        var level = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
         if (level == 0) return true;
 
         var possibility = 0.6f + 0.4f / (level + 1f);

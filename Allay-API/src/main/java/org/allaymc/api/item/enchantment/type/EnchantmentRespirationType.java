@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentRespirationType extends AbstractEnchantmentType {
-    public static final EnchantmentRespirationType RESPIRATION = new EnchantmentRespirationType();
-
-    private EnchantmentRespirationType() {
+    public EnchantmentRespirationType() {
         super(new Identifier("minecraft:respiration"), 6, 3, Rarity.RARE);
     }
 }

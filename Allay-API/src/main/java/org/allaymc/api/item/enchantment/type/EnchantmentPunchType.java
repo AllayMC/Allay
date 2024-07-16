@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentPunchType extends AbstractEnchantmentType {
-    public static final EnchantmentPunchType PUNCH = new EnchantmentPunchType();
-
-    private EnchantmentPunchType() {
+    public EnchantmentPunchType() {
         super(new Identifier("minecraft:punch"), 20, 2, Rarity.RARE);
     }
 }

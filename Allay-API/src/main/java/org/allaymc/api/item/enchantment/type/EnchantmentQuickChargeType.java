@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentQuickChargeType extends AbstractEnchantmentType {
-    public static final EnchantmentQuickChargeType QUICK_CHARGE = new EnchantmentQuickChargeType();
-
-    private EnchantmentQuickChargeType() {
+    public EnchantmentQuickChargeType() {
         super(new Identifier("minecraft:quick_charge"), 35, 3, Rarity.UNCOMMON);
     }
 }

@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentPowerType extends AbstractEnchantmentType {
-    public static final EnchantmentPowerType POWER = new EnchantmentPowerType();
-
-    private EnchantmentPowerType() {
+    public EnchantmentPowerType() {
         super(new Identifier("minecraft:power"), 19, 5, Rarity.COMMON);
     }
 }

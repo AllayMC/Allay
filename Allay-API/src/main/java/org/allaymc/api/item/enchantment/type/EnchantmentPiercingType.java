@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentPiercingType extends AbstractEnchantmentType {
-    public static final EnchantmentPiercingType PIERCING = new EnchantmentPiercingType();
-
-    private EnchantmentPiercingType() {
+    public EnchantmentPiercingType() {
         super(new Identifier("minecraft:piercing"), 34, 4, Rarity.COMMON);
     }
 

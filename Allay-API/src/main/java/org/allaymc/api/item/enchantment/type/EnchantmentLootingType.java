@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentLootingType extends AbstractEnchantmentType {
-    public static final EnchantmentLootingType LOOTING = new EnchantmentLootingType();
-
-    private EnchantmentLootingType() {
+    public EnchantmentLootingType() {
         super(new Identifier("minecraft:looting"), 14, 3, Rarity.RARE);
     }
 }

@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentBindingType extends AbstractEnchantmentType {
-    public static final EnchantmentBindingType BINDING = new EnchantmentBindingType();
-
-    private EnchantmentBindingType() {
+    public EnchantmentBindingType() {
         super(new Identifier("minecraft:binding"), 27, 1, Rarity.VERY_RARE);
     }
 }

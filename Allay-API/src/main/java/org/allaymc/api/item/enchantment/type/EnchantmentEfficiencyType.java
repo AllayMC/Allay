@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentEfficiencyType extends AbstractEnchantmentType {
-    public static final EnchantmentEfficiencyType EFFICIENCY = new EnchantmentEfficiencyType();
-
-    private EnchantmentEfficiencyType() {
+    public EnchantmentEfficiencyType() {
         super(new Identifier("minecraft:efficiency"), 15, 5, Rarity.COMMON);
     }
 }

@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentKnockbackType extends AbstractEnchantmentType {
-    public static final EnchantmentKnockbackType KNOCKBACK = new EnchantmentKnockbackType();
-
-    private EnchantmentKnockbackType() {
+    public EnchantmentKnockbackType() {
         super(new Identifier("minecraft:knockback"), 12, 2, Rarity.UNCOMMON);
     }
 }

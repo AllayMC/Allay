@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentInfinityType extends AbstractEnchantmentType {
-    public static final EnchantmentInfinityType INFINITY = new EnchantmentInfinityType();
-
-    private EnchantmentInfinityType() {
+    public EnchantmentInfinityType() {
         super(new Identifier("minecraft:infinity"), 22, 1, Rarity.VERY_RARE);
     }
 
