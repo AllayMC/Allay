@@ -2,6 +2,7 @@ package org.allaymc.server.world;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.init.SimpleBlockEntityInitInfo;
+import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.Chunk;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.allaymc.api.block.type.BlockTypes.*;
-import static org.allaymc.api.blockentity.type.BlockEntityTypes.BARREL_TYPE;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
@@ -22,15 +22,15 @@ class AllayChunkTest {
 
     @Test
     void testInvalidGetBlockStateMethodCall() {
-        assertEquals(AIR_TYPE.getDefaultState(), chunk.getBlockState(0, -10000, 0));
+        assertEquals(AIR.getDefaultState(), chunk.getBlockState(0, -10000, 0));
     }
 
     @Test
     void testUpdateBlockState() {
-        chunk.setBlockState(0, 0, 0, OAK_WOOD_TYPE.getDefaultState(), 0);
-        chunk.setBlockState(0, 0, 0, WATER_TYPE.getDefaultState(), 1);
-        assertEquals(OAK_WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 0));
-        assertEquals(WATER_TYPE.getDefaultState(), chunk.getBlockState(0, 0, 0, 1));
+        chunk.setBlockState(0, 0, 0, OAK_WOOD.getDefaultState(), 0);
+        chunk.setBlockState(0, 0, 0, WATER.getDefaultState(), 1);
+        assertEquals(OAK_WOOD.getDefaultState(), chunk.getBlockState(0, 0, 0, 0));
+        assertEquals(WATER.getDefaultState(), chunk.getBlockState(0, 0, 0, 1));
     }
 
     @Test
@@ -59,7 +59,7 @@ class AllayChunkTest {
 
     @Test
     void testUpdateBlockEntity() {
-        var blockEntity = BARREL_TYPE.createBlockEntity(
+        var blockEntity = BlockEntityTypes.BARREL.createBlockEntity(
                 SimpleBlockEntityInitInfo
                         .builder()
                         .pos(11, 45, 14)

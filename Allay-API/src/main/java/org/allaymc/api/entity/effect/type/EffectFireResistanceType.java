@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectFireResistanceType extends AbstractEffectType {
-    public static final EffectFireResistanceType FIRE_RESISTANCE_TYPE = new EffectFireResistanceType();
+    public static final EffectFireResistanceType FIRE_RESISTANCE = new EffectFireResistanceType();
 
     private EffectFireResistanceType() {
         super(12, new Identifier("minecraft:fire_resistance"));

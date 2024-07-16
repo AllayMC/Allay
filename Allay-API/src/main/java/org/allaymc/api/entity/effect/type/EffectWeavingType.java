@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author IWareQ
  */
 public class EffectWeavingType extends AbstractEffectType {
-    public static final EffectWeavingType WEAVING_OMEN_TYPE = new EffectWeavingType();
+    public static final EffectWeavingType WEAVING_OMEN = new EffectWeavingType();
 
     private EffectWeavingType() {
         super(33, new Identifier("minecraft:weaving"), true);

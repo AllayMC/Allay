@@ -20,7 +20,7 @@ import java.util.List;
 
 import static org.allaymc.api.data.VanillaItemTags.*;
 import static org.allaymc.api.data.VanillaMaterialTypes.*;
-import static org.allaymc.api.item.type.ItemTypes.SHEARS_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
 /**
  * Allay Project 2023/5/19
@@ -229,7 +229,7 @@ public interface ItemBaseComponent extends ItemComponent {
         if (itemType.hasItemTag(IS_SWORD)) {
             if (materialType == WEB) return 15.0;
         }
-        if (itemType == SHEARS_TYPE) {
+        if (itemType == SHEARS) {
             // Shears break wool and leaves faster
             if (materialType == CLOTH) {
                 return 5.0;
@@ -265,7 +265,7 @@ public interface ItemBaseComponent extends ItemComponent {
         if (blockHardness == 0) return true;
         if (getItemType().hasItemTag(IS_SWORD)) {
             // Swords can break bamboo instantly
-            return blockState.getBlockType() == BlockTypes.BAMBOO_TYPE;
+            return blockState.getBlockType() == BlockTypes.BAMBOO;
         }
         return false;
     }

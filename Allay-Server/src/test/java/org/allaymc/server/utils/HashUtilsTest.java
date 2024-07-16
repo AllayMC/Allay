@@ -2,7 +2,6 @@ package org.allaymc.server.utils;
 
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
@@ -13,16 +12,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 
-import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 
 @ExtendWith({AllayTestExtension.class})
 public class HashUtilsTest {
-    static BlockState testBlockState;
     static final int testBlockStateHash = 567193200;
+    static BlockState testBlockState;
 
     @BeforeAll
     static void before() {
-        testBlockState = OAK_WOOD_TYPE.getDefaultState();
+        testBlockState = OAK_WOOD.getDefaultState();
     }
 
     @Test
@@ -72,5 +71,4 @@ public class HashUtilsTest {
         Assertions.assertEquals(64, HashUtils.getYFromHashChunkXYZ(-2147482616));
         Assertions.assertEquals(8, HashUtils.getZFromHashChunkXYZ(-2147482616));
     }
-
 }

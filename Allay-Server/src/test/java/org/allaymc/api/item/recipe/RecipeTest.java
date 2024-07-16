@@ -1,26 +1,22 @@
 package org.allaymc.api.item.recipe;
 
-import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
+import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
 import org.allaymc.api.item.recipe.input.CraftingInput;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
-import static org.allaymc.api.item.type.ItemTypes.DIAMOND_TYPE;
-import static org.allaymc.api.item.type.ItemTypes.GRASS_BLOCK_TYPE;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.allaymc.api.item.type.ItemTypes.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/11/25
@@ -29,8 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(AllayTestExtension.class)
 class RecipeTest {
-
-    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(GRASS_BLOCK_TYPE));
+    public static final Map<Character, ItemDescriptor> GRASS_KEY = Map.of('x', new DefaultDescriptor(GRASS_BLOCK));
 
     @Test
     void testShapedRecipe() {
@@ -49,13 +44,13 @@ class RecipeTest {
                 .build();
 
         assertEquals(new Identifier("minecraft:grass_magic_1"), grassMagic1.getIdentifier());
-        assertEquals(DIAMOND_TYPE, grassMagic1.getOutputs()[0].getItemType());
+        assertEquals(DIAMOND, grassMagic1.getOutputs()[0].getItemType());
         assertEquals("test_tag", grassMagic1.getTag());
 
         var input1 = new CraftingInput(
                 grass(), grass(), air(),
                 grass(), grass(), air(),
-                air(),   air(),   air()
+                air(), air(), air()
         );
         var input2 = new CraftingInput(
                 grass(), grass(),
@@ -64,7 +59,7 @@ class RecipeTest {
         var input3 = new CraftingInput(
                 air(), grass(), grass(),
                 air(), grass(), grass(),
-                air(), air(),   air()
+                air(), air(), air()
         );
         var input4 = new CraftingInput(
                 air(), air(), air(),
@@ -113,12 +108,12 @@ class RecipeTest {
         var input8 = new CraftingInput(
                 grass(), air(), air(),
                 grass(), air(), air(),
-                air(),   air(), air()
+                air(), air(), air()
         );
         var input9 = new CraftingInput(
                 air(), grass(), air(),
                 air(), grass(), air(),
-                air(),   air(), air()
+                air(), air(), air()
         );
         var input10 = new CraftingInput(
                 air(), air(), grass(),
@@ -198,9 +193,9 @@ class RecipeTest {
                 .identifier(new Identifier("minecraft:grass_magic_1"))
                 .ingredients(
                         new ItemDescriptor[]{
-                                new DefaultDescriptor(GRASS_BLOCK_TYPE),
-                                new DefaultDescriptor(GRASS_BLOCK_TYPE),
-                                new DefaultDescriptor(GRASS_BLOCK_TYPE)
+                                new DefaultDescriptor(GRASS_BLOCK),
+                                new DefaultDescriptor(GRASS_BLOCK),
+                                new DefaultDescriptor(GRASS_BLOCK)
                         }
                 )
                 .outputs(new ItemStack[]{diamond()})
@@ -222,20 +217,20 @@ class RecipeTest {
     }
 
     private ItemDiamondStack diamond() {
-        return DIAMOND_TYPE.createItemStack(
+        return DIAMOND.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()
         );
     }
 
 
     private ItemGrassBlockStack grass() {
-        return GRASS_BLOCK_TYPE.createItemStack(
+        return GRASS_BLOCK.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()
         );
     }
 
     private ItemAirStack air() {
-        return AIR_TYPE.createItemStack(
+        return AIR.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()
         );
     }

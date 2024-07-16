@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
  * Allay Project 11/12/2023
@@ -104,7 +104,7 @@ public class AllayDimension implements Dimension {
     @Override
     public void breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player) {
         var block = getBlockState(x, y, z);
-        if (block.getBlockType() == AIR_TYPE) {
+        if (block.getBlockType() == AIR) {
             log.warn("Trying to break air block at x={}, y={}, z={}", x, y, z);
             return;
         }
@@ -119,7 +119,7 @@ public class AllayDimension implements Dimension {
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
                 usedItem, player
         );
-        setBlockState(x, y, z, AIR_TYPE.getDefaultState());
+        setBlockState(x, y, z, AIR.getDefaultState());
 
         if (player != null) player.exhaust(0.005f);
     }

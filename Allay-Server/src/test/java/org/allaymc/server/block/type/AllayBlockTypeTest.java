@@ -1,7 +1,10 @@
 package org.allaymc.server.block.type;
 
 import org.allaymc.api.block.component.common.BlockStateData;
-import org.allaymc.api.block.property.enums.*;
+import org.allaymc.api.block.property.enums.WallConnectionTypeEast;
+import org.allaymc.api.block.property.enums.WallConnectionTypeNorth;
+import org.allaymc.api.block.property.enums.WallConnectionTypeSouth;
+import org.allaymc.api.block.property.enums.WallConnectionTypeWest;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BooleanPropertyType;
 import org.allaymc.api.block.property.type.EnumPropertyType;
@@ -19,7 +22,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
-import static org.allaymc.api.block.type.BlockTypes.*;
+import static org.allaymc.api.block.type.BlockTypes.BLUE_CANDLE;
+import static org.allaymc.api.block.type.BlockTypes.COBBLED_DEEPSLATE_WALL;
 import static org.allaymc.server.block.type.AllayBlockType.computeSpecialValue;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -135,7 +139,7 @@ class AllayBlockTypeTest {
 
     @Test
     void testBlockStateHash() {
-        var b1 = COBBLED_DEEPSLATE_WALL_TYPE.getDefaultState();
+        var b1 = COBBLED_DEEPSLATE_WALL.getDefaultState();
         b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
         b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
         b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
@@ -143,7 +147,7 @@ class AllayBlockTypeTest {
         b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
         assertEquals(1789459903, b1.unsignedBlockStateHash());
 
-        var b2 = BLUE_CANDLE_TYPE.getDefaultState();
+        var b2 = BLUE_CANDLE.getDefaultState();
         b2 = b2.setProperty(VanillaBlockPropertyTypes.CANDLES, 2);
         b2 = b2.setProperty(VanillaBlockPropertyTypes.LIT, false);
         assertEquals(4220034033L, b2.unsignedBlockStateHash());

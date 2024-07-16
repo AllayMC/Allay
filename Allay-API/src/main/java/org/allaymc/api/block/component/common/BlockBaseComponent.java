@@ -226,26 +226,26 @@ public interface BlockBaseComponent extends BlockComponent {
         if (entity != null) {
             isInWater = entity.isInWater();
             isOnGround = entity.isOnGround();
-            hasteEffectLevel = entity.getEffectLevel(EffectHasteType.HASTE_TYPE);
+            hasteEffectLevel = entity.getEffectLevel(EffectHasteType.HASTE);
             // Conduit Power ensures at least level 2 haste effect
-            if (entity.hasEffect(EffectConduitPowerType.CONDUIT_POWER_TYPE)) {
+            if (entity.hasEffect(EffectConduitPowerType.CONDUIT_POWER)) {
                 hasteEffectLevel = Integer.max(hasteEffectLevel, 2);
             }
 
-            miningFatigueLevel = entity.getEffectLevel(EffectHasteType.HASTE_TYPE);
+            miningFatigueLevel = entity.getEffectLevel(EffectHasteType.HASTE);
 
             if (entity instanceof EntityContainerHolderComponent containerHolder) {
                 if (containerHolder.hasContainer(FullContainerType.ARMOR))
                     hasAquaAffinity = containerHolder
                             .getContainer(FullContainerType.ARMOR)
                             .getItemStack(0)
-                            .hasEnchantment(EnchantmentAquaAffinityType.AQUA_AFFINITY_TYPE);
+                            .hasEnchantment(EnchantmentAquaAffinityType.AQUA_AFFINITY);
 
                 if (containerHolder.hasContainer(FullContainerType.PLAYER_INVENTORY))
                     efficiencyLevel = containerHolder
                             .getContainer(FullContainerType.PLAYER_INVENTORY)
                             .getItemInHand()
-                            .getEnchantmentLevel(EnchantmentEfficiencyType.EFFICIENCY_TYPE);
+                            .getEnchantmentLevel(EnchantmentEfficiencyType.EFFICIENCY);
             }
         }
 

@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 @NotThreadSafe
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -165,11 +165,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public BlockState getBlockState(int x, int y, int z, int layer) {
         if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
-            return AIR_TYPE.getDefaultState();
+            return AIR.getDefaultState();
 
         checkXZ(x, z);
         var section = this.getSection(y >> 4);
-        return section == null ? AIR_TYPE.getDefaultState() : section.getBlockState(x, y & 0xf, z, layer);
+        return section == null ? AIR.getDefaultState() : section.getBlockState(x, y & 0xf, z, layer);
     }
 
     @Override

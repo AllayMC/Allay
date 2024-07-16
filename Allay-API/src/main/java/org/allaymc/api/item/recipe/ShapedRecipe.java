@@ -14,7 +14,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescripto
 
 import java.util.*;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * Allay Project 2023/11/25
@@ -84,7 +84,7 @@ public class ShapedRecipe extends CraftingRecipe {
                 var key = row[j];
                 var item = inputs[i][j];
                 if (key == EMPTY_KEY_CHAR) {
-                    if (!item.getItemType().equals(AIR_TYPE)) return false;
+                    if (!item.getItemType().equals(AIR)) return false;
                 } else {
                     var descriptor = keys.get(key);
                     if (!descriptor.match(item)) return false;
@@ -167,11 +167,11 @@ public class ShapedRecipe extends CraftingRecipe {
     }
 
     protected boolean notAllEmptyRow(ItemStack[] inputs) {
-        return Arrays.stream(inputs).anyMatch(item -> item.getItemType() != AIR_TYPE);
+        return Arrays.stream(inputs).anyMatch(item -> item.getItemType() != AIR);
     }
 
     protected boolean notAllEmptyColumn(ItemStack[][] inputs, int column) {
-        return Arrays.stream(inputs).anyMatch(row -> row[column].getItemType() != AIR_TYPE);
+        return Arrays.stream(inputs).anyMatch(row -> row[column].getItemType() != AIR);
     }
 
     public interface PatternHelper {

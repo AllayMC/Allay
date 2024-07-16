@@ -31,7 +31,7 @@ public class TrKeysGen {
         var codeBuilder = TypeSpec.interfaceBuilder(CLASS_NAME)
                 .addModifiers(Modifier.PUBLIC)
                 .addJavadoc("@author daoge_cmd <br>\n" +
-                        "Allay Project <br>\n");
+                            "Allay Project <br>\n");
         for (var key : keys) {
             var identifier = new Identifier(key);
             var namespace = handleNamespace(identifier.namespace());
@@ -44,7 +44,10 @@ public class TrKeysGen {
                             .build()
             );
         }
-        var javaFile = JavaFile.builder(CLASS_NAME.packageName(), codeBuilder.build()).build();
+        var javaFile = JavaFile.builder(CLASS_NAME.packageName(), codeBuilder.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         System.out.println("Generating " + CLASS_NAME.simpleName() + ".java ...");
         Files.deleteIfExists(OUTPUT_PATH);
         Files.createFile(OUTPUT_PATH);

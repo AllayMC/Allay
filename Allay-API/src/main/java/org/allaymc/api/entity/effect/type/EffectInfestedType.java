@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author IWareQ
  */
 public class EffectInfestedType extends AbstractEffectType {
-    public static final EffectInfestedType INFESTED_TYPE = new EffectInfestedType();
+    public static final EffectInfestedType INFESTED = new EffectInfestedType();
 
     private EffectInfestedType() {
         super(35, new Identifier("minecraft:infested"), true);

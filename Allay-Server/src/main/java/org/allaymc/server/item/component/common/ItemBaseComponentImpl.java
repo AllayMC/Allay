@@ -156,7 +156,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public boolean willDamageItem() {
-        var level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING_TYPE);
+        var level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING);
         if (level == 0) return true;
 
         var possibility = 1f / (level + 1f);
@@ -172,7 +172,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public ItemData toNetworkItemData() {
-        if (itemType == ItemTypes.AIR_TYPE) return ItemData.AIR;
+        if (itemType == ItemTypes.AIR) return ItemData.AIR;
 
         var blockState = toBlockState();
         return ItemData
@@ -372,8 +372,8 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         }
 
         var materialType = blockState.getBlockType().getMaterial().materialType();
-        if (itemType == ItemTypes.SHEARS_TYPE) {
-            if (blockType == BlockTypes.VINE_TYPE || blockType == BlockTypes.GLOW_LICHEN_TYPE) return true;
+        if (itemType == ItemTypes.SHEARS) {
+            if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) return true;
 
             return materialType == VanillaMaterialTypes.CLOTH ||
                    materialType == VanillaMaterialTypes.LEAVES ||
@@ -392,11 +392,11 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
         if (isHoe(itemType)) {
             if (
-                    blockType == BlockTypes.DRIED_KELP_BLOCK_TYPE ||
-                    blockType == BlockTypes.HAY_BLOCK_TYPE ||
-                    blockType == BlockTypes.TARGET_TYPE ||
-                    blockType == BlockTypes.SPONGE_TYPE ||
-                    blockType == BlockTypes.MOSS_BLOCK_TYPE
+                    blockType == BlockTypes.DRIED_KELP_BLOCK ||
+                    blockType == BlockTypes.HAY_BLOCK ||
+                    blockType == BlockTypes.TARGET ||
+                    blockType == BlockTypes.SPONGE ||
+                    blockType == BlockTypes.MOSS_BLOCK
             ) return true;
 
             return materialType == VanillaMaterialTypes.LEAVES ||
@@ -406,12 +406,12 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
         if (isSword(itemType)) {
             if (
-                    blockType == BlockTypes.BAMBOO_TYPE ||
-                    blockType == BlockTypes.BAMBOO_SAPLING_TYPE ||
-                    blockType == BlockTypes.COCOA_TYPE ||
-                    blockType == BlockTypes.HAY_BLOCK_TYPE ||
-                    blockType == BlockTypes.VINE_TYPE ||
-                    blockType == BlockTypes.GLOW_LICHEN_TYPE
+                    blockType == BlockTypes.BAMBOO ||
+                    blockType == BlockTypes.BAMBOO_SAPLING ||
+                    blockType == BlockTypes.COCOA ||
+                    blockType == BlockTypes.HAY_BLOCK ||
+                    blockType == BlockTypes.VINE ||
+                    blockType == BlockTypes.GLOW_LICHEN
             ) return true;
 
             return materialType == VanillaMaterialTypes.VEGETABLE ||

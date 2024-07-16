@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentLoyaltyType extends AbstractEnchantmentType {
-    public static final EnchantmentLoyaltyType LOYALTY_TYPE = new EnchantmentLoyaltyType();
+    public static final EnchantmentLoyaltyType LOYALTY = new EnchantmentLoyaltyType();
 
     private EnchantmentLoyaltyType() {
         super(new Identifier("minecraft:loyalty"), 31, 3, Rarity.UNCOMMON);

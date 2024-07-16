@@ -35,7 +35,8 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
             TypeSpec.classBuilder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
                     .addJavadoc(
                             "@author daoge_cmd <br>\n" +
-                                    "Allay Project <br>\n")
+                            "Allay Project <br>\n"
+                    )
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
@@ -55,7 +56,7 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         var typesClass = TypeSpec.classBuilder(BLOCK_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : VanillaBlockId.values()) {
             typesClass.addField(
-                    FieldSpec.builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, generateClassFullName(id)), id.name() + "_TYPE")
+                    FieldSpec.builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             .build()
             );
@@ -73,7 +74,10 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
             addDefaultBlockTypeInitializer(id, blockClassFullName);
         }
         generateDefaultBlockTypeInitializer();
-        var javaFile = JavaFile.builder(BLOCK_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
+        var javaFile = JavaFile.builder(BLOCK_TYPES_CLASS_NAME.packageName(), typesClass.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         System.out.println("Generating " + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/block/type/" + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
@@ -81,7 +85,7 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
     private static void addDefaultBlockTypeInitializer(VanillaBlockId id, ClassName blockClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", BLOCK_TYPES_CLASS_NAME, id.name() + "_TYPE", BLOCK_TYPE_BUILDER_CLASS_NAME)
+                .add("$T.$N = $T\n", BLOCK_TYPES_CLASS_NAME, id.name(), BLOCK_TYPE_BUILDER_CLASS_NAME)
                 .add("        .builder($T.class)\n", blockClassName)
                 .add("        .vanillaBlock($T.$N)\n", VANILLA_BLOCK_ID_CLASS_NAME, id.name());
         var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(id.getIdentifier().toString());
@@ -101,7 +105,7 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
                 .addMethod(
                         MethodSpec.methodBuilder(generateInitializerMethodName(id))
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addStatement("if ($T.$N != null) return", BLOCK_TYPES_CLASS_NAME, id.name() + "_TYPE")
+                                .addStatement("if ($T.$N != null) return", BLOCK_TYPES_CLASS_NAME, id.name())
                                 .addCode(initializer.build())
                                 .build()
                 );
@@ -114,7 +118,10 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath))
             Files.createDirectories(folderPath);
-        var javaFile = JavaFile.builder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build()).build();
+        var javaFile = JavaFile.builder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         System.out.println("Generating " + BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(filePath, javaFile.toString());
     }

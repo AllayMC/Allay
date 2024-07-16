@@ -35,7 +35,7 @@ import org.joml.primitives.AABBfc;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
  * Allay Project 11/12/2023
@@ -188,7 +188,7 @@ public interface Dimension {
 
     default BlockState getBlockState(int x, int y, int z, int layer) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
-            return AIR_TYPE.getDefaultState();
+            return AIR.getDefaultState();
 
         var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
@@ -227,7 +227,7 @@ public interface Dimension {
                         }
                     });
                 } else {
-                    var air = AIR_TYPE.getDefaultState();
+                    var air = AIR.getDefaultState();
                     for (int localX = localStartX; localX < localEndX; localX++) {
                         for (int globalY = y; globalY < y + sizeY; globalY++) {
                             for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
@@ -438,7 +438,7 @@ public interface Dimension {
     }
 
     default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion, int pickupDelay) {
-        var entityItem = EntityTypes.ITEM_TYPE.createEntity(
+        var entityItem = EntityTypes.ITEM.createEntity(
                 SimpleEntityInitInfo.builder()
                         .dimension(this)
                         .pos(pos)

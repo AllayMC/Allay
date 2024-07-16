@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author daoge_cmd
  */
 public class CommandNodeTest {
-
     @Test
     void testRootNode() {
         var node = new RootNode();

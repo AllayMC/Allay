@@ -12,28 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author daoge_cmd
  */
 class ReflectionUtilsTest {
-
-    class A {
-        int a;
-
-        String methodA() {
-            return "origin";
-        }
-    }
-
-    class B extends A {
-        int b;
-
-        @Override
-        String methodA() {
-            return "override";
-        }
-
-        String methodB() {
-            return "methodB";
-        }
-    }
-
     @Test
     void testGetAllFields() {
         var fields = ReflectionUtils.getAllFields(B.class);
@@ -51,6 +29,27 @@ class ReflectionUtilsTest {
         for (var method : methods) {
             if (method.getName().equals("methodA")) assertEquals("override", method.invoke(b));
             else if (method.getName().equals("methodB")) assertEquals("methodB", method.invoke(b));
+        }
+    }
+
+    static class A {
+        int a;
+
+        String methodA() {
+            return "origin";
+        }
+    }
+
+    static class B extends A {
+        int b;
+
+        @Override
+        String methodA() {
+            return "override";
+        }
+
+        String methodB() {
+            return "methodB";
         }
     }
 }

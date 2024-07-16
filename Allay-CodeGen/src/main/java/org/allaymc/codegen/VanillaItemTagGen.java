@@ -94,7 +94,8 @@ public class VanillaItemTagGen {
         }
 
         var javaFile = JavaFile.builder("org.allaymc.api.data", codeBuilder.build())
-                .indent("   ")
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
                 .build();
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/data/VanillaItemTags.java"), javaFile.toString());
     }

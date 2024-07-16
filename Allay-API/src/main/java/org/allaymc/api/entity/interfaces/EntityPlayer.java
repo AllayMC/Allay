@@ -12,7 +12,7 @@ import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3f;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * @author daoge_cmd <br>
@@ -49,7 +49,7 @@ public interface EntityPlayer extends
         if (container == null) return false;
 
         var item = container.getItemStack(slot);
-        if (item.getItemType() == AIR_TYPE) return false;
+        if (item.getItemType() == AIR) return false;
         if (item.getCount() < count) return false;
 
         forceDropItem(container, slot, count);

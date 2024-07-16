@@ -20,7 +20,6 @@ public class ThroughList2ArrayJMHTest {
     private final BlockPropertyType.BlockPropertyValue<?, ?, ?>[] data1 = new BlockPropertyType.BlockPropertyValue[3];
     private final ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>> data2 = new ArrayList<>(3);
 
-
     @Setup
     public void setup() throws MissingImplementationException {
         Allay.initAllayAPI();

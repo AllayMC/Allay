@@ -80,7 +80,10 @@ public class VanillaEntityIdEnumGen {
             codeBuilder.addEnumConstant(valueName, TypeSpec.anonymousClassBuilder("$S, $L", entry.getKey(), entry.getValue()).build());
         }
 
-        var javaFile = JavaFile.builder(packageName, codeBuilder.build()).build();
+        var javaFile = JavaFile.builder(packageName, codeBuilder.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         Files.writeString(outPutPath, javaFile.toString());
     }
 }

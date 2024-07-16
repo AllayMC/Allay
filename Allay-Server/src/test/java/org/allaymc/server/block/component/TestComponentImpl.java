@@ -3,8 +3,8 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.utils.Identifier;
 
 /**
  * Allay Project 2023/4/16

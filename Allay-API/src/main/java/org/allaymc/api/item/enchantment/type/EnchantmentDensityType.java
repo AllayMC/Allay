@@ -11,7 +11,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EnchantmentDensityType extends AbstractEnchantmentType {
-    public static final EnchantmentDensityType DENSITY_TYPE = new EnchantmentDensityType();
+    public static final EnchantmentDensityType DENSITY = new EnchantmentDensityType();
 
     private EnchantmentDensityType() {
         super(new Identifier("minecraft:density"), 39, 5, Rarity.UNCOMMON);

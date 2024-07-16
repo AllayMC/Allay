@@ -36,7 +36,7 @@ public class ItemArmorBaseComponentImpl<T extends ItemStack> extends ItemBaseCom
 
     @Override
     public boolean willDamageItem() {
-        var level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING_TYPE);
+        var level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING);
         if (level == 0) return true;
 
         var possibility = 0.6f + 0.4f / (level + 1f);

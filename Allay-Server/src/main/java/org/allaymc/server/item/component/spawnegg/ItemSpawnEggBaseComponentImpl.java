@@ -31,7 +31,7 @@ public class ItemSpawnEggBaseComponentImpl<T extends ItemStack> extends ItemBase
         identifier = new Identifier(identifier.toString().replace("_spawn_egg", ""));
 
         var entityType = EntityTypeRegistry.getRegistry().get(identifier);
-        if (entityType == EntityTypes.VILLAGER_TYPE) entityType = EntityTypes.VILLAGER_V2_TYPE;
+        if (entityType == EntityTypes.VILLAGER) entityType = EntityTypes.VILLAGER_V2;
         var entity = entityType.createEntity(
                 SimpleEntityInitInfo.builder()
                         .dimension(dimension)

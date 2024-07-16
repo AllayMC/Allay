@@ -10,6 +10,8 @@ import java.util.List;
  * @author daoge_cmd
  */
 public class Utils {
+    public static final String INDENT = "    ";
+
     public static String convertToPascalCase(String str) {
         List<String> parts = StringUtils.fastSplit(str, "_");
         StringBuilder output = new StringBuilder();

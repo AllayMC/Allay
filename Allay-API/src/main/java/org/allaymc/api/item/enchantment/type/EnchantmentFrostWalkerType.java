@@ -11,7 +11,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EnchantmentFrostWalkerType extends AbstractEnchantmentType {
-    public static final EnchantmentFrostWalkerType FROST_WALKER_TYPE = new EnchantmentFrostWalkerType();
+    public static final EnchantmentFrostWalkerType FROST_WALKER = new EnchantmentFrostWalkerType();
 
     private EnchantmentFrostWalkerType() {
         super(new Identifier("minecraft:frost_walker"), 25, 3, Rarity.RARE);

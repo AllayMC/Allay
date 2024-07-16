@@ -19,6 +19,6 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
-        return new ItemStack[]{ItemTypes.DIRT_TYPE.createItemStack()};
+        return new ItemStack[]{ItemTypes.DIRT.createItemStack()};
     }
 }

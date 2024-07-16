@@ -23,7 +23,7 @@ import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBox
 @UtilityClass
 public final class BlockEntityTypeInitializer {
     public static void initBarrel() {
-        BlockEntityTypes.BARREL_TYPE = BlockEntityTypeBuilder
+        BlockEntityTypes.BARREL = BlockEntityTypeBuilder
                 .builder(BlockEntityBarrel.class)
                 .name(VanillaBlockEntityId.BARREL)
                 .addComponent(BlockEntityBarrelBaseComponentImpl::new, BlockEntityBarrelBaseComponentImpl.class)
@@ -32,7 +32,7 @@ public final class BlockEntityTypeInitializer {
     }
 
     public static void initChest() {
-        BlockEntityTypes.CHEST_TYPE = BlockEntityTypeBuilder
+        BlockEntityTypes.CHEST = BlockEntityTypeBuilder
                 .builder(BlockEntityChest.class)
                 .name(VanillaBlockEntityId.CHEST)
                 .addComponent(BlockEntityChestBaseComponentImpl::new, BlockEntityChestBaseComponentImpl.class)
@@ -41,7 +41,7 @@ public final class BlockEntityTypeInitializer {
     }
 
     public static void initShulkerBox() {
-        BlockEntityTypes.SHULKER_BOX_TYPE = BlockEntityTypeBuilder
+        BlockEntityTypes.SHULKER_BOX = BlockEntityTypeBuilder
                 .builder(BlockEntityShulkerBox.class)
                 .name(VanillaBlockEntityId.SHULKER_BOX)
                 .addComponent(BlockEntityShulkerBoxBaseComponentImpl::new, BlockEntityShulkerBoxBaseComponentImpl.class)

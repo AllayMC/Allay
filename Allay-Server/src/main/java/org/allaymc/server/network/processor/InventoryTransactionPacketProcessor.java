@@ -17,7 +17,7 @@ import org.cloudburstmc.protocol.bedrock.packet.InventoryTransactionPacket;
 
 import java.util.Objects;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * Allay Project 11/22/2023
@@ -69,7 +69,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 dimension.sendBlockUpdateTo(blockStateClicked, clickBlockPos, 0, player);
 
                                 // Player places a block
-                                if (itemStack.getItemType() == AIR_TYPE) break;
+                                if (itemStack.getItemType() == AIR) break;
                                 if (!itemStack.placeBlock(dimension, placeBlockPos, interactInfo)) {
                                     var blockStateReplaced = dimension.getBlockState(placeBlockPos);
                                     dimension.sendBlockUpdateTo(blockStateReplaced, placeBlockPos, 0, player);
@@ -129,7 +129,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         if (!damageable.attack(damageContainer)) return;
 
                         itemInHand.onAttackEntity(player, target);
-                        if (itemInHand.isBroken()) player.setItemInHand(AIR_TYPE.createItemStack());
+                        if (itemInHand.isBroken()) player.setItemInHand(AIR.createItemStack());
                         else player.sendItemInHandUpdate();
                     }
                 }

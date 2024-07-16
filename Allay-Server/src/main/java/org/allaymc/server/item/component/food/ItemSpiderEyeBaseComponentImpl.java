@@ -16,6 +16,6 @@ public class ItemSpiderEyeBaseComponentImpl extends ItemFoodComponentImpl {
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        player.addEffect(EffectPoisonType.POISON_TYPE.createInstance(0, 5 * 20)); // 1 lvl, 5 seconds
+        player.addEffect(EffectPoisonType.POISON.createInstance(0, 5 * 20)); // 1 lvl, 5 seconds
     }
 }

@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * @author daoge_cmd
  */
 class StringUtilsTest {
-
     static String testStr = "aaa:bbb;ccc:ddd";
 
     @Test

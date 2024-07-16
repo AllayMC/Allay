@@ -9,7 +9,7 @@ import org.allaymc.api.world.palette.Palette;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.AIR;
 import static org.allaymc.api.world.chunk.UnsafeChunk.index;
 
 /**
@@ -32,7 +32,7 @@ public record ChunkSection(
     public ChunkSection(byte sectionY) {
         this(
                 sectionY,
-                new Palette[]{new Palette<>(AIR_TYPE.getDefaultState()), new Palette<>(AIR_TYPE.getDefaultState())},
+                new Palette[]{new Palette<>(AIR.getDefaultState()), new Palette<>(AIR.getDefaultState())},
                 new Palette<>(VanillaBiomeId.PLAINS),
                 new NibbleArray(Chunk.SECTION_SIZE),
                 new NibbleArray(Chunk.SECTION_SIZE)
@@ -81,7 +81,7 @@ public record ChunkSection(
     }
 
     public boolean isEmpty() {
-        return blockLayer[0].isEmpty() && blockLayer[0].get(0) == AIR_TYPE.getDefaultState();
+        return blockLayer[0].isEmpty() && blockLayer[0].get(0) == AIR.getDefaultState();
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {

@@ -24,7 +24,7 @@ public class ItemTropicalFishSpawnEggBaseComponentImpl extends ItemBaseComponent
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) return false;
-        var entity = EntityTypes.TROPICALFISH_TYPE.createEntity(
+        var entity = EntityTypes.TROPICALFISH.createEntity(
                 SimpleEntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z())

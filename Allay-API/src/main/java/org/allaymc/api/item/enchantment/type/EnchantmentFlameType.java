@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentFlameType extends AbstractEnchantmentType {
-    public static final EnchantmentFlameType FLAME_TYPE = new EnchantmentFlameType();
+    public static final EnchantmentFlameType FLAME = new EnchantmentFlameType();
 
     private EnchantmentFlameType() {
         super(new Identifier("minecraft:flame"), 21, 1, Rarity.RARE);

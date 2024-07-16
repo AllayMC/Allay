@@ -19,6 +19,6 @@ public class ItemChickenBaseComponentImpl extends ItemFoodComponentImpl {
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
         if (0.3f >= ThreadLocalRandom.current().nextFloat())
-            player.addEffect(EffectHungerType.HUNGER_TYPE.createInstance(0, 30 * 20)); // 1 lvl, 30 seconds
+            player.addEffect(EffectHungerType.HUNGER.createInstance(0, 30 * 20)); // 1 lvl, 30 seconds
     }
 }

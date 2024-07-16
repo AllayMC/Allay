@@ -2,6 +2,7 @@ package org.allaymc.server.pack;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.Strictness;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.pack.PackManifest;
@@ -24,18 +25,18 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
+ * A util for encrypting pack
+ * <p>
  * Allay Project 2024/2/7
  *
  * @author daoge_cmd
- *
- * An util for encrypting pack
  */
 @Slf4j
 public final class PackEncryptor {
     private static final Gson GSON = new GsonBuilder()
             .disableHtmlEscaping()
             .serializeNulls() // NOTICE: Null should be serialized!
-            .setLenient()
+            .setStrictness(Strictness.LENIENT)
             .create();
     private static final int KEY_LENGTH = 32;
     private static final byte[] VERSION = new byte[]{(byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00};

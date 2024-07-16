@@ -4,46 +4,36 @@ import org.joml.primitives.AABBf;
 
 public class TestEntity implements HasAABB, HasLongId {
 
-   private final float x;
+    private final float x, y, z;
+    private final float width, height, length;
+    private final int id;
 
-   private final float y;
-
-   private final float z;
-
-   private final float width;
-
-   private final float height;
-
-    private final float length;
-
-   private final int id;
-
-   public TestEntity(int id, float x, float y, float width, float height) {
+    public TestEntity(int id, float x, float y, float width, float height) {
         this(id, x, y, 0, width, height, 0);
-   }
+    }
 
-   public TestEntity(int id, float x, float y, float z, float width, float height, float length) {
-      this.id = id;
-      this.x = x;
-      this.y = y;
-      this.z = z;
-      this.width = width;
-      this.height = height;
-      this.length = length;
-   }
+    public TestEntity(int id, float x, float y, float z, float width, float height, float length) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.width = width;
+        this.height = height;
+        this.length = length;
+    }
 
-   @Override
-   public AABBf copyOffsetAABBTo(AABBf dest) {
-      if (dest == null) {
-         dest = new AABBf();
-      }
-      dest.setMin(x, y, z);
-      dest.setMax(x + width, y + height, z + length);
-      return dest;
-   }
+    @Override
+    public AABBf copyOffsetAABBTo(AABBf dest) {
+        if (dest == null) {
+            dest = new AABBf();
+        }
+        dest.setMin(x, y, z);
+        dest.setMax(x + width, y + height, z + length);
+        return dest;
+    }
 
-   @Override
-   public long getLongId() {
-      return id;
-   }
+    @Override
+    public long getLongId() {
+        return id;
+    }
 }

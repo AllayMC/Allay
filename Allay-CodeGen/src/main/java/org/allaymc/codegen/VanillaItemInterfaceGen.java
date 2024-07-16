@@ -28,7 +28,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
             TypeSpec.classBuilder(ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
                     .addJavadoc(
                             "@author daoge_cmd <br>\n" +
-                                    "Allay Project <br>\n")
+                            "Allay Project <br>\n")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
@@ -47,7 +47,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         var typesClass = TypeSpec.classBuilder(ITEM_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : VanillaItemId.values()) {
             typesClass.addField(
-                    FieldSpec.builder(ParameterizedTypeName.get(ITEM_TYPE_CLASS_NAME, generateClassFullName(id)), id.name() + "_TYPE")
+                    FieldSpec.builder(ParameterizedTypeName.get(ITEM_TYPE_CLASS_NAME, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             .build()
             );
@@ -65,7 +65,10 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
             addDefaultItemTypeInitializer(id, itemClassFullName);
         }
         generateDefaultItemTypeInitializer();
-        var javaFile = JavaFile.builder(ITEM_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
+        var javaFile = JavaFile.builder(ITEM_TYPES_CLASS_NAME.packageName(), typesClass.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         System.out.println("Generating " + ITEM_TYPES_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/item/type/" + ITEM_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
@@ -73,7 +76,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
     private static void addDefaultItemTypeInitializer(VanillaItemId id, ClassName itemClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", ITEM_TYPES_CLASS_NAME, id.name() + "_TYPE", ITEM_TYPE_BUILDER_CLASS_NAME)
+                .add("$T.$N = $T\n", ITEM_TYPES_CLASS_NAME, id.name(), ITEM_TYPE_BUILDER_CLASS_NAME)
                 .add("        .builder($T.class)\n", itemClassName)
                 .add("        .vanillaItem($T.$N)\n", VANILLA_ITEM_ID_CLASS_NAME, id.name())
                 .add("        .build();");
@@ -81,7 +84,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
                 .addMethod(
                         MethodSpec.methodBuilder(generateInitializerMethodName(id))
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addStatement("if ($T.$N != null) return", ITEM_TYPES_CLASS_NAME, id.name() + "_TYPE")
+                                .addStatement("if ($T.$N != null) return", ITEM_TYPES_CLASS_NAME, id.name())
                                 .addCode(initializer.build())
                                 .build()
                 );
@@ -94,7 +97,10 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath))
             Files.createDirectories(folderPath);
-        var javaFile = JavaFile.builder(ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build()).build();
+        var javaFile = JavaFile.builder(ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         System.out.println("Generating " + ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(filePath, javaFile.toString());
     }

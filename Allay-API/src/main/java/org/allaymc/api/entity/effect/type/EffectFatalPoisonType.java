@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectFatalPoisonType extends AbstractEffectType {
-    public static final EffectFatalPoisonType FATAL_POISON_TYPE = new EffectFatalPoisonType();
+    public static final EffectFatalPoisonType FATAL_POISON = new EffectFatalPoisonType();
 
     private EffectFatalPoisonType() {
         super(25, new Identifier("minecraft:fatal_poison"), true);

@@ -10,7 +10,7 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
  * @author daoge_cmd
  */
 public final class BlockEntityTypes {
-    public static BlockEntityType<BlockEntityBarrel> BARREL_TYPE;
-    public static BlockEntityType<BlockEntityChest> CHEST_TYPE;
-    public static BlockEntityType<BlockEntityShulkerBox> SHULKER_BOX_TYPE;
+    public static BlockEntityType<BlockEntityBarrel> BARREL;
+    public static BlockEntityType<BlockEntityChest> CHEST;
+    public static BlockEntityType<BlockEntityShulkerBox> SHULKER_BOX;
 }
