@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT"  follow="true">
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="[%cyan{%d{HH:mm:ss} %level}] [%yellow{%t}] [%blue{%c{0}}] %minecraftFormatting{%msg}%n"/>
         </Console>
         <RollingRandomAccessFile name="File" fileName="logs/server.log" filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
