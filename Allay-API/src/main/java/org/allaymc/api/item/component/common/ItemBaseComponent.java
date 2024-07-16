@@ -107,7 +107,7 @@ public interface ItemBaseComponent extends ItemComponent {
     /**
      * Attempt to use this item on a block.
      * <p>
-     * This method will be called only when client think "he can" use the item. In other words, when {@code player.isUsingItemOnBlock()} return {@code true}.
+     * This method will be called only when client thinks "he can" use the item. In other words, when {@code player.isUsingItemOnBlock()} return {@code true}.
      * This method should handle reducing item count, durability, etc., on successful use.
      * No need to send item updates separately as the caller will handle it.
      * <p>
