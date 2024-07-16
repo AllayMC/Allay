@@ -22,6 +22,7 @@ public interface ContainerActionProcessorHolder {
         holder.registerProcessor(new ConsumeActionProcessor());
         holder.registerProcessor(new CreateActionProcessor());
         holder.registerProcessor(new CraftResultDeprecatedActionProcessor());
+        holder.registerProcessor(new MineBlockActionProcessor());
     }
 
     <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type);
