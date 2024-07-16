@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component.food;
 
-import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
@@ -16,8 +16,8 @@ public class ItemPufferfishBaseComponentImpl extends ItemFoodComponentImpl {
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        player.addEffect(EffectTypes.HUNGER.createInstance(2, 15 * 20)); // 3 lvl, 15 seconds
-        player.addEffect(EffectTypes.NAUSEA.createInstance(0, 15 * 20)); // 1 lvl, 15 seconds
-        player.addEffect(EffectTypes.POISON.createInstance(1, 60 * 20)); // 2 lvl, 1 minutes
+        player.addEffect(VanillaEffectTypes.HUNGER.createInstance(2, 15 * 20)); // 3 lvl, 15 seconds
+        player.addEffect(VanillaEffectTypes.NAUSEA.createInstance(0, 15 * 20)); // 1 lvl, 15 seconds
+        player.addEffect(VanillaEffectTypes.POISON.createInstance(1, 60 * 20)); // 2 lvl, 1 minutes
     }
 }
