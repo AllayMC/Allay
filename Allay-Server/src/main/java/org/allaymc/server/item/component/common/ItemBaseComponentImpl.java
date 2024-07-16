@@ -152,7 +152,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public boolean willDamageItem() {
-        var level = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
+        var level = getEnchantmentLevel(VanillaEnchantmentTypes.UNBREAKING);
         if (level == 0) return true;
 
         var possibility = 1f / (level + 1f);

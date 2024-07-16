@@ -9,7 +9,7 @@ import org.allaymc.api.item.enchantment.type.*;
  * @author IWareQ
  */
 @UtilityClass
-public class EnchantmentTypes {
+public class VanillaEnchantmentTypes {
     public static final EnchantmentAquaAffinityType AQUA_AFFINITY = new EnchantmentAquaAffinityType();
     public static final EnchantmentBaneOfArthropodsType BANE_OF_ARTHROPODS = new EnchantmentBaneOfArthropodsType();
     public static final EnchantmentBindingType BINDING = new EnchantmentBindingType();
