@@ -1,20 +1,13 @@
 package org.allaymc.server.component;
 
 import lombok.SneakyThrows;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.component.interfaces.ComponentedObject;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.ComponentInjectException;
-import org.allaymc.server.component.impl.SimpleAttackComponent;
-import org.allaymc.server.component.impl.SimpleHealthComponent;
-import org.allaymc.server.component.impl.SimpleNameComponent;
-import org.allaymc.server.component.impl.SimpleTestAnonymousClassComponent;
-import org.allaymc.server.component.impl.SimpleTestDependencyComponent;
-import org.allaymc.server.component.impl.SimpleTestEventListenerComponent;
-import org.allaymc.server.component.impl.SimpleTestEventTriggerComponent;
-import org.allaymc.server.component.impl.SimpleTestInitArgComponent;
+import org.allaymc.server.component.impl.*;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.component.interfaces.AttackComponent;
 import org.allaymc.server.component.interfaces.HealthComponent;
@@ -27,9 +20,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/3/4

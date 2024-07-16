@@ -11,6 +11,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.effect.type.EffectConduitPowerType;
 import org.allaymc.api.entity.effect.type.EffectHasteType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -31,6 +32,7 @@ import static org.allaymc.api.item.ItemHelper.isSword;
 public interface BlockBaseComponent extends BlockComponent {
     /**
      * Get the block type
+     *
      * @return block type
      */
     BlockType<? extends BlockBehavior> getBlockType();
@@ -41,13 +43,14 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Update a specific property of a specific block
+     *
      * @param propertyType the property type needs to be updated
-     * @param value the new property value
-     * @param x block's x coordinate
-     * @param y block's y coordinate
-     * @param z block's z coordinate
-     * @param dimension the dimension which the block is in
-     * @param layer the layer which contains the block
+     * @param value        the new property value
+     * @param x            block's x coordinate
+     * @param y            block's y coordinate
+     * @param z            block's z coordinate
+     * @param dimension    the dimension which the block is in
+     * @param layer        the layer which contains the block
      */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, Dimension dimension, int layer) {
         var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
@@ -101,6 +104,7 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Called when the block encounters random tick update
+     *
      * @param blockState the block
      */
     void onRandomUpdate(BlockStateWithPos blockState);
@@ -168,8 +172,10 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Get the block's drops when it is broke by item normally
+     *
      * @param blockState the block being broke
-     * @param usedItem the item used to break the block
+     * @param usedItem   the item used to break the block
+     *
      * @return the drops
      */
     default ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
@@ -182,7 +188,9 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Get the block's drops when it is broke by an item which has silk touch enchantment
+     *
      * @param blockState the block which is being broke
+     *
      * @return the drops
      */
     default ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
@@ -195,9 +203,11 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * Calculate how long can break a specific block state
+     *
      * @param blockState the specific block state, must belong to this block type
-     * @param usedItem the item used, can be null
-     * @param entity the entity who break the block, can be null
+     * @param usedItem   the item used, can be null
+     * @param entity     the entity who break the block, can be null
+     *
      * @return the time (second)
      */
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
@@ -217,26 +227,26 @@ public interface BlockBaseComponent extends BlockComponent {
         if (entity != null) {
             isInWater = entity.isInWater();
             isOnGround = entity.isOnGround();
-            hasteEffectLevel = entity.getEffectLevel(EffectHasteType.HASTE_TYPE);
+            hasteEffectLevel = entity.getEffectLevel(EffectTypes.HASTE);
             // Conduit Power ensures at least level 2 haste effect
-            if (entity.hasEffect(EffectConduitPowerType.CONDUIT_POWER_TYPE)) {
+            if (entity.hasEffect(EffectTypes.CONDUIT_POWER)) {
                 hasteEffectLevel = Integer.max(hasteEffectLevel, 2);
             }
 
-            miningFatigueLevel = entity.getEffectLevel(EffectHasteType.HASTE_TYPE);
+            miningFatigueLevel = entity.getEffectLevel(EffectTypes.HASTE);
 
             if (entity instanceof EntityContainerHolderComponent containerHolder) {
                 if (containerHolder.hasContainer(FullContainerType.ARMOR))
                     hasAquaAffinity = containerHolder
                             .getContainer(FullContainerType.ARMOR)
                             .getItemStack(0)
-                            .hasEnchantment(EnchantmentAquaAffinityType.AQUA_AFFINITY_TYPE);
+                            .hasEnchantment(EnchantmentAquaAffinityType.AQUA_AFFINITY);
 
                 if (containerHolder.hasContainer(FullContainerType.PLAYER_INVENTORY))
                     efficiencyLevel = containerHolder
                             .getContainer(FullContainerType.PLAYER_INVENTORY)
                             .getItemInHand()
-                            .getEnchantmentLevel(EnchantmentEfficiencyType.EFFICIENCY_TYPE);
+                            .getEnchantmentLevel(EnchantmentEfficiencyType.EFFICIENCY);
             }
         }
 
@@ -265,13 +275,14 @@ public interface BlockBaseComponent extends BlockComponent {
         return 1d / speed;
     }
 
-    private static double speedBonusByEfficiency(int efficiencyLevel) {
+    private double speedBonusByEfficiency(int efficiencyLevel) {
         if (efficiencyLevel == 0) return 0;
         return efficiencyLevel * efficiencyLevel + 1;
     }
 
     /**
      * Check if the provided block state is belong to this block type
+     *
      * @param blockState the block state you want to check
      */
     private void checkBlockType(BlockState blockState) {

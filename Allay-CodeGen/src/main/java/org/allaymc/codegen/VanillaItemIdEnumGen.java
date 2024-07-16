@@ -59,7 +59,10 @@ public class VanillaItemIdEnumGen {
         var identifierClass = ClassName.get("org.allaymc.dependence", "Identifier");
         TypeSpec.Builder codeBuilder = commonBuilder(identifierClass);
         addEnums(codeBuilder);
-        var javaFile = JavaFile.builder("org.allaymc.dependence", codeBuilder.build()).build();
+        var javaFile = JavaFile.builder("org.allaymc.dependence", codeBuilder.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         Files.writeString(Path.of("Allay-CodeGen/src/main/java/org/allaymc/dependence/VanillaItemId.java"), javaFile.toString());
     }
 
@@ -76,17 +79,23 @@ public class VanillaItemIdEnumGen {
         codeBuilder.addMethod(MethodSpec.methodBuilder("fromIdentifier")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addParameter(IDENTIFIER_CLASS, "identifier")
-                .addCode("""
-                        try{
-                            return valueOf(identifier.path().replace(".", "_").toUpperCase(java.util.Locale.ENGLISH));
-                        }catch(IllegalArgumentException ignore){
-                            return null;
-                        }""")
+                .addCode(
+                        CodeBlock.builder()
+                                .beginControlFlow("try")
+                                .addStatement("return valueOf(identifier.path().replace(\".\", \"_\").toUpperCase(java.util.Locale.ENGLISH))")
+                                .nextControlFlow("catch (IllegalArgumentException ignore)")
+                                .addStatement("return null")
+                                .endControlFlow()
+                                .build()
+                )
                 .returns(VANILLA_ITEM_ID_CLASS)
                 .build()
         );
         addEnums(codeBuilder);
-        var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build()).build();
+        var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         String result = javaFile.toString()
                 .replace("public ItemType", "public ItemType<?>")
                 .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.utils.identifier.Identifier")

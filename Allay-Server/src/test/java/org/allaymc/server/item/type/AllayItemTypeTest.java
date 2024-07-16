@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
-import static org.allaymc.api.item.type.ItemTypes.DIAMOND_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.DIAMOND;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -18,22 +18,21 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @ExtendWith(AllayTestExtension.class)
 public class AllayItemTypeTest {
-
     @Test
     void testCreation() {
-        var itemStack = DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        var itemStack = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
         assertEquals(1, itemStack.getCount());
         assertEquals(0, itemStack.getMeta());
         assertEquals(0, itemStack.getDurability());
         assertEquals("", itemStack.getCustomName());
         assertEquals(NbtMap.EMPTY, itemStack.getCustomNBTContent());
         assertEquals(List.of(), itemStack.getLore());
-        assertEquals(DIAMOND_TYPE, itemStack.getItemType());
+        assertEquals(DIAMOND, itemStack.getItemType());
     }
 
     @Test
     void testGenericFunctions() {
-        var itemStack = DIAMOND_TYPE.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        var itemStack = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
 
         // Count
         itemStack.setCount(2);

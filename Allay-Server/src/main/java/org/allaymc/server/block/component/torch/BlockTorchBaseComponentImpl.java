@@ -49,7 +49,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         // TODO: Replace when a method appears to check whether the block can be replaced
         if (
                 (
-                        oldBlock.getBlockType() != BlockTypes.AIR_TYPE &&
+                        oldBlock.getBlockType() != BlockTypes.AIR &&
                         !(oldBlock.getBehavior() instanceof BlockLiquidComponent)
                 ) || torchFace == TorchFacingDirection.UNKNOWN
         ) return false;

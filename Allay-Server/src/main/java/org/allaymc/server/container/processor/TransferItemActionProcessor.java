@@ -13,7 +13,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import java.util.List;
 import java.util.Map;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * Allay Project 2023/7/28
@@ -35,7 +35,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         int destinationStackNetworkId = action.getDestination().getStackNetworkId();
 
         var sourItem = source.getItemStack(sourceSlot);
-        if (sourItem.getItemType() == AIR_TYPE) {
+        if (sourItem.getItemType() == AIR) {
             log.warn("place an air item is not allowed");
             return error();
         }
@@ -52,7 +52,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         }
 
         var destItem = destination.getItemStack(destinationSlot);
-        if (destItem.getItemType() != AIR_TYPE && destItem.getItemType() != sourItem.getItemType()) {
+        if (destItem.getItemType() != AIR && destItem.getItemType() != sourItem.getItemType()) {
             log.warn("place an item to a slot that has a different item is not allowed");
             return error();
         }
@@ -73,7 +73,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             // Case 1: Take all
             resultSourItem = Container.EMPTY_SLOT_PLACE_HOLDER;
             source.setItemStack(sourceSlot, resultSourItem);
-            if (destItem.getItemType() != AIR_TYPE) {
+            if (destItem.getItemType() != AIR) {
                 resultDestItem = destItem;
                 // Destination item is not empty, just add count, and keep the same stack network id
                 resultDestItem.setCount(destItem.getCount() + count);
@@ -92,7 +92,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             resultSourItem = sourItem;
             resultSourItem.setCount(resultSourItem.getCount() - count);
             source.onSlotChange(sourceSlot);
-            if (destItem.getItemType() != AIR_TYPE) {
+            if (destItem.getItemType() != AIR) {
                 // Destination item is not empty
                 resultDestItem = destItem;
                 resultDestItem.setCount(destItem.getCount() + count);

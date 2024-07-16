@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentFeatherFallingType extends AbstractEnchantmentType {
-    public static final EnchantmentFeatherFallingType FEATHER_FALLING_TYPE = new EnchantmentFeatherFallingType();
+    public static final EnchantmentFeatherFallingType FEATHER_FALLING = new EnchantmentFeatherFallingType();
 
     private EnchantmentFeatherFallingType() {
         super(new Identifier("minecraft:feather_falling"), 2, 4, Rarity.UNCOMMON);

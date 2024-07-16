@@ -121,7 +121,10 @@ public class VanillaBiomeIdEnumGen {
                 .returns(BiomeType.class)
                 .build());
         var builtCode = codeBuilder.build();
-        var javaFile = JavaFile.builder(PACKAGE_NAME, builtCode).build();
+        var javaFile = JavaFile.builder(PACKAGE_NAME, builtCode)
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         String result = javaFile.toString()
                 .replace("org.allaymc.dependence.BiomeType", "org.allaymc.api.world.biome.BiomeType")
                 .replace("org.allaymc.dependence.Identifier", "org.allaymc.api.utils.Identifier")

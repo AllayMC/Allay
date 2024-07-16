@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentUnbreakingType extends AbstractEnchantmentType {
-    public static final EnchantmentUnbreakingType UNBREAKING_TYPE = new EnchantmentUnbreakingType();
+    public static final EnchantmentUnbreakingType UNBREAKING = new EnchantmentUnbreakingType();
 
     private EnchantmentUnbreakingType() {
         super(new Identifier("minecraft:unbreaking"), 17, 3, Rarity.UNCOMMON);

@@ -160,11 +160,11 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("fallblock")
                 .exec((context, player) -> {
-                    var entity = EntityTypes.FALLING_BLOCK_TYPE.createEntity(
+                    var entity = EntityTypes.FALLING_BLOCK.createEntity(
                             SimpleEntityInitInfo.builder()
                                     .loc(player.getLocation())
                                     .nbt(NbtMap.builder()
-                                            .putInt("BlockStateHash", BlockTypes.SAND_TYPE.getDefaultState().blockStateHash())
+                                            .putInt("BlockStateHash", BlockTypes.SAND.getDefaultState().blockStateHash())
                                             .build()
                                     )
                                     .build()

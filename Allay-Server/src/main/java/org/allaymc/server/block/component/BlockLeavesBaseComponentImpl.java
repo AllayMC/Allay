@@ -21,8 +21,8 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
-        if (usedItem.getItemType() == ItemTypes.SHEARS_TYPE) {
-            return new ItemStack[]{blockState.blockState().toItemStack()};
+        if (usedItem.getItemType() == ItemTypes.SHEARS) {
+            return super.getDrops(blockState, usedItem);
         }
         // TODO: Drop saplings
         // https://minecraft.fandom.com/zh/wiki/%E6%A0%91%E5%8F%B6#%E8%8E%B7%E5%8F%96

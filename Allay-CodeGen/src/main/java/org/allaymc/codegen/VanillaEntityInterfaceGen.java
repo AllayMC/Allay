@@ -27,7 +27,7 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
             TypeSpec.classBuilder(ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
                     .addJavadoc(
                             "@author daoge_cmd <br>\n" +
-                                    "Allay Project <br>\n")
+                            "Allay Project <br>\n")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
     public static void main(String[] args) {
@@ -44,7 +44,7 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
         var typesClass = TypeSpec.classBuilder(ENTITY_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : VanillaEntityId.values()) {
             typesClass.addField(
-                    FieldSpec.builder(ParameterizedTypeName.get(ENTITY_TYPE_CLASS_NAME, generateClassFullName(id)), id.name() + "_TYPE")
+                    FieldSpec.builder(ParameterizedTypeName.get(ENTITY_TYPE_CLASS_NAME, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             .build()
             );
@@ -58,7 +58,10 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
             addDefaultEntityTypeInitializer(id, entityClassFullName);
         }
         generateDefaultEntityTypeInitializer();
-        var javaFile = JavaFile.builder(ENTITY_TYPES_CLASS_NAME.packageName(), typesClass.build()).build();
+        var javaFile = JavaFile.builder(ENTITY_TYPES_CLASS_NAME.packageName(), typesClass.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         System.out.println("Generating " + ENTITY_TYPES_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/entity/type/" + ENTITY_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
@@ -66,7 +69,7 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
     private static void addDefaultEntityTypeInitializer(VanillaEntityId id, ClassName entityClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", ENTITY_TYPES_CLASS_NAME, id.name() + "_TYPE", ENTITY_TYPE_BUILDER_CLASS_NAME)
+                .add("$T.$N = $T\n", ENTITY_TYPES_CLASS_NAME, id.name(), ENTITY_TYPE_BUILDER_CLASS_NAME)
                 .add("        .builder($T.class)\n", entityClassName)
                 .add("        .vanillaEntity($T.$N)\n", VANILLA_ENTITY_ID_CLASS_NAME, id.name())
                 .add("        .build();");
@@ -74,7 +77,7 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
                 .addMethod(
                         MethodSpec.methodBuilder(generateInitializerMethodName(id))
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addStatement("if ($T.$N != null) return", ENTITY_TYPES_CLASS_NAME, id.name() + "_TYPE")
+                                .addStatement("if ($T.$N != null) return", ENTITY_TYPES_CLASS_NAME, id.name())
                                 .addCode(initializer.build())
                                 .build()
                 );
@@ -87,7 +90,10 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath))
             Files.createDirectories(folderPath);
-        var javaFile = JavaFile.builder(ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build()).build();
+        var javaFile = JavaFile.builder(ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         System.out.println("Generating " + ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.simpleName() + ".java ...");
         Files.writeString(filePath, javaFile.toString());
     }
@@ -105,7 +111,7 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addJavadoc(
                         "@author daoge_cmd <br>\n" +
-                                "Allay Project <br>\n")
+                        "Allay Project <br>\n")
                 .addMethod(
                         MethodSpec.methodBuilder("init")
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -115,7 +121,10 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
                 .build();
         var filePath = Path.of("Allay-Server/src/main/java/org/allaymc/server/entity/initializer/" + className.simpleName() + ".java");
         if (!Files.exists(filePath)) {
-            var javaFile = JavaFile.builder("org.allaymc.server.entity.initializer", clazz).build();
+            var javaFile = JavaFile.builder("org.allaymc.server.entity.initializer", clazz)
+                    .indent(Utils.INDENT)
+                    .skipJavaLangImports(true)
+                    .build();
             System.out.println("Generating " + className.simpleName() + ".java ...");
             Files.writeString(filePath, javaFile.toString());
         }

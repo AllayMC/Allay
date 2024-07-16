@@ -3,8 +3,6 @@ package org.allaymc.api.entity.effect;
 import lombok.Getter;
 import org.allaymc.api.utils.Identifier;
 
-import java.awt.*;
-
 /**
  * Allay Project 2023/10/27
  *
@@ -16,17 +14,15 @@ public abstract class AbstractEffectType implements EffectType {
 
     protected final int id;
     protected final Identifier identifier;
-    protected final Color color;
     protected final boolean isBad;
 
-    public AbstractEffectType(int id, Identifier identifier, Color color) {
-        this(id, identifier, color, false);
+    public AbstractEffectType(int id, Identifier identifier) {
+        this(id, identifier, false);
     }
 
-    public AbstractEffectType(int id, Identifier identifier, Color color, boolean isBad) {
+    public AbstractEffectType(int id, Identifier identifier, boolean isBad) {
         this.id = id;
         this.identifier = identifier;
-        this.color = color;
         this.isBad = isBad;
         EffectRegistry.getRegistry().register(id, identifier, this);
     }

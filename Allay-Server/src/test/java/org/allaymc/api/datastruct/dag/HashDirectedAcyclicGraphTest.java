@@ -4,17 +4,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HashDirectedAcyclicGraphTest {
-    enum Base {A, B, C, D, E, F, G, H}
-
     static HashDirectedAcyclicGraph<Base> setABCDEFG;
 
     @BeforeAll
@@ -59,7 +53,6 @@ public class HashDirectedAcyclicGraphTest {
             instance.setBefore(Base.C, Base.B);
         });
     }
-
 
     /**
      * Test of isBefore method, of class HashDirectedAcyclicGraph<Base>.
@@ -402,7 +395,9 @@ public class HashDirectedAcyclicGraphTest {
         }
         // ADEFG -> B -> C
         List<Base> sortedList = instance.getSortedList();
-        Assertions.assertEquals(sortedList.get(sortedList.size()-1),Base.C);
-        Assertions.assertEquals(sortedList.get(sortedList.size()-2),Base.B);
+        Assertions.assertEquals(sortedList.get(sortedList.size() - 1), Base.C);
+        Assertions.assertEquals(sortedList.get(sortedList.size() - 2), Base.B);
     }
+
+    enum Base {A, B, C, D, E, F, G, H}
 }

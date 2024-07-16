@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(AllayTestExtension.class)
 public class LongTimePermTreeTest {
-
     @Test
     void testOp() {
         var tree = AllayPermTree

@@ -1,7 +1,7 @@
 package org.allaymc.server.component.impl;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.interfaces.NameComponent;
 
 /**
@@ -10,7 +10,6 @@ import org.allaymc.server.component.interfaces.NameComponent;
  * @author daoge_cmd
  */
 public class SimpleNameComponent implements NameComponent {
-
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:name_component");
 

@@ -34,9 +34,9 @@ public class FlatNoiser implements Noiser {
     protected void parsePreset(String preset) {
         var list = new ArrayList<BlockState>();
         if (preset.isBlank()) {
-            var bedrock = BEDROCK_TYPE.getDefaultState();
-            var grass = GRASS_BLOCK_TYPE.getDefaultState();
-            var dirt = DIRT_TYPE.getDefaultState();
+            var bedrock = BEDROCK.getDefaultState();
+            var grass = GRASS_BLOCK.getDefaultState();
+            var dirt = DIRT.getDefaultState();
             list.add(bedrock);
             list.add(dirt);
             list.add(dirt);

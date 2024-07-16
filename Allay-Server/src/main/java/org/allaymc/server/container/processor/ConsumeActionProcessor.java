@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import java.util.List;
 import java.util.Map;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * Allay Project 2023/12/1
@@ -40,7 +40,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
             return error();
         }
 
-        if (item.getItemType() == AIR_TYPE) {
+        if (item.getItemType() == AIR) {
             log.warn("cannot consume an air!");
             return error();
         }

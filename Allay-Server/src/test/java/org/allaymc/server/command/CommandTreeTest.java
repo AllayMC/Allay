@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author daoge_cmd
  */
 public class CommandTreeTest {
-
     static Command mockCmd = Mockito.mock(Command.class);
     static CommandSender mockSender = Mockito.mock(CommandSender.class);
     static Location3f cmdExecLoc = new Location3f(0, 0, 0, null);

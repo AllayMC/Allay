@@ -15,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author daoge_cmd
  */
 class BlockPropertyTypeTest {
-
     @Test
     void testGetPropertyType() {
         Assertions.assertEquals(BlockPropertyType.Type.BOOLEAN, BlockPropertyType.getPropertyType(BooleanPropertyType.class));

@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @ExtendWith(AllayTestExtension.class)
 class BlockStateHashTest {
-
     static Map<Integer, Object> BLOCK_STATE_DATA = new HashMap<>();
 
     @BeforeAll

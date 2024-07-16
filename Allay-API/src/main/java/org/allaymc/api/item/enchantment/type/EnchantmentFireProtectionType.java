@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentFireProtectionType extends AbstractEnchantmentType {
-    public static final EnchantmentFireProtectionType FIRE_PROTECTION_TYPE = new EnchantmentFireProtectionType();
+    public static final EnchantmentFireProtectionType FIRE_PROTECTION = new EnchantmentFireProtectionType();
 
     private EnchantmentFireProtectionType() {
         super(new Identifier("minecraft:fire_protection"), 1, 4, Rarity.UNCOMMON);

@@ -49,9 +49,9 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         super.tick();
         var blockType = blockState.getBlockType();
         if (
-                blockType == BlockTypes.SAND_TYPE ||
-                blockType == BlockTypes.GRAVEL_TYPE ||
-                blockType == BlockTypes.ANVIL_TYPE
+                blockType == BlockTypes.SAND ||
+                blockType == BlockTypes.GRAVEL ||
+                blockType == BlockTypes.ANVIL
         ) {
             aliveTick++;
             if (aliveTick > MAX_ALIVE_TICKS) {

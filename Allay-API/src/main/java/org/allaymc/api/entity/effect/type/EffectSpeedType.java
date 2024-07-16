@@ -6,18 +6,14 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.Identifier;
 
-import java.awt.*;
-
 /**
  * Allay Project 2023/10/27
  *
  * @author daoge_cmd
  */
 public class EffectSpeedType extends AbstractEffectType {
-    public static final EffectSpeedType SPEED_TYPE = new EffectSpeedType();
-
-    private EffectSpeedType() {
-        super(1, new Identifier("minecraft:speed"), new Color(51, 235, 255));
+    public EffectSpeedType() {
+        super(1, new Identifier("minecraft:speed"));
     }
 
     @Override

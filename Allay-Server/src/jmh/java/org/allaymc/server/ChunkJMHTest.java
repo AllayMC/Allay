@@ -10,8 +10,8 @@ import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD_TYPE;
-import static org.allaymc.api.block.type.BlockTypes.STONE_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
+import static org.allaymc.api.block.type.BlockTypes.STONE;
 
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.Throughput)
@@ -29,7 +29,7 @@ public class ChunkJMHTest {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {
-                    chunk.setBlockState(i, k, j, OAK_WOOD_TYPE.getDefaultState());
+                    chunk.setBlockState(i, k, j, OAK_WOOD.getDefaultState());
                 }
             }
         }
@@ -37,7 +37,7 @@ public class ChunkJMHTest {
 
     @Benchmark
     public void test1() {
-        chunk.setBlockState(0, 0, 0, STONE_TYPE.getDefaultState());
+        chunk.setBlockState(0, 0, 0, STONE.getDefaultState());
     }
 
     @Benchmark
@@ -48,7 +48,7 @@ public class ChunkJMHTest {
     @Threads(Threads.MAX)
     @Benchmark
     public void test3() {
-        chunk.setBlockState(0, 0, 0, STONE_TYPE.getDefaultState());
+        chunk.setBlockState(0, 0, 0, STONE.getDefaultState());
     }
 
     @Threads(Threads.MAX)

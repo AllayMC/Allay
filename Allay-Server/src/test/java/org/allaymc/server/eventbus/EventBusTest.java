@@ -16,13 +16,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class EventBusTest {
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
+    private String str;
+    private boolean bool;
 
     {
         eventBus.registerListener(this);
     }
-
-    private String str;
-    private boolean bool;
 
     @EventHandler(priority = 100)
     public void highPriorityHandler(TestEvent event) {

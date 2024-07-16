@@ -3,7 +3,7 @@ package org.allaymc.api.item.recipe.input;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * Allay Project 2023/12/1
@@ -58,7 +58,7 @@ public class CraftingInput implements Input {
                 if (itemStack == null) {
                     throw new IllegalArgumentException("ItemStack cannot be null");
                 }
-                if (itemStack.getItemType() != AIR_TYPE) {
+                if (itemStack.getItemType() != AIR) {
                     if (itemStack.getCount() != 1) {
                         throw new IllegalArgumentException("Non-air ItemStack count must be 1");
                     }

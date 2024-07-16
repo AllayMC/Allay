@@ -66,7 +66,7 @@ import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.allaymc.api.entity.type.EntityTypes.PLAYER_TYPE;
+import static org.allaymc.api.entity.type.EntityTypes.PLAYER;
 
 @Slf4j
 public final class AllayServer implements Server {
@@ -289,7 +289,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void onConnect(BedrockServerSession session) {
-        var player = PLAYER_TYPE.createEntity(
+        var player = PLAYER.createEntity(
                 SimpleEntityInitInfo
                         .builder()
                         .build()

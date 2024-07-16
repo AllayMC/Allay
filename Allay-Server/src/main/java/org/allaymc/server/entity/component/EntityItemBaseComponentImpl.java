@@ -71,7 +71,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     @Override
     public void onCollideWith(Entity other) {
         // check can merge
-        if (itemStack != null && other.getEntityType() == EntityTypes.ITEM_TYPE) {
+        if (itemStack != null && other.getEntityType() == EntityTypes.ITEM) {
             var otherEntityItem = (EntityItem) other;
             var otherItemStack = otherEntityItem.getItemStack();
             if (otherItemStack != null && otherItemStack.canMerge(itemStack)) {

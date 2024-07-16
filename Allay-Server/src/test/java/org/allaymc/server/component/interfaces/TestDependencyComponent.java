@@ -7,7 +7,7 @@ import org.allaymc.api.component.interfaces.Component;
  *
  * @author daoge_cmd
  */
-public interface TestDependencyComponent extends Component{
+public interface TestDependencyComponent extends Component {
     Component getNameComponent();
 
     Component getHealthComponent();

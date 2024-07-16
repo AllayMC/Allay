@@ -1,7 +1,7 @@
 package org.allaymc.server.component.impl;
 
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.interfaces.HealthComponent;
 
 /**
@@ -10,7 +10,6 @@ import org.allaymc.server.component.interfaces.HealthComponent;
  * @author daoge_cmd
  */
 public class SimpleHealthComponent implements HealthComponent {
-
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:health_component");
 

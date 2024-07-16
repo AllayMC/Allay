@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentMultishotType extends AbstractEnchantmentType {
-    public static final EnchantmentMultishotType MULTISHOT_TYPE = new EnchantmentMultishotType();
+    public static final EnchantmentMultishotType MULTISHOT = new EnchantmentMultishotType();
 
     private EnchantmentMultishotType() {
         super(new Identifier("minecraft:multishot"), 33, 1, Rarity.RARE);

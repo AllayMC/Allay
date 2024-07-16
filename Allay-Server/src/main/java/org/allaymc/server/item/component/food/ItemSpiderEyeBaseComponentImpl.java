@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component.food;
 
-import org.allaymc.api.entity.effect.type.EffectPoisonType;
+import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
@@ -16,6 +16,6 @@ public class ItemSpiderEyeBaseComponentImpl extends ItemFoodComponentImpl {
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        player.addEffect(EffectPoisonType.POISON_TYPE.createInstance(0, 5 * 20)); // 1 lvl, 5 seconds
+        player.addEffect(EffectTypes.POISON.createInstance(0, 5 * 20)); // 1 lvl, 5 seconds
     }
 }
