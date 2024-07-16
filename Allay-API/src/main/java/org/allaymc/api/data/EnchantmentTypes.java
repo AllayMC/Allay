@@ -1,4 +1,4 @@
-package org.allaymc.api.item.enchantment;
+package org.allaymc.api.data;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.item.enchantment.type.*;

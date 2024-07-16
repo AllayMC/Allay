@@ -17,7 +17,7 @@ import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.data.EnchantmentTypes;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.protocol.bedrock.data.GameType;

@@ -4,7 +4,7 @@ import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.data.EnchantmentTypes;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;

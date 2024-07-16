@@ -14,7 +14,7 @@ import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.EnchantmentTypes;
+import org.allaymc.api.data.EnchantmentTypes;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
