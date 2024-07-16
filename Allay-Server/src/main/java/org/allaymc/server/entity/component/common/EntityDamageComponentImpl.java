@@ -11,6 +11,7 @@ import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.event.EntityFallEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.effect.type.EffectJumpBoostType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -97,7 +98,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         if (!hasFallDamage()) return;
         if (!((boolean) baseComponent.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;
 
-        var damage = Math.round(event.getFallDistance() - 3);
-        if (damage > 0) this.attack(new DamageContainer(null, DamageContainer.DamageType.FALL, damage));
+        var damage = Math.round((event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectJumpBoostType.JUMP_BOOST_TYPE));
+        if (damage > 0) this.attack(DamageContainer.fall(damage));
     }
 }

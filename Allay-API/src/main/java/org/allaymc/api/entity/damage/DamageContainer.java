@@ -49,6 +49,10 @@ public class DamageContainer {
         return new DamageContainer(null, DamageType.STARVE, sourceDamage);
     }
 
+    public static DamageContainer fall(float sourceDamage) {
+        return new DamageContainer(null, DamageType.FALL, sourceDamage);
+    }
+
     public boolean hasCustomKnockback() {
         return customKnockback != -1;
     }
