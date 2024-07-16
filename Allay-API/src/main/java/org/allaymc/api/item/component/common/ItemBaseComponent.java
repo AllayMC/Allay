@@ -17,6 +17,8 @@ import org.joml.Vector3ic;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.allaymc.api.data.VanillaItemTags.*;
 import static org.allaymc.api.data.VanillaMaterialTypes.*;
@@ -271,14 +273,13 @@ public interface ItemBaseComponent extends ItemComponent {
     }
 
     default boolean checkEnchantmentCompatibility(EnchantmentType type) {
-        return getIncompatibleEnchantmentType(type) == null;
+        return getIncompatibleEnchantmentTypes(type).isEmpty();
     }
 
-    default EnchantmentType getIncompatibleEnchantmentType(EnchantmentType type) {
+    default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {
         return getEnchantments().stream()
-                .filter(enchantmentInstance -> enchantmentInstance.getType().checkIncompatible(type))
-                .findFirst()
                 .map(EnchantmentInstance::getType)
-                .orElse(null);
+                .filter(enchantmentInstanceType -> enchantmentInstanceType.checkIncompatible(type))
+                .collect(Collectors.toSet());
     }
 }

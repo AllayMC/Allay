@@ -39,7 +39,7 @@ public class EnchantCommand extends SimpleCommand {
                             return ctx.fail();
                         }
 
-                        var incompatibleEnchantmentType = item.getIncompatibleEnchantmentType(enchantmentType);
+                        var incompatibleEnchantmentType = item.getIncompatibleEnchantmentTypes(enchantmentType);
                         if (incompatibleEnchantmentType != null) {
                             ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_CANTCOMBINE, incompatibleEnchantmentType.getIdentifier(), enchantmentType.getIdentifier());
                             return ctx.fail();
