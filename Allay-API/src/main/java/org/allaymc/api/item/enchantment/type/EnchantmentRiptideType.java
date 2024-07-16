@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentRiptideType extends AbstractEnchantmentType {
-    public static final EnchantmentRiptideType RIPTIDE = new EnchantmentRiptideType();
-
-    private EnchantmentRiptideType() {
+    public EnchantmentRiptideType() {
         super(new Identifier("minecraft:riptide"), 30, 3, Rarity.RARE);
     }
 

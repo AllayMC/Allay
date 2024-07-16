@@ -12,12 +12,9 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
-import org.allaymc.api.entity.effect.type.EffectConduitPowerType;
-import org.allaymc.api.entity.effect.type.EffectHasteType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.enchantment.type.EnchantmentAquaAffinityType;
-import org.allaymc.api.item.enchantment.type.EnchantmentEfficiencyType;
+import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
@@ -240,13 +237,13 @@ public interface BlockBaseComponent extends BlockComponent {
                     hasAquaAffinity = containerHolder
                             .getContainer(FullContainerType.ARMOR)
                             .getItemStack(0)
-                            .hasEnchantment(EnchantmentAquaAffinityType.AQUA_AFFINITY);
+                            .hasEnchantment(VanillaEnchantmentTypes.AQUA_AFFINITY);
 
                 if (containerHolder.hasContainer(FullContainerType.PLAYER_INVENTORY))
                     efficiencyLevel = containerHolder
                             .getContainer(FullContainerType.PLAYER_INVENTORY)
                             .getItemInHand()
-                            .getEnchantmentLevel(EnchantmentEfficiencyType.EFFICIENCY);
+                            .getEnchantmentLevel(VanillaEnchantmentTypes.EFFICIENCY);
             }
         }
 

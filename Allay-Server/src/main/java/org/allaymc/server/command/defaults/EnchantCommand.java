@@ -39,9 +39,11 @@ public class EnchantCommand extends SimpleCommand {
                             return ctx.fail();
                         }
 
-                        var incompatibleEnchantmentType = item.getIncompatibleEnchantmentType(enchantmentType);
-                        if (incompatibleEnchantmentType != null) {
-                            ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_CANTCOMBINE, incompatibleEnchantmentType.getIdentifier(), enchantmentType.getIdentifier());
+                        var incompatibleEnchantmentType = item.getIncompatibleEnchantmentTypes(enchantmentType);
+                        if (!incompatibleEnchantmentType.isEmpty()) {
+                            incompatibleEnchantmentType.forEach(incompatibleEnchantment -> {
+                                ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_CANTCOMBINE, incompatibleEnchantment.getIdentifier(), enchantmentType.getIdentifier());
+                            });
                             return ctx.fail();
                         }
 

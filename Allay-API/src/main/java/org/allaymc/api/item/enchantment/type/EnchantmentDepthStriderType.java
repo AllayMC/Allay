@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentDepthStriderType extends AbstractEnchantmentType {
-    public static final EnchantmentDepthStriderType DEPTH_STRIDER = new EnchantmentDepthStriderType();
-
-    private EnchantmentDepthStriderType() {
+    public EnchantmentDepthStriderType() {
         super(new Identifier("minecraft:depth_strider"), 7, 3, Rarity.RARE);
     }
 

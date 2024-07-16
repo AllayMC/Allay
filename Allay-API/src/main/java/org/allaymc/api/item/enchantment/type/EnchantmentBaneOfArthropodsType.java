@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentBaneOfArthropodsType extends AbstractEnchantmentType {
-    public static final EnchantmentBaneOfArthropodsType BANE_OF_ARTHROPODS = new EnchantmentBaneOfArthropodsType();
-
-    private EnchantmentBaneOfArthropodsType() {
+    public EnchantmentBaneOfArthropodsType() {
         super(new Identifier("minecraft:bane_of_arthropods"), 11, 5, Rarity.UNCOMMON);
     }
 

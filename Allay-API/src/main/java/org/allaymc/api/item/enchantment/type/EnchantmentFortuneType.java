@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentFortuneType extends AbstractEnchantmentType {
-    public static final EnchantmentFortuneType FORTUNE = new EnchantmentFortuneType();
-
-    private EnchantmentFortuneType() {
+    public EnchantmentFortuneType() {
         super(new Identifier("minecraft:fortune"), 18, 3, Rarity.RARE);
     }
 

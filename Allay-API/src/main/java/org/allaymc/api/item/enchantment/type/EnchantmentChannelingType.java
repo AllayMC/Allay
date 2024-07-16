@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentChannelingType extends AbstractEnchantmentType {
-    public static final EnchantmentChannelingType CHANNELING = new EnchantmentChannelingType();
-
-    private EnchantmentChannelingType() {
+    public EnchantmentChannelingType() {
         super(new Identifier("minecraft:channeling"), 32, 1, Rarity.VERY_RARE);
     }
 

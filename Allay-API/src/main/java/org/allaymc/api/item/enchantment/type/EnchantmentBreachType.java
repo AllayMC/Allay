@@ -11,9 +11,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EnchantmentBreachType extends AbstractEnchantmentType {
-    public static final EnchantmentBreachType BREACH = new EnchantmentBreachType();
-
-    private EnchantmentBreachType() {
+    public EnchantmentBreachType() {
         super(new Identifier("minecraft:breach"), 40, 4, Rarity.RARE);
     }
 

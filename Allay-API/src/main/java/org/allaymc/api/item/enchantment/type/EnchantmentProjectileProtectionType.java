@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentProjectileProtectionType extends AbstractEnchantmentType {
-    public static final EnchantmentProjectileProtectionType PROJECTILE_PROTECTION = new EnchantmentProjectileProtectionType();
-
-    private EnchantmentProjectileProtectionType() {
+    public EnchantmentProjectileProtectionType() {
         super(new Identifier("minecraft:projectile_protection"), 4, 4, Rarity.UNCOMMON);
     }
 

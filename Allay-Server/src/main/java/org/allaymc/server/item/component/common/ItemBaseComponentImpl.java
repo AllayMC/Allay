@@ -19,11 +19,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.common.ItemBaseComponent;
 import org.allaymc.api.item.component.common.ItemDataComponent;
 import org.allaymc.api.item.component.event.*;
-import org.allaymc.api.item.enchantment.EnchantmentHelper;
-import org.allaymc.api.item.enchantment.EnchantmentInstance;
-import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
-import org.allaymc.api.item.enchantment.type.EnchantmentUnbreakingType;
+import org.allaymc.api.item.enchantment.*;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
@@ -156,7 +152,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public boolean willDamageItem() {
-        var level = getEnchantmentLevel(EnchantmentUnbreakingType.UNBREAKING);
+        var level = getEnchantmentLevel(VanillaEnchantmentTypes.UNBREAKING);
         if (level == 0) return true;
 
         var possibility = 1f / (level + 1f);

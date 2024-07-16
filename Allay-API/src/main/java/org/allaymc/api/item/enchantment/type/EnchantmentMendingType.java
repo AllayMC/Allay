@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentMendingType extends AbstractEnchantmentType {
-    public static final EnchantmentMendingType MENDING = new EnchantmentMendingType();
-
-    private EnchantmentMendingType() {
+    public EnchantmentMendingType() {
         super(new Identifier("minecraft:mending"), 26, 3, Rarity.RARE);
     }
 

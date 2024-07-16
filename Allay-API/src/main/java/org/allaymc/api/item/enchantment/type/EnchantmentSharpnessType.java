@@ -10,9 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentSharpnessType extends AbstractEnchantmentType {
-    public static final EnchantmentSharpnessType SHARPNESS = new EnchantmentSharpnessType();
-
-    private EnchantmentSharpnessType() {
+    public EnchantmentSharpnessType() {
         super(new Identifier("minecraft:sharpness"), 9, 5, Rarity.COMMON);
     }
 

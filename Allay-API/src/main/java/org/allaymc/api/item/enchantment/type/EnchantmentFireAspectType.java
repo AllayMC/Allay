@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentFireAspectType extends AbstractEnchantmentType {
-    public static final EnchantmentFireAspectType FIRE_ASPECT = new EnchantmentFireAspectType();
-
-    private EnchantmentFireAspectType() {
+    public EnchantmentFireAspectType() {
         super(new Identifier("minecraft:fire_aspect"), 13, 2, Rarity.RARE);
     }
 }

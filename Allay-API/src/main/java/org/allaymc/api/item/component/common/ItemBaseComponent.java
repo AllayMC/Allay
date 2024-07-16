@@ -17,6 +17,8 @@ import org.joml.Vector3ic;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.allaymc.api.data.VanillaItemTags.*;
 import static org.allaymc.api.data.VanillaMaterialTypes.*;
@@ -105,7 +107,7 @@ public interface ItemBaseComponent extends ItemComponent {
     /**
      * Attempt to use this item on a block.
      * <p>
-     * This method will be called only when client think "he can" use the item. In other words, when {@code player.isUsingItemOnBlock()} return {@code true}.
+     * This method will be called only when client thinks "he can" use the item. In other words, when {@code player.isUsingItemOnBlock()} return {@code true}.
      * This method should handle reducing item count, durability, etc., on successful use.
      * No need to send item updates separately as the caller will handle it.
      * <p>
@@ -271,14 +273,13 @@ public interface ItemBaseComponent extends ItemComponent {
     }
 
     default boolean checkEnchantmentCompatibility(EnchantmentType type) {
-        return getIncompatibleEnchantmentType(type) == null;
+        return getIncompatibleEnchantmentTypes(type).isEmpty();
     }
 
-    default EnchantmentType getIncompatibleEnchantmentType(EnchantmentType type) {
+    default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {
         return getEnchantments().stream()
-                .filter(enchantmentInstance -> enchantmentInstance.getType().checkIncompatible(type))
-                .findFirst()
                 .map(EnchantmentInstance::getType)
-                .orElse(null);
+                .filter(enchantmentInstanceType -> enchantmentInstanceType.checkIncompatible(type))
+                .collect(Collectors.toSet());
     }
 }

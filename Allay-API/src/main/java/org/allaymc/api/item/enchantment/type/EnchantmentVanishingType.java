@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentVanishingType extends AbstractEnchantmentType {
-    public static final EnchantmentVanishingType VANISHING = new EnchantmentVanishingType();
-
-    private EnchantmentVanishingType() {
+    public EnchantmentVanishingType() {
         super(new Identifier("minecraft:vanishing"), 28, 1, Rarity.VERY_RARE);
     }
 }

@@ -9,9 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentSwiftSneakType extends AbstractEnchantmentType {
-    public static final EnchantmentSwiftSneakType SWIFT_SNEAK = new EnchantmentSwiftSneakType();
-
-    private EnchantmentSwiftSneakType() {
+    public EnchantmentSwiftSneakType() {
         super(new Identifier("minecraft:swift_sneak"), 37, 3, Rarity.VERY_RARE);
     }
 }
