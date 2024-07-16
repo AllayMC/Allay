@@ -3,6 +3,7 @@ package org.allaymc.server.command.defaults;
 import com.sun.jna.platform.win32.COM.WbemcliUtil;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandTree;
@@ -73,8 +74,8 @@ public class StatusCommand extends SimpleCommand {
         super("status", TrKeys.A_COMMAND_STATUS_DESCRIPTION);
     }
 
-    protected static void printOperationSystemMemoryInfo(CommandContext context) {
-        context.addOutput(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "Operation System Memory Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
+    protected static void printOperationSystemMemoryInfo(CommandSender sender) {
+        sender.sendText(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "Operation System Memory Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
         var globalMemory = SYSTEM_INFO.getHardware().getMemory();
         var virtualMemory = globalMemory.getVirtualMemory();
         // Physical Memory
@@ -83,8 +84,8 @@ public class StatusCommand extends SimpleCommand {
         var usage = (double) usedPhysicalMemory / allPhysicalMemory * 100;
         var usageColor = TextFormat.GREEN;
         if (usage > 85) usageColor = TextFormat.GOLD;
-        context.addOutput(TextFormat.GOLD + "OS memory: ");
-        context.addOutput(TextFormat.GOLD + "  Physical memory: " + TextFormat.GREEN + usageColor + toMB(usedPhysicalMemory) + " / " + toMB(allPhysicalMemory) + ". (" + round(usage, 2) + "%)");
+        sender.sendText(TextFormat.GOLD + "OS memory: ");
+        sender.sendText(TextFormat.GOLD + "  Physical memory: " + TextFormat.GREEN + usageColor + toMB(usedPhysicalMemory) + " / " + toMB(allPhysicalMemory) + ". (" + round(usage, 2) + "%)");
 
         // Virtual Memory
         var allVirtualMemory = virtualMemory.getVirtualMax() / 1000;
@@ -92,90 +93,90 @@ public class StatusCommand extends SimpleCommand {
         usage = (double) usedVirtualMemory / allVirtualMemory * 100;
         usageColor = TextFormat.GREEN;
         if (usage > 85) usageColor = TextFormat.GOLD;
-        context.addOutput(TextFormat.GOLD + "  Virtual memory: " + TextFormat.GREEN + usageColor + toMB(usedVirtualMemory) + " / " + toMB(allVirtualMemory) + ". (" + round(usage, 2) + "%)");
+        sender.sendText(TextFormat.GOLD + "  Virtual memory: " + TextFormat.GREEN + usageColor + toMB(usedVirtualMemory) + " / " + toMB(allVirtualMemory) + ". (" + round(usage, 2) + "%)");
 
         // Hardware
         var physicalMemories = globalMemory.getPhysicalMemory();
-        if (!physicalMemories.isEmpty()) context.addOutput(TextFormat.GOLD + "  Hardware list: ");
+        if (!physicalMemories.isEmpty()) sender.sendText(TextFormat.GOLD + "  Hardware list: ");
         for (var each : physicalMemories) {
-            context.addOutput(TextFormat.AQUA + "    " + each.getBankLabel() + " @ " + formatFreq(each.getClockSpeed()) + TextFormat.WHITE + " " + toMB(each.getCapacity() / 1000));
-            context.addOutput(TextFormat.GRAY + "      " + each.getMemoryType() + ", " + each.getManufacturer());
+            sender.sendText(TextFormat.AQUA + "    " + each.getBankLabel() + " @ " + formatFreq(each.getClockSpeed()) + TextFormat.WHITE + " " + toMB(each.getCapacity() / 1000));
+            sender.sendText(TextFormat.GRAY + "      " + each.getMemoryType() + ", " + each.getManufacturer());
         }
-        context.addOutput("");
+        sender.sendText("");
     }
 
-    protected static void printCPUInfo(CommandContext context) {
+    protected static void printCPUInfo(CommandSender sender) {
         var cpu = SYSTEM_INFO.getHardware().getProcessor();
         var processorIdentifier = cpu.getProcessorIdentifier();
-        context.addOutput(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "CPU Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
-        context.addOutput(TextFormat.GOLD + "CPU: " + TextFormat.AQUA + processorIdentifier.getName() + TextFormat.GRAY +
+        sender.sendText(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "CPU Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
+        sender.sendText(TextFormat.GOLD + "CPU: " + TextFormat.AQUA + processorIdentifier.getName() + TextFormat.GRAY +
                           " (" + formatFreq(cpu.getMaxFreq()) + " baseline; " + cpu.getPhysicalProcessorCount() + " cores, " + cpu.getLogicalProcessorCount() + " logical cores)");
-        context.addOutput(TextFormat.GOLD + "Thread count: " + TextFormat.GREEN + Thread.getAllStackTraces().size());
-        context.addOutput(TextFormat.GOLD + "CPU Features: " + TextFormat.RESET + (processorIdentifier.isCpu64bit() ? "64bit, " : "32bit, ") +
+        sender.sendText(TextFormat.GOLD + "Thread count: " + TextFormat.GREEN + Thread.getAllStackTraces().size());
+        sender.sendText(TextFormat.GOLD + "CPU Features: " + TextFormat.RESET + (processorIdentifier.isCpu64bit() ? "64bit, " : "32bit, ") +
                           processorIdentifier.getModel() + ", micro-arch: " + processorIdentifier.getMicroarchitecture());
-        context.addOutput("");
+        sender.sendText("");
     }
 
-    protected static void printNetworkInfo(CommandContext context) {
+    protected static void printNetworkInfo(CommandSender sender) {
         try {
             var networkIFs = SYSTEM_INFO.getHardware().getNetworkIFs();
             if (networkIFs != null) {
-                context.addOutput(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "Network Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
-                context.addOutput(TextFormat.GOLD + "Network hardware list: ");
+                sender.sendText(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "Network Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
+                sender.sendText(TextFormat.GOLD + "Network hardware list: ");
                 ObjectArrayList<String> list;
                 for (var networkIF : networkIFs) {
                     list = new ObjectArrayList<>(networkIF.getIPv4addr().length + networkIF.getIPv6addr().length);
                     list.addElements(0, networkIF.getIPv4addr());
                     list.addElements(list.size(), networkIF.getIPv6addr());
-                    context.addOutput(TextFormat.AQUA + "  " + networkIF.getDisplayName());
-                    context.addOutput(TextFormat.RESET + "    " + toKB(networkIF.getSpeed()) + "/s " + TextFormat.GRAY + String.join(", ", list));
+                    sender.sendText(TextFormat.AQUA + "  " + networkIF.getDisplayName());
+                    sender.sendText(TextFormat.RESET + "    " + toKB(networkIF.getSpeed()) + "/s " + TextFormat.GRAY + String.join(", ", list));
                 }
-                context.addOutput("");
+                sender.sendText("");
             }
         } catch (Exception ignored) {
-            context.addOutput(TextFormat.RED + "    Failed to get network info.");
+            sender.sendText(TextFormat.RED + "    Failed to get network info.");
         }
     }
 
-    protected static void printOperationSystemAndJVMInfo(CommandContext context) {
+    protected static void printOperationSystemAndJVMInfo(CommandSender sender) {
         var os = SYSTEM_INFO.getOperatingSystem();
         var mxBean = ManagementFactory.getRuntimeMXBean();
-        context.addOutput(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "OS & JVM Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
-        context.addOutput(TextFormat.GOLD + "OS: " + TextFormat.AQUA + os.getFamily() + " " + os.getManufacturer() + " " +
+        sender.sendText(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "OS & JVM Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
+        sender.sendText(TextFormat.GOLD + "OS: " + TextFormat.AQUA + os.getFamily() + " " + os.getManufacturer() + " " +
                           os.getVersionInfo().getVersion() + " " + os.getVersionInfo().getCodeName() + " " + os.getBitness() + "bit, " +
                           "build " + os.getVersionInfo().getBuildNumber());
-        context.addOutput(TextFormat.GOLD + "JVM: " + TextFormat.AQUA + mxBean.getVmName() + " " + mxBean.getVmVendor() + " " + mxBean.getVmVersion());
+        sender.sendText(TextFormat.GOLD + "JVM: " + TextFormat.AQUA + mxBean.getVmName() + " " + mxBean.getVmVendor() + " " + mxBean.getVmVersion());
         try {
             var vm = detectVM();
-            if (vm == null) context.addOutput(TextFormat.GOLD + "Virtual environment: " + TextFormat.GREEN + "no");
-            else context.addOutput(TextFormat.GOLD + "Virtual environment: " + TextFormat.YELLOW + "yes (" + vm + ")");
+            if (vm == null) sender.sendText(TextFormat.GOLD + "Virtual environment: " + TextFormat.GREEN + "no");
+            else sender.sendText(TextFormat.GOLD + "Virtual environment: " + TextFormat.YELLOW + "yes (" + vm + ")");
         } catch (Exception ignore) {}
-        context.addOutput("");
+        sender.sendText("");
     }
 
-    protected static void printWorldInfo(CommandContext context) {
+    protected static void printWorldInfo(CommandSender sender) {
         for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
-            context.addOutput(TextFormat.GREEN + "---- " + TextFormat.WHITE + "World " + world.getWorldData().getName() + " Status" + TextFormat.GREEN + " ----");
-            context.addOutput(TextFormat.GOLD + "TPS: " + TextFormat.WHITE + world.getTps());
-            context.addOutput(TextFormat.GOLD + "MSPT: " + TextFormat.WHITE + world.getMSPT());
-            context.addOutput(TextFormat.GOLD + "TickUsage: " + TextFormat.WHITE + world.getTickUsage() * 100f + "%");
-            world.getDimensions().values().forEach(dimension -> printDimensionInfo(context, dimension));
+            sender.sendText(TextFormat.GREEN + "---- " + TextFormat.WHITE + "World " + world.getWorldData().getName() + " Status" + TextFormat.GREEN + " ----");
+            sender.sendText(TextFormat.GOLD + "TPS: " + TextFormat.WHITE + world.getTps());
+            sender.sendText(TextFormat.GOLD + "MSPT: " + TextFormat.WHITE + world.getMSPT());
+            sender.sendText(TextFormat.GOLD + "TickUsage: " + TextFormat.WHITE + world.getTickUsage() * 100f + "%");
+            world.getDimensions().values().forEach(dimension -> printDimensionInfo(sender, dimension));
         }
     }
 
-    protected static void printDimensionInfo(CommandContext context, Dimension dimension) {
-        context.addOutput(TextFormat.GOLD + "DimensionId " + TextFormat.WHITE + dimension.getDimensionInfo().dimensionId());
-        context.addOutput(TextFormat.GOLD + "Chunk count: " + TextFormat.WHITE + dimension.getChunkService().getLoadedChunks().size());
-        context.addOutput(TextFormat.GOLD + "Entity count: " + TextFormat.WHITE + dimension.getEntityCount());
-        context.addOutput(TextFormat.GOLD + "BlockEntity count: " + TextFormat.WHITE + dimension.getBlockEntityCount());
+    protected static void printDimensionInfo(CommandSender sender, Dimension dimension) {
+        sender.sendText(TextFormat.GOLD + "DimensionId " + TextFormat.WHITE + dimension.getDimensionInfo().dimensionId());
+        sender.sendText(TextFormat.GOLD + "Chunk count: " + TextFormat.WHITE + dimension.getChunkService().getLoadedChunks().size());
+        sender.sendText(TextFormat.GOLD + "Entity count: " + TextFormat.WHITE + dimension.getEntityCount());
+        sender.sendText(TextFormat.GOLD + "BlockEntity count: " + TextFormat.WHITE + dimension.getBlockEntityCount());
     }
 
-    protected static void printUpTimeInfo(CommandContext context) {
+    protected static void printUpTimeInfo(CommandSender sender) {
         var time = System.currentTimeMillis() - Server.getInstance().getStartTime();
-        context.addOutput(TextFormat.GOLD + "Uptime: " + formatUptime(time));
+        sender.sendText(TextFormat.GOLD + "Uptime: " + formatUptime(time));
     }
 
-    protected static void printMemoryUsageInfo(CommandContext context) {
+    protected static void printMemoryUsageInfo(CommandSender sender) {
         var runtime = Runtime.getRuntime();
         var totalMB = round(((double) runtime.totalMemory()) / 1024 / 1024, 2);
         var usedMB = round((double) (runtime.totalMemory() - runtime.freeMemory()) / 1024 / 1024, 2);
@@ -185,19 +186,19 @@ public class StatusCommand extends SimpleCommand {
         var usageColor = TextFormat.GREEN;
         if (usage > 85) usageColor = TextFormat.GOLD;
 
-        context.addOutput(TextFormat.GOLD + "Used VM memory: " + usageColor + usedMB + " MB. (" + round(usage, 2) + "%)");
-        context.addOutput(TextFormat.GOLD + "Total VM memory: " + TextFormat.RED + totalMB + " MB.");
-        context.addOutput(TextFormat.GOLD + "Maximum JVM memory: " + TextFormat.RED + maxMB + " MB.");
+        sender.sendText(TextFormat.GOLD + "Used VM memory: " + usageColor + usedMB + " MB. (" + round(usage, 2) + "%)");
+        sender.sendText(TextFormat.GOLD + "Total VM memory: " + TextFormat.RED + totalMB + " MB.");
+        sender.sendText(TextFormat.GOLD + "Maximum JVM memory: " + TextFormat.RED + maxMB + " MB.");
     }
 
-    protected static void printOnlinePlayerInfo(CommandContext context) {
+    protected static void printOnlinePlayerInfo(CommandSender sender) {
         var server = Server.getInstance();
         var playerColor = TextFormat.GREEN;
         if (((float) server.getOnlinePlayerCount() / (float) server.getNetworkServer().getMaxPlayerCount()) > 0.85) {
             playerColor = TextFormat.GOLD;
         }
 
-        context.addOutput(TextFormat.GOLD + "Players: " + playerColor + server.getOnlinePlayers().size() + TextFormat.GREEN + " online, " +
+        sender.sendText(TextFormat.GOLD + "Players: " + playerColor + server.getOnlinePlayers().size() + TextFormat.GREEN + " online, " +
                           TextFormat.RED + server.getNetworkServer().getMaxPlayerCount() + TextFormat.GREEN + " max. ");
     }
 
@@ -301,16 +302,17 @@ public class StatusCommand extends SimpleCommand {
                 .optional()
                 .exec(context -> {
                     boolean full = context.getResult(0);
-                    context.addOutput(TextFormat.GREEN + "---- " + TextFormat.WHITE + "Server Status" + TextFormat.GREEN + " ----");
-                    printUpTimeInfo(context);
-                    printMemoryUsageInfo(context);
-                    printOnlinePlayerInfo(context);
-                    printWorldInfo(context);
+                    var sender = context.getSender();
+                    sender.sendText(TextFormat.GREEN + "---- " + TextFormat.WHITE + "Server Status" + TextFormat.GREEN + " ----");
+                    printUpTimeInfo(sender);
+                    printMemoryUsageInfo(sender);
+                    printOnlinePlayerInfo(sender);
+                    printWorldInfo(sender);
                     if (full) {
-                        printOperationSystemAndJVMInfo(context);
-                        printNetworkInfo(context);
-                        printCPUInfo(context);
-                        printOperationSystemMemoryInfo(context);
+                        printOperationSystemAndJVMInfo(sender);
+                        printNetworkInfo(sender);
+                        printCPUInfo(sender);
+                        printOperationSystemMemoryInfo(sender);
                     }
                     return context.success();
                 });

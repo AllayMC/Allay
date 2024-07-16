@@ -42,6 +42,7 @@ import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
@@ -462,17 +463,24 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
-        var cmdOutputPk = new CommandOutputPacket();
-        cmdOutputPk.setType(CommandOutputType.ALL_OUTPUT);
-        cmdOutputPk.setCommandOriginData(sender.getCommandOriginData());
-        for (var output : outputs) {
-            cmdOutputPk.getMessages().add(new CommandOutputMessage(
-                    status != CommandResult.FAIL_STATUS, // Indicates if the output message was one of a successful command execution
-                    I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()),
-                    Utils.EMPTY_STRING_ARRAY));
+        if (sender == thisEntity) {
+            var cmdOutputPk = new CommandOutputPacket();
+            cmdOutputPk.setType(CommandOutputType.ALL_OUTPUT);
+            cmdOutputPk.setCommandOriginData(sender.getCommandOriginData());
+            for (var output : outputs) {
+                cmdOutputPk.getMessages().add(new CommandOutputMessage(
+                        status != CommandResult.FAIL_STATUS, // Indicates if the output message was one of a successful command execution
+                        I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()),
+                        Utils.EMPTY_STRING_ARRAY));
+            }
+            cmdOutputPk.setSuccessCount(status);
+            networkComponent.sendPacket(cmdOutputPk);
+        } else {
+            for (var output : outputs) {
+                var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()) + "]";
+                sendText(str);
+            }
         }
-        cmdOutputPk.setSuccessCount(status);
-        networkComponent.sendPacket(cmdOutputPk);
     }
 
     @Override
