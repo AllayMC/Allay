@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * Allay Project 2023/7/15
@@ -22,7 +22,7 @@ public interface Container {
 
     // We can provide a null info for air type
     // And only for air type we can do that
-    ItemStack EMPTY_SLOT_PLACE_HOLDER = AIR_TYPE.createItemStack(null);
+    ItemStack EMPTY_SLOT_PLACE_HOLDER = AIR.createItemStack(null);
 
     FullContainerType<?> getContainerType();
 

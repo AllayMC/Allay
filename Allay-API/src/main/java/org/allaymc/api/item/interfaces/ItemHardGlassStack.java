@@ -10,7 +10,7 @@ import org.allaymc.api.item.type.ItemTypeBuilder;
  * Allay Project <br>
  */
 public interface ItemHardGlassStack extends ItemStack {
-    ItemType<ItemHardGlassStack> HARD_GLASS_TYPE = ItemTypeBuilder
+    ItemType<ItemHardGlassStack> HARD_GLASS = ItemTypeBuilder
             .builder(ItemHardGlassStack.class)
             .vanillaItem(VanillaItemId.HARD_GLASS)
             .build();

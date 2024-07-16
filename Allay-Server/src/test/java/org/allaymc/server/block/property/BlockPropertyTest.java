@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
  * @author daoge_cmd
  */
 public class BlockPropertyTest {
-
     @Test
     void testBooleanProperty() {
         var p1 = VanillaBlockPropertyTypes.AGE_BIT.createValue(true);

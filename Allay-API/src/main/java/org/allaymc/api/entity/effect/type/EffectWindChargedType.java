@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author IWareQ
  */
 public class EffectWindChargedType extends AbstractEffectType {
-    public static final EffectWindChargedType WIND_CHARGED_TYPE = new EffectWindChargedType();
+    public static final EffectWindChargedType WIND_CHARGED = new EffectWindChargedType();
 
     private EffectWindChargedType() {
         super(32, new Identifier("minecraft:wind_charged"), true);

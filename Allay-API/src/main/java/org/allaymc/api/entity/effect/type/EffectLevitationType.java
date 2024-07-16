@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectLevitationType extends AbstractEffectType {
-    public static final EffectLevitationType LEVITATION_TYPE = new EffectLevitationType();
+    public static final EffectLevitationType LEVITATION = new EffectLevitationType();
 
     private EffectLevitationType() {
         super(24, new Identifier("minecraft:levitation"), true);

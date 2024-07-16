@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.lang.Math.*;
 import static org.allaymc.api.block.component.common.BlockStateData.DEFAULT_FRICTION;
-import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.AIR;
 import static org.allaymc.api.utils.MathUtils.isInRange;
 
 /**
@@ -162,7 +162,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             var blockFace = values[i];
             var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
             var blockState = dimension.getBlockState(offsetVec);
-            if (blockState.getBlockType() == AIR_TYPE) {
+            if (blockState.getBlockType() == AIR) {
                 var currentDistanceSqrt = entity.getLocation().distanceSquared(offsetVec.x() + 0.5f, offsetVec.y() + 0.5f, offsetVec.z() + 0.5f);
                 if (currentDistanceSqrt < distanceSqrt) {
                     movingDirection = blockFace;
@@ -223,8 +223,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         // 1. Multiplier factors
         var movementFactor = entity.getMovementFactor();
 
-        var speedLevel = entity.getEffectLevel(EffectSpeedType.SPEED_TYPE);
-        var slownessLevel = entity.getEffectLevel(EffectSlownessType.SLOWNESS_TYPE);
+        var speedLevel = entity.getEffectLevel(EffectSpeedType.SPEED);
+        var slownessLevel = entity.getEffectLevel(EffectSlownessType.SLOWNESS);
 
         var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
 

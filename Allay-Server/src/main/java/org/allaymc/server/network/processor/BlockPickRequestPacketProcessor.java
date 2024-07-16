@@ -23,7 +23,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         if (!player.canReachBlock(blockPos) || player.getGameType() != GameType.CREATIVE) return;
 
         var block = player.getLocation().dimension().getBlockState(blockPos);
-        if (block.getBlockType() == BlockTypes.AIR_TYPE) {
+        if (block.getBlockType() == BlockTypes.AIR) {
             log.warn("Player {} tried to pick air!", player.getOriginName());
             return;
         }

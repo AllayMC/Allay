@@ -11,7 +11,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectAbsorptionType extends AbstractEffectType {
-    public static final EffectAbsorptionType ABSORPTION_TYPE = new EffectAbsorptionType();
+    public static final EffectAbsorptionType ABSORPTION = new EffectAbsorptionType();
 
     private EffectAbsorptionType() {
         super(22, new Identifier("minecraft:absorption"));

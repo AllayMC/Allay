@@ -36,8 +36,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static org.allaymc.api.block.type.BlockTypes.AIR_TYPE;
-import static org.allaymc.api.block.type.BlockTypes.UNKNOWN_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.AIR;
+import static org.allaymc.api.block.type.BlockTypes.UNKNOWN;
 
 /**
  * Allay Project 8/23/2023
@@ -107,7 +107,7 @@ public class LevelDBChunkSerializer {
                             section = new ChunkSection((byte) ySection);
                         } else {
                             @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
-                            Arrays.fill(palettes, new Palette<>(AIR_TYPE.getDefaultState()));
+                            Arrays.fill(palettes, new Palette<>(AIR.getDefaultState()));
                             section = new ChunkSection((byte) ySection, palettes);
                         }
                         for (int layer = 0; layer < layers; layer++) {
@@ -115,7 +115,7 @@ public class LevelDBChunkSerializer {
                                 BlockState blockState = BlockStateHashPalette.getRegistry().get(hash);
                                 if (blockState == null) {
                                     log.error("Unknown block state hash: " + hash);
-                                    blockState = UNKNOWN_TYPE.getDefaultState();
+                                    blockState = UNKNOWN.getDefaultState();
                                 }
                                 return blockState;
                             });
@@ -124,9 +124,7 @@ public class LevelDBChunkSerializer {
                         break;
                 }
             } finally {
-                if (byteBuf != null) {
-                    byteBuf.release();
-                }
+                byteBuf.release();
             }
         }
         builder.sections(sections);

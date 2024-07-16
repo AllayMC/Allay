@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  */
 @ExtendWith(AllayTestExtension.class)
 public class RegistryTest {
-
     @Test
     void testBlockTypeRegistry() {
         for (var id : VanillaBlockId.values()) {

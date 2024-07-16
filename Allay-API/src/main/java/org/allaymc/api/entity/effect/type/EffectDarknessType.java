@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectDarknessType extends AbstractEffectType {
-    public static final EffectDarknessType DARKNESS_TYPE = new EffectDarknessType();
+    public static final EffectDarknessType DARKNESS = new EffectDarknessType();
 
     private EffectDarknessType() {
         super(30, new Identifier("minecraft:darkness"), true);

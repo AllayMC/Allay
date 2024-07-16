@@ -48,7 +48,7 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
             dimension.getEntityService().addEntity(createFallingEntity(dimension, pos, blockState), () -> {
                 dimension.setBlockState(
                         pos.x(), pos.y(), pos.z(),
-                        BlockTypes.AIR_TYPE.getDefaultState()
+                        BlockTypes.AIR.getDefaultState()
                 );
             });
             return true;
@@ -58,14 +58,14 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
     }
 
     protected boolean invalidDownBlock(BlockType<?> down0, BlockType<?> down1) {
-        return down0 == BlockTypes.AIR_TYPE ||
-               down0 == BlockTypes.FIRE_TYPE ||
+        return down0 == BlockTypes.AIR ||
+               down0 == BlockTypes.FIRE ||
                down0.getBlockBehavior() instanceof BlockLiquidComponent ||
-               (down0 == BlockTypes.BUBBLE_COLUMN_TYPE && down1.getBlockBehavior() instanceof BlockLiquidComponent);
+               (down0 == BlockTypes.BUBBLE_COLUMN && down1.getBlockBehavior() instanceof BlockLiquidComponent);
     }
 
     protected EntityFallingBlock createFallingEntity(Dimension dimension, Vector3ic pos, BlockState blockState) {
-        return EntityTypes.FALLING_BLOCK_TYPE.createEntity(
+        return EntityTypes.FALLING_BLOCK.createEntity(
                 SimpleEntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(pos.x() + 0.5f, pos.y(), pos.z() + 0.5f)

@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentSoulSpeedType extends AbstractEnchantmentType {
-    public static final EnchantmentSoulSpeedType SOUL_SPEED_TYPE = new EnchantmentSoulSpeedType();
+    public static final EnchantmentSoulSpeedType SOUL_SPEED = new EnchantmentSoulSpeedType();
 
     private EnchantmentSoulSpeedType() {
         super(new Identifier("minecraft:soul_speed"), 36, 3, Rarity.VERY_RARE);

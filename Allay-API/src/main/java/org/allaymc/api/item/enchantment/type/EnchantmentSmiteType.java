@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentSmiteType extends AbstractEnchantmentType {
-    public static final EnchantmentSmiteType SMITE_TYPE = new EnchantmentSmiteType();
+    public static final EnchantmentSmiteType SMITE = new EnchantmentSmiteType();
 
     private EnchantmentSmiteType() {
         super(new Identifier("minecraft:smite"), 10, 5, Rarity.UNCOMMON);

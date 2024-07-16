@@ -18,8 +18,8 @@ public class ItemPufferfishBaseComponentImpl extends ItemFoodComponentImpl {
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        player.addEffect(EffectHungerType.HUNGER_TYPE.createInstance(2, 15 * 20)); // 3 lvl, 15 seconds
-        player.addEffect(EffectNauseaType.NAUSEA_TYPE.createInstance(0, 15 * 20)); // 1 lvl, 15 seconds
-        player.addEffect(EffectPoisonType.POISON_TYPE.createInstance(1, 60 * 20)); // 2 lvl, 1 minutes
+        player.addEffect(EffectHungerType.HUNGER.createInstance(2, 15 * 20)); // 3 lvl, 15 seconds
+        player.addEffect(EffectNauseaType.NAUSEA.createInstance(0, 15 * 20)); // 1 lvl, 15 seconds
+        player.addEffect(EffectPoisonType.POISON.createInstance(1, 60 * 20)); // 2 lvl, 1 minutes
     }
 }

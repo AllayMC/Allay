@@ -4,9 +4,7 @@ import org.allaymc.api.utils.IdentifierUtils;
 import org.allaymc.api.utils.exception.InvalidIdentifierException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/3/4

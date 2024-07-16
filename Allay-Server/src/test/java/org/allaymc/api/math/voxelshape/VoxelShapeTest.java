@@ -17,8 +17,8 @@ class VoxelShapeTest {
     void testStairShape() {
         var vs = VoxelShape
                 .builder()
-                .solid(0, 0, 0, 1, 1 ,1)
-                .vacancy(0.5f, 0.5f, 0, 1, 1 ,1)
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.5f, 0.5f, 0, 1, 1, 1)
                 .build();
         assertFalse(vs.intersectsPoint(0.75f, 0.75f, 0.5f));
         var aabb = new AABBf(0.51f, 0.51f, 0.01f, 0.99f, 0.99f, 0.99f);

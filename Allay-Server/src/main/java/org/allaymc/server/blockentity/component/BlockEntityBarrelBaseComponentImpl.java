@@ -29,7 +29,7 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
         var container = containerHolderComponent.<BarrelContainer>getContainer();
         container.addOnOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
-                BlockTypes.BARREL_TYPE.getBlockBehavior().updateBlockProperty(
+                BlockTypes.BARREL.getBlockBehavior().updateBlockProperty(
                         VanillaBlockPropertyTypes.OPEN_BIT,
                         true,
                         position.x(),
@@ -41,7 +41,7 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
         });
         container.addOnCloseListener(viewer -> {
             if (container.getViewers().isEmpty()) {
-                BlockTypes.BARREL_TYPE.getBlockBehavior().updateBlockProperty(
+                BlockTypes.BARREL.getBlockBehavior().updateBlockProperty(
                         VanillaBlockPropertyTypes.OPEN_BIT,
                         false,
                         position.x(),

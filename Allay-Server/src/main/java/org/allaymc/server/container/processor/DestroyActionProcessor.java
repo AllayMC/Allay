@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * Allay Project 2023/7/28
@@ -39,7 +39,7 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
             return error();
         }
 
-        if (item.getItemType() == AIR_TYPE) {
+        if (item.getItemType() == AIR) {
             log.warn("cannot destroy an air!");
             return error();
         }

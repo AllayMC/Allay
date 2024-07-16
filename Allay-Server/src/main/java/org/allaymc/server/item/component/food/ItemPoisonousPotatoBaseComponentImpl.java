@@ -19,6 +19,6 @@ public class ItemPoisonousPotatoBaseComponentImpl extends ItemFoodComponentImpl 
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
         if (0.6f >= ThreadLocalRandom.current().nextFloat())
-            player.addEffect(EffectPoisonType.POISON_TYPE.createInstance(0, 5 * 20)); // 1 lvl, 5 seconds
+            player.addEffect(EffectPoisonType.POISON.createInstance(0, 5 * 20)); // 1 lvl, 5 seconds
     }
 }

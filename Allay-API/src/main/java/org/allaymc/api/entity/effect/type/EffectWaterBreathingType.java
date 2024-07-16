@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectWaterBreathingType extends AbstractEffectType {
-    public static final EffectWaterBreathingType WATER_BREATHING_TYPE = new EffectWaterBreathingType();
+    public static final EffectWaterBreathingType WATER_BREATHING = new EffectWaterBreathingType();
 
     private EffectWaterBreathingType() {
         super(13, new Identifier("minecraft:water_breathing"));

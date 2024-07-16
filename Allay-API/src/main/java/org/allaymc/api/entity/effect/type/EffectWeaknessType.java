@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectWeaknessType extends AbstractEffectType {
-    public static final EffectWeaknessType WEAKNESS_TYPE = new EffectWeaknessType();
+    public static final EffectWeaknessType WEAKNESS = new EffectWeaknessType();
 
     private EffectWeaknessType() {
         super(18, new Identifier("minecraft:weakness"), true);

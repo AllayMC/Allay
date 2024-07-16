@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentAquaAffinityType extends AbstractEnchantmentType {
-    public static final EnchantmentAquaAffinityType AQUA_AFFINITY_TYPE = new EnchantmentAquaAffinityType();
+    public static final EnchantmentAquaAffinityType AQUA_AFFINITY = new EnchantmentAquaAffinityType();
 
     private EnchantmentAquaAffinityType() {
         super(new Identifier("minecraft:aqua_affinity"), 8, 1, Rarity.RARE);

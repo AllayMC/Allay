@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author daoge_cmd
  */
 class AllayNbtUtilsTest {
-
     static String NBT_BASE64_LE = "CgAAAQgAdGVzdEZsYWcBAA==";
     static String NBT_BASE64 = "CgAAAQAIdGVzdEZsYWcBAA==";
 

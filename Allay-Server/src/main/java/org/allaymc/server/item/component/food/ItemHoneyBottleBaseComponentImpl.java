@@ -16,6 +16,6 @@ public class ItemHoneyBottleBaseComponentImpl extends ItemFoodComponentImpl {
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        player.removeEffect(EffectPoisonType.POISON_TYPE);
+        player.removeEffect(EffectPoisonType.POISON);
     }
 }

@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR_TYPE;
+import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
  * Allay Project 2023/12/1
@@ -57,7 +57,7 @@ public class ShapelessRecipe extends CraftingRecipe {
     }
 
     protected List<ItemStack> collectNonAirItems(ItemStack[] items) {
-        return Arrays.stream(items).filter(item -> item.getItemType() != AIR_TYPE).toList();
+        return Arrays.stream(items).filter(item -> item.getItemType() != AIR).toList();
     }
 
     protected int findItem(List<ItemStack> itemPool, ItemDescriptor target) {

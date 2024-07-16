@@ -7,7 +7,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.joml.Vector3ic;
 
-import static org.allaymc.api.block.type.BlockTypes.CAULDRON_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.CAULDRON;
 
 /**
  * Allay Project 2023/12/6
@@ -21,6 +21,6 @@ public class ItemCauldronBaseComponentImpl extends ItemBaseComponentImpl<ItemCau
 
     @Override
     public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        return tryPlaceBlockState(dimension, CAULDRON_TYPE.getDefaultState(), placeBlockPos, placementInfo);
+        return tryPlaceBlockState(dimension, CAULDRON.getDefaultState(), placeBlockPos, placementInfo);
     }
 }

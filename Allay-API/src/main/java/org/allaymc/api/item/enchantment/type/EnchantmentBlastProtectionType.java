@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentBlastProtectionType extends AbstractEnchantmentType {
-    public static final EnchantmentBlastProtectionType BLAST_PROTECTION_TYPE = new EnchantmentBlastProtectionType();
+    public static final EnchantmentBlastProtectionType BLAST_PROTECTION = new EnchantmentBlastProtectionType();
 
     private EnchantmentBlastProtectionType() {
         super(new Identifier("minecraft:blast_protection"), 3, 4, Rarity.RARE);

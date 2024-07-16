@@ -13,7 +13,7 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
  * @author daoge_cmd
  */
 public abstract class OtherChunkAccessibleContext extends Context {
-    private static final BlockState AIR = BlockTypes.AIR_TYPE.getDefaultState();
+    private static final BlockState AIR = BlockTypes.AIR.getDefaultState();
 
     @Getter
     protected ChunkAccessible chunkAccessor;

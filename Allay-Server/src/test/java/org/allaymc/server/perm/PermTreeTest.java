@@ -8,7 +8,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static org.allaymc.api.perm.tree.PermTree.PermChangeType.ADD;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Allay Project 2023/12/30
@@ -16,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author daoge_cmd
  */
 public class PermTreeTest {
-
     @Test
     void testPermNodeFullName() {
         var tree = AllayPermTree

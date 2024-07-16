@@ -27,7 +27,7 @@ public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentI
         var rand = ThreadLocalRandom.current();
         // Has a 1/8 chance to drop seeds
         if (rand.nextInt(8) == 0) {
-            return new ItemStack[]{ItemTypes.WHEAT_SEEDS_TYPE.createItemStack()};
+            return new ItemStack[]{ItemTypes.WHEAT_SEEDS.createItemStack()};
         }
         return Utils.EMPTY_ITEM_STACK_ARRAY;
     }
@@ -41,14 +41,14 @@ public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentI
 
     @Override
     public boolean canPlaceOnBlock(BlockType<?> blockType) {
-        return blockType == GRASS_BLOCK_TYPE ||
-               blockType == MYCELIUM_TYPE ||
-               blockType == PODZOL_TYPE ||
-               blockType == DIRT_TYPE ||
-               blockType == DIRT_WITH_ROOTS_TYPE ||
-               blockType == FARMLAND_TYPE ||
-               blockType == MUD_TYPE ||
-               blockType == MUDDY_MANGROVE_ROOTS_TYPE ||
-               blockType == MOSS_BLOCK_TYPE;
+        return blockType == GRASS_BLOCK ||
+               blockType == MYCELIUM ||
+               blockType == PODZOL ||
+               blockType == DIRT ||
+               blockType == DIRT_WITH_ROOTS ||
+               blockType == FARMLAND ||
+               blockType == MUD ||
+               blockType == MUDDY_MANGROVE_ROOTS ||
+               blockType == MOSS_BLOCK;
     }
 }

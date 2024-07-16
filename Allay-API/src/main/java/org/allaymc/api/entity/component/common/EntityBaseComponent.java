@@ -48,7 +48,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
 
     private static boolean isWaterType(BlockType<?> blockType) {
-        return blockType == BlockTypes.FLOWING_WATER_TYPE || blockType == BlockTypes.WATER_TYPE;
+        return blockType == BlockTypes.FLOWING_WATER || blockType == BlockTypes.WATER;
     }
 
     EntityType<? extends Entity> getEntityType();

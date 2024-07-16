@@ -19,10 +19,10 @@ public class ItemEnchantedGoldenAppleBaseComponentImpl extends ItemFoodComponent
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        player.addEffect(EffectRegenerationType.REGENERATION_TYPE.createInstance(4, 30 * 20)); // 5 lvl, 30 seconds
-        player.addEffect(EffectAbsorptionType.ABSORPTION_TYPE.createInstance(3, 60 * 2 * 20)); // 4 lvl, 2 minutes
-        player.addEffect(EffectResistanceType.RESISTANCE_TYPE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
-        player.addEffect(EffectFireResistanceType.FIRE_RESISTANCE_TYPE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
+        player.addEffect(EffectRegenerationType.REGENERATION.createInstance(4, 30 * 20)); // 5 lvl, 30 seconds
+        player.addEffect(EffectAbsorptionType.ABSORPTION.createInstance(3, 60 * 2 * 20)); // 4 lvl, 2 minutes
+        player.addEffect(EffectResistanceType.RESISTANCE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
+        player.addEffect(EffectFireResistanceType.FIRE_RESISTANCE.createInstance(0, 60 * 5 * 20)); // 1 lvl, 5 minutes
     }
 
     @Override

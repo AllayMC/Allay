@@ -8,10 +8,10 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityVillagerV2;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
-import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.EntityFallingBlockBaseComponentImpl;
 import org.allaymc.server.entity.component.EntityItemBaseComponentImpl;
+import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
+import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.player.*;
 
 import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicEntityAttributes;
@@ -26,7 +26,7 @@ import static org.allaymc.api.entity.component.common.EntityAttributeComponent.b
 @UtilityClass
 public final class EntityTypeInitializer {
     public static void initFallingBlock() {
-        EntityTypes.FALLING_BLOCK_TYPE = EntityTypeBuilder
+        EntityTypes.FALLING_BLOCK = EntityTypeBuilder
                 .builder(EntityFallingBlock.class)
                 .vanillaEntity(VanillaEntityId.FALLING_BLOCK)
                 .addComponent(EntityFallingBlockBaseComponentImpl::new, EntityFallingBlockBaseComponentImpl.class)
@@ -34,7 +34,7 @@ public final class EntityTypeInitializer {
     }
 
     public static void initItem() {
-        EntityTypes.ITEM_TYPE = EntityTypeBuilder
+        EntityTypes.ITEM = EntityTypeBuilder
                 .builder(EntityItem.class)
                 .vanillaEntity(VanillaEntityId.ITEM)
                 .addComponent(EntityItemBaseComponentImpl::new, EntityItemBaseComponentImpl.class)
@@ -42,7 +42,7 @@ public final class EntityTypeInitializer {
     }
 
     public static void initPlayer() {
-        EntityTypes.PLAYER_TYPE = EntityTypeBuilder
+        EntityTypes.PLAYER = EntityTypeBuilder
                 .builder(EntityPlayer.class)
                 .vanillaEntity(VanillaEntityId.PLAYER)
                 .addComponent(EntityPlayerBaseComponentImpl::new, EntityPlayerBaseComponentImpl.class)
@@ -56,7 +56,7 @@ public final class EntityTypeInitializer {
     }
 
     public static void initVillagerV2() {
-        EntityTypes.VILLAGER_V2_TYPE = EntityTypeBuilder
+        EntityTypes.VILLAGER_V2 = EntityTypeBuilder
                 .builder(EntityVillagerV2.class)
                 .vanillaEntity(VanillaEntityId.VILLAGER_V2)
                 .addComponent(() -> new EntityAttributeComponentImpl(basicEntityAttributes()), EntityAttributeComponentImpl.class)

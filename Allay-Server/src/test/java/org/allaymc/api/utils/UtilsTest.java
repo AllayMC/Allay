@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author daoge_cmd
  */
 class UtilsTest {
-
     @Test
     void testComputeRequiredBits() {
         assertEquals(1, Utils.computeRequiredBits(1));

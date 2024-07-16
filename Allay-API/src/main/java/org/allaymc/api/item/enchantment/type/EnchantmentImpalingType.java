@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * Allay Project <br>
  */
 public class EnchantmentImpalingType extends AbstractEnchantmentType {
-    public static final EnchantmentImpalingType IMPALING_TYPE = new EnchantmentImpalingType();
+    public static final EnchantmentImpalingType IMPALING = new EnchantmentImpalingType();
 
     private EnchantmentImpalingType() {
         super(new Identifier("minecraft:impaling"), 29, 5, Rarity.RARE);

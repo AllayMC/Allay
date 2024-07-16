@@ -20,9 +20,12 @@ public abstract class BaseInterfaceGen {
                 .addSuperinterface(superClassName)
                 .addJavadoc(
                         "@author daoge_cmd <br>\n" +
-                                "Allay Project <br>\n")
+                        "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
-        var javaFile = JavaFile.builder(itemClassName.packageName(), codeBuilder.build()).build();
+        var javaFile = JavaFile.builder(itemClassName.packageName(), codeBuilder.build())
+                .indent(Utils.INDENT)
+                .skipJavaLangImports(true)
+                .build();
         System.out.println("Generating " + itemClassName + ".java ...");
         Files.writeString(path, javaFile.toString());
     }

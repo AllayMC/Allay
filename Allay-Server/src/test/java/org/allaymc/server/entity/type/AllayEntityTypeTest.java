@@ -25,7 +25,7 @@ class AllayEntityTypeTest {
 
     @BeforeAll
     static void init() {
-        sheep = EntityTypes.SHEEP_TYPE.createEntity(SimpleEntityInitInfo.builder().pos(0, 1, 2).dimension(mockDimension).build());
+        sheep = EntityTypes.SHEEP.createEntity(SimpleEntityInitInfo.builder().pos(0, 1, 2).dimension(mockDimension).build());
     }
 
     @Test

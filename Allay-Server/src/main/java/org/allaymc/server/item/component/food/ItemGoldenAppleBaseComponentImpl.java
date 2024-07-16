@@ -17,8 +17,8 @@ public class ItemGoldenAppleBaseComponentImpl extends ItemFoodComponentImpl {
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        player.addEffect(EffectRegenerationType.REGENERATION_TYPE.createInstance(1, 5 * 20)); // 2 lvl, 5 seconds
-        player.addEffect(EffectAbsorptionType.ABSORPTION_TYPE.createInstance(0, 60 * 2 * 20)); // 1 lvl, 2 minutes
+        player.addEffect(EffectRegenerationType.REGENERATION.createInstance(1, 5 * 20)); // 2 lvl, 5 seconds
+        player.addEffect(EffectAbsorptionType.ABSORPTION.createInstance(0, 60 * 2 * 20)); // 1 lvl, 2 minutes
     }
 
     @Override

@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd
  */
 public class EffectResistanceType extends AbstractEffectType {
-    public static final EffectResistanceType RESISTANCE_TYPE = new EffectResistanceType();
+    public static final EffectResistanceType RESISTANCE = new EffectResistanceType();
 
     private EffectResistanceType() {
         super(11, new Identifier("minecraft:resistance"));

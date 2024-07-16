@@ -14,13 +14,7 @@ import org.allaymc.server.world.storage.AllayLevelDBWorldStorage;
 import org.allaymc.testutils.AllayTestExtension;
 import org.apache.commons.io.FileUtils;
 import org.joml.Vector3i;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -33,7 +27,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD_TYPE;
+import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 
 /**
  * Allay Project 2023/5/31
@@ -60,6 +54,18 @@ class LevelDBWorldStorageTest {
         serve.when(Server::getInstance).thenReturn(server);
         Mockito.when(server.getVirtualThreadPool()).thenReturn(Executors.newVirtualThreadPerTaskExecutor());
         Mockito.when(mockWorld.getPlayers()).thenReturn(List.of());
+    }
+
+    @AfterAll
+    static void end() {
+        try {
+            levelDBWorldStorage.close();
+            Files.copy(levelDat.resolve("Allay-Server/src/test/resources/beworld/copy/level.dat"), levelDat.resolve("Allay-Server/src/test/resources/beworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
+            FileUtils.deleteDirectory(levelDat.resolve("Allay-Server/src/test/resources/beworld/db").toFile());
+            Server.getInstance().shutdown();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @SneakyThrows
@@ -95,7 +101,7 @@ class LevelDBWorldStorageTest {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {
-                    allayUnsafeChunk.setBlockState(i, k, j, OAK_WOOD_TYPE.getDefaultState());
+                    allayUnsafeChunk.setBlockState(i, k, j, OAK_WOOD.getDefaultState());
                     allayUnsafeChunk.setBiome(i, k, j, VanillaBiomeId.FOREST);
                 }
                 allayUnsafeChunk.setHeight(i, j, 319);
@@ -110,20 +116,8 @@ class LevelDBWorldStorageTest {
     @Order(4)
     void testReadChunk() {
         Chunk chunk = levelDBWorldStorage.readChunk(0, 0, DimensionInfo.OVERWORLD).join();
-        Assertions.assertEquals(OAK_WOOD_TYPE.getDefaultState(), chunk.getBlockState(0, 55, 0));
+        Assertions.assertEquals(OAK_WOOD.getDefaultState(), chunk.getBlockState(0, 55, 0));
         Assertions.assertEquals(VanillaBiomeId.FOREST, chunk.getBiome(0, 55, 0));
         Assertions.assertEquals(319, chunk.getHeight(0, 0));
-    }
-
-    @AfterAll
-    static void end() {
-        try {
-            levelDBWorldStorage.close();
-            Files.copy(levelDat.resolve("Allay-Server/src/test/resources/beworld/copy/level.dat"), levelDat.resolve("Allay-Server/src/test/resources/beworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
-            FileUtils.deleteDirectory(levelDat.resolve("Allay-Server/src/test/resources/beworld/db").toFile());
-            Server.getInstance().shutdown();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

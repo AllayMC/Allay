@@ -19,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author daoge_cmd
  */
 public class AllayPluginManagerTest extends AllayPluginManager {
+    static DescriptorMapBuilder builder() {
+        return new DescriptorMapBuilder();
+    }
 
     @BeforeEach
     void cleanUp() {
@@ -99,10 +102,6 @@ public class AllayPluginManagerTest extends AllayPluginManager {
         assertTrue(this.pluginsSortedList.contains("a"));
         assertTrue(this.pluginsSortedList.contains("b"));
         assertTrue(this.pluginsSortedList.contains("c"));
-    }
-
-    static DescriptorMapBuilder builder() {
-        return new DescriptorMapBuilder();
     }
 
     static class DescriptorMapBuilder {

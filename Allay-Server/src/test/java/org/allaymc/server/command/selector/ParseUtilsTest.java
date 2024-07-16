@@ -4,8 +4,8 @@ import lombok.SneakyThrows;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.allaymc.server.command.selector.ParseUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2024/5/18
@@ -13,7 +13,6 @@ import static org.allaymc.server.command.selector.ParseUtils.*;
  * @author daoge_cmd
  */
 class ParseUtilsTest {
-
     @SneakyThrows
     @Test
     void testParseOffsetInt() {

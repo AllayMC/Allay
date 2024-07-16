@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 @ExtendWith(AllayTestExtension.class)
 public class ContainerTest {
-
     static FullContainerType<Container> testContainerType = FullContainerType
             .builder()
             .size(36)
