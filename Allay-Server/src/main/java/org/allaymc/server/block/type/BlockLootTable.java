@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.loottable.LootTable;
 import org.allaymc.server.loottable.LootTableType;
@@ -57,12 +58,8 @@ public final class BlockLootTable {
 
     public static void readFrom(InputStreamReader reader) {
         JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
-            var blockId = VanillaBlockId.fromIdentifier(new Identifier(entry.getKey()));
-            if (blockId == null) {
-                log.warn("Unknown block id: {}", entry.getKey());
-                return;
-            }
             List<Pool<BreakBlockContext>> pools = new ArrayList<>();
+
             for (var element : entry.getValue().getAsJsonArray()) {
                 var poolObj = element.getAsJsonObject();
                 Conditions<BreakBlockContext> conditions = parseConditions(poolObj);
@@ -70,7 +67,15 @@ public final class BlockLootTable {
                 Entries<BreakBlockContext> entries = parseEntries(poolObj);
                 pools.add(new Pool<>(conditions, rolls, entries));
             }
-            BLOCK_LOOT_TABLES.put(blockId, new LootTable<>(BLOCK_LOOT_TABLE_TYPE, pools));
+
+            for (var id : AllayStringUtils.fastSplit(entry.getKey(), "|")) {
+                var blockId = VanillaBlockId.fromIdentifier(new Identifier(id));
+                if (blockId == null) {
+                    log.warn("Unknown block id: {}", entry.getKey());
+                    return;
+                }
+                BLOCK_LOOT_TABLES.put(blockId, new LootTable<>(BLOCK_LOOT_TABLE_TYPE, pools));
+            }
         });
     }
 
