@@ -10,7 +10,7 @@ import org.allaymc.api.datastruct.aabbtree.AABBOverlapFilter;
 import org.allaymc.api.datastruct.aabbtree.AABBTree;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
@@ -222,8 +222,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         // 1. Multiplier factors
         var movementFactor = entity.getMovementFactor();
 
-        var speedLevel = entity.getEffectLevel(EffectTypes.SPEED);
-        var slownessLevel = entity.getEffectLevel(EffectTypes.SLOWNESS);
+        var speedLevel = entity.getEffectLevel(VanillaEffectTypes.SPEED);
+        var slownessLevel = entity.getEffectLevel(VanillaEffectTypes.SLOWNESS);
 
         var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
 

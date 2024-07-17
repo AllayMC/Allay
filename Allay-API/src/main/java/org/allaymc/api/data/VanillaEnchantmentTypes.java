@@ -8,6 +8,7 @@ import org.allaymc.api.item.enchantment.type.*;
  *
  * @author IWareQ
  */
+@SuppressWarnings("unused")
 @UtilityClass
 public class VanillaEnchantmentTypes {
     public static final EnchantmentAquaAffinityType AQUA_AFFINITY = new EnchantmentAquaAffinityType();

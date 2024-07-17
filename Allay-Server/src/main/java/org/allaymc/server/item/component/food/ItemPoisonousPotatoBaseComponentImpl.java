@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component.food;
 
-import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -19,6 +19,6 @@ public class ItemPoisonousPotatoBaseComponentImpl extends ItemFoodComponentImpl 
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
         if (0.6f >= ThreadLocalRandom.current().nextFloat())
-            player.addEffect(EffectTypes.POISON.createInstance(0, 5 * 20)); // 1 lvl, 5 seconds
+            player.addEffect(VanillaEffectTypes.POISON.createInstance(0, 5 * 20)); // 1 lvl, 5 seconds
     }
 }

@@ -12,6 +12,8 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
+import org.allaymc.api.data.VanillaEffectTypes;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.world.Dimension;
@@ -172,7 +174,7 @@ public interface BlockBaseComponent extends BlockComponent {
      *
      * @param blockState the block being broke
      * @param usedItem   the item used to break the block, can be null
-     * @param player     the entity who break the block, can be null
+     * @param entity     the entity who break the block, can be null
      *
      * @return the drops
      */
@@ -219,13 +221,13 @@ public interface BlockBaseComponent extends BlockComponent {
         if (entity != null) {
             isInWater = entity.isInWater();
             isOnGround = entity.isOnGround();
-            hasteEffectLevel = entity.getEffectLevel(EffectTypes.HASTE);
+            hasteEffectLevel = entity.getEffectLevel(VanillaEffectTypes.HASTE);
             // Conduit Power ensures at least level 2 haste effect
-            if (entity.hasEffect(EffectTypes.CONDUIT_POWER)) {
+            if (entity.hasEffect(VanillaEffectTypes.CONDUIT_POWER)) {
                 hasteEffectLevel = Integer.max(hasteEffectLevel, 2);
             }
 
-            miningFatigueLevel = entity.getEffectLevel(EffectTypes.HASTE);
+            miningFatigueLevel = entity.getEffectLevel(VanillaEffectTypes.HASTE);
 
             if (entity instanceof EntityContainerHolderComponent containerHolder) {
                 if (containerHolder.hasContainer(FullContainerType.ARMOR))
