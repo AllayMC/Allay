@@ -207,7 +207,13 @@ public class GameTestCommand extends SimpleCommand {
                 .key("reloadblockloottable")
                 .exec(context -> {
                     try {
-                        BlockLootTable.readFrom(new InputStreamReader(Files.newInputStream(Path.of("../Allay-Data/resources/loot_tables/blocks.json"))));
+                        var path = Path.of("../Allay-Data/resources/loot_tables/blocks.json");
+                        if (!Files.exists(path)) {
+                            context.addError("This command can only be used in local environment!");
+                            return context.fail();
+                        }
+                        BlockLootTable.readFrom(new InputStreamReader(Files.newInputStream(path)));
+                        context.addOutput("Block loot tables have been reloaded!");
                     } catch (IOException e) {
                         context.addError(e.toString());
                         return context.fail();
