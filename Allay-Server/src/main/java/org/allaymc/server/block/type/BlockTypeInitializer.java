@@ -222,6 +222,11 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(VanillaBlockId.SHORT_GRASS)
                 .setBlockBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
                 .build();
+        BlockTypes.FERN = BlockTypeBuilder
+                .builder(BlockFernBehavior.class)
+                .vanillaBlock(VanillaBlockId.FERN)
+                .setBlockBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
+                .build();
     }
 
     public static void initTallGrass() {
@@ -231,10 +236,6 @@ public final class BlockTypeInitializer {
                 .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBlockBaseComponentSupplier(BlockTallGrassBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initLargeFern() {
-        // TODO: Needs adaptation
         BlockTypes.LARGE_FERN = BlockTypeBuilder
                 .builder(BlockLargeFernBehavior.class)
                 .vanillaBlock(VanillaBlockId.LARGE_FERN)
