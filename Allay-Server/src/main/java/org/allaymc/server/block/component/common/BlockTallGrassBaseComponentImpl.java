@@ -17,14 +17,13 @@ import org.allaymc.api.data.VanillaBlockPropertyTypes;
  * @author daoge_cmd
  */
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "upper_block_bit")
-public class BlockTallWheatSeedDropableBaseComponentImpl extends BlockWheatSeedDropableBaseComponentImpl {
-    public BlockTallWheatSeedDropableBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponentImpl {
+    public BlockTallGrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (!super.canKeepExisting(current, neighbor, face)) return false;
         if (face != BlockFace.UP && face != BlockFace.DOWN) return true;
 
         var dimension = current.pos().dimension();

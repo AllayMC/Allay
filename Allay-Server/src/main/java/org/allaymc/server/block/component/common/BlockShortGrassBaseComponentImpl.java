@@ -4,13 +4,6 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.entity.Entity;
-import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.type.ItemTypes;
-import org.allaymc.api.utils.Utils;
-
-import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.type.BlockTypes.*;
 
@@ -19,8 +12,8 @@ import static org.allaymc.api.block.type.BlockTypes.*;
  *
  * @author daoge_cmd
  */
-public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockWheatSeedDropableBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockShortGrassBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockShortGrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
