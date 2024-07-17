@@ -12,7 +12,9 @@ import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
 import org.cloudburstmc.protocol.bedrock.data.PlayerBlockActionData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.ItemStackRequest;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
+import org.cloudburstmc.protocol.bedrock.packet.ItemStackRequestPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
@@ -240,6 +242,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     @Override
     public void handleSync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
         handleInputData(player, packet.getInputData());
+        handleSingleItemStackRequest(player, packet.getItemStackRequest(), receiveTime);
     }
 
     @Override
@@ -253,6 +256,17 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             checkInteractDistance(player);
         }
         return PacketSignal.UNHANDLED;
+    }
+
+    protected void handleSingleItemStackRequest(EntityPlayer player, ItemStackRequest request, long receiveTime) {
+        // We had no idea why the client still use PlayerAuthInputPacket to hold ItemStackRequest
+        // Instead of using ItemStackRequestPacket
+        // This seems only happen when player break a block (MineBlockAction)
+        if (request == null) return;
+        var pk = new ItemStackRequestPacket();
+        pk.getRequests().add(request);
+        // Forward it to ItemStackRequestPacketProcessor
+        player.getPacketProcessorHolder().getProcessor(pk).handleSync(player, pk, receiveTime);
     }
 
     protected boolean notReadyForInput(EntityPlayer player) {
