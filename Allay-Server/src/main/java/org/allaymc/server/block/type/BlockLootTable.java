@@ -68,7 +68,7 @@ public final class BlockLootTable {
                 Entries<BreakBlockContext> entries = parseEntries(poolObj);
                 pools.add(new Pool<>(conditions, rolls, entries));
             }
-            BLOCK_LOOT_TABLES.putIfAbsent(blockId, new LootTable<>(BLOCK_LOOT_TABLE_TYPE, pools));
+            BLOCK_LOOT_TABLES.put(blockId, new LootTable<>(BLOCK_LOOT_TABLE_TYPE, pools));
         });
     }
 
