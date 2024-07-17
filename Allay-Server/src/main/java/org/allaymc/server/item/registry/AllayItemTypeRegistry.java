@@ -12,6 +12,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.server.item.type.InternalItemTypeData;
 import org.allaymc.server.item.type.ItemTypeDefaultInitializer;
 import org.allaymc.server.item.type.ItemTypeInitializer;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
@@ -39,6 +40,7 @@ public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, Item
 
     @SneakyThrows
     public void init() {
+        InternalItemTypeData.init();
         log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADING));
         var defaultInitializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(ItemTypeDefaultInitializer.class);
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(ItemTypeInitializer.class);

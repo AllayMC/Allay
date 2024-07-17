@@ -13,6 +13,7 @@ import org.allaymc.api.item.tag.ItemTag;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -31,6 +32,7 @@ public class Utils {
     public static final VanillaItemId[] EMPTY_VANILLA_ITEM_ID_ARRAY = new VanillaItemId[0];
     public static final VanillaBlockId[] EMPTY_VANILLA_BLOCK_ID_ARRAY = new VanillaBlockId[0];
     public static final ItemStack[] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0];
+    public static final Set<ItemStack> EMPTY_ITEM_STACK_SET = Set.of();
 
     public byte[] appendBytes(byte[] bytes1, byte[]... bytes2) {
         int length = bytes1.length;

@@ -15,14 +15,21 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
+import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.type.BlockLootTable;
+import org.allaymc.server.loottable.context.BreakBlockContext;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3f;
 import org.joml.Vector3ic;
+
+import java.util.Set;
 
 /**
  * Allay Project 2023/4/8
@@ -59,6 +66,23 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public void onScheduledUpdate(BlockStateWithPos blockState) {}
 
     @Override
+    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        var vanillaBlockId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
+        if (vanillaBlockId != null) {
+            var lootTable = BlockLootTable.getLootTable(vanillaBlockId);
+            if (lootTable != null) {
+                var context = new BreakBlockContext(entity, usedItem);
+                return lootTable.loot(context);
+            }
+        }
+
+        if (getBlockType().getItemType() != null)
+            return Set.of(getSilkTouchDrop(blockState));
+
+        return Utils.EMPTY_ITEM_STACK_SET;
+    }
+
+    @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
@@ -76,8 +100,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
-        if (!isDroppable(blockState, usedItem, player)) return;
+    public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        if (!isDroppable(blockState, usedItem, entity)) return;
 
         var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);
         var dimension = blockState.pos().dimension();
@@ -87,15 +111,15 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             return;
         }
 
-        var drops = getDrops(blockState, usedItem);
+        var drops = getDrops(blockState, usedItem, entity);
         for (var drop : drops) {
             dimension.dropItem(drop, dropPos);
         }
     }
 
     @Override
-    public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
-        if (player != null && player.getGameType() == GameType.CREATIVE) return false;
+    public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) return false;
         return blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
     }
 

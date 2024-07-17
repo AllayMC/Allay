@@ -12,8 +12,10 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.server.block.type.BlockLootTable;
 import org.allaymc.server.block.type.BlockTypeDefaultInitializer;
 import org.allaymc.server.block.type.BlockTypeInitializer;
+import org.allaymc.server.block.type.InternalBlockTypeData;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 
 import java.util.ArrayList;
@@ -39,6 +41,8 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
 
     @SneakyThrows
     public void init() {
+        InternalBlockTypeData.init();
+        BlockLootTable.init();
         log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADING));
         var defaultInitializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockTypeDefaultInitializer.class);
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockTypeInitializer.class);

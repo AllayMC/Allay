@@ -1,0 +1,50 @@
+{
+  "minecraft:stone": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:cobblestone"
+        }
+      ]
+    }
+  ],
+  "minecraft:glass": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "empty"
+        }
+      ]
+    }
+  ],
+  "minecraft:grass_block": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:dirt"
+        }
+      ]
+    }
+  ],
+  "minecraft:short_grass|minecraft:tall_grass|minecraft:fern|minecraft:large_fern": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "empty",
+          "weight": 7
+        },
+        {
+          "type": "item",
+          "name": "minecraft:wheat_seeds",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

@@ -19,11 +19,15 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
+import org.allaymc.server.block.type.BlockLootTable;
+import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.joml.Vector3f;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -198,6 +202,23 @@ public class GameTestCommand extends SimpleCommand {
                 .exec((context, player) -> {
                     player.letClientApplyMotion(new Vector3f(context.getResult(1), context.getResult(2), context.getResult(3)));
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.PLAYER)
+                .root()
+                .key("reloadblockloottable")
+                .exec(context -> {
+                    try {
+                        var path = Path.of("../Allay-Data/resources/loot_tables/blocks.json");
+                        if (!Files.exists(path)) {
+                            context.addError("This command can only be used in local environment!");
+                            return context.fail();
+                        }
+                        BlockLootTable.readFrom(new InputStreamReader(Files.newInputStream(path)));
+                        context.addOutput("Block loot tables have been reloaded!");
+                    } catch (IOException e) {
+                        context.addError(e.toString());
+                        return context.fail();
+                    }
+                    return context.success();
+                });
     }
 }

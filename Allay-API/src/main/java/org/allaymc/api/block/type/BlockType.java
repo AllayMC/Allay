@@ -7,6 +7,7 @@ import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.tag.BlockTag;
+import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.Identified;
 import org.allaymc.api.utils.Identifier;

@@ -2,7 +2,6 @@ package org.allaymc.server.block.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.interfaces.*;
-import org.allaymc.api.block.interfaces.glass.BlockGlassBehavior;
 import org.allaymc.api.block.interfaces.leaves.*;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
@@ -16,8 +15,8 @@ import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
-import org.allaymc.server.block.component.common.BlockTallWheatSeedDropableBaseComponentImpl;
-import org.allaymc.server.block.component.common.BlockWheatSeedDropableBaseComponentImpl;
+import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
+import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 
@@ -29,14 +28,6 @@ import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
-    public static void initStone() {
-        BlockTypes.STONE = BlockTypeBuilder
-                .builder(BlockStoneBehavior.class)
-                .vanillaBlock(VanillaBlockId.STONE)
-                .setBlockBaseComponentSupplier(BlockStoneBaseComponentImpl::new)
-                .build();
-    }
-
     public static void initLeaves() {
         BlockTypes.ACACIA_LEAVES = BlockTypeBuilder
                 .builder(BlockAcaciaLeavesBehavior.class)
@@ -229,7 +220,12 @@ public final class BlockTypeInitializer {
         BlockTypes.SHORT_GRASS = BlockTypeBuilder
                 .builder(BlockShortGrassBehavior.class)
                 .vanillaBlock(VanillaBlockId.SHORT_GRASS)
-                .setBlockBaseComponentSupplier(BlockWheatSeedDropableBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
+                .build();
+        BlockTypes.FERN = BlockTypeBuilder
+                .builder(BlockFernBehavior.class)
+                .vanillaBlock(VanillaBlockId.FERN)
+                .setBlockBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
                 .build();
     }
 
@@ -238,25 +234,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockTallGrassBehavior.class)
                 .vanillaBlock(VanillaBlockId.TALL_GRASS)
                 .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockBaseComponentSupplier(BlockTallWheatSeedDropableBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockTallGrassBaseComponentImpl::new)
                 .build();
-    }
-
-    public static void initLargeFern() {
-        // TODO: Needs adaptation
         BlockTypes.LARGE_FERN = BlockTypeBuilder
                 .builder(BlockLargeFernBehavior.class)
                 .vanillaBlock(VanillaBlockId.LARGE_FERN)
                 .setProperties(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockBaseComponentSupplier(BlockTallWheatSeedDropableBaseComponentImpl::new)
-                .build();
-    }
-
-    public static void initGlass() {
-        BlockTypes.GLASS = BlockTypeBuilder
-                .builder(BlockGlassBehavior.class)
-                .vanillaBlock(VanillaBlockId.GLASS)
-                .setBlockBaseComponentSupplier(BlockGlassBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockTallGrassBaseComponentImpl::new)
                 .build();
     }
 
