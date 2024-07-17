@@ -6,11 +6,14 @@ import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.common.ItemItemStorableComponent;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+
+import java.util.Set;
 
 /**
  * Allay Project 2024/6/20
@@ -27,8 +30,8 @@ public class BlockShulkerBoxBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
-        return new ItemStack[]{createShulkerBoxDrop(blockState)};
+    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        return Set.of(createShulkerBoxDrop(blockState));
     }
 
     @Override
@@ -46,7 +49,7 @@ public class BlockShulkerBoxBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
+    public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         // 2024/6/21 NOTICE
         // The data exported by BDS is not quite correct. In theory, shulker boxes can be mined with bare hands, but the exported data shows they cannot.
         // Considering the special drop logic of shulker boxes (if they contain items, they will still drop when mined in creative mode), it is suspected to be an internal bug of BDS. Therefore, isDroppable() is overridden here.
@@ -54,6 +57,6 @@ public class BlockShulkerBoxBaseComponentImpl extends BlockBaseComponentImpl {
         var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.pos());
         var container = blockEntity.getContainer();
         if (!container.isEmpty()) return true;
-        return player.getGameType() != GameType.CREATIVE;
+        return !(entity instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE;
     }
 }

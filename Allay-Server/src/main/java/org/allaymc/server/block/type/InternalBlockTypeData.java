@@ -33,7 +33,7 @@ public final class InternalBlockTypeData {
     // Stores the correct tool sets for blocks that require tool quality
     private static final EnumMap<VanillaBlockId, VanillaItemId[]> VANILLA_BLOCK_SPECIAL_TOOLS = new EnumMap<>(VanillaBlockId.class);
 
-    static {
+    public static void init() {
         try (var reader = new InputStreamReader(new BufferedInputStream(ResourceUtils.getResource("block_types.json")))) {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
                 var id = VanillaBlockId.fromIdentifier(new Identifier(entry.getKey()));

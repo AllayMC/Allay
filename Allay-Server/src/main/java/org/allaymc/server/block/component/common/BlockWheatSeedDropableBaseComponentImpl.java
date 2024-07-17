@@ -4,10 +4,12 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.Utils;
 
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.type.BlockTypes.*;
@@ -23,13 +25,13 @@ public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentI
     }
 
     @Override
-    public ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
+    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         var rand = ThreadLocalRandom.current();
         // Has a 1/8 chance to drop seeds
         if (rand.nextInt(8) == 0) {
-            return new ItemStack[]{ItemTypes.WHEAT_SEEDS.createItemStack()};
+            return Set.of(ItemTypes.WHEAT_SEEDS.createItemStack());
         }
-        return Utils.EMPTY_ITEM_STACK_ARRAY;
+        return Utils.EMPTY_ITEM_STACK_SET;
     }
 
     @Override

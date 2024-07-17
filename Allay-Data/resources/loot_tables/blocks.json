@@ -1,0 +1,13 @@
+{
+  "minecraft:stone": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:cobblestone"
+        }
+      ]
+    }
+  ]
+}

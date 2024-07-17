@@ -1,0 +1,37 @@
+package org.allaymc.server.loottable.entry;
+
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.server.loottable.context.Context;
+
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+
+/**
+ * Allay Project 2024/7/15
+ *
+ * @author daoge_cmd
+ */
+public record Entries<CONTEXT_TYPE extends Context>(
+        List<Entry<CONTEXT_TYPE>> entries
+) {
+    public Set<ItemStack> loot(CONTEXT_TYPE context) {
+        var validEntries = entries
+                .stream()
+                .filter(e -> e.test(context))
+                .toList();
+        int weightSum = 0;
+        for (Entry<CONTEXT_TYPE> entry : validEntries) {
+            weightSum += entry.getWeight();
+        }
+        var rand = ThreadLocalRandom.current().nextInt(weightSum) + 1;
+        for (Entry<CONTEXT_TYPE> entry : validEntries) {
+            rand -= entry.getWeight();
+            if (rand <= 0) {
+                return entry.loot(context);
+            }
+        }
+        // Won't reach here
+        throw new RuntimeException();
+    }
+}

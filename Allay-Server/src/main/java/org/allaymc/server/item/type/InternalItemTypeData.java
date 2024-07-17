@@ -26,7 +26,7 @@ public final class InternalItemTypeData {
 
     private static final Map<VanillaItemId, ItemTag[]> VANILLA_ITEM_TAGS_CUSTOM = new HashMap<>();
 
-    static {
+    public static void init() {
         try (var reader = new InputStreamReader(new BufferedInputStream(ResourceUtils.getResource("items.json")))) {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
                 var id = VanillaItemId.fromIdentifier(new Identifier(entry.getKey()));

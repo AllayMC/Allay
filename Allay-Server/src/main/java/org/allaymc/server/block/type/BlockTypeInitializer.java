@@ -29,14 +29,6 @@ import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
-    public static void initStone() {
-        BlockTypes.STONE = BlockTypeBuilder
-                .builder(BlockStoneBehavior.class)
-                .vanillaBlock(VanillaBlockId.STONE)
-                .setBlockBaseComponentSupplier(BlockStoneBaseComponentImpl::new)
-                .build();
-    }
-
     public static void initLeaves() {
         BlockTypes.ACACIA_LEAVES = BlockTypeBuilder
                 .builder(BlockAcaciaLeavesBehavior.class)

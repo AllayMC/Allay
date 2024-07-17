@@ -12,12 +12,12 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.effect.EffectTypes;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.data.VanillaEnchantmentTypes;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
+
+import java.util.Set;
 
 import static org.allaymc.api.item.ItemHelper.isSword;
 
@@ -135,7 +135,7 @@ public interface BlockBaseComponent extends BlockComponent {
      */
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
-    boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player);
+    boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     /**
      * @param itemStack    The item in the player's hand
@@ -160,10 +160,10 @@ public interface BlockBaseComponent extends BlockComponent {
      * Called when a block is broken by non-creative game mode player
      *
      * @param blockState The block that was broken
-     * @param usedItem   The item that was used to break the block
-     * @param player     The player who broke the block, can be null
+     * @param usedItem   The item that was used to break the block, can be null
+     * @param entity     The player who broke the block, can be null
      */
-    void onBreak(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player);
+    void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     void onScheduledUpdate(BlockStateWithPos blockState);
 
@@ -171,17 +171,12 @@ public interface BlockBaseComponent extends BlockComponent {
      * Get the block's drops when it is broke by item normally
      *
      * @param blockState the block being broke
-     * @param usedItem   the item used to break the block
+     * @param usedItem   the item used to break the block, can be null
+     * @param player     the entity who break the block, can be null
      *
      * @return the drops
      */
-    default ItemStack[] getDrops(BlockStateWithPos blockState, ItemStack usedItem) {
-        // TODO: Fortune
-        if (getBlockType().getItemType() != null)
-            return new ItemStack[]{getSilkTouchDrop(blockState)};
-
-        return Utils.EMPTY_ITEM_STACK_ARRAY;
-    }
+    Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     /**
      * Get the block's drops when it is broke by an item which has silk touch enchantment
