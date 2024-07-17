@@ -244,14 +244,6 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static void initGlass() {
-        BlockTypes.GLASS = BlockTypeBuilder
-                .builder(BlockGlassBehavior.class)
-                .vanillaBlock(VanillaBlockId.GLASS)
-                .setBlockBaseComponentSupplier(BlockGlassBaseComponentImpl::new)
-                .build();
-    }
-
     public static void initBarrel() {
         BlockTypes.BARREL = BlockTypeBuilder
                 .builder(BlockBarrelBehavior.class)

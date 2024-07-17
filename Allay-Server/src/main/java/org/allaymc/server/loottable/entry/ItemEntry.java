@@ -59,7 +59,7 @@ public class ItemEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_T
             var name = json.get("name").getAsString();
             var weight = 1;
             if (json.has("weight")) {
-                json.get("weight").getAsInt();
+                weight = json.get("weight").getAsInt();
             }
             var conditions = parseConditions(json, lootTableType);
             var functions = parseFunctions(json, lootTableType);

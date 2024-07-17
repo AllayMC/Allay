@@ -32,7 +32,7 @@ public class EmptyEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_
         public Entry<CONTEXT_TYPE> deserialize(JsonObject json, LootTableType<CONTEXT_TYPE> lootTableType) {
             var weight = 1;
             if (json.has("weight")) {
-                json.get("weight").getAsInt();
+                weight = json.get("weight").getAsInt();
             }
             var conditions = parseConditions(json, lootTableType);
             return new EmptyEntry<>(weight, conditions);

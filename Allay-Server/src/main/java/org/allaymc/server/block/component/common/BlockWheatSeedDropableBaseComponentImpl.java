@@ -25,16 +25,6 @@ public class BlockWheatSeedDropableBaseComponentImpl extends BlockBaseComponentI
     }
 
     @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        var rand = ThreadLocalRandom.current();
-        // Has a 1/8 chance to drop seeds
-        if (rand.nextInt(8) == 0) {
-            return Set.of(ItemTypes.WHEAT_SEEDS.createItemStack());
-        }
-        return Utils.EMPTY_ITEM_STACK_SET;
-    }
-
-    @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         if (face != BlockFace.UP && face != BlockFace.DOWN) return true;
         var blockUnder = current.pos().dimension().getBlockState(BlockFace.DOWN.offsetPos(current.pos()));
