@@ -13,6 +13,7 @@ import org.allaymc.server.loottable.Pool;
 import org.allaymc.server.loottable.Rolls;
 import org.allaymc.server.loottable.condition.Condition;
 import org.allaymc.server.loottable.condition.Conditions;
+import org.allaymc.server.loottable.condition.MatchToolCondition;
 import org.allaymc.server.loottable.context.BreakBlockContext;
 import org.allaymc.server.loottable.entry.EmptyEntry;
 import org.allaymc.server.loottable.entry.Entries;
@@ -48,6 +49,7 @@ public final class BlockLootTable {
             .supportFunction("set_name", SetNameFunction.deserializer())
             .supportEntry("item", ItemEntry.deserializer())
             .supportEntry("empty", EmptyEntry.deserializer())
+            .supportCondition("match_tool", MatchToolCondition.deserializer())
             .build();
 
     public static final Map<VanillaBlockId, LootTable<BreakBlockContext>> BLOCK_LOOT_TABLES = new EnumMap<>(VanillaBlockId.class);
