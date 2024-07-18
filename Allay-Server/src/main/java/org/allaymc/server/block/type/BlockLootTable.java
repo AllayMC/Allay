@@ -5,8 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.loottable.LootTable;
 import org.allaymc.server.loottable.LootTableType;
 import org.allaymc.server.loottable.Pool;
@@ -29,10 +27,9 @@ import org.allaymc.server.utils.ResourceUtils;
 
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Allay Project 2024/7/17
@@ -64,19 +61,25 @@ public final class BlockLootTable {
 
             for (var element : entry.getValue().getAsJsonArray()) {
                 var poolObj = element.getAsJsonObject();
-                Conditions<BreakBlockContext> conditions = parseConditions(poolObj);
-                Rolls rolls = parseRolls(poolObj);
-                Entries<BreakBlockContext> entries = parseEntries(poolObj);
+                var conditions = parseConditions(poolObj);
+                var rolls = parseRolls(poolObj);
+                var entries = parseEntries(poolObj);
                 pools.add(new Pool<>(conditions, rolls, entries));
             }
 
-            for (var id : AllayStringUtils.fastSplit(entry.getKey(), "|")) {
-                var blockId = VanillaBlockId.fromIdentifier(new Identifier(id));
-                if (blockId == null) {
-                    log.warn("Unknown block id: {}", entry.getKey());
-                    return;
+            try {
+                var regex = Pattern.compile(entry.getKey());
+                var blocks = Arrays.stream(VanillaBlockId.values())
+                        .map(VanillaBlockId::getIdentifier)
+                        .toList();
+                for (var block : blocks) {
+                    if (regex.matcher(block.toString()).matches()) {
+                        var blockId = VanillaBlockId.fromIdentifier(block);
+                        BLOCK_LOOT_TABLES.put(blockId, new LootTable<>(BLOCK_LOOT_TABLE_TYPE, pools));
+                    }
                 }
-                BLOCK_LOOT_TABLES.put(blockId, new LootTable<>(BLOCK_LOOT_TABLE_TYPE, pools));
+            } catch (PatternSyntaxException exception) {
+                throw new RuntimeException("invalid block regex: ", exception);
             }
         });
     }

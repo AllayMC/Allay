@@ -10,7 +10,7 @@
       ]
     }
   ],
-  "minecraft:glass": [
+  "minecraft:glass(_pane)?|minecraft:\\w+_stained_glass(_pane)?": [
     {
       "rolls": 1,
       "entries": [

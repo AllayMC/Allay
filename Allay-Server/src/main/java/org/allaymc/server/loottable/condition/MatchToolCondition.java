@@ -29,34 +29,20 @@ public class MatchToolCondition implements Condition<BreakBlockContext> {
     // TODO: enchantment level check
     protected Set<EnchantmentType> enchantmentTypes;
 
-    @Override
-    public boolean test(BreakBlockContext context) {
-        var usedItem = context.getUsedItem();
-        if (count != null && usedItem.getCount() != count) {
-            return false;
-        }
-        if (durability != null && usedItem.getDurability() != durability) {
-            return false;
-        }
-        if (itemType != null && usedItem.getItemType() != itemType) {
-            return false;
-        }
-        if (!enchantmentTypes.isEmpty()) {
-            for (var enchantmentType : enchantmentTypes) {
-                if (!usedItem.hasEnchantment(enchantmentType)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public static ConditionDeserializer<BreakBlockContext> deserializer() {
         return new MatchToolConditionDeserializer();
     }
 
-    public static class MatchToolConditionDeserializer implements ConditionDeserializer<BreakBlockContext> {
+    @Override
+    public boolean test(BreakBlockContext context) {
+        var usedItem = context.getUsedItem();
+        if (count != null && usedItem.getCount() != count) return false;
+        if (durability != null && usedItem.getDurability() != durability) return false;
+        if (itemType != null && usedItem.getItemType() != itemType) return false;
+        return enchantmentTypes.stream().allMatch(usedItem::hasEnchantment);
+    }
 
+    public static class MatchToolConditionDeserializer implements ConditionDeserializer<BreakBlockContext> {
         @Override
         public Condition<BreakBlockContext> deserialize(JsonObject json) {
             ItemType<?> itemType = null;
