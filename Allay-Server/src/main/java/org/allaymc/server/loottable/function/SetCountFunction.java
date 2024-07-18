@@ -14,24 +14,24 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 @AllArgsConstructor
 public class SetCountFunction implements Function {
-    protected int min;
-    protected int max;
-    @Override
-    public void apply(ItemStack itemStack) {
-        if (min == max) {
-            itemStack.setCount(itemStack.getItemData().maxStackSize() >= min ? min : itemStack.getItemData().maxStackSize());
-            return;
-        }
-        var rand = min + ThreadLocalRandom.current().nextInt(max - min + 1);
-        itemStack.setCount(itemStack.getItemData().maxStackSize() >= rand ? rand : itemStack.getItemData().maxStackSize());
-    }
+    protected int min, max;
 
     public static FunctionDeserializer deserializer() {
         return new SetCountFunctionDeserializer();
     }
 
-    public static class SetCountFunctionDeserializer implements FunctionDeserializer {
+    @Override
+    public void apply(ItemStack itemStack) {
+        if (min == max) {
+            itemStack.setCount(Math.min(itemStack.getItemData().maxStackSize(), min));
+            return;
+        }
 
+        var rand = min + ThreadLocalRandom.current().nextInt(max - min + 1);
+        itemStack.setCount(Math.min(itemStack.getItemData().maxStackSize(), rand));
+    }
+
+    public static class SetCountFunctionDeserializer implements FunctionDeserializer {
         @Override
         public Function deserialize(JsonObject json) {
             var count = json.get("count").getAsJsonObject();

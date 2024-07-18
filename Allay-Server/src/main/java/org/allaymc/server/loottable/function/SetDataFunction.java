@@ -12,13 +12,14 @@ import org.allaymc.api.item.ItemStack;
 @AllArgsConstructor
 public class SetDataFunction implements Function {
     protected int data;
-    @Override
-    public void apply(ItemStack itemStack) {
-        itemStack.setMeta(data);
-    }
 
     public static FunctionDeserializer deserializer() {
         return new SetDataFunctionDeserializer();
+    }
+
+    @Override
+    public void apply(ItemStack itemStack) {
+        itemStack.setMeta(data);
     }
 
     public static class SetDataFunctionDeserializer implements FunctionDeserializer {

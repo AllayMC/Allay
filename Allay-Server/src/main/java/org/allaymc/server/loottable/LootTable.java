@@ -3,9 +3,9 @@ package org.allaymc.server.loottable;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.server.loottable.context.Context;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Allay Project 2024/7/15
@@ -17,10 +17,8 @@ public record LootTable<CONTEXT_TYPE extends Context>(
         List<Pool<CONTEXT_TYPE>> pools
 ) {
     public Set<ItemStack> loot(CONTEXT_TYPE context) {
-        Set<ItemStack> items = new HashSet<>();
-        for (var pool : pools) {
-            items.addAll(pool.loot(context));
-        }
-        return items;
+        return pools.stream()
+                .flatMap(pool -> pool.loot(context).stream())
+                .collect(Collectors.toSet());
     }
 }

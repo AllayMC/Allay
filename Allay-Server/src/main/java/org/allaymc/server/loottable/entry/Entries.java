@@ -12,20 +12,15 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author daoge_cmd
  */
-public record Entries<CONTEXT_TYPE extends Context>(
-        List<Entry<CONTEXT_TYPE>> entries
-) {
+public record Entries<CONTEXT_TYPE extends Context>(List<Entry<CONTEXT_TYPE>> entries) {
     public Set<ItemStack> loot(CONTEXT_TYPE context) {
-        var validEntries = entries
-                .stream()
+        var validEntries = entries.stream()
                 .filter(e -> e.test(context))
                 .toList();
-        int weightSum = 0;
-        for (Entry<CONTEXT_TYPE> entry : validEntries) {
-            weightSum += entry.getWeight();
-        }
+        var weightSum = validEntries.stream().mapToInt(Entry::getWeight).sum();
+
         var rand = ThreadLocalRandom.current().nextInt(weightSum) + 1;
-        for (Entry<CONTEXT_TYPE> entry : validEntries) {
+        for (var entry : validEntries) {
             rand -= entry.getWeight();
             if (rand <= 0) {
                 return entry.loot(context);

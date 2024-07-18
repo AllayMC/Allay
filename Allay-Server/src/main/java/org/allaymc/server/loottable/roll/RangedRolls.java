@@ -1,5 +1,6 @@
 package org.allaymc.server.loottable.roll;
 
+import lombok.AllArgsConstructor;
 import org.allaymc.server.loottable.Rolls;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -9,13 +10,9 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author daoge_cmd
  */
+@AllArgsConstructor
 public class RangedRolls implements Rolls {
-    protected int min;
-    protected int max;
-    public RangedRolls(int min, int max) {
-        this.min = min;
-        this.max = max;
-    }
+    protected int min, max;
 
     @Override
     public int getRolls() {

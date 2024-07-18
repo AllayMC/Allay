@@ -4,12 +4,12 @@ import com.google.gson.JsonObject;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.loottable.LootTableType;
 import org.allaymc.server.loottable.condition.Conditions;
 import org.allaymc.server.loottable.context.Context;
 import org.allaymc.server.loottable.function.Function;
 import org.allaymc.server.loottable.function.Functions;
-import org.allaymc.api.utils.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +30,6 @@ public class ItemEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_T
         this.itemType = ItemTypeRegistry.getRegistry().get(new Identifier(name));
     }
 
-    @Override
-    public Set<ItemStack> loot(Context context) {
-        var item = itemType.createItemStack();
-        functions.apply(item);
-        return Set.of(item);
-    }
-
     protected static Functions parseFunctions(JsonObject json, LootTableType<?> lootTableType) {
         List<Function> list = new ArrayList<>();
         if (json.has("functions")) {
@@ -51,6 +44,13 @@ public class ItemEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_T
 
     public static <CONTEXT_TYPE extends Context> EntryDeserializer<CONTEXT_TYPE> deserializer() {
         return new ItemEntryDeserializer<>();
+    }
+
+    @Override
+    public Set<ItemStack> loot(Context context) {
+        var item = itemType.createItemStack();
+        functions.apply(item);
+        return Set.of(item);
     }
 
     public static class ItemEntryDeserializer<CONTEXT_TYPE extends Context> implements EntryDeserializer<CONTEXT_TYPE> {

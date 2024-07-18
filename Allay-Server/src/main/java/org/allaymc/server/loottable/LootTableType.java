@@ -1,6 +1,9 @@
 package org.allaymc.server.loottable;
 
 import com.google.gson.JsonObject;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.allaymc.server.loottable.condition.Condition;
 import org.allaymc.server.loottable.condition.ConditionDeserializer;
 import org.allaymc.server.loottable.context.Context;
@@ -17,23 +20,14 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
+@AllArgsConstructor
 public class LootTableType<CONTEXT_TYPE extends Context> {
     protected Map<String, FunctionDeserializer> functions;
     protected Map<String, ConditionDeserializer<CONTEXT_TYPE>> conditions;
     protected Map<String, EntryDeserializer<CONTEXT_TYPE>> entries;
 
-    public LootTableType(
-            Map<String, FunctionDeserializer> functions,
-            Map<String, ConditionDeserializer<CONTEXT_TYPE>> conditions,
-            Map<String, EntryDeserializer<CONTEXT_TYPE>> entries
-    ) {
-        this.functions = functions;
-        this.conditions = conditions;
-        this.entries = entries;
-    }
-
     public static <CONTEXT_TYPE extends Context> LootTableTypeBuilder<CONTEXT_TYPE> builder() {
-        return new LootTableTypeBuilder<CONTEXT_TYPE>();
+        return new LootTableTypeBuilder<>();
     }
 
     public Function getFunction(String name, JsonObject json) {
@@ -48,12 +42,11 @@ public class LootTableType<CONTEXT_TYPE extends Context> {
         return entries.get(type).deserialize(json, this);
     }
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class LootTableTypeBuilder<CONTEXT_TYPE extends Context> {
         private final Map<String, FunctionDeserializer> functions = new HashMap<>();
         private final Map<String, ConditionDeserializer<CONTEXT_TYPE>> conditions = new HashMap<>();
         private final Map<String, EntryDeserializer<CONTEXT_TYPE>> entries = new HashMap<>();
-
-        LootTableTypeBuilder() {}
 
         public LootTableTypeBuilder<CONTEXT_TYPE> supportFunction(String name, FunctionDeserializer deserializer) {
             this.functions.putIfAbsent(name, deserializer);

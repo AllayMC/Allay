@@ -9,12 +9,8 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-public record Functions(
-        List<Function> functions
-) {
+public record Functions(List<Function> functions) {
     public void apply(ItemStack itemStack) {
-        for (Function function : functions) {
-            function.apply(itemStack);
-        }
+        functions.forEach(function -> function.apply(itemStack));
     }
 }

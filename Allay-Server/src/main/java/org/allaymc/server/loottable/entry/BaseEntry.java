@@ -16,8 +16,8 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public abstract class BaseEntry<CONTEXT_TYPE extends Context> implements Entry<CONTEXT_TYPE> {
     protected String name;
     protected int weight;

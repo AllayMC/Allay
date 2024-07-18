@@ -14,16 +14,16 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 @AllArgsConstructor
 public class SetDamageFunction implements Function {
-    protected float min;
-    protected float max;
-    @Override
-    public void apply(ItemStack itemStack) {
-        var rand = ThreadLocalRandom.current().nextFloat(min, max);
-        itemStack.setDurability((int) (itemStack.getItemData().maxDamage() * rand));
-    }
+    protected float min, max;
 
     public static FunctionDeserializer deserializer() {
         return new SetDamageFunctionDeserializer();
+    }
+
+    @Override
+    public void apply(ItemStack itemStack) {
+        var rand = (int) ThreadLocalRandom.current().nextFloat(min, max);
+        itemStack.setDurability(itemStack.getItemData().maxDamage() * rand);
     }
 
     public static class SetDamageFunctionDeserializer implements FunctionDeserializer {

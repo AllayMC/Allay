@@ -18,13 +18,13 @@ public class EmptyEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_
         super(null, weight, conditions);
     }
 
+    public static <CONTEXT_TYPE extends Context> EntryDeserializer<CONTEXT_TYPE> deserializer() {
+        return new EmptyEntryDeserializer<>();
+    }
+
     @Override
     public Set<ItemStack> loot(Context context) {
         return Set.of();
-    }
-
-    public static <CONTEXT_TYPE extends Context> EntryDeserializer<CONTEXT_TYPE> deserializer() {
-        return new EmptyEntryDeserializer<>();
     }
 
     public static class EmptyEntryDeserializer<CONTEXT_TYPE extends Context> implements EntryDeserializer<CONTEXT_TYPE> {

@@ -10,8 +10,8 @@ import org.allaymc.api.item.ItemStack;
  *
  * @author daoge_cmd
  */
-@AllArgsConstructor
 @Getter
+@AllArgsConstructor
 public class BreakBlockContext implements Context {
     protected Entity entity;
     protected ItemStack usedItem;

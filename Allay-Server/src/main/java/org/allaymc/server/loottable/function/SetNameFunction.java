@@ -12,13 +12,14 @@ import org.allaymc.api.item.ItemStack;
 @AllArgsConstructor
 public class SetNameFunction implements Function {
     protected String name;
-    @Override
-    public void apply(ItemStack itemStack) {
-        itemStack.setCustomName(name);
-    }
 
     public static FunctionDeserializer deserializer() {
         return new SetNameFunctionDeserializer();
+    }
+
+    @Override
+    public void apply(ItemStack itemStack) {
+        itemStack.setCustomName(name);
     }
 
     public static class SetNameFunctionDeserializer implements FunctionDeserializer {

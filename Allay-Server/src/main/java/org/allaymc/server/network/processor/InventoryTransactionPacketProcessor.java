@@ -1,6 +1,5 @@
 package org.allaymc.server.network.processor;
 
-import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
@@ -110,7 +109,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
             }
             case ITEM_USE_ON_ENTITY -> {
                 var target = player.getDimension().getEntityByRuntimeId(packet.getRuntimeEntityId());
-                Preconditions.checkNotNull(target, "Player " + player.getOriginName() + " try to attack a entity which doesn't exist! Entity id: " + packet.getRuntimeEntityId());
+                // In some cases, for example when a falling block entity solidifies, latency may allow attacking an entity that
+                // no longer exists server side. This is expected, so we shouldn't throw NullPointerException.
+                if (target == null) {
+                    log.debug("Player {} try to attack a entity which doesn't exist! Entity id: {}", player.getOriginName(), packet.getRuntimeEntityId());
+                    return;
+                }
+
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
                         target.onInteract(player, player.getItemInHand());

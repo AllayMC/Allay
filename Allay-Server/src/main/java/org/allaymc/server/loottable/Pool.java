@@ -18,11 +18,9 @@ public record Pool<CONTEXT_TYPE extends Context>(
         Rolls rolls,
         Entries<CONTEXT_TYPE> entries
 ) {
-    private static final Set<ItemStack> EMPTY = Set.of();
-
     Set<ItemStack> loot(CONTEXT_TYPE context) {
-        if (!conditions.test(context)) return EMPTY;
-        var items = new HashSet<ItemStack>();
+        if (!conditions.test(context)) return Set.of();
+        Set<ItemStack> items = new HashSet<>();
         for (var i = 0; i < rolls.getRolls(); i++) {
             items.addAll(entries.loot(context));
         }
