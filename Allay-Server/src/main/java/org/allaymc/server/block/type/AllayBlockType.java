@@ -12,11 +12,7 @@ import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.common.CustomBlockComponent;
 import org.allaymc.api.block.material.Material;
-import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.block.registry.MaterialRegistry;
-import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -32,6 +28,7 @@ import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.network.ProtocolInfo;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.Identifier;
@@ -39,7 +36,6 @@ import org.allaymc.api.utils.exception.BlockComponentInjectException;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockEntityHolderComponentImpl;
-import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.cloudburstmc.nbt.NbtMap;
@@ -137,7 +133,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
     @Override
     public BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        return BlockStateHashPalette.getRegistry().get(HashUtils.computeBlockStateHash(identifier, propertyValues));
+        return Registries.BLOCK_STATE_PALETTE.get(HashUtils.computeBlockStateHash(identifier, propertyValues));
     }
 
     @Override
@@ -211,7 +207,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     }
 
     /**
-     * Each {@link AllayBlockState} is a singleton, stored in the {@link AllayBlockStateHashPalette AllayBlockPaletteRegistry}, which means you can directly use == to compare whether two Block States are equal
+     * Each {@link AllayBlockState} is a singleton, stored in Registries.BLOCK_STATE_PALETTE, which means you can directly use == to compare whether two Block States are equal
      */
     record AllayBlockState(
             BlockType<?> blockType,
@@ -390,13 +386,13 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
             this.identifier = vanillaBlockId.getIdentifier();
-            var dataMap = VanillaBlockStateDataRegistry.getRegistry().get(vanillaBlockId);
+            var dataMap = Registries.BLOCK_STATE_DATA.get(vanillaBlockId);
             if (dataMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block data component for " + vanillaBlockId + " from vanilla block data registry!");
             components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
             var tags = InternalBlockTypeData.getBlockTags(vanillaBlockId);
             if (tags.length != 0) setBlockTags(tags);
-            setMaterial(MaterialRegistry.getRegistry().get(InternalBlockTypeData.getMaterialType(vanillaBlockId)));
+            setMaterial(Registries.MATERIALS.get(InternalBlockTypeData.getMaterialType(vanillaBlockId)));
             return this;
         }
 
@@ -491,8 +487,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             } catch (Exception e) {
                 throw new BlockTypeBuildException("Failed to create block type!", e);
             }
-            type.register(BlockTypeRegistry.getRegistry());
-            type.register(BlockStateHashPalette.getRegistry());
+            type.register(Registries.BLOCK_TYPES);
+            type.register(Registries.BLOCK_STATE_PALETTE);
             return type;
         }
 

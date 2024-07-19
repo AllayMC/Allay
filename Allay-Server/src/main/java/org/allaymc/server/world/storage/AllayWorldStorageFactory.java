@@ -1,6 +1,6 @@
 package org.allaymc.server.world.storage;
 
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.MappedRegistry;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageFactory;
 
@@ -14,7 +14,7 @@ import java.util.function.Function;
  *
  * @author daoge_cmd
  */
-public class AllayWorldStorageFactory extends SimpleMappedRegistry<String, Function<Path, WorldStorage>, Map<String, Function<Path, WorldStorage>>> implements WorldStorageFactory {
+public class AllayWorldStorageFactory extends MappedRegistry<String, Function<Path, WorldStorage>, Map<String, Function<Path, WorldStorage>>> implements WorldStorageFactory {
     public AllayWorldStorageFactory() {
         super(null, $ -> new ConcurrentHashMap<>());
         init();

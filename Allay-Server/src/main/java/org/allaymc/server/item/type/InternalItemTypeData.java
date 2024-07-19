@@ -6,7 +6,6 @@ import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.server.utils.ResourceUtils;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -27,7 +26,7 @@ public final class InternalItemTypeData {
     private static final Map<VanillaItemId, ItemTag[]> VANILLA_ITEM_TAGS_CUSTOM = new HashMap<>();
 
     public static void init() {
-        try (var reader = new InputStreamReader(new BufferedInputStream(ResourceUtils.getResource("items.json")))) {
+        try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("items.json")))) {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
                 var id = VanillaItemId.fromIdentifier(new Identifier(entry.getKey()));
                 var obj = entry.getValue().getAsJsonObject();
@@ -46,7 +45,7 @@ public final class InternalItemTypeData {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        try (var reader = new InputStreamReader(new BufferedInputStream(ResourceUtils.getResource("item_tags_custom.json")))) {
+        try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("item_tags_custom.json")))) {
             var map = new HashMap<VanillaItemId, Set<ItemTag>>();
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
                 var tag = VanillaItemTags.getTagByName(entry.getKey());

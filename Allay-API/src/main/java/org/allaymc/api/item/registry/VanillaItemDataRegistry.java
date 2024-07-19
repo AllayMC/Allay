@@ -3,7 +3,7 @@ package org.allaymc.api.item.registry;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.component.common.ItemData;
-import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.registry.AbstractMappedRegistry;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public interface VanillaItemDataRegistry extends MappedRegistry<VanillaItemId, ItemData, Map<VanillaItemId, ItemData>> {
+public interface VanillaItemDataRegistry extends AbstractMappedRegistry<VanillaItemId, ItemData, Map<VanillaItemId, ItemData>> {
     ApiInstanceHolder<VanillaItemDataRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static VanillaItemDataRegistry getRegistry() {

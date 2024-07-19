@@ -1,7 +1,7 @@
 package org.allaymc.api.world.generator;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.registry.AbstractMappedRegistry;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -11,7 +11,7 @@ import java.util.function.Function;
  *
  * @author daoge_cmd
  */
-public interface WorldGeneratorFactory extends MappedRegistry<String, Function<String, WorldGenerator>, Map<String, Function<String, WorldGenerator>>> {
+public interface WorldGeneratorFactory extends AbstractMappedRegistry<String, Function<String, WorldGenerator>, Map<String, Function<String, WorldGenerator>>> {
     ApiInstanceHolder<WorldGeneratorFactory> FACTORY = ApiInstanceHolder.create();
 
     static WorldGeneratorFactory getFactory() {

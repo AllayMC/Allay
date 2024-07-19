@@ -1,11 +1,8 @@
 package org.allaymc.server;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
-import org.allaymc.api.block.palette.BlockStateHashPalette;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.block.registry.MaterialRegistry;
-import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
@@ -29,6 +26,13 @@ import org.allaymc.api.item.registry.VanillaItemDataRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.registry.IntMappedRegistry;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.SimpleRegistry;
+import org.allaymc.server.registry.loader.BlockStateDataLoader;
+import org.allaymc.server.registry.loader.MaterialLoader;
+import org.allaymc.server.registry.populator.BlockTypeRegistryPopulator;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.exception.MissingImplementationException;
@@ -36,13 +40,7 @@ import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorFactory;
 import org.allaymc.api.world.storage.WorldStorageFactory;
-import org.allaymc.server.block.registry.AllayBlockStateHashPalette;
-import org.allaymc.server.block.registry.AllayBlockTypeRegistry;
-import org.allaymc.server.block.registry.AllayMaterialRegistry;
-import org.allaymc.server.block.registry.AllayVanillaBlockStateDataRegistry;
 import org.allaymc.server.block.type.AllayBlockType;
-import org.allaymc.server.block.type.BlockLootTable;
-import org.allaymc.server.block.type.InternalBlockTypeData;
 import org.allaymc.server.blockentity.registry.AllayBlockEntityTypeRegistry;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
@@ -63,9 +61,9 @@ import org.allaymc.server.item.registry.AllayRecipeRegistry;
 import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
 import org.allaymc.server.item.registry.AllayItemTypeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
-import org.allaymc.server.item.type.InternalItemTypeData;
 import org.allaymc.server.pack.AllayPackRegistry;
 import org.allaymc.server.perm.tree.AllayPermTree;
+import org.allaymc.server.registry.loader.RegistryLoaders;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
@@ -73,7 +71,12 @@ import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.allaymc.server.world.generator.AllayWorldGeneratorFactory;
 import org.allaymc.server.world.storage.AllayWorldStorageFactory;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
+import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.jetbrains.annotations.VisibleForTesting;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 public final class Allay {
@@ -101,7 +104,9 @@ public final class Allay {
 
         log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING));
         try {
-            initAllayAPI();
+            initAllay();
+            // Only save cache mapping when allay is running normally
+            // instead of running in test environment
             ComponentClassCacheUtils.saveCacheMapping();
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
@@ -125,12 +130,17 @@ public final class Allay {
         return true;
     }
 
+    @VisibleForTesting
+    public static void initAllay() throws MissingImplementationException {
+        initAllayAPI();
+        initRegistries();
+    }
+
     /**
      * NOTICE: The i18n implementation must be registered before initializing the API,
      * which means that you should call initI18n() before call initAllayAPI()!
      */
-    @VisibleForTesting
-    public static void initAllayAPI() throws MissingImplementationException {
+    private static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
 
@@ -157,11 +167,11 @@ public final class Allay {
         api.bind(BlockEntityTypeRegistry.class, AllayBlockEntityTypeRegistry::new, instance -> ((AllayBlockEntityTypeRegistry) instance).init());
 
         // Block
-        api.bind(MaterialRegistry.class, () -> new AllayMaterialRegistry(new AllayMaterialRegistry.Loader()));
+//        api.bind(MaterialRegistry.class, () -> new AllayMaterialRegistry(new AllayMaterialRegistry.Loader()));
         api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
-        api.bind(VanillaBlockStateDataRegistry.class, () -> new AllayVanillaBlockStateDataRegistry(new AllayVanillaBlockStateDataRegistry.Loader()));
-        api.bind(BlockStateHashPalette.class, AllayBlockStateHashPalette::new);
-        api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
+//        api.bind(VanillaBlockStateDataRegistry.class, () -> new AllayVanillaBlockStateDataRegistry(new AllayVanillaBlockStateDataRegistry.Loader()));
+//        api.bind(BlockStateHashPalette.class, AllayBlockStateHashPalette::new);
+//        api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
 
         // Entity
         api.bind(EffectRegistry.class, AllayEffectRegistry::new, instance -> ((AllayEffectRegistry) instance).init());
@@ -197,6 +207,21 @@ public final class Allay {
         api.bind(PackRegistry.class, AllayPackRegistry::new);
 
         api.implement("Allay");
+    }
+
+    private static void initRegistries() {
+        // Block
+        Registries.MATERIALS = SimpleMappedRegistry.create(new MaterialLoader());
+        Registries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataLoader());
+        Registries.BLOCK_STATE_PALETTE = IntMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
+        Registries.BLOCK_TYPES = SimpleMappedRegistry.create(RegistryLoaders.empty(HashMap::new), new BlockTypeRegistryPopulator());
+        Registries.BLOCK_DEFINITIONS = SimpleRegistry.create(RegistryLoaders.empty(() -> {
+            List<BlockDefinition> blockDefinitions = new ArrayList<>();
+            for (var blockType : Registries.BLOCK_TYPES.getContent().values()) {
+                blockType.getAllStates().forEach(state -> blockDefinitions.add(state.toNetworkBlockDefinition()));
+            }
+            return blockDefinitions;
+        }));
     }
 
     @VisibleForTesting

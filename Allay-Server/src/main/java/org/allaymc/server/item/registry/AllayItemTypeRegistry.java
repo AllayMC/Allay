@@ -9,7 +9,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.MappedRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
 import org.allaymc.server.item.type.InternalItemTypeData;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.allaymc.server.utils.ResourceUtils.callInitializer;
+import static org.allaymc.server.utils.Utils.callInitializer;
 
 /**
  * Allay Project 2023/5/19
@@ -31,7 +31,7 @@ import static org.allaymc.server.utils.ResourceUtils.callInitializer;
  */
 @Slf4j
 @Getter
-public class AllayItemTypeRegistry extends SimpleMappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> implements ItemTypeRegistry {
+public class AllayItemTypeRegistry extends MappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> implements ItemTypeRegistry {
     private final List<ItemDefinition> itemDefinitions = new ArrayList<>();
 
     public AllayItemTypeRegistry() {

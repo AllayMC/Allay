@@ -2,11 +2,11 @@ package org.allaymc.server.world.biome;
 
 import lombok.SneakyThrows;
 import org.allaymc.api.data.VanillaBiomeId;
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.biome.BiomeData;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
-import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.MutableNbtMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author daoge_cmd
  */
-public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, BiomeData, Map<BiomeType, BiomeData>> implements BiomeTypeRegistry {
+public class AllayBiomeTypeRegistry extends MappedRegistry<BiomeType, BiomeData, Map<BiomeType, BiomeData>> implements BiomeTypeRegistry {
 
     private MutableNbtMap biomeDefinition;
 
@@ -30,7 +30,7 @@ public class AllayBiomeTypeRegistry extends SimpleMappedRegistry<BiomeType, Biom
 
     @SneakyThrows
     private void loadVanillaBiomeDefinition() {
-        try (var stream = ResourceUtils.getResource("biome_definitions.nbt")) {
+        try (var stream = Utils.getResource("biome_definitions.nbt")) {
             biomeDefinition = MutableNbtMap.from((NbtMap) NbtUtils.createGZIPReader(stream).readTag());
 
             int i = 0;

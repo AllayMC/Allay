@@ -7,12 +7,12 @@ import io.netty.buffer.Unpooled;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
@@ -112,7 +112,7 @@ public class LevelDBChunkSerializer {
                         }
                         for (int layer = 0; layer < layers; layer++) {
                             section.blockLayer()[layer].readFromStoragePersistent(byteBuf, hash -> {
-                                BlockState blockState = BlockStateHashPalette.getRegistry().get(hash);
+                                BlockState blockState = Registries.BLOCK_STATE_PALETTE.get(hash);
                                 if (blockState == null) {
                                     log.error("Unknown block state hash: " + hash);
                                     blockState = UNKNOWN.getDefaultState();

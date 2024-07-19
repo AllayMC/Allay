@@ -9,10 +9,10 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
-import org.allaymc.api.registry.RegistryLoader;
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.loader.RegistryLoader;
+import org.allaymc.api.registry.MappedRegistry;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.utils.ResourceUtils;
+import org.allaymc.api.utils.Utils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -31,7 +31,7 @@ import java.util.function.Supplier;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, ItemStack, Map<Integer, ItemStack>> implements CreativeItemRegistry {
+public class AllayCreativeItemRegistry extends MappedRegistry<Integer, ItemStack, Map<Integer, ItemStack>> implements CreativeItemRegistry {
 
     protected ItemData[] cachedNetworkItemDataArray;
 
@@ -55,7 +55,7 @@ public class AllayCreativeItemRegistry extends SimpleMappedRegistry<Integer, Ite
         protected Supplier<InputStream> inputStreamSupplier;
 
         public Loader() {
-            this(() -> ResourceUtils.getResource("creative_items.nbt"));
+            this(() -> Utils.getResource("creative_items.nbt"));
         }
 
         @SneakyThrows

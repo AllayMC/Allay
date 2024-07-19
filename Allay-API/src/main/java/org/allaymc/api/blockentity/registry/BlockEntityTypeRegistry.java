@@ -2,7 +2,7 @@ package org.allaymc.api.blockentity.registry;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.registry.AbstractMappedRegistry;
 
 import java.util.Map;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public interface BlockEntityTypeRegistry extends MappedRegistry<String, BlockEntityType<?>, Map<String, BlockEntityType<?>>> {
+public interface BlockEntityTypeRegistry extends AbstractMappedRegistry<String, BlockEntityType<?>, Map<String, BlockEntityType<?>>> {
     ApiInstanceHolder<BlockEntityTypeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static BlockEntityTypeRegistry getRegistry() {

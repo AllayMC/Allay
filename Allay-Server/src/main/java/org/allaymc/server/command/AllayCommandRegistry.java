@@ -9,7 +9,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.server.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.perm.DefaultPermissions;
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.MappedRegistry;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
@@ -27,7 +27,7 @@ import static org.allaymc.api.utils.AllayStringUtils.spiltCommandArgs;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayCommandRegistry extends SimpleMappedRegistry<String, Command, Map<String, Command>> implements CommandRegistry {
+public class AllayCommandRegistry extends MappedRegistry<String, Command, Map<String, Command>> implements CommandRegistry {
 
     public AllayCommandRegistry() {
         super(null, $ -> new ConcurrentHashMap<>());

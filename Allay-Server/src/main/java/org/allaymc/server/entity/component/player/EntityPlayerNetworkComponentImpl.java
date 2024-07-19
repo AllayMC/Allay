@@ -3,7 +3,6 @@ package org.allaymc.server.entity.component.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -27,6 +26,7 @@ import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.allaymc.api.pack.PackRegistry;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
@@ -350,7 +350,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         session.getPeer().getCodecHelper().setBlockDefinitions(
                 SimpleDefinitionRegistry
                         .<BlockDefinition>builder()
-                        .addAll(BlockTypeRegistry.getRegistry().getBlockDefinitions())
+                        .addAll(Registries.BLOCK_DEFINITIONS.getContent())
                         .build()
         );
 

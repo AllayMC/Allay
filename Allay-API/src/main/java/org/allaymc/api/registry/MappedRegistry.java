@@ -1,72 +1,91 @@
 package org.allaymc.api.registry;
 
+import org.allaymc.api.registry.loader.RegistryLoader;
+
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
- * An abstract registry holding a map of various registrations as defined by {@link MAPPING}.
+ * A public registry holding a map of various registrations as defined by {@code MAPPING}.
  * The M represents the map class, which can be anything that extends {@link Map}. The
- * {@link KEY} and {@link VALUE} generics are the key and value respectively.
+ * {@code KEY} and {@code VALUE} generics are the key and value respectively.
+ * <p>
+ * Allay Project 2023/3/18
  *
  * @param <KEY>     the key
  * @param <VALUE>   the value
  * @param <MAPPING> the map
- *                  <p>
  *
- * @author daoge_cmd <br>
- * Date: 2023/3/18 <br>
- * Allay Project <br>
+ * @author GeyserMC | daoge_cmd
  */
-public interface MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> extends Registry<MAPPING> {
-    /**
-     * Returns the value registered by the given key.
-     *
-     * @param key the key
-     *
-     * @return the value registered by the given key.
-     */
-    default VALUE get(KEY key) {
-        return getContent().get(key);
+public class MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> extends AbstractMappedRegistry<KEY, VALUE, MAPPING> {
+
+    protected <INPUT> MappedRegistry(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {
+        super(input, registryLoader);
     }
 
     /**
-     * Returns and maps the value by the given key if present.
+     * Creates a new mapped registry with the given {@link RegistryLoader}. The
+     * input type is not specified here, meaning the loader return type is either
+     * predefined, or the registry is populated at a later point.
      *
-     * @param key    the key
-     * @param mapper the mapper
-     * @param <U>    the type
+     * @param registryLoader the registry loader
+     * @param <INPUT>        the input
+     * @param <KEY>          the map key
+     * @param <VALUE>        the map value
+     * @param <MAPPING>      the returned mappings type, a map in this case
      *
-     * @return the mapped value from the given key if present
+     * @return a new registry with the given RegistryLoader
      */
-    default <U> Optional<U> map(KEY key, Function<? super VALUE, ? extends U> mapper) {
-        var value = this.get(key);
-        return value == null ? Optional.empty() : Optional.ofNullable(mapper.apply(value));
+    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> AbstractMappedRegistry<KEY, VALUE, MAPPING> of(RegistryLoader<INPUT, MAPPING> registryLoader) {
+        return new MappedRegistry<>(null, registryLoader);
     }
 
     /**
-     * Returns the value registered by the given key or the default value
-     * specified if null.
+     * Creates a new mapped registry with the given {@link RegistryLoader} and input.
      *
-     * @param key          the key
-     * @param defaultValue the default value
+     * @param input          the input
+     * @param registryLoader the registry loader
+     * @param <INPUT>        the input
+     * @param <KEY>          the map key
+     * @param <VALUE>        the map value
+     * @param <MAPPING>      the returned mappings type, a map in this case
      *
-     * @return the value registered by the given key or the default value
-     * specified if null.
+     * @return a new registry with the given RegistryLoader
      */
-    default VALUE getOrDefault(KEY key, VALUE defaultValue) {
-        return getContent().getOrDefault(key, defaultValue);
+    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> AbstractMappedRegistry<KEY, VALUE, MAPPING> of(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {
+        return new MappedRegistry<>(input, registryLoader);
     }
 
     /**
-     * Registers a new value into this registry with the given key.
+     * Creates a new mapped registry with the given {@link RegistryLoader} supplier.
+     * The input type is not specified here, meaning the loader return type is either
+     * predefined, or the registry is populated at a later point.
      *
-     * @param key   the key
-     * @param value the value
+     * @param registryLoader the registry loader supplier
+     * @param <INPUT>        the input
+     * @param <KEY>          the map key
+     * @param <VALUE>        the map value
+     * @param <MAPPING>      the returned mappings type, a map in this case
      *
-     * @return a new value into this registry with the given key.
+     * @return a new registry with the given RegistryLoader supplier
      */
-    default VALUE register(KEY key, VALUE value) {
-        return getContent().put(key, value);
+    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> AbstractMappedRegistry<KEY, VALUE, MAPPING> of(Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {
+        return new MappedRegistry<>(null, registryLoader.get());
+    }
+
+    /**
+     * Creates a new mapped registry with the given {@link RegistryLoader} and input.
+     *
+     * @param registryLoader the registry loader
+     * @param <INPUT>        the input
+     * @param <KEY>          the map key
+     * @param <VALUE>        the map value
+     * @param <MAPPING>      the returned mappings type, a map in this case
+     *
+     * @return a new registry with the given RegistryLoader supplier
+     */
+    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> AbstractMappedRegistry<KEY, VALUE, MAPPING> of(INPUT input, Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {
+        return new MappedRegistry<>(input, registryLoader.get());
     }
 }

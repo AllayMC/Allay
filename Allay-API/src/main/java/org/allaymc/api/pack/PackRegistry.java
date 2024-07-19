@@ -1,7 +1,7 @@
 package org.allaymc.api.pack;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.registry.AbstractMappedRegistry;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackStackPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePacksInfoPacket;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -16,7 +16,7 @@ import java.util.UUID;
  *
  * @author IWareQ
  */
-public interface PackRegistry extends MappedRegistry<UUID, Pack, Map<UUID, Pack>> {
+public interface PackRegistry extends AbstractMappedRegistry<UUID, Pack, Map<UUID, Pack>> {
 
     ApiInstanceHolder<PackRegistry> REGISTRY = ApiInstanceHolder.create();
 

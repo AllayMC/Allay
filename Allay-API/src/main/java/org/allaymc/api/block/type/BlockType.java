@@ -3,12 +3,11 @@ package org.allaymc.api.block.type;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.material.Material;
-import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.tag.BlockTag;
-import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.registry.IntMappedRegistry;
+import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.utils.Identified;
 import org.allaymc.api.utils.Identifier;
 import org.jetbrains.annotations.Unmodifiable;
@@ -138,7 +137,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      *
      * @param registry the block type registry.
      */
-    default void register(BlockTypeRegistry registry) {
+    default void register(SimpleMappedRegistry<Identifier, BlockType<?>> registry) {
         registry.register(getIdentifier(), this);
     }
 
@@ -147,7 +146,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      *
      * @param registry the block state hash palette.
      */
-    default void register(BlockStateHashPalette registry) {
+    default void register(IntMappedRegistry<BlockState> registry) {
         for (var s : getBlockStateHashMap().values()) {
             registry.register(s.blockStateHash(), s);
         }

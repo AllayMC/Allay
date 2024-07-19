@@ -9,7 +9,7 @@ import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackLoader;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.pack.PackRegistry;
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.MappedRegistry;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.pack.defaults.ResourcePack;
 import org.allaymc.server.pack.loader.ZipPackLoader;
@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author IWareQ
  */
 @Slf4j
-public class AllayPackRegistry extends SimpleMappedRegistry<UUID, Pack, Map<UUID, Pack>> implements PackRegistry {
+public class AllayPackRegistry extends MappedRegistry<UUID, Pack, Map<UUID, Pack>> implements PackRegistry {
 
     private final List<PackLoader.Factory> packLoaders = new ArrayList<>();
     private final Map<Pack.Type, Pack.Factory> packFactories = new EnumMap<>(Pack.Type.class);

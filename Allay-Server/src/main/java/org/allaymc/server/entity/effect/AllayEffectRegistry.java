@@ -7,7 +7,6 @@ import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.registry.SimpleDoubleKeyMappedRegistry;
 import org.allaymc.api.utils.Identifier;
 
 import java.util.HashMap;

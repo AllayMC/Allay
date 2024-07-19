@@ -11,10 +11,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.SneakyThrows;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.network.ProtocolInfo;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.Utils;
@@ -58,7 +58,7 @@ public class RecipeExportUtil {
     @SneakyThrows
     public static void main(String[] args) {
         Allay.initI18n();
-        Allay.initAllayAPI();
+        Allay.initAllay();
         BedrockCodecHelper helper = CODEC.createHelper();
         helper.setEncodingSettings(EncodingSettings.CLIENT);
         helper.setItemDefinitions(
@@ -71,7 +71,7 @@ public class RecipeExportUtil {
         helper.setBlockDefinitions(
                 SimpleDefinitionRegistry
                         .<BlockDefinition>builder()
-                        .addAll(BlockTypeRegistry.getRegistry().getBlockDefinitions())
+                        .addAll(Registries.BLOCK_DEFINITIONS.getContent())
                         .build()
         );
         try (InputStream resourceAsStream = RecipeExportUtil.class.getClassLoader().getResourceAsStream("crafting_data_packet.bin")) {

@@ -1,46 +1,33 @@
-package org.allaymc.server.block.registry;
+package org.allaymc.server.registry.populator;
 
-import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.Registry;
+import org.allaymc.api.registry.populator.RegistryPopulator;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
 import org.allaymc.server.block.type.BlockLootTable;
 import org.allaymc.server.block.type.BlockTypeDefaultInitializer;
 import org.allaymc.server.block.type.BlockTypeInitializer;
 import org.allaymc.server.block.type.InternalBlockTypeData;
-import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import static org.allaymc.server.utils.ResourceUtils.callInitializer;
+import static org.allaymc.server.utils.Utils.callInitializer;
 
 /**
- * Allay Project 2023/3/26
+ * Allay Project 2024/7/19
  *
  * @author daoge_cmd
  */
 @Slf4j
-public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifier, BlockType<?>, Map<Identifier, BlockType<?>>> implements BlockTypeRegistry {
-    @Getter
-    private final List<BlockDefinition> blockDefinitions = new ArrayList<>();
-
-    public AllayBlockTypeRegistry() {
-        super(null, input -> new ConcurrentHashMap<>());
-    }
-
-    @SneakyThrows
-    public void init() {
+public class BlockTypeRegistryPopulator implements RegistryPopulator<Map<Identifier, BlockType<?>>> {
+    @Override
+    public <REGISTRY extends Registry<Map<Identifier, BlockType<?>>>> void populate(REGISTRY registry) {
         InternalBlockTypeData.init();
         BlockLootTable.init();
         log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADING));
@@ -55,14 +42,6 @@ public final class AllayBlockTypeRegistry extends SimpleMappedRegistry<Identifie
             initializers.forEach(method -> callInitializer(method, null));
             defaultInitializers.forEach(method -> callInitializer(method, progressBar));
         }
-        rebuildDefinitionList();
         log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADED, defaultInitializers.size()));
-    }
-
-    private void rebuildDefinitionList() {
-        blockDefinitions.clear();
-        for (var blockType : this.getContent().values()) {
-            blockType.getAllStates().forEach(state -> blockDefinitions.add(state.toNetworkBlockDefinition()));
-        }
     }
 }

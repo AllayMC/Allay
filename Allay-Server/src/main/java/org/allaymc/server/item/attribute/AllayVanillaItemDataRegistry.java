@@ -7,10 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.component.common.ItemData;
 import org.allaymc.api.item.registry.VanillaItemDataRegistry;
-import org.allaymc.api.registry.RegistryLoader;
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.loader.RegistryLoader;
+import org.allaymc.api.registry.MappedRegistry;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.utils.ResourceUtils;
+import org.allaymc.api.utils.Utils;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -25,7 +25,7 @@ import java.util.function.Supplier;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayVanillaItemDataRegistry extends SimpleMappedRegistry<VanillaItemId, ItemData, Map<VanillaItemId, ItemData>> implements VanillaItemDataRegistry {
+public class AllayVanillaItemDataRegistry extends MappedRegistry<VanillaItemId, ItemData, Map<VanillaItemId, ItemData>> implements VanillaItemDataRegistry {
     public AllayVanillaItemDataRegistry(RegistryLoader<Void, Map<VanillaItemId, ItemData>> registryLoader) {
         super(null, registryLoader);
     }
@@ -35,7 +35,7 @@ public class AllayVanillaItemDataRegistry extends SimpleMappedRegistry<VanillaIt
         protected Supplier<InputStream> streamSupplier;
 
         public Loader() {
-            this(() -> new BufferedInputStream(ResourceUtils.getResource("items.json")));
+            this(() -> new BufferedInputStream(Utils.getResource("items.json")));
         }
 
         @SneakyThrows

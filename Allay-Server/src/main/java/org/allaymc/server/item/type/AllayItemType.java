@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
@@ -19,6 +18,7 @@ import org.allaymc.api.item.registry.VanillaItemDataRegistry;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
@@ -100,7 +100,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             // Try to find out if this item type has a corresponding block type
             var blockIdentifier = BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier);
             // Note that the block type still may be null
-            blockTypeCache = BlockTypeRegistry.getRegistry().get(blockIdentifier);
+            blockTypeCache = Registries.BLOCK_TYPES.get(blockIdentifier);
             haveTriedInitBlockTypeCache = true;
         }
         return blockTypeCache;

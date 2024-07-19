@@ -9,19 +9,19 @@ import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.MappedRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.server.entity.type.EntityTypeDefaultInitializer;
 import org.allaymc.server.entity.type.EntityTypeInitializer;
-import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.allaymc.server.utils.ResourceUtils.callInitializer;
+import static org.allaymc.server.utils.Utils.callInitializer;
 
 /**
  * Allay Project 2023/5/26
@@ -29,7 +29,7 @@ import static org.allaymc.server.utils.ResourceUtils.callInitializer;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, EntityType<?>, Map<Identifier, EntityType<?>>> implements EntityTypeRegistry {
+public class AllayEntityTypeRegistry extends MappedRegistry<Identifier, EntityType<?>, Map<Identifier, EntityType<?>>> implements EntityTypeRegistry {
     @Getter
     private NbtMap availableEntityIdentifierTag;
 
@@ -59,7 +59,7 @@ public class AllayEntityTypeRegistry extends SimpleMappedRegistry<Identifier, En
     private void loadVanillaEntityIdentifierTag() {
         //TODO: Support custom entity
         availableEntityIdentifierTag = (NbtMap) NbtUtils.createNetworkReader(
-                ResourceUtils.getResource("entity_identifiers.nbt")
+                Utils.getResource("entity_identifiers.nbt")
         ).readTag();
     }
 }

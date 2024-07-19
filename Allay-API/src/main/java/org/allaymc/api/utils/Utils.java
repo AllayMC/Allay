@@ -13,6 +13,7 @@ import org.allaymc.api.item.tag.ItemTag;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -117,5 +118,9 @@ public class Utils {
             }
             return stringBuilder.toString();
         }
+    }
+
+    public static InputStream getResource(String resourceName) {
+        return Objects.requireNonNull(Utils.class.getClassLoader().getResourceAsStream(resourceName));
     }
 }

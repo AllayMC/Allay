@@ -1,5 +1,7 @@
 package org.allaymc.api.registry;
 
+import org.allaymc.api.registry.loader.RegistryLoader;
+
 import java.util.function.Supplier;
 
 /**
@@ -13,12 +15,12 @@ import java.util.function.Supplier;
  *
  * @author GeyserMC | daoge_cmd
  */
-public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
+public class SimpleRegistry<CONTENT> extends AbstractRegistry<CONTENT> {
 
     protected CONTENT content;
 
     protected <INPUT> SimpleRegistry(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {
-        this.content = registryLoader.load(input);
+        super(input, registryLoader);
     }
 
     /**
@@ -32,7 +34,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      *
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
+    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> create(Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
         return new SimpleRegistry<>(null, registryLoader.get());
     }
 
@@ -47,7 +49,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      *
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(INPUT input, Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
+    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> create(INPUT input, Supplier<RegistryLoader<INPUT, CONTENT>> registryLoader) {
         return new SimpleRegistry<>(input, registryLoader.get());
     }
 
@@ -62,7 +64,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      *
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(RegistryLoader<INPUT, CONTENT> registryLoader) {
+    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> create(RegistryLoader<INPUT, CONTENT> registryLoader) {
         return new SimpleRegistry<>(null, registryLoader);
     }
 
@@ -76,17 +78,7 @@ public class SimpleRegistry<CONTENT> implements Registry<CONTENT> {
      *
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> of(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {
+    public static <INPUT, CONTENT> SimpleRegistry<CONTENT> create(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {
         return new SimpleRegistry<>(input, registryLoader);
-    }
-
-    @Override
-    public CONTENT getContent() {
-        return this.content;
-    }
-
-    @Override
-    public void setContent(CONTENT content) {
-        this.content = content;
     }
 }

@@ -22,7 +22,7 @@ public class ThroughList2ArrayJMHTest {
 
     @Setup
     public void setup() throws MissingImplementationException {
-        Allay.initAllayAPI();
+        Allay.initAllay();
         data1[0] = VanillaBlockPropertyTypes.AGE_16.createValue(5);
         data1[1] = VanillaBlockPropertyTypes.ACTIVE.createValue(false);
         data1[2] = VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION.createValue(TorchFacingDirection.WEST);

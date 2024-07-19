@@ -1,7 +1,7 @@
 package org.allaymc.api.world.biome;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.registry.AbstractMappedRegistry;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Map;
@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public interface BiomeTypeRegistry extends MappedRegistry<BiomeType, BiomeData, Map<BiomeType, BiomeData>> {
+public interface BiomeTypeRegistry extends AbstractMappedRegistry<BiomeType, BiomeData, Map<BiomeType, BiomeData>> {
     ApiInstanceHolder<BiomeTypeRegistry> REGISTRY = ApiInstanceHolder.create();
 
     static BiomeTypeRegistry getRegistry() {

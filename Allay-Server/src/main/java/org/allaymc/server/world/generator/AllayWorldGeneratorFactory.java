@@ -1,6 +1,6 @@
 package org.allaymc.server.world.generator;
 
-import org.allaymc.api.registry.SimpleMappedRegistry;
+import org.allaymc.api.registry.MappedRegistry;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorFactory;
@@ -14,7 +14,7 @@ import java.util.function.Function;
  *
  * @author daoge_cmd
  */
-public class AllayWorldGeneratorFactory extends SimpleMappedRegistry<String, Function<String, WorldGenerator>, Map<String, Function<String, WorldGenerator>>> implements WorldGeneratorFactory {
+public class AllayWorldGeneratorFactory extends MappedRegistry<String, Function<String, WorldGenerator>, Map<String, Function<String, WorldGenerator>>> implements WorldGeneratorFactory {
     public AllayWorldGeneratorFactory() {
         super(null, $ -> new ConcurrentHashMap<>());
         init();

@@ -2,7 +2,7 @@ package org.allaymc.api.item.registry;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.registry.AbstractMappedRegistry;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public interface ItemTypeRegistry extends MappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> {
+public interface ItemTypeRegistry extends AbstractMappedRegistry<Identifier, ItemType<?>, Map<Identifier, ItemType<?>>> {
 
     ApiInstanceHolder<ItemTypeRegistry> REGISTRY = ApiInstanceHolder.create();
 

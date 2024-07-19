@@ -5,7 +5,7 @@ import org.allaymc.api.utils.exception.MissingImplementationException;
 public class InitApiSpeedTest {
     public static void main(String[] args) throws MissingImplementationException {
         long start = System.currentTimeMillis();
-        Allay.initAllayAPI();
+        Allay.initAllay();
         System.out.println("time: " + ((System.currentTimeMillis() - start) / 1000d) + "s");
     }
 }

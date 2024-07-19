@@ -1,8 +1,8 @@
 package org.allaymc.server.block;
 
 import com.google.gson.JsonParser;
-import org.allaymc.api.block.palette.BlockStateHashPalette;
-import org.allaymc.server.block.registry.AllayVanillaBlockStateDataRegistry;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -29,13 +28,7 @@ class BlockStateHashTest {
 
     @BeforeAll
     static void load() {
-        try (var reader = new InputStreamReader(
-                Objects.requireNonNull(
-                        AllayVanillaBlockStateDataRegistry.class
-                                .getClassLoader()
-                                .getResourceAsStream("block_states.json"),
-                        "block_states.json is missing!"))
-        ) {
+        try (var reader = new InputStreamReader(Utils.getResource("block_states.json"))) {
             JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> BLOCK_STATE_DATA.put(entry.getAsJsonObject().get("blockStateHash").getAsInt(), entry));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -44,10 +37,10 @@ class BlockStateHashTest {
 
     @Test
     void testAllHashes() {
-        for (var expectedHash : BLOCK_STATE_DATA.keySet()) {
-            assertNotNull(BlockStateHashPalette.getRegistry().get(expectedHash));
+        for (int expectedHash : BLOCK_STATE_DATA.keySet()) {
+            assertNotNull(Registries.BLOCK_STATE_PALETTE.get(expectedHash));
         }
-        for (var computedHash : BlockStateHashPalette.getRegistry().getContent().keySet()) {
+        for (var computedHash : Registries.BLOCK_STATE_PALETTE.getContent().keySet()) {
             assertNotNull(BLOCK_STATE_DATA.get(computedHash));
         }
     }

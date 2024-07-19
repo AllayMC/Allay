@@ -2,10 +2,6 @@ package org.allaymc.api;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.palette.BlockStateHashPalette;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.block.registry.MaterialRegistry;
-import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
@@ -171,11 +167,7 @@ public final class AllayAPI {
         requireImpl(BlockEntityTypeRegistry.class, BlockEntityTypeRegistry.REGISTRY::set);
 
         // Block
-        requireImpl(MaterialRegistry.class, MaterialRegistry.REGISTRY::set);
         requireImpl(BlockTypeBuilder.BlockTypeBuilderFactory.class, BlockTypeBuilder.FACTORY::set);
-        requireImpl(VanillaBlockStateDataRegistry.class, VanillaBlockStateDataRegistry.REGISTRY::set);
-        requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
-        requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
 
         // Entity
         requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
