@@ -7,6 +7,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
+import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
@@ -18,19 +19,17 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.registry.*;
+import org.allaymc.server.registry.AllayCommandRegistry;
 import org.allaymc.server.registry.loader.RegistryLoaders;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.MissingImplementationException;
-import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
@@ -44,23 +43,16 @@ import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.type.AllayItemType;
-import org.allaymc.server.pack.AllayPackRegistry;
 import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.registry.loader.*;
 import org.allaymc.server.registry.populator.*;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
 import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
-import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
-import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.VisibleForTesting;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 @Slf4j
 public final class Allay {
@@ -165,7 +157,7 @@ public final class Allay {
 //        api.bind(EntityTypeRegistry.class, AllayEntityTypeRegistry::new, instance -> ((AllayEntityTypeRegistry) instance).init());
 
         // Biome
-        api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
+//        api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
 
         // World
         api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
@@ -187,7 +179,7 @@ public final class Allay {
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
 
         // Resource pack
-        api.bind(PackRegistry.class, AllayPackRegistry::new);
+//        api.bind(PackRegistry.class, AllayPackRegistry::new);
 
         api.implement("Allay");
     }
@@ -205,13 +197,6 @@ public final class Allay {
                 r -> Registries.ITEMS = r,
                 new ItemTypeRegistryPopulator()
         );
-        Registries.ITEM_DEFINITIONS = SimpleRegistry.create(RegistryLoaders.empty(() -> {
-            var itemDefinitions = new ArrayList<ItemDefinition>();
-            for (var itemType : Registries.ITEMS.getContent().values()) {
-                itemDefinitions.add(itemType.toNetworkDefinition());
-            }
-            return itemDefinitions;
-        }));
 
         // BlockEntity
         SimpleMappedRegistry.create(
@@ -229,13 +214,6 @@ public final class Allay {
                 r -> Registries.BLOCKS = r,
                 new BlockTypeRegistryPopulator()
         );
-        Registries.BLOCK_DEFINITIONS = SimpleRegistry.create(RegistryLoaders.empty(() -> {
-            List<BlockDefinition> blockDefinitions = new ArrayList<>();
-            for (var blockType : Registries.BLOCKS.getContent().values()) {
-                blockType.getAllStates().forEach(state -> blockDefinitions.add(state.toNetworkBlockDefinition()));
-            }
-            return blockDefinitions;
-        }));
 
         // Entity
         DoubleKeyMappedRegistry.create(
@@ -248,7 +226,6 @@ public final class Allay {
                 r -> Registries.ENTITIES = r,
                 new EntityTypeRegistryPopulator()
         );
-        Registries.ENTITY_IDENTIFIERS = SimpleRegistry.create("entity_identifiers.nbt", RegistryLoaders.NBT);
 
         // World
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());
@@ -259,6 +236,12 @@ public final class Allay {
 
         // Recipe
         Registries.RECIPES = IntMappedRegistry.create(new RecipeRegistryLoader());
+
+        // Pack
+        Registries.PACKS = SimpleMappedRegistry.create(new PackRegistryLoader());
+
+        // Command
+        Registries.COMMANDS = new AllayCommandRegistry();
     }
 
     @VisibleForTesting

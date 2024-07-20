@@ -1,4 +1,4 @@
-package org.allaymc.server.command;
+package org.allaymc.server.registry;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.Command;
@@ -9,32 +9,32 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.server.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.perm.DefaultPermissions;
-import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import static org.allaymc.api.utils.AllayStringUtils.spiltCommandArgs;
 
 /**
- * Allay Project 2023/12/29
+ * Allay Project 2024/7/20
  *
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayCommandRegistry extends MappedRegistry<String, Command, Map<String, Command>> implements CommandRegistry {
-
+public class AllayCommandRegistry extends CommandRegistry {
     public AllayCommandRegistry() {
-        super(null, $ -> new ConcurrentHashMap<>());
+        super(null, $ -> new HashMap<>());
+        registerDefaultCommands();
     }
 
-    @Override
-    public void registerDefaultCommands() {
+    private void registerDefaultCommands() {
         register(new MeCommand());
         register(new GameTestCommand());
         register(new StopCommand());
@@ -65,8 +65,20 @@ public class AllayCommandRegistry extends MappedRegistry<String, Command, Map<St
 
     @Override
     public void register(Command command) {
-        register(command.getName(), command);
+        content.put(command.getName(), command);
         command.getPermissions().forEach(DefaultPermissions.OPERATOR::addPerm);
+    }
+
+    @Override
+    public Command register(String name, Command command) {
+        var previous = get(name);
+        register(command);
+        return previous;
+    }
+
+    @Override
+    public void register(Consumer<Map<String, Command>> consumer) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -109,15 +121,6 @@ public class AllayCommandRegistry extends MappedRegistry<String, Command, Map<St
         }
     }
 
-    protected Command findCommand(String nameOrAlias) {
-        var result = this.get(nameOrAlias);
-        if (result != null) return result;
-
-        return this.getContent().values().stream()
-                .filter(command -> command.getAliases().contains(nameOrAlias))
-                .findFirst().orElse(null);
-    }
-
     @Override
     public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
         var pk = new AvailableCommandsPacket();
@@ -127,5 +130,14 @@ public class AllayCommandRegistry extends MappedRegistry<String, Command, Map<St
             }
         }
         return pk;
+    }
+
+    protected Command findCommand(String nameOrAlias) {
+        var result = this.get(nameOrAlias);
+        if (result != null) return result;
+
+        return this.getContent().values().stream()
+                .filter(command -> command.getAliases().contains(nameOrAlias))
+                .findFirst().orElse(null);
     }
 }

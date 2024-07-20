@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.component.common.ItemData;
-import org.allaymc.api.registry.loader.RegistryLoader;
+import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 

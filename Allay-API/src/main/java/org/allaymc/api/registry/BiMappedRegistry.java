@@ -1,7 +1,6 @@
 package org.allaymc.api.registry;
 
 import com.google.common.collect.BiMap;
-import org.allaymc.api.registry.loader.RegistryLoader;
 
 /**
  * Allay Project 2023/10/28

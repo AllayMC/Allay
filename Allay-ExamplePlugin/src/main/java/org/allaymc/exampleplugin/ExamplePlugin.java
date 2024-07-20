@@ -38,7 +38,7 @@ public final class ExamplePlugin extends Plugin {
         var server = Server.getInstance();
         server.getEventBus().registerListener(serverEventListener);
         server.getEventBus().registerListener(worldEventListener);
-        server.getCommandRegistry().register(new ExampleCommand());
+        Registries.COMMANDS.register(new ExampleCommand());
     }
 
     @Override
@@ -47,6 +47,6 @@ public final class ExamplePlugin extends Plugin {
         var server = Server.getInstance();
         server.getEventBus().unregisterListener(serverEventListener);
         server.getEventBus().unregisterListener(worldEventListener);
-        server.getCommandRegistry().unregister("example-cmd");
+        Registries.COMMANDS.unregister("example-cmd");
     }
 }

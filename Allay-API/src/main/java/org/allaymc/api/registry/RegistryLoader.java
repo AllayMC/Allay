@@ -1,4 +1,4 @@
-package org.allaymc.api.registry.loader;
+package org.allaymc.api.registry;
 
 /**
  * Represents a registry loader. {@link INPUT} is the input value, which can be anything,

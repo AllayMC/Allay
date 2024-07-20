@@ -23,8 +23,9 @@
  * @link https://github.com/GeyserMC/Geyser
  */
 
-package org.allaymc.api.registry.loader;
+package org.allaymc.server.registry.loader;
 
+import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;

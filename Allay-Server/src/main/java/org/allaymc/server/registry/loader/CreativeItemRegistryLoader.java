@@ -9,7 +9,7 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.registry.loader.RegistryLoader;
+import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.utils.ItemMetaBlockStateBiMap;

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.material.MaterialType;
 import org.allaymc.api.data.VanillaMaterialTypes;
-import org.allaymc.api.registry.loader.RegistryLoader;
+import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
 
 import java.io.BufferedInputStream;

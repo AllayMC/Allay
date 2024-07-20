@@ -17,7 +17,7 @@ import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.recipe.ShapedRecipe;
 import org.allaymc.api.item.recipe.ShapelessRecipe;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.registry.loader.RegistryLoader;
+import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;

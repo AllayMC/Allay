@@ -3,6 +3,7 @@ package org.allaymc.server.terminal;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.minecrell.terminalconsole.SimpleTerminalConsole;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
@@ -26,7 +27,7 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
     @Override
     protected void runCommand(String cmd) {
         if (cmd.startsWith("/")) cmd = cmd.substring(1);
-        server.getCommandRegistry().execute(server, cmd);
+        Registries.COMMANDS.execute(server, cmd);
     }
 
     @Override

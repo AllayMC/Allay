@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerStorage;
-import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -40,7 +39,6 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
-import org.allaymc.server.command.AllayCommandRegistry;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.plugin.AllayPluginManager;
@@ -117,8 +115,6 @@ public final class AllayServer implements Server {
         it.load(true); // load and save to update comments/new fields
     });
     @Getter
-    private CommandRegistry commandRegistry;
-    @Getter
     private PluginManager pluginManager;
     @Getter
     private Scheduler scheduler;
@@ -189,8 +185,6 @@ public final class AllayServer implements Server {
                 this,
                 new JsonScoreboardStorage(Path.of("command_data/scoreboards.json"))
         );
-        commandRegistry = new AllayCommandRegistry();
-        commandRegistry.registerDefaultCommands();
         networkServer = new AllayNetworkServer(this);
         scheduler = new AllayScheduler();
 

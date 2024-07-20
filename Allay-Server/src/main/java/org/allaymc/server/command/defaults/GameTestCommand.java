@@ -141,7 +141,7 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("dumpcmd")
                 .exec((context, player) -> {
-                    var cmdPk = Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player);
+                    var cmdPk = Registries.COMMANDS.encodeAvailableCommandsPacketFor(player);
                     try {
                         Files.deleteIfExists(Path.of("cmd_pk_allay.json"));
                     } catch (IOException e) {

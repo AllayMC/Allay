@@ -1,9 +1,9 @@
 package org.allaymc.api.command;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.registry.AbstractMappedRegistry;
+import org.allaymc.api.registry.RegistryLoader;
+import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 
@@ -12,17 +12,15 @@ import java.util.Map;
  *
  * @author daoge_cmd
  */
-public interface CommandRegistry extends AbstractMappedRegistry<String, Command, Map<String, Command>> {
+public abstract class CommandRegistry extends SimpleMappedRegistry<String, Command> {
 
-    @ApiStatus.Internal
-    AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player);
+    protected <I> CommandRegistry(I input, RegistryLoader<I, Map<String, Command>> registryLoader) {
+        super(input, registryLoader);
+    }
 
-    @ApiStatus.Internal
-    void registerDefaultCommands();
+    public abstract void register(Command command);
 
-    void register(Command command);
-
-    Command unregister(String name);
+    public abstract Command unregister(String name);
 
     /**
      * @param sender The command sender
@@ -30,5 +28,7 @@ public interface CommandRegistry extends AbstractMappedRegistry<String, Command,
      *
      * @return The command execution result
      */
-    CommandResult execute(CommandSender sender, String cmd);
+    public abstract CommandResult execute(CommandSender sender, String cmd);
+
+    public abstract AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player);
 }

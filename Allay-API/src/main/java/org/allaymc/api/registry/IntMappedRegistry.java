@@ -26,7 +26,6 @@
 package org.allaymc.api.registry;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import org.allaymc.api.registry.loader.RegistryLoader;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.Supplier;

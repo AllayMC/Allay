@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.network.processor.PacketProcessor;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.SettingsCommandPacket;
@@ -14,7 +15,7 @@ import org.cloudburstmc.protocol.bedrock.packet.SettingsCommandPacket;
 public class SettingsCommandPacketProcessor extends PacketProcessor<SettingsCommandPacket> {
     @Override
     public void handleSync(EntityPlayer player, SettingsCommandPacket packet, long receiveTime) {
-        Server.getInstance().getCommandRegistry().execute(player, packet.getCommand().substring(1));
+        Registries.COMMANDS.execute(player, packet.getCommand().substring(1));
     }
 
     @Override

@@ -6,6 +6,8 @@ import org.allaymc.api.block.material.MaterialType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.command.Command;
+import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.entity.effect.EffectType;
@@ -15,16 +17,14 @@ import org.allaymc.api.item.component.common.ItemData;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.pack.Pack;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.storage.WorldStorage;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
-import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 
 /**
@@ -40,13 +40,6 @@ public final class Registries {
     public static DoubleKeyMappedRegistry<Integer, Identifier, EnchantmentType> ENCHANTMENTS;
     public static SimpleMappedRegistry<VanillaItemId, ItemData> VANILLA_ITEM_DATA;
     public static SimpleMappedRegistry<Identifier, ItemType<?>> ITEMS;
-    /**
-     * NOTICE
-     * The custom block/item/entity etc. are not supported currently <p>
-     * And we have no plan to implement them in the near future <p>
-     * So we can cache the definitions to speed up player joining
-     */
-    public static SimpleRegistry<List<ItemDefinition>> ITEM_DEFINITIONS;
 
     // BlockEntity
     public static SimpleMappedRegistry<String, BlockEntityType<?>> BLOCK_ENTITIES;
@@ -56,12 +49,10 @@ public final class Registries {
     public static IntMappedRegistry<BlockState> BLOCK_STATE_PALETTE;
     public static SimpleMappedRegistry<VanillaBlockId, Map<Integer, BlockStateData>> VANILLA_BLOCK_STATE_DATA;
     public static SimpleMappedRegistry<Identifier, BlockType<?>> BLOCKS;
-    public static SimpleRegistry<List<BlockDefinition>> BLOCK_DEFINITIONS;
 
     // Entity
     public static DoubleKeyMappedRegistry<Integer, Identifier, EffectType> EFFECTS;
     public static SimpleMappedRegistry<Identifier, EntityType<?>> ENTITIES;
-    public static SimpleRegistry<NbtMap> ENTITY_IDENTIFIERS;
 
     // World
     public static SimpleMappedRegistry<String, Function<Path, WorldStorage>> WORLD_STORAGE_FACTORIES;
@@ -75,4 +66,10 @@ public final class Registries {
     // TODO: PotionMixData
     // TODO: ContainerMixData
     // TODO: MaterialReducer
+
+    // Pack
+    public static SimpleMappedRegistry<UUID, Pack> PACKS;
+
+    // Command
+    public static CommandRegistry COMMANDS;
 }

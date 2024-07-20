@@ -1,6 +1,6 @@
 package org.allaymc.server.registry.loader;
 
-import org.allaymc.api.registry.loader.RegistryLoader;
+import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.world.generator.FlatNoiser;

@@ -13,13 +13,11 @@ import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.utils.exception.MissingRequirementException;
-import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
 
 import java.util.HashMap;
@@ -157,9 +155,6 @@ public final class AllayAPI {
         // Entity
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
 
-        // Biome
-        requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);
-
         // World
         requireImpl(WorldGenerator.WorldGeneratorBuilderFactory.class, WorldGenerator.BUILDER_FACTORY::set);
 
@@ -170,9 +165,6 @@ public final class AllayAPI {
         requireImpl(EntitySelectorAPI.class, EntitySelectorAPI.API::set);
         requireImpl(CommandTree.CommandTreeFactory.class, CommandTree.FACTORY::set);
         requireImpl(CommandNodeFactory.class, CommandNodeFactory.FACTORY::set);
-
-        // Resource pack
-        requireImpl(PackRegistry.class, PackRegistry.REGISTRY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {}

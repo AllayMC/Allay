@@ -92,8 +92,6 @@ public interface Server extends TaskCreator, CommandSender {
 
     WorldPool getWorldPool();
 
-    CommandRegistry getCommandRegistry();
-
     default World getDefaultWorld() {
         return getWorldPool().getDefaultWorld();
     }

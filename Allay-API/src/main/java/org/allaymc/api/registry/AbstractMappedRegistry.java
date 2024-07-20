@@ -1,7 +1,5 @@
 package org.allaymc.api.registry;
 
-import org.allaymc.api.registry.loader.RegistryLoader;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;

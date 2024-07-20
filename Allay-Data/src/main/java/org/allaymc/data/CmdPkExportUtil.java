@@ -25,7 +25,7 @@ public class CmdPkExportUtil {
     @SneakyThrows
     public static void main(String[] args) {
         BedrockCodecHelper helper = CODEC.createHelper();
-        try (InputStream resourceAsStream = RecipeExportUtil.class.getClassLoader().getResourceAsStream("available_commands_packet.bin")) {
+        try (InputStream resourceAsStream = CmdPkExportUtil.class.getClassLoader().getResourceAsStream("available_commands_packet.bin")) {
             Preconditions.checkNotNull(resourceAsStream);
             ByteBuf byteBuf = Unpooled.wrappedBuffer(resourceAsStream.readAllBytes());
             // 跳过AvailableCommandsPacket的packet id
