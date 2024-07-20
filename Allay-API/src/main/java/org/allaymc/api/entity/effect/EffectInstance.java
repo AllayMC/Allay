@@ -1,6 +1,7 @@
 package org.allaymc.api.entity.effect;
 
 import com.google.common.base.Preconditions;
+import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -11,7 +12,7 @@ import org.cloudburstmc.nbt.NbtMap;
 public interface EffectInstance {
 
     static EffectInstance fromNBT(NbtMap nbt) {
-        var effectType = EffectRegistry.getRegistry().getByK1((int) nbt.getByte("Id"));
+        var effectType = Registries.EFFECTS.getByK1((int) nbt.getByte("Id"));
         Preconditions.checkNotNull(effectType, "Effect type not found for id: " + nbt.getByte("Id") + "!");
         int amplifier = nbt.getByte("Amplifier");
         int duration = nbt.getInt("Duration");

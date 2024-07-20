@@ -1,8 +1,8 @@
 package org.allaymc.server.command.tree.node;
 
 import org.allaymc.api.command.tree.CommandNode;
-import org.allaymc.api.entity.effect.EffectRegistry;
 import org.allaymc.api.entity.effect.EffectType;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
 import static org.allaymc.api.utils.Identifier.DEFAULT_NAMESPACE;
@@ -14,7 +14,7 @@ import static org.allaymc.api.utils.Identifier.DEFAULT_NAMESPACE;
  */
 public class EffectNode extends EnumNode {
 
-    protected static final String[] STR_EFFECTS = EffectRegistry.getRegistry().getContent().m1().values()
+    protected static final String[] STR_EFFECTS = Registries.EFFECTS.getContent().m1().values()
             .stream()
             .map(type -> type.getIdentifier().path())
             .toArray(String[]::new);
@@ -25,6 +25,6 @@ public class EffectNode extends EnumNode {
 
     @Override
     protected Object argToResult(String arg) {
-        return EffectRegistry.getRegistry().getByK2(new Identifier(DEFAULT_NAMESPACE, arg));
+        return Registries.EFFECTS.getByK2(new Identifier(DEFAULT_NAMESPACE, arg));
     }
 }

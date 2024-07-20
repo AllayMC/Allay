@@ -98,7 +98,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             // Try to find out if this item type has a corresponding block type
             var blockIdentifier = BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier);
             // Note that the block type still may be null
-            blockTypeCache = Registries.BLOCK_TYPES.get(blockIdentifier);
+            blockTypeCache = Registries.BLOCKS.get(blockIdentifier);
             haveTriedInitBlockTypeCache = true;
         }
         return blockTypeCache;
@@ -196,7 +196,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             if (runtimeId == Integer.MAX_VALUE) runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
 
             var type = new AllayItemType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier, runtimeId, itemTags);
-            Registries.ITEM_TYPES.register(identifier, type);
+            Registries.ITEMS.register(identifier, type);
             return type;
         }
     }

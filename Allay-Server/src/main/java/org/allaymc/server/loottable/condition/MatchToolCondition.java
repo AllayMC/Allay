@@ -46,7 +46,7 @@ public class MatchToolCondition implements Condition<BreakBlockContext> {
         public Condition<BreakBlockContext> deserialize(JsonObject json) {
             ItemType<?> itemType = null;
             if (json.has("item")) {
-                itemType = Registries.ITEM_TYPES.get(new Identifier(json.get("item").getAsString()));
+                itemType = Registries.ITEMS.get(new Identifier(json.get("item").getAsString()));
             }
             Integer count = null;
             if (json.has("count")) {

@@ -33,7 +33,7 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
         try (var reader = NbtUtils.createGZIPReader(Utils.getResource("item_meta_block_state_bimap.nbt"))) {
             var nbt = (NbtMap) reader.readTag();
             nbt.forEach((itemIdentifier, metaToHash) -> {
-                var itemType = Registries.ITEM_TYPES.get(new Identifier(itemIdentifier));
+                var itemType = Registries.ITEMS.get(new Identifier(itemIdentifier));
                 Objects.requireNonNull(itemType, "Cannot find item type by identifier: " + itemIdentifier);
                 var metaToHashMap = (NbtMap) metaToHash;
                 metaToHashMap.forEach((meta, blockStateHash) -> {

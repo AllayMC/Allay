@@ -27,7 +27,7 @@ public class ItemEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_T
     public ItemEntry(String name, int weight, Conditions<CONTEXT_TYPE> conditions, Functions functions) {
         super(name, weight, conditions);
         this.functions = functions;
-        this.itemType = Registries.ITEM_TYPES.get(new Identifier(name));
+        this.itemType = Registries.ITEMS.get(new Identifier(name));
     }
 
     protected static Functions parseFunctions(JsonObject json, LootTableType<?> lootTableType) {

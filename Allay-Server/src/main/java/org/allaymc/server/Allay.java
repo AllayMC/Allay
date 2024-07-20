@@ -13,8 +13,8 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.datastruct.DynamicURLClassLoader;
-import org.allaymc.api.entity.effect.EffectRegistry;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
+import org.allaymc.api.entity.effect.EffectType;
+import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
@@ -40,8 +40,6 @@ import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.data.AllayVanillaItemMetaBlockStateBiMap;
-import org.allaymc.server.entity.effect.AllayEffectRegistry;
-import org.allaymc.server.entity.registry.AllayEntityTypeRegistry;
 import org.allaymc.server.entity.type.AllayEntityType;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.gui.Dashboard;
@@ -52,10 +50,7 @@ import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.pack.AllayPackRegistry;
 import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.registry.loader.*;
-import org.allaymc.server.registry.populator.BlockEntityTypeRegistryPopulator;
-import org.allaymc.server.registry.populator.BlockTypeRegistryPopulator;
-import org.allaymc.server.registry.populator.EnchantmentTypeRegistryPopulator;
-import org.allaymc.server.registry.populator.ItemTypeRegistryPopulator;
+import org.allaymc.server.registry.populator.*;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
@@ -122,16 +117,16 @@ public final class Allay {
         return true;
     }
 
+
+    /**
+     * NOTICE: The i18n implementation must be registered before initializing allay,
+     * which means that you should call initI18n() before call initAllay()!
+     */
     @VisibleForTesting
     public static void initAllay() throws MissingImplementationException {
         initAllayAPI();
         initRegistries();
     }
-
-    /**
-     * NOTICE: The i18n implementation must be registered before initializing the API,
-     * which means that you should call initI18n() before call initAllayAPI()!
-     */
     private static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
@@ -168,9 +163,9 @@ public final class Allay {
 //        api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
 
         // Entity
-        api.bind(EffectRegistry.class, AllayEffectRegistry::new, instance -> ((AllayEffectRegistry) instance).init());
+//        api.bind(EffectRegistry.class, AllayEffectRegistry::new, instance -> ((AllayEffectRegistry) instance).init());
         api.bind(EntityTypeBuilder.EntityTypeBuilderFactory.class, () -> AllayEntityType::builder);
-        api.bind(EntityTypeRegistry.class, AllayEntityTypeRegistry::new, instance -> ((AllayEntityTypeRegistry) instance).init());
+//        api.bind(EntityTypeRegistry.class, AllayEntityTypeRegistry::new, instance -> ((AllayEntityTypeRegistry) instance).init());
 
         // Biome
         api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
@@ -213,12 +208,12 @@ public final class Allay {
         Registries.VANILLA_ITEM_DATA = SimpleMappedRegistry.create(new VanillaItemDataLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
-                r -> Registries.ITEM_TYPES = r,
+                r -> Registries.ITEMS = r,
                 new ItemTypeRegistryPopulator()
         );
         Registries.ITEM_DEFINITIONS = SimpleRegistry.create(RegistryLoaders.empty(() -> {
             var itemDefinitions = new ArrayList<ItemDefinition>();
-            for (var itemType : Registries.ITEM_TYPES.getContent().values()) {
+            for (var itemType : Registries.ITEMS.getContent().values()) {
                 itemDefinitions.add(itemType.toNetworkDefinition());
             }
             return itemDefinitions;
@@ -237,16 +232,29 @@ public final class Allay {
         Registries.BLOCK_STATE_PALETTE = IntMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, BlockType<?>>()),
-                r -> Registries.BLOCK_TYPES = r,
+                r -> Registries.BLOCKS = r,
                 new BlockTypeRegistryPopulator()
         );
         Registries.BLOCK_DEFINITIONS = SimpleRegistry.create(RegistryLoaders.empty(() -> {
             List<BlockDefinition> blockDefinitions = new ArrayList<>();
-            for (var blockType : Registries.BLOCK_TYPES.getContent().values()) {
+            for (var blockType : Registries.BLOCKS.getContent().values()) {
                 blockType.getAllStates().forEach(state -> blockDefinitions.add(state.toNetworkBlockDefinition()));
             }
             return blockDefinitions;
         }));
+
+        // Entity
+        DoubleKeyMappedRegistry.create(
+                RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, EffectType>())),
+                r -> Registries.EFFECTS = r,
+                new EffectTypeRegistryPopulator()
+        );
+        SimpleMappedRegistry.create(
+                RegistryLoaders.empty(() -> new HashMap<Identifier, EntityType<?>>()),
+                r -> Registries.ENTITIES = r,
+                new EntityTypeRegistryPopulator()
+        );
+        Registries.ENTITY_IDENTIFIERS = SimpleRegistry.create("entity_identifiers.nbt", RegistryLoaders.NBT);
 
         // World
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());

@@ -3,7 +3,7 @@ package org.allaymc.api.entity;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
@@ -18,7 +18,7 @@ import org.cloudburstmc.nbt.NbtMap;
 public final class EntityHelper {
     public static Entity fromNBT(Dimension dimension, NbtMap nbt) {
         var identifier = new Identifier(nbt.getString("identifier"));
-        var entityType = EntityTypeRegistry.getRegistry().get(identifier);
+        var entityType = Registries.ENTITIES.get(identifier);
         if (entityType == null) {
             log.warn("Unknown entity type {}", identifier);
             return null;

@@ -9,7 +9,6 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
@@ -108,7 +107,7 @@ public class GameTestCommand extends SimpleCommand {
                 .intNum("count", 1)
                 .optional()
                 .exec((context, player) -> {
-                    var entityType = EntityTypeRegistry.getRegistry().get(new Identifier((String) context.getResult(1)));
+                    var entityType = Registries.ENTITIES.get(new Identifier((String) context.getResult(1)));
                     int count = context.getResult(2);
                     if (entityType == null) {
                         context.addOutput(TextFormat.RED + "Unknown entity type!");

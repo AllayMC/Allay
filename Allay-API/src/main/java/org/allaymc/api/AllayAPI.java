@@ -9,8 +9,6 @@ import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
-import org.allaymc.api.entity.effect.EffectRegistry;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
@@ -159,9 +157,7 @@ public final class AllayAPI {
         requireImpl(BlockTypeBuilder.BlockTypeBuilderFactory.class, BlockTypeBuilder.FACTORY::set);
 
         // Entity
-        requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
-        requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
 
         // Biome
         requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);

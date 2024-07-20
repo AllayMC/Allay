@@ -1,45 +1,25 @@
-package org.allaymc.server.entity.registry;
+package org.allaymc.server.registry.populator;
 
-import lombok.Getter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
-import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.registry.MappedRegistry;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.ReflectionUtils;
-import org.allaymc.api.utils.Utils;
 import org.allaymc.server.entity.type.EntityTypeDefaultInitializer;
 import org.allaymc.server.entity.type.EntityTypeInitializer;
-import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.nbt.NbtUtils;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.allaymc.server.utils.Utils.callInitializer;
 
 /**
- * Allay Project 2023/5/26
+ * Allay Project 2024/7/20
  *
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayEntityTypeRegistry extends MappedRegistry<Identifier, EntityType<?>, Map<Identifier, EntityType<?>>> implements EntityTypeRegistry {
-    @Getter
-    private NbtMap availableEntityIdentifierTag;
-
-    public AllayEntityTypeRegistry() {
-        super(null, input -> new ConcurrentHashMap<>());
-        loadVanillaEntityIdentifierTag();
-    }
-
-    @SneakyThrows
-    public void init() {
+public class EntityTypeRegistryPopulator implements Runnable {
+    @Override
+    public void run() {
         log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADING));
         var defaultInitializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(EntityTypeDefaultInitializer.class);
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(EntityTypeInitializer.class);
@@ -53,13 +33,5 @@ public class AllayEntityTypeRegistry extends MappedRegistry<Identifier, EntityTy
             defaultInitializers.forEach(method -> callInitializer(method, progressBar));
         }
         log.info(I18n.get().tr(TrKeys.A_ENTITYTYPE_LOADED, defaultInitializers.size()));
-    }
-
-    @SneakyThrows
-    private void loadVanillaEntityIdentifierTag() {
-        //TODO: Support custom entity
-        availableEntityIdentifierTag = (NbtMap) NbtUtils.createNetworkReader(
-                Utils.getResource("entity_identifiers.nbt")
-        ).readTag();
     }
 }

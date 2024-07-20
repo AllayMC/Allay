@@ -29,7 +29,7 @@ public class ItemTypeNode extends BaseNode {
         if (arg.indexOf(':') == -1) {
             arg = Identifier.DEFAULT_NAMESPACE + ":" + arg;
         }
-        var itemType = Registries.ITEM_TYPES.get(new Identifier(arg));
+        var itemType = Registries.ITEMS.get(new Identifier(arg));
         if (itemType == null) {
             context.addError(TrKeys.M_COMMANDS_GIVE_ITEM_NOTFOUND, arg);
             return false;

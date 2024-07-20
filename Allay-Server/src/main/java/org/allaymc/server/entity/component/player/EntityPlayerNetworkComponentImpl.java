@@ -15,7 +15,6 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.item.recipe.RecipeRegistry;
@@ -353,7 +352,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         );
 
         var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();
-        availableEntityIdentifiersPacket.setIdentifiers(EntityTypeRegistry.getRegistry().getAvailableEntityIdentifierTag());
+        availableEntityIdentifiersPacket.setIdentifiers(Registries.ENTITY_IDENTIFIERS.getContent());
         sendPacket(availableEntityIdentifiersPacket);
 
         var biomeDefinitionListPacket = new BiomeDefinitionListPacket();

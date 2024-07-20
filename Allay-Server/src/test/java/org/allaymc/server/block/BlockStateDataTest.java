@@ -77,7 +77,7 @@ class BlockStateDataTest {
     void testVanillaBlockStateData() {
         int error = 0;
         for (var vanillaBlockId : VanillaBlockId.values()) {
-            BlockType<?> type = Registries.BLOCK_TYPES.get(vanillaBlockId.getIdentifier());
+            BlockType<?> type = Registries.BLOCKS.get(vanillaBlockId.getIdentifier());
             assertNotNull(type);
             var blockStateDataMap = Registries.VANILLA_BLOCK_STATE_DATA.get(vanillaBlockId);
             assertNotNull(blockStateDataMap);

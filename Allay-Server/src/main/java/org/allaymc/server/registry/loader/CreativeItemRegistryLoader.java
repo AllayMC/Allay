@@ -36,7 +36,7 @@ public class CreativeItemRegistryLoader implements RegistryLoader<Void, Int2Obje
             var items = nbt.getList("items", NbtType.COMPOUND);
             for (int i = 0; i < items.size(); i++) {
                 var item = items.get(i);
-                var itemType = Registries.ITEM_TYPES.get(new Identifier(item.getString("name")));
+                var itemType = Registries.ITEMS.get(new Identifier(item.getString("name")));
                 Objects.requireNonNull(itemType, "itemType cannot be null!");
 
                 int meta = item.getShort("damage");

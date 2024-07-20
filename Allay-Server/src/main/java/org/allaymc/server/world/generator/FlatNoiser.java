@@ -47,7 +47,7 @@ public class FlatNoiser implements Noiser {
                 var entry = AllayStringUtils.fastTwoPartSplit(layer, "x", "");
                 var blockId = entry[0];
                 var count = Integer.parseInt(entry[1]);
-                var blockState = Registries.BLOCK_TYPES.get(new Identifier(blockId)).getDefaultState();
+                var blockState = Registries.BLOCKS.get(new Identifier(blockId)).getDefaultState();
                 for (int i = 1; i <= count; i++) {
                     list.add(blockState);
                 }

@@ -149,7 +149,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         return switch (parseItemDescriptorType(jsonObject)) {
             case DEFAULT -> {
                 Identifier itemId = new Identifier(jsonObject.get("item").getAsString());
-                var itemType = Registries.ITEM_TYPES.get(itemId);
+                var itemType = Registries.ITEMS.get(itemId);
                 // "data" field only exists in default item descriptor
                 var meta = jsonObject.get("data");
                 if (meta != null) {
@@ -179,7 +179,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
 
     private ItemStack parseOutput(JsonObject jsonObject) {
         var itemId = new Identifier(jsonObject.get("item").getAsString());
-        var itemType = Registries.ITEM_TYPES.get(itemId);
+        var itemType = Registries.ITEMS.get(itemId);
         Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
         var count = jsonObject.get("count").getAsInt();
         var meta = jsonObject.has("data") ? jsonObject.get("data").getAsInt() : 0;

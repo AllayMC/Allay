@@ -19,7 +19,7 @@ public class RegistryTest {
     @Test
     void testBlockTypeRegistry() {
         for (var id : VanillaBlockId.values()) {
-            assertNotNull(Registries.BLOCK_TYPES.get(id.getIdentifier()));
+            assertNotNull(Registries.BLOCKS.get(id.getIdentifier()));
         }
     }
 
@@ -39,7 +39,7 @@ public class RegistryTest {
     @Test
     void testItemTypeRegistry() {
         for (var id : VanillaItemId.values()) {
-            assertNotNull(Registries.ITEM_TYPES.get(id.getIdentifier()));
+            assertNotNull(Registries.ITEMS.get(id.getIdentifier()));
         }
     }
 }

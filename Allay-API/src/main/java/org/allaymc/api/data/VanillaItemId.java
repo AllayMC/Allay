@@ -3221,7 +3221,7 @@ public enum VanillaItemId {
     }
 
     public ItemType<?> getItemType() {
-        return Registries.ITEM_TYPES.get(this.getIdentifier());
+        return Registries.ITEMS.get(this.getIdentifier());
     }
 
     public static VanillaItemId fromIdentifier(Identifier identifier) {

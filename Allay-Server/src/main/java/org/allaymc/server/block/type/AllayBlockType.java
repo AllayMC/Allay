@@ -486,14 +486,14 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             } catch (Exception e) {
                 throw new BlockTypeBuildException("Failed to create block type!", e);
             }
-            type.register(Registries.BLOCK_TYPES);
+            type.register(Registries.BLOCKS);
             type.register(Registries.BLOCK_STATE_PALETTE);
             return type;
         }
 
         private void prepareItemType() {
             var itemId = BlockAndItemIdMapper.blockIdToActualBlockItemId(identifier);
-            itemType = Registries.ITEM_TYPES.get(itemId);
+            itemType = Registries.ITEMS.get(itemId);
             if (itemType == null) {
                 // If the corresponding block item is not explicitly registered, automatically register one
                 itemType = ItemTypeBuilder
@@ -505,7 +505,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 // If an additional block item has already been registered, add "item." prefix
                 var hardItemId = new Identifier(itemId.namespace(), BlockAndItemIdMapper.NAMING_CONFLICT_PATH_PREFIX + itemId.path());
                 // Allay will pre-register block items with the "item." prefix in the vanilla registry, so let's check again for this ID
-                hardItemType = Registries.ITEM_TYPES.get(hardItemId);
+                hardItemType = Registries.ITEMS.get(hardItemId);
                 if (hardItemType == null) {
                     hardItemType = ItemTypeBuilder
                             .builder(ItemStack.class)

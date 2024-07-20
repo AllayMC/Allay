@@ -37,7 +37,7 @@ public class NbtRegistryLoader implements RegistryLoader<String, NbtMap> {
 
     @Override
     public NbtMap load(String input) {
-        try (NBTInputStream nbtInputStream = NbtUtils.createNetworkReader(Utils.getResource(input), true, true)) {
+        try (NBTInputStream nbtInputStream = NbtUtils.createNetworkReader(Utils.getResource(input))) {
             return (NbtMap) nbtInputStream.readTag();
         } catch (Exception e) {
             throw new AssertionError("Failed to load registrations for " + input, e);
