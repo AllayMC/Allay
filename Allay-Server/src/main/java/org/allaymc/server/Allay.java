@@ -135,40 +135,19 @@ public final class Allay {
         api.bind(EventBus.EventBusFactory.class, () -> AllayEventBus::new);
 
         // Item
-//        api.bind(EnchantmentRegistry.class, AllayEnchantmentRegistry::new, instance -> ((AllayEnchantmentRegistry) instance).init());
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
-//        api.bind(VanillaItemDataRegistry.class, () -> new AllayVanillaItemDataRegistry(new AllayVanillaItemDataRegistry.Loader()));
-//        api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());
 
         // BlockEntity
         api.bind(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, () -> AllayBlockEntityType::builder);
-//        api.bind(BlockEntityTypeRegistry.class, AllayBlockEntityTypeRegistry::new, instance -> ((AllayBlockEntityTypeRegistry) instance).init());
 
         // Block
-//        api.bind(MaterialRegistry.class, () -> new AllayMaterialRegistry(new AllayMaterialRegistry.Loader()));
         api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
-//        api.bind(VanillaBlockStateDataRegistry.class, () -> new AllayVanillaBlockStateDataRegistry(new AllayVanillaBlockStateDataRegistry.Loader()));
-//        api.bind(BlockStateHashPalette.class, AllayBlockStateHashPalette::new);
-//        api.bind(BlockTypeRegistry.class, AllayBlockTypeRegistry::new, instance -> ((AllayBlockTypeRegistry) instance).init());
 
         // Entity
-//        api.bind(EffectRegistry.class, AllayEffectRegistry::new, instance -> ((AllayEffectRegistry) instance).init());
         api.bind(EntityTypeBuilder.EntityTypeBuilderFactory.class, () -> AllayEntityType::builder);
-//        api.bind(EntityTypeRegistry.class, AllayEntityTypeRegistry::new, instance -> ((AllayEntityTypeRegistry) instance).init());
-
-        // Biome
-//        api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
 
         // World
         api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
-//        api.bind(WorldStorageFactory.class, AllayWorldStorageFactory::new);
-//        api.bind(WorldGeneratorFactory.class, AllayWorldGeneratorFactory::new);
-
-        // Creative Item Registry
-//        api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
-
-        // Recipe
-//        api.bind(RecipeRegistry.class, AllayRecipeRegistry::new, instance -> ((AllayRecipeRegistry) instance).registerVanillaRecipes());
 
         // Perm
         api.bind(PermTree.PermTreeFactory.class, () -> AllayPermTree::create);
@@ -177,9 +156,6 @@ public final class Allay {
         api.bind(EntitySelectorAPI.class, AllayEntitySelectorAPI::new);
         api.bind(CommandTree.CommandTreeFactory.class, () -> AllayCommandTree::create);
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
-
-        // Resource pack
-//        api.bind(PackRegistry.class, AllayPackRegistry::new);
 
         api.implement("Allay");
     }
