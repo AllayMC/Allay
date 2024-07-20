@@ -27,18 +27,13 @@ import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.registry.*;
-import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.registry.loader.VanillaBlockStateDataLoader;
-import org.allaymc.server.registry.loader.MaterialLoader;
-import org.allaymc.server.registry.loader.VanillaItemDataLoader;
-import org.allaymc.server.registry.populator.BlockTypeRegistryPopulator;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.api.world.generator.WorldGeneratorFactory;
-import org.allaymc.api.world.storage.WorldStorageFactory;
+import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.blockentity.registry.AllayBlockEntityTypeRegistry;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
@@ -54,28 +49,31 @@ import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
-import org.allaymc.server.item.registry.AllayRecipeRegistry;
 import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
+import org.allaymc.server.item.registry.AllayRecipeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.pack.AllayPackRegistry;
 import org.allaymc.server.perm.tree.AllayPermTree;
-import org.allaymc.server.registry.loader.RegistryLoaders;
+import org.allaymc.server.registry.loader.*;
+import org.allaymc.server.registry.populator.BlockTypeRegistryPopulator;
 import org.allaymc.server.registry.populator.EnchantmentTypeRegistryPopulator;
 import org.allaymc.server.registry.populator.ItemTypeRegistryPopulator;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
 import org.allaymc.server.world.generator.AllayWorldGenerator;
-import org.allaymc.server.world.generator.AllayWorldGeneratorFactory;
-import org.allaymc.server.world.storage.AllayWorldStorageFactory;
+import org.allaymc.server.world.storage.AllayLevelDBWorldStorage;
+import org.allaymc.server.world.storage.AllayNonPersistentWorldStorage;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.jetbrains.annotations.VisibleForTesting;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 
 @Slf4j
 public final class Allay {
@@ -185,8 +183,8 @@ public final class Allay {
 
         // World
         api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
-        api.bind(WorldStorageFactory.class, AllayWorldStorageFactory::new);
-        api.bind(WorldGeneratorFactory.class, AllayWorldGeneratorFactory::new);
+//        api.bind(WorldStorageFactory.class, AllayWorldStorageFactory::new);
+//        api.bind(WorldGeneratorFactory.class, AllayWorldGeneratorFactory::new);
 
         // Creative Item Registry
         api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
@@ -245,6 +243,10 @@ public final class Allay {
             }
             return blockDefinitions;
         }));
+
+        // World
+        Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());
+        Registries.WORLD_GENERATOR_FACTORIES = SimpleMappedRegistry.create(new WorldGeneratorFactoryRegistryLoader());
     }
 
     @VisibleForTesting

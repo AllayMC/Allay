@@ -24,7 +24,7 @@ import java.util.Map;
 public class VanillaBlockStateDataLoader implements RegistryLoader<Void, Map<VanillaBlockId, Map<Integer, BlockStateData>>> {
     @Override
     @SneakyThrows
-    public Map<VanillaBlockId, Map<Integer, BlockStateData>> load(Void unused) {
+    public Map<VanillaBlockId, Map<Integer, BlockStateData>> load(Void $) {
         log.info("Start loading vanilla block state data registry...");
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_states.json")))) {
             var loaded = new EnumMap<VanillaBlockId, Map<Integer, BlockStateData>>(VanillaBlockId.class);

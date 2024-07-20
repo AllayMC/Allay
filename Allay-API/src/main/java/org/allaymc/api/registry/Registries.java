@@ -11,11 +11,15 @@ import org.allaymc.api.item.component.common.ItemData;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Holds all the common registries in allay.
@@ -38,4 +42,8 @@ public final class Registries {
     public static SimpleMappedRegistry<VanillaBlockId, Map<Integer, BlockStateData>> VANILLA_BLOCK_STATE_DATA;
     public static SimpleMappedRegistry<Identifier, BlockType<?>> BLOCK_TYPES;
     public static SimpleRegistry<List<BlockDefinition>> BLOCK_DEFINITIONS;
+
+    // World
+    public static SimpleMappedRegistry<String, Function<Path, WorldStorage>> WORLD_STORAGE_FACTORIES;
+    public static SimpleMappedRegistry<String, Function<String, WorldGenerator>> WORLD_GENERATOR_FACTORIES;
 }

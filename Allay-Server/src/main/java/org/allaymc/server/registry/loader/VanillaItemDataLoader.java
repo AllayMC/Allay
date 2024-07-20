@@ -23,7 +23,7 @@ import java.util.Map;
 public class VanillaItemDataLoader implements RegistryLoader<Void, Map<VanillaItemId, ItemData>> {
     @Override
     @SneakyThrows
-    public Map<VanillaItemId, ItemData> load(Void unused) {
+    public Map<VanillaItemId, ItemData> load(Void $) {
         log.info("Start loading vanilla item data registry...");
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("items.json")))) {
             var loaded = new HashMap<VanillaItemId, ItemData>();

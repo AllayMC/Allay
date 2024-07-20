@@ -27,8 +27,6 @@ import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.utils.exception.MissingRequirementException;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.api.world.generator.WorldGeneratorFactory;
-import org.allaymc.api.world.storage.WorldStorageFactory;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -176,8 +174,6 @@ public final class AllayAPI {
 
         // World
         requireImpl(WorldGenerator.WorldGeneratorBuilderFactory.class, WorldGenerator.BUILDER_FACTORY::set);
-        requireImpl(WorldStorageFactory.class, WorldStorageFactory.FACTORY::set);
-        requireImpl(WorldGeneratorFactory.class, WorldGeneratorFactory.FACTORY::set);
 
         // Creative Item Registry
         requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
