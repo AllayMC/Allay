@@ -13,7 +13,7 @@ import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.recipe.*;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.item.type.AllayItemType;
@@ -149,7 +149,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         return switch (parseItemDescriptorType(jsonObject)) {
             case DEFAULT -> {
                 Identifier itemId = new Identifier(jsonObject.get("item").getAsString());
-                var itemType = ItemTypeRegistry.getRegistry().get(itemId);
+                var itemType = Registries.ITEM_TYPES.get(itemId);
                 // "data" field only exists in default item descriptor
                 var meta = jsonObject.get("data");
                 if (meta != null) {
@@ -179,7 +179,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
 
     private ItemStack parseOutput(JsonObject jsonObject) {
         var itemId = new Identifier(jsonObject.get("item").getAsString());
-        var itemType = ItemTypeRegistry.getRegistry().get(itemId);
+        var itemType = Registries.ITEM_TYPES.get(itemId);
         Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
         var count = jsonObject.get("count").getAsInt();
         var meta = jsonObject.has("data") ? jsonObject.get("data").getAsInt() : 0;

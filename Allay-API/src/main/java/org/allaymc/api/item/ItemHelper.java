@@ -3,8 +3,8 @@ package org.allaymc.api.item;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -22,7 +22,7 @@ public final class ItemHelper {
         int count = nbt.getByte("Count");
         int meta = nbt.getShort("Damage");
         var name = nbt.getString("Name");
-        var itemType = Objects.requireNonNull(ItemTypeRegistry.getRegistry().get(new Identifier(name)), "Unknown item type " + name + "while loading container items!");
+        var itemType = Objects.requireNonNull(Registries.ITEM_TYPES.get(new Identifier(name)), "Unknown item type " + name + "while loading container items!");
         return itemType.createItemStack(
                 SimpleItemStackInitInfo
                         .builder()

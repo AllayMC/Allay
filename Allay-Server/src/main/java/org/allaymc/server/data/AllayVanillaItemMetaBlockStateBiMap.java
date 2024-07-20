@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
@@ -34,7 +33,7 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
         try (var reader = NbtUtils.createGZIPReader(Utils.getResource("item_meta_block_state_bimap.nbt"))) {
             var nbt = (NbtMap) reader.readTag();
             nbt.forEach((itemIdentifier, metaToHash) -> {
-                var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(itemIdentifier));
+                var itemType = Registries.ITEM_TYPES.get(new Identifier(itemIdentifier));
                 Objects.requireNonNull(itemType, "Cannot find item type by identifier: " + itemIdentifier);
                 var metaToHashMap = (NbtMap) metaToHash;
                 metaToHashMap.forEach((meta, blockStateHash) -> {

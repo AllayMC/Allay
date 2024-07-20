@@ -2,7 +2,6 @@ package org.allaymc.server.block.registry;
 
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
@@ -40,7 +39,7 @@ public class RegistryTest {
     @Test
     void testItemTypeRegistry() {
         for (var id : VanillaItemId.values()) {
-            assertNotNull(ItemTypeRegistry.getRegistry().get(id.getIdentifier()));
+            assertNotNull(Registries.ITEM_TYPES.get(id.getIdentifier()));
         }
     }
 }

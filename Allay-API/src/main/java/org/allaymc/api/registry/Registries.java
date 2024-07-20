@@ -9,8 +9,10 @@ import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.component.common.ItemData;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
+import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,9 @@ public final class Registries {
     // Item
     public static DoubleKeyMappedRegistry<Integer, Identifier, EnchantmentType> ENCHANTMENTS;
     public static SimpleMappedRegistry<VanillaItemId, ItemData> VANILLA_ITEM_DATA;
+    public static SimpleMappedRegistry<Identifier, ItemType<?>> ITEM_TYPES;
+    public static SimpleRegistry<List<ItemDefinition>> ITEM_DEFINITIONS;
+
     // Block
     public static SimpleMappedRegistry<MaterialType, Material> MATERIALS;
     public static IntMappedRegistry<BlockState> BLOCK_STATE_PALETTE;

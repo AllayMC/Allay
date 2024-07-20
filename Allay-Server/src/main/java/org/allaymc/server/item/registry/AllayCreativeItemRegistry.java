@@ -8,9 +8,9 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
-import org.allaymc.api.registry.loader.RegistryLoader;
 import org.allaymc.api.registry.MappedRegistry;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.api.registry.loader.RegistryLoader;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.cloudburstmc.nbt.NbtMap;
@@ -47,7 +47,7 @@ public class AllayCreativeItemRegistry extends MappedRegistry<Integer, ItemStack
 
     @Override
     public void rebuildNetworkItemDataArray() {
-        cachedNetworkItemDataArray = mappings.values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new);
+        cachedNetworkItemDataArray = content.values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new);
     }
 
     @AllArgsConstructor
@@ -68,7 +68,7 @@ public class AllayCreativeItemRegistry extends MappedRegistry<Integer, ItemStack
                 var items = nbt.getList("items", NbtType.COMPOUND);
                 for (int i = 0; i < items.size(); i++) {
                     var item = items.get(i);
-                    var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(item.getString("name")));
+                    var itemType = Registries.ITEM_TYPES.get(new Identifier(item.getString("name")));
                     Objects.requireNonNull(itemType, "itemType cannot be null!");
 
                     int meta = item.getShort("damage");

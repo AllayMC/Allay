@@ -24,7 +24,6 @@ import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.network.ProtocolInfo;
@@ -33,9 +32,9 @@ import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.BlockComponentInjectException;
-import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockEntityHolderComponentImpl;
+import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.cloudburstmc.nbt.NbtMap;
@@ -494,7 +493,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         private void prepareItemType() {
             var itemId = BlockAndItemIdMapper.blockIdToActualBlockItemId(identifier);
-            itemType = ItemTypeRegistry.getRegistry().get(itemId);
+            itemType = Registries.ITEM_TYPES.get(itemId);
             if (itemType == null) {
                 // If the corresponding block item is not explicitly registered, automatically register one
                 itemType = ItemTypeBuilder
@@ -506,7 +505,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 // If an additional block item has already been registered, add "item." prefix
                 var hardItemId = new Identifier(itemId.namespace(), BlockAndItemIdMapper.NAMING_CONFLICT_PATH_PREFIX + itemId.path());
                 // Allay will pre-register block items with the "item." prefix in the vanilla registry, so let's check again for this ID
-                hardItemType = ItemTypeRegistry.getRegistry().get(hardItemId);
+                hardItemType = Registries.ITEM_TYPES.get(hardItemId);
                 if (hardItemType == null) {
                     hardItemType = ItemTypeBuilder
                             .builder(ItemStack.class)

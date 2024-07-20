@@ -4,17 +4,13 @@ import org.allaymc.api.command.tree.BaseNode;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
-import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumConstraint;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandEnumData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Allay Project 2024/7/8
@@ -33,7 +29,7 @@ public class ItemTypeNode extends BaseNode {
         if (arg.indexOf(':') == -1) {
             arg = Identifier.DEFAULT_NAMESPACE + ":" + arg;
         }
-        var itemType = ItemTypeRegistry.getRegistry().get(new Identifier(arg));
+        var itemType = Registries.ITEM_TYPES.get(new Identifier(arg));
         if (itemType == null) {
             context.addError(TrKeys.M_COMMANDS_GIVE_ITEM_NOTFOUND, arg);
             return false;

@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.SneakyThrows;
 import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
@@ -64,7 +63,7 @@ public class RecipeExportUtil {
         helper.setItemDefinitions(
                 SimpleDefinitionRegistry
                         .<ItemDefinition>builder()
-                        .addAll(ItemTypeRegistry.getRegistry().getItemDefinitions())
+                        .addAll(Registries.ITEM_DEFINITIONS.getContent())
                         .build()
         );
 

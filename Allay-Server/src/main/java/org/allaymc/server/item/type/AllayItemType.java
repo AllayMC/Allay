@@ -13,7 +13,6 @@ import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
@@ -197,7 +196,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             if (runtimeId == Integer.MAX_VALUE) runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
 
             var type = new AllayItemType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier, runtimeId, itemTags);
-            ItemTypeRegistry.getRegistry().register(identifier, type);
+            Registries.ITEM_TYPES.register(identifier, type);
             return type;
         }
     }
