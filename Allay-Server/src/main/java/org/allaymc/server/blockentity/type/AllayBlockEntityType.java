@@ -7,12 +7,12 @@ import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
-import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
@@ -134,7 +134,7 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
             }
             if (name == null) throw new EntityTypeBuildException("name cannot be null!");
             var type = new AllayBlockEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), name);
-            BlockEntityTypeRegistry.getRegistry().register(name, type);
+            Registries.BLOCK_ENTITIES.register(name, type);
             return type;
         }
     }

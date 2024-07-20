@@ -5,6 +5,7 @@ import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.material.MaterialType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
@@ -41,6 +42,9 @@ public final class Registries {
      * So we can cache the definitions to speed up player joining
      */
     public static SimpleRegistry<List<ItemDefinition>> ITEM_DEFINITIONS;
+
+    // BlockEntity
+    public static SimpleMappedRegistry<String, BlockEntityType<?>> BLOCK_ENTITIES;
 
     // Block
     public static SimpleMappedRegistry<MaterialType, Material> MATERIALS;

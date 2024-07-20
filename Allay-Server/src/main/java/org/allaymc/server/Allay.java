@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
-import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
+import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
@@ -34,7 +34,6 @@ import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.block.type.AllayBlockType;
-import org.allaymc.server.blockentity.registry.AllayBlockEntityTypeRegistry;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
@@ -53,6 +52,7 @@ import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.pack.AllayPackRegistry;
 import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.registry.loader.*;
+import org.allaymc.server.registry.populator.BlockEntityTypeRegistryPopulator;
 import org.allaymc.server.registry.populator.BlockTypeRegistryPopulator;
 import org.allaymc.server.registry.populator.EnchantmentTypeRegistryPopulator;
 import org.allaymc.server.registry.populator.ItemTypeRegistryPopulator;
@@ -158,7 +158,7 @@ public final class Allay {
 
         // BlockEntity
         api.bind(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, () -> AllayBlockEntityType::builder);
-        api.bind(BlockEntityTypeRegistry.class, AllayBlockEntityTypeRegistry::new, instance -> ((AllayBlockEntityTypeRegistry) instance).init());
+//        api.bind(BlockEntityTypeRegistry.class, AllayBlockEntityTypeRegistry::new, instance -> ((AllayBlockEntityTypeRegistry) instance).init());
 
         // Block
 //        api.bind(MaterialRegistry.class, () -> new AllayMaterialRegistry(new AllayMaterialRegistry.Loader()));
@@ -223,6 +223,13 @@ public final class Allay {
             }
             return itemDefinitions;
         }));
+
+        // BlockEntity
+        SimpleMappedRegistry.create(
+                RegistryLoaders.empty(() -> new HashMap<String, BlockEntityType<?>>()),
+                r -> Registries.BLOCK_ENTITIES = r,
+                new BlockEntityTypeRegistryPopulator()
+        );
 
         // Block
         Registries.MATERIALS = SimpleMappedRegistry.create(new MaterialLoader());
