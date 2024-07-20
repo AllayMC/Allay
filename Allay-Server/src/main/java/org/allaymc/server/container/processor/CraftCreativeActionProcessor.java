@@ -3,7 +3,7 @@ package org.allaymc.server.container.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.registry.CreativeItemRegistry;
+import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftCreativeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -23,7 +23,7 @@ public class CraftCreativeActionProcessor implements ContainerActionProcessor<Cr
         if (player.getGameType() != GameType.CREATIVE && player.getGameType() != GameType.SPECTATOR)
             return error();
 
-        var item = CreativeItemRegistry.getRegistry().get(action.getCreativeItemNetworkId() - 1);
+        var item = Registries.CREATIVE_ITEMS.get(action.getCreativeItemNetworkId() - 1);
         if (item == null) {
             log.warn("Unknown creative item network id: {}", action.getCreativeItemNetworkId() - 1);
             return error();

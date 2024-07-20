@@ -7,6 +7,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.common.ItemData;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
@@ -34,6 +35,11 @@ public final class Registries {
     public static DoubleKeyMappedRegistry<Integer, Identifier, EnchantmentType> ENCHANTMENTS;
     public static SimpleMappedRegistry<VanillaItemId, ItemData> VANILLA_ITEM_DATA;
     public static SimpleMappedRegistry<Identifier, ItemType<?>> ITEM_TYPES;
+    /**
+     * The custom block/item/entity etc. are not supported currently <p>
+     * And we have no plan to implement them in the near future <p>
+     * So we can cache the definitions to speed up player joining
+     */
     public static SimpleRegistry<List<ItemDefinition>> ITEM_DEFINITIONS;
 
     // Block
@@ -46,4 +52,8 @@ public final class Registries {
     // World
     public static SimpleMappedRegistry<String, Function<Path, WorldStorage>> WORLD_STORAGE_FACTORIES;
     public static SimpleMappedRegistry<String, Function<String, WorldGenerator>> WORLD_GENERATOR_FACTORIES;
+
+    // Creative Item Registry
+    public static IntMappedRegistry<ItemStack> CREATIVE_ITEMS;
+    public static SimpleRegistry<org.cloudburstmc.protocol.bedrock.data.inventory.ItemData[]> CREATIVE_ITEM_NETWORK_CONTENT;
 }

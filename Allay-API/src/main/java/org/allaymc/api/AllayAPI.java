@@ -17,7 +17,6 @@ import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.recipe.RecipeRegistry;
-import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.perm.tree.PermTree;
@@ -174,9 +173,6 @@ public final class AllayAPI {
 
         // World
         requireImpl(WorldGenerator.WorldGeneratorBuilderFactory.class, WorldGenerator.BUILDER_FACTORY::set);
-
-        // Creative Item Registry
-        requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
 
         // Recipe
         requireImpl(RecipeRegistry.class, RecipeRegistry.REGISTRY::set);

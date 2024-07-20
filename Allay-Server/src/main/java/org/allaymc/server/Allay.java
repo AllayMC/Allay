@@ -19,9 +19,9 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.recipe.RecipeRegistry;
-import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.pack.PackRegistry;
@@ -33,7 +33,6 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.block.type.AllayBlockType;
 import org.allaymc.server.blockentity.registry.AllayBlockEntityTypeRegistry;
 import org.allaymc.server.blockentity.type.AllayBlockEntityType;
@@ -49,7 +48,6 @@ import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
-import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
 import org.allaymc.server.item.registry.AllayRecipeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.pack.AllayPackRegistry;
@@ -62,18 +60,15 @@ import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
 import org.allaymc.server.world.generator.AllayWorldGenerator;
-import org.allaymc.server.world.storage.AllayLevelDBWorldStorage;
-import org.allaymc.server.world.storage.AllayNonPersistentWorldStorage;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.VisibleForTesting;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Function;
 
 @Slf4j
 public final class Allay {
@@ -141,7 +136,9 @@ public final class Allay {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
 
+        // Check if the cache has expired
         ComponentClassCacheUtils.checkCacheValid();
+        // Read component class cache
         ComponentClassCacheUtils.readCacheMapping();
 
         // Common
@@ -187,7 +184,7 @@ public final class Allay {
 //        api.bind(WorldGeneratorFactory.class, AllayWorldGeneratorFactory::new);
 
         // Creative Item Registry
-        api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
+//        api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
 
         // Recipe
         api.bind(RecipeRegistry.class, AllayRecipeRegistry::new, instance -> ((AllayRecipeRegistry) instance).registerVanillaRecipes());
@@ -247,6 +244,10 @@ public final class Allay {
         // World
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());
         Registries.WORLD_GENERATOR_FACTORIES = SimpleMappedRegistry.create(new WorldGeneratorFactoryRegistryLoader());
+
+        // Creative Item Registry
+        Registries.CREATIVE_ITEMS = IntMappedRegistry.create(new CreativeItemRegistryLoader());
+        Registries.CREATIVE_ITEM_NETWORK_CONTENT = SimpleRegistry.create(RegistryLoaders.empty(() -> Registries.CREATIVE_ITEMS.getContent().values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new)));
     }
 
     @VisibleForTesting

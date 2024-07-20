@@ -19,7 +19,6 @@ import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.item.recipe.RecipeRegistry;
-import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
@@ -362,7 +361,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(biomeDefinitionListPacket);
 
         var creativeContentPacket = new CreativeContentPacket();
-        creativeContentPacket.setContents(CreativeItemRegistry.getRegistry().getNetworkItemDataArray());
+        creativeContentPacket.setContents(Registries.CREATIVE_ITEM_NETWORK_CONTENT.getContent());
         sendPacket(creativeContentPacket);
 
         var craftingDataPacket = RecipeRegistry.getRegistry().getCraftingDataPacket();
