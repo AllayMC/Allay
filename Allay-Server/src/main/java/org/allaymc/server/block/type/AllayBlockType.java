@@ -386,7 +386,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
             this.identifier = vanillaBlockId.getIdentifier();
-            var dataMap = Registries.BLOCK_STATE_DATA.get(vanillaBlockId);
+            var dataMap = Registries.VANILLA_BLOCK_STATE_DATA.get(vanillaBlockId);
             if (dataMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block data component for " + vanillaBlockId + " from vanilla block data registry!");
             components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));

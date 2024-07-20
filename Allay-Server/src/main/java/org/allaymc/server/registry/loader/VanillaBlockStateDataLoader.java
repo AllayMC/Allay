@@ -21,7 +21,7 @@ import java.util.Map;
  * @author daoge_cmd
  */
 @Slf4j
-public class BlockStateDataLoader implements RegistryLoader<Void, Map<VanillaBlockId, Map<Integer, BlockStateData>>> {
+public class VanillaBlockStateDataLoader implements RegistryLoader<Void, Map<VanillaBlockId, Map<Integer, BlockStateData>>> {
     @Override
     @SneakyThrows
     public Map<VanillaBlockId, Map<Integer, BlockStateData>> load(Void unused) {

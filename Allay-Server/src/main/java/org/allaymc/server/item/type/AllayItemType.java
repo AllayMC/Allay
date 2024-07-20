@@ -14,7 +14,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
-import org.allaymc.api.item.registry.VanillaItemDataRegistry;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
@@ -135,7 +134,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             this.runtimeId = vanillaItemId.getRuntimeId();
 
             // Attributes for vanilla item
-            var itemData = VanillaItemDataRegistry.getRegistry().get(vanillaItemId);
+            var itemData = Registries.VANILLA_ITEM_DATA.get(vanillaItemId);
             if (itemData == null)
                 throw new ItemTypeBuildException("Cannot find vanilla item data component for " + vanillaItemId + " from vanilla item attribute registry!");
 

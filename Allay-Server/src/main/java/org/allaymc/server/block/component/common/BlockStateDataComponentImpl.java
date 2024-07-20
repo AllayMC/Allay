@@ -71,7 +71,7 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
             var vanillaId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
             Objects.requireNonNull(vanillaId);
-            var attributeMap = Registries.BLOCK_STATE_DATA.get(vanillaId);
+            var attributeMap = Registries.VANILLA_BLOCK_STATE_DATA.get(vanillaId);
             Objects.requireNonNull(attributeMap);
             var newAttributeMap = new HashMap<Integer, BlockStateData>();
             attributeMap.forEach((blockStateHash, attribute) ->
