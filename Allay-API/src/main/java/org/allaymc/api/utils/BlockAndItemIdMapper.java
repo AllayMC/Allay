@@ -2,7 +2,6 @@ package org.allaymc.api.utils;
 
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 
 /**
  * Allay Project 2023/12/8
@@ -35,7 +34,7 @@ import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
  * <br>
  * 请注意，对于原版方块物品，若其meta（特殊值）不等于0，则不同特殊值的物品还有可能映射到一个方块类型的不同的方块状态上 <br>
  * 具体点说，此类物品特殊值是由对应方块状态的各个方块属性序列化后全填充二进制位得到的。我们不推荐继续使用特殊值，这里也不会细讲具体逻辑<br>
- * 此类映射关系由 {@link VanillaItemMetaBlockStateBiMap} 维护<br>
+ * 此类映射关系由类org.allaymc.server.util.VanillaItemMetaBlockStateBiMap维护<br>
  */
 public final class BlockAndItemIdMapper {
 

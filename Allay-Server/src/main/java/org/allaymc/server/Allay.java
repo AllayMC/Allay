@@ -11,7 +11,6 @@ import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
-import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.datastruct.DynamicURLClassLoader;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
@@ -39,7 +38,7 @@ import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.allaymc.server.component.injector.AllayComponentInjector;
-import org.allaymc.server.data.AllayVanillaItemMetaBlockStateBiMap;
+import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.allaymc.server.entity.type.AllayEntityType;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.gui.Dashboard;
@@ -170,9 +169,6 @@ public final class Allay {
         // Biome
         api.bind(BiomeTypeRegistry.class, AllayBiomeTypeRegistry::new);
 
-        // Misc
-        api.bind(VanillaItemMetaBlockStateBiMap.class, AllayVanillaItemMetaBlockStateBiMap::new, instance -> ((AllayVanillaItemMetaBlockStateBiMap) instance).init());
-
         // World
         api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
 //        api.bind(WorldStorageFactory.class, AllayWorldStorageFactory::new);
@@ -260,7 +256,7 @@ public final class Allay {
         Registries.WORLD_STORAGE_FACTORIES = SimpleMappedRegistry.create(new WorldStorageFactoryRegistryLoader());
         Registries.WORLD_GENERATOR_FACTORIES = SimpleMappedRegistry.create(new WorldGeneratorFactoryRegistryLoader());
 
-        // Creative Item Registry
+        // Creative Item
         Registries.CREATIVE_ITEMS = IntMappedRegistry.create(new CreativeItemRegistryLoader());
         Registries.CREATIVE_ITEM_NETWORK_CONTENT = SimpleRegistry.create(RegistryLoaders.empty(() -> Registries.CREATIVE_ITEMS.getContent().values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new)));
     }

@@ -8,7 +8,6 @@ import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
-import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
@@ -161,9 +160,6 @@ public final class AllayAPI {
 
         // Biome
         requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);
-
-        // Misc
-        requireImpl(VanillaItemMetaBlockStateBiMap.class, VanillaItemMetaBlockStateBiMap.REGISTRY::set);
 
         // World
         requireImpl(WorldGenerator.WorldGeneratorBuilderFactory.class, WorldGenerator.BUILDER_FACTORY::set);

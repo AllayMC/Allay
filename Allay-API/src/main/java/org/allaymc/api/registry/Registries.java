@@ -65,7 +65,7 @@ public final class Registries {
     public static SimpleMappedRegistry<String, Function<Path, WorldStorage>> WORLD_STORAGE_FACTORIES;
     public static SimpleMappedRegistry<String, Function<String, WorldGenerator>> WORLD_GENERATOR_FACTORIES;
 
-    // Creative Item Registry
+    // Creative Item
     public static IntMappedRegistry<ItemStack> CREATIVE_ITEMS;
     public static SimpleRegistry<org.cloudburstmc.protocol.bedrock.data.inventory.ItemData[]> CREATIVE_ITEM_NETWORK_CONTENT;
 }

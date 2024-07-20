@@ -1,11 +1,10 @@
-package org.allaymc.server.data;
+package org.allaymc.server.utils;
 
 import it.unimi.dsi.fastutil.Function;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
@@ -24,12 +23,13 @@ import java.util.Objects;
  * @author daoge_cmd
  */
 @Slf4j
-public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMetaBlockStateBiMap {
+public final class ItemMetaBlockStateBiMap {
 
     private static final Map<ItemType<?>, Map<Integer, BlockState>> ITEM_TYPE_TO_META_MAP = new HashMap<>();
     private static final Map<BlockType<?>, Map<Integer, Integer>> BLOCK_STATE_HASH_TO_META_MAP = new HashMap<>();
+    private static boolean initialized = false;
 
-    public void init() {
+    public static void init() {
         try (var reader = NbtUtils.createGZIPReader(Utils.getResource("item_meta_block_state_bimap.nbt"))) {
             var nbt = (NbtMap) reader.readTag();
             nbt.forEach((itemIdentifier, metaToHash) -> {
@@ -47,17 +47,23 @@ public final class AllayVanillaItemMetaBlockStateBiMap implements VanillaItemMet
             });
         } catch (IOException e) {
             log.error("Cannot load item_meta_block_state_bimap.nbt!", e);
+        } finally {
+            initialized = true;
         }
     }
 
-    @Override
-    public Function<Integer, BlockState> getMetaToBlockStateMapper(ItemType<?> itemType) {
+    public static Function<Integer, BlockState> getMetaToBlockStateMapper(ItemType<?> itemType) {
+        if (!initialized) {
+            throw new IllegalStateException();
+        }
         var map = ITEM_TYPE_TO_META_MAP.get(itemType);
         return map != null ? map::get : ($ -> itemType.getBlockType().getDefaultState());
     }
 
-    @Override
-    public Function<Integer, Integer> getBlockStateHashToMetaMapper(BlockType<?> blockType) {
+    public static Function<Integer, Integer> getBlockStateHashToMetaMapper(BlockType<?> blockType) {
+        if (!initialized) {
+            throw new IllegalStateException();
+        }
         var map = BLOCK_STATE_HASH_TO_META_MAP.get(blockType);
         return map != null ? map::get : ($ -> 0);
     }

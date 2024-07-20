@@ -22,9 +22,9 @@ import static org.allaymc.server.utils.Utils.callInitializer;
 public class BlockTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
+        log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADING));
         InternalBlockTypeData.init();
         BlockLootTable.init();
-        log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADING));
         var defaultInitializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockTypeDefaultInitializer.class);
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockTypeInitializer.class);
         try (var progressBar = ProgressBar

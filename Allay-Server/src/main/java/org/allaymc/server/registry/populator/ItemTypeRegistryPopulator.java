@@ -21,8 +21,8 @@ import static org.allaymc.server.utils.Utils.callInitializer;
 public class ItemTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
-        InternalItemTypeData.init();
         log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADING));
+        InternalItemTypeData.init();
         var defaultInitializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(ItemTypeDefaultInitializer.class);
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(ItemTypeInitializer.class);
         try (var progressBar = ProgressBar
