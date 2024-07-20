@@ -1,7 +1,8 @@
-package org.allaymc.server.item.registry;
+package org.allaymc.server.registry.loader;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
@@ -12,35 +13,31 @@ import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.recipe.*;
+import org.allaymc.api.item.recipe.NetworkRecipe;
+import org.allaymc.api.item.recipe.ShapedRecipe;
+import org.allaymc.api.item.recipe.ShapelessRecipe;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.registry.loader.RegistryLoader;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.api.utils.Utils;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
-import org.cloudburstmc.protocol.bedrock.packet.CraftingDataPacket;
 
 import java.io.InputStreamReader;
 import java.util.*;
 
 /**
- * Allay Project 2023/11/25
+ * Allay Project 2024/7/20
  *
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayRecipeRegistry implements RecipeRegistry {
-    private final Map<Integer, NetworkRecipe> networkRecipes = new Int2ObjectOpenHashMap<>();
-    private final Map<Identifier, ShapedRecipe> shapedRecipes = new HashMap<>();
-    private final Map<Identifier, ShapelessRecipe> shapelessRecipes = new HashMap<>();
-    private final Set<Recipe> recipes = new HashSet<>();
-    private List<RecipeData> networkRecipeData = null;
-    private boolean shouldUpdateNetworkRecipeDataCache = true;
-
-    public void registerVanillaRecipes() {
-        var stream = AllayItemType.class.getClassLoader().getResourceAsStream("recipes.json");
-        if (stream == null) return;
+public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<NetworkRecipe>> {
+    @Override
+    public Int2ObjectMap<NetworkRecipe> load(Void $) {
+        log.info("Start loading recipe registry...");
+        var recipes = new Int2ObjectOpenHashMap<NetworkRecipe>();
+        var stream = Objects.requireNonNull(Utils.getResource("recipes.json"));
 
         var obj = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
         var shapedRecipes = obj.getAsJsonArray("shaped");
@@ -53,38 +50,21 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 .setConsumer(new ConsoleProgressBarConsumer(System.out))
                 .build()) {
             for (var shapedRecipe : shapedRecipes) {
-                registerShaped(parseShaped(shapedRecipe.getAsJsonObject()));
+                var recipe = parseShaped(shapedRecipe.getAsJsonObject());
+                recipes.put(recipe.getNetworkId(), recipe);
                 pgbar.step();
             }
-
             for (var shapelessRecipe : shapelessRecipes) {
-                registerShapeless(parseShapeless(shapelessRecipe.getAsJsonObject()));
+                var recipe = parseShapeless(shapelessRecipe.getAsJsonObject());
+                recipes.put(recipe.getNetworkId(), recipe);
                 pgbar.step();
             }
-//            for (var entry : array) {
-//                var obj = entry.getAsJsonObject();
-//
-//                switch (CraftingDataType.byId(obj.get("type").getAsInt())) {
-//                    case SHAPELESS -> registerShapeless(parseShapeless(obj));
-//                    case SHAPED -> registerShaped(parseShaped(obj));
-//                    case FURNACE, FURNACE_DATA, MULTI, SHULKER_BOX, SHAPELESS_CHEMISTRY, SHAPED_CHEMISTRY,
-//                         SMITHING_TRANSFORM, SMITHING_TRIM -> {
-//                        // TODO
-//                    }
-//                    default ->
-//                            throw new IllegalStateException("Unexpected value: " + CraftingDataType.byId(obj.get("type").getAsInt()));
-//                }
-//
-//                // furnace recipes don't have both id and uuid
-//                pgbar.setExtraMessage(
-//                        obj.has("id") ? obj.get("id").getAsString() :
-//                                obj.has("uuid") ? obj.get("uuid").getAsString() : "");
-//                pgbar.step();
-//            }
         }
+        log.info("Loaded recipe registry successfully");
+        return recipes;
     }
 
-    private ShapelessRecipe parseShapeless(JsonObject obj) {
+    protected ShapelessRecipe parseShapeless(JsonObject obj) {
         // Ingredients
         List<ItemDescriptor> ingredients = new ArrayList<>();
         obj.getAsJsonArray("input").forEach(item -> {
@@ -102,7 +82,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                 .build();
     }
 
-    private ShapedRecipe parseShaped(JsonObject obj) {
+    protected ShapedRecipe parseShaped(JsonObject obj) {
         // Pattern
         List<String> patternList = new ArrayList<>();
         obj.getAsJsonArray("pattern").forEach(line -> {
@@ -131,7 +111,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
     }
 
 
-    private List<ItemStack> parseOutputs(JsonObject obj) {
+    protected List<ItemStack> parseOutputs(JsonObject obj) {
         // Multi outputs is possible
         List<ItemStack> outputs = new ArrayList<>();
         var outputJson = obj.get("output");
@@ -145,7 +125,7 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         return outputs;
     }
 
-    private ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
+    protected ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
         return switch (parseItemDescriptorType(jsonObject)) {
             case DEFAULT -> {
                 Identifier itemId = new Identifier(jsonObject.get("item").getAsString());
@@ -167,17 +147,17 @@ public class AllayRecipeRegistry implements RecipeRegistry {
         };
     }
 
-    private ItemDescriptorType parseItemDescriptorType(JsonObject jsonObject) {
+    protected ItemDescriptorType parseItemDescriptorType(JsonObject jsonObject) {
         if (jsonObject.has("tag")) return ItemDescriptorType.ITEM_TAG;
         else return ItemDescriptorType.DEFAULT;
     }
 
-    private enum ItemDescriptorType {
+    protected enum ItemDescriptorType {
         DEFAULT,
         ITEM_TAG
     }
 
-    private ItemStack parseOutput(JsonObject jsonObject) {
+    protected ItemStack parseOutput(JsonObject jsonObject) {
         var itemId = new Identifier(jsonObject.get("item").getAsString());
         var itemType = Registries.ITEMS.get(itemId);
         Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
@@ -192,67 +172,5 @@ public class AllayRecipeRegistry implements RecipeRegistry {
                         .extraTag(nbtMap)
                         .build()
         );
-    }
-
-    @Override
-    public NetworkRecipe getRecipeByNetworkId(int networkId) {
-        return networkRecipes.get(networkId);
-    }
-
-    @Override
-    public void registerShaped(ShapedRecipe recipe) {
-        networkRecipes.put(recipe.getNetworkId(), recipe);
-        shapedRecipes.put(recipe.getIdentifier(), recipe);
-        recipes.add(recipe);
-        shouldUpdateNetworkRecipeDataCache = true;
-    }
-
-    @Override
-    public ShapedRecipe getShapedRecipe(Identifier identifier) {
-        return shapedRecipes.get(identifier);
-    }
-
-    @Override
-    public void registerShapeless(ShapelessRecipe recipe) {
-        networkRecipes.put(recipe.getNetworkId(), recipe);
-        shapelessRecipes.put(recipe.getIdentifier(), recipe);
-        recipes.add(recipe);
-        shouldUpdateNetworkRecipeDataCache = true;
-    }
-
-    @Override
-    public ShapelessRecipe getShapelessRecipe(Identifier identifier) {
-        return shapelessRecipes.get(identifier);
-    }
-
-    @Override
-    public CraftingDataPacket getCraftingDataPacket() {
-        var packet = new CraftingDataPacket();
-        packet.getCraftingData().addAll(getNetworkRecipeData());
-        // TODO packet.getPotionMixData().addAll();
-        // TODO packet.getContainerMixData().addAll();
-        packet.setCleanRecipes(true);
-        return packet;
-    }
-
-    @Override
-    public Set<Recipe> getRecipes() {
-        return Collections.unmodifiableSet(recipes);
-    }
-
-    protected List<RecipeData> getNetworkRecipeData() {
-        if (shouldUpdateNetworkRecipeDataCache) {
-            networkRecipeData = buildNetworkRecipeData();
-            shouldUpdateNetworkRecipeDataCache = false;
-        }
-        return networkRecipeData;
-    }
-
-    protected List<RecipeData> buildNetworkRecipeData() {
-        var result = new ArrayList<RecipeData>();
-        for (var recipe : recipes) {
-            result.add(recipe.toNetworkRecipeData());
-        }
-        return result;
     }
 }

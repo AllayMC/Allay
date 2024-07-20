@@ -17,7 +17,7 @@ import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.item.recipe.RecipeRegistry;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
@@ -42,6 +42,8 @@ import org.cloudburstmc.protocol.bedrock.data.GamePublishSetting;
 import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
@@ -50,6 +52,7 @@ import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -359,12 +362,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         biomeDefinitionListPacket.setDefinitions(BiomeTypeRegistry.getRegistry().getBiomeDefinition());
         sendPacket(biomeDefinitionListPacket);
 
-        var creativeContentPacket = new CreativeContentPacket();
-        creativeContentPacket.setContents(Registries.CREATIVE_ITEM_NETWORK_CONTENT.getContent());
-        sendPacket(creativeContentPacket);
+        sendPacket(DeferredData.getCreativeContentPacket());
 
-        var craftingDataPacket = RecipeRegistry.getRegistry().getCraftingDataPacket();
-        sendPacket(craftingDataPacket);
+        sendPacket(DeferredData.getCraftingDataPacket());
     }
 
     protected void validateAndSetSpawnPoint(PlayerData playerData) {
@@ -406,5 +406,43 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var childChannel = rakServerChannel.getChildChannel(session.getSocketAddress());
         var rakSessionCodec = childChannel.rakPipeline().get(RakSessionCodec.class);
         return (int) rakSessionCodec.getPing();
+    }
+
+    /**
+     * Only build these data when player join <br>
+     * Which allows plugins to register their custom stuff
+     */
+    private static class DeferredData {
+        static CraftingDataPacket CRAFTING_DATA_PACKET = null;
+
+        static CraftingDataPacket getCraftingDataPacket() {
+            if (CRAFTING_DATA_PACKET == null) {
+                CRAFTING_DATA_PACKET = new CraftingDataPacket();
+                CRAFTING_DATA_PACKET.getCraftingData().addAll(buildNetworkRecipeData());
+                // TODO: packet.getPotionMixData().addAll();
+                // TODO: packet.getContainerMixData().addAll();
+                // TODO: packet.getMaterialReducers().addAll();
+                CRAFTING_DATA_PACKET.setCleanRecipes(true);
+            }
+            return CRAFTING_DATA_PACKET;
+        }
+
+        static List<RecipeData> buildNetworkRecipeData() {
+            var result = new ArrayList<RecipeData>();
+            for (var recipe : Registries.RECIPES.getContent().values()) {
+                result.add(recipe.toNetworkRecipeData());
+            }
+            return result;
+        }
+
+        static CreativeContentPacket CREATIVE_CONTENT_PACKET = null;
+
+        static CreativeContentPacket getCreativeContentPacket() {
+            if (CREATIVE_CONTENT_PACKET == null) {
+                CREATIVE_CONTENT_PACKET = new CreativeContentPacket();
+                CREATIVE_CONTENT_PACKET.setContents(Registries.CREATIVE_ITEMS.getContent().values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new));
+            }
+            return CREATIVE_CONTENT_PACKET;
+        }
     }
 }

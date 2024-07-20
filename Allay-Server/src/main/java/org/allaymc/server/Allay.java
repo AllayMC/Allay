@@ -20,12 +20,12 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.registry.*;
+import org.allaymc.server.registry.loader.RegistryLoaders;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
@@ -38,13 +38,11 @@ import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.allaymc.server.component.injector.AllayComponentInjector;
-import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.allaymc.server.entity.type.AllayEntityType;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
-import org.allaymc.server.item.registry.AllayRecipeRegistry;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.pack.AllayPackRegistry;
 import org.allaymc.server.perm.tree.AllayPermTree;
@@ -178,7 +176,7 @@ public final class Allay {
 //        api.bind(CreativeItemRegistry.class, () -> new AllayCreativeItemRegistry(new AllayCreativeItemRegistry.Loader()));
 
         // Recipe
-        api.bind(RecipeRegistry.class, AllayRecipeRegistry::new, instance -> ((AllayRecipeRegistry) instance).registerVanillaRecipes());
+//        api.bind(RecipeRegistry.class, AllayRecipeRegistry::new, instance -> ((AllayRecipeRegistry) instance).registerVanillaRecipes());
 
         // Perm
         api.bind(PermTree.PermTreeFactory.class, () -> AllayPermTree::create);
@@ -258,7 +256,9 @@ public final class Allay {
 
         // Creative Item
         Registries.CREATIVE_ITEMS = IntMappedRegistry.create(new CreativeItemRegistryLoader());
-        Registries.CREATIVE_ITEM_NETWORK_CONTENT = SimpleRegistry.create(RegistryLoaders.empty(() -> Registries.CREATIVE_ITEMS.getContent().values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new)));
+
+        // Recipe
+        Registries.RECIPES = IntMappedRegistry.create(new RecipeRegistryLoader());
     }
 
     @VisibleForTesting

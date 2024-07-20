@@ -13,6 +13,7 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.common.ItemData;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -40,6 +41,7 @@ public final class Registries {
     public static SimpleMappedRegistry<VanillaItemId, ItemData> VANILLA_ITEM_DATA;
     public static SimpleMappedRegistry<Identifier, ItemType<?>> ITEMS;
     /**
+     * NOTICE
      * The custom block/item/entity etc. are not supported currently <p>
      * And we have no plan to implement them in the near future <p>
      * So we can cache the definitions to speed up player joining
@@ -67,5 +69,10 @@ public final class Registries {
 
     // Creative Item
     public static IntMappedRegistry<ItemStack> CREATIVE_ITEMS;
-    public static SimpleRegistry<org.cloudburstmc.protocol.bedrock.data.inventory.ItemData[]> CREATIVE_ITEM_NETWORK_CONTENT;
+
+    // Recipe
+    public static IntMappedRegistry<NetworkRecipe> RECIPES;
+    // TODO: PotionMixData
+    // TODO: ContainerMixData
+    // TODO: MaterialReducer
 }
