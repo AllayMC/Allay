@@ -16,7 +16,6 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
@@ -157,7 +156,6 @@ public final class AllayAPI {
         requireImpl(EventBus.EventBusFactory.class, EventBus.FACTORY::set);
 
         // Item
-        requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
         requireImpl(VanillaItemDataRegistry.class, VanillaItemDataRegistry.REGISTRY::set);
         requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);

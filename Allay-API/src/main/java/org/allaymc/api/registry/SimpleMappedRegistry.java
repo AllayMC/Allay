@@ -26,9 +26,9 @@
 package org.allaymc.api.registry;
 
 import org.allaymc.api.registry.loader.RegistryLoader;
-import org.allaymc.api.registry.populator.RegistryPopulator;
 
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -59,10 +59,10 @@ public class SimpleMappedRegistry<K, V> extends AbstractMappedRegistry<K, V, Map
         return new SimpleMappedRegistry<>(null, registryLoader);
     }
 
-    public static <I, K, V> SimpleMappedRegistry<K, V> create(RegistryLoader<I, Map<K, V>> registryLoader, RegistryPopulator<Map<K, V>> registryPopulator) {
+    public static <I, K, V> void create(RegistryLoader<I, Map<K, V>> registryLoader, Consumer<SimpleMappedRegistry<K, V>> setter, Runnable afterSet) {
         var registry = new SimpleMappedRegistry<>(null, registryLoader);
-        registryPopulator.populate(registry);
-        return registry;
+        setter.accept(registry);
+        afterSet.run();
     }
 
     /**

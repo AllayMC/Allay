@@ -3,6 +3,7 @@ package org.allaymc.api.item.enchantment;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
 import java.util.Map;
@@ -34,7 +35,7 @@ public abstract class AbstractEnchantmentType implements EnchantmentType {
         this.id = id;
         this.maxLevel = maxLevel;
         this.rarity = rarity;
-        EnchantmentRegistry.getRegistry().register(this.id, identifier, this);
+        Registries.ENCHANTMENTS.register(this.id, identifier, this);
     }
 
     @Override

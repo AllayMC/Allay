@@ -1,8 +1,8 @@
 package org.allaymc.server.command.tree.node;
 
 import org.allaymc.api.command.tree.CommandNode;
-import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
 import static org.allaymc.api.utils.Identifier.DEFAULT_NAMESPACE;
@@ -15,7 +15,7 @@ import static org.allaymc.api.utils.Identifier.DEFAULT_NAMESPACE;
 public class EnchantmentNode extends EnumNode {
 
     protected static final String[] ENCHANTMENT_STR_ARRAY =
-            EnchantmentRegistry.getRegistry().getContent().m1().values()
+            Registries.ENCHANTMENTS.getContent().m1().values()
                     .stream()
                     .map(type -> type.getIdentifier().path())
                     .toArray(String[]::new);
@@ -26,6 +26,6 @@ public class EnchantmentNode extends EnumNode {
 
     @Override
     protected Object argToResult(String arg) {
-        return EnchantmentRegistry.getRegistry().getByK2(new Identifier(DEFAULT_NAMESPACE, arg));
+        return Registries.ENCHANTMENTS.getByK2(new Identifier(DEFAULT_NAMESPACE, arg));
     }
 }

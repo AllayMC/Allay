@@ -3,6 +3,7 @@ package org.allaymc.server;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
@@ -18,7 +19,7 @@ import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.item.enchantment.EnchantmentRegistry;
+import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.recipe.RecipeRegistry;
 import org.allaymc.api.item.registry.CreativeItemRegistry;
 import org.allaymc.api.item.registry.ItemTypeRegistry;
@@ -26,10 +27,8 @@ import org.allaymc.api.item.registry.VanillaItemDataRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.perm.tree.PermTree;
-import org.allaymc.api.registry.IntMappedRegistry;
-import org.allaymc.api.registry.Registries;
-import org.allaymc.api.registry.SimpleMappedRegistry;
-import org.allaymc.api.registry.SimpleRegistry;
+import org.allaymc.api.registry.*;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.registry.loader.BlockStateDataLoader;
 import org.allaymc.server.registry.loader.MaterialLoader;
 import org.allaymc.server.registry.populator.BlockTypeRegistryPopulator;
@@ -56,7 +55,6 @@ import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.attribute.AllayVanillaItemDataRegistry;
-import org.allaymc.server.item.enchantment.AllayEnchantmentRegistry;
 import org.allaymc.server.item.registry.AllayRecipeRegistry;
 import org.allaymc.server.item.registry.AllayCreativeItemRegistry;
 import org.allaymc.server.item.registry.AllayItemTypeRegistry;
@@ -64,6 +62,7 @@ import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.pack.AllayPackRegistry;
 import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.registry.loader.RegistryLoaders;
+import org.allaymc.server.registry.populator.EnchantmentTypeRegistryPopulator;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.world.biome.AllayBiomeTypeRegistry;
@@ -157,7 +156,7 @@ public final class Allay {
         api.bind(EventBus.EventBusFactory.class, () -> AllayEventBus::new);
 
         // Item
-        api.bind(EnchantmentRegistry.class, AllayEnchantmentRegistry::new, instance -> ((AllayEnchantmentRegistry) instance).init());
+//        api.bind(EnchantmentRegistry.class, AllayEnchantmentRegistry::new, instance -> ((AllayEnchantmentRegistry) instance).init());
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
         api.bind(VanillaItemDataRegistry.class, () -> new AllayVanillaItemDataRegistry(new AllayVanillaItemDataRegistry.Loader()));
         api.bind(ItemTypeRegistry.class, AllayItemTypeRegistry::new, instance -> ((AllayItemTypeRegistry) instance).init());
@@ -210,11 +209,17 @@ public final class Allay {
     }
 
     private static void initRegistries() {
+        // Item
+        DoubleKeyMappedRegistry.create(
+                RegistryLoaders.empty(() -> new DoubleKeyMappedRegistry.MapPair<>(new Int2ObjectOpenHashMap<>(), new HashMap<Identifier, EnchantmentType>())),
+                r -> Registries.ENCHANTMENTS = r,
+                new EnchantmentTypeRegistryPopulator()
+        );
         // Block
         Registries.MATERIALS = SimpleMappedRegistry.create(new MaterialLoader());
         Registries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataLoader());
         Registries.BLOCK_STATE_PALETTE = IntMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
-        Registries.BLOCK_TYPES = SimpleMappedRegistry.create(RegistryLoaders.empty(HashMap::new), new BlockTypeRegistryPopulator());
+        SimpleMappedRegistry.create(RegistryLoaders.empty(() -> new HashMap<Identifier, BlockType<?>>()), r -> Registries.BLOCK_TYPES = r, new BlockTypeRegistryPopulator());
         Registries.BLOCK_DEFINITIONS = SimpleRegistry.create(RegistryLoaders.empty(() -> {
             List<BlockDefinition> blockDefinitions = new ArrayList<>();
             for (var blockType : Registries.BLOCK_TYPES.getContent().values()) {
