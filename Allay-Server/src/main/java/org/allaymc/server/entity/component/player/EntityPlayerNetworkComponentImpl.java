@@ -356,13 +356,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                         .build()
         );
 
-        var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();
-        availableEntityIdentifiersPacket.setIdentifiers(DeferredData.getEntityIdentifiers());
-        sendPacket(availableEntityIdentifiersPacket);
+        sendPacket(DeferredData.getAvailableEntityIdentifiersPacket());
 
-        var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
-        biomeDefinitionListPacket.setDefinitions(DeferredData.getBiomeDefinitions());
-        sendPacket(biomeDefinitionListPacket);
+        sendPacket(DeferredData.getBiomeDefinitionListPacket());
 
         sendPacket(DeferredData.getCreativeContentPacket());
 
@@ -471,36 +467,40 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return BLOCK_DEFINITIONS;
         }
 
-        private static NbtMap ENTITY_IDENTIFIERS;
+        private static AvailableEntityIdentifiersPacket AVAILABLE_ENTITY_IDENTIFIERS_PACKET;
 
-        public static NbtMap getEntityIdentifiers() {
+        public static AvailableEntityIdentifiersPacket getAvailableEntityIdentifiersPacket() {
             // TODO: support custom entity
             // We just read it from file currently
-            if (ENTITY_IDENTIFIERS == null) {
+            if (AVAILABLE_ENTITY_IDENTIFIERS_PACKET == null) {
                 try (var stream = NbtUtils.createNetworkReader(Utils.getResource("entity_identifiers.nbt"))) {
-                    ENTITY_IDENTIFIERS = (NbtMap) stream.readTag();
+                    var tag = (NbtMap) stream.readTag();
+                    AVAILABLE_ENTITY_IDENTIFIERS_PACKET = new AvailableEntityIdentifiersPacket();
+                    AVAILABLE_ENTITY_IDENTIFIERS_PACKET.setIdentifiers(tag);
                 } catch (Exception e) {
                     throw new AssertionError("Failed to load entity_identifiers.nbt", e);
                 }
             }
-            assert ENTITY_IDENTIFIERS != null;
-            return ENTITY_IDENTIFIERS;
+            assert AVAILABLE_ENTITY_IDENTIFIERS_PACKET != null;
+            return AVAILABLE_ENTITY_IDENTIFIERS_PACKET;
         }
 
-        private static NbtMap BIOME_DEFINITIONS;
+        private static BiomeDefinitionListPacket BIOME_DEFINITION_LIST_PACKET;
 
-        public static NbtMap getBiomeDefinitions() {
+        public static BiomeDefinitionListPacket getBiomeDefinitionListPacket() {
             // TODO: support custom biome
             // Same to entity, we just read it from file currently
-            if (BIOME_DEFINITIONS == null) {
+            if (BIOME_DEFINITION_LIST_PACKET == null) {
                 try (var stream = Utils.getResource("biome_definitions.nbt")) {
-                    BIOME_DEFINITIONS = (NbtMap) NbtUtils.createGZIPReader(stream).readTag();
+                    var tag = (NbtMap) NbtUtils.createGZIPReader(stream).readTag();
+                    BIOME_DEFINITION_LIST_PACKET = new BiomeDefinitionListPacket();
+                    BIOME_DEFINITION_LIST_PACKET.setDefinitions(tag);
                 } catch (Exception e) {
                     throw new AssertionError("Failed to load biome_definitions.nbt", e);
                 }
             }
-            assert BIOME_DEFINITIONS != null;
-            return BIOME_DEFINITIONS;
+            assert BIOME_DEFINITION_LIST_PACKET != null;
+            return BIOME_DEFINITION_LIST_PACKET;
         }
 
         private static ResourcePacksInfoPacket RESOURCE_PACKS_INFO_PACKET;
