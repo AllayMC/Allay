@@ -27,6 +27,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.type.InternalBlockTypeData;
+import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -163,7 +164,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     public BlockState toBlockState() {
         return itemType.getBlockType() == null ?
                 null :
-                VanillaItemMetaBlockStateBiMap.getRegistry().getMetaToBlockStateMapper(itemType).apply(meta);
+                ItemMetaBlockStateBiMap.getMetaToBlockStateMapper(itemType).apply(meta);
     }
 
     @Override

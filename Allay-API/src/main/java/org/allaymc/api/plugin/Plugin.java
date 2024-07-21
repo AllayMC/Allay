@@ -59,22 +59,6 @@ public abstract class Plugin implements TaskCreator {
         else log.warn("Plugin {} is marked as reloadable but do nothing in reload() method!", pluginContainer.descriptor().getName());
     }
 
-    public Server getServer() {
-        return Server.getInstance();
-    }
-
-    public Scheduler getServerScheduler() {
-        return this.getServer().getScheduler();
-    }
-
-    public PluginManager getPluginManager() {
-        return this.getServer().getPluginManager();
-    }
-
-    public CommandRegistry getCommandRegistry() {
-        return this.getServer().getCommandRegistry();
-    }
-
     public I18n getPluginI18n() {
         return pluginContainer.i18n();
     }

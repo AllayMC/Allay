@@ -11,9 +11,9 @@ import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
@@ -142,7 +142,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
                 throw new EntityTypeBuildException("identifier cannot be null!");
             }
             var type = new AllayEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier);
-            EntityTypeRegistry.getRegistry().register(identifier, type);
+            Registries.ENTITIES.register(identifier, type);
             return type;
         }
     }

@@ -25,8 +25,8 @@ public class BlockStateUpdateJMHTest {
 
     @Setup
     public void init() throws MissingImplementationException {
-        Allay.initAllayAPI();
-        observer = BlockTypes.OBSERVER_TYPE.getDefaultState();
+        Allay.initAllay();
+        observer = BlockTypes.OBSERVER.getDefaultState();
     }
 
     @Benchmark

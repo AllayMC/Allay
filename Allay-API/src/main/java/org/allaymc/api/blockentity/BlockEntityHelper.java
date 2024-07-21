@@ -3,7 +3,7 @@ package org.allaymc.api.blockentity;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.init.SimpleBlockEntityInitInfo;
-import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -17,7 +17,7 @@ import org.cloudburstmc.nbt.NbtMap;
 public final class BlockEntityHelper {
     public static BlockEntity fromNBT(Dimension dimension, NbtMap nbt) {
         var id = nbt.getString("id");
-        var blockEntityType = BlockEntityTypeRegistry.getRegistry().get(id);
+        var blockEntityType = Registries.BLOCK_ENTITIES.get(id);
         if (blockEntityType == null) {
             log.warn("Unknown block entity type: {}", id);
             return null;

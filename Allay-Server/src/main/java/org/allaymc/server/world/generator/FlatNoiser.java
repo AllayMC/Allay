@@ -1,7 +1,7 @@
 package org.allaymc.server.world.generator;
 
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -47,7 +47,7 @@ public class FlatNoiser implements Noiser {
                 var entry = AllayStringUtils.fastTwoPartSplit(layer, "x", "");
                 var blockId = entry[0];
                 var count = Integer.parseInt(entry[1]);
-                var blockState = BlockTypeRegistry.getRegistry().get(new Identifier(blockId)).getDefaultState();
+                var blockState = Registries.BLOCKS.get(new Identifier(blockId)).getDefaultState();
                 for (int i = 1; i <= count; i++) {
                     list.add(blockState);
                 }

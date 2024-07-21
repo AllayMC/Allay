@@ -1,6 +1,7 @@
 package org.allaymc.api.entity.effect;
 
 import lombok.Getter;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
 /**
@@ -24,7 +25,7 @@ public abstract class AbstractEffectType implements EffectType {
         this.id = id;
         this.identifier = identifier;
         this.isBad = isBad;
-        EffectRegistry.getRegistry().register(id, identifier, this);
+        Registries.EFFECTS.register(id, identifier, this);
     }
 
     @Override

@@ -9,10 +9,6 @@ public interface TrKeys {
 
     String A_API_IMPLEMENTED = "allay:api.implemented";
 
-    String A_BLOCKATTR_LOADED = "allay:blockattr.loaded";
-
-    String A_BLOCKATTR_LOADING = "allay:blockattr.loading";
-
     String A_BLOCKENTITYTYPE_LOADED = "allay:blockentitytype.loaded";
 
     String A_BLOCKENTITYTYPE_LOADING = "allay:blockentitytype.loading";
@@ -176,6 +172,10 @@ public interface TrKeys {
     String A_PLUGIN_LOAD_ERROR = "allay:plugin.load.error";
 
     String A_PLUGIN_LOADING = "allay:plugin.loading";
+
+    String A_RECIPE_LOADED = "allay:recipe.loaded";
+
+    String A_RECIPE_LOADING = "allay:recipe.loading";
 
     String A_SERVER_STARTING = "allay:server.starting";
 

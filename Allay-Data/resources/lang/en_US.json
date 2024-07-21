@@ -1,8 +1,6 @@
 {
   "allay:allay.starting": "Starting up allay...",
   "allay:api.implemented": "This server is running §b%1§r, implement Allay-API version §b%2",
-  "allay:blockattr.loaded": "Vanilla block attribute data is loaded",
-  "allay:blockattr.loading": "Loading vanilla block attribute data...",
   "allay:blockentitytype.loaded": "Loaded %1 block entity types",
   "allay:blockentitytype.loading": "Loading block entity types...",
   "allay:blocktype.loaded": "Loaded %1 block types",
@@ -85,6 +83,8 @@
   "allay:plugin.jar.entrance.typeinvalid": "The entrance class of plugin %1 is not a subclass of Plugin",
   "allay:plugin.load.error": "Error while loading plugin %1. Error: %2",
   "allay:plugin.loading": "Loading plugin %1",
+  "allay:recipe.loaded": "Loaded %1 recipes",
+  "allay:recipe.loading": "LOading recipes...",
   "allay:server.starting": "Starting Allay...",
   "allay:world.loaded": "World %1 is loaded",
   "allay:world.loading": "Loading world %1",

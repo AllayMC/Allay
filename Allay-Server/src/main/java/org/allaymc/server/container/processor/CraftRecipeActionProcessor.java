@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.CraftingContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.recipe.RecipeRegistry;
+import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -33,7 +33,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
         }
 
-        var recipe = RecipeRegistry.getRegistry().getRecipeByNetworkId(action.getRecipeNetworkId());
+        var recipe = Registries.RECIPES.get(action.getRecipeNetworkId());
         var input = craftingContainer.createCraftingInput();
 
         var matched = recipe.match(input);

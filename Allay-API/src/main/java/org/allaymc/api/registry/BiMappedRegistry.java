@@ -7,24 +7,28 @@ import com.google.common.collect.BiMap;
  *
  * @author daoge_cmd
  */
-public interface BiMappedRegistry<LEFT, RIGHT> extends Registry<BiMap<LEFT, RIGHT>> {
-    default RIGHT getByLeft(LEFT left) {
-        return getContent().get(left);
+public class BiMappedRegistry<LEFT, RIGHT> extends AbstractRegistry<BiMap<LEFT, RIGHT>> {
+    protected <INPUT> BiMappedRegistry(INPUT input, RegistryLoader<INPUT, BiMap<LEFT, RIGHT>> registryLoader) {
+        super(input, registryLoader);
     }
 
-    default LEFT getByRight(RIGHT right) {
-        return getContent().inverse().get(right);
+    public RIGHT getByLeft(LEFT left) {
+        return content.get(left);
     }
 
-    default RIGHT getByLeftOrDefault(LEFT left, RIGHT defaultValue) {
-        return getContent().getOrDefault(left, defaultValue);
+    public LEFT getByRight(RIGHT right) {
+        return content.inverse().get(right);
     }
 
-    default LEFT getByRightOrDefault(RIGHT right, LEFT defaultValue) {
-        return getContent().inverse().getOrDefault(right, defaultValue);
+    public RIGHT getByLeftOrDefault(LEFT left, RIGHT defaultValue) {
+        return content.getOrDefault(left, defaultValue);
     }
 
-    default void register(LEFT left, RIGHT right) {
-        getContent().put(left, right);
+    public LEFT getByRightOrDefault(RIGHT right, LEFT defaultValue) {
+        return content.inverse().getOrDefault(right, defaultValue);
+    }
+
+    public void register(LEFT left, RIGHT right) {
+        content.put(left, right);
     }
 }

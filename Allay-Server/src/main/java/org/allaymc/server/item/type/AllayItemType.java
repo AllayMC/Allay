@@ -5,7 +5,6 @@ import lombok.SneakyThrows;
 import lombok.ToString;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
@@ -14,11 +13,10 @@ import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
-import org.allaymc.api.item.registry.VanillaItemDataRegistry;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
@@ -100,7 +98,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             // Try to find out if this item type has a corresponding block type
             var blockIdentifier = BlockAndItemIdMapper.itemIdToPossibleBlockId(identifier);
             // Note that the block type still may be null
-            blockTypeCache = BlockTypeRegistry.getRegistry().get(blockIdentifier);
+            blockTypeCache = Registries.BLOCKS.get(blockIdentifier);
             haveTriedInitBlockTypeCache = true;
         }
         return blockTypeCache;
@@ -135,7 +133,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             this.runtimeId = vanillaItemId.getRuntimeId();
 
             // Attributes for vanilla item
-            var itemData = VanillaItemDataRegistry.getRegistry().get(vanillaItemId);
+            var itemData = Registries.VANILLA_ITEM_DATA.get(vanillaItemId);
             if (itemData == null)
                 throw new ItemTypeBuildException("Cannot find vanilla item data component for " + vanillaItemId + " from vanilla item attribute registry!");
 
@@ -198,7 +196,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             if (runtimeId == Integer.MAX_VALUE) runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
 
             var type = new AllayItemType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier, runtimeId, itemTags);
-            ItemTypeRegistry.getRegistry().register(identifier, type);
+            Registries.ITEMS.register(identifier, type);
             return type;
         }
     }

@@ -2,8 +2,8 @@ package org.allaymc.server.loottable.entry;
 
 import com.google.gson.JsonObject;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.loottable.LootTableType;
 import org.allaymc.server.loottable.condition.Conditions;
@@ -27,7 +27,7 @@ public class ItemEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_T
     public ItemEntry(String name, int weight, Conditions<CONTEXT_TYPE> conditions, Functions functions) {
         super(name, weight, conditions);
         this.functions = functions;
-        this.itemType = ItemTypeRegistry.getRegistry().get(new Identifier(name));
+        this.itemType = Registries.ITEMS.get(new Identifier(name));
     }
 
     protected static Functions parseFunctions(JsonObject json, LootTableType<?> lootTableType) {

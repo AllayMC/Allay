@@ -2,6 +2,7 @@ package org.allaymc.api.item.enchantment;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -14,7 +15,7 @@ import org.cloudburstmc.nbt.NbtMap;
 public class EnchantmentHelper {
     public EnchantmentInstance fromNBT(NbtMap nbtMap) {
         var id = nbtMap.getShort("id");
-        var enchantmentType = EnchantmentRegistry.getRegistry().getByK1((int) id);
+        var enchantmentType = Registries.ENCHANTMENTS.getByK1((int) id);
         if (enchantmentType == null) {
             log.warn("Unknown enchantment id {}", id);
             return null;

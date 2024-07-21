@@ -9,7 +9,6 @@ import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaMaterialTypes;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.server.utils.ResourceUtils;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -34,7 +33,7 @@ public final class InternalBlockTypeData {
     private static final EnumMap<VanillaBlockId, VanillaItemId[]> VANILLA_BLOCK_SPECIAL_TOOLS = new EnumMap<>(VanillaBlockId.class);
 
     public static void init() {
-        try (var reader = new InputStreamReader(new BufferedInputStream(ResourceUtils.getResource("block_types.json")))) {
+        try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_types.json")))) {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
                 var id = VanillaBlockId.fromIdentifier(new Identifier(entry.getKey()));
                 var obj = entry.getValue().getAsJsonObject();
@@ -67,7 +66,7 @@ public final class InternalBlockTypeData {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        try (var reader = new InputStreamReader(new BufferedInputStream(ResourceUtils.getResource("block_tags_custom.json")))) {
+        try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_tags_custom.json")))) {
             var map = new HashMap<VanillaBlockId, Set<BlockTag>>();
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
                 var tag = VanillaBlockTags.getTagByName(entry.getKey());

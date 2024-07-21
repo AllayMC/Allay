@@ -8,13 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.server.misc.WorldLoadEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.WorldSettings;
-import org.allaymc.api.world.generator.WorldGeneratorFactory;
-import org.allaymc.api.world.storage.WorldStorageFactory;
 import org.cloudburstmc.protocol.common.util.Preconditions;
 
 import java.io.File;
@@ -79,19 +78,19 @@ public final class AllayWorldPool implements WorldPool {
 
         var netherSettings = settings.nether();
         var theEndSettings = settings.theEnd();
-        var storage = WorldStorageFactory.getFactory().createWorldStorage(settings.storageType(), WORLDS_FOLDER.resolve(name));
+        var storage = Registries.WORLD_STORAGE_FACTORIES.get(settings.storageType()).apply(WORLDS_FOLDER.resolve(name));
         var world = new AllayWorld(storage);
         // Load overworld dimension
-        var overworld = new AllayDimension(world, WorldGeneratorFactory.getFactory().createWorldGenerator(overworldSettings.generatorType(), overworldSettings.generatorPreset()), DimensionInfo.OVERWORLD);
+        var overworld = new AllayDimension(world, Registries.WORLD_GENERATOR_FACTORIES.get(overworldSettings.generatorType()).apply(overworldSettings.generatorPreset()), DimensionInfo.OVERWORLD);
         world.setDimension(overworld);
         // Load nether and the end dimension if they are not null
         if (netherSettings != null) {
-            var nether = new AllayDimension(world, WorldGeneratorFactory.getFactory().createWorldGenerator(netherSettings.generatorType(), netherSettings.generatorPreset()), DimensionInfo.NETHER);
+            var nether = new AllayDimension(world, Registries.WORLD_GENERATOR_FACTORIES.get(netherSettings.generatorType()).apply(netherSettings.generatorPreset()), DimensionInfo.NETHER);
             world.setDimension(nether);
         }
 
         if (theEndSettings != null) {
-            var theEnd = new AllayDimension(world, WorldGeneratorFactory.getFactory().createWorldGenerator(theEndSettings.generatorType(), theEndSettings.generatorPreset()), DimensionInfo.THE_END);
+            var theEnd = new AllayDimension(world, Registries.WORLD_GENERATOR_FACTORIES.get(theEndSettings.generatorType()).apply(theEndSettings.generatorPreset()), DimensionInfo.THE_END);
             world.setDimension(theEnd);
         }
 

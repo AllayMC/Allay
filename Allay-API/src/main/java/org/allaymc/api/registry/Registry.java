@@ -57,7 +57,5 @@ public interface Registry<CONTENT> {
      *
      * @param consumer the consumer
      */
-    default void register(Consumer<CONTENT> consumer) {
-        consumer.accept(getContent());
-    }
+    void register(Consumer<CONTENT> consumer);
 }

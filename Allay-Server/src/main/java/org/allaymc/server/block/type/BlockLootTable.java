@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.server.loottable.LootTable;
 import org.allaymc.server.loottable.LootTableType;
 import org.allaymc.server.loottable.Pool;
@@ -23,7 +24,6 @@ import org.allaymc.server.loottable.function.SetDataFunction;
 import org.allaymc.server.loottable.function.SetNameFunction;
 import org.allaymc.server.loottable.roll.RangedRolls;
 import org.allaymc.server.loottable.roll.SimpleRolls;
-import org.allaymc.server.utils.ResourceUtils;
 
 import java.io.BufferedInputStream;
 import java.io.InputStreamReader;
@@ -52,7 +52,7 @@ public final class BlockLootTable {
     public static final Map<VanillaBlockId, LootTable<BreakBlockContext>> BLOCK_LOOT_TABLES = new EnumMap<>(VanillaBlockId.class);
 
     public static void init() {
-        readFrom(new InputStreamReader(new BufferedInputStream(ResourceUtils.getResource("loot_tables/blocks.json"))));
+        readFrom(new InputStreamReader(new BufferedInputStream(Utils.getResource("loot_tables/blocks.json"))));
     }
 
     public static void readFrom(InputStreamReader reader) {

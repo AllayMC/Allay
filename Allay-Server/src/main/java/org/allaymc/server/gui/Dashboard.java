@@ -11,6 +11,7 @@ import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.PluginDependency;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -519,7 +520,7 @@ public final class Dashboard {
 
             appendTextToConsole(cmd + "\n"); // show what was run in the console
             var server = Server.getInstance();
-            server.getScheduler().runLater(server, () -> server.getCommandRegistry().execute(Server.getInstance(), cmd));
+            server.getScheduler().runLater(server, () -> Registries.COMMANDS.execute(Server.getInstance(), cmd));
         }
     }
 }

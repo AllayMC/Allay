@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
@@ -10,22 +9,20 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.block.type.BlockLootTable;
-import org.allaymc.server.utils.ResourceUtils;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.joml.Vector3f;
 
-import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
@@ -51,7 +48,7 @@ public class GameTestCommand extends SimpleCommand {
                 .intNum("blockStateHash")
                 .exec((context, player) -> {
                     int blockStateHash = context.getResult(1);
-                    var blockState = BlockStateHashPalette.getRegistry().get(blockStateHash);
+                    var blockState = Registries.BLOCK_STATE_PALETTE.get(blockStateHash);
                     if (blockState == null) {
                         context.addError("Unknown block state hash!");
                         return context.fail();
@@ -110,7 +107,7 @@ public class GameTestCommand extends SimpleCommand {
                 .intNum("count", 1)
                 .optional()
                 .exec((context, player) -> {
-                    var entityType = EntityTypeRegistry.getRegistry().get(new Identifier((String) context.getResult(1)));
+                    var entityType = Registries.ENTITIES.get(new Identifier((String) context.getResult(1)));
                     int count = context.getResult(2);
                     if (entityType == null) {
                         context.addOutput(TextFormat.RED + "Unknown entity type!");
@@ -144,7 +141,7 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("dumpcmd")
                 .exec((context, player) -> {
-                    var cmdPk = Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player);
+                    var cmdPk = Registries.COMMANDS.encodeAvailableCommandsPacketFor(player);
                     try {
                         Files.deleteIfExists(Path.of("cmd_pk_allay.json"));
                     } catch (IOException e) {

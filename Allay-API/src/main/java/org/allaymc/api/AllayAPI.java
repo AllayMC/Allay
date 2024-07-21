@@ -2,40 +2,23 @@ package org.allaymc.api;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.palette.BlockStateHashPalette;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.block.registry.MaterialRegistry;
-import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.block.type.BlockTypeBuilder;
-import org.allaymc.api.blockentity.registry.BlockEntityTypeRegistry;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.component.interfaces.ComponentInjector;
-import org.allaymc.api.data.VanillaItemMetaBlockStateBiMap;
-import org.allaymc.api.entity.effect.EffectRegistry;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.item.enchantment.EnchantmentRegistry;
-import org.allaymc.api.item.recipe.RecipeRegistry;
-import org.allaymc.api.item.registry.CreativeItemRegistry;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
-import org.allaymc.api.item.registry.VanillaItemDataRegistry;
 import org.allaymc.api.item.type.ItemTypeBuilder;
-import org.allaymc.api.pack.PackRegistry;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.utils.exception.MissingRequirementException;
-import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.api.world.generator.WorldGeneratorFactory;
-import org.allaymc.api.world.storage.WorldStorageFactory;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -161,43 +144,19 @@ public final class AllayAPI {
         requireImpl(EventBus.EventBusFactory.class, EventBus.FACTORY::set);
 
         // Item
-        requireImpl(EnchantmentRegistry.class, EnchantmentRegistry.REGISTRY::set);
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);
-        requireImpl(VanillaItemDataRegistry.class, VanillaItemDataRegistry.REGISTRY::set);
-        requireImpl(ItemTypeRegistry.class, ItemTypeRegistry.REGISTRY::set);
 
         // BlockEntity
         requireImpl(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, BlockEntityTypeBuilder.FACTORY::set);
-        requireImpl(BlockEntityTypeRegistry.class, BlockEntityTypeRegistry.REGISTRY::set);
 
         // Block
-        requireImpl(MaterialRegistry.class, MaterialRegistry.REGISTRY::set);
         requireImpl(BlockTypeBuilder.BlockTypeBuilderFactory.class, BlockTypeBuilder.FACTORY::set);
-        requireImpl(VanillaBlockStateDataRegistry.class, VanillaBlockStateDataRegistry.REGISTRY::set);
-        requireImpl(BlockStateHashPalette.class, BlockStateHashPalette.REGISTRY::set);
-        requireImpl(BlockTypeRegistry.class, BlockTypeRegistry.REGISTRY::set);
 
         // Entity
-        requireImpl(EffectRegistry.class, EffectRegistry.REGISTRY::set);
         requireImpl(EntityTypeBuilder.EntityTypeBuilderFactory.class, EntityTypeBuilder.FACTORY::set);
-        requireImpl(EntityTypeRegistry.class, EntityTypeRegistry.REGISTRY::set);
-
-        // Biome
-        requireImpl(BiomeTypeRegistry.class, BiomeTypeRegistry.REGISTRY::set);
-
-        // Misc
-        requireImpl(VanillaItemMetaBlockStateBiMap.class, VanillaItemMetaBlockStateBiMap.REGISTRY::set);
 
         // World
         requireImpl(WorldGenerator.WorldGeneratorBuilderFactory.class, WorldGenerator.BUILDER_FACTORY::set);
-        requireImpl(WorldStorageFactory.class, WorldStorageFactory.FACTORY::set);
-        requireImpl(WorldGeneratorFactory.class, WorldGeneratorFactory.FACTORY::set);
-
-        // Creative Item Registry
-        requireImpl(CreativeItemRegistry.class, CreativeItemRegistry.REGISTRY::set);
-
-        // Recipe
-        requireImpl(RecipeRegistry.class, RecipeRegistry.REGISTRY::set);
 
         // Perm
         requireImpl(PermTree.PermTreeFactory.class, PermTree.FACTORY::set);
@@ -206,9 +165,6 @@ public final class AllayAPI {
         requireImpl(EntitySelectorAPI.class, EntitySelectorAPI.API::set);
         requireImpl(CommandTree.CommandTreeFactory.class, CommandTree.FACTORY::set);
         requireImpl(CommandNodeFactory.class, CommandNodeFactory.FACTORY::set);
-
-        // Resource pack
-        requireImpl(PackRegistry.class, PackRegistry.REGISTRY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {}

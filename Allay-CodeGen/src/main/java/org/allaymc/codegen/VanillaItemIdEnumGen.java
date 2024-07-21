@@ -68,11 +68,11 @@ public class VanillaItemIdEnumGen {
 
     @SneakyThrows
     public static void generateToAPIModule() {
-        var itemTypeRegistryClass = ClassName.get("org.allaymc.api.item.registry", "ItemTypeRegistry");
+        var registriesClass = ClassName.get("org.allaymc.api.registry", "Registries");
         var itemTypeClass = ClassName.get("org.allaymc.api.item.type", "ItemType");
         TypeSpec.Builder codeBuilder = commonBuilder(IDENTIFIER_CLASS).addMethod(MethodSpec.methodBuilder("getItemType")
                 .addModifiers(Modifier.PUBLIC)
-                .addStatement("return $T.getRegistry().get(this.getIdentifier())", itemTypeRegistryClass)
+                .addStatement("return $T.ITEM_TYPES.get(this.getIdentifier())", registriesClass)
                 .returns(itemTypeClass)
                 .build()
         );

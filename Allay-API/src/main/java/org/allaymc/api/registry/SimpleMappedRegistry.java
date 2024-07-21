@@ -1,27 +1,45 @@
+/*
+ * Copyright (c) 2019-2022 GeyserMC. http://geysermc.org
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @author GeyserMC
+ * @link https://github.com/GeyserMC/Geyser
+ */
+
 package org.allaymc.api.registry;
 
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * A public registry holding a map of various registrations as defined by {@code MAPPING}.
- * The M represents the map class, which can be anything that extends {@link Map}. The
- * {@code KEY} and {@code VALUE} generics are the key and value respectively.
- * <p>
- * Allay Project 2023/3/18
+ * A variant of {@link AbstractMappedRegistry} with {@link Map} as the defined type. Unlike
+ * {@link MappedRegistry}, this registry does not support specifying your own Map class,
+ * and only permits operations the {@link Map} interface does, unless you manually cast.
  *
- * @param <KEY>     the key
- * @param <VALUE>   the value
- * @param <MAPPING> the map
- *
- * @author GeyserMC | daoge_cmd
+ * @param <K> the key
+ * @param <V> the value
  */
-public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> implements MappedRegistry<KEY, VALUE, MAPPING> {
-
-    protected MAPPING mappings;
-
-    protected <INPUT> SimpleMappedRegistry(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {
-        this.mappings = registryLoader.load(input);
+public class SimpleMappedRegistry<K, V> extends AbstractMappedRegistry<K, V, Map<K, V>> {
+    protected <I> SimpleMappedRegistry(I input, RegistryLoader<I, Map<K, V>> registryLoader) {
+        super(input, registryLoader);
     }
 
     /**
@@ -30,30 +48,32 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * predefined, or the registry is populated at a later point.
      *
      * @param registryLoader the registry loader
-     * @param <INPUT>        the input
-     * @param <KEY>          the map key
-     * @param <VALUE>        the map value
-     * @param <MAPPING>      the returned mappings type, a map in this case
-     *
+     * @param <I> the input
+     * @param <K> the map key
+     * @param <V> the map value
      * @return a new registry with the given RegistryLoader
      */
-    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(RegistryLoader<INPUT, MAPPING> registryLoader) {
+    public static <I, K, V> SimpleMappedRegistry<K, V> create(RegistryLoader<I, Map<K, V>> registryLoader) {
         return new SimpleMappedRegistry<>(null, registryLoader);
+    }
+
+    public static <I, K, V> void create(RegistryLoader<I, Map<K, V>> registryLoader, Consumer<SimpleMappedRegistry<K, V>> setter, Runnable afterSet) {
+        var registry = new SimpleMappedRegistry<>(null, registryLoader);
+        setter.accept(registry);
+        afterSet.run();
     }
 
     /**
      * Creates a new mapped registry with the given {@link RegistryLoader} and input.
      *
-     * @param input          the input
+     * @param input the input
      * @param registryLoader the registry loader
-     * @param <INPUT>        the input
-     * @param <KEY>          the map key
-     * @param <VALUE>        the map value
-     * @param <MAPPING>      the returned mappings type, a map in this case
-     *
+     * @param <I> the input
+     * @param <K> the map key
+     * @param <V> the map value
      * @return a new registry with the given RegistryLoader
      */
-    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {
+    public static <I, K, V> SimpleMappedRegistry<K, V> create(I input, RegistryLoader<I, Map<K, V>> registryLoader) {
         return new SimpleMappedRegistry<>(input, registryLoader);
     }
 
@@ -63,14 +83,12 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * predefined, or the registry is populated at a later point.
      *
      * @param registryLoader the registry loader supplier
-     * @param <INPUT>        the input
-     * @param <KEY>          the map key
-     * @param <VALUE>        the map value
-     * @param <MAPPING>      the returned mappings type, a map in this case
-     *
+     * @param <I> the input
+     * @param <K> the map key
+     * @param <V> the map value
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {
+    public static <I, K, V> SimpleMappedRegistry<K, V> create(Supplier<RegistryLoader<I, Map<K, V>>> registryLoader) {
         return new SimpleMappedRegistry<>(null, registryLoader.get());
     }
 
@@ -78,24 +96,12 @@ public class SimpleMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> i
      * Creates a new mapped registry with the given {@link RegistryLoader} and input.
      *
      * @param registryLoader the registry loader
-     * @param <INPUT>        the input
-     * @param <KEY>          the map key
-     * @param <VALUE>        the map value
-     * @param <MAPPING>      the returned mappings type, a map in this case
-     *
+     * @param <I> the input
+     * @param <K> the map key
+     * @param <V> the map value
      * @return a new registry with the given RegistryLoader supplier
      */
-    public static <INPUT, KEY, VALUE, MAPPING extends Map<KEY, VALUE>> MappedRegistry<KEY, VALUE, MAPPING> of(INPUT input, Supplier<RegistryLoader<INPUT, MAPPING>> registryLoader) {
+    public static <I, K, V> SimpleMappedRegistry<K, V> create(I input, Supplier<RegistryLoader<I, Map<K, V>>> registryLoader) {
         return new SimpleMappedRegistry<>(input, registryLoader.get());
-    }
-
-    @Override
-    public MAPPING getContent() {
-        return this.mappings;
-    }
-
-    @Override
-    public void setContent(MAPPING mappings) {
-        this.mappings = mappings;
     }
 }

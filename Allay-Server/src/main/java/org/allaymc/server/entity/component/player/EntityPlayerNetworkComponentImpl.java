@@ -3,7 +3,6 @@ package org.allaymc.server.entity.component.player;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -16,26 +15,26 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.entity.registry.EntityTypeRegistry;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.item.recipe.RecipeRegistry;
-import org.allaymc.api.item.registry.CreativeItemRegistry;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.network.processor.PacketProcessorHolder;
-import org.allaymc.api.pack.PackRegistry;
+import org.allaymc.api.pack.Pack;
+import org.allaymc.api.pack.PackManifest;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.biome.BiomeTypeRegistry;
 import org.allaymc.server.network.processor.AllayPacketProcessorHolder;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
@@ -45,6 +44,8 @@ import org.cloudburstmc.protocol.bedrock.data.GamePublishSetting;
 import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
+import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
@@ -53,6 +54,7 @@ import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -226,7 +228,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // Update abilities, adventure settings, entity flags that are related to game type
         player.setGameType(player.getGameType());
 
-        sendPacket(Server.getInstance().getCommandRegistry().encodeAvailableCommandsPacketFor(player));
+        sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(player));
 
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
         server.addToPlayerList(player);
@@ -313,7 +315,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
         startGamePacket.setPremiumWorldTemplateId("");
         startGamePacket.setInventoriesServerAuthoritative(true);
-        startGamePacket.setItemDefinitions(ItemTypeRegistry.getRegistry().getItemDefinitions());
+        startGamePacket.setItemDefinitions(DeferredData.getItemDefinitions());
         startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
         startGamePacket.setServerAuthoritativeBlockBreaking(true);
         // TODO: add it to server-settings.yml
@@ -350,24 +352,17 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         session.getPeer().getCodecHelper().setBlockDefinitions(
                 SimpleDefinitionRegistry
                         .<BlockDefinition>builder()
-                        .addAll(BlockTypeRegistry.getRegistry().getBlockDefinitions())
+                        .addAll(DeferredData.getBlockDefinitions())
                         .build()
         );
 
-        var availableEntityIdentifiersPacket = new AvailableEntityIdentifiersPacket();
-        availableEntityIdentifiersPacket.setIdentifiers(EntityTypeRegistry.getRegistry().getAvailableEntityIdentifierTag());
-        sendPacket(availableEntityIdentifiersPacket);
+        sendPacket(DeferredData.getAvailableEntityIdentifiersPacket());
 
-        var biomeDefinitionListPacket = new BiomeDefinitionListPacket();
-        biomeDefinitionListPacket.setDefinitions(BiomeTypeRegistry.getRegistry().getBiomeDefinition());
-        sendPacket(biomeDefinitionListPacket);
+        sendPacket(DeferredData.getBiomeDefinitionListPacket());
 
-        var creativeContentPacket = new CreativeContentPacket();
-        creativeContentPacket.setContents(CreativeItemRegistry.getRegistry().getNetworkItemDataArray());
-        sendPacket(creativeContentPacket);
+        sendPacket(DeferredData.getCreativeContentPacket());
 
-        var craftingDataPacket = RecipeRegistry.getRegistry().getCraftingDataPacket();
-        sendPacket(craftingDataPacket);
+        sendPacket(DeferredData.getCraftingDataPacket());
     }
 
     protected void validateAndSetSpawnPoint(PlayerData playerData) {
@@ -400,7 +395,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         server.onLoggedIn(player);
         // TODO: plugin event
         manager.callEvent(PlayerLoggedInEvent.INSTANCE);
-        sendPacket(PackRegistry.getRegistry().getPacksInfoPacket());
+        sendPacket(DeferredData.getResourcePacksInfoPacket());
     }
 
     @Override
@@ -409,5 +404,161 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var childChannel = rakServerChannel.getChildChannel(session.getSocketAddress());
         var rakSessionCodec = childChannel.rakPipeline().get(RakSessionCodec.class);
         return (int) rakSessionCodec.getPing();
+    }
+
+    /**
+     * Only build these data when player join <br>
+     * Which allows plugins to register their custom stuff
+     */
+    public static class DeferredData {
+        private static CraftingDataPacket CRAFTING_DATA_PACKET = null;
+
+        public static CraftingDataPacket getCraftingDataPacket() {
+            if (CRAFTING_DATA_PACKET == null) {
+                CRAFTING_DATA_PACKET = new CraftingDataPacket();
+                CRAFTING_DATA_PACKET.getCraftingData().addAll(buildNetworkRecipeData());
+                // TODO: packet.getPotionMixData().addAll();
+                // TODO: packet.getContainerMixData().addAll();
+                // TODO: packet.getMaterialReducers().addAll();
+                CRAFTING_DATA_PACKET.setCleanRecipes(true);
+            }
+            return CRAFTING_DATA_PACKET;
+        }
+
+        public static List<RecipeData> buildNetworkRecipeData() {
+            var result = new ArrayList<RecipeData>();
+            for (var recipe : Registries.RECIPES.getContent().values()) {
+                result.add(recipe.toNetworkRecipeData());
+            }
+            return result;
+        }
+
+        private static CreativeContentPacket CREATIVE_CONTENT_PACKET = null;
+
+        public static CreativeContentPacket getCreativeContentPacket() {
+            if (CREATIVE_CONTENT_PACKET == null) {
+                CREATIVE_CONTENT_PACKET = new CreativeContentPacket();
+                CREATIVE_CONTENT_PACKET.setContents(Registries.CREATIVE_ITEMS.getContent().values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new));
+            }
+            return CREATIVE_CONTENT_PACKET;
+        }
+
+        private static List<ItemDefinition> ITEM_DEFINITIONS;
+
+        public static List<ItemDefinition> getItemDefinitions() {
+            if (ITEM_DEFINITIONS == null) {
+                ITEM_DEFINITIONS = new ArrayList<ItemDefinition>();
+                for (var itemType : Registries.ITEMS.getContent().values()) {
+                    ITEM_DEFINITIONS.add(itemType.toNetworkDefinition());
+                }
+            }
+            return ITEM_DEFINITIONS;
+        }
+
+        private static List<BlockDefinition> BLOCK_DEFINITIONS;
+
+        public static List<BlockDefinition> getBlockDefinitions() {
+            if (BLOCK_DEFINITIONS == null) {
+                BLOCK_DEFINITIONS = new ArrayList<>();
+                for (var blockType : Registries.BLOCKS.getContent().values()) {
+                    blockType.getAllStates().forEach(state -> BLOCK_DEFINITIONS.add(state.toNetworkBlockDefinition()));
+                }
+            }
+            return BLOCK_DEFINITIONS;
+        }
+
+        private static AvailableEntityIdentifiersPacket AVAILABLE_ENTITY_IDENTIFIERS_PACKET;
+
+        public static AvailableEntityIdentifiersPacket getAvailableEntityIdentifiersPacket() {
+            // TODO: support custom entity
+            // We just read it from file currently
+            if (AVAILABLE_ENTITY_IDENTIFIERS_PACKET == null) {
+                try (var stream = NbtUtils.createNetworkReader(Utils.getResource("entity_identifiers.nbt"))) {
+                    var tag = (NbtMap) stream.readTag();
+                    AVAILABLE_ENTITY_IDENTIFIERS_PACKET = new AvailableEntityIdentifiersPacket();
+                    AVAILABLE_ENTITY_IDENTIFIERS_PACKET.setIdentifiers(tag);
+                } catch (Exception e) {
+                    throw new AssertionError("Failed to load entity_identifiers.nbt", e);
+                }
+            }
+            assert AVAILABLE_ENTITY_IDENTIFIERS_PACKET != null;
+            return AVAILABLE_ENTITY_IDENTIFIERS_PACKET;
+        }
+
+        private static BiomeDefinitionListPacket BIOME_DEFINITION_LIST_PACKET;
+
+        public static BiomeDefinitionListPacket getBiomeDefinitionListPacket() {
+            // TODO: support custom biome
+            // Same to entity, we just read it from file currently
+            if (BIOME_DEFINITION_LIST_PACKET == null) {
+                try (var stream = Utils.getResource("biome_definitions.nbt")) {
+                    var tag = (NbtMap) NbtUtils.createGZIPReader(stream).readTag();
+                    BIOME_DEFINITION_LIST_PACKET = new BiomeDefinitionListPacket();
+                    BIOME_DEFINITION_LIST_PACKET.setDefinitions(tag);
+                } catch (Exception e) {
+                    throw new AssertionError("Failed to load biome_definitions.nbt", e);
+                }
+            }
+            assert BIOME_DEFINITION_LIST_PACKET != null;
+            return BIOME_DEFINITION_LIST_PACKET;
+        }
+
+        private static ResourcePacksInfoPacket RESOURCE_PACKS_INFO_PACKET;
+
+        public static ResourcePacksInfoPacket getResourcePacksInfoPacket() {
+            if (RESOURCE_PACKS_INFO_PACKET == null) {
+                buildResourcePackPacket();
+            }
+            assert RESOURCE_PACKS_INFO_PACKET != null;
+            return RESOURCE_PACKS_INFO_PACKET;
+        }
+
+        private static ResourcePackStackPacket RESOURCES_PACK_STACK_PACKET;
+
+        public static ResourcePackStackPacket getResourcesPackStackPacket() {
+            if (RESOURCES_PACK_STACK_PACKET == null) {
+                buildResourcePackPacket();
+            }
+            assert RESOURCES_PACK_STACK_PACKET != null;
+            return RESOURCES_PACK_STACK_PACKET;
+        }
+
+        public static void buildResourcePackPacket() {
+            RESOURCE_PACKS_INFO_PACKET = new ResourcePacksInfoPacket();
+            RESOURCES_PACK_STACK_PACKET = new ResourcePackStackPacket();
+
+            var forceResourcePacks = Server.SETTINGS.resourcePackSettings().forceResourcePacks();
+            RESOURCE_PACKS_INFO_PACKET.setForcedToAccept(forceResourcePacks);
+
+            RESOURCES_PACK_STACK_PACKET.setForcedToAccept(forceResourcePacks);
+            // Just left a '*' here, if we put in an exact game version,
+            // it is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
+            RESOURCES_PACK_STACK_PACKET.setGameVersion("*");
+
+            for (var pack : Registries.PACKS.getContent().values()) {
+                var id = pack.getId().toString();
+                var version = pack.getStringVersion();
+                var type = pack.getType();
+
+                var packEntry = new ResourcePacksInfoPacket.Entry(
+                        id,
+                        version,
+                        pack.getSize(),
+                        pack.getContentKey(),
+                        "", // TODO: Sub pack name
+                        id,
+                        type == Pack.Type.SCRIPT,
+                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED)
+                );
+                var stackEntry = new ResourcePackStackPacket.Entry(id, version, "");
+                if (type == Pack.Type.RESOURCES) {
+                    RESOURCE_PACKS_INFO_PACKET.getResourcePackInfos().add(packEntry);
+                    RESOURCES_PACK_STACK_PACKET.getResourcePacks().add(stackEntry);
+                } else if (type == Pack.Type.DATA || type == Pack.Type.SCRIPT) {
+                    RESOURCE_PACKS_INFO_PACKET.getBehaviorPackInfos().add(packEntry);
+                    RESOURCES_PACK_STACK_PACKET.getBehaviorPacks().add(stackEntry);
+                }
+            }
+        }
     }
 }

@@ -3,7 +3,8 @@ package org.allaymc.server.network.processor.login;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.ILoginPacketProcessor;
-import org.allaymc.api.pack.PackRegistry;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackClientResponsePacket;
 
@@ -20,7 +21,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
         switch (packet.getStatus()) {
             case SEND_PACKS -> {
                 for (var packId : packet.getPackIds()) {
-                    var pack = PackRegistry.getRegistry().get(UUID.fromString(packId.split("_")[0]));
+                    var pack = Registries.PACKS.get(UUID.fromString(packId.split("_")[0]));
                     if (pack == null) {
                         player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_RESOURCEPACK);
                         return;
@@ -29,7 +30,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                     player.sendPacket(pack.toNetwork());
                 }
             }
-            case HAVE_ALL_PACKS -> player.sendPacket(PackRegistry.getRegistry().getPackStackPacket());
+            case HAVE_ALL_PACKS -> player.sendPacket(EntityPlayerNetworkComponentImpl.DeferredData.getResourcesPackStackPacket());
             case COMPLETED -> player.initializePlayer();
             default -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
         }

@@ -3,10 +3,9 @@ package org.allaymc.server.loottable.condition;
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
-import org.allaymc.api.item.enchantment.EnchantmentRegistry;
 import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.registry.ItemTypeRegistry;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.loottable.context.BreakBlockContext;
 
@@ -47,7 +46,7 @@ public class MatchToolCondition implements Condition<BreakBlockContext> {
         public Condition<BreakBlockContext> deserialize(JsonObject json) {
             ItemType<?> itemType = null;
             if (json.has("item")) {
-                itemType = ItemTypeRegistry.getRegistry().get(new Identifier(json.get("item").getAsString()));
+                itemType = Registries.ITEMS.get(new Identifier(json.get("item").getAsString()));
             }
             Integer count = null;
             if (json.has("count")) {
@@ -63,7 +62,7 @@ public class MatchToolCondition implements Condition<BreakBlockContext> {
                     var enchObj = element.getAsJsonObject();
                     var enchName = enchObj.get("enchantment").getAsString();
                     if (!enchName.contains(":")) enchName = Identifier.DEFAULT_NAMESPACE + ":" + enchName;
-                    var enchType = EnchantmentRegistry.getRegistry().getByK2(new Identifier(enchName));
+                    var enchType = Registries.ENCHANTMENTS.getByK2(new Identifier(enchName));
                     Preconditions.checkNotNull(enchType);
                     enchTypes.add(enchType);
                 }

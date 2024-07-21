@@ -72,12 +72,12 @@ public class VanillaBlockIdEnumGen {
     @SneakyThrows
     public static void generateToAPIModule() {
         var identifierClass = ClassName.get("org.allaymc.api.utils", "Identifier");
-        var blockTypeRegistryClass = ClassName.get("org.allaymc.api.block.registry", "BlockTypeRegistry");
+        var registriesClass = ClassName.get("org.allaymc.api.registry", "Registries");
         var blockTypeClass = ClassName.get("org.allaymc.api.block.type", "BlockType");
         TypeSpec.Builder codeBuilder = commonBuilder(identifierClass)
                 .addMethod(MethodSpec.methodBuilder("getBlockType")
                         .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return $T.getRegistry().get(this.getIdentifier())", blockTypeRegistryClass)
+                        .addStatement("return $T.BLOCK_TYPES.get(this.getIdentifier())", registriesClass)
                         .returns(blockTypeClass)
                         .build()
                 )

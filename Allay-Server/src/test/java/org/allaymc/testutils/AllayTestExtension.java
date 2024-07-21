@@ -17,7 +17,7 @@ public class AllayTestExtension implements BeforeAllCallback {
     public void beforeAll(ExtensionContext context) throws Exception {
         if (!AllayAPI.getInstance().isImplemented()) {
             Allay.initI18n();
-            Allay.initAllayAPI();
+            Allay.initAllay();
         }
     }
 }

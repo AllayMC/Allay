@@ -2,12 +2,12 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.block.palette.BlockStateHashPalette;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityFallingBlock;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
@@ -85,7 +85,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
         nbt.listenForInt("BlockStateHash", blockStateHash ->
-                blockState = BlockStateHashPalette.getRegistry().get(blockStateHash)
+                blockState = Registries.BLOCK_STATE_PALETTE.get(blockStateHash)
         );
     }
 

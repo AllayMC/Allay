@@ -2,10 +2,9 @@ package org.allaymc.server.block;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.BlockStateData;
-import org.allaymc.api.block.registry.BlockTypeRegistry;
-import org.allaymc.api.block.registry.VanillaBlockStateDataRegistry;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.testutils.AllayTestExtension;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -78,9 +77,9 @@ class BlockStateDataTest {
     void testVanillaBlockStateData() {
         int error = 0;
         for (var vanillaBlockId : VanillaBlockId.values()) {
-            BlockType<?> type = BlockTypeRegistry.getRegistry().get(vanillaBlockId.getIdentifier());
+            BlockType<?> type = Registries.BLOCKS.get(vanillaBlockId.getIdentifier());
             assertNotNull(type);
-            var blockStateDataMap = VanillaBlockStateDataRegistry.getRegistry().get(vanillaBlockId);
+            var blockStateDataMap = Registries.VANILLA_BLOCK_STATE_DATA.get(vanillaBlockId);
             assertNotNull(blockStateDataMap);
             for (var state : type.getBlockStateHashMap().values()) {
                 var expected = blockStateDataMap.get(state.blockStateHash());
