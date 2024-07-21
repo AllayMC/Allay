@@ -1,8 +1,6 @@
 {
   "allay:allay.starting": "正在启动allay...",
   "allay:api.implemented": "此服务器正在运行 §b%1§r, 实现Allay-API版本 §b%2",
-  "allay:blockattr.loaded": "加载原版方块属性表完成",
-  "allay:blockattr.loading": "正在加载原版方块属性表...",
   "allay:blockentitytype.loaded": "加载完成 %1 个方块实体类型",
   "allay:blockentitytype.loading": "正在加载方块实体类型...",
   "allay:blocktype.loaded": "加载完成 %1 个方块类型",
@@ -85,6 +83,8 @@
   "allay:plugin.jar.mainclass.typeinvalid": "插件 %1 的主类未继承Plugin",
   "allay:plugin.load.error": "读取插件 %1 时发生错误: %2",
   "allay:plugin.loading": "正在读取插件 %1",
+  "allay:recipe.loaded": "加载完成 %1 个配方",
+  "allay:recipe.loading": "正在加载配方...",
   "allay:server.starting": "正在启动Allay...",
   "allay:world.loaded": "世界 %1 已加载",
   "allay:world.loading": "正在加载世界 %1",

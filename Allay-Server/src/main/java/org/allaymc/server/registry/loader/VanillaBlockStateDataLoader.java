@@ -25,7 +25,6 @@ public class VanillaBlockStateDataLoader implements RegistryLoader<Void, Map<Van
     @Override
     @SneakyThrows
     public Map<VanillaBlockId, Map<Integer, BlockStateData>> load(Void $) {
-        log.info("Start loading vanilla block state data registry...");
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_states.json")))) {
             var loaded = new EnumMap<VanillaBlockId, Map<Integer, BlockStateData>>(VanillaBlockId.class);
             JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> {
@@ -42,7 +41,6 @@ public class VanillaBlockStateDataLoader implements RegistryLoader<Void, Map<Van
 
                 loaded.get(type).put(obj.get("blockStateHash").getAsInt(), blockStateData);
             });
-            log.info("Loaded vanilla block attribute data registry successfully");
             return loaded;
         }
     }

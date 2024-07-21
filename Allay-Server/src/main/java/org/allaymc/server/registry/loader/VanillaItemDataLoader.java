@@ -24,7 +24,6 @@ public class VanillaItemDataLoader implements RegistryLoader<Void, Map<VanillaIt
     @Override
     @SneakyThrows
     public Map<VanillaItemId, ItemData> load(Void $) {
-        log.info("Start loading vanilla item data registry...");
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("items.json")))) {
             var loaded = new HashMap<VanillaItemId, ItemData>();
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
@@ -36,7 +35,6 @@ public class VanillaItemDataLoader implements RegistryLoader<Void, Map<VanillaIt
                 var itemData = ItemData.fromJson(entry.getValue().toString());
                 loaded.put(id, itemData);
             });
-            log.info("Loaded vanilla item data registry successfully");
             return loaded;
         }
     }
