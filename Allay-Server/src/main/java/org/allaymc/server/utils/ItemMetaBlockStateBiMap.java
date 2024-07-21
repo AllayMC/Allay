@@ -27,7 +27,7 @@ public final class ItemMetaBlockStateBiMap {
 
     private static final Map<ItemType<?>, Map<Integer, BlockState>> ITEM_TYPE_TO_META_MAP = new HashMap<>();
     private static final Map<BlockType<?>, Map<Integer, Integer>> BLOCK_STATE_HASH_TO_META_MAP = new HashMap<>();
-    private static boolean initialized = false;
+    private static boolean INITIALIZED = false;
 
     public static void init() {
         try (var reader = NbtUtils.createGZIPReader(Utils.getResource("item_meta_block_state_bimap.nbt"))) {
@@ -39,21 +39,20 @@ public final class ItemMetaBlockStateBiMap {
                 metaToHashMap.forEach((meta, blockStateHash) -> {
                     var metaInt = Integer.parseInt(meta);
                     var blockStateHashInt = (Integer) blockStateHash;
-                    var blockState = Registries.BLOCK_STATE_PALETTE.get(blockStateHashInt);
+                    var blockState = Registries.BLOCK_STATE_PALETTE.get(blockStateHashInt.intValue());
                     Objects.requireNonNull(blockState, "Cannot find block state by hash: " + blockStateHashInt);
                     ITEM_TYPE_TO_META_MAP.computeIfAbsent(itemType, k -> new Int2ObjectOpenHashMap<>()).put(metaInt, blockState);
                     BLOCK_STATE_HASH_TO_META_MAP.computeIfAbsent(blockState.getBlockType(), k -> new Int2ObjectOpenHashMap<>()).put(blockStateHashInt, metaInt);
                 });
             });
+            INITIALIZED = true;
         } catch (IOException e) {
-            log.error("Cannot load item_meta_block_state_bimap.nbt!", e);
-        } finally {
-            initialized = true;
+            throw new RuntimeException(e);
         }
     }
 
     public static Function<Integer, BlockState> getMetaToBlockStateMapper(ItemType<?> itemType) {
-        if (!initialized) {
+        if (!INITIALIZED) {
             throw new IllegalStateException();
         }
         var map = ITEM_TYPE_TO_META_MAP.get(itemType);
@@ -61,7 +60,7 @@ public final class ItemMetaBlockStateBiMap {
     }
 
     public static Function<Integer, Integer> getBlockStateHashToMetaMapper(BlockType<?> blockType) {
-        if (!initialized) {
+        if (!INITIALIZED) {
             throw new IllegalStateException();
         }
         var map = BLOCK_STATE_HASH_TO_META_MAP.get(blockType);
