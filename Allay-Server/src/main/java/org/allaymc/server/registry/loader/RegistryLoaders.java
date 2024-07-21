@@ -25,6 +25,7 @@
 
 package org.allaymc.server.registry.loader;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.registry.RegistryLoader;
 
 import java.util.function.Supplier;
@@ -32,7 +33,8 @@ import java.util.function.Supplier;
 /**
  * Holds common {@link RegistryLoader}s or utility methods surrounding them.
  */
-public final class RegistryLoaders {
+@UtilityClass
+public class RegistryLoaders {
     /**
      * The {@link RegistryLoader} responsible for loading NBT.
      */
@@ -61,6 +63,4 @@ public final class RegistryLoaders {
     public static <I, V> RegistryLoader<I, V> uninitialized() {
         return input -> null;
     }
-
-    private RegistryLoaders() {}
 }
