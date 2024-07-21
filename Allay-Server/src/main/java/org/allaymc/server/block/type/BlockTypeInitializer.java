@@ -3,6 +3,12 @@ package org.allaymc.server.block.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.interfaces.leaves.*;
+import org.allaymc.api.block.interfaces.log.BlockAcaciaLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockBirchLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockDarkOakLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockJungleLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockOakLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockSpruceLogBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
 import org.allaymc.api.block.interfaces.torch.*;
@@ -16,6 +22,9 @@ import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
+import org.allaymc.server.block.component.facing.BlockCardinalDirectionComponentImpl;
+import org.allaymc.server.block.component.facing.BlockFacingBaseComponentImpl;
+import org.allaymc.server.block.component.facing.BlockPillarAxisBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
@@ -713,6 +722,55 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(VanillaBlockId.UNLIT_REDSTONE_TORCH)
                 .setProperties(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initLog() {
+        BlockTypes.ACACIA_LOG = BlockTypeBuilder
+                .builder(BlockAcaciaLogBehavior.class)
+                .vanillaBlock(VanillaBlockId.ACACIA_LOG)
+                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+                .build();
+        BlockTypes.OAK_LOG = BlockTypeBuilder
+                .builder(BlockOakLogBehavior.class)
+                .vanillaBlock(VanillaBlockId.OAK_LOG)
+                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+                .build();
+        BlockTypes.SPRUCE_LOG = BlockTypeBuilder
+                .builder(BlockSpruceLogBehavior.class)
+                .vanillaBlock(VanillaBlockId.SPRUCE_LOG)
+                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+                .build();
+        BlockTypes.DARK_OAK_LOG = BlockTypeBuilder
+                .builder(BlockDarkOakLogBehavior.class)
+                .vanillaBlock(VanillaBlockId.DARK_OAK_LOG)
+                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+                .build();
+        BlockTypes.JUNGLE_LOG = BlockTypeBuilder
+                .builder(BlockJungleLogBehavior.class)
+                .vanillaBlock(VanillaBlockId.JUNGLE_LOG)
+                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+                .build();
+        BlockTypes.BIRCH_LOG = BlockTypeBuilder
+                .builder(BlockBirchLogBehavior.class)
+                .vanillaBlock(VanillaBlockId.BIRCH_LOG)
+                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+                .build();
+        //TODO: others blocks
+    }
+
+    public static void initFurnaces() {
+        BlockTypes.FURNACE = BlockTypeBuilder
+                .builder(BlockFurnaceBehavior.class)
+                .vanillaBlock(VanillaBlockId.FURNACE)
+                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockCardinalDirectionComponentImpl::new)
                 .build();
     }
 }
