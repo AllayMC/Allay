@@ -1,6 +1,6 @@
 package org.allaymc.server.block.component.facing;
 
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
+import static org.allaymc.api.data.VanillaBlockPropertyTypes.DIRECTION;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;
@@ -15,9 +15,9 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "facing_direction")
-public class BlockFacingBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockFacingBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "direction")
+public class BlockDirectionBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockDirectionBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
@@ -28,7 +28,10 @@ public class BlockFacingBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
             return true;
         }
-        blockState = blockState.setProperty(FACING_DIRECTION, placementInfo.blockFace().ordinal());
+        var player = placementInfo.player();
+        if (player != null) {
+            blockState = blockState.setProperty(DIRECTION, player.getHorizontalFace().ordinal());
+        }
         
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;

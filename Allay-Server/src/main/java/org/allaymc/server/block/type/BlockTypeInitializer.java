@@ -26,7 +26,7 @@ import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.facing.BlockCardinalDirectionComponentImpl;
-import org.allaymc.server.block.component.facing.BlockFacingBaseComponentImpl;
+import org.allaymc.server.block.component.facing.BlockFacingDirectionBaseComponentImpl;
 import org.allaymc.server.block.component.facing.BlockPillarAxisBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
@@ -821,13 +821,20 @@ public final class BlockTypeInitializer {
         BlockTypes.DEEPSLATE = initPillarAxis(BlockDeepslateBehavior.class, VanillaBlockId.DEEPSLATE);
     }
 
-    public static void initFurnaces() {
-        BlockTypes.FURNACE = BlockTypeBuilder
-                .builder(BlockFurnaceBehavior.class)
-                .vanillaBlock(VanillaBlockId.FURNACE)
-                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+    public static void initCardinalDirection() {
+        BlockTypes.ANVIL = BlockTypeBuilder
+                .builder(BlockAnvilBehavior.class)
+                .vanillaBlock(VanillaBlockId.ANVIL)
+                .setProperties(VanillaBlockPropertyTypes.DAMAGE, VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockCardinalDirectionComponentImpl::new)
                 .build();
+
+        //TODO: BlockTypes.BIG_DRIPLEAF, BIG_DRIPLEAF
+        BlockTypes.BLAST_FURNACE = buildCardinalDirection(BlockBlastFurnaceBehavior.class, VanillaBlockId.BLAST_FURNACE);
+        BlockTypes.CARVED_PUMPKIN = buildCardinalDirection(BlockCarvedPumpkinBehavior.class, VanillaBlockId.CARVED_PUMPKIN);
+
+        //TODO: CALIBRATED_SCULK_SENSOR
+        BlockTypes.FURNACE = buildCardinalDirection(BlockFurnaceBehavior.class, VanillaBlockId.FURNACE);
     }
 
     public static void initButtons() {
@@ -853,6 +860,15 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
                 .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+                .build();
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildCardinalDirection(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+        return BlockTypeBuilder
+                .builder(clazz)
+                .vanillaBlock(vanillaBlockId)
+                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockCardinalDirectionComponentImpl::new)
                 .build();
     }
 
