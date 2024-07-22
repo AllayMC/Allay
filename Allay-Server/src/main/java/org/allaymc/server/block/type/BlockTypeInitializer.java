@@ -11,6 +11,7 @@ import org.allaymc.api.block.interfaces.log.*;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
 import org.allaymc.api.block.interfaces.torch.*;
+import org.allaymc.api.block.interfaces.wood.*;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.block.type.BlockTypes;
@@ -19,14 +20,14 @@ import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.*;
+import org.allaymc.server.block.component.button.BlockStoneButtonComponentImpl;
+import org.allaymc.server.block.component.button.BlockWoodenButtonComponentImpl;
 import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.facing.BlockCardinalDirectionComponentImpl;
 import org.allaymc.server.block.component.facing.BlockFacingBaseComponentImpl;
 import org.allaymc.server.block.component.facing.BlockPillarAxisBaseComponentImpl;
-import org.allaymc.server.block.component.redstone.button.BlockStoneButtonComponentImpl;
-import org.allaymc.server.block.component.redstone.button.BlockWoodenButtonComponentImpl;
 import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
@@ -729,34 +730,95 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static void initLog() {
+    public static void initPillars() {
+        //Log
         BlockTypes.ACACIA_LOG = initPillarAxis(BlockAcaciaLogBehavior.class, VanillaBlockId.ACACIA_LOG);
+        BlockTypes.BAMBOO_BLOCK = initPillarAxis(BlockBambooBlockBehavior.class, VanillaBlockId.BAMBOO_BLOCK);
+        BlockTypes.BIRCH_LOG = initPillarAxis(BlockBirchLogBehavior.class, VanillaBlockId.BIRCH_LOG);
+        BlockTypes.CHERRY_LOG = initPillarAxis(BlockCherryLogBehavior.class, VanillaBlockId.CHERRY_LOG);
+        BlockTypes.CRIMSON_STEM = initPillarAxis(BlockCrimsonStemBehavior.class, VanillaBlockId.CRIMSON_STEM);
+        BlockTypes.DARK_OAK_LOG = initPillarAxis(BlockDarkOakLogBehavior.class, VanillaBlockId.DARK_OAK_LOG);
+        BlockTypes.JUNGLE_LOG = initPillarAxis(BlockJungleLogBehavior.class, VanillaBlockId.JUNGLE_LOG);
+        BlockTypes.MANGROVE_LOG = initPillarAxis(BlockMangroveLogBehavior.class, VanillaBlockId.MANGROVE_LOG);
         BlockTypes.OAK_LOG = initPillarAxis(BlockOakLogBehavior.class, VanillaBlockId.OAK_LOG);
-        BlockTypes.SPRUCE_LOG = BlockTypeBuilder
-                .builder(BlockSpruceLogBehavior.class)
-                .vanillaBlock(VanillaBlockId.SPRUCE_LOG)
-                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+        BlockTypes.SPRUCE_LOG = initPillarAxis(BlockSpruceLogBehavior.class, VanillaBlockId.SPRUCE_LOG);
+        BlockTypes.WARPED_STEM = initPillarAxis(BlockWarpedStemBehavior.class, VanillaBlockId.WARPED_STEM);
+
+        //Stripped Log
+        BlockTypes.STRIPPED_ACACIA_LOG = initPillarAxis(BlockStrippedAcaciaLogBehavior.class, VanillaBlockId.STRIPPED_ACACIA_LOG);
+        BlockTypes.STRIPPED_BAMBOO_BLOCK = initPillarAxis(BlockStrippedBambooBlockBehavior.class, VanillaBlockId.STRIPPED_BAMBOO_BLOCK);
+        BlockTypes.STRIPPED_BIRCH_LOG = initPillarAxis(BlockStrippedBirchLogBehavior.class, VanillaBlockId.STRIPPED_BIRCH_LOG);
+        BlockTypes.STRIPPED_CHERRY_LOG = initPillarAxis(BlockStrippedCherryLogBehavior.class, VanillaBlockId.STRIPPED_CHERRY_LOG);
+        BlockTypes.STRIPPED_CRIMSON_STEM = initPillarAxis(BlockStrippedCrimsonStemBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_STEM);
+        BlockTypes.STRIPPED_DARK_OAK_LOG = initPillarAxis(BlockStrippedDarkOakLogBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_LOG);
+        BlockTypes.STRIPPED_JUNGLE_LOG = initPillarAxis(BlockStrippedJungleLogBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_LOG);
+        BlockTypes.STRIPPED_OAK_LOG = initPillarAxis(BlockStrippedOakLogBehavior.class, VanillaBlockId.STRIPPED_OAK_LOG);
+        BlockTypes.STRIPPED_SPRUCE_LOG = initPillarAxis(BlockStrippedSpruceLogBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_LOG);
+        BlockTypes.STRIPPED_WARPED_STEM = initPillarAxis(BlockStrippedWarpedStemBehavior.class, VanillaBlockId.STRIPPED_WARPED_STEM);
+
+        //Wood
+        BlockTypes.ACACIA_WOOD = initPillarAxis(BlockAcaciaWoodBehavior.class, VanillaBlockId.ACACIA_WOOD);
+        BlockTypes.BAMBOO_BLOCK = initPillarAxis(BlockBambooBlockBehavior.class, VanillaBlockId.BAMBOO_BLOCK);
+        BlockTypes.BIRCH_WOOD = initPillarAxis(BlockBirchWoodBehavior.class, VanillaBlockId.BIRCH_WOOD);
+        BlockTypes.CHERRY_WOOD = initPillarAxis(BlockCherryWoodBehavior.class, VanillaBlockId.CHERRY_WOOD);
+        BlockTypes.CRIMSON_HYPHAE = initPillarAxis(BlockCrimsonHyphaeBehavior.class, VanillaBlockId.CRIMSON_HYPHAE);
+        BlockTypes.DARK_OAK_WOOD = initPillarAxis(BlockDarkOakWoodBehavior.class, VanillaBlockId.DARK_OAK_WOOD);
+        BlockTypes.JUNGLE_WOOD = initPillarAxis(BlockJungleWoodBehavior.class, VanillaBlockId.JUNGLE_WOOD);
+        BlockTypes.MANGROVE_WOOD = initPillarAxis(BlockMangroveWoodBehavior.class, VanillaBlockId.MANGROVE_WOOD);
+        BlockTypes.OAK_WOOD = initPillarAxis(BlockOakWoodBehavior.class, VanillaBlockId.OAK_WOOD);
+        BlockTypes.SPRUCE_WOOD = initPillarAxis(BlockSpruceWoodBehavior.class, VanillaBlockId.SPRUCE_LOG);
+        BlockTypes.WARPED_HYPHAE = initPillarAxis(BlockWarpedHyphaeBehavior.class, VanillaBlockId.WARPED_STEM);
+
+        //Stripped Wood
+        BlockTypes.STRIPPED_ACACIA_WOOD = initPillarAxis(BlockStrippedAcaciaWoodBehavior.class, VanillaBlockId.STRIPPED_ACACIA_WOOD);
+        BlockTypes.STRIPPED_BAMBOO_BLOCK = initPillarAxis(BlockStrippedBambooBlockBehavior.class, VanillaBlockId.STRIPPED_BAMBOO_BLOCK);
+        BlockTypes.STRIPPED_BIRCH_WOOD = initPillarAxis(BlockStrippedBirchWoodBehavior.class, VanillaBlockId.STRIPPED_BIRCH_WOOD);
+        BlockTypes.STRIPPED_CHERRY_WOOD = initPillarAxis(BlockStrippedCherryWoodBehavior.class, VanillaBlockId.STRIPPED_CHERRY_WOOD);
+        BlockTypes.STRIPPED_CRIMSON_HYPHAE = initPillarAxis(BlockStrippedCrimsonHyphaeBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_HYPHAE);
+        BlockTypes.STRIPPED_DARK_OAK_WOOD = initPillarAxis(BlockStrippedDarkOakWoodBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_WOOD);
+        BlockTypes.STRIPPED_JUNGLE_WOOD = initPillarAxis(BlockStrippedJungleWoodBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_WOOD);
+        BlockTypes.STRIPPED_MANGROVE_WOOD = initPillarAxis(BlockStrippedMangroveWoodBehavior.class, VanillaBlockId.STRIPPED_MANGROVE_WOOD);
+        BlockTypes.STRIPPED_OAK_WOOD = initPillarAxis(BlockStrippedOakWoodBehavior.class, VanillaBlockId.STRIPPED_OAK_WOOD);
+        BlockTypes.STRIPPED_SPRUCE_WOOD = initPillarAxis(BlockStrippedSpruceWoodBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_LOG);
+        BlockTypes.STRIPPED_WARPED_HYPHAE = initPillarAxis(BlockStrippedWarpedHyphaeBehavior.class, VanillaBlockId.STRIPPED_WARPED_STEM);
+
+        BlockTypes.MUDDY_MANGROVE_ROOTS = initPillarAxis(BlockMuddyMangroveRootsBehavior.class, VanillaBlockId.MUDDY_MANGROVE_ROOTS);
+
+        BlockTypes.BASALT = initPillarAxis(BlockBasaltBehavior.class, VanillaBlockId.BASALT);
+        BlockTypes.POLISHED_BASALT = initPillarAxis(BlockPolishedBasaltBehavior.class, VanillaBlockId.POLISHED_BASALT);
+
+        BlockTypes.OCHRE_FROGLIGHT = initPillarAxis(BlockOchreFroglightBehavior.class, VanillaBlockId.OCHRE_FROGLIGHT);
+        BlockTypes.PEARLESCENT_FROGLIGHT = initPillarAxis(BlockPearlescentFroglightBehavior.class, VanillaBlockId.PEARLESCENT_FROGLIGHT);
+        BlockTypes.VERDANT_FROGLIGHT = initPillarAxis(BlockVerdantFroglightBehavior.class, VanillaBlockId.VERDANT_FROGLIGHT);
+        
+        BlockTypes.BONE_BLOCK = BlockTypeBuilder
+                .builder(BlockBoneBlockBehavior.class)
+                .vanillaBlock(VanillaBlockId.BONE_BLOCK)
+                .setProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockDeprecatedBaseComponentImpl::new)
                 .build();
-        BlockTypes.DARK_OAK_LOG = BlockTypeBuilder
-                .builder(BlockDarkOakLogBehavior.class)
-                .vanillaBlock(VanillaBlockId.DARK_OAK_LOG)
-                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+        BlockTypes.HAY_BLOCK = BlockTypeBuilder
+                .builder(BlockHayBlockBehavior.class)
+                .vanillaBlock(VanillaBlockId.HAY_BLOCK)
+                .setProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockDeprecatedBaseComponentImpl::new)
                 .build();
-        BlockTypes.JUNGLE_LOG = BlockTypeBuilder
-                .builder(BlockJungleLogBehavior.class)
-                .vanillaBlock(VanillaBlockId.JUNGLE_LOG)
-                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+        
+        BlockTypes.PURPUR_BLOCK = BlockTypeBuilder
+                .builder(BlockPurpurBlockBehavior.class)
+                .vanillaBlock(VanillaBlockId.PURPUR_BLOCK)
+                .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockChiselTypeBaseComponentImpl::new)
                 .build();
-        BlockTypes.BIRCH_LOG = BlockTypeBuilder
-                .builder(BlockBirchLogBehavior.class)
-                .vanillaBlock(VanillaBlockId.BIRCH_LOG)
-                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+        BlockTypes.QUARTZ_BLOCK = BlockTypeBuilder
+                .builder(BlockQuartzBlockBehavior.class)
+                .vanillaBlock(VanillaBlockId.QUARTZ_BLOCK)
+                .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockChiselTypeBaseComponentImpl::new)
                 .build();
-        //TODO: others blocks
+
+        BlockTypes.CHAIN = initPillarAxis(BlockChainBehavior.class, VanillaBlockId.CHAIN);
+        BlockTypes.DEEPSLATE = initPillarAxis(BlockDeepslateBehavior.class, VanillaBlockId.DEEPSLATE);
     }
 
     public static void initFurnaces() {

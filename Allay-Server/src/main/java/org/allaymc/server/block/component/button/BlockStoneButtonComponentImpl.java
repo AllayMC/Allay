@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.redstone.button;
+package org.allaymc.server.block.component.button;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;

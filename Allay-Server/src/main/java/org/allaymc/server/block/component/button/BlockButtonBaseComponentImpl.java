@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.redstone.button;
+package org.allaymc.server.block.component.button;
 
 import static org.allaymc.api.data.VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT;
 
