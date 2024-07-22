@@ -1,6 +1,8 @@
 package org.allaymc.server.block.type;
 
 import lombok.experimental.UtilityClass;
+
+import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.interfaces.leaves.*;
 import org.allaymc.api.block.interfaces.log.BlockAcaciaLogBehavior;
@@ -12,6 +14,7 @@ import org.allaymc.api.block.interfaces.log.BlockSpruceLogBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
 import org.allaymc.api.block.interfaces.torch.*;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
@@ -726,18 +729,8 @@ public final class BlockTypeInitializer {
     }
 
     public static void initLog() {
-        BlockTypes.ACACIA_LOG = BlockTypeBuilder
-                .builder(BlockAcaciaLogBehavior.class)
-                .vanillaBlock(VanillaBlockId.ACACIA_LOG)
-                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
-                .build();
-        BlockTypes.OAK_LOG = BlockTypeBuilder
-                .builder(BlockOakLogBehavior.class)
-                .vanillaBlock(VanillaBlockId.OAK_LOG)
-                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
-                .build();
+        BlockTypes.ACACIA_LOG = initPillarAxis(BlockAcaciaLogBehavior.class, VanillaBlockId.ACACIA_LOG);
+        BlockTypes.OAK_LOG = initPillarAxis(BlockOakLogBehavior.class, VanillaBlockId.OAK_LOG);
         BlockTypes.SPRUCE_LOG = BlockTypeBuilder
                 .builder(BlockSpruceLogBehavior.class)
                 .vanillaBlock(VanillaBlockId.SPRUCE_LOG)
@@ -771,6 +764,15 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(VanillaBlockId.FURNACE)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockCardinalDirectionComponentImpl::new)
+                .build();
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> initPillarAxis(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+        return BlockTypeBuilder
+                .builder(clazz)
+                .vanillaBlock(vanillaBlockId)
+                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
                 .build();
     }
 }
