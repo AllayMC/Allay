@@ -3,14 +3,11 @@ package org.allaymc.server.block.type;
 import lombok.experimental.UtilityClass;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.interfaces.*;
+import org.allaymc.api.block.interfaces.button.*;
 import org.allaymc.api.block.interfaces.leaves.*;
-import org.allaymc.api.block.interfaces.log.BlockAcaciaLogBehavior;
-import org.allaymc.api.block.interfaces.log.BlockBirchLogBehavior;
-import org.allaymc.api.block.interfaces.log.BlockDarkOakLogBehavior;
-import org.allaymc.api.block.interfaces.log.BlockJungleLogBehavior;
-import org.allaymc.api.block.interfaces.log.BlockOakLogBehavior;
-import org.allaymc.api.block.interfaces.log.BlockSpruceLogBehavior;
+import org.allaymc.api.block.interfaces.log.*;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
 import org.allaymc.api.block.interfaces.torch.*;
@@ -28,9 +25,13 @@ import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl
 import org.allaymc.server.block.component.facing.BlockCardinalDirectionComponentImpl;
 import org.allaymc.server.block.component.facing.BlockFacingBaseComponentImpl;
 import org.allaymc.server.block.component.facing.BlockPillarAxisBaseComponentImpl;
+import org.allaymc.server.block.component.redstone.button.BlockStoneButtonComponentImpl;
+import org.allaymc.server.block.component.redstone.button.BlockWoodenButtonComponentImpl;
 import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
+
+import java.util.function.Function;
 
 /**
  * Allay Project 2024/3/9
@@ -767,12 +768,42 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initButtons() {
+        BlockTypes.ACACIA_BUTTON = initWoodenButton(BlockAcaciaButtonBehavior.class, VanillaBlockId.ACACIA_BUTTON);
+        BlockTypes.BAMBOO_BUTTON = initWoodenButton(BlockBambooButtonBehavior.class, VanillaBlockId.BAMBOO_BUTTON);
+        BlockTypes.BIRCH_BUTTON = initWoodenButton(BlockBirchButtonBehavior.class, VanillaBlockId.BIRCH_BUTTON);
+        BlockTypes.CHERRY_BUTTON = initWoodenButton(BlockCherryButtonBehavior.class, VanillaBlockId.CHERRY_BUTTON);
+        BlockTypes.CRIMSON_BUTTON = initWoodenButton(BlockCrimsonButtonBehavior.class, VanillaBlockId.CRIMSON_BUTTON);
+        BlockTypes.DARK_OAK_BUTTON = initWoodenButton(BlockDarkOakButtonBehavior.class, VanillaBlockId.DARK_OAK_BUTTON);
+        BlockTypes.JUNGLE_BUTTON = initWoodenButton(BlockJungleButtonBehavior.class, VanillaBlockId.JUNGLE_BUTTON);
+        BlockTypes.MANGROVE_BUTTON = initWoodenButton(BlockMangroveButtonBehavior.class, VanillaBlockId.MANGROVE_BUTTON);
+        BlockTypes.SPRUCE_BUTTON = initWoodenButton(BlockSpruceButtonBehavior.class, VanillaBlockId.SPRUCE_BUTTON);
+        BlockTypes.WARPED_BUTTON = initWoodenButton(BlockWarpedButtonBehavior.class, VanillaBlockId.WARPED_BUTTON);
+        BlockTypes.WOODEN_BUTTON = initWoodenButton(BlockWoodenButtonBehavior.class, VanillaBlockId.WOODEN_BUTTON);
+        
+        BlockTypes.POLISHED_BLACKSTONE_BUTTON = initButton(BlockPolishedBlackstoneButtonBehavior.class, VanillaBlockId.POLISHED_BLACKSTONE_BUTTON, BlockStoneButtonComponentImpl::new);
+        BlockTypes.STONE_BUTTON = initButton(BlockStoneButtonBehavior.class, VanillaBlockId.STONE_BUTTON, BlockStoneButtonComponentImpl::new);
+    }
+
     private static <T extends BlockBehavior> BlockType<T> initPillarAxis(Class<T> clazz, VanillaBlockId vanillaBlockId) {
         return BlockTypeBuilder
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
                 .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+                .build();
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> initWoodenButton(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+        return initButton(clazz, vanillaBlockId, BlockWoodenButtonComponentImpl::new);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> initButton(Class<T> clazz, VanillaBlockId vanillaBlockId, Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
+        return BlockTypeBuilder
+                .builder(clazz)
+                .vanillaBlock(vanillaBlockId)
+                .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+                .setBlockBaseComponentSupplier(blockBaseComponentSupplier)
                 .build();
     }
 }

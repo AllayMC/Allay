@@ -26,7 +26,7 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onRandomUpdate(BlockStateWithPos blockState) {
         //TODO: check groth condition
-        var oldGrowth = blockState.blockState().getPropertyValue(GROWTH)
+        var oldGrowth = blockState.blockState().getPropertyValue(GROWTH);
         if (oldGrowth < GROWTH.getMax()) {
             grow(blockState.blockState(), oldGrowth + 1);
         }
