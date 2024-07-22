@@ -72,7 +72,7 @@ jobs:
         run: echo "changelog=${{ github.event.commits[0].message }}" >> $GITHUB_OUTPUT
       - name: Get Time
         id: time
-        uses: nanzm/get-time-action@v1.1
+        uses: nanzm/get-time-action@v2.0
         if: github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         with:
           timeZone: 8
