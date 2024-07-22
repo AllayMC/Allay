@@ -5,6 +5,8 @@ import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -26,9 +28,14 @@ public class BlockFacingBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
             return true;
         }
-        blockState = blockState.setProperty(FACING_DIRECTION, placementInfo.blockFace().opposite().ordinal());
+        blockState = blockState.setProperty(FACING_DIRECTION, placementInfo.blockFace().ordinal());
         
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
+    }
+
+    @Override
+    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        return true; //TODO
     }
 }
