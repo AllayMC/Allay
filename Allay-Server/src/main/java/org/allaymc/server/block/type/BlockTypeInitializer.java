@@ -11,6 +11,7 @@ import org.allaymc.api.block.interfaces.leaves.*;
 import org.allaymc.api.block.interfaces.log.*;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
+import org.allaymc.api.block.interfaces.terracotta.*;
 import org.allaymc.api.block.interfaces.torch.*;
 import org.allaymc.api.block.interfaces.wood.*;
 import org.allaymc.api.block.type.BlockType;
@@ -870,6 +871,30 @@ public final class BlockTypeInitializer {
         BlockTypes.WARPED_DOOR = buildWoodenDoor(BlockWarpedDoorBehavior.class, VanillaBlockId.WARPED_DOOR);
     }
 
+    public static void initFacingDirection() {
+        BlockTypes.BLACK_GLAZED_TERRACOTTA = buildFacingDirection(BlockBlackGlazedTerracottaBehavior.class, VanillaBlockId.BLACK_GLAZED_TERRACOTTA);
+        BlockTypes.BLUE_GLAZED_TERRACOTTA = buildFacingDirection(BlockBlueGlazedTerracottaBehavior.class, VanillaBlockId.BLUE_GLAZED_TERRACOTTA);
+        BlockTypes.BROWN_GLAZED_TERRACOTTA = buildFacingDirection(BlockBrownGlazedTerracottaBehavior.class, VanillaBlockId.BROWN_GLAZED_TERRACOTTA);
+        BlockTypes.CYAN_GLAZED_TERRACOTTA = buildFacingDirection(BlockCyanGlazedTerracottaBehavior.class, VanillaBlockId.CYAN_GLAZED_TERRACOTTA);
+        BlockTypes.GRAY_GLAZED_TERRACOTTA = buildFacingDirection(BlockGrayGlazedTerracottaBehavior.class, VanillaBlockId.GRAY_GLAZED_TERRACOTTA);
+        BlockTypes.GREEN_GLAZED_TERRACOTTA = buildFacingDirection(BlockGreenGlazedTerracottaBehavior.class, VanillaBlockId.GREEN_GLAZED_TERRACOTTA);
+        BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA = buildFacingDirection(BlockLightBlueGlazedTerracottaBehavior.class, VanillaBlockId.LIGHT_BLUE_GLAZED_TERRACOTTA);
+        BlockTypes.LIME_GLAZED_TERRACOTTA = buildFacingDirection(BlockLimeGlazedTerracottaBehavior.class, VanillaBlockId.LIME_GLAZED_TERRACOTTA);
+        BlockTypes.MAGENTA_GLAZED_TERRACOTTA = buildFacingDirection(BlockMagentaGlazedTerracottaBehavior.class, VanillaBlockId.MAGENTA_GLAZED_TERRACOTTA);
+        BlockTypes.ORANGE_GLAZED_TERRACOTTA = buildFacingDirection(BlockOrangeGlazedTerracottaBehavior.class, VanillaBlockId.ORANGE_GLAZED_TERRACOTTA);
+        BlockTypes.PINK_GLAZED_TERRACOTTA = buildFacingDirection(BlockPinkGlazedTerracottaBehavior.class, VanillaBlockId.PINK_GLAZED_TERRACOTTA);
+        BlockTypes.PURPLE_GLAZED_TERRACOTTA = buildFacingDirection(BlockPurpleGlazedTerracottaBehavior.class, VanillaBlockId.PURPLE_GLAZED_TERRACOTTA);
+        BlockTypes.RED_GLAZED_TERRACOTTA = buildFacingDirection(BlockRedGlazedTerracottaBehavior.class, VanillaBlockId.RED_GLAZED_TERRACOTTA);
+        BlockTypes.SILVER_GLAZED_TERRACOTTA = buildFacingDirection(BlockSilverGlazedTerracottaBehavior.class, VanillaBlockId.SILVER_GLAZED_TERRACOTTA);
+        BlockTypes.PURPLE_GLAZED_TERRACOTTA = buildFacingDirection(BlockPurpleGlazedTerracottaBehavior.class, VanillaBlockId.PURPLE_GLAZED_TERRACOTTA);
+        BlockTypes.WHITE_GLAZED_TERRACOTTA = buildFacingDirection(BlockWhiteGlazedTerracottaBehavior.class, VanillaBlockId.WHITE_GLAZED_TERRACOTTA);
+        BlockTypes.YELLOW_GLAZED_TERRACOTTA = buildFacingDirection(BlockYellowGlazedTerracottaBehavior.class, VanillaBlockId.YELLOW_GLAZED_TERRACOTTA);
+
+        BlockTypes.END_ROD = buildFacingDirection(BlockEndRodBehavior.class, VanillaBlockId.END_ROD);
+        BlockTypes.LIGHTNING_ROD = buildFacingDirection(BlockLightningRodBehavior.class, VanillaBlockId.LIGHTNING_ROD);
+        BlockTypes.SKULL = buildFacingDirection(BlockSkullBehavior.class, VanillaBlockId.SKULL);
+    }
+
     private static <T extends BlockBehavior> BlockType<T> initPillarAxis(Class<T> clazz, VanillaBlockId vanillaBlockId) {
         return BlockTypeBuilder
                 .builder(clazz)
@@ -885,6 +910,15 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockCardinalDirectionComponentImpl::new)
+                .build();
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildFacingDirection(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+        return BlockTypeBuilder
+                .builder(clazz)
+                .vanillaBlock(vanillaBlockId)
+                .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockFacingDirectionBaseComponentImpl::new)
                 .build();
     }
 
