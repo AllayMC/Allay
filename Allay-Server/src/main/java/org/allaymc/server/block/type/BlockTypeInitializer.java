@@ -6,6 +6,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.interfaces.button.*;
+import org.allaymc.api.block.interfaces.door.*;
 import org.allaymc.api.block.interfaces.leaves.*;
 import org.allaymc.api.block.interfaces.log.*;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
@@ -25,6 +26,7 @@ import org.allaymc.server.block.component.button.BlockWoodenButtonComponentImpl;
 import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
+import org.allaymc.server.block.component.door.BlockDoorComponentImpl;
 import org.allaymc.server.block.component.facing.BlockCardinalDirectionComponentImpl;
 import org.allaymc.server.block.component.facing.BlockFacingDirectionBaseComponentImpl;
 import org.allaymc.server.block.component.facing.BlockPillarAxisBaseComponentImpl;
@@ -854,6 +856,20 @@ public final class BlockTypeInitializer {
         BlockTypes.STONE_BUTTON = initButton(BlockStoneButtonBehavior.class, VanillaBlockId.STONE_BUTTON, BlockStoneButtonComponentImpl::new);
     }
 
+    public static void initDoors() {
+        BlockTypes.ACACIA_DOOR = buildWoodenDoor(BlockAcaciaDoorBehavior.class, VanillaBlockId.ACACIA_DOOR);
+        BlockTypes.BAMBOO_DOOR = buildWoodenDoor(BlockBambooDoorBehavior.class, VanillaBlockId.BAMBOO_DOOR);
+        BlockTypes.BIRCH_DOOR = buildWoodenDoor(BlockBirchDoorBehavior.class, VanillaBlockId.BIRCH_DOOR);
+        BlockTypes.CHERRY_DOOR = buildWoodenDoor(BlockCherryDoorBehavior.class, VanillaBlockId.CHERRY_DOOR);
+        BlockTypes.CRIMSON_DOOR = buildWoodenDoor(BlockCrimsonDoorBehavior.class, VanillaBlockId.CRIMSON_DOOR);
+        BlockTypes.DARK_OAK_DOOR = buildWoodenDoor(BlockDarkOakDoorBehavior.class, VanillaBlockId.DARK_OAK_DOOR);
+        BlockTypes.JUNGLE_DOOR = buildWoodenDoor(BlockJungleDoorBehavior.class, VanillaBlockId.JUNGLE_DOOR);
+        BlockTypes.MANGROVE_DOOR = buildWoodenDoor(BlockMangroveDoorBehavior.class, VanillaBlockId.MANGROVE_DOOR);
+        BlockTypes.WOODEN_DOOR = buildWoodenDoor(BlockWoodenDoorBehavior.class, VanillaBlockId.WOODEN_DOOR);
+        BlockTypes.SPRUCE_DOOR = buildWoodenDoor(BlockSpruceDoorBehavior.class, VanillaBlockId.SPRUCE_DOOR);
+        BlockTypes.WARPED_DOOR = buildWoodenDoor(BlockWarpedDoorBehavior.class, VanillaBlockId.WARPED_DOOR);
+    }
+
     private static <T extends BlockBehavior> BlockType<T> initPillarAxis(Class<T> clazz, VanillaBlockId vanillaBlockId) {
         return BlockTypeBuilder
                 .builder(clazz)
@@ -881,6 +897,19 @@ public final class BlockTypeInitializer {
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION)
+                .setBlockBaseComponentSupplier(blockBaseComponentSupplier)
+                .build();
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildWoodenDoor(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+        return buildDoor(clazz, vanillaBlockId, BlockDoorComponentImpl::new);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildDoor(Class<T> clazz, VanillaBlockId vanillaBlockId, Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
+        return BlockTypeBuilder
+                .builder(clazz)
+                .vanillaBlock(vanillaBlockId)
+                .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBlockBaseComponentSupplier(blockBaseComponentSupplier)
                 .build();
     }
