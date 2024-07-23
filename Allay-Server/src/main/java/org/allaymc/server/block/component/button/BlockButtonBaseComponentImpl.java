@@ -37,8 +37,7 @@ public abstract class BlockButtonBaseComponentImpl extends BlockFacingDirectionB
         var pos = interactInfo.clickBlockPos();
         var blockState = dimension.getBlockState(pos);
         if (!blockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
-            blockState = blockState.setProperty(BUTTON_PRESSED_BIT, true);
-            dimension.setBlockState(pos, blockState);
+            updateBlockProperty(BUTTON_PRESSED_BIT, true, pos, dimension);
             dimension.getBlockUpdateService().scheduleBlockUpdate(pos, getActivationTime());
             dimension.addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_ON);
         }
@@ -51,8 +50,7 @@ public abstract class BlockButtonBaseComponentImpl extends BlockFacingDirectionB
         var pos = blockStateWithPos.pos();
         var blockState = blockStateWithPos.blockState();
         if (blockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
-            blockState = blockState.setProperty(BUTTON_PRESSED_BIT, false);
-            pos.dimension().setBlockState(pos, blockState);
+            updateBlockProperty(BUTTON_PRESSED_BIT, false, pos, pos.dimension());
             pos.dimension().addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_OFF);
         }
     }

@@ -34,6 +34,12 @@ public class BlockFacingDirectionBaseComponentImpl extends BlockBaseComponentImp
 
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        return true; //TODO
+        if (current.blockState().getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) return true;
+        return canPlaceOnBlock(neighbor.blockState().getBlockType());
+    }
+
+    @Override
+    public boolean canPlaceOnBlock(BlockType<?> blockType) {
+        return blockType.getMaterial().isSolid();
     }
 }
