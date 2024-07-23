@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
@@ -11,7 +12,6 @@ import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.event.EntityFallEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -24,7 +24,6 @@ import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
  * @author daoge_cmd
  */
 public class EntityDamageComponentImpl implements EntityDamageComponent {
-
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_damage_component");
 
@@ -51,8 +50,28 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         lastDamage = damage;
         lastDamageTime = currentTime;
 
-        // Critical hit
-        damage.updateFinalDamage(d -> d * (damage.isCritical() ? 1.5f : 1f));
+        var attacker = damage.getAttacker();
+        if (attacker != null) {
+            var strengthLevel = attacker.getEffectLevel(VanillaEffectTypes.STRENGTH);
+            if (strengthLevel > 0) {
+                damage.updateFinalDamage(d -> {
+                    var pow = Math.pow(1.3, strengthLevel);
+                    return (float) (d * pow + ((pow - 1) / 0.3));
+                });
+            }
+
+            var weaknessLevel = attacker.getEffectLevel(VanillaEffectTypes.WEAKNESS);
+            if (weaknessLevel > 0) {
+                damage.updateFinalDamage(d -> {
+                    var pow = Math.pow(0.8, weaknessLevel);
+                    return (float) (d * pow + ((pow - 1) / 0.4));
+                });
+            }
+        }
+
+        // TODO: Sharpness enchantment
+
+        if (damage.isCritical()) damage.updateFinalDamage(d -> d * 1.5f);
 
         // Damage absorption
         var absorption = baseComponent.getAbsorption();
@@ -66,9 +85,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
         baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
-
         if (damage.isCritical()) baseComponent.applyAnimation(AnimatePacket.Action.CRITICAL_HIT);
-        var attacker = damage.getAttacker();
+
         if (attacker != null) {
             if (attacker instanceof EntityPlayerHungerComponent hungerComponent)
                 hungerComponent.exhaust(0.1f);
