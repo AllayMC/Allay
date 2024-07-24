@@ -1,5 +1,6 @@
 package org.allaymc.server;
 
+import io.netty.util.ResourceLeakDetector;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
@@ -63,6 +64,7 @@ public final class Allay {
 
     public static void main(String[] args) {
         long startTime = System.currentTimeMillis();
+        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
         System.setProperty("joml.format", "false"); // Set JOML vectors are output without a scientific notation
         System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // Enable async logging
         initI18n();
