@@ -84,7 +84,7 @@
   "allay:plugin.load.error": "Error while loading plugin %1. Error: %2",
   "allay:plugin.loading": "Loading plugin %1",
   "allay:recipe.loaded": "Loaded %1 recipes",
-  "allay:recipe.loading": "LOading recipes...",
+  "allay:recipe.loading": "Loading recipes...",
   "allay:server.starting": "Starting Allay...",
   "allay:world.loaded": "World %1 is loaded",
   "allay:world.loading": "Loading world %1",

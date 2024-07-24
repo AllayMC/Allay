@@ -21,7 +21,7 @@
   "itemtype.loaded": "Loaded %1 item types",
   "creativeitem.loading": "Loading creative items...",
   "creativeitem.loaded": "Creative items is loaded",
-  "recipe.loading": "LOading recipes...",
+  "recipe.loading": "Loading recipes...",
   "recipe.loaded": "Loaded %1 recipes",
   "command.generic.sender.notServer": "This command can only be executed by the server!",
   "command.generic.sender.notPlayer": "This command can only be executed by a player!",

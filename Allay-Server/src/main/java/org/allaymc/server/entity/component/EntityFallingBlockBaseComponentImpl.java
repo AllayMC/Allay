@@ -52,7 +52,6 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         var block = getDimension().getBlockState(floorPos);
         if (!block.getBlockType().hasBlockTag(VanillaBlockTags.REPLACEABLE)) {
             getDimension().getEntityService().removeEntity(thisEntity, () -> {
-                despawnFromAll();
                 getDimension().addLevelEvent(
                         location.x(), location.y(), location.z(),
                         LevelEvent.BLOCK_UPDATE_BREAK, blockState.blockStateHash()
@@ -63,7 +62,6 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         }
 
         getDimension().getEntityService().removeEntity(thisEntity, () -> {
-            despawnFromAll();
             getDimension().setBlockState(
                     (int) floorPos.x(),
                     (int) floorPos.y(),
