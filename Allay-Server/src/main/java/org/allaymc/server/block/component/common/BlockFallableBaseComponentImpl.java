@@ -32,16 +32,16 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
 
         var pos = current.pos();
         var dimension = pos.dimension();
-        spawnFallingEntity(dimension, pos, current.blockState());
+        trySpawnFallingEntity(dimension, pos, current.blockState());
     }
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        if (spawnFallingEntity(dimension, placeBlockPos, blockState)) return true;
+        if (trySpawnFallingEntity(dimension, placeBlockPos, blockState)) return true;
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
-    protected boolean spawnFallingEntity(Dimension dimension, Vector3ic pos, BlockState blockState) {
+    protected boolean trySpawnFallingEntity(Dimension dimension, Vector3ic pos, BlockState blockState) {
         var down0 = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType();
         var down1 = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos), 1).getBlockType();
         if (invalidDownBlock(down0, down1)) {
