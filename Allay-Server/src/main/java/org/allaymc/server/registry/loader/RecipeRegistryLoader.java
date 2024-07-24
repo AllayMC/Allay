@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.data.VanillaItemTags;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
@@ -36,7 +37,7 @@ import java.util.*;
 public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<NetworkRecipe>> {
     @Override
     public Int2ObjectMap<NetworkRecipe> load(Void $) {
-        log.info(TrKeys.A_RECIPE_LOADING);
+        log.info(I18n.get().tr(TrKeys.A_RECIPE_LOADING));
         var recipes = new Int2ObjectOpenHashMap<NetworkRecipe>();
         var stream = Objects.requireNonNull(Utils.getResource("recipes.json"));
 
@@ -61,7 +62,7 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<
                 pgbar.step();
             }
         }
-        log.info(TrKeys.A_RECIPE_LOADED, recipes.size());
+        log.info(I18n.get().tr(TrKeys.A_RECIPE_LOADED, recipes.size()));
         return recipes;
     }
 
