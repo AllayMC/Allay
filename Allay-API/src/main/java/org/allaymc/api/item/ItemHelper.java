@@ -19,6 +19,7 @@ import java.util.Objects;
 @UtilityClass
 public final class ItemHelper {
     public static ItemStack fromNBT(NbtMap nbt) {
+        // TODO: item state updater
         int count = nbt.getByte("Count");
         int meta = nbt.getShort("Damage");
         var name = nbt.getString("Name");
