@@ -3,6 +3,8 @@ package org.allaymc.api.registry;
 import org.allaymc.api.block.component.common.BlockStateData;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.material.MaterialType;
+import org.allaymc.api.block.property.BlockPropertyProcessor;
+import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -48,6 +50,7 @@ public final class Registries {
     public static SimpleMappedRegistry<MaterialType, Material> MATERIALS;
     public static IntMappedRegistry<BlockState> BLOCK_STATE_PALETTE;
     public static SimpleMappedRegistry<VanillaBlockId, Map<Integer, BlockStateData>> VANILLA_BLOCK_STATE_DATA;
+    public static SimpleMappedRegistry<BlockPropertyType<?>, BlockPropertyProcessor> BLOCK_PROPERTY_PROCESSORS;
     public static SimpleMappedRegistry<Identifier, BlockType<?>> BLOCKS;
 
     // Entity

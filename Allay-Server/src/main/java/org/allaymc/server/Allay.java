@@ -185,6 +185,7 @@ public final class Allay {
         Registries.MATERIALS = SimpleMappedRegistry.create(new MaterialLoader());
         Registries.VANILLA_BLOCK_STATE_DATA = SimpleMappedRegistry.create(new VanillaBlockStateDataLoader());
         Registries.BLOCK_STATE_PALETTE = IntMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
+        Registries.BLOCK_PROPERTY_PROCESSORS = SimpleMappedRegistry.create()
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, BlockType<?>>()),
                 r -> Registries.BLOCKS = r,
