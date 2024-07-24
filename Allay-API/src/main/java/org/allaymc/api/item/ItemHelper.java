@@ -21,6 +21,8 @@ import java.util.Objects;
 @UtilityClass
 public final class ItemHelper {
     public static ItemStack fromNBT(NbtMap nbt) {
+        // NOTICE: Unlike BlockStateUpdater, the second argument of the updateItemState() method
+        // represents the version that needs to be upgraded to instead of the current version
         nbt = ItemStateUpdaters.updateItemState(nbt, ItemStateUpdaters.LATEST_VERSION);
         int count = nbt.getByte("Count");
         int meta = nbt.getShort("Damage");
