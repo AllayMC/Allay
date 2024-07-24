@@ -4,8 +4,10 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.itemstateupdater.ItemStateUpdaters;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Arrays;
@@ -19,7 +21,7 @@ import java.util.Objects;
 @UtilityClass
 public final class ItemHelper {
     public static ItemStack fromNBT(NbtMap nbt) {
-        // TODO: item state updater
+        nbt = ItemStateUpdaters.updateItemState(nbt, ItemStateUpdaters.LATEST_VERSION);
         int count = nbt.getByte("Count");
         int meta = nbt.getShort("Damage");
         var name = nbt.getString("Name");

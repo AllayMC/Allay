@@ -16,6 +16,7 @@ dependencies {
     api(libs.blockstateupdater) {
         exclude(group = "org.cloudburstmc", module = "nbt")
     }
+    api(libs.itemstateupdater)
     api(libs.slf4j.api)
     api(libs.nbt)
     api(libs.fastutil)
