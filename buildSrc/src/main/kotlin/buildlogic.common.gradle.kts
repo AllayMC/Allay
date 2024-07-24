@@ -15,8 +15,8 @@ java {
 
 repositories {
     // Use Maven Central for resolving dependencies.
-    mavenLocal()
     mavenCentral()
+//    mavenLocal()
     maven("https://www.jitpack.io/")
     maven("https://repo.opencollab.dev/maven-releases/")
     maven("https://repo.opencollab.dev/maven-snapshots/")
