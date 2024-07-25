@@ -143,25 +143,11 @@ public class AllayPluginManager implements PluginManager {
         if (isPluginEnabled(pluginContainer.descriptor().getName())) return;
 
         log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
-        var plugin = pluginContainer.plugin();
-
-        for (var method : ReflectionUtils.getAllMethods(plugin.getClass())) {
-            var annotation = method.getAnnotation(LogHandler.class);
-            if (annotation == null) continue;
-            if (annotation.order() != order) continue;
-            if (method.getReturnType() != void.class) {
-                throw new EventException("Log handler method must return void: " + method.getName() + " in plugin " + pluginContainer.descriptor().getName());
-            }
-
-            if (method.getParameterCount() != 0) {
-                throw new EventException("Log handler method must have no parameter: " + method.getName() + " in plugin " + pluginContainer.descriptor().getName());
-            }
-
-            try {
-                method.invoke(plugin);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
-            }
+        try {
+            var plugin = pluginContainer.plugin();
+            plugin.onEnable(order);
+        } catch (Exception e) {
+            log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
         }
 
         if (order == PluginLoadOrder.POST_WORLD) enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
