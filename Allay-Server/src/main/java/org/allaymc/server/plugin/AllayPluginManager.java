@@ -13,7 +13,6 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 /**
  * Allay Project 2024/2/8
  *
@@ -141,6 +140,8 @@ public class AllayPluginManager implements PluginManager {
 
     public void enablePlugins() {
         for (var s : pluginsSortedList) {
+            if (isPluginEnabled(s)) continue;
+
             var pluginContainer = getPlugin(s);
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {

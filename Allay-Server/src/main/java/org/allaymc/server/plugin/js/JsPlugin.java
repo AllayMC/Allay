@@ -67,15 +67,15 @@ public class JsPlugin extends Plugin {
         tryCallJsFunction("onLoad");
     }
 
-    @Override
-    public void onEnable() {
-        tryCallJsFunction("onEnable");
-    }
-
     protected void initGlobalMembers() {
         var binding = jsContext.getBindings("js");
         binding.putMember("plugin", this);
         binding.putMember("console", proxyLogger);
+    }
+
+    @Override
+    public void onEnable() {
+        tryCallJsFunction("onEnable");
     }
 
     @Override
