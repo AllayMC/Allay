@@ -169,6 +169,8 @@ public interface TrKeys {
 
     String A_PLUGIN_LOAD_ERROR = "allay:plugin.load.error";
 
+    String A_PLUGIN_LOADING = "allay:plugin.loading";
+
     String A_RECIPE_LOADED = "allay:recipe.loaded";
 
     String A_RECIPE_LOADING = "allay:recipe.loading";

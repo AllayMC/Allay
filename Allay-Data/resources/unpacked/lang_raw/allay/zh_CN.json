@@ -40,6 +40,7 @@
   "world.loading": "正在加载世界 %1",
   "world.loaded": "世界 %1 已加载",
   "plugin.duplicate": "找到重复的插件 %1",
+  "plugin.loading": "正在读取插件 %1",
   "plugin.load.error": "读取插件 %1 时发生错误: %2",
   "plugin.dependency.missing": "插件 %1 缺少依赖 %2",
   "plugin.enabling": "正在开启插件 %1",

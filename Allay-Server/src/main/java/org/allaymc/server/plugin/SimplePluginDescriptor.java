@@ -3,7 +3,6 @@ package org.allaymc.server.plugin;
 import lombok.Getter;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.plugin.PluginDescriptor;
-import org.allaymc.api.plugin.PluginLoadOrder;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-@SuppressWarnings("unused")
 @Getter
 public class SimplePluginDescriptor implements PluginDescriptor {
     private String entrance;

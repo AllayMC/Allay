@@ -23,7 +23,6 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
-import org.allaymc.api.plugin.PluginLoadOrder;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardService;
@@ -175,7 +174,7 @@ public final class AllayServer implements Server {
         initTerminalConsole();
 
         pluginManager = new AllayPluginManager();
-        pluginManager.loadPlugins(PluginLoadOrder.START_UP);
+        pluginManager.loadPlugins();
 
         worldPool.loadWorlds();
         var cmdDataPath = Path.of("command_data");
@@ -188,7 +187,7 @@ public final class AllayServer implements Server {
         networkServer = new AllayNetworkServer(this);
         scheduler = new AllayScheduler();
 
-        pluginManager.loadPlugins(PluginLoadOrder.POST_WORLD);
+        pluginManager.enablePlugins();
 
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         networkServer.start();

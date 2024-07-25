@@ -22,9 +22,14 @@ public abstract class Plugin implements TaskCreator {
     protected PluginContainer pluginContainer;
 
     /**
+     * When the plugin is loaded, call
+     */
+    public void onLoad() {}
+
+    /**
      * When the plugin is enabled, call
      */
-    abstract public void onEnable(PluginLoadOrder order);
+    public void onEnable() {}
 
     /**
      * When the plugin is disabled, call
