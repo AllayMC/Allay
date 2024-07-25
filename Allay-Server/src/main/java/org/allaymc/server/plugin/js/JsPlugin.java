@@ -3,6 +3,7 @@ package org.allaymc.server.plugin.js;
 import lombok.SneakyThrows;
 import org.allaymc.api.plugin.Plugin;
 import org.allaymc.api.plugin.PluginContainer;
+import org.allaymc.api.plugin.PluginLoadOrder;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
@@ -32,7 +33,7 @@ public class JsPlugin extends Plugin {
 
     @SneakyThrows
     @Override
-    public void onLoad() {
+    public void onEnable(PluginLoadOrder order) {
         // ClassCastException won't happen
         var chromeDebugPort = ((JsPluginDescriptor) pluginContainer.descriptor()).getDebugPort();
         var cbd = Context.newBuilder("js")
@@ -64,7 +65,7 @@ public class JsPlugin extends Plugin {
                         .mimeType("application/javascript+module")
                         .build()
         );
-        tryCallJsFunction("onLoad");
+        tryCallJsFunction("onEnable", order);
     }
 
     protected void initGlobalMembers() {
@@ -74,18 +75,8 @@ public class JsPlugin extends Plugin {
     }
 
     @Override
-    public void onEnable() {
-        tryCallJsFunction("onEnable");
-    }
-
-    @Override
     public void onDisable() {
         tryCallJsFunction("onDisable");
-    }
-
-    @Override
-    public void onUnload() {
-        tryCallJsFunction("onUnload");
         jsContext.close(true);
     }
 
@@ -97,14 +88,12 @@ public class JsPlugin extends Plugin {
     @Override
     public void reload() {
         onDisable();
-        onUnload();
-        onLoad();
-        onEnable();
+        onEnable(PluginLoadOrder.START_UP);
     }
 
-    protected void tryCallJsFunction(String onLoad) {
+    protected void tryCallJsFunction(String onLoad, Object... arguments) {
         var func = jsExport.getMember(onLoad);
         if (func != null && func.canExecute())
-            func.executeVoid();
+            func.executeVoid(arguments);
     }
 }

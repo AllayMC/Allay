@@ -1,10 +1,6 @@
 import {a} from './another.js';
 
-export function onLoad() {
-    console.info("Example-Plugin-Js has been loaded!");
-}
-
-export function onEnable() {
+export function onEnable(order) {
     console.info("Example-Plugin-Js has been enabled!");
     console.info(plugin.getPluginI18n().tr("ejp:example_js_plugin_i18n_test"));
     a();
