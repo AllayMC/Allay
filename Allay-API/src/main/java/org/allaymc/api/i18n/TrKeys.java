@@ -115,8 +115,6 @@ public interface TrKeys {
 
     String A_GUI_PLUGIN_NAME = "allay:gui.plugin.name";
 
-    String A_GUI_PLUGIN_ORDER = "allay:gui.plugin.order";
-
     String A_GUI_PLUGIN_VERSION = "allay:gui.plugin.version";
 
     String A_GUI_PLUGIN_WEBSITE = "allay:gui.plugin.website";
@@ -170,8 +168,6 @@ public interface TrKeys {
     String A_PLUGIN_JAR_ENTRANCE_TYPEINVALID = "allay:plugin.jar.entrance.typeinvalid";
 
     String A_PLUGIN_LOAD_ERROR = "allay:plugin.load.error";
-
-    String A_PLUGIN_LOADING = "allay:plugin.loading";
 
     String A_RECIPE_LOADED = "allay:recipe.loaded";
 
