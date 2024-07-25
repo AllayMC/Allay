@@ -25,8 +25,6 @@ public interface PluginDescriptor {
 
     String getEntrance();
 
-    PluginLoadOrder getOrder();
-
     // Plugins can leave this information unavailable
     String getDescription();
 

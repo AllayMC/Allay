@@ -2,7 +2,10 @@ package org.allaymc.exampleplugin;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+
+import org.allaymc.api.plugin.LogHandler;
 import org.allaymc.api.plugin.Plugin;
+import org.allaymc.api.plugin.PluginLoadOrder;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -25,15 +28,15 @@ public final class ExamplePlugin extends Plugin {
         INSTANCE = this;
     }
 
-    @Override
-    public void onLoad() {
-        log.info("ExamplePlugin loaded!");
+    @LogHandler(order = PluginLoadOrder.POST_WORLD)
+    public void onEnablePostWorld() {
+        log.info("ExamplePlugin enable post world!");
         Registries.WORLD_GENERATOR_FACTORIES.register("RANDOM_BLOCK", preset -> WorldGenerator.builder().name("RANDOM_BLOCK").noisers(new RandomBlockNoiser()).build());
     }
 
-    @Override
-    public void onEnable() {
-        log.info("ExamplePlugin enabled!");
+    @LogHandler
+    public void onEnableStartUp() {
+        log.info("ExamplePlugin enable start up!");
         log.info(getPluginI18n().tr("ep:example_plugin_i18n_test"));
         var server = Server.getInstance();
         server.getEventBus().registerListener(serverEventListener);

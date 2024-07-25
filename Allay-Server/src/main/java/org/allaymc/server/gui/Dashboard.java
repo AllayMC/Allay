@@ -97,7 +97,6 @@ public final class Dashboard {
                     JOptionPane.showMessageDialog(null,
                             I18n.get().tr(TrKeys.A_GUI_PLUGIN_NAME) + ": " + pluginDescriptor.getName() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLUGIN_ENTRANCE) + ": " + pluginDescriptor.getEntrance() + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLUGIN_ORDER) + ": " + pluginDescriptor.getOrder() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLUGIN_DESCRIPTION) + ": " + pluginDescriptor.getDescription() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLUGIN_VERSION) + ": " + pluginDescriptor.getVersion() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLUGIN_AUTHORS) + ": " + String.join(", ", pluginDescriptor.getAuthors()) + "\n" +

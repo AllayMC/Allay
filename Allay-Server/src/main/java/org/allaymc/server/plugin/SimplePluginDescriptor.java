@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 public class SimplePluginDescriptor implements PluginDescriptor {
     private String entrance;
-    private PluginLoadOrder order;
     private String name;
     private String description;
     private String version;
@@ -38,10 +37,5 @@ public class SimplePluginDescriptor implements PluginDescriptor {
     public String getWebsite() {
         if (website == null) website = "";
         return website;
-    }
-
-    public PluginLoadOrder getOrder() {
-        if (order == null) order = PluginLoadOrder.POST_WORLD;
-        return order;
     }
 }

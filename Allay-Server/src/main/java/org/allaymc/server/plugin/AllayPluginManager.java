@@ -3,15 +3,19 @@ package org.allaymc.server.plugin;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.datastruct.dag.DAGCycleException;
 import org.allaymc.api.datastruct.dag.HashDirectedAcyclicGraph;
+import org.allaymc.api.eventbus.EventException;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.*;
+import org.allaymc.api.utils.ReflectionUtils;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
 import org.allaymc.server.plugin.js.JsPluginLoader;
 
+import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 /**
  * Allay Project 2024/2/8
@@ -86,7 +90,6 @@ public class AllayPluginManager implements PluginManager {
         while (iterator.hasNext()) {
             var s = iterator.next();
             var descriptor = descriptors.get(s);
-            if (descriptor.getOrder() != order) continue;
 
             var loader = loaders.get(s);
             for (var dependency : descriptor.getDependencies()) {
@@ -108,8 +111,7 @@ public class AllayPluginManager implements PluginManager {
             }
 
             plugins.put(descriptor.getName(), pluginContainer);
-            pluginContainer.plugin().onLoad();
-            log.info(I18n.get().tr(TrKeys.A_PLUGIN_LOADING, descriptor.getName()));
+            enablePlugin(pluginContainer, order);
         }
     }
 
@@ -137,23 +139,33 @@ public class AllayPluginManager implements PluginManager {
         return sources.stream().flatMap(source -> source.find().stream()).collect(Collectors.toSet());
     }
 
-    @Override
-    public void enablePlugins() {
-        for (var s : pluginsSortedList) {
-            var pluginContainer = getPlugin(s);
-            if (isPluginEnabled(pluginContainer.descriptor().getName())) return;
+    private void enablePlugin(PluginContainer pluginContainer, PluginLoadOrder order) {
+        if (isPluginEnabled(pluginContainer.descriptor().getName())) return;
 
-            log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
-            try {
-                var plugin = pluginContainer.plugin();
-                plugin.onEnable();
-                plugin.setEnabled(true);
-            } catch (Exception e) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
+        log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
+        var plugin = pluginContainer.plugin();
+
+        for (var method : ReflectionUtils.getAllMethods(plugin.getClass())) {
+            var annotation = method.getAnnotation(LogHandler.class);
+            if (annotation == null) continue;
+            if (annotation.order() != order) continue;
+            if (method.getReturnType() != void.class) {
+                throw new EventException("Log handler method must return void: " + method.getName() + " in plugin " + pluginContainer.descriptor().getName());
             }
 
-            enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
+            if (method.getParameterCount() != 0) {
+                throw new EventException("Log handler method must have no parameter: " + method.getName() + " in plugin " + pluginContainer.descriptor().getName());
+            }
+
+            try {
+                method.invoke(plugin);
+                plugin.setEnabled(true);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
+            }
         }
+
+        if (order == PluginLoadOrder.POST_WORLD) enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
     }
 
     @Override

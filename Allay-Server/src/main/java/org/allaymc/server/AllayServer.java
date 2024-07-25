@@ -189,7 +189,6 @@ public final class AllayServer implements Server {
         scheduler = new AllayScheduler();
 
         pluginManager.loadPlugins(PluginLoadOrder.POST_WORLD);
-        pluginManager.enablePlugins();
 
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         networkServer.start();

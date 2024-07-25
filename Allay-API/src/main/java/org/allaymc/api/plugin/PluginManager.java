@@ -14,8 +14,6 @@ public interface PluginManager {
     @ApiStatus.Internal
     void loadPlugins(PluginLoadOrder order);
 
-    void enablePlugins();
-
     void disablePlugins();
 
     void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory);
