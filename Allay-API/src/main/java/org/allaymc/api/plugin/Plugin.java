@@ -20,9 +20,6 @@ import org.allaymc.api.server.Server;
 public abstract class Plugin implements TaskCreator {
 
     protected PluginContainer pluginContainer;
-    // This value shouldn't be edited by the plugin itself!
-    // Instead, it should only be edited by the plugin manager
-    protected boolean enabled = false;
 
     /**
      * When the plugin is loaded, call
@@ -65,6 +62,6 @@ public abstract class Plugin implements TaskCreator {
 
     @Override
     public boolean isValid() {
-        return enabled;
+        return Server.getInstance().getPluginManager().isPluginEnabled(pluginContainer.descriptor().getName());
     }
 }

@@ -159,7 +159,6 @@ public class AllayPluginManager implements PluginManager {
 
             try {
                 method.invoke(plugin);
-                plugin.setEnabled(true);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }
@@ -176,7 +175,6 @@ public class AllayPluginManager implements PluginManager {
             try {
                 var plugin = pluginContainer.plugin();
                 plugin.onDisable();
-                plugin.setEnabled(false);
             } catch (Exception e) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), e);
             }
