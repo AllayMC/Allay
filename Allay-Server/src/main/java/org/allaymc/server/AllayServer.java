@@ -239,6 +239,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
+        pluginManager.disablePlugins();
         // TODO: check the reason
         // Do not move this line down
         // Otherwise server-settings.yml will be blank after shutdown

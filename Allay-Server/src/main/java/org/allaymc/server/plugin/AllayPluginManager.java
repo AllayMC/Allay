@@ -147,8 +147,8 @@ public class AllayPluginManager implements PluginManager {
             try {
                 var plugin = pluginContainer.plugin();
                 plugin.onEnable();
-            } catch (Exception e) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
+            } catch (Throwable t) {
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), t);
             }
 
             enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
@@ -163,8 +163,8 @@ public class AllayPluginManager implements PluginManager {
             try {
                 var plugin = pluginContainer.plugin();
                 plugin.onDisable();
-            } catch (Exception e) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), e);
+            } catch (Throwable t) {
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), t);
             }
         }
     }
