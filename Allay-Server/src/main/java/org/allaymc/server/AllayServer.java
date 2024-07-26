@@ -23,7 +23,6 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
-import org.allaymc.api.plugin.PluginLoadOrder;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardService;
@@ -68,12 +67,11 @@ import static org.allaymc.api.entity.type.EntityTypes.PLAYER;
 
 @Slf4j
 public final class AllayServer implements Server {
-    private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
 
-    private static volatile AllayServer instance;
+    private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
+    private static volatile AllayServer INSTANCE;
 
     private final boolean debug = Server.SETTINGS.genericSettings().debug();
-
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
@@ -84,7 +82,6 @@ public final class AllayServer implements Server {
             Server.SETTINGS.storageSettings().savePlayerData() ?
                     new AllayNBTFilePlayerStorage(Path.of("players")) :
                     AllayEmptyPlayerStorage.INSTANCE;
-
     // Thread pool for executing CPU-intensive tasks
     @Getter
     private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(
@@ -97,7 +94,6 @@ public final class AllayServer implements Server {
     // Thread pool for executing I/O-intensive tasks
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
-
     @Getter
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
     private final BanInfo banInfo = ConfigManager.create(BanInfo.class, it -> {
@@ -114,6 +110,7 @@ public final class AllayServer implements Server {
         it.saveDefaults(); // save file if it does not exist
         it.load(true); // load and save to update comments/new fields
     });
+
     @Getter
     private PluginManager pluginManager;
     @Getter
@@ -142,15 +139,15 @@ public final class AllayServer implements Server {
     private long startTime;
 
     public static AllayServer getInstance() {
-        if (instance == null) {
+        if (INSTANCE == null) {
             synchronized (AllayServer.class) {
-                if (instance == null) {
-                    instance = new AllayServer();
+                if (INSTANCE == null) {
+                    INSTANCE = new AllayServer();
                 }
             }
         }
 
-        return instance;
+        return INSTANCE;
     }
 
     @SneakyThrows
@@ -175,7 +172,7 @@ public final class AllayServer implements Server {
         initTerminalConsole();
 
         pluginManager = new AllayPluginManager();
-        pluginManager.loadPlugins(PluginLoadOrder.START_UP);
+        pluginManager.loadPlugins();
 
         worldPool.loadWorlds();
         var cmdDataPath = Path.of("command_data");
@@ -188,7 +185,6 @@ public final class AllayServer implements Server {
         networkServer = new AllayNetworkServer(this);
         scheduler = new AllayScheduler();
 
-        pluginManager.loadPlugins(PluginLoadOrder.POST_WORLD);
         pluginManager.enablePlugins();
 
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
@@ -241,6 +237,7 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
+        pluginManager.disablePlugins();
         // TODO: check the reason
         // Do not move this line down
         // Otherwise server-settings.yml will be blank after shutdown

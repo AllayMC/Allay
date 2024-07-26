@@ -8,7 +8,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
-import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;

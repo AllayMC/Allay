@@ -81,11 +81,6 @@ public class JsPlugin extends Plugin {
     @Override
     public void onDisable() {
         tryCallJsFunction("onDisable");
-    }
-
-    @Override
-    public void onUnload() {
-        tryCallJsFunction("onUnload");
         jsContext.close(true);
     }
 
@@ -97,7 +92,6 @@ public class JsPlugin extends Plugin {
     @Override
     public void reload() {
         onDisable();
-        onUnload();
         onLoad();
         onEnable();
     }

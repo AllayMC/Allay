@@ -12,10 +12,12 @@ import java.util.Map;
 public interface PluginManager {
 
     @ApiStatus.Internal
-    void loadPlugins(PluginLoadOrder order);
+    void loadPlugins();
 
+    @ApiStatus.Internal
     void enablePlugins();
 
+    @ApiStatus.Internal
     void disablePlugins();
 
     void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory);

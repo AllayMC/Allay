@@ -63,7 +63,6 @@
   "gui.plugin.info": "插件信息",
   "gui.plugin.name": "名称",
   "gui.plugin.entrance": "入口",
-  "gui.plugin.order": "加载顺序",
   "gui.plugin.description": "介绍",
   "gui.plugin.authors": "作者",
   "gui.plugin.dependencies": "依赖",

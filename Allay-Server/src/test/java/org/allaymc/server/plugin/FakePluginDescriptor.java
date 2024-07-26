@@ -3,7 +3,6 @@ package org.allaymc.server.plugin;
 import lombok.Getter;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.api.plugin.PluginDescriptor;
-import org.allaymc.api.plugin.PluginLoadOrder;
 
 import java.util.List;
 
@@ -33,11 +32,6 @@ public class FakePluginDescriptor implements PluginDescriptor {
     @Override
     public String getEntrance() {
         return "";
-    }
-
-    @Override
-    public PluginLoadOrder getOrder() {
-        return PluginLoadOrder.POST_WORLD;
     }
 
     @Override

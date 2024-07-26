@@ -44,7 +44,7 @@ public class AllayPluginManager implements PluginManager {
     }
 
     @Override
-    public void loadPlugins(PluginLoadOrder order) {
+    public void loadPlugins() {
         if (descriptors == null) {
             descriptors = new HashMap<>();
             loaders = new HashMap<>();
@@ -60,7 +60,7 @@ public class AllayPluginManager implements PluginManager {
         }
 
         // 4. Load plugins (parent -> child)
-        onLoad(descriptors, loaders, order);
+        onLoad(descriptors, loaders);
     }
 
     protected void findLoadersAndLoadDescriptors(Set<Path> paths, Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
@@ -80,13 +80,12 @@ public class AllayPluginManager implements PluginManager {
         }
     }
 
-    protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders, PluginLoadOrder order) {
+    protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
         var iterator = pluginsSortedList.iterator();
         start:
         while (iterator.hasNext()) {
             var s = iterator.next();
             var descriptor = descriptors.get(s);
-            if (descriptor.getOrder() != order) continue;
 
             var loader = loaders.get(s);
             for (var dependency : descriptor.getDependencies()) {
@@ -99,17 +98,19 @@ public class AllayPluginManager implements PluginManager {
                 }
             }
 
+            
+            log.info(I18n.get().tr(TrKeys.A_PLUGIN_LOADING, descriptor.getName()));
+
             PluginContainer pluginContainer;
             try {
                 pluginContainer = loader.loadPlugin();
+                pluginContainer.plugin().onLoad();
             } catch (Exception e) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName()), e);
                 continue;
             }
 
             plugins.put(descriptor.getName(), pluginContainer);
-            pluginContainer.plugin().onLoad();
-            log.info(I18n.get().tr(TrKeys.A_PLUGIN_LOADING, descriptor.getName()));
         }
     }
 
@@ -137,19 +138,17 @@ public class AllayPluginManager implements PluginManager {
         return sources.stream().flatMap(source -> source.find().stream()).collect(Collectors.toSet());
     }
 
-    @Override
     public void enablePlugins() {
         for (var s : pluginsSortedList) {
-            var pluginContainer = getPlugin(s);
-            if (isPluginEnabled(pluginContainer.descriptor().getName())) return;
+            if (isPluginEnabled(s)) continue;
 
+            var pluginContainer = getPlugin(s);
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
                 plugin.onEnable();
-                plugin.setEnabled(true);
-            } catch (Exception e) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), e);
+            } catch (Throwable t) {
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), t);
             }
 
             enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
@@ -164,9 +163,8 @@ public class AllayPluginManager implements PluginManager {
             try {
                 var plugin = pluginContainer.plugin();
                 plugin.onDisable();
-                plugin.setEnabled(false);
-            } catch (Exception e) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), e);
+            } catch (Throwable t) {
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), t);
             }
         }
     }
