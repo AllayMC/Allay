@@ -24,7 +24,7 @@ to support plugins which are written in different kinds of languages.
 `PluginContainer`: A running container will be created after the plugin loaded, which including the plugin's logic body, descriptor, loader and data folder.
 
 `Plugin`: The logic body of a plugin。This object is used by the system to interact with a plugin, 
-which typically contains at least the logic that will be executed when the plugin is loaded, enabled, and unloaded
+which typically contains at least the logic that will be executed when the plugin is loaded, enabled, and disabled
 
 ## Loading process
 
@@ -41,5 +41,3 @@ Once everything is done, call the plugin's `onLoad()` method. Note that this doe
 - ...
 
 When a plugin is enabled, the plugin's `onEnable()` method is called. Correspondingly, the `onDisable()` method of the plugin is called when the plugin is closed.
-
-When you uninstall a plugin, the `onUnload()` method of the plugin is called.
