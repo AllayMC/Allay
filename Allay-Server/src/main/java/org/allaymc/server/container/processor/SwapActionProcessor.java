@@ -55,7 +55,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 destinationItem.getCustomName(),
                                                 destinationItem.getDurability()
                                         )
-                                )
+                                ),
+                                null
                         ),
                         new ItemStackResponseContainer(
                                 destinationContainer.getSlotType(destinationSlot),
@@ -68,7 +69,8 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 sourceItem.getCustomName(),
                                                 sourceItem.getDurability()
                                         )
-                                )
+                                ),
+                                null
                         )
                 )
         );

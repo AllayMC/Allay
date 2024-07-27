@@ -536,21 +536,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             RESOURCES_PACK_STACK_PACKET.setGameVersion("*");
 
             for (var pack : Registries.PACKS.getContent().values()) {
-                var id = pack.getId().toString();
-                var version = pack.getStringVersion();
                 var type = pack.getType();
 
-                var packEntry = new ResourcePacksInfoPacket.Entry(
-                        id,
-                        version,
-                        pack.getSize(),
-                        pack.getContentKey(),
-                        "", // TODO: Sub pack name
-                        id,
-                        type == Pack.Type.SCRIPT,
-                        pack.getManifest().getCapabilities().contains(PackManifest.Capability.RAYTRACED)
-                );
-                var stackEntry = new ResourcePackStackPacket.Entry(id, version, "");
+                var packEntry = pack.toEntryInfo();
+                var stackEntry = pack.toEntryStack();
                 if (type == Pack.Type.RESOURCES) {
                     RESOURCE_PACKS_INFO_PACKET.getResourcePackInfos().add(packEntry);
                     RESOURCES_PACK_STACK_PACKET.getResourcePacks().add(stackEntry);

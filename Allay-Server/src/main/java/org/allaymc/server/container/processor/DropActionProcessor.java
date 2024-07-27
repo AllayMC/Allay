@@ -58,7 +58,8 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                                 item.getCustomName(),
                                                 item.getDurability()
                                         )
-                                )
+                                ),
+                                null
                         )
                 )
         );

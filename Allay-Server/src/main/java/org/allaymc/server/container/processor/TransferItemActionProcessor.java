@@ -116,7 +116,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                 resultDestItem.getCustomName(),
                                 resultDestItem.getDurability()
                         )
-                )
+                ),
+                null
         );
         // No need to respond to CREATED_OUTPUT (mj's strange hack)
         if (source.getContainerType() != FullContainerType.CREATED_OUTPUT) {
@@ -133,7 +134,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                             resultSourItem.getCustomName(),
                                             resultSourItem.getDurability()
                                     )
-                            )
+                            ),
+                            null
                     ), destItemStackResponseSlot)
             );
         } else {

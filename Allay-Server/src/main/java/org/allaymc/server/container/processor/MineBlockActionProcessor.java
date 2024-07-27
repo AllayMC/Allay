@@ -51,7 +51,8 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
                                                 itemInHand.getCustomName(),
                                                 itemInHand.getDurability()
                                         )
-                                )
+                                ),
+                                null
                         )
                 )
         );
