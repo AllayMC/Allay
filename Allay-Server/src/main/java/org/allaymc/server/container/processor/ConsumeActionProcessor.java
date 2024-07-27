@@ -72,7 +72,8 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
                                                 item.getCustomName(),
                                                 item.getDurability()
                                         )
-                                )
+                                ),
+                                null
                         )
                 )
         );

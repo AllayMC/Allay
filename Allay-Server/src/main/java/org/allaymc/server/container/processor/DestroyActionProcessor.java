@@ -71,7 +71,8 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
                                                 item.getCustomName(),
                                                 item.getDurability()
                                         )
-                                )
+                                ),
+                                null
                         )
                 )
         );

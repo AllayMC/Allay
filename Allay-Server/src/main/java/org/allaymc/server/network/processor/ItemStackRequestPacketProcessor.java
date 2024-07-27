@@ -87,7 +87,7 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
         }));
 
         var containers = changedContainers.entrySet().stream()
-                .map(entry -> new ItemStackResponseContainer(entry.getKey(), entry.getValue()))
+                .map(entry -> new ItemStackResponseContainer(entry.getKey(), entry.getValue(), null))
                 .toList();
         return new ItemStackResponse(ItemStackResponseStatus.OK, requestId, containers);
     }
