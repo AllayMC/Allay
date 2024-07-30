@@ -115,8 +115,6 @@ public interface TrKeys {
 
     String A_GUI_PLUGIN_NAME = "allay:gui.plugin.name";
 
-    String A_GUI_PLUGIN_ORDER = "allay:gui.plugin.order";
-
     String A_GUI_PLUGIN_VERSION = "allay:gui.plugin.version";
 
     String A_GUI_PLUGIN_WEBSITE = "allay:gui.plugin.website";

@@ -63,7 +63,6 @@
   "gui.plugin.info": "Plugin Information",
   "gui.plugin.name": "Name",
   "gui.plugin.entrance": "Entrance",
-  "gui.plugin.order": "Loading Order",
   "gui.plugin.description": "Description",
   "gui.plugin.authors": "Authors",
   "gui.plugin.dependencies": "Dependencies",
