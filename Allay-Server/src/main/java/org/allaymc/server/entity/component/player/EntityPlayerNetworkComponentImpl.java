@@ -56,6 +56,7 @@ import org.joml.Vector3fc;
 import javax.crypto.SecretKey;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -438,7 +439,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         public static CreativeContentPacket getCreativeContentPacket() {
             if (CREATIVE_CONTENT_PACKET == null) {
                 CREATIVE_CONTENT_PACKET = new CreativeContentPacket();
-                CREATIVE_CONTENT_PACKET.setContents(Registries.CREATIVE_ITEMS.getContent().values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new));
+                // We should sort it first!
+                var map = new TreeMap<>(Registries.CREATIVE_ITEMS.getContent());
+                CREATIVE_CONTENT_PACKET.setContents(map.values().stream().map(ItemStack::toNetworkItemData).toArray(ItemData[]::new));
             }
             return CREATIVE_CONTENT_PACKET;
         }
@@ -447,7 +450,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         public static List<ItemDefinition> getItemDefinitions() {
             if (ITEM_DEFINITIONS == null) {
-                ITEM_DEFINITIONS = new ArrayList<ItemDefinition>();
+                ITEM_DEFINITIONS = new ArrayList<>();
                 for (var itemType : Registries.ITEMS.getContent().values()) {
                     ITEM_DEFINITIONS.add(itemType.toNetworkDefinition());
                 }
