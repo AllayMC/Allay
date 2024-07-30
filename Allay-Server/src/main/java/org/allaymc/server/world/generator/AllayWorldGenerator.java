@@ -341,15 +341,16 @@ public final class AllayWorldGenerator implements WorldGenerator {
                 return null;
             }
 
-            var loadedChunk = dimension.getChunkService().getChunk(x, z);
-            if (loadedChunk != null) return loadedChunk;
-
             var noiseFuture = chunkNoiseFutures.get(HashUtils.hashXZ(x, z));
-            Preconditions.checkNotNull(noiseFuture);
+            if (noiseFuture != null) {
+                var chunk = noiseFuture.getNow(null);
+                Preconditions.checkNotNull(chunk);
+                return chunk;
+            }
 
-            var chunk = noiseFuture.getNow(null);
-            Preconditions.checkNotNull(chunk);
-            return chunk;
+            var loadedChunk = dimension.getChunkService().getChunk(x, z);
+            Preconditions.checkNotNull(loadedChunk);
+            return loadedChunk;
         }
 
         private boolean isInRange(int x, int z) {
