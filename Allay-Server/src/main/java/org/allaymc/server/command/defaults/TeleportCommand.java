@@ -23,15 +23,39 @@ public class TeleportCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                .target("targets")
+                .target("victims")
                 .pos("pos")
                 .exec(context -> {
-                    List<Entity> targets = context.getResult(0);
+                    List<Entity> victims = context.getResult(0);
                     Vector3f pos = context.getResult(1);
                     var loc = new Location3f(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
-                    for (Entity target : targets) {
-                        target.teleport(loc);
-                        context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, target.getDisplayName(), pos.x, pos.y, pos.z);
+                    for (Entity victim : victims) {
+                        victim.teleport(loc);
+                        context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, victim.getDisplayName(), pos.x, pos.y, pos.z);
+                    }
+
+                    return context.success();
+                })
+                .up()
+                .target("destination")
+                .exec(context -> {
+                    List<Entity> victims = context.getResult(0);
+                    List<Entity> destination = context.getResult(1);
+
+                    if (destination.isEmpty()) {
+                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
+                        return context.fail();
+                    }
+
+                    if (destination.size() > 1) {
+                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_TOOMANYTARGETS);
+                        return context.fail();
+                    }
+
+                    var destEntity = destination.getFirst();
+                    for (Entity victim : victims) {
+                        victim.teleport(destEntity.getLocation());
+                        context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS, victim.getDisplayName(), destEntity.getDisplayName());
                     }
 
                     return context.success();
