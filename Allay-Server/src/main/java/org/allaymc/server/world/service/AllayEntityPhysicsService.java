@@ -11,6 +11,7 @@ import org.allaymc.api.datastruct.aabbtree.AABBTree;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.data.VanillaEffectTypes;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
@@ -67,7 +68,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected Map<Long, Entity> entities = new Long2ObjectOpenHashMap<>();
-    protected Map<Long, Queue<ScheduledMove>> scheduledMoveQueue = new Long2ObjectOpenHashMap<>();
+    protected Map<Long, Queue<ClientMove>> clientMoveQueue = new Long2ObjectOpenHashMap<>();
     protected Map<Long, List<Entity>> entityCollisionCache = new Long2ObjectOpenHashMap<>();
     /**
      * Regardless of the value of the entity's hasEntityCollision(), this aabb tree saves its collision result
@@ -81,7 +82,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     @Override
     public void tick() {
-        handleScheduledMoveQueue();
+        handleClientMoveQueue();
         cacheEntityCollisionResult();
         var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
         entities.values().parallelStream().forEach(entity -> {
@@ -452,24 +453,24 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return max;
     }
 
-    protected void handleScheduledMoveQueue() {
-        for (var entry : scheduledMoveQueue.entrySet()) {
+    protected void handleClientMoveQueue() {
+        for (var entry : clientMoveQueue.entrySet()) {
             var queue = entry.getValue();
             while (!queue.isEmpty()) {
-                var scheduledMove = queue.poll();
-                var entity = scheduledMove.entity();
-                // The entity may have been removed
-                if (!entities.containsKey(entity.getRuntimeId())) continue;
+                var clientMove = queue.poll();
+                var player = clientMove.player();
+                // The player may have been removed
+                if (!entities.containsKey(player.getRuntimeId())) continue;
                 // Calculate delta pos (motion)
-                var motion = scheduledMove.newLoc().sub(entity.getLocation(), new Vector3f());
-                entity.setMotion(motion);
-                if (updateEntityLocation(entity, scheduledMove.newLoc()))
-                    entityAABBTree.update(entity);
-                // ScheduledMove is not calculated by the server, but we need to calculate the onGround status
+                var motion = clientMove.newLoc().sub(player.getLocation(), new Vector3f());
+                player.setMotionValueOnly(motion);
+                if (updateEntityLocation(player, clientMove.newLoc()))
+                    entityAABBTree.update(player);
+                // ClientMove is not calculated by the server, but we need to calculate the onGround status
                 // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
-                var aabb = scheduledMove.entity.getOffsetAABB();
+                var aabb = clientMove.player.getOffsetAABB();
                 aabb.minY -= FAT_AABB_MARGIN;
-                entity.setOnGround(dimension.getCollidingBlocks(aabb) != null);
+                player.setOnGround(dimension.getCollidingBlocks(aabb) != null);
             }
         }
     }
@@ -508,10 +509,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * See {@link PacketProcessor#handleAsync}
      */
     @Override
-    public void offerScheduledMove(Entity entity, Location3fc newLoc) {
-        if (!entities.containsKey(entity.getRuntimeId())) return;
-        if (entity.getLocation().equals(newLoc)) return;
-        scheduledMoveQueue.computeIfAbsent(entity.getRuntimeId(), $ -> new ConcurrentLinkedQueue<>()).offer(new ScheduledMove(entity, newLoc));
+    public void offerClientMove(EntityPlayer player, Location3fc newLoc) {
+        if (!entities.containsKey(player.getRuntimeId())) return;
+        if (player.getLocation().equals(newLoc)) return;
+        clientMoveQueue.computeIfAbsent(player.getRuntimeId(), $ -> new ConcurrentLinkedQueue<>()).offer(new ClientMove(player, newLoc));
     }
 
     @Override
@@ -539,5 +540,5 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return result;
     }
 
-    protected record ScheduledMove(Entity entity, Location3fc newLoc) {}
+    protected record ClientMove(EntityPlayer player, Location3fc newLoc) {}
 }

@@ -2,6 +2,7 @@ package org.allaymc.api.world.service;
 
 import org.allaymc.api.datastruct.aabbtree.AABBOverlapFilter;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.jetbrains.annotations.ApiStatus;
@@ -32,7 +33,7 @@ public interface EntityPhysicsService {
 
     boolean containEntity(Entity entity);
 
-    void offerScheduledMove(Entity entity, Location3fc newLoc);
+    void offerClientMove(EntityPlayer player, Location3fc newLoc);
 
     default List<Entity> computeCollidingEntities(Entity entity) {
         return computeCollidingEntities(entity.getOffsetAABB(), other -> other.getRuntimeId() != entity.getRuntimeId());

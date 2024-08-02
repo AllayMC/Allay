@@ -46,8 +46,6 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
-import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -62,7 +60,9 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
+import org.joml.Vector3i;
 import org.joml.primitives.AABBf;
 
 import java.util.*;
@@ -299,9 +299,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         packet.setUuid(networkComponent.getLoginData().getUuid());
         packet.setUsername(networkComponent.getOriginName());
         packet.setPlatformChatId(networkComponent.getLoginData().getDeviceInfo().deviceId());
-        packet.setPosition(Vector3f.from(location.x(), location.y(), location.z()));
-        packet.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
-        packet.setRotation(Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
+        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y(), location.z()));
+        packet.setMotion(org.cloudburstmc.math.vector.Vector3f.from(motion.x(), motion.y(), motion.z()));
+        packet.setRotation(org.cloudburstmc.math.vector.Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         packet.setGameType(gameType);
         packet.getMetadata().putAll(this.metadata.getEntityDataMap());
         packet.setDeviceId(networkComponent.getLoginData().getDeviceInfo().deviceId());
@@ -515,7 +515,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 .playerNBT(saveNBT())
                 .currentWorldName(getWorld().getWorldData().getName())
                 .currentDimensionId(getDimension().getDimensionInfo().dimensionId())
-                .spawnPoint(new org.joml.Vector3i(spawnPoint.x(), spawnPoint.y(), spawnPoint.z()))
+                .spawnPoint(new Vector3i(spawnPoint.x(), spawnPoint.y(), spawnPoint.z()))
                 .spawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName())
                 .spawnPointDimensionId(spawnPoint.dimension().getDimensionInfo().dimensionId())
                 .build();
@@ -569,7 +569,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void publishClientChunkUpdate() {
         var packet = new NetworkChunkPublisherUpdatePacket();
         var loc = getLocation();
-        packet.setPosition(Vector3i.from(loc.x(), loc.y(), loc.z()));
+        packet.setPosition(org.cloudburstmc.math.vector.Vector3i.from(loc.x(), loc.y(), loc.z()));
         packet.setRadius(getChunkLoadingRadius() << 4);
         networkComponent.sendPacket(packet);
     }
@@ -588,8 +588,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var packet = new PlayerActionPacket();
         packet.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);
         packet.setRuntimeEntityId(runtimeId);
-        packet.setBlockPosition(Vector3i.ZERO);
-        packet.setResultPosition(Vector3i.ZERO);
+        packet.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
+        packet.setResultPosition(org.cloudburstmc.math.vector.Vector3i.ZERO);
         networkComponent.sendPacket(packet);
         awaitingDimensionChangeACK = false;
     }
@@ -848,11 +848,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void knockback(Vector3fc source, float kb) {
         var kbMotion = calculateKnockbackMotion(source, kb);
-        letClientApplyMotion(kbMotion);
+        setMotion(kbMotion);
     }
 
     @Override
-    public void letClientApplyMotion(Vector3fc motion) {
+    public void setMotionValueOnly(Vector3fc motion) {
+        this.motion = new Vector3f(motion);
+    }
+
+    @Override
+    public void setMotion(Vector3fc motion) {
+        // For player, motion effect is calculated by the client rather than the server
+        // We only need to send SetEntityMotionPacket to client when
+        // we want to apply motion on a player
         var packet = new SetEntityMotionPacket();
         packet.setMotion(MathUtils.JOMLVecToCBVec(motion));
         packet.setRuntimeEntityId(runtimeId);
