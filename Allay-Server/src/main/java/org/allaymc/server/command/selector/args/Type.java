@@ -22,7 +22,8 @@ public class Type extends CachedSimpleSelectorArgument {
         for (var type : arguments) {
             var reversed = ParseUtils.checkReversed(type);
             if (reversed) {
-                dontHave.add(type);
+                // Remove '!'
+                dontHave.add(type.substring(1));
             } else have.add(type);
         }
         return entity -> have.stream().allMatch(type -> checkType(entity, type)) &&
@@ -45,6 +46,7 @@ public class Type extends CachedSimpleSelectorArgument {
     }
 
     protected boolean checkType(Entity entity, String type) {
-        return entity.getEntityType().getIdentifier().toString().equals(type);
+        var identifier = entity.getEntityType().getIdentifier();
+        return identifier.toString().equals(type) || identifier.path().equals(type);
     }
 }
