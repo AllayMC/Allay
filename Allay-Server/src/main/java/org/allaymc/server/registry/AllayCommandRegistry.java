@@ -60,6 +60,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new EffectCommand());
         register(new GiveCommand());
         register(new DifficultyCommand());
+        register(new ListCommand());
     }
 
     @Override
