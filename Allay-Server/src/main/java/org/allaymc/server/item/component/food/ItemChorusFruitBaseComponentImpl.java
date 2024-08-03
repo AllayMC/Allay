@@ -33,6 +33,8 @@ public class ItemChorusFruitBaseComponentImpl extends ItemFoodComponentImpl {
 
             if (y < 0) continue;
 
+            // TODO: use height map
+
             while (y >= 0 && !dimension.getBlockState(x, y + 1, z).getBlockType().getMaterial().isSolid()) {
                 y--;
             }
