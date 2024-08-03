@@ -2,6 +2,7 @@ package org.allaymc.server.entity.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaEntityId;
+import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.interfaces.EntityFallingBlock;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -15,7 +16,6 @@ import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.player.*;
 
 import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicEntityAttributes;
-import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicPlayerAttributes;
 
 /**
  * Allay Project 2024/3/9
@@ -47,7 +47,7 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(VanillaEntityId.PLAYER)
                 .addComponent(EntityPlayerBaseComponentImpl::new, EntityPlayerBaseComponentImpl.class)
                 .addComponent(EntityPlayerNetworkComponentImpl::new, EntityPlayerNetworkComponentImpl.class)
-                .addComponent(() -> new EntityPlayerAttributeComponentImpl(basicPlayerAttributes()), EntityAttributeComponentImpl.class)
+                .addComponent(() -> new EntityPlayerAttributeComponentImpl(EntityPlayerAttributeComponent.basicPlayerAttributes()), EntityAttributeComponentImpl.class)
                 .addComponent(EntityPlayerContainerHolderComponentImpl::new, EntityPlayerContainerHolderComponentImpl.class)
                 .addComponent(EntityPlayerContainerViewerComponentImpl::new, EntityPlayerContainerViewerComponentImpl.class)
                 .addComponent(EntityPlayerDamageComponentImpl::new, EntityDamageComponentImpl.class)

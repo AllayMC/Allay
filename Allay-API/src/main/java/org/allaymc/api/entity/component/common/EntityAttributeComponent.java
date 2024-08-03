@@ -16,18 +16,6 @@ import java.util.List;
  */
 public interface EntityAttributeComponent extends EntityComponent {
 
-    static List<AttributeType> basicPlayerAttributes() {
-        var list = basicEntityAttributes();
-        list.addAll(Lists.newArrayList(
-                AttributeType.PLAYER_HUNGER,
-                AttributeType.PLAYER_SATURATION,
-                AttributeType.PLAYER_EXHAUSTION,
-                AttributeType.PLAYER_LEVEL,
-                AttributeType.PLAYER_EXPERIENCE
-        ));
-        return list;
-    }
-
     static List<AttributeType> basicEntityAttributes() {
         return Lists.newArrayList(
                 AttributeType.ABSORPTION,
