@@ -15,6 +15,8 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.network.PacketReceiveEvent;
+import org.allaymc.api.eventbus.event.network.PacketSendEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.item.ItemStack;
@@ -154,6 +156,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         session.setPacketHandler(new BedrockPacketHandler() {
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
+                var event = new PacketReceiveEvent(player, packet);
+                Server.getInstance().getEventBus().callEvent(event);
+                if (event.isCancelled()) {
+                    return PacketSignal.HANDLED;
+                }
+                packet = event.getPacket();
+
                 var processor = packetProcessorHolder.getProcessor(packet);
                 if (processor == null) {
                     log.warn("Received a packet without packet handler: {}", packet);
@@ -194,11 +203,25 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void sendPacket(BedrockPacket packet) {
+        var event = new PacketSendEvent(player, packet);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        packet = event.getPacket();
+
         session.sendPacket(packet);
     }
 
     @Override
     public void sendPacketImmediately(BedrockPacket packet) {
+        var event = new PacketSendEvent(player, packet);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        packet = event.getPacket();
+
         session.sendPacketImmediately(packet);
     }
 
