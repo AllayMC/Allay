@@ -27,6 +27,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.server.player.PlayerItemHeldEvent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.i18n.I18n;
@@ -391,6 +392,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var inv = containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY);
         inv.setHandSlot(handSlot);
         var itemStack = inv.getItemStack(handSlot);
+
+        var event = new PlayerItemHeldEvent(thisEntity, itemStack, handSlot);
+        Server.getInstance().getEventBus().callEvent(event);
 
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(runtimeId);
