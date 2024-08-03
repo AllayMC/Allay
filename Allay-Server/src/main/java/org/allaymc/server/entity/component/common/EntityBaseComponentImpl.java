@@ -25,9 +25,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.eventbus.event.entity.EntityFallEvent;
-import org.allaymc.api.eventbus.event.entity.EntityDieEvent;
-import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
+import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
@@ -718,6 +716,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void addEffect(EffectInstance effectInstance) {
+        var event = new EntityAddEffectEvent(thisEntity, effectInstance);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        effectInstance = event.getEffect();
+
         var old = effects.put(effectInstance.getType(), effectInstance);
         if (old != null) old.getType().onRemove(thisEntity, old);
 
@@ -737,18 +742,27 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void removeEffect(EffectType effectType) {
-        var removed = effects.remove(effectType);
-        if (removed != null) {
-            effectType.onRemove(thisEntity, removed);
-
-            var mobEffectPk = new MobEffectPacket();
-            mobEffectPk.setRuntimeEntityId(runtimeId);
-            mobEffectPk.setEffectId(effectType.getId());
-            mobEffectPk.setEvent(MobEffectPacket.Event.REMOVE);
-            sendMobEffectPacket(mobEffectPk);
-
-            syncVisibleEffects();
+        var removed = effects.get(effectType);
+        if (removed == null) {
+            return;
         }
+
+        var event = new EntityRemoveEffectEvent(thisEntity, removed);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        effects.remove(effectType);
+
+        effectType.onRemove(thisEntity, removed);
+
+        var mobEffectPk = new MobEffectPacket();
+        mobEffectPk.setRuntimeEntityId(runtimeId);
+        mobEffectPk.setEffectId(effectType.getId());
+        mobEffectPk.setEvent(MobEffectPacket.Event.REMOVE);
+        sendMobEffectPacket(mobEffectPk);
+
+        syncVisibleEffects();
     }
 
     protected void sendMobEffectPacket(MobEffectPacket packet) {
