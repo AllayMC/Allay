@@ -4,8 +4,11 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.eventbus.event.container.ContainerCloseEvent;
+import org.allaymc.api.eventbus.event.container.ContainerOpenEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -80,6 +83,12 @@ public class BaseContainer implements Container {
 
     @Override
     public void addViewer(ContainerViewer viewer) {
+        var event = new ContainerOpenEvent(viewer, this);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
         if (viewers.containsValue(viewer)) {
             log.warn("Viewer already exists! Container: {}, Viewer: {}", this.containerType, viewer);
             removeViewer(viewer);
@@ -97,6 +106,12 @@ public class BaseContainer implements Container {
 
     @Override
     public void removeViewer(ContainerViewer viewer) {
+        var event = new ContainerCloseEvent(viewer, this);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
         viewer.onClose(viewers.inverse().remove(viewer), this);
         onClose(viewer);
     }
