@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
+import org.allaymc.api.eventbus.event.world.ChunkUnloadEvent;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
@@ -285,6 +286,9 @@ public final class AllayChunkService implements ChunkService {
     public void unloadChunk(long chunkHash) {
         var chunk = getChunk(chunkHash);
         if (chunk == null) return;
+
+        var event = new ChunkUnloadEvent(chunk);
+        Server.getInstance().getEventBus().callEvent(event);
 
         loadedChunks.remove(chunkHash);
         chunk.save(worldStorage);
