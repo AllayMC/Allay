@@ -1,7 +1,5 @@
 package org.allaymc.api.entity.component.player;
 
-import com.google.common.base.Preconditions;
-import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 
 /**
@@ -11,48 +9,23 @@ import org.allaymc.api.entity.component.common.EntityAttributeComponent;
  */
 public interface EntityPlayerAttributeComponent extends EntityAttributeComponent {
 
-    default int getExperienceLevel() {
-        return (int) getAttributeValue(AttributeType.PLAYER_LEVEL);
-    }
+    int getExperienceLevel();
 
-    default void setExperienceLevel(int value) {
-        Preconditions.checkArgument(value >= 0 && value <= 24791);
-        setAttribute(AttributeType.PLAYER_LEVEL, value);
-    }
+    void setExperienceLevel(int value);
 
-    default float getExperience() {
-        return getAttributeValue(AttributeType.PLAYER_EXPERIENCE);
-    }
+    float getExperience();
 
-    default void setExperience(float value) {
-        Preconditions.checkArgument(value >= 0 && value <= 1);
-        setAttribute(AttributeType.PLAYER_EXPERIENCE, value);
-    }
+    void setExperience(float value);
 
-    default int getHunger() {
-        return (int) getAttributeValue(AttributeType.PLAYER_HUNGER);
-    }
+    int getHunger();
 
-    default void setHunger(int value) {
-        Preconditions.checkArgument(value >= 0 && value <= 20);
-        setAttribute(AttributeType.PLAYER_HUNGER, value);
-    }
+    void setHunger(int value);
 
-    default float getSaturation() {
-        return getAttributeValue(AttributeType.PLAYER_SATURATION);
-    }
+    float getSaturation();
 
-    default void setSaturation(float value) {
-        Preconditions.checkArgument(value >= 0 && value <= 20);
-        setAttribute(AttributeType.PLAYER_SATURATION, value);
-    }
+    void setSaturation(float value);
 
-    default float getExhaustion() {
-        return getAttributeValue(AttributeType.PLAYER_EXHAUSTION);
-    }
+    float getExhaustion();
 
-    default void setExhaustion(float value) {
-        Preconditions.checkArgument(value >= 0 && value <= 5);
-        setAttribute(AttributeType.PLAYER_EXHAUSTION, value);
-    }
+    void setExhaustion(float value);
 }
