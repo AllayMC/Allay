@@ -1,6 +1,7 @@
 package org.allaymc.server.network.processor;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.server.player.PlayerCommandEvent;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
@@ -11,7 +12,15 @@ public class CommandRequestPacketProcessor extends PacketProcessor<CommandReques
     @Override
     public void handleSync(EntityPlayer player, CommandRequestPacket packet, long receiveTime) {
         // The packet returns `/command args`, this gets rid of the `/` at the start
-        Registries.COMMANDS.execute(player, packet.getCommand().substring(1));
+        var cmd = packet.getCommand().substring(1);
+
+        var event = new PlayerCommandEvent(player, cmd);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
+        Registries.COMMANDS.execute(player, cmd);
     }
 
     @Override
