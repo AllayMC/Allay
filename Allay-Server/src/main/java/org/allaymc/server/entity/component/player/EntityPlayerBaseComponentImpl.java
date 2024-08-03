@@ -27,6 +27,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.server.player.PlayerGameTypeChangeEvent;
 import org.allaymc.api.eventbus.event.server.player.PlayerItemHeldEvent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
@@ -157,6 +158,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void setGameType(GameType gameType) {
+        var event = new PlayerGameTypeChangeEvent(thisEntity, this.gameType, gameType);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
         this.gameType = gameType;
 
         this.fallDistance = 0;
