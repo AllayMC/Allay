@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.event.world.TimeChangeEvent;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
@@ -182,8 +183,7 @@ public class AllayWorld implements World {
     protected void tickTime(long tickNumber) {
         if (worldData.getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) {
             if (tickNumber >= nextTimeSendTick) {
-                worldData.addTime(TIME_SENDING_INTERVAL);
-                sendTime(getPlayers());
+                setTime(worldData.getTime() + TIME_SENDING_INTERVAL);
                 nextTimeSendTick = tickNumber + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
             }
         }
@@ -191,6 +191,10 @@ public class AllayWorld implements World {
 
     @Override
     public void setTime(long time) {
+        var event = new TimeChangeEvent(this, worldData.getTime(), time);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) return;
+
         worldData.setTime(time);
         sendTime(getPlayers());
     }
