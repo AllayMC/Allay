@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @Getter
 @AllArgsConstructor
-public class CommandExecuteEvent extends Event implements CancellableEvent {
+public class CommandExecuteEvent extends CommandEvent implements CancellableEvent {
     protected CommandSender commandSender;
     protected String command;
 }

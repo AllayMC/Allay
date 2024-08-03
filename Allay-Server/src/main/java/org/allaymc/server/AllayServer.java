@@ -14,6 +14,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.event.server.ServerStopEvent;
 import org.allaymc.api.eventbus.event.server.network.ClientConnectEvent;
 import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
@@ -238,6 +239,12 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
+        var event = new ServerStopEvent();
+        eventBus.callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
         pluginManager.disablePlugins();
         // TODO: check the reason
         // Do not move this line down

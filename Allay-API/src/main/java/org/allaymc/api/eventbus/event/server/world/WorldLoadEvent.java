@@ -1,9 +1,8 @@
 package org.allaymc.api.eventbus.event.server.world;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.eventbus.event.WorldEvent;
 import org.allaymc.api.world.World;
 
 /**
@@ -12,7 +11,8 @@ import org.allaymc.api.world.World;
  * @author daoge_cmd
  */
 @Getter
-@AllArgsConstructor
-public class WorldLoadEvent extends Event implements CancellableEvent {
-    protected World world;
+public class WorldLoadEvent extends WorldEvent implements CancellableEvent {
+    public WorldLoadEvent(World world) {
+        super(world);
+    }
 }
