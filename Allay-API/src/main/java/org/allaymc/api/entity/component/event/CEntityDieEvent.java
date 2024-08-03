@@ -7,5 +7,5 @@ import org.allaymc.api.eventbus.event.Event;
  *
  * @author daoge_cmd
  */
-public class EntityDieEvent extends Event {
+public class CEntityDieEvent extends Event {
 }

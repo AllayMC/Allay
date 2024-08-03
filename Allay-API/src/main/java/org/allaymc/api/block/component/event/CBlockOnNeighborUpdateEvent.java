@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @Getter
 @AllArgsConstructor
-public class BlockOnNeighborUpdateEvent extends Event {
+public class CBlockOnNeighborUpdateEvent extends Event {
     private final BlockStateWithPos current;
     private final BlockStateWithPos neighbor;
     private final BlockFace face;

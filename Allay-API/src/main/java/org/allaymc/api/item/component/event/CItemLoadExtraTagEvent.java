@@ -14,6 +14,6 @@ import org.cloudburstmc.nbt.NbtMap;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ItemLoadExtraTagEvent extends Event {
+public class CItemLoadExtraTagEvent extends Event {
     protected NbtMap extraTag;
 }

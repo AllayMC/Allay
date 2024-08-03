@@ -16,7 +16,7 @@ import org.joml.Vector3ic;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ItemPlacedAsBlockEvent extends Event {
+public class CItemPlacedAsBlockEvent extends Event {
     protected Dimension dimension;
     protected Vector3ic placeBlockPos;
     protected ItemStack itemStack;

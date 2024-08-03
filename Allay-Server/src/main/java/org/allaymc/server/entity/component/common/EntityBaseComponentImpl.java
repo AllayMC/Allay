@@ -15,9 +15,10 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
-import org.allaymc.api.entity.component.event.EntityFallEvent;
-import org.allaymc.api.entity.component.event.EntityLoadNBTEvent;
-import org.allaymc.api.entity.component.event.EntitySaveNBTEvent;
+import org.allaymc.api.entity.component.event.CEntityDieEvent;
+import org.allaymc.api.entity.component.event.CEntityFallEvent;
+import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
+import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.init.EntityInitInfo;
@@ -214,7 +215,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     protected void onDie() {
         var event = new EntityDieEvent(thisEntity);
         getWorld().getEventBus().callEvent(event);
-        manager.callEvent(new org.allaymc.api.entity.component.event.EntityDieEvent());
+        manager.callEvent(new CEntityDieEvent());
         dead = true;
         deadTimer = DEFAULT_DEAD_TIMER;
         applyEntityEvent(EntityEventType.DEATH, 0);
@@ -641,7 +642,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             builder.putList("ActiveEffects", NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
         }
         saveUniqueId(builder);
-        var event = new EntitySaveNBTEvent(builder);
+        var event = new CEntitySaveNBTEvent(builder);
         manager.callEvent(event);
         return builder.build();
     }
@@ -678,7 +679,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         });
 
         loadUniqueId(nbt);
-        var event = new EntityLoadNBTEvent(nbt);
+        var event = new CEntityLoadNBTEvent(nbt);
         manager.callEvent(event);
     }
 
@@ -699,7 +700,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             this.fallDistance = 0;
             return;
         }
-        this.manager.callEvent(new EntityFallEvent(this.fallDistance));
+        this.manager.callEvent(new CEntityFallEvent(this.fallDistance));
         this.fallDistance = 0;
     }
 

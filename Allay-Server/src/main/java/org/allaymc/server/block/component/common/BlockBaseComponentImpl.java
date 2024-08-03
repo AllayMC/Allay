@@ -4,10 +4,10 @@ import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.component.event.BlockOnInteractEvent;
-import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
-import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
-import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
+import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
+import org.allaymc.api.block.component.event.CBlockOnNeighborUpdateEvent;
+import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
+import org.allaymc.api.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
@@ -53,7 +53,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        manager.callEvent(new BlockOnNeighborUpdateEvent(current, neighbor, face));
+        manager.callEvent(new CBlockOnNeighborUpdateEvent(current, neighbor, face));
         if (!canKeepExisting(current, neighbor, face)) {
             current.pos().dimension().breakBlock(current.pos(), null, null);
         }
@@ -91,12 +91,12 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        manager.callEvent(new BlockOnPlaceEvent(currentBlockState, newBlockState, placementInfo));
+        manager.callEvent(new CBlockOnPlaceEvent(currentBlockState, newBlockState, placementInfo));
     }
 
     @Override
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
-        manager.callEvent(new BlockOnReplaceEvent(currentBlockState, newBlockState, placementInfo));
+        manager.callEvent(new CBlockOnReplaceEvent(currentBlockState, newBlockState, placementInfo));
     }
 
     @Override
@@ -125,7 +125,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        var event = new BlockOnInteractEvent(itemStack, dimension, interactInfo, false);
+        var event = new CBlockOnInteractEvent(itemStack, dimension, interactInfo, false);
         manager.callEvent(event);
         return event.isSuccess();
     }

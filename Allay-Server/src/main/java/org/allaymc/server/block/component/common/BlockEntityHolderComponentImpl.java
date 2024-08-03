@@ -4,10 +4,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.BlockEntityHolderComponent;
-import org.allaymc.api.block.component.event.BlockOnInteractEvent;
-import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
-import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
-import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
+import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
+import org.allaymc.api.block.component.event.CBlockOnNeighborUpdateEvent;
+import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
+import org.allaymc.api.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -30,7 +30,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     protected final BlockEntityType<T> blockEntityType;
 
     @EventHandler
-    private void onBlockPlace(BlockOnPlaceEvent event) {
+    private void onBlockPlace(CBlockOnPlaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
         createBlockEntityAt(pos, false);
         var blockEntity = getBlockEntity(pos);
@@ -43,7 +43,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     }
 
     @EventHandler
-    private void onBlockRemove(BlockOnReplaceEvent event) {
+    private void onBlockRemove(CBlockOnReplaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
         var blockEntity = getBlockEntity(pos);
         if (blockEntity == null) {
@@ -55,14 +55,14 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     }
 
     @EventHandler
-    private void onNeighborChanged(BlockOnNeighborUpdateEvent event) {
+    private void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().pos());
         var blockEntity = getBlockEntity(pos);
         blockEntity.onNeighborUpdate(event);
     }
 
     @EventHandler
-    private void onInteract(BlockOnInteractEvent event) {
+    private void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickBlockPos();
         var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension());
         blockEntity.onInteract(event);

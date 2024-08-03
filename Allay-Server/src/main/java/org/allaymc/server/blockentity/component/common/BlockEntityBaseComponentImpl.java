@@ -2,14 +2,14 @@ package org.allaymc.server.blockentity.component.common;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.allaymc.api.block.component.event.BlockOnInteractEvent;
-import org.allaymc.api.block.component.event.BlockOnNeighborUpdateEvent;
-import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
-import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
+import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
+import org.allaymc.api.block.component.event.CBlockOnNeighborUpdateEvent;
+import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
+import org.allaymc.api.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
-import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
-import org.allaymc.api.blockentity.component.event.BlockEntitySaveNBTEvent;
+import org.allaymc.api.blockentity.component.event.CBlockEntityLoadNBTEvent;
+import org.allaymc.api.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -58,7 +58,7 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
                 .putInt("z", position.z())
                 .putString("CustomName", customName)
                 .putBoolean("isMovable", true);
-        var event = new BlockEntitySaveNBTEvent(builder);
+        var event = new CBlockEntitySaveNBTEvent(builder);
         manager.callEvent(event);
         return builder.build();
     }
@@ -73,27 +73,27 @@ public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements Bloc
         pos.z = nbt.getInt("z", position.z());
         position = pos;
 
-        var event = new BlockEntityLoadNBTEvent(nbt);
+        var event = new CBlockEntityLoadNBTEvent(nbt);
         manager.callEvent(event);
     }
 
     @Override
-    public void onNeighborUpdate(BlockOnNeighborUpdateEvent event) {
+    public void onNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
         manager.callEvent(event);
     }
 
     @Override
-    public void onPlace(BlockOnPlaceEvent event) {
+    public void onPlace(CBlockOnPlaceEvent event) {
         manager.callEvent(event);
     }
 
     @Override
-    public void onReplace(BlockOnReplaceEvent event) {
+    public void onReplace(CBlockOnReplaceEvent event) {
         manager.callEvent(event);
     }
 
     @Override
-    public void onInteract(BlockOnInteractEvent event) {
+    public void onInteract(CBlockOnInteractEvent event) {
         manager.callEvent(event);
     }
 }

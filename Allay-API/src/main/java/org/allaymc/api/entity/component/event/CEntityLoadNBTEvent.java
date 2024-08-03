@@ -2,15 +2,18 @@ package org.allaymc.api.entity.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.eventbus.event.Event;
+import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Allay Project 2024/2/26
+ * Allay Project 2023/9/23
  *
  * @author daoge_cmd
  */
 @Getter
+@Setter
 @AllArgsConstructor
-public class EntityFallEvent extends Event {
-    protected float fallDistance;
+public class CEntityLoadNBTEvent extends Event {
+    protected NbtMap nbt;
 }

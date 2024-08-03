@@ -4,9 +4,9 @@ import lombok.Setter;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.common.ItemItemStorableComponent;
-import org.allaymc.api.item.component.event.ItemLoadExtraTagEvent;
-import org.allaymc.api.item.component.event.ItemPlacedAsBlockEvent;
-import org.allaymc.api.item.component.event.ItemSaveExtraTagEvent;
+import org.allaymc.api.item.component.event.CItemLoadExtraTagEvent;
+import org.allaymc.api.item.component.event.CItemPlacedAsBlockEvent;
+import org.allaymc.api.item.component.event.CItemSaveExtraTagEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -24,19 +24,19 @@ public class ItemItemStorableComponentImpl implements ItemItemStorableComponent 
     protected List<NbtMap> storedItems = List.of();
 
     @EventHandler
-    protected void onLoadExtraTag(ItemLoadExtraTagEvent event) {
+    protected void onLoadExtraTag(CItemLoadExtraTagEvent event) {
         var extraTag = event.getExtraTag();
         extraTag.listenForList("Items", NbtType.COMPOUND, itemsNbt -> storedItems = itemsNbt);
     }
 
     @EventHandler
-    protected void onSaveExtraTag(ItemSaveExtraTagEvent event) {
+    protected void onSaveExtraTag(CItemSaveExtraTagEvent event) {
         var builder = event.getExtraTag();
         if (!storedItems.isEmpty()) builder.put("Items", storedItems);
     }
 
     @EventHandler
-    protected void onPlacedAsBlock(ItemPlacedAsBlockEvent event) {
+    protected void onPlacedAsBlock(CItemPlacedAsBlockEvent event) {
         var blockEntity = event.getDimension().getBlockEntity(event.getPlaceBlockPos());
         if (blockEntity instanceof BlockEntityContainerHolderComponent component) {
             component.getContainer().loadNBT(storedItems);

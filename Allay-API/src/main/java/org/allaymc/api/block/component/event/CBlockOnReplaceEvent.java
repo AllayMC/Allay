@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @Getter
 @AllArgsConstructor
-public class BlockOnReplaceEvent extends Event {
+public class CBlockOnReplaceEvent extends Event {
     protected BlockStateWithPos currentBlockState;
     protected BlockState newBlockState;
     protected PlayerInteractInfo placementInfo; // Can be null

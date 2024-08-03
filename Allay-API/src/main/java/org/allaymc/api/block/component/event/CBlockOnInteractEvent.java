@@ -15,7 +15,7 @@ import org.allaymc.api.world.Dimension;
  */
 @Getter
 @AllArgsConstructor
-public final class BlockOnInteractEvent extends Event {
+public final class CBlockOnInteractEvent extends Event {
     private final ItemStack itemStack;
     private final Dimension dimension;
     private final PlayerInteractInfo interactInfo;

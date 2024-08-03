@@ -127,7 +127,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
         extraTag.listenForCompound("CustomNBT", customNbt -> this.customNBTContent = customNbt);
 
-        var event = new ItemLoadExtraTagEvent(extraTag);
+        var event = new CItemLoadExtraTagEvent(extraTag);
         manager.callEvent(event);
     }
 
@@ -227,7 +227,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         // Custom NBT content
         if (!customNBTContent.isEmpty()) nbtBuilder.put("CustomNBT", customNBTContent);
 
-        var event = new ItemSaveExtraTagEvent(nbtBuilder);
+        var event = new CItemSaveExtraTagEvent(nbtBuilder);
         manager.callEvent(event);
 
         return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
@@ -242,14 +242,14 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public boolean canUseItemInAir(EntityPlayer player) {
-        var event = new ItemTryUseEvent(player, false);
+        var event = new CItemTryUseEvent(player, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }
 
     @Override
     public boolean useItemInAir(EntityPlayer player, long usedTime) {
-        var event = new ItemUsedEvent(player, usedTime, false);
+        var event = new CItemUsedEvent(player, usedTime, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }
@@ -266,7 +266,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
         if (result) {
             tryConsumeItem(player);
-            var event = new ItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
+            var event = new CItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
             manager.callEvent(event);
         }
         return result;
@@ -340,12 +340,12 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public void onBreakBlock(BlockState block, Entity breaker) {
-        manager.callEvent(new ItemBreakBlockEvent(block, breaker));
+        manager.callEvent(new CItemBreakBlockEvent(block, breaker));
     }
 
     @Override
     public void onAttackEntity(Entity attacker, Entity victim) {
-        manager.callEvent(new ItemAttackEntityEvent(attacker, victim));
+        manager.callEvent(new CItemAttackEntityEvent(attacker, victim));
     }
 
     @Override

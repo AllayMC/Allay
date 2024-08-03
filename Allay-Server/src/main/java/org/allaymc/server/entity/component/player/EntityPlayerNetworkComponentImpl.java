@@ -12,7 +12,7 @@ import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
+import org.allaymc.api.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
@@ -23,7 +23,6 @@ import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.allaymc.api.pack.Pack;
-import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
@@ -395,7 +394,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         loggedIn = true;
         server.onLoggedIn(player);
         // TODO: plugin event
-        manager.callEvent(PlayerLoggedInEvent.INSTANCE);
+        manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
         sendPacket(DeferredData.getResourcePacksInfoPacket());
     }
 

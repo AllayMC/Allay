@@ -4,8 +4,8 @@ import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.common.ItemBaseComponent;
-import org.allaymc.api.item.component.event.ItemAttackEntityEvent;
-import org.allaymc.api.item.component.event.ItemBreakBlockEvent;
+import org.allaymc.api.item.component.event.CItemAttackEntityEvent;
+import org.allaymc.api.item.component.event.CItemBreakBlockEvent;
 import org.allaymc.api.item.component.tool.ItemToolComponent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
@@ -19,7 +19,7 @@ public abstract class ItemBlockBreakingToolComponent implements ItemToolComponen
     protected ItemBaseComponent baseComponent;
 
     @EventHandler
-    protected void onBreakBlock(ItemBreakBlockEvent event) {
+    protected void onBreakBlock(CItemBreakBlockEvent event) {
         var entity = event.getBreaker();
         if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) return;
 
@@ -31,7 +31,7 @@ public abstract class ItemBlockBreakingToolComponent implements ItemToolComponen
     }
 
     @EventHandler
-    protected void onAttackEntity(ItemAttackEntityEvent event) {
+    protected void onAttackEntity(CItemAttackEntityEvent event) {
         if (!baseComponent.willDamageItem()) return;
         baseComponent.increaseDurability(2);
     }

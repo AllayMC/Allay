@@ -1,10 +1,10 @@
-package org.allaymc.api.blockentity.component.event;
+package org.allaymc.api.item.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.eventbus.event.Event;
-import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtMapBuilder;
 
 /**
  * Allay Project 2023/9/23
@@ -14,6 +14,6 @@ import org.cloudburstmc.nbt.NbtMap;
 @Getter
 @Setter
 @AllArgsConstructor
-public class BlockEntityLoadNBTEvent extends Event {
-    protected NbtMap nbt;
+public class CItemSaveExtraTagEvent extends Event {
+    protected NbtMapBuilder extraTag;
 }

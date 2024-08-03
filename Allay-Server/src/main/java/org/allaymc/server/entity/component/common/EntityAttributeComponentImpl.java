@@ -7,8 +7,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
-import org.allaymc.api.entity.component.event.EntityLoadNBTEvent;
-import org.allaymc.api.entity.component.event.EntitySaveNBTEvent;
+import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
+import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.Identifier;
@@ -42,7 +42,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @EventHandler
-    private void onLoadNBT(EntityLoadNBTEvent event) {
+    private void onLoadNBT(CEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
         nbt.listenForList("Attributes", NbtType.COMPOUND, attributesNbt -> {
             attributesNbt.forEach(attributeNbt -> {
@@ -55,7 +55,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @EventHandler
-    private void onSaveNBT(EntitySaveNBTEvent event) {
+    private void onSaveNBT(CEntitySaveNBTEvent event) {
         event.getNbt().putList(
                 "Attributes",
                 NbtType.COMPOUND,

@@ -10,6 +10,6 @@ import org.allaymc.api.eventbus.event.Event;
  * @author daoge_cmd
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class PlayerLoggedInEvent extends Event {
-    public static final PlayerLoggedInEvent INSTANCE = new PlayerLoggedInEvent();
+public class CPlayerLoggedInEvent extends Event {
+    public static final CPlayerLoggedInEvent INSTANCE = new CPlayerLoggedInEvent();
 }

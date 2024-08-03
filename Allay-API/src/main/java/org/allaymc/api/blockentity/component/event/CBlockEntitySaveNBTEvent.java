@@ -1,4 +1,4 @@
-package org.allaymc.api.item.component.event;
+package org.allaymc.api.blockentity.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +14,6 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ItemSaveExtraTagEvent extends Event {
-    protected NbtMapBuilder extraTag;
+public class CBlockEntitySaveNBTEvent extends Event {
+    protected NbtMapBuilder nbt;
 }

@@ -4,8 +4,8 @@ import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.ItemFoodComponent;
-import org.allaymc.api.item.component.event.ItemTryUseEvent;
-import org.allaymc.api.item.component.event.ItemUsedEvent;
+import org.allaymc.api.item.component.event.CItemTryUseEvent;
+import org.allaymc.api.item.component.event.CItemUsedEvent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -47,12 +47,12 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
     }
 
     @EventHandler
-    private void onTryUseItem(ItemTryUseEvent event) {
+    private void onTryUseItem(CItemTryUseEvent event) {
         event.setCanBeUsed(canBeAlwaysEaten() || event.getPlayer().canEat());
     }
 
     @EventHandler
-    private void onItemUsed(ItemUsedEvent event) {
+    private void onItemUsed(CItemUsedEvent event) {
         if (event.getUsedTime() < eatingTime) {
             event.setCanBeUsed(false);
             return;

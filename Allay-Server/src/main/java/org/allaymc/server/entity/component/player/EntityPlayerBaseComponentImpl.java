@@ -19,7 +19,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.event.PlayerLoggedInEvent;
+import org.allaymc.api.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
@@ -119,7 +119,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     }
 
     @EventHandler
-    protected void onPlayerLoggedIn(PlayerLoggedInEvent event) {
+    protected void onPlayerLoggedIn(CPlayerLoggedInEvent event) {
         var loginData = networkComponent.getLoginData();
         skin = loginData.getSkin();
         setDisplayName(loginData.getDisplayName());

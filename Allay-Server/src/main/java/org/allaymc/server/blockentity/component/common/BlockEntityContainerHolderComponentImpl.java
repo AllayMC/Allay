@@ -1,12 +1,12 @@
 package org.allaymc.server.blockentity.component.common;
 
 import lombok.Setter;
-import org.allaymc.api.block.component.event.BlockOnInteractEvent;
-import org.allaymc.api.block.component.event.BlockOnReplaceEvent;
+import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
+import org.allaymc.api.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
-import org.allaymc.api.blockentity.component.event.BlockEntityLoadNBTEvent;
-import org.allaymc.api.blockentity.component.event.BlockEntitySaveNBTEvent;
+import org.allaymc.api.blockentity.component.event.CBlockEntityLoadNBTEvent;
+import org.allaymc.api.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
@@ -57,14 +57,14 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @EventHandler
-    private void onLoadNBT(BlockEntityLoadNBTEvent event) {
+    private void onLoadNBT(CBlockEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
         nbt.listenForList("Items", NbtType.COMPOUND, items -> container.loadNBT(items));
         container.setBlockPos(baseComponent.getPosition());
     }
 
     @EventHandler
-    private void onSaveNBT(BlockEntitySaveNBTEvent event) {
+    private void onSaveNBT(CBlockEntitySaveNBTEvent event) {
         var builder = event.getNbt();
         builder.putList(
                 "Items",
@@ -74,7 +74,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @EventHandler
-    private void onInteract(BlockOnInteractEvent event) {
+    private void onInteract(CBlockOnInteractEvent event) {
         var player = event.getInteractInfo().player();
         if (player == null || player.isSneaking()) return;
 
@@ -87,7 +87,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @EventHandler
-    private void onReplace(BlockOnReplaceEvent event) {
+    private void onReplace(CBlockOnReplaceEvent event) {
         if (!dropItemWhenBreak()) return;
 
         var pos = event.getCurrentBlockState().pos();

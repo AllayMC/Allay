@@ -1,6 +1,6 @@
 package org.allaymc.server.blockentity.component.shulkerbox;
 
-import org.allaymc.api.block.component.event.BlockOnPlaceEvent;
+import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
@@ -80,7 +80,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
     }
 
     @EventHandler
-    public void onPlace(BlockOnPlaceEvent event) {
+    public void onPlace(CBlockOnPlaceEvent event) {
         var placementInfo = event.getPlacementInfo();
         if (placementInfo == null) return;
 

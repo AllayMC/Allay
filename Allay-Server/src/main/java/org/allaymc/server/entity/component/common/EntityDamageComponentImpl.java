@@ -9,7 +9,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
-import org.allaymc.api.entity.component.event.EntityFallEvent;
+import org.allaymc.api.entity.component.event.CEntityFallEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -112,7 +112,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     }
 
     @EventHandler
-    private void onEntityFall(EntityFallEvent event) {
+    private void onEntityFall(CEntityFallEvent event) {
         if (!hasFallDamage()) return;
         if (!((boolean) baseComponent.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;
 
