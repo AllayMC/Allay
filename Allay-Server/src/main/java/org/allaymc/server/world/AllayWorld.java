@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.world.TimeChangeEvent;
+import org.allaymc.api.eventbus.event.world.WorldSaveEvent;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
@@ -246,6 +247,8 @@ public class AllayWorld implements World {
 
     @Override
     public void saveWorldData() {
+        var event = new WorldSaveEvent(this);
+        Server.getInstance().getEventBus().callEvent(event);
         getWorldStorage().writeWorldData(worldData);
     }
 
