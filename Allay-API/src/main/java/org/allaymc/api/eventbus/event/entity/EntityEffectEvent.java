@@ -1,7 +1,6 @@
 package org.allaymc.api.eventbus.event.entity;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.eventbus.event.CancellableEvent;

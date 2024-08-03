@@ -11,6 +11,8 @@ import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
@@ -110,6 +112,13 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @Override
     public void setHealth(float value) {
+        var event = new EntityHealthChangeEvent(entity, getAttributeValue(AttributeType.HEALTH), value);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        value = event.getNewHealth();
+
         setAttribute(AttributeType.HEALTH, max(0, min(value, this.getMaxHealth())));
     }
 
