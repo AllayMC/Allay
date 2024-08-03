@@ -163,6 +163,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         if (event.isCancelled()) {
             return;
         }
+        gameType = event.getNewGameType();
 
         this.gameType = gameType;
 

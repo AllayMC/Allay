@@ -472,7 +472,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 }
 
                 // Calculate delta pos (motion)
-                var motion = clientMove.newLoc().sub(player.getLocation(), new Vector3f());
+                var motion = event.getTo().sub(player.getLocation(), new Vector3f());
                 player.setMotionValueOnly(motion);
                 if (updateEntityLocation(player, clientMove.newLoc()))
                     entityAABBTree.update(player);

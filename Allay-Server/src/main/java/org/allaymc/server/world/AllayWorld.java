@@ -196,7 +196,7 @@ public class AllayWorld implements World {
         Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) return;
 
-        worldData.setTime(time);
+        worldData.setTime(event.getNewTime());
         sendTime(getPlayers());
     }
 

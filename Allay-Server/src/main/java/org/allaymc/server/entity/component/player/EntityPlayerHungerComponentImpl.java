@@ -146,7 +146,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
             return;
         }
 
-        this.foodLevel = Math.max(Math.min(foodLevel, MAX_FOOD_LEVEL), 0);
+        this.foodLevel = Math.max(Math.min(event.getNewFoodLevel(), MAX_FOOD_LEVEL), 0);
     }
 
     @Override

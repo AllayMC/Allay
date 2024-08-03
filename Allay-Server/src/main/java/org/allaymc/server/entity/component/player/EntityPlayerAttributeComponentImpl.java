@@ -43,15 +43,13 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public void setExperience(float value) {
-        Preconditions.checkArgument(value >= 0 && value <= 1);
-
         var event = new PlayerExperienceChangeEvent(player, getAttributeValue(AttributeType.PLAYER_EXPERIENCE), value);
         Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
 
-        setAttribute(AttributeType.PLAYER_EXPERIENCE, value);
+        setAttribute(AttributeType.PLAYER_EXPERIENCE, event.getNewExperience());
     }
 
     @Override
