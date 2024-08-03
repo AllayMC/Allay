@@ -404,6 +404,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void setSkin(Skin skin) {
         this.skin = skin;
+
         var packet = new PlayerSkinPacket();
         packet.setUuid(networkComponent.getLoginData().getUuid());
         packet.setSkin(skin.toNetwork());
@@ -411,6 +412,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         // It seems that old skin name is unused
         packet.setOldSkinName("");
         packet.setTrustedSkin(true);
+
         var server = Server.getInstance();
         server.broadcastPacket(packet);
         server.onSkinUpdate(thisEntity);
