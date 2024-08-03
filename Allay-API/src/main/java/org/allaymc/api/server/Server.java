@@ -6,7 +6,6 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerStorage;
-import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
@@ -54,7 +53,7 @@ public interface Server extends TaskCreator, CommandSender {
 
     long getStartTime();
 
-    void kickAllPlayersAndBlock();
+    void disconnectAllPlayersBlocking();
 
     Scheduler getScheduler();
 

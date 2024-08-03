@@ -16,7 +16,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.server.ServerStopEvent;
 import org.allaymc.api.eventbus.event.server.network.ClientConnectEvent;
+import org.allaymc.api.eventbus.event.server.player.PlayerBanEvent;
 import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
+import org.allaymc.api.eventbus.event.server.player.PlayerUnbanEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
@@ -204,7 +206,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void kickAllPlayersAndBlock() {
+    public void disconnectAllPlayersBlocking() {
         players.values().forEach(player -> player.disconnect(TrKeys.M_DISCONNECT_CLOSED));
         while (!players.isEmpty()) {
             Thread.yield();
@@ -257,7 +259,7 @@ public final class AllayServer implements Server {
         // Start a thread to handle server shutdown
         Thread.ofPlatform().start(() -> {
             try {
-                kickAllPlayersAndBlock();
+                disconnectAllPlayersBlocking();
             } finally {
                 isRunning.compareAndSet(true, false);
                 worldPool.close();
@@ -425,7 +427,17 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean ban(String uuidOrName) {
-        if (!banInfo.bannedPlayers().add(uuidOrName)) return false;
+        if (banInfo.bannedPlayers().contains(uuidOrName)) {
+            return false;
+        }
+
+        var event = new PlayerBanEvent(uuidOrName);
+        eventBus.callEvent(event);
+        if (event.isCancelled()) {
+            return false;
+        }
+
+        banInfo.bannedPlayers().add(uuidOrName);
         players.values().stream()
                 .filter(player -> player.getUUID().toString().equals(uuidOrName) ||
                                   player.getOriginName().equals(uuidOrName))
@@ -435,7 +447,18 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean unban(String uuidOrName) {
-        return banInfo.bannedPlayers().remove(uuidOrName);
+        if (!banInfo.bannedPlayers().contains(uuidOrName)) {
+            return false;
+        }
+
+        var event = new PlayerUnbanEvent(uuidOrName);
+        eventBus.callEvent(event);
+        if (event.isCancelled()) {
+            return false;
+        }
+
+        banInfo.bannedPlayers().remove(uuidOrName);
+        return true;
     }
 
     @Override
