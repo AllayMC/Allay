@@ -1,11 +1,10 @@
 package org.allaymc.server.world;
 
-import com.google.common.collect.Sets;
 import eu.okaeri.configs.ConfigManager;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.eventbus.event.server.world.WorldLoadEvent;
+import org.allaymc.api.eventbus.event.world.WorldLoadEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.Registries;
@@ -21,7 +20,6 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -34,7 +32,6 @@ public final class AllayWorldPool implements WorldPool {
     public static final Path WORLDS_FOLDER = Path.of("worlds");
     public static final String SETTINGS_FILE_NAME = "world-settings.yml";
 
-    private static final Set<Object> ALL_WORLDS_LISTENERS = Sets.newConcurrentHashSet();
     private final Map<String, World> worlds = new ConcurrentHashMap<>();
     @Getter
     private WorldSettings worldConfig;
@@ -51,18 +48,6 @@ public final class AllayWorldPool implements WorldPool {
     @Override
     public void close() {
         worlds.values().forEach(World::close);
-    }
-
-    @Override
-    public void registerListenerForAllWorlds(Object listener) {
-        if (ALL_WORLDS_LISTENERS.add(listener))
-            worlds.values().forEach(world -> world.getEventBus().registerListener(listener));
-    }
-
-    @Override
-    public void unregisterListenerForAllWorlds(Object listener) {
-        if (ALL_WORLDS_LISTENERS.remove(listener))
-            worlds.values().forEach(world -> world.getEventBus().unregisterListener(listener));
     }
 
     @Override
@@ -94,7 +79,6 @@ public final class AllayWorldPool implements WorldPool {
             world.setDimension(theEnd);
         }
 
-        ALL_WORLDS_LISTENERS.forEach(world.getEventBus()::registerListener);
         if (addWorld(world)) {
             log.info(I18n.get().tr(TrKeys.A_WORLD_LOADED, name));
             if (!worldConfig.worlds().containsKey(name)) {

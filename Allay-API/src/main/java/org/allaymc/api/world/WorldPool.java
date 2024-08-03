@@ -42,8 +42,4 @@ public interface WorldPool {
     void loadWorlds();
 
     void close();
-
-    void registerListenerForAllWorlds(Object listener);
-
-    void unregisterListenerForAllWorlds(Object listener);
 }

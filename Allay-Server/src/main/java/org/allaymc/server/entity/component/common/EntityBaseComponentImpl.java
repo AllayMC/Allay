@@ -25,8 +25,9 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.eventbus.event.world.entity.EntityDieEvent;
-import org.allaymc.api.eventbus.event.world.entity.EntityTeleportEvent;
+import org.allaymc.api.eventbus.event.entity.EntityFallEvent;
+import org.allaymc.api.eventbus.event.entity.EntityDieEvent;
+import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
@@ -214,7 +215,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     protected void onDie() {
         var event = new EntityDieEvent(thisEntity);
-        getWorld().getEventBus().callEvent(event);
+        Server.getInstance().getEventBus().callEvent(event);
         manager.callEvent(new CEntityDieEvent());
         dead = true;
         deadTimer = DEFAULT_DEAD_TIMER;
@@ -355,9 +356,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target));
         var currentWorld = this.getWorld();
         var targetWorld = target.dimension().getWorld();
-        currentWorld.getEventBus().callEvent(event);
+        Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) return;
-        if (targetWorld != currentWorld) targetWorld.getEventBus().callEvent(event);
+        if (targetWorld != currentWorld) Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) return;
         target = event.getTo();
         if (this.location.dimension == target.dimension()) {
@@ -694,8 +695,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void onFall() {
-        var event = new org.allaymc.api.eventbus.event.world.entity.EntityFallEvent(thisEntity, fallDistance);
-        getWorld().getEventBus().callEvent(event);
+        var event = new EntityFallEvent(thisEntity, fallDistance);
+        Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) {
             this.fallDistance = 0;
             return;

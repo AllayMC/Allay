@@ -8,7 +8,7 @@ import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.server.player.PlayerFoodLevelChangeEvent;
+import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Difficulty;

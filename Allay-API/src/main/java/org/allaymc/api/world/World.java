@@ -91,8 +91,6 @@ public interface World {
         getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
     }
 
-    EventBus getEventBus();
-
     default Difficulty getDifficulty() {
         return getWorldData().getDifficulty();
     }

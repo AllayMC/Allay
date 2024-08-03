@@ -18,8 +18,7 @@ public final class ExamplePlugin extends Plugin {
 
     public static ExamplePlugin INSTANCE;
 
-    private final ServerEventListener serverEventListener = new ServerEventListener();
-    private final WorldEventListener worldEventListener = new WorldEventListener();
+    private final EventListener eventListener = new EventListener();
 
     public ExamplePlugin() {
         INSTANCE = this;
@@ -36,8 +35,7 @@ public final class ExamplePlugin extends Plugin {
         log.info("ExamplePlugin enabled!");
         log.info(getPluginI18n().tr("ep:example_plugin_i18n_test"));
         var server = Server.getInstance();
-        server.getEventBus().registerListener(serverEventListener);
-        server.getEventBus().registerListener(worldEventListener);
+        server.getEventBus().registerListener(eventListener);
         Registries.COMMANDS.register(new ExampleCommand());
     }
 
@@ -45,8 +43,7 @@ public final class ExamplePlugin extends Plugin {
     public void onDisable() {
         log.info("ExamplePlugin disabled!");
         var server = Server.getInstance();
-        server.getEventBus().unregisterListener(serverEventListener);
-        server.getEventBus().unregisterListener(worldEventListener);
+        server.getEventBus().unregisterListener(eventListener);
         Registries.COMMANDS.unregister("example-cmd");
     }
 }

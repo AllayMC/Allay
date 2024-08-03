@@ -2,7 +2,7 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.eventbus.event.server.player.PlayerKickEvent;
+import org.allaymc.api.eventbus.event.player.PlayerKickEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
 

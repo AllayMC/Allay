@@ -48,8 +48,6 @@ public class AllayWorld implements World {
     protected final Scheduler scheduler = new AllayScheduler();
     protected final GameLoop gameLoop;
     @Getter
-    protected final EventBus eventBus = new AllayEventBus();
-    @Getter
     protected final Thread thread;
     protected final Thread networkThread;
     protected long nextTimeSendTick;

@@ -3,7 +3,7 @@ package org.allaymc.server.network.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.server.player.PlayerChangeSkinEvent;
+import org.allaymc.api.eventbus.event.player.PlayerChangeSkinEvent;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;

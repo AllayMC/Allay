@@ -5,9 +5,9 @@ import com.google.common.collect.Sets;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.server.player.PlayerJoinEvent;
-import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
-import org.allaymc.api.eventbus.event.world.entity.EntityDespawnEvent;
+import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
+import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
+import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.scorer.EntityScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
@@ -42,7 +42,6 @@ public final class ScoreboardService {
         this.storage = storage;
         read();
         server.getEventBus().registerListener(new ServerEventListener());
-        server.getWorldPool().registerListenerForAllWorlds(new AllWorldEventListener());
     }
 
     public boolean add(Scoreboard scoreboard) {
@@ -144,7 +143,7 @@ public final class ScoreboardService {
         scoreboards.values().forEach(scoreboard -> scoreboard.removeLine(scorer));
     }
 
-    public class AllWorldEventListener {
+    public class ServerEventListener {
         @EventHandler
         public void onEntityDespawn(EntityDespawnEvent event) {
             var entity = event.getEntity();
@@ -152,9 +151,7 @@ public final class ScoreboardService {
             if (entity instanceof EntityPlayer) return;
             removeScorerFromAllScoreboards(new EntityScorer(entity));
         }
-    }
 
-    public class ServerEventListener {
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent event) {
             var player = event.getPlayer();
