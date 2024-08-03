@@ -14,6 +14,8 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.event.network.IPBanEvent;
+import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
 import org.allaymc.api.eventbus.event.server.ServerStopEvent;
 import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.eventbus.event.player.PlayerBanEvent;
@@ -474,6 +476,13 @@ public final class AllayServer implements Server {
     @Override
     public boolean banIP(String ip) {
         if (!banInfo.bannedIps().add(ip)) return false;
+
+        var event = new IPBanEvent(ip);
+        eventBus.callEvent(event);
+        if (event.isCancelled()) {
+            return false;
+        }
+
         players.values().stream()
                 .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
                 .forEach(player -> player.disconnect("Your IP is banned!"));
@@ -482,7 +491,18 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean unbanIP(String ip) {
-        return banInfo.bannedIps().remove(ip);
+        if (!banInfo.bannedIps().contains(ip)) {
+            return false;
+        }
+
+        var event = new IPUnbanEvent(ip);
+        eventBus.callEvent(event);
+        if (event.isCancelled()) {
+            return false;
+        }
+
+        banInfo.bannedIps().remove(ip);
+        return true;
     }
 
     @Override
