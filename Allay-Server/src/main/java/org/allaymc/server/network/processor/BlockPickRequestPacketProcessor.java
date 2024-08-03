@@ -1,10 +1,14 @@
 package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerPickBlockEvent;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.network.processor.PacketProcessor;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -20,6 +24,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
     @Override
     public void handleSync(EntityPlayer player, BlockPickRequestPacket packet, long receiveTime) {
         var blockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
+        var addUserData = packet.isAddUserData();
         if (!player.canReachBlock(blockPos) || player.getGameType() != GameType.CREATIVE) return;
 
         var block = player.getLocation().dimension().getBlockState(blockPos);
@@ -29,7 +34,20 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         }
 
         var item = block.toItemStack();
+        // TODO: UserData
         item.setCount(item.getItemData().maxStackSize());
+
+        var event = new PlayerPickBlockEvent(
+                player,
+                new BlockStateWithPos(block, new Position3i(blockPos, player.getDimension()), 0),
+                addUserData,
+                item
+        );
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        item = event.getItemBlock();
 
         var inventory = player.getContainer(FullContainerType.PLAYER_INVENTORY);
         // Foreach hot bar

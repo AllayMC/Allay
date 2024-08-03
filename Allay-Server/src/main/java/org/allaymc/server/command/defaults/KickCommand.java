@@ -35,7 +35,7 @@ public class KickCommand extends SimpleCommand {
                                 context.addError("PlayerKickEvent is cancelled");
                                 return context.fail();
                             }
-                            player.disconnect(reason);
+                            player.disconnect(event.getReason());
                             context.addOutput("Kicked " + name);
                             return context.success();
                         }
