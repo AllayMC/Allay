@@ -716,7 +716,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void addEffect(EffectInstance effectInstance) {
-        var event = new EntityAddEffectEvent(thisEntity, effectInstance);
+        var event = new EntityEffectAddEvent(thisEntity, effectInstance);
         Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) {
             return;
@@ -747,7 +747,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
             return;
         }
 
-        var event = new EntityRemoveEffectEvent(thisEntity, removed);
+        var event = new EntityEffectRemoveEvent(thisEntity, removed);
         Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) {
             return;

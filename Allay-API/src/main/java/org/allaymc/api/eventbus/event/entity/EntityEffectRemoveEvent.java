@@ -8,8 +8,8 @@ import org.allaymc.api.entity.effect.EffectInstance;
  *
  * @author daoge_cmd
  */
-public class EntityRemoveEffectEvent extends EntityEffectEvent {
-    public EntityRemoveEffectEvent(Entity entity, EffectInstance effect) {
+public class EntityEffectRemoveEvent extends EntityEffectEvent {
+    public EntityEffectRemoveEvent(Entity entity, EffectInstance effect) {
         super(entity, effect);
     }
 }
