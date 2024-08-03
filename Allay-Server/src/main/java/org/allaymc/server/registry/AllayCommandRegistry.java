@@ -94,7 +94,11 @@ public class AllayCommandRegistry extends CommandRegistry {
     public CommandResult execute(CommandSender sender, String cmd) {
         var event = new CommandExecuteEvent(sender, cmd);
         Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) return CommandResult.fail();
+        if (event.isCancelled()) {
+            return CommandResult.fail();
+        }
+        sender = event.getCommandSender();
+        cmd = event.getCommand();
 
         var spilt = spiltCommandArgs(cmd);
         var commandName = spilt.pop();
