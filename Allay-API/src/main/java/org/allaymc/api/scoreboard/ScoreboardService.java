@@ -156,7 +156,7 @@ public final class ScoreboardService {
 
     public class ServerEventListener {
         @EventHandler
-        public void onPlayerInitialized(PlayerJoinEvent event) {
+        public void onPlayerJoin(PlayerJoinEvent event) {
             var player = event.getPlayer();
             addViewer(player);
             var scorer = new PlayerScorer(player);

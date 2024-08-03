@@ -10,8 +10,8 @@ import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
  *
  * @author daoge_cmd
  */
-@Getter
 @AllArgsConstructor
+@Getter
 public class ClientConnectEvent extends NetworkEvent implements CancellableEvent {
     protected BedrockServerSession session;
 }

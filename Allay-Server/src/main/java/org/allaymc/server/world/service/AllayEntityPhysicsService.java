@@ -12,6 +12,7 @@ import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.world.player.PlayerMoveEvent;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
@@ -461,6 +462,15 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 var player = clientMove.player();
                 // The player may have been removed
                 if (!entities.containsKey(player.getRuntimeId())) continue;
+
+                var event = new PlayerMoveEvent(player, player.getLocation(), clientMove.newLoc());
+                dimension.getWorld().getEventBus().callEvent(event);
+                if (event.isCancelled()) {
+                    // Let client back to the previous pos
+                    player.teleport(event.getFrom());
+                    continue;
+                }
+
                 // Calculate delta pos (motion)
                 var motion = clientMove.newLoc().sub(player.getLocation(), new Vector3f());
                 player.setMotionValueOnly(motion);

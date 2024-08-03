@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ServerEventListener {
 
     @EventHandler
-    private void onPlayerInitialized(PlayerJoinEvent event) {
+    private void onPlayerJoin(PlayerJoinEvent event) {
         var player = event.getPlayer();
         player.sendText("allay-chan: welcome to the server");
         player.addServerSettingForm(

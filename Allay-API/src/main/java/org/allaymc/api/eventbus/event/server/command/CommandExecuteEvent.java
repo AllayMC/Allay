@@ -11,8 +11,8 @@ import org.allaymc.api.eventbus.event.Event;
  *
  * @author daoge_cmd
  */
-@Getter
 @AllArgsConstructor
+@Getter
 public class CommandExecuteEvent extends CommandEvent implements CancellableEvent {
     protected CommandSender commandSender;
     protected String command;
