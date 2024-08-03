@@ -4,9 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.server.player.*;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.processor.PacketProcessor;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -219,20 +221,62 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void handleInputData(EntityPlayer player, Set<PlayerAuthInputData> inputData) {
+        if (player.isDead()) return;
         for (var input : inputData) {
             switch (input) {
-                case START_SPRINTING -> player.setSprinting(true);
-                case STOP_SPRINTING -> player.setSprinting(false);
-                case START_SNEAKING -> player.setSneaking(true);
-                case STOP_SNEAKING -> player.setSneaking(false);
-                case START_SWIMMING -> player.setSwimming(true);
-                case STOP_SWIMMING -> player.setSwimming(false);
-                case START_GLIDING -> player.setGliding(true);
-                case STOP_GLIDING -> player.setGliding(false);
-                case START_CRAWLING -> player.setCrawling(true);
-                case STOP_CRAWLING -> player.setCrawling(false);
+                case START_SPRINTING -> {
+                    var event = new PlayerToggleSprintEvent(player, true);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setSprinting(true);
+                }
+                case STOP_SPRINTING -> {
+                    var event = new PlayerToggleSprintEvent(player, false);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setSprinting(false);
+                }
+                case START_SNEAKING -> {
+                    var event = new PlayerToggleSneakEvent(player, true);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setSneaking(true);
+                }
+                case STOP_SNEAKING -> {
+                    var event = new PlayerToggleSneakEvent(player, false);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setSneaking(false);
+                }
+                case START_SWIMMING -> {
+                    var event = new PlayerToggleSwimEvent(player, true);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setSwimming(true);
+                }
+                case STOP_SWIMMING -> {
+                    var event = new PlayerToggleSwimEvent(player, false);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setSwimming(false);
+                }
+                case START_GLIDING -> {
+                    var event = new PlayerToggleGlideEvent(player, true);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setGliding(true);
+                }
+                case STOP_GLIDING -> {
+                    var event = new PlayerToggleGlideEvent(player, false);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setGliding(false);
+                }
+                case START_CRAWLING -> {
+                    var event = new PlayerToggleCrawlEvent(player, true);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setCrawling(true);
+                }
+                case STOP_CRAWLING -> {
+                    var event = new PlayerToggleCrawlEvent(player, false);
+                    Server.getInstance().getEventBus().callEvent(event);
+                    player.setCrawling(false);
+                }
                 case START_JUMPING -> {
-                    if (player.isDead()) return;
+                    var event = new PlayerJumpEvent(player);
+                    Server.getInstance().getEventBus().callEvent(event);
                     player.exhaust(player.isSprinting() ? 0.2f : 0.05f);
                 }
             }
