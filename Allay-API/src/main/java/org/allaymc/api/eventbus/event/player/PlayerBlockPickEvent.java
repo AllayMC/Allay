@@ -13,13 +13,13 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
-public class PlayerPickBlockEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerBlockPickEvent extends PlayerEvent implements CancellableEvent {
     protected BlockStateWithPos clickedBlock;
     protected boolean addUserData;
     @Setter
     protected ItemStack itemBlock;
 
-    public PlayerPickBlockEvent(EntityPlayer player, BlockStateWithPos clickedBlock, boolean addUserData, ItemStack itemBlock) {
+    public PlayerBlockPickEvent(EntityPlayer player, BlockStateWithPos clickedBlock, boolean addUserData, ItemStack itemBlock) {
         super(player);
         this.clickedBlock = clickedBlock;
         this.addUserData = addUserData;

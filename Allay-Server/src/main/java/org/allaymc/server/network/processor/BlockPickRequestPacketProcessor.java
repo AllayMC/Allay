@@ -5,7 +5,7 @@ import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.player.PlayerPickBlockEvent;
+import org.allaymc.api.eventbus.event.player.PlayerBlockPickEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.server.Server;
@@ -37,7 +37,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         // TODO: UserData
         item.setCount(item.getItemData().maxStackSize());
 
-        var event = new PlayerPickBlockEvent(
+        var event = new PlayerBlockPickEvent(
                 player,
                 new BlockStateWithPos(block, new Position3i(blockPos, player.getDimension()), 0),
                 addUserData,
