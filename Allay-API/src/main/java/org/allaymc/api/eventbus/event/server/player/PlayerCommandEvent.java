@@ -1,5 +1,6 @@
 package org.allaymc.api.eventbus.event.server.player;
 
+import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.PlayerEvent;
 
@@ -8,8 +9,8 @@ import org.allaymc.api.eventbus.event.PlayerEvent;
  *
  * @author daoge_cmd
  */
+@Getter
 public class PlayerCommandEvent extends PlayerEvent {
-
     protected String command;
 
     public PlayerCommandEvent(EntityPlayer player, String command) {

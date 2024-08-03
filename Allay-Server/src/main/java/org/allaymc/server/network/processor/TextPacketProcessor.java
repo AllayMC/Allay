@@ -16,15 +16,13 @@ public class TextPacketProcessor extends PacketProcessor<TextPacket> {
     @Override
     public void handleSync(EntityPlayer player, TextPacket packet, long receiveTime) {
         if (packet.getType() == TextPacket.Type.CHAT) {
-            var message = "<" + player.getDisplayName() + "> " + packet.getMessage();
-
-            var event = new PlayerChatEvent(player, message);
+            var event = new PlayerChatEvent(player, "<" + player.getDisplayName() + "> ", packet.getMessage());
             Server.getInstance().getEventBus().callEvent(event);
             if (event.isCancelled()) {
                 return;
             }
 
-            Server.getInstance().broadcastMessage(message);
+            Server.getInstance().broadcastMessage(event.buildChat());
         }
     }
 

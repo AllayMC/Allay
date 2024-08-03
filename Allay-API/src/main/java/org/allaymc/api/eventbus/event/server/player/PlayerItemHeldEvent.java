@@ -1,5 +1,6 @@
 package org.allaymc.api.eventbus.event.server.player;
 
+import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.PlayerEvent;
 import org.allaymc.api.item.ItemStack;
@@ -9,6 +10,7 @@ import org.allaymc.api.item.ItemStack;
  *
  * @author daoge_cmd
  */
+@Getter
 public class PlayerItemHeldEvent extends PlayerEvent {
     protected ItemStack itemStack;
     protected int slot;
