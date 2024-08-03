@@ -1,12 +1,16 @@
 package org.allaymc.server.item.component.food;
 
 import lombok.Getter;
+import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.player.PlayerEatFoodEvent;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemFoodComponent;
 import org.allaymc.api.item.component.event.CItemTryUseEvent;
 import org.allaymc.api.item.component.event.CItemUsedEvent;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
@@ -23,6 +27,9 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
     private final int foodPoints;
     private final float saturationPoints;
     private final int eatingTime;
+
+    @ComponentedObject
+    protected ItemStack itemStack;
 
     public ItemFoodComponentImpl(int foodPoints, float saturationPoints) {
         this(foodPoints, saturationPoints, DEFAULT_EATING_TIME);
@@ -59,6 +66,13 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
         }
 
         var player = event.getPlayer();
+        var playerEatFoodEvent = new PlayerEatFoodEvent(player, itemStack);
+        Server.getInstance().getEventBus().callEvent(playerEatFoodEvent);
+        if (event.isCancelled()) {
+            event.setCanBeUsed(false);
+            return;
+        }
+
         onEaten(player);
         if (player.getGameType() == GameType.CREATIVE) return;
         var itemInHand = player.getItemInHand();
