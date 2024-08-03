@@ -8,6 +8,8 @@ import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.server.player.PlayerFoodLevelChangeEvent;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Difficulty;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -138,7 +140,12 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
 
     @Override
     public void setFoodLevel(int foodLevel) {
-        // TODO: event
+        var event = new PlayerFoodLevelChangeEvent(player, this.foodLevel, foodLevel);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
         this.foodLevel = Math.max(Math.min(foodLevel, MAX_FOOD_LEVEL), 0);
     }
 

@@ -1,5 +1,6 @@
 package org.allaymc.api.eventbus.event.server.player;
 
+import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.eventbus.event.PlayerEvent;
@@ -10,6 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
  *
  * @author daoge_cmd
  */
+@Getter
 public class PlayerGameTypeChangeEvent extends PlayerEvent implements CancellableEvent {
     protected GameType oldGameType;
     protected GameType newGameType;
