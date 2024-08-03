@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
+import org.allaymc.api.eventbus.event.server.player.PlayerJoinEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;
@@ -17,7 +17,7 @@ import org.cloudburstmc.protocol.bedrock.packet.SetLocalPlayerAsInitializedPacke
 public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProcessor<SetLocalPlayerAsInitializedPacket> {
     @Override
     public void handle(EntityPlayer player, SetLocalPlayerAsInitializedPacket packet) {
-        var event = new PlayerInitializedEvent(player);
+        var event = new PlayerJoinEvent(player);
         Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
         // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,

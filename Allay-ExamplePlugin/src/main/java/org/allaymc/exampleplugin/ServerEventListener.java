@@ -2,7 +2,7 @@ package org.allaymc.exampleplugin;
 
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
+import org.allaymc.api.eventbus.event.server.player.PlayerJoinEvent;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class ServerEventListener {
 
     @EventHandler
-    private void onPlayerInitialized(PlayerInitializedEvent event) {
+    private void onPlayerInitialized(PlayerJoinEvent event) {
         var player = event.getPlayer();
         player.sendText("allay-chan: welcome to the server");
         player.addServerSettingForm(

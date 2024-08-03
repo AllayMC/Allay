@@ -9,8 +9,8 @@ import org.allaymc.api.eventbus.event.PlayerEvent;
  *
  * @author daoge_cmd
  */
-public class PlayerInitializedEvent extends PlayerEvent implements CancellableEvent {
-    public PlayerInitializedEvent(EntityPlayer player) {
+public class PlayerJoinEvent extends PlayerEvent implements CancellableEvent {
+    public PlayerJoinEvent(EntityPlayer player) {
         super(player);
     }
 }

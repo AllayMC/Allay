@@ -6,7 +6,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
+import org.allaymc.api.eventbus.event.server.player.PlayerJoinEvent;
 import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
@@ -331,7 +331,7 @@ public final class Dashboard {
     }
 
     @EventHandler
-    private void onPlayerJoin(PlayerInitializedEvent event) {
+    private void onPlayerJoin(PlayerJoinEvent event) {
         updateOnlinePlayerCount();
         updateOnlinePlayerTable();
     }

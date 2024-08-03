@@ -1,4 +1,4 @@
-package org.allaymc.api.eventbus.event.server.misc;
+package org.allaymc.api.eventbus.event.server.world;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

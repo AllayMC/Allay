@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.server.player.PlayerInitializedEvent;
+import org.allaymc.api.eventbus.event.server.player.PlayerJoinEvent;
 import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
 import org.allaymc.api.eventbus.event.world.entity.EntityDespawnEvent;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -156,7 +156,7 @@ public final class ScoreboardService {
 
     public class ServerEventListener {
         @EventHandler
-        public void onPlayerInitialized(PlayerInitializedEvent event) {
+        public void onPlayerInitialized(PlayerJoinEvent event) {
             var player = event.getPlayer();
             addViewer(player);
             var scorer = new PlayerScorer(player);

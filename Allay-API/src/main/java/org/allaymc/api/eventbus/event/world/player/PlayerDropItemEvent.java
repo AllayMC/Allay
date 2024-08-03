@@ -12,10 +12,10 @@ import org.allaymc.api.item.ItemStack;
  * @author daoge_cmd
  */
 @Getter
-public class PlayerThrowItemEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerDropItemEvent extends PlayerEvent implements CancellableEvent {
     protected ItemStack itemStack;
 
-    public PlayerThrowItemEvent(EntityPlayer player, ItemStack itemStack) {
+    public PlayerDropItemEvent(EntityPlayer player, ItemStack itemStack) {
         super(player);
         this.itemStack = itemStack;
     }

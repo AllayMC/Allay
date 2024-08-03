@@ -14,6 +14,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.event.server.network.ClientConnectEvent;
 import org.allaymc.api.eventbus.event.server.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
@@ -280,6 +281,12 @@ public final class AllayServer implements Server {
 
     @Override
     public void onConnect(BedrockServerSession session) {
+        var event = new ClientConnectEvent(session);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            session.disconnect();
+            return;
+        }
         var player = PLAYER.createEntity(
                 SimpleEntityInitInfo
                         .builder()
