@@ -1,5 +1,6 @@
 package org.allaymc.api.world;
 
+import com.google.common.base.Preconditions;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
@@ -228,24 +229,8 @@ public class WorldData {
     }
 
     public synchronized void setTime(long time) {
+        Preconditions.checkArgument(time >= WorldData.TIME_DAY && time <= WorldData.TIME_FULL, "Time must be between " + WorldData.TIME_DAY + " and " + WorldData.TIME_FULL);
         this.time = time;
-        rollbackTime();
-    }
-
-    public synchronized void addTime() {
-        this.time++;
-        rollbackTime();
-    }
-
-    public synchronized void addTime(long value) {
-        this.time += value;
-        rollbackTime();
-    }
-
-    protected void rollbackTime() {
-        if (this.time > TIME_FULL) {
-            this.time = 0;
-        }
     }
 
     public synchronized void setCurrentTick(long currentTick) {

@@ -25,7 +25,7 @@ public class TimeChangeEvent extends WorldEvent implements CancellableEvent {
     }
 
     public void setNewTime(long time) {
-        Preconditions.checkArgument(time < WorldData.TIME_DAY || time > WorldData.TIME_FULL, "Time must be between " + WorldData.TIME_DAY + " and " + WorldData.TIME_FULL);
+        Preconditions.checkArgument(time >= WorldData.TIME_DAY && time <= WorldData.TIME_FULL, "Time must be between " + WorldData.TIME_DAY + " and " + WorldData.TIME_FULL);
         this.newTime = time;
     }
 }

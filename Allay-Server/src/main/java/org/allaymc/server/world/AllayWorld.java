@@ -190,12 +190,21 @@ public class AllayWorld implements World {
 
     @Override
     public void setTime(long time) {
+        time = rollbackTime(time);
+
         var event = new TimeChangeEvent(this, worldData.getTime(), time);
         Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) return;
 
         worldData.setTime(event.getNewTime());
         sendTime(getPlayers());
+    }
+
+    protected long rollbackTime(long time) {
+        if (time < WorldData.TIME_DAY || time > WorldData.TIME_FULL) {
+            return WorldData.TIME_DAY;
+        }
+        return time;
     }
 
     @Override
