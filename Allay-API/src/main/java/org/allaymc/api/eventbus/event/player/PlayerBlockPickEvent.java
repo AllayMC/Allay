@@ -15,6 +15,7 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 public class PlayerBlockPickEvent extends PlayerEvent implements CancellableEvent {
     protected BlockStateWithPos clickedBlock;
+    @Setter
     protected boolean addUserData;
     @Setter
     protected ItemStack itemBlock;

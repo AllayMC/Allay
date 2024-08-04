@@ -24,6 +24,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
     @Override
     public void handleSync(EntityPlayer player, BlockPickRequestPacket packet, long receiveTime) {
         var blockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
+        // TODO: UserData
         var addUserData = packet.isAddUserData();
         if (!player.canReachBlock(blockPos) || player.getGameType() != GameType.CREATIVE) return;
 
@@ -34,7 +35,6 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
         }
 
         var item = block.toItemStack();
-        // TODO: UserData
         item.setCount(item.getItemData().maxStackSize());
 
         var event = new PlayerBlockPickEvent(
@@ -48,6 +48,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
             return;
         }
         item = event.getItemBlock();
+        addUserData = event.isAddUserData();
 
         var inventory = player.getContainer(FullContainerType.PLAYER_INVENTORY);
         // Foreach hot bar
