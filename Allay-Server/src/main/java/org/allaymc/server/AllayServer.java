@@ -17,6 +17,7 @@ import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.network.IPBanEvent;
 import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
 import org.allaymc.api.eventbus.event.server.ServerStopEvent;
+import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
 import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.eventbus.event.player.PlayerBanEvent;
 import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
@@ -524,6 +525,10 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean addToWhitelist(String uuidOrName) {
+        var event = new WhitelistAddPlayerEvent(uuidOrName);
+        eventBus.callEvent(event);
+        if (event.isCancelled()) return false;
+
         return whitelist.whitelist().add(uuidOrName);
     }
 
