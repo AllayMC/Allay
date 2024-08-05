@@ -1,6 +1,8 @@
 package org.allaymc.api.eventbus.event.world;
 
+import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 
 import lombok.Getter;
@@ -11,10 +13,8 @@ import lombok.Getter;
  * @author Dhaiven
  */
 @Getter
-public class ChunkUnloadEvent extends Event {
-    protected Chunk chunk;
-
-    public ChunkUnloadEvent(Chunk chunk) {
-        this.chunk = chunk;
+public class ChunkUnloadEvent extends ChunkEvent implements CancellableEvent {
+    public ChunkUnloadEvent(Dimension dimension, Chunk chunk) {
+        super(dimension, chunk);
     }
 }

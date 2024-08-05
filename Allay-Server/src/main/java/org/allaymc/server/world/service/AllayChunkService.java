@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
+import org.allaymc.api.eventbus.event.world.ChunkLoadEvent;
+import org.allaymc.api.eventbus.event.world.ChunkPreLoadEvent;
 import org.allaymc.api.eventbus.event.world.ChunkUnloadEvent;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
@@ -97,7 +99,11 @@ public final class AllayChunkService implements ChunkService {
         unusedChunkClearCountDown.entrySet().removeIf(entry -> {
             var shouldRemove = entry.getValue() == 0;
             if (shouldRemove) {
-                unloadChunk(entry.getKey());
+                if (!unloadChunk(entry.getKey())) {
+                    // Chunk cannot be unloaded, may because ChunkUnloadEvent is cancelled
+                    shouldRemove = false;
+                    entry.setValue(Server.SETTINGS.worldSettings().removeUnneededChunkCycle());
+                }
             }
             return shouldRemove;
         });
@@ -176,6 +182,9 @@ public final class AllayChunkService implements ChunkService {
         var presentValue = loadingChunks.putIfAbsent(hashXZ, future);
         if (presentValue != null) return presentValue;
 
+        var chunkPreLoadEvent = new ChunkPreLoadEvent(dimension, x, z);
+        Server.getInstance().getEventBus().callEvent(chunkPreLoadEvent);
+
         worldStorage.readChunk(x, z, dimension.getDimensionInfo()).exceptionally(t -> {
             log.error("Error while reading chunk ({},{}) !", x, z, t);
             return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
@@ -194,6 +203,10 @@ public final class AllayChunkService implements ChunkService {
             preparedChunk.afterSetChunk(dimension);
             future.complete(preparedChunk);
             loadingChunks.remove(hashXZ);
+
+            var chunkLoadEvent = new ChunkLoadEvent(dimension, preparedChunk);
+            Server.getInstance().getEventBus().callEvent(chunkLoadEvent);
+
             return preparedChunk;
         });
         return future;
@@ -279,16 +292,21 @@ public final class AllayChunkService implements ChunkService {
         return Collections.unmodifiableCollection(loadingChunks.values());
     }
 
-    public void unloadChunk(int x, int z) {
-        unloadChunk(HashUtils.hashXZ(x, z));
+    @Override
+    public boolean unloadChunk(int x, int z) {
+        return unloadChunk(HashUtils.hashXZ(x, z));
     }
 
-    public void unloadChunk(long chunkHash) {
+    @Override
+    public boolean unloadChunk(long chunkHash) {
         var chunk = getChunk(chunkHash);
-        if (chunk == null) return;
+        if (chunk == null) return false;
 
-        var event = new ChunkUnloadEvent(chunk);
+        var event = new ChunkUnloadEvent(dimension, chunk);
         Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return false;
+        }
 
         loadedChunks.remove(chunkHash);
         chunk.save(worldStorage);
@@ -296,6 +314,8 @@ public final class AllayChunkService implements ChunkService {
             entity.despawnFromAll();
             dimension.getEntityPhysicsService().removeEntity(entity);
         });
+
+        return true;
     }
 
     @Override
