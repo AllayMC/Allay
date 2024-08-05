@@ -9,7 +9,6 @@ import org.cloudburstmc.protocol.bedrock.codec.v686.Bedrock_v686;
 @UtilityClass
 public final class ProtocolInfo {
 
-    // TODO: Change to Bedrock_v686.CODEC when released
     public static final BedrockCodec PACKET_CODEC = Bedrock_v686.CODEC;
 
     public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 2, 3, 0);
