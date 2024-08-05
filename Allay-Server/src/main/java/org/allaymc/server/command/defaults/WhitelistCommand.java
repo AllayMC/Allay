@@ -64,18 +64,14 @@ public class WhitelistCommand extends SimpleCommand {
                 .root()
                 .key("enable")
                 .exec(context -> {
-                    Server.SETTINGS.genericSettings().isWhitelisted(true);
-                    Server.getInstance().getOnlinePlayers().values().stream()
-                            .filter(player -> !Server.getInstance().isWhitelisted(player.getUUID().toString()) &&
-                                              !Server.getInstance().isWhitelisted(player.getOriginName()))
-                            .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
+                    Server.getInstance().whitelist(true);
                     context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_ENABLED);
                     return context.success();
                 })
                 .root()
                 .key("disable")
                 .exec(context -> {
-                    Server.SETTINGS.genericSettings().isWhitelisted(false);
+                    Server.getInstance().whitelist(false);
                     context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_DISABLED);
                     return context.success();
                 });
