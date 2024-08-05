@@ -26,7 +26,7 @@ public class BanIPCommand extends SimpleCommand {
                         context.addOutput(TrKeys.M_COMMANDS_BANIP_SUCCESS, ip);
                         return context.success();
                     } else {
-                        context.addError("IP " + ip + " is already banned!");
+                        context.addError("Can't ban ip " + ip + ", which may already being banned, or the event is cancelled by plugin.");
                         return context.fail();
                     }
                 });

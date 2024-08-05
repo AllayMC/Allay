@@ -292,12 +292,19 @@ public final class AllayServer implements Server {
 
     @Override
     public void onConnect(BedrockServerSession session) {
+        if (Server.getInstance().isIPBanned(AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0])) {
+            // TODO: I18n
+            session.disconnect("Your IP is banned!");
+            return;
+        }
+
         var event = new ClientConnectEvent(session);
         Server.getInstance().getEventBus().callEvent(event);
         if (event.isCancelled()) {
             session.disconnect();
             return;
         }
+
         var player = PLAYER.createEntity(
                 SimpleEntityInitInfo
                         .builder()

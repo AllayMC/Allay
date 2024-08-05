@@ -42,12 +42,6 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             return;
         }
 
-        if (server.isIPBanned(AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0])) {
-            // TODO: I18n
-            player.disconnect("Your IP is banned!");
-            return;
-        }
-
         if (!loginData.isXboxAuthenticated() && Server.SETTINGS.networkSettings().xboxAuth()) {
             player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTAUTHENTICATED);
             return;
