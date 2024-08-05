@@ -9,6 +9,7 @@ import org.allaymc.api.client.storage.PlayerStorage;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.event.server.WhitelistChangeEvent;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.plugin.PluginManager;
@@ -168,6 +169,18 @@ public interface Server extends TaskCreator, CommandSender {
 
     @UnmodifiableView
     Set<String> getBannedIPs();
+
+    default void whitelist() {
+        whitelist(true);
+    }
+
+    default void whitelist(boolean enable) {
+        var event = new WhitelistChangeEvent(enable);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) return;
+
+        Server.SETTINGS.genericSettings().isWhitelisted(enable);
+    }
 
     boolean isWhitelisted(String uuidOrName);
 
