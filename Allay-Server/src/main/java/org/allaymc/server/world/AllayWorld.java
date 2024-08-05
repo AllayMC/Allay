@@ -6,11 +6,13 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.world.DifficultyChangeEvent;
 import org.allaymc.api.eventbus.event.world.TimeChangeEvent;
 import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
+import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
@@ -200,6 +202,11 @@ public class AllayWorld implements World {
         sendTime(getPlayers());
     }
 
+    @Override
+    public long getTime() {
+        return worldData.getTime();
+    }
+
     protected long rollbackTime(long time) {
         if (time < WorldData.TIME_DAY || time > WorldData.TIME_FULL) {
             return WorldData.TIME_DAY;
@@ -250,6 +257,22 @@ public class AllayWorld implements World {
     @Override
     public <V> V getGameRule(GameRule gameRule) {
         return worldData.getGameRule(gameRule);
+    }
+
+    @Override
+    public Difficulty getDifficulty() {
+        return worldData.getDifficulty();
+    }
+
+    @Override
+    public void setDifficulty(Difficulty difficulty) {
+        var event = new DifficultyChangeEvent(this, worldData.getDifficulty(), difficulty);
+        Server.getInstance().getEventBus().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
+        worldData.setDifficulty(difficulty);
     }
 
     @Override

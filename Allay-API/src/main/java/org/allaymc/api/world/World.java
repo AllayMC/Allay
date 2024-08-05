@@ -1,7 +1,6 @@
 package org.allaymc.api.world;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
@@ -74,6 +73,8 @@ public interface World {
 
     void setTime(long time);
 
+    long getTime();
+
     default void addTime(long amount) {
         setTime(getWorldData().getTime() + amount);
     }
@@ -91,11 +92,7 @@ public interface World {
         getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
     }
 
-    default Difficulty getDifficulty() {
-        return getWorldData().getDifficulty();
-    }
+    Difficulty getDifficulty();
 
-    default void setDifficulty(Difficulty difficulty) {
-        getWorldData().setDifficulty(difficulty);
-    }
+    void setDifficulty(Difficulty difficulty);
 }
