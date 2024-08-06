@@ -213,7 +213,8 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     protected void onDie() {
         var event = new EntityDieEvent(thisEntity);
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
+
         manager.callEvent(new CEntityDieEvent());
         dead = true;
         deadTimer = DEFAULT_DEAD_TIMER;
@@ -352,12 +353,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
         }
 
         var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target));
-        var currentWorld = this.getWorld();
-        var targetWorld = target.dimension().getWorld();
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
         if (event.isCancelled()) return;
-        if (targetWorld != currentWorld) Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) return;
+
         target = event.getTo();
         if (this.location.dimension == target.dimension()) {
             // Teleporting in the current same dimension,
@@ -694,12 +692,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void onFall() {
         var event = new EntityFallEvent(thisEntity, fallDistance);
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
         if (event.isCancelled()) {
             this.fallDistance = 0;
             return;
         }
-        this.manager.callEvent(new CEntityFallEvent(this.fallDistance));
+
+        this.manager.callEvent(new CEntityFallEvent(event.getFallDistance()));
         this.fallDistance = 0;
     }
 
@@ -717,10 +716,9 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void addEffect(EffectInstance effectInstance) {
         var event = new EntityEffectAddEvent(thisEntity, effectInstance);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+        event.call();
+        if (event.isCancelled()) return;
+
         effectInstance = event.getEffect();
 
         var old = effects.put(effectInstance.getType(), effectInstance);
@@ -728,14 +726,14 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
         effectInstance.getType().onAdd(thisEntity, effectInstance);
 
-        var mobEffectPk = new MobEffectPacket();
-        mobEffectPk.setRuntimeEntityId(runtimeId);
-        mobEffectPk.setEffectId(effectInstance.getType().getId());
-        mobEffectPk.setAmplifier(effectInstance.getAmplifier());
-        mobEffectPk.setParticles(effectInstance.isVisible());
-        mobEffectPk.setDuration(effectInstance.getDuration());
-        mobEffectPk.setEvent(old == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
-        sendMobEffectPacket(mobEffectPk);
+        var packet = new MobEffectPacket();
+        packet.setRuntimeEntityId(runtimeId);
+        packet.setEffectId(effectInstance.getType().getId());
+        packet.setAmplifier(effectInstance.getAmplifier());
+        packet.setParticles(effectInstance.isVisible());
+        packet.setDuration(effectInstance.getDuration());
+        packet.setEvent(old == null ? MobEffectPacket.Event.ADD : MobEffectPacket.Event.MODIFY);
+        sendMobEffectPacket(packet);
 
         if (old == null) syncVisibleEffects();
     }
@@ -743,24 +741,21 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Override
     public void removeEffect(EffectType effectType) {
         var removed = effects.get(effectType);
-        if (removed == null) {
-            return;
-        }
+        if (removed == null) return;
 
         var event = new EntityEffectRemoveEvent(thisEntity, removed);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+        event.call();
+        if (event.isCancelled()) return;
+
         effects.remove(effectType);
 
         effectType.onRemove(thisEntity, removed);
 
-        var mobEffectPk = new MobEffectPacket();
-        mobEffectPk.setRuntimeEntityId(runtimeId);
-        mobEffectPk.setEffectId(effectType.getId());
-        mobEffectPk.setEvent(MobEffectPacket.Event.REMOVE);
-        sendMobEffectPacket(mobEffectPk);
+        var packet = new MobEffectPacket();
+        packet.setRuntimeEntityId(runtimeId);
+        packet.setEffectId(effectType.getId());
+        packet.setEvent(MobEffectPacket.Event.REMOVE);
+        sendMobEffectPacket(packet);
 
         syncVisibleEffects();
     }

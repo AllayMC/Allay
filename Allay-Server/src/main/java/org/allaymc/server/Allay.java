@@ -23,9 +23,10 @@ import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.perm.tree.PermTree;
-import org.allaymc.api.registry.*;
-import org.allaymc.server.registry.AllayCommandRegistry;
-import org.allaymc.server.registry.loader.RegistryLoaders;
+import org.allaymc.api.registry.DoubleKeyMappedRegistry;
+import org.allaymc.api.registry.IntMappedRegistry;
+import org.allaymc.api.registry.Registries;
+import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
@@ -44,6 +45,7 @@ import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.perm.tree.AllayPermTree;
+import org.allaymc.server.registry.AllayCommandRegistry;
 import org.allaymc.server.registry.loader.*;
 import org.allaymc.server.registry.populator.*;
 import org.allaymc.server.scheduler.AllayScheduler;
@@ -117,6 +119,7 @@ public final class Allay {
         initAllayAPI();
         initRegistries();
     }
+
     private static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
@@ -133,7 +136,7 @@ public final class Allay {
             if (asyncTaskExecutor == null) return new AllayScheduler();
             else return new AllayScheduler(asyncTaskExecutor);
         });
-        api.bind(EventBus.EventBusFactory.class, () -> AllayEventBus::new);
+        api.bind(EventBus.Factory.class, () -> AllayEventBus::new);
 
         // Item
         api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);

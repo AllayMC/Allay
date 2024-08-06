@@ -5,6 +5,8 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
 
+import java.util.StringJoiner;
+
 /**
  * Allay Project 2024/8/3
  *
@@ -17,17 +19,16 @@ public class ListCommand extends SimpleCommand {
 
     @Override
     public void prepareCommandTree(CommandTree tree) {
-        tree.getRoot()
-                .exec(context -> {
-                    StringBuilder str = new StringBuilder();
-                    int c = 0;
-                    for (var player : Server.getInstance().getOnlinePlayers().values()) {
-                        str.append(player.getDisplayName()).append(", ");
-                        c++;
-                    }
-                    context.getSender().sendTr(TrKeys.M_COMMANDS_PLAYERS_LIST, c, Server.getInstance().getNetworkServer().getMaxPlayerCount());
-                    context.getSender().sendText(str.toString());
-                    return context.success();
-                });
+        tree.getRoot().exec(context -> {
+            var server = Server.getInstance();
+            var players = server.getOnlinePlayers().values();
+
+            var joiner = new StringJoiner(", ");
+            players.forEach(player -> joiner.add(player.getDisplayName()));
+
+            context.getSender().sendTr(TrKeys.M_COMMANDS_PLAYERS_LIST, players.size(), server.getNetworkServer().getMaxPlayerCount());
+            context.getSender().sendText(joiner.toString());
+            return context.success();
+        });
     }
 }

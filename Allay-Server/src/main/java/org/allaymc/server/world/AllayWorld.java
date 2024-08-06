@@ -191,20 +191,20 @@ public class AllayWorld implements World {
     }
 
     @Override
+    public long getTime() {
+        return worldData.getTime();
+    }
+
+    @Override
     public void setTime(long time) {
         time = rollbackTime(time);
 
         var event = new TimeChangeEvent(this, worldData.getTime(), time);
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
         if (event.isCancelled()) return;
 
         worldData.setTime(event.getNewTime());
         sendTime(getPlayers());
-    }
-
-    @Override
-    public long getTime() {
-        return worldData.getTime();
     }
 
     protected long rollbackTime(long time) {
@@ -267,18 +267,16 @@ public class AllayWorld implements World {
     @Override
     public void setDifficulty(Difficulty difficulty) {
         var event = new DifficultyChangeEvent(this, worldData.getDifficulty(), difficulty);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+        event.call();
+        if (event.isCancelled()) return;
 
-        worldData.setDifficulty(difficulty);
+        worldData.setDifficulty(event.getNewDifficulty());
     }
 
     @Override
     public void saveWorldData() {
         var event = new WorldDataSaveEvent(this);
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
         getWorldStorage().writeWorldData(worldData);
     }
 

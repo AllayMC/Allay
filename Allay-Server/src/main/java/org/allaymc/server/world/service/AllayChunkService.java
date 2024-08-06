@@ -183,7 +183,7 @@ public final class AllayChunkService implements ChunkService {
         if (presentValue != null) return presentValue;
 
         var chunkPreLoadEvent = new ChunkPreLoadEvent(dimension, x, z);
-        Server.getInstance().getEventBus().callEvent(chunkPreLoadEvent);
+        chunkPreLoadEvent.call();
 
         worldStorage.readChunk(x, z, dimension.getDimensionInfo()).exceptionally(t -> {
             log.error("Error while reading chunk ({},{}) !", x, z, t);
@@ -205,7 +205,7 @@ public final class AllayChunkService implements ChunkService {
             loadingChunks.remove(hashXZ);
 
             var chunkLoadEvent = new ChunkLoadEvent(dimension, preparedChunk);
-            Server.getInstance().getEventBus().callEvent(chunkLoadEvent);
+            chunkLoadEvent.call();
 
             return preparedChunk;
         });
@@ -303,10 +303,8 @@ public final class AllayChunkService implements ChunkService {
         if (chunk == null) return false;
 
         var event = new ChunkUnloadEvent(dimension, chunk);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
+        event.call();
+        if (event.isCancelled()) return false;
 
         loadedChunks.remove(chunkHash);
         chunk.save(worldStorage);

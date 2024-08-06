@@ -6,7 +6,6 @@ import org.allaymc.api.block.material.MaterialType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;

@@ -14,15 +14,15 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
+import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.eventbus.event.network.IPBanEvent;
 import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
-import org.allaymc.api.eventbus.event.server.ServerStopEvent;
-import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
-import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
-import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.eventbus.event.player.PlayerBanEvent;
 import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
 import org.allaymc.api.eventbus.event.player.PlayerUnbanEvent;
+import org.allaymc.api.eventbus.event.server.ServerStopEvent;
+import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
+import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
@@ -246,10 +246,8 @@ public final class AllayServer implements Server {
     @Override
     public void shutdown() {
         var event = new ServerStopEvent();
-        eventBus.callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+        event.call();
+        if (event.isCancelled()) return;
 
         pluginManager.disablePlugins();
         // TODO: check the reason
@@ -301,7 +299,7 @@ public final class AllayServer implements Server {
         }
 
         var event = new ClientConnectEvent(session);
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
         if (event.isCancelled()) {
             session.disconnect();
             return;
@@ -438,15 +436,11 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean ban(String uuidOrName) {
-        if (banInfo.bannedPlayers().contains(uuidOrName)) {
-            return false;
-        }
+        if (isBanned(uuidOrName)) return false;
 
         var event = new PlayerBanEvent(uuidOrName);
-        eventBus.callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
+        event.call();
+        if (event.isCancelled()) return false;
 
         banInfo.bannedPlayers().add(uuidOrName);
         players.values().stream()
@@ -458,15 +452,11 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean unban(String uuidOrName) {
-        if (!banInfo.bannedPlayers().contains(uuidOrName)) {
-            return false;
-        }
+        if (!isBanned(uuidOrName)) return false;
 
         var event = new PlayerUnbanEvent(uuidOrName);
-        eventBus.callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
+        event.call();
+        if (event.isCancelled()) return false;
 
         banInfo.bannedPlayers().remove(uuidOrName);
         return true;
@@ -484,14 +474,13 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean banIP(String ip) {
-        if (!banInfo.bannedIps().add(ip)) return false;
+        if (isIPBanned(ip)) return false;
 
         var event = new IPBanEvent(ip);
-        eventBus.callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
+        event.call();
+        if (event.isCancelled()) return false;
 
+        banInfo.bannedIps().add(ip);
         players.values().stream()
                 .filter(player -> AllayStringUtils.fastTwoPartSplit(player.getClientSession().getSocketAddress().toString().substring(1), ":", "")[0].equals(ip))
                 .forEach(player -> player.disconnect("Your IP is banned!"));
@@ -500,15 +489,11 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean unbanIP(String ip) {
-        if (!banInfo.bannedIps().contains(ip)) {
-            return false;
-        }
+        if (!isIPBanned(ip)) return false;
 
         var event = new IPUnbanEvent(ip);
-        eventBus.callEvent(event);
-        if (event.isCancelled()) {
-            return false;
-        }
+        event.call();
+        if (event.isCancelled()) return false;
 
         banInfo.bannedIps().remove(ip);
         return true;
@@ -526,8 +511,10 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean addToWhitelist(String uuidOrName) {
+        if (isWhitelisted(uuidOrName)) return false;
+
         var event = new WhitelistAddPlayerEvent(uuidOrName);
-        eventBus.callEvent(event);
+        event.call();
         if (event.isCancelled()) return false;
 
         return whitelist.whitelist().add(uuidOrName);
@@ -535,12 +522,13 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean removeFromWhitelist(String uuidOrName) {
-        if (!whitelist.whitelist().remove(uuidOrName)) return false;
+        if (!isWhitelisted(uuidOrName)) return false;
 
         var event = new WhitelistRemovePlayerEvent(uuidOrName);
-        eventBus.callEvent(event);
+        event.call();
         if (event.isCancelled()) return false;
 
+        whitelist.whitelist().remove(uuidOrName);
         players.values().stream()
                 .filter(player -> player.getUUID().toString().equals(uuidOrName) ||
                                   player.getOriginName().equals(uuidOrName))

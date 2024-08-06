@@ -171,20 +171,16 @@ public interface Server extends TaskCreator, CommandSender {
     @UnmodifiableView
     Set<String> getBannedIPs();
 
-    default void whitelist() {
-        whitelist(true);
-    }
-
-    default void whitelist(boolean enable) {
+    default void setWhitelist(boolean enable) {
         var event = new WhitelistChangeEvent(enable);
-        getEventBus().callEvent(event);
+        event.call();
         if (event.isCancelled()) return;
 
         SETTINGS.genericSettings().isWhitelisted(enable);
         if (enable) {
             getOnlinePlayers().values().stream()
-                .filter(player -> isWhitelisted(player))
-                .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
+                    .filter(player -> !isWhitelisted(player))
+                    .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
         }
     }
 

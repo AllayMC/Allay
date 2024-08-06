@@ -11,6 +11,7 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
@@ -23,25 +24,57 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
 
     float DEFAULT_MOVEMENT_SPEED = 0.1f;
 
-    boolean isSprinting();
+    default boolean isSprinting() {
+        return getMetadata().get(EntityFlag.SPRINTING);
+    }
 
-    void setSprinting(boolean sprinting);
+    default void setSprinting(boolean sprinting) {
+        if (sprinting == isSprinting()) return;
 
-    boolean isSneaking();
+        var speed = getMovementSpeed();
+        if (sprinting) speed *= 1.3f;
+        else speed /= 1.3f;
 
-    void setSneaking(boolean sneaking);
+        setMovementSpeed(speed);
 
-    boolean isSwimming();
+        setAndSendEntityFlag(EntityFlag.SPRINTING, sprinting);
+    }
 
-    void setSwimming(boolean swimming);
+    default boolean isSneaking() {
+        return getMetadata().get(EntityFlag.SNEAKING);
+    }
 
-    boolean isGliding();
+    default void setSneaking(boolean sneaking) {
+        if (sneaking == isSneaking()) return;
+        setAndSendEntityFlag(EntityFlag.SNEAKING, sneaking);
+    }
 
-    void setGliding(boolean gliding);
+    default boolean isSwimming() {
+        return getMetadata().get(EntityFlag.SWIMMING);
+    }
 
-    boolean isCrawling();
+    default void setSwimming(boolean swimming) {
+        if (swimming == isSwimming()) return;
+        setAndSendEntityFlag(EntityFlag.SWIMMING, swimming);
+    }
 
-    void setCrawling(boolean crawling);
+    default boolean isGliding() {
+        return getMetadata().get(EntityFlag.GLIDING);
+    }
+
+    default void setGliding(boolean gliding) {
+        if (gliding == isGliding()) return;
+        setAndSendEntityFlag(EntityFlag.GLIDING, gliding);
+    }
+
+    default boolean isCrawling() {
+        return getMetadata().get(EntityFlag.CRAWLING);
+    }
+
+    default void setCrawling(boolean crawling) {
+        if (crawling == isCrawling()) return;
+        setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
+    }
 
     boolean isUsingItemOnBlock();
 
@@ -160,9 +193,9 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
         // Check whether there is a point that inside of the player's AABB
         // And can reach the provided pos
         var aabb = getOffsetAABB();
-        float[] aabbXs = new float[] {aabb.minX(), aabb.maxX()};
-        float[] aabbYs = new float[] {aabb.minY(), aabb.maxY()};
-        float[] aabbZs = new float[] {aabb.minZ(), aabb.maxZ()};
+        float[] aabbXs = new float[]{aabb.minX(), aabb.maxX()};
+        float[] aabbYs = new float[]{aabb.minY(), aabb.maxY()};
+        float[] aabbZs = new float[]{aabb.minZ(), aabb.maxZ()};
         for (var aabbX : aabbXs) {
             for (var aabbY : aabbYs) {
                 for (var aabbZ : aabbZs) {

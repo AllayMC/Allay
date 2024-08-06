@@ -15,15 +15,13 @@ import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 public class TextPacketProcessor extends PacketProcessor<TextPacket> {
     @Override
     public void handleSync(EntityPlayer player, TextPacket packet, long receiveTime) {
-        if (packet.getType() == TextPacket.Type.CHAT) {
-            var event = new PlayerChatEvent(player, "<" + player.getDisplayName() + "> ", packet.getMessage());
-            Server.getInstance().getEventBus().callEvent(event);
-            if (event.isCancelled()) {
-                return;
-            }
+        if (packet.getType() != TextPacket.Type.CHAT) return;
 
-            Server.getInstance().broadcastMessage(event.buildChat());
-        }
+        var event = new PlayerChatEvent(player, "<" + player.getDisplayName() + "> ", packet.getMessage());
+        event.call();
+        if (event.isCancelled()) return;
+
+        Server.getInstance().broadcastMessage(event.buildChat());
     }
 
     @Override

@@ -12,7 +12,6 @@ import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
  */
 @Getter
 public class PlayerAnimationEvent extends PlayerEvent implements CancellableEvent {
-
     protected AnimatePacket.Action action;
     protected float rowingTime;
 

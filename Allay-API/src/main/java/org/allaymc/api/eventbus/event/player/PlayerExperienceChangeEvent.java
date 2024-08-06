@@ -1,11 +1,9 @@
 package org.allaymc.api.eventbus.event.player;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
-
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Allay Project 2024/8/3

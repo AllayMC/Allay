@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityService;
 import org.allaymc.server.world.chunk.AllayChunk;
@@ -40,7 +39,7 @@ public class AllayEntityService implements EntityService {
 
     private void removeEntityImmediately(Entity entity) {
         var event = new EntityDespawnEvent(entity);
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
 
         var chunk = (AllayChunk) entity.getCurrentChunk();
         if (chunk == null)
@@ -56,7 +55,7 @@ public class AllayEntityService implements EntityService {
 
     private void addEntityImmediately(Entity entity) {
         var event = new EntitySpawnEvent(entity);
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
 
         var chunk = (AllayChunk) entity.getCurrentChunk();
         if (chunk == null)

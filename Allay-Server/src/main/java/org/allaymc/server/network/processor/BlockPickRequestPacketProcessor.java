@@ -8,7 +8,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerBlockPickEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.network.processor.PacketProcessor;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -43,10 +42,9 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
                 addUserData,
                 item
         );
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+        event.call();
+        if (event.isCancelled()) return;
+
         item = event.getItemBlock();
         addUserData = event.isAddUserData();
 

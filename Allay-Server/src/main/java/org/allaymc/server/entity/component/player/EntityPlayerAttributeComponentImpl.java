@@ -6,7 +6,6 @@ import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerExperienceChangeEvent;
-import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
 
 import java.util.List;
@@ -44,10 +43,8 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     public void setExperience(float value) {
         var event = new PlayerExperienceChangeEvent(player, getAttributeValue(AttributeType.PLAYER_EXPERIENCE), value);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+        event.call();
+        if (event.isCancelled()) return;
 
         setAttribute(AttributeType.PLAYER_EXPERIENCE, event.getNewExperience());
     }

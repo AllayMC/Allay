@@ -12,7 +12,6 @@ import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
@@ -101,25 +100,20 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     @Override
     public void sendAttributesToClient() {
         if (networkComponent == null) return;
-        var updateAttributesPacket = new UpdateAttributesPacket();
-        updateAttributesPacket.setRuntimeEntityId(entity.getRuntimeId());
-        for (Attribute attribute : attributes.values()) {
-            updateAttributesPacket.getAttributes().add(attribute.toNetwork());
-        }
-        updateAttributesPacket.setTick(entity.getWorld().getTick());
-        networkComponent.sendPacket(updateAttributesPacket);
+        var packet = new UpdateAttributesPacket();
+        packet.setRuntimeEntityId(entity.getRuntimeId());
+        attributes.values().forEach(attribute -> packet.getAttributes().add(attribute.toNetwork()));
+        packet.setTick(entity.getWorld().getTick());
+        networkComponent.sendPacket(packet);
     }
 
     @Override
     public void setHealth(float value) {
-        var event = new EntityHealthChangeEvent(entity, getAttributeValue(AttributeType.HEALTH), value);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
-        value = event.getNewHealth();
+        var event = new EntityHealthChangeEvent(entity, getHealth(), value);
+        event.call();
+        if (event.isCancelled()) return;
 
-        setAttribute(AttributeType.HEALTH, max(0, min(value, this.getMaxHealth())));
+        setAttribute(AttributeType.HEALTH, max(0, min(event.getNewHealth(), this.getMaxHealth())));
     }
 
     @Override

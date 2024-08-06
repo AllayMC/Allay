@@ -9,7 +9,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.perm.DefaultPermissions;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
@@ -19,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.allaymc.api.utils.AllayStringUtils.spiltCommandArgs;
+import static org.allaymc.api.utils.AllayStringUtils.splitCommandArgs;
 
 /**
  * Allay Project 2024/7/20
@@ -93,14 +92,13 @@ public class AllayCommandRegistry extends CommandRegistry {
     @Override
     public CommandResult execute(CommandSender sender, String cmd) {
         var event = new CommandExecuteEvent(sender, cmd);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return CommandResult.fail();
-        }
+        event.call();
+        if (event.isCancelled()) return CommandResult.fail();
+
         sender = event.getCommandSender();
         cmd = event.getCommand();
 
-        var spilt = spiltCommandArgs(cmd);
+        var spilt = splitCommandArgs(cmd);
         var commandName = spilt.pop();
 
         var command = this.findCommand(commandName);

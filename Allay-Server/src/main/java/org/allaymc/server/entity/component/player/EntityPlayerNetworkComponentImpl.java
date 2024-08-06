@@ -20,6 +20,7 @@ import org.allaymc.api.eventbus.event.network.PacketSendEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
@@ -46,19 +47,14 @@ import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
-import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
-import org.cloudburstmc.protocol.common.util.Preconditions;
 import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
@@ -157,10 +153,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
                 var event = new PacketReceiveEvent(player, packet);
-                Server.getInstance().getEventBus().callEvent(event);
-                if (event.isCancelled()) {
-                    return PacketSignal.HANDLED;
-                }
+                event.call();
+                if (event.isCancelled()) return PacketSignal.HANDLED;
+
                 packet = event.getPacket();
 
                 var processor = packetProcessorHolder.getProcessor(packet);
@@ -177,10 +172,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     // If player is not in any world, use server tick instead
                     time = Server.getInstance().getTick();
                 }
+
                 if (processor.handleAsync(player, packet, time) != PacketSignal.HANDLED) {
                     // Packet processors should make sure that PacketProcessor.handleSync() won't be called
                     // if player is not in any world
-                    Preconditions.checkNotNull(world, "Player that is not in any world cannot handle sync packet");
+                    Objects.requireNonNull(world, "Player that is not in any world cannot handle sync packet");
                     world.addSyncPacketToQueue(player, packet, time);
                 }
 
@@ -204,25 +200,19 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Override
     public void sendPacket(BedrockPacket packet) {
         var event = new PacketSendEvent(player, packet);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
-        packet = event.getPacket();
+        event.call();
+        if (event.isCancelled()) return;
 
-        session.sendPacket(packet);
+        session.sendPacket(event.getPacket());
     }
 
     @Override
     public void sendPacketImmediately(BedrockPacket packet) {
         var event = new PacketSendEvent(player, packet);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
-        packet = event.getPacket();
+        event.call();
+        if (event.isCancelled()) return;
 
-        session.sendPacketImmediately(packet);
+        session.sendPacketImmediately(event.getPacket());
     }
 
     @Override
@@ -434,12 +424,23 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
      * Which allows plugins to register their custom stuff
      */
     public static class DeferredData {
-        private static CraftingDataPacket CRAFTING_DATA_PACKET = null;
+        private static CraftingDataPacket CRAFTING_DATA_PACKET;
+        private static CreativeContentPacket CREATIVE_CONTENT_PACKET;
+        private static List<ItemDefinition> ITEM_DEFINITIONS;
+        private static List<BlockDefinition> BLOCK_DEFINITIONS;
+        private static AvailableEntityIdentifiersPacket AVAILABLE_ENTITY_IDENTIFIERS_PACKET;
+        private static BiomeDefinitionListPacket BIOME_DEFINITION_LIST_PACKET;
+        private static ResourcePacksInfoPacket RESOURCE_PACKS_INFO_PACKET;
+        private static ResourcePackStackPacket RESOURCES_PACK_STACK_PACKET;
 
         public static CraftingDataPacket getCraftingDataPacket() {
             if (CRAFTING_DATA_PACKET == null) {
                 CRAFTING_DATA_PACKET = new CraftingDataPacket();
-                CRAFTING_DATA_PACKET.getCraftingData().addAll(buildNetworkRecipeData());
+                CRAFTING_DATA_PACKET.getCraftingData().addAll(
+                        Registries.RECIPES.getContent().values().stream()
+                                .map(Recipe::toNetworkRecipeData)
+                                .toList()
+                );
                 // TODO: packet.getPotionMixData().addAll();
                 // TODO: packet.getContainerMixData().addAll();
                 // TODO: packet.getMaterialReducers().addAll();
@@ -447,16 +448,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             }
             return CRAFTING_DATA_PACKET;
         }
-
-        public static List<RecipeData> buildNetworkRecipeData() {
-            var result = new ArrayList<RecipeData>();
-            for (var recipe : Registries.RECIPES.getContent().values()) {
-                result.add(recipe.toNetworkRecipeData());
-            }
-            return result;
-        }
-
-        private static CreativeContentPacket CREATIVE_CONTENT_PACKET = null;
 
         public static CreativeContentPacket getCreativeContentPacket() {
             if (CREATIVE_CONTENT_PACKET == null) {
@@ -468,8 +459,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return CREATIVE_CONTENT_PACKET;
         }
 
-        private static List<ItemDefinition> ITEM_DEFINITIONS;
-
         public static List<ItemDefinition> getItemDefinitions() {
             if (ITEM_DEFINITIONS == null) {
                 ITEM_DEFINITIONS = new ArrayList<>();
@@ -480,8 +469,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return ITEM_DEFINITIONS;
         }
 
-        private static List<BlockDefinition> BLOCK_DEFINITIONS;
-
         public static List<BlockDefinition> getBlockDefinitions() {
             if (BLOCK_DEFINITIONS == null) {
                 BLOCK_DEFINITIONS = new ArrayList<>();
@@ -491,8 +478,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             }
             return BLOCK_DEFINITIONS;
         }
-
-        private static AvailableEntityIdentifiersPacket AVAILABLE_ENTITY_IDENTIFIERS_PACKET;
 
         public static AvailableEntityIdentifiersPacket getAvailableEntityIdentifiersPacket() {
             // TODO: support custom entity
@@ -510,8 +495,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return AVAILABLE_ENTITY_IDENTIFIERS_PACKET;
         }
 
-        private static BiomeDefinitionListPacket BIOME_DEFINITION_LIST_PACKET;
-
         public static BiomeDefinitionListPacket getBiomeDefinitionListPacket() {
             // TODO: support custom biome
             // Same to entity, we just read it from file currently
@@ -528,8 +511,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return BIOME_DEFINITION_LIST_PACKET;
         }
 
-        private static ResourcePacksInfoPacket RESOURCE_PACKS_INFO_PACKET;
-
         public static ResourcePacksInfoPacket getResourcePacksInfoPacket() {
             if (RESOURCE_PACKS_INFO_PACKET == null) {
                 buildResourcePackPacket();
@@ -537,8 +518,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             assert RESOURCE_PACKS_INFO_PACKET != null;
             return RESOURCE_PACKS_INFO_PACKET;
         }
-
-        private static ResourcePackStackPacket RESOURCES_PACK_STACK_PACKET;
 
         public static ResourcePackStackPacket getResourcesPackStackPacket() {
             if (RESOURCES_PACK_STACK_PACKET == null) {

@@ -55,13 +55,13 @@ public class AllayStringUtils {
     }
 
     /**
-     * 解析给定文本，从中分割命令参数
+     * Parses the given text to split command arguments
      *
-     * @param cmdLine the cmd line
+     * @param cmdLine the command line
      *
-     * @return 命令参数数组
+     * @return a List of command arguments
      */
-    public static LinkedList<String> spiltCommandArgs(String cmdLine) {
+    public static LinkedList<String> splitCommandArgs(String cmdLine) {
         StringBuilder sb = new StringBuilder(cmdLine);
         LinkedList<String> args = new LinkedList<>();
         boolean notQuoted = true;
@@ -101,12 +101,10 @@ public class AllayStringUtils {
     }
 
     public static Map<String, String> parseOptions(String preset) {
-        if (preset.isBlank()) {
-            return Collections.emptyMap();
-        }
+        if (preset.isBlank()) return Collections.emptyMap();
         var splits = fastSplit(preset, ";");
         var options = new HashMap<String, String>();
-        for(var split : splits) {
+        for (var split : splits) {
             if (!split.contains("=")) {
                 log.warn("Invalid option: {}", split);
                 continue;

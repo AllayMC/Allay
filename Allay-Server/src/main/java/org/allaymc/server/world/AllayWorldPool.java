@@ -8,7 +8,6 @@ import org.allaymc.api.eventbus.event.world.WorldLoadEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
@@ -127,7 +126,7 @@ public final class AllayWorldPool implements WorldPool {
 
     private boolean addWorld(World world) {
         var event = new WorldLoadEvent(world);
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
         if (event.isCancelled()) return false;
 
         worlds.put(world.getWorldData().getName(), world);

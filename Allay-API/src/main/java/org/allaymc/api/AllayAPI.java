@@ -141,7 +141,7 @@ public final class AllayAPI {
         requireImpl(Server.class, Server.INSTANCE::set);
         requireImpl(ComponentInjector.ComponentInjectorFactory.class, ComponentInjector.ComponentInjectorFactory.FACTORY::set);
         requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
-        requireImpl(EventBus.EventBusFactory.class, EventBus.FACTORY::set);
+        requireImpl(EventBus.Factory.class, EventBus.FACTORY::set);
 
         // Item
         requireImpl(ItemTypeBuilder.ItemTypeBuilderFactory.class, ItemTypeBuilder.FACTORY::set);

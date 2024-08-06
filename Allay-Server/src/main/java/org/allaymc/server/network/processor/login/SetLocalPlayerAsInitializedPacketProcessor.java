@@ -18,7 +18,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
     @Override
     public void handle(EntityPlayer player, SetLocalPlayerAsInitializedPacket packet) {
         var event = new PlayerJoinEvent(player);
-        Server.getInstance().getEventBus().callEvent(event);
+        event.call();
         if (event.isCancelled()) player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
         // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,
         // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client

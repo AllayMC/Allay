@@ -8,7 +8,6 @@ import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.processor.PacketProcessor;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -225,58 +224,47 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         for (var input : inputData) {
             switch (input) {
                 case START_SPRINTING -> {
-                    var event = new PlayerToggleSprintEvent(player, true);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleSprintEvent(player, true).call();
                     player.setSprinting(true);
                 }
                 case STOP_SPRINTING -> {
-                    var event = new PlayerToggleSprintEvent(player, false);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleSprintEvent(player, false).call();
                     player.setSprinting(false);
                 }
                 case START_SNEAKING -> {
-                    var event = new PlayerToggleSneakEvent(player, true);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleSneakEvent(player, true).call();
                     player.setSneaking(true);
                 }
                 case STOP_SNEAKING -> {
-                    var event = new PlayerToggleSneakEvent(player, false);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleSneakEvent(player, false).call();
                     player.setSneaking(false);
                 }
                 case START_SWIMMING -> {
-                    var event = new PlayerToggleSwimEvent(player, true);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleSwimEvent(player, true).call();
                     player.setSwimming(true);
                 }
                 case STOP_SWIMMING -> {
-                    var event = new PlayerToggleSwimEvent(player, false);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleSwimEvent(player, false).call();
                     player.setSwimming(false);
                 }
                 case START_GLIDING -> {
-                    var event = new PlayerToggleGlideEvent(player, true);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleGlideEvent(player, true).call();
                     player.setGliding(true);
                 }
                 case STOP_GLIDING -> {
-                    var event = new PlayerToggleGlideEvent(player, false);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleGlideEvent(player, false).call();
                     player.setGliding(false);
                 }
                 case START_CRAWLING -> {
-                    var event = new PlayerToggleCrawlEvent(player, true);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleCrawlEvent(player, true).call();
                     player.setCrawling(true);
                 }
                 case STOP_CRAWLING -> {
-                    var event = new PlayerToggleCrawlEvent(player, false);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerToggleCrawlEvent(player, false).call();
                     player.setCrawling(false);
                 }
                 case START_JUMPING -> {
-                    var event = new PlayerJumpEvent(player);
-                    Server.getInstance().getEventBus().callEvent(event);
+                    new PlayerJumpEvent(player).call();
                     player.exhaust(player.isSprinting() ? 0.2f : 0.05f);
                 }
             }

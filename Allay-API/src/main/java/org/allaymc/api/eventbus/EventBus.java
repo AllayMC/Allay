@@ -9,8 +9,7 @@ import org.allaymc.api.eventbus.event.Event;
  * @author daoge_cmd
  */
 public interface EventBus {
-
-    ApiInstanceHolder<EventBusFactory> FACTORY = ApiInstanceHolder.create();
+    ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
 
     static EventBus create() {
         return FACTORY.get().create();
@@ -22,7 +21,7 @@ public interface EventBus {
 
     <E extends Event> E callEvent(E event);
 
-    interface EventBusFactory {
+    interface Factory {
         EventBus create();
     }
 }

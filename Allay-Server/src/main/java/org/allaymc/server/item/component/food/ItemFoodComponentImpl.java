@@ -67,8 +67,8 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
 
         var player = event.getPlayer();
         var playerEatFoodEvent = new PlayerEatFoodEvent(player, itemStack);
-        Server.getInstance().getEventBus().callEvent(playerEatFoodEvent);
-        if (event.isCancelled()) {
+        playerEatFoodEvent.call();
+        if (playerEatFoodEvent.isCancelled()) {
             event.setCanBeUsed(false);
             return;
         }

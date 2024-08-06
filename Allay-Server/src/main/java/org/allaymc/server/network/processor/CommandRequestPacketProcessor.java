@@ -4,7 +4,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerCommandEvent;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.CommandRequestPacket;
 
@@ -12,15 +11,13 @@ public class CommandRequestPacketProcessor extends PacketProcessor<CommandReques
     @Override
     public void handleSync(EntityPlayer player, CommandRequestPacket packet, long receiveTime) {
         // The packet returns `/command args`, this gets rid of the `/` at the start
-        var cmd = packet.getCommand().substring(1);
+        var command = packet.getCommand().substring(1);
 
-        var event = new PlayerCommandEvent(player, cmd);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+        var event = new PlayerCommandEvent(player, command);
+        event.call();
+        if (event.isCancelled()) return;
 
-        Registries.COMMANDS.execute(player, cmd);
+        Registries.COMMANDS.execute(player, command);
     }
 
     @Override

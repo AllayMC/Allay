@@ -159,10 +159,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void setGameType(GameType gameType) {
         var event = new PlayerGameTypeChangeEvent(thisEntity, this.gameType, gameType);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            return;
-        }
+        event.call();
+        if (event.isCancelled()) return;
+
         gameType = event.getNewGameType();
 
         this.gameType = gameType;
@@ -318,64 +317,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         return packet;
     }
 
-    @Override
-    public boolean isSprinting() {
-        return metadata.get(EntityFlag.SPRINTING);
-    }
-
-    @Override
-    public void setSprinting(boolean sprinting) {
-        if (sprinting == isSprinting()) return;
-
-        var speed = getMovementSpeed();
-        if (sprinting) speed *= 1.3f;
-        else speed /= 1.3f;
-
-        setMovementSpeed(speed);
-
-        setAndSendEntityFlag(EntityFlag.SPRINTING, sprinting);
-    }
-
-    @Override
-    public boolean isSneaking() {
-        return metadata.get(EntityFlag.SNEAKING);
-    }
-
-    @Override
-    public void setSneaking(boolean sneaking) {
-        setAndSendEntityFlag(EntityFlag.SNEAKING, sneaking);
-    }
-
-    @Override
-    public boolean isSwimming() {
-        return metadata.get(EntityFlag.SWIMMING);
-    }
-
-    @Override
-    public void setSwimming(boolean swimming) {
-        setAndSendEntityFlag(EntityFlag.SWIMMING, swimming);
-    }
-
-    @Override
-    public boolean isGliding() {
-        return metadata.get(EntityFlag.GLIDING);
-    }
-
-    @Override
-    public void setGliding(boolean gliding) {
-        setAndSendEntityFlag(EntityFlag.GLIDING, gliding);
-    }
-
-    @Override
-    public boolean isCrawling() {
-        return metadata.get(EntityFlag.CRAWLING);
-    }
-
-    @Override
-    public void setCrawling(boolean crawling) {
-        setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
-    }
-
     public long getStartUsingItemInAirTime() {
         if (!isUsingItemInAir()) {
             log.warn("Trying to get a player's start action time who doesn't have action!");
@@ -401,8 +342,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         inv.setHandSlot(handSlot);
         var itemStack = inv.getItemStack(handSlot);
 
-        var event = new PlayerItemHeldEvent(thisEntity, itemStack, handSlot);
-        Server.getInstance().getEventBus().callEvent(event);
+        new PlayerItemHeldEvent(thisEntity, itemStack, handSlot).call();
 
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(runtimeId);

@@ -12,7 +12,6 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  */
 @Getter
 public class EntityHealthChangeEvent extends EntityEvent implements CancellableEvent {
-
     protected float oldHealth;
     @Setter
     protected float newHealth;

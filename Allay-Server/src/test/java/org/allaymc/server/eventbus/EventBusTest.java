@@ -42,7 +42,7 @@ public class EventBusTest {
 
     @EventHandler
     public void cancelHandler(TestCancellableEvent event) {
-        event.setCancelled();
+        event.cancel();
     }
 
     @Test
