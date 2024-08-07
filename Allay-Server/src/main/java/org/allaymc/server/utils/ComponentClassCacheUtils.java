@@ -58,9 +58,9 @@ public final class ComponentClassCacheUtils {
                 return;
             }
 
-            var cn = CACHE_ROOT_PATH.resolve("cn");
-            if (Files.exists(cn)) {
-                PathUtils.deleteDirectory(cn);
+            var path = CACHE_ROOT_PATH.resolve("org");
+            if (Files.exists(path)) {
+                PathUtils.deleteDirectory(path);
             }
 
             Files.deleteIfExists(CACHE_ROOT_PATH.resolve("mapping.json"));
