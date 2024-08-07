@@ -239,7 +239,6 @@ public class WorldData {
     }
 
     public void setTime(long time) {
-        Preconditions.checkArgument(time >= WorldData.TIME_DAY && time <= WorldData.TIME_FULL, "Time must be between " + WorldData.TIME_DAY + " and " + WorldData.TIME_FULL);
         time = rollbackTime(time);
 
         var event = new TimeChangeEvent(this.world, this.time, time);
