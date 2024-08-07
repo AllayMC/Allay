@@ -210,7 +210,7 @@ public class WorldData {
         return gameType;
     }
 
-    public synchronized void setGameType(GameType gameType) {
+    public void setGameType(GameType gameType) {
         this.gameType = gameType;
     }
 
@@ -218,7 +218,7 @@ public class WorldData {
         return name;
     }
 
-    public synchronized void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -226,7 +226,7 @@ public class WorldData {
         return difficulty;
     }
 
-    public synchronized void setDifficulty(Difficulty difficulty) {
+    public void setDifficulty(Difficulty difficulty) {
         var event = new DifficultyChangeEvent(this.world, this.difficulty, difficulty);
         event.call();
         if (event.isCancelled()) return;
@@ -238,7 +238,7 @@ public class WorldData {
         return time;
     }
 
-    public synchronized void setTime(long time) {
+    public void setTime(long time) {
         Preconditions.checkArgument(time >= WorldData.TIME_DAY && time <= WorldData.TIME_FULL, "Time must be between " + WorldData.TIME_DAY + " and " + WorldData.TIME_FULL);
         time = rollbackTime(time);
 
@@ -273,15 +273,15 @@ public class WorldData {
         return time;
     }
 
-    public synchronized void setCurrentTick(long currentTick) {
+    public void setCurrentTick(long currentTick) {
         this.currentTick = currentTick;
     }
 
-    public synchronized void setGameRule(GameRule gameRule, Object o) {
+    public void setGameRule(GameRule gameRule, Object o) {
         this.gameRules.put(gameRule, o);
     }
 
-    public synchronized <V> V getGameRule(GameRule gameRule) {
+    public <V> V getGameRule(GameRule gameRule) {
         return gameRules.get(gameRule);
     }
 
@@ -292,7 +292,7 @@ public class WorldData {
         return spawnPoint;
     }
 
-    public synchronized void setSpawnPoint(Vector3ic spawnPoint) {
+    public void setSpawnPoint(Vector3ic spawnPoint) {
         this.spawnPoint = spawnPoint;
     }
 
