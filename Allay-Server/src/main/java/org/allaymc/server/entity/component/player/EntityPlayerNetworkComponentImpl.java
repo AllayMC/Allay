@@ -257,7 +257,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
 
-        player.getLocation().dimension().getWorld().sendTime(List.of(player));
+        player.getLocation().dimension().getWorld().getWorldData().sendTime(List.of(player));
         // Save player data the first time
         server.getPlayerStorage().savePlayerData(player);
     }

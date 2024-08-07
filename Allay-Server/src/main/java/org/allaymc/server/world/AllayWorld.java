@@ -184,41 +184,10 @@ public class AllayWorld implements World {
     protected void tickTime(long tickNumber) {
         if (worldData.getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) {
             if (tickNumber >= nextTimeSendTick) {
-                setTime(worldData.getTime() + TIME_SENDING_INTERVAL);
+                worldData.setTime(worldData.getTime() + TIME_SENDING_INTERVAL);
                 nextTimeSendTick = tickNumber + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
             }
         }
-    }
-
-    @Override
-    public long getTime() {
-        return worldData.getTime();
-    }
-
-    @Override
-    public void setTime(long time) {
-        time = rollbackTime(time);
-
-        var event = new TimeChangeEvent(this, worldData.getTime(), time);
-        event.call();
-        if (event.isCancelled()) return;
-
-        worldData.setTime(event.getNewTime());
-        sendTime(getPlayers());
-    }
-
-    protected long rollbackTime(long time) {
-        if (time < WorldData.TIME_DAY || time > WorldData.TIME_FULL) {
-            return WorldData.TIME_DAY;
-        }
-        return time;
-    }
-
-    @Override
-    public void sendTime(EntityPlayer player) {
-        var setTimePk = new SetTimePacket();
-        setTimePk.setTime((int) worldData.getTime());
-        player.sendPacket(setTimePk);
     }
 
     @Override
@@ -247,30 +216,6 @@ public class AllayWorld implements World {
     public void setDimension(Dimension dimension) {
         Preconditions.checkArgument(!this.dimensionMap.containsKey(dimension.getDimensionInfo().dimensionId()));
         this.dimensionMap.put(dimension.getDimensionInfo().dimensionId(), dimension);
-    }
-
-    @Override
-    public void setGameRule(GameRule gamerule, Object value) {
-        worldData.setGameRule(gamerule, value);
-    }
-
-    @Override
-    public <V> V getGameRule(GameRule gameRule) {
-        return worldData.getGameRule(gameRule);
-    }
-
-    @Override
-    public Difficulty getDifficulty() {
-        return worldData.getDifficulty();
-    }
-
-    @Override
-    public void setDifficulty(Difficulty difficulty) {
-        var event = new DifficultyChangeEvent(this, worldData.getDifficulty(), difficulty);
-        event.call();
-        if (event.isCancelled()) return;
-
-        worldData.setDifficulty(event.getNewDifficulty());
     }
 
     @Override

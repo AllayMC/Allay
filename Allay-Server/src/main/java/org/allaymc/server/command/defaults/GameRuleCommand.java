@@ -47,7 +47,7 @@ public class GameRuleCommand extends SimpleCommand {
             var value = context.getResult(1);
             if (value != null) {
                 value = isBoolGameRule ? (boolean) value : (int) value;
-                world.setGameRule(gamerule, value);
+                world.getWorldData().setGameRule(gamerule, value);
 
                 context.addOutput(TrKeys.M_COMMANDS_GAMERULE_SUCCESS, gamerule.getName(), value);
             } else {

@@ -250,7 +250,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var currentDim = location.dimension();
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
-            targetDim.getWorld().sendTime(thisEntity);
+            targetDim.getWorld().getWorldData().sendTime(thisEntity);
             networkComponent.sendPacket(targetDim.getWorld().getWorldData().getGameRules().buildPacket());
         }
         this.location.dimension().removePlayer(thisEntity, () -> {

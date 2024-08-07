@@ -66,33 +66,9 @@ public interface World {
 
     void close();
 
-    @ApiStatus.Internal
-    default void sendTime(Collection<EntityPlayer> players) {
-        players.forEach(this::sendTime);
-    }
-
-    void setTime(long time);
-
-    long getTime();
-
-    default void addTime(long amount) {
-        setTime(getWorldData().getTime() + amount);
-    }
-
-    @ApiStatus.Internal
-    void sendTime(EntityPlayer player);
-
     void setDimension(Dimension dimension);
-
-    void setGameRule(GameRule gamerule, Object value);
-
-    <V> V getGameRule(GameRule gameRule);
 
     default void broadcastPacket(BedrockPacket packet) {
         getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
     }
-
-    Difficulty getDifficulty();
-
-    void setDifficulty(Difficulty difficulty);
 }

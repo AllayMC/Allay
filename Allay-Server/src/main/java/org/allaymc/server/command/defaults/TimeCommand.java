@@ -32,7 +32,7 @@ public class TimeCommand extends SimpleCommand {
                         case "sunset" -> WorldData.TIME_SUNSET;
                         default -> throw new IllegalStateException("Unexpected value: " + strTime);
                     };
-                    world.setTime(time);
+                    world.getWorldData().setTime(time);
                     context.addOutput(TrKeys.M_COMMANDS_TIME_SET, time);
                     return context.success();
                 })
@@ -41,7 +41,7 @@ public class TimeCommand extends SimpleCommand {
                 .exec(context -> {
                     var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
                     long time = context.getResult(1);
-                    world.setTime(time);
+                    world.getWorldData().setTime(time);
                     context.addOutput(TrKeys.M_COMMANDS_TIME_SET, time);
                     return context.success();
                 })
@@ -51,7 +51,7 @@ public class TimeCommand extends SimpleCommand {
                 .exec(context -> {
                     var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
                     long amount = context.getResult(1);
-                    world.addTime(amount);
+                    world.getWorldData().addTime(amount);
                     context.addOutput(TrKeys.M_COMMANDS_TIME_ADDED, amount);
                     return context.success();
                 });

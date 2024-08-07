@@ -80,6 +80,6 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
     }
 
     protected boolean canDropItemInContainers() {
-        return entity.getWorld().getGameRule(GameRule.DO_ENTITY_DROPS);
+        return entity.getWorld().getWorldData().getGameRule(GameRule.DO_ENTITY_DROPS);
     }
 }

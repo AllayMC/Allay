@@ -5,14 +5,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import org.allaymc.api.datastruct.SemVersion;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.world.DifficultyChangeEvent;
+import org.allaymc.api.eventbus.event.world.TimeChangeEvent;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
+
+import java.util.Collection;
 
 @Getter
 @Builder
@@ -221,7 +227,11 @@ public class WorldData {
     }
 
     public synchronized void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
+        var event = new DifficultyChangeEvent(this.world, this.difficulty, difficulty);
+        event.call();
+        if (event.isCancelled()) return;
+
+        this.difficulty = event.getNewDifficulty();
     }
 
     public long getTime() {
@@ -230,7 +240,37 @@ public class WorldData {
 
     public synchronized void setTime(long time) {
         Preconditions.checkArgument(time >= WorldData.TIME_DAY && time <= WorldData.TIME_FULL, "Time must be between " + WorldData.TIME_DAY + " and " + WorldData.TIME_FULL);
-        this.time = time;
+        time = rollbackTime(time);
+
+        var event = new TimeChangeEvent(this.world, this.time, time);
+        event.call();
+        if (event.isCancelled()) return;
+
+        this.time = event.getNewTime();
+        sendTime(this.world.getPlayers());
+    }
+
+    @ApiStatus.Internal
+    public void sendTime(Collection<EntityPlayer> players) {
+        players.forEach(this::sendTime);
+    }
+
+    @ApiStatus.Internal
+    public void sendTime(EntityPlayer player) {
+        var setTimePk = new SetTimePacket();
+        setTimePk.setTime((int) time);
+        player.sendPacket(setTimePk);
+    }
+
+    public void addTime(long amount) {
+        setTime(this.time + amount);
+    }
+
+    protected long rollbackTime(long time) {
+        if (time < WorldData.TIME_DAY || time > WorldData.TIME_FULL) {
+            return WorldData.TIME_DAY;
+        }
+        return time;
     }
 
     public synchronized void setCurrentTick(long currentTick) {
