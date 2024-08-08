@@ -2,6 +2,7 @@ package org.allaymc.server.world;
 
 import lombok.SneakyThrows;
 import org.allaymc.api.data.VanillaBiomeId;
+import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.DimensionInfo;
@@ -39,6 +40,7 @@ import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 class LevelDBWorldStorageTest {
     static Path levelDat = Path.of("").toAbsolutePath().getParent();//this is root path,relative to the `.run` directory
     static Server server = Mockito.mock(Server.class);
+    static EventBus eventBus = Mockito.mock(EventBus.class);
     static World mockWorld = Mockito.mock(World.class);
     static AllayLevelDBWorldStorage levelDBWorldStorage;
 
@@ -52,6 +54,7 @@ class LevelDBWorldStorageTest {
         levelDBWorldStorage = new AllayLevelDBWorldStorage(levelDat.resolve("Allay-Server/src/test/resources/beworld"));
         @SuppressWarnings("resource") MockedStatic<Server> serve = Mockito.mockStatic(Server.class);
         serve.when(Server::getInstance).thenReturn(server);
+        Mockito.when(server.getEventBus()).thenReturn(eventBus);
         Mockito.when(server.getVirtualThreadPool()).thenReturn(Executors.newVirtualThreadPerTaskExecutor());
         Mockito.when(mockWorld.getPlayers()).thenReturn(List.of());
     }
