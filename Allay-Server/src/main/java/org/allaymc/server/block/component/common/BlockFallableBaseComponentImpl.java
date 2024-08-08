@@ -12,6 +12,8 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityFallingBlock;
 import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.event.block.BlockFallEvent;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3ic;
@@ -45,6 +47,12 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
         var down0 = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType();
         var down1 = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos), 1).getBlockType();
         if (invalidDownBlock(down0, down1)) {
+            var event = new BlockFallEvent(new BlockStateWithPos(blockState, new Position3i(pos, dimension), 0));
+            event.call();
+            if (event.isCancelled()) {
+                return false;
+            }
+
             dimension.getEntityService().addEntity(createFallingEntity(dimension, pos, blockState), () -> {
                 dimension.setBlockState(
                         pos.x(), pos.y(), pos.z(),
