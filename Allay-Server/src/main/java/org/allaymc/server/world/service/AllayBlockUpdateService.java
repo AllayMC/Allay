@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.allaymc.api.block.component.common.BlockLiquidComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;
+import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.BlockUpdateService;
@@ -34,39 +36,76 @@ public class AllayBlockUpdateService implements BlockUpdateService {
         positions.forEach(pos -> {
             var layer0 = dimension.getBlockState(pos);
             var layer1 = dimension.getBlockState(pos, 1);
-            var blockState0 = new BlockStateWithPos(layer0, new Position3i(pos, dimension), 0);
-            layer0.getBehavior().onScheduledUpdate(blockState0);
+            var block0 = new BlockStateWithPos(layer0, new Position3i(pos, dimension), 0);
+
+            if (callScheduleUpdateEvent(block0)) {
+                return;
+            }
+
+            layer0.getBehavior().onScheduledUpdate(block0);
+
             if (layer1.getBehavior() instanceof BlockLiquidComponent) {
-                var blockState1 = new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1);
-                layer1.getBehavior().onScheduledUpdate(blockState1);
+                var block1 = new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1);
+
+                if (callScheduleUpdateEvent(block1)) {
+                    return;
+                }
+
+                layer1.getBehavior().onScheduledUpdate(block1);
             }
         });
 
         int count = 0;
         while (!neighborUpdates.isEmpty() && count < MAX_NU_PER_TICK) {
             var update = neighborUpdates.poll();
+            var blockFace = update.blockFace();
             var pos = update.pos();
             var neighborPos = update.neighborPos();
-            var neighborBlockStateWithPos = new BlockStateWithPos(dimension.getBlockState(neighborPos), new Position3i(neighborPos, dimension), 0);
-            var blockFace = update.blockFace();
 
             var layer0 = dimension.getBlockState(pos);
             var layer1 = dimension.getBlockState(pos, 1);
+
+            var block0 = new BlockStateWithPos(layer0, new Position3i(pos, dimension), 0);
+            var neighborBlock0 = new BlockStateWithPos(dimension.getBlockState(neighborPos), new Position3i(neighborPos, dimension), 0);
+
+            if (callNeighborUpdateEvent(block0, neighborBlock0, blockFace)) {
+                return;
+            }
+
             layer0.getBehavior().onNeighborUpdate(
-                    new BlockStateWithPos(layer0, new Position3i(pos, dimension), 0),
-                    neighborBlockStateWithPos,
+                    block0,
+                    neighborBlock0,
                     blockFace
             );
+
             if (layer1.getBehavior() instanceof BlockLiquidComponent) {
+                var block1 = new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1);
+
+                if (callNeighborUpdateEvent(block1, neighborBlock0, blockFace)) {
+                    return;
+                }
+
                 layer1.getBehavior().onNeighborUpdate(
-                        new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1),
-                        neighborBlockStateWithPos,
+                        block1,
+                        neighborBlock0,
                         blockFace
                 );
             }
 
             count++;
         }
+    }
+
+    protected boolean callScheduleUpdateEvent(BlockStateWithPos block) {
+        var event = new BlockScheduleUpdateEvent(block);
+        event.call();
+        return event.isCancelled();
+    }
+
+    protected boolean callNeighborUpdateEvent(BlockStateWithPos block, BlockStateWithPos neighborBlock, BlockFace blockFace) {
+        var event = new BlockNeighborUpdateEvent(block, neighborBlock, blockFace);
+        event.call();
+        return event.isCancelled();
     }
 
     @Override
