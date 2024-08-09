@@ -2,7 +2,6 @@ package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.OnInitFinish;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.impl.*;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;

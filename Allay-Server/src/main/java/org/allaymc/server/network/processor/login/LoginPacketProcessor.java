@@ -7,7 +7,6 @@ import org.allaymc.api.eventbus.event.player.PlayerLoggedInEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ServerToClientHandshakePacket;

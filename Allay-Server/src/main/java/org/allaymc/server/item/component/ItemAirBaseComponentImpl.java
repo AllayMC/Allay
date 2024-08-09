@@ -1,10 +1,8 @@
 package org.allaymc.server.item.component;
 
 import org.allaymc.api.component.annotation.OnInitFinish;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;

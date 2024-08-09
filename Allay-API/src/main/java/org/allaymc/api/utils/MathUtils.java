@@ -3,9 +3,9 @@ package org.allaymc.api.utils;
 import lombok.experimental.UtilityClass;
 import org.joml.*;
 
-import static java.lang.StrictMath.*;
-
 import java.lang.Math;
+
+import static java.lang.StrictMath.*;
 
 /**
  * Allay Project 7/31/2023

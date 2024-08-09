@@ -1,7 +1,6 @@
 package org.allaymc.api.item.init;
 
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 

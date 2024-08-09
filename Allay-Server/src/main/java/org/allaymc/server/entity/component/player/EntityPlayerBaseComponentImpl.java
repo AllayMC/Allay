@@ -14,7 +14,6 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.OnInitFinish;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;

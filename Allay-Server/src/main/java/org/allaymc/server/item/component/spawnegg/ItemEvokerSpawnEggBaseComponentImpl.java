@@ -5,7 +5,6 @@ import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.init.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.egg.ItemEvokerSpawnEggStack;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.joml.Vector3ic;

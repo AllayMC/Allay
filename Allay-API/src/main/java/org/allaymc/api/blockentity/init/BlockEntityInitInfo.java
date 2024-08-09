@@ -1,6 +1,5 @@
 package org.allaymc.api.blockentity.init;
 
-import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.world.Dimension;

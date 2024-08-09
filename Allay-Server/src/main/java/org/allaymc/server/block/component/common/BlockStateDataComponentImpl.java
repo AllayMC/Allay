@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component.common;
 
-import org.allaymc.api.block.component.common.BlockStateDataComponent;
 import org.allaymc.api.block.component.common.BlockStateData;
+import org.allaymc.api.block.component.common.BlockStateDataComponent;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;

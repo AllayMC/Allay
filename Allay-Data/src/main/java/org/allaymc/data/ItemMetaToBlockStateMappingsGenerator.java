@@ -1,7 +1,6 @@
 package org.allaymc.data;
 
 import lombok.SneakyThrows;
-import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;

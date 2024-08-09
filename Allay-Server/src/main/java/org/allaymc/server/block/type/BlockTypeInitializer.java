@@ -14,9 +14,9 @@ import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
+import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
-import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 

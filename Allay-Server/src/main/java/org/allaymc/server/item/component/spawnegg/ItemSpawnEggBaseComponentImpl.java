@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;

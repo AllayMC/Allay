@@ -10,7 +10,6 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.BlockBaseComponent;
-import org.allaymc.api.block.component.common.CustomBlockComponent;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTag;
@@ -35,8 +34,8 @@ import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.component.injector.AllayComponentInjector;
-import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
+import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 

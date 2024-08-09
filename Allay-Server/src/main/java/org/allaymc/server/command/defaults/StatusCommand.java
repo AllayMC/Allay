@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SimpleCommand;
-import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;

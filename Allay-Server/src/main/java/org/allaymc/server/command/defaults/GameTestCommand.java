@@ -14,7 +14,6 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;

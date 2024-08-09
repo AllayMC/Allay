@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;

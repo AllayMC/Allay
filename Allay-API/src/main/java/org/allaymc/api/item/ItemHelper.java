@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.itemstateupdater.ItemStateUpdaters;

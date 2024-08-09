@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.*;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;

@@ -3,9 +3,7 @@ package org.allaymc.api.plugin;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.i18n.I18n;
-import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.server.Server;
 
