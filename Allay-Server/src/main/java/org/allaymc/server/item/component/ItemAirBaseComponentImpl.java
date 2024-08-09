@@ -12,9 +12,9 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
  *
  * @author daoge_cmd
  */
-public class ItemAirBaseComponentImpl extends ItemBaseComponentImpl<ItemAirStack> {
+public class ItemAirBaseComponentImpl extends ItemBaseComponentImpl {
 
-    public static SimpleItemStackInitInfo<ItemAirStack> AIR_TYPE_INIT_INFO =
+    public static SimpleItemStackInitInfo AIR_TYPE_INIT_INFO =
             SimpleItemStackInitInfo
                     .builder()
                     .autoAssignStackNetworkId(false)

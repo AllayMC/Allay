@@ -10,7 +10,7 @@ import org.cloudburstmc.nbt.NbtMap;
  *
  * @author daoge_cmd
  */
-public interface ItemStackInitInfo<T extends ItemStack> extends ComponentInitInfo {
+public interface ItemStackInitInfo extends ComponentInitInfo {
 
     int count();
 
@@ -22,7 +22,7 @@ public interface ItemStackInitInfo<T extends ItemStack> extends ComponentInitInf
 
     boolean autoAssignStackNetworkId();
 
-    ItemType<T> getItemType();
+    ItemType<?> getItemType();
 
-    void setItemType(ItemType<T> itemType);
+    void setItemType(ItemType<?> itemType);
 }

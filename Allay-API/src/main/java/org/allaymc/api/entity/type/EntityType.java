@@ -16,5 +16,5 @@ import java.util.List;
 public interface EntityType<T extends Entity> extends Identified {
     List<ComponentProvider<? extends EntityComponent>> getComponentProviders();
 
-    T createEntity(EntityInitInfo<T> info);
+    T createEntity(EntityInitInfo info);
 }

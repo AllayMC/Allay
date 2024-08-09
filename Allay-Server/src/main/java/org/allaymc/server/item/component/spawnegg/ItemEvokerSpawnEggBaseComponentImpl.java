@@ -16,8 +16,8 @@ import org.joml.Vector3ic;
  * @author IWareQ
  */
 @Slf4j
-public class ItemEvokerSpawnEggBaseComponentImpl extends ItemBaseComponentImpl<ItemEvokerSpawnEggStack> {
-    public ItemEvokerSpawnEggBaseComponentImpl(ItemStackInitInfo<ItemEvokerSpawnEggStack> initInfo) {
+public class ItemEvokerSpawnEggBaseComponentImpl extends ItemBaseComponentImpl {
+    public ItemEvokerSpawnEggBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 

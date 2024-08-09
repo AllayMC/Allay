@@ -26,7 +26,7 @@ import static org.allaymc.api.item.ItemHelper.fromNBT;
  */
 @Setter
 @Getter
-public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityItem> implements EntityItemBaseComponent {
+public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl implements EntityItemBaseComponent {
 
     public static final int MAX_AGE = 6000;
 
@@ -34,7 +34,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl<EntityI
     protected int pickupDelay = 10;
     protected int age;
 
-    public EntityItemBaseComponentImpl(EntityInitInfo<EntityItem> info) {
+    public EntityItemBaseComponentImpl(EntityInitInfo info) {
         super(info);
     }
 

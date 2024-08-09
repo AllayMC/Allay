@@ -72,7 +72,7 @@ import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Fla
  * @author daoge_cmd
  */
 @Slf4j
-public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComponent {
+public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
@@ -94,13 +94,13 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Getter
     protected long uniqueId = Long.MAX_VALUE;
     @Manager
-    protected ComponentManager<T> manager;
+    protected ComponentManager manager;
     @ComponentedObject
-    protected T thisEntity;
+    protected Entity thisEntity;
     @Dependency(soft = true)
     protected EntityAttributeComponent attributeComponent;
     @Getter
-    protected EntityType<T> entityType;
+    protected EntityType<? extends Entity> entityType;
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
     protected Map<EffectType, EffectInstance> effects = new HashMap<>();
     protected Vector3f motion = new Vector3f();
@@ -126,7 +126,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
     @Setter
     protected float absorption;
 
-    public EntityBaseComponentImpl(EntityInitInfo<T> info) {
+    public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.entityType = info.getEntityType();
         this.metadata = new Metadata();
@@ -135,7 +135,7 @@ public class EntityBaseComponentImpl<T extends Entity> implements EntityBaseComp
 
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
-        loadNBT(((EntityInitInfo<T>) initInfo).nbt());
+        loadNBT(((EntityInitInfo) initInfo).nbt());
         initMetadata();
     }
 

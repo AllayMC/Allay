@@ -17,8 +17,8 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author daoge_cmd
  */
-public class ItemArmorBaseComponentImpl<T extends ItemStack> extends ItemBaseComponentImpl<T> {
-    public ItemArmorBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
+public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl {
+    public ItemArmorBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 

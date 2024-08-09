@@ -19,5 +19,5 @@ public interface BlockEntityType<T extends BlockEntity> {
     List<ComponentProvider<? extends BlockEntityComponent>> getComponentProviders();
 
     @ApiStatus.Internal
-    T createBlockEntity(BlockEntityInitInfo<T> info);
+    T createBlockEntity(BlockEntityInitInfo info);
 }

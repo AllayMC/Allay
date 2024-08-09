@@ -13,7 +13,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.server.block.component.TestComponentImpl;
 import org.allaymc.server.block.component.TestComponentImplV2;
-import org.allaymc.server.block.component.TestCustomBlockComponentImpl;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
@@ -55,7 +54,6 @@ class AllayBlockTypeTest {
                 .setComponents(List.of(
                         new TestComponentImpl(),
                         BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.builder().burnOdds(2).build())))
-                .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                 .build();
         testBlockType2 = AllayBlockType
                 .builder(TestBlock.class)
@@ -67,7 +65,6 @@ class AllayBlockTypeTest {
                 .setComponents(List.of(
                         new TestComponentImpl(),
                         BlockStateDataComponentImpl.ofDirectDynamic(blockState -> BlockStateData.builder().burnOdds(3).build())))
-                .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                 .build();
     }
 
@@ -85,7 +82,6 @@ class AllayBlockTypeTest {
                                 new TestComponentImplV2(),
                                 BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.DEFAULT)
                         ))
-                        .addCustomBlockComponent(new TestCustomBlockComponentImpl())
                         .build()
         );
     }

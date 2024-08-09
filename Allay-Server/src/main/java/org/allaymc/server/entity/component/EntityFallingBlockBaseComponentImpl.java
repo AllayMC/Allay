@@ -26,11 +26,11 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl<EntityFallingBlock> implements EntityFallingBlockBaseComponent {
+public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl implements EntityFallingBlockBaseComponent {
 
     protected BlockState blockState;
 
-    public EntityFallingBlockBaseComponentImpl(EntityInitInfo<EntityFallingBlock> info) {
+    public EntityFallingBlockBaseComponentImpl(EntityInitInfo info) {
         super(info);
     }
 

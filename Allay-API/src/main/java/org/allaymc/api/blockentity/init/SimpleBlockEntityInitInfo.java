@@ -16,12 +16,12 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
  * @author daoge_cmd
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEntityInitInfo<T> {
+public class SimpleBlockEntityInitInfo implements BlockEntityInitInfo {
     private final Dimension dimension;
     private final NbtMap nbt;
     @Getter
     @Setter
-    private BlockEntityType<T> blockEntityType;
+    private BlockEntityType<?> blockEntityType;
 
     public static Builder builder() {
         return new Builder();
@@ -63,8 +63,8 @@ public class SimpleBlockEntityInitInfo<T extends BlockEntity> implements BlockEn
             return this;
         }
 
-        public <R extends BlockEntity> SimpleBlockEntityInitInfo<R> build() {
-            return new SimpleBlockEntityInitInfo<>(dimension, nbtBuilder.build());
+        public SimpleBlockEntityInitInfo build() {
+            return new SimpleBlockEntityInitInfo(dimension, nbtBuilder.build());
         }
     }
 }

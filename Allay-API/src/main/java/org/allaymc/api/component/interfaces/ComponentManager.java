@@ -7,8 +7,6 @@ import org.allaymc.api.eventbus.event.Event;
  *
  * @author daoge_cmd
  */
-public interface ComponentManager<T> {
+public interface ComponentManager {
     <E extends Event> E callEvent(E event);
-
-    T getComponentedObject();
 }

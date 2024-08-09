@@ -42,7 +42,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
 
     @Manager
-    protected ComponentManager<?> manager;
+    protected ComponentManager manager;
 
     @Getter
     protected BlockType<? extends BlockBehavior> blockType;

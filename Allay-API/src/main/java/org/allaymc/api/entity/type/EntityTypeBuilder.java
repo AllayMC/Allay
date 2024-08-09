@@ -20,43 +20,43 @@ import static org.allaymc.api.component.interfaces.ComponentProvider.toMap;
  *
  * @author daoge_cmd
  */
-public interface EntityTypeBuilder<T extends Entity, C extends EntityComponent> {
+public interface EntityTypeBuilder<T extends Entity> {
     ApiInstanceHolder<EntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
 
-    static <T extends Entity> EntityTypeBuilder<T, EntityComponent> builder(Class<T> clazz) {
+    static <T extends Entity> EntityTypeBuilder<T> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);
     }
 
-    EntityTypeBuilder<T, C> identifier(Identifier identifier);
+    EntityTypeBuilder<T> identifier(Identifier identifier);
 
-    EntityTypeBuilder<T, C> identifier(String identifier);
+    EntityTypeBuilder<T> identifier(String identifier);
 
-    EntityTypeBuilder<T, C> vanillaEntity(VanillaEntityId vanillaEntityId);
+    EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId);
 
-    default EntityTypeBuilder<T, C> setComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
+    default EntityTypeBuilder<T> setComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
         return setComponents(toMap(componentProviders));
     }
 
-    EntityTypeBuilder<T, C> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders);
+    EntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders);
 
 
-    default EntityTypeBuilder<T, C> addComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
+    default EntityTypeBuilder<T> addComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
         return addComponents(toMap(componentProviders));
     }
 
-    EntityTypeBuilder<T, C> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders);
+    EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders);
 
-    EntityTypeBuilder<T, C> addComponent(Function<EntityInitInfo<T>, EntityComponent> provider, Class<?> componentClass);
+    EntityTypeBuilder<T> addComponent(Function<EntityInitInfo, ? extends EntityComponent> provider, Class<?> componentClass);
 
-    default EntityTypeBuilder<T, C> addComponent(Supplier<EntityComponent> supplier, Class<?> componentClass) {
+    default EntityTypeBuilder<T> addComponent(Supplier<? extends EntityComponent> supplier, Class<?> componentClass) {
         return addComponent($ -> supplier.get(), componentClass);
     }
 
-    EntityTypeBuilder<T, C> addComponent(ComponentProvider<EntityComponent> componentProvider);
+    EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponent> componentProvider);
 
     EntityType<T> build();
 
     interface EntityTypeBuilderFactory {
-        <T extends Entity> EntityTypeBuilder<T, EntityComponent> create(Class<T> clazz);
+        <T extends Entity> EntityTypeBuilder<T> create(Class<T> clazz);
     }
 }

@@ -365,7 +365,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected Identifier identifier;
         protected ItemType<?> itemType;
         protected ItemType<?> hardItemType;
-        protected boolean isCustomBlock = false;
+        protected boolean isCustomBlock = true;
         protected Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
         protected Set<BlockTag> blockTags = Set.of();
         protected Material material;
@@ -384,6 +384,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
+            this.isCustomBlock = false;
             this.identifier = vanillaBlockId.getIdentifier();
             var dataMap = Registries.VANILLA_BLOCK_STATE_DATA.get(vanillaBlockId);
             if (dataMap == null)
@@ -429,13 +430,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         @Override
         public Builder<T> addComponent(BlockComponent component) {
             this.components.put(findComponentIdentifierInCertainClass(component.getClass()), component);
-            return this;
-        }
-
-        @Override
-        public Builder<T> addCustomBlockComponent(CustomBlockComponent customBlockComponent) {
-            components.put(findComponentIdentifierInCertainClass(customBlockComponent.getClass()), customBlockComponent);
-            isCustomBlock = true;
             return this;
         }
 

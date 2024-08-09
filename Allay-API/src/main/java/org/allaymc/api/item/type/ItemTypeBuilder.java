@@ -21,48 +21,48 @@ import static org.allaymc.api.component.interfaces.ComponentProvider.toMap;
  *
  * @author daoge_cmd
  */
-public interface ItemTypeBuilder<T extends ItemStack, C extends ItemComponent> {
+public interface ItemTypeBuilder<T extends ItemStack> {
     ApiInstanceHolder<ItemTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
 
-    static <T extends ItemStack> ItemTypeBuilder<T, ItemComponent> builder(Class<T> clazz) {
+    static <T extends ItemStack> ItemTypeBuilder<T> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);
     }
 
-    ItemTypeBuilder<T, C> identifier(Identifier identifier);
+    ItemTypeBuilder<T> identifier(Identifier identifier);
 
-    default ItemTypeBuilder<T, C> identifier(String identifier) {
+    default ItemTypeBuilder<T> identifier(String identifier) {
         return identifier(new Identifier(identifier));
     }
 
-    ItemTypeBuilder<T, C> vanillaItem(VanillaItemId vanillaItemId);
+    ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId);
 
-    ItemTypeBuilder<T, C> runtimeId(int runtimeId);
+    ItemTypeBuilder<T> runtimeId(int runtimeId);
 
-    ItemTypeBuilder<T, C> setComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders);
+    ItemTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders);
 
-    default ItemTypeBuilder<T, C> setComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
+    default ItemTypeBuilder<T> setComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
         return setComponents(toMap(componentProviders));
     }
 
-    ItemTypeBuilder<T, C> addComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders);
+    ItemTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders);
 
-    default ItemTypeBuilder<T, C> addComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
+    default ItemTypeBuilder<T> addComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
         return addComponents(toMap(componentProviders));
     }
 
-    ItemTypeBuilder<T, C> addComponent(Function<ItemStackInitInfo<T>, C> provider, Class<?> componentClass);
+    ItemTypeBuilder<T> addComponent(Function<ItemStackInitInfo, ? extends ItemComponent> provider, Class<?> componentClass);
 
-    default ItemTypeBuilder<T, C> addComponent(Supplier<C> supplier, Class<?> componentClass) {
+    default ItemTypeBuilder<T> addComponent(Supplier<? extends ItemComponent> supplier, Class<?> componentClass) {
         return addComponent($ -> supplier.get(), componentClass);
     }
 
-    ItemTypeBuilder<T, C> addComponent(ComponentProvider<ItemComponent> componentProvider);
+    ItemTypeBuilder<T> addComponent(ComponentProvider<? extends ItemComponent> componentProvider);
 
-    ItemTypeBuilder<T, C> setItemTags(ItemTag... itemTags);
+    ItemTypeBuilder<T> setItemTags(ItemTag... itemTags);
 
     ItemType<T> build();
 
     interface ItemTypeBuilderFactory {
-        <T extends ItemStack> ItemTypeBuilder<T, ItemComponent> create(Class<T> clazz);
+        <T extends ItemStack> ItemTypeBuilder<T> create(Class<T> clazz);
     }
 }

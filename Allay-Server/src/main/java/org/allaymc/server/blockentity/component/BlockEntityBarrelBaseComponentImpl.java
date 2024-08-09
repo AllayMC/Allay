@@ -15,11 +15,11 @@ import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentI
  *
  * @author daoge_cmd
  */
-public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponentImpl<BlockEntityBarrel> {
+public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponentImpl {
     @Dependency
     private BlockEntityContainerHolderComponent containerHolderComponent;
 
-    public BlockEntityBarrelBaseComponentImpl(BlockEntityInitInfo<BlockEntityBarrel> info) {
+    public BlockEntityBarrelBaseComponentImpl(BlockEntityInitInfo info) {
         super(info);
     }
 

@@ -45,7 +45,7 @@ import static org.allaymc.api.item.ItemHelper.*;
  * @author daoge_cmd
  */
 @Slf4j
-public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseComponent {
+public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
@@ -61,13 +61,13 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     protected ItemDataComponent attributeComponent;
 
     @ComponentedObject
-    protected T thisItemStack;
+    protected ItemStack thisItemStack;
 
     @Manager
-    protected ComponentManager<T> manager;
+    protected ComponentManager manager;
 
     @Getter
-    protected ItemType<T> itemType;
+    protected ItemType<?> itemType;
     @Getter
     protected int count;
     @Getter
@@ -89,7 +89,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
     @Setter
     protected int stackNetworkId;
 
-    public ItemBaseComponentImpl(ItemStackInitInfo<T> initInfo) {
+    public ItemBaseComponentImpl(ItemStackInitInfo initInfo) {
         this.itemType = initInfo.getItemType();
         this.count = initInfo.count();
         this.meta = initInfo.meta();
@@ -109,7 +109,7 @@ public class ItemBaseComponentImpl<T extends ItemStack> implements ItemBaseCompo
 
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
-        loadExtraTag(((ItemStackInitInfo<?>) initInfo).extraTag());
+        loadExtraTag(((ItemStackInitInfo) initInfo).extraTag());
     }
 
     @Override

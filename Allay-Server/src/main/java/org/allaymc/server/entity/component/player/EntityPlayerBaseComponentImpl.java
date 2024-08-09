@@ -11,6 +11,7 @@ import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FixedContainerId;
@@ -78,7 +79,7 @@ import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCOR
  * @author daoge_cmd
  */
 @Slf4j
-public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<EntityPlayer> implements EntityPlayerBaseComponent {
+public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl implements EntityPlayerBaseComponent {
 
     @Dependency
     protected EntityContainerHolderComponent containerHolderComponent;
@@ -115,8 +116,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();
     @Getter
     protected float movementSpeed = DEFAULT_MOVEMENT_SPEED;
+    @ComponentedObject
+    protected EntityPlayer thisPlayer;
 
-    public EntityPlayerBaseComponentImpl(EntityInitInfo<EntityPlayer> info) {
+    public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
     }
 
@@ -133,8 +136,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         super.onInitFinish(initInfo);
         permTree = PermTree.create();
         permTree.setOp(true);
-        adventureSettings = new AdventureSettings(thisEntity);
-        abilities = new Abilities(thisEntity);
+        adventureSettings = new AdventureSettings(thisPlayer);
+        abilities = new Abilities(thisPlayer);
         // Init adventure settings and abilities
         permTree.notifyAllPermListeners();
     }
@@ -158,7 +161,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void setGameType(GameType gameType) {
-        var event = new PlayerGameTypeChangeEvent(thisEntity, this.gameType, gameType);
+        var event = new PlayerGameTypeChangeEvent(thisPlayer, this.gameType, gameType);
         event.call();
         if (event.isCancelled()) return;
 
@@ -232,7 +235,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 }
                 // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
                 // It's much easier to just resend the inventory.
-                thisEntity.sendContentsWithSpecificContainerId(inventory, FixedContainerId.PLAYER_INVENTORY, slot);
+                thisPlayer.sendContentsWithSpecificContainerId(inventory, FixedContainerId.PLAYER_INVENTORY, slot);
             }
         }
     }
@@ -250,10 +253,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         var currentDim = location.dimension();
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
-            targetDim.getWorld().getWorldData().sendTime(thisEntity);
+            targetDim.getWorld().getWorldData().sendTime(thisPlayer);
             networkComponent.sendPacket(targetDim.getWorld().getWorldData().getGameRules().buildPacket());
         }
-        this.location.dimension().removePlayer(thisEntity, () -> {
+        location.dimension().removePlayer(thisPlayer, () -> {
             targetDim.getChunkService().getOrLoadChunkSynchronously((int) target.x() >> 4, (int) target.z() >> 4);
             setLocationBeforeSpawn(target);
             sendLocationToSelf();
@@ -264,20 +267,20 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 networkComponent.sendPacket(packet);
                 awaitingDimensionChangeACK = true;
             }
-            targetDim.addPlayer(thisEntity);
+            targetDim.addPlayer(thisPlayer);
         });
     }
 
     @Override
     public void spawnTo(EntityPlayer player) {
-        if (thisEntity != player) {
+        if (thisPlayer != player) {
             super.spawnTo(player);
         }
     }
 
     @Override
     public void despawnFrom(EntityPlayer player) {
-        if (thisEntity != player) {
+        if (thisPlayer != player) {
             super.despawnFrom(player);
         }
     }
@@ -293,7 +296,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             var distance = getLocation().distance(newLoc);
             if (isSwimming()) exhaust += 0.01f * distance;
             if (isSprinting()) exhaust += 0.1f * distance;
-            thisEntity.exhaust(exhaust);
+            thisPlayer.exhaust(exhaust);
         }
 
         super.broadcastMoveToViewers(loc, teleporting);
@@ -311,7 +314,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         packet.setMotion(org.cloudburstmc.math.vector.Vector3f.from(motion.x(), motion.y(), motion.z()));
         packet.setRotation(org.cloudburstmc.math.vector.Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         packet.setGameType(gameType);
-        packet.getMetadata().putAll(this.metadata.getEntityDataMap());
+        packet.getMetadata().putAll(metadata.getEntityDataMap());
         packet.setDeviceId(networkComponent.getLoginData().getDeviceInfo().deviceId());
         packet.setHand(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).getItemInHand().toNetworkItemData());
         return packet;
@@ -342,7 +345,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         inv.setHandSlot(handSlot);
         var itemStack = inv.getItemStack(handSlot);
 
-        new PlayerItemHeldEvent(thisEntity, itemStack, handSlot).call();
+        new PlayerItemHeldEvent(thisPlayer, itemStack, handSlot).call();
 
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(runtimeId);
@@ -367,7 +370,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
         var server = Server.getInstance();
         server.broadcastPacket(packet);
-        server.onSkinUpdate(thisEntity);
+        server.onSkinUpdate(thisPlayer);
     }
 
     @Override
@@ -402,7 +405,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound("Perm", permNbt -> this.permTree.loadNBT(permNbt, true));
+        nbt.listenForCompound("Perm", permNbt -> permTree.loadNBT(permNbt, true));
         nbt.listenForList("Offhand", NbtType.COMPOUND, offhandNbt ->
                 containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(offhandNbt)
         );
@@ -420,21 +423,21 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void sendCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
-        if (sender == thisEntity) {
+        if (sender == thisPlayer) {
             var packet = new CommandOutputPacket();
             packet.setType(CommandOutputType.ALL_OUTPUT);
             packet.setCommandOriginData(sender.getCommandOriginData());
             for (var output : outputs) {
                 packet.getMessages().add(new CommandOutputMessage(
                         status != CommandResult.FAIL_STATUS, // Indicates if the output message was one of a successful command execution
-                        I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()),
+                        I18n.get().tr(thisPlayer.getLangCode(), output.str(), output.args()),
                         Utils.EMPTY_STRING_ARRAY));
             }
             packet.setSuccessCount(status);
             networkComponent.sendPacket(packet);
         } else {
             for (var output : outputs) {
-                var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisEntity.getLangCode(), output.str(), output.args()) + "]";
+                var str = TextFormat.GRAY + "" + TextFormat.ITALIC + "[" + sender.getCommandSenderName() + ": " + I18n.get().tr(thisPlayer.getLangCode(), output.str(), output.args()) + "]";
                 sendText(str);
             }
         }
@@ -489,7 +492,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
     public void setUsingItemInAir(boolean value, long time) {
         setAndSendEntityFlag(EntityFlag.USING_ITEM, value);
         if (value) {
-            this.startUsingItemInAirTime = time;
+            startUsingItemInAirTime = time;
         }
     }
 
@@ -533,7 +536,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         if (awaitingDimensionChangeACK) {
             sendDimensionChangeSuccess();
         }
-        chunk.spawnEntitiesTo(thisEntity);
+        chunk.spawnEntitiesTo(thisPlayer);
         networkComponent.onChunkInRangeSent();
     }
 
@@ -550,12 +553,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void spawnEntity(Entity entity) {
-        entity.spawnTo(this.thisEntity);
+        entity.spawnTo(thisPlayer);
     }
 
     @Override
     public void despawnEntity(Entity entity) {
-        entity.despawnFrom(this.thisEntity);
+        entity.despawnFrom(thisPlayer);
     }
 
     @Override
@@ -564,8 +567,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
                 .map(location.dimension.getChunkService()::getChunk)
                 .filter(Objects::nonNull)
                 .forEach(chunk -> {
-                    chunk.despawnEntitiesFrom(thisEntity);
-                    chunk.removeChunkLoader(thisEntity);
+                    chunk.despawnEntitiesFrom(thisPlayer);
+                    chunk.removeChunkLoader(thisPlayer);
                 });
     }
 
@@ -594,12 +597,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             packet.setMessage(key);
             packet.setParameters(List.of(args));
             networkComponent.sendPacket(packet);
-        } else sendText(I18n.get().tr(thisEntity.getLangCode(), key, args));
+        } else sendText(I18n.get().tr(thisPlayer.getLangCode(), key, args));
     }
 
     @Override
     public String getCommandSenderName() {
-        return thisEntity.getOriginName();
+        return thisPlayer.getOriginName();
     }
 
     @Override
@@ -631,7 +634,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public EntityPlayer asPlayer() {
-        return thisEntity;
+        return thisPlayer;
     }
 
     @Override
@@ -671,7 +674,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void showForm(Form form) {
-        if (this.forms.size() > 100) {
+        if (forms.size() > 100) {
             networkComponent.disconnect("Possible DoS vulnerability: More Than 100 FormWindow sent to client already.");
         }
         var packet = new ModalFormRequestPacket();
@@ -721,10 +724,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         setScorePacket.setAction(SetScorePacket.Action.SET);
         networkComponent.sendPacket(setScorePacket);
 
-        var scorer = new PlayerScorer(thisEntity);
+        var scorer = new PlayerScorer(thisPlayer);
         var line = scoreboard.getLine(scorer);
         if (slot == DisplaySlot.BELOW_NAME && line != null) {
-            this.setAndSendEntityData(SCORE, line.getScore() + " " + scoreboard.getDisplayName());
+            setAndSendEntityData(SCORE, line.getScore() + " " + scoreboard.getDisplayName());
         }
     }
 
@@ -739,7 +742,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
         networkComponent.sendPacket(packet);
 
         if (slot == DisplaySlot.BELOW_NAME) {
-            this.setAndSendEntityData(SCORE, "");
+            setAndSendEntityData(SCORE, "");
         }
     }
 
@@ -760,9 +763,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             packet.getInfos().add(networkInfo);
         networkComponent.sendPacket(packet);
 
-        var scorer = new PlayerScorer(thisEntity);
-        if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(thisEntity)) {
-            this.setAndSendEntityData(SCORE, "");
+        var scorer = new PlayerScorer(thisPlayer);
+        if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(thisPlayer)) {
+            setAndSendEntityData(SCORE, "");
         }
     }
 
@@ -775,9 +778,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
             packet.getInfos().add(networkInfo);
         networkComponent.sendPacket(packet);
 
-        var scorer = new PlayerScorer(thisEntity);
+        var scorer = new PlayerScorer(thisPlayer);
         if (line.getScorer().equals(scorer) && line.getScoreboard().getViewers(DisplaySlot.BELOW_NAME).contains(this)) {
-            this.setAndSendEntityData(SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
+            setAndSendEntityData(SCORE, line.getScore() + " " + line.getScoreboard().getDisplayName());
         }
     }
 
@@ -794,7 +797,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl<Entit
 
     @Override
     public void setAbsorption(float absorption) {
-        if (this.absorption == absorption) return;
+        if (absorption == absorption) return;
         super.setAbsorption(absorption);
         attributeComponent.setAttribute(AttributeType.ABSORPTION, absorption);
     }

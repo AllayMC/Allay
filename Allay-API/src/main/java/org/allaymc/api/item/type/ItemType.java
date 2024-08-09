@@ -24,7 +24,7 @@ import java.util.Set;
 public interface ItemType<T extends ItemStack> extends Identified {
     List<ComponentProvider<? extends ItemComponent>> getComponentProviders();
 
-    T createItemStack(ItemStackInitInfo<T> info);
+    T createItemStack(ItemStackInitInfo info);
 
     default T createItemStack() {
         return createItemStack(1);

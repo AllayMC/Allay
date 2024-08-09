@@ -16,30 +16,30 @@ import java.util.function.Supplier;
  *
  * @author daoge_cmd
  */
-public interface BlockEntityTypeBuilder<T extends BlockEntity, C extends BlockEntityComponent> {
+public interface BlockEntityTypeBuilder<T extends BlockEntity> {
     ApiInstanceHolder<BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory> FACTORY = ApiInstanceHolder.create();
 
-    static <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> builder(Class<T> clazz) {
+    static <T extends BlockEntity> BlockEntityTypeBuilder<T> builder(Class<T> clazz) {
         return FACTORY.get().create(clazz);
     }
 
     BlockEntityType<T> build();
 
-    BlockEntityTypeBuilder<T, C> name(String name);
+    BlockEntityTypeBuilder<T> name(String name);
 
-    BlockEntityTypeBuilder<T, C> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
+    BlockEntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
 
-    BlockEntityTypeBuilder<T, C> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
+    BlockEntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders);
 
-    BlockEntityTypeBuilder<T, C> addComponent(Function<BlockEntityInitInfo<T>, C> provider, Class<?> componentClass);
+    BlockEntityTypeBuilder<T> addComponent(Function<BlockEntityInitInfo, ? extends BlockEntityComponent> provider, Class<?> componentClass);
 
-    default BlockEntityTypeBuilder<T, C> addComponent(Supplier<C> supplier, Class<?> componentClass) {
+    default BlockEntityTypeBuilder<T> addComponent(Supplier<? extends BlockEntityComponent> supplier, Class<?> componentClass) {
         return addComponent(info -> supplier.get(), componentClass);
     }
 
-    BlockEntityTypeBuilder<T, C> addComponent(ComponentProvider<BlockEntityComponent> componentProvider);
+    BlockEntityTypeBuilder<T> addComponent(ComponentProvider<? extends BlockEntityComponent> componentProvider);
 
     interface BlockEntityTypeBuilderFactory {
-        <T extends BlockEntity> BlockEntityTypeBuilder<T, BlockEntityComponent> create(Class<T> clazz);
+        <T extends BlockEntity> BlockEntityTypeBuilder<T> create(Class<T> clazz);
     }
 }

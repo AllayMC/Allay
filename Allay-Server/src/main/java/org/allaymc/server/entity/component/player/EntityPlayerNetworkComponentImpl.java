@@ -92,7 +92,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected boolean hideDisconnectReason = false;
     protected AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
     @Manager
-    protected ComponentManager<EntityPlayer> manager;
+    protected ComponentManager manager;
     @ComponentedObject
     protected EntityPlayer player;
     @Getter

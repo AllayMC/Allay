@@ -15,12 +15,12 @@ import org.joml.Vector3fc;
  *
  * @author Cool_Loong
  */
-public class SimpleEntityInitInfo<T extends Entity> implements EntityInitInfo<T> {
+public class SimpleEntityInitInfo implements EntityInitInfo {
     protected final Dimension dimension;
     protected final NbtMap nbt;
     @Getter
     @Setter
-    protected EntityType<T> entityType;
+    protected EntityType<?> entityType;
 
     protected SimpleEntityInitInfo(Dimension dimension, NbtMap nbt) {
         this.dimension = dimension;
@@ -102,8 +102,8 @@ public class SimpleEntityInitInfo<T extends Entity> implements EntityInitInfo<T>
             return this;
         }
 
-        public <R extends Entity> SimpleEntityInitInfo<R> build() {
-            return new SimpleEntityInitInfo<>(dimension, nbtBuilder.build());
+        public SimpleEntityInitInfo build() {
+            return new SimpleEntityInitInfo(dimension, nbtBuilder.build());
         }
     }
 }

@@ -14,11 +14,11 @@ import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
  *
  * @author daoge_cmd
  */
-public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentImpl<BlockEntityChest> {
+public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentImpl {
     @Dependency
     private BlockEntityContainerHolderComponent containerHolderComponent;
 
-    public BlockEntityChestBaseComponentImpl(BlockEntityInitInfo<BlockEntityChest> info) {
+    public BlockEntityChestBaseComponentImpl(BlockEntityInitInfo info) {
         super(info);
     }
 

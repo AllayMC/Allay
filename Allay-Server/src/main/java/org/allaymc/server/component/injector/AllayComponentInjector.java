@@ -208,10 +208,9 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
 
     @Getter
     @RequiredArgsConstructor
-    protected static class AllayComponentManager<T> implements ComponentManager<T> {
+    protected static class AllayComponentManager implements ComponentManager {
 
         protected final EventBus eventBus = new AllayEventBus();
-        protected final T componentedObject;
 
         @Override
         public <E extends Event> E callEvent(E event) {
@@ -241,7 +240,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             var components = componentProviders.stream().map(provider -> provider.provide(initInfo)).toList();
             injectComponentInstances(instance, components);
 
-            var componentManager = new AllayComponentManager<>(instance);
+            var componentManager = new AllayComponentManager();
             injectComponentManagerAndSetUpEventHandlers(componentManager, components);
             injectComponentedObject(instance, components);
             components.forEach(component -> component.onInitFinish(initInfo));
@@ -262,7 +261,7 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             }
         }
 
-        protected void injectComponentManagerAndSetUpEventHandlers(AllayComponentManager<T> manager, List<? extends Component> components) {
+        protected void injectComponentManagerAndSetUpEventHandlers(AllayComponentManager manager, List<? extends Component> components) {
             for (var component : components) {
                 ReflectionUtils.getAllFields(component.getClass()).stream()
                         .filter(field -> field.isAnnotationPresent(Manager.class))

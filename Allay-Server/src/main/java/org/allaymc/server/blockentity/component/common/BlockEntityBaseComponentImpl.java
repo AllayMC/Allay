@@ -27,26 +27,26 @@ import org.cloudburstmc.nbt.NbtMap;
  * @author daoge_cmd
  */
 @Getter
-public class BlockEntityBaseComponentImpl<T extends BlockEntity> implements BlockEntityBaseComponent {
+public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
 
     @Getter(AccessLevel.NONE)
     @Manager
-    protected ComponentManager<T> manager;
+    protected ComponentManager manager;
 
-    protected BlockEntityType<T> blockEntityType;
+    protected BlockEntityType<?> blockEntityType;
     protected Position3ic position;
     protected String customName = "";
 
-    public BlockEntityBaseComponentImpl(BlockEntityInitInfo<T> initInfo) {
+    public BlockEntityBaseComponentImpl(BlockEntityInitInfo initInfo) {
         this.blockEntityType = initInfo.getBlockEntityType();
         this.position = new Position3i(0, 0, 0, initInfo.dimension());
     }
 
     @Override
     public void onInitFinish(ComponentInitInfo initInfo) {
-        loadNBT(((BlockEntityInitInfo<?>) initInfo).nbt());
+        loadNBT(((BlockEntityInitInfo) initInfo).nbt());
     }
 
     @Override

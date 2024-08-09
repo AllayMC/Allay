@@ -68,18 +68,18 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         );
     }
 
-    public static <T extends Entity> EntityTypeBuilder<T, EntityComponent> builder(Class<T> interfaceClass) {
+    public static <T extends Entity> EntityTypeBuilder<T> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
 
     @SneakyThrows
     @Override
-    public T createEntity(EntityInitInfo<T> info) {
+    public T createEntity(EntityInitInfo info) {
         info.setEntityType(this);
         return (T) constructor.invoke(info);
     }
 
-    public static class Builder<T extends Entity> implements EntityTypeBuilder<T, EntityComponent> {
+    public static class Builder<T extends Entity> implements EntityTypeBuilder<T> {
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders = new HashMap<>();
         protected Identifier identifier;
@@ -89,25 +89,25 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         @Override
-        public EntityTypeBuilder<T, EntityComponent> identifier(Identifier identifier) {
+        public EntityTypeBuilder<T> identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T, EntityComponent> identifier(String identifier) {
+        public EntityTypeBuilder<T> identifier(String identifier) {
             this.identifier = new Identifier(identifier);
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T, EntityComponent> vanillaEntity(VanillaEntityId vanillaEntityId) {
+        public EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId) {
             this.identifier = vanillaEntityId.getIdentifier();
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T, EntityComponent> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
+        public EntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
             if (componentProviders == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
             this.componentProviders = new HashMap<>(componentProviders);
@@ -115,20 +115,20 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         @Override
-        public EntityTypeBuilder<T, EntityComponent> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
+        public EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
             this.componentProviders.putAll(componentProviders);
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T, EntityComponent> addComponent(Function<EntityInitInfo<T>, EntityComponent> provider, Class<?> componentClass) {
+        public EntityTypeBuilder<T> addComponent(Function<EntityInitInfo, ? extends EntityComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.SimpleComponentProvider<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
         @Override
-        public EntityTypeBuilder<T, EntityComponent> addComponent(ComponentProvider<EntityComponent> p) {
+        public EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponent> p) {
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }

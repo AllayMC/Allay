@@ -80,13 +80,13 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         );
     }
 
-    public static <T extends ItemStack> ItemTypeBuilder<T, ItemComponent> builder(Class<T> interfaceClass) {
+    public static <T extends ItemStack> ItemTypeBuilder<T> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
 
     @SneakyThrows
     @Override
-    public T createItemStack(ItemStackInitInfo<T> info) {
+    public T createItemStack(ItemStackInitInfo info) {
         // "info" for ItemAirType is useless and can be null
         if (info != null) info.setItemType(this);
         return (T) constructor.invoke(info);
@@ -105,7 +105,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     }
 
     @ToString
-    public static class Builder<T extends ItemStack> implements ItemTypeBuilder<T, ItemComponent> {
+    public static class Builder<T extends ItemStack> implements ItemTypeBuilder<T> {
 
         protected static int CUSTOM_ITEM_RUNTIME_ID_COUNTER = 10000;
 
@@ -122,13 +122,13 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> identifier(Identifier identifier) {
+        public ItemTypeBuilder<T> identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> vanillaItem(VanillaItemId vanillaItemId) {
+        public ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId) {
             this.identifier = vanillaItemId.getIdentifier();
             this.runtimeId = vanillaItemId.getRuntimeId();
 
@@ -147,38 +147,38 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> runtimeId(int runtimeId) {
+        public ItemTypeBuilder<T> runtimeId(int runtimeId) {
             this.runtimeId = runtimeId;
             return this;
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> setComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
+        public ItemTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
             this.componentProviders = new HashMap<>(componentProviders);
             return this;
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> addComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
+        public ItemTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
             this.componentProviders.putAll(componentProviders);
             return this;
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> addComponent(Function<ItemStackInitInfo<T>, ItemComponent> provider, Class<?> componentClass) {
+        public ItemTypeBuilder<T> addComponent(Function<ItemStackInitInfo, ? extends ItemComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.SimpleComponentProvider<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> addComponent(ComponentProvider<ItemComponent> p) {
+        public ItemTypeBuilder<T> addComponent(ComponentProvider<? extends ItemComponent> p) {
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
         @Override
-        public ItemTypeBuilder<T, ItemComponent> setItemTags(ItemTag... itemTags) {
+        public ItemTypeBuilder<T> setItemTags(ItemTag... itemTags) {
             this.itemTags = Set.of(itemTags);
             return this;
         }

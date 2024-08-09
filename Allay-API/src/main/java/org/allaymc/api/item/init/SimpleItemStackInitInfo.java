@@ -15,7 +15,7 @@ import static org.allaymc.api.item.component.common.ItemBaseComponent.EMPTY_STAC
  *
  * @author Cool_Loong | daoge_cmd
  */
-public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackInitInfo<T> {
+public class SimpleItemStackInitInfo implements ItemStackInitInfo {
     protected final int count;
     protected final int meta;
     protected final int stackNetworkId;
@@ -23,7 +23,7 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
     protected NbtMap extraTag;
     @Getter
     @Setter
-    protected ItemType<T> itemType;
+    protected ItemType<?> itemType;
 
     protected SimpleItemStackInitInfo(int count, int meta, NbtMap extraTag, int stackNetworkId, boolean autoAssignStackNetworkId) {
         this.count = count;
@@ -97,8 +97,8 @@ public class SimpleItemStackInitInfo<T extends ItemStack> implements ItemStackIn
             return this;
         }
 
-        public <R extends ItemStack> SimpleItemStackInitInfo<R> build() {
-            return new SimpleItemStackInitInfo<>(
+        public SimpleItemStackInitInfo build() {
+            return new SimpleItemStackInitInfo(
                     count, meta, extraTagBuilder.build(),
                     stackNetworkId, autoAssignStackNetworkId);
         }

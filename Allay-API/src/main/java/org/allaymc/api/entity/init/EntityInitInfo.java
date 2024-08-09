@@ -11,12 +11,12 @@ import org.cloudburstmc.nbt.NbtMap;
  *
  * @author daoge_cmd
  */
-public interface EntityInitInfo<T extends Entity> extends ComponentInitInfo {
+public interface EntityInitInfo extends ComponentInitInfo {
     Dimension dimension();
 
     NbtMap nbt();
 
-    EntityType<T> getEntityType();
+    EntityType<? extends Entity> getEntityType();
 
-    void setEntityType(EntityType<T> entityType);
+    void setEntityType(EntityType<? extends Entity> entityType);
 }

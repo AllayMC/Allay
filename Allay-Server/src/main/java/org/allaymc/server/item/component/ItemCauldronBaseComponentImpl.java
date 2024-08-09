@@ -14,8 +14,8 @@ import static org.allaymc.api.block.type.BlockTypes.CAULDRON;
  *
  * @author daoge_cmd
  */
-public class ItemCauldronBaseComponentImpl extends ItemBaseComponentImpl<ItemCauldronStack> {
-    public ItemCauldronBaseComponentImpl(ItemStackInitInfo<ItemCauldronStack> initInfo) {
+public class ItemCauldronBaseComponentImpl extends ItemBaseComponentImpl {
+    public ItemCauldronBaseComponentImpl(ItemStackInitInfo initInfo) {
         super(initInfo);
     }
 

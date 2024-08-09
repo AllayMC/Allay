@@ -18,13 +18,13 @@ import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
  *
  * @author IWareQ
  */
-public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseComponentImpl<BlockEntityShulkerBox> {
+public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseComponentImpl {
     @Dependency
     private BlockEntityContainerHolderComponent containerHolderComponent;
 
     private BlockFace facing = BlockFace.UP;
 
-    public BlockEntityShulkerBoxBaseComponentImpl(BlockEntityInitInfo<BlockEntityShulkerBox> info) {
+    public BlockEntityShulkerBoxBaseComponentImpl(BlockEntityInitInfo info) {
         super(info);
     }
 
