@@ -6,6 +6,7 @@ import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderCo
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.impl.ShulkerBoxContainer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -29,7 +30,8 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
     }
 
     @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
+    @OnInitFinish
+    public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         var container = containerHolderComponent.<ShulkerBoxContainer>getContainer();
         container.addOnOpenListener(viewer -> {

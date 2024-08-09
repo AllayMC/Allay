@@ -4,6 +4,7 @@ import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderCo
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.impl.ChestContainer;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
@@ -22,8 +23,9 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
         super(info);
     }
 
+    @OnInitFinish
     @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
+    public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         var container = containerHolderComponent.<ChestContainer>getContainer();
         container.addOnOpenListener(viewer -> {

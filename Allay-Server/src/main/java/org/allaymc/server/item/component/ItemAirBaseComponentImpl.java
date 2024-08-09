@@ -1,6 +1,8 @@
 package org.allaymc.server.item.component;
 
+import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
@@ -29,7 +31,8 @@ public class ItemAirBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
+    @OnInitFinish
+    public void onInitFinish(ItemStackInitInfo initInfo) {
         // Do nothing here
     }
 }

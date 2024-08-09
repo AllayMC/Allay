@@ -5,6 +5,7 @@ import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderCo
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.impl.BarrelContainer;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
@@ -23,8 +24,9 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
         super(info);
     }
 
+    @OnInitFinish
     @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
+    public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         var container = containerHolderComponent.<BarrelContainer>getContainer();
         container.addOnOpenListener(viewer -> {

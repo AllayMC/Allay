@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.Dependency;
-import org.allaymc.api.component.annotation.Manager;
+import org.allaymc.api.component.annotation.*;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.data.*;
@@ -107,9 +104,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         return STACK_NETWORK_ID_COUNTER;
     }
 
-    @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
-        loadExtraTag(((ItemStackInitInfo) initInfo).extraTag());
+    @OnInitFinish
+    public void onInitFinish(ItemStackInitInfo initInfo) {
+        loadExtraTag(initInfo.extraTag());
     }
 
     @Override

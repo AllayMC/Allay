@@ -1,9 +1,11 @@
 package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.component.annotation.ComponentedObject;
+import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.impl.*;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
+import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.component.common.EntityContainerHolderComponentImpl;
@@ -29,8 +31,8 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         );
     }
 
-    @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
+    @OnInitFinish
+    public void onInitFinish(EntityInitInfo initInfo) {
         addContainer(new PlayerInventoryContainer(player));
     }
 

@@ -1,7 +1,6 @@
 package org.allaymc.api.component.interfaces;
 
 import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.component.annotation.DoNotInject;
 
 /**
  * Describe the implementation of a component.
@@ -17,6 +16,4 @@ import org.allaymc.api.component.annotation.DoNotInject;
  * @author daoge_cmd
  */
 public interface Component {
-    @DoNotInject
-    default void onInitFinish(ComponentInitInfo initInfo) {}
 }

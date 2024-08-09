@@ -13,6 +13,7 @@ import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
@@ -132,7 +133,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
+    @OnInitFinish
+    public void onInitFinish(EntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
         permTree = PermTree.create();
         permTree.setOp(true);

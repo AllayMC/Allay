@@ -14,6 +14,7 @@ import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
+import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.math.position.Position3i;
@@ -44,9 +45,9 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         this.position = new Position3i(0, 0, 0, initInfo.dimension());
     }
 
-    @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
-        loadNBT(((BlockEntityInitInfo) initInfo).nbt());
+    @OnInitFinish
+    public void onInitFinish(BlockEntityInitInfo initInfo) {
+        loadNBT(initInfo.nbt());
     }
 
     @Override

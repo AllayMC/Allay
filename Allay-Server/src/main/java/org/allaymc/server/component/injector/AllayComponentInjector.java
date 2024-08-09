@@ -5,16 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
+import org.allaymc.api.component.annotation.*;
 import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.Dependency;
-import org.allaymc.api.component.annotation.DoNotInject;
-import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.*;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.Event;
@@ -24,10 +21,7 @@ import org.allaymc.api.utils.exception.ComponentInjectException;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 
@@ -243,7 +237,23 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
             var componentManager = new AllayComponentManager();
             injectComponentManagerAndSetUpEventHandlers(componentManager, components);
             injectComponentedObject(instance, components);
-            components.forEach(component -> component.onInitFinish(initInfo));
+            components.forEach(component -> callOnInitFinishMethod(component, initInfo));
+        }
+
+        protected void callOnInitFinishMethod(Component component, ComponentInitInfo initInfo) {
+            Arrays.stream(component.getClass().getMethods())
+                    .filter(method ->
+                            method.isAnnotationPresent(OnInitFinish.class) &&
+                            method.getReturnType() == void.class &&
+                            method.getParameterCount() == 1)
+                    .forEach(method -> {
+                        method.setAccessible(true);
+                        try {
+                            method.invoke(component, initInfo);
+                        } catch (Exception e) {
+                            throw new ComponentInjectException("Cannot call onInitFinish method on component: " + component.getClass().getName(), e);
+                        }
+                    });
         }
 
         protected void injectComponentedObject(T instance, List<? extends Component> components) {

@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.Dependency;
-import org.allaymc.api.component.annotation.Manager;
+import org.allaymc.api.component.annotation.*;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
@@ -133,9 +130,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         setDisplayName(entityType.getIdentifier().toString());
     }
 
-    @Override
-    public void onInitFinish(ComponentInitInfo initInfo) {
-        loadNBT(((EntityInitInfo) initInfo).nbt());
+    @OnInitFinish
+    public void onInitFinish(EntityInitInfo initInfo) {
+        loadNBT(initInfo.nbt());
         initMetadata();
     }
 
