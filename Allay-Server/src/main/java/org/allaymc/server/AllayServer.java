@@ -80,6 +80,7 @@ public final class AllayServer implements Server {
     private static volatile AllayServer INSTANCE;
 
     private final boolean debug = Server.SETTINGS.genericSettings().debug();
+    private final AtomicBoolean isShuttingDown = new AtomicBoolean(false);
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
@@ -134,12 +135,19 @@ public final class AllayServer implements Server {
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
             .onTick(gameLoop -> {
+                if (!isRunning()) {
+                    gameLoop.stop();
+                    return;
+                }
+
                 try {
                     tick(gameLoop.getTick());
                 } catch (Throwable throwable) {
                     log.error("Error while ticking server", throwable);
                 }
-            }).build();
+            })
+            .onStop(this::shutdown0)
+            .build();
 
     @Getter
     private ScoreboardService scoreboardService;
@@ -172,7 +180,7 @@ public final class AllayServer implements Server {
         Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
             @Override
             public void run() {
-                // TODO: it seems not works
+                // FIXME: it seems not works
                 shutdown();
             }
         });
@@ -245,33 +253,30 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
-        var event = new ServerStopEvent();
-        event.call();
-        if (event.isCancelled()) return;
+        isRunning.set(false);
+    }
 
-        pluginManager.disablePlugins();
-        // TODO: check the reason
-        // Do not move this line down
-        // Otherwise server-settings.yml will be blank after shutdown
-        SETTINGS.save();
-        banInfo.save();
-        whitelist.save();
-        scoreboardService.save();
+    private void shutdown0() {
+        try {
+            var event = new ServerStopEvent();
+            event.call();
 
-        // Start a thread to handle server shutdown
-        Thread.ofPlatform().start(() -> {
-            try {
-                disconnectAllPlayersBlocking();
-            } finally {
-                isRunning.compareAndSet(true, false);
-                worldPool.close();
-                playerStorage.close();
-                virtualThreadPool.shutdownNow();
-                computeThreadPool.shutdownNow();
-            }
+            disconnectAllPlayersBlocking();
 
-            System.exit(0);
-        });
+            pluginManager.disablePlugins();
+            SETTINGS.save();
+            banInfo.save();
+            whitelist.save();
+            scoreboardService.save();
+        } finally {
+            isRunning.compareAndSet(true, false);
+            worldPool.close();
+            playerStorage.close();
+            virtualThreadPool.shutdownNow();
+            computeThreadPool.shutdownNow();
+        }
+
+        System.exit(0);
     }
 
     @Override
