@@ -321,7 +321,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         // TODO: add it to server-settings.yml
         startGamePacket.setTrustingPlayers(true);
-        startGamePacket.setLevelName(Server.SETTINGS.genericSettings().motd());
+        startGamePacket.setLevelName(Server.SETTINGS.genericSettings().subMotd());
         startGamePacket.setLevelId("");
         startGamePacket.setDefaultPlayerPermission(Server.SETTINGS.genericSettings().defaultPermission());
         startGamePacket.setServerChunkTickRange(spawnWorld.getWorldData().getServerChunkTickRange());
