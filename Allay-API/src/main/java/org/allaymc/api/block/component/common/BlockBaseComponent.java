@@ -34,6 +34,10 @@ public interface BlockBaseComponent extends BlockComponent {
      */
     BlockType<? extends BlockBehavior> getBlockType();
 
+    default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, Vector3ic pos, Dimension dimension) {
+        updateBlockProperty(propertyType, value, pos.x(), pos.y(), pos.z(), dimension, 0);
+    }
+
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, Dimension dimension) {
         updateBlockProperty(propertyType, value, x, y, z, dimension, 0);
     }
