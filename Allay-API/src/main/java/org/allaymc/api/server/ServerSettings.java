@@ -33,7 +33,7 @@ public class ServerSettings extends OkaeriConfig {
     @Accessors(fluent = true)
     public static class GenericSettings extends OkaeriConfig {
 
-        private String motd = "An allay-powered server";
+        private String motd = "§bAllayMc Server";
 
         @CustomKey("sub-motd")
         @Comment("Usually only visible on the LAN interface")
