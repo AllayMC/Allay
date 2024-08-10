@@ -90,6 +90,14 @@ public record FullContainerType<T extends Container>(
             .mapAllSlotToType(ContainerSlotType.SHULKER_BOX)
             .build();
 
+    public static final FullContainerType<FurnaceContainer> FURNACE = builder()
+            .id(ContainerType.FURNACE)
+            .size(3)
+            .mapSlotToType(SmeltingContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
+            .mapSlotToType(SmeltingContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
+            .mapSlotToType(SmeltingContainer.INGREDIENT_SLOT, ContainerSlotType.FURNACE_INGREDIENT)
+            .build();
+
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;
@@ -154,6 +162,13 @@ public record FullContainerType<T extends Container>(
             if (slotTypeTable == null) throw new IllegalStateException("The size must be set firstly!");
             heldSlotTypes.add(type);
             Arrays.fill(slotTypeTable, type);
+            return this;
+        }
+
+        public FullContainerTypeBuilder mapSlotToType(int slot, ContainerSlotType type) {
+            if (slotTypeTable == null) throw new IllegalStateException("The size must be set firstly!");
+            heldSlotTypes.add(type);
+            slotTypeTable[slot] = type;
             return this;
         }
 
