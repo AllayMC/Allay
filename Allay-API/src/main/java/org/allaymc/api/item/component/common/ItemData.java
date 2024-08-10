@@ -30,6 +30,10 @@ public class ItemData {
     protected int maxStackSize = 64;
     @Builder.Default
     protected int toughnessValue = 0;
+    @Builder.Default
+    protected float furnaceBurnIntervalMultipler = 0;
+    @Builder.Default
+    protected float furnaceXPMultiplier = 0;
 
     public static ItemData fromJson(String json) {
         return JSONUtils.from(json, ItemData.class);
