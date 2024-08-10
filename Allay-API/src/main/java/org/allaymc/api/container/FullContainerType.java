@@ -93,9 +93,9 @@ public record FullContainerType<T extends Container>(
     public static final FullContainerType<FurnaceContainer> FURNACE = builder()
             .id(ContainerType.FURNACE)
             .size(3)
-            .mapSlotToType(SmeltingContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
-            .mapSlotToType(SmeltingContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
-            .mapSlotToType(SmeltingContainer.INGREDIENT_SLOT, ContainerSlotType.FURNACE_INGREDIENT)
+            .mapSlotToType(FurnaceContainer.RESULT_SLOT, ContainerSlotType.FURNACE_RESULT)
+            .mapSlotToType(FurnaceContainer.FUEL_SLOT, ContainerSlotType.FURNACE_FUEL)
+            .mapSlotToType(FurnaceContainer.INGREDIENT_SLOT, ContainerSlotType.FURNACE_INGREDIENT)
             .build();
 
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {

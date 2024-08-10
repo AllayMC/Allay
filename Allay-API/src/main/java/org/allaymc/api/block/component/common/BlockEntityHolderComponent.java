@@ -32,7 +32,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      *
      * @return the block entity, or null if block entity is not found
      */
-    default T getBlockEntity(int x, int y, int z, Dimension dimension) {
+    default T getBlockEntityAt(int x, int y, int z, Dimension dimension) {
         var blockEntity = dimension.getBlockEntity(x, y, z);
         if (blockEntity == null) return null;
         if (blockEntity.getBlockEntityType() != this.getBlockEntityType()) {
@@ -47,8 +47,8 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         return (T) blockEntity;
     }
 
-    default T getBlockEntity(Position3ic pos) {
-        return getBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension());
+    default T getBlockEntityAt(Position3ic pos) {
+        return getBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
     default void createBlockEntityAt(Position3ic pos) {

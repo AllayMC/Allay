@@ -1,17 +1,21 @@
 package org.allaymc.server.blockentity.type;
 
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
 import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
+import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
 import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.container.impl.BarrelContainer;
 import org.allaymc.api.container.impl.ChestContainer;
+import org.allaymc.api.container.impl.FurnaceContainer;
 import org.allaymc.api.data.VanillaBlockEntityId;
 import org.allaymc.server.blockentity.component.BlockEntityBarrelBaseComponentImpl;
 import org.allaymc.server.blockentity.component.BlockEntityChestBaseComponentImpl;
 import org.allaymc.server.blockentity.component.common.BlockEntityContainerHolderComponentImpl;
+import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxContainerHolderComponentImpl;
 
@@ -46,6 +50,15 @@ public final class BlockEntityTypeInitializer {
                 .name(VanillaBlockEntityId.SHULKER_BOX)
                 .addComponent(BlockEntityShulkerBoxBaseComponentImpl::new, BlockEntityShulkerBoxBaseComponentImpl.class)
                 .addComponent(BlockEntityShulkerBoxContainerHolderComponentImpl::new, BlockEntityShulkerBoxContainerHolderComponentImpl.class)
+                .build();
+    }
+
+    public static void initFurnace() {
+        BlockEntityTypes.FURNACE = BlockEntityTypeBuilder
+                .builder(BlockEntityFurnace.class)
+                .name(VanillaBlockEntityId.FURNACE)
+                .addComponent(BlockEntityFurnaceBaseComponentImpl::new, BlockEntityFurnaceBaseComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(FurnaceContainer::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
     }
 }

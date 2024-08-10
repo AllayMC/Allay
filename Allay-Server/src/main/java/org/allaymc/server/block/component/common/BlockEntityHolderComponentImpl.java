@@ -32,9 +32,22 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     @EventHandler
     private void onBlockPlace(CBlockOnPlaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
+
+        var oldBlockEntity = getBlockEntityAt(pos);
+        if (oldBlockEntity != null) {
+            if (oldBlockEntity.getBlockEntityType() == blockEntityType) {
+                // Block entity may already exist, for example when furnace switching lit status
+                return;
+            } else {
+                log.warn("Old block entity is detected! Pos: {}, block entity: {}", pos, oldBlockEntity.getBlockEntityType());
+                removeBlockEntityAt(pos);
+            }
+        }
+
         createBlockEntityAt(pos, false);
-        var blockEntity = getBlockEntity(pos);
+        var blockEntity = getBlockEntityAt(pos);
         blockEntity.onPlace(event);
+
         // Send block entity to client after onPlace()
         // because onPlace() method may make some changes on this block entity
         if (blockEntity.sendToClient()) {
@@ -45,7 +58,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     @EventHandler
     private void onBlockRemove(CBlockOnReplaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
-        var blockEntity = getBlockEntity(pos);
+        var blockEntity = getBlockEntityAt(pos);
         if (blockEntity == null) {
             log.warn("Block entity not found at pos: {}", pos);
             return;
@@ -57,14 +70,14 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     @EventHandler
     private void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().pos());
-        var blockEntity = getBlockEntity(pos);
+        var blockEntity = getBlockEntityAt(pos);
         blockEntity.onNeighborUpdate(event);
     }
 
     @EventHandler
     private void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickBlockPos();
-        var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension());
+        var blockEntity = getBlockEntityAt(pos.x(), pos.y(), pos.z(), event.getDimension());
         blockEntity.onInteract(event);
     }
 }
