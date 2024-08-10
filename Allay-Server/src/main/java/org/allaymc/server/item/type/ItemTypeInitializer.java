@@ -2,6 +2,8 @@ package org.allaymc.server.item.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaItemId;
+import org.allaymc.api.item.component.ItemArmorBaseComponent;
+import org.allaymc.api.item.component.ItemArmorBaseComponent.ArmorType;
 import org.allaymc.api.item.component.tool.ItemAxeComponent;
 import org.allaymc.api.item.component.tool.ItemHoeComponent;
 import org.allaymc.api.item.component.tool.ItemPickaxeComponent;
@@ -1128,37 +1130,37 @@ public final class ItemTypeInitializer {
         ItemTypes.CHAINMAIL_HELMET = ItemTypeBuilder
                 .builder(ItemChainmailHelmetStack.class)
                 .vanillaItem(VanillaItemId.CHAINMAIL_HELMET)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.DIAMOND_HELMET = ItemTypeBuilder
                 .builder(ItemDiamondHelmetStack.class)
                 .vanillaItem(VanillaItemId.DIAMOND_HELMET)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.GOLDEN_HELMET = ItemTypeBuilder
                 .builder(ItemGoldenHelmetStack.class)
                 .vanillaItem(VanillaItemId.GOLDEN_HELMET)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.IRON_HELMET = ItemTypeBuilder
                 .builder(ItemIronHelmetStack.class)
                 .vanillaItem(VanillaItemId.IRON_HELMET)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.LEATHER_HELMET = ItemTypeBuilder
                 .builder(ItemLeatherHelmetStack.class)
                 .vanillaItem(VanillaItemId.LEATHER_HELMET)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.NETHERITE_HELMET = ItemTypeBuilder
                 .builder(ItemNetheriteHelmetStack.class)
                 .vanillaItem(VanillaItemId.NETHERITE_HELMET)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.TURTLE_HELMET = ItemTypeBuilder
                 .builder(ItemTurtleHelmetStack.class)
                 .vanillaItem(VanillaItemId.TURTLE_HELMET)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
     }
 
@@ -1167,32 +1169,32 @@ public final class ItemTypeInitializer {
         ItemTypes.CHAINMAIL_CHESTPLATE = ItemTypeBuilder
                 .builder(ItemChainmailChestplateStack.class)
                 .vanillaItem(VanillaItemId.CHAINMAIL_CHESTPLATE)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.DIAMOND_CHESTPLATE = ItemTypeBuilder
                 .builder(ItemDiamondChestplateStack.class)
                 .vanillaItem(VanillaItemId.DIAMOND_CHESTPLATE)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.GOLDEN_CHESTPLATE = ItemTypeBuilder
                 .builder(ItemGoldenChestplateStack.class)
                 .vanillaItem(VanillaItemId.GOLDEN_CHESTPLATE)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.IRON_CHESTPLATE = ItemTypeBuilder
                 .builder(ItemIronChestplateStack.class)
                 .vanillaItem(VanillaItemId.IRON_CHESTPLATE)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.LEATHER_CHESTPLATE = ItemTypeBuilder
                 .builder(ItemLeatherChestplateStack.class)
                 .vanillaItem(VanillaItemId.LEATHER_CHESTPLATE)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.NETHERITE_CHESTPLATE = ItemTypeBuilder
                 .builder(ItemNetheriteChestplateStack.class)
                 .vanillaItem(VanillaItemId.NETHERITE_CHESTPLATE)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
     }
 
@@ -1200,32 +1202,32 @@ public final class ItemTypeInitializer {
         ItemTypes.CHAINMAIL_LEGGINGS = ItemTypeBuilder
                 .builder(ItemChainmailLeggingsStack.class)
                 .vanillaItem(VanillaItemId.CHAINMAIL_LEGGINGS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.DIAMOND_LEGGINGS = ItemTypeBuilder
                 .builder(ItemDiamondLeggingsStack.class)
                 .vanillaItem(VanillaItemId.DIAMOND_LEGGINGS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.GOLDEN_LEGGINGS = ItemTypeBuilder
                 .builder(ItemGoldenLeggingsStack.class)
                 .vanillaItem(VanillaItemId.GOLDEN_LEGGINGS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.IRON_LEGGINGS = ItemTypeBuilder
                 .builder(ItemIronLeggingsStack.class)
                 .vanillaItem(VanillaItemId.IRON_LEGGINGS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.LEATHER_LEGGINGS = ItemTypeBuilder
                 .builder(ItemLeatherLeggingsStack.class)
                 .vanillaItem(VanillaItemId.LEATHER_LEGGINGS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.NETHERITE_LEGGINGS = ItemTypeBuilder
                 .builder(ItemNetheriteLeggingsStack.class)
                 .vanillaItem(VanillaItemId.NETHERITE_LEGGINGS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
     }
 
@@ -1233,32 +1235,32 @@ public final class ItemTypeInitializer {
         ItemTypes.CHAINMAIL_BOOTS = ItemTypeBuilder
                 .builder(ItemChainmailBootsStack.class)
                 .vanillaItem(VanillaItemId.CHAINMAIL_BOOTS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.DIAMOND_BOOTS = ItemTypeBuilder
                 .builder(ItemDiamondBootsStack.class)
                 .vanillaItem(VanillaItemId.DIAMOND_BOOTS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.GOLDEN_BOOTS = ItemTypeBuilder
                 .builder(ItemGoldenBootsStack.class)
                 .vanillaItem(VanillaItemId.GOLDEN_BOOTS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.IRON_BOOTS = ItemTypeBuilder
                 .builder(ItemIronBootsStack.class)
                 .vanillaItem(VanillaItemId.IRON_BOOTS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.LEATHER_BOOTS = ItemTypeBuilder
                 .builder(ItemLeatherBootsStack.class)
                 .vanillaItem(VanillaItemId.LEATHER_BOOTS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.NETHERITE_BOOTS = ItemTypeBuilder
                 .builder(ItemNetheriteBootsStack.class)
                 .vanillaItem(VanillaItemId.NETHERITE_BOOTS)
-                .addComponent(ItemArmorBaseComponentImpl::new, ItemArmorBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
     }
 
