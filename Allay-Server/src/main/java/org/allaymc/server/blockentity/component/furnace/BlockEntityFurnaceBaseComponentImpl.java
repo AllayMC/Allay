@@ -37,9 +37,11 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected short cookTime; // unit: gt
     @Getter
     protected short burnDuration; // unit: gt
-    // TODO: give player xp
+    // TODO: drop exp ore
     @Getter
     protected int storedXPInt;
+    protected int currentIngredientStackNetworkId = Integer.MAX_VALUE;
+    protected FurnaceRecipe currentFurnaceRecipe = null;
 
     public BlockEntityFurnaceBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
@@ -118,23 +120,30 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         FurnaceContainer container = containerHolderComponent.getContainer();
         if (container.isEmpty(FurnaceContainer.INGREDIENT_SLOT)) {
             cookTime = 0;
-            sendFurnaceDataToContainerViewers();
+            sendFurnaceContainerData();
             return;
         }
 
         var ingredient = container.getIngredient();
-        var furnaceRecipe = matchFurnaceRecipe(ingredient);
-        if (furnaceRecipe == null) {
-            return;
+        FurnaceInput furnaceInput = null;
+        if (ingredient.getStackNetworkId() != currentIngredientStackNetworkId) {
+            var furnaceRecipe = matchFurnaceRecipe(ingredient);
+            if (furnaceRecipe == null) {
+                return;
+            }
+
+            furnaceInput = new FurnaceInput(ingredient, getFurnaceRecipeTag());
+            if (!furnaceRecipe.match(furnaceInput)) {
+                log.warn("Furnace recipe does not match input! Recipe: {}, Input: {}", furnaceRecipe.getIdentifier(), ingredient.getItemType().getIdentifier());
+                return;
+            }
+
+            currentIngredientStackNetworkId = ingredient.getStackNetworkId();
+            currentFurnaceRecipe = furnaceRecipe;
         }
 
-        var furnaceInput = new FurnaceInput(ingredient, getFurnaceRecipeTag());
-        if (!furnaceRecipe.match(furnaceInput)) {
-            log.warn("Furnace recipe does not match input! Recipe: {}, Input: {}", furnaceRecipe.getIdentifier(), ingredient.getItemType().getIdentifier());
-            return;
-        }
-
-        if (!container.isEmpty(FurnaceContainer.RESULT_SLOT) && furnaceRecipe.getOutput().getItemType() != container.getResult().getItemType()) {
+        var output = currentFurnaceRecipe.getOutput();
+        if (!container.isEmpty(FurnaceContainer.RESULT_SLOT) && output.getItemType() != container.getResult().getItemType()) {
             // Output slot already have a different item, so we can't cook
             return;
         }
@@ -145,14 +154,14 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         if (!checkFuel()) {
-            sendFurnaceDataToContainerViewers();
+            sendFurnaceContainerData();
             return;
         }
 
-        cookTime += (short) getSpeed(furnaceRecipe, furnaceInput);
+        cookTime += (short) getSpeed(currentFurnaceRecipe, furnaceInput);
 
         if (cookTime < MAX_COOK_TIME) {
-            sendFurnaceDataToContainerViewers();
+            sendFurnaceContainerData();
             // Not finished
             return;
         }
@@ -160,11 +169,11 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         // TODO: Event
         var previousResult = container.getResult();
         if (previousResult == Container.EMPTY_SLOT_PLACE_HOLDER) {
-            container.setResult(furnaceRecipe.getOutput());
+            container.setResult(output.copy());
         } else {
-            if (previousResult.getItemType() != furnaceRecipe.getOutput().getItemType()) {
+            if (previousResult.getItemType() != output.getItemType()) {
                 log.warn("Furnace result slot already has different item! Previous: {}, New: {}", previousResult.getItemType().getIdentifier(), furnaceRecipe.getOutput().getItemType().getIdentifier());
-                container.setResult(furnaceRecipe.getOutput());
+                container.setResult(output.copy());
                 return;
             }
             previousResult.setCount(previousResult.getCount() + 1);
@@ -172,12 +181,12 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         cookTime = 0;
-        storedXPInt += (int) furnaceRecipe.getOutput().getItemData().furnaceXPMultiplier();
+        storedXPInt += (int) output.getItemData().furnaceXPMultiplier();
 
-        sendFurnaceDataToContainerViewers();
+        sendFurnaceContainerData();
     }
 
-    protected void sendFurnaceDataToContainerViewers() {
+    protected void sendFurnaceContainerData() {
         var container = containerHolderComponent.getContainer();
         // NOTICE: This is not an error, ask mojang for the reason why you should "/ getSpeedWhenFurnaceTypeMostSuitable()"
         container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, (int) (cookTime / getSpeedWhenFurnaceTypeMostSuitable()));
