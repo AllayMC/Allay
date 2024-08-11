@@ -19,6 +19,7 @@ import org.allaymc.api.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.api.eventbus.event.network.PacketSendEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.math.location.Location3f;
@@ -181,7 +182,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             @Override
             public void onDisconnect(String reason) {
-                disconnectReason = reason;
+                // Disconnect reason shouldn't be null otherwise the server won't handle it
+                if (disconnectReason != null) return;
+                disconnectReason = reason != null ? reason : "";
             }
         });
     }

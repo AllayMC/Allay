@@ -84,6 +84,7 @@ public final class AllayServer implements Server {
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
+    private final AtomicBoolean isShuttingDown = new AtomicBoolean(false);
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
     private final PlayerStorage playerStorage =
@@ -134,9 +135,10 @@ public final class AllayServer implements Server {
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
             .onTick(gameLoop -> {
-                if (!isRunning() && players.isEmpty()) {
+                if (isShuttingDown() && players.isEmpty()) {
                     // Shutdown only when all players are disconnected
                     gameLoop.stop();
+                    return;
                 }
 
                 try {
@@ -217,12 +219,8 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void disconnectAllPlayersBlocking() {
+    public void disconnectAllPlayers() {
         players.values().forEach(player -> player.disconnect(TrKeys.M_DISCONNECT_CLOSED));
-        while (!players.isEmpty()) {
-            Thread.yield();
-            // Spin until all players are disconnected
-        }
     }
 
     @Override
@@ -252,8 +250,11 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
-        if (!isRunning.compareAndSet(true, false)) return;
-        Thread.ofPlatform().start(this::disconnectAllPlayersBlocking);
+        if (!isShuttingDown.compareAndSet(false, true)) {
+            // Already shutting down
+            return;
+        }
+        disconnectAllPlayers();
     }
 
     private void shutdown0() {
@@ -267,6 +268,7 @@ public final class AllayServer implements Server {
             whitelist.save();
             scoreboardService.save();
         } finally {
+            isRunning.set(false);
             worldPool.close();
             playerStorage.close();
             virtualThreadPool.shutdownNow();
@@ -564,6 +566,10 @@ public final class AllayServer implements Server {
     @Override
     public boolean isRunning() {
         return isRunning.get();
+    }
+
+    private boolean isShuttingDown() {
+        return isShuttingDown.get();
     }
 
     @Override

@@ -55,7 +55,7 @@ public interface Server extends TaskCreator, CommandSender {
 
     long getStartTime();
 
-    void disconnectAllPlayersBlocking();
+    void disconnectAllPlayers();
 
     Scheduler getScheduler();
 

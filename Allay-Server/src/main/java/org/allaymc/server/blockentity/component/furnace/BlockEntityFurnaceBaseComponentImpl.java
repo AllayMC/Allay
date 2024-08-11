@@ -42,6 +42,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected int storedXPInt;
     protected int currentIngredientStackNetworkId = Integer.MAX_VALUE;
     protected FurnaceRecipe currentFurnaceRecipe = null;
+    protected FurnaceInput currentFurnaceInput = null;
 
     public BlockEntityFurnaceBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
@@ -125,14 +126,13 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         var ingredient = container.getIngredient();
-        FurnaceInput furnaceInput = null;
         if (ingredient.getStackNetworkId() != currentIngredientStackNetworkId) {
             var furnaceRecipe = matchFurnaceRecipe(ingredient);
             if (furnaceRecipe == null) {
                 return;
             }
 
-            furnaceInput = new FurnaceInput(ingredient, getFurnaceRecipeTag());
+            var furnaceInput = new FurnaceInput(ingredient, getFurnaceRecipeTag());
             if (!furnaceRecipe.match(furnaceInput)) {
                 log.warn("Furnace recipe does not match input! Recipe: {}, Input: {}", furnaceRecipe.getIdentifier(), ingredient.getItemType().getIdentifier());
                 return;
@@ -140,6 +140,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
             currentIngredientStackNetworkId = ingredient.getStackNetworkId();
             currentFurnaceRecipe = furnaceRecipe;
+            currentFurnaceInput = furnaceInput;
         }
 
         var output = currentFurnaceRecipe.getOutput();
@@ -159,7 +160,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return;
         }
 
-        cookTime += (short) getSpeed(currentFurnaceRecipe, furnaceInput);
+        cookTime += (short) getSpeed(currentFurnaceRecipe, currentFurnaceInput);
 
         if (cookTime < MAX_COOK_TIME) {
             sendFurnaceContainerData();
