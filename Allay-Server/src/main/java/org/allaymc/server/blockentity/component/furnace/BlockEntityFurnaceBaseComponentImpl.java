@@ -109,6 +109,12 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     @Override
     public void tick() {
         var container = containerHolderComponent.getContainer(FullContainerType.FURNACE);
+        if (container.isEmpty(FurnaceContainer.INGREDIENT_SLOT)) {
+            cookTime = 0;
+            sendFurnaceDataToContainerViewers();
+            return;
+        }
+
         var ingredient = container.getIngredient();
 
         var furnaceRecipe = matchFurnaceRecipe(ingredient);
