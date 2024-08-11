@@ -83,9 +83,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected boolean networkEncryptionEnabled = false;
     @Getter
     protected boolean initialized = false;
-    @Getter
-    @Setter
-    protected boolean disconnected = false;
     // It will be set while client disconnecting from server
     // Otherwise, it will be null
     protected String disconnectReason = null;
@@ -115,7 +112,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Override
     public void handleDisconnect() {
         if (disconnectReason != null) {
-            disconnected = true;
             // Do not believe that the client will disconnect proactively
             // Especially for cheater, the BedrockPacketHandler::onDisconnect() method may won't be called
             // If we call server.onDisconnect() in BedrockPacketHandler::onDisconnect(),
@@ -132,7 +128,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public boolean shouldHandleDisconnect() {
-        return !disconnected && disconnectReason != null;
+        return disconnectReason != null;
     }
 
     @Override
@@ -230,6 +226,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             log.error("Error while disconnecting the session", e);
         }
         hideDisconnectReason = hideReason;
+    }
+
+    @Override
+    public boolean isDisconnected() {
+        return !session.isConnected();
     }
 
     protected void doFirstSpawn() {
