@@ -10,7 +10,6 @@ import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderCo
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.FurnaceContainer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
@@ -28,7 +27,7 @@ import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
 @Slf4j
 public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityFurnaceBaseComponent {
 
-    public static final int MAX_COOK_TIME_NORMAL = 200;
+    public static final int MAX_COOK_TIME = 200;
 
     @Dependency
     protected BlockEntityContainerHolderComponent containerHolderComponent;
@@ -62,13 +61,17 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     @Override
-    public int getSpeed() {
+    public float getSpeedNormal() {
         return 1;
     }
 
     @Override
-    public int getSpeedWhenFurnaceTypeMostSuitable() {
+    public float getSpeedWhenFurnaceTypeMostSuitable() {
         return 1;
+    }
+
+    protected float getSpeed(FurnaceRecipe furnaceRecipe, FurnaceInput furnaceInput) {
+        return furnaceRecipe.isFurnaceTypeMostSuitable(furnaceInput) ? getSpeedWhenFurnaceTypeMostSuitable() : getSpeedNormal();
     }
 
     @Override
@@ -108,7 +111,11 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     @Override
     public void tick() {
-        var container = containerHolderComponent.getContainer(FullContainerType.FURNACE);
+        if (burnTime > 0) {
+            burnTime--;
+        }
+
+        FurnaceContainer container = containerHolderComponent.getContainer();
         if (container.isEmpty(FurnaceContainer.INGREDIENT_SLOT)) {
             cookTime = 0;
             sendFurnaceDataToContainerViewers();
@@ -116,7 +123,6 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         var ingredient = container.getIngredient();
-
         var furnaceRecipe = matchFurnaceRecipe(ingredient);
         if (furnaceRecipe == null) {
             return;
@@ -133,19 +139,25 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return;
         }
 
+        if (container.getResult().getCount() == container.getResult().getItemData().maxStackSize()) {
+            // Output slot is full
+            return;
+        }
+
         if (!checkFuel()) {
             sendFurnaceDataToContainerViewers();
             return;
         }
 
-        cookTime += 1;
+        cookTime += (short) getSpeed(furnaceRecipe, furnaceInput);
 
-        if (cookTime < (MAX_COOK_TIME_NORMAL / (furnaceRecipe.isFurnaceTypeMostSuitable(furnaceInput) ? getSpeedWhenFurnaceTypeMostSuitable() : getSpeed()))) {
+        if (cookTime < MAX_COOK_TIME) {
             sendFurnaceDataToContainerViewers();
             // Not finished
             return;
         }
 
+        // TODO: Event
         var previousResult = container.getResult();
         if (previousResult == Container.EMPTY_SLOT_PLACE_HOLDER) {
             container.setResult(furnaceRecipe.getOutput());
@@ -167,17 +179,17 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     protected void sendFurnaceDataToContainerViewers() {
         var container = containerHolderComponent.getContainer();
-        container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, cookTime);
+        // NOTICE: This is not an error, ask mojang for the reason why you should "/ getSpeedWhenFurnaceTypeMostSuitable()"
+        container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, (int) (cookTime / getSpeedWhenFurnaceTypeMostSuitable()));
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_TIME, burnTime);
     }
 
     protected boolean checkFuel() {
         if (burnTime > 0) {
-            burnTime--;
             return true;
         }
 
-        var container = containerHolderComponent.getContainer(FullContainerType.FURNACE);
+        FurnaceContainer container = containerHolderComponent.getContainer();
         var fuel = container.getFuel();
 
         if (fuel == Container.EMPTY_SLOT_PLACE_HOLDER) {
@@ -190,6 +202,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return false;
         }
 
+        // TODO: Event
         if (fuel.getCount() > 1) {
             fuel.setCount(fuel.getCount() - 1);
             container.onSlotChange(FurnaceContainer.FUEL_SLOT);

@@ -217,6 +217,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void disconnect(@MayContainTrKey String reason, boolean hideReason) {
+        if (!session.isConnected()) {
+            log.warn("Trying to disconnect a player who already disconnected!");
+            return;
+        }
         // Disconnection will be handled in handleDisconnect() method
         disconnectReason = I18n.get().tr(player.getLangCode(), reason);
         // Send disconnect packet to client

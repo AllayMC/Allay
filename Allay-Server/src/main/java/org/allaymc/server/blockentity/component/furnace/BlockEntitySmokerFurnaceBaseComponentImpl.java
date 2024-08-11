@@ -31,7 +31,7 @@ public class BlockEntitySmokerFurnaceBaseComponentImpl extends BlockEntityFurnac
     }
 
     @Override
-    public int getSpeedWhenFurnaceTypeMostSuitable() {
+    public float getSpeedWhenFurnaceTypeMostSuitable() {
         return 2;
     }
 }
