@@ -8,9 +8,13 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.component.BlockEntityFurnaceBaseComponent;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
+import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.impl.FurnaceContainer;
+import org.allaymc.api.eventbus.event.container.FurnaceConsumeFuelEvent;
+import org.allaymc.api.eventbus.event.container.FurnaceSmeltEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceInput;
@@ -31,6 +35,9 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     @Dependency
     protected BlockEntityContainerHolderComponent containerHolderComponent;
+    @ComponentedObject
+    protected BlockEntityFurnace thisBlockEntityFurnace;
+
     @Getter
     protected short burnTime; // unit: gt
     @Getter
@@ -169,7 +176,21 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return;
         }
 
-        // TODO: Event
+        cookTime = 0;
+        if (ingredient.getCount() > 1) {
+            ingredient.reduceCount(1);
+            container.onSlotChange(FurnaceContainer.INGREDIENT_SLOT);
+        } else {
+            container.clearSlot(FurnaceContainer.INGREDIENT_SLOT);
+        }
+
+        var event = new FurnaceSmeltEvent(thisBlockEntityFurnace, ingredient, output);
+        event.call();
+        if (event.isCancelled()) {
+            sendFurnaceContainerData();
+            return;
+        }
+
         var currentResult = container.getResult();
         if (currentResult == Container.EMPTY_SLOT_PLACE_HOLDER) {
             container.setResult(output.copy());
@@ -183,7 +204,6 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             container.onSlotChange(FurnaceContainer.RESULT_SLOT);
         }
 
-        cookTime = 0;
         storedXPInt += (int) output.getItemData().furnaceXPMultiplier();
 
         sendFurnaceContainerData();
@@ -204,19 +224,24 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         FurnaceContainer container = containerHolderComponent.getContainer();
+
+        if (container.isEmpty(FurnaceContainer.FUEL_SLOT)) {
+            resetToNoFuelState();
+            return false;
+        }
+
         var fuel = container.getFuel();
-
-        if (fuel == Container.EMPTY_SLOT_PLACE_HOLDER) {
+        if (!isFuel(fuel)) {
             resetToNoFuelState();
             return false;
         }
 
-        if (!isFuel(container.getFuel())) {
-            resetToNoFuelState();
+        var event = new FurnaceConsumeFuelEvent(thisBlockEntityFurnace, fuel);
+        event.call();
+        if (event.isCancelled()) {
             return false;
         }
 
-        // TODO: Event
         if (fuel.getCount() > 1) {
             fuel.setCount(fuel.getCount() - 1);
             container.onSlotChange(FurnaceContainer.FUEL_SLOT);

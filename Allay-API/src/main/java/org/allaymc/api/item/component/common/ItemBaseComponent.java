@@ -41,6 +41,14 @@ public interface ItemBaseComponent extends ItemComponent {
 
     void setCount(int count);
 
+    default void reduceCount(int count) {
+        setCount(getCount() - count);
+    }
+
+    default void increaseCount(int count) {
+        setCount(getCount() + count);
+    }
+
     int getMeta();
 
     void setMeta(int meta);
