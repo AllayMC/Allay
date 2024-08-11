@@ -64,17 +64,18 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     @Override
-    public float getSpeedNormal() {
+    public float getNormalSpeed() {
         return 1;
     }
 
     @Override
-    public float getSpeedWhenFurnaceTypeMostSuitable() {
+    public float getIdealSpeed() {
         return 1;
     }
 
-    protected float getSpeed(FurnaceRecipe furnaceRecipe, FurnaceInput furnaceInput) {
-        return furnaceRecipe.isFurnaceTypeMostSuitable(furnaceInput) ? getSpeedWhenFurnaceTypeMostSuitable() : getSpeedNormal();
+    @Override
+    public float getCurrentSpeed() {
+        return currentFurnaceRecipe.isFurnaceTypeMostSuitable(currentFurnaceInput) ? getIdealSpeed() : getNormalSpeed();
     }
 
     @Override
@@ -160,7 +161,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return;
         }
 
-        cookTime += (short) getSpeed(currentFurnaceRecipe, currentFurnaceInput);
+        cookTime += (short) getCurrentSpeed();
 
         if (cookTime < MAX_COOK_TIME) {
             sendFurnaceContainerData();
@@ -191,7 +192,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected void sendFurnaceContainerData() {
         var container = containerHolderComponent.getContainer();
         // NOTICE: This is not an error, ask mojang for the reason why you should "/ getSpeedWhenFurnaceTypeMostSuitable()"
-        container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, (int) (cookTime / getSpeedWhenFurnaceTypeMostSuitable()));
+        container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, (int) (cookTime / getIdealSpeed()));
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_TIME, burnTime);
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_DURATION, burnDuration);
         container.sendContainerData(ContainerSetDataPacket.FURNACE_STORED_XP, storedXPInt);

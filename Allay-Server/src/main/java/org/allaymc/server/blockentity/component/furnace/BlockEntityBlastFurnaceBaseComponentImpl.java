@@ -31,7 +31,7 @@ public class BlockEntityBlastFurnaceBaseComponentImpl extends BlockEntityFurnace
     }
 
     @Override
-    public float getSpeedWhenFurnaceTypeMostSuitable() {
+    public float getIdealSpeed() {
         return 2;
     }
 }

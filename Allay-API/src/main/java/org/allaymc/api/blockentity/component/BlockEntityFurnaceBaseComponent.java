@@ -25,7 +25,9 @@ public interface BlockEntityFurnaceBaseComponent extends BlockEntityBaseComponen
 
     String getFurnaceRecipeTag();
 
-    float getSpeedNormal();
+    float getNormalSpeed();
 
-    float getSpeedWhenFurnaceTypeMostSuitable();
+    float getIdealSpeed();
+
+    float getCurrentSpeed();
 }
