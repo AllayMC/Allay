@@ -31,7 +31,7 @@ public class ItemData {
     @Builder.Default
     protected int toughnessValue = 0;
     @Builder.Default
-    protected float furnaceBurnIntervalMultiplier = 0;
+    protected float furnaceBurnDuration = 0;
     @Builder.Default
     protected float furnaceXPMultiplier = 0;
 

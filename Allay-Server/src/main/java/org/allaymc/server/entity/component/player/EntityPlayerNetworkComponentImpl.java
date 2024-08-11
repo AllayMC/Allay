@@ -441,6 +441,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                                 .map(Recipe::toNetworkRecipeData)
                                 .toList()
                 );
+                CRAFTING_DATA_PACKET.getCraftingData().addAll(
+                        Registries.FURNACE_RECIPES.getContent().values().stream()
+                                .map(Recipe::toNetworkRecipeData)
+                                .toList()
+                );
                 // TODO: packet.getPotionMixData().addAll();
                 // TODO: packet.getContainerMixData().addAll();
                 // TODO: packet.getMaterialReducers().addAll();

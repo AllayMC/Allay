@@ -14,6 +14,8 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.common.ItemData;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.recipe.CraftingRecipe;
+import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
@@ -62,6 +64,7 @@ public final class Registries {
 
     // Recipe
     public static IntMappedRegistry<NetworkRecipe> RECIPES;
+    public static SimpleMappedRegistry<Identifier, FurnaceRecipe> FURNACE_RECIPES;
     // TODO: PotionMixData
     // TODO: ContainerMixData
     // TODO: MaterialReducer

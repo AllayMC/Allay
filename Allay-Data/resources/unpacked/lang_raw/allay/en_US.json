@@ -23,6 +23,8 @@
   "creativeitem.loaded": "Creative items is loaded",
   "recipe.loading": "Loading recipes...",
   "recipe.loaded": "Loaded %1 recipes",
+  "furnacerecipe.loading": "Loading furnace recipes...",
+  "furnacerecipe.loaded": "Loaded %1 furnace recipes",
   "command.generic.sender.notServer": "This command can only be executed by the server!",
   "command.generic.sender.notPlayer": "This command can only be executed by a player!",
   "command.generic.sender.notEntity": "This command can only be executed by an entity!",

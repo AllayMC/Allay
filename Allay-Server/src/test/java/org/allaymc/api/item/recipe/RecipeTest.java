@@ -240,6 +240,7 @@ class RecipeTest {
         var input2 = new FurnaceInput(grass(), FurnaceRecipe.FURNACE_TAG);
 
         assertFalse(grassMagic2.match(input2));
+        assertEquals(grassMagic2.getIdentifier(), new Identifier(GRASS_BLOCK.getIdentifier() + "_" + FurnaceRecipe.BLAST_FURNACE_TAG));
     }
 
     private ItemDiamondStack diamond() {

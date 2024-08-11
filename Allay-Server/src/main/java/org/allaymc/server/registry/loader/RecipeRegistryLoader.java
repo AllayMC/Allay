@@ -7,23 +7,16 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
-import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.descriptor.ItemTagDescriptor;
-import org.allaymc.api.item.init.SimpleItemStackInitInfo;
 import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.recipe.ShapedRecipe;
 import org.allaymc.api.item.recipe.ShapelessRecipe;
-import org.allaymc.api.registry.Registries;
 import org.allaymc.api.registry.RegistryLoader;
-import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
-import org.cloudburstmc.nbt.NbtMap;
 
 import java.io.InputStreamReader;
 import java.util.*;
@@ -70,7 +63,7 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<
         // Ingredients
         List<ItemDescriptor> ingredients = new ArrayList<>();
         obj.getAsJsonArray("input").forEach(item -> {
-            ingredients.add(parseItemDescriptor(item.getAsJsonObject()));
+            ingredients.add(RecipeJsonUtils.parseItemDescriptor(item.getAsJsonObject()));
         });
 
         return ShapelessRecipe
@@ -78,7 +71,7 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<
                 .identifier(new Identifier(obj.get("id").getAsString()))
                 .ingredients(ingredients.toArray(ItemDescriptor[]::new))
                 .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
-                .outputs(parseOutputs(obj).toArray(ItemStack[]::new))
+                .outputs(RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new))
                 .tag(obj.get("tag").getAsString())
                 .uuid(UUID.fromString(obj.get("uuid").getAsString()))
                 .build();
@@ -96,7 +89,7 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<
         obj.getAsJsonObject("input").entrySet().forEach(k -> {
             // the length of k.getKey() must be 1 so we can safely convert it to a char
             var key = k.getKey().charAt(0);
-            var itemDescriptor = parseItemDescriptor(k.getValue().getAsJsonObject());
+            var itemDescriptor = RecipeJsonUtils.parseItemDescriptor(k.getValue().getAsJsonObject());
             keys.put(key, itemDescriptor);
         });
 
@@ -106,73 +99,9 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<
                 .priority(obj.has("priority") ? obj.get("priority").getAsInt() : 0)
                 .pattern(ShapedRecipe.PatternHelper.build(patternList))
                 .keys(keys)
-                .outputs(parseOutputs(obj).toArray(ItemStack[]::new))
+                .outputs(RecipeJsonUtils.parseOutputs(obj).toArray(ItemStack[]::new))
                 .tag(obj.get("tag").getAsString())
                 .uuid(UUID.fromString(obj.get("uuid").getAsString()))
                 .build();
-    }
-
-
-    protected List<ItemStack> parseOutputs(JsonObject obj) {
-        // Multi outputs is possible
-        List<ItemStack> outputs = new ArrayList<>();
-        var outputJson = obj.get("output");
-        if (outputJson.isJsonObject()) {
-            outputs.add(parseOutput(outputJson.getAsJsonObject()));
-        } else {
-            for (var output : outputJson.getAsJsonArray()) {
-                outputs.add(parseOutput(output.getAsJsonObject()));
-            }
-        }
-        return outputs;
-    }
-
-    protected ItemDescriptor parseItemDescriptor(JsonObject jsonObject) {
-        return switch (parseItemDescriptorType(jsonObject)) {
-            case DEFAULT -> {
-                Identifier itemId = new Identifier(jsonObject.get("item").getAsString());
-                var itemType = Registries.ITEMS.get(itemId);
-                // "data" field only exists in default item descriptor
-                var meta = jsonObject.get("data");
-                if (meta != null) {
-                    yield new DefaultDescriptor(itemType, meta.getAsInt());
-                } else {
-                    yield new DefaultDescriptor(itemType);
-                }
-            }
-            case ITEM_TAG -> {
-                var tagId = jsonObject.get("tag").getAsString();
-                var itemTag = VanillaItemTags.getTagByName(tagId);
-                Objects.requireNonNull(itemTag, "Unknown item tag: " + tagId);
-                yield new ItemTagDescriptor(itemTag);
-            }
-        };
-    }
-
-    protected ItemDescriptorType parseItemDescriptorType(JsonObject jsonObject) {
-        if (jsonObject.has("tag")) return ItemDescriptorType.ITEM_TAG;
-        else return ItemDescriptorType.DEFAULT;
-    }
-
-    protected enum ItemDescriptorType {
-        DEFAULT,
-        ITEM_TAG
-    }
-
-    protected ItemStack parseOutput(JsonObject jsonObject) {
-        var itemId = new Identifier(jsonObject.get("item").getAsString());
-        var itemType = Registries.ITEMS.get(itemId);
-        Objects.requireNonNull(itemType, "Unknown item type: " + itemId);
-        var count = jsonObject.get("count").getAsInt();
-        var meta = jsonObject.has("data") ? jsonObject.get("data").getAsInt() : 0;
-        var nbtMap = jsonObject.has("nbt") ? AllayNbtUtils.base64ToNbt(jsonObject.get("nbt").getAsString()) : NbtMap.EMPTY;
-        return itemType.createItemStack(
-                SimpleItemStackInitInfo
-                        .builder()
-                        .count(count)
-                        .meta(meta)
-                        .extraTag(nbtMap)
-                        .build()
-        );
     }
 }

@@ -49,6 +49,10 @@ public interface TrKeys {
 
     String A_ENTITYTYPE_LOADING = "allay:entitytype.loading";
 
+    String A_FURNACERECIPE_LOADED = "allay:furnacerecipe.loaded";
+
+    String A_FURNACERECIPE_LOADING = "allay:furnacerecipe.loading";
+
     String A_GUI_CHUNK = "allay:gui.chunk";
 
     String A_GUI_CHUNK_LABEL = "allay:gui.chunk.label";

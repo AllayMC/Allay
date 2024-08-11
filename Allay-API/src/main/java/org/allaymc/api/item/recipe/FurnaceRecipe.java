@@ -6,6 +6,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.recipe.input.FurnaceInput;
 import org.allaymc.api.item.recipe.input.Input;
+import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.FurnaceRecipeData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
@@ -15,7 +16,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeDa
  *
  * @author daoge_cmd
  */
-public class FurnaceRecipe implements Recipe, TaggedRecipe {
+public class FurnaceRecipe implements Recipe, TaggedRecipe, IdentifiedRecipe {
     public static final String FURNACE_TAG = "furnace";
     public static final String BLAST_FURNACE_TAG = "blast_furnace";
     public static final String SMOKER_TAG = "smoker";
@@ -25,12 +26,19 @@ public class FurnaceRecipe implements Recipe, TaggedRecipe {
     @Getter
     protected DefaultDescriptor ingredient;
     protected ItemStack output;
+    // NOTICE: Furnace recipe does not have identifier in runtime
+    // We give each furnace recipe an identifier server-side to make it possible
+    // to be registered into registry
+    // The identifier is simply ingredient + tag
+    @Getter
+    protected Identifier identifier;
 
     @Builder
     public FurnaceRecipe(DefaultDescriptor ingredient, ItemStack output, String tag) {
         this.ingredient = ingredient;
         this.output = output;
         this.tag = tag;
+        this.identifier = new Identifier(ingredient.getItemType().getIdentifier() + "_" + tag);
     }
 
     @Override
