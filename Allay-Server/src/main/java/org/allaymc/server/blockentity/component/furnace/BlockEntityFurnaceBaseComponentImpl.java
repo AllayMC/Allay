@@ -143,12 +143,13 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         var output = currentFurnaceRecipe.getOutput();
-        if (!container.isEmpty(FurnaceContainer.RESULT_SLOT) && output.getItemType() != container.getResult().getItemType()) {
+        var outputItemType = output.getItemType();
+        if (!container.isEmpty(FurnaceContainer.RESULT_SLOT) && outputItemType != container.getResult().getItemType()) {
             // Output slot already have a different item, so we can't cook
             return;
         }
 
-        if (container.getResult().getCount() == container.getResult().getItemData().maxStackSize()) {
+        if (container.getResult().isFull()) {
             // Output slot is full
             return;
         }
@@ -167,16 +168,16 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         // TODO: Event
-        var previousResult = container.getResult();
-        if (previousResult == Container.EMPTY_SLOT_PLACE_HOLDER) {
+        var currentResult = container.getResult();
+        if (currentResult == Container.EMPTY_SLOT_PLACE_HOLDER) {
             container.setResult(output.copy());
         } else {
-            if (previousResult.getItemType() != output.getItemType()) {
-                log.warn("Furnace result slot already has different item! Previous: {}, New: {}", previousResult.getItemType().getIdentifier(), furnaceRecipe.getOutput().getItemType().getIdentifier());
+            if (currentResult.getItemType() != outputItemType) {
+                log.warn("Furnace result slot already has different item! Previous: {}, New: {}", currentResult.getItemType().getIdentifier(), outputItemType.getIdentifier());
                 container.setResult(output.copy());
                 return;
             }
-            previousResult.setCount(previousResult.getCount() + 1);
+            currentResult.setCount(currentResult.getCount() + 1);
             container.onSlotChange(FurnaceContainer.RESULT_SLOT);
         }
 

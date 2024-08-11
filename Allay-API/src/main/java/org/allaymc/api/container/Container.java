@@ -145,7 +145,7 @@ public interface Container {
         // Firstly, try to merge with other item stack
         for (int index = minSlotIndex; index <= maxSlotIndex; index++) {
             var content = itemStacks[index];
-            if (content.getCount() != content.getItemData().maxStackSize() && content.canMerge(itemStack, true)) {
+            if (!content.isFull() && content.canMerge(itemStack, true)) {
                 if (content.getCount() + itemStack.getCount() <= content.getItemData().maxStackSize()) {
                     content.setCount(content.getCount() + itemStack.getCount());
                     itemStack.setCount(0);

@@ -57,7 +57,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     private static int STACK_NETWORK_ID_COUNTER = 1;
 
     @Dependency
-    protected ItemDataComponent attributeComponent;
+    protected ItemDataComponent itemDataComponent;
 
     @ComponentedObject
     protected ItemStack thisItemStack;
@@ -128,6 +128,11 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         var event = new CItemLoadExtraTagEvent(extraTag);
         manager.callEvent(event);
+    }
+
+    @Override
+    public boolean isFull() {
+        return count == itemDataComponent.getItemData().maxStackSize();
     }
 
     @Override
@@ -296,14 +301,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         if (extraTag2 == null) extraTag2 = NbtMap.EMPTY;
         return itemStack.getItemType() == getItemType() &&
                itemStack.getMeta() == getMeta() &&
-               (ignoreCount || count + itemStack.getCount() <= attributeComponent.getItemData().maxStackSize()) &&
+               (ignoreCount || count + itemStack.getCount() <= itemDataComponent.getItemData().maxStackSize()) &&
                extraTag1.equals(extraTag2) &&
                itemStack.toBlockState() == toBlockState();
     }
 
     @Override
     public float calculateAttackDamage() {
-        return attributeComponent.getItemData().attackDamage();
+        return itemDataComponent.getItemData().attackDamage();
     }
 
     @Override
@@ -349,7 +354,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean isBroken() {
-        var maxDamage = attributeComponent.getItemData().maxDamage();
+        var maxDamage = itemDataComponent.getItemData().maxDamage();
         // This item does not support durability
         if (maxDamage == 0) return false;
         return durability >= maxDamage;

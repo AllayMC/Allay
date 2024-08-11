@@ -37,6 +37,8 @@ public interface ItemBaseComponent extends ItemComponent {
 
     int getCount();
 
+    boolean isFull();
+
     void setCount(int count);
 
     int getMeta();
