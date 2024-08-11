@@ -10,7 +10,6 @@ import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderCo
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.FurnaceContainer;
 import org.allaymc.api.item.ItemStack;
@@ -29,7 +28,7 @@ import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
 @Slf4j
 public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityFurnaceBaseComponent {
 
-    public static final int MAX_COOK_TIME = 200;
+    public static final int MAX_COOK_TIME_NORMAL = 200;
 
     @Dependency
     protected BlockEntityContainerHolderComponent containerHolderComponent;
@@ -39,6 +38,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected short cookTime; // unit: gt
     @Getter
     protected short burnDuration; // unit: gt
+    // TODO: give player xp
     @Getter
     protected int storedXPInt;
 
@@ -62,7 +62,12 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     @Override
-    public int getSpeedMultiplier() {
+    public int getSpeed() {
+        return 1;
+    }
+
+    @Override
+    public int getSpeedWhenFurnaceTypeMostSuitable() {
         return 1;
     }
 
@@ -111,7 +116,8 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return;
         }
 
-        if (!furnaceRecipe.match(new FurnaceInput(ingredient, getFurnaceRecipeTag()))) {
+        var furnaceInput = new FurnaceInput(ingredient, getFurnaceRecipeTag());
+        if (!furnaceRecipe.match(furnaceInput)) {
             log.warn("Furnace recipe does not match input! Recipe: {}, Input: {}", furnaceRecipe.getIdentifier(), ingredient.getItemType().getIdentifier());
             return;
         }
@@ -126,9 +132,9 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return;
         }
 
-        cookTime += (short) getSpeedMultiplier();
+        cookTime += 1;
 
-        if (cookTime < MAX_COOK_TIME) {
+        if (cookTime < (MAX_COOK_TIME_NORMAL / (furnaceRecipe.isFurnaceTypeMostSuitable(furnaceInput) ? getSpeedWhenFurnaceTypeMostSuitable() : getSpeed()))) {
             sendFurnaceDataToContainerViewers();
             // Not finished
             return;

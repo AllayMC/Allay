@@ -736,28 +736,28 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(VanillaBlockId.BLAST_FURNACE)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
-                // TODO: BlockEntity
+                .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
                 .build();
         BlockTypes.LIT_BLAST_FURNACE = BlockTypeBuilder
                 .builder(BlockLitBlastFurnaceBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIT_BLAST_FURNACE)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
-                // TODO: BlockEntity
+                .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
                 .build();
         BlockTypes.SMOKER = BlockTypeBuilder
                 .builder(BlockSmokerBehavior.class)
                 .vanillaBlock(VanillaBlockId.SMOKER)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
-                // TODO: BlockEntity
+                .bindBlockEntity(BlockEntityTypes.SMOKER)
                 .build();
         BlockTypes.LIT_SMOKER = BlockTypeBuilder
                 .builder(BlockLitSmokerBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIT_SMOKER)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
-                // TODO: BlockEntity
+                .bindBlockEntity(BlockEntityTypes.SMOKER)
                 .build();
     }
 }

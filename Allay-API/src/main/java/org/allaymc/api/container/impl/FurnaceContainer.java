@@ -26,6 +26,10 @@ public class FurnaceContainer extends BaseContainer {
         super(FullContainerType.FURNACE);
     }
 
+    public FurnaceContainer(FullContainerType<?> containerType) {
+        super(containerType);
+    }
+
     public ItemStack getIngredient() {
         return getItemStack(INGREDIENT_SLOT);
     }

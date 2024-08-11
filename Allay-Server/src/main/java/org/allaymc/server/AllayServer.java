@@ -80,7 +80,6 @@ public final class AllayServer implements Server {
     private static volatile AllayServer INSTANCE;
 
     private final boolean debug = Server.SETTINGS.genericSettings().debug();
-    private final AtomicBoolean isShuttingDown = new AtomicBoolean(false);
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
@@ -135,9 +134,9 @@ public final class AllayServer implements Server {
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
             .onTick(gameLoop -> {
-                if (!isRunning()) {
+                if (!isRunning() && players.isEmpty()) {
+                    // Shutdown only when all players are disconnected
                     gameLoop.stop();
-                    return;
                 }
 
                 try {
@@ -253,15 +252,14 @@ public final class AllayServer implements Server {
 
     @Override
     public void shutdown() {
-        isRunning.set(false);
+        if (!isRunning.compareAndSet(true, false)) return;
+        Thread.ofPlatform().start(this::disconnectAllPlayersBlocking);
     }
 
     private void shutdown0() {
         try {
             var event = new ServerStopEvent();
             event.call();
-
-            disconnectAllPlayersBlocking();
 
             pluginManager.disablePlugins();
             SETTINGS.save();

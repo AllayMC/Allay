@@ -45,7 +45,7 @@ public class FurnaceRecipe implements Recipe, TaggedRecipe, IdentifiedRecipe {
     @Override
     public boolean match(Input input) {
         if (!(input instanceof FurnaceInput furnaceInput)) return false;
-        if (!tag.equals(FURNACE_TAG) && !furnaceInput.getTag().equals(tag)) return false;
+        if (!isFurnaceTypeSuitable(furnaceInput)) return false;
         return ingredient.match(furnaceInput.getIngredient());
     }
 
@@ -56,6 +56,14 @@ public class FurnaceRecipe implements Recipe, TaggedRecipe, IdentifiedRecipe {
 
     public ItemStack getOutput() {
         return output;
+    }
+
+    public boolean isFurnaceTypeMostSuitable(FurnaceInput input) {
+        return tag.equals(input.getTag());
+    }
+
+    public boolean isFurnaceTypeSuitable(FurnaceInput input) {
+        return tag.equals(FURNACE_TAG) || tag.equals(input.getTag());
     }
 
     @Override

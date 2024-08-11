@@ -2,20 +2,18 @@ package org.allaymc.server.blockentity.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.interfaces.BlockEntityBarrel;
-import org.allaymc.api.blockentity.interfaces.BlockEntityChest;
-import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
-import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
+import org.allaymc.api.blockentity.interfaces.*;
+import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
-import org.allaymc.api.container.impl.BarrelContainer;
-import org.allaymc.api.container.impl.ChestContainer;
-import org.allaymc.api.container.impl.FurnaceContainer;
+import org.allaymc.api.container.impl.*;
 import org.allaymc.api.data.VanillaBlockEntityId;
 import org.allaymc.server.blockentity.component.BlockEntityBarrelBaseComponentImpl;
 import org.allaymc.server.blockentity.component.BlockEntityChestBaseComponentImpl;
 import org.allaymc.server.blockentity.component.common.BlockEntityContainerHolderComponentImpl;
+import org.allaymc.server.blockentity.component.furnace.BlockEntityBlastFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseComponentImpl;
+import org.allaymc.server.blockentity.component.furnace.BlockEntitySmokerFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxContainerHolderComponentImpl;
 
@@ -59,6 +57,18 @@ public final class BlockEntityTypeInitializer {
                 .name(VanillaBlockEntityId.FURNACE)
                 .addComponent(BlockEntityFurnaceBaseComponentImpl::new, BlockEntityFurnaceBaseComponentImpl.class)
                 .addComponent(() -> new BlockEntityContainerHolderComponentImpl(FurnaceContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .build();
+        BlockEntityTypes.BLAST_FURNACE = BlockEntityTypeBuilder
+                .builder(BlockEntityBlastFurnace.class)
+                .name(VanillaBlockEntityId.BLAST_FURNACE)
+                .addComponent(BlockEntityBlastFurnaceBaseComponentImpl::new, BlockEntityBlastFurnaceBaseComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BlastFurnaceContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .build();
+        BlockEntityTypes.SMOKER = BlockEntityTypeBuilder
+                .builder(BlockEntitySmoker.class)
+                .name(VanillaBlockEntityId.SMOKER)
+                .addComponent(BlockEntitySmokerFurnaceBaseComponentImpl::new, BlockEntitySmokerFurnaceBaseComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(SmokerContainer::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
     }
 }
