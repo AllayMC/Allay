@@ -182,6 +182,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         // NOTICE: This is not an error, ask mojang for the reason why you should "/ getSpeedWhenFurnaceTypeMostSuitable()"
         container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, (int) (cookTime / getSpeedWhenFurnaceTypeMostSuitable()));
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_TIME, burnTime);
+        container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_DURATION, burnDuration);
     }
 
     protected boolean checkFuel() {
