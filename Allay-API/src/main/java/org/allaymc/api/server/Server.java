@@ -1,6 +1,7 @@
 package org.allaymc.api.server;
 
 import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.OkaeriConfigInitializer;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.client.data.DeviceInfo;
@@ -36,13 +37,17 @@ public interface Server extends TaskCreator, CommandSender {
 
     String SETTINGS_FILE_NAME = "server-settings.yml";
 
-    ServerSettings SETTINGS = ConfigManager.create(ServerSettings.class, it -> {
-        it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
-        it.withBindFile(SETTINGS_FILE_NAME); // specify Path, File or pathname
-        it.withRemoveOrphans(true); // automatic removal of undeclared keys
-        it.saveDefaults(); // save file if it does not exist
-        it.load(true); // load and save to update comments/new fields
-    });
+    ServerSettings SETTINGS = ConfigManager.create(ServerSettings.class, createConfigInitializer(SETTINGS_FILE_NAME));
+
+    static OkaeriConfigInitializer createConfigInitializer(String fileName) {
+        return it -> {
+            it.withConfigurer(new YamlSnakeYamlConfigurer()); // Specify configurer implementation, optionally additional serdes packages
+            it.withBindFile(fileName); // Specify Path, File or pathname
+            it.withRemoveOrphans(true); // Automatic removal of undeclared keys
+            it.saveDefaults(); // Save file if it does not exist
+            it.load(true); // Load and save to update comments/new fields
+        };
+    }
 
     static Server getInstance() {
         return INSTANCE.get();

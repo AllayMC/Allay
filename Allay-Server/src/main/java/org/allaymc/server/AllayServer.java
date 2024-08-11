@@ -1,6 +1,7 @@
 package org.allaymc.server;
 
 import eu.okaeri.configs.ConfigManager;
+import eu.okaeri.configs.OkaeriConfigInitializer;
 import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -60,6 +61,7 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.nio.file.Files;
@@ -105,20 +107,8 @@ public final class AllayServer implements Server {
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
     @Getter
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
-    private final BanInfo banInfo = ConfigManager.create(BanInfo.class, it -> {
-        it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
-        it.withBindFile("ban-info.yml"); // specify Path, File or pathname
-        it.withRemoveOrphans(true); // automatic removal of undeclared keys
-        it.saveDefaults(); // save file if it does not exist
-        it.load(true); // load and save to update comments/new fields
-    });
-    private final Whitelist whitelist = ConfigManager.create(Whitelist.class, it -> {
-        it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
-        it.withBindFile("whitelist.yml"); // specify Path, File or pathname
-        it.withRemoveOrphans(true); // automatic removal of undeclared keys
-        it.saveDefaults(); // save file if it does not exist
-        it.load(true); // load and save to update comments/new fields
-    });
+    private final BanInfo banInfo = ConfigManager.create(BanInfo.class, Server.createConfigInitializer("ban-info.yml"));
+    private final Whitelist whitelist = ConfigManager.create(Whitelist.class, Server.createConfigInitializer("whitelist.yml"));
 
     @Getter
     private PluginManager pluginManager;
