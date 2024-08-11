@@ -174,4 +174,8 @@ public interface Container {
         var array = getItemStackArray();
         return tryAddItem(itemStack, 0, array.length - 1);
     }
+
+    default void sendContainerData(int property, int value) {
+        getViewers().forEach((id, viewer) -> viewer.sendContainerData(id, property, value));
+    }
 }

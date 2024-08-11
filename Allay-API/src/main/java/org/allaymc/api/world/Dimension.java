@@ -134,14 +134,26 @@ public interface Dimension {
     }
 
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update) {
-        setBlockState(x, y, z, blockState, layer, send, update, null);
+        setBlockState(x, y, z, blockState, layer, send, update, true, null);
+    }
+
+    default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior) {
+        setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update, callBlockBehavior);
+    }
+
+    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior) {
+        setBlockState(x, y, z, blockState, layer, send, update, callBlockBehavior, null);
     }
 
     default void setBlockState(int x, int y, int z, BlockState blockState, PlayerInteractInfo placementInfo) {
-        setBlockState(x, y, z, blockState, 0, true, true, placementInfo);
+        setBlockState(x, y, z, blockState, 0, true, true, true, placementInfo);
     }
 
-    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, PlayerInteractInfo placementInfo) {
+    default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
+        setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update, callBlockBehavior, placementInfo);
+    }
+
+    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
         if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
 
@@ -150,8 +162,10 @@ public interface Dimension {
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
 
         var blockPos = new Position3i(x, y, z, this);
-        blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
-        oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
+        if (callBlockBehavior) {
+            blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
+            oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
+        }
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
 
         if (update) updateAround(x, y, z);

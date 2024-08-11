@@ -17,10 +17,7 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
-import org.cloudburstmc.protocol.bedrock.packet.ContainerClosePacket;
-import org.cloudburstmc.protocol.bedrock.packet.ContainerOpenPacket;
-import org.cloudburstmc.protocol.bedrock.packet.InventoryContentPacket;
-import org.cloudburstmc.protocol.bedrock.packet.InventorySlotPacket;
+import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.HashMap;
@@ -198,5 +195,15 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @Override
     public @UnmodifiableView BiMap<FullContainerType<?>, Container> getTypeToContainer() {
         return typeToContainer;
+    }
+
+    @Override
+    public void sendContainerData(byte assignedId, int property, int value) {
+        var pk1 = new ContainerSetDataPacket();
+        pk1.setWindowId(assignedId);
+        pk1.setProperty(property);
+        pk1.setValue(value);
+
+        networkComponent.sendPacket(pk1);
     }
 }

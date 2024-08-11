@@ -269,7 +269,6 @@ public final class AllayServer implements Server {
             whitelist.save();
             scoreboardService.save();
         } finally {
-            isRunning.compareAndSet(true, false);
             worldPool.close();
             playerStorage.close();
             virtualThreadPool.shutdownNow();

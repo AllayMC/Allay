@@ -33,17 +33,6 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     private void onBlockPlace(CBlockOnPlaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
 
-        var oldBlockEntity = getBlockEntityAt(pos);
-        if (oldBlockEntity != null) {
-            if (oldBlockEntity.getBlockEntityType() == blockEntityType) {
-                // Block entity may already exist, for example when furnace switching lit status
-                return;
-            } else {
-                log.warn("Old block entity is detected! Pos: {}, block entity: {}", pos, oldBlockEntity.getBlockEntityType());
-                removeBlockEntityAt(pos);
-            }
-        }
-
         createBlockEntityAt(pos, false);
         var blockEntity = getBlockEntityAt(pos);
         blockEntity.onPlace(event);

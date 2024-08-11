@@ -2,6 +2,7 @@ package org.allaymc.api.container;
 
 import com.google.common.collect.BiMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
+import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 /**
@@ -42,4 +43,6 @@ public interface ContainerViewer {
     default void closeAllContainers() {
         getIdToContainer().forEach(this::onClose);
     }
+
+    void sendContainerData(byte assignedId, int property, int value);
 }
