@@ -91,6 +91,9 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     @Override
     public void setLit(boolean lit) {
         var currentBlockState = getDimension().getBlockState(position);
+        if (currentBlockState.getBlockType() == (lit ? getLitBlockType() : getUnlitBlockType())) {
+            return;
+        }
         var propertyValues = currentBlockState.getPropertyValues().values().toArray(BlockPropertyType.BlockPropertyValue <?, ?, ?>[]::new);
         getDimension().setBlockState(
                 position, lit ? getLitBlockType().ofState(propertyValues) : getUnlitBlockType().ofState(propertyValues),
