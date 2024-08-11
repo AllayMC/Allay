@@ -8,6 +8,7 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
 import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
 import org.allaymc.api.item.recipe.input.CraftingInput;
+import org.allaymc.api.item.recipe.input.FurnaceInput;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
@@ -187,7 +188,7 @@ class RecipeTest {
     }
 
     @Test
-    void testShapeless() {
+    void testShapelessRecipe() {
         var grassMagic1 = ShapelessRecipe
                 .builder()
                 .identifier(new Identifier("minecraft:grass_magic_1"))
@@ -214,6 +215,31 @@ class RecipeTest {
 
         assertFalse(grassMagic1.match(input2));
         assertFalse(grassMagic1.match(input3));
+    }
+
+    @Test
+    void testFurnaceRecipe() {
+        var grassMagic1 = FurnaceRecipe
+                .builder()
+                .ingredient(new DefaultDescriptor(GRASS_BLOCK))
+                .tag(FurnaceRecipe.FURNACE_TAG)
+                .output(diamond())
+                .build();
+
+        var input1 = new FurnaceInput(grass(), FurnaceRecipe.FURNACE_TAG);
+
+        assertTrue(grassMagic1.match(input1));
+
+        var grassMagic2 = FurnaceRecipe
+                .builder()
+                .ingredient(new DefaultDescriptor(GRASS_BLOCK))
+                .tag(FurnaceRecipe.BLAST_FURNACE_TAG)
+                .output(diamond())
+                .build();
+
+        var input2 = new FurnaceInput(grass(), FurnaceRecipe.FURNACE_TAG);
+
+        assertFalse(grassMagic2.match(input2));
     }
 
     private ItemDiamondStack diamond() {

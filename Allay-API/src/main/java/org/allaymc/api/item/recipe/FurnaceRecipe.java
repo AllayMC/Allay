@@ -1,5 +1,6 @@
 package org.allaymc.api.item.recipe;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
@@ -15,11 +16,22 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeDa
  * @author daoge_cmd
  */
 public class FurnaceRecipe implements Recipe, TaggedRecipe {
+    public static final String FURNACE_TAG = "furnace";
+    public static final String BLAST_FURNACE_TAG = "blast_furnace";
+    public static final String SMOKER_TAG = "smoker";
+
     @Getter
     protected String tag;
     @Getter
     protected DefaultDescriptor ingredient;
     protected ItemStack output;
+
+    @Builder
+    public FurnaceRecipe(DefaultDescriptor ingredient, ItemStack output, String tag) {
+        this.ingredient = ingredient;
+        this.output = output;
+        this.tag = tag;
+    }
 
     @Override
     public boolean match(Input input) {
