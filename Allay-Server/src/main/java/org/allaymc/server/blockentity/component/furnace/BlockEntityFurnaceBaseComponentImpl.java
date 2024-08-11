@@ -183,6 +183,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, (int) (cookTime / getSpeedWhenFurnaceTypeMostSuitable()));
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_TIME, burnTime);
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_DURATION, burnDuration);
+        container.sendContainerData(ContainerSetDataPacket.FURNACE_STORED_XP, storedXPInt);
     }
 
     protected boolean checkFuel() {
