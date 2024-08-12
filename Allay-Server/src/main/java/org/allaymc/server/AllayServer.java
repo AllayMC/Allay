@@ -81,6 +81,7 @@ public final class AllayServer implements Server {
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
+    private final AtomicBoolean isRunning = new AtomicBoolean(true);
     private final AtomicBoolean isShuttingDown = new AtomicBoolean(false);
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
@@ -121,6 +122,12 @@ public final class AllayServer implements Server {
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
             .onTick(gameLoop -> {
+                if (isShuttingDown() && players.isEmpty()) {
+                    // Shutdown only when all players are disconnected
+                    gameLoop.stop();
+                    return;
+                }
+
                 try {
                     tick(gameLoop.getTick());
                 } catch (Throwable throwable) {
@@ -232,7 +239,6 @@ public final class AllayServer implements Server {
             return;
         }
         disconnectAllPlayers();
-        gameLoop.stop();
     }
 
     private void shutdown0() {
@@ -246,6 +252,7 @@ public final class AllayServer implements Server {
             whitelist.save();
             scoreboardService.save();
         } finally {
+            isRunning.set(false);
             worldPool.close();
             playerStorage.close();
             virtualThreadPool.shutdownNow();
@@ -543,7 +550,7 @@ public final class AllayServer implements Server {
 
     @Override
     public boolean isRunning() {
-        return gameLoop.isRunning();
+        return isRunning.get();
     }
 
     private boolean isShuttingDown() {
