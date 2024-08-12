@@ -3,6 +3,7 @@ package org.allaymc.api.entity.attribute;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 
@@ -13,6 +14,7 @@ import org.cloudburstmc.protocol.bedrock.data.AttributeData;
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 @ToString
 public class Attribute implements Cloneable {
 

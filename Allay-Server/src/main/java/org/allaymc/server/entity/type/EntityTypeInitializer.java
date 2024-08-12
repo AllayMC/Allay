@@ -2,15 +2,14 @@ package org.allaymc.server.entity.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaEntityId;
+import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
-import org.allaymc.api.entity.interfaces.EntityFallingBlock;
-import org.allaymc.api.entity.interfaces.EntityItem;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.entity.interfaces.EntityVillagerV2;
+import org.allaymc.api.entity.interfaces.*;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.EntityFallingBlockBaseComponentImpl;
 import org.allaymc.server.entity.component.EntityItemBaseComponentImpl;
+import org.allaymc.server.entity.component.EntityXpOrbBaseComponentImpl;
 import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
 import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.player.*;
@@ -38,6 +37,13 @@ public final class EntityTypeInitializer {
                 .builder(EntityItem.class)
                 .vanillaEntity(VanillaEntityId.ITEM)
                 .addComponent(EntityItemBaseComponentImpl::new, EntityItemBaseComponentImpl.class)
+                .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
+                .addComponent(
+                        () -> new EntityAttributeComponentImpl(
+                                AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)
+                        ),
+                        EntityAttributeComponentImpl.class
+                )
                 .build();
     }
 
@@ -61,6 +67,21 @@ public final class EntityTypeInitializer {
                 .vanillaEntity(VanillaEntityId.VILLAGER_V2)
                 .addComponent(() -> new EntityAttributeComponentImpl(basicEntityAttributes()), EntityAttributeComponentImpl.class)
                 .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
+                .build();
+    }
+
+    public static void initXBOrb() {
+        EntityTypes.XP_ORB = EntityTypeBuilder
+                .builder(EntityXpOrb.class)
+                .vanillaEntity(VanillaEntityId.XP_ORB)
+                .addComponent(EntityXpOrbBaseComponentImpl::new, EntityXpOrbBaseComponentImpl.class)
+                .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
+                .addComponent(
+                        () -> new EntityAttributeComponentImpl(
+                                AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)
+                        ),
+                        EntityAttributeComponentImpl.class
+                )
                 .build();
     }
 }

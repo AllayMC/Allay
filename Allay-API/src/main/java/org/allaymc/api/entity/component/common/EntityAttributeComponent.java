@@ -16,14 +16,14 @@ import java.util.List;
  */
 public interface EntityAttributeComponent extends EntityComponent {
 
-    static List<AttributeType> basicEntityAttributes() {
-        return Lists.newArrayList(
+    static AttributeType[] basicEntityAttributes() {
+        return new AttributeType[]{
                 AttributeType.ABSORPTION,
                 AttributeType.KNOCKBACK_RESISTANCE,
                 AttributeType.HEALTH,
                 AttributeType.MOVEMENT,
                 AttributeType.FALL_DAMAGE
-        );
+        };
     }
 
     void addAttribute(AttributeType attributeType);

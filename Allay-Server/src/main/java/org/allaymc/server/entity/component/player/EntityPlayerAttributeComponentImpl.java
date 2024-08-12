@@ -20,7 +20,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @ComponentedObject
     private EntityPlayer player;
 
-    public EntityPlayerAttributeComponentImpl(List<AttributeType> attributeTypes) {
+    public EntityPlayerAttributeComponentImpl(AttributeType... attributeTypes) {
         super(attributeTypes);
     }
 

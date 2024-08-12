@@ -38,8 +38,16 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     @Dependency(soft = true)
     protected EntityPlayerNetworkComponent networkComponent;
 
-    public EntityAttributeComponentImpl(List<AttributeType> attributeTypes) {
-        attributeTypes.forEach(this::addAttribute);
+    public EntityAttributeComponentImpl(AttributeType... attributeTypes) {
+        for (AttributeType attributeType : attributeTypes) {
+            addAttribute(attributeType);
+        }
+    }
+
+    public EntityAttributeComponentImpl(Attribute... attributes) {
+        for (Attribute attribute : attributes) {
+            this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
+        }
     }
 
     @EventHandler

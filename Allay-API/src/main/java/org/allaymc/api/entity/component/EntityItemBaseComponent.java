@@ -21,16 +21,11 @@ public interface EntityItemBaseComponent extends EntityBaseComponent {
 
     void setPickupDelay(int delay);
 
-    int getAge();
+    short getAge();
 
-    void setAge(int age);
+    void setAge(short age);
 
     default boolean canBePicked() {
         return getPickupDelay() == 0;
-    }
-
-    @Override
-    default boolean computeBlockCollisionMotion() {
-        return true;
     }
 }

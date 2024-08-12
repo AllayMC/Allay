@@ -32,7 +32,7 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl impleme
 
     protected ItemStack itemStack;
     protected int pickupDelay = 10;
-    protected int age;
+    protected short age;
 
     public EntityItemBaseComponentImpl(EntityInitInfo info) {
         super(info);
@@ -84,16 +84,21 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl impleme
 
     @Override
     public NbtMap saveNBT() {
-        var nbt = super.saveNBT();
+        var builder = super.saveNBT().toBuilder();
+
         if (itemStack != null)
-            nbt = nbt.toBuilder().putCompound("Item", itemStack.saveNBT()).build();
-        return nbt;
+            builder.putCompound("Item", itemStack.saveNBT()).build();
+        builder.putShort("Age", age);
+
+        return builder.build();
     }
 
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
+
         nbt.listenForCompound("Item", itemNbt -> this.itemStack = fromNBT(itemNbt));
+        nbt.listenForShort("Age", age -> this.age = age);
     }
 
     @Override
@@ -106,5 +111,10 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl impleme
         packet.setMotion(MathUtils.JOMLVecToCBVec(motion));
         packet.getMetadata().putAll(metadata.getEntityDataMap());
         return packet;
+    }
+
+    @Override
+    public boolean computeBlockCollisionMotion() {
+        return true;
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -13,16 +14,16 @@ import java.util.List;
  */
 public interface EntityPlayerAttributeComponent extends EntityAttributeComponent {
 
-    static List<AttributeType> basicPlayerAttributes() {
-        var list = EntityAttributeComponent.basicEntityAttributes();
-        list.addAll(Lists.newArrayList(
+    static AttributeType[] basicPlayerAttributes() {
+        var list = Lists.newArrayList(
                 AttributeType.PLAYER_HUNGER,
                 AttributeType.PLAYER_SATURATION,
                 AttributeType.PLAYER_EXHAUSTION,
                 AttributeType.PLAYER_LEVEL,
                 AttributeType.PLAYER_EXPERIENCE
-        ));
-        return list;
+        );
+        list.addAll(Arrays.asList(EntityAttributeComponent.basicEntityAttributes()));
+        return list.toArray(AttributeType[]::new);
     }
 
     int getExperienceLevel();
