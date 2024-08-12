@@ -34,7 +34,7 @@ caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version
 # K-V DataBase
 leveldbjni = { group = "net.daporkchop", name = "leveldb-mcpe-jni", version = "0.0.10-SNAPSHOT" }
 # Logging dependencies
-slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.13" }
+slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.16" }
 log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j" }
 log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.ref = "log4j" }
 # CLI dependencie
