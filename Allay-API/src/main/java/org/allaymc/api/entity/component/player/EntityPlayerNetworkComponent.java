@@ -54,11 +54,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     void sendPacketImmediately(BedrockPacket packet);
 
-    default void disconnect(@MayContainTrKey String reason) {
-        disconnect(reason, false);
-    }
-
-    void disconnect(@MayContainTrKey String reason, boolean hideReason);
+    void disconnect(@MayContainTrKey String reason);
 
     boolean isDisconnected();
 
@@ -72,16 +68,11 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
     @ApiStatus.Internal
     void setEncryptionSecretKey(SecretKey secretKey);
 
-    @ApiStatus.Internal
-    void handleDisconnect();
-
     /**
      * Has the player been fully initialized?
      * (This represents whether the player's client can see the world and proceed with gameplay.)
      */
     boolean isInitialized();
-
-    boolean shouldHandleDisconnect();
 
     @ApiStatus.Internal
     void setInitialized();

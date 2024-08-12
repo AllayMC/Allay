@@ -17,9 +17,9 @@ import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.api.eventbus.event.network.PacketSendEvent;
+import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.math.location.Location3f;
@@ -84,10 +84,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected boolean networkEncryptionEnabled = false;
     @Getter
     protected boolean initialized = false;
-    // It will be set while client disconnecting from server
-    // Otherwise, it will be null
-    protected String disconnectReason = null;
-    protected boolean hideDisconnectReason = false;
     protected AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
     @Manager
     protected ComponentManager manager;
@@ -110,26 +106,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         processor.handleSync(player, packet, time);
     }
 
-    @Override
-    public void handleDisconnect() {
-        if (disconnectReason != null) {
-            // Do not believe that the client will disconnect proactively
-            // Especially for cheater, the BedrockPacketHandler::onDisconnect() method may won't be called
-            // If we call server.onDisconnect() in BedrockPacketHandler::onDisconnect(),
-            // cheaters will be able to create a lot of fake clients and make the server OOM
-            onDisconnect();
-            server.onDisconnect(player, disconnectReason);
-            disconnectReason = null;
-        }
-    }
-
-    protected void onDisconnect() {
+    protected void onDisconnect(String disconnectReason) {
+        var event = new PlayerQuitEvent(player, disconnectReason);
+        event.call();
         player.closeAllContainers();
-    }
-
-    @Override
-    public boolean shouldHandleDisconnect() {
-        return disconnectReason != null;
+        server.onDisconnect(player, disconnectReason);
     }
 
     @Override
@@ -182,15 +163,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             @Override
             public void onDisconnect(String reason) {
-                // Disconnect reason shouldn't be null otherwise the server won't handle it
-                if (disconnectReason != null) return;
-                disconnectReason = reason != null ? reason : "";
-
-                if (player.getDimension() != null) return;
-                // Player is not in any world
-                // which means that the disconnect won't be handled
-                // So we need to handle it here
-                handleDisconnect();
+                EntityPlayerNetworkComponentImpl.this.onDisconnect(reason);
             }
         });
     }
@@ -221,20 +194,17 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     @Override
-    public void disconnect(@MayContainTrKey String reason, boolean hideReason) {
+    public void disconnect(@MayContainTrKey String reason) {
         if (!session.isConnected()) {
             log.warn("Trying to disconnect a player who is already disconnected!");
             return;
         }
-        // Disconnection will be handled in handleDisconnect() method
-        disconnectReason = I18n.get().tr(player.getLangCode(), reason);
-        // Send disconnect packet to client
+        var disconnectReason = I18n.get().tr(player.getLangCode(), reason);
         try {
-            player.getClientSession().disconnect(disconnectReason, hideDisconnectReason);
+            player.getClientSession().disconnect(disconnectReason);
         } catch (Exception e) {
             log.error("Error while disconnecting the session", e);
         }
-        hideDisconnectReason = hideReason;
     }
 
     @Override

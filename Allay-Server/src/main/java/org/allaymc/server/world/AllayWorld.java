@@ -88,7 +88,7 @@ public class AllayWorld implements World {
 
     protected void networkTick() {
         while (Server.getInstance().isRunning()) {
-            if (!packetQueue.isEmpty() || shouldHandlePlayersDisconnect()) {
+            if (!packetQueue.isEmpty()) {
                 while (!networkLock.compareAndSet(false, true)) {
                     // Spin
                     Thread.yield();
@@ -105,28 +105,12 @@ public class AllayWorld implements World {
                     entry.player().handleDataPacket(entry.packet(), entry.time());
                     count++;
                 }
-                // Before client disconnect, there may be other packets which are not handled
-                // So we handle disconnect after we handled all other packets
-                handlePlayersDisconnect();
             } catch (Throwable throwable) {
                 log.error("Error while handling sync packet in world {}", this.getWorldData().getName(), throwable);
             } finally {
                 networkLock.set(false);
             }
         }
-    }
-
-    protected void handlePlayersDisconnect() {
-        dimensionMap.values().forEach(dim -> dim.getPlayers().forEach(EntityPlayer::handleDisconnect));
-    }
-
-    protected boolean shouldHandlePlayersDisconnect() {
-        // Do not use stream API to improve performance
-        // Because this is a high-frequency method
-        for (var dim : dimensionMap.values())
-            for (var entityPlayer : dim.getPlayers())
-                if (entityPlayer.shouldHandleDisconnect()) return true;
-        return false;
     }
 
     @Override

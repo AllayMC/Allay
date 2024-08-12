@@ -317,9 +317,11 @@ public final class AllayServer implements Server {
     @Override
     public void onDisconnect(EntityPlayer player, String reason) {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
+
         if (player.isInitialized()) {
             broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
         }
+
         if (player.isSpawned()) {
             this.getPlayerStorage().savePlayerData(player);
             player.getDimension().removePlayer(player);
@@ -329,10 +331,9 @@ public final class AllayServer implements Server {
             pk.getEntries().add(playerListEntry);
             broadcastPacket(pk);
         }
+
         players.remove(player.getUUID());
         networkServer.setPlayerCount(players.size());
-        var event = new PlayerQuitEvent(player, reason);
-        eventBus.callEvent(event);
     }
 
     @Override
