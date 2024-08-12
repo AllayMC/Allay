@@ -2,7 +2,9 @@ package org.allaymc.server.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
@@ -99,6 +101,30 @@ public class AllayDimension implements Dimension {
     @UnmodifiableView
     public Set<EntityPlayer> getPlayers() {
         return unmodifiablePlayersView;
+    }
+
+    @Override
+    public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
+        var chunk = getChunkService().getChunkByLevelPos(x, z);
+        if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
+
+        var xIndex = x & 15;
+        var zIndex = z & 15;
+        var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
+        if (oldBlockState == blockState) {
+            log.warn("Trying to set the same block state at x={}, y={}, z={}", x, y, z);
+            return;
+        }
+
+        var blockPos = new Position3i(x, y, z, this);
+        if (callBlockBehavior) {
+            blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
+            oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
+        }
+        chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
+
+        if (update) updateAround(x, y, z);
+        if (send) chunk.sendChunkPacket(Dimension.createBlockUpdatePacket(blockState, x, y, z, layer));
     }
 
     @Override

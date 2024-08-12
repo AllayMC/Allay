@@ -154,24 +154,7 @@ public interface Dimension {
         setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update, callBlockBehavior, placementInfo);
     }
 
-    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
-        var chunk = getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
-
-        var xIndex = x & 15;
-        var zIndex = z & 15;
-        var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
-
-        var blockPos = new Position3i(x, y, z, this);
-        if (callBlockBehavior) {
-            blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
-            oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
-        }
-        chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
-
-        if (update) updateAround(x, y, z);
-        if (send) chunk.sendChunkPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
-    }
+    void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
 
     default void sendBlockUpdateTo(BlockState blockState, Vector3ic pos, int layer, EntityPlayer player) {
         sendBlockUpdateTo(blockState, pos.x(), pos.y(), pos.z(), layer, player);
