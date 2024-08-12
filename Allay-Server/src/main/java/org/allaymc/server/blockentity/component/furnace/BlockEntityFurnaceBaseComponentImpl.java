@@ -121,6 +121,10 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         nbt.listenForShort("CookTime", value -> cookTime = value);
         nbt.listenForShort("BurnDuration", value -> burnDuration = value);
         nbt.listenForInt("StoredXP", value -> storedXP = value);
+
+        if (burnTime > 0) {
+            setLit(true);
+        }
     }
 
     @Override
