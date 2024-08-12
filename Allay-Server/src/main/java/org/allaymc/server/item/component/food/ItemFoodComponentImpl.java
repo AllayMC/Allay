@@ -75,7 +75,7 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
         onEaten(player);
         if (player.getGameType() == GameType.CREATIVE) return;
         var itemInHand = player.getItemInHand();
-        if (itemInHand.getCount() == 1) player.setItemInHand(ItemTypes.AIR.createItemStack());
+        if (itemInHand.getCount() == 1) player.clearItemInHand();
         else itemInHand.setCount(itemInHand.getCount() - 1);
     }
 }

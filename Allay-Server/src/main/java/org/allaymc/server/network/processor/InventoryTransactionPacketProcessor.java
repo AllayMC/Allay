@@ -134,7 +134,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         if (!damageable.attack(damageContainer)) return;
 
                         itemInHand.onAttackEntity(player, target);
-                        if (itemInHand.isBroken()) player.setItemInHand(AIR.createItemStack());
+                        if (itemInHand.isBroken()) player.clearItemInHand();
                         else player.sendItemInHandUpdate();
                     }
                 }

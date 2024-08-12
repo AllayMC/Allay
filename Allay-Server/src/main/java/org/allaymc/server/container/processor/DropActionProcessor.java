@@ -11,7 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import java.util.Collections;
 import java.util.Map;
 
-import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
+import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 
 /**
  * Allay Project 2023/9/23
@@ -32,7 +32,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
             return error();
         }
 
-        if (item == EMPTY_SLOT_PLACE_HOLDER) {
+        if (item == AIR_STACK) {
             log.warn("cannot throw an air!");
             return error();
         }

@@ -62,7 +62,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 world.breakBlock(pos.getX(), pos.getY(), pos.getZ(), itemInHand, player);
                 itemInHand.onBreakBlock(oldState, player);
                 if (itemInHand.isBroken()) {
-                    player.setItemInHand(ItemTypes.AIR.createItemStack());
+                    player.clearItemInHand();
                 } else {
                     player.sendItemInHandUpdate();
                 }

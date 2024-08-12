@@ -9,6 +9,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.event.CEntityDieEvent;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -58,7 +59,7 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
             container.removeAllViewers();
             if (!canDropItemInContainers()) continue;
             for (var itemStack : container.getItemStacks()) {
-                if (itemStack == Container.EMPTY_SLOT_PLACE_HOLDER) continue;
+                if (itemStack == ItemAirStack.AIR_STACK) continue;
                 dimension.dropItem(
                         itemStack,
                         new Vector3f(

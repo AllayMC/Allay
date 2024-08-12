@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
+import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,14 +32,14 @@ public class ContainerTest {
 
     @Test
     void testEmptySlotPlaceHolder() {
-        assertEquals(0, EMPTY_SLOT_PLACE_HOLDER.getCount());
-        assertEquals(0, EMPTY_SLOT_PLACE_HOLDER.getStackNetworkId());
+        assertEquals(0, AIR_STACK.getCount());
+        assertEquals(0, AIR_STACK.getStackNetworkId());
     }
 
     @Test
     void testContainerEmptySlot() {
         for (var item : container.getItemStacks()) {
-            assertEquals(EMPTY_SLOT_PLACE_HOLDER, item);
+            assertEquals(AIR_STACK, item);
         }
     }
 

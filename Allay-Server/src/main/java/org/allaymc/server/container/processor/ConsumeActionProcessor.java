@@ -1,8 +1,8 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.Container;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -54,7 +54,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
             item.setCount(item.getCount() - count);
             sourceContainer.onSlotChange(slot);
         } else {
-            item = Container.EMPTY_SLOT_PLACE_HOLDER;
+            item = ItemAirStack.AIR_STACK;
             sourceContainer.clearSlot(slot);
         }
 

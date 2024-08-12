@@ -12,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import java.util.Collections;
 import java.util.Map;
 
-import static org.allaymc.api.container.Container.EMPTY_SLOT_PLACE_HOLDER;
+import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
@@ -53,7 +53,7 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
             item.setCount(item.getCount() - count);
             container.onSlotChange(slot);
         } else {
-            item = EMPTY_SLOT_PLACE_HOLDER;
+            item = AIR_STACK;
             container.setItemStack(slot, item);
         }
 

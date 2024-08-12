@@ -83,7 +83,7 @@ public final class AllayChunkService implements ChunkService {
             try {
                 chunkLoaderManager.tick();
             } catch (Throwable t) {
-                log.error("Error while ticking chunk loader {}!", chunkLoaderManager.chunkLoader);
+                log.error("Error while ticking chunk loader {}!", chunkLoaderManager.chunkLoader, t);
             }
         }
     }

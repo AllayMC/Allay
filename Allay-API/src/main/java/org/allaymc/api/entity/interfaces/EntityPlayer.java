@@ -8,6 +8,7 @@ import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.player.*;
 import org.allaymc.api.eventbus.event.player.PlayerDropItemEvent;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3f;
@@ -95,11 +96,15 @@ public interface EntityPlayer extends
         getContainer(FullContainerType.PLAYER_INVENTORY).setItemInHand(itemStack);
     }
 
+    default void clearItemInHand() {
+        getContainer(FullContainerType.PLAYER_INVENTORY).clearItemInHand();
+    }
+
     default void sendItemInHandUpdate() {
         var inv = getContainer(FullContainerType.PLAYER_INVENTORY);
         var itemStack = inv.getItemInHand();
         if (itemStack.getCount() != 0) inv.onSlotChange(inv.getHandSlot());
-        else inv.setItemInHand(Container.EMPTY_SLOT_PLACE_HOLDER);
+        else inv.setItemInHand(ItemAirStack.AIR_STACK);
     }
 }
 

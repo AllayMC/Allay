@@ -1,8 +1,10 @@
 package org.allaymc.api.item;
 
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
@@ -18,23 +20,29 @@ import java.util.Objects;
  * @author daoge_cmd
  */
 @UtilityClass
+@Slf4j
 public final class ItemHelper {
     public static ItemStack fromNBT(NbtMap nbt) {
-        // NOTICE: Unlike BlockStateUpdater, the second argument of the updateItemState() method
-        // represents the version that needs to be upgraded to instead of the current version
-        nbt = ItemStateUpdaters.updateItemState(nbt, ItemStateUpdaters.LATEST_VERSION);
-        int count = nbt.getByte("Count");
-        int meta = nbt.getShort("Damage");
-        var name = nbt.getString("Name");
-        var itemType = Objects.requireNonNull(Registries.ITEMS.get(new Identifier(name)), "Unknown item type " + name + "while loading container items!");
-        return itemType.createItemStack(
-                SimpleItemStackInitInfo
-                        .builder()
-                        .count(count)
-                        .meta(meta)
-                        .extraTag(nbt.getCompound("tag"))
-                        .build()
-        );
+        try {
+            // NOTICE: Unlike BlockStateUpdater, the second argument of the updateItemState() method
+            // represents the version that needs to be upgraded to instead of the current version
+            nbt = ItemStateUpdaters.updateItemState(nbt, ItemStateUpdaters.LATEST_VERSION);
+            int count = nbt.getByte("Count", (byte) 1);
+            int meta = nbt.getShort("Damage");
+            var name = nbt.getString("Name");
+            var itemType = Objects.requireNonNull(Registries.ITEMS.get(new Identifier(name)), "Unknown item type " + name + "while loading container items!");
+            return itemType.createItemStack(
+                    SimpleItemStackInitInfo
+                            .builder()
+                            .count(count)
+                            .meta(meta)
+                            .extraTag(nbt.getCompound("tag"))
+                            .build()
+            );
+        } catch (Throwable t) {
+            log.error("An error happen while loading container items", t);
+            return ItemAirStack.AIR_STACK;
+        }
     }
 
     /**

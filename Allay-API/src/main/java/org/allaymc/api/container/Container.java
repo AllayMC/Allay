@@ -1,6 +1,7 @@
 package org.allaymc.api.container;
 
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -11,18 +12,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.allaymc.api.item.type.ItemTypes.AIR;
-
 /**
  * Allay Project 2023/7/15
  *
  * @author daoge_cmd
  */
 public interface Container {
-
-    // We can provide a null info for air type
-    // And only for air type we can do that
-    ItemStack EMPTY_SLOT_PLACE_HOLDER = AIR.createItemStack(null);
 
     FullContainerType<?> getContainerType();
 
@@ -63,12 +58,12 @@ public interface Container {
     ItemStack getItemStack(int slot);
 
     default boolean isEmpty(int slot) {
-        return getItemStack(slot) == EMPTY_SLOT_PLACE_HOLDER;
+        return getItemStack(slot) == ItemAirStack.AIR_STACK;
     }
 
     default boolean isEmpty() {
         for (ItemStack itemStack : getItemStackArray()) {
-            if (itemStack != EMPTY_SLOT_PLACE_HOLDER) {
+            if (itemStack != ItemAirStack.AIR_STACK) {
                 return false;
             }
         }
@@ -86,7 +81,7 @@ public interface Container {
     void setItemStack(int slot, ItemStack itemStack);
 
     default void clearSlot(int slot) {
-        setItemStack(slot, EMPTY_SLOT_PLACE_HOLDER);
+        setItemStack(slot, ItemAirStack.AIR_STACK);
     }
 
     default void clearAllSlots() {
@@ -141,7 +136,7 @@ public interface Container {
         var minEmptySlot = -1;
         // Find out the min empty slot
         for (int index = minSlotIndex; index <= maxSlotIndex; index++) {
-            if (itemStacks[index] == Container.EMPTY_SLOT_PLACE_HOLDER) {
+            if (itemStacks[index] == ItemAirStack.AIR_STACK) {
                 minEmptySlot = index;
                 break;
             }

@@ -185,6 +185,12 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 // Disconnect reason shouldn't be null otherwise the server won't handle it
                 if (disconnectReason != null) return;
                 disconnectReason = reason != null ? reason : "";
+
+                if (player.getDimension() != null) return;
+                // Player is not in any world
+                // which means that the disconnect won't be handled
+                // So we need to handle it here
+                handleDisconnect();
             }
         });
     }

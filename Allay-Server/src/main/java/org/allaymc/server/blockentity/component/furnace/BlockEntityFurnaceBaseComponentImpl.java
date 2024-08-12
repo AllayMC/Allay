@@ -14,11 +14,11 @@ import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.OnInitFinish;
-import org.allaymc.api.container.Container;
 import org.allaymc.api.container.impl.FurnaceContainer;
 import org.allaymc.api.eventbus.event.container.FurnaceConsumeFuelEvent;
 import org.allaymc.api.eventbus.event.container.FurnaceSmeltEvent;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceInput;
 import org.allaymc.api.item.type.ItemTypes;
@@ -66,7 +66,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         super.onInitFinish(initInfo);
         FurnaceContainer container = containerHolderComponent.getContainer();
         container.addOnSlotChangeListener(FurnaceContainer.RESULT_SLOT, item -> {
-            if (item != Container.EMPTY_SLOT_PLACE_HOLDER) return;
+            if (item != ItemAirStack.AIR_STACK) return;
             tryDropStoredXP();
         });
     }
@@ -212,7 +212,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         var currentResult = container.getResult();
-        if (currentResult == Container.EMPTY_SLOT_PLACE_HOLDER) {
+        if (currentResult == ItemAirStack.AIR_STACK) {
             container.setResult(output.copy());
         } else {
             if (currentResult.getItemType() != outputItemType) {

@@ -1,10 +1,10 @@
 package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
@@ -71,7 +71,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
         ItemStack resultDestItem;
         if (sourItem.getCount() == count) {
             // Case 1: Take all
-            resultSourItem = Container.EMPTY_SLOT_PLACE_HOLDER;
+            resultSourItem = ItemAirStack.AIR_STACK;
             source.setItemStack(sourceSlot, resultSourItem);
             if (destItem.getItemType() != AIR) {
                 resultDestItem = destItem;

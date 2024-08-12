@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.container.ContainerCloseEvent;
 import org.allaymc.api.eventbus.event.container.ContainerOpenEvent;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
@@ -38,7 +39,7 @@ public class BaseContainer implements Container {
     public BaseContainer(FullContainerType<? extends Container> containerType) {
         this.containerType = containerType;
         this.content = new ItemStack[containerType.size()];
-        Arrays.fill(this.content, EMPTY_SLOT_PLACE_HOLDER);
+        Arrays.fill(this.content, ItemAirStack.AIR_STACK);
     }
 
     @Override
@@ -75,9 +76,9 @@ public class BaseContainer implements Container {
 
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
-        if (itemStack.getItemType() == ItemTypes.AIR && itemStack != EMPTY_SLOT_PLACE_HOLDER) {
+        if (itemStack.getItemType() == ItemTypes.AIR && itemStack != ItemAirStack.AIR_STACK) {
             // NOTICE: Please use clearSlot() instead of using this method if you want to clear a slot!
-            itemStack = EMPTY_SLOT_PLACE_HOLDER;
+            itemStack = ItemAirStack.AIR_STACK;
         }
         content[slot] = itemStack;
         onSlotChange(slot);
@@ -192,13 +193,13 @@ public class BaseContainer implements Container {
     @Override
     public void loadNBT(List<NbtMap> nbtList) {
         for (var nbt : nbtList) {
-            try {
-                int slot = nbt.getByte("Slot");
-                ItemStack itemStack = fromNBT(nbt);
-                content[slot] = itemStack;
-            } catch (NullPointerException e) {
-                log.error("An error happen while loading container items", e);
+            if (!nbt.containsKey("Slot")) {
+                log.warn("Item NBT does not contain a slot key! Skipping item...");
+                continue;
             }
+            int slot = nbt.getByte("Slot");
+            ItemStack itemStack = fromNBT(nbt);
+            content[slot] = itemStack;
         }
     }
 }

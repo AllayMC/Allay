@@ -174,7 +174,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             world.breakBlock(breakBlockX, breakBlockY, breakBlockZ, itemInHand, player);
             itemInHand.onBreakBlock(breakBlock, player);
             if (itemInHand.isBroken()) {
-                player.setItemInHand(ItemTypes.AIR.createItemStack());
+                player.clearItemInHand();
             } else {
                 player.sendItemInHandUpdate();
             }
