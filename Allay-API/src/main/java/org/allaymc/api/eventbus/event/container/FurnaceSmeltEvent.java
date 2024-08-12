@@ -2,7 +2,6 @@ package org.allaymc.api.eventbus.event.container;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;

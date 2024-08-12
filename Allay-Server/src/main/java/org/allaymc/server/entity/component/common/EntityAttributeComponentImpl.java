@@ -16,7 +16,10 @@ import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Map;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

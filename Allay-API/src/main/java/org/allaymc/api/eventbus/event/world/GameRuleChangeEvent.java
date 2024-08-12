@@ -1,11 +1,10 @@
 package org.allaymc.api.eventbus.event.world;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.gamerule.GameRule;
-
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * Allay Project 2024/08/12

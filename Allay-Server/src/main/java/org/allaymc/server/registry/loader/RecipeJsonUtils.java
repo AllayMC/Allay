@@ -12,7 +12,6 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtMap;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;

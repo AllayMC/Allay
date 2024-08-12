@@ -1,6 +1,5 @@
 package org.allaymc.api.entity.component.common;
 
-import com.google.common.collect.Lists;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.EntityComponent;

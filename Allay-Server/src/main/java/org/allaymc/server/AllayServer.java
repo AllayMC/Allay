@@ -1,8 +1,6 @@
 package org.allaymc.server;
 
 import eu.okaeri.configs.ConfigManager;
-import eu.okaeri.configs.OkaeriConfigInitializer;
-import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
@@ -19,7 +17,6 @@ import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.eventbus.event.network.IPBanEvent;
 import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
 import org.allaymc.api.eventbus.event.player.PlayerBanEvent;
-import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
 import org.allaymc.api.eventbus.event.player.PlayerUnbanEvent;
 import org.allaymc.api.eventbus.event.server.ServerStopEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
@@ -61,7 +58,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.nio.file.Files;
@@ -121,7 +117,8 @@ public final class AllayServer implements Server {
     private AllayTerminalConsole terminalConsole;
 
     private long nextPlayerDataAutoSaveTime = 0;
-
+    @Getter
+    private ScoreboardService scoreboardService;
     private final GameLoop gameLoop = GameLoop.builder()
             .loopCountPerSec(20)
             .onTick(gameLoop -> {
@@ -139,9 +136,6 @@ public final class AllayServer implements Server {
             })
             .onStop(this::shutdown0)
             .build();
-
-    @Getter
-    private ScoreboardService scoreboardService;
     @Getter
     private long startTime;
 

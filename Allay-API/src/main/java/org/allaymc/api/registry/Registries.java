@@ -14,7 +14,6 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.common.ItemData;
 import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.recipe.CraftingRecipe;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.type.ItemType;

@@ -9,7 +9,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemFoodComponent;
 import org.allaymc.api.item.component.event.CItemTryUseEvent;
 import org.allaymc.api.item.component.event.CItemUsedEvent;
-import org.allaymc.api.item.type.ItemTypes;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 

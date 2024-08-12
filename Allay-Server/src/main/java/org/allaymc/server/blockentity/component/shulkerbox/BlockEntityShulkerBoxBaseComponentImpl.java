@@ -7,7 +7,6 @@ import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.container.impl.ShulkerBoxContainer;
-import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;

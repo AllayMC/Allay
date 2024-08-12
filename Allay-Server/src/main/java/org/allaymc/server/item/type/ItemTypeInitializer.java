@@ -2,7 +2,6 @@ package org.allaymc.server.item.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.item.component.ItemArmorBaseComponent;
 import org.allaymc.api.item.component.ItemArmorBaseComponent.ArmorType;
 import org.allaymc.api.item.component.tool.ItemAxeComponent;
 import org.allaymc.api.item.component.tool.ItemHoeComponent;

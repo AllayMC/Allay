@@ -1,9 +1,6 @@
 package org.allaymc.api.entity.component;
 
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
-
-import java.util.List;
 
 /**
  * Allay Project 2024/8/12
