@@ -3,6 +3,8 @@ package org.allaymc.api.container;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.container.ContainerCloseEvent;
 import org.allaymc.api.eventbus.event.container.ContainerOpenEvent;
@@ -31,6 +33,7 @@ public class BaseContainer implements Container {
     protected final ItemStack[] content;
     protected final Set<Consumer<ContainerViewer>> onOpenListeners = new HashSet<>();
     protected final Set<Consumer<ContainerViewer>> onCloseListeners = new HashSet<>();
+    protected final Int2ObjectMap<Set<Consumer<ItemStack>>> onSlotChangeListeners = new Int2ObjectOpenHashMap<>();
 
     public BaseContainer(FullContainerType<? extends Container> containerType) {
         this.containerType = containerType;
@@ -123,6 +126,11 @@ public class BaseContainer implements Container {
         for (var viewer : viewers.values()) {
             viewer.onSlotChange(this, slot);
         }
+        var listeners = onSlotChangeListeners.get(slot);
+        if (listeners == null || listeners.isEmpty()) return;
+        for (var listener : listeners) {
+            listener.accept(content[slot]);
+        }
     }
 
     @Override
@@ -153,6 +161,16 @@ public class BaseContainer implements Container {
     @Override
     public void removeOnCloseListener(Consumer<ContainerViewer> listener) {
         onCloseListeners.remove(listener);
+    }
+
+    @Override
+    public void addOnSlotChangeListener(int slot, Consumer<ItemStack> listener) {
+        onSlotChangeListeners.computeIfAbsent(slot, k -> new HashSet<>()).add(listener);
+    }
+
+    @Override
+    public void removeOnSlotChangeListener(int slot, Consumer<ItemStack> listener) {
+        onSlotChangeListeners.computeIfAbsent(slot, k -> new HashSet<>()).remove(listener);
     }
 
     @Override

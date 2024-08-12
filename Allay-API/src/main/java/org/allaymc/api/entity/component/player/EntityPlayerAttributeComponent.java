@@ -5,7 +5,6 @@ import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Allay Project 2023/10/14
@@ -30,9 +29,39 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
 
     void setExperienceLevel(int value);
 
-    float getExperience();
+    float getExperienceProgress();
 
-    void setExperience(float value);
+    void setExperienceProgress(float value);
+
+    default void addExperience(int addition) {
+        int currentLevel = getExperienceLevel();
+        int requiredExpCurrentLevel = calculateRequireExperience(currentLevel);
+        float total = getExperienceProgress() * requiredExpCurrentLevel + addition;
+
+        while (total >= requiredExpCurrentLevel) {
+            total -= requiredExpCurrentLevel;
+            currentLevel++;
+            requiredExpCurrentLevel = calculateRequireExperience(currentLevel);
+        }
+
+        setExperienceProgress(total / requiredExpCurrentLevel);
+        setExperienceLevel(currentLevel);
+    }
+
+    /**
+     * Calculate experience required for the level
+     * @param level level
+     * @return required experience
+     */
+    static int calculateRequireExperience(int level) {
+        if (level >= 30) {
+            return 112 + (level - 30) * 9;
+        } else if (level >= 15) {
+            return 37 + (level - 15) * 5;
+        } else {
+            return 7 + (level << 1);
+        }
+    }
 
     int getHunger();
 

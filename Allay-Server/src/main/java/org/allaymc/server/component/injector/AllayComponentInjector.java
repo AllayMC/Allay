@@ -105,6 +105,9 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         bb = buildConstructor(bb);
 
         for (var methodShouldBeInject : Arrays.stream(interfaceClass.getMethods()).filter(method -> {
+            // Skip static methods
+            if (Modifier.isStatic(method.getModifiers())) return false;
+
             // Do not inject methods that are annotated with @DoNotInject
             if (!method.isAnnotationPresent(DoNotInject.class)) return true;
 

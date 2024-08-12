@@ -215,6 +215,16 @@ public class GameTestCommand extends SimpleCommand {
                         return context.fail();
                     }
                     return context.success();
-                });
+                })
+                .root()
+                .key("spawnXpOrb")
+                .intNum("xp")
+                .exec((context, player) -> {
+                    player.getDimension().splitAndDropXpOrb(
+                            player.getLocation().add(0, -1, 0, new Vector3f()),
+                            context.getResult(1)
+                    );
+                    return context.success();
+                }, SenderType.PLAYER);
     }
 }

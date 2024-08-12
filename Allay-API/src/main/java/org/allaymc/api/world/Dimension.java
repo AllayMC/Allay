@@ -10,6 +10,7 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
@@ -462,6 +463,41 @@ public interface Dimension {
         entityItem.setItemStack(itemStack);
         entityItem.setPickupDelay(pickupDelay);
         getEntityService().addEntity(entityItem);
+    }
+
+    default void splitAndDropXpOrb(Vector3fc pos, int xp) {
+        for (var split : EntityXpOrb.splitIntoOrbSizes(xp)) {
+            dropXpOrb(pos, split);
+        }
+    }
+
+    default void dropXpOrb(Vector3fc pos, int xp) {
+        var rand = ThreadLocalRandom.current();
+        var motion = new org.joml.Vector3f(
+                (rand.nextFloat() * 0.2f - 0.1f) * 2f,
+                rand.nextFloat() * 0.4f,
+                (rand.nextFloat() * 0.2f - 0.1f) * 2f
+        );
+        dropXpOrb(pos, xp, motion);
+    }
+
+    default void dropXpOrb(Vector3fc pos, int xp, Vector3fc motion) {
+        dropXpOrb(pos, xp, motion, 10);
+    }
+
+    default void dropXpOrb(Vector3fc pos, int xp, Vector3fc motion, int pickupDelay) {
+        var rand = ThreadLocalRandom.current();
+        var entityXpOrb = EntityTypes.XP_ORB.createEntity(
+                SimpleEntityInitInfo.builder()
+                        .dimension(this)
+                        .pos(pos)
+                        .motion(motion)
+                        .rot(rand.nextFloat() * 360f, 0)
+                        .build()
+        );
+        entityXpOrb.setExperienceValue(xp);
+        entityXpOrb.setPickupDelay(pickupDelay);
+        getEntityService().addEntity(entityXpOrb);
     }
 
     default void breakBlock(Vector3ic pos, ItemStack usedItem, EntityPlayer player) {

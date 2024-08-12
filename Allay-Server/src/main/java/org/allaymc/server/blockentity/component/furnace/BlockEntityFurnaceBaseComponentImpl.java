@@ -1,7 +1,9 @@
 package org.allaymc.server.blockentity.component.furnace;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -11,6 +13,7 @@ import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityFurnace;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.impl.FurnaceContainer;
 import org.allaymc.api.eventbus.event.container.FurnaceConsumeFuelEvent;
@@ -18,10 +21,12 @@ import org.allaymc.api.eventbus.event.container.FurnaceSmeltEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceInput;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
+import org.joml.Vector3f;
 
 /**
  * Allay Project 2024/8/11
@@ -44,15 +49,26 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected short cookTime; // unit: gt
     @Getter
     protected short burnDuration; // unit: gt
-    // TODO: drop exp ore
     @Getter
-    protected int storedXPInt;
+    @Setter
+    protected float storedXP;
     protected int currentIngredientStackNetworkId = Integer.MAX_VALUE;
     protected FurnaceRecipe currentFurnaceRecipe = null;
     protected FurnaceInput currentFurnaceInput = null;
 
     public BlockEntityFurnaceBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
+    }
+
+    @OnInitFinish
+    @Override
+    public void onInitFinish(BlockEntityInitInfo initInfo) {
+        super.onInitFinish(initInfo);
+        FurnaceContainer container = containerHolderComponent.getContainer();
+        container.addOnSlotChangeListener(FurnaceContainer.RESULT_SLOT, item -> {
+            if (item != Container.EMPTY_SLOT_PLACE_HOLDER) return;
+            tryDropStoredXP();
+        });
     }
 
     @Override
@@ -92,7 +108,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         builder.putShort("BurnTime", burnTime)
                 .putShort("CookTime", cookTime)
                 .putShort("BurnDuration", burnDuration)
-                .putInt("StoredXPInt", storedXPInt);
+                .putFloat("StoredXP", storedXP);
 
         return builder.build();
     }
@@ -104,7 +120,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         nbt.listenForShort("BurnTime", value -> burnTime = value);
         nbt.listenForShort("CookTime", value -> cookTime = value);
         nbt.listenForShort("BurnDuration", value -> burnDuration = value);
-        nbt.listenForInt("StoredXPInt", value -> storedXPInt = value);
+        nbt.listenForInt("StoredXP", value -> storedXP = value);
     }
 
     @Override
@@ -204,9 +220,27 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             container.onSlotChange(FurnaceContainer.RESULT_SLOT);
         }
 
-        storedXPInt += (int) output.getItemData().furnaceXPMultiplier();
+        storedXP += output.getItemData().furnaceXPMultiplier();
 
         sendFurnaceContainerData();
+    }
+
+    protected void tryDropStoredXP() {
+        if (storedXP < 1) return;
+
+        var pos = new Vector3f(
+            position.x() + 0.5f,
+            position.y() + 1.5f,
+            position.z() + 0.5f
+        );
+        getDimension().dropXpOrb(pos, (int) storedXP);
+        storedXP = 0;
+    }
+
+    @Override
+    public void onReplace(CBlockOnReplaceEvent event) {
+        super.onReplace(event);
+        tryDropStoredXP();
     }
 
     protected void sendFurnaceContainerData() {
@@ -215,7 +249,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, (int) (cookTime / getIdealSpeed()));
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_TIME, burnTime);
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_DURATION, burnDuration);
-        container.sendContainerData(ContainerSetDataPacket.FURNACE_STORED_XP, storedXPInt);
+        container.sendContainerData(ContainerSetDataPacket.FURNACE_STORED_XP, (int) storedXP);
     }
 
     protected boolean checkFuel() {
@@ -242,11 +276,15 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return false;
         }
 
-        if (fuel.getCount() > 1) {
-            fuel.setCount(fuel.getCount() - 1);
-            container.onSlotChange(FurnaceContainer.FUEL_SLOT);
+        if (fuel.getItemType() != ItemTypes.LAVA_BUCKET) {
+            if (fuel.getCount() > 1) {
+                fuel.setCount(fuel.getCount() - 1);
+                container.onSlotChange(FurnaceContainer.FUEL_SLOT);
+            } else {
+                container.clearSlot(FurnaceContainer.FUEL_SLOT);
+            }
         } else {
-            container.clearSlot(FurnaceContainer.FUEL_SLOT);
+            container.setFuel(ItemTypes.BUCKET.createItemStack(1));
         }
 
         burnDuration = (short) fuel.getItemData().furnaceBurnDuration();

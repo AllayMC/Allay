@@ -4,11 +4,14 @@ import lombok.Getter;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
+import org.allaymc.api.component.annotation.Manager;
+import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
+import org.allaymc.api.entity.component.event.CEntityDamageEvent;
 import org.allaymc.api.entity.component.event.CEntityFallEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
@@ -31,6 +34,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     protected EntityBaseComponent baseComponent;
     @Dependency
     protected EntityAttributeComponent attributeComponent;
+    @Manager
+    protected ComponentManager manager;
 
     @ComponentedObject
     protected Entity entity;
@@ -103,7 +108,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean canAttack(DamageContainer damage) {
-        return true;
+        var event = new CEntityDamageEvent(damage, true);
+        manager.callEvent(event);
+        return event.isCanAttack();
     }
 
     @Override

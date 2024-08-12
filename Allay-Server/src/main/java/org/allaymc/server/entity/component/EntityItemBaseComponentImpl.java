@@ -9,9 +9,7 @@ import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.MathUtils;
-import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.joml.primitives.AABBf;
@@ -26,13 +24,8 @@ import static org.allaymc.api.item.ItemHelper.fromNBT;
  */
 @Setter
 @Getter
-public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl implements EntityItemBaseComponent {
-
-    public static final int MAX_AGE = 6000;
-
+public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl implements EntityItemBaseComponent {
     protected ItemStack itemStack;
-    protected int pickupDelay = 10;
-    protected short age;
 
     public EntityItemBaseComponentImpl(EntityInitInfo info) {
         super(info);
@@ -44,28 +37,6 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl impleme
             itemStack.clearStackNetworkId();
         }
         this.itemStack = itemStack;
-    }
-
-    @Override
-    public AABBfc getAABB() {
-        return new AABBf(-0.125f, 0.0f, -0.125f, 0.125f, 0.25f, 0.125f);
-    }
-
-    @Override
-    protected void initMetadata() {
-        super.initMetadata();
-        metadata.set(EntityFlag.HAS_COLLISION, false);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (age != -1) {
-            age++;
-            if (age >= MAX_AGE) despawn();
-        }
-
-        if (pickupDelay > 0) pickupDelay--;
     }
 
     @Override
@@ -88,7 +59,6 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl impleme
 
         if (itemStack != null)
             builder.putCompound("Item", itemStack.saveNBT()).build();
-        builder.putShort("Age", age);
 
         return builder.build();
     }
@@ -98,7 +68,11 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl impleme
         super.loadNBT(nbt);
 
         nbt.listenForCompound("Item", itemNbt -> this.itemStack = fromNBT(itemNbt));
-        nbt.listenForShort("Age", age -> this.age = age);
+    }
+
+    @Override
+    public AABBfc getAABB() {
+        return new AABBf(-0.125f, 0.0f, -0.125f, 0.125f, 0.25f, 0.125f);
     }
 
     @Override
@@ -111,10 +85,5 @@ public class EntityItemBaseComponentImpl extends EntityBaseComponentImpl impleme
         packet.setMotion(MathUtils.JOMLVecToCBVec(motion));
         packet.getMetadata().putAll(metadata.getEntityDataMap());
         return packet;
-    }
-
-    @Override
-    public boolean computeBlockCollisionMotion() {
-        return true;
     }
 }

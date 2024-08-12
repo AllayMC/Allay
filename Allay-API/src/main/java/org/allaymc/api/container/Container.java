@@ -38,6 +38,10 @@ public interface Container {
 
     void removeOnCloseListener(Consumer<ContainerViewer> listener);
 
+    void addOnSlotChangeListener(int slot, Consumer<ItemStack> listener);
+
+    void removeOnSlotChangeListener(int slot, Consumer<ItemStack> listener);
+
     default boolean hasBlockPos() {
         return false;
     }

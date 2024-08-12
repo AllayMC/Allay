@@ -4,6 +4,8 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
+import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.World;
 
 /**
  * Allay Project 2024/8/12

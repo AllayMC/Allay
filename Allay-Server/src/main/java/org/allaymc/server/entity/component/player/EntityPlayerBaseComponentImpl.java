@@ -224,20 +224,20 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
             var inventory = Objects.requireNonNull(containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY));
             var slot = inventory.tryAddItem(item);
-            if (slot != -1) {
-                if (item.getCount() == 0) {
-                    var packet = new TakeItemEntityPacket();
-                    packet.setRuntimeEntityId(runtimeId);
-                    packet.setItemRuntimeEntityId(entityItem.getRuntimeId());
-                    Objects.requireNonNull(dimension.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(packet);
-                    // Set item to null to prevent others from picking this item twice
-                    entityItem.setItemStack(null);
-                    dimension.getEntityService().removeEntity(entityItem);
-                }
-                // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
-                // It's much easier to just resend the inventory.
-                thisPlayer.sendContentsWithSpecificContainerId(inventory, FixedContainerId.PLAYER_INVENTORY, slot);
+            if (slot == -1) continue;
+
+            if (item.getCount() == 0) {
+                var packet = new TakeItemEntityPacket();
+                packet.setRuntimeEntityId(runtimeId);
+                packet.setItemRuntimeEntityId(entityItem.getRuntimeId());
+                Objects.requireNonNull(dimension.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(packet);
+                // Set item to null to prevent others from picking this item twice
+                entityItem.setItemStack(null);
+                entityItem.despawn();
             }
+            // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
+            // It's much easier to just resend the inventory.
+            thisPlayer.sendContentsWithSpecificContainerId(inventory, FixedContainerId.PLAYER_INVENTORY, slot);
         }
     }
 

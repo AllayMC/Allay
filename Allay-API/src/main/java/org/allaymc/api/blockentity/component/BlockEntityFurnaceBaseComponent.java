@@ -15,7 +15,9 @@ public interface BlockEntityFurnaceBaseComponent extends BlockEntityBaseComponen
 
     short getBurnDuration();
 
-    int getStoredXPInt();
+    float getStoredXP();
+
+    void setStoredXP(float storedXP);
 
     BlockType<?> getUnlitBlockType();
 

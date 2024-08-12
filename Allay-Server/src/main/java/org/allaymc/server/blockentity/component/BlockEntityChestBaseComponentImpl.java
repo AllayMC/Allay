@@ -25,7 +25,7 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
-        var container = containerHolderComponent.<ChestContainer>getContainer();
+        ChestContainer container = containerHolderComponent.getContainer();
         container.addOnOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
                 BlockEventPacket pk = new BlockEventPacket();
