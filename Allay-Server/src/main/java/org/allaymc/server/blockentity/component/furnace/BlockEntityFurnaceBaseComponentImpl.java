@@ -121,10 +121,6 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         nbt.listenForShort("CookTime", value -> cookTime = value);
         nbt.listenForShort("BurnDuration", value -> burnDuration = value);
         nbt.listenForInt("StoredXP", value -> storedXP = value);
-
-        if (burnTime > 0) {
-            setLit(true);
-        }
     }
 
     @Override
@@ -245,6 +241,11 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     public void onReplace(CBlockOnReplaceEvent event) {
         super.onReplace(event);
         tryDropStoredXP();
+    }
+
+    @Override
+    public boolean sendToClient() {
+        return false;
     }
 
     protected void sendFurnaceContainerData() {
