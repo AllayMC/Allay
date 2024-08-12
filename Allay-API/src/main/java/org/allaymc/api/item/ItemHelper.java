@@ -40,7 +40,7 @@ public final class ItemHelper {
                             .build()
             );
         } catch (Throwable t) {
-            log.error("An error happen while loading container items", t);
+            log.error("Failed to load item from NBT", t);
             return ItemAirStack.AIR_STACK;
         }
     }
