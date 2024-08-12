@@ -7,6 +7,11 @@ import org.allaymc.api.world.gamerule.GameRule;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Allay Project 2024/08/12
+ *
+ * @author Dhaiven
+ */
 @Getter
 public class GameRuleChangeEvent extends WorldEvent implements CancellableEvent {
     protected GameRule gameRule;

@@ -7,6 +7,7 @@ import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.world.DifficultyChangeEvent;
 import org.allaymc.api.eventbus.event.world.GameRuleChangeEvent;
+import org.allaymc.api.eventbus.event.world.SpawnPointChangeEvent;
 import org.allaymc.api.eventbus.event.world.TimeChangeEvent;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -296,7 +297,11 @@ public class WorldData {
     }
 
     public void setSpawnPoint(Vector3ic spawnPoint) {
-        this.spawnPoint = spawnPoint;
+        var event = new SpawnPointChangeEvent(this.world, this.spawnPoint, spawnPoint);
+        event.call();
+        if (event.isCancelled()) return;
+
+        this.spawnPoint = event.getNewPos();
     }
 
     @ApiStatus.Internal
