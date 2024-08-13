@@ -115,13 +115,14 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean hasFallDamage() {
-        return baseComponent.hasGravity();
+        return baseComponent.hasGravity() ||
+               !baseComponent.hasEffect(VanillaEffectTypes.SLOW_FALLING) ||
+               (boolean) baseComponent.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE);
     }
 
     @EventHandler
     private void onEntityFall(CEntityFallEvent event) {
         if (!hasFallDamage()) return;
-        if (!((boolean) baseComponent.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE))) return;
 
         var damage = Math.round((event.getFallDistance() - 3) - baseComponent.getEffectLevel(VanillaEffectTypes.JUMP_BOOST));
         if (damage > 0) this.attack(DamageContainer.fall(damage));

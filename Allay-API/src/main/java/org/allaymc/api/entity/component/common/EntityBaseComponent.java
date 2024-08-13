@@ -4,6 +4,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.entity.effect.EffectInstance;
@@ -346,7 +347,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     }
 
     default boolean canCriticalAttack() {
-        return !isOnGround() && getMotion().y() < 0;
+        return !isOnGround() && getMotion().y() < 0 && !hasEffect(VanillaEffectTypes.BLINDNESS) && !hasEffect(VanillaEffectTypes.SLOW_FALLING);
     }
 
     boolean addTag(String tag);

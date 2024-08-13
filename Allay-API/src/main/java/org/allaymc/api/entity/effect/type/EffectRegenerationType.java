@@ -19,14 +19,15 @@ public class EffectRegenerationType extends AbstractEffectType {
     @Override
     public void onTick(Entity entity, EffectInstance effectInstance) {
         if (!(entity instanceof EntityAttributeComponent attributeComponent)) return;
-        var level = effectInstance.getLevel();
+        var level = effectInstance.getLevel() - 1;
 
-        var ticksPerHealth = 50 >> (level - 1);
+        var ticksPerHealth = 50 >> level;
         if (ticksPerHealth < 1) ticksPerHealth = 1;
 
         if (effectInstance.getDuration() % ticksPerHealth != 0) return;
 
         var healthPerSecond = 20f / ticksPerHealth;
         attributeComponent.setHealth(attributeComponent.getHealth() + healthPerSecond);
+        // TODO: damage undead mobs
     }
 }

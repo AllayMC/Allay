@@ -73,6 +73,6 @@ public enum GameRule {
 
     public enum Type {
         INT,
-        BOOLEAN;
+        BOOLEAN
     }
 }
