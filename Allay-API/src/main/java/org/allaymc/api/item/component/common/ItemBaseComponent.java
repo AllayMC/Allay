@@ -59,9 +59,7 @@ public interface ItemBaseComponent extends ItemComponent {
 
     boolean isBroken();
 
-    default void increaseDurability(int addition) {
-        setDurability(getDurability() + addition);
-    }
+    void increaseDurability(int addition);
 
     boolean willDamageItem();
 

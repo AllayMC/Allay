@@ -361,6 +361,20 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
+    public void increaseDurability(int addition) {
+        if (!canIncreaseDurabilityThisTime()) return;
+        setDurability(getDurability() + addition);
+    }
+
+    protected boolean canIncreaseDurabilityThisTime() {
+        var unbreakingLevel = getEnchantmentLevel(VanillaEnchantmentTypes.UNBREAKING);
+        if (unbreakingLevel == 0) return true;
+
+        var possibility = 1f / (unbreakingLevel + 1f);
+        return ThreadLocalRandom.current().nextFloat() <= possibility;
+    }
+
+    @Override
     public boolean isCorrectToolFor(BlockState blockState) {
         var blockType = blockState.getBlockType();
 
