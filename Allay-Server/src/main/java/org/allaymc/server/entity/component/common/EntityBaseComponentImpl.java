@@ -414,8 +414,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void setHasEntityCollision(boolean hasEntityCollision) {
-        metadata.set(EntityFlag.HAS_COLLISION, hasEntityCollision);
-        sendEntityFlags(EntityFlag.HAS_COLLISION);
+        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
     }
 
     @Override
@@ -441,8 +440,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void setHasGravity(boolean hasGravity) {
-        metadata.set(EntityFlag.HAS_GRAVITY, hasGravity);
-        sendEntityFlags(EntityFlag.HAS_GRAVITY);
+        setAndSendEntityFlag(EntityFlag.HAS_GRAVITY, hasGravity);
     }
 
     @Override
