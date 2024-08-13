@@ -17,7 +17,7 @@ import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
 public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponentImpl implements EntityPlayerAttributeComponent {
 
     @ComponentedObject
-    private EntityPlayer player;
+    private EntityPlayer thisPlayer;
 
     public EntityPlayerAttributeComponentImpl(AttributeType... attributeTypes) {
         super(attributeTypes);
@@ -30,7 +30,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public void setExperienceLevel(int value) {
-        var event = new PlayerExperienceLevelChangeEvent(player, (int) getAttributeValue(AttributeType.PLAYER_LEVEL), value);
+        var event = new PlayerExperienceLevelChangeEvent(thisPlayer, (int) getAttributeValue(AttributeType.PLAYER_LEVEL), value);
         event.call();
         if (event.isCancelled()) return;
 
@@ -44,7 +44,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public void setExperienceProgress(float value) {
-        var event = new PlayerExperienceProgressChangeEvent(player, getAttributeValue(AttributeType.PLAYER_EXPERIENCE), value);
+        var event = new PlayerExperienceProgressChangeEvent(thisPlayer, getAttributeValue(AttributeType.PLAYER_EXPERIENCE), value);
         event.call();
         if (event.isCancelled()) return;
 

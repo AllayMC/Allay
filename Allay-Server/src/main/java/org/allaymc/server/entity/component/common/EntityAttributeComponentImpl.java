@@ -37,7 +37,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     protected final Map<AttributeType, Attribute> attributes = new EnumMap<>(AttributeType.class);
 
     @ComponentedObject
-    protected Entity entity;
+    protected Entity thisEntity;
     @Dependency(soft = true)
     protected EntityPlayerNetworkComponent networkComponent;
 
@@ -112,15 +112,15 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     public void sendAttributesToClient() {
         if (networkComponent == null) return;
         var packet = new UpdateAttributesPacket();
-        packet.setRuntimeEntityId(entity.getRuntimeId());
+        packet.setRuntimeEntityId(thisEntity.getRuntimeId());
         attributes.values().forEach(attribute -> packet.getAttributes().add(attribute.toNetwork()));
-        packet.setTick(entity.getWorld().getTick());
+        packet.setTick(thisEntity.getWorld().getTick());
         networkComponent.sendPacket(packet);
     }
 
     @Override
     public void setHealth(float value) {
-        var event = new EntityHealthChangeEvent(entity, getHealth(), value);
+        var event = new EntityHealthChangeEvent(thisEntity, getHealth(), value);
         event.call();
         if (event.isCancelled()) return;
 

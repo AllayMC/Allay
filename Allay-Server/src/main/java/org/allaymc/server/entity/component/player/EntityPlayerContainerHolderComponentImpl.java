@@ -17,7 +17,7 @@ import org.allaymc.server.entity.component.common.EntityContainerHolderComponent
 public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHolderComponentImpl implements EntityPlayerContainerHolderComponent {
 
     @ComponentedObject
-    private EntityPlayer player;
+    private EntityPlayer thisPlayer;
 
     public EntityPlayerContainerHolderComponentImpl() {
         super(
@@ -32,11 +32,11 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
 
     @OnInitFinish
     public void onInitFinish(EntityInitInfo initInfo) {
-        addContainer(new PlayerInventoryContainer(player));
+        addContainer(new PlayerInventoryContainer(thisPlayer));
     }
 
     @Override
     protected boolean canDropItemInContainers() {
-        return !(boolean) player.getWorld().getWorldData().getGameRule(GameRule.KEEP_INVENTORY);
+        return !(boolean) thisPlayer.getWorld().getWorldData().getGameRule(GameRule.KEEP_INVENTORY);
     }
 }

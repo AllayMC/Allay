@@ -88,7 +88,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Manager
     protected ComponentManager manager;
     @ComponentedObject
-    protected EntityPlayer player;
+    protected EntityPlayer thisPlayer;
     @Getter
     @Setter
     protected LoginData loginData;
@@ -103,14 +103,14 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void handleDataPacket(BedrockPacket packet, long time) {
         var processor = packetProcessorHolder.getProcessor(packet);
         // processor won't be null as we have checked it the time it arrived
-        processor.handleSync(player, packet, time);
+        processor.handleSync(thisPlayer, packet, time);
     }
 
     protected void onDisconnect(String disconnectReason) {
-        var event = new PlayerQuitEvent(player, disconnectReason);
+        var event = new PlayerQuitEvent(thisPlayer, disconnectReason);
         event.call();
-        player.closeAllContainers();
-        server.onDisconnect(player, disconnectReason);
+        thisPlayer.closeAllContainers();
+        server.onDisconnect(thisPlayer, disconnectReason);
     }
 
     @Override
@@ -130,7 +130,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         session.setPacketHandler(new BedrockPacketHandler() {
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
-                var event = new PacketReceiveEvent(player, packet);
+                var event = new PacketReceiveEvent(thisPlayer, packet);
                 event.call();
                 if (event.isCancelled()) return PacketSignal.HANDLED;
 
@@ -143,7 +143,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 }
 
                 long time;
-                var world = player.getWorld();
+                var world = thisPlayer.getWorld();
                 if (world != null) {
                     time = world.getTick();
                 } else {
@@ -151,11 +151,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     time = Server.getInstance().getTick();
                 }
 
-                if (processor.handleAsync(player, packet, time) != PacketSignal.HANDLED) {
+                if (processor.handleAsync(thisPlayer, packet, time) != PacketSignal.HANDLED) {
                     // Packet processors should make sure that PacketProcessor.handleSync() won't be called
                     // if player is not in any world
                     Objects.requireNonNull(world, "Player that is not in any world cannot handle sync packet");
-                    world.addSyncPacketToQueue(player, packet, time);
+                    world.addSyncPacketToQueue(thisPlayer, packet, time);
                 }
 
                 return PacketSignal.HANDLED;
@@ -177,7 +177,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void sendPacket(BedrockPacket packet) {
-        var event = new PacketSendEvent(player, packet);
+        var event = new PacketSendEvent(thisPlayer, packet);
         event.call();
         if (event.isCancelled()) return;
 
@@ -186,7 +186,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void sendPacketImmediately(BedrockPacket packet) {
-        var event = new PacketSendEvent(player, packet);
+        var event = new PacketSendEvent(thisPlayer, packet);
         event.call();
         if (event.isCancelled()) return;
 
@@ -199,9 +199,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             log.warn("Trying to disconnect a player who is already disconnected!");
             return;
         }
-        var disconnectReason = I18n.get().tr(player.getLangCode(), reason);
+        var disconnectReason = I18n.get().tr(thisPlayer.getLangCode(), reason);
         try {
-            player.getClientSession().disconnect(disconnectReason);
+            thisPlayer.getClientSession().disconnect(disconnectReason);
         } catch (Exception e) {
             log.error("Error while disconnecting the session", e);
         }
@@ -214,26 +214,26 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     protected void doFirstSpawn() {
         // Load EntityPlayer's NBT
-        player.loadNBT(server.getPlayerStorage().readPlayerData(player).getPlayerNBT());
+        thisPlayer.loadNBT(server.getPlayerStorage().readPlayerData(thisPlayer).getPlayerNBT());
 
         var setEntityDataPacket = new SetEntityDataPacket();
-        setEntityDataPacket.setRuntimeEntityId(player.getRuntimeId());
-        setEntityDataPacket.getMetadata().putAll(player.getMetadata().getEntityDataMap());
-        setEntityDataPacket.setTick(player.getWorld().getTick());
+        setEntityDataPacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
+        setEntityDataPacket.getMetadata().putAll(thisPlayer.getMetadata().getEntityDataMap());
+        setEntityDataPacket.setTick(thisPlayer.getWorld().getTick());
         sendPacket(setEntityDataPacket);
 
         // Update abilities, adventure settings, entity flags that are related to game type
-        player.setGameType(player.getGameType());
+        thisPlayer.setGameType(thisPlayer.getGameType());
 
-        sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(player));
+        sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
 
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
-        server.addToPlayerList(player);
+        server.addToPlayerList(thisPlayer);
         if (server.getOnlinePlayerCount() > 1) {
-            server.sendFullPlayerListInfoTo(player);
+            server.sendFullPlayerListInfoTo(thisPlayer);
         }
 
-        player.sendAttributesToClient();
+        thisPlayer.sendAttributesToClient();
 
         sendInventories();
 
@@ -241,15 +241,15 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
 
-        player.getLocation().dimension().getWorld().getWorldData().sendTime(List.of(player));
+        thisPlayer.getLocation().dimension().getWorld().getWorldData().sendTime(List.of(thisPlayer));
         // Save player data the first time
-        server.getPlayerStorage().savePlayerData(player);
+        server.getPlayerStorage().savePlayerData(thisPlayer);
     }
 
     private void sendInventories() {
-        player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
-        player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
-        player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
+        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
+        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
+        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
         // No need to send cursor's content to client because there is nothing in cursor
     }
 
@@ -258,7 +258,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // initializePlayer() method will read all the data in PlayerData except playerNBT
         // To be more exactly, we will validate and set player's current pos and spawn point in this method
         // And playerNBT will be used in EntityPlayer::loadNBT() in doFirstSpawnPlayer() method
-        var playerData = server.getPlayerStorage().readPlayerData(player);
+        var playerData = server.getPlayerStorage().readPlayerData(thisPlayer);
         // Validate and set player pos
         Dimension dimension;
         Vector3fc currentPos;
@@ -284,15 +284,15 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 (int) currentPos.z() >> 4
         );
         baseComponent.setLocationBeforeSpawn(new Location3f(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
-        dimension.addPlayer(player);
+        dimension.addPlayer(thisPlayer);
 
         var spawnWorld = dimension.getWorld();
         var startGamePacket = new StartGamePacket();
         startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
-        startGamePacket.setUniqueEntityId(player.getRuntimeId());
-        startGamePacket.setRuntimeEntityId(player.getRuntimeId());
-        startGamePacket.setPlayerGameType(player.getGameType());
-        var loc = player.getLocation();
+        startGamePacket.setUniqueEntityId(thisPlayer.getRuntimeId());
+        startGamePacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
+        startGamePacket.setPlayerGameType(thisPlayer.getGameType());
+        var loc = thisPlayer.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
         startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
@@ -376,7 +376,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             var vec = playerData.getSpawnPoint();
             spawnPoint = new Location3i(vec.x(), vec.y(), vec.z(), spawnWorld.getDimension(playerData.getSpawnPointDimensionId()));
         }
-        player.setSpawnPoint(spawnPoint);
+        thisPlayer.setSpawnPoint(spawnPoint);
     }
 
     @Override
@@ -389,7 +389,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
         sendPacket(playStatusPacket);
         loggedIn = true;
-        server.onLoggedIn(player);
+        server.onLoggedIn(thisPlayer);
         // TODO: plugin event
         manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
         sendPacket(DeferredData.getResourcePacksInfoPacket());

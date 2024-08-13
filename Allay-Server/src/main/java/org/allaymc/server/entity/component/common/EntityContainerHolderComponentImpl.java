@@ -29,7 +29,7 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
     protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_holder_component");
 
     @ComponentedObject
-    protected static Entity entity;
+    protected static Entity thisEntity;
 
     public EntityContainerHolderComponentImpl(Container... containers) {
         super(containers);
@@ -52,7 +52,7 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
 
     @EventHandler
     protected void onDie(CEntityDieEvent event) {
-        var pos = entity.getLocation();
+        var pos = thisEntity.getLocation();
         var dimension = pos.dimension();
         var rand = ThreadLocalRandom.current();
         for (var container : getContainers().values()) {
@@ -81,6 +81,6 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
     }
 
     protected boolean canDropItemInContainers() {
-        return entity.getWorld().getWorldData().getGameRule(GameRule.DO_ENTITY_DROPS);
+        return thisEntity.getWorld().getWorldData().getGameRule(GameRule.DO_ENTITY_DROPS);
     }
 }

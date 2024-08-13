@@ -31,7 +31,7 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     private static final int MAX_FOOD_LEVEL = 20;
 
     @ComponentedObject
-    protected EntityPlayer player;
+    protected EntityPlayer thisPlayer;
 
     private int foodLevel = MAX_FOOD_LEVEL;
     private float foodSaturationLevel = 5f;
@@ -42,15 +42,15 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     @Override
     public void tickHunger() {
         if (
-                !player.isSpawned() || player.isDead() ||
-                player.getGameType() == GameType.CREATIVE ||
-                player.getGameType() == GameType.SPECTATOR
+                !thisPlayer.isSpawned() || thisPlayer.isDead() ||
+                thisPlayer.getGameType() == GameType.CREATIVE ||
+                thisPlayer.getGameType() == GameType.SPECTATOR
         ) return;
 
         foodTickTimer++;
         if (foodTickTimer >= 80) foodTickTimer = 0;
 
-        var difficulty = player.getWorld().getWorldData().getDifficulty();
+        var difficulty = thisPlayer.getWorld().getWorldData().getDifficulty();
         if (difficulty == Difficulty.PEACEFUL && foodTickTimer % 10 == 0) {
             setFoodLevel(foodLevel + 1);
 
@@ -61,17 +61,17 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
             if (foodLevel >= 18) regenerate(true);
             else if (foodLevel == 0) {
                 if (
-                        (difficulty == Difficulty.EASY && player.getHealth() > 10) ||
-                        (difficulty == Difficulty.NORMAL && player.getHealth() > 1) ||
+                        (difficulty == Difficulty.EASY && thisPlayer.getHealth() > 10) ||
+                        (difficulty == Difficulty.NORMAL && thisPlayer.getHealth() > 1) ||
                         difficulty == Difficulty.HARD
                 ) {
-                    player.attack(DamageContainer.starve(1));
+                    thisPlayer.attack(DamageContainer.starve(1));
                 }
             }
         }
 
-        if (foodLevel <= 6 && player.isSprinting()) {
-            player.setSprinting(false);
+        if (foodLevel <= 6 && thisPlayer.isSprinting()) {
+            thisPlayer.setSprinting(false);
         }
 
         syncFoodData();
@@ -80,30 +80,30 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     private void syncFoodData() {
         var needSend = false;
 
-        var hunger = player.getAttribute(AttributeType.PLAYER_HUNGER);
+        var hunger = thisPlayer.getAttribute(AttributeType.PLAYER_HUNGER);
         if (hunger.getCurrentValue() != foodLevel) {
             hunger.setCurrentValue(foodLevel);
             needSend = true;
         }
 
-        var saturation = player.getAttribute(AttributeType.PLAYER_SATURATION);
+        var saturation = thisPlayer.getAttribute(AttributeType.PLAYER_SATURATION);
         if (saturation.getCurrentValue() != foodSaturationLevel) {
             saturation.setCurrentValue(foodSaturationLevel);
             needSend = true;
         }
 
-        var exhaustion = player.getAttribute(AttributeType.PLAYER_EXHAUSTION);
+        var exhaustion = thisPlayer.getAttribute(AttributeType.PLAYER_EXHAUSTION);
         if (exhaustion.getCurrentValue() != foodExhaustionLevel) {
             exhaustion.setCurrentValue(foodExhaustionLevel);
             needSend = true;
         }
 
-        if (needSend) player.sendAttributesToClient();
+        if (needSend) thisPlayer.sendAttributesToClient();
     }
 
     @Override
     public void exhaust(float level) {
-        if (player.getGameType() == GameType.CREATIVE) return;
+        if (thisPlayer.getGameType() == GameType.CREATIVE) return;
         this.foodExhaustionLevel += level;
         while (this.foodExhaustionLevel >= 4) {
             this.foodExhaustionLevel -= 4;
@@ -126,22 +126,22 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     }
 
     private void regenerate(boolean exhaust) {
-        if (player.getHealth() == player.getMaxHealth()) return;
+        if (thisPlayer.getHealth() == thisPlayer.getMaxHealth()) return;
 
-        player.setHealth(player.getHealth() + 1);
-        if (exhaust) player.exhaust(6);
+        thisPlayer.setHealth(thisPlayer.getHealth() + 1);
+        if (exhaust) thisPlayer.exhaust(6);
     }
 
     @Override
     public boolean canEat() {
         return getFoodLevel() < MAX_FOOD_LEVEL ||
-               player.getGameType() == GameType.CREATIVE ||
-               player.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL;
+               thisPlayer.getGameType() == GameType.CREATIVE ||
+               thisPlayer.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL;
     }
 
     @Override
     public void setFoodLevel(int foodLevel) {
-        var event = new PlayerFoodLevelChangeEvent(player, this.foodLevel, foodLevel);
+        var event = new PlayerFoodLevelChangeEvent(thisPlayer, this.foodLevel, foodLevel);
         event.call();
         if (event.isCancelled()) return;
 

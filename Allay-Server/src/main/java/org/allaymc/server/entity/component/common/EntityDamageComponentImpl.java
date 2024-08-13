@@ -38,7 +38,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     protected ComponentManager manager;
 
     @ComponentedObject
-    protected Entity entity;
+    protected Entity thisEntity;
 
     @Getter
     protected DamageContainer lastDamage;
@@ -85,7 +85,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             damage.updateFinalDamage(d -> Math.max(0, d - absorption));
         }
 
-        if (entity instanceof EntityPlayerHungerComponent hungerComponent)
+        if (thisEntity instanceof EntityPlayerHungerComponent hungerComponent)
             hungerComponent.exhaust(0.1f);
 
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());

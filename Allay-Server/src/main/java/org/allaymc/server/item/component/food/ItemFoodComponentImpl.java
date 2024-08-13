@@ -27,7 +27,7 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
     private final int eatingTime;
 
     @ComponentedObject
-    protected ItemStack itemStack;
+    protected ItemStack thisItemStack;
 
     public ItemFoodComponentImpl(int foodPoints, float saturationPoints) {
         this(foodPoints, saturationPoints, DEFAULT_EATING_TIME);
@@ -64,7 +64,7 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
         }
 
         var player = event.getPlayer();
-        var playerEatFoodEvent = new PlayerEatFoodEvent(player, itemStack);
+        var playerEatFoodEvent = new PlayerEatFoodEvent(player, thisItemStack);
         playerEatFoodEvent.call();
         if (playerEatFoodEvent.isCancelled()) {
             event.setCanBeUsed(false);
