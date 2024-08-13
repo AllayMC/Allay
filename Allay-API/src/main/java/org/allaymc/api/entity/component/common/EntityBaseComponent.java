@@ -235,7 +235,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     void removeAllEffects();
 
-    default void tick() {}
+    default void tick(long currentTick) {}
 
     default boolean enableHeadYaw() {
         return false;

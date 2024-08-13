@@ -73,7 +73,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         chunk.sendChunkPacket(packet);
     }
 
-    default void tick() {}
+    default void tick(long currentTick) {}
 
     default boolean sendToClient() {
         return true;

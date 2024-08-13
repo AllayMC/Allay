@@ -32,8 +32,8 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl {
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(long currentTick) {
+        super.tick(currentTick);
 
         if (age != -1) {
             age++;

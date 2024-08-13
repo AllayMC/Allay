@@ -33,8 +33,8 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(long currentTick) {
+        super.tick(currentTick);
 
         moveToNearestPlayer();
     }

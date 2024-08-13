@@ -52,21 +52,21 @@ public final class AllayChunkService implements ChunkService {
     private final Set<Long> keepLoadingChunks = Sets.newConcurrentHashSet();
 
     @Override
-    public void tick() {
+    public void tick(long currentTick) {
         sendChunkPackets();
         tickChunkLoaders();
         removeUnusedChunks();
-        tickChunks();
+        tickChunks(currentTick);
     }
 
     private WorldGenerator getWorldGenerator() {
         return dimension.getWorldGenerator();
     }
 
-    private void tickChunks() {
+    private void tickChunks(long currentTick) {
         for (Chunk chunk : loadedChunks.values()) {
             try {
-                chunk.tick();
+                chunk.tick(currentTick);
             } catch (Throwable t) {
                 log.error("Error while ticking chunk({}, {})!", chunk.getX(), chunk.getZ(), t);
             }

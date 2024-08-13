@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  * @author daoge_cmd
  */
 public interface ChunkService extends ChunkAccessible {
-    void tick();
+    void tick(long currentTick);
 
     CompletableFuture<Chunk> getChunkLoadingFuture(int x, int z);
 

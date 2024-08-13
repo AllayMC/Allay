@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @ThreadSafe
 public interface Chunk extends UnsafeChunk {
     @ApiStatus.Internal
-    void tick();
+    void tick(long currentTick);
 
     boolean isLoaded();
 

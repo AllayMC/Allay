@@ -136,7 +136,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     @Override
-    public void tick() {
+    public void tick(long currentTick) {
         var lastBurnTime = burnTime;
         tickFurnace();
         if (lastBurnTime == 1 && burnTime == 0) setLit(false);

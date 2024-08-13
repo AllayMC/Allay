@@ -44,7 +44,9 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     }
 
     @Override
-    public void tick() {
+    public void tick(long currentTick) {
+        super.tick(currentTick);
+
         if (!isOnGround()) return;
 
         var floorPos = location.floor(new Vector3f());

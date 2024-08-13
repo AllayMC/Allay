@@ -63,7 +63,7 @@ public class AllayDimension implements Dimension {
 
     @Override
     public void tick(long currentTick) {
-        chunkService.tick();
+        chunkService.tick(currentTick);
         entityService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);

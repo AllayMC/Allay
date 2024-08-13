@@ -118,6 +118,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected float movementSpeed = DEFAULT_MOVEMENT_SPEED;
     @ComponentedObject
     protected EntityPlayer thisPlayer;
+    protected long nextSavePlayerDataTime = Integer.MAX_VALUE;
 
     public EntityPlayerBaseComponentImpl(EntityInitInfo info) {
         super(info);
@@ -187,11 +188,29 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void tick(long currentTick) {
+        super.tick(currentTick);
+
         syncData();
         tryPickUpItems();
         hungerComponent.tickHunger();
+
+        savePlayerDataIfNecessary();
+    }
+
+    protected void savePlayerDataIfNecessary() {
+        // We use server's tick instead of world's tick
+        // because player may teleport between worlds
+        // and the tick in different worlds may not be same
+        var currentServerTick = Server.getInstance().getTick();
+        if (nextSavePlayerDataTime == Integer.MAX_VALUE) {
+            nextSavePlayerDataTime = currentServerTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
+            return;
+        }
+        if (currentServerTick >= nextSavePlayerDataTime) {
+            Server.getInstance().getPlayerStorage().savePlayerData(thisPlayer);
+            nextSavePlayerDataTime = currentServerTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
+        }
     }
 
     protected void syncData() {

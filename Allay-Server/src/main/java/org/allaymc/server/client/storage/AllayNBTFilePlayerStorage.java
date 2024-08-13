@@ -22,32 +22,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Slf4j
 public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
-
-    private final Map<UUID, Long> playersDataAutoSaveTime = new ConcurrentHashMap<>();
-
     @Getter
     protected Path dataFolderPath;
-    protected long currentTick;
 
     @SneakyThrows
     public AllayNBTFilePlayerStorage(Path dataFolderPath) {
         this.dataFolderPath = dataFolderPath;
         if (!Files.exists(dataFolderPath)) Files.createDirectory(dataFolderPath);
-    }
-
-    @Override
-    public void tick(long currentTick) {
-        this.currentTick = currentTick;
-        playersDataAutoSaveTime.forEach((uuid, saveTime) -> {
-            if (currentTick < saveTime) return;
-
-            var player = Server.getInstance().getOnlinePlayers().get(uuid);
-            if (player.isDisconnected()) {
-                playersDataAutoSaveTime.remove(uuid);
-            } else if (player.isInitialized()) {
-                savePlayerData(player);
-            }
-        });
     }
 
     @Override
@@ -75,7 +56,7 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
             Files.delete(oldPath);
         }
 
-        // rename current file to uuid_old.nbt
+        // Rename current file to uuid_old.nbt
         if (Files.exists(path)) Files.move(path, oldPath);
 
         try (var writer = NbtUtils.createGZIPWriter(Files.newOutputStream(path))) {
@@ -88,8 +69,6 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
 
         // delete uuid_old.nbt file
         Files.deleteIfExists(oldPath);
-
-        playersDataAutoSaveTime.put(uuid, currentTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle());
     }
 
     @SneakyThrows

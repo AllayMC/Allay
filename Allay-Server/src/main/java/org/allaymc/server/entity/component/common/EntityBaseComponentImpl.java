@@ -173,7 +173,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void tick() {
+    public void tick(long currentTick) {
         checkDead();
         tickEffects();
     }
