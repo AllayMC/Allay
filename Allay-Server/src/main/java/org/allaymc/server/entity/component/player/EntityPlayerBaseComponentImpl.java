@@ -195,10 +195,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         tryPickUpItems();
         hungerComponent.tickHunger();
 
-        savePlayerDataIfNecessary();
+        tickPlayerDataAutoSave();
     }
 
-    protected void savePlayerDataIfNecessary() {
+    protected void tickPlayerDataAutoSave() {
         // We use server's tick instead of world's tick
         // because player may teleport between worlds
         // and the tick in different worlds may not be same
