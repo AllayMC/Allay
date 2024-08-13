@@ -70,7 +70,7 @@ jobs:
         id: get-changelog
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         run: |
-          CHANGELOG=$(echo "${{ github.event.commits[0].message }}" | tr '\n' ' ')
+          CHANGELOG=$(echo "${{ github.event.commits[0].message }}" | sed ':a;N;$!ba;s/\n/\\n/g')
           echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
       - name: Get Time
         id: time
