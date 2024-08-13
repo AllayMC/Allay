@@ -48,7 +48,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public boolean attack(DamageContainer damage) {
         if (!canBeAttacked(damage)) return false;
-        if (checkCoolDown(damage)) return false;
+        if (!checkCoolDown(damage)) return false;
 
         applyAttacker(damage);
         applyVictim(damage);
@@ -82,11 +82,11 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected boolean checkCoolDown(DamageContainer damage) {
         var currentTime = baseComponent.getWorld().getTick();
-        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return true;
+        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return false;
 
         lastDamage = damage;
         lastDamageTime = currentTime;
-        return false;
+        return true;
     }
 
     protected void applyVictim(DamageContainer damage) {
