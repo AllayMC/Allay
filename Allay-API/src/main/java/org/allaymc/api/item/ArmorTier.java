@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.allaymc.api.item.tag.ItemTag;
 
 import static org.allaymc.api.data.VanillaItemTags.*;
-import static org.allaymc.api.data.VanillaItemTags.NETHERITE_TIER;
 
 /**
  * Allay Project 2024/8/13

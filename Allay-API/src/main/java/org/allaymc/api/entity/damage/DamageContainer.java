@@ -53,6 +53,10 @@ public class DamageContainer {
         return new DamageContainer(null, DamageType.FALL, sourceDamage);
     }
 
+    public static DamageContainer magicEffect(float sourceDamage) {
+        return new DamageContainer(null, DamageType.MAGIC_EFFECT, sourceDamage);
+    }
+
     public boolean hasCustomKnockback() {
         return customKnockback != -1;
     }
