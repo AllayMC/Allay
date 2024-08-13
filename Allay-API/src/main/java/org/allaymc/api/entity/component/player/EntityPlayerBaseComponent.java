@@ -45,7 +45,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     default void setSneaking(boolean sneaking) {
-        if (sneaking == isSneaking()) return;
         setAndSendEntityFlag(EntityFlag.SNEAKING, sneaking);
     }
 
@@ -54,7 +53,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     default void setSwimming(boolean swimming) {
-        if (swimming == isSwimming()) return;
         setAndSendEntityFlag(EntityFlag.SWIMMING, swimming);
     }
 
@@ -63,7 +61,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     default void setGliding(boolean gliding) {
-        if (gliding == isGliding()) return;
         setAndSendEntityFlag(EntityFlag.GLIDING, gliding);
     }
 
@@ -72,7 +69,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     }
 
     default void setCrawling(boolean crawling) {
-        if (crawling == isCrawling()) return;
         setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
     }
 
