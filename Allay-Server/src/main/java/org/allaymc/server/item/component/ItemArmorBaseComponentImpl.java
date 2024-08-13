@@ -4,7 +4,6 @@ import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.ArmorTier;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
