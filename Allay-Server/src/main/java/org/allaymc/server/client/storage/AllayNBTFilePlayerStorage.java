@@ -23,10 +23,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
 
+    private final Map<UUID, Long> playersDataAutoSaveTime = new ConcurrentHashMap<>();
+
     @Getter
     protected Path dataFolderPath;
-
-    private final Map<UUID, Long> playersDataAutoSaveTime = new ConcurrentHashMap<>();
     protected long currentTick;
 
     @SneakyThrows

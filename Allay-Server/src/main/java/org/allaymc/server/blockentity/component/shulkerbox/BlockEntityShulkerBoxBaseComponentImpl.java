@@ -30,7 +30,7 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
     @OnInitFinish
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
-        var container = containerHolderComponent.<ShulkerBoxContainer>getContainer();
+        ShulkerBoxContainer container = containerHolderComponent.getContainer();
         container.addOnOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
                 BlockEventPacket pk = new BlockEventPacket();

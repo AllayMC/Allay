@@ -2,7 +2,8 @@ package org.allaymc.api.container.impl;
 
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.recipe.input.CraftingInput;
-import org.joml.Vector3ic;
+
+import java.util.stream.IntStream;
 
 /**
  * Allay Project 2024/1/19
@@ -10,21 +11,8 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 public class CraftingTableContainer extends CraftingContainer {
-
-    protected Vector3ic craftingTablePos;
-
     public CraftingTableContainer() {
         super(FullContainerType.CRAFTING_TABLE);
-    }
-
-    @Override
-    public Vector3ic getBlockPos() {
-        return craftingTablePos;
-    }
-
-    @Override
-    public void setBlockPos(Vector3ic blockPos) {
-        this.craftingTablePos = blockPos;
     }
 
     @Override
@@ -38,15 +26,6 @@ public class CraftingTableContainer extends CraftingContainer {
 
     @Override
     public int calculateShouldConsumedItemCount() {
-        var count = 0;
-        for (var i = 0; i < 9; i++) {
-            if (!isEmpty(i)) count++;
-        }
-        return count;
-    }
-
-    @Override
-    public boolean hasBlockPos() {
-        return true;
+        return (int) IntStream.range(0, 9).filter(i -> !isEmpty(i)).count();
     }
 }

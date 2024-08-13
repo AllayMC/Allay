@@ -9,6 +9,7 @@ import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.impl.BlockContainer;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.common.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -63,19 +64,19 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     @Override
     public void sendContentsWithSpecificContainerId(Container container, int containerId) {
-        var inventoryContentPacket = new InventoryContentPacket();
-        inventoryContentPacket.setContainerId(containerId);
-        inventoryContentPacket.setContents(container.toNetworkItemData());
-        networkComponent.sendPacket(inventoryContentPacket);
+        var packet = new InventoryContentPacket();
+        packet.setContainerId(containerId);
+        packet.setContents(container.toNetworkItemData());
+        networkComponent.sendPacket(packet);
     }
 
     @Override
     public void sendContentsWithSpecificContainerId(Container container, int containerId, int slot) {
-        var inventorySlotPacket = new InventorySlotPacket();
-        inventorySlotPacket.setContainerId(containerId);
-        inventorySlotPacket.setSlot(container.toNetworkSlotIndex(slot));
-        inventorySlotPacket.setItem(container.getItemStack(slot).toNetworkItemData());
-        networkComponent.sendPacket(inventorySlotPacket);
+        var packet = new InventorySlotPacket();
+        packet.setContainerId(containerId);
+        packet.setSlot(container.toNetworkSlotIndex(slot));
+        packet.setItem(container.getItemStack(slot).toNetworkItemData());
+        networkComponent.sendPacket(packet);
     }
 
     @Override
@@ -105,16 +106,16 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     private void sendContainerOpenPacket(byte assignedId, Container container) {
-        var containerOpenPacket = new ContainerOpenPacket();
-        containerOpenPacket.setId(assignedId);
-        containerOpenPacket.setType(container.getContainerType().toNetworkType());
-        if (container.hasBlockPos()) {
-            containerOpenPacket.setBlockPosition(MathUtils.JOMLVecToCBVec(container.getBlockPos()));
+        var packet = new ContainerOpenPacket();
+        packet.setId(assignedId);
+        packet.setType(container.getContainerType().toNetworkType());
+        if (container instanceof BlockContainer blockContainer) {
+            packet.setBlockPosition(MathUtils.JOMLVecToCBVec(blockContainer.getBlockPos()));
         } else {
             var location = baseComponent.getLocation();
-            containerOpenPacket.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
+            packet.setBlockPosition(Vector3i.from(location.x(), location.y(), location.z()));
         }
-        networkComponent.sendPacket(containerOpenPacket);
+        networkComponent.sendPacket(packet);
     }
 
     @Override
@@ -131,10 +132,10 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     protected void sendContainerClosePacket(byte assignedId, Container container) {
-        var containerClosePacket = new ContainerClosePacket();
-        containerClosePacket.setId(assignedId);
-        containerClosePacket.setType(container.getContainerType().toNetworkType());
-        networkComponent.sendPacket(containerClosePacket);
+        var packet = new ContainerClosePacket();
+        packet.setId(assignedId);
+        packet.setType(container.getContainerType().toNetworkType());
+        networkComponent.sendPacket(packet);
     }
 
     @Override
@@ -199,11 +200,11 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     @Override
     public void sendContainerData(byte assignedId, int property, int value) {
-        var pk1 = new ContainerSetDataPacket();
-        pk1.setWindowId(assignedId);
-        pk1.setProperty(property);
-        pk1.setValue(value);
+        var packet = new ContainerSetDataPacket();
+        packet.setWindowId(assignedId);
+        packet.setProperty(property);
+        packet.setValue(value);
 
-        networkComponent.sendPacket(pk1);
+        networkComponent.sendPacket(packet);
     }
 }

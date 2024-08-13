@@ -12,6 +12,7 @@ import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.ContainerViewer;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.impl.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.Identifier;
@@ -61,7 +62,9 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     private void onLoadNBT(CBlockEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
         nbt.listenForList("Items", NbtType.COMPOUND, items -> container.loadNBT(items));
-        container.setBlockPos(baseComponent.getPosition());
+        if (container instanceof BlockContainer blockContainer) {
+            blockContainer.setBlockPos(baseComponent.getPosition());
+        }
     }
 
     @EventHandler

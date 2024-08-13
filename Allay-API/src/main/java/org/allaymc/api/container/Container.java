@@ -6,7 +6,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3ic;
 
 import java.util.List;
 import java.util.Map;
@@ -36,18 +35,6 @@ public interface Container {
     void addOnSlotChangeListener(int slot, Consumer<ItemStack> listener);
 
     void removeOnSlotChangeListener(int slot, Consumer<ItemStack> listener);
-
-    default boolean hasBlockPos() {
-        return false;
-    }
-
-    default Vector3ic getBlockPos() {
-        throw new UnsupportedOperationException();
-    }
-
-    default void setBlockPos(Vector3ic blockPos) {
-        // Do nothing in default
-    }
 
     default ContainerSlotType getSlotType(int slot) {
         return getContainerType().getSlotType(slot);

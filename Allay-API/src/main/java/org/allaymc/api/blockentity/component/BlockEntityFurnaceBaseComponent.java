@@ -9,11 +9,11 @@ import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
  * @author daoge_cmd
  */
 public interface BlockEntityFurnaceBaseComponent extends BlockEntityBaseComponent {
-    short getBurnTime();
+    int getBurnTime();
 
-    short getCookTime();
+    int getCookTime();
 
-    short getBurnDuration();
+    int getBurnDuration();
 
     float getStoredXP();
 

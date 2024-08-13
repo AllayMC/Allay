@@ -1,6 +1,5 @@
 package org.allaymc.api.container.impl;
 
-import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.ItemStack;
@@ -12,7 +11,7 @@ import org.allaymc.api.item.recipe.input.CraftingInput;
  *
  * @author daoge_cmd
  */
-public abstract class CraftingContainer extends BaseContainer {
+public abstract class CraftingContainer extends BlockContainer {
     public CraftingContainer(FullContainerType<? extends Container> containerType) {
         super(containerType);
     }

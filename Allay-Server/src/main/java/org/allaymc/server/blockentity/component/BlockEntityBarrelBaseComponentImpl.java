@@ -26,7 +26,7 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
     @Override
     public void onInitFinish(BlockEntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
-        var container = containerHolderComponent.<BarrelContainer>getContainer();
+        BarrelContainer container = containerHolderComponent.getContainer();
         container.addOnOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
                 BlockTypes.BARREL.getBlockBehavior().updateBlockProperty(

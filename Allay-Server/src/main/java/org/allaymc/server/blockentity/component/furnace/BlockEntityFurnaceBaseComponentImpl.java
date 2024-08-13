@@ -44,14 +44,15 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected BlockEntityFurnace thisBlockEntityFurnace;
 
     @Getter
-    protected short burnTime; // unit: gt
+    protected int burnTime; // unit: gt
     @Getter
-    protected short cookTime; // unit: gt
+    protected int cookTime; // unit: gt
     @Getter
-    protected short burnDuration; // unit: gt
+    protected int burnDuration; // unit: gt
     @Getter
     @Setter
     protected float storedXP;
+
     protected int currentIngredientStackNetworkId = Integer.MAX_VALUE;
     protected FurnaceRecipe currentFurnaceRecipe = null;
     protected FurnaceInput currentFurnaceInput = null;
@@ -103,14 +104,12 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     @Override
     public NbtMap saveNBT() {
-        var builder = super.saveNBT().toBuilder();
-
-        builder.putShort("BurnTime", burnTime)
-                .putShort("CookTime", cookTime)
-                .putShort("BurnDuration", burnDuration)
-                .putFloat("StoredXP", storedXP);
-
-        return builder.build();
+        return super.saveNBT().toBuilder()
+                .putShort("BurnTime", (short) burnTime)
+                .putShort("CookTime", (short) cookTime)
+                .putShort("BurnDuration", (short) burnDuration)
+                .putFloat("StoredXP", storedXP)
+                .build();
     }
 
     @Override
@@ -120,18 +119,18 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         nbt.listenForShort("BurnTime", value -> burnTime = value);
         nbt.listenForShort("CookTime", value -> cookTime = value);
         nbt.listenForShort("BurnDuration", value -> burnDuration = value);
-        nbt.listenForInt("StoredXP", value -> storedXP = value);
+        nbt.listenForFloat("StoredXP", value -> storedXP = value);
     }
 
     @Override
     public void setLit(boolean lit) {
         var currentBlockState = getDimension().getBlockState(position);
-        if (currentBlockState.getBlockType() == (lit ? getLitBlockType() : getUnlitBlockType())) {
-            return;
-        }
-        var propertyValues = currentBlockState.getPropertyValues().values().toArray(BlockPropertyType.BlockPropertyValue <?, ?, ?>[]::new);
+        var newBlockType = lit ? getLitBlockType() : getUnlitBlockType();
+        if (currentBlockState.getBlockType() == newBlockType) return;
+
+        var propertyValues = currentBlockState.getPropertyValues().values().toArray(BlockPropertyType.BlockPropertyValue<?, ?, ?>[]::new);
         getDimension().setBlockState(
-                position, lit ? getLitBlockType().ofState(propertyValues) : getUnlitBlockType().ofState(propertyValues),
+                position, newBlockType.ofState(propertyValues),
                 0, true, true, false
         );
     }
@@ -146,9 +145,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     protected void tickFurnace() {
-        if (burnTime > 0) {
-            burnTime--;
-        }
+        if (burnTime > 0) burnTime--;
 
         FurnaceContainer container = containerHolderComponent.getContainer();
         if (container.isEmpty(FurnaceContainer.INGREDIENT_SLOT)) {
@@ -164,7 +161,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         var output = currentFurnaceRecipe.getOutput();
         var outputItemType = output.getItemType();
         if (
-                // Output slot already have a different item, so we can't cook
+            // Output slot already have a different item, so we can't cook
                 (!container.isEmpty(FurnaceContainer.RESULT_SLOT) && outputItemType != container.getResult().getItemType()) ||
                 // Output slot is full
                 container.getResult().isFull() ||
@@ -174,12 +171,10 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             return;
         }
 
-        cookTime += (short) getCurrentSpeed();
+        cookTime += (int) getCurrentSpeed();
 
-        if (cookTime < MAX_COOK_TIME) {
-            // Not finished
-            return;
-        }
+        // Not finished
+        if (cookTime < MAX_COOK_TIME) return;
 
         cookTime = 0;
         if (ingredient.getCount() > 1) {
@@ -191,9 +186,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
         var event = new FurnaceSmeltEvent(thisBlockEntityFurnace, ingredient, output);
         event.call();
-        if (event.isCancelled()) {
-            return;
-        }
+        if (event.isCancelled()) return;
 
         var currentResult = container.getResult();
         if (currentResult == ItemAirStack.AIR_STACK) {
@@ -204,7 +197,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
                 container.setResult(output.copy());
                 return;
             }
-            currentResult.setCount(currentResult.getCount() + 1);
+            currentResult.increaseCount(1);
             container.onSlotChange(FurnaceContainer.RESULT_SLOT);
         }
 
@@ -213,9 +206,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     protected boolean checkIngredient(ItemStack ingredient) {
         var furnaceRecipe = matchFurnaceRecipe(ingredient);
-        if (furnaceRecipe == null) {
-            return false;
-        }
+        if (furnaceRecipe == null) return false;
 
         var furnaceInput = new FurnaceInput(ingredient, getFurnaceRecipeTag());
         if (!furnaceRecipe.match(furnaceInput)) {
@@ -233,9 +224,9 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         if (storedXP < 1) return;
 
         var pos = new Vector3f(
-            position.x() + 0.5f,
-            position.y() + 1.5f,
-            position.z() + 0.5f
+                position.x() + 0.5f,
+                position.y() + 1.5f,
+                position.z() + 0.5f
         );
         getDimension().dropXpOrb(pos, (int) storedXP);
         storedXP = 0;
@@ -255,7 +246,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected void sendFurnaceContainerData() {
         var container = containerHolderComponent.getContainer();
         if (container.getViewers().isEmpty()) return;
-        // NOTICE: This is not an error, ask mojang for the reason why you should "/ getSpeedWhenFurnaceTypeMostSuitable()"
+        // NOTICE: This is not an error, ask mojang for the reason why you should "/ getIdealSpeed()"
         container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, (int) (cookTime / getIdealSpeed()));
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_TIME, burnTime);
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_DURATION, burnDuration);
@@ -263,9 +254,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     }
 
     protected boolean checkFuel() {
-        if (burnTime > 0) {
-            return true;
-        }
+        if (burnTime > 0) return true;
 
         FurnaceContainer container = containerHolderComponent.getContainer();
 
@@ -277,22 +266,20 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
         var event = new FurnaceConsumeFuelEvent(thisBlockEntityFurnace, fuel);
         event.call();
-        if (event.isCancelled()) {
-            return false;
-        }
+        if (event.isCancelled()) return false;
 
-        if (fuel.getItemType() != ItemTypes.LAVA_BUCKET) {
+        if (fuel.getItemType() == ItemTypes.LAVA_BUCKET) {
+            container.setFuel(ItemTypes.BUCKET.createItemStack(1));
+        } else {
             if (fuel.getCount() > 1) {
-                fuel.setCount(fuel.getCount() - 1);
+                fuel.reduceCount(1);
                 container.onSlotChange(FurnaceContainer.FUEL_SLOT);
             } else {
                 container.clearSlot(FurnaceContainer.FUEL_SLOT);
             }
-        } else {
-            container.setFuel(ItemTypes.BUCKET.createItemStack(1));
         }
 
-        burnDuration = (short) fuel.getItemData().furnaceBurnDuration();
+        burnDuration = (int) fuel.getItemData().furnaceBurnDuration();
         burnTime = burnDuration;
 
         return true;
