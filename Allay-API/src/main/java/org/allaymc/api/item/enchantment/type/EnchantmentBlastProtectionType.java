@@ -1,6 +1,6 @@
 package org.allaymc.api.item.enchantment.type;
 
-import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
+import org.allaymc.api.entity.damage.DamageContainer.DamageType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
@@ -9,7 +9,7 @@ import org.allaymc.api.utils.Identifier;
  * @author daoge_cmd <br>
  * Allay Project <br>
  */
-public class EnchantmentBlastProtectionType extends AbstractEnchantmentType {
+public class EnchantmentBlastProtectionType extends AbstractEnchantmentProtectionType {
     public EnchantmentBlastProtectionType() {
         super(new Identifier("minecraft:blast_protection"), 3, 4, Rarity.RARE);
     }
@@ -19,5 +19,16 @@ public class EnchantmentBlastProtectionType extends AbstractEnchantmentType {
         return other instanceof EnchantmentFireProtectionType ||
                other instanceof EnchantmentProtectionType ||
                other instanceof EnchantmentProjectileProtectionType;
+    }
+
+    @Override
+    public int getProtectionFactor(DamageType damageType, int level) {
+        if (
+                damageType != DamageType.BLOCK_EXPLOSION &&
+                damageType != DamageType.ENTITY_EXPLOSION
+        ) {
+            return 0;
+        }
+        return level * 2;
     }
 }

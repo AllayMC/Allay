@@ -4,11 +4,13 @@ import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
+import org.allaymc.api.item.enchantment.type.AbstractEnchantmentProtectionType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
@@ -198,6 +200,17 @@ public interface ItemBaseComponent extends ItemComponent {
     float calculateAttackDamage();
 
     boolean hasEnchantment(EnchantmentType enchantmentType);
+
+    default boolean hasProtectionEnchantment() {
+        return getEnchantments().stream().anyMatch(enchantmentInstance -> enchantmentInstance.getType() instanceof AbstractEnchantmentProtectionType);
+    }
+
+    default int getEnchantmentProtectionFactor(DamageContainer.DamageType damageType) {
+        return getEnchantments().stream()
+                .filter(enchantmentInstance -> enchantmentInstance.getType() instanceof AbstractEnchantmentProtectionType)
+                .mapToInt(enchantmentInstance -> ((AbstractEnchantmentProtectionType) enchantmentInstance.getType()).getProtectionFactor(damageType, enchantmentInstance.getLevel()))
+                .sum();
+    }
 
     int getEnchantmentLevel(EnchantmentType enchantmentType);
 

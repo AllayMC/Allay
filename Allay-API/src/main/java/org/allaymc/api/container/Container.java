@@ -89,6 +89,12 @@ public interface Container {
 
     void onSlotChange(int slot);
 
+    default void onAllSlotsChange() {
+        for (int slot = 0; slot < getItemStackArray().length; slot++) {
+            onSlotChange(slot);
+        }
+    }
+
     List<NbtMap> saveNBT();
 
     void loadNBT(List<NbtMap> nbtList);

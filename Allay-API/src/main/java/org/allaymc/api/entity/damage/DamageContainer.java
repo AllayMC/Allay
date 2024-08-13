@@ -23,6 +23,7 @@ public class DamageContainer {
     protected float finalDamage;
     @Setter
     protected float customKnockback = -1;
+    protected float knockbackResistance = 0;
     @Setter
     protected int coolDown = DEFAULT_DAMAGE_COOL_DOWN;
     @Setter
@@ -54,7 +55,7 @@ public class DamageContainer {
     }
 
     public static DamageContainer magicEffect(float sourceDamage) {
-        return new DamageContainer(null, DamageType.MAGIC_EFFECT, sourceDamage);
+        return new DamageContainer(null, DamageType.MAGIC, sourceDamage);
     }
 
     public boolean hasCustomKnockback() {
@@ -65,20 +66,104 @@ public class DamageContainer {
         this.finalDamage = updater.apply(this.finalDamage);
     }
 
+    public boolean canBeReducedByArmor() {
+        return switch (this.damageType) {
+            case FIRE_TICK, SUFFOCATION, DROWNING,
+                 STARVE, VOID, MAGIC, COMMAND,
+                 FLY_INTO_WALL, FREEZING, SONIC_BOOM -> false;
+            default -> true;
+        };
+    }
+
     public enum DamageType {
-        ENTITY_ATTACK,
-        FALL,
-        VOID,
-        PROJECTILE,
+        ANVIL,
+        /**
+         * Block explosion damage
+         */
+        BLOCK_EXPLOSION,
+        CHARGING,
+        /**
+         * Damage caused by contact with a block such as a Cactus
+         */
+        CONTACT,
+        /**
+         * Damage caused by running out of air underwater
+         */
         DROWNING,
-        CACTUS,
-        LAVA,
-        ON_FIRE,
+        /**
+         * Damage caused by being attacked by another entity
+         */
+        ENTITY_ATTACK,
+        /**
+         * Entity explosion damage
+         */
+        ENTITY_EXPLOSION,
+        /**
+         * Fall damage
+         */
+        FALL,
+        FALLING_BLOCK,
+        /**
+         * Damage caused by standing in fire
+         */
         FIRE,
-        ENTITY_EXPLODE,
-        MAGIC_EFFECT,
+        FIREBALL,
+        /**
+         * Burn damage
+         */
+        FIRE_TICK,
+        FIREWORKS,
+        FLY_INTO_WALL,
+        FREEZING,
+        /**
+         * Damage caused by standing in lava
+         */
+        LAVA,
+        /**
+         * Damage caused by being struck by lightning
+         */
+        LIGHTNING,
+        /**
+         * Potion or spell damage
+         */
+        MAGIC,
+        /**
+         * Damage caused by standing on magma block
+         */
+        MAGMA,
+        PISTON,
+        /**
+         * Damage caused by being hit by a projectile such as an Arrow
+         */
+        PROJECTILE,
+        RAM_ATTACK,
+        STALACTITE,
+        /**
+         * Damage caused by hunger
+         */
         STARVE,
-        API,
+        /**
+         * Damage caused by being put in a block
+         */
+        SUFFOCATION,
+        /**
+         * Damage caused by submitting /kill command
+         */
         COMMAND,
+        SONIC_BOOM,
+        TEMPERATURE,
+        /**
+         * Damage caused by thorns enchantment
+         */
+        THORNS,
+        /**
+         * Damage caused by falling into the void
+         */
+        VOID,
+        WITHER,
+        /**
+         * Plugins
+         */
+        API,
     }
 }

@@ -20,7 +20,7 @@ public interface EntityDamageComponent extends EntityComponent {
         return attack(DamageContainer.entityAttack(attacker, damage));
     }
 
-    boolean canAttack(DamageContainer damage);
+    boolean canBeAttacked(DamageContainer damage);
 
     DamageContainer getLastDamage();
 

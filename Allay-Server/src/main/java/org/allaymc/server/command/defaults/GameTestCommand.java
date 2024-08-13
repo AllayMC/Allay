@@ -7,6 +7,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -224,6 +225,13 @@ public class GameTestCommand extends SimpleCommand {
                             player.getLocation().add(0, -1, 0, new Vector3f()),
                             context.getResult(1)
                     );
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("damageself")
+                .floatNum("damage")
+                .exec((context, player) -> {
+                    player.attack(DamageContainer.entityAttack(player, context.getResult(1)));
                     return context.success();
                 }, SenderType.PLAYER);
     }

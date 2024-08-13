@@ -47,15 +47,69 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean attack(DamageContainer damage) {
-        if (!canAttack(damage)) return false;
+        if (!canBeAttacked(damage)) return false;
+        if (checkCoolDown(damage)) return false;
 
+        applyAttacker(damage);
+        applyVictim(damage);
+        applyDamage(damage);
+
+        return true;
+    }
+
+    protected void applyDamage(DamageContainer damage) {
+        attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
+        baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
+        if (damage.isCritical()) baseComponent.applyAnimation(AnimatePacket.Action.CRITICAL_HIT);
+
+        if (thisEntity instanceof EntityPlayerHungerComponent hungerComponent) {
+            hungerComponent.exhaust(0.1f);
+        }
+
+        var attacker = damage.getAttacker();
+        if (attacker == null) return;
+
+        if (attacker instanceof EntityPlayerHungerComponent hungerComponent) {
+            hungerComponent.exhaust(0.1f);
+        }
+
+        if (damage.hasCustomKnockback()) {
+            baseComponent.knockback(attacker.getLocation(), damage.getCustomKnockback());
+        } else {
+            baseComponent.knockback(attacker.getLocation());
+        }
+    }
+
+    protected boolean checkCoolDown(DamageContainer damage) {
         var currentTime = baseComponent.getWorld().getTick();
-        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return false;
+        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return true;
 
         lastDamage = damage;
         lastDamageTime = currentTime;
+        return false;
+    }
 
+    protected void applyVictim(DamageContainer damage) {
+        applyEffects(damage);
+        applyArmor(damage);
+    }
+
+    protected void applyEffects(DamageContainer damage) {
+        // Damage absorption
+        var absorption = baseComponent.getAbsorption();
+        if (absorption > 0) {
+            baseComponent.setAbsorption(Math.max(0, absorption - damage.getFinalDamage()));
+            damage.updateFinalDamage(d -> Math.max(0, d - absorption));
+        }
+    }
+
+    protected void applyArmor(DamageContainer damage) {
+        // Nothing here
+    }
+
+    protected void applyAttacker(DamageContainer damage) {
         var attacker = damage.getAttacker();
+
         if (attacker != null) {
             var strengthLevel = attacker.getEffectLevel(VanillaEffectTypes.STRENGTH);
             if (strengthLevel > 0) {
@@ -77,37 +131,10 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         // TODO: Sharpness enchantment
 
         if (damage.isCritical()) damage.updateFinalDamage(d -> d * 1.5f);
-
-        // Damage absorption
-        var absorption = baseComponent.getAbsorption();
-        if (absorption > 0) {
-            baseComponent.setAbsorption(Math.max(0, absorption - damage.getFinalDamage()));
-            damage.updateFinalDamage(d -> Math.max(0, d - absorption));
-        }
-
-        if (thisEntity instanceof EntityPlayerHungerComponent hungerComponent)
-            hungerComponent.exhaust(0.1f);
-
-        attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
-        baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
-        if (damage.isCritical()) baseComponent.applyAnimation(AnimatePacket.Action.CRITICAL_HIT);
-
-        if (attacker != null) {
-            if (attacker instanceof EntityPlayerHungerComponent hungerComponent)
-                hungerComponent.exhaust(0.1f);
-
-            if (damage.hasCustomKnockback()) {
-                baseComponent.knockback(attacker.getLocation(), damage.getCustomKnockback());
-            } else {
-                baseComponent.knockback(attacker.getLocation());
-            }
-        }
-
-        return true;
     }
 
     @Override
-    public boolean canAttack(DamageContainer damage) {
+    public boolean canBeAttacked(DamageContainer damage) {
         var event = new CEntityDamageEvent(damage, true);
         manager.callEvent(event);
         return event.isCanAttack();
