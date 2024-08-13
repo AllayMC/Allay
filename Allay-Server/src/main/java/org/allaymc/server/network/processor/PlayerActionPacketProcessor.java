@@ -91,7 +91,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
 
     private void prepareForRespawn(EntityPlayer player, Location3ic spawnPoint) {
         var spawnDimension = spawnPoint.dimension();
-        spawnDimension.getChunkService().getOrLoadChunkSynchronously(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
+        spawnDimension.getChunkService().getOrLoadChunkSync(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
         player.setLocationBeforeSpawn(new Location3f(spawnPoint));
     }
 

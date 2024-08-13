@@ -279,7 +279,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // Validate and set spawn point
         validateAndSetSpawnPoint(playerData);
         // Load the current point chunk firstly so that we can add player entity into the chunk
-        dimension.getChunkService().getOrLoadChunkSynchronously(
+        dimension.getChunkService().getOrLoadChunkSync(
                 (int) currentPos.x() >> 4,
                 (int) currentPos.z() >> 4
         );

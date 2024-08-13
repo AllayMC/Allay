@@ -139,7 +139,7 @@ public final class AllayChunkService implements ChunkService {
 
     @SlowOperation
     @Override
-    public Chunk getOrLoadChunkSynchronously(int x, int z) {
+    public Chunk getOrLoadChunkSync(int x, int z) {
         return getOrLoadChunk(x, z).join();
     }
 

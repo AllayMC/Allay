@@ -106,7 +106,7 @@ public class AllayDimension implements Dimension {
     @Override
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
+        if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
 
         var xIndex = x & 15;
         var zIndex = z & 15;

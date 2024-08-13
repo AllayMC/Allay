@@ -363,6 +363,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void teleportInDimension(Location3fc target) {
+        // Ensure that the new chunk is loaded
+        target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
         setLocationAndCheckChunk(target);
         broadcastMoveToViewers(target, true);
     }
@@ -370,7 +372,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected void teleportOverDimension(Location3fc target) {
         // Teleporting to another dimension, there will be more works to be done
         this.location.dimension().getEntityService().removeEntity(thisEntity, () -> {
-            target.dimension().getChunkService().getOrLoadChunkSynchronously((int) target.x() >> 4, (int) target.z() >> 4);
+            target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
             setLocationBeforeSpawn(target);
             target.dimension().getEntityService().addEntity(thisEntity);
         });

@@ -189,7 +189,7 @@ public interface Dimension {
             return AIR.getDefaultState();
 
         var chunk = getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
+        if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
@@ -381,7 +381,7 @@ public interface Dimension {
 
     default BlockEntity getBlockEntity(int x, int y, int z) {
         var chunk = getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null) chunk = getChunkService().getOrLoadChunkSynchronously(x >> 4, z >> 4);
+        if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
         return chunk.getBlockEntity(x & 15, y, z & 15);
     }
 

@@ -258,7 +258,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             networkComponent.sendPacket(targetDim.getWorld().getWorldData().getGameRules().buildPacket());
         }
         location.dimension().removePlayer(thisPlayer, () -> {
-            targetDim.getChunkService().getOrLoadChunkSynchronously((int) target.x() >> 4, (int) target.z() >> 4);
+            targetDim.getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
             setLocationBeforeSpawn(target);
             sendLocationToSelf();
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
