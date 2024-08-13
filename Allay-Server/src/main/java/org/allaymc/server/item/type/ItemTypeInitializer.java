@@ -1195,6 +1195,11 @@ public final class ItemTypeInitializer {
                 .vanillaItem(VanillaItemId.NETHERITE_CHESTPLATE)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
+        ItemTypes.ELYTRA = ItemTypeBuilder
+                .builder(ItemElytraStack.class)
+                .vanillaItem(VanillaItemId.ELYTRA)
+                .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
+                .build();
     }
 
     public static void initLeggings() {

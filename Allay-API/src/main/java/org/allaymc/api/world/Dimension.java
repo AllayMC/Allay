@@ -289,6 +289,10 @@ public interface Dimension {
         chunk.sendChunkPacket(levelEventPacket);
     }
 
+    default void addLevelSoundEvent(Vector3fc pos, SoundEvent soundEvent) {
+        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
+    }
+
     default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent) {
         addLevelSoundEvent(x, y, z, soundEvent, -1);
     }
@@ -407,6 +411,10 @@ public interface Dimension {
 
     default void broadcastPacket(BedrockPacket packet) {
         getPlayers().forEach(player -> player.sendPacket(packet));
+    }
+
+    default void addSound(Vector3fc pos, String sound) {
+        addSound(pos.x(), pos.y(), pos.z(), sound);
     }
 
     default void addSound(float x, float y, float z, String sound) {

@@ -46,14 +46,28 @@ public final class ItemHelper {
     }
 
     /**
-     * Get the item tier of an item.
+     * Get the tool tier of an item.
      *
      * @param itemType The {@link ItemType} of the item.
      *
-     * @return The {@link ItemTier} object, or {@code null} if the item does not have an item tier.
+     * @return The {@link ToolTier} object, or {@code null} if the item does not have an tool tier.
      */
-    public static ItemTier getItemTier(ItemType<?> itemType) {
-        return Arrays.stream(ItemTier.ORDER_OF_QUALITY)
+    public static ToolTier getToolTier(ItemType<?> itemType) {
+        return Arrays.stream(ToolTier.ORDER_OF_QUALITY)
+                .filter(tier -> itemType.hasItemTag(tier.getItemTag()))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Get the armor tier of an item.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return The {@link ArmorTier} object, or {@code null} if the item does not have an armor tier.
+     */
+    public static ArmorTier getArmorTier(ItemType<?> itemType) {
+        return Arrays.stream(ArmorTier.ORDER_OF_QUALITY)
                 .filter(tier -> itemType.hasItemTag(tier.getItemTag()))
                 .findFirst()
                 .orElse(null);

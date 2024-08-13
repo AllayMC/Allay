@@ -13,19 +13,21 @@ import static org.allaymc.api.data.VanillaItemTags.*;
  */
 @Getter
 @AllArgsConstructor
-public enum ItemTier {
+public enum ToolTier {
     WOODEN(WOODEN_TIER),
+    GOLD(GOLDEN_TIER),
     STONE(STONE_TIER),
     IRON(IRON_TIER),
     DIAMOND(DIAMOND_TIER),
-    NETHERITE(NETHERITE_TIER),
-    GOLD(GOLDEN_TIER);
+    NETHERITE(NETHERITE_TIER);
 
-    public static final ItemTier[] ORDER_OF_QUALITY = {GOLD, NETHERITE, DIAMOND, IRON, STONE, WOODEN};
+    public static final ToolTier[] ORDER_OF_QUALITY = {
+            NETHERITE, DIAMOND, IRON, STONE, GOLD, WOODEN
+    };
 
     private final ItemTag itemTag;
 
-    public boolean isBetterThan(ItemTier tier) {
+    public boolean isBetterThan(ToolTier tier) {
         return this.ordinal() > tier.ordinal();
     }
 }
