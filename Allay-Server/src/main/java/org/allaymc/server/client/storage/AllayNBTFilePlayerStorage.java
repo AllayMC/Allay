@@ -5,12 +5,15 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.storage.NativeFilePlayerStorage;
 import org.allaymc.api.client.storage.PlayerData;
+import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Allay Project 2024/1/27
@@ -18,15 +21,33 @@ import java.util.UUID;
  * @author daoge_cmd
  */
 @Slf4j
-@Getter
 public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
 
+    @Getter
     protected Path dataFolderPath;
+
+    private final Map<UUID, Long> playersDataAutoSaveTime = new ConcurrentHashMap<>();
+    protected long currentTick;
 
     @SneakyThrows
     public AllayNBTFilePlayerStorage(Path dataFolderPath) {
         this.dataFolderPath = dataFolderPath;
         if (!Files.exists(dataFolderPath)) Files.createDirectory(dataFolderPath);
+    }
+
+    @Override
+    public void tick(long currentTick) {
+        this.currentTick = currentTick;
+        playersDataAutoSaveTime.forEach((uuid, saveTime) -> {
+            if (currentTick >= saveTime) {
+                var player = Server.getInstance().getOnlinePlayers().get(uuid);
+                if (player == null) { //If player is offline
+                    playersDataAutoSaveTime.remove(uuid);
+                } else if (player.isInitialized()) {
+                    savePlayerData(player);
+                }
+            }
+        });
     }
 
     @Override
@@ -67,6 +88,8 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
 
         // delete uuid_old.nbt file
         Files.deleteIfExists(oldPath);
+
+        playersDataAutoSaveTime.put(uuid, currentTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle());
     }
 
     @SneakyThrows

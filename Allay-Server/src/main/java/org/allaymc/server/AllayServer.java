@@ -116,7 +116,6 @@ public final class AllayServer implements Server {
     private Thread terminalConsoleThread;
     private AllayTerminalConsole terminalConsole;
 
-    private long nextPlayerDataAutoSaveTime = 0;
     @Getter
     private ScoreboardService scoreboardService;
     private final GameLoop gameLoop = GameLoop.builder()
@@ -211,14 +210,6 @@ public final class AllayServer implements Server {
     public void tick(long currentTick) {
         this.scheduler.tick();
         playerStorage.tick(currentTick);
-        autoSavePlayerData(currentTick);
-    }
-
-    private void autoSavePlayerData(long currentTick) {
-        if (currentTick >= nextPlayerDataAutoSaveTime) {
-            savePlayerData();
-            nextPlayerDataAutoSaveTime = currentTick + Server.SETTINGS.storageSettings().playerDataAutoSaveCycle();
-        }
     }
 
     @Override
