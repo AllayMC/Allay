@@ -5,9 +5,12 @@ import lombok.Setter;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.entity.attribute.AttributeType;
+import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
+import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Difficulty;
@@ -148,5 +151,15 @@ public class EntityPlayerHungerComponentImpl implements EntityPlayerHungerCompon
     @Override
     public void setFoodTickTimer(int foodTickTimer) {
         this.foodTickTimer = Math.max(foodTickTimer, 0);
+    }
+
+    @EventHandler
+    protected void onSaveNBT(CEntitySaveNBTEvent event) {
+        event.getNbt().putInt("foodTickTimer", foodTickTimer);
+    }
+
+    @EventHandler
+    protected void onLoadNBT(CEntityLoadNBTEvent event) {
+        event.getNbt().listenForInt("foodTickTimer", value -> foodTickTimer = value);
     }
 }

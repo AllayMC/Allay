@@ -39,13 +39,13 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
     public void tick(long currentTick) {
         this.currentTick = currentTick;
         playersDataAutoSaveTime.forEach((uuid, saveTime) -> {
-            if (currentTick >= saveTime) {
-                var player = Server.getInstance().getOnlinePlayers().get(uuid);
-                if (player == null) { //If player is offline
-                    playersDataAutoSaveTime.remove(uuid);
-                } else if (player.isInitialized()) {
-                    savePlayerData(player);
-                }
+            if (currentTick < saveTime) return;
+
+            var player = Server.getInstance().getOnlinePlayers().get(uuid);
+            if (player.isDisconnected()) {
+                playersDataAutoSaveTime.remove(uuid);
+            } else if (player.isInitialized()) {
+                savePlayerData(player);
             }
         });
     }
