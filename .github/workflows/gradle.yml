@@ -2,7 +2,7 @@ name: Allay
 
 on:
   push:
-    branches: ["master"]
+    branches: [ "master" ]
     paths:
       - .github/workflows/build.yml
       - Allay-API/src/**
@@ -69,7 +69,9 @@ jobs:
       - name: Format ChangeLog
         id: get-changelog
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        run: echo "changelog=${{ github.event.commits[0].message }}" >> $GITHUB_OUTPUT
+        run: |
+          CHANGELOG=$(echo "${{ github.event.commits[0].message }}" | tr '\n' ' ')
+          echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
       - name: Get Time
         id: time
         uses: nanzm/get-time-action@v2.0
