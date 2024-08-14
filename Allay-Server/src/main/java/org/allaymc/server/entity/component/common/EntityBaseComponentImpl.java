@@ -176,6 +176,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public void tick(long currentTick) {
         checkDead();
         tickEffects();
+        attributeComponent.tick();
     }
 
     protected void tickEffects() {

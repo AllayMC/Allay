@@ -99,6 +99,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
             if (item == ItemAirStack.AIR_STACK) continue;
             enchantmentProtectionFactor += item.getEnchantmentProtectionFactor(damage.getDamageType());
         }
+        enchantmentProtectionFactor = Math.min(20, enchantmentProtectionFactor);
 
         if (enchantmentProtectionFactor == 0) return;
 

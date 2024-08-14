@@ -25,6 +25,8 @@ public interface EntityAttributeComponent extends EntityComponent {
         };
     }
 
+    default void tick() {}
+
     void addAttribute(AttributeType attributeType);
 
     Collection<Attribute> getAttributes();

@@ -22,7 +22,6 @@ import org.allaymc.api.entity.component.EntityItemBaseComponent;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -85,8 +84,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected EntityContainerHolderComponent containerHolderComponent;
     @Dependency
     protected EntityPlayerNetworkComponent networkComponent;
-    @Dependency
-    protected EntityPlayerHungerComponent hungerComponent;
     @Getter
     protected GameType gameType = GameType.CREATIVE;
     @Getter
@@ -191,11 +188,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void tick(long currentTick) {
         super.tick(currentTick);
 
-        syncData();
         tryPickUpItems();
-        hungerComponent.tickHunger();
-
         tickPlayerDataAutoSave();
+
+        syncData();
     }
 
     protected void tickPlayerDataAutoSave() {

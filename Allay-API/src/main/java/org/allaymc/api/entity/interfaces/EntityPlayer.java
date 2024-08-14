@@ -26,8 +26,7 @@ public interface EntityPlayer extends
         EntityPlayerAttributeComponent,
         EntityPlayerContainerHolderComponent,
         EntityContainerViewerComponent,
-        EntityDamageComponent,
-        EntityPlayerHungerComponent {
+        EntityDamageComponent {
 
     default <T extends Container> T getReachableContainer(FullContainerType<?> slotType) {
         var container = getOpenedContainer(slotType);
