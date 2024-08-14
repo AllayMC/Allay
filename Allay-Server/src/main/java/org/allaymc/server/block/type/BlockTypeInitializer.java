@@ -733,6 +733,51 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static void initFurnace() {
+        BlockTypes.FURNACE = BlockTypeBuilder
+                .builder(BlockFurnaceBehavior.class)
+                .vanillaBlock(VanillaBlockId.FURNACE)
+                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.FURNACE)
+                .build();
+        BlockTypes.LIT_FURNACE = BlockTypeBuilder
+                .builder(BlockLitFurnaceBehavior.class)
+                .vanillaBlock(VanillaBlockId.LIT_FURNACE)
+                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.FURNACE)
+                .build();
+        BlockTypes.BLAST_FURNACE = BlockTypeBuilder
+                .builder(BlockBlastFurnaceBehavior.class)
+                .vanillaBlock(VanillaBlockId.BLAST_FURNACE)
+                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
+                .build();
+        BlockTypes.LIT_BLAST_FURNACE = BlockTypeBuilder
+                .builder(BlockLitBlastFurnaceBehavior.class)
+                .vanillaBlock(VanillaBlockId.LIT_BLAST_FURNACE)
+                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
+                .build();
+        BlockTypes.SMOKER = BlockTypeBuilder
+                .builder(BlockSmokerBehavior.class)
+                .vanillaBlock(VanillaBlockId.SMOKER)
+                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.SMOKER)
+                .build();
+        BlockTypes.LIT_SMOKER = BlockTypeBuilder
+                .builder(BlockLitSmokerBehavior.class)
+                .vanillaBlock(VanillaBlockId.LIT_SMOKER)
+                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.SMOKER)
+                .build();
+    }
+
     public static void initPillars() {
         //Log
         BlockTypes.ACACIA_LOG = initPillarAxis(BlockAcaciaLogBehavior.class, VanillaBlockId.ACACIA_LOG);
@@ -833,11 +878,9 @@ public final class BlockTypeInitializer {
                 .build();
 
         //TODO: BlockTypes.BIG_DRIPLEAF, BIG_DRIPLEAF
-        BlockTypes.BLAST_FURNACE = buildCardinalDirection(BlockBlastFurnaceBehavior.class, VanillaBlockId.BLAST_FURNACE);
         BlockTypes.CARVED_PUMPKIN = buildCardinalDirection(BlockCarvedPumpkinBehavior.class, VanillaBlockId.CARVED_PUMPKIN);
 
         //TODO: CALIBRATED_SCULK_SENSOR
-        BlockTypes.FURNACE = buildCardinalDirection(BlockFurnaceBehavior.class, VanillaBlockId.FURNACE);
     }
 
     public static void initButtons() {
