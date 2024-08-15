@@ -11,6 +11,7 @@ import org.allaymc.api.data.CompassRoseDirection;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.SignTextChangeEvent;
+import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.MathUtils;
@@ -79,9 +80,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             return;
         }
 
-        var event = new SignTextChangeEvent(new BlockStateWithPos(getBlockState(), getPosition(), 0), newText, player);
+        var event = new SignTextChangeEvent(new BlockStateWithPos(getBlockState(), position, 0), newText, player);
         event.call();
         if (event.isCancelled()) return;
+        newText = event.getText();
 
         if (isFrontSide) {
             frontText.setText(newText);
@@ -113,6 +115,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         var itemInHand = player.getItemInHand();
 
         if (itemInHand.getItemType() == ItemTypes.HONEYCOMB && !waxed) {
+            var signWaxEvent = new SignWaxEvent(new BlockStateWithPos(getBlockState(), position, 0), player);
+            signWaxEvent.call();
+            if (signWaxEvent.isCancelled()) return;
+
             setWaxed(true);
             player.tryConsumeItemInHand();
             player.getDimension().addLevelEvent(position.x(), position.y(), position.z(), LevelEvent.PARTICLE_WAX_ON);
