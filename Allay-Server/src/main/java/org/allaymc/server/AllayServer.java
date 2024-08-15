@@ -10,10 +10,8 @@ import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerStorage;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
-import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.eventbus.event.network.IPBanEvent;
 import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
 import org.allaymc.api.eventbus.event.player.PlayerBanEvent;
@@ -53,7 +51,6 @@ import org.allaymc.server.world.AllayWorldPool;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -69,13 +66,12 @@ import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.allaymc.api.entity.type.EntityTypes.PLAYER;
-
 @Slf4j
 public final class AllayServer implements Server {
 
     private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
     private static volatile AllayServer INSTANCE;
+    private static final int MAX_DISCONNECT_WAIT_TIME = 20 * 5; // 5 seconds
 
     private final boolean debug = Server.SETTINGS.genericSettings().debug();
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
@@ -105,16 +101,20 @@ public final class AllayServer implements Server {
 
     private final Thread terminalConsoleThread = new AllayTerminalConsoleThread();
     private final AllayTerminalConsole terminalConsole = new AllayTerminalConsole(this);
+    private int disconnectWaitTime = 0;
 
     @Getter
     private ScoreboardService scoreboardService;
     private final GameLoop gameLoop = GameLoop.builder().loopCountPerSec(20).onTick(gameLoop -> {
-        if (!isRunning.get() && players.isEmpty()) {
-            // disconnectAllPlayers() method is called in shutdown() method
-            // so we just need to wait for all players to disconnect
-            // before stopping the server game loop
-            gameLoop.stop();
-            return;
+        if (!isRunning.get()) {
+            disconnectWaitTime++;
+            if (players.isEmpty() || disconnectWaitTime >= MAX_DISCONNECT_WAIT_TIME) {
+                // disconnectAllPlayers() method is called in shutdown() method
+                // so we just need to wait for all players to disconnect
+                // before stopping the server game loop
+                gameLoop.stop();
+                return;
+            }
         }
 
         try {

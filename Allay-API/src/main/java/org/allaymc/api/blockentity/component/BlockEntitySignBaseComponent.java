@@ -2,9 +2,7 @@ package org.allaymc.api.blockentity.component;
 
 import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.nbt.NbtMap;
-import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
 
 /**
  * Allay Project 2024/8/16
@@ -30,6 +28,8 @@ public interface BlockEntitySignBaseComponent extends BlockEntityBaseComponent {
         boolean isGlowing();
 
         void setGlowing(boolean glowing);
+
+        String flattenText();
 
         NbtMap saveNBT();
     }

@@ -1,6 +1,7 @@
 package org.allaymc.server.blockentity.component.sign;
 
 import lombok.Getter;
+import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.api.data.BlockFace;
@@ -9,6 +10,7 @@ import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.data.CompassRoseDirection;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.block.SignTextChangeEvent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.MathUtils;
@@ -49,6 +51,8 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
                 .putBoolean("IsWaxed", waxed)
                 .putCompound("FrontText", frontText.saveNBT())
                 .putCompound("BackText", backText.saveNBT())
+                // Unused
+                .putLong("LockedForEditingBy", -1L)
                 .build();
     }
 
@@ -59,6 +63,31 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         pk.setFrontSide(frontSide);
 
         player.sendPacket(pk);
+    }
+
+    @Override
+    public void applyClientChange(EntityPlayer player, NbtMap nbt) {
+        String[] newText;
+        boolean isFrontSide = true;
+        if (!frontText.flattenText().equals(nbt.getCompound("FrontText").getString("Text"))) {
+            newText = AllayStringUtils.fastSplit(nbt.getCompound("FrontText").getString("Text"), "\n").toArray(String[]::new);
+        } else if (!backText.flattenText().equals(nbt.getCompound("BackText").getString("Text"))) {
+            isFrontSide = false;
+            newText = AllayStringUtils.fastSplit(nbt.getCompound("BackText").getString("Text"), "\n").toArray(String[]::new);
+        } else {
+            // No changes
+            return;
+        }
+
+        var event = new SignTextChangeEvent(new BlockStateWithPos(getBlockState(), getPosition(), 0), newText, player);
+        event.call();
+        if (event.isCancelled()) return;
+
+        if (isFrontSide) {
+            frontText.setText(newText);
+        } else {
+            backText.setText(newText);
+        }
     }
 
     @Override
@@ -77,6 +106,8 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         super.onInteract(event);
         var player = event.getInteractInfo().player();
         if (player == null || player.isSneaking()) return;
+        // If a sign is waxed, it cannot be modified.
+        if (waxed) return;
 
         var isFrontSideInteracted = isFrontSideInteracted(event.getInteractInfo().blockFace());
         var itemInHand = player.getItemInHand();
@@ -113,8 +144,6 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             return;
         }
 
-        // If a sign is waxed, it cannot be modified.
-        if (waxed) return;
         openSignEditorFor(player, isFrontSideInteracted);
         event.setSuccess(true);
     }
@@ -164,8 +193,18 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
 
         @Override
         public void setText(String[] text) {
+            sanitizeText(text);
             this.text = text;
             sendBlockEntityDataPacketToViewers();
+        }
+
+        private static void sanitizeText(String[] lines) {
+            for (int i = 0; i < lines.length; i++) {
+                // Don't allow excessive text per line.
+                if (lines[i] != null) {
+                    lines[i] = lines[i].substring(0, Math.min(255, lines[i].length()));
+                }
+            }
         }
 
         @Override
@@ -180,9 +219,14 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         }
 
         @Override
+        public String flattenText() {
+            return String.join("\n", text);
+        }
+
+        @Override
         public NbtMap saveNBT() {
             return NbtMap.builder()
-                    .putString("Text", String.join("\n", text))
+                    .putString("Text", flattenText())
                     .putBoolean("IgnoreLighting", glowing)
                     // Not implemented
                     .putInt("SignTextColor", -16777216)

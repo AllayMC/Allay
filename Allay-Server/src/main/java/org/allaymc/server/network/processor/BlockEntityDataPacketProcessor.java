@@ -16,7 +16,7 @@ public class BlockEntityDataPacketProcessor extends PacketProcessor<BlockEntityD
     public void handleSync(EntityPlayer player, BlockEntityDataPacket packet, long receiveTime) {
         var pos = packet.getBlockPosition();
         var blockEntity = player.getDimension().getBlockEntity(pos.getX(), pos.getY(), pos.getZ());
-        blockEntity.loadNBT(packet.getData());
+        blockEntity.applyClientChange(player, packet.getData());
         // Send new data to other viewers
         blockEntity.sendBlockEntityDataPacketToViewers();
     }
