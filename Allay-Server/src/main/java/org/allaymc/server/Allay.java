@@ -94,8 +94,8 @@ public final class Allay {
 
         try {
             Server.getInstance().start(startTime);
-        } catch (Exception e) {
-            log.error("Error while starting the server!", e);
+        } catch (Throwable t) {
+            log.error("Error while starting the server!", t);
             Server.getInstance().shutdown();
         }
     }

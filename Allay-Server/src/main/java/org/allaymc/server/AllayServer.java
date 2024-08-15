@@ -85,19 +85,10 @@ public final class AllayServer implements Server {
     private final AtomicBoolean isShuttingDown = new AtomicBoolean(false);
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
-    private final PlayerStorage playerStorage =
-            Server.SETTINGS.storageSettings().savePlayerData() ?
-                    new AllayNBTFilePlayerStorage(Path.of("players")) :
-                    AllayEmptyPlayerStorage.INSTANCE;
+    private final PlayerStorage playerStorage = Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE;
     // Thread pool for executing CPU-intensive tasks
     @Getter
-    private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(
-            Runtime.getRuntime().availableProcessors(),
-            Runtime.getRuntime().availableProcessors(),
-            0,
-            TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<>(),
-            AllayComputeThread::new);
+    private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(), Runtime.getRuntime().availableProcessors(), 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), AllayComputeThread::new);
     // Thread pool for executing I/O-intensive tasks
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
@@ -118,23 +109,19 @@ public final class AllayServer implements Server {
 
     @Getter
     private ScoreboardService scoreboardService;
-    private final GameLoop gameLoop = GameLoop.builder()
-            .loopCountPerSec(20)
-            .onTick(gameLoop -> {
-                if (isShuttingDown() && players.isEmpty()) {
-                    // Shutdown only when all players are disconnected
-                    gameLoop.stop();
-                    return;
-                }
+    private final GameLoop gameLoop = GameLoop.builder().loopCountPerSec(20).onTick(gameLoop -> {
+        if (isShuttingDown() && players.isEmpty()) {
+            // Shutdown only when all players are disconnected
+            gameLoop.stop();
+            return;
+        }
 
-                try {
-                    tick(gameLoop.getTick());
-                } catch (Throwable throwable) {
-                    log.error("Error while ticking server", throwable);
-                }
-            })
-            .onStop(this::shutdown0)
-            .build();
+        try {
+            tick(gameLoop.getTick());
+        } catch (Throwable throwable) {
+            log.error("Error while ticking server", throwable);
+        }
+    }).onStop(this::shutdown0).build();
     @Getter
     private long startTime;
 
@@ -164,7 +151,7 @@ public final class AllayServer implements Server {
         Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
             @Override
             public void run() {
-                // FIXME: it seems not works
+                if (isShuttingDown.get()) return;
                 shutdown();
             }
         });
@@ -246,8 +233,8 @@ public final class AllayServer implements Server {
             isRunning.set(false);
             worldPool.close();
             playerStorage.close();
-            virtualThreadPool.shutdownNow();
-            computeThreadPool.shutdownNow();
+            virtualThreadPool.shutdown();
+            computeThreadPool.shutdown();
         }
 
         System.exit(0);
@@ -284,11 +271,7 @@ public final class AllayServer implements Server {
             return;
         }
 
-        var player = PLAYER.createEntity(
-                SimpleEntityInitInfo
-                        .builder()
-                        .build()
-        );
+        var player = PLAYER.createEntity(SimpleEntityInitInfo.builder().build());
         sendTr(TrKeys.A_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString());
         player.setClientSession(session);
     }
@@ -334,11 +317,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void addToPlayerList(
-            UUID uuid, long entityId,
-            String name, DeviceInfo deviceInfo,
-            String xuid, Skin skin
-    ) {
+    public void addToPlayerList(UUID uuid, long entityId, String name, DeviceInfo deviceInfo, String xuid, Skin skin) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.ADD);
 
@@ -424,8 +403,7 @@ public final class AllayServer implements Server {
 
         banInfo.bannedPlayers().add(uuidOrName);
         players.values().stream()
-                .filter(player -> player.getUUID().toString().equals(uuidOrName) ||
-                                  player.getOriginName().equals(uuidOrName))
+                .filter(player -> player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect("You are banned!"));
         return true;
     }
@@ -510,8 +488,7 @@ public final class AllayServer implements Server {
 
         whitelist.whitelist().remove(uuidOrName);
         players.values().stream()
-                .filter(player -> player.getUUID().toString().equals(uuidOrName) ||
-                                  player.getOriginName().equals(uuidOrName))
+                .filter(player -> player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
         return true;
     }
