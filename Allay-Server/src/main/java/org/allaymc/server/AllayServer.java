@@ -127,11 +127,7 @@ public final class AllayServer implements Server {
 
     public static AllayServer getInstance() {
         if (INSTANCE == null) {
-            synchronized (AllayServer.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new AllayServer();
-                }
-            }
+            INSTANCE = new AllayServer();
         }
 
         return INSTANCE;
