@@ -112,10 +112,6 @@ public class AllayDimension implements Dimension {
         var xIndex = x & 15;
         var zIndex = z & 15;
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
-        if (oldBlockState == blockState) {
-            log.debug("Trying to set the same block state at x={}, y={}, z={}", x, y, z);
-            return;
-        }
         if (oldBlockState.getBlockType() == BlockTypes.WATER && blockState.getBlockStateData().canContainLiquid()) {
             // If the old block is water and the new block can contain liquid,
             // we need to move water to layer 1

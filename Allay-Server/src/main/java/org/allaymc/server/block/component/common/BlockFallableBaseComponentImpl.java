@@ -11,6 +11,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityFallingBlock;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.block.BlockFallEvent;
 import org.allaymc.api.math.position.Position3i;
@@ -34,16 +35,16 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
 
         var pos = current.pos();
         var dimension = pos.dimension();
-        trySpawnFallingEntity(dimension, pos, current.blockState());
+        trySpawnFallingEntity(dimension, pos, current.blockState(), null);
     }
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        if (trySpawnFallingEntity(dimension, placeBlockPos, blockState)) return true;
+        if (trySpawnFallingEntity(dimension, placeBlockPos, blockState, placementInfo.player())) return true;
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 
-    protected boolean trySpawnFallingEntity(Dimension dimension, Vector3ic pos, BlockState blockState) {
+    protected boolean trySpawnFallingEntity(Dimension dimension, Vector3ic pos, BlockState blockState, EntityPlayer player) {
         var down0 = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType();
         var down1 = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos), 1).getBlockType();
         if (invalidDownBlock(down0, down1)) {
@@ -53,12 +54,17 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
                 return false;
             }
 
-            dimension.getEntityService().addEntity(createFallingEntity(dimension, pos, blockState), () -> {
+            if (player != null) {
+                // trySpawnFallingEntity() is called from place method, so we need to send block update to client
+                // to let client know that the block is failed to be placed because it will fall
+                dimension.sendBlockUpdateTo(BlockTypes.AIR.getDefaultState(), pos, 0, player);
+            } else {
                 dimension.setBlockState(
                         pos.x(), pos.y(), pos.z(),
                         BlockTypes.AIR.getDefaultState()
                 );
-            });
+            }
+            dimension.getEntityService().addEntity(createFallingEntity(dimension, pos, blockState));
             return true;
         }
 
