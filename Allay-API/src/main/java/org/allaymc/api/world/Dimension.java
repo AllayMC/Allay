@@ -282,6 +282,18 @@ public interface Dimension {
         return notEmpty ? blockStates : null;
     }
 
+    default void addLevelEvent(Vector3fc pos, LevelEventType levelEventType) {
+        addLevelEvent(pos.x(), pos.y(), pos.z(), levelEventType, 0);
+    }
+
+    default void addLevelEvent(Vector3fc pos, LevelEventType levelEventType, int data) {
+        addLevelEvent(pos.x(), pos.y(), pos.z(), levelEventType, data);
+    }
+
+    default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType) {
+        addLevelEvent(x, y, z, levelEventType, 0);
+    }
+
     default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType, int data) {
         var chunk = getChunkService().getChunk((int) x >> 4, (int) z >> 4);
         if (chunk == null) return;

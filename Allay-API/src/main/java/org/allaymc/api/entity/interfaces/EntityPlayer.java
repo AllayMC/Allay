@@ -10,6 +10,7 @@ import org.allaymc.api.eventbus.event.player.PlayerDropItemEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.MathUtils;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3f;
 
@@ -97,6 +98,13 @@ public interface EntityPlayer extends
 
     default void clearItemInHand() {
         getContainer(FullContainerType.PLAYER_INVENTORY).clearItemInHand();
+    }
+
+    default void tryConsumeItemInHand() {
+        if (getGameType() == GameType.CREATIVE) return;
+        var itemInHand = getItemInHand();
+        if (itemInHand.getCount() == 1) clearItemInHand();
+        else itemInHand.setCount(itemInHand.getCount() - 1);
     }
 
     default void sendItemInHandUpdate() {

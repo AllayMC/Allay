@@ -9,10 +9,12 @@ import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.data.CompassRoseDirection;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
 
 /**
@@ -75,9 +77,48 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         super.onInteract(event);
         var player = event.getInteractInfo().player();
         if (player == null || player.isSneaking()) return;
+
+        var isFrontSideInteracted = isFrontSideInteracted(event.getInteractInfo().blockFace());
+        var itemInHand = player.getItemInHand();
+
+        if (itemInHand.getItemType() == ItemTypes.HONEYCOMB && !waxed) {
+            setWaxed(true);
+            player.tryConsumeItemInHand();
+            player.getDimension().addLevelEvent(position.x(), position.y(), position.z(), LevelEvent.PARTICLE_WAX_ON);
+            sendBlockEntityDataPacketToViewers();
+            event.setSuccess(true);
+            return;
+        }
+
+        if (itemInHand.getItemType() == ItemTypes.GLOW_INK_SAC && !(isFrontSideInteracted ? frontText.isGlowing() : backText.isGlowing())) {
+            if (isFrontSideInteracted) {
+                frontText.setGlowing(true);
+            } else {
+                backText.setGlowing(true);
+            }
+            player.tryConsumeItemInHand();
+            player.getDimension().addLevelEvent(player.getLocation(), LevelEvent.SOUND_INK_SACE_USED);
+            sendBlockEntityDataPacketToViewers();
+            event.setSuccess(true);
+            return;
+        }
+
+        if (itemInHand.getItemType() == ItemTypes.INK_SAC && isFrontSideInteracted ? frontText.isGlowing() : backText.isGlowing()) {
+            if (isFrontSideInteracted) {
+                frontText.setGlowing(false);
+            } else {
+                backText.setGlowing(false);
+            }
+            player.tryConsumeItemInHand();
+            player.getDimension().addLevelEvent(player.getLocation(), LevelEvent.SOUND_INK_SACE_USED);
+            sendBlockEntityDataPacketToViewers();
+            event.setSuccess(true);
+            return;
+        }
+
         // If a sign is waxed, it cannot be modified.
         if (waxed) return;
-        openSignEditorFor(player, isFrontSideInteracted(event.getInteractInfo().blockFace()));
+        openSignEditorFor(player, isFrontSideInteracted);
         event.setSuccess(true);
     }
 
@@ -115,7 +156,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
 
     protected class SignTextImpl implements SignText {
 
-        protected String[] text = new String[]{"", "", "", ""};
+        protected String[] text = new String[]{""};
         protected boolean glowing = false;
         // TODO: Color
 
