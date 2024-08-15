@@ -15,9 +15,16 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.entity.init.SimpleEntityInitInfo;
+import org.allaymc.api.entity.type.EntityTypes;
+import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
+import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.NetworkServer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
+import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
@@ -34,6 +41,7 @@ import static org.allaymc.api.network.ProtocolInfo.PACKET_CODEC;
  *
  * @author daoge_cmd
  */
+@Slf4j
 @Getter
 public class AllayNetworkServer implements NetworkServer {
 
@@ -76,14 +84,35 @@ public class AllayNetworkServer implements NetworkServer {
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
-                        session.setLogging(true);
                         session.setCodec(PACKET_CODEC);
-                        server.onConnect(session);
+
+                        var server = Server.getInstance();
+                        if (server.isIPBanned(AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0])) {
+                            // TODO: I18n
+                            session.disconnect("Your IP is banned!");
+                            return;
+                        }
+
+                        var event = new ClientConnectEvent(session);
+                        event.call();
+                        if (event.isCancelled()) {
+                            session.disconnect();
+                            return;
+                        }
+
+                        var player = EntityTypes.PLAYER.createEntity(SimpleEntityInitInfo.builder().build());
+                        log.info(I18n.get().tr(TrKeys.A_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
+                        player.setClientSession(session);
                     }
                 })
                 .bind(bindAddress)
                 .syncUninterruptibly()
                 .channel();
+    }
+
+    @Override
+    public void shutdown() {
+        channel.close();
     }
 
     @Override

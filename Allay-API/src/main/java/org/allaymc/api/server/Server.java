@@ -56,7 +56,7 @@ public interface Server extends TaskCreator, CommandSender {
     /**
      * Start the server
      */
-    void start(long timeMillis);
+    void start(long initialTime);
 
     long getStartTime();
 
@@ -89,8 +89,6 @@ public interface Server extends TaskCreator, CommandSender {
                 .findFirst()
                 .orElse(null);
     }
-
-    void onConnect(BedrockServerSession session);
 
     void onLoggedIn(EntityPlayer player);
 

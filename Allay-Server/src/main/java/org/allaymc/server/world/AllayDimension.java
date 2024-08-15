@@ -70,7 +70,7 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
-    public void close() {
+    public void shutdown() {
         chunkService.unloadAllChunks();
     }
 

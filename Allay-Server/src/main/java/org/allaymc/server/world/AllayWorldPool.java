@@ -45,8 +45,8 @@ public final class AllayWorldPool implements WorldPool {
     }
 
     @Override
-    public void close() {
-        worlds.values().forEach(World::close);
+    public void shutdown() {
+        worlds.values().forEach(World::shutdown);
     }
 
     @Override

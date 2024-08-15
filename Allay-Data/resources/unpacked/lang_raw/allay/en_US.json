@@ -1,5 +1,6 @@
 {
   "server.starting": "Starting Allay...",
+  "server.stopped": "Server stopped",
   "lang.set": "Server language was set to %1",
   "api.implemented": "This server is running §b%1§r, implement Allay-API version §b%2",
   "network.server.starting": "Starting up network server...",

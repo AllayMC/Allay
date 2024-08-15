@@ -38,7 +38,7 @@ public class AllayEmptyPlayerStorage implements PlayerStorage {
     }
 
     @Override
-    public void close() {
+    public void shutdown() {
         // Do nothing
     }
 }

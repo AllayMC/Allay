@@ -11,6 +11,8 @@ import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 public interface NetworkServer {
     void start();
 
+    void shutdown();
+
     BedrockPong getPong();
 
     void updatePong();

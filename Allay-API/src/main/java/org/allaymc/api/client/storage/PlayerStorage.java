@@ -32,5 +32,5 @@ public interface PlayerStorage {
         return hasPlayerData(player.getUUID());
     }
 
-    void close();
+    void shutdown();
 }

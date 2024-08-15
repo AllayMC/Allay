@@ -36,6 +36,7 @@ public class AllayWorld implements World {
 
     protected final Queue<PacketQueueEntry> packetQueue = PlatformDependent.newMpscQueue();
     protected final AtomicBoolean networkLock = new AtomicBoolean(false);
+    protected final AtomicBoolean isRunning = new AtomicBoolean(true);
     @Getter
     protected final WorldStorage worldStorage;
     @Getter
@@ -43,7 +44,7 @@ public class AllayWorld implements World {
     @Getter
     protected final Int2ObjectOpenHashMap<Dimension> dimensionMap = new Int2ObjectOpenHashMap<>(3);
     @Getter
-    protected final Scheduler scheduler = new AllayScheduler();
+    protected final Scheduler scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
     protected final GameLoop gameLoop;
     @Getter
     protected final Thread thread;
@@ -59,7 +60,7 @@ public class AllayWorld implements World {
             this.worldData.setName(nativeFileWorldStorage.getWorldFolderPath().toFile().getName());
 
         this.gameLoop = GameLoop.builder().onTick(gameLoop -> {
-            if (!Server.getInstance().isRunning()) {
+            if (!isRunning.get()) {
                 gameLoop.stop();
                 return;
             }
@@ -87,7 +88,7 @@ public class AllayWorld implements World {
     }
 
     protected void networkTick() {
-        while (Server.getInstance().isRunning()) {
+        while (isRunning.get()) {
             if (!packetQueue.isEmpty()) {
                 while (!networkLock.compareAndSet(false, true)) {
                     // Spin
@@ -206,10 +207,16 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public void close() {
-        dimensionMap.values().forEach(Dimension::close);
+    public void shutdown() {
+        isRunning.set(false);
+        dimensionMap.values().forEach(Dimension::shutdown);
         saveWorldData();
-        getWorldStorage().close();
+        getWorldStorage().shutdown();
+    }
+
+    @Override
+    public boolean isRunning() {
+        return isRunning.get();
     }
 
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}

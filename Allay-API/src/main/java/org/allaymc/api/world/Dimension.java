@@ -56,7 +56,7 @@ public interface Dimension {
 
     void tick(long currentTick);
 
-    void close();
+    void shutdown();
 
     WorldGenerator getWorldGenerator();
 

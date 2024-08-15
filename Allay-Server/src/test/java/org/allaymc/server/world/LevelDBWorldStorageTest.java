@@ -62,7 +62,7 @@ class LevelDBWorldStorageTest {
     @AfterAll
     static void end() {
         try {
-            levelDBWorldStorage.close();
+            levelDBWorldStorage.shutdown();
             Files.copy(levelDat.resolve("Allay-Server/src/test/resources/beworld/copy/level.dat"), levelDat.resolve("Allay-Server/src/test/resources/beworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
             FileUtils.deleteDirectory(levelDat.resolve("Allay-Server/src/test/resources/beworld/db").toFile());
             Server.getInstance().shutdown();

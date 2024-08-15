@@ -82,7 +82,6 @@ public final class AllayServer implements Server {
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
-    private final AtomicBoolean isShuttingDown = new AtomicBoolean(false);
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
     private final PlayerStorage playerStorage = Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE;
@@ -98,20 +97,22 @@ public final class AllayServer implements Server {
     private final Whitelist whitelist = ConfigManager.create(Whitelist.class, Server.createConfigInitializer("whitelist.yml"));
 
     @Getter
-    private PluginManager pluginManager;
+    private final PluginManager pluginManager = new AllayPluginManager();
     @Getter
-    private Scheduler scheduler;
+    private final Scheduler scheduler = new AllayScheduler(virtualThreadPool);
     @Getter
-    private NetworkServer networkServer;
+    private final NetworkServer networkServer = new AllayNetworkServer(this);
 
-    private Thread terminalConsoleThread;
-    private AllayTerminalConsole terminalConsole;
+    private final Thread terminalConsoleThread = new AllayTerminalConsoleThread();
+    private final AllayTerminalConsole terminalConsole = new AllayTerminalConsole(this);
 
     @Getter
     private ScoreboardService scoreboardService;
     private final GameLoop gameLoop = GameLoop.builder().loopCountPerSec(20).onTick(gameLoop -> {
-        if (isShuttingDown() && players.isEmpty()) {
-            // Shutdown only when all players are disconnected
+        if (!isRunning.get() && players.isEmpty()) {
+            // disconnectAllPlayers() method is called in shutdown() method
+            // so we just need to wait for all players to disconnect
+            // before stopping the server game loop
             gameLoop.stop();
             return;
         }
@@ -119,9 +120,15 @@ public final class AllayServer implements Server {
         try {
             tick(gameLoop.getTick());
         } catch (Throwable throwable) {
-            log.error("Error while ticking server", throwable);
+            log.error("Error while ticking the server", throwable);
         }
-    }).onStop(this::shutdown0).build();
+    }).onStop(() -> {
+        try {
+            shutdownReally();
+        } catch (Throwable throwable) {
+            log.error("Error while stopping the server", throwable);
+        }
+    }).build();
     @Getter
     private long startTime;
 
@@ -135,7 +142,7 @@ public final class AllayServer implements Server {
 
     @SneakyThrows
     @Override
-    public void start(long timeMillis) {
+    public void start(long initialTime) {
         var ctx = (LoggerContext) LogManager.getContext(false);
         var log4jConfig = ctx.getConfiguration();
         var loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
@@ -147,26 +154,23 @@ public final class AllayServer implements Server {
         Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
             @Override
             public void run() {
-                if (isShuttingDown.get()) return;
+                if (isRunning.get()) return;
                 shutdown();
             }
         });
 
-        initTerminalConsole();
+        terminalConsoleThread.start();
 
-        pluginManager = new AllayPluginManager();
         pluginManager.loadPlugins();
 
         worldPool.loadWorlds();
+
         var cmdDataPath = Path.of("command_data");
         if (!Files.exists(cmdDataPath)) Files.createDirectory(cmdDataPath);
-
         scoreboardService = new ScoreboardService(
                 this,
                 new JsonScoreboardStorage(Path.of("command_data/scoreboards.json"))
         );
-        networkServer = new AllayNetworkServer(this);
-        scheduler = new AllayScheduler();
 
         pluginManager.enablePlugins();
 
@@ -177,10 +181,11 @@ public final class AllayServer implements Server {
                 TrKeys.A_NETWORK_SERVER_STARTED,
                 SETTINGS.networkSettings().ip(),
                 String.valueOf(SETTINGS.networkSettings().port()),
-                String.valueOf(startTime - timeMillis)
+                String.valueOf(startTime - initialTime)
         );
 
         if (SETTINGS.genericSettings().enableGui()) Allay.DASHBOARD.serverStarted();
+
         gameLoop.startLoop();
     }
 
@@ -200,40 +205,40 @@ public final class AllayServer implements Server {
         return gameLoop.getTick();
     }
 
-    private void initTerminalConsole() {
-        terminalConsole = new AllayTerminalConsole(this);
-        terminalConsoleThread = new AllayTerminalConsoleThread();
-        terminalConsoleThread.start();
-    }
-
     @Override
     public void shutdown() {
-        if (!isShuttingDown.compareAndSet(false, true)) {
-            // Already shutting down
+        // Mark the server as "not running"
+        // The real shutdown logic is in shutdownReally() method
+        // and will be called after all players are disconnected
+        if (!isRunning.compareAndSet(true, false)) {
             return;
         }
         disconnectAllPlayers();
     }
 
-    private void shutdown0() {
-        try {
-            var event = new ServerStopEvent();
-            event.call();
+    private void shutdownReally() {
+        // Shutdown network server to prevent new client connecting to the server
+        networkServer.shutdown();
 
-            pluginManager.disablePlugins();
-            SETTINGS.save();
-            banInfo.save();
-            whitelist.save();
-            scoreboardService.save();
-        } finally {
-            isRunning.set(false);
-            worldPool.close();
-            playerStorage.close();
-            virtualThreadPool.shutdown();
-            computeThreadPool.shutdown();
-        }
+        var event = new ServerStopEvent();
+        event.call();
 
-        System.exit(0);
+        // Disable all plugins firstly
+        pluginManager.disablePlugins();
+
+        // Save all configurations & data
+        SETTINGS.save();
+        banInfo.save();
+        whitelist.save();
+        scoreboardService.save();
+        playerStorage.shutdown();
+
+        // Shutdown all worlds
+        worldPool.shutdown();
+
+        // Shutdown thread pools
+        virtualThreadPool.shutdown();
+        computeThreadPool.shutdown();
     }
 
     @Override
@@ -250,26 +255,6 @@ public final class AllayServer implements Server {
     @Override
     public boolean isValid() {
         return true;
-    }
-
-    @Override
-    public void onConnect(BedrockServerSession session) {
-        if (Server.getInstance().isIPBanned(AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0])) {
-            // TODO: I18n
-            session.disconnect("Your IP is banned!");
-            return;
-        }
-
-        var event = new ClientConnectEvent(session);
-        event.call();
-        if (event.isCancelled()) {
-            session.disconnect();
-            return;
-        }
-
-        var player = PLAYER.createEntity(SimpleEntityInitInfo.builder().build());
-        sendTr(TrKeys.A_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString());
-        player.setClientSession(session);
     }
 
     @Override
@@ -515,10 +500,6 @@ public final class AllayServer implements Server {
     @Override
     public boolean isRunning() {
         return isRunning.get();
-    }
-
-    private boolean isShuttingDown() {
-        return isShuttingDown.get();
     }
 
     @Override

@@ -64,7 +64,7 @@ public class AllayCachedPlayerStorage implements PlayerStorage {
     }
 
     @Override
-    public void close() {
+    public void shutdown() {
         cache.forEach((key, dataEntry) -> {
             cache.remove(key);
             playerStorage.savePlayerData(key, dataEntry.playerData);

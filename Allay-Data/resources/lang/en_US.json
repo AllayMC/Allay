@@ -87,6 +87,7 @@
   "allay:recipe.loaded": "Loaded %1 recipes",
   "allay:recipe.loading": "Loading recipes...",
   "allay:server.starting": "Starting Allay...",
+  "allay:server.stopped": "Server stopped",
   "allay:world.loaded": "World %1 is loaded",
   "allay:world.loading": "Loading world %1",
   "minecraft:achievement.acquireIron": "Acquire Hardware",
