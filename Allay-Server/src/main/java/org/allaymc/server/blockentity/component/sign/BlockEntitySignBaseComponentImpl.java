@@ -85,7 +85,6 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             setWaxed(true);
             player.tryConsumeItemInHand();
             player.getDimension().addLevelEvent(position.x(), position.y(), position.z(), LevelEvent.PARTICLE_WAX_ON);
-            sendBlockEntityDataPacketToViewers();
             event.setSuccess(true);
             return;
         }
@@ -98,7 +97,6 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             }
             player.tryConsumeItemInHand();
             player.getDimension().addLevelEvent(player.getLocation(), LevelEvent.SOUND_INK_SACE_USED);
-            sendBlockEntityDataPacketToViewers();
             event.setSuccess(true);
             return;
         }
@@ -111,7 +109,6 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             }
             player.tryConsumeItemInHand();
             player.getDimension().addLevelEvent(player.getLocation(), LevelEvent.SOUND_INK_SACE_USED);
-            sendBlockEntityDataPacketToViewers();
             event.setSuccess(true);
             return;
         }
