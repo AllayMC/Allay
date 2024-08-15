@@ -6,6 +6,7 @@ import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
@@ -148,6 +149,10 @@ public interface Dimension {
 
     default void setBlockState(int x, int y, int z, BlockState blockState, PlayerInteractInfo placementInfo) {
         setBlockState(x, y, z, blockState, 0, true, true, true, placementInfo);
+    }
+
+    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, PlayerInteractInfo placementInfo) {
+        setBlockState(x, y, z, blockState, layer, true, true, true, placementInfo);
     }
 
     default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {

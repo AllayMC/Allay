@@ -8,6 +8,7 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.block.PlaceBlockHelper;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
@@ -29,24 +30,11 @@ public class BlockBarrelBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
-        if (placementInfo == null) {
-            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
-            return true;
-        }
-        var player = placementInfo.player();
-        if (abs(player.getLocation().x() - placeBlockPos.x()) < 2 && abs(player.getLocation().z() - placeBlockPos.z()) < 2) {
-            var y = player.getLocation().y() + player.getEyeHeight();
-            if (y - placeBlockPos.y() > 2) {
-                blockState = blockState.setProperty(FACING_DIRECTION, BlockFace.UP.ordinal());
-            } else if (placeBlockPos.y() - y > 0) {
-                blockState = blockState.setProperty(FACING_DIRECTION, BlockFace.DOWN.ordinal());
-            } else {
-                blockState = blockState.setProperty(FACING_DIRECTION, player.getHorizontalFace().opposite().ordinal());
-            }
-        } else {
-            blockState = blockState.setProperty(FACING_DIRECTION, player.getHorizontalFace().opposite().ordinal());
-        }
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
+        dimension.setBlockState(
+                placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
+                PlaceBlockHelper.processFacingDirectionProperty(blockState, placeBlockPos, placementInfo),
+                placementInfo
+        );
         return true;
     }
 }
