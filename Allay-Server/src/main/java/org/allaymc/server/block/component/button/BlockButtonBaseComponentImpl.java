@@ -11,20 +11,23 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.facing.BlockFacingDirectionBaseComponentImpl;
+import org.allaymc.server.block.component.facing.BlockFacingDirectionComponentImpl;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
+
+import lombok.Getter;
 
 import java.time.Duration;
 
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "button_pressed_bit")
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "facing_direction")
-public abstract class BlockButtonBaseComponentImpl extends BlockFacingDirectionBaseComponentImpl {
-    public BlockButtonBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
-        super(blockType);
-    }
+public class BlockButtonBaseComponentImpl extends BlockFacingDirectionComponentImpl {
+    @Getter
+    protected final Duration activationTime;
 
-    abstract public Duration getActivationTime();
+    public BlockButtonBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, Duration activationTime) {
+        super(blockType);
+        this.activationTime = activationTime;
+    }
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {

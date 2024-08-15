@@ -16,8 +16,8 @@ import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
 @RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "direction")
-public class BlockDirectionBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockDirectionBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockDirectionComponentImpl extends BlockBaseComponentImpl {
+    public BlockDirectionComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 

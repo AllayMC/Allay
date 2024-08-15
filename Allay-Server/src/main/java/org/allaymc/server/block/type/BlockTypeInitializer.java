@@ -22,19 +22,13 @@ import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.*;
-import org.allaymc.server.block.component.button.BlockStoneButtonComponentImpl;
-import org.allaymc.server.block.component.button.BlockWoodenButtonComponentImpl;
-import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
-import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
-import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
-import org.allaymc.server.block.component.door.BlockDoorComponentImpl;
-import org.allaymc.server.block.component.facing.BlockCardinalDirectionComponentImpl;
-import org.allaymc.server.block.component.facing.BlockFacingDirectionBaseComponentImpl;
-import org.allaymc.server.block.component.facing.BlockPillarAxisBaseComponentImpl;
-import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
-import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
-import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
+import org.allaymc.server.block.component.button.*;
+import org.allaymc.server.block.component.common.*;
+import org.allaymc.server.block.component.door.*;
+import org.allaymc.server.block.component.facing.*;
+import org.allaymc.server.block.component.torch.*;
 
+import java.time.Duration;
 import java.util.function.Function;
 
 /**
@@ -896,11 +890,11 @@ public final class BlockTypeInitializer {
         BlockTypes.WARPED_BUTTON = initWoodenButton(BlockWarpedButtonBehavior.class, VanillaBlockId.WARPED_BUTTON);
         BlockTypes.WOODEN_BUTTON = initWoodenButton(BlockWoodenButtonBehavior.class, VanillaBlockId.WOODEN_BUTTON);
         
-        BlockTypes.POLISHED_BLACKSTONE_BUTTON = initButton(BlockPolishedBlackstoneButtonBehavior.class, VanillaBlockId.POLISHED_BLACKSTONE_BUTTON, BlockStoneButtonComponentImpl::new);
-        BlockTypes.STONE_BUTTON = initButton(BlockStoneButtonBehavior.class, VanillaBlockId.STONE_BUTTON, BlockStoneButtonComponentImpl::new);
+        BlockTypes.POLISHED_BLACKSTONE_BUTTON = initButton(BlockPolishedBlackstoneButtonBehavior.class, VanillaBlockId.POLISHED_BLACKSTONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
+        BlockTypes.STONE_BUTTON = initButton(BlockStoneButtonBehavior.class, VanillaBlockId.STONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
     }
 
-    public static void initDoors() {
+    /**public static void initDoors() {
         BlockTypes.ACACIA_DOOR = buildWoodenDoor(BlockAcaciaDoorBehavior.class, VanillaBlockId.ACACIA_DOOR);
         BlockTypes.BAMBOO_DOOR = buildWoodenDoor(BlockBambooDoorBehavior.class, VanillaBlockId.BAMBOO_DOOR);
         BlockTypes.BIRCH_DOOR = buildWoodenDoor(BlockBirchDoorBehavior.class, VanillaBlockId.BIRCH_DOOR);
@@ -912,7 +906,7 @@ public final class BlockTypeInitializer {
         BlockTypes.WOODEN_DOOR = buildWoodenDoor(BlockWoodenDoorBehavior.class, VanillaBlockId.WOODEN_DOOR);
         BlockTypes.SPRUCE_DOOR = buildWoodenDoor(BlockSpruceDoorBehavior.class, VanillaBlockId.SPRUCE_DOOR);
         BlockTypes.WARPED_DOOR = buildWoodenDoor(BlockWarpedDoorBehavior.class, VanillaBlockId.WARPED_DOOR);
-    }
+    }*/
 
     public static void initFacingDirection() {
         BlockTypes.BLACK_GLAZED_TERRACOTTA = buildFacingDirection(BlockBlackGlazedTerracottaBehavior.class, VanillaBlockId.BLACK_GLAZED_TERRACOTTA);
@@ -943,7 +937,7 @@ public final class BlockTypeInitializer {
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockPillarAxisComponentImpl::new)
                 .build();
     }
 
@@ -961,12 +955,12 @@ public final class BlockTypeInitializer {
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockFacingDirectionBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockFacingDirectionComponentImpl::new)
                 .build();
     }
 
     private static <T extends BlockBehavior> BlockType<T> initWoodenButton(Class<T> clazz, VanillaBlockId vanillaBlockId) {
-        return initButton(clazz, vanillaBlockId, BlockWoodenButtonComponentImpl::new);
+        return initButton(clazz, vanillaBlockId, BlockWoodenButtonBaseComponentImpl::new);
     }
 
     private static <T extends BlockBehavior> BlockType<T> initButton(Class<T> clazz, VanillaBlockId vanillaBlockId, Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {

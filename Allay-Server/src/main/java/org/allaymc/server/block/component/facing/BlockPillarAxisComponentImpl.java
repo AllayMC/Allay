@@ -15,8 +15,8 @@ import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "pillar_axis")
-public class BlockPillarAxisBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockPillarAxisBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockPillarAxisComponentImpl extends BlockBaseComponentImpl {
+    public BlockPillarAxisComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 

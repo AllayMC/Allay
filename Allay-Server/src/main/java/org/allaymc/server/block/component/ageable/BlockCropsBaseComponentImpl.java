@@ -14,7 +14,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
-import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 @RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "growth")
 public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
@@ -24,7 +24,7 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onRandomUpdate(BlockStateWithPos blockState) {
-        //TODO: check groth condition
+        //TODO: check growth condition
         var oldGrowth = blockState.blockState().getPropertyValue(GROWTH);
         if (oldGrowth < GROWTH.getMax()) {
             grow(blockState.pos().dimension(), blockState.pos(), oldGrowth + 1);
@@ -37,8 +37,7 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
 
         var blockState = dimension.getBlockState(interactInfo.clickBlockPos());
         if (itemStack instanceof ItemBoneMealStack && blockState.getPropertyValue(GROWTH) < GROWTH.getMax()) {
-            var random = new Random();
-            int newAge = random.nextInt(3) + 2; //Between 2 and 5
+            int newAge = ThreadLocalRandom.current().nextInt(3) + 2; //Between 2 and 5
             if (newAge > GROWTH.getMax()) {
                 newAge = GROWTH.getMax();
             }

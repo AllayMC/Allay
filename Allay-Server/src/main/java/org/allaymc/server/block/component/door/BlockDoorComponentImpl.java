@@ -19,16 +19,15 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.facing.BlockDirectionBaseComponentImpl;
+import org.allaymc.server.block.component.facing.BlockDirectionComponentImpl;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "direction")
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "door_hinge_bit")
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "open_bit")
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "upper_block_bit")
-public class BlockDoorComponentImpl extends BlockDirectionBaseComponentImpl {
+public class BlockDoorComponentImpl extends BlockDirectionComponentImpl {
     public BlockDoorComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
