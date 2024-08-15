@@ -2,7 +2,7 @@ package org.allaymc.server.block;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.joml.Vector3ic;
 

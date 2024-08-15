@@ -1,6 +1,6 @@
 package org.allaymc.api.world.service;
 
-import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.data.BlockFace;
 import org.joml.Vector3ic;
 
 import java.time.Duration;

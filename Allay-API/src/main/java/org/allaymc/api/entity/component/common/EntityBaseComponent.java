@@ -1,6 +1,6 @@
 package org.allaymc.api.entity.component.common;
 
-import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;

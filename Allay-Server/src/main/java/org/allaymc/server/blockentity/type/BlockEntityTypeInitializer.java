@@ -1,6 +1,7 @@
 package org.allaymc.server.blockentity.type;
 
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
 import org.allaymc.api.blockentity.interfaces.*;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
@@ -14,6 +15,7 @@ import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseCo
 import org.allaymc.server.blockentity.component.furnace.BlockEntitySmokerFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxContainerHolderComponentImpl;
+import org.allaymc.server.blockentity.component.sign.BlockEntitySignBaseComponentImpl;
 
 /**
  * Allay Project 2024/3/9
@@ -67,6 +69,14 @@ public final class BlockEntityTypeInitializer {
                 .name(VanillaBlockEntityId.SMOKER)
                 .addComponent(BlockEntitySmokerFurnaceBaseComponentImpl::new, BlockEntitySmokerFurnaceBaseComponentImpl.class)
                 .addComponent(() -> new BlockEntityContainerHolderComponentImpl(SmokerContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .build();
+    }
+
+    public static void initSign() {
+        BlockEntityTypes.SIGN = BlockEntityTypeBuilder
+                .builder(BlockEntitySign.class)
+                .name(VanillaBlockEntityId.SIGN)
+                .addComponent(BlockEntitySignBaseComponentImpl::new, BlockEntitySignBaseComponentImpl.class)
                 .build();
     }
 }

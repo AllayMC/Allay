@@ -85,7 +85,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         var blockEntity = getBlockEntityType().createBlockEntity(SimpleBlockEntityInitInfo.builder().pos(x, y, z).dimension(dimension).build());
         chunk.addBlockEntity(blockEntity);
         if (sendToClient && blockEntity.sendToClient()) {
-            blockEntity.sendBlockEntityDataPacketToAll();
+            blockEntity.sendBlockEntityDataPacketToViewers();
         }
     }
 

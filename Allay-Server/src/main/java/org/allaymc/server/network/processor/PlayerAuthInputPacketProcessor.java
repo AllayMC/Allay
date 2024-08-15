@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.*;

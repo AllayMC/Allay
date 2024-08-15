@@ -1,7 +1,7 @@
 package org.allaymc.server.blockentity.component.shulkerbox;
 
 import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.component.annotation.Dependency;

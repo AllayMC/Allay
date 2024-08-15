@@ -1,6 +1,6 @@
 package org.allaymc.api.math.voxelshape;
 
-import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.data.BlockFace;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.junit.jupiter.api.Test;

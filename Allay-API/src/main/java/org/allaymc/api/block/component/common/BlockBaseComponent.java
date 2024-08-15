@@ -3,8 +3,8 @@ package org.allaymc.api.block.component.common;
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
-import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.data.BlockFace;
+import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -139,7 +139,7 @@ public interface BlockBaseComponent extends BlockComponent {
 
     /**
      * @param itemStack    The item in the player's hand
-     * @param interactInfo The player interaction info, can be null
+     * @param interactInfo The player interaction info
      *
      * @return Whether the operation is valid.
      * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return true

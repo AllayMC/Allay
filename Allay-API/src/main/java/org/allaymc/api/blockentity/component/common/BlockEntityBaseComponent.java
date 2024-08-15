@@ -62,7 +62,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         player.sendPacket(createBlockEntityDataPacket());
     }
 
-    default void sendBlockEntityDataPacketToAll() {
+    default void sendBlockEntityDataPacketToViewers() {
         sendPacketToViewers(createBlockEntityDataPacket());
     }
 
