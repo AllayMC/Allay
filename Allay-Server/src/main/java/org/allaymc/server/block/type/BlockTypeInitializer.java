@@ -1006,6 +1006,8 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.DIRECTION, VanillaBlockPropertyTypes.DOOR_HINGE_BIT, VanillaBlockPropertyTypes.OPEN_BIT, VanillaBlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBlockBaseComponentSupplier(blockBaseComponentSupplier)
+                .build();
+    }
 
     public static void initWallSigns() {
         BlockTypes.ACACIA_WALL_SIGN = BlockTypeBuilder

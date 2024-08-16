@@ -7,10 +7,10 @@ import static org.allaymc.api.data.VanillaBlockPropertyTypes.UPPER_BLOCK_BIT;
 import java.util.Set;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.BlockLiquidComponent;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;

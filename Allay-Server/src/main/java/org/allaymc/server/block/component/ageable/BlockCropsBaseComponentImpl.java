@@ -3,15 +3,14 @@ package org.allaymc.server.block.component.ageable;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemBoneMealStack;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -62,9 +61,7 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
                 int newAge = ThreadLocalRandom.current().nextInt(3) + 2; //Between 2 and 5
                 grow(dimension, interactInfo.clickBlockPos(), newAge);
                 //TODO: BoneMeal particle
-                if (interactInfo.player().getGameType() != GameType.CREATIVE) {
-                    itemStack.reduceCount(1);
-                }
+                interactInfo.player().tryConsumeItemInHand();
             }
         }
 
