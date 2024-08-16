@@ -2,6 +2,7 @@ package org.allaymc.server.block.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.interfaces.*;
+import org.allaymc.api.block.interfaces.hangingsign.*;
 import org.allaymc.api.block.interfaces.leaves.*;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
@@ -20,6 +21,7 @@ import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
+import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
@@ -923,6 +925,86 @@ public final class BlockTypeInitializer {
                 .setProperties(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION)
                 .setBlockBaseComponentSupplier(blockType -> new BlockStandingSignBaseComponentImpl(blockType, ItemTypes.WARPED_SIGN))
                 .bindBlockEntity(BlockEntityTypes.SIGN)
+                .build();
+    }
+
+    public static void initHangingSigns() {
+        BlockTypes.ACACIA_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockAcaciaHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.ACACIA_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.BAMBOO_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockBambooHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.BAMBOO_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.BIRCH_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockBirchHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.BIRCH_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.CHERRY_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockCherryHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.CHERRY_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.CRIMSON_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockCrimsonHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.CRIMSON_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.DARK_OAK_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockDarkOakHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.DARK_OAK_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.JUNGLE_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockJungleHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.JUNGLE_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.MANGROVE_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockMangroveHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.MANGROVE_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.OAK_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockOakHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.OAK_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.SPRUCE_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockSpruceHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.SPRUCE_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
+                .build();
+        BlockTypes.WARPED_HANGING_SIGN = BlockTypeBuilder
+                .builder(BlockWarpedHangingSignBehavior.class)
+                .vanillaBlock(VanillaBlockId.WARPED_HANGING_SIGN)
+                .setProperties(VanillaBlockPropertyTypes.ATTACHED_BIT, VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION, VanillaBlockPropertyTypes.HANGING)
+                .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
+                .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
                 .build();
     }
 }

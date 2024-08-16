@@ -15,6 +15,7 @@ import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseCo
 import org.allaymc.server.blockentity.component.furnace.BlockEntitySmokerFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxBaseComponentImpl;
 import org.allaymc.server.blockentity.component.shulkerbox.BlockEntityShulkerBoxContainerHolderComponentImpl;
+import org.allaymc.server.blockentity.component.sign.BlockEntityHangingSignBaseComponentImpl;
 import org.allaymc.server.blockentity.component.sign.BlockEntitySignBaseComponentImpl;
 
 /**
@@ -77,6 +78,11 @@ public final class BlockEntityTypeInitializer {
                 .builder(BlockEntitySign.class)
                 .name(VanillaBlockEntityId.SIGN)
                 .addComponent(BlockEntitySignBaseComponentImpl::new, BlockEntitySignBaseComponentImpl.class)
+                .build();
+        BlockEntityTypes.HANGING_SIGN = BlockEntityTypeBuilder
+                .builder(BlockEntityHangingSign.class)
+                .name(VanillaBlockEntityId.HANGING_SIGN)
+                .addComponent(BlockEntityHangingSignBaseComponentImpl::new, BlockEntityHangingSignBaseComponentImpl.class)
                 .build();
     }
 }
