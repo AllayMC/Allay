@@ -6,9 +6,16 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.facing.BlockPillarAxisComponentImpl;
 
+/**
+ * Allay Project 2024/8/15
+ *
+ * @author Dhaiven
+ */
 @RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "deprecated")
 public class BlockDeprecatedBaseComponentImpl extends BlockPillarAxisComponentImpl {
     public BlockDeprecatedBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
+
+    
 }

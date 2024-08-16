@@ -1,7 +1,5 @@
 package org.allaymc.server.block.component.facing;
 
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.PILLAR_AXIS;
-
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
@@ -14,6 +12,13 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
+import static org.allaymc.api.data.VanillaBlockPropertyTypes.PILLAR_AXIS;
+
+/**
+ * Allay Project 2024/8/15
+ *
+ * @author Dhaiven
+ */
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "pillar_axis")
 public class BlockPillarAxisComponentImpl extends BlockBaseComponentImpl {
     public BlockPillarAxisComponentImpl(BlockType<? extends BlockBehavior> blockType) {

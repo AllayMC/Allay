@@ -14,7 +14,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 
 /**
- * Allay Project 22/07/2024
+ * Allay Project 2024/8/15
  *
  * @author Dhaiven
  */

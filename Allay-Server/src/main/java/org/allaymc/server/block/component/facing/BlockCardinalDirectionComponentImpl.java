@@ -1,11 +1,8 @@
 package org.allaymc.server.block.component.facing;
 
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION;
-
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -14,7 +11,15 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
-@RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "cardinal_direction")
+import static org.allaymc.api.block.property.PropertyUtil.toMinecraftCardinalDirection;
+import static org.allaymc.api.data.VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION;
+
+/**
+ * Allay Project 2024/8/15
+ *
+ * @author Dhaiven
+ */
+@RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "minecraft:cardinal_direction")
 public class BlockCardinalDirectionComponentImpl extends BlockBaseComponentImpl {
     public BlockCardinalDirectionComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
@@ -29,12 +34,7 @@ public class BlockCardinalDirectionComponentImpl extends BlockBaseComponentImpl 
         }
         var player = placementInfo.player();
         if (player != null) {
-            blockState = blockState.setProperty(MINECRAFT_CARDINAL_DIRECTION, switch (player.getHorizontalFace()) {
-                case EAST -> MinecraftCardinalDirection.WEST;
-                case NORTH -> MinecraftCardinalDirection.SOUTH;
-                case SOUTH -> MinecraftCardinalDirection.NORTH;
-                default -> MinecraftCardinalDirection.EAST;
-            });
+            blockState = blockState.setProperty(MINECRAFT_CARDINAL_DIRECTION, toMinecraftCardinalDirection(player.getHorizontalFace().opposite()));
         }
         
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);

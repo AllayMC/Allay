@@ -5,6 +5,11 @@ import org.allaymc.api.block.type.BlockType;
 
 import java.time.Duration;
 
+/**
+ * Allay Project 2024/8/15
+ *
+ * @author Dhaiven
+ */
 public class BlockWoodenButtonBaseComponentImpl extends BlockButtonBaseComponentImpl {
     public BlockWoodenButtonBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType, Duration.ofMillis(1500)); // 1.5 second

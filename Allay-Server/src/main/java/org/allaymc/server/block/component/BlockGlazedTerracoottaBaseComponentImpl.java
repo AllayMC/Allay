@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.facing;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;
@@ -6,21 +6,20 @@ import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.DIRECTION;
+import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
 
 /**
  * Allay Project 2024/8/15
  *
  * @author Dhaiven
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "direction")
-public class BlockDirectionComponentImpl extends BlockBaseComponentImpl {
-    public BlockDirectionComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "facing_direction")
+public class BlockGlazedTerracoottaBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockGlazedTerracoottaBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
@@ -31,11 +30,7 @@ public class BlockDirectionComponentImpl extends BlockBaseComponentImpl {
             dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
             return true;
         }
-        var player = placementInfo.player();
-        if (player != null) {
-            blockState = blockState.setProperty(DIRECTION, player.getHorizontalFace().ordinal());
-        }
-        
+        blockState = blockState.setProperty(FACING_DIRECTION, placementInfo.player().getHorizontalFace().opposite().ordinal());
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
