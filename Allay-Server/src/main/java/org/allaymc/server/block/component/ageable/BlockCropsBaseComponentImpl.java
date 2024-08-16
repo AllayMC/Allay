@@ -6,12 +6,12 @@ import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemBoneMealStack;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -31,17 +31,9 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
-        dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
-        return true;
-    }
-
-    @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (face != BlockFace.DOWN && face != BlockFace.UP) return true;
-        var blockUnder = current.pos().dimension().getBlockState(BlockFace.DOWN.offsetPos(current.pos()));
-        return this.canPlaceOnBlock(blockUnder.getBlockType());
+        if (face != BlockFace.DOWN) return true;
+        return canPlaceOnBlock(neighbor.blockState().getBlockType());
     }
 
     @Override
@@ -51,7 +43,9 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onRandomUpdate(BlockStateWithPos blockState) {
-        //TODO: check growth condition
+        if (blockState.pos().dimension().getInternalLightLevel(blockState.pos()) < 9) return;
+        if (ThreadLocalRandom.current().nextInt(2) != 1) return;
+
         var oldGrowth = blockState.blockState().getPropertyValue(GROWTH);
         if (oldGrowth < GROWTH.getMax()) {
             grow(blockState.pos().dimension(), blockState.pos(), oldGrowth + 1);
@@ -67,6 +61,10 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
             if (blockState.getPropertyValue(GROWTH) < GROWTH.getMax()) {
                 int newAge = ThreadLocalRandom.current().nextInt(3) + 2; //Between 2 and 5
                 grow(dimension, interactInfo.clickBlockPos(), newAge);
+                //TODO: BoneMeal particle
+                if (interactInfo.player().getGameType() != GameType.CREATIVE) {
+                    itemStack.reduceCount(1);
+                }
             }
         }
 

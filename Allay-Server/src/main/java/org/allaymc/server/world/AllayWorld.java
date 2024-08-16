@@ -50,6 +50,9 @@ public class AllayWorld implements World {
     protected final Thread networkThread;
     protected long nextTimeSendTick;
 
+    @Getter
+    protected int internalSkyLight;
+
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
         this.worldData = worldStorage.getWorldDataCache();
@@ -84,6 +87,8 @@ public class AllayWorld implements World {
         this.networkThread = Thread.ofVirtual()
                 .name("World Network Thread - " + this.getWorldData().getName())
                 .unstarted(this::networkTick);
+        
+        this.internalSkyLight = worldData.calculInternalSkyLight(currentTick);
     }
 
     protected void networkTick() {
@@ -142,6 +147,7 @@ public class AllayWorld implements World {
     public void tick(long currentTick) {
         syncData();
         tickTime(currentTick);
+        this.internalSkyLight = worldData.calculInternalSkyLight(currentTick);
         scheduler.tick();
         getDimensions().values().forEach(d -> d.tick(currentTick));
         worldStorage.tick(currentTick);

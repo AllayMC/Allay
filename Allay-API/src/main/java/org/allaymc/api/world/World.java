@@ -70,4 +70,6 @@ public interface World {
     default void broadcastPacket(BedrockPacket packet) {
         getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
     }
+
+    int getInternalSkyLight();
 }

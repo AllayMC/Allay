@@ -23,6 +23,7 @@ import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.*;
+import org.allaymc.server.block.component.ageable.BlockCropsBaseComponentImpl;
 import org.allaymc.server.block.component.button.*;
 import org.allaymc.server.block.component.common.*;
 import org.allaymc.server.block.component.door.*;
