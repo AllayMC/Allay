@@ -208,6 +208,9 @@ public final class AllayChunkService implements ChunkService {
             chunkLoadEvent.call();
 
             return preparedChunk;
+        }).exceptionally(t -> {
+            log.error("Error while setting chunk ({},{}) !", x, z, t);
+            return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         });
         return future;
     }
