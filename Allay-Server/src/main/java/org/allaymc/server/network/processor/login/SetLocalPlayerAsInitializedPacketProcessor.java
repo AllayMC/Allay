@@ -25,7 +25,6 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         // Otherwise the client will snap into the ground
         player.sendLocationToSelf();
         player.setInitialized();
-        Server.getInstance().broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED, player.getOriginName());
     }
 
     @Override

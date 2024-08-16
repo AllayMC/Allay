@@ -254,13 +254,14 @@ public final class AllayServer implements Server {
     public void onLoggedIn(EntityPlayer player) {
         players.put(player.getUUID(), player);
         networkServer.setPlayerCount(players.size());
+        Server.getInstance().broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED, player.getOriginName());
     }
 
     @Override
     public void onDisconnect(EntityPlayer player, String reason) {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
-        if (player.isInitialized()) {
+        if (player.isLoggedIn()) {
             broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
         }
 

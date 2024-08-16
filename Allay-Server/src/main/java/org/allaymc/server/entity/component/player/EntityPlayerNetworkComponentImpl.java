@@ -17,6 +17,7 @@ import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.api.eventbus.event.network.PacketSendEvent;
+import org.allaymc.api.eventbus.event.player.PlayerLoggedInEvent;
 import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
@@ -394,6 +395,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void completeLogin() {
         if (server.getOnlinePlayerCount() >= Server.SETTINGS.genericSettings().maxClientCount()) {
             disconnect(TrKeys.M_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
+            return;
+        }
+
+        var event = new PlayerLoggedInEvent(thisPlayer);
+        event.call();
+        if (event.isCancelled()) {
+            disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
             return;
         }
 

@@ -62,13 +62,6 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
             otherDevice.disconnect(TrKeys.M_DISCONNECTIONSCREEN_LOGGEDINOTHERLOCATION);
         }
 
-        var event = new PlayerLoggedInEvent(player);
-        Server.getInstance().getEventBus().callEvent(event);
-        if (event.isCancelled()) {
-            player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
-            return;
-        }
-
         if (!Server.SETTINGS.networkSettings().enableNetworkEncryption()) {
             player.completeLogin();
             return;
