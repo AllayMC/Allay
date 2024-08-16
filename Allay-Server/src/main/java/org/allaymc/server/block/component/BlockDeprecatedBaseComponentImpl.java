@@ -16,6 +16,4 @@ public class BlockDeprecatedBaseComponentImpl extends BlockPillarAxisComponentIm
     public BlockDeprecatedBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
-
-    
 }

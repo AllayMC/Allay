@@ -977,15 +977,6 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildFacingDirection(Class<T> clazz, VanillaBlockId vanillaBlockId) {
-        return BlockTypeBuilder
-                .builder(clazz)
-                .vanillaBlock(vanillaBlockId)
-                .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockFacingDirectionComponentImpl::new)
-                .build();
-    }
-
     private static <T extends BlockBehavior> BlockType<T> initWoodenButton(Class<T> clazz, VanillaBlockId vanillaBlockId) {
         return initButton(clazz, vanillaBlockId, BlockWoodenButtonBaseComponentImpl::new);
     }

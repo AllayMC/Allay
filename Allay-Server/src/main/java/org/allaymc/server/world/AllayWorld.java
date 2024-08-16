@@ -88,7 +88,7 @@ public class AllayWorld implements World {
                 .name("World Network Thread - " + this.getWorldData().getName())
                 .unstarted(this::networkTick);
         
-        this.internalSkyLight = worldData.calculInternalSkyLight(currentTick);
+        this.internalSkyLight = worldData.calculInternalSkyLight(1);
     }
 
     protected void networkTick() {

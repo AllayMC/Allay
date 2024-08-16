@@ -26,11 +26,9 @@ public class BlockGlazedTerracoottaBaseComponentImpl extends BlockBaseComponentI
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
-        if (placementInfo == null) {
-            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
-            return true;
+        if (placementInfo != null) {
+            blockState = blockState.setProperty(FACING_DIRECTION, placementInfo.player().getHorizontalFace().opposite().ordinal());
         }
-        blockState = blockState.setProperty(FACING_DIRECTION, placementInfo.player().getHorizontalFace().opposite().ordinal());
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
     }
