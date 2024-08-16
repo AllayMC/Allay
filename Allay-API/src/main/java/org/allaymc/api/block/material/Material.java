@@ -24,4 +24,8 @@ public record Material(
         boolean isSuperHot,
         float translucency
 ) {
+
+        public boolean isTransparent() {
+                return translucency() != 1.0f;
+        }
 }

@@ -137,6 +137,36 @@ public enum BlockFace {
         };
     }
 
+    /**
+     * Rotate this BlockFace around the Y axis clockwise (NORTH =&gt; EAST =&gt; SOUTH =&gt; WEST =&gt; NORTH)
+     *
+     * @return block face
+     */
+    public BlockFace rotateY() {
+        return switch (this) {
+            case NORTH -> EAST;
+            case EAST -> SOUTH;
+            case SOUTH -> WEST;
+            case WEST -> NORTH;
+            default -> throw new RuntimeException("Unable to get Y-rotated face of " + this);
+        };
+    }
+
+    /**
+     * Rotate this BlockFace around the Y axis counter-clockwise (NORTH =&gt; WEST =&gt; SOUTH =&gt; EAST =&gt; NORTH)
+     *
+     * @return block face
+     */
+    public BlockFace rotateYCCW() {
+        return switch (this) {
+            case NORTH -> WEST;
+            case EAST -> NORTH;
+            case SOUTH -> EAST;
+            case WEST -> SOUTH;
+            default -> throw new RuntimeException("Unable to get counter-clockwise Y-rotated face of " + this);
+        };
+    }
+
     public boolean isHorizontal() {
         return this == NORTH || this == EAST || this == SOUTH || this == WEST;
     }
