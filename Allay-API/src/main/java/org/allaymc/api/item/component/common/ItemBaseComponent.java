@@ -130,7 +130,9 @@ public interface ItemBaseComponent extends ItemComponent {
     }
 
     /**
-     * Attempt to place a block using this item, regardless of whether this item is a block item.
+     * Attempt to place a block using this item, regardless of whether this item is a block item. <br>
+     * This method won't decide the block state depending on the placement info <br>
+     * Use which block state really will be decided in BlockBaseComponent::place() method <br>
      *
      * @return {@code true} if the block is successfully placed,
      * {@code false} if placement fails (reasons: not a block item, placement check fails, event is canceled)

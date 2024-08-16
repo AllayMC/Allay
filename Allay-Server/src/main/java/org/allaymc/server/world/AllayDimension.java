@@ -3,8 +3,9 @@ package org.allaymc.server.world;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
@@ -70,7 +71,7 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
-    public void close() {
+    public void shutdown() {
         chunkService.unloadAllChunks();
     }
 
@@ -111,9 +112,10 @@ public class AllayDimension implements Dimension {
         var xIndex = x & 15;
         var zIndex = z & 15;
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
-        if (oldBlockState == blockState) {
-            log.warn("Trying to set the same block state at x={}, y={}, z={}", x, y, z);
-            return;
+        if (oldBlockState.getBlockType() == BlockTypes.WATER && blockState.getBlockStateData().canContainLiquid()) {
+            // If the old block is water and the new block can contain liquid,
+            // we need to move water to layer 1
+            setBlockState(x, y, z, BlockTypes.WATER.getDefaultState(), 1);
         }
 
         var blockPos = new Position3i(x, y, z, this);
@@ -145,7 +147,13 @@ public class AllayDimension implements Dimension {
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
                 usedItem, player
         );
-        setBlockState(x, y, z, AIR.getDefaultState());
+
+        if (getBlockState(x, y, z, 1).getBlockType() == BlockTypes.WATER) {
+            // If layer 1 has water, move it to layer 0
+            setBlockState(x, y, z, BlockTypes.WATER.getDefaultState());
+        } else {
+            setBlockState(x, y, z, AIR.getDefaultState());
+        }
 
         if (player != null) player.exhaust(0.005f);
     }

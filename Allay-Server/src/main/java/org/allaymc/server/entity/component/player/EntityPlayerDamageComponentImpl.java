@@ -5,7 +5,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.item.ArmorTier;
+import org.allaymc.api.data.ArmorTier;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
@@ -99,6 +99,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
             if (item == ItemAirStack.AIR_STACK) continue;
             enchantmentProtectionFactor += item.getEnchantmentProtectionFactor(damage.getDamageType());
         }
+        enchantmentProtectionFactor = Math.min(20, enchantmentProtectionFactor);
 
         if (enchantmentProtectionFactor == 0) return;
 

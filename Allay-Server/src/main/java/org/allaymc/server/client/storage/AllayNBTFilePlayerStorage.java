@@ -83,7 +83,7 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
     }
 
     @Override
-    public void close() {
+    public void shutdown() {
         // Do nothing
     }
 

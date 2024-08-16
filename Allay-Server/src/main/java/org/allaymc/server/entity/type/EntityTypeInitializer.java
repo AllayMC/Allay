@@ -57,7 +57,6 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityPlayerContainerHolderComponentImpl::new, EntityPlayerContainerHolderComponentImpl.class)
                 .addComponent(EntityPlayerContainerViewerComponentImpl::new, EntityPlayerContainerViewerComponentImpl.class)
                 .addComponent(EntityPlayerDamageComponentImpl::new, EntityPlayerDamageComponentImpl.class)
-                .addComponent(EntityPlayerHungerComponentImpl::new, EntityPlayerHungerComponentImpl.class)
                 .build();
     }
 

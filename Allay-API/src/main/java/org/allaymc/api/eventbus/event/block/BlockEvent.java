@@ -2,7 +2,7 @@ package org.allaymc.api.eventbus.event.block;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.eventbus.event.Event;
 
 /**

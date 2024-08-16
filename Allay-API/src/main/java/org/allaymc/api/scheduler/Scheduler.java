@@ -10,11 +10,6 @@ import java.util.concurrent.ExecutorService;
  * @author daoge_cmd
  */
 public interface Scheduler {
-
-    static Scheduler createScheduler() {
-        return SchedulerFactory.FACTORY.get().createScheduler(null);
-    }
-
     static Scheduler createScheduler(ExecutorService asyncTaskExecutor) {
         return SchedulerFactory.FACTORY.get().createScheduler(asyncTaskExecutor);
     }

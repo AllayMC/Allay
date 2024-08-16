@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
@@ -103,7 +102,8 @@ public final class AllayWorldGenerator implements WorldGenerator {
     }
 
     private void processPopulationQueue(GameLoop loop) {
-        if (!Server.getInstance().isRunning()) {
+        // dimension may be null in a short term when initializing
+        if (dimension != null && !dimension.getWorld().isRunning()) {
             loop.stop();
             return;
         }

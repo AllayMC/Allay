@@ -3,8 +3,8 @@ package org.allaymc.api.world;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
-import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.data.BlockFace;
+import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
@@ -56,7 +56,7 @@ public interface Dimension {
 
     void tick(long currentTick);
 
-    void close();
+    void shutdown();
 
     WorldGenerator getWorldGenerator();
 
@@ -148,6 +148,10 @@ public interface Dimension {
 
     default void setBlockState(int x, int y, int z, BlockState blockState, PlayerInteractInfo placementInfo) {
         setBlockState(x, y, z, blockState, 0, true, true, true, placementInfo);
+    }
+
+    default void setBlockState(int x, int y, int z, BlockState blockState, int layer, PlayerInteractInfo placementInfo) {
+        setBlockState(x, y, z, blockState, layer, true, true, true, placementInfo);
     }
 
     default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
@@ -276,6 +280,18 @@ public interface Dimension {
             }
         }
         return notEmpty ? blockStates : null;
+    }
+
+    default void addLevelEvent(Vector3fc pos, LevelEventType levelEventType) {
+        addLevelEvent(pos.x(), pos.y(), pos.z(), levelEventType, 0);
+    }
+
+    default void addLevelEvent(Vector3fc pos, LevelEventType levelEventType, int data) {
+        addLevelEvent(pos.x(), pos.y(), pos.z(), levelEventType, data);
+    }
+
+    default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType) {
+        addLevelEvent(x, y, z, levelEventType, 0);
     }
 
     default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType, int data) {

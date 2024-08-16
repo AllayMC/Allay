@@ -9,7 +9,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemFoodComponent;
 import org.allaymc.api.item.component.event.CItemTryUseEvent;
 import org.allaymc.api.item.component.event.CItemUsedEvent;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 /**
@@ -72,9 +71,6 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
         }
 
         onEaten(player);
-        if (player.getGameType() == GameType.CREATIVE) return;
-        var itemInHand = player.getItemInHand();
-        if (itemInHand.getCount() == 1) player.clearItemInHand();
-        else itemInHand.setCount(itemInHand.getCount() - 1);
+        player.tryConsumeItemInHand();
     }
 }

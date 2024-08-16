@@ -1,8 +1,8 @@
 package org.allaymc.server.block.component.common;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.data.BlockStateWithPos;
+import org.allaymc.api.data.BlockFace;
+import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 
 import static org.allaymc.api.block.type.BlockTypes.*;

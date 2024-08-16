@@ -1,6 +1,6 @@
 package org.allaymc.exampleplugin;
 
-import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
 import org.allaymc.api.form.Forms;

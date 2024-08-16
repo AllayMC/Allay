@@ -25,10 +25,6 @@ public class AllayScheduler implements Scheduler {
     protected long tickCounter;
     protected AtomicInteger taskCount = new AtomicInteger(0);
 
-    public AllayScheduler() {
-        this(Server.getInstance().getVirtualThreadPool());
-    }
-
     public AllayScheduler(ExecutorService asyncTaskExecutor) {
         this.asyncTaskExecutor = asyncTaskExecutor;
     }

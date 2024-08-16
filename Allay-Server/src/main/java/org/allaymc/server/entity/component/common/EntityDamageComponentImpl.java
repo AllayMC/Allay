@@ -13,7 +13,7 @@ import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
 import org.allaymc.api.entity.component.event.CEntityDamageEvent;
 import org.allaymc.api.entity.component.event.CEntityFallEvent;
-import org.allaymc.api.entity.component.player.EntityPlayerHungerComponent;
+import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.Identifier;
@@ -62,15 +62,15 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
         if (damage.isCritical()) baseComponent.applyAnimation(AnimatePacket.Action.CRITICAL_HIT);
 
-        if (thisEntity instanceof EntityPlayerHungerComponent hungerComponent) {
-            hungerComponent.exhaust(0.1f);
+        if (thisEntity instanceof EntityPlayerAttributeComponent attributeComponent) {
+            attributeComponent.exhaust(0.1f);
         }
 
         var attacker = damage.getAttacker();
         if (attacker == null) return;
 
-        if (attacker instanceof EntityPlayerHungerComponent hungerComponent) {
-            hungerComponent.exhaust(0.1f);
+        if (attacker instanceof EntityPlayerAttributeComponent attributeComponent) {
+            attributeComponent.exhaust(0.1f);
         }
 
         if (damage.hasCustomKnockback()) {

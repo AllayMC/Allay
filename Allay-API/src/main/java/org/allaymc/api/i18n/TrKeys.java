@@ -181,6 +181,8 @@ public interface TrKeys {
 
     String A_SERVER_STARTING = "allay:server.starting";
 
+    String A_SERVER_STOPPED = "allay:server.stopped";
+
     String A_WORLD_LOADED = "allay:world.loaded";
 
     String A_WORLD_LOADING = "allay:world.loading";

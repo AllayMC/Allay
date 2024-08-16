@@ -304,7 +304,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         return worldDataCache;
     }
 
-    public void close() {
+    public void shutdown() {
         try {
             this.db.close();
             worldDataCache = null;

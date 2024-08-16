@@ -63,15 +63,23 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
         }
     }
 
-    int getHunger();
+    int getFoodLevel();
 
-    void setHunger(int value);
+    void setFoodLevel(int value);
 
-    float getSaturation();
+    float getFoodSaturationLevel();
 
-    void setSaturation(float value);
+    void setFoodSaturationLevel(float value);
 
-    float getExhaustion();
+    float getFoodExhaustionLevel();
 
-    void setExhaustion(float value);
+    void setFoodExhaustionLevel(float value);
+
+    void exhaust(float level);
+
+    void saturate(int food, float saturation);
+
+    boolean canEat();
+
+    void setFoodTickTimer(int foodTickTimer);
 }

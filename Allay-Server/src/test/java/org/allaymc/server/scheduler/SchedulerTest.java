@@ -5,6 +5,7 @@ import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.utils.GameLoop;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -15,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author daoge_cmd
  */
 class SchedulerTest {
-    protected static final Scheduler scheduler = new AllayScheduler();
+    protected static final Scheduler scheduler = new AllayScheduler(Executors.newVirtualThreadPerTaskExecutor());
 
     protected static final TaskCreator MOCK_TASK_CREATOR = new MockTaskCreator();
 

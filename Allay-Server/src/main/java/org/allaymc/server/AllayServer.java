@@ -10,10 +10,8 @@ import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.skin.Skin;
 import org.allaymc.api.client.storage.PlayerStorage;
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventBus;
-import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.eventbus.event.network.IPBanEvent;
 import org.allaymc.api.eventbus.event.network.IPUnbanEvent;
 import org.allaymc.api.eventbus.event.player.PlayerBanEvent;
@@ -53,7 +51,6 @@ import org.allaymc.server.world.AllayWorldPool;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
-import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -69,35 +66,24 @@ import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.allaymc.api.entity.type.EntityTypes.PLAYER;
-
 @Slf4j
 public final class AllayServer implements Server {
 
     private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
     private static volatile AllayServer INSTANCE;
+    private static final int MAX_DISCONNECT_WAIT_TIME = 20 * 5; // 5 seconds
 
     private final boolean debug = Server.SETTINGS.genericSettings().debug();
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
     @Getter
     private final WorldPool worldPool = new AllayWorldPool();
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
-    private final AtomicBoolean isShuttingDown = new AtomicBoolean(false);
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
-    private final PlayerStorage playerStorage =
-            Server.SETTINGS.storageSettings().savePlayerData() ?
-                    new AllayNBTFilePlayerStorage(Path.of("players")) :
-                    AllayEmptyPlayerStorage.INSTANCE;
+    private final PlayerStorage playerStorage = Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE;
     // Thread pool for executing CPU-intensive tasks
     @Getter
-    private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(
-            Runtime.getRuntime().availableProcessors(),
-            Runtime.getRuntime().availableProcessors(),
-            0,
-            TimeUnit.MILLISECONDS,
-            new LinkedBlockingQueue<>(),
-            AllayComputeThread::new);
+    private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(), Runtime.getRuntime().availableProcessors(), 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), AllayComputeThread::new);
     // Thread pool for executing I/O-intensive tasks
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
@@ -107,44 +93,48 @@ public final class AllayServer implements Server {
     private final Whitelist whitelist = ConfigManager.create(Whitelist.class, Server.createConfigInitializer("whitelist.yml"));
 
     @Getter
-    private PluginManager pluginManager;
+    private final PluginManager pluginManager = new AllayPluginManager();
     @Getter
-    private Scheduler scheduler;
+    private final Scheduler scheduler = new AllayScheduler(virtualThreadPool);
     @Getter
-    private NetworkServer networkServer;
+    private final NetworkServer networkServer = new AllayNetworkServer(this);
 
-    private Thread terminalConsoleThread;
-    private AllayTerminalConsole terminalConsole;
+    private final Thread terminalConsoleThread = new AllayTerminalConsoleThread();
+    private final AllayTerminalConsole terminalConsole = new AllayTerminalConsole(this);
+    private int disconnectWaitTime = 0;
 
     @Getter
     private ScoreboardService scoreboardService;
-    private final GameLoop gameLoop = GameLoop.builder()
-            .loopCountPerSec(20)
-            .onTick(gameLoop -> {
-                if (isShuttingDown() && players.isEmpty()) {
-                    // Shutdown only when all players are disconnected
-                    gameLoop.stop();
-                    return;
-                }
+    private final GameLoop gameLoop = GameLoop.builder().loopCountPerSec(20).onTick(gameLoop -> {
+        if (!isRunning.get()) {
+            disconnectWaitTime++;
+            if (players.isEmpty() || disconnectWaitTime >= MAX_DISCONNECT_WAIT_TIME) {
+                // disconnectAllPlayers() method is called in shutdown() method
+                // so we just need to wait for all players to disconnect
+                // before stopping the server game loop
+                gameLoop.stop();
+                return;
+            }
+        }
 
-                try {
-                    tick(gameLoop.getTick());
-                } catch (Throwable throwable) {
-                    log.error("Error while ticking server", throwable);
-                }
-            })
-            .onStop(this::shutdown0)
-            .build();
+        try {
+            tick(gameLoop.getTick());
+        } catch (Throwable throwable) {
+            log.error("Error while ticking the server", throwable);
+        }
+    }).onStop(() -> {
+        try {
+            shutdownReally();
+        } catch (Throwable throwable) {
+            log.error("Error while stopping the server", throwable);
+        }
+    }).build();
     @Getter
     private long startTime;
 
     public static AllayServer getInstance() {
         if (INSTANCE == null) {
-            synchronized (AllayServer.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = new AllayServer();
-                }
-            }
+            INSTANCE = new AllayServer();
         }
 
         return INSTANCE;
@@ -152,7 +142,7 @@ public final class AllayServer implements Server {
 
     @SneakyThrows
     @Override
-    public void start(long timeMillis) {
+    public void start(long initialTime) {
         var ctx = (LoggerContext) LogManager.getContext(false);
         var log4jConfig = ctx.getConfiguration();
         var loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
@@ -164,26 +154,23 @@ public final class AllayServer implements Server {
         Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
             @Override
             public void run() {
-                // FIXME: it seems not works
+                if (isRunning.get()) return;
                 shutdown();
             }
         });
 
-        initTerminalConsole();
+        terminalConsoleThread.start();
 
-        pluginManager = new AllayPluginManager();
         pluginManager.loadPlugins();
 
         worldPool.loadWorlds();
+
         var cmdDataPath = Path.of("command_data");
         if (!Files.exists(cmdDataPath)) Files.createDirectory(cmdDataPath);
-
         scoreboardService = new ScoreboardService(
                 this,
                 new JsonScoreboardStorage(Path.of("command_data/scoreboards.json"))
         );
-        networkServer = new AllayNetworkServer(this);
-        scheduler = new AllayScheduler();
 
         pluginManager.enablePlugins();
 
@@ -194,10 +181,11 @@ public final class AllayServer implements Server {
                 TrKeys.A_NETWORK_SERVER_STARTED,
                 SETTINGS.networkSettings().ip(),
                 String.valueOf(SETTINGS.networkSettings().port()),
-                String.valueOf(startTime - timeMillis)
+                String.valueOf(startTime - initialTime)
         );
 
         if (SETTINGS.genericSettings().enableGui()) Allay.DASHBOARD.serverStarted();
+
         gameLoop.startLoop();
     }
 
@@ -217,40 +205,40 @@ public final class AllayServer implements Server {
         return gameLoop.getTick();
     }
 
-    private void initTerminalConsole() {
-        terminalConsole = new AllayTerminalConsole(this);
-        terminalConsoleThread = new AllayTerminalConsoleThread();
-        terminalConsoleThread.start();
-    }
-
     @Override
     public void shutdown() {
-        if (!isShuttingDown.compareAndSet(false, true)) {
-            // Already shutting down
+        // Mark the server as "not running"
+        // The real shutdown logic is in shutdownReally() method
+        // and will be called after all players are disconnected
+        if (!isRunning.compareAndSet(true, false)) {
             return;
         }
         disconnectAllPlayers();
     }
 
-    private void shutdown0() {
-        try {
-            var event = new ServerStopEvent();
-            event.call();
+    private void shutdownReally() {
+        // Shutdown network server to prevent new client connecting to the server
+        networkServer.shutdown();
 
-            pluginManager.disablePlugins();
-            SETTINGS.save();
-            banInfo.save();
-            whitelist.save();
-            scoreboardService.save();
-        } finally {
-            isRunning.set(false);
-            worldPool.close();
-            playerStorage.close();
-            virtualThreadPool.shutdownNow();
-            computeThreadPool.shutdownNow();
-        }
+        var event = new ServerStopEvent();
+        event.call();
 
-        System.exit(0);
+        // Disable all plugins firstly
+        pluginManager.disablePlugins();
+
+        // Save all configurations & data
+        SETTINGS.save();
+        banInfo.save();
+        whitelist.save();
+        scoreboardService.save();
+        playerStorage.shutdown();
+
+        // Shutdown all worlds
+        worldPool.shutdown();
+
+        // Shutdown thread pools
+        virtualThreadPool.shutdown();
+        computeThreadPool.shutdown();
     }
 
     @Override
@@ -267,30 +255,6 @@ public final class AllayServer implements Server {
     @Override
     public boolean isValid() {
         return true;
-    }
-
-    @Override
-    public void onConnect(BedrockServerSession session) {
-        if (Server.getInstance().isIPBanned(AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0])) {
-            // TODO: I18n
-            session.disconnect("Your IP is banned!");
-            return;
-        }
-
-        var event = new ClientConnectEvent(session);
-        event.call();
-        if (event.isCancelled()) {
-            session.disconnect();
-            return;
-        }
-
-        var player = PLAYER.createEntity(
-                SimpleEntityInitInfo
-                        .builder()
-                        .build()
-        );
-        sendTr(TrKeys.A_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString());
-        player.setClientSession(session);
     }
 
     @Override
@@ -334,11 +298,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void addToPlayerList(
-            UUID uuid, long entityId,
-            String name, DeviceInfo deviceInfo,
-            String xuid, Skin skin
-    ) {
+    public void addToPlayerList(UUID uuid, long entityId, String name, DeviceInfo deviceInfo, String xuid, Skin skin) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.ADD);
 
@@ -424,8 +384,7 @@ public final class AllayServer implements Server {
 
         banInfo.bannedPlayers().add(uuidOrName);
         players.values().stream()
-                .filter(player -> player.getUUID().toString().equals(uuidOrName) ||
-                                  player.getOriginName().equals(uuidOrName))
+                .filter(player -> player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect("You are banned!"));
         return true;
     }
@@ -510,8 +469,7 @@ public final class AllayServer implements Server {
 
         whitelist.whitelist().remove(uuidOrName);
         players.values().stream()
-                .filter(player -> player.getUUID().toString().equals(uuidOrName) ||
-                                  player.getOriginName().equals(uuidOrName))
+                .filter(player -> player.getUUID().toString().equals(uuidOrName) || player.getOriginName().equals(uuidOrName))
                 .forEach(player -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOTALLOWED));
         return true;
     }
@@ -542,10 +500,6 @@ public final class AllayServer implements Server {
     @Override
     public boolean isRunning() {
         return isRunning.get();
-    }
-
-    private boolean isShuttingDown() {
-        return isShuttingDown.get();
     }
 
     @Override

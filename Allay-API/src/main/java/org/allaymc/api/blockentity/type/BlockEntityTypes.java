@@ -14,4 +14,5 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityFurnace> FURNACE;
     public static BlockEntityType<BlockEntityBlastFurnace> BLAST_FURNACE;
     public static BlockEntityType<BlockEntitySmoker> SMOKER;
+    public static BlockEntityType<BlockEntitySign> SIGN;
 }

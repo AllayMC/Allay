@@ -64,7 +64,7 @@ public final class Allay {
     public static Dashboard DASHBOARD;
 
     public static void main(String[] args) {
-        long startTime = System.currentTimeMillis();
+        long initialTime = System.currentTimeMillis();
         ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
         System.setProperty("joml.format", "false"); // Set JOML vectors are output without a scientific notation
         System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // Enable async logging
@@ -93,11 +93,18 @@ public final class Allay {
         }
 
         try {
-            Server.getInstance().start(startTime);
-        } catch (Exception e) {
-            log.error("Error while starting the server!", e);
-            Server.getInstance().shutdown();
+            Server.getInstance().start(initialTime);
+        } catch (Throwable t) {
+            log.error("Error while starting the server!", t);
+            // The server may not be initialized correctly
+            // So we can't call Server::shutdown() to stop the server
+            System.exit(1);
         }
+
+        log.info(I18n.get().tr(TrKeys.A_SERVER_STOPPED));
+        // Server has been shutdown
+        // Call System.exit(0) to stop other non-daemon threads
+        System.exit(0);
     }
 
     private static boolean isHeadless() {
@@ -132,10 +139,7 @@ public final class Allay {
         // Common
         api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::getInstance);
-        api.bind(Scheduler.SchedulerFactory.class, () -> asyncTaskExecutor -> {
-            if (asyncTaskExecutor == null) return new AllayScheduler();
-            else return new AllayScheduler(asyncTaskExecutor);
-        });
+        api.bind(Scheduler.SchedulerFactory.class, () -> AllayScheduler::new);
         api.bind(EventBus.Factory.class, () -> AllayEventBus::new);
 
         // Item

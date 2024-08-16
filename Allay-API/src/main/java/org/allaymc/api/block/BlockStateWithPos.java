@@ -1,4 +1,4 @@
-package org.allaymc.api.block.data;
+package org.allaymc.api.block;
 
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.math.position.Position3ic;

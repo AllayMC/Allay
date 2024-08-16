@@ -31,5 +31,5 @@ public interface WorldStorage {
 
     WorldData getWorldDataCache();
 
-    void close();
+    void shutdown();
 }

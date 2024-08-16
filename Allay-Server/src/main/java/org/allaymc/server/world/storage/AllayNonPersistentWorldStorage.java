@@ -108,5 +108,5 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
     }
 
     @Override
-    public void close() {}
+    public void shutdown() {}
 }

@@ -63,7 +63,9 @@ public interface World {
 
     void saveWorldData();
 
-    void close();
+    void shutdown();
+
+    boolean isRunning();
 
     void setDimension(Dimension dimension);
 

@@ -1,7 +1,7 @@
 package org.allaymc.api.block.property;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
 
 /**

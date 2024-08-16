@@ -42,6 +42,10 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
 
     void loadNBT(NbtMap nbt);
 
+    default void applyClientChange(EntityPlayer player, NbtMap nbt) {
+        loadNBT(nbt);
+    }
+
     void onNeighborUpdate(CBlockOnNeighborUpdateEvent event);
 
     void onPlace(CBlockOnPlaceEvent event);
@@ -62,7 +66,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         player.sendPacket(createBlockEntityDataPacket());
     }
 
-    default void sendBlockEntityDataPacketToAll() {
+    default void sendBlockEntityDataPacketToViewers() {
         sendPacketToViewers(createBlockEntityDataPacket());
     }
 

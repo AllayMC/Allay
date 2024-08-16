@@ -1,6 +1,8 @@
 package org.allaymc.server.item.type;
 
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.component.ItemArmorBaseComponent.ArmorType;
 import org.allaymc.api.item.component.tool.ItemAxeComponent;
@@ -18,12 +20,14 @@ import org.allaymc.api.item.interfaces.leggings.*;
 import org.allaymc.api.item.interfaces.pickaxe.*;
 import org.allaymc.api.item.interfaces.shovel.*;
 import org.allaymc.api.item.interfaces.shulkerbox.*;
+import org.allaymc.api.item.interfaces.sign.*;
 import org.allaymc.api.item.interfaces.sword.*;
 import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.ItemAirBaseComponentImpl;
 import org.allaymc.server.item.component.ItemArmorBaseComponentImpl;
 import org.allaymc.server.item.component.ItemCauldronBaseComponentImpl;
+import org.allaymc.server.item.component.ItemSignBaseComponentImpl;
 import org.allaymc.server.item.component.common.ItemItemStorableComponentImpl;
 import org.allaymc.server.item.component.food.*;
 import org.allaymc.server.item.component.spawnegg.ItemEvokerSpawnEggBaseComponentImpl;
@@ -1273,6 +1277,64 @@ public final class ItemTypeInitializer {
                 .builder(ItemCauldronStack.class)
                 .vanillaItem(VanillaItemId.CAULDRON)
                 .addComponent(ItemCauldronBaseComponentImpl::new, ItemCauldronBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initSigns() {
+        ItemTypes.ACACIA_SIGN = ItemTypeBuilder
+                .builder(ItemAcaciaSignStack.class)
+                .vanillaItem(VanillaItemId.ACACIA_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.ACACIA_WALL_SIGN, VanillaBlockId.ACACIA_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.BAMBOO_SIGN = ItemTypeBuilder
+                .builder(ItemBambooSignStack.class)
+                .vanillaItem(VanillaItemId.BAMBOO_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.BAMBOO_WALL_SIGN, VanillaBlockId.BAMBOO_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.BIRCH_SIGN = ItemTypeBuilder
+                .builder(ItemBirchSignStack.class)
+                .vanillaItem(VanillaItemId.BIRCH_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.BIRCH_WALL_SIGN, VanillaBlockId.BIRCH_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.CHERRY_SIGN = ItemTypeBuilder
+                .builder(ItemCherrySignStack.class)
+                .vanillaItem(VanillaItemId.CHERRY_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.CHERRY_WALL_SIGN, VanillaBlockId.CHERRY_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.CRIMSON_SIGN = ItemTypeBuilder
+                .builder(ItemCrimsonSignStack.class)
+                .vanillaItem(VanillaItemId.CRIMSON_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.CRIMSON_WALL_SIGN, VanillaBlockId.CRIMSON_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.DARK_OAK_SIGN = ItemTypeBuilder
+                .builder(ItemDarkOakSignStack.class)
+                .vanillaItem(VanillaItemId.DARK_OAK_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.DARKOAK_WALL_SIGN, VanillaBlockId.DARKOAK_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.JUNGLE_SIGN = ItemTypeBuilder
+                .builder(ItemJungleSignStack.class)
+                .vanillaItem(VanillaItemId.JUNGLE_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.JUNGLE_WALL_SIGN, VanillaBlockId.JUNGLE_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.MANGROVE_SIGN = ItemTypeBuilder
+                .builder(ItemMangroveSignStack.class)
+                .vanillaItem(VanillaItemId.MANGROVE_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.MANGROVE_WALL_SIGN, VanillaBlockId.MANGROVE_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.OAK_SIGN = ItemTypeBuilder
+                .builder(ItemOakSignStack.class)
+                .vanillaItem(VanillaItemId.OAK_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.WALL_SIGN, VanillaBlockId.STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.SPRUCE_SIGN = ItemTypeBuilder
+                .builder(ItemSpruceSignStack.class)
+                .vanillaItem(VanillaItemId.SPRUCE_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.SPRUCE_WALL_SIGN, VanillaBlockId.SPRUCE_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .build();
+        ItemTypes.WARPED_SIGN = ItemTypeBuilder
+                .builder(ItemWarpedSignStack.class)
+                .vanillaItem(VanillaItemId.WARPED_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, VanillaBlockId.WARPED_WALL_SIGN, VanillaBlockId.WARPED_STANDING_SIGN), ItemSignBaseComponentImpl.class)
                 .build();
     }
 }
