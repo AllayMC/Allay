@@ -20,8 +20,9 @@ public interface EntityAttributeComponent extends EntityComponent {
                 AttributeType.ABSORPTION,
                 AttributeType.KNOCKBACK_RESISTANCE,
                 AttributeType.HEALTH,
-                AttributeType.MOVEMENT,
-                AttributeType.FALL_DAMAGE
+                AttributeType.MOVEMENT_SPEED,
+                AttributeType.UNDER_WATER_MOVEMENT_SPEED,
+                AttributeType.LAVA_MOVEMENT_SPEED
         };
     }
 

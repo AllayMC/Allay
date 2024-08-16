@@ -702,7 +702,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setMovementSpeed(float speed) {
         movementSpeed = speed;
-        attributeComponent.setAttribute(AttributeType.MOVEMENT, movementSpeed);
+        attributeComponent.setAttribute(AttributeType.MOVEMENT_SPEED, movementSpeed);
         // NOTICE: abilities.setWalkSpeed(speed) shouldn't be called otherwise player can't sprint
     }
 

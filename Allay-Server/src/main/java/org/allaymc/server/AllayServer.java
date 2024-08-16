@@ -71,7 +71,6 @@ public final class AllayServer implements Server {
 
     private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
     private static volatile AllayServer INSTANCE;
-    private static final int MAX_DISCONNECT_WAIT_TIME = 20 * 5; // 5 seconds
 
     private final boolean debug = Server.SETTINGS.genericSettings().debug();
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
@@ -101,20 +100,13 @@ public final class AllayServer implements Server {
 
     private final Thread terminalConsoleThread = new AllayTerminalConsoleThread();
     private final AllayTerminalConsole terminalConsole = new AllayTerminalConsole(this);
-    private int disconnectWaitTime = 0;
 
     @Getter
     private ScoreboardService scoreboardService;
     private final GameLoop gameLoop = GameLoop.builder().loopCountPerSec(20).onTick(gameLoop -> {
         if (!isRunning.get()) {
-            disconnectWaitTime++;
-            if (players.isEmpty() || disconnectWaitTime >= MAX_DISCONNECT_WAIT_TIME) {
-                // disconnectAllPlayers() method is called in shutdown() method
-                // so we just need to wait for all players to disconnect
-                // before stopping the server game loop
-                gameLoop.stop();
-                return;
-            }
+            gameLoop.stop();
+            return;
         }
 
         try {
@@ -171,6 +163,7 @@ public final class AllayServer implements Server {
                 this,
                 new JsonScoreboardStorage(Path.of("command_data/scoreboards.json"))
         );
+        scoreboardService.read();
 
         pluginManager.enablePlugins();
 
@@ -274,10 +267,10 @@ public final class AllayServer implements Server {
         if (player.isSpawned()) {
             this.getPlayerStorage().savePlayerData(player);
             player.getDimension().removePlayer(player);
-            var playerListEntry = playerListEntryMap.remove(player.getUUID());
+
             var pk = new PlayerListPacket();
             pk.setAction(PlayerListPacket.Action.REMOVE);
-            pk.getEntries().add(playerListEntry);
+            pk.getEntries().add(playerListEntryMap.remove(player.getUUID()));
             broadcastPacket(pk);
         }
 

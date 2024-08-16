@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.component.player;
 
-import com.google.common.base.Preconditions;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
@@ -90,30 +89,30 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public int getExperienceLevel() {
-        return (int) getAttributeValue(AttributeType.PLAYER_LEVEL);
+        return (int) getAttributeValue(AttributeType.PLAYER_EXPERIENCE_LEVEL);
     }
 
     @Override
     public void setExperienceLevel(int value) {
-        var event = new PlayerExperienceLevelChangeEvent(thisPlayer, (int) getAttributeValue(AttributeType.PLAYER_LEVEL), value);
+        var event = new PlayerExperienceLevelChangeEvent(thisPlayer, (int) getAttributeValue(AttributeType.PLAYER_EXPERIENCE_LEVEL), value);
         event.call();
         if (event.isCancelled()) return;
 
-        setAttribute(AttributeType.PLAYER_LEVEL, event.getNewExperienceLevel());
+        setAttribute(AttributeType.PLAYER_EXPERIENCE_LEVEL, event.getNewExperienceLevel());
     }
 
     @Override
     public float getExperienceProgress() {
-        return getAttributeValue(AttributeType.PLAYER_EXPERIENCE);
+        return getAttributeValue(AttributeType.PLAYER_EXPERIENCE_PROGRESS);
     }
 
     @Override
     public void setExperienceProgress(float value) {
-        var event = new PlayerExperienceProgressChangeEvent(thisPlayer, getAttributeValue(AttributeType.PLAYER_EXPERIENCE), value);
+        var event = new PlayerExperienceProgressChangeEvent(thisPlayer, getAttributeValue(AttributeType.PLAYER_EXPERIENCE_PROGRESS), value);
         event.call();
         if (event.isCancelled()) return;
 
-        setAttribute(AttributeType.PLAYER_EXPERIENCE, event.getNewExperienceProgress());
+        setAttribute(AttributeType.PLAYER_EXPERIENCE_PROGRESS, event.getNewExperienceProgress());
     }
 
     @Override

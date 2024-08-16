@@ -18,8 +18,8 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
                 AttributeType.PLAYER_HUNGER,
                 AttributeType.PLAYER_SATURATION,
                 AttributeType.PLAYER_EXHAUSTION,
-                AttributeType.PLAYER_LEVEL,
-                AttributeType.PLAYER_EXPERIENCE
+                AttributeType.PLAYER_EXPERIENCE_LEVEL,
+                AttributeType.PLAYER_EXPERIENCE_PROGRESS
         );
         list.addAll(Arrays.asList(EntityAttributeComponent.basicEntityAttributes()));
         return list.toArray(AttributeType[]::new);
