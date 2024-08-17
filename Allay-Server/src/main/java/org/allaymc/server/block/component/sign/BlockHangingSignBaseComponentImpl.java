@@ -50,7 +50,7 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
                 blockState = PlaceBlockHelper.processFacingDirectionProperty(blockState, placeBlockPos, placementInfo);
             } else return false;
         } else {
-            blockState = blockState.setProperty(VanillaBlockPropertyTypes.FACING_DIRECTION, face.opposite().rotateAroundYAxis().ordinal());
+            blockState = blockState.setProperty(VanillaBlockPropertyTypes.FACING_DIRECTION, face.opposite().rotateY().ordinal());
         }
 
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
