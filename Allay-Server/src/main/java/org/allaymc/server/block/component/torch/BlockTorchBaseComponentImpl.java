@@ -4,7 +4,6 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.EnumBiMap;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;
-import org.allaymc.api.block.component.common.BlockLiquidComponent;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.BlockStateWithPos;
@@ -12,8 +11,8 @@ import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
+import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
@@ -46,13 +45,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var oldBlock = dimension.getBlockState(placeBlockPos);
         var torchFace = map.get(placementInfo.blockFace());
 
-        // TODO: Replace when a method appears to check whether the block can be replaced
-        if (
-                (
-                        oldBlock.getBlockType() != BlockTypes.AIR &&
-                        !(oldBlock.getBehavior() instanceof BlockLiquidComponent)
-                ) || torchFace == TorchFacingDirection.UNKNOWN
-        ) return false;
+        if (!oldBlock.getBlockType().hasBlockTag(VanillaBlockTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN) return false;
 
         var targetBlock = dimension.getBlockState(placementInfo.clickBlockPos());
         BlockType<?> blockType2 = targetBlock.getBlockType();
