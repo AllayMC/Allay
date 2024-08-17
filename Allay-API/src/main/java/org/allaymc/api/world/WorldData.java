@@ -274,7 +274,7 @@ public class WorldData {
     }
 
     /**
-     * @see https://minecraft.wiki/w/Light#Internal_sky_light
+     * @see <a href="https://minecraft.wiki/w/Light#Internal_sky_light">Internal_sky_light</a>
      */
     public int calculInternalSkyLight(float tickDiff) {
        float d = 1.0F - (this.getRainStrength(tickDiff) * 5.0F) / 16.0F;

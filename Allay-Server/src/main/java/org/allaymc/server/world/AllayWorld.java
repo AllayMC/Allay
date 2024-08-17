@@ -148,7 +148,6 @@ public class AllayWorld implements World {
     public void tick(long currentTick) {
         syncData();
         tickTime(currentTick);
-        this.internalSkyLight = worldData.calculInternalSkyLight(currentTick);
         scheduler.tick();
         getDimensions().values().forEach(d -> d.tick(currentTick));
         worldStorage.tick(currentTick);
@@ -168,11 +167,13 @@ public class AllayWorld implements World {
         }
     }
 
-    protected void tickTime(long tickNumber) {
+    protected void tickTime(long currentTick) {
         if (worldData.getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) {
-            if (tickNumber >= nextTimeSendTick) {
+            if (currentTick >= nextTimeSendTick) {
                 worldData.setTime(worldData.getTime() + TIME_SENDING_INTERVAL);
-                nextTimeSendTick = tickNumber + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
+                this.internalSkyLight = worldData.calculInternalSkyLight(currentTick);
+
+                nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
             }
         }
     }
