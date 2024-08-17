@@ -31,6 +31,9 @@ public class BlockRodBaseComponentImpl extends BlockBaseComponentImpl {
             return true;
         }
 
+        // We shouldn't use PlaceBlockHelper.processFacingDirectionProperty here
+        // because the facing direction of a rod block is dependent on the block face the player clicked
+
         var face = placementInfo.blockFace();
         if (face.isHorizontal()) {
             face = face.opposite();
