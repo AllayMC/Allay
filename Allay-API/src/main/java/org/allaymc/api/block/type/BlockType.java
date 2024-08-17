@@ -113,6 +113,17 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     /**
+     * Creates a block state, the property values are copied from the given block state. <br>
+     * The given block state's type must have same property types as this block type.
+     *
+     * @param other the block state to copy property values from.
+     * @return the block state, or null if the given block state is invalid
+     */
+    default BlockState copyPropertyValuesFrom(BlockState other) {
+        return ofState(other.getPropertyValues().values().toArray(BlockPropertyType.BlockPropertyValue<?, ?, ?>[]::new));
+    }
+
+    /**
      * Creates a block state from the given block state hash.
      *
      * @param blockStateHash the block state hash.
