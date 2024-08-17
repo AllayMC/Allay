@@ -65,6 +65,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.getBlockUpdateService().scheduleBlockUpdate(pos, getActivationTime());
             dimension.addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_ON);
         }
+        return true;
     }
 
     @Override
