@@ -40,7 +40,6 @@ public final class ScoreboardService {
 
     public ScoreboardService(Server server, ScoreboardStorage storage) {
         this.storage = storage;
-        read();
         server.getEventBus().registerListener(new ServerEventListener());
     }
 

@@ -17,9 +17,11 @@ import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.network.PacketReceiveEvent;
 import org.allaymc.api.eventbus.event.network.PacketSendEvent;
+import org.allaymc.api.eventbus.event.player.PlayerLoggedInEvent;
 import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.math.location.Location3f;
@@ -56,6 +58,7 @@ import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
@@ -98,6 +101,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
     protected BedrockServerSession session;
+    protected AtomicBoolean disconnected = new AtomicBoolean(false);
 
     @Override
     public void handleDataPacket(BedrockPacket packet, long time) {
@@ -163,6 +167,12 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             @Override
             public void onDisconnect(String reason) {
+                if (!disconnected.compareAndSet(false, true)) {
+                    // Failed to set disconnected field from false to true
+                    // Which means the client may be disconnected by server
+                    // by calling EntityPlayerNetworkComponentImpl::disconnect() method
+                    return;
+                }
                 EntityPlayerNetworkComponentImpl.this.onDisconnect(reason);
             }
         });
@@ -195,15 +205,17 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void disconnect(@MayContainTrKey String reason) {
-        if (!session.isConnected()) {
+        if (!disconnected.compareAndSet(false, true)) {
             log.warn("Trying to disconnect a player who is already disconnected!");
             return;
         }
         var disconnectReason = I18n.get().tr(thisPlayer.getLangCode(), reason);
         try {
+            onDisconnect(disconnectReason);
+            // Tell the client that it should disconnect
             thisPlayer.getClientSession().disconnect(disconnectReason);
-        } catch (Exception e) {
-            log.error("Error while disconnecting the session", e);
+        } catch (Throwable t) {
+            log.error("Error while disconnecting the session", t);
         }
     }
 
@@ -279,6 +291,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // Validate and set spawn point
         validateAndSetSpawnPoint(playerData);
         // Load the current point chunk firstly so that we can add player entity into the chunk
+        // TODO: Stuck here
         dimension.getChunkService().getOrLoadChunkSync(
                 (int) currentPos.x() >> 4,
                 (int) currentPos.z() >> 4
@@ -381,13 +394,22 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public void completeLogin() {
-        var playStatusPacket = new PlayStatusPacket();
         if (server.getOnlinePlayerCount() >= Server.SETTINGS.genericSettings().maxClientCount()) {
-            playStatusPacket.setStatus(PlayStatusPacket.Status.FAILED_SERVER_FULL_SUB_CLIENT);
-        } else {
-            playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
+            disconnect(TrKeys.M_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
+            return;
         }
+
+        var event = new PlayerLoggedInEvent(thisPlayer);
+        event.call();
+        if (event.isCancelled()) {
+            disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
+            return;
+        }
+
+        var playStatusPacket = new PlayStatusPacket();
+        playStatusPacket.setStatus(PlayStatusPacket.Status.LOGIN_SUCCESS);
         sendPacket(playStatusPacket);
+
         loggedIn = true;
         server.onLoggedIn(thisPlayer);
         // TODO: plugin event

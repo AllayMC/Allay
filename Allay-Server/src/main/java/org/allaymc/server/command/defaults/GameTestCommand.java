@@ -218,7 +218,7 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 })
                 .root()
-                .key("spawnXpOrb")
+                .key("spawnxporb")
                 .intNum("xp")
                 .exec((context, player) -> {
                     player.getDimension().splitAndDropXpOrb(

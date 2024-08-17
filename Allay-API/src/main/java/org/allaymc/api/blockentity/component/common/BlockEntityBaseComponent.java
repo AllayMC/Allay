@@ -87,4 +87,24 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         var pos = getPosition();
         return pos.dimension().getBlockState(pos.x(), pos.y(), pos.z());
     }
+
+    /**
+     * Get the custom name of the block entity
+     * @return the custom name of the block entity, null if not present
+     */
+    String getCustomName();
+
+    /**
+     * Set the custom name of the block entity
+     * @param customName the custom name of the block entity, can be null to remove the custom name
+     */
+    void setCustomName(String customName);
+
+    default boolean hasCustomName() {
+        return getCustomName() != null;
+    }
+
+    default void clearCustomName() {
+        setCustomName(null);
+    }
 }

@@ -84,17 +84,6 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Check if the block can be placed on the specified block type.
-     *
-     * @param blockType The type of the block on which this block is being placed.
-     *
-     * @return {@code true} if the block can be placed on the specified block type, {@code false} otherwise.
-     */
-    default boolean canPlaceOnBlock(BlockType<?> blockType) {
-        return true;
-    }
-
-    /**
      * Call when a blockState causes another blockState to update.
      *
      * @param current  The current block

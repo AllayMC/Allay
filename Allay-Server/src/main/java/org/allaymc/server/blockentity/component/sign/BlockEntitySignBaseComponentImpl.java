@@ -40,7 +40,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
 
-        nbt.listenForBoolean("IsWaxed", this::setWaxed);
+        nbt.listenForBoolean("IsWaxed", value -> waxed = value);
         nbt.listenForCompound("FrontText", value -> frontText = readSignTextFromNBT(value));
         nbt.listenForCompound("BackText", value -> backText = readSignTextFromNBT(value));
     }

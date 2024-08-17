@@ -16,8 +16,7 @@ public class ClientToServerHandshakePacketProcessor extends ILoginPacketProcesso
     @Override
     public void handle(EntityPlayer player, ClientToServerHandshakePacket packet) {
         if (player.isNetworkEncryptionEnabled()) player.completeLogin();
-        else
-            log.warn("Client {} sent ClientToServerHandshakePacket without encryption enabled", player.getOriginName());
+        else log.warn("Client {} sent ClientToServerHandshakePacket without encryption enabled", player.getOriginName());
     }
 
     @Override

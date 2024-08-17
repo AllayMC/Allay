@@ -56,6 +56,7 @@ public class BlockStateData {
                         color.getBlue(),
                         Integer.parseInt(str.substring(7), 16));
             }).create();
+
     @Builder.Default
     protected int burnOdds = 0;
     @Builder.Default

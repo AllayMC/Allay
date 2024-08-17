@@ -1,7 +1,7 @@
 package org.allaymc.server.blockentity.component.common;
 
-import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.api.block.component.event.CBlockOnNeighborUpdateEvent;
 import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
@@ -30,13 +30,13 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
 
-    @Getter(AccessLevel.NONE)
     @Manager
     protected ComponentManager manager;
 
     protected BlockEntityType<?> blockEntityType;
     protected Position3ic position;
-    protected String customName = "";
+    @Setter
+    protected String customName;
 
     public BlockEntityBaseComponentImpl(BlockEntityInitInfo initInfo) {
         this.blockEntityType = initInfo.getBlockEntityType();
@@ -55,8 +55,10 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
                 .putInt("x", position.x())
                 .putInt("y", position.y())
                 .putInt("z", position.z())
-                .putString("CustomName", customName)
                 .putBoolean("isMovable", true);
+        if (customName != null) {
+            builder.putString("CustomName", customName);
+        }
         var event = new CBlockEntitySaveNBTEvent(builder);
         manager.callEvent(event);
         return builder.build();

@@ -34,7 +34,7 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
         } else {
             willBreak = notSamePlant(dimension.getBlockState(BlockFace.UP.offsetPos(current.pos())));
             if (!willBreak)
-                willBreak = !this.canPlaceOnBlock(dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())).getBlockType());
+                willBreak = !this.canPlaceOn(dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())).getBlockType());
         }
         return !willBreak;
     }

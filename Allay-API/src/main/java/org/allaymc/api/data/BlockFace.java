@@ -83,6 +83,16 @@ public enum BlockFace {
         );
     }
 
+    public BlockFace rotateAroundYAxis() {
+        return switch (this) {
+            case NORTH -> EAST;
+            case EAST -> SOUTH;
+            case SOUTH -> WEST;
+            case WEST -> NORTH;
+            default -> throw new RuntimeException("Unable to get Y-rotated face of " + this);
+        };
+    }
+
     @SuppressWarnings("SuspiciousNameCombination")
     public Vector3f rotateVector(Vector3fc vec) {
         Vector3f result = new Vector3f(vec);

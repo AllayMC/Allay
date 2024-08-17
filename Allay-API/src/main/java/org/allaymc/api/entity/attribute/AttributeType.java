@@ -19,11 +19,12 @@ public enum AttributeType {
     ABSORPTION("minecraft:absorption", 0, Float.MAX_VALUE, 0),
     KNOCKBACK_RESISTANCE("minecraft:knockback_resistance", 0, 1, 0.6f),
     HEALTH("minecraft:health", 0, 20, 20),
-    MOVEMENT("minecraft:movement", 0.1f, 1, 0.1f),
+    MOVEMENT_SPEED("minecraft:movement", 0.1f, 1, 0.1f),
+    UNDER_WATER_MOVEMENT_SPEED("minecraft:underwater_movement", 0, Float.MAX_VALUE, 0.02f),
+    LAVA_MOVEMENT_SPEED("minecraft:lava_movement", 0, Float.MAX_VALUE, 0.02f),
     FOLLOW_RANGE("minecraft:follow_range", 0, 2048, 16),
     ATTACK_DAMAGE("minecraft:attack_damage", 1, Float.MAX_VALUE, 1),
     LUCK("minecraft:luck", -1024, 1024, 0),
-    FALL_DAMAGE("minecraft:fall_damage", 0, Float.MAX_VALUE, 1),
 
     // Horse
     HORSE_JUMP_STRENGTH("minecraft:horse.jump_strength", 0, 20, 0.7f),
@@ -35,8 +36,8 @@ public enum AttributeType {
     PLAYER_HUNGER("minecraft:player.hunger", 0, 20, 20),
     PLAYER_SATURATION("minecraft:player.saturation", 0, 20, 20),
     PLAYER_EXHAUSTION("minecraft:player.exhaustion", 0, 5, 0.41f),
-    PLAYER_LEVEL("minecraft:player.level", 0, 24791, 0),
-    PLAYER_EXPERIENCE("minecraft:player.experience", 0, 1, 0);
+    PLAYER_EXPERIENCE_LEVEL("minecraft:player.level", 0, 24791, 0),
+    PLAYER_EXPERIENCE_PROGRESS("minecraft:player.experience", 0, 1, 0);
 
     private static final Map<String, AttributeType> KEY_LOOK_UP = new HashMap<>();
 

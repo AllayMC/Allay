@@ -4,6 +4,8 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.data.CompassRoseDirection;
+import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.joml.Vector3ic;
 
 import static java.lang.Math.abs;
@@ -31,6 +33,14 @@ public final class PlaceBlockHelper {
         } else {
             blockState = blockState.setProperty(FACING_DIRECTION, player.getHorizontalFace().opposite().ordinal());
         }
+        return blockState;
+    }
+
+    public static BlockState processGroundSignDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        if (placementInfo == null) return blockState;
+        blockState = blockState.setProperty(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION.createValue(
+                CompassRoseDirection.getClosestFromYaw(placementInfo.player().getLocation().yaw()).getIndex()
+        ));
         return blockState;
     }
 }

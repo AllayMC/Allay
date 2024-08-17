@@ -1,6 +1,7 @@
 package org.allaymc.api.math.voxelshape;
 
 import org.allaymc.api.data.BlockFace;
+import org.iq80.leveldb.table.Block;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.junit.jupiter.api.Test;
@@ -74,6 +75,183 @@ class VoxelShapeTest {
         assertEquals(1.9f, vacancy.maxX());
         assertEquals(1.9f, vacancy.maxY());
         assertEquals(1.9f, vacancy.maxZ());
+    }
 
+    @Test
+    void testIsFull() {
+        var vs1 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .build();
+
+        for (var face : BlockFace.values()) {
+            assertTrue(vs1.isFull(face));
+        }
+
+        var vs2 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.4f, 0, 0.4f, 0.6f, 1, 0.6f)
+                .build();
+
+        assertFalse(vs2.isFull(BlockFace.UP));
+        assertFalse(vs2.isFull(BlockFace.DOWN));
+        for (var face : BlockFace.getHorizontal()) {
+            assertTrue(vs2.isFull(face));
+        }
+
+        var vs3 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.4f, 0.4f, 0.4f, 0.6f, 0.6f, 0.6f)
+                .build();
+
+        for (var face : BlockFace.values()) {
+            assertTrue(vs3.isFull(face));
+        }
+
+        var vs4 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 0.5f, 1, 1)
+                .build();
+
+        assertFalse(vs4.isFull(BlockFace.UP));
+        assertFalse(vs4.isFull(BlockFace.DOWN));
+        assertFalse(vs4.isFull(BlockFace.EAST));
+        assertFalse(vs4.isFull(BlockFace.NORTH));
+        assertFalse(vs4.isFull(BlockFace.SOUTH));
+        assertTrue(vs4.isFull(BlockFace.WEST));
+
+        var vs5 = VoxelShape
+                .builder()
+                .build();
+
+        for (var face : BlockFace.values()) {
+            assertFalse(vs5.isFull(face));
+        }
+
+        var vs6 = VoxelShape
+                .builder()
+                .vacancy(0, 0, 0, 1, 1, 1)
+                .build();
+
+        for (var face : BlockFace.values()) {
+            assertFalse(vs6.isFull(face));
+        }
+    }
+
+    @Test
+    void testIsCenterFull() {
+        var vs1 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .build();
+
+        for (var face : BlockFace.values()) {
+            assertTrue(vs1.isCenterFull(face));
+        }
+
+        var vs2 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.45f, 0, 0.45f, 0.55f, 1, 0.55f)
+                .build();
+
+        assertFalse(vs2.isCenterFull(BlockFace.UP));
+        assertFalse(vs2.isCenterFull(BlockFace.DOWN));
+        for (var face : BlockFace.getHorizontal()) {
+            assertTrue(vs2.isCenterFull(face));
+        }
+
+        var vs3 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.35f, 0.35f, 0.35f, 0.65f, 0.65f, 0.65f)
+                .build();
+
+        for (var face : BlockFace.values()) {
+            assertTrue(vs3.isCenterFull(face));
+        }
+
+        var vs4 = VoxelShape
+                .builder()
+                .solid(0.375f, 0, 0.375f, 0.625f, 1, 0.625f)
+                .build();
+
+        assertTrue(vs4.isCenterFull(BlockFace.UP));
+        assertTrue(vs4.isCenterFull(BlockFace.DOWN));
+        for (var face : BlockFace.getHorizontal()) {
+            assertFalse(vs4.isCenterFull(face));
+        }
+    }
+
+    @Test
+    void testIsFullBlock() {
+        // 完整方块
+        var vs1 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .build();
+        assertTrue(vs1.isFullBlock());
+
+        // 不完整方块（有空缺）
+        var vs2 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.4f, 0, 0.4f, 0.6f, 1, 0.6f)
+                .build();
+        assertFalse(vs2.isFullBlock());
+
+        // 部分支撑面不完整
+        var vs3 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 0.5f, 1)
+                .build();
+        assertFalse(vs3.isFullBlock());
+    }
+
+    @Test
+    void testIsEdgeFull() {
+        var vs1 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .build();
+        for (var face : BlockFace.values()) {
+            assertTrue(vs1.isEdgeFull(face));
+        }
+
+        var vs2 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.0f, 0.0f, 0.0f, 0.125f, 1, 0.125f)
+                .build();
+        for (var face : BlockFace.getVertical()) {
+            assertFalse(vs2.isEdgeFull(face));
+        }
+
+        var vs3 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 0.125f, 1, 1)
+                .build();
+        assertTrue(vs3.isEdgeFull(BlockFace.WEST));
+        assertFalse(vs3.isEdgeFull(BlockFace.EAST));
+        assertFalse(vs3.isEdgeFull(BlockFace.NORTH));
+        assertFalse(vs3.isEdgeFull(BlockFace.SOUTH));
+        assertFalse(vs3.isEdgeFull(BlockFace.UP));
+        assertFalse(vs3.isEdgeFull(BlockFace.DOWN));
+
+        var vs4 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.2f, 0.8f, 0.2f, 0.8f, 1, 0.8f)
+                .build();
+        assertTrue(vs4.isEdgeFull(BlockFace.UP));
+
+        var vs5 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.1f, 0.8f, 0.1f, 0.9f, 1, 0.9f)
+                .build();
+        assertFalse(vs5.isEdgeFull(BlockFace.UP));
     }
 }
