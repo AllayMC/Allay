@@ -18,8 +18,8 @@ import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
  * @author Dhaiven
  */
 @RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "facing_direction")
-public class BlockGlazedTerracoottaBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockGlazedTerracoottaBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockGlazedTerracottaBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockGlazedTerracottaBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 

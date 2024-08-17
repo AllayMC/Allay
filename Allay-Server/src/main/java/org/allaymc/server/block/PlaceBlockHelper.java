@@ -2,6 +2,7 @@ package org.allaymc.server.block;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.property.enums.PillarAxis;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.CompassRoseDirection;
@@ -10,6 +11,7 @@ import org.joml.Vector3ic;
 
 import static java.lang.Math.abs;
 import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
+import static org.allaymc.api.data.VanillaBlockPropertyTypes.PILLAR_AXIS;
 
 /**
  * Allay Project 2024/8/15
@@ -33,6 +35,18 @@ public final class PlaceBlockHelper {
         } else {
             blockState = blockState.setProperty(FACING_DIRECTION, player.getHorizontalFace().opposite().ordinal());
         }
+        return blockState;
+    }
+
+    public static BlockState processPillarAxisProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        if (placementInfo != null) {
+            return blockState.setProperty(PILLAR_AXIS, switch (placementInfo.blockFace()) {
+                case EAST, WEST -> PillarAxis.X;
+                case DOWN, UP -> PillarAxis.Y;
+                case NORTH, SOUTH -> PillarAxis.Z;
+            });
+        }
+
         return blockState;
     }
 

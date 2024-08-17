@@ -89,7 +89,7 @@ public class AllayWorld implements World {
                 .name("World Network Thread - " + this.getWorldData().getName())
                 .unstarted(this::networkTick);
         
-        this.internalSkyLight = worldData.calculInternalSkyLight(1);
+        this.internalSkyLight = worldData.calculateInternalSkyLight(1);
     }
 
     protected void networkTick() {
@@ -171,7 +171,7 @@ public class AllayWorld implements World {
         if (worldData.getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) {
             if (currentTick >= nextTimeSendTick) {
                 worldData.setTime(worldData.getTime() + TIME_SENDING_INTERVAL);
-                this.internalSkyLight = worldData.calculInternalSkyLight(currentTick);
+                this.internalSkyLight = worldData.calculateInternalSkyLight(currentTick);
 
                 nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
             }

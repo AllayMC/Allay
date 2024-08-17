@@ -917,7 +917,7 @@ public final class BlockTypeInitializer {
         BlockTypes.WARPED_DOOR = buildWoodenDoor(BlockWarpedDoorBehavior.class, VanillaBlockId.WARPED_DOOR);
     }
 
-    public static void initFacingDirection() {
+    public static void initGlazedTerracotta() {
         BlockTypes.BLACK_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockBlackGlazedTerracottaBehavior.class, VanillaBlockId.BLACK_GLAZED_TERRACOTTA);
         BlockTypes.BLUE_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockBlueGlazedTerracottaBehavior.class, VanillaBlockId.BLUE_GLAZED_TERRACOTTA);
         BlockTypes.BROWN_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockBrownGlazedTerracottaBehavior.class, VanillaBlockId.BROWN_GLAZED_TERRACOTTA);
@@ -935,7 +935,9 @@ public final class BlockTypeInitializer {
         BlockTypes.PURPLE_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockPurpleGlazedTerracottaBehavior.class, VanillaBlockId.PURPLE_GLAZED_TERRACOTTA);
         BlockTypes.WHITE_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockWhiteGlazedTerracottaBehavior.class, VanillaBlockId.WHITE_GLAZED_TERRACOTTA);
         BlockTypes.YELLOW_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockYellowGlazedTerracottaBehavior.class, VanillaBlockId.YELLOW_GLAZED_TERRACOTTA);
+    }
 
+    public static void initRods() {
         BlockTypes.END_ROD = BlockTypeBuilder
                 .builder(BlockEndRodBehavior.class)
                 .vanillaBlock(VanillaBlockId.END_ROD)
@@ -955,7 +957,7 @@ public final class BlockTypeInitializer {
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockGlazedTerracoottaBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockGlazedTerracottaBaseComponentImpl::new)
                 .build();
     }
 

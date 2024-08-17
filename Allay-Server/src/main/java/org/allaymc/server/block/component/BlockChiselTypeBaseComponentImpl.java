@@ -8,7 +8,8 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.facing.BlockPillarAxisComponentImpl;
+import org.allaymc.server.block.PlaceBlockHelper;
+import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.data.VanillaBlockPropertyTypes.CHISEL_TYPE;
@@ -18,8 +19,9 @@ import static org.allaymc.api.data.VanillaBlockPropertyTypes.CHISEL_TYPE;
  *
  * @author Dhaiven
  */
+@RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "pillar_axis")
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "chisel_type")
-public class BlockChiselTypeBaseComponentImpl extends BlockPillarAxisComponentImpl {
+public class BlockChiselTypeBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockChiselTypeBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -37,6 +39,11 @@ public class BlockChiselTypeBaseComponentImpl extends BlockPillarAxisComponentIm
             });
         }
         
-        return super.place(dimension, blockState, placeBlockPos, placementInfo);
+        dimension.setBlockState(
+                placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
+                PlaceBlockHelper.processPillarAxisProperty(blockState, placeBlockPos, placementInfo),
+                placementInfo
+        );
+        return true;
     }
 }

@@ -522,15 +522,12 @@ public interface Dimension {
      */
     void breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player);
 
-    /**
-     * @see https://minecraft.wiki/w/Light#Internal_light_level
-     */
     default int getInternalLightLevel(Vector3ic pos) {
         return getInternalLightLevel(pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * @see https://minecraft.wiki/w/Light#Internal_light_level
+     * @see <a href="https://minecraft.wiki/w/Light#Internal_light_level">Internal light level</a>
      */
     default int getInternalLightLevel(int x, int y, int z) {
         if (getDimensionInfo() != DimensionInfo.OVERWORLD) return 0;

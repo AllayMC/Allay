@@ -25,7 +25,7 @@ public record Material(
         float translucency
 ) {
 
-        public boolean isTransparent() {
-                return translucency() != 1.0f;
-        }
+    public boolean isTransparent() {
+        return translucency() != 1.0f;
+    }
 }

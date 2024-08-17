@@ -274,31 +274,31 @@ public class WorldData {
     }
 
     /**
-     * @see <a href="https://minecraft.wiki/w/Light#Internal_sky_light">Internal_sky_light</a>
+     * @see <a href="https://minecraft.wiki/w/Light#Internal_sky_light">Internal sky light</a>
      */
-    public int calculInternalSkyLight(float tickDiff) {
-       float rainFactor = 1.0F - (this.getRainStrength(tickDiff) * 5.0F) / 16.0F;
-       float thunderFactor = 1.0F - (this.getThunderStrength(tickDiff) * 5.0F) / 16.0F;
-       double sunFactor = 0.5F + 2.0F * Math.clamp(Math.cos(this.getSunAnglePercentage(tickDiff) * 6.2831855F), -0.25F, 0.25F);
-       return (int) ((1.0F - sunFactor * rainFactor * thunderFactor) * 11.0F);
+    public int calculateInternalSkyLight(float tickDiff) {
+        float rainFactor = 1F - (this.getRainStrength(tickDiff) * 5F) / 16F;
+        float thunderFactor = 1F - (this.getThunderStrength(tickDiff) * 5F) / 16F;
+        double sunFactor = 0.5F + 2F * Math.clamp(Math.cos(this.getSunAnglePercentage(tickDiff) * 6.2831855F), -0.25F, 0.25F);
+        return (int) ((1.0F - sunFactor * rainFactor * thunderFactor) * 11F);
     }
 
     public float getSunAnglePercentage(float tickDiff) {
-        return calculSunAnglePercentage(getTime(), tickDiff);
+        return calculateSunAnglePercentage(getTime(), tickDiff);
     }
 
-    public float calculSunAnglePercentage(long time, float tickDiff) {
+    public float calculateSunAnglePercentage(long time, float tickDiff) {
         int timeProgress = (int) (time % TIME_FULL);
         float angle = (timeProgress + tickDiff) / TIME_FULL - 0.25F;
 
-        if (angle < 0.0F) {
+        if (angle < 0F) {
             ++angle;
-        } else if (angle > 1.0F) {
+        } else if (angle > 1F) {
             --angle;
         }
 
-        float diff = 1.0F - (float) ((Math.cos(angle * Math.PI) + 1.0D) / 2.0D);
-        return angle + (diff - angle) / 3.0F;
+        float diff = 1F - (float) ((Math.cos(angle * Math.PI) + 1D) / 2D);
+        return angle + (diff - angle) / 3F;
     }
 
     public float getRainStrength(float tickDiff) {
