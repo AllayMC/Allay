@@ -32,12 +32,7 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         if (face != BlockFace.DOWN) return true;
-        return canPlaceOnBlock(neighbor.blockState().getBlockType());
-    }
-
-    @Override
-    public boolean canPlaceOnBlock(BlockType<?> blockType) {
-        return blockType == FARMLAND;
+        return neighbor.blockState().getBlockType() == FARMLAND;
     }
 
     @Override

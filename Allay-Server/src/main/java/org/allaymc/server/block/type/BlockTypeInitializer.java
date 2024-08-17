@@ -230,7 +230,6 @@ public final class BlockTypeInitializer {
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-
     }
 
     public static void initGrassBlock() {
