@@ -56,6 +56,8 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
+        if (super.onInteract(itemStack, dimension, interactInfo)) return true;
+
         var pos = interactInfo.clickBlockPos();
         var blockState = dimension.getBlockState(pos);
         if (!blockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
@@ -63,8 +65,6 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.getBlockUpdateService().scheduleBlockUpdate(pos, getActivationTime());
             dimension.addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_ON);
         }
-
-        return super.onInteract(itemStack, dimension, interactInfo);
     }
 
     @Override
