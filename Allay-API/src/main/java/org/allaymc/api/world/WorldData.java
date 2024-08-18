@@ -277,8 +277,8 @@ public class WorldData {
      * @see <a href="https://minecraft.wiki/w/Light#Internal_sky_light">Internal sky light</a>
      */
     public int calculateInternalSkyLight(float tickDiff) {
-        float rainFactor = 1F - (this.getRainStrength(tickDiff) * 5F) / 16F;
-        float thunderFactor = 1F - (this.getThunderStrength(tickDiff) * 5F) / 16F;
+        float rainFactor = 1F - (this.getRainStrength() * 5F) / 16F;
+        float thunderFactor = 1F - (this.getThunderStrength() * 5F) / 16F;
         double sunFactor = 0.5F + 2F * Math.clamp(Math.cos(this.getSunAnglePercentage(tickDiff) * 6.2831855F), -0.25F, 0.25F);
         return (int) ((1.0F - sunFactor * rainFactor * thunderFactor) * 11F);
     }
@@ -288,24 +288,23 @@ public class WorldData {
     }
 
     public float calculateSunAnglePercentage(long time, float tickDiff) {
-        int timeProgress = (int) (time % TIME_FULL);
-        float angle = (timeProgress + tickDiff) / TIME_FULL - 0.25F;
+        float angle = (time + tickDiff) / TIME_FULL - 0.25F;
 
         if (angle < 0F) {
-            ++angle;
+            angle++;
         } else if (angle > 1F) {
-            --angle;
+            angle--;
         }
 
         float diff = 1F - (float) ((Math.cos(angle * Math.PI) + 1D) / 2D);
         return angle + (diff - angle) / 3F;
     }
 
-    public float getRainStrength(float tickDiff) {
+    public float getRainStrength() {
         return rainLevel == 1 ? 1 : 0; // TODO: real implementation
     }
 
-    public float getThunderStrength(float tickDiff) {
+    public float getThunderStrength() {
         return rainLevel == 2 ? 1 : 0; // TODO: real implementation
     }
 

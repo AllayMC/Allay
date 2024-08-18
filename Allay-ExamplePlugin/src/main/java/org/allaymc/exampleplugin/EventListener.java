@@ -64,6 +64,7 @@ public class EventListener {
                 list.add("Biome: §aN/A");
             }
             list.add("Ping: " + player.getPing());
+            list.add("ItlSkyLight: " + player.getWorld().getInternalSkyLight());
             scoreboard.setLines(list);
             return true;
         }, 20);

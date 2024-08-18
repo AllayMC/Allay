@@ -59,8 +59,8 @@ public class AllayWorld implements World {
         this.worldData = worldStorage.getWorldDataCache();
         this.worldData.setWorld(this);
 
-        if (worldStorage instanceof NativeFileWorldStorage nativeFileWorldStorage)
-            this.worldData.setName(nativeFileWorldStorage.getWorldFolderPath().toFile().getName());
+//        if (worldStorage instanceof NativeFileWorldStorage nativeFileWorldStorage)
+//            this.worldData.setName(nativeFileWorldStorage.getWorldFolderPath().toFile().getName());
 
         this.gameLoop = GameLoop.builder().onTick(gameLoop -> {
             if (!isRunning.get()) {
