@@ -34,7 +34,7 @@ import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.block.component.facing.BlockCardinalDirectionComponentImpl;
-import org.allaymc.server.block.component.facing.BlockPillarAxisComponentImpl;
+import org.allaymc.server.block.component.facing.BlockPillarAxisLikeComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
@@ -849,26 +849,26 @@ public final class BlockTypeInitializer {
                 .builder(BlockBoneBlockBehavior.class)
                 .vanillaBlock(VanillaBlockId.BONE_BLOCK)
                 .setProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
                 .build();
         BlockTypes.HAY_BLOCK = BlockTypeBuilder
                 .builder(BlockHayBlockBehavior.class)
                 .vanillaBlock(VanillaBlockId.HAY_BLOCK)
                 .setProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
                 .build();
 
         BlockTypes.PURPUR_BLOCK = BlockTypeBuilder
                 .builder(BlockPurpurBlockBehavior.class)
                 .vanillaBlock(VanillaBlockId.PURPUR_BLOCK)
                 .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
                 .build();
         BlockTypes.QUARTZ_BLOCK = BlockTypeBuilder
                 .builder(BlockQuartzBlockBehavior.class)
                 .vanillaBlock(VanillaBlockId.QUARTZ_BLOCK)
                 .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
                 .build();
 
         BlockTypes.CHAIN = buildPillarAxis(BlockChainBehavior.class, VanillaBlockId.CHAIN);
@@ -987,7 +987,7 @@ public final class BlockTypeInitializer {
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
                 .build();
     }
 

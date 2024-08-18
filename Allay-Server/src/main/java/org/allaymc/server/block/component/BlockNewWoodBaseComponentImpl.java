@@ -8,7 +8,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.facing.BlockPillarAxisComponentImpl;
+import org.allaymc.server.block.component.facing.BlockPillarAxisLikeComponentImpl;
 
 import static org.allaymc.api.item.ItemHelper.isAxe;
 
@@ -19,7 +19,7 @@ import static org.allaymc.api.item.ItemHelper.isAxe;
  */
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "pillar_axis")
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "stripped_bit")
-public class BlockNewWoodBaseComponentImpl extends BlockPillarAxisComponentImpl {
+public class BlockNewWoodBaseComponentImpl extends BlockPillarAxisLikeComponentImpl {
     public BlockNewWoodBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }

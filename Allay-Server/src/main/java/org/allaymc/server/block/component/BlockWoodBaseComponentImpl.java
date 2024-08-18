@@ -8,7 +8,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.facing.BlockPillarAxisComponentImpl;
+import org.allaymc.server.block.component.facing.BlockPillarAxisLikeComponentImpl;
 
 import static org.allaymc.api.item.ItemHelper.isAxe;
 
@@ -18,7 +18,7 @@ import static org.allaymc.api.item.ItemHelper.isAxe;
  * @author Dhaiven
  */
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "pillar_axis")
-public class BlockWoodBaseComponentImpl extends BlockPillarAxisComponentImpl {
+public class BlockWoodBaseComponentImpl extends BlockPillarAxisLikeComponentImpl {
     protected final VanillaBlockId strippedType;
 
     public BlockWoodBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, VanillaBlockId strippedType) {
