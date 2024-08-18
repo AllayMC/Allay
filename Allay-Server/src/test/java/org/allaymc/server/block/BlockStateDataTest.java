@@ -85,7 +85,7 @@ class BlockStateDataTest {
                 var expected = blockStateDataMap.get(state.blockStateHash());
                 if (expected == null) {
                     log.error("Missing block state data for state: {}, Block: {}", state, type.getIdentifier());
-                    log.info("expected blockhash: {}", state.blockStateHash());
+                    log.info("Expected block state hash: {}", state.blockStateHash());
                     error++;
                 }
             }
