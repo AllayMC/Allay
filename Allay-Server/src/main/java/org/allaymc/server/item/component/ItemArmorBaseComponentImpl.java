@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component;
 
-import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -11,7 +11,6 @@ import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
 

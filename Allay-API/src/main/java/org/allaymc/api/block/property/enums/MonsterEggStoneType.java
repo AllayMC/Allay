@@ -8,15 +8,15 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum MonsterEggStoneType {
-    CHISELED_STONE_BRICK,
+    STONE,
 
     COBBLESTONE,
 
-    CRACKED_STONE_BRICK,
+    STONE_BRICK,
 
     MOSSY_STONE_BRICK,
 
-    STONE,
+    CRACKED_STONE_BRICK,
 
-    STONE_BRICK
+    CHISELED_STONE_BRICK
 }

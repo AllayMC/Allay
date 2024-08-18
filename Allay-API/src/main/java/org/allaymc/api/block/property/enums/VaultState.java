@@ -8,11 +8,11 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum VaultState {
-    ACTIVE,
-
-    EJECTING,
-
     INACTIVE,
 
-    UNLOCKING
+    ACTIVE,
+
+    UNLOCKING,
+
+    EJECTING
 }

@@ -8,19 +8,19 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum StoneSlabType3 {
+    END_STONE_BRICK,
+
+    SMOOTH_RED_SANDSTONE,
+
+    POLISHED_ANDESITE,
+
     ANDESITE,
 
     DIORITE,
 
-    END_STONE_BRICK,
+    POLISHED_DIORITE,
 
     GRANITE,
 
-    POLISHED_ANDESITE,
-
-    POLISHED_DIORITE,
-
-    POLISHED_GRANITE,
-
-    SMOOTH_RED_SANDSTONE
+    POLISHED_GRANITE
 }

@@ -55,6 +55,8 @@ public interface World {
 
     void tick(long currentTick);
 
+    void syncInternalSkyLight();
+
     Scheduler getScheduler();
 
     WorldStorage getWorldStorage();
@@ -72,4 +74,6 @@ public interface World {
     default void broadcastPacket(BedrockPacket packet) {
         getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
     }
+
+    int getInternalSkyLight();
 }

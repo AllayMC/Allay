@@ -7,7 +7,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
-import static org.allaymc.api.item.component.common.ItemBaseComponent.EMPTY_STACK_NETWORK_ID;
+import static org.allaymc.api.item.component.ItemBaseComponent.EMPTY_STACK_NETWORK_ID;
 
 /**
  * Allay Project 2023/9/14

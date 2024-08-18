@@ -221,7 +221,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Override
     public boolean isDisconnected() {
-        return !session.isConnected();
+        return disconnected.get();
     }
 
     protected void doFirstSpawn() {

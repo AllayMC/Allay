@@ -8,7 +8,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.data.ArmorTier;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
+import org.allaymc.server.entity.component.EntityDamageComponentImpl;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 /**

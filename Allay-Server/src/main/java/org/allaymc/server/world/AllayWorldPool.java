@@ -12,6 +12,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.allaymc.api.world.WorldSettings;
+import org.allaymc.api.world.generator.WorldGenerator;
 import org.cloudburstmc.protocol.common.util.Preconditions;
 
 import java.io.File;
@@ -65,16 +66,16 @@ public final class AllayWorldPool implements WorldPool {
         var storage = Registries.WORLD_STORAGE_FACTORIES.get(settings.storageType()).apply(WORLDS_FOLDER.resolve(name));
         var world = new AllayWorld(storage);
         // Load overworld dimension
-        var overworld = new AllayDimension(world, Registries.WORLD_GENERATOR_FACTORIES.get(overworldSettings.generatorType()).apply(overworldSettings.generatorPreset()), DimensionInfo.OVERWORLD);
+        var overworld = new AllayDimension(world, tryCreateWorldGenerator(overworldSettings), DimensionInfo.OVERWORLD);
         world.setDimension(overworld);
         // Load nether and the end dimension if they are not null
         if (netherSettings != null) {
-            var nether = new AllayDimension(world, Registries.WORLD_GENERATOR_FACTORIES.get(netherSettings.generatorType()).apply(netherSettings.generatorPreset()), DimensionInfo.NETHER);
+            var nether = new AllayDimension(world, tryCreateWorldGenerator(netherSettings), DimensionInfo.NETHER);
             world.setDimension(nether);
         }
 
         if (theEndSettings != null) {
-            var theEnd = new AllayDimension(world, Registries.WORLD_GENERATOR_FACTORIES.get(theEndSettings.generatorType()).apply(theEndSettings.generatorPreset()), DimensionInfo.THE_END);
+            var theEnd = new AllayDimension(world, tryCreateWorldGenerator(theEndSettings), DimensionInfo.THE_END);
             world.setDimension(theEnd);
         }
 
@@ -85,6 +86,15 @@ public final class AllayWorldPool implements WorldPool {
                 worldConfig.save();
             }
         }
+    }
+
+    private static WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldEntry.DimensionSettings overworldSettings) {
+        var factory = Registries.WORLD_GENERATOR_FACTORIES.get(overworldSettings.generatorType());
+        if (factory == null) {
+            log.error("Cannot find world generator {}", overworldSettings.generatorType());
+            factory = Registries.WORLD_GENERATOR_FACTORIES.get("VOID");
+        }
+        return factory.apply(overworldSettings.generatorPreset());
     }
 
     private void loadWorldConfig() {

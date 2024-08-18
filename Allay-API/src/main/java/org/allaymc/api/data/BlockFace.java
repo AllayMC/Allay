@@ -2,6 +2,7 @@ package org.allaymc.api.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3i;
@@ -15,7 +16,7 @@ import static java.lang.Math.min;
 /**
  * Allay Project 2023/8/11
  *
- * @author JukeboxMC | daoge_cmd
+ * @author JukeboxMC | daoge_cmd | Dhaiven
  */
 @Getter
 @AllArgsConstructor
@@ -83,16 +84,6 @@ public enum BlockFace {
         );
     }
 
-    public BlockFace rotateAroundYAxis() {
-        return switch (this) {
-            case NORTH -> EAST;
-            case EAST -> SOUTH;
-            case SOUTH -> WEST;
-            case WEST -> NORTH;
-            default -> throw new RuntimeException("Unable to get Y-rotated face of " + this);
-        };
-    }
-
     @SuppressWarnings("SuspiciousNameCombination")
     public Vector3f rotateVector(Vector3fc vec) {
         Vector3f result = new Vector3f(vec);
@@ -147,6 +138,36 @@ public enum BlockFace {
         };
     }
 
+    /**
+     * Rotate this BlockFace around the Y axis clockwise (NORTH =&gt; EAST =&gt; SOUTH =&gt; WEST =&gt; NORTH)
+     *
+     * @return block face
+     */
+    public BlockFace rotateY() {
+        return switch (this) {
+            case NORTH -> EAST;
+            case EAST -> SOUTH;
+            case SOUTH -> WEST;
+            case WEST -> NORTH;
+            default -> throw new RuntimeException("Unable to get Y-rotated face of " + this);
+        };
+    }
+
+    /**
+     * Rotate this BlockFace around the Y axis counter-clockwise (NORTH =&gt; WEST =&gt; SOUTH =&gt; EAST =&gt; NORTH)
+     *
+     * @return block face
+     */
+    public BlockFace rotateYCCW() {
+        return switch (this) {
+            case NORTH -> WEST;
+            case EAST -> NORTH;
+            case SOUTH -> EAST;
+            case WEST -> SOUTH;
+            default -> throw new RuntimeException("Unable to get counter-clockwise Y-rotated face of " + this);
+        };
+    }
+
     public boolean isHorizontal() {
         return this == NORTH || this == EAST || this == SOUTH || this == WEST;
     }
@@ -158,6 +179,16 @@ public enum BlockFace {
             case SOUTH -> 2;
             case NORTH -> 3;
             default -> throw new IllegalStateException("Unexpected value: " + this);
+        };
+    }
+
+    public MinecraftCardinalDirection toMinecraftCardinalDirection() {
+        return switch (this) {
+            case NORTH -> MinecraftCardinalDirection.NORTH;
+            case SOUTH -> MinecraftCardinalDirection.SOUTH;
+            case EAST -> MinecraftCardinalDirection.EAST;
+            case WEST -> MinecraftCardinalDirection.WEST;
+            default -> null;
         };
     }
 }

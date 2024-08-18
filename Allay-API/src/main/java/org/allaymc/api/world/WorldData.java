@@ -248,6 +248,7 @@ public class WorldData {
 
         this.time = event.getNewTime();
         sendTime(this.world.getPlayers());
+        this.world.syncInternalSkyLight();
     }
 
     @ApiStatus.Internal
@@ -271,6 +272,42 @@ public class WorldData {
             return WorldData.TIME_DAY;
         }
         return time;
+    }
+
+    /**
+     * @see <a href="https://minecraft.wiki/w/Light#Internal_sky_light">Internal sky light</a>
+     */
+    // TODO: need more checks
+    public int calculateInternalSkyLight() {
+        float rainFactor = 1F - (this.getRainStrength() * 5F) / 16F;
+        float thunderFactor = 1F - (this.getThunderStrength() * 5F) / 16F;
+        double sunFactor = 0.5F + 2F * Math.clamp(Math.cos(this.getSunAnglePercentage() * 6.2831855F), -0.25F, 0.25F);
+        return (int) ((1.0F - sunFactor * rainFactor * thunderFactor) * 11F);
+    }
+
+    public float getSunAnglePercentage() {
+        return calculateSunAnglePercentage(getTime());
+    }
+
+    public float calculateSunAnglePercentage(long time) {
+        float angle = time / TIME_FULL - 0.25F;
+
+        if (angle < 0F) {
+            angle++;
+        } else if (angle > 1F) {
+            angle--;
+        }
+
+        float diff = 1F - (float) ((Math.cos(angle * Math.PI) + 1D) / 2D);
+        return angle + (diff - angle) / 3F;
+    }
+
+    public float getRainStrength() {
+        return rainLevel == 1 ? 1 : 0; // TODO: real implementation
+    }
+
+    public float getThunderStrength() {
+        return rainLevel == 2 ? 1 : 0; // TODO: real implementation
     }
 
     public void setCurrentTick(long currentTick) {

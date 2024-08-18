@@ -12,7 +12,7 @@ import org.allaymc.api.eventbus.event.player.PlayerExperienceLevelChangeEvent;
 import org.allaymc.api.eventbus.event.player.PlayerExperienceProgressChangeEvent;
 import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
 import org.allaymc.api.world.Difficulty;
-import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
+import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 /**

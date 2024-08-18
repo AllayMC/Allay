@@ -16,7 +16,7 @@ import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 
 @ExtendWith({AllayTestExtension.class})
 public class HashUtilsTest {
-    static final int testBlockStateHash = 567193200;
+    static final int testBlockStateHash = 1622499771;
     static BlockState testBlockState;
 
     @BeforeAll
@@ -39,9 +39,10 @@ public class HashUtilsTest {
 
     @Test
     public void testFnv1a32Nbt() {
-        NbtMap tag = NbtMap.builder().putString("name", "minecraft:oak_wood")
+        NbtMap tag = NbtMap.builder()
+                .putString("name", "minecraft:oak_wood")
                 .putCompound("states", NbtMap.builder()
-                        .putString("pillar_axis", "x")
+                        .putString("pillar_axis", "y")
                         .build())
                 .build();
         Assertions.assertEquals(testBlockStateHash, HashUtils.fnv1a_32_nbt(tag));

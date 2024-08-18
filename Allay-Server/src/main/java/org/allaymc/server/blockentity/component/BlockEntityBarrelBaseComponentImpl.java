@@ -1,13 +1,12 @@
 package org.allaymc.server.blockentity.component;
 
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
+import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.container.impl.BarrelContainer;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
-import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
 
 /**
  * Allay Project 2023/12/6

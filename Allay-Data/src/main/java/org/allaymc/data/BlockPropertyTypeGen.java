@@ -40,7 +40,7 @@ public class BlockPropertyTypeGen {
         }
         log.info("Generating property type data...");
 
-        Map<String, List<NbtMap>> blockToBlockStateData = new HashMap<>();
+        Map<String, List<NbtMap>> blockToBlockStateData = new LinkedHashMap<>();
         for (int i = 0; i < blockStateCounter; ++i) {
             NbtMap nbtMap = blocks.get(i);
             String name = nbtMap.getString("name");
@@ -197,7 +197,7 @@ public class BlockPropertyTypeGen {
     static class PropertyType {
         final String serializationName;
         final String blockName;
-        final Set<String> values = new HashSet<>();
+        final Set<String> values = new LinkedHashSet<>();
         String valueType = "";
 
         PropertyType(String blockName, String serializationName) {

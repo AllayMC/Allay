@@ -4,6 +4,7 @@ import io.netty.util.ResourceLeakDetector;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
+import org.allaymc.api.block.property.BlockPropertyProcessor;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -198,6 +199,7 @@ public final class Allay {
                 r -> Registries.BLOCKS = r,
                 new BlockTypeRegistryPopulator()
         );
+        BlockPropertyProcessor.init();
 
         // Entity
         DoubleKeyMappedRegistry.create(

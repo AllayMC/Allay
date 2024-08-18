@@ -1,7 +1,6 @@
 package org.allaymc.server.item.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.component.ItemArmorBaseComponent.ArmorType;
@@ -28,7 +27,7 @@ import org.allaymc.server.item.component.ItemAirBaseComponentImpl;
 import org.allaymc.server.item.component.ItemArmorBaseComponentImpl;
 import org.allaymc.server.item.component.ItemCauldronBaseComponentImpl;
 import org.allaymc.server.item.component.ItemSignBaseComponentImpl;
-import org.allaymc.server.item.component.common.ItemItemStorableComponentImpl;
+import org.allaymc.server.item.component.ItemItemStorableComponentImpl;
 import org.allaymc.server.item.component.food.*;
 import org.allaymc.server.item.component.spawnegg.ItemEvokerSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.spawnegg.ItemSpawnEggBaseComponentImpl;

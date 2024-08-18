@@ -3,7 +3,7 @@ package org.allaymc.api.block.type;
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockComponent;
-import org.allaymc.api.block.component.common.BlockBaseComponent;
+import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTag;

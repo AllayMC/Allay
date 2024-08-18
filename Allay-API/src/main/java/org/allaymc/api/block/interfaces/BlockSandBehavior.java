@@ -1,7 +1,7 @@
 package org.allaymc.api.block.interfaces;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.common.BlockFallableBaseComponent;
+import org.allaymc.api.block.component.BlockFallableBaseComponent;
 
 /**
  * @author daoge_cmd <br>

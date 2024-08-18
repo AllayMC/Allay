@@ -7,7 +7,7 @@ import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderCompon
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.entity.component.common.EntityContainerHolderComponentImpl;
+import org.allaymc.server.entity.component.EntityContainerHolderComponentImpl;
 
 /**
  * Allay Project 2023/12/2

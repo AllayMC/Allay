@@ -1,13 +1,12 @@
 package org.allaymc.server.item.component;
 
 import lombok.Getter;
-import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.item.component.ItemSignBaseComponent;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**

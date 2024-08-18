@@ -8,11 +8,11 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum BigDripleafTilt {
-    FULL_TILT,
-
     NONE,
+
+    UNSTABLE,
 
     PARTIAL_TILT,
 
-    UNSTABLE
+    FULL_TILT
 }

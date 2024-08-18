@@ -1,6 +1,7 @@
 package org.allaymc.server.item.type;
 
 import org.allaymc.api.item.init.SimpleItemStackInitInfo;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.junit.jupiter.api.Test;
@@ -32,40 +33,50 @@ public class AllayItemTypeTest {
 
     @Test
     void testGenericFunctions() {
-        var itemStack = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        var diamond = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
 
         // Count
-        itemStack.setCount(2);
-        assertEquals(2, itemStack.getCount());
-        assertThrows(IllegalArgumentException.class, () -> itemStack.setCount(-1));
+        diamond.setCount(2);
+        assertEquals(2, diamond.getCount());
+        assertThrows(IllegalArgumentException.class, () -> diamond.setCount(-1));
 
         // Meta
-        itemStack.setMeta(1);
-        assertEquals(1, itemStack.getMeta());
-        assertThrows(IllegalArgumentException.class, () -> itemStack.setMeta(-1));
+        diamond.setMeta(1);
+        assertEquals(1, diamond.getMeta());
+        assertThrows(IllegalArgumentException.class, () -> diamond.setMeta(-1));
 
         // Lore
-        itemStack.setLore(List.of("testLore1", "testLore2"));
-        assertEquals(List.of("testLore1", "testLore2"), itemStack.getLore());
-
-        // Durability
-        itemStack.setDurability(1);
-        assertEquals(1, itemStack.getDurability());
-        assertThrows(IllegalArgumentException.class, () -> itemStack.setDurability(-1));
+        diamond.setLore(List.of("testLore1", "testLore2"));
+        assertEquals(List.of("testLore1", "testLore2"), diamond.getLore());
 
         // CustomName
-        itemStack.setCustomName("TestCustomName");
-        assertEquals("TestCustomName", itemStack.getCustomName());
+        diamond.setCustomName("TestCustomName");
+        assertEquals("TestCustomName", diamond.getCustomName());
 
         // Custom NBT Content
-        itemStack.setCustomNBTContent(
+        diamond.setCustomNBTContent(
                 NbtMap.builder()
                         .putString("testKey", "testValue")
                         .build()
         );
-        var savedItemStackNBT = itemStack.saveNBT();
+        var savedItemStackNBT = diamond.saveNBT();
         var customNBT = savedItemStackNBT.getCompound("tag").getCompound("CustomNBT");
         assertTrue(customNBT.containsKey("testKey"));
         assertEquals("testValue", customNBT.getString("testKey"));
+    }
+
+    @Test
+    void testDurability() {
+        var diamond = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        var axe = ItemTypes.DIAMOND_AXE.createItemStack(1);
+
+        // Diamond doesn't support durability
+        diamond.setDurability(1);
+        assertEquals(0, diamond.getDurability());
+
+        // Instead, diamond axe supports durability
+        axe.setDurability(1);
+        assertEquals(1, axe.getDurability());
+        assertThrows(IllegalArgumentException.class, () -> axe.setDurability(-1));
     }
 }

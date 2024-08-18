@@ -1,7 +1,6 @@
 package org.allaymc.server.blockentity.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
 import org.allaymc.api.blockentity.interfaces.*;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
@@ -9,7 +8,7 @@ import org.allaymc.api.container.impl.*;
 import org.allaymc.api.data.VanillaBlockEntityId;
 import org.allaymc.server.blockentity.component.BlockEntityBarrelBaseComponentImpl;
 import org.allaymc.server.blockentity.component.BlockEntityChestBaseComponentImpl;
-import org.allaymc.server.blockentity.component.common.BlockEntityContainerHolderComponentImpl;
+import org.allaymc.server.blockentity.component.BlockEntityContainerHolderComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityBlastFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntitySmokerFurnaceBaseComponentImpl;

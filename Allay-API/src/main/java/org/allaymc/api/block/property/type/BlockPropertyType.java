@@ -3,6 +3,7 @@ package org.allaymc.api.block.property.type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import org.allaymc.api.block.property.BlockPropertyProcessor;
 
 import java.util.List;
 
@@ -31,6 +32,18 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> createValue(DATATYPE value);
 
     BlockPropertyValue<DATATYPE, ? extends BlockPropertyType<DATATYPE>, ?> tryCreateValue(Object value);
+
+    /**
+     * Get the processor for this property type
+     * @return the processor, null if not present
+     */
+    BlockPropertyProcessor getProcessor();
+
+    /**
+     * Set the processor for this property type
+     * @param processor the processor, or null to remove
+     */
+    void setProcessor(BlockPropertyProcessor processor);
 
     byte getBitSize();
 

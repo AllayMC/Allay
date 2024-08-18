@@ -21,8 +21,8 @@ import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.component.injector.AllayComponentInjector;
-import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
-import org.allaymc.server.item.component.common.ItemDataComponentImpl;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
+import org.allaymc.server.item.component.ItemDataComponentImpl;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 
 import java.util.*;

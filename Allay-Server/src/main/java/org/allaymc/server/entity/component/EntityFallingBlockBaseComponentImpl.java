@@ -7,7 +7,6 @@ import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;

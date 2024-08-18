@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.lang.Math.*;
-import static org.allaymc.api.block.component.common.BlockStateData.DEFAULT_FRICTION;
+import static org.allaymc.api.block.BlockStateData.DEFAULT_FRICTION;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 import static org.allaymc.api.utils.MathUtils.isInRange;
 

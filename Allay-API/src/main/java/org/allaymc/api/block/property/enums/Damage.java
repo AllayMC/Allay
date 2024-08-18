@@ -8,11 +8,11 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum Damage {
-    BROKEN,
+    UNDAMAGED,
 
     SLIGHTLY_DAMAGED,
 
-    UNDAMAGED,
+    VERY_DAMAGED,
 
-    VERY_DAMAGED
+    BROKEN
 }

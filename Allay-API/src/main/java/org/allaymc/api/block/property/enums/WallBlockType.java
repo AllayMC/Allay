@@ -8,31 +8,31 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum WallBlockType {
-    ANDESITE,
-
-    BRICK,
-
     COBBLESTONE,
 
-    DIORITE,
-
-    END_BRICK,
+    MOSSY_COBBLESTONE,
 
     GRANITE,
 
-    MOSSY_COBBLESTONE,
+    DIORITE,
+
+    ANDESITE,
+
+    SANDSTONE,
+
+    BRICK,
+
+    STONE_BRICK,
 
     MOSSY_STONE_BRICK,
 
     NETHER_BRICK,
 
-    PRISMARINE,
+    END_BRICK,
 
-    RED_NETHER_BRICK,
+    PRISMARINE,
 
     RED_SANDSTONE,
 
-    SANDSTONE,
-
-    STONE_BRICK
+    RED_NETHER_BRICK
 }

@@ -15,7 +15,7 @@ import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.MathUtils;
-import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
+import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;

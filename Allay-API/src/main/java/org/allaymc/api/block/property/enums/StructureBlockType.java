@@ -8,15 +8,15 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum StructureBlockType {
-    CORNER,
-
     DATA,
 
-    EXPORT,
-
-    INVALID,
+    SAVE,
 
     LOAD,
 
-    SAVE
+    CORNER,
+
+    INVALID,
+
+    EXPORT
 }

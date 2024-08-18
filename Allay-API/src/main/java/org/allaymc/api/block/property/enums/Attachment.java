@@ -8,11 +8,11 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum Attachment {
-    HANGING,
+    STANDING,
 
-    MULTIPLE,
+    HANGING,
 
     SIDE,
 
-    STANDING
+    MULTIPLE
 }

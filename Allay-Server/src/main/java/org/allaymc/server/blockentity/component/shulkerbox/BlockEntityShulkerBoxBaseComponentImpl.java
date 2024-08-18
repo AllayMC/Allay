@@ -2,12 +2,12 @@ package org.allaymc.server.blockentity.component.shulkerbox;
 
 import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.api.data.BlockFace;
-import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
+import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.container.impl.ShulkerBoxContainer;
-import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
+import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 

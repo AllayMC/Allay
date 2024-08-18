@@ -11,6 +11,7 @@ import org.allaymc.api.block.type.BlockType;
  * @author IWareQ
  */
 @RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "color_bit")
+@RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "torch_facing_direction")
 public class BlockColoredTorchBaseComponentImpl extends BlockTorchBaseComponentImpl {
     public BlockColoredTorchBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

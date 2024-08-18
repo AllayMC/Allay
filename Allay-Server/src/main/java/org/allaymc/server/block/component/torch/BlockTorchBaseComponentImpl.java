@@ -4,7 +4,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.EnumBiMap;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;
-import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
@@ -14,7 +14,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
+import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
 @RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "torch_facing_direction")

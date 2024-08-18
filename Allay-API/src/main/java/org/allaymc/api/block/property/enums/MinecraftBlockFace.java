@@ -10,13 +10,13 @@ package org.allaymc.api.block.property.enums;
 public enum MinecraftBlockFace {
     DOWN,
 
-    EAST,
+    UP,
 
     NORTH,
 
     SOUTH,
 
-    UP,
+    WEST,
 
-    WEST
+    EAST
 }

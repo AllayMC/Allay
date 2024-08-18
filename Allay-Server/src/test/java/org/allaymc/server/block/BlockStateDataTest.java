@@ -1,7 +1,7 @@
 package org.allaymc.server.block;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.common.BlockStateData;
+import org.allaymc.api.block.BlockStateData;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.registry.Registries;
@@ -85,7 +85,7 @@ class BlockStateDataTest {
                 var expected = blockStateDataMap.get(state.blockStateHash());
                 if (expected == null) {
                     log.error("Missing block state data for state: {}, Block: {}", state, type.getIdentifier());
-                    log.info("expected blockhash: {}", state.blockStateHash());
+                    log.info("Expected block state hash: {}", state.blockStateHash());
                     error++;
                 }
             }

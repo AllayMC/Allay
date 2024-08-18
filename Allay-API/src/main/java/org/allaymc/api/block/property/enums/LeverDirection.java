@@ -10,17 +10,17 @@ package org.allaymc.api.block.property.enums;
 public enum LeverDirection {
     DOWN_EAST_WEST,
 
-    DOWN_NORTH_SOUTH,
-
     EAST,
 
-    NORTH,
+    WEST,
 
     SOUTH,
 
-    UP_EAST_WEST,
+    NORTH,
 
     UP_NORTH_SOUTH,
 
-    WEST
+    UP_EAST_WEST,
+
+    DOWN_NORTH_SOUTH
 }

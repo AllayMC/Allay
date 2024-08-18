@@ -1,6 +1,8 @@
 package org.allaymc.api.block.property.type;
 
 import lombok.Getter;
+import lombok.Setter;
+import org.allaymc.api.block.property.BlockPropertyProcessor;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +19,8 @@ public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPro
     protected final List<DATATYPE> validValues;
     protected final DATATYPE defaultValue;
     protected final byte bitSize;
+    @Setter
+    protected BlockPropertyProcessor processor;
 
     protected BaseBlockPropertyType(String name, List<DATATYPE> validValues, DATATYPE defaultValue, byte bitSize) {
         this.name = name;

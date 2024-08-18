@@ -51,13 +51,16 @@ public class AllayWorld implements World {
     protected final Thread networkThread;
     protected long nextTimeSendTick;
 
+    @Getter
+    protected int internalSkyLight;
+
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
         this.worldData = worldStorage.getWorldDataCache();
         this.worldData.setWorld(this);
 
-        if (worldStorage instanceof NativeFileWorldStorage nativeFileWorldStorage)
-            this.worldData.setName(nativeFileWorldStorage.getWorldFolderPath().toFile().getName());
+//        if (worldStorage instanceof NativeFileWorldStorage nativeFileWorldStorage)
+//            this.worldData.setName(nativeFileWorldStorage.getWorldFolderPath().toFile().getName());
 
         this.gameLoop = GameLoop.builder().onTick(gameLoop -> {
             if (!isRunning.get()) {
@@ -85,6 +88,8 @@ public class AllayWorld implements World {
         this.networkThread = Thread.ofVirtual()
                 .name("World Network Thread - " + this.getWorldData().getName())
                 .unstarted(this::networkTick);
+        
+        syncInternalSkyLight();
     }
 
     protected void networkTick() {
@@ -152,6 +157,14 @@ public class AllayWorld implements World {
         worldData.getGameRules().sync(this);
     }
 
+    /**
+     * TODO: called when rain and thunder change
+     */
+    @Override
+    public void syncInternalSkyLight() {
+        this.internalSkyLight = worldData.calculateInternalSkyLight();
+    }
+
     @Override
     public void startTick() {
         if (thread.getState() != Thread.State.NEW) {
@@ -162,12 +175,12 @@ public class AllayWorld implements World {
         }
     }
 
-    protected void tickTime(long tickNumber) {
-        if (worldData.getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) {
-            if (tickNumber >= nextTimeSendTick) {
-                worldData.setTime(worldData.getTime() + TIME_SENDING_INTERVAL);
-                nextTimeSendTick = tickNumber + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
-            }
+    protected void tickTime(long currentTick) {
+        if (!worldData.<Boolean>getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) return;
+
+        if (currentTick >= nextTimeSendTick) {
+            worldData.addTime(TIME_SENDING_INTERVAL);
+            nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
         }
     }
 
