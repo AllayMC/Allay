@@ -373,7 +373,7 @@ public final class Dashboard {
 
     private void updatePluginTable() {
         var title = new String[]{I18n.get().tr(TrKeys.A_GUI_PLUGIN_NAME), I18n.get().tr(TrKeys.A_GUI_PLUGIN_DESCRIPTION), I18n.get().tr(TrKeys.A_GUI_PLUGIN_VERSION), I18n.get().tr(TrKeys.A_GUI_PLUGIN_AUTHORS)};
-        var plugins = Server.getInstance().getPluginManager().getPlugins().values();
+        var plugins = Server.getInstance().getPluginManager().getEnabledPlugins().values();
         var data = new String[4][plugins.isEmpty() ? 0 : plugins.size() - 1];
         int row = 0;
         for (var plugin : plugins) {
