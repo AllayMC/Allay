@@ -61,7 +61,7 @@ public class EventListener {
         var blockUnder = player.getDimension().getBlockState(BlockFace.DOWN.offsetPos((int) loc.x(), (int) loc.y(), (int) loc.z()));
         lines.add("BlockUnder: §a" + blockUnder.getBlockType().getIdentifier().path());
         var itemInHand = player.getItemInHand();
-        lines.add("ItemInHand: §a" + itemInHand.getItemType().getIdentifier() + (itemInHand.getMeta() != 0 ? ":" + itemInHand.getMeta() : ""));
+        lines.add("ItemInHand: §a" + itemInHand.getItemType().getIdentifier().path() + (itemInHand.getMeta() != 0 ? ":" + itemInHand.getMeta() : ""));
         lines.add("Chunk: §a" + chunk.getX() + ", " + chunk.getZ());
         lines.add("Loaded: §a" + player.getDimension().getChunkService().getLoadedChunks().size());
         lines.add("Loading: §a" + player.getDimension().getChunkService().getLoadingChunks().size());
