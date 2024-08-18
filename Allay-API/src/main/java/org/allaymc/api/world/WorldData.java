@@ -248,6 +248,7 @@ public class WorldData {
 
         this.time = event.getNewTime();
         sendTime(this.world.getPlayers());
+        this.world.syncInternalSkyLight();
     }
 
     @ApiStatus.Internal

@@ -6,8 +6,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.world.TimeChangeEvent;
 import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
@@ -55,7 +53,6 @@ public class AllayWorld implements World {
 
     @Getter
     protected int internalSkyLight;
-    protected boolean needSyncInternalSkyLight = true;
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
@@ -92,7 +89,7 @@ public class AllayWorld implements World {
                 .name("World Network Thread - " + this.getWorldData().getName())
                 .unstarted(this::networkTick);
         
-        Server.getInstance().getEventBus().registerListener(this);
+        syncInternalSkyLight();
     }
 
     protected void networkTick() {
@@ -150,9 +147,6 @@ public class AllayWorld implements World {
     @Override
     public void tick(long currentTick) {
         syncData();
-        if (needSyncInternalSkyLight) {
-            syncInternalSkyLight();
-        }
         tickTime(currentTick);
         scheduler.tick();
         getDimensions().values().forEach(d -> d.tick(currentTick));
@@ -166,9 +160,9 @@ public class AllayWorld implements World {
     /**
      * TODO: called when rain and thunder change
      */
-    protected void syncInternalSkyLight() {
+    @Override
+    public void syncInternalSkyLight() {
         this.internalSkyLight = worldData.calculateInternalSkyLight();
-        needSyncInternalSkyLight = false;
     }
 
     @Override
@@ -236,12 +230,6 @@ public class AllayWorld implements World {
     @Override
     public boolean isRunning() {
         return isRunning.get();
-    }
-
-    @EventHandler
-    private void onTimeChange(TimeChangeEvent event) {
-        if (event.isCancelled()) return;
-        needSyncInternalSkyLight = true;
     }
 
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}

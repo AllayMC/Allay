@@ -55,6 +55,8 @@ public interface World {
 
     void tick(long currentTick);
 
+    void syncInternalSkyLight();
+
     Scheduler getScheduler();
 
     WorldStorage getWorldStorage();
