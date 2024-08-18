@@ -799,16 +799,16 @@ public final class BlockTypeInitializer {
         BlockTypes.WARPED_STEM = buildWood(BlockWarpedStemBehavior.class, VanillaBlockId.WARPED_STEM, VanillaBlockId.STRIPPED_WARPED_STEM);
 
         // Stripped Log
-        BlockTypes.STRIPPED_ACACIA_LOG = initPillarAxis(BlockStrippedAcaciaLogBehavior.class, VanillaBlockId.STRIPPED_ACACIA_LOG);
-        BlockTypes.STRIPPED_BAMBOO_BLOCK = initPillarAxis(BlockStrippedBambooBlockBehavior.class, VanillaBlockId.STRIPPED_BAMBOO_BLOCK);
-        BlockTypes.STRIPPED_BIRCH_LOG = initPillarAxis(BlockStrippedBirchLogBehavior.class, VanillaBlockId.STRIPPED_BIRCH_LOG);
-        BlockTypes.STRIPPED_CHERRY_LOG = initPillarAxis(BlockStrippedCherryLogBehavior.class, VanillaBlockId.STRIPPED_CHERRY_LOG);
-        BlockTypes.STRIPPED_CRIMSON_STEM = initPillarAxis(BlockStrippedCrimsonStemBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_STEM);
-        BlockTypes.STRIPPED_DARK_OAK_LOG = initPillarAxis(BlockStrippedDarkOakLogBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_LOG);
-        BlockTypes.STRIPPED_JUNGLE_LOG = initPillarAxis(BlockStrippedJungleLogBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_LOG);
-        BlockTypes.STRIPPED_OAK_LOG = initPillarAxis(BlockStrippedOakLogBehavior.class, VanillaBlockId.STRIPPED_OAK_LOG);
-        BlockTypes.STRIPPED_SPRUCE_LOG = initPillarAxis(BlockStrippedSpruceLogBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_LOG);
-        BlockTypes.STRIPPED_WARPED_STEM = initPillarAxis(BlockStrippedWarpedStemBehavior.class, VanillaBlockId.STRIPPED_WARPED_STEM);
+        BlockTypes.STRIPPED_ACACIA_LOG = buildPillarAxis(BlockStrippedAcaciaLogBehavior.class, VanillaBlockId.STRIPPED_ACACIA_LOG);
+        BlockTypes.STRIPPED_BAMBOO_BLOCK = buildPillarAxis(BlockStrippedBambooBlockBehavior.class, VanillaBlockId.STRIPPED_BAMBOO_BLOCK);
+        BlockTypes.STRIPPED_BIRCH_LOG = buildPillarAxis(BlockStrippedBirchLogBehavior.class, VanillaBlockId.STRIPPED_BIRCH_LOG);
+        BlockTypes.STRIPPED_CHERRY_LOG = buildPillarAxis(BlockStrippedCherryLogBehavior.class, VanillaBlockId.STRIPPED_CHERRY_LOG);
+        BlockTypes.STRIPPED_CRIMSON_STEM = buildPillarAxis(BlockStrippedCrimsonStemBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_STEM);
+        BlockTypes.STRIPPED_DARK_OAK_LOG = buildPillarAxis(BlockStrippedDarkOakLogBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_LOG);
+        BlockTypes.STRIPPED_JUNGLE_LOG = buildPillarAxis(BlockStrippedJungleLogBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_LOG);
+        BlockTypes.STRIPPED_OAK_LOG = buildPillarAxis(BlockStrippedOakLogBehavior.class, VanillaBlockId.STRIPPED_OAK_LOG);
+        BlockTypes.STRIPPED_SPRUCE_LOG = buildPillarAxis(BlockStrippedSpruceLogBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_LOG);
+        BlockTypes.STRIPPED_WARPED_STEM = buildPillarAxis(BlockStrippedWarpedStemBehavior.class, VanillaBlockId.STRIPPED_WARPED_STEM);
 
         // Wood
         BlockTypes.ACACIA_WOOD = buildWood(BlockAcaciaWoodBehavior.class, VanillaBlockId.ACACIA_WOOD, VanillaBlockId.STRIPPED_ACACIA_WOOD);
@@ -825,25 +825,25 @@ public final class BlockTypeInitializer {
         BlockTypes.MANGROVE_WOOD = buildNewWood(BlockMangroveWoodBehavior.class, VanillaBlockId.MANGROVE_WOOD);
 
         // Stripped Wood
-        BlockTypes.STRIPPED_ACACIA_WOOD = initPillarAxis(BlockStrippedAcaciaWoodBehavior.class, VanillaBlockId.STRIPPED_ACACIA_WOOD);
-        BlockTypes.STRIPPED_BIRCH_WOOD = initPillarAxis(BlockStrippedBirchWoodBehavior.class, VanillaBlockId.STRIPPED_BIRCH_WOOD);
-        BlockTypes.STRIPPED_CHERRY_WOOD = initPillarAxis(BlockStrippedCherryWoodBehavior.class, VanillaBlockId.STRIPPED_CHERRY_WOOD);
-        BlockTypes.STRIPPED_CRIMSON_HYPHAE = initPillarAxis(BlockStrippedCrimsonHyphaeBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_HYPHAE);
-        BlockTypes.STRIPPED_DARK_OAK_WOOD = initPillarAxis(BlockStrippedDarkOakWoodBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_WOOD);
-        BlockTypes.STRIPPED_JUNGLE_WOOD = initPillarAxis(BlockStrippedJungleWoodBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_WOOD);
-        BlockTypes.STRIPPED_MANGROVE_WOOD = initPillarAxis(BlockStrippedMangroveWoodBehavior.class, VanillaBlockId.STRIPPED_MANGROVE_WOOD);
-        BlockTypes.STRIPPED_OAK_WOOD = initPillarAxis(BlockStrippedOakWoodBehavior.class, VanillaBlockId.STRIPPED_OAK_WOOD);
-        BlockTypes.STRIPPED_SPRUCE_WOOD = initPillarAxis(BlockStrippedSpruceWoodBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_WOOD);
-        BlockTypes.STRIPPED_WARPED_HYPHAE = initPillarAxis(BlockStrippedWarpedHyphaeBehavior.class, VanillaBlockId.STRIPPED_WARPED_HYPHAE);
+        BlockTypes.STRIPPED_ACACIA_WOOD = buildPillarAxis(BlockStrippedAcaciaWoodBehavior.class, VanillaBlockId.STRIPPED_ACACIA_WOOD);
+        BlockTypes.STRIPPED_BIRCH_WOOD = buildPillarAxis(BlockStrippedBirchWoodBehavior.class, VanillaBlockId.STRIPPED_BIRCH_WOOD);
+        BlockTypes.STRIPPED_CHERRY_WOOD = buildPillarAxis(BlockStrippedCherryWoodBehavior.class, VanillaBlockId.STRIPPED_CHERRY_WOOD);
+        BlockTypes.STRIPPED_CRIMSON_HYPHAE = buildPillarAxis(BlockStrippedCrimsonHyphaeBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_HYPHAE);
+        BlockTypes.STRIPPED_DARK_OAK_WOOD = buildPillarAxis(BlockStrippedDarkOakWoodBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_WOOD);
+        BlockTypes.STRIPPED_JUNGLE_WOOD = buildPillarAxis(BlockStrippedJungleWoodBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_WOOD);
+        BlockTypes.STRIPPED_MANGROVE_WOOD = buildPillarAxis(BlockStrippedMangroveWoodBehavior.class, VanillaBlockId.STRIPPED_MANGROVE_WOOD);
+        BlockTypes.STRIPPED_OAK_WOOD = buildPillarAxis(BlockStrippedOakWoodBehavior.class, VanillaBlockId.STRIPPED_OAK_WOOD);
+        BlockTypes.STRIPPED_SPRUCE_WOOD = buildPillarAxis(BlockStrippedSpruceWoodBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_WOOD);
+        BlockTypes.STRIPPED_WARPED_HYPHAE = buildPillarAxis(BlockStrippedWarpedHyphaeBehavior.class, VanillaBlockId.STRIPPED_WARPED_HYPHAE);
 
-        BlockTypes.MUDDY_MANGROVE_ROOTS = initPillarAxis(BlockMuddyMangroveRootsBehavior.class, VanillaBlockId.MUDDY_MANGROVE_ROOTS);
+        BlockTypes.MUDDY_MANGROVE_ROOTS = buildPillarAxis(BlockMuddyMangroveRootsBehavior.class, VanillaBlockId.MUDDY_MANGROVE_ROOTS);
 
-        BlockTypes.BASALT = initPillarAxis(BlockBasaltBehavior.class, VanillaBlockId.BASALT);
-        BlockTypes.POLISHED_BASALT = initPillarAxis(BlockPolishedBasaltBehavior.class, VanillaBlockId.POLISHED_BASALT);
+        BlockTypes.BASALT = buildPillarAxis(BlockBasaltBehavior.class, VanillaBlockId.BASALT);
+        BlockTypes.POLISHED_BASALT = buildPillarAxis(BlockPolishedBasaltBehavior.class, VanillaBlockId.POLISHED_BASALT);
 
-        BlockTypes.OCHRE_FROGLIGHT = initPillarAxis(BlockOchreFroglightBehavior.class, VanillaBlockId.OCHRE_FROGLIGHT);
-        BlockTypes.PEARLESCENT_FROGLIGHT = initPillarAxis(BlockPearlescentFroglightBehavior.class, VanillaBlockId.PEARLESCENT_FROGLIGHT);
-        BlockTypes.VERDANT_FROGLIGHT = initPillarAxis(BlockVerdantFroglightBehavior.class, VanillaBlockId.VERDANT_FROGLIGHT);
+        BlockTypes.OCHRE_FROGLIGHT = buildPillarAxis(BlockOchreFroglightBehavior.class, VanillaBlockId.OCHRE_FROGLIGHT);
+        BlockTypes.PEARLESCENT_FROGLIGHT = buildPillarAxis(BlockPearlescentFroglightBehavior.class, VanillaBlockId.PEARLESCENT_FROGLIGHT);
+        BlockTypes.VERDANT_FROGLIGHT = buildPillarAxis(BlockVerdantFroglightBehavior.class, VanillaBlockId.VERDANT_FROGLIGHT);
 
         BlockTypes.BONE_BLOCK = BlockTypeBuilder
                 .builder(BlockBoneBlockBehavior.class)
@@ -871,8 +871,8 @@ public final class BlockTypeInitializer {
                 .setBlockBaseComponentSupplier(BlockChiselTypeBaseComponentImpl::new)
                 .build();
 
-        BlockTypes.CHAIN = initPillarAxis(BlockChainBehavior.class, VanillaBlockId.CHAIN);
-        BlockTypes.DEEPSLATE = initPillarAxis(BlockDeepslateBehavior.class, VanillaBlockId.DEEPSLATE);
+        BlockTypes.CHAIN = buildPillarAxis(BlockChainBehavior.class, VanillaBlockId.CHAIN);
+        BlockTypes.DEEPSLATE = buildPillarAxis(BlockDeepslateBehavior.class, VanillaBlockId.DEEPSLATE);
     }
 
     public static void initCardinalDirection() {
@@ -890,20 +890,20 @@ public final class BlockTypeInitializer {
     }
 
     public static void initButtons() {
-        BlockTypes.ACACIA_BUTTON = initWoodenButton(BlockAcaciaButtonBehavior.class, VanillaBlockId.ACACIA_BUTTON);
-        BlockTypes.BAMBOO_BUTTON = initWoodenButton(BlockBambooButtonBehavior.class, VanillaBlockId.BAMBOO_BUTTON);
-        BlockTypes.BIRCH_BUTTON = initWoodenButton(BlockBirchButtonBehavior.class, VanillaBlockId.BIRCH_BUTTON);
-        BlockTypes.CHERRY_BUTTON = initWoodenButton(BlockCherryButtonBehavior.class, VanillaBlockId.CHERRY_BUTTON);
-        BlockTypes.CRIMSON_BUTTON = initWoodenButton(BlockCrimsonButtonBehavior.class, VanillaBlockId.CRIMSON_BUTTON);
-        BlockTypes.DARK_OAK_BUTTON = initWoodenButton(BlockDarkOakButtonBehavior.class, VanillaBlockId.DARK_OAK_BUTTON);
-        BlockTypes.JUNGLE_BUTTON = initWoodenButton(BlockJungleButtonBehavior.class, VanillaBlockId.JUNGLE_BUTTON);
-        BlockTypes.MANGROVE_BUTTON = initWoodenButton(BlockMangroveButtonBehavior.class, VanillaBlockId.MANGROVE_BUTTON);
-        BlockTypes.SPRUCE_BUTTON = initWoodenButton(BlockSpruceButtonBehavior.class, VanillaBlockId.SPRUCE_BUTTON);
-        BlockTypes.WARPED_BUTTON = initWoodenButton(BlockWarpedButtonBehavior.class, VanillaBlockId.WARPED_BUTTON);
-        BlockTypes.WOODEN_BUTTON = initWoodenButton(BlockWoodenButtonBehavior.class, VanillaBlockId.WOODEN_BUTTON);
+        BlockTypes.ACACIA_BUTTON = buildWoodenButton(BlockAcaciaButtonBehavior.class, VanillaBlockId.ACACIA_BUTTON);
+        BlockTypes.BAMBOO_BUTTON = buildWoodenButton(BlockBambooButtonBehavior.class, VanillaBlockId.BAMBOO_BUTTON);
+        BlockTypes.BIRCH_BUTTON = buildWoodenButton(BlockBirchButtonBehavior.class, VanillaBlockId.BIRCH_BUTTON);
+        BlockTypes.CHERRY_BUTTON = buildWoodenButton(BlockCherryButtonBehavior.class, VanillaBlockId.CHERRY_BUTTON);
+        BlockTypes.CRIMSON_BUTTON = buildWoodenButton(BlockCrimsonButtonBehavior.class, VanillaBlockId.CRIMSON_BUTTON);
+        BlockTypes.DARK_OAK_BUTTON = buildWoodenButton(BlockDarkOakButtonBehavior.class, VanillaBlockId.DARK_OAK_BUTTON);
+        BlockTypes.JUNGLE_BUTTON = buildWoodenButton(BlockJungleButtonBehavior.class, VanillaBlockId.JUNGLE_BUTTON);
+        BlockTypes.MANGROVE_BUTTON = buildWoodenButton(BlockMangroveButtonBehavior.class, VanillaBlockId.MANGROVE_BUTTON);
+        BlockTypes.SPRUCE_BUTTON = buildWoodenButton(BlockSpruceButtonBehavior.class, VanillaBlockId.SPRUCE_BUTTON);
+        BlockTypes.WARPED_BUTTON = buildWoodenButton(BlockWarpedButtonBehavior.class, VanillaBlockId.WARPED_BUTTON);
+        BlockTypes.WOODEN_BUTTON = buildWoodenButton(BlockWoodenButtonBehavior.class, VanillaBlockId.WOODEN_BUTTON);
 
-        BlockTypes.POLISHED_BLACKSTONE_BUTTON = initButton(BlockPolishedBlackstoneButtonBehavior.class, VanillaBlockId.POLISHED_BLACKSTONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
-        BlockTypes.STONE_BUTTON = initButton(BlockStoneButtonBehavior.class, VanillaBlockId.STONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
+        BlockTypes.POLISHED_BLACKSTONE_BUTTON = buildButton(BlockPolishedBlackstoneButtonBehavior.class, VanillaBlockId.POLISHED_BLACKSTONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
+        BlockTypes.STONE_BUTTON = buildButton(BlockStoneButtonBehavior.class, VanillaBlockId.STONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
     }
 
     public static void initDoors() {
@@ -982,7 +982,7 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> initPillarAxis(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+    private static <T extends BlockBehavior> BlockType<T> buildPillarAxis(Class<T> clazz, VanillaBlockId vanillaBlockId) {
         return BlockTypeBuilder
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
@@ -1000,11 +1000,11 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> initWoodenButton(Class<T> clazz, VanillaBlockId vanillaBlockId) {
-        return initButton(clazz, vanillaBlockId, BlockWoodenButtonBaseComponentImpl::new);
+    private static <T extends BlockBehavior> BlockType<T> buildWoodenButton(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+        return buildButton(clazz, vanillaBlockId, BlockWoodenButtonBaseComponentImpl::new);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> initButton(Class<T> clazz, VanillaBlockId vanillaBlockId, Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
+    private static <T extends BlockBehavior> BlockType<T> buildButton(Class<T> clazz, VanillaBlockId vanillaBlockId, Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
         return BlockTypeBuilder
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
@@ -1027,20 +1027,20 @@ public final class BlockTypeInitializer {
     }
 
     public static void initWallSigns() {
-        BlockTypes.WALL_SIGN = initWallSign0(BlockWallSignBehavior.class, VanillaBlockId.WALL_SIGN, ItemTypes.OAK_SIGN);
-        BlockTypes.ACACIA_WALL_SIGN = initWallSign0(BlockAcaciaWallSignBehavior.class, VanillaBlockId.ACACIA_WALL_SIGN, ItemTypes.ACACIA_SIGN);
-        BlockTypes.BAMBOO_WALL_SIGN = initWallSign0(BlockBambooWallSignBehavior.class, VanillaBlockId.BAMBOO_WALL_SIGN, ItemTypes.BAMBOO_SIGN);
-        BlockTypes.BIRCH_WALL_SIGN = initWallSign0(BlockBirchWallSignBehavior.class, VanillaBlockId.BIRCH_WALL_SIGN, ItemTypes.BIRCH_SIGN);
-        BlockTypes.CHERRY_WALL_SIGN = initWallSign0(BlockCherryWallSignBehavior.class, VanillaBlockId.CHERRY_WALL_SIGN, ItemTypes.CHERRY_SIGN);
-        BlockTypes.CRIMSON_WALL_SIGN = initWallSign0(BlockCrimsonWallSignBehavior.class, VanillaBlockId.CRIMSON_WALL_SIGN, ItemTypes.CRIMSON_SIGN);
-        BlockTypes.DARKOAK_WALL_SIGN = initWallSign0(BlockDarkoakWallSignBehavior.class, VanillaBlockId.DARKOAK_WALL_SIGN, ItemTypes.DARK_OAK_SIGN);
-        BlockTypes.JUNGLE_WALL_SIGN = initWallSign0(BlockJungleWallSignBehavior.class, VanillaBlockId.JUNGLE_WALL_SIGN, ItemTypes.JUNGLE_SIGN);
-        BlockTypes.MANGROVE_WALL_SIGN = initWallSign0(BlockMangroveWallSignBehavior.class, VanillaBlockId.MANGROVE_WALL_SIGN, ItemTypes.MANGROVE_SIGN);
-        BlockTypes.SPRUCE_WALL_SIGN = initWallSign0(BlockSpruceWallSignBehavior.class, VanillaBlockId.SPRUCE_WALL_SIGN, ItemTypes.SPRUCE_SIGN);
-        BlockTypes.WARPED_WALL_SIGN = initWallSign0(BlockWarpedWallSignBehavior.class, VanillaBlockId.WARPED_WALL_SIGN, ItemTypes.WARPED_SIGN);
+        BlockTypes.WALL_SIGN = buildWallSign(BlockWallSignBehavior.class, VanillaBlockId.WALL_SIGN, ItemTypes.OAK_SIGN);
+        BlockTypes.ACACIA_WALL_SIGN = buildWallSign(BlockAcaciaWallSignBehavior.class, VanillaBlockId.ACACIA_WALL_SIGN, ItemTypes.ACACIA_SIGN);
+        BlockTypes.BAMBOO_WALL_SIGN = buildWallSign(BlockBambooWallSignBehavior.class, VanillaBlockId.BAMBOO_WALL_SIGN, ItemTypes.BAMBOO_SIGN);
+        BlockTypes.BIRCH_WALL_SIGN = buildWallSign(BlockBirchWallSignBehavior.class, VanillaBlockId.BIRCH_WALL_SIGN, ItemTypes.BIRCH_SIGN);
+        BlockTypes.CHERRY_WALL_SIGN = buildWallSign(BlockCherryWallSignBehavior.class, VanillaBlockId.CHERRY_WALL_SIGN, ItemTypes.CHERRY_SIGN);
+        BlockTypes.CRIMSON_WALL_SIGN = buildWallSign(BlockCrimsonWallSignBehavior.class, VanillaBlockId.CRIMSON_WALL_SIGN, ItemTypes.CRIMSON_SIGN);
+        BlockTypes.DARKOAK_WALL_SIGN = buildWallSign(BlockDarkoakWallSignBehavior.class, VanillaBlockId.DARKOAK_WALL_SIGN, ItemTypes.DARK_OAK_SIGN);
+        BlockTypes.JUNGLE_WALL_SIGN = buildWallSign(BlockJungleWallSignBehavior.class, VanillaBlockId.JUNGLE_WALL_SIGN, ItemTypes.JUNGLE_SIGN);
+        BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockMangroveWallSignBehavior.class, VanillaBlockId.MANGROVE_WALL_SIGN, ItemTypes.MANGROVE_SIGN);
+        BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockSpruceWallSignBehavior.class, VanillaBlockId.SPRUCE_WALL_SIGN, ItemTypes.SPRUCE_SIGN);
+        BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockWarpedWallSignBehavior.class, VanillaBlockId.WARPED_WALL_SIGN, ItemTypes.WARPED_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> initWallSign0(Class<T> clazz, VanillaBlockId vanillaBlockId, ItemType<?> dropItemType) {
+    private static <T extends BlockBehavior> BlockType<T> buildWallSign(Class<T> clazz, VanillaBlockId vanillaBlockId, ItemType<?> dropItemType) {
         return BlockTypeBuilder
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
@@ -1051,20 +1051,20 @@ public final class BlockTypeInitializer {
     }
 
     public static void initStandingSigns() {
-        BlockTypes.STANDING_SIGN = initStandingSign0(BlockStandingSignBehavior.class, VanillaBlockId.STANDING_SIGN, ItemTypes.OAK_SIGN);
-        BlockTypes.ACACIA_STANDING_SIGN = initStandingSign0(BlockAcaciaStandingSignBehavior.class, VanillaBlockId.ACACIA_STANDING_SIGN, ItemTypes.ACACIA_SIGN);
-        BlockTypes.BAMBOO_STANDING_SIGN = initStandingSign0(BlockBambooStandingSignBehavior.class, VanillaBlockId.BAMBOO_STANDING_SIGN, ItemTypes.BAMBOO_SIGN);
-        BlockTypes.BIRCH_STANDING_SIGN = initStandingSign0(BlockBirchStandingSignBehavior.class, VanillaBlockId.BIRCH_STANDING_SIGN, ItemTypes.BIRCH_SIGN);
-        BlockTypes.CHERRY_STANDING_SIGN = initStandingSign0(BlockCherryStandingSignBehavior.class, VanillaBlockId.CHERRY_STANDING_SIGN, ItemTypes.CHERRY_SIGN);
-        BlockTypes.CRIMSON_STANDING_SIGN = initStandingSign0(BlockCrimsonStandingSignBehavior.class, VanillaBlockId.CRIMSON_STANDING_SIGN, ItemTypes.CRIMSON_SIGN);
-        BlockTypes.DARKOAK_STANDING_SIGN = initStandingSign0(BlockDarkoakStandingSignBehavior.class, VanillaBlockId.DARKOAK_STANDING_SIGN, ItemTypes.DARK_OAK_SIGN);
-        BlockTypes.JUNGLE_STANDING_SIGN = initStandingSign0(BlockJungleStandingSignBehavior.class, VanillaBlockId.JUNGLE_STANDING_SIGN, ItemTypes.JUNGLE_SIGN);
-        BlockTypes.MANGROVE_STANDING_SIGN = initStandingSign0(BlockMangroveStandingSignBehavior.class, VanillaBlockId.MANGROVE_STANDING_SIGN, ItemTypes.MANGROVE_SIGN);
-        BlockTypes.SPRUCE_STANDING_SIGN = initStandingSign0(BlockSpruceStandingSignBehavior.class, VanillaBlockId.SPRUCE_STANDING_SIGN, ItemTypes.SPRUCE_SIGN);
-        BlockTypes.WARPED_STANDING_SIGN = initStandingSign0(BlockWarpedStandingSignBehavior.class, VanillaBlockId.WARPED_STANDING_SIGN, ItemTypes.WARPED_SIGN);
+        BlockTypes.STANDING_SIGN = buildStandingSign(BlockStandingSignBehavior.class, VanillaBlockId.STANDING_SIGN, ItemTypes.OAK_SIGN);
+        BlockTypes.ACACIA_STANDING_SIGN = buildStandingSign(BlockAcaciaStandingSignBehavior.class, VanillaBlockId.ACACIA_STANDING_SIGN, ItemTypes.ACACIA_SIGN);
+        BlockTypes.BAMBOO_STANDING_SIGN = buildStandingSign(BlockBambooStandingSignBehavior.class, VanillaBlockId.BAMBOO_STANDING_SIGN, ItemTypes.BAMBOO_SIGN);
+        BlockTypes.BIRCH_STANDING_SIGN = buildStandingSign(BlockBirchStandingSignBehavior.class, VanillaBlockId.BIRCH_STANDING_SIGN, ItemTypes.BIRCH_SIGN);
+        BlockTypes.CHERRY_STANDING_SIGN = buildStandingSign(BlockCherryStandingSignBehavior.class, VanillaBlockId.CHERRY_STANDING_SIGN, ItemTypes.CHERRY_SIGN);
+        BlockTypes.CRIMSON_STANDING_SIGN = buildStandingSign(BlockCrimsonStandingSignBehavior.class, VanillaBlockId.CRIMSON_STANDING_SIGN, ItemTypes.CRIMSON_SIGN);
+        BlockTypes.DARKOAK_STANDING_SIGN = buildStandingSign(BlockDarkoakStandingSignBehavior.class, VanillaBlockId.DARKOAK_STANDING_SIGN, ItemTypes.DARK_OAK_SIGN);
+        BlockTypes.JUNGLE_STANDING_SIGN = buildStandingSign(BlockJungleStandingSignBehavior.class, VanillaBlockId.JUNGLE_STANDING_SIGN, ItemTypes.JUNGLE_SIGN);
+        BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockMangroveStandingSignBehavior.class, VanillaBlockId.MANGROVE_STANDING_SIGN, ItemTypes.MANGROVE_SIGN);
+        BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockSpruceStandingSignBehavior.class, VanillaBlockId.SPRUCE_STANDING_SIGN, ItemTypes.SPRUCE_SIGN);
+        BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockWarpedStandingSignBehavior.class, VanillaBlockId.WARPED_STANDING_SIGN, ItemTypes.WARPED_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> initStandingSign0(Class<T> clazz, VanillaBlockId vanillaBlockId, ItemType<?> dropItemType) {
+    private static <T extends BlockBehavior> BlockType<T> buildStandingSign(Class<T> clazz, VanillaBlockId vanillaBlockId, ItemType<?> dropItemType) {
         return BlockTypeBuilder
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
@@ -1075,20 +1075,20 @@ public final class BlockTypeInitializer {
     }
 
     public static void initHangingSigns() {
-        BlockTypes.ACACIA_HANGING_SIGN = initHangingSign0(BlockAcaciaHangingSignBehavior.class, VanillaBlockId.ACACIA_HANGING_SIGN);
-        BlockTypes.BAMBOO_HANGING_SIGN = initHangingSign0(BlockBambooHangingSignBehavior.class, VanillaBlockId.BAMBOO_HANGING_SIGN);
-        BlockTypes.BIRCH_HANGING_SIGN = initHangingSign0(BlockBirchHangingSignBehavior.class, VanillaBlockId.BIRCH_HANGING_SIGN);
-        BlockTypes.CHERRY_HANGING_SIGN = initHangingSign0(BlockCherryHangingSignBehavior.class, VanillaBlockId.CHERRY_HANGING_SIGN);
-        BlockTypes.CRIMSON_HANGING_SIGN = initHangingSign0(BlockCrimsonHangingSignBehavior.class, VanillaBlockId.CRIMSON_HANGING_SIGN);
-        BlockTypes.DARK_OAK_HANGING_SIGN = initHangingSign0(BlockDarkOakHangingSignBehavior.class, VanillaBlockId.DARK_OAK_HANGING_SIGN);
-        BlockTypes.JUNGLE_HANGING_SIGN = initHangingSign0(BlockJungleHangingSignBehavior.class, VanillaBlockId.JUNGLE_HANGING_SIGN);
-        BlockTypes.MANGROVE_HANGING_SIGN = initHangingSign0(BlockMangroveHangingSignBehavior.class, VanillaBlockId.MANGROVE_HANGING_SIGN);
-        BlockTypes.OAK_HANGING_SIGN = initHangingSign0(BlockOakHangingSignBehavior.class, VanillaBlockId.OAK_HANGING_SIGN);
-        BlockTypes.SPRUCE_HANGING_SIGN = initHangingSign0(BlockSpruceHangingSignBehavior.class, VanillaBlockId.SPRUCE_HANGING_SIGN);
-        BlockTypes.WARPED_HANGING_SIGN = initHangingSign0(BlockWarpedHangingSignBehavior.class, VanillaBlockId.WARPED_HANGING_SIGN);
+        BlockTypes.ACACIA_HANGING_SIGN = buildHangingSign(BlockAcaciaHangingSignBehavior.class, VanillaBlockId.ACACIA_HANGING_SIGN);
+        BlockTypes.BAMBOO_HANGING_SIGN = buildHangingSign(BlockBambooHangingSignBehavior.class, VanillaBlockId.BAMBOO_HANGING_SIGN);
+        BlockTypes.BIRCH_HANGING_SIGN = buildHangingSign(BlockBirchHangingSignBehavior.class, VanillaBlockId.BIRCH_HANGING_SIGN);
+        BlockTypes.CHERRY_HANGING_SIGN = buildHangingSign(BlockCherryHangingSignBehavior.class, VanillaBlockId.CHERRY_HANGING_SIGN);
+        BlockTypes.CRIMSON_HANGING_SIGN = buildHangingSign(BlockCrimsonHangingSignBehavior.class, VanillaBlockId.CRIMSON_HANGING_SIGN);
+        BlockTypes.DARK_OAK_HANGING_SIGN = buildHangingSign(BlockDarkOakHangingSignBehavior.class, VanillaBlockId.DARK_OAK_HANGING_SIGN);
+        BlockTypes.JUNGLE_HANGING_SIGN = buildHangingSign(BlockJungleHangingSignBehavior.class, VanillaBlockId.JUNGLE_HANGING_SIGN);
+        BlockTypes.MANGROVE_HANGING_SIGN = buildHangingSign(BlockMangroveHangingSignBehavior.class, VanillaBlockId.MANGROVE_HANGING_SIGN);
+        BlockTypes.OAK_HANGING_SIGN = buildHangingSign(BlockOakHangingSignBehavior.class, VanillaBlockId.OAK_HANGING_SIGN);
+        BlockTypes.SPRUCE_HANGING_SIGN = buildHangingSign(BlockSpruceHangingSignBehavior.class, VanillaBlockId.SPRUCE_HANGING_SIGN);
+        BlockTypes.WARPED_HANGING_SIGN = buildHangingSign(BlockWarpedHangingSignBehavior.class, VanillaBlockId.WARPED_HANGING_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> initHangingSign0(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+    private static <T extends BlockBehavior> BlockType<T> buildHangingSign(Class<T> clazz, VanillaBlockId vanillaBlockId) {
         return BlockTypeBuilder
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
