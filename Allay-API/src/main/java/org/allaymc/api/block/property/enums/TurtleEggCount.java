@@ -8,11 +8,11 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum TurtleEggCount {
-    FOUR_EGG,
-
     ONE_EGG,
+
+    TWO_EGG,
 
     THREE_EGG,
 
-    TWO_EGG
+    FOUR_EGG
 }

@@ -8,15 +8,15 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum TorchFacingDirection {
+    UNKNOWN,
+
+    WEST,
+
     EAST,
 
     NORTH,
 
     SOUTH,
 
-    TOP,
-
-    UNKNOWN,
-
-    WEST
+    TOP
 }

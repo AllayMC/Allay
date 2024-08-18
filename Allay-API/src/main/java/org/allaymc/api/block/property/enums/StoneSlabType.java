@@ -8,19 +8,19 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum StoneSlabType {
-    BRICK,
-
-    COBBLESTONE,
-
-    NETHER_BRICK,
-
-    QUARTZ,
+    SMOOTH_STONE,
 
     SANDSTONE,
 
-    SMOOTH_STONE,
+    WOOD,
+
+    COBBLESTONE,
+
+    BRICK,
 
     STONE_BRICK,
 
-    WOOD
+    QUARTZ,
+
+    NETHER_BRICK
 }

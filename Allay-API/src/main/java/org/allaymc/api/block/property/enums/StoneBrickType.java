@@ -8,13 +8,13 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum StoneBrickType {
-    CHISELED,
-
-    CRACKED,
-
     DEFAULT,
 
     MOSSY,
+
+    CRACKED,
+
+    CHISELED,
 
     SMOOTH
 }

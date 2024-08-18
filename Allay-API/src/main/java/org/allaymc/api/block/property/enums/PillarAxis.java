@@ -8,9 +8,9 @@ package org.allaymc.api.block.property.enums;
  * @author daoge_cmd
  */
 public enum PillarAxis {
-    X,
-
     Y,
+
+    X,
 
     Z
 }
