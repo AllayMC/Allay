@@ -1,6 +1,7 @@
 package org.allaymc.exampleplugin;
 
 import org.allaymc.api.data.BlockFace;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
 import org.allaymc.api.form.Forms;
@@ -43,30 +44,35 @@ public class EventListener {
         scoreboard.addViewer(player, DisplaySlot.SIDEBAR);
         Server.getInstance().getScheduler().scheduleRepeating(ExamplePlugin.INSTANCE, () -> {
             if (player.isDisconnected()) return false;
-            var list = new ArrayList<String>();
-            list.add("Online: §a" + Server.getInstance().getOnlinePlayerCount() + "/" + Server.getInstance().getNetworkServer().getMaxPlayerCount());
-            list.add("Time: §a" + player.getWorld().getWorldData().getTime());
-            list.add("World: §a" + player.getWorld().getWorldData().getName());
-            if (!player.isInWorld()) return true;
-            var loc = player.getLocation();
-            var chunk = player.getCurrentChunk();
-            int cx = chunk.getX();
-            int cz = chunk.getZ();
-            var blockUnder = player.getDimension().getBlockState(BlockFace.DOWN.offsetPos((int) loc.x(), (int) loc.y(), (int) loc.z()));
-            list.add("BlockUnder: §a" + blockUnder.getBlockType().getIdentifier().path());
-            list.add("Chunk: §a" + cx + ", " + cz);
-            list.add("Loaded: §a" + player.getDimension().getChunkService().getLoadedChunks().size());
-            list.add("Loading: §a" + player.getDimension().getChunkService().getLoadingChunks().size());
-            try {
-                list.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x() & 15, (int) loc.y(), (int) loc.z() & 15));
-            } catch (IllegalArgumentException e) {
-                // y坐标超出范围了
-                list.add("Biome: §aN/A");
-            }
-            list.add("Ping: " + player.getPing());
-            list.add("ItlSkyLight: " + player.getWorld().getInternalSkyLight());
-            scoreboard.setLines(list);
+            updateScoreboard(player, scoreboard);
             return true;
         }, 20);
+    }
+
+    private void updateScoreboard(EntityPlayer player, Scoreboard scoreboard) {
+        if (!player.isInWorld()) return;
+
+        var lines = new ArrayList<String>();
+        lines.add("Online: §a" + Server.getInstance().getOnlinePlayerCount() + "/" + Server.getInstance().getNetworkServer().getMaxPlayerCount());
+        lines.add("Time: §a" + player.getWorld().getWorldData().getTime());
+        lines.add("World: §a" + player.getWorld().getWorldData().getName());
+        var loc = player.getLocation();
+        var chunk = player.getCurrentChunk();
+        var blockUnder = player.getDimension().getBlockState(BlockFace.DOWN.offsetPos((int) loc.x(), (int) loc.y(), (int) loc.z()));
+        lines.add("BlockUnder: §a" + blockUnder.getBlockType().getIdentifier().path());
+        var itemInHand = player.getItemInHand();
+        lines.add("ItemInHand: §a" + itemInHand.getItemType().getIdentifier() + (itemInHand.getMeta() != 0 ? ":" + itemInHand.getMeta() : ""));
+        lines.add("Chunk: §a" + chunk.getX() + ", " + chunk.getZ());
+        lines.add("Loaded: §a" + player.getDimension().getChunkService().getLoadedChunks().size());
+        lines.add("Loading: §a" + player.getDimension().getChunkService().getLoadingChunks().size());
+        try {
+            lines.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x() & 15, (int) loc.y(), (int) loc.z() & 15));
+        } catch (IllegalArgumentException e) {
+            // y坐标超出范围了
+            lines.add("Biome: §aN/A");
+        }
+        lines.add("Ping: " + player.getPing());
+        lines.add("ItlSkyLight: " + player.getWorld().getInternalSkyLight());
+        scoreboard.setLines(lines);
     }
 }

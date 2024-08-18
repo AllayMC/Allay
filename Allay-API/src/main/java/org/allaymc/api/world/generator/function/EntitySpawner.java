@@ -9,6 +9,6 @@ import java.util.function.Function;
  *
  * @author daoge_cmd
  */
-public interface EntitySpawner extends Function<EntitySpawnContext, Boolean>, GenerateFunction {
-
+public interface EntitySpawner extends GenerateFunction {
+    boolean apply(EntitySpawnContext entitySpawnContext);
 }

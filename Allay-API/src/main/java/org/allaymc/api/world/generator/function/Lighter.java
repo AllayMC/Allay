@@ -9,6 +9,6 @@ import java.util.function.Function;
  *
  * @author daoge_cmd
  */
-public interface Lighter extends Function<LightContext, Boolean>, GenerateFunction {
-
+public interface Lighter extends GenerateFunction {
+    boolean apply(LightContext lightContext);
 }

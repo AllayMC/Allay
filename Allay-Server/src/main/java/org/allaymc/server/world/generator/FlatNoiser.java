@@ -57,7 +57,7 @@ public class FlatNoiser implements Noiser {
     }
 
     @Override
-    public Boolean apply(NoiseContext context) {
+    public boolean apply(NoiseContext context) {
         var flatChunk = context.getCurrentChunk();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
