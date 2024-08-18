@@ -21,5 +21,7 @@ public class ItemAxeComponentImpl extends ItemBlockBreakingToolComponent impleme
         }
         var strippedBlockState = woodBaseComponent.getStrippedBlockState(blockState);
         dimension.setBlockState(clickedBlockPos, strippedBlockState);
+        // TODO: Wave animation
+        // TODO: increase durability
     }
 }
