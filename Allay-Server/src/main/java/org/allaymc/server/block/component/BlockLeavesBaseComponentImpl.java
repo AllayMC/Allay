@@ -7,7 +7,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 
 import java.util.Set;
 

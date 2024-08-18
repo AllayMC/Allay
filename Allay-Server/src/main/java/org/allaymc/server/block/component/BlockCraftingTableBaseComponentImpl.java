@@ -1,12 +1,11 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 
 /**
  * Allay Project 2023/12/6

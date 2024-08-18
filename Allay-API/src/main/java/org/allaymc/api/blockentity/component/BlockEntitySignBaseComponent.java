@@ -1,6 +1,5 @@
 package org.allaymc.api.blockentity.component;
 
-import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.cloudburstmc.nbt.NbtMap;
 

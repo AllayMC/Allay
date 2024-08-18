@@ -1,7 +1,7 @@
 package org.allaymc.api.block.property;
 
 import org.allaymc.api.block.PlaceBlockHelper;
-import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.joml.Vector3ic;
 

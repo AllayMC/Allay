@@ -1,14 +1,14 @@
 package org.allaymc.server.item.component.spawnegg;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.item.component.common.ItemBaseComponentImpl;
+import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3f;
 import org.joml.Vector3ic;
 

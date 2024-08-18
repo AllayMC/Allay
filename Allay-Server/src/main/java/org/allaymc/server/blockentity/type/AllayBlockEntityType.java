@@ -16,7 +16,7 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
-import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
+import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.entity.type.EntityTypeBuildException;
 import org.allaymc.server.utils.ComponentClassCacheUtils;

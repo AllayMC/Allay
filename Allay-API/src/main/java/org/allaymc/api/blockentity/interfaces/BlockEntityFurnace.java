@@ -2,7 +2,7 @@ package org.allaymc.api.blockentity.interfaces;
 
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityFurnaceBaseComponent;
-import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
+import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 
 /**
  * Allay Project 2024/8/11

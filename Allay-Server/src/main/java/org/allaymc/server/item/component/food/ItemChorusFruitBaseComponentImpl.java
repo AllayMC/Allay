@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component.food;
 
-import org.allaymc.api.block.component.common.BlockLiquidComponent;
+import org.allaymc.api.block.component.BlockLiquidComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
 import org.joml.Vector3f;

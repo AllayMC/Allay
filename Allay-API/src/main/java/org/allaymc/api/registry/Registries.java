@@ -1,6 +1,6 @@
 package org.allaymc.api.registry;
 
-import org.allaymc.api.block.component.common.BlockStateData;
+import org.allaymc.api.block.BlockStateData;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.material.MaterialType;
 import org.allaymc.api.block.type.BlockState;
@@ -12,7 +12,7 @@ import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.common.ItemData;
+import org.allaymc.api.item.ItemData;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.NetworkRecipe;

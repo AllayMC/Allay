@@ -1,6 +1,6 @@
 package org.allaymc.api.blockentity;
 
-import org.allaymc.api.blockentity.component.common.BlockEntityBaseComponent;
+import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 
 /**
  * Allay Project 2023/9/15

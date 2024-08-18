@@ -1,11 +1,10 @@
 package org.allaymc.server.blockentity.component;
 
-import org.allaymc.api.blockentity.component.common.BlockEntityContainerHolderComponent;
+import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.container.impl.ChestContainer;
-import org.allaymc.server.blockentity.component.common.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
 /**

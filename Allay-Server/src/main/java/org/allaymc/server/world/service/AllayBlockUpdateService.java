@@ -1,7 +1,7 @@
 package org.allaymc.server.world.service;
 
 import lombok.RequiredArgsConstructor;
-import org.allaymc.api.block.component.common.BlockLiquidComponent;
+import org.allaymc.api.block.component.BlockLiquidComponent;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;

@@ -10,8 +10,8 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.EntityFallingBlockBaseComponentImpl;
 import org.allaymc.server.entity.component.EntityItemBaseComponentImpl;
 import org.allaymc.server.entity.component.EntityXpOrbBaseComponentImpl;
-import org.allaymc.server.entity.component.common.EntityAttributeComponentImpl;
-import org.allaymc.server.entity.component.common.EntityDamageComponentImpl;
+import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
+import org.allaymc.server.entity.component.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.player.*;
 
 import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicEntityAttributes;

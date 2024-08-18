@@ -3,7 +3,7 @@ package org.allaymc.api.block.component.event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;

@@ -2,7 +2,7 @@ package org.allaymc.server.block.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.common.BlockBaseComponent;
+import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.interfaces.button.*;
 import org.allaymc.api.block.interfaces.door.*;
@@ -27,10 +27,10 @@ import org.allaymc.api.math.voxelshape.CommonShapes;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
-import org.allaymc.server.block.component.common.BlockFallableBaseComponentImpl;
-import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImpl;
-import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
-import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
+import org.allaymc.server.block.component.BlockFallableBaseComponentImpl;
+import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
+import org.allaymc.server.block.component.BlockStateDataComponentImpl;
+import org.allaymc.server.block.component.grass.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
@@ -766,7 +766,7 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static void initPillars() {
+    public static void initWoods() {
         // Log
         BlockTypes.ACACIA_LOG = buildWood(BlockAcaciaLogBehavior.class, VanillaBlockId.ACACIA_LOG, VanillaBlockId.STRIPPED_ACACIA_LOG);
         BlockTypes.BAMBOO_BLOCK = buildWood(BlockBambooBlockBehavior.class, VanillaBlockId.BAMBOO_BLOCK, VanillaBlockId.STRIPPED_BAMBOO_BLOCK);
@@ -779,6 +779,18 @@ public final class BlockTypeInitializer {
         BlockTypes.OAK_LOG = buildWood(BlockOakLogBehavior.class, VanillaBlockId.OAK_LOG, VanillaBlockId.STRIPPED_OAK_LOG);
         BlockTypes.SPRUCE_LOG = buildWood(BlockSpruceLogBehavior.class, VanillaBlockId.SPRUCE_LOG, VanillaBlockId.STRIPPED_SPRUCE_LOG);
         BlockTypes.WARPED_STEM = buildWood(BlockWarpedStemBehavior.class, VanillaBlockId.WARPED_STEM, VanillaBlockId.STRIPPED_WARPED_STEM);
+        // Stripped Log
+        BlockTypes.STRIPPED_ACACIA_LOG = buildStrippedWood(BlockStrippedAcaciaLogBehavior.class, VanillaBlockId.STRIPPED_ACACIA_LOG);
+        BlockTypes.STRIPPED_BAMBOO_BLOCK = buildStrippedWood(BlockStrippedBambooBlockBehavior.class, VanillaBlockId.STRIPPED_BAMBOO_BLOCK);
+        BlockTypes.STRIPPED_BIRCH_LOG = buildStrippedWood(BlockStrippedBirchLogBehavior.class, VanillaBlockId.STRIPPED_BIRCH_LOG);
+        BlockTypes.STRIPPED_CHERRY_LOG = buildStrippedWood(BlockStrippedCherryLogBehavior.class, VanillaBlockId.STRIPPED_CHERRY_LOG);
+        BlockTypes.STRIPPED_CRIMSON_STEM = buildStrippedWood(BlockStrippedCrimsonStemBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_STEM);
+        BlockTypes.STRIPPED_DARK_OAK_LOG = buildStrippedWood(BlockStrippedDarkOakLogBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_LOG);
+        BlockTypes.STRIPPED_JUNGLE_LOG = buildStrippedWood(BlockStrippedJungleLogBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_LOG);
+        BlockTypes.STRIPPED_MANGROVE_LOG = buildStrippedWood(BlockStrippedMangroveLogBehavior.class, VanillaBlockId.STRIPPED_MANGROVE_LOG);
+        BlockTypes.STRIPPED_OAK_LOG = buildStrippedWood(BlockStrippedOakLogBehavior.class, VanillaBlockId.STRIPPED_OAK_LOG);
+        BlockTypes.STRIPPED_SPRUCE_LOG = buildStrippedWood(BlockStrippedSpruceLogBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_LOG);
+        BlockTypes.STRIPPED_WARPED_STEM = buildStrippedWood(BlockStrippedWarpedStemBehavior.class, VanillaBlockId.STRIPPED_WARPED_STEM);
 
         // Wood
         BlockTypes.ACACIA_WOOD = buildWood(BlockAcaciaWoodBehavior.class, VanillaBlockId.ACACIA_WOOD, VanillaBlockId.STRIPPED_ACACIA_WOOD);
@@ -789,10 +801,22 @@ public final class BlockTypeInitializer {
         BlockTypes.OAK_WOOD = buildWood(BlockOakWoodBehavior.class, VanillaBlockId.OAK_WOOD, VanillaBlockId.STRIPPED_OAK_WOOD);
         BlockTypes.SPRUCE_WOOD = buildWood(BlockSpruceWoodBehavior.class, VanillaBlockId.SPRUCE_WOOD, VanillaBlockId.STRIPPED_SPRUCE_WOOD);
         BlockTypes.WARPED_HYPHAE = buildWood(BlockWarpedHyphaeBehavior.class, VanillaBlockId.WARPED_HYPHAE, VanillaBlockId.STRIPPED_WARPED_HYPHAE);
+        // Stripped Wood
+        BlockTypes.STRIPPED_ACACIA_WOOD = buildStrippedWood(BlockStrippedAcaciaWoodBehavior.class, VanillaBlockId.STRIPPED_ACACIA_WOOD);
+        BlockTypes.STRIPPED_BIRCH_WOOD = buildStrippedWood(BlockStrippedBirchWoodBehavior.class, VanillaBlockId.STRIPPED_BIRCH_WOOD);
+        BlockTypes.STRIPPED_CRIMSON_HYPHAE = buildStrippedWood(BlockStrippedCrimsonHyphaeBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_HYPHAE);
+        BlockTypes.STRIPPED_DARK_OAK_WOOD = buildStrippedWood(BlockStrippedDarkOakWoodBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_WOOD);
+        BlockTypes.STRIPPED_JUNGLE_WOOD = buildStrippedWood(BlockStrippedJungleWoodBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_WOOD);
+        BlockTypes.STRIPPED_OAK_WOOD = buildStrippedWood(BlockStrippedOakWoodBehavior.class, VanillaBlockId.STRIPPED_OAK_WOOD);
+        BlockTypes.STRIPPED_SPRUCE_WOOD = buildStrippedWood(BlockStrippedSpruceWoodBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_WOOD);
+        BlockTypes.STRIPPED_WARPED_HYPHAE = buildStrippedWood(BlockStrippedWarpedHyphaeBehavior.class, VanillaBlockId.STRIPPED_WARPED_HYPHAE);
 
         // New Wood
         BlockTypes.CHERRY_WOOD = buildNewWood(BlockCherryWoodBehavior.class, VanillaBlockId.CHERRY_WOOD);
         BlockTypes.MANGROVE_WOOD = buildNewWood(BlockMangroveWoodBehavior.class, VanillaBlockId.MANGROVE_WOOD);
+        // Stripped New Wood
+        BlockTypes.STRIPPED_CHERRY_WOOD = buildNewWood(BlockStrippedCherryWoodBehavior.class, VanillaBlockId.STRIPPED_CHERRY_WOOD);
+        BlockTypes.STRIPPED_MANGROVE_WOOD = buildNewWood(BlockStrippedMangroveWoodBehavior.class, VanillaBlockId.STRIPPED_MANGROVE_WOOD);
     }
 
     public static void initButtons() {
@@ -847,6 +871,15 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
                 .setBlockBaseComponentSupplier(blockType -> new BlockWoodBaseComponentImpl(blockType, strippedBlockId))
+                .build();
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildStrippedWood(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+        return BlockTypeBuilder
+                .builder(clazz)
+                .vanillaBlock(vanillaBlockId)
+                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(blockType -> new BlockWoodBaseComponentImpl(blockType, vanillaBlockId))
                 .build();
     }
 

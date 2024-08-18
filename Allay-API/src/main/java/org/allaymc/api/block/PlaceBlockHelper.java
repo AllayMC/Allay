@@ -1,7 +1,7 @@
 package org.allaymc.api.block;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.block.component.common.PlayerInteractInfo;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.PillarAxis;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;

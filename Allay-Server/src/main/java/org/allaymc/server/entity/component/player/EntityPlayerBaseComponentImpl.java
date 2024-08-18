@@ -47,7 +47,7 @@ import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.entity.component.common.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;

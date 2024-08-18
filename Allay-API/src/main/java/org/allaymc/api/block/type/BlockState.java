@@ -1,7 +1,7 @@
 package org.allaymc.api.block.type;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.common.BlockStateData;
+import org.allaymc.api.block.BlockStateData;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.item.ItemStack;
 import org.cloudburstmc.nbt.NbtMap;
