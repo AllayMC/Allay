@@ -140,8 +140,6 @@ public class AllayPluginManager implements PluginManager {
 
     public void enablePlugins() {
         for (var s : pluginsSortedList) {
-            if (isPluginEnabled(s)) continue;
-
             var pluginContainer = getPlugin(s);
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
@@ -159,6 +157,8 @@ public class AllayPluginManager implements PluginManager {
     @Override
     public void disablePlugins() {
         for (var s : pluginsSortedList) {
+            if (!isPluginEnabled(s)) continue;
+
             var pluginContainer = getPlugin(s);
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_DISABLING, pluginContainer.descriptor().getName()));
             try {
