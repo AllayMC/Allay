@@ -259,16 +259,21 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        var player = placementInfo.player();
-        if (player != null && DO_BLOCK_PLACING_CHECK && hasEntityCollision(dimension, placeBlockPos, blockState))
-            return false;
+        EntityPlayer player = null;
+        if (placementInfo != null) {
+            if (DO_BLOCK_PLACING_CHECK && hasEntityCollision(dimension, placeBlockPos, blockState)) {
+                return false;
+            }
+            player = placementInfo.player();
+        }
+
 
         var oldBlockState = dimension.getBlockState(placeBlockPos);
         if (!oldBlockState.getBlockType().hasBlockTag(VanillaBlockTags.REPLACEABLE)) return false;
 
         var blockType = blockState.getBlockType();
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
-        if (result) {
+        if (result && player != null) {
             tryConsumeItem(player);
             var event = new CItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
             manager.callEvent(event);

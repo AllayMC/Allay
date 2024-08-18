@@ -2,6 +2,7 @@ package org.allaymc.api.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3i;
@@ -178,6 +179,16 @@ public enum BlockFace {
             case SOUTH -> 2;
             case NORTH -> 3;
             default -> throw new IllegalStateException("Unexpected value: " + this);
+        };
+    }
+
+    public MinecraftCardinalDirection toMinecraftCardinalDirection() {
+        return switch (this) {
+            case NORTH -> MinecraftCardinalDirection.NORTH;
+            case SOUTH -> MinecraftCardinalDirection.SOUTH;
+            case EAST -> MinecraftCardinalDirection.EAST;
+            case WEST -> MinecraftCardinalDirection.WEST;
+            default -> null;
         };
     }
 }

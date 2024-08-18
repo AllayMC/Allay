@@ -21,7 +21,6 @@ public class BlockCraftingTableBaseComponentImpl extends BlockBaseComponentImpl 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) return true;
-        if (interactInfo == null) return false;
 
         var player = interactInfo.player();
         var craftingTableContainer = player.getContainer(FullContainerType.CRAFTING_TABLE);

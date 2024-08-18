@@ -10,8 +10,7 @@ import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.joml.Vector3ic;
 
 import static java.lang.Math.abs;
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.PILLAR_AXIS;
+import static org.allaymc.api.data.VanillaBlockPropertyTypes.*;
 
 /**
  * Allay Project 2024/8/15
@@ -39,15 +38,12 @@ public final class PlaceBlockHelper {
     }
 
     public static BlockState processPillarAxisProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        if (placementInfo != null) {
-            return blockState.setProperty(PILLAR_AXIS, switch (placementInfo.blockFace()) {
-                case EAST, WEST -> PillarAxis.X;
-                case DOWN, UP -> PillarAxis.Y;
-                case NORTH, SOUTH -> PillarAxis.Z;
-            });
-        }
-
-        return blockState;
+        if (placementInfo == null) return blockState;
+        return blockState.setProperty(PILLAR_AXIS, switch (placementInfo.blockFace()) {
+            case EAST, WEST -> PillarAxis.X;
+            case DOWN, UP -> PillarAxis.Y;
+            case NORTH, SOUTH -> PillarAxis.Z;
+        });
     }
 
     public static BlockState processGroundSignDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
@@ -55,6 +51,15 @@ public final class PlaceBlockHelper {
         blockState = blockState.setProperty(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION.createValue(
                 CompassRoseDirection.getClosestFromYaw(placementInfo.player().getLocation().yaw()).getIndex()
         ));
+        return blockState;
+    }
+
+    public static BlockState processMinecraftCardinalDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        if (placementInfo == null) return blockState;
+        blockState = blockState.setProperty(
+                MINECRAFT_CARDINAL_DIRECTION,
+                placementInfo.player().getHorizontalFace().opposite().toMinecraftCardinalDirection()
+        );
         return blockState;
     }
 }

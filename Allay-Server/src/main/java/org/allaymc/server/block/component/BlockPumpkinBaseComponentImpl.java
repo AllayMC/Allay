@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.facing;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.RequireBlockProperty;
@@ -6,7 +6,6 @@ import org.allaymc.api.block.component.common.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.PlaceBlockHelper;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
@@ -17,9 +16,9 @@ import org.joml.Vector3ic;
  *
  * @author Dhaiven
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "pillar_axis")
-public class BlockPillarAxisLikeComponentImpl extends BlockBaseComponentImpl {
-    public BlockPillarAxisLikeComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+@RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "minecraft:cardinal_direction")
+public class BlockPumpkinBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockPumpkinBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
@@ -27,8 +26,14 @@ public class BlockPillarAxisLikeComponentImpl extends BlockBaseComponentImpl {
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         dimension.setBlockState(
-                placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
-                PlaceBlockHelper.processPillarAxisProperty(blockState, placeBlockPos, placementInfo),
+                placeBlockPos.x(),
+                placeBlockPos.y(),
+                placeBlockPos.z(),
+                PlaceBlockHelper.processMinecraftCardinalDirectionProperty(
+                        blockState,
+                        placeBlockPos,
+                        placementInfo
+                ),
                 placementInfo
         );
         return true;

@@ -74,7 +74,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         BlockFace face =  BlockFace.SOUTH;
-        if (placementInfo != null && placementInfo.player() != null) {
+        if (placementInfo != null) {
             face = placementInfo.player().getHorizontalFace();
         }
         blockState = blockState.setProperty(DIRECTION, DOOR_DIRECTION.get(face));

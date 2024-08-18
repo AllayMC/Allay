@@ -8,7 +8,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.facing.BlockPillarAxisLikeComponentImpl;
 
 import static org.allaymc.api.item.ItemHelper.isAxe;
 
