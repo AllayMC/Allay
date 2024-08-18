@@ -93,27 +93,27 @@
       "serializationName": "attachment",
       "valueType": "ENUM",
       "values": [
+        "standing",
         "hanging",
-        "multiple",
         "side",
-        "standing"
+        "multiple"
       ]
     },
     "bamboo_leaf_size": {
       "serializationName": "bamboo_leaf_size",
       "valueType": "ENUM",
       "values": [
-        "large_leaves",
         "no_leaves",
-        "small_leaves"
+        "small_leaves",
+        "large_leaves"
       ]
     },
     "bamboo_stalk_thickness": {
       "serializationName": "bamboo_stalk_thickness",
       "valueType": "ENUM",
       "values": [
-        "thick",
-        "thin"
+        "thin",
+        "thick"
       ]
     },
     "big_dripleaf_head": {
@@ -128,10 +128,10 @@
       "serializationName": "big_dripleaf_tilt",
       "valueType": "ENUM",
       "values": [
-        "full_tilt",
         "none",
+        "unstable",
         "partial_tilt",
-        "unstable"
+        "full_tilt"
       ]
     },
     "bite_counter": {
@@ -311,9 +311,9 @@
       "serializationName": "cauldron_liquid",
       "valueType": "ENUM",
       "values": [
+        "water",
         "lava",
-        "powder_snow",
-        "water"
+        "powder_snow"
       ]
     },
     "chemistry_table_type": {
@@ -321,17 +321,17 @@
       "valueType": "ENUM",
       "values": [
         "compound_creator",
+        "material_reducer",
         "element_constructor",
-        "lab_table",
-        "material_reducer"
+        "lab_table"
       ]
     },
     "chisel_type": {
       "serializationName": "chisel_type",
       "valueType": "ENUM",
       "values": [
-        "chiseled",
         "default",
+        "chiseled",
         "lines",
         "smooth"
       ]
@@ -415,9 +415,9 @@
       "serializationName": "cracked_state",
       "valueType": "ENUM",
       "values": [
+        "no_cracks",
         "cracked",
-        "max_cracked",
-        "no_cracks"
+        "max_cracked"
       ]
     },
     "crafting": {
@@ -432,10 +432,10 @@
       "serializationName": "damage",
       "valueType": "ENUM",
       "values": [
-        "broken",
-        "slightly_damaged",
         "undamaged",
-        "very_damaged"
+        "slightly_damaged",
+        "very_damaged",
+        "broken"
       ]
     },
     "dead_bit": {
@@ -470,8 +470,8 @@
       "serializationName": "dirt_type",
       "valueType": "ENUM",
       "values": [
-        "coarse",
-        "normal"
+        "normal",
+        "coarse"
       ]
     },
     "disarmed_bit": {
@@ -502,11 +502,11 @@
       "serializationName": "dripstone_thickness",
       "valueType": "ENUM",
       "values": [
-        "base",
+        "tip",
         "frustum",
-        "merge",
         "middle",
-        "tip"
+        "base",
+        "merge"
       ]
     },
     "end_portal_eye_bit": {
@@ -759,13 +759,13 @@
       "valueType": "ENUM",
       "values": [
         "down_east_west",
-        "down_north_south",
         "east",
-        "north",
+        "west",
         "south",
-        "up_east_west",
+        "north",
         "up_north_south",
-        "west"
+        "up_east_west",
+        "down_north_south"
       ]
     },
     "liquid_depth": {
@@ -803,21 +803,21 @@
       "valueType": "ENUM",
       "values": [
         "down",
-        "east",
+        "up",
         "north",
         "south",
-        "up",
-        "west"
+        "west",
+        "east"
       ]
     },
     "minecraft_cardinal_direction": {
       "serializationName": "minecraft:cardinal_direction",
       "valueType": "ENUM",
       "values": [
-        "east",
-        "north",
         "south",
-        "west"
+        "west",
+        "north",
+        "east"
       ]
     },
     "minecraft_facing_direction": {
@@ -825,11 +825,11 @@
       "valueType": "ENUM",
       "values": [
         "down",
-        "east",
+        "up",
         "north",
         "south",
-        "up",
-        "west"
+        "west",
+        "east"
       ]
     },
     "minecraft_vertical_half": {
@@ -858,12 +858,12 @@
       "serializationName": "monster_egg_stone_type",
       "valueType": "ENUM",
       "values": [
-        "chiseled_stone_brick",
-        "cobblestone",
-        "cracked_stone_brick",
-        "mossy_stone_brick",
         "stone",
-        "stone_brick"
+        "cobblestone",
+        "stone_brick",
+        "mossy_stone_brick",
+        "cracked_stone_brick",
+        "chiseled_stone_brick"
       ]
     },
     "multi_face_direction_bits": {
@@ -968,14 +968,14 @@
         "down_north",
         "down_south",
         "down_west",
-        "east_up",
-        "north_up",
-        "south_up",
         "up_east",
         "up_north",
         "up_south",
         "up_west",
-        "west_up"
+        "west_up",
+        "east_up",
+        "north_up",
+        "south_up"
       ]
     },
     "output_lit_bit": {
@@ -1006,8 +1006,8 @@
       "serializationName": "pillar_axis",
       "valueType": "ENUM",
       "values": [
-        "x",
         "y",
+        "x",
         "z"
       ]
     },
@@ -1032,9 +1032,9 @@
       "serializationName": "prismarine_block_type",
       "valueType": "ENUM",
       "values": [
-        "bricks",
+        "default",
         "dark",
-        "default"
+        "bricks"
       ]
     },
     "propagule_stage": {
@@ -1141,9 +1141,9 @@
       "serializationName": "sand_stone_type",
       "valueType": "ENUM",
       "values": [
-        "cut",
         "default",
         "heiroglyphs",
+        "cut",
         "smooth"
       ]
     },
@@ -1169,8 +1169,8 @@
       "valueType": "ENUM",
       "values": [
         "default",
-        "double_bot",
-        "double_top"
+        "double_top",
+        "double_bot"
       ]
     },
     "sponge_type": {
@@ -1207,10 +1207,10 @@
       "serializationName": "stone_brick_type",
       "valueType": "ENUM",
       "values": [
-        "chiseled",
-        "cracked",
         "default",
         "mossy",
+        "cracked",
+        "chiseled",
         "smooth"
       ]
     },
@@ -1218,53 +1218,53 @@
       "serializationName": "stone_slab_type",
       "valueType": "ENUM",
       "values": [
-        "brick",
-        "cobblestone",
-        "nether_brick",
-        "quartz",
-        "sandstone",
         "smooth_stone",
+        "sandstone",
+        "wood",
+        "cobblestone",
+        "brick",
         "stone_brick",
-        "wood"
+        "quartz",
+        "nether_brick"
       ]
     },
     "stone_slab_type_2": {
       "serializationName": "stone_slab_type_2",
       "valueType": "ENUM",
       "values": [
-        "mossy_cobblestone",
-        "prismarine_brick",
-        "prismarine_dark",
-        "prismarine_rough",
-        "purpur",
-        "red_nether_brick",
         "red_sandstone",
-        "smooth_sandstone"
+        "purpur",
+        "prismarine_rough",
+        "prismarine_dark",
+        "prismarine_brick",
+        "mossy_cobblestone",
+        "smooth_sandstone",
+        "red_nether_brick"
       ]
     },
     "stone_slab_type_3": {
       "serializationName": "stone_slab_type_3",
       "valueType": "ENUM",
       "values": [
+        "end_stone_brick",
+        "smooth_red_sandstone",
+        "polished_andesite",
         "andesite",
         "diorite",
-        "end_stone_brick",
-        "granite",
-        "polished_andesite",
         "polished_diorite",
-        "polished_granite",
-        "smooth_red_sandstone"
+        "granite",
+        "polished_granite"
       ]
     },
     "stone_slab_type_4": {
       "serializationName": "stone_slab_type_4",
       "valueType": "ENUM",
       "values": [
-        "cut_red_sandstone",
-        "cut_sandstone",
         "mossy_stone_brick",
         "smooth_quartz",
-        "stone"
+        "stone",
+        "cut_sandstone",
+        "cut_red_sandstone"
       ]
     },
     "stripped_bit": {
@@ -1279,20 +1279,20 @@
       "serializationName": "structure_block_type",
       "valueType": "ENUM",
       "values": [
-        "corner",
         "data",
-        "export",
-        "invalid",
+        "save",
         "load",
-        "save"
+        "corner",
+        "invalid",
+        "export"
       ]
     },
     "structure_void_type": {
       "serializationName": "structure_void_type",
       "valueType": "ENUM",
       "values": [
-        "air",
-        "void"
+        "void",
+        "air"
       ]
     },
     "suspended_bit": {
@@ -1315,12 +1315,12 @@
       "serializationName": "torch_facing_direction",
       "valueType": "ENUM",
       "values": [
+        "unknown",
+        "west",
         "east",
         "north",
         "south",
-        "top",
-        "unknown",
-        "west"
+        "top"
       ]
     },
     "trial_spawner_state": {
@@ -1347,10 +1347,10 @@
       "serializationName": "turtle_egg_count",
       "valueType": "ENUM",
       "values": [
-        "four_egg",
         "one_egg",
+        "two_egg",
         "three_egg",
-        "two_egg"
+        "four_egg"
       ]
     },
     "twisting_vines_age": {
@@ -1413,10 +1413,10 @@
       "serializationName": "vault_state",
       "valueType": "ENUM",
       "values": [
-        "active",
-        "ejecting",
         "inactive",
-        "unlocking"
+        "active",
+        "unlocking",
+        "ejecting"
       ]
     },
     "vine_direction_bits": {
@@ -1445,20 +1445,20 @@
       "serializationName": "wall_block_type",
       "valueType": "ENUM",
       "values": [
-        "andesite",
-        "brick",
         "cobblestone",
-        "diorite",
-        "end_brick",
-        "granite",
         "mossy_cobblestone",
+        "granite",
+        "diorite",
+        "andesite",
+        "sandstone",
+        "brick",
+        "stone_brick",
         "mossy_stone_brick",
         "nether_brick",
+        "end_brick",
         "prismarine",
-        "red_nether_brick",
         "red_sandstone",
-        "sandstone",
-        "stone_brick"
+        "red_nether_brick"
       ]
     },
     "wall_connection_type_east": {
