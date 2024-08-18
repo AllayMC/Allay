@@ -40,6 +40,7 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         if (trySpawnFallingEntity(dimension, placeBlockPos, blockState, placementInfo.player())) return true;
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }

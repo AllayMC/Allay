@@ -12,7 +12,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.PlaceBlockHelper;
+import org.allaymc.api.block.PlaceBlockHelper;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
@@ -31,17 +31,6 @@ public class BlockStandingSignBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockStandingSignBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemType<?> dropItemType) {
         super(blockType);
         this.dropItemType = dropItemType;
-    }
-
-    @Override
-    public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
-        dimension.setBlockState(
-                placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
-                PlaceBlockHelper.processGroundSignDirectionProperty(blockState, placeBlockPos, placementInfo),
-                placementInfo
-        );
-        return true;
     }
 
     @Override

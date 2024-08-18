@@ -12,7 +12,6 @@ import org.allaymc.api.block.interfaces.log.*;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
 import org.allaymc.api.block.interfaces.standingsign.*;
-import org.allaymc.api.block.interfaces.terracotta.*;
 import org.allaymc.api.block.interfaces.torch.*;
 import org.allaymc.api.block.interfaces.wallsign.*;
 import org.allaymc.api.block.interfaces.wood.*;
@@ -33,13 +32,13 @@ import org.allaymc.server.block.component.common.BlockShortGrassBaseComponentImp
 import org.allaymc.server.block.component.common.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.common.BlockTallGrassBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
-import org.allaymc.server.block.component.BlockFurnaceBaseComponentImpl;
-import org.allaymc.server.block.component.BlockPillarAxisLikeComponentImpl;
 import org.allaymc.server.block.component.sign.BlockHangingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImpl;
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
+import org.allaymc.server.block.component.wood.BlockNewWoodBaseComponentImpl;
+import org.allaymc.server.block.component.wood.BlockWoodBaseComponentImpl;
 
 import java.time.Duration;
 import java.util.function.Function;
@@ -114,15 +113,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockGravelBehavior.class)
                 .vanillaBlock(VanillaBlockId.GRAVEL)
                 .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
-                .build();
-    }
-
-    public static void initSand() {
-        BlockTypes.SAND = BlockTypeBuilder
-                .builder(BlockSandBehavior.class)
-                .vanillaBlock(VanillaBlockId.SAND)
-                .setProperties(VanillaBlockPropertyTypes.SAND_TYPE)
-                .setBlockBaseComponentSupplier(BlockSandBaseComponentImpl::new)
                 .build();
     }
 
@@ -272,7 +262,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockBarrelBehavior.class)
                 .vanillaBlock(VanillaBlockId.BARREL)
                 .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION, VanillaBlockPropertyTypes.OPEN_BIT)
-                .setBlockBaseComponentSupplier(BlockBarrelBaseComponentImpl::new)
                 .bindBlockEntity(BlockEntityTypes.BARREL)
                 .build();
     }
@@ -282,7 +271,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockChestBehavior.class)
                 .vanillaBlock(VanillaBlockId.CHEST)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockChestBaseComponentImpl::new)
                 .bindBlockEntity(BlockEntityTypes.CHEST)
                 .build();
     }
@@ -744,42 +732,36 @@ public final class BlockTypeInitializer {
                 .builder(BlockFurnaceBehavior.class)
                 .vanillaBlock(VanillaBlockId.FURNACE)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
                 .bindBlockEntity(BlockEntityTypes.FURNACE)
                 .build();
         BlockTypes.LIT_FURNACE = BlockTypeBuilder
                 .builder(BlockLitFurnaceBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIT_FURNACE)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
                 .bindBlockEntity(BlockEntityTypes.FURNACE)
                 .build();
         BlockTypes.BLAST_FURNACE = BlockTypeBuilder
                 .builder(BlockBlastFurnaceBehavior.class)
                 .vanillaBlock(VanillaBlockId.BLAST_FURNACE)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
                 .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
                 .build();
         BlockTypes.LIT_BLAST_FURNACE = BlockTypeBuilder
                 .builder(BlockLitBlastFurnaceBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIT_BLAST_FURNACE)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
                 .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
                 .build();
         BlockTypes.SMOKER = BlockTypeBuilder
                 .builder(BlockSmokerBehavior.class)
                 .vanillaBlock(VanillaBlockId.SMOKER)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
                 .bindBlockEntity(BlockEntityTypes.SMOKER)
                 .build();
         BlockTypes.LIT_SMOKER = BlockTypeBuilder
                 .builder(BlockLitSmokerBehavior.class)
                 .vanillaBlock(VanillaBlockId.LIT_SMOKER)
                 .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockFurnaceBaseComponentImpl::new)
                 .bindBlockEntity(BlockEntityTypes.SMOKER)
                 .build();
     }
@@ -798,18 +780,6 @@ public final class BlockTypeInitializer {
         BlockTypes.SPRUCE_LOG = buildWood(BlockSpruceLogBehavior.class, VanillaBlockId.SPRUCE_LOG, VanillaBlockId.STRIPPED_SPRUCE_LOG);
         BlockTypes.WARPED_STEM = buildWood(BlockWarpedStemBehavior.class, VanillaBlockId.WARPED_STEM, VanillaBlockId.STRIPPED_WARPED_STEM);
 
-        // Stripped Log
-        BlockTypes.STRIPPED_ACACIA_LOG = buildPillarAxisLike(BlockStrippedAcaciaLogBehavior.class, VanillaBlockId.STRIPPED_ACACIA_LOG);
-        BlockTypes.STRIPPED_BAMBOO_BLOCK = buildPillarAxisLike(BlockStrippedBambooBlockBehavior.class, VanillaBlockId.STRIPPED_BAMBOO_BLOCK);
-        BlockTypes.STRIPPED_BIRCH_LOG = buildPillarAxisLike(BlockStrippedBirchLogBehavior.class, VanillaBlockId.STRIPPED_BIRCH_LOG);
-        BlockTypes.STRIPPED_CHERRY_LOG = buildPillarAxisLike(BlockStrippedCherryLogBehavior.class, VanillaBlockId.STRIPPED_CHERRY_LOG);
-        BlockTypes.STRIPPED_CRIMSON_STEM = buildPillarAxisLike(BlockStrippedCrimsonStemBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_STEM);
-        BlockTypes.STRIPPED_DARK_OAK_LOG = buildPillarAxisLike(BlockStrippedDarkOakLogBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_LOG);
-        BlockTypes.STRIPPED_JUNGLE_LOG = buildPillarAxisLike(BlockStrippedJungleLogBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_LOG);
-        BlockTypes.STRIPPED_OAK_LOG = buildPillarAxisLike(BlockStrippedOakLogBehavior.class, VanillaBlockId.STRIPPED_OAK_LOG);
-        BlockTypes.STRIPPED_SPRUCE_LOG = buildPillarAxisLike(BlockStrippedSpruceLogBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_LOG);
-        BlockTypes.STRIPPED_WARPED_STEM = buildPillarAxisLike(BlockStrippedWarpedStemBehavior.class, VanillaBlockId.STRIPPED_WARPED_STEM);
-
         // Wood
         BlockTypes.ACACIA_WOOD = buildWood(BlockAcaciaWoodBehavior.class, VanillaBlockId.ACACIA_WOOD, VanillaBlockId.STRIPPED_ACACIA_WOOD);
         BlockTypes.BIRCH_WOOD = buildWood(BlockBirchWoodBehavior.class, VanillaBlockId.BIRCH_WOOD, VanillaBlockId.STRIPPED_BIRCH_WOOD);
@@ -823,74 +793,6 @@ public final class BlockTypeInitializer {
         // New Wood
         BlockTypes.CHERRY_WOOD = buildNewWood(BlockCherryWoodBehavior.class, VanillaBlockId.CHERRY_WOOD);
         BlockTypes.MANGROVE_WOOD = buildNewWood(BlockMangroveWoodBehavior.class, VanillaBlockId.MANGROVE_WOOD);
-
-        // Stripped Wood
-        BlockTypes.STRIPPED_ACACIA_WOOD = buildPillarAxisLike(BlockStrippedAcaciaWoodBehavior.class, VanillaBlockId.STRIPPED_ACACIA_WOOD);
-        BlockTypes.STRIPPED_BIRCH_WOOD = buildPillarAxisLike(BlockStrippedBirchWoodBehavior.class, VanillaBlockId.STRIPPED_BIRCH_WOOD);
-        BlockTypes.STRIPPED_CHERRY_WOOD = buildPillarAxisLike(BlockStrippedCherryWoodBehavior.class, VanillaBlockId.STRIPPED_CHERRY_WOOD);
-        BlockTypes.STRIPPED_CRIMSON_HYPHAE = buildPillarAxisLike(BlockStrippedCrimsonHyphaeBehavior.class, VanillaBlockId.STRIPPED_CRIMSON_HYPHAE);
-        BlockTypes.STRIPPED_DARK_OAK_WOOD = buildPillarAxisLike(BlockStrippedDarkOakWoodBehavior.class, VanillaBlockId.STRIPPED_DARK_OAK_WOOD);
-        BlockTypes.STRIPPED_JUNGLE_WOOD = buildPillarAxisLike(BlockStrippedJungleWoodBehavior.class, VanillaBlockId.STRIPPED_JUNGLE_WOOD);
-        BlockTypes.STRIPPED_MANGROVE_WOOD = buildPillarAxisLike(BlockStrippedMangroveWoodBehavior.class, VanillaBlockId.STRIPPED_MANGROVE_WOOD);
-        BlockTypes.STRIPPED_OAK_WOOD = buildPillarAxisLike(BlockStrippedOakWoodBehavior.class, VanillaBlockId.STRIPPED_OAK_WOOD);
-        BlockTypes.STRIPPED_SPRUCE_WOOD = buildPillarAxisLike(BlockStrippedSpruceWoodBehavior.class, VanillaBlockId.STRIPPED_SPRUCE_WOOD);
-        BlockTypes.STRIPPED_WARPED_HYPHAE = buildPillarAxisLike(BlockStrippedWarpedHyphaeBehavior.class, VanillaBlockId.STRIPPED_WARPED_HYPHAE);
-
-        BlockTypes.MUDDY_MANGROVE_ROOTS = buildPillarAxisLike(BlockMuddyMangroveRootsBehavior.class, VanillaBlockId.MUDDY_MANGROVE_ROOTS);
-
-        BlockTypes.BASALT = buildPillarAxisLike(BlockBasaltBehavior.class, VanillaBlockId.BASALT);
-        BlockTypes.POLISHED_BASALT = buildPillarAxisLike(BlockPolishedBasaltBehavior.class, VanillaBlockId.POLISHED_BASALT);
-
-        BlockTypes.OCHRE_FROGLIGHT = buildPillarAxisLike(BlockOchreFroglightBehavior.class, VanillaBlockId.OCHRE_FROGLIGHT);
-        BlockTypes.PEARLESCENT_FROGLIGHT = buildPillarAxisLike(BlockPearlescentFroglightBehavior.class, VanillaBlockId.PEARLESCENT_FROGLIGHT);
-        BlockTypes.VERDANT_FROGLIGHT = buildPillarAxisLike(BlockVerdantFroglightBehavior.class, VanillaBlockId.VERDANT_FROGLIGHT);
-
-        BlockTypes.BONE_BLOCK = BlockTypeBuilder
-                .builder(BlockBoneBlockBehavior.class)
-                .vanillaBlock(VanillaBlockId.BONE_BLOCK)
-                .setProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
-                .build();
-        BlockTypes.HAY_BLOCK = BlockTypeBuilder
-                .builder(BlockHayBlockBehavior.class)
-                .vanillaBlock(VanillaBlockId.HAY_BLOCK)
-                .setProperties(VanillaBlockPropertyTypes.DEPRECATED, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
-                .build();
-
-        BlockTypes.PURPUR_BLOCK = BlockTypeBuilder
-                .builder(BlockPurpurBlockBehavior.class)
-                .vanillaBlock(VanillaBlockId.PURPUR_BLOCK)
-                .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
-                .build();
-        BlockTypes.QUARTZ_BLOCK = BlockTypeBuilder
-                .builder(BlockQuartzBlockBehavior.class)
-                .vanillaBlock(VanillaBlockId.QUARTZ_BLOCK)
-                .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
-                .build();
-
-        BlockTypes.CHAIN = buildPillarAxisLike(BlockChainBehavior.class, VanillaBlockId.CHAIN);
-        BlockTypes.DEEPSLATE = buildPillarAxisLike(BlockDeepslateBehavior.class, VanillaBlockId.DEEPSLATE);
-    }
-
-    public static void initAnvil() {
-        BlockTypes.ANVIL = BlockTypeBuilder
-                .builder(BlockAnvilBehavior.class)
-                .vanillaBlock(VanillaBlockId.ANVIL)
-                .setProperties(VanillaBlockPropertyTypes.DAMAGE, VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockAnvilBaseComponentImpl::new)
-                .build();
-    }
-
-    public static void initCarvedPumpkin() {
-        BlockTypes.CARVED_PUMPKIN = BlockTypeBuilder
-                .builder(BlockCarvedPumpkinBehavior.class)
-                .vanillaBlock(VanillaBlockId.CARVED_PUMPKIN)
-                .setProperties(VanillaBlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockPumpkinBaseComponentImpl::new)
-                .build();
     }
 
     public static void initButtons() {
@@ -924,26 +826,6 @@ public final class BlockTypeInitializer {
         BlockTypes.WARPED_DOOR = buildWoodenDoor(BlockWarpedDoorBehavior.class, VanillaBlockId.WARPED_DOOR);
     }
 
-    public static void initGlazedTerracotta() {
-        BlockTypes.BLACK_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockBlackGlazedTerracottaBehavior.class, VanillaBlockId.BLACK_GLAZED_TERRACOTTA);
-        BlockTypes.BLUE_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockBlueGlazedTerracottaBehavior.class, VanillaBlockId.BLUE_GLAZED_TERRACOTTA);
-        BlockTypes.BROWN_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockBrownGlazedTerracottaBehavior.class, VanillaBlockId.BROWN_GLAZED_TERRACOTTA);
-        BlockTypes.CYAN_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockCyanGlazedTerracottaBehavior.class, VanillaBlockId.CYAN_GLAZED_TERRACOTTA);
-        BlockTypes.GRAY_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockGrayGlazedTerracottaBehavior.class, VanillaBlockId.GRAY_GLAZED_TERRACOTTA);
-        BlockTypes.GREEN_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockGreenGlazedTerracottaBehavior.class, VanillaBlockId.GREEN_GLAZED_TERRACOTTA);
-        BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockLightBlueGlazedTerracottaBehavior.class, VanillaBlockId.LIGHT_BLUE_GLAZED_TERRACOTTA);
-        BlockTypes.LIME_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockLimeGlazedTerracottaBehavior.class, VanillaBlockId.LIME_GLAZED_TERRACOTTA);
-        BlockTypes.MAGENTA_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockMagentaGlazedTerracottaBehavior.class, VanillaBlockId.MAGENTA_GLAZED_TERRACOTTA);
-        BlockTypes.ORANGE_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockOrangeGlazedTerracottaBehavior.class, VanillaBlockId.ORANGE_GLAZED_TERRACOTTA);
-        BlockTypes.PINK_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockPinkGlazedTerracottaBehavior.class, VanillaBlockId.PINK_GLAZED_TERRACOTTA);
-        BlockTypes.PURPLE_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockPurpleGlazedTerracottaBehavior.class, VanillaBlockId.PURPLE_GLAZED_TERRACOTTA);
-        BlockTypes.RED_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockRedGlazedTerracottaBehavior.class, VanillaBlockId.RED_GLAZED_TERRACOTTA);
-        BlockTypes.SILVER_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockSilverGlazedTerracottaBehavior.class, VanillaBlockId.SILVER_GLAZED_TERRACOTTA);
-        BlockTypes.PURPLE_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockPurpleGlazedTerracottaBehavior.class, VanillaBlockId.PURPLE_GLAZED_TERRACOTTA);
-        BlockTypes.WHITE_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockWhiteGlazedTerracottaBehavior.class, VanillaBlockId.WHITE_GLAZED_TERRACOTTA);
-        BlockTypes.YELLOW_GLAZED_TERRACOTTA = buildGlazedTerracootta(BlockYellowGlazedTerracottaBehavior.class, VanillaBlockId.YELLOW_GLAZED_TERRACOTTA);
-    }
-
     public static void initRods() {
         BlockTypes.END_ROD = BlockTypeBuilder
                 .builder(BlockEndRodBehavior.class)
@@ -956,15 +838,6 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(VanillaBlockId.LIGHTNING_ROD)
                 .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockRodBaseComponentImpl::new)
-                .build();
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildGlazedTerracootta(Class<T> clazz, VanillaBlockId vanillaBlockId) {
-        return BlockTypeBuilder
-                .builder(clazz)
-                .vanillaBlock(vanillaBlockId)
-                .setProperties(VanillaBlockPropertyTypes.FACING_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockGlazedTerracottaBaseComponentImpl::new)
                 .build();
     }
 
@@ -983,15 +856,6 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(vanillaBlockId)
                 .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS, VanillaBlockPropertyTypes.STRIPPED_BIT)
                 .setBlockBaseComponentSupplier(BlockNewWoodBaseComponentImpl::new)
-                .build();
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildPillarAxisLike(Class<T> clazz, VanillaBlockId vanillaBlockId) {
-        return BlockTypeBuilder
-                .builder(clazz)
-                .vanillaBlock(vanillaBlockId)
-                .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockPillarAxisLikeComponentImpl::new)
                 .build();
     }
 

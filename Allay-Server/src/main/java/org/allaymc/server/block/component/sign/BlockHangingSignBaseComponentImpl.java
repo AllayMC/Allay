@@ -10,7 +10,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.PlaceBlockHelper;
+import org.allaymc.api.block.PlaceBlockHelper;
 import org.allaymc.server.block.component.common.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 

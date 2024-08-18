@@ -2,6 +2,7 @@ package org.allaymc.api.block.property.type;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.property.BlockPropertyProcessor;
 
 import java.util.List;
 import java.util.Objects;

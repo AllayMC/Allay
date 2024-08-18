@@ -1,4 +1,4 @@
-package org.allaymc.server.block;
+package org.allaymc.api.block;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.component.common.PlayerInteractInfo;

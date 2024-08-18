@@ -27,13 +27,16 @@ public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
-        if (placementInfo != null) {
-            var blockFace = placementInfo.blockFace();
-            var stairFace = placementInfo.player().getHorizontalFace();
-            blockState = blockState.setProperty(VanillaBlockPropertyTypes.WEIRDO_DIRECTION, stairFace.toStairDirectionValue());
-            if ((placementInfo.clickPos().y() > 0.5 && blockFace != BlockFace.UP) || blockFace == BlockFace.DOWN) {
-                blockState = blockState.setProperty(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, true);
-            }
+        if (placementInfo == null) {
+            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
+            return true;
+        }
+
+        var blockFace = placementInfo.blockFace();
+        var stairFace = placementInfo.player().getHorizontalFace();
+        blockState = blockState.setProperty(VanillaBlockPropertyTypes.WEIRDO_DIRECTION, stairFace.toStairDirectionValue());
+        if ((placementInfo.clickPos().y() > 0.5 && blockFace != BlockFace.UP) || blockFace == BlockFace.DOWN) {
+            blockState = blockState.setProperty(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, true);
         }
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
