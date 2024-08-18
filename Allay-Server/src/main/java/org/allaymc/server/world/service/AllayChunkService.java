@@ -310,11 +310,12 @@ public final class AllayChunkService implements ChunkService {
         if (event.isCancelled()) return false;
 
         loadedChunks.remove(chunkHash);
-        chunk.save(worldStorage);
         chunk.getEntities().forEach((runtimeId, entity) -> {
             entity.despawnFromAll();
             dimension.getEntityPhysicsService().removeEntity(entity);
         });
+
+        worldStorage.writeChunk(chunk);
 
         return true;
     }

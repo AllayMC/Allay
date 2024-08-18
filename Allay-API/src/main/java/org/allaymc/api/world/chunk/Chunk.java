@@ -81,10 +81,6 @@ public interface Chunk extends UnsafeChunk {
     @ApiStatus.Internal
     LevelChunkPacket createFullLevelChunkPacketChunk();
 
-    default void save(WorldStorage storage) {
-        storage.writeChunk(this).join();
-    }
-
     default void spawnEntitiesTo(EntityPlayer player) {
         getEntities().values().forEach(player::spawnEntity);
     }
