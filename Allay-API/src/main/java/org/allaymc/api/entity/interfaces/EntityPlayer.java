@@ -12,6 +12,7 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
+import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.joml.Vector3f;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
@@ -112,6 +113,15 @@ public interface EntityPlayer extends
         var itemStack = inv.getItemInHand();
         if (itemStack.getCount() != 0) inv.onSlotChange(inv.getHandSlot());
         else inv.setItemInHand(ItemAirStack.AIR_STACK);
+    }
+
+    default void swingArm() {
+        var pk = new AnimatePacket();
+        pk.setAction(AnimatePacket.Action.SWING_ARM);
+        pk.setRuntimeEntityId(getRuntimeId());
+
+        sendPacket(pk);
+        sendPacketToViewers(pk);
     }
 }
 

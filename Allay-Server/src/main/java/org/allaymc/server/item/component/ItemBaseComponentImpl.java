@@ -156,6 +156,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void setDurability(int durability) {
+        if (!itemDataComponent.getItemData().isDamageable()) {
+            log.warn("Item {} does not support durability!", itemType.getIdentifier());
+            return;
+        }
         if (durability < 0)
             throw new IllegalArgumentException("Durability must bigger than zero!");
         this.durability = durability;
@@ -365,6 +369,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean isBroken() {
+        if (!itemDataComponent.getItemData().isDamageable())
+            return false;
         var maxDamage = itemDataComponent.getItemData().maxDamage();
         // This item does not support durability
         if (maxDamage == 0) return false;

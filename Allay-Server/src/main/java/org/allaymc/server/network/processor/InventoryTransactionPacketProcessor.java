@@ -37,13 +37,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
     @Override
     public void handleSync(EntityPlayer player, InventoryTransactionPacket packet, long receiveTime) {
+        var itemInHand = player.getItemInHand();
         var transactionType = packet.getTransactionType();
         switch (transactionType) {
             case ITEM_USE -> {
                 var clickBlockPos = MathUtils.CBVecToJOMLVec(packet.getBlockPosition());
                 var clickPos = MathUtils.CBVecToJOMLVec(packet.getClickPosition());
                 var blockFace = BlockFace.fromId(packet.getBlockFace());
-                var itemStack = player.getItemInHand();
                 var world = player.getLocation().dimension();
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
@@ -55,21 +55,21 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 player, clickBlockPos,
                                 clickPos, blockFace
                         );
-                        itemStack.rightClickItemOn(dimension, placeBlockPos, interactInfo);
+                        itemInHand.rightClickItemOn(dimension, placeBlockPos, interactInfo);
                         if (player.isUsingItemOnBlock()) {
-                            if (itemStack.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
+                            if (itemInHand.useItemOnBlock(dimension, placeBlockPos, interactInfo)) {
                                 // Using item on the block successfully, no need to call BlockBehavior::onInteract()
                                 break;
                             }
-                            if (!interactedBlock.getBehavior().onInteract(itemStack, dimension, interactInfo)) {
+                            if (!interactedBlock.getBehavior().onInteract(itemInHand, dimension, interactInfo)) {
                                 // Player interaction with the block was unsuccessful, possibly the plugin rolled back the event, need to override the client block change
                                 // Override the block change that was clicked
                                 var blockStateClicked = dimension.getBlockState(clickBlockPos);
                                 dimension.sendBlockUpdateTo(blockStateClicked, clickBlockPos, 0, player);
 
                                 // Player places a block
-                                if (itemStack.getItemType() == AIR) break;
-                                if (!itemStack.placeBlock(dimension, placeBlockPos, interactInfo)) {
+                                if (itemInHand.getItemType() == AIR) break;
+                                if (!itemInHand.placeBlock(dimension, placeBlockPos, interactInfo)) {
                                     var blockStateReplaced = dimension.getBlockState(placeBlockPos);
                                     dimension.sendBlockUpdateTo(blockStateReplaced, placeBlockPos, 0, player);
                                 }
@@ -77,26 +77,24 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         }
                     }
                     case ITEM_USE_CLICK_AIR -> {
-                        itemStack.clickItemInAir(player);
+                        itemInHand.clickItemInAir(player);
                         if (!player.isUsingItemInAir()) {
-                            if (itemStack.canUseItemInAir(player)) {
+                            if (itemInHand.canUseItemInAir(player)) {
                                 // Start using item
                                 player.setUsingItemInAir(true, receiveTime);
                             }
                         } else if (player.isUsingItemInAir()) {
                             // Item used
-                            itemStack.useItemInAir(player, player.getItemUsingInAirTime(receiveTime));
+                            itemInHand.useItemInAir(player, player.getItemUsingInAirTime(receiveTime));
                             player.setUsingItemInAir(false);
                         }
                     }
                 }
-
-                player.sendItemInHandUpdate();
             }
             case ITEM_RELEASE -> {
                 switch (packet.getActionType()) {
                     case ITEM_RELEASE_RELEASE -> {
-                        player.getItemInHand().releaseUsingItem(player, player.getItemUsingInAirTime(receiveTime));
+                        itemInHand.releaseUsingItem(player, player.getItemUsingInAirTime(receiveTime));
                         // 玩家吃东西中断时，ITEM_USE_CLICK_AIR并不会发送
                         // 然而ITEM_RELEASE_RELEASE总是会在玩家停止使用物品时发送，无论是否使用成功
                         // 所以我们在收到ITEM_RELEASE_RELEASE时也刷新玩家物品使用状态，作为ITEM_USE_CLICK_AIR的补充
@@ -118,15 +116,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
-                        target.onInteract(player, player.getItemInHand());
-                        player.sendItemInHandUpdate();
+                        target.onInteract(player, itemInHand);
                     }
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
                         // Doesn't have damage component, can't attack
                         if (!(target instanceof EntityDamageComponent damageable)) return;
 
                         // TODO: Check whether the player can touch the target entity or not (to prevent cheater)
-                        var itemInHand = player.getItemInHand();
                         var damage = itemInHand.calculateAttackDamage();
                         if (damage == 0) damage = 1;
 
@@ -134,8 +130,6 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         if (!damageable.attack(damageContainer)) return;
 
                         itemInHand.onAttackEntity(player, target);
-                        if (itemInHand.isBroken()) player.clearItemInHand();
-                        else player.sendItemInHandUpdate();
                     }
                 }
             }
@@ -169,6 +163,11 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 }
             }
         }
+
+        // The item may have been changed or broken
+        // So we need to send update to client
+        if (itemInHand.isBroken()) player.clearItemInHand();
+        else player.sendItemInHandUpdate();
     }
 
     @Override
