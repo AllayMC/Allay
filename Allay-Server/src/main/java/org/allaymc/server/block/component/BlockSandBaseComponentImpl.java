@@ -31,8 +31,6 @@ public class BlockSandBaseComponentImpl extends BlockFallableBaseComponentImpl {
             return true;
         }
 
-        var sandType = placementInfo.player().getItemInHand().getMeta() == 0 ? SandType.NORMAL : SandType.RED;
-        blockState = blockState.setProperty(VanillaBlockPropertyTypes.SAND_TYPE, sandType);
         return super.place(dimension, blockState, placeBlockPos, placementInfo);
     }
 }

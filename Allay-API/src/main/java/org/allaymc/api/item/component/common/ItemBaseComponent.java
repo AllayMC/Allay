@@ -131,7 +131,8 @@ public interface ItemBaseComponent extends ItemComponent {
 
     /**
      * Attempt to place a block using this item, regardless of whether this item is a block item. <br>
-     * This method won't decide the block state depending on the placement info <br>
+     * This method won't decide complex block property value based on the placement info <br>
+     * However, it will decide the base block variant using the information from item_meta_block_state_bimap.nbt <br>
      * Use which block state really will be decided in BlockBaseComponent::place() method <br>
      *
      * @return {@code true} if the block is successfully placed,

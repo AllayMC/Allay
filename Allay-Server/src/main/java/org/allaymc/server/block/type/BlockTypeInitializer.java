@@ -862,13 +862,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockPurpurBlockBehavior.class)
                 .vanillaBlock(VanillaBlockId.PURPUR_BLOCK)
                 .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockChiselTypeBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockPillarAxisComponentImpl::new)
                 .build();
         BlockTypes.QUARTZ_BLOCK = BlockTypeBuilder
                 .builder(BlockQuartzBlockBehavior.class)
                 .vanillaBlock(VanillaBlockId.QUARTZ_BLOCK)
                 .setProperties(VanillaBlockPropertyTypes.CHISEL_TYPE, VanillaBlockPropertyTypes.PILLAR_AXIS)
-                .setBlockBaseComponentSupplier(BlockChiselTypeBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockPillarAxisComponentImpl::new)
                 .build();
 
         BlockTypes.CHAIN = buildPillarAxis(BlockChainBehavior.class, VanillaBlockId.CHAIN);
