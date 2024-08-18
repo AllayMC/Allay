@@ -99,7 +99,12 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
-        return CompletableFuture.supplyAsync(() -> readChunkSync(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool());
+        return CompletableFuture
+                .supplyAsync(() -> readChunkSync(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool())
+                .exceptionally(e -> {
+                    log.error("Failed to read chunk {}, {}", x, z, e);
+                    return null;
+                });
     }
 
     @Override
@@ -128,7 +133,12 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException {
-        return CompletableFuture.runAsync(() -> writeChunkSync(chunk), Server.getInstance().getVirtualThreadPool());
+        return CompletableFuture
+                .runAsync(() -> writeChunkSync(chunk), Server.getInstance().getVirtualThreadPool())
+                .exceptionally(e -> {
+                    log.error("Failed to write chunk {}, {}", chunk.getX(), chunk.getZ(), e);
+                    return null;
+                });
     }
 
     @Override
