@@ -96,6 +96,5 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
     @ApiStatus.Internal
     void completeLogin();
 
-    @ApiStatus.Internal
     int getPing();
 }
