@@ -141,6 +141,10 @@ public class AllayPluginManager implements PluginManager {
     public void enablePlugins() {
         for (var s : pluginsSortedList) {
             var pluginContainer = getPlugin(s);
+            if (pluginContainer == null) {
+                // Plugin failed to be loaded
+                continue;
+            }
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_ENABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
