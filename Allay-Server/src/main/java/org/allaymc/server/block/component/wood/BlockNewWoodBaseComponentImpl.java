@@ -32,6 +32,6 @@ public class BlockNewWoodBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.setBlockState(interactInfo.clickBlockPos(), dimension.getBlockState(interactInfo.clickBlockPos()).setProperty(VanillaBlockPropertyTypes.STRIPPED_BIT, true));
         }
 
-        return true;
+        return false;
     }
 }

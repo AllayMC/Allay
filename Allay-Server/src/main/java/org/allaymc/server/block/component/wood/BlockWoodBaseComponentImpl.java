@@ -34,6 +34,6 @@ public class BlockWoodBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.setBlockState(interactInfo.clickBlockPos(), strippedType.getBlockType().copyPropertyValuesFrom(dimension.getBlockState(interactInfo.clickBlockPos())));
         }
 
-        return true;
+        return false;
     }
 }
