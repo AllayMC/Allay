@@ -149,6 +149,7 @@ public class AllayPluginManager implements PluginManager {
                 plugin.onEnable();
             } catch (Throwable t) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName()), t);
+                continue;
             }
 
             enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
