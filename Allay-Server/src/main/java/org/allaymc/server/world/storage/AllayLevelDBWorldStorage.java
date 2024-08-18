@@ -40,7 +40,6 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
-//    private static final byte[] LEVEL_DAT_MAGIC = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
     private static final int CURRENT_LEVEL_DAT_VERSION = 10;
 
     private static final int LATEST_CHUNK_VERSION = 40;
