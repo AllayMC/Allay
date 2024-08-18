@@ -171,7 +171,7 @@ public class AllayWorld implements World {
         if (worldData.getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) {
             if (currentTick >= nextTimeSendTick) {
                 worldData.setTime(worldData.getTime() + TIME_SENDING_INTERVAL);
-                this.internalSkyLight = worldData.calculateInternalSkyLight(currentTick);
+                this.internalSkyLight = worldData.calculateInternalSkyLight(1);
 
                 nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
             }
