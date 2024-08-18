@@ -56,7 +56,7 @@ public class AllayWorld implements World {
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
-        this.worldData = worldStorage.getWorldDataCache();
+        this.worldData = worldStorage.readWorldData();
         this.worldData.setWorld(this);
 
 //        if (worldStorage instanceof NativeFileWorldStorage nativeFileWorldStorage)

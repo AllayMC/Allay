@@ -17,19 +17,17 @@ public interface WorldStorage {
 
     CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) throws WorldStorageException;
 
-    Chunk readChunkSynchronously(int chunkX, int chunkZ, DimensionInfo dimensionInfo) throws WorldStorageException;
+    Chunk readChunkSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo) throws WorldStorageException;
 
     CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException;
 
-    void writeChunkSynchronously(Chunk chunk) throws WorldStorageException;
+    void writeChunkSync(Chunk chunk) throws WorldStorageException;
 
     boolean containChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
 
     void writeWorldData(WorldData worldData) throws WorldStorageException;
 
     WorldData readWorldData() throws WorldStorageException;
-
-    WorldData getWorldDataCache();
 
     void shutdown();
 }

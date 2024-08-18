@@ -42,11 +42,11 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) {
-        return CompletableFuture.completedFuture(readChunkSynchronously(x, z, dimensionInfo));
+        return CompletableFuture.completedFuture(readChunkSync(x, z, dimensionInfo));
     }
 
     @Override
-    public Chunk readChunkSynchronously(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
+    public Chunk readChunkSync(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
         var dimension = Server.getInstance().getWorldPool().getWorld(worldData.getName()).getDimension(dimensionInfo.dimensionId());
         var hash = HashUtils.hashXZ(x, z);
         var chunk = chunks.get(hash);
@@ -59,12 +59,12 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
 
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) {
-        writeChunkSynchronously(chunk);
+        writeChunkSync(chunk);
         return CompletableFuture.completedFuture(null);
     }
 
     @Override
-    public void writeChunkSynchronously(Chunk chunk) throws WorldStorageException {
+    public void writeChunkSync(Chunk chunk) throws WorldStorageException {
         var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
         chunks.put(hash, chunk);
         writeEntities(hash, chunk.getEntities().values());
@@ -100,11 +100,6 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
     @Override
     public WorldData readWorldData() {
         return this.worldData;
-    }
-
-    @Override
-    public WorldData getWorldDataCache() {
-        return worldData;
     }
 
     @Override

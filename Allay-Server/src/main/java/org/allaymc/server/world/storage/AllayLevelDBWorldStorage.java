@@ -21,9 +21,12 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.iq80.leveldb.CompressionType;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -37,15 +40,19 @@ import java.util.concurrent.CompletableFuture;
  */
 @Slf4j
 public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
-    private static final byte[] LEVEL_DAT_MAGIC = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
+//    private static final byte[] LEVEL_DAT_MAGIC = new byte[]{10, 0, 0, 0, 68, 11, 0, 0};
+    private static final int CURRENT_LEVEL_DAT_VERSION = 10;
+
     private static final int LATEST_CHUNK_VERSION = 40;
+
     private static final int VANILLA_CHUNK_STATE_NEW = 0;
     private static final int VANILLA_CHUNK_STATE_GENERATED = 1;
     private static final int VANILLA_CHUNK_STATE_POPULATED = 2;
     private static final int VANILLA_CHUNK_STATE_FINISHED = 3;
+
     private final Path path;
     private final DB db;
-    private WorldData worldDataCache;
+    private final String worldName;
 
     public AllayLevelDBWorldStorage(Path path) throws WorldStorageException {
         this(path, new Options()
@@ -55,15 +62,12 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         );
     }
     public AllayLevelDBWorldStorage(Path path, Options options) throws WorldStorageException {
-        var worldName = path.getName(path.getNameCount() - 1).toString();
+        worldName = path.getName(path.getNameCount() - 1).toString();
         var file = path.toFile();
         if (!file.exists() && !file.mkdirs()) {
             throw new WorldStorageException("Failed to create world directory!");
         }
         this.path = path;
-
-        worldDataCache = readWorldData();
-        if (worldDataCache == null) createWorldData(worldName);
 
         var dbFolder = path.resolve("db").toFile();
         try {
@@ -76,16 +80,19 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         }
     }
 
-    private void createWorldData(String worldName) {
+    private WorldData createWorldData(String worldName) {
         var levelDat = path.resolve("level.dat").toFile();
         try {
             // noinspection ResultOfMethodCallIgnored
             levelDat.createNewFile();
-            worldDataCache = WorldData.builder().build();
-            worldDataCache.setName(worldName);
-            writeWorldData(worldDataCache);
+            var worldData = WorldData
+                    .builder()
+                    .name(worldName)
+                    .build();
+            writeWorldData(worldData);
             Files.copy(levelDat.toPath(), path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
             Files.writeString(path.resolve("levelname.txt"), worldName, StandardOpenOption.CREATE);
+            return worldData;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -93,11 +100,11 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
     @Override
     public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
-        return CompletableFuture.supplyAsync(() -> readChunkSynchronously(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool());
+        return CompletableFuture.supplyAsync(() -> readChunkSync(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool());
     }
 
     @Override
-    public Chunk readChunkSynchronously(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
+    public Chunk readChunkSync(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
         var builder = AllayUnsafeChunk.builder()
                 .chunkX(x)
                 .chunkZ(z)
@@ -122,11 +129,11 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
 
     @Override
     public CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException {
-        return CompletableFuture.runAsync(() -> writeChunkSynchronously(chunk), Server.getInstance().getVirtualThreadPool());
+        return CompletableFuture.runAsync(() -> writeChunkSync(chunk), Server.getInstance().getVirtualThreadPool());
     }
 
     @Override
-    public void writeChunkSynchronously(Chunk chunk) throws WorldStorageException {
+    public void writeChunkSync(Chunk chunk) throws WorldStorageException {
         try (var writeBatch = this.db.createWriteBatch()) {
             writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{LATEST_CHUNK_VERSION});
             writeBatch.put(
@@ -152,27 +159,40 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     }
 
     @Override
-    public synchronized void writeWorldData(WorldData worldData) {
+    public void writeWorldData(WorldData worldData) {
         var levelDat = path.resolve("level.dat").toFile();
         try (var output = new FileOutputStream(levelDat)) {
             if (levelDat.exists())
                 Files.copy(path.resolve("level.dat"), path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
 
-            output.write(LEVEL_DAT_MAGIC);
-            var nbtOutputStream = NbtUtils.createWriterLE(output);
+            // 1.Current version
+            output.write(int2ByteArrayLE(CURRENT_LEVEL_DAT_VERSION));
+
+            var byteArrayOutputStream = new ByteArrayOutputStream();
+            var nbtOutputStream = NbtUtils.createWriterLE(byteArrayOutputStream);
             nbtOutputStream.writeTag(writeWorldDataToNBT(worldData));
-            worldDataCache = worldData;
+
+            var data = byteArrayOutputStream.toByteArray();
+            // 2.Data length
+            output.write(int2ByteArrayLE(data.length));
+
+            // 3.Data
+            output.write(data);
         } catch (IOException e) {
             throw new WorldStorageException(e);
         }
     }
 
+    private static byte[] int2ByteArrayLE(int value) {
+        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array();
+    }
+
     @Override
-    public synchronized WorldData readWorldData() throws WorldStorageException {
+    public WorldData readWorldData() throws WorldStorageException {
         var levelDat = path.resolve("level.dat").toFile();
-        if (!levelDat.exists()) return null;
+        if (!levelDat.exists()) return createWorldData(worldName);
         try (var input = new FileInputStream(levelDat)) {
-            // The first 8 bytes are magic number
+            // current_version + data length
             // noinspection ResultOfMethodCallIgnored
             input.skip(8);
             NBTInputStream readerLE = NbtUtils.createReaderLE(new ByteArrayInputStream(input.readAllBytes()));
@@ -299,15 +319,9 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                 .build();
     }
 
-    @Override
-    public WorldData getWorldDataCache() {
-        return worldDataCache;
-    }
-
     public void shutdown() {
         try {
             this.db.close();
-            worldDataCache = null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
