@@ -39,9 +39,10 @@ public class HashUtilsTest {
 
     @Test
     public void testFnv1a32Nbt() {
-        NbtMap tag = NbtMap.builder().putString("name", "minecraft:oak_wood")
+        NbtMap tag = NbtMap.builder()
+                .putString("name", "minecraft:oak_wood")
                 .putCompound("states", NbtMap.builder()
-                        .putString("pillar_axis", "x")
+                        .putString("pillar_axis", "y")
                         .build())
                 .build();
         Assertions.assertEquals(testBlockStateHash, HashUtils.fnv1a_32_nbt(tag));

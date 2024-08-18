@@ -37,7 +37,7 @@ import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImp
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
-import org.allaymc.server.block.component.wood.BlockNewWoodBaseComponentImpl;
+import org.allaymc.server.block.component.wood.BlockOldWoodBaseComponentImpl;
 import org.allaymc.server.block.component.wood.BlockWoodBaseComponentImpl;
 
 import java.time.Duration;
@@ -813,9 +813,9 @@ public final class BlockTypeInitializer {
         BlockTypes.STRIPPED_CHERRY_WOOD = buildStrippedWood(BlockStrippedCherryWoodBehavior.class, VanillaBlockId.STRIPPED_CHERRY_WOOD);
         BlockTypes.STRIPPED_MANGROVE_WOOD = buildStrippedWood(BlockStrippedMangroveWoodBehavior.class, VanillaBlockId.STRIPPED_MANGROVE_WOOD);
 
-        // New Wood
-        BlockTypes.CHERRY_WOOD = buildNewWood(BlockCherryWoodBehavior.class, VanillaBlockId.CHERRY_WOOD);
-        BlockTypes.MANGROVE_WOOD = buildNewWood(BlockMangroveWoodBehavior.class, VanillaBlockId.MANGROVE_WOOD);
+        // Old Wood
+        BlockTypes.CHERRY_WOOD = buildOldWood(BlockCherryWoodBehavior.class, VanillaBlockId.CHERRY_WOOD, VanillaBlockId.STRIPPED_CHERRY_WOOD);
+        BlockTypes.MANGROVE_WOOD = buildOldWood(BlockMangroveWoodBehavior.class, VanillaBlockId.MANGROVE_WOOD, VanillaBlockId.STRIPPED_MANGROVE_WOOD);
     }
 
     public static void initButtons() {
@@ -882,12 +882,13 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildNewWood(Class<T> clazz, VanillaBlockId vanillaBlockId) {
+    private static <T extends BlockBehavior> BlockType<T> buildOldWood(Class<T> clazz, VanillaBlockId vanillaBlockId, VanillaBlockId strippedBlockId) {
         return BlockTypeBuilder
                 .builder(clazz)
                 .vanillaBlock(vanillaBlockId)
+                // NOTICE: STRIPPED_BIT is deprecated and shouldn't be used!
                 .setProperties(VanillaBlockPropertyTypes.PILLAR_AXIS, VanillaBlockPropertyTypes.STRIPPED_BIT)
-                .setBlockBaseComponentSupplier(BlockNewWoodBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(blockType -> new BlockOldWoodBaseComponentImpl(blockType, strippedBlockId))
                 .build();
     }
 
