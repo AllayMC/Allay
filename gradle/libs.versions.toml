@@ -14,7 +14,7 @@ blockstateupdater = { group = "org.cloudburstmc", name = "block-state-updater", 
 itemstateupdater = { group = "com.github.AllayMC", name = "ItemStateUpdater", version = "10093afbb1" }
 # Collections
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.14" }
-guava = { group = "com.google.guava", name = "guava", version = "33.2.1-jre" }
+guava = { group = "com.google.guava", name = "guava", version = "33.3.0-jre" }
 # Serialization
 gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.2" }
