@@ -30,7 +30,7 @@ public final class ItemMetaBlockStateBiMap {
     private static boolean INITIALIZED = false;
 
     public static void init() {
-        try (var reader = NbtUtils.createGZIPReader(Utils.getResource("item_meta_block_state_bimap_old.nbt"))) {
+        try (var reader = NbtUtils.createGZIPReader(Utils.getResource("item_meta_block_state_bimap.nbt"))) {
             var nbt = (NbtMap) reader.readTag();
             nbt.forEach((itemIdentifier, metaToHash) -> {
                 var itemType = Registries.ITEMS.get(new Identifier(itemIdentifier));
