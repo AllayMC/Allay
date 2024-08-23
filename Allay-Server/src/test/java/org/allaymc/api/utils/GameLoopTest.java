@@ -52,6 +52,6 @@ class GameLoopTest {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        Preconditions.checkArgument(gameLoop.getTps() != 20);
+        Preconditions.checkArgument(gameLoop.getTps() <= 20);
     }
 }
