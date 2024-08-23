@@ -171,6 +171,9 @@ public final class Palette<V> {
         if (blockStateHash == PaletteUtils.HASH_NOT_LATEST) {
             var oldNbtMap = (NbtMap) nbtInputStream.readTag();
             var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, BlockStateUpdaters.LATEST_VERSION);
+            // Make sure that tree map is used
+            // If the map inside states nbt is not tree map
+            // the block state hash will be wrong!
             var states = new TreeMap<>(newNbtMap.getCompound("states"));
             var tag = NbtMap.builder()
                     .putString("name", newNbtMap.getString("name"))
