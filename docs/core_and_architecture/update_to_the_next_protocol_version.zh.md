@@ -60,7 +60,7 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 
 **第五步，先运行`VanillaBlockIdEnumGen`，然后运行`VanillaBlockInterfaceGen`**。此步需要较多人工操作：
 
-- 你需要手动删除旧的方块，若存在方块属性变动，你需要手动修改以适配。你可以查看[BlockStateUpdater](https://github.com/CloudburstMC/BlockStateUpdater)来了解方块更改情况。
+- 你需要手动删除旧的方块，若存在方块属性变动，你需要手动修改以适配。你可以查看[StateUpdater](https://github.com/AllayMC/StateUpdater)来了解方块更改情况。
   通过查看`Allay-Server/src/main/java/org/allaymc/server/block/type/BlockTypeInitializer.java`内是否存在报错，你可以快速确定哪些方块属性发生了变动， 
   **方块属性适配不仅仅是修改setProperties()的传参，你同样需要适配方块的代码逻辑**，这点很重要！
 - 若存在一批相似的方块，你需要在`VanillaBlockInterfaceGen`的`registerSubPackages()`方法中注册新的子包避免方块类群过于冗杂。

@@ -71,7 +71,7 @@ or `VanillaBlockTagGen`.
 **Step five, run VanillaBlockInterfaceGen**. This step requires more manual operation:
 
 - You need to manually delete old blocks. If there are changes in block properties, you need to manually modify them to
-  adapt. You can refer to [BlockStateUpdater](https://github.com/CloudburstMC/BlockStateUpdater) to understand block
+  adapt. You can refer to [StateUpdater](https://github.com/AllayMC/StateUpdater) to understand block
   changes.
   By checking if there are errors
   in `Allay-Server/src/main/java/org/allaymc/server/block/type/BlockTypeInitializer.java`, you can quickly determine

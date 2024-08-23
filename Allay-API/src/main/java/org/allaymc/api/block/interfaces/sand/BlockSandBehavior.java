@@ -1,4 +1,4 @@
-package org.allaymc.api.block.interfaces;
+package org.allaymc.api.block.interfaces.sand;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockFallableBaseComponent;
@@ -7,5 +7,5 @@ import org.allaymc.api.block.component.BlockFallableBaseComponent;
  * @author daoge_cmd <br>
  * Allay Project <br>
  */
-public interface BlockGravelBehavior extends BlockBehavior, BlockFallableBaseComponent {
+public interface BlockSandBehavior extends BlockBehavior, BlockFallableBaseComponent {
 }
