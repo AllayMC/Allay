@@ -44,7 +44,7 @@ tasks.clean {
 
 publishing {
     publications {
-        create<MavenPublication>("allayAPI") {
+        create<MavenPublication>("AllayAPI") {
             from(components["java"])
         }
     }
