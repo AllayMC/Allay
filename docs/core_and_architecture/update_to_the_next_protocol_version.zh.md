@@ -73,7 +73,7 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 
 ## 4.更新依赖
 
-更新Allay使用的协议库`Cloudburst/Protocol`以及方块状态更新器`CloudburstMC/BlockStateUpdater`到最新
+更新Allay使用的协议库[Cloudburst/Protocol](https://github.com/CloudburstMC/Protocol)以及状态更新器[AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater)到最新
 
 ## 5.更新`Allay-API/src/main/java/org/allaymc/api/network/ProtocolInfo.java`
 

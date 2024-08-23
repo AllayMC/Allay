@@ -98,7 +98,7 @@ operation, but the workload is less than before:
 ## 4. Update Dependencies
 
 Update the protocol library [Cloudburst/Protocol](https://github.com/CloudburstMC/Protocol) and the block state
-updater [CloudburstMC/BlockStateUpdater](https://github.com/CloudburstMC/BlockStateUpdater) to the latest version.
+updater [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater) to the latest version.
 
 ## 5. Update `Allay-API/src/main/java/org/allaymc/api/network/ProtocolInfo.java`
 
