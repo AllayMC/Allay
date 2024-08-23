@@ -9,10 +9,10 @@ version = "1.0.0"
 
 dependencies {
     api(libs.network) {
-        exclude(group = "org.cloudburstmc", module = "nbt") // use allay's nbt library
+        exclude(group = "org.cloudburstmc", module = "nbt") // Use allaymc's nbt library
         exclude(group = "org.cloudburstmc.fastutil.commons")
         exclude(group = "org.cloudburstmc.fastutil.maps")
-        // NOTICE: We should use specific version, newer version has memory issue! Update it till memory issue being resolved
+        // NOTICE: We should use this specific version, newer version has memory issue! Update it till memory issue being resolved
         exclude(group = "org.cloudburstmc.netty", module = "netty-transport-raknet")
     }
     api(libs.raknet)
@@ -29,7 +29,7 @@ dependencies {
     api(libs.joml)
     api(libs.joml.primitives)
     api(libs.okaeri.configs.yaml.snakeyaml) {
-        exclude(group = "org.yaml", module = "snakeyaml")//use my latest version
+        exclude(group = "org.yaml", module = "snakeyaml")// Use the latest version
     }
     api(libs.caffeine)
     implementation(libs.libdeflate)
