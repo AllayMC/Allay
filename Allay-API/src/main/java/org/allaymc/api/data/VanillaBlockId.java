@@ -2397,7 +2397,7 @@ public enum VanillaBlockId {
     }
 
     public BlockType<?> getBlockType() {
-        return Registries.BLOCK_TYPES.get(this.getIdentifier());
+        return Registries.BLOCKS.get(this.getIdentifier());
     }
 
     public static org.allaymc.api.data.VanillaBlockId fromIdentifier(

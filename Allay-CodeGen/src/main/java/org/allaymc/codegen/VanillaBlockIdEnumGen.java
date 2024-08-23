@@ -77,7 +77,7 @@ public class VanillaBlockIdEnumGen {
         TypeSpec.Builder codeBuilder = commonBuilder(identifierClass)
                 .addMethod(MethodSpec.methodBuilder("getBlockType")
                         .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return $T.BLOCK_TYPES.get(this.getIdentifier())", registriesClass)
+                        .addStatement("return $T.BLOCKS.get(this.getIdentifier())", registriesClass)
                         .returns(blockTypeClass)
                         .build()
                 )
