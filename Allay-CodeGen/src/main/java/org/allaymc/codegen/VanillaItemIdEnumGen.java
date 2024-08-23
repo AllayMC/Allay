@@ -72,7 +72,7 @@ public class VanillaItemIdEnumGen {
         var itemTypeClass = ClassName.get("org.allaymc.api.item.type", "ItemType");
         TypeSpec.Builder codeBuilder = commonBuilder(IDENTIFIER_CLASS).addMethod(MethodSpec.methodBuilder("getItemType")
                 .addModifiers(Modifier.PUBLIC)
-                .addStatement("return $T.ITEM_TYPES.get(this.getIdentifier())", registriesClass)
+                .addStatement("return $T.ITEMS.get(this.getIdentifier())", registriesClass)
                 .returns(itemTypeClass)
                 .build()
         );
