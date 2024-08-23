@@ -175,6 +175,8 @@ public final class Palette<V> {
             // If the map inside states nbt is not tree map
             // the block state hash will be wrong!
             var states = new TreeMap<>(newNbtMap.getCompound("states"));
+            // To calculate the hash of the block state
+            // "name" field must be in the first place
             var tag = NbtMap.builder()
                     .putString("name", newNbtMap.getString("name"))
                     .putCompound("states", NbtMap.fromMap(states))

@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Allay" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="ALTERNATIVE_JRE_PATH" value="graalvm-jdk-21" />
+    <option name="ALTERNATIVE_JRE_PATH" value="21" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="org.allaymc.server.Allay" />
     <module name="Allay.Allay-Server.main" />
     <option name="VM_PARAMETERS" value="-Dfile.encoding=UTF-8 -XX:+UseZGC -XX:+ZGenerational -Xmx2G -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=8099 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false" />
