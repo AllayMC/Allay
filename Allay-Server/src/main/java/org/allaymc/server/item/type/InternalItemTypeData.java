@@ -1,6 +1,7 @@
 package org.allaymc.server.item.type;
 
 import com.google.gson.JsonParser;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.tag.ItemTag;
@@ -20,6 +21,7 @@ import java.util.Set;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public final class InternalItemTypeData {
     private static final Map<VanillaItemId, ItemTag[]> VANILLA_ITEM_TAGS = new HashMap<>();
 
@@ -35,7 +37,12 @@ public final class InternalItemTypeData {
                     var tags = obj.get("tags").getAsJsonArray();
                     var itemTags = new ItemTag[tags.size()];
                     for (int i = 0; i < tags.size(); i++) {
-                        itemTags[i] = VanillaItemTags.getTagByName(tags.get(i).getAsString());
+                        var tag = VanillaItemTags.getTagByName(tags.get(i).getAsString());
+                        if (tag == null) {
+                            log.warn("Unknown item tag: {}", tags.get(i).getAsString());
+                            continue;
+                        }
+                        itemTags[i] = tag;
                     }
                     VANILLA_ITEM_TAGS.put(id, itemTags);
                 } else {
@@ -52,6 +59,10 @@ public final class InternalItemTypeData {
                 for (var obj : entry.getValue().getAsJsonArray()) {
                     var itemId = obj.getAsString();
                     var id = VanillaItemId.fromIdentifier(new Identifier(itemId));
+                    if (id == null) {
+                        log.warn("Unknown item id: {}", itemId);
+                        return;
+                    }
                     map.computeIfAbsent(id, k -> new HashSet<>()).add(tag);
                 }
             });
