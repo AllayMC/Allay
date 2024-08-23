@@ -99,8 +99,11 @@ public final class AllayChunkService implements ChunkService {
         unusedChunkClearCountDown.entrySet().removeIf(entry -> {
             var shouldRemove = entry.getValue() == 0;
             if (shouldRemove) {
-                if (!unloadChunk(entry.getKey())) {
+                if (!unloadChunk(entry.getKey()).getNow(true)) {
                     // Chunk cannot be unloaded, may because ChunkUnloadEvent is cancelled
+                    // If chunk unloading is cancelled by a plugin, unloadChunk()
+                    // will return CompletableFuture.completedFuture(false) so we can
+                    // use getNow() method here
                     shouldRemove = false;
                     entry.setValue(Server.SETTINGS.worldSettings().removeUnneededChunkCycle());
                 }
@@ -165,7 +168,7 @@ public final class AllayChunkService implements ChunkService {
         }
 
         // When all the CompletableFutures are completed, return a new CompletableFuture
-        return CompletableFuture.allOf(futureSet.toArray(new CompletableFuture[0])).thenApplyAsync($ ->
+        return CompletableFuture.allOf(futureSet.toArray(CompletableFuture[]::new)).thenApplyAsync($ ->
                 futureSet.stream()
                         .map(CompletableFuture::join)
                         .collect(Collectors.toSet()), Server.getInstance().getVirtualThreadPool()
@@ -296,18 +299,18 @@ public final class AllayChunkService implements ChunkService {
     }
 
     @Override
-    public boolean unloadChunk(int x, int z) {
+    public CompletableFuture<Boolean> unloadChunk(int x, int z) {
         return unloadChunk(HashUtils.hashXZ(x, z));
     }
 
     @Override
-    public boolean unloadChunk(long chunkHash) {
+    public CompletableFuture<Boolean> unloadChunk(long chunkHash) {
         var chunk = getChunk(chunkHash);
-        if (chunk == null) return false;
+        if (chunk == null) return CompletableFuture.completedFuture(false);
 
         var event = new ChunkUnloadEvent(dimension, chunk);
         event.call();
-        if (event.isCancelled()) return false;
+        if (event.isCancelled()) return CompletableFuture.completedFuture(false);
 
         loadedChunks.remove(chunkHash);
         chunk.getEntities().forEach((runtimeId, entity) -> {
@@ -315,14 +318,20 @@ public final class AllayChunkService implements ChunkService {
             dimension.getEntityPhysicsService().removeEntity(entity);
         });
 
-        worldStorage.writeChunk(chunk);
-
-        return true;
+        var future = new CompletableFuture<Boolean>();
+        worldStorage
+                .writeChunk(chunk)
+                .exceptionally(t -> {
+                    future.complete(false);
+                    return null;
+                })
+                .thenRun(() -> future.complete(true));
+        return future;
     }
 
     @Override
-    public void unloadAllChunks() {
-        this.loadedChunks.values().forEach((c) -> unloadChunk(c.getX(), c.getZ()));
+    public CompletableFuture<Void> unloadAllChunks() {
+        return CompletableFuture.allOf(loadedChunks.keySet().stream().map(this::unloadChunk).toArray(CompletableFuture[]::new));
     }
 
     private final class ChunkLoaderManager {

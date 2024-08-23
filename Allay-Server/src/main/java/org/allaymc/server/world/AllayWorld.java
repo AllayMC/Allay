@@ -224,7 +224,7 @@ public class AllayWorld implements World {
         isRunning.set(false);
         dimensionMap.values().forEach(Dimension::shutdown);
         saveWorldData();
-        getWorldStorage().shutdown();
+        worldStorage.shutdown();
     }
 
     @Override

@@ -18,12 +18,14 @@ Allay借助Endstone DevTools从BDS导出所需的海量数据。故在更新Alla
 
 - biome_definitions.nbt (从pmmp/BedrockData获取)
 - block_states.json
+- block_types.json
 - creative_items.nbt
 - entity_identifiers.nbt (从pmmp/BedrockData获取)
 - items.json
 - materials.json
 - block_tags_custom.json(此文件人工维护，你需要检查是否有方块id需要更新)
 - item_tags_custom.json(此文件人工维护，你需要检查是否有物品id需要更新)
+- recipes.json
 
 **第二步，更新unpacked目录下的文件**。这些文件虽然说不会被打包进jar内，但是会在代码生成阶段被使用：
 
@@ -58,7 +60,7 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 
 **第五步，先运行`VanillaBlockIdEnumGen`，然后运行`VanillaBlockInterfaceGen`**。此步需要较多人工操作：
 
-- 你需要手动删除旧的方块，若存在方块属性变动，你需要手动修改以适配。你可以查看[BlockStateUpdater](https://github.com/CloudburstMC/BlockStateUpdater)来了解方块更改情况。
+- 你需要手动删除旧的方块，若存在方块属性变动，你需要手动修改以适配。你可以查看[StateUpdater](https://github.com/AllayMC/StateUpdater)来了解方块更改情况。
   通过查看`Allay-Server/src/main/java/org/allaymc/server/block/type/BlockTypeInitializer.java`内是否存在报错，你可以快速确定哪些方块属性发生了变动， 
   **方块属性适配不仅仅是修改setProperties()的传参，你同样需要适配方块的代码逻辑**，这点很重要！
 - 若存在一批相似的方块，你需要在`VanillaBlockInterfaceGen`的`registerSubPackages()`方法中注册新的子包避免方块类群过于冗杂。
@@ -71,7 +73,7 @@ Allay通过代码生成完成大部分重复工作。接下来我们将注意力
 
 ## 4.更新依赖
 
-更新Allay使用的协议库`Cloudburst/Protocol`以及方块状态更新器`CloudburstMC/BlockStateUpdater`到最新
+更新Allay使用的协议库[Cloudburst/Protocol](https://github.com/CloudburstMC/Protocol)以及状态更新器[AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater)到最新
 
 ## 5.更新`Allay-API/src/main/java/org/allaymc/api/network/ProtocolInfo.java`
 

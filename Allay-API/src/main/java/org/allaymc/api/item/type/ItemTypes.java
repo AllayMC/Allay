@@ -1,21 +1,840 @@
 package org.allaymc.api.item.type;
 
-import org.allaymc.api.item.interfaces.*;
-import org.allaymc.api.item.interfaces.axe.*;
-import org.allaymc.api.item.interfaces.boat.*;
-import org.allaymc.api.item.interfaces.boots.*;
-import org.allaymc.api.item.interfaces.bricks.*;
-import org.allaymc.api.item.interfaces.bucket.*;
-import org.allaymc.api.item.interfaces.button.*;
-import org.allaymc.api.item.interfaces.candle.*;
-import org.allaymc.api.item.interfaces.candlecake.*;
-import org.allaymc.api.item.interfaces.carpet.*;
-import org.allaymc.api.item.interfaces.chestplate.*;
-import org.allaymc.api.item.interfaces.concrete.*;
+import org.allaymc.api.item.interfaces.ItemAcaciaPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemActivatorRailStack;
+import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.item.interfaces.ItemAlliumStack;
+import org.allaymc.api.item.interfaces.ItemAllowStack;
+import org.allaymc.api.item.interfaces.ItemAmethystBlockStack;
+import org.allaymc.api.item.interfaces.ItemAmethystClusterStack;
+import org.allaymc.api.item.interfaces.ItemAmethystShardStack;
+import org.allaymc.api.item.interfaces.ItemAncientDebrisStack;
+import org.allaymc.api.item.interfaces.ItemAndesiteStack;
+import org.allaymc.api.item.interfaces.ItemAnglerPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemAppleStack;
+import org.allaymc.api.item.interfaces.ItemArcherPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemArmadilloScuteStack;
+import org.allaymc.api.item.interfaces.ItemArmorStandStack;
+import org.allaymc.api.item.interfaces.ItemArmsUpPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemArrowStack;
+import org.allaymc.api.item.interfaces.ItemAzaleaStack;
+import org.allaymc.api.item.interfaces.ItemAzureBluetStack;
+import org.allaymc.api.item.interfaces.ItemBakedPotatoStack;
+import org.allaymc.api.item.interfaces.ItemBalloonStack;
+import org.allaymc.api.item.interfaces.ItemBambooBlockStack;
+import org.allaymc.api.item.interfaces.ItemBambooChestRaftStack;
+import org.allaymc.api.item.interfaces.ItemBambooMosaicStack;
+import org.allaymc.api.item.interfaces.ItemBambooPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemBambooRaftStack;
+import org.allaymc.api.item.interfaces.ItemBambooStack;
+import org.allaymc.api.item.interfaces.ItemBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemBannerStack;
+import org.allaymc.api.item.interfaces.ItemBarrelStack;
+import org.allaymc.api.item.interfaces.ItemBarrierStack;
+import org.allaymc.api.item.interfaces.ItemBasaltStack;
+import org.allaymc.api.item.interfaces.ItemBeaconStack;
+import org.allaymc.api.item.interfaces.ItemBedStack;
+import org.allaymc.api.item.interfaces.ItemBedrockStack;
+import org.allaymc.api.item.interfaces.ItemBeeNestStack;
+import org.allaymc.api.item.interfaces.ItemBeefStack;
+import org.allaymc.api.item.interfaces.ItemBeehiveStack;
+import org.allaymc.api.item.interfaces.ItemBeetrootSeedsStack;
+import org.allaymc.api.item.interfaces.ItemBeetrootSoupStack;
+import org.allaymc.api.item.interfaces.ItemBeetrootStack;
+import org.allaymc.api.item.interfaces.ItemBellStack;
+import org.allaymc.api.item.interfaces.ItemBigDripleafStack;
+import org.allaymc.api.item.interfaces.ItemBirchPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemBlackDyeStack;
+import org.allaymc.api.item.interfaces.ItemBlackstoneStack;
+import org.allaymc.api.item.interfaces.ItemBladePotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemBlastFurnaceStack;
+import org.allaymc.api.item.interfaces.ItemBlazePowderStack;
+import org.allaymc.api.item.interfaces.ItemBlazeRodStack;
+import org.allaymc.api.item.interfaces.ItemBleachStack;
+import org.allaymc.api.item.interfaces.ItemBlueDyeStack;
+import org.allaymc.api.item.interfaces.ItemBlueIceStack;
+import org.allaymc.api.item.interfaces.ItemBlueOrchidStack;
+import org.allaymc.api.item.interfaces.ItemBoltArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemBoneBlockStack;
+import org.allaymc.api.item.interfaces.ItemBoneMealStack;
+import org.allaymc.api.item.interfaces.ItemBoneStack;
+import org.allaymc.api.item.interfaces.ItemBookStack;
+import org.allaymc.api.item.interfaces.ItemBookshelfStack;
+import org.allaymc.api.item.interfaces.ItemBorderBlockStack;
+import org.allaymc.api.item.interfaces.ItemBordureIndentedBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemBowStack;
+import org.allaymc.api.item.interfaces.ItemBowlStack;
+import org.allaymc.api.item.interfaces.ItemBreadStack;
+import org.allaymc.api.item.interfaces.ItemBreezeRodStack;
+import org.allaymc.api.item.interfaces.ItemBrewerPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemBrewingStandStack;
+import org.allaymc.api.item.interfaces.ItemBrickBlockStack;
+import org.allaymc.api.item.interfaces.ItemBrickStack;
+import org.allaymc.api.item.interfaces.ItemBrownDyeStack;
+import org.allaymc.api.item.interfaces.ItemBrownMushroomBlockStack;
+import org.allaymc.api.item.interfaces.ItemBrownMushroomStack;
+import org.allaymc.api.item.interfaces.ItemBrushStack;
+import org.allaymc.api.item.interfaces.ItemBubbleColumnStack;
+import org.allaymc.api.item.interfaces.ItemBuddingAmethystStack;
+import org.allaymc.api.item.interfaces.ItemBurnPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemCactusStack;
+import org.allaymc.api.item.interfaces.ItemCakeStack;
+import org.allaymc.api.item.interfaces.ItemCalciteStack;
+import org.allaymc.api.item.interfaces.ItemCalibratedSculkSensorStack;
+import org.allaymc.api.item.interfaces.ItemCameraStack;
+import org.allaymc.api.item.interfaces.ItemCampfireStack;
+import org.allaymc.api.item.interfaces.ItemCarrotOnAStickStack;
+import org.allaymc.api.item.interfaces.ItemCarrotStack;
+import org.allaymc.api.item.interfaces.ItemCarrotsStack;
+import org.allaymc.api.item.interfaces.ItemCartographyTableStack;
+import org.allaymc.api.item.interfaces.ItemCarvedPumpkinStack;
+import org.allaymc.api.item.interfaces.ItemCauldronStack;
+import org.allaymc.api.item.interfaces.ItemCaveVinesBodyWithBerriesStack;
+import org.allaymc.api.item.interfaces.ItemCaveVinesHeadWithBerriesStack;
+import org.allaymc.api.item.interfaces.ItemCaveVinesStack;
+import org.allaymc.api.item.interfaces.ItemChainCommandBlockStack;
+import org.allaymc.api.item.interfaces.ItemChainStack;
+import org.allaymc.api.item.interfaces.ItemCharcoalStack;
+import org.allaymc.api.item.interfaces.ItemChemicalHeatStack;
+import org.allaymc.api.item.interfaces.ItemChemistryTableStack;
+import org.allaymc.api.item.interfaces.ItemCherryPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemChestStack;
+import org.allaymc.api.item.interfaces.ItemChickenStack;
+import org.allaymc.api.item.interfaces.ItemChiseledBookshelfStack;
+import org.allaymc.api.item.interfaces.ItemChiseledDeepslateStack;
+import org.allaymc.api.item.interfaces.ItemChiseledPolishedBlackstoneStack;
+import org.allaymc.api.item.interfaces.ItemChiseledQuartzBlockStack;
+import org.allaymc.api.item.interfaces.ItemChiseledTuffStack;
+import org.allaymc.api.item.interfaces.ItemChorusFlowerStack;
+import org.allaymc.api.item.interfaces.ItemChorusFruitStack;
+import org.allaymc.api.item.interfaces.ItemChorusPlantStack;
+import org.allaymc.api.item.interfaces.ItemClayBallStack;
+import org.allaymc.api.item.interfaces.ItemClayStack;
+import org.allaymc.api.item.interfaces.ItemClientRequestPlaceholderBlockStack;
+import org.allaymc.api.item.interfaces.ItemClockStack;
+import org.allaymc.api.item.interfaces.ItemCoalBlockStack;
+import org.allaymc.api.item.interfaces.ItemCoalOreStack;
+import org.allaymc.api.item.interfaces.ItemCoalStack;
+import org.allaymc.api.item.interfaces.ItemCoastArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemCobbledDeepslateStack;
+import org.allaymc.api.item.interfaces.ItemCobblestoneStack;
+import org.allaymc.api.item.interfaces.ItemCocoaBeansStack;
+import org.allaymc.api.item.interfaces.ItemCocoaStack;
+import org.allaymc.api.item.interfaces.ItemCodStack;
+import org.allaymc.api.item.interfaces.ItemColoredTorchBpStack;
+import org.allaymc.api.item.interfaces.ItemColoredTorchRgStack;
+import org.allaymc.api.item.interfaces.ItemCommandBlockStack;
+import org.allaymc.api.item.interfaces.ItemComparatorStack;
+import org.allaymc.api.item.interfaces.ItemCompassStack;
+import org.allaymc.api.item.interfaces.ItemComposterStack;
+import org.allaymc.api.item.interfaces.ItemCompoundStack;
+import org.allaymc.api.item.interfaces.ItemConduitStack;
+import org.allaymc.api.item.interfaces.ItemCookedBeefStack;
+import org.allaymc.api.item.interfaces.ItemCookedChickenStack;
+import org.allaymc.api.item.interfaces.ItemCookedCodStack;
+import org.allaymc.api.item.interfaces.ItemCookedMuttonStack;
+import org.allaymc.api.item.interfaces.ItemCookedPorkchopStack;
+import org.allaymc.api.item.interfaces.ItemCookedRabbitStack;
+import org.allaymc.api.item.interfaces.ItemCookedSalmonStack;
+import org.allaymc.api.item.interfaces.ItemCookieStack;
+import org.allaymc.api.item.interfaces.ItemCopperBlockStack;
+import org.allaymc.api.item.interfaces.ItemCopperBulbStack;
+import org.allaymc.api.item.interfaces.ItemCopperGrateStack;
+import org.allaymc.api.item.interfaces.ItemCopperIngotStack;
+import org.allaymc.api.item.interfaces.ItemCopperOreStack;
+import org.allaymc.api.item.interfaces.ItemCornflowerStack;
+import org.allaymc.api.item.interfaces.ItemCrackedDeepslateTilesStack;
+import org.allaymc.api.item.interfaces.ItemCrafterStack;
+import org.allaymc.api.item.interfaces.ItemCraftingTableStack;
+import org.allaymc.api.item.interfaces.ItemCreeperBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemCrimsonFungusStack;
+import org.allaymc.api.item.interfaces.ItemCrimsonHyphaeStack;
+import org.allaymc.api.item.interfaces.ItemCrimsonNyliumStack;
+import org.allaymc.api.item.interfaces.ItemCrimsonPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemCrimsonRootsStack;
+import org.allaymc.api.item.interfaces.ItemCrimsonStemStack;
+import org.allaymc.api.item.interfaces.ItemCrossbowStack;
+import org.allaymc.api.item.interfaces.ItemCryingObsidianStack;
+import org.allaymc.api.item.interfaces.ItemCyanDyeStack;
+import org.allaymc.api.item.interfaces.ItemDandelionStack;
+import org.allaymc.api.item.interfaces.ItemDangerPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemDarkOakPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemDarkPrismarineStack;
+import org.allaymc.api.item.interfaces.ItemDaylightDetectorInvertedStack;
+import org.allaymc.api.item.interfaces.ItemDaylightDetectorStack;
+import org.allaymc.api.item.interfaces.ItemDeadbushStack;
+import org.allaymc.api.item.interfaces.ItemDecoratedPotStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateCoalOreStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateCopperOreStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateDiamondOreStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateEmeraldOreStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateGoldOreStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateIronOreStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateLapisOreStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateRedstoneOreStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateStack;
+import org.allaymc.api.item.interfaces.ItemDeepslateTilesStack;
+import org.allaymc.api.item.interfaces.ItemDenyStack;
+import org.allaymc.api.item.interfaces.ItemDetectorRailStack;
+import org.allaymc.api.item.interfaces.ItemDiamondBlockStack;
+import org.allaymc.api.item.interfaces.ItemDiamondHorseArmorStack;
+import org.allaymc.api.item.interfaces.ItemDiamondOreStack;
+import org.allaymc.api.item.interfaces.ItemDiamondStack;
+import org.allaymc.api.item.interfaces.ItemDioriteStack;
+import org.allaymc.api.item.interfaces.ItemDirtWithRootsStack;
+import org.allaymc.api.item.interfaces.ItemDiscFragment5Stack;
+import org.allaymc.api.item.interfaces.ItemDispenserStack;
+import org.allaymc.api.item.interfaces.ItemDoublePlantStack;
+import org.allaymc.api.item.interfaces.ItemDragonBreathStack;
+import org.allaymc.api.item.interfaces.ItemDriedKelpBlockStack;
+import org.allaymc.api.item.interfaces.ItemDriedKelpStack;
+import org.allaymc.api.item.interfaces.ItemDripstoneBlockStack;
+import org.allaymc.api.item.interfaces.ItemDropperStack;
+import org.allaymc.api.item.interfaces.ItemDuneArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemDyeStack;
+import org.allaymc.api.item.interfaces.ItemEchoShardStack;
+import org.allaymc.api.item.interfaces.ItemElytraStack;
+import org.allaymc.api.item.interfaces.ItemEmeraldBlockStack;
+import org.allaymc.api.item.interfaces.ItemEmeraldOreStack;
+import org.allaymc.api.item.interfaces.ItemEmeraldStack;
+import org.allaymc.api.item.interfaces.ItemEmptyMapStack;
+import org.allaymc.api.item.interfaces.ItemEnchantedBookStack;
+import org.allaymc.api.item.interfaces.ItemEnchantedGoldenAppleStack;
+import org.allaymc.api.item.interfaces.ItemEnchantingTableStack;
+import org.allaymc.api.item.interfaces.ItemEndCrystalStack;
+import org.allaymc.api.item.interfaces.ItemEndGatewayStack;
+import org.allaymc.api.item.interfaces.ItemEndPortalFrameStack;
+import org.allaymc.api.item.interfaces.ItemEndPortalStack;
+import org.allaymc.api.item.interfaces.ItemEndRodStack;
+import org.allaymc.api.item.interfaces.ItemEndStoneStack;
+import org.allaymc.api.item.interfaces.ItemEnderChestStack;
+import org.allaymc.api.item.interfaces.ItemEnderEyeStack;
+import org.allaymc.api.item.interfaces.ItemEnderPearlStack;
+import org.allaymc.api.item.interfaces.ItemExperienceBottleStack;
+import org.allaymc.api.item.interfaces.ItemExplorerPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemExposedCopperBulbStack;
+import org.allaymc.api.item.interfaces.ItemExposedCopperGrateStack;
+import org.allaymc.api.item.interfaces.ItemEyeArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemFarmlandStack;
+import org.allaymc.api.item.interfaces.ItemFeatherStack;
+import org.allaymc.api.item.interfaces.ItemFermentedSpiderEyeStack;
+import org.allaymc.api.item.interfaces.ItemFernStack;
+import org.allaymc.api.item.interfaces.ItemFieldMasonedBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemFilledMapStack;
+import org.allaymc.api.item.interfaces.ItemFireChargeStack;
+import org.allaymc.api.item.interfaces.ItemFireStack;
+import org.allaymc.api.item.interfaces.ItemFireworkRocketStack;
+import org.allaymc.api.item.interfaces.ItemFireworkStarStack;
+import org.allaymc.api.item.interfaces.ItemFishingRodStack;
+import org.allaymc.api.item.interfaces.ItemFletchingTableStack;
+import org.allaymc.api.item.interfaces.ItemFlintAndSteelStack;
+import org.allaymc.api.item.interfaces.ItemFlintStack;
+import org.allaymc.api.item.interfaces.ItemFlowArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemFlowBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemFlowPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemFlowerBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemFlowerPotStack;
+import org.allaymc.api.item.interfaces.ItemFloweringAzaleaStack;
+import org.allaymc.api.item.interfaces.ItemFrameStack;
+import org.allaymc.api.item.interfaces.ItemFriendPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemFrogSpawnStack;
+import org.allaymc.api.item.interfaces.ItemFrostedIceStack;
+import org.allaymc.api.item.interfaces.ItemFurnaceStack;
+import org.allaymc.api.item.interfaces.ItemGhastTearStack;
+import org.allaymc.api.item.interfaces.ItemGildedBlackstoneStack;
+import org.allaymc.api.item.interfaces.ItemGlassBottleStack;
+import org.allaymc.api.item.interfaces.ItemGlisteringMelonSliceStack;
+import org.allaymc.api.item.interfaces.ItemGlobeBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemGlowBerriesStack;
+import org.allaymc.api.item.interfaces.ItemGlowFrameStack;
+import org.allaymc.api.item.interfaces.ItemGlowInkSacStack;
+import org.allaymc.api.item.interfaces.ItemGlowLichenStack;
+import org.allaymc.api.item.interfaces.ItemGlowStickStack;
+import org.allaymc.api.item.interfaces.ItemGlowingobsidianStack;
+import org.allaymc.api.item.interfaces.ItemGlowstoneDustStack;
+import org.allaymc.api.item.interfaces.ItemGlowstoneStack;
+import org.allaymc.api.item.interfaces.ItemGoatHornStack;
+import org.allaymc.api.item.interfaces.ItemGoldBlockStack;
+import org.allaymc.api.item.interfaces.ItemGoldIngotStack;
+import org.allaymc.api.item.interfaces.ItemGoldNuggetStack;
+import org.allaymc.api.item.interfaces.ItemGoldOreStack;
+import org.allaymc.api.item.interfaces.ItemGoldenAppleStack;
+import org.allaymc.api.item.interfaces.ItemGoldenCarrotStack;
+import org.allaymc.api.item.interfaces.ItemGoldenHorseArmorStack;
+import org.allaymc.api.item.interfaces.ItemGoldenRailStack;
+import org.allaymc.api.item.interfaces.ItemGraniteStack;
+import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
+import org.allaymc.api.item.interfaces.ItemGrassPathStack;
+import org.allaymc.api.item.interfaces.ItemGravelStack;
+import org.allaymc.api.item.interfaces.ItemGrayDyeStack;
+import org.allaymc.api.item.interfaces.ItemGreenDyeStack;
+import org.allaymc.api.item.interfaces.ItemGrindstoneStack;
+import org.allaymc.api.item.interfaces.ItemGunpowderStack;
+import org.allaymc.api.item.interfaces.ItemGusterBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemGusterPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemHangingRootsStack;
+import org.allaymc.api.item.interfaces.ItemHardenedClayStack;
+import org.allaymc.api.item.interfaces.ItemHayBlockStack;
+import org.allaymc.api.item.interfaces.ItemHeartOfTheSeaStack;
+import org.allaymc.api.item.interfaces.ItemHeartPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemHeartbreakPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemHeavyCoreStack;
+import org.allaymc.api.item.interfaces.ItemHeavyWeightedPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemHoneyBlockStack;
+import org.allaymc.api.item.interfaces.ItemHoneyBottleStack;
+import org.allaymc.api.item.interfaces.ItemHoneycombBlockStack;
+import org.allaymc.api.item.interfaces.ItemHoneycombStack;
+import org.allaymc.api.item.interfaces.ItemHopperStack;
+import org.allaymc.api.item.interfaces.ItemHostArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemHowlPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemIceBombStack;
+import org.allaymc.api.item.interfaces.ItemIceStack;
+import org.allaymc.api.item.interfaces.ItemInfestedCobblestoneStack;
+import org.allaymc.api.item.interfaces.ItemInfestedDeepslateStack;
+import org.allaymc.api.item.interfaces.ItemInfestedStoneStack;
+import org.allaymc.api.item.interfaces.ItemInfoUpdate2Stack;
+import org.allaymc.api.item.interfaces.ItemInfoUpdateStack;
+import org.allaymc.api.item.interfaces.ItemInkSacStack;
+import org.allaymc.api.item.interfaces.ItemInvisibleBedrockStack;
+import org.allaymc.api.item.interfaces.ItemIronBarsStack;
+import org.allaymc.api.item.interfaces.ItemIronBlockStack;
+import org.allaymc.api.item.interfaces.ItemIronHorseArmorStack;
+import org.allaymc.api.item.interfaces.ItemIronIngotStack;
+import org.allaymc.api.item.interfaces.ItemIronNuggetStack;
+import org.allaymc.api.item.interfaces.ItemIronOreStack;
+import org.allaymc.api.item.interfaces.ItemItemBedStack;
+import org.allaymc.api.item.interfaces.ItemItemBeetrootStack;
+import org.allaymc.api.item.interfaces.ItemItemBrewingStandStack;
+import org.allaymc.api.item.interfaces.ItemItemCakeStack;
+import org.allaymc.api.item.interfaces.ItemItemCameraStack;
+import org.allaymc.api.item.interfaces.ItemItemCampfireStack;
+import org.allaymc.api.item.interfaces.ItemItemCauldronStack;
+import org.allaymc.api.item.interfaces.ItemItemChainStack;
+import org.allaymc.api.item.interfaces.ItemItemFlowerPotStack;
+import org.allaymc.api.item.interfaces.ItemItemFrameStack;
+import org.allaymc.api.item.interfaces.ItemItemGlowFrameStack;
+import org.allaymc.api.item.interfaces.ItemItemHopperStack;
+import org.allaymc.api.item.interfaces.ItemItemKelpStack;
+import org.allaymc.api.item.interfaces.ItemItemNetherSproutsStack;
+import org.allaymc.api.item.interfaces.ItemItemNetherWartStack;
+import org.allaymc.api.item.interfaces.ItemItemReedsStack;
+import org.allaymc.api.item.interfaces.ItemItemSkullStack;
+import org.allaymc.api.item.interfaces.ItemItemSoulCampfireStack;
+import org.allaymc.api.item.interfaces.ItemItemWheatStack;
+import org.allaymc.api.item.interfaces.ItemJigsawStack;
+import org.allaymc.api.item.interfaces.ItemJukeboxStack;
+import org.allaymc.api.item.interfaces.ItemJunglePressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemKelpStack;
+import org.allaymc.api.item.interfaces.ItemLadderStack;
+import org.allaymc.api.item.interfaces.ItemLanternStack;
+import org.allaymc.api.item.interfaces.ItemLapisBlockStack;
+import org.allaymc.api.item.interfaces.ItemLapisLazuliStack;
+import org.allaymc.api.item.interfaces.ItemLapisOreStack;
+import org.allaymc.api.item.interfaces.ItemLargeAmethystBudStack;
+import org.allaymc.api.item.interfaces.ItemLargeFernStack;
+import org.allaymc.api.item.interfaces.ItemLeadStack;
+import org.allaymc.api.item.interfaces.ItemLeatherHorseArmorStack;
+import org.allaymc.api.item.interfaces.ItemLeatherStack;
+import org.allaymc.api.item.interfaces.ItemLecternStack;
+import org.allaymc.api.item.interfaces.ItemLeverStack;
+import org.allaymc.api.item.interfaces.ItemLightBlueDyeStack;
+import org.allaymc.api.item.interfaces.ItemLightGrayDyeStack;
+import org.allaymc.api.item.interfaces.ItemLightWeightedPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemLightningRodStack;
+import org.allaymc.api.item.interfaces.ItemLilacStack;
+import org.allaymc.api.item.interfaces.ItemLilyOfTheValleyStack;
+import org.allaymc.api.item.interfaces.ItemLimeDyeStack;
+import org.allaymc.api.item.interfaces.ItemLingeringPotionStack;
+import org.allaymc.api.item.interfaces.ItemLitBlastFurnaceStack;
+import org.allaymc.api.item.interfaces.ItemLitDeepslateRedstoneOreStack;
+import org.allaymc.api.item.interfaces.ItemLitFurnaceStack;
+import org.allaymc.api.item.interfaces.ItemLitPumpkinStack;
+import org.allaymc.api.item.interfaces.ItemLitRedstoneLampStack;
+import org.allaymc.api.item.interfaces.ItemLitRedstoneOreStack;
+import org.allaymc.api.item.interfaces.ItemLitSmokerStack;
+import org.allaymc.api.item.interfaces.ItemLodestoneCompassStack;
+import org.allaymc.api.item.interfaces.ItemLodestoneStack;
+import org.allaymc.api.item.interfaces.ItemLoomStack;
+import org.allaymc.api.item.interfaces.ItemMaceStack;
+import org.allaymc.api.item.interfaces.ItemMagentaDyeStack;
+import org.allaymc.api.item.interfaces.ItemMagmaCreamStack;
+import org.allaymc.api.item.interfaces.ItemMagmaStack;
+import org.allaymc.api.item.interfaces.ItemMangrovePressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemMangrovePropaguleStack;
+import org.allaymc.api.item.interfaces.ItemMangroveRootsStack;
+import org.allaymc.api.item.interfaces.ItemMedicineStack;
+import org.allaymc.api.item.interfaces.ItemMediumAmethystBudStack;
+import org.allaymc.api.item.interfaces.ItemMelonBlockStack;
+import org.allaymc.api.item.interfaces.ItemMelonSeedsStack;
+import org.allaymc.api.item.interfaces.ItemMelonSliceStack;
+import org.allaymc.api.item.interfaces.ItemMelonStemStack;
+import org.allaymc.api.item.interfaces.ItemMinerPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemMobSpawnerStack;
+import org.allaymc.api.item.interfaces.ItemMojangBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemMossBlockStack;
+import org.allaymc.api.item.interfaces.ItemMossyCobblestoneStack;
+import org.allaymc.api.item.interfaces.ItemMournerPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemMovingBlockStack;
+import org.allaymc.api.item.interfaces.ItemMudStack;
+import org.allaymc.api.item.interfaces.ItemMuddyMangroveRootsStack;
+import org.allaymc.api.item.interfaces.ItemMushroomStewStack;
+import org.allaymc.api.item.interfaces.ItemMuttonStack;
+import org.allaymc.api.item.interfaces.ItemMyceliumStack;
+import org.allaymc.api.item.interfaces.ItemNameTagStack;
+import org.allaymc.api.item.interfaces.ItemNautilusShellStack;
+import org.allaymc.api.item.interfaces.ItemNetherBrickStack;
+import org.allaymc.api.item.interfaces.ItemNetherGoldOreStack;
+import org.allaymc.api.item.interfaces.ItemNetherSproutsStack;
+import org.allaymc.api.item.interfaces.ItemNetherStarStack;
+import org.allaymc.api.item.interfaces.ItemNetherWartBlockStack;
+import org.allaymc.api.item.interfaces.ItemNetherWartStack;
+import org.allaymc.api.item.interfaces.ItemNetherbrick0Stack;
+import org.allaymc.api.item.interfaces.ItemNetheriteBlockStack;
+import org.allaymc.api.item.interfaces.ItemNetheriteIngotStack;
+import org.allaymc.api.item.interfaces.ItemNetheriteScrapStack;
+import org.allaymc.api.item.interfaces.ItemNetheriteUpgradeSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemNetherrackStack;
+import org.allaymc.api.item.interfaces.ItemNetherreactorStack;
+import org.allaymc.api.item.interfaces.ItemNoteblockStack;
+import org.allaymc.api.item.interfaces.ItemObserverStack;
+import org.allaymc.api.item.interfaces.ItemObsidianStack;
+import org.allaymc.api.item.interfaces.ItemOchreFroglightStack;
+import org.allaymc.api.item.interfaces.ItemOminousBottleStack;
+import org.allaymc.api.item.interfaces.ItemOminousTrialKeyStack;
+import org.allaymc.api.item.interfaces.ItemOrangeDyeStack;
+import org.allaymc.api.item.interfaces.ItemOrangeTulipStack;
+import org.allaymc.api.item.interfaces.ItemOxeyeDaisyStack;
+import org.allaymc.api.item.interfaces.ItemOxidizedCopperBulbStack;
+import org.allaymc.api.item.interfaces.ItemOxidizedCopperGrateStack;
+import org.allaymc.api.item.interfaces.ItemPackedIceStack;
+import org.allaymc.api.item.interfaces.ItemPackedMudStack;
+import org.allaymc.api.item.interfaces.ItemPaintingStack;
+import org.allaymc.api.item.interfaces.ItemPaperStack;
+import org.allaymc.api.item.interfaces.ItemPearlescentFroglightStack;
+import org.allaymc.api.item.interfaces.ItemPeonyStack;
+import org.allaymc.api.item.interfaces.ItemPhantomMembraneStack;
+import org.allaymc.api.item.interfaces.ItemPiglinBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemPinkDyeStack;
+import org.allaymc.api.item.interfaces.ItemPinkPetalsStack;
+import org.allaymc.api.item.interfaces.ItemPinkTulipStack;
+import org.allaymc.api.item.interfaces.ItemPitcherCropStack;
+import org.allaymc.api.item.interfaces.ItemPitcherPlantStack;
+import org.allaymc.api.item.interfaces.ItemPitcherPodStack;
+import org.allaymc.api.item.interfaces.ItemPlentyPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemPodzolStack;
+import org.allaymc.api.item.interfaces.ItemPointedDripstoneStack;
+import org.allaymc.api.item.interfaces.ItemPoisonousPotatoStack;
+import org.allaymc.api.item.interfaces.ItemPolishedAndesiteStack;
+import org.allaymc.api.item.interfaces.ItemPolishedBasaltStack;
+import org.allaymc.api.item.interfaces.ItemPolishedBlackstonePressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemPolishedBlackstoneStack;
+import org.allaymc.api.item.interfaces.ItemPolishedDeepslateStack;
+import org.allaymc.api.item.interfaces.ItemPolishedDioriteStack;
+import org.allaymc.api.item.interfaces.ItemPolishedGraniteStack;
+import org.allaymc.api.item.interfaces.ItemPolishedTuffStack;
+import org.allaymc.api.item.interfaces.ItemPoppedChorusFruitStack;
+import org.allaymc.api.item.interfaces.ItemPoppyStack;
+import org.allaymc.api.item.interfaces.ItemPorkchopStack;
+import org.allaymc.api.item.interfaces.ItemPortalStack;
+import org.allaymc.api.item.interfaces.ItemPotatoStack;
+import org.allaymc.api.item.interfaces.ItemPotatoesStack;
+import org.allaymc.api.item.interfaces.ItemPotionStack;
+import org.allaymc.api.item.interfaces.ItemPowderSnowStack;
+import org.allaymc.api.item.interfaces.ItemPoweredComparatorStack;
+import org.allaymc.api.item.interfaces.ItemPoweredRepeaterStack;
+import org.allaymc.api.item.interfaces.ItemPrismarineCrystalsStack;
+import org.allaymc.api.item.interfaces.ItemPrismarineShardStack;
+import org.allaymc.api.item.interfaces.ItemPrismarineStack;
+import org.allaymc.api.item.interfaces.ItemPrizePotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemPufferfishStack;
+import org.allaymc.api.item.interfaces.ItemPumpkinPieStack;
+import org.allaymc.api.item.interfaces.ItemPumpkinSeedsStack;
+import org.allaymc.api.item.interfaces.ItemPumpkinStack;
+import org.allaymc.api.item.interfaces.ItemPumpkinStemStack;
+import org.allaymc.api.item.interfaces.ItemPurpleDyeStack;
+import org.allaymc.api.item.interfaces.ItemPurpurBlockStack;
+import org.allaymc.api.item.interfaces.ItemQuartzBlockStack;
+import org.allaymc.api.item.interfaces.ItemQuartzOreStack;
+import org.allaymc.api.item.interfaces.ItemQuartzPillarStack;
+import org.allaymc.api.item.interfaces.ItemQuartzStack;
+import org.allaymc.api.item.interfaces.ItemRabbitFootStack;
+import org.allaymc.api.item.interfaces.ItemRabbitHideStack;
+import org.allaymc.api.item.interfaces.ItemRabbitStack;
+import org.allaymc.api.item.interfaces.ItemRabbitStewStack;
+import org.allaymc.api.item.interfaces.ItemRailStack;
+import org.allaymc.api.item.interfaces.ItemRaiserArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemRapidFertilizerStack;
+import org.allaymc.api.item.interfaces.ItemRawCopperBlockStack;
+import org.allaymc.api.item.interfaces.ItemRawGoldBlockStack;
+import org.allaymc.api.item.interfaces.ItemRawGoldStack;
+import org.allaymc.api.item.interfaces.ItemRawIronBlockStack;
+import org.allaymc.api.item.interfaces.ItemRawIronStack;
+import org.allaymc.api.item.interfaces.ItemRecoveryCompassStack;
+import org.allaymc.api.item.interfaces.ItemRedDyeStack;
+import org.allaymc.api.item.interfaces.ItemRedFlowerStack;
+import org.allaymc.api.item.interfaces.ItemRedMushroomBlockStack;
+import org.allaymc.api.item.interfaces.ItemRedMushroomStack;
+import org.allaymc.api.item.interfaces.ItemRedNetherBrickStack;
+import org.allaymc.api.item.interfaces.ItemRedTulipStack;
+import org.allaymc.api.item.interfaces.ItemRedstoneBlockStack;
+import org.allaymc.api.item.interfaces.ItemRedstoneLampStack;
+import org.allaymc.api.item.interfaces.ItemRedstoneOreStack;
+import org.allaymc.api.item.interfaces.ItemRedstoneStack;
+import org.allaymc.api.item.interfaces.ItemRedstoneTorchStack;
+import org.allaymc.api.item.interfaces.ItemRedstoneWireStack;
+import org.allaymc.api.item.interfaces.ItemReinforcedDeepslateStack;
+import org.allaymc.api.item.interfaces.ItemRepeaterStack;
+import org.allaymc.api.item.interfaces.ItemRepeatingCommandBlockStack;
+import org.allaymc.api.item.interfaces.ItemReserved6Stack;
+import org.allaymc.api.item.interfaces.ItemRespawnAnchorStack;
+import org.allaymc.api.item.interfaces.ItemRibArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemRoseBushStack;
+import org.allaymc.api.item.interfaces.ItemRottenFleshStack;
+import org.allaymc.api.item.interfaces.ItemSaddleStack;
+import org.allaymc.api.item.interfaces.ItemSalmonStack;
+import org.allaymc.api.item.interfaces.ItemScaffoldingStack;
+import org.allaymc.api.item.interfaces.ItemScrapePotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemSculkCatalystStack;
+import org.allaymc.api.item.interfaces.ItemSculkSensorStack;
+import org.allaymc.api.item.interfaces.ItemSculkShriekerStack;
+import org.allaymc.api.item.interfaces.ItemSculkStack;
+import org.allaymc.api.item.interfaces.ItemSculkVeinStack;
+import org.allaymc.api.item.interfaces.ItemSeaLanternStack;
+import org.allaymc.api.item.interfaces.ItemSeaPickleStack;
+import org.allaymc.api.item.interfaces.ItemSeagrassStack;
+import org.allaymc.api.item.interfaces.ItemSentryArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemShaperArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemSheafPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemShearsStack;
+import org.allaymc.api.item.interfaces.ItemShelterPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemShieldStack;
+import org.allaymc.api.item.interfaces.ItemShortGrassStack;
+import org.allaymc.api.item.interfaces.ItemShroomlightStack;
+import org.allaymc.api.item.interfaces.ItemShulkerShellStack;
+import org.allaymc.api.item.interfaces.ItemSilenceArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemSkullBannerPatternStack;
+import org.allaymc.api.item.interfaces.ItemSkullPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemSkullStack;
+import org.allaymc.api.item.interfaces.ItemSlimeBallStack;
+import org.allaymc.api.item.interfaces.ItemSlimeStack;
+import org.allaymc.api.item.interfaces.ItemSmallAmethystBudStack;
+import org.allaymc.api.item.interfaces.ItemSmallDripleafBlockStack;
+import org.allaymc.api.item.interfaces.ItemSmithingTableStack;
+import org.allaymc.api.item.interfaces.ItemSmokerStack;
+import org.allaymc.api.item.interfaces.ItemSmoothBasaltStack;
+import org.allaymc.api.item.interfaces.ItemSmoothQuartzStack;
+import org.allaymc.api.item.interfaces.ItemSmoothStoneStack;
+import org.allaymc.api.item.interfaces.ItemSnortPotterySherdStack;
+import org.allaymc.api.item.interfaces.ItemSnoutArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemSnowLayerStack;
+import org.allaymc.api.item.interfaces.ItemSnowStack;
+import org.allaymc.api.item.interfaces.ItemSnowballStack;
+import org.allaymc.api.item.interfaces.ItemSoulCampfireStack;
+import org.allaymc.api.item.interfaces.ItemSoulFireStack;
+import org.allaymc.api.item.interfaces.ItemSoulLanternStack;
+import org.allaymc.api.item.interfaces.ItemSoulSoilStack;
+import org.allaymc.api.item.interfaces.ItemSoulTorchStack;
+import org.allaymc.api.item.interfaces.ItemSparklerStack;
+import org.allaymc.api.item.interfaces.ItemSpiderEyeStack;
+import org.allaymc.api.item.interfaces.ItemSpireArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemSplashPotionStack;
+import org.allaymc.api.item.interfaces.ItemSpongeStack;
+import org.allaymc.api.item.interfaces.ItemSporeBlossomStack;
+import org.allaymc.api.item.interfaces.ItemSprucePressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemSpyglassStack;
+import org.allaymc.api.item.interfaces.ItemStainedHardenedClayStack;
+import org.allaymc.api.item.interfaces.ItemStandingBannerStack;
+import org.allaymc.api.item.interfaces.ItemStickStack;
+import org.allaymc.api.item.interfaces.ItemStonePressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemStoneStack;
+import org.allaymc.api.item.interfaces.ItemStonebrickStack;
+import org.allaymc.api.item.interfaces.ItemStonecutterBlockStack;
+import org.allaymc.api.item.interfaces.ItemStonecutterStack;
+import org.allaymc.api.item.interfaces.ItemStringStack;
+import org.allaymc.api.item.interfaces.ItemStrippedBambooBlockStack;
+import org.allaymc.api.item.interfaces.ItemStrippedCrimsonHyphaeStack;
+import org.allaymc.api.item.interfaces.ItemStrippedCrimsonStemStack;
+import org.allaymc.api.item.interfaces.ItemStrippedWarpedHyphaeStack;
+import org.allaymc.api.item.interfaces.ItemStrippedWarpedStemStack;
+import org.allaymc.api.item.interfaces.ItemStructureBlockStack;
+import org.allaymc.api.item.interfaces.ItemStructureVoidStack;
+import org.allaymc.api.item.interfaces.ItemSugarCaneStack;
+import org.allaymc.api.item.interfaces.ItemSugarStack;
+import org.allaymc.api.item.interfaces.ItemSunflowerStack;
+import org.allaymc.api.item.interfaces.ItemSuspiciousGravelStack;
+import org.allaymc.api.item.interfaces.ItemSuspiciousStewStack;
+import org.allaymc.api.item.interfaces.ItemSweetBerriesStack;
+import org.allaymc.api.item.interfaces.ItemSweetBerryBushStack;
+import org.allaymc.api.item.interfaces.ItemTallGrassStack;
+import org.allaymc.api.item.interfaces.ItemTallgrass0Stack;
+import org.allaymc.api.item.interfaces.ItemTargetStack;
+import org.allaymc.api.item.interfaces.ItemTideArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemTntStack;
+import org.allaymc.api.item.interfaces.ItemTorchStack;
+import org.allaymc.api.item.interfaces.ItemTorchflowerCropStack;
+import org.allaymc.api.item.interfaces.ItemTorchflowerSeedsStack;
+import org.allaymc.api.item.interfaces.ItemTorchflowerStack;
+import org.allaymc.api.item.interfaces.ItemTotemOfUndyingStack;
+import org.allaymc.api.item.interfaces.ItemTrappedChestStack;
+import org.allaymc.api.item.interfaces.ItemTrialKeyStack;
+import org.allaymc.api.item.interfaces.ItemTrialSpawnerStack;
+import org.allaymc.api.item.interfaces.ItemTridentStack;
+import org.allaymc.api.item.interfaces.ItemTripWireStack;
+import org.allaymc.api.item.interfaces.ItemTripwireHookStack;
+import org.allaymc.api.item.interfaces.ItemTropicalFishStack;
+import org.allaymc.api.item.interfaces.ItemTuffStack;
+import org.allaymc.api.item.interfaces.ItemTurtleScuteStack;
+import org.allaymc.api.item.interfaces.ItemTwistingVinesStack;
+import org.allaymc.api.item.interfaces.ItemUnderwaterTorchStack;
+import org.allaymc.api.item.interfaces.ItemUnknownStack;
+import org.allaymc.api.item.interfaces.ItemUnlitRedstoneTorchStack;
+import org.allaymc.api.item.interfaces.ItemUnpoweredComparatorStack;
+import org.allaymc.api.item.interfaces.ItemUnpoweredRepeaterStack;
+import org.allaymc.api.item.interfaces.ItemVaultStack;
+import org.allaymc.api.item.interfaces.ItemVerdantFroglightStack;
+import org.allaymc.api.item.interfaces.ItemVexArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemVineStack;
+import org.allaymc.api.item.interfaces.ItemWallBannerStack;
+import org.allaymc.api.item.interfaces.ItemWardArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemWarpedFungusOnAStickStack;
+import org.allaymc.api.item.interfaces.ItemWarpedFungusStack;
+import org.allaymc.api.item.interfaces.ItemWarpedHyphaeStack;
+import org.allaymc.api.item.interfaces.ItemWarpedNyliumStack;
+import org.allaymc.api.item.interfaces.ItemWarpedPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemWarpedRootsStack;
+import org.allaymc.api.item.interfaces.ItemWarpedStemStack;
+import org.allaymc.api.item.interfaces.ItemWarpedWartBlockStack;
+import org.allaymc.api.item.interfaces.ItemWaterlilyStack;
+import org.allaymc.api.item.interfaces.ItemWaxedCopperBulbStack;
+import org.allaymc.api.item.interfaces.ItemWaxedCopperGrateStack;
+import org.allaymc.api.item.interfaces.ItemWaxedExposedCopperBulbStack;
+import org.allaymc.api.item.interfaces.ItemWaxedExposedCopperGrateStack;
+import org.allaymc.api.item.interfaces.ItemWaxedOxidizedCopperBulbStack;
+import org.allaymc.api.item.interfaces.ItemWaxedOxidizedCopperGrateStack;
+import org.allaymc.api.item.interfaces.ItemWaxedWeatheredCopperBulbStack;
+import org.allaymc.api.item.interfaces.ItemWaxedWeatheredCopperGrateStack;
+import org.allaymc.api.item.interfaces.ItemWayfinderArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemWeatheredCopperBulbStack;
+import org.allaymc.api.item.interfaces.ItemWeatheredCopperGrateStack;
+import org.allaymc.api.item.interfaces.ItemWebStack;
+import org.allaymc.api.item.interfaces.ItemWeepingVinesStack;
+import org.allaymc.api.item.interfaces.ItemWheatSeedsStack;
+import org.allaymc.api.item.interfaces.ItemWheatStack;
+import org.allaymc.api.item.interfaces.ItemWhiteDyeStack;
+import org.allaymc.api.item.interfaces.ItemWhiteTulipStack;
+import org.allaymc.api.item.interfaces.ItemWildArmorTrimSmithingTemplateStack;
+import org.allaymc.api.item.interfaces.ItemWindChargeStack;
+import org.allaymc.api.item.interfaces.ItemWitherRoseStack;
+import org.allaymc.api.item.interfaces.ItemWolfArmorStack;
+import org.allaymc.api.item.interfaces.ItemWoodenPressurePlateStack;
+import org.allaymc.api.item.interfaces.ItemWritableBookStack;
+import org.allaymc.api.item.interfaces.ItemWrittenBookStack;
+import org.allaymc.api.item.interfaces.ItemYellowDyeStack;
+import org.allaymc.api.item.interfaces.anvil.ItemAnvilStack;
+import org.allaymc.api.item.interfaces.anvil.ItemChippedAnvilStack;
+import org.allaymc.api.item.interfaces.anvil.ItemDamagedAnvilStack;
+import org.allaymc.api.item.interfaces.anvil.ItemDeprecatedAnvilStack;
+import org.allaymc.api.item.interfaces.axe.ItemDiamondAxeStack;
+import org.allaymc.api.item.interfaces.axe.ItemGoldenAxeStack;
+import org.allaymc.api.item.interfaces.axe.ItemIronAxeStack;
+import org.allaymc.api.item.interfaces.axe.ItemNetheriteAxeStack;
+import org.allaymc.api.item.interfaces.axe.ItemStoneAxeStack;
+import org.allaymc.api.item.interfaces.axe.ItemWoodenAxeStack;
+import org.allaymc.api.item.interfaces.boat.ItemAcaciaBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemAcaciaChestBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemBirchBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemBirchChestBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemCherryBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemCherryChestBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemChestBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemDarkOakBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemDarkOakChestBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemJungleBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemJungleChestBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemMangroveBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemMangroveChestBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemOakBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemOakChestBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemSpruceBoatStack;
+import org.allaymc.api.item.interfaces.boat.ItemSpruceChestBoatStack;
+import org.allaymc.api.item.interfaces.boots.ItemChainmailBootsStack;
+import org.allaymc.api.item.interfaces.boots.ItemDiamondBootsStack;
+import org.allaymc.api.item.interfaces.boots.ItemGoldenBootsStack;
+import org.allaymc.api.item.interfaces.boots.ItemIronBootsStack;
+import org.allaymc.api.item.interfaces.boots.ItemLeatherBootsStack;
+import org.allaymc.api.item.interfaces.boots.ItemNetheriteBootsStack;
+import org.allaymc.api.item.interfaces.bricks.ItemChiseledNetherBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemChiseledStoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemChiseledTuffBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemCrackedDeepslateBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemCrackedNetherBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemCrackedPolishedBlackstoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemCrackedStoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemDeepslateBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemEndBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemInfestedChiseledStoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemInfestedCrackedStoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemInfestedMossyStoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemInfestedStoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemMossyStoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemMudBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemPolishedBlackstoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemPrismarineBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemQuartzBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemStoneBricksStack;
+import org.allaymc.api.item.interfaces.bricks.ItemTuffBricksStack;
+import org.allaymc.api.item.interfaces.bucket.ItemAxolotlBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemCodBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemLavaBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemMilkBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemPowderSnowBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemPufferfishBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemSalmonBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemTadpoleBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemTropicalFishBucketStack;
+import org.allaymc.api.item.interfaces.bucket.ItemWaterBucketStack;
+import org.allaymc.api.item.interfaces.button.ItemAcaciaButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemBambooButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemBirchButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemCherryButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemCrimsonButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemDarkOakButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemJungleButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemMangroveButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemPolishedBlackstoneButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemSpruceButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemStoneButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemWarpedButtonStack;
+import org.allaymc.api.item.interfaces.button.ItemWoodenButtonStack;
+import org.allaymc.api.item.interfaces.candle.ItemBlackCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemBlueCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemBrownCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemCyanCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemGrayCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemGreenCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemLightBlueCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemLightGrayCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemLimeCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemMagentaCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemOrangeCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemPinkCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemPurpleCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemRedCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemWhiteCandleStack;
+import org.allaymc.api.item.interfaces.candle.ItemYellowCandleStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemBlackCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemBlueCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemBrownCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemCyanCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemGrayCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemGreenCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemLightBlueCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemLightGrayCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemLimeCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemMagentaCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemOrangeCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemPinkCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemPurpleCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemRedCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemWhiteCandleCakeStack;
+import org.allaymc.api.item.interfaces.candlecake.ItemYellowCandleCakeStack;
+import org.allaymc.api.item.interfaces.carpet.ItemBlackCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemBlueCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemBrownCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemCyanCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemGrayCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemGreenCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemLightBlueCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemLightGrayCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemLimeCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemMagentaCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemMossCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemOrangeCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemPinkCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemPurpleCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemRedCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemWhiteCarpetStack;
+import org.allaymc.api.item.interfaces.carpet.ItemYellowCarpetStack;
+import org.allaymc.api.item.interfaces.chestplate.ItemChainmailChestplateStack;
+import org.allaymc.api.item.interfaces.chestplate.ItemDiamondChestplateStack;
+import org.allaymc.api.item.interfaces.chestplate.ItemGoldenChestplateStack;
+import org.allaymc.api.item.interfaces.chestplate.ItemIronChestplateStack;
+import org.allaymc.api.item.interfaces.chestplate.ItemLeatherChestplateStack;
+import org.allaymc.api.item.interfaces.chestplate.ItemNetheriteChestplateStack;
+import org.allaymc.api.item.interfaces.concrete.ItemBlackConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemBlueConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemBrownConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemCyanConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemGrayConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemGreenConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemLightBlueConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemLightGrayConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemLimeConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemMagentaConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemOrangeConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemPinkConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemPurpleConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemRedConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemWhiteConcreteStack;
+import org.allaymc.api.item.interfaces.concrete.ItemYellowConcreteStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemBlackConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemBlueConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemBrownConcretePowderStack;
 import org.allaymc.api.item.interfaces.concretepowder.ItemConcretePowderStack;
-import org.allaymc.api.item.interfaces.concretepowder.*;
-import org.allaymc.api.item.interfaces.copper.*;
-import org.allaymc.api.item.interfaces.coral.*;
+import org.allaymc.api.item.interfaces.concretepowder.ItemCyanConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemGrayConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemGreenConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemLightBlueConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemLightGrayConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemLimeConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemMagentaConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemOrangeConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemPinkConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemPurpleConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemRedConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemWhiteConcretePowderStack;
+import org.allaymc.api.item.interfaces.concretepowder.ItemYellowConcretePowderStack;
+import org.allaymc.api.item.interfaces.copper.ItemChiseledCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemCutCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemExposedChiseledCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemExposedCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemExposedCutCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemOxidizedChiseledCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemOxidizedCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemOxidizedCutCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemRawCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedChiseledCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedCutCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedExposedChiseledCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedExposedCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedExposedCutCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedOxidizedChiseledCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedOxidizedCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedOxidizedCutCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedWeatheredChiseledCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedWeatheredCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWaxedWeatheredCutCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWeatheredChiseledCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWeatheredCopperStack;
+import org.allaymc.api.item.interfaces.copper.ItemWeatheredCutCopperStack;
+import org.allaymc.api.item.interfaces.coral.ItemBrainCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemBubbleCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemDeadBrainCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemDeadBubbleCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemDeadFireCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemDeadHornCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemDeadTubeCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemFireCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemHornCoralStack;
+import org.allaymc.api.item.interfaces.coral.ItemTubeCoralStack;
 import org.allaymc.api.item.interfaces.coralblock.ItemBrainCoralBlockStack;
 import org.allaymc.api.item.interfaces.coralblock.ItemBubbleCoralBlockStack;
 import org.allaymc.api.item.interfaces.coralblock.ItemCoralBlockStack;
@@ -26,52 +845,859 @@ import org.allaymc.api.item.interfaces.coralblock.ItemDeadHornCoralBlockStack;
 import org.allaymc.api.item.interfaces.coralblock.ItemDeadTubeCoralBlockStack;
 import org.allaymc.api.item.interfaces.coralblock.ItemFireCoralBlockStack;
 import org.allaymc.api.item.interfaces.coralblock.ItemHornCoralBlockStack;
-import org.allaymc.api.item.interfaces.coralblock.*;
-import org.allaymc.api.item.interfaces.coralfan.*;
-import org.allaymc.api.item.interfaces.door.*;
-import org.allaymc.api.item.interfaces.egg.*;
-import org.allaymc.api.item.interfaces.element.*;
-import org.allaymc.api.item.interfaces.fence.*;
-import org.allaymc.api.item.interfaces.fencegate.*;
+import org.allaymc.api.item.interfaces.coralblock.ItemTubeCoralBlockStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemBrainCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemBubbleCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemCoralFanDeadStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadBrainCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadBubbleCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadFireCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadHornCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemDeadTubeCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemFireCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemHornCoralFanStack;
+import org.allaymc.api.item.interfaces.coralfan.ItemTubeCoralFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemBrainCoralWallFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemBubbleCoralWallFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemDeadBrainCoralWallFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemDeadBubbleCoralWallFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemDeadFireCoralWallFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemDeadHornCoralWallFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemDeadTubeCoralWallFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemFireCoralWallFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemHornCoralWallFanStack;
+import org.allaymc.api.item.interfaces.coralwallfan.ItemTubeCoralWallFanStack;
+import org.allaymc.api.item.interfaces.dirt.ItemCoarseDirtStack;
+import org.allaymc.api.item.interfaces.dirt.ItemDirtStack;
+import org.allaymc.api.item.interfaces.door.ItemAcaciaDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemBambooDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemBirchDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemCherryDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemCopperDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemCrimsonDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemDarkOakDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemExposedCopperDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemIronDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemAcaciaDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemBirchDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemCrimsonDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemDarkOakDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemIronDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemJungleDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemMangroveDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemSpruceDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemWarpedDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemItemWoodenDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemJungleDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemMangroveDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemOxidizedCopperDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemSpruceDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemWarpedDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemWaxedCopperDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemWaxedExposedCopperDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemWaxedOxidizedCopperDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemWaxedWeatheredCopperDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemWeatheredCopperDoorStack;
+import org.allaymc.api.item.interfaces.door.ItemWoodenDoorStack;
+import org.allaymc.api.item.interfaces.egg.ItemAgentSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemAllaySpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemArmadilloSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemAxolotlSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemBatSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemBeeSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemBlazeSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemBoggedSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemBreezeSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemCamelSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemCatSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemCaveSpiderSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemChickenSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemCodSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemCowSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemCreeperSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemDolphinSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemDonkeySpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemDragonEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemDrownedSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemElderGuardianSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemEnderDragonSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemEndermanSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemEndermiteSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemEvokerSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemFoxSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemFrogSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemGhastSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemGlowSquidSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemGoatSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemGuardianSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemHoglinSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemHorseSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemHuskSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemIronGolemSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemLlamaSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemMagmaCubeSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemMonsterEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemMooshroomSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemMuleSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemNpcSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemOcelotSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemPandaSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemParrotSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemPhantomSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemPigSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemPiglinBruteSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemPiglinSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemPillagerSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemPolarBearSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemPufferfishSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemRabbitSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemRavagerSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSalmonSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSheepSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemShulkerSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSilverfishSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSkeletonHorseSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSkeletonSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSlimeSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSnifferEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSnifferSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSnowGolemSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSpiderSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemSquidSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemStraySpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemStriderSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemTadpoleSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemTraderLlamaSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemTropicalFishSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemTurtleEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemTurtleSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemVexSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemVillagerSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemVindicatorSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemWanderingTraderSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemWardenSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemWitchSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemWitherSkeletonSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemWitherSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemWolfSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemZoglinSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemZombieHorseSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemZombiePigmanSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemZombieSpawnEggStack;
+import org.allaymc.api.item.interfaces.egg.ItemZombieVillagerSpawnEggStack;
+import org.allaymc.api.item.interfaces.element.ItemElement0Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement100Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement101Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement102Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement103Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement104Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement105Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement106Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement107Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement108Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement109Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement10Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement110Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement111Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement112Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement113Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement114Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement115Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement116Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement117Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement118Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement11Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement12Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement13Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement14Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement15Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement16Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement17Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement18Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement19Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement1Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement20Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement21Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement22Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement23Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement24Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement25Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement26Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement27Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement28Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement29Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement2Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement30Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement31Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement32Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement33Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement34Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement35Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement36Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement37Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement38Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement39Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement3Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement40Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement41Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement42Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement43Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement44Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement45Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement46Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement47Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement48Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement49Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement4Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement50Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement51Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement52Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement53Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement54Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement55Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement56Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement57Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement58Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement59Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement5Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement60Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement61Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement62Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement63Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement64Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement65Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement66Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement67Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement68Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement69Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement6Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement70Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement71Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement72Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement73Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement74Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement75Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement76Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement77Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement78Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement79Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement7Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement80Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement81Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement82Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement83Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement84Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement85Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement86Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement87Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement88Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement89Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement8Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement90Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement91Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement92Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement93Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement94Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement95Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement96Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement97Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement98Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement99Stack;
+import org.allaymc.api.item.interfaces.element.ItemElement9Stack;
+import org.allaymc.api.item.interfaces.fence.ItemAcaciaFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemBambooFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemBirchFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemCherryFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemCrimsonFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemDarkOakFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemJungleFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemMangroveFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemNetherBrickFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemOakFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemSpruceFenceStack;
+import org.allaymc.api.item.interfaces.fence.ItemWarpedFenceStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemAcaciaFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemBambooFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemBirchFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemCherryFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemCrimsonFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemDarkOakFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemJungleFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemMangroveFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemSpruceFenceGateStack;
+import org.allaymc.api.item.interfaces.fencegate.ItemWarpedFenceGateStack;
 import org.allaymc.api.item.interfaces.glass.ItemGlassStack;
 import org.allaymc.api.item.interfaces.glass.ItemHardGlassStack;
 import org.allaymc.api.item.interfaces.glass.ItemTintedGlassStack;
 import org.allaymc.api.item.interfaces.glasspane.ItemGlassPaneStack;
 import org.allaymc.api.item.interfaces.glasspane.ItemHardGlassPaneStack;
-import org.allaymc.api.item.interfaces.hangingsign.*;
-import org.allaymc.api.item.interfaces.helmet.*;
-import org.allaymc.api.item.interfaces.hoe.*;
-import org.allaymc.api.item.interfaces.leaves.*;
-import org.allaymc.api.item.interfaces.leggings.*;
+import org.allaymc.api.item.interfaces.hangingsign.ItemAcaciaHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemBambooHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemBirchHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemCherryHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemCrimsonHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemDarkOakHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemJungleHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemMangroveHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemOakHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemSpruceHangingSignStack;
+import org.allaymc.api.item.interfaces.hangingsign.ItemWarpedHangingSignStack;
+import org.allaymc.api.item.interfaces.helmet.ItemChainmailHelmetStack;
+import org.allaymc.api.item.interfaces.helmet.ItemDiamondHelmetStack;
+import org.allaymc.api.item.interfaces.helmet.ItemGoldenHelmetStack;
+import org.allaymc.api.item.interfaces.helmet.ItemIronHelmetStack;
+import org.allaymc.api.item.interfaces.helmet.ItemLeatherHelmetStack;
+import org.allaymc.api.item.interfaces.helmet.ItemNetheriteHelmetStack;
+import org.allaymc.api.item.interfaces.helmet.ItemTurtleHelmetStack;
+import org.allaymc.api.item.interfaces.hoe.ItemDiamondHoeStack;
+import org.allaymc.api.item.interfaces.hoe.ItemGoldenHoeStack;
+import org.allaymc.api.item.interfaces.hoe.ItemIronHoeStack;
+import org.allaymc.api.item.interfaces.hoe.ItemNetheriteHoeStack;
+import org.allaymc.api.item.interfaces.hoe.ItemStoneHoeStack;
+import org.allaymc.api.item.interfaces.hoe.ItemWoodenHoeStack;
+import org.allaymc.api.item.interfaces.leaves.ItemAcaciaLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemAzaleaLeavesFloweredStack;
+import org.allaymc.api.item.interfaces.leaves.ItemAzaleaLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemBirchLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemCherryLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemDarkOakLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemJungleLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemLeaves2Stack;
+import org.allaymc.api.item.interfaces.leaves.ItemLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemMangroveLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemOakLeavesStack;
+import org.allaymc.api.item.interfaces.leaves.ItemSpruceLeavesStack;
+import org.allaymc.api.item.interfaces.leggings.ItemChainmailLeggingsStack;
+import org.allaymc.api.item.interfaces.leggings.ItemDiamondLeggingsStack;
+import org.allaymc.api.item.interfaces.leggings.ItemGoldenLeggingsStack;
+import org.allaymc.api.item.interfaces.leggings.ItemIronLeggingsStack;
+import org.allaymc.api.item.interfaces.leggings.ItemLeatherLeggingsStack;
+import org.allaymc.api.item.interfaces.leggings.ItemNetheriteLeggingsStack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock0Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock10Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock11Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock12Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock13Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock14Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock15Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock1Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock2Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock3Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock4Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock5Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock6Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock7Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock8Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlock9Stack;
+import org.allaymc.api.item.interfaces.lightblock.ItemLightBlockStack;
 import org.allaymc.api.item.interfaces.liquid.ItemFlowingLavaStack;
 import org.allaymc.api.item.interfaces.liquid.ItemFlowingWaterStack;
 import org.allaymc.api.item.interfaces.liquid.ItemLavaStack;
 import org.allaymc.api.item.interfaces.liquid.ItemWaterStack;
-import org.allaymc.api.item.interfaces.log.*;
-import org.allaymc.api.item.interfaces.minecart.*;
-import org.allaymc.api.item.interfaces.musicdisc.*;
-import org.allaymc.api.item.interfaces.pickaxe.*;
+import org.allaymc.api.item.interfaces.log.ItemAcaciaLogStack;
+import org.allaymc.api.item.interfaces.log.ItemBirchLogStack;
+import org.allaymc.api.item.interfaces.log.ItemCherryLogStack;
+import org.allaymc.api.item.interfaces.log.ItemDarkOakLogStack;
+import org.allaymc.api.item.interfaces.log.ItemJungleLogStack;
+import org.allaymc.api.item.interfaces.log.ItemLog2Stack;
+import org.allaymc.api.item.interfaces.log.ItemLogStack;
+import org.allaymc.api.item.interfaces.log.ItemMangroveLogStack;
+import org.allaymc.api.item.interfaces.log.ItemOakLogStack;
+import org.allaymc.api.item.interfaces.log.ItemSpruceLogStack;
+import org.allaymc.api.item.interfaces.log.ItemStrippedAcaciaLogStack;
+import org.allaymc.api.item.interfaces.log.ItemStrippedBirchLogStack;
+import org.allaymc.api.item.interfaces.log.ItemStrippedCherryLogStack;
+import org.allaymc.api.item.interfaces.log.ItemStrippedDarkOakLogStack;
+import org.allaymc.api.item.interfaces.log.ItemStrippedJungleLogStack;
+import org.allaymc.api.item.interfaces.log.ItemStrippedMangroveLogStack;
+import org.allaymc.api.item.interfaces.log.ItemStrippedOakLogStack;
+import org.allaymc.api.item.interfaces.log.ItemStrippedSpruceLogStack;
+import org.allaymc.api.item.interfaces.minecart.ItemChestMinecartStack;
+import org.allaymc.api.item.interfaces.minecart.ItemCommandBlockMinecartStack;
+import org.allaymc.api.item.interfaces.minecart.ItemHopperMinecartStack;
+import org.allaymc.api.item.interfaces.minecart.ItemMinecartStack;
+import org.allaymc.api.item.interfaces.minecart.ItemTntMinecartStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDisc11Stack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDisc13Stack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDisc5Stack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscBlocksStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscCatStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscChirpStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscCreatorMusicBoxStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscCreatorStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscFarStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscMallStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscMellohiStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscOthersideStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscPigstepStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscPrecipiceStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscRelicStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscStalStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscStradStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscWaitStack;
+import org.allaymc.api.item.interfaces.musicdisc.ItemMusicDiscWardStack;
+import org.allaymc.api.item.interfaces.pickaxe.ItemDiamondPickaxeStack;
+import org.allaymc.api.item.interfaces.pickaxe.ItemGoldenPickaxeStack;
+import org.allaymc.api.item.interfaces.pickaxe.ItemIronPickaxeStack;
+import org.allaymc.api.item.interfaces.pickaxe.ItemNetheritePickaxeStack;
+import org.allaymc.api.item.interfaces.pickaxe.ItemStonePickaxeStack;
+import org.allaymc.api.item.interfaces.pickaxe.ItemWoodenPickaxeStack;
 import org.allaymc.api.item.interfaces.piston.ItemPistonArmCollisionStack;
 import org.allaymc.api.item.interfaces.piston.ItemPistonStack;
 import org.allaymc.api.item.interfaces.piston.ItemStickyPistonArmCollisionStack;
 import org.allaymc.api.item.interfaces.piston.ItemStickyPistonStack;
-import org.allaymc.api.item.interfaces.planks.*;
-import org.allaymc.api.item.interfaces.sapling.*;
-import org.allaymc.api.item.interfaces.shovel.*;
-import org.allaymc.api.item.interfaces.shulkerbox.*;
-import org.allaymc.api.item.interfaces.sign.*;
-import org.allaymc.api.item.interfaces.slab.*;
-import org.allaymc.api.item.interfaces.stainedglass.*;
-import org.allaymc.api.item.interfaces.stainedglasspane.*;
-import org.allaymc.api.item.interfaces.stairs.*;
-import org.allaymc.api.item.interfaces.standingsign.*;
-import org.allaymc.api.item.interfaces.sword.*;
-import org.allaymc.api.item.interfaces.terracotta.*;
-import org.allaymc.api.item.interfaces.trapdoor.*;
-import org.allaymc.api.item.interfaces.wall.*;
-import org.allaymc.api.item.interfaces.wallsign.*;
-import org.allaymc.api.item.interfaces.wood.*;
-import org.allaymc.api.item.interfaces.wool.*;
+import org.allaymc.api.item.interfaces.planks.ItemAcaciaPlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemBambooPlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemBirchPlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemCherryPlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemCrimsonPlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemDarkOakPlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemJunglePlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemMangrovePlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemOakPlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemPlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemSprucePlanksStack;
+import org.allaymc.api.item.interfaces.planks.ItemWarpedPlanksStack;
+import org.allaymc.api.item.interfaces.sand.ItemRedSandStack;
+import org.allaymc.api.item.interfaces.sand.ItemSandStack;
+import org.allaymc.api.item.interfaces.sand.ItemSoulSandStack;
+import org.allaymc.api.item.interfaces.sand.ItemSuspiciousSandStack;
+import org.allaymc.api.item.interfaces.sandstone.ItemChiseledRedSandstoneStack;
+import org.allaymc.api.item.interfaces.sandstone.ItemChiseledSandstoneStack;
+import org.allaymc.api.item.interfaces.sandstone.ItemCutRedSandstoneStack;
+import org.allaymc.api.item.interfaces.sandstone.ItemCutSandstoneStack;
+import org.allaymc.api.item.interfaces.sandstone.ItemRedSandstoneStack;
+import org.allaymc.api.item.interfaces.sandstone.ItemSandstoneStack;
+import org.allaymc.api.item.interfaces.sandstone.ItemSmoothRedSandstoneStack;
+import org.allaymc.api.item.interfaces.sandstone.ItemSmoothSandstoneStack;
+import org.allaymc.api.item.interfaces.sapling.ItemAcaciaSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemBambooSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemBirchSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemCherrySaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemDarkOakSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemJungleSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemOakSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemSaplingStack;
+import org.allaymc.api.item.interfaces.sapling.ItemSpruceSaplingStack;
+import org.allaymc.api.item.interfaces.shovel.ItemDiamondShovelStack;
+import org.allaymc.api.item.interfaces.shovel.ItemGoldenShovelStack;
+import org.allaymc.api.item.interfaces.shovel.ItemIronShovelStack;
+import org.allaymc.api.item.interfaces.shovel.ItemNetheriteShovelStack;
+import org.allaymc.api.item.interfaces.shovel.ItemStoneShovelStack;
+import org.allaymc.api.item.interfaces.shovel.ItemWoodenShovelStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemBlackShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemBlueShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemBrownShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemCyanShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemGrayShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemGreenShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemLightBlueShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemLightGrayShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemLimeShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemMagentaShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemOrangeShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemPinkShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemPurpleShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemRedShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemUndyedShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemWhiteShulkerBoxStack;
+import org.allaymc.api.item.interfaces.shulkerbox.ItemYellowShulkerBoxStack;
+import org.allaymc.api.item.interfaces.sign.ItemAcaciaSignStack;
+import org.allaymc.api.item.interfaces.sign.ItemBambooSignStack;
+import org.allaymc.api.item.interfaces.sign.ItemBirchSignStack;
+import org.allaymc.api.item.interfaces.sign.ItemCherrySignStack;
+import org.allaymc.api.item.interfaces.sign.ItemCrimsonSignStack;
+import org.allaymc.api.item.interfaces.sign.ItemDarkOakSignStack;
+import org.allaymc.api.item.interfaces.sign.ItemJungleSignStack;
+import org.allaymc.api.item.interfaces.sign.ItemMangroveSignStack;
+import org.allaymc.api.item.interfaces.sign.ItemOakSignStack;
+import org.allaymc.api.item.interfaces.sign.ItemSpruceSignStack;
+import org.allaymc.api.item.interfaces.sign.ItemWarpedSignStack;
+import org.allaymc.api.item.interfaces.slab.ItemAcaciaDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemAcaciaSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemAndesiteDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemAndesiteSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBambooDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBambooMosaicDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBambooMosaicSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBambooSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBirchDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBirchSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBlackstoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBlackstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCherryDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCherrySlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCobbledDeepslateDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCobbledDeepslateSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCobblestoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCobblestoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCrimsonDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCrimsonSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCutRedSandstoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCutRedSandstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCutSandstoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemCutSandstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDarkOakDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDarkOakSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDarkPrismarineDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDarkPrismarineSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDeepslateBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDeepslateBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDeepslateTileDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDeepslateTileSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDioriteDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDioriteSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlab2Stack;
+import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlab3Stack;
+import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlab4Stack;
+import org.allaymc.api.item.interfaces.slab.ItemDoubleStoneBlockSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemEndStoneBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemEndStoneBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemExposedCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemExposedDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemGraniteDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemGraniteSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemJungleDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemJungleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemMangroveDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemMangroveSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemMossyCobblestoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemMossyCobblestoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemMossyStoneBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemMossyStoneBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemMudBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemMudBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemNetherBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemNetherBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemNormalStoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemNormalStoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemOakDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemOakSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemOxidizedCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemOxidizedDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPetrifiedOakDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPetrifiedOakSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedAndesiteDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedAndesiteSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedBlackstoneBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedBlackstoneBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedBlackstoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedBlackstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedDeepslateDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedDeepslateSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedDioriteDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedDioriteSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedGraniteDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedGraniteSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedTuffDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPolishedTuffSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPrismarineBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPrismarineBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPrismarineDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPrismarineSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPurpurDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemPurpurSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemQuartzDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemQuartzSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemRedNetherBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemRedNetherBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemRedSandstoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemRedSandstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSandstoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSandstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSmoothQuartzDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSmoothQuartzSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSmoothRedSandstoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSmoothRedSandstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSmoothSandstoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSmoothSandstoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSmoothStoneDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSmoothStoneSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSpruceDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemSpruceSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab2Stack;
+import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab3Stack;
+import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlab4Stack;
+import org.allaymc.api.item.interfaces.slab.ItemStoneBlockSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemStoneBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemStoneBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemTuffBrickDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemTuffBrickSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemTuffDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemTuffSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWarpedDoubleSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWarpedSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWaxedCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWaxedDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWaxedExposedCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWaxedExposedDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWaxedOxidizedCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWaxedOxidizedDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWaxedWeatheredCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWaxedWeatheredDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWeatheredCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWeatheredDoubleCutCopperSlabStack;
+import org.allaymc.api.item.interfaces.slab.ItemWoodenSlabStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemBlackStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemBlueStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemBrownStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemCyanStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemGrayStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemGreenStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardBlackStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardBlueStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardBrownStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardCyanStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardGrayStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardGreenStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardLightBlueStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardLightGrayStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardLimeStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardMagentaStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardOrangeStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardPinkStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardPurpleStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardRedStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardWhiteStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemHardYellowStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemLightBlueStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemLightGrayStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemLimeStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemMagentaStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemOrangeStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemPinkStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemPurpleStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemRedStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemWhiteStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglass.ItemYellowStainedGlassStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemBlackStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemBlueStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemBrownStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemCyanStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemGrayStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemGreenStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardBlackStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardBlueStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardBrownStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardCyanStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardGrayStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardGreenStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardLightBlueStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardLightGrayStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardLimeStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardMagentaStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardOrangeStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardPinkStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardPurpleStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardRedStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardWhiteStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemHardYellowStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemLightBlueStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemLightGrayStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemLimeStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemMagentaStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemOrangeStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemPinkStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemPurpleStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemRedStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemWhiteStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stainedglasspane.ItemYellowStainedGlassPaneStack;
+import org.allaymc.api.item.interfaces.stairs.ItemAcaciaStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemAndesiteStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemBambooMosaicStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemBambooStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemBirchStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemBlackstoneStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemCherryStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemCobbledDeepslateStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemCrimsonStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemCutCopperStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemDarkOakStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemDarkPrismarineStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemDeepslateBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemDeepslateTileStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemDioriteStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemEndBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemExposedCutCopperStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemGraniteStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemJungleStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemMangroveStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemMossyCobblestoneStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemMossyStoneBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemMudBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemNetherBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemNormalStoneStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemOakStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemOxidizedCutCopperStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPolishedAndesiteStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPolishedBlackstoneBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPolishedBlackstoneStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPolishedDeepslateStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPolishedDioriteStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPolishedGraniteStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPolishedTuffStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPrismarineBricksStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPrismarineStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemPurpurStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemQuartzStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemRedNetherBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemRedSandstoneStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemSandstoneStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemSmoothQuartzStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemSmoothRedSandstoneStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemSmoothSandstoneStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemSpruceStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemStoneBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemStoneStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemTuffBrickStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemTuffStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemWarpedStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemWaxedCutCopperStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemWaxedExposedCutCopperStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemWaxedOxidizedCutCopperStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemWaxedWeatheredCutCopperStairsStack;
+import org.allaymc.api.item.interfaces.stairs.ItemWeatheredCutCopperStairsStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemAcaciaStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemBambooStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemBirchStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemCherryStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemCrimsonStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemDarkoakStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemJungleStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemMangroveStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemSpruceStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemStandingSignStack;
+import org.allaymc.api.item.interfaces.standingsign.ItemWarpedStandingSignStack;
+import org.allaymc.api.item.interfaces.sword.ItemDiamondSwordStack;
+import org.allaymc.api.item.interfaces.sword.ItemGoldenSwordStack;
+import org.allaymc.api.item.interfaces.sword.ItemIronSwordStack;
+import org.allaymc.api.item.interfaces.sword.ItemNetheriteSwordStack;
+import org.allaymc.api.item.interfaces.sword.ItemStoneSwordStack;
+import org.allaymc.api.item.interfaces.sword.ItemWoodenSwordStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemBlackGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemBlackTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemBlueGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemBlueTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemBrownGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemBrownTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemCyanGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemCyanTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemGrayGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemGrayTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemGreenGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemGreenTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemLightBlueGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemLightBlueTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemLightGrayTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemLimeGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemLimeTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemMagentaGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemMagentaTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemOrangeGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemOrangeTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemPinkGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemPinkTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemPurpleGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemPurpleTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemRedGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemRedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemSilverGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemWhiteGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemWhiteTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemYellowGlazedTerracottaStack;
+import org.allaymc.api.item.interfaces.terracotta.ItemYellowTerracottaStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemAcaciaTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemBambooTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemBirchTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemCherryTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemCopperTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemCrimsonTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemDarkOakTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemExposedCopperTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemIronTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemJungleTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemMangroveTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemOxidizedCopperTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemSpruceTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemWarpedTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemWaxedCopperTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemWaxedExposedCopperTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemWaxedOxidizedCopperTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemWaxedWeatheredCopperTrapdoorStack;
+import org.allaymc.api.item.interfaces.trapdoor.ItemWeatheredCopperTrapdoorStack;
+import org.allaymc.api.item.interfaces.wall.ItemBlackstoneWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemCobbledDeepslateWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemCobblestoneWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemDeepslateBrickWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemDeepslateTileWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemMudBrickWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemPolishedBlackstoneBrickWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemPolishedBlackstoneWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemPolishedDeepslateWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemPolishedTuffWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemTuffBrickWallStack;
+import org.allaymc.api.item.interfaces.wall.ItemTuffWallStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemAcaciaWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemBambooWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemBirchWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemCherryWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemCrimsonWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemDarkoakWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemJungleWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemMangroveWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemSpruceWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemWallSignStack;
+import org.allaymc.api.item.interfaces.wallsign.ItemWarpedWallSignStack;
+import org.allaymc.api.item.interfaces.wood.ItemAcaciaWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemBirchWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemCherryWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemDarkOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemJungleWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemMangroveWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemSpruceWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedAcaciaWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedBirchWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedCherryWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedDarkOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedJungleWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedMangroveWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedOakWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemStrippedSpruceWoodStack;
+import org.allaymc.api.item.interfaces.wood.ItemWoodStack;
+import org.allaymc.api.item.interfaces.wool.ItemBlackWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemBlueWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemBrownWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemCyanWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemGrayWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemGreenWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemLightBlueWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemLightGrayWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemLimeWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemMagentaWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemOrangeWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemPinkWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemPurpleWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemRedWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemWhiteWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemWoolStack;
+import org.allaymc.api.item.interfaces.wool.ItemYellowWoolStack;
 
 public final class ItemTypes {
     public static ItemType<ItemAcaciaBoatStack> ACACIA_BOAT;
@@ -135,6 +1761,10 @@ public final class ItemTypes {
     public static ItemType<ItemAncientDebrisStack> ANCIENT_DEBRIS;
 
     public static ItemType<ItemAndesiteStack> ANDESITE;
+
+    public static ItemType<ItemAndesiteDoubleSlabStack> ANDESITE_DOUBLE_SLAB;
+
+    public static ItemType<ItemAndesiteSlabStack> ANDESITE_SLAB;
 
     public static ItemType<ItemAndesiteStairsStack> ANDESITE_STAIRS;
 
@@ -398,6 +2028,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemBrainCoralFanStack> BRAIN_CORAL_FAN;
 
+    public static ItemType<ItemBrainCoralWallFanStack> BRAIN_CORAL_WALL_FAN;
+
     public static ItemType<ItemBreadStack> BREAD;
 
     public static ItemType<ItemBreezeRodStack> BREEZE_ROD;
@@ -411,6 +2043,8 @@ public final class ItemTypes {
     public static ItemType<ItemBrickStack> BRICK;
 
     public static ItemType<ItemBrickBlockStack> BRICK_BLOCK;
+
+    public static ItemType<ItemBrickDoubleSlabStack> BRICK_DOUBLE_SLAB;
 
     public static ItemType<ItemBrickSlabStack> BRICK_SLAB;
 
@@ -453,6 +2087,8 @@ public final class ItemTypes {
     public static ItemType<ItemBubbleCoralBlockStack> BUBBLE_CORAL_BLOCK;
 
     public static ItemType<ItemBubbleCoralFanStack> BUBBLE_CORAL_FAN;
+
+    public static ItemType<ItemBubbleCoralWallFanStack> BUBBLE_CORAL_WALL_FAN;
 
     public static ItemType<ItemBucketStack> BUCKET;
 
@@ -570,6 +2206,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemChickenSpawnEggStack> CHICKEN_SPAWN_EGG;
 
+    public static ItemType<ItemChippedAnvilStack> CHIPPED_ANVIL;
+
     public static ItemType<ItemChiseledBookshelfStack> CHISELED_BOOKSHELF;
 
     public static ItemType<ItemChiseledCopperStack> CHISELED_COPPER;
@@ -579,6 +2217,14 @@ public final class ItemTypes {
     public static ItemType<ItemChiseledNetherBricksStack> CHISELED_NETHER_BRICKS;
 
     public static ItemType<ItemChiseledPolishedBlackstoneStack> CHISELED_POLISHED_BLACKSTONE;
+
+    public static ItemType<ItemChiseledQuartzBlockStack> CHISELED_QUARTZ_BLOCK;
+
+    public static ItemType<ItemChiseledRedSandstoneStack> CHISELED_RED_SANDSTONE;
+
+    public static ItemType<ItemChiseledSandstoneStack> CHISELED_SANDSTONE;
+
+    public static ItemType<ItemChiseledStoneBricksStack> CHISELED_STONE_BRICKS;
 
     public static ItemType<ItemChiseledTuffStack> CHISELED_TUFF;
 
@@ -604,6 +2250,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemCoalOreStack> COAL_ORE;
 
+    public static ItemType<ItemCoarseDirtStack> COARSE_DIRT;
+
     public static ItemType<ItemCoastArmorTrimSmithingTemplateStack> COAST_ARMOR_TRIM_SMITHING_TEMPLATE;
 
     public static ItemType<ItemCobbledDeepslateStack> COBBLED_DEEPSLATE;
@@ -617,6 +2265,8 @@ public final class ItemTypes {
     public static ItemType<ItemCobbledDeepslateWallStack> COBBLED_DEEPSLATE_WALL;
 
     public static ItemType<ItemCobblestoneStack> COBBLESTONE;
+
+    public static ItemType<ItemCobblestoneDoubleSlabStack> COBBLESTONE_DOUBLE_SLAB;
 
     public static ItemType<ItemCobblestoneSlabStack> COBBLESTONE_SLAB;
 
@@ -692,12 +2342,6 @@ public final class ItemTypes {
 
     public static ItemType<ItemCoralFanDeadStack> CORAL_FAN_DEAD;
 
-    public static ItemType<ItemCoralFanHangStack> CORAL_FAN_HANG;
-
-    public static ItemType<ItemCoralFanHang2Stack> CORAL_FAN_HANG2;
-
-    public static ItemType<ItemCoralFanHang3Stack> CORAL_FAN_HANG3;
-
     public static ItemType<ItemCornflowerStack> CORNFLOWER;
 
     public static ItemType<ItemCowSpawnEggStack> COW_SPAWN_EGG;
@@ -709,6 +2353,8 @@ public final class ItemTypes {
     public static ItemType<ItemCrackedNetherBricksStack> CRACKED_NETHER_BRICKS;
 
     public static ItemType<ItemCrackedPolishedBlackstoneBricksStack> CRACKED_POLISHED_BLACKSTONE_BRICKS;
+
+    public static ItemType<ItemCrackedStoneBricksStack> CRACKED_STONE_BRICKS;
 
     public static ItemType<ItemCrafterStack> CRAFTER;
 
@@ -766,6 +2412,18 @@ public final class ItemTypes {
 
     public static ItemType<ItemCutCopperStairsStack> CUT_COPPER_STAIRS;
 
+    public static ItemType<ItemCutRedSandstoneStack> CUT_RED_SANDSTONE;
+
+    public static ItemType<ItemCutRedSandstoneDoubleSlabStack> CUT_RED_SANDSTONE_DOUBLE_SLAB;
+
+    public static ItemType<ItemCutRedSandstoneSlabStack> CUT_RED_SANDSTONE_SLAB;
+
+    public static ItemType<ItemCutSandstoneStack> CUT_SANDSTONE;
+
+    public static ItemType<ItemCutSandstoneDoubleSlabStack> CUT_SANDSTONE_DOUBLE_SLAB;
+
+    public static ItemType<ItemCutSandstoneSlabStack> CUT_SANDSTONE_SLAB;
+
     public static ItemType<ItemCyanCandleStack> CYAN_CANDLE;
 
     public static ItemType<ItemCyanCandleCakeStack> CYAN_CANDLE_CAKE;
@@ -789,6 +2447,10 @@ public final class ItemTypes {
     public static ItemType<ItemCyanTerracottaStack> CYAN_TERRACOTTA;
 
     public static ItemType<ItemCyanWoolStack> CYAN_WOOL;
+
+    public static ItemType<ItemDamagedAnvilStack> DAMAGED_ANVIL;
+
+    public static ItemType<ItemDandelionStack> DANDELION;
 
     public static ItemType<ItemDangerPotterySherdStack> DANGER_POTTERY_SHERD;
 
@@ -828,6 +2490,12 @@ public final class ItemTypes {
 
     public static ItemType<ItemDarkOakWoodStack> DARK_OAK_WOOD;
 
+    public static ItemType<ItemDarkPrismarineStack> DARK_PRISMARINE;
+
+    public static ItemType<ItemDarkPrismarineDoubleSlabStack> DARK_PRISMARINE_DOUBLE_SLAB;
+
+    public static ItemType<ItemDarkPrismarineSlabStack> DARK_PRISMARINE_SLAB;
+
     public static ItemType<ItemDarkPrismarineStairsStack> DARK_PRISMARINE_STAIRS;
 
     public static ItemType<ItemDarkoakStandingSignStack> DARKOAK_STANDING_SIGN;
@@ -844,11 +2512,15 @@ public final class ItemTypes {
 
     public static ItemType<ItemDeadBrainCoralFanStack> DEAD_BRAIN_CORAL_FAN;
 
+    public static ItemType<ItemDeadBrainCoralWallFanStack> DEAD_BRAIN_CORAL_WALL_FAN;
+
     public static ItemType<ItemDeadBubbleCoralStack> DEAD_BUBBLE_CORAL;
 
     public static ItemType<ItemDeadBubbleCoralBlockStack> DEAD_BUBBLE_CORAL_BLOCK;
 
     public static ItemType<ItemDeadBubbleCoralFanStack> DEAD_BUBBLE_CORAL_FAN;
+
+    public static ItemType<ItemDeadBubbleCoralWallFanStack> DEAD_BUBBLE_CORAL_WALL_FAN;
 
     public static ItemType<ItemDeadFireCoralStack> DEAD_FIRE_CORAL;
 
@@ -856,17 +2528,23 @@ public final class ItemTypes {
 
     public static ItemType<ItemDeadFireCoralFanStack> DEAD_FIRE_CORAL_FAN;
 
+    public static ItemType<ItemDeadFireCoralWallFanStack> DEAD_FIRE_CORAL_WALL_FAN;
+
     public static ItemType<ItemDeadHornCoralStack> DEAD_HORN_CORAL;
 
     public static ItemType<ItemDeadHornCoralBlockStack> DEAD_HORN_CORAL_BLOCK;
 
     public static ItemType<ItemDeadHornCoralFanStack> DEAD_HORN_CORAL_FAN;
 
+    public static ItemType<ItemDeadHornCoralWallFanStack> DEAD_HORN_CORAL_WALL_FAN;
+
     public static ItemType<ItemDeadTubeCoralStack> DEAD_TUBE_CORAL;
 
     public static ItemType<ItemDeadTubeCoralBlockStack> DEAD_TUBE_CORAL_BLOCK;
 
     public static ItemType<ItemDeadTubeCoralFanStack> DEAD_TUBE_CORAL_FAN;
+
+    public static ItemType<ItemDeadTubeCoralWallFanStack> DEAD_TUBE_CORAL_WALL_FAN;
 
     public static ItemType<ItemDeadbushStack> DEADBUSH;
 
@@ -912,6 +2590,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemDenyStack> DENY;
 
+    public static ItemType<ItemDeprecatedAnvilStack> DEPRECATED_ANVIL;
+
     public static ItemType<ItemDetectorRailStack> DETECTOR_RAIL;
 
     public static ItemType<ItemDiamondStack> DIAMOND;
@@ -941,6 +2621,10 @@ public final class ItemTypes {
     public static ItemType<ItemDiamondSwordStack> DIAMOND_SWORD;
 
     public static ItemType<ItemDioriteStack> DIORITE;
+
+    public static ItemType<ItemDioriteDoubleSlabStack> DIORITE_DOUBLE_SLAB;
+
+    public static ItemType<ItemDioriteSlabStack> DIORITE_SLAB;
 
     public static ItemType<ItemDioriteStairsStack> DIORITE_STAIRS;
 
@@ -1262,6 +2946,10 @@ public final class ItemTypes {
 
     public static ItemType<ItemEndStoneStack> END_STONE;
 
+    public static ItemType<ItemEndStoneBrickDoubleSlabStack> END_STONE_BRICK_DOUBLE_SLAB;
+
+    public static ItemType<ItemEndStoneBrickSlabStack> END_STONE_BRICK_SLAB;
+
     public static ItemType<ItemEnderChestStack> ENDER_CHEST;
 
     public static ItemType<ItemEnderDragonSpawnEggStack> ENDER_DRAGON_SPAWN_EGG;
@@ -1327,6 +3015,8 @@ public final class ItemTypes {
     public static ItemType<ItemFireCoralBlockStack> FIRE_CORAL_BLOCK;
 
     public static ItemType<ItemFireCoralFanStack> FIRE_CORAL_FAN;
+
+    public static ItemType<ItemFireCoralWallFanStack> FIRE_CORAL_WALL_FAN;
 
     public static ItemType<ItemFireworkRocketStack> FIREWORK_ROCKET;
 
@@ -1443,6 +3133,10 @@ public final class ItemTypes {
     public static ItemType<ItemGoldenSwordStack> GOLDEN_SWORD;
 
     public static ItemType<ItemGraniteStack> GRANITE;
+
+    public static ItemType<ItemGraniteDoubleSlabStack> GRANITE_DOUBLE_SLAB;
+
+    public static ItemType<ItemGraniteSlabStack> GRANITE_SLAB;
 
     public static ItemType<ItemGraniteStairsStack> GRANITE_STAIRS;
 
@@ -1618,6 +3312,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemHornCoralFanStack> HORN_CORAL_FAN;
 
+    public static ItemType<ItemHornCoralWallFanStack> HORN_CORAL_WALL_FAN;
+
     public static ItemType<ItemHorseSpawnEggStack> HORSE_SPAWN_EGG;
 
     public static ItemType<ItemHostArmorTrimSmithingTemplateStack> HOST_ARMOR_TRIM_SMITHING_TEMPLATE;
@@ -1630,7 +3326,19 @@ public final class ItemTypes {
 
     public static ItemType<ItemIceBombStack> ICE_BOMB;
 
+    public static ItemType<ItemInfestedChiseledStoneBricksStack> INFESTED_CHISELED_STONE_BRICKS;
+
+    public static ItemType<ItemInfestedCobblestoneStack> INFESTED_COBBLESTONE;
+
+    public static ItemType<ItemInfestedCrackedStoneBricksStack> INFESTED_CRACKED_STONE_BRICKS;
+
     public static ItemType<ItemInfestedDeepslateStack> INFESTED_DEEPSLATE;
+
+    public static ItemType<ItemInfestedMossyStoneBricksStack> INFESTED_MOSSY_STONE_BRICKS;
+
+    public static ItemType<ItemInfestedStoneStack> INFESTED_STONE;
+
+    public static ItemType<ItemInfestedStoneBricksStack> INFESTED_STONE_BRICKS;
 
     public static ItemType<ItemInfoUpdateStack> INFO_UPDATE;
 
@@ -1821,6 +3529,38 @@ public final class ItemTypes {
     public static ItemType<ItemLeverStack> LEVER;
 
     public static ItemType<ItemLightBlockStack> LIGHT_BLOCK;
+
+    public static ItemType<ItemLightBlock0Stack> LIGHT_BLOCK_0;
+
+    public static ItemType<ItemLightBlock1Stack> LIGHT_BLOCK_1;
+
+    public static ItemType<ItemLightBlock10Stack> LIGHT_BLOCK_10;
+
+    public static ItemType<ItemLightBlock11Stack> LIGHT_BLOCK_11;
+
+    public static ItemType<ItemLightBlock12Stack> LIGHT_BLOCK_12;
+
+    public static ItemType<ItemLightBlock13Stack> LIGHT_BLOCK_13;
+
+    public static ItemType<ItemLightBlock14Stack> LIGHT_BLOCK_14;
+
+    public static ItemType<ItemLightBlock15Stack> LIGHT_BLOCK_15;
+
+    public static ItemType<ItemLightBlock2Stack> LIGHT_BLOCK_2;
+
+    public static ItemType<ItemLightBlock3Stack> LIGHT_BLOCK_3;
+
+    public static ItemType<ItemLightBlock4Stack> LIGHT_BLOCK_4;
+
+    public static ItemType<ItemLightBlock5Stack> LIGHT_BLOCK_5;
+
+    public static ItemType<ItemLightBlock6Stack> LIGHT_BLOCK_6;
+
+    public static ItemType<ItemLightBlock7Stack> LIGHT_BLOCK_7;
+
+    public static ItemType<ItemLightBlock8Stack> LIGHT_BLOCK_8;
+
+    public static ItemType<ItemLightBlock9Stack> LIGHT_BLOCK_9;
 
     public static ItemType<ItemLightBlueCandleStack> LIGHT_BLUE_CANDLE;
 
@@ -2034,9 +3774,19 @@ public final class ItemTypes {
 
     public static ItemType<ItemMossyCobblestoneStack> MOSSY_COBBLESTONE;
 
+    public static ItemType<ItemMossyCobblestoneDoubleSlabStack> MOSSY_COBBLESTONE_DOUBLE_SLAB;
+
+    public static ItemType<ItemMossyCobblestoneSlabStack> MOSSY_COBBLESTONE_SLAB;
+
     public static ItemType<ItemMossyCobblestoneStairsStack> MOSSY_COBBLESTONE_STAIRS;
 
+    public static ItemType<ItemMossyStoneBrickDoubleSlabStack> MOSSY_STONE_BRICK_DOUBLE_SLAB;
+
+    public static ItemType<ItemMossyStoneBrickSlabStack> MOSSY_STONE_BRICK_SLAB;
+
     public static ItemType<ItemMossyStoneBrickStairsStack> MOSSY_STONE_BRICK_STAIRS;
+
+    public static ItemType<ItemMossyStoneBricksStack> MOSSY_STONE_BRICKS;
 
     public static ItemType<ItemMournerPotterySherdStack> MOURNER_POTTERY_SHERD;
 
@@ -2108,6 +3858,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemNetherBrickStack> NETHER_BRICK;
 
+    public static ItemType<ItemNetherBrickDoubleSlabStack> NETHER_BRICK_DOUBLE_SLAB;
+
     public static ItemType<ItemNetherBrickFenceStack> NETHER_BRICK_FENCE;
 
     public static ItemType<ItemNetherBrickSlabStack> NETHER_BRICK_SLAB;
@@ -2155,6 +3907,10 @@ public final class ItemTypes {
     public static ItemType<ItemNetherrackStack> NETHERRACK;
 
     public static ItemType<ItemNetherreactorStack> NETHERREACTOR;
+
+    public static ItemType<ItemNormalStoneDoubleSlabStack> NORMAL_STONE_DOUBLE_SLAB;
+
+    public static ItemType<ItemNormalStoneSlabStack> NORMAL_STONE_SLAB;
 
     public static ItemType<ItemNormalStoneStairsStack> NORMAL_STONE_STAIRS;
 
@@ -2264,6 +4020,8 @@ public final class ItemTypes {
 
     public static ItemType<ItemPeonyStack> PEONY;
 
+    public static ItemType<ItemPetrifiedOakDoubleSlabStack> PETRIFIED_OAK_DOUBLE_SLAB;
+
     public static ItemType<ItemPetrifiedOakSlabStack> PETRIFIED_OAK_SLAB;
 
     public static ItemType<ItemPhantomMembraneStack> PHANTOM_MEMBRANE;
@@ -2332,6 +4090,10 @@ public final class ItemTypes {
 
     public static ItemType<ItemPolishedAndesiteStack> POLISHED_ANDESITE;
 
+    public static ItemType<ItemPolishedAndesiteDoubleSlabStack> POLISHED_ANDESITE_DOUBLE_SLAB;
+
+    public static ItemType<ItemPolishedAndesiteSlabStack> POLISHED_ANDESITE_SLAB;
+
     public static ItemType<ItemPolishedAndesiteStairsStack> POLISHED_ANDESITE_STAIRS;
 
     public static ItemType<ItemPolishedBasaltStack> POLISHED_BASALT;
@@ -2372,9 +4134,17 @@ public final class ItemTypes {
 
     public static ItemType<ItemPolishedDioriteStack> POLISHED_DIORITE;
 
+    public static ItemType<ItemPolishedDioriteDoubleSlabStack> POLISHED_DIORITE_DOUBLE_SLAB;
+
+    public static ItemType<ItemPolishedDioriteSlabStack> POLISHED_DIORITE_SLAB;
+
     public static ItemType<ItemPolishedDioriteStairsStack> POLISHED_DIORITE_STAIRS;
 
     public static ItemType<ItemPolishedGraniteStack> POLISHED_GRANITE;
+
+    public static ItemType<ItemPolishedGraniteDoubleSlabStack> POLISHED_GRANITE_DOUBLE_SLAB;
+
+    public static ItemType<ItemPolishedGraniteSlabStack> POLISHED_GRANITE_SLAB;
 
     public static ItemType<ItemPolishedGraniteStairsStack> POLISHED_GRANITE_STAIRS;
 
@@ -2412,11 +4182,21 @@ public final class ItemTypes {
 
     public static ItemType<ItemPrismarineStack> PRISMARINE;
 
+    public static ItemType<ItemPrismarineBrickDoubleSlabStack> PRISMARINE_BRICK_DOUBLE_SLAB;
+
+    public static ItemType<ItemPrismarineBrickSlabStack> PRISMARINE_BRICK_SLAB;
+
+    public static ItemType<ItemPrismarineBricksStack> PRISMARINE_BRICKS;
+
     public static ItemType<ItemPrismarineBricksStairsStack> PRISMARINE_BRICKS_STAIRS;
 
     public static ItemType<ItemPrismarineCrystalsStack> PRISMARINE_CRYSTALS;
 
+    public static ItemType<ItemPrismarineDoubleSlabStack> PRISMARINE_DOUBLE_SLAB;
+
     public static ItemType<ItemPrismarineShardStack> PRISMARINE_SHARD;
+
+    public static ItemType<ItemPrismarineSlabStack> PRISMARINE_SLAB;
 
     public static ItemType<ItemPrismarineStairsStack> PRISMARINE_STAIRS;
 
@@ -2462,6 +4242,10 @@ public final class ItemTypes {
 
     public static ItemType<ItemPurpurBlockStack> PURPUR_BLOCK;
 
+    public static ItemType<ItemPurpurDoubleSlabStack> PURPUR_DOUBLE_SLAB;
+
+    public static ItemType<ItemPurpurSlabStack> PURPUR_SLAB;
+
     public static ItemType<ItemPurpurStairsStack> PURPUR_STAIRS;
 
     public static ItemType<ItemQuartzStack> QUARTZ;
@@ -2470,7 +4254,11 @@ public final class ItemTypes {
 
     public static ItemType<ItemQuartzBricksStack> QUARTZ_BRICKS;
 
+    public static ItemType<ItemQuartzDoubleSlabStack> QUARTZ_DOUBLE_SLAB;
+
     public static ItemType<ItemQuartzOreStack> QUARTZ_ORE;
+
+    public static ItemType<ItemQuartzPillarStack> QUARTZ_PILLAR;
 
     public static ItemType<ItemQuartzSlabStack> QUARTZ_SLAB;
 
@@ -2530,9 +4318,19 @@ public final class ItemTypes {
 
     public static ItemType<ItemRedNetherBrickStack> RED_NETHER_BRICK;
 
+    public static ItemType<ItemRedNetherBrickDoubleSlabStack> RED_NETHER_BRICK_DOUBLE_SLAB;
+
+    public static ItemType<ItemRedNetherBrickSlabStack> RED_NETHER_BRICK_SLAB;
+
     public static ItemType<ItemRedNetherBrickStairsStack> RED_NETHER_BRICK_STAIRS;
 
+    public static ItemType<ItemRedSandStack> RED_SAND;
+
     public static ItemType<ItemRedSandstoneStack> RED_SANDSTONE;
+
+    public static ItemType<ItemRedSandstoneDoubleSlabStack> RED_SANDSTONE_DOUBLE_SLAB;
+
+    public static ItemType<ItemRedSandstoneSlabStack> RED_SANDSTONE_SLAB;
 
     public static ItemType<ItemRedSandstoneStairsStack> RED_SANDSTONE_STAIRS;
 
@@ -2587,6 +4385,8 @@ public final class ItemTypes {
     public static ItemType<ItemSandStack> SAND;
 
     public static ItemType<ItemSandstoneStack> SANDSTONE;
+
+    public static ItemType<ItemSandstoneDoubleSlabStack> SANDSTONE_DOUBLE_SLAB;
 
     public static ItemType<ItemSandstoneSlabStack> SANDSTONE_SLAB;
 
@@ -2670,13 +4470,33 @@ public final class ItemTypes {
 
     public static ItemType<ItemSmoothBasaltStack> SMOOTH_BASALT;
 
+    public static ItemType<ItemSmoothQuartzStack> SMOOTH_QUARTZ;
+
+    public static ItemType<ItemSmoothQuartzDoubleSlabStack> SMOOTH_QUARTZ_DOUBLE_SLAB;
+
+    public static ItemType<ItemSmoothQuartzSlabStack> SMOOTH_QUARTZ_SLAB;
+
     public static ItemType<ItemSmoothQuartzStairsStack> SMOOTH_QUARTZ_STAIRS;
 
+    public static ItemType<ItemSmoothRedSandstoneStack> SMOOTH_RED_SANDSTONE;
+
+    public static ItemType<ItemSmoothRedSandstoneDoubleSlabStack> SMOOTH_RED_SANDSTONE_DOUBLE_SLAB;
+
+    public static ItemType<ItemSmoothRedSandstoneSlabStack> SMOOTH_RED_SANDSTONE_SLAB;
+
     public static ItemType<ItemSmoothRedSandstoneStairsStack> SMOOTH_RED_SANDSTONE_STAIRS;
+
+    public static ItemType<ItemSmoothSandstoneStack> SMOOTH_SANDSTONE;
+
+    public static ItemType<ItemSmoothSandstoneDoubleSlabStack> SMOOTH_SANDSTONE_DOUBLE_SLAB;
+
+    public static ItemType<ItemSmoothSandstoneSlabStack> SMOOTH_SANDSTONE_SLAB;
 
     public static ItemType<ItemSmoothSandstoneStairsStack> SMOOTH_SANDSTONE_STAIRS;
 
     public static ItemType<ItemSmoothStoneStack> SMOOTH_STONE;
+
+    public static ItemType<ItemSmoothStoneDoubleSlabStack> SMOOTH_STONE_DOUBLE_SLAB;
 
     public static ItemType<ItemSmoothStoneSlabStack> SMOOTH_STONE_SLAB;
 
@@ -2796,9 +4616,13 @@ public final class ItemTypes {
 
     public static ItemType<ItemStoneBlockSlab4Stack> STONE_BLOCK_SLAB4;
 
+    public static ItemType<ItemStoneBrickDoubleSlabStack> STONE_BRICK_DOUBLE_SLAB;
+
     public static ItemType<ItemStoneBrickSlabStack> STONE_BRICK_SLAB;
 
     public static ItemType<ItemStoneBrickStairsStack> STONE_BRICK_STAIRS;
+
+    public static ItemType<ItemStoneBricksStack> STONE_BRICKS;
 
     public static ItemType<ItemStoneButtonStack> STONE_BUTTON;
 
@@ -2943,6 +4767,8 @@ public final class ItemTypes {
     public static ItemType<ItemTubeCoralBlockStack> TUBE_CORAL_BLOCK;
 
     public static ItemType<ItemTubeCoralFanStack> TUBE_CORAL_FAN;
+
+    public static ItemType<ItemTubeCoralWallFanStack> TUBE_CORAL_WALL_FAN;
 
     public static ItemType<ItemTuffStack> TUFF;
 
@@ -3247,8 +5073,6 @@ public final class ItemTypes {
     public static ItemType<ItemYellowConcretePowderStack> YELLOW_CONCRETE_POWDER;
 
     public static ItemType<ItemYellowDyeStack> YELLOW_DYE;
-
-    public static ItemType<ItemYellowFlowerStack> YELLOW_FLOWER;
 
     public static ItemType<ItemYellowGlazedTerracottaStack> YELLOW_GLAZED_TERRACOTTA;
 

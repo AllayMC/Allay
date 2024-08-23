@@ -21,12 +21,14 @@ Unless otherwise specified, the default root directory is `Allay-Data/resources`
 
 - biome_definitions.nbt (obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData))
 - block_states.json
+- block_types.json
 - creative_items.nbt
 - entity_identifiers.nbt (obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData))
 - items.json
 - materials.json
 - block_tags_custom.json (this file is manually maintained; check if any block IDs need updating)
 - item_tags_custom.json (this file is manually maintained; check if any item IDs need updating)
+- recipes.json
 
 **Step two, update the files under the unpacked directory**:
 
@@ -69,7 +71,7 @@ or `VanillaBlockTagGen`.
 **Step five, run VanillaBlockInterfaceGen**. This step requires more manual operation:
 
 - You need to manually delete old blocks. If there are changes in block properties, you need to manually modify them to
-  adapt. You can refer to [BlockStateUpdater](https://github.com/CloudburstMC/BlockStateUpdater) to understand block
+  adapt. You can refer to [StateUpdater](https://github.com/AllayMC/StateUpdater) to understand block
   changes.
   By checking if there are errors
   in `Allay-Server/src/main/java/org/allaymc/server/block/type/BlockTypeInitializer.java`, you can quickly determine
@@ -96,7 +98,7 @@ operation, but the workload is less than before:
 ## 4. Update Dependencies
 
 Update the protocol library [Cloudburst/Protocol](https://github.com/CloudburstMC/Protocol) and the block state
-updater [CloudburstMC/BlockStateUpdater](https://github.com/CloudburstMC/BlockStateUpdater) to the latest version.
+updater [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater) to the latest version.
 
 ## 5. Update `Allay-API/src/main/java/org/allaymc/api/network/ProtocolInfo.java`
 

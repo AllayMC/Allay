@@ -10,8 +10,7 @@ import org.allaymc.api.utils.PaletteUtils;
 import org.allaymc.api.world.bitarray.BitArray;
 import org.allaymc.api.world.bitarray.BitArrayVersion;
 import org.allaymc.api.world.chunk.Chunk;
-import org.cloudburstmc.blockstateupdater.BlockStateUpdaters;
-import org.cloudburstmc.blockstateupdater.util.tagupdater.CompoundTagUpdaterContext;
+import org.allaymc.updater.block.BlockStateUpdaters;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -168,12 +167,10 @@ public final class Palette<V> {
             LittleEndianDataInputStream input,
             NBTInputStream nbtInputStream
     ) throws IOException {
-        var pair = PaletteUtils.fastReadBlockHash(input, byteBuf);
-        if (pair.left() == null) {
+        var blockStateHash = PaletteUtils.fastReadBlockHash(input, byteBuf);
+        if (blockStateHash == PaletteUtils.HASH_NOT_LATEST) {
             var oldNbtMap = (NbtMap) nbtInputStream.readTag();
-            var semVersion = pair.right();
-            var version = CompoundTagUpdaterContext.makeVersion(semVersion.major(), semVersion.minor(), semVersion.patch());
-            var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, version);
+            var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, BlockStateUpdaters.LATEST_VERSION);
             var states = new TreeMap<>(newNbtMap.getCompound("states"));
             var tag = NbtMap.builder()
                     .putString("name", newNbtMap.getString("name"))
@@ -181,7 +178,7 @@ public final class Palette<V> {
                     .build();
             this.palette.add(deserializer.deserialize(HashUtils.fnv1a_32_nbt(tag)));
         } else {
-            this.palette.add(deserializer.deserialize(pair.left()));
+            this.palette.add(deserializer.deserialize(blockStateHash));
         }
     }
 

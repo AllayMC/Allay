@@ -9,6 +9,8 @@ import org.allaymc.api.block.interfaces.door.*;
 import org.allaymc.api.block.interfaces.hangingsign.*;
 import org.allaymc.api.block.interfaces.leaves.*;
 import org.allaymc.api.block.interfaces.log.*;
+import org.allaymc.api.block.interfaces.sand.BlockRedSandBehavior;
+import org.allaymc.api.block.interfaces.sand.BlockSandBehavior;
 import org.allaymc.api.block.interfaces.shulkerbox.*;
 import org.allaymc.api.block.interfaces.stairs.*;
 import org.allaymc.api.block.interfaces.standingsign.*;
@@ -108,10 +110,20 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static void initGravel() {
+    public static void initFallable() {
         BlockTypes.GRAVEL = BlockTypeBuilder
                 .builder(BlockGravelBehavior.class)
                 .vanillaBlock(VanillaBlockId.GRAVEL)
+                .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
+                .build();
+        BlockTypes.SAND = BlockTypeBuilder
+                .builder(BlockSandBehavior.class)
+                .vanillaBlock(VanillaBlockId.SAND)
+                .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
+                .build();
+        BlockTypes.RED_SAND = BlockTypeBuilder
+                .builder(BlockRedSandBehavior.class)
+                .vanillaBlock(VanillaBlockId.RED_SAND)
                 .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
                 .build();
     }

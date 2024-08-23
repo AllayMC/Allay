@@ -194,5 +194,11 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*ShovelStack"), "shovel");
         registerSubPackage(Pattern.compile(".*HoeStack"), "hoe");
         registerSubPackage(Pattern.compile(".*AxeStack"), "axe");
+        registerSubPackage(Pattern.compile(".*SandstoneStack"), "sandstone");
+        registerSubPackage(Pattern.compile(".*SandStack"), "sand");
+        registerSubPackage(Pattern.compile(".*LightBlock.*Stack"), "lightblock");
+        registerSubPackage(Pattern.compile(".*DirtStack"), "dirt");
+        registerSubPackage(Pattern.compile(".*AnvilStack"), "anvil");
+        registerSubPackage(Pattern.compile(".*CoralWallFanStack"), "coralwallfan");
     }
 }

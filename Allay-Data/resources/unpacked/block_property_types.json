@@ -147,28 +147,6 @@
         6
       ]
     },
-    "block_light_level": {
-      "serializationName": "block_light_level",
-      "valueType": "INTEGER",
-      "values": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15
-      ]
-    },
     "bloom": {
       "serializationName": "bloom",
       "valueType": "BOOLEAN",
@@ -395,14 +373,6 @@
         1
       ]
     },
-    "coral_hang_type_bit": {
-      "serializationName": "coral_hang_type_bit",
-      "valueType": "BOOLEAN",
-      "values": [
-        false,
-        true
-      ]
-    },
     "covered_bit": {
       "serializationName": "covered_bit",
       "valueType": "BOOLEAN",
@@ -426,16 +396,6 @@
       "values": [
         false,
         true
-      ]
-    },
-    "damage": {
-      "serializationName": "damage",
-      "valueType": "ENUM",
-      "values": [
-        "undamaged",
-        "slightly_damaged",
-        "very_damaged",
-        "broken"
       ]
     },
     "dead_bit": {
@@ -464,14 +424,6 @@
         1,
         2,
         3
-      ]
-    },
-    "dirt_type": {
-      "serializationName": "dirt_type",
-      "valueType": "ENUM",
-      "values": [
-        "normal",
-        "coarse"
       ]
     },
     "disarmed_bit": {
@@ -854,18 +806,6 @@
         7
       ]
     },
-    "monster_egg_stone_type": {
-      "serializationName": "monster_egg_stone_type",
-      "valueType": "ENUM",
-      "values": [
-        "stone",
-        "cobblestone",
-        "stone_brick",
-        "mossy_stone_brick",
-        "cracked_stone_brick",
-        "chiseled_stone_brick"
-      ]
-    },
     "multi_face_direction_bits": {
       "serializationName": "multi_face_direction_bits",
       "valueType": "INTEGER",
@@ -1028,15 +968,6 @@
         true
       ]
     },
-    "prismarine_block_type": {
-      "serializationName": "prismarine_block_type",
-      "valueType": "ENUM",
-      "values": [
-        "default",
-        "dark",
-        "bricks"
-      ]
-    },
     "propagule_stage": {
       "serializationName": "propagule_stage",
       "valueType": "INTEGER",
@@ -1137,24 +1068,6 @@
         3
       ]
     },
-    "sand_stone_type": {
-      "serializationName": "sand_stone_type",
-      "valueType": "ENUM",
-      "values": [
-        "default",
-        "heiroglyphs",
-        "cut",
-        "smooth"
-      ]
-    },
-    "sand_type": {
-      "serializationName": "sand_type",
-      "valueType": "ENUM",
-      "values": [
-        "normal",
-        "red"
-      ]
-    },
     "sculk_sensor_phase": {
       "serializationName": "sculk_sensor_phase",
       "valueType": "INTEGER",
@@ -1201,70 +1114,6 @@
       "values": [
         false,
         true
-      ]
-    },
-    "stone_brick_type": {
-      "serializationName": "stone_brick_type",
-      "valueType": "ENUM",
-      "values": [
-        "default",
-        "mossy",
-        "cracked",
-        "chiseled",
-        "smooth"
-      ]
-    },
-    "stone_slab_type": {
-      "serializationName": "stone_slab_type",
-      "valueType": "ENUM",
-      "values": [
-        "smooth_stone",
-        "sandstone",
-        "wood",
-        "cobblestone",
-        "brick",
-        "stone_brick",
-        "quartz",
-        "nether_brick"
-      ]
-    },
-    "stone_slab_type_2": {
-      "serializationName": "stone_slab_type_2",
-      "valueType": "ENUM",
-      "values": [
-        "red_sandstone",
-        "purpur",
-        "prismarine_rough",
-        "prismarine_dark",
-        "prismarine_brick",
-        "mossy_cobblestone",
-        "smooth_sandstone",
-        "red_nether_brick"
-      ]
-    },
-    "stone_slab_type_3": {
-      "serializationName": "stone_slab_type_3",
-      "valueType": "ENUM",
-      "values": [
-        "end_stone_brick",
-        "smooth_red_sandstone",
-        "polished_andesite",
-        "andesite",
-        "diorite",
-        "polished_diorite",
-        "granite",
-        "polished_granite"
-      ]
-    },
-    "stone_slab_type_4": {
-      "serializationName": "stone_slab_type_4",
-      "valueType": "ENUM",
-      "values": [
-        "mossy_stone_brick",
-        "smooth_quartz",
-        "stone",
-        "cut_sandstone",
-        "cut_red_sandstone"
       ]
     },
     "stripped_bit": {

@@ -4,13 +4,14 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.datastruct.SemVersion;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v686.Bedrock_v686;
+import org.cloudburstmc.protocol.bedrock.codec.v712.Bedrock_v712;
 
 @UtilityClass
 public final class ProtocolInfo {
 
-    public static final BedrockCodec PACKET_CODEC = Bedrock_v686.CODEC;
+    public static final BedrockCodec PACKET_CODEC = Bedrock_v712.CODEC;
 
-    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 2, 3, 0);
+    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 20, 0, 0);
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to blockstates.
@@ -18,7 +19,7 @@ public final class ProtocolInfo {
      * This is not the same as current game version. It should match the numbers in the
      * newest blockstate upgrade schema used in BedrockBlockUpgradeSchema.
      */
-    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 0, 3, 0);
+    public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 20, 6, 0);
 
     public static final int BLOCK_STATE_VERSION_NUM_NO_REVISION = (BLOCK_STATE_VERSION.major() << 24) | // major
                                                                   (BLOCK_STATE_VERSION.minor() << 16) | // minor

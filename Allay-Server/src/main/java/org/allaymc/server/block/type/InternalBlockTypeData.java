@@ -1,6 +1,7 @@
 package org.allaymc.server.block.type;
 
 import com.google.gson.JsonParser;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.material.MaterialType;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.data.VanillaBlockId;
@@ -20,6 +21,7 @@ import java.util.*;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public final class InternalBlockTypeData {
 
     // Use array instead of set to reduce memory usage
@@ -45,7 +47,12 @@ public final class InternalBlockTypeData {
                     var tags = obj.get("tags").getAsJsonArray();
                     var blockTags = new BlockTag[tags.size()];
                     for (int i = 0; i < tags.size(); i++) {
-                        blockTags[i] = VanillaBlockTags.getTagByName(tags.get(i).getAsString());
+                        var tag = VanillaBlockTags.getTagByName(tags.get(i).getAsString());
+                        if (tag == null) {
+                            log.warn("Unknown block tag: {}", tags.get(i).getAsString());
+                            continue;
+                        }
+                        blockTags[i] = tag;
                     }
                     VANILLA_BLOCK_TAGS.put(id, blockTags);
                 } else {
@@ -73,6 +80,10 @@ public final class InternalBlockTypeData {
                 for (var obj : entry.getValue().getAsJsonArray()) {
                     var blockId = obj.getAsString();
                     var id = VanillaBlockId.fromIdentifier(new Identifier(blockId));
+                    if (id == null) {
+                        log.warn("Unknown block id: {}", blockId);
+                        return;
+                    }
                     map.computeIfAbsent(id, k -> new HashSet<>()).add(tag);
                 }
             });
