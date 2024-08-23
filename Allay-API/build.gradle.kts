@@ -16,11 +16,8 @@ dependencies {
         exclude(group = "org.cloudburstmc.netty", module = "netty-transport-raknet")
     }
     api(libs.raknet)
-    api(libs.blockstateupdater) {
-        exclude(group = "org.cloudburstmc", module = "nbt")
-    }
+    api(libs.stateupdater)
     api(libs.nbt)
-    api(libs.itemstateupdater)
     api(libs.slf4j.api)
     api(libs.fastutil)
     api(libs.guava)
