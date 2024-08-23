@@ -10,7 +10,7 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.itemstateupdater.ItemStateUpdaters;
+import org.allaymc.updater.item.ItemStateUpdaters;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Arrays;

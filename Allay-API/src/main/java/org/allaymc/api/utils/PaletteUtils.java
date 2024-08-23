@@ -1,7 +1,6 @@
 package org.allaymc.api.utils;
 
 import io.netty.buffer.ByteBuf;
-import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.network.ProtocolInfo;
 import org.cloudburstmc.nbt.NbtType;
@@ -15,7 +14,10 @@ import java.io.IOException;
  * @author Cool_Loong
  */
 public class PaletteUtils {
-    public static Pair<Integer, SemVersion> fastReadBlockHash(LittleEndianDataInputStream input, ByteBuf byteBuf) {
+
+    public static final int HASH_NOT_LATEST = Integer.MAX_VALUE;
+
+    public static int fastReadBlockHash(LittleEndianDataInputStream input, ByteBuf byteBuf) {
         try {
             byteBuf.markReaderIndex();
             int typeId = input.readUnsignedByte();
@@ -27,11 +29,7 @@ public class PaletteUtils {
         }
     }
 
-    private static Pair<Integer, SemVersion> deserialize(LittleEndianDataInputStream input,
-                                                         ByteBuf byteBuf,
-                                                         NbtType<?> type,
-                                                         int maxDepth
-    ) throws IOException {
+    private static int deserialize(LittleEndianDataInputStream input, ByteBuf byteBuf, NbtType<?> type, int maxDepth) throws IOException {
         if (maxDepth < 0) {
             throw new IllegalArgumentException("NBT compound is too deeply nested");
         }
@@ -56,18 +54,18 @@ public class PaletteUtils {
                         int version = input.readInt();
                         byteBuf.resetReaderIndex();
                         if (version != ProtocolInfo.BLOCK_STATE_VERSION_NUM) {
-                            return Pair.of(null, getSemVersion(version));
+                            return HASH_NOT_LATEST;
                         }
                         byte[] result = new byte[end - byteBuf.readerIndex()];
                         input.readFully(result);
-                        result[result.length - 1] = 0;//because an End Tag be put when at the end serialize tag
+                        result[result.length - 1] = 0;// because an End Tag be put when at the end serialize tag
 
-                        input.skipBytes(input.readUnsignedShort());//UTF
-                        deserialize(input, byteBuf, nbtType, maxDepth - 1);//Value
-                        input.skipBytes(1);//end tag
-                        int i = HashUtils.fnv1a_32(result);
-                        if (i == 147887818) i = -2;//minecraft:unknown
-                        return Pair.of(i, null);
+                        input.skipBytes(input.readUnsignedShort());// UTF
+                        deserialize(input, byteBuf, nbtType, maxDepth - 1);// Value
+                        input.skipBytes(1);// end tag
+                        int hash = HashUtils.fnv1a_32(result);
+                        if (hash == 147887818) hash = -2;// minecraft:unknown
+                        return hash;
                     }
                     deserialize(input, byteBuf, nbtType, maxDepth - 1);
                 }
@@ -83,10 +81,10 @@ public class PaletteUtils {
             case INT_ARRAY -> input.skipBytes(input.readInt() * 4);
             case LONG_ARRAY -> input.skipBytes(input.readInt() * 8);
         }
-        return null;
+        return HASH_NOT_LATEST;
     }
 
-    public static SemVersion getSemVersion(int version) {
+    public static SemVersion toSemVersion(int version) {
         int major = (version >> 24) & 0xFF;
         int minor = (version >> 16) & 0xFF;
         int patch = (version >> 8) & 0xFF;
