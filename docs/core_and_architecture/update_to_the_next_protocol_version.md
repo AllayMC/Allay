@@ -21,12 +21,14 @@ Unless otherwise specified, the default root directory is `Allay-Data/resources`
 
 - biome_definitions.nbt (obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData))
 - block_states.json
+- block_types.json
 - creative_items.nbt
 - entity_identifiers.nbt (obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData))
 - items.json
 - materials.json
 - block_tags_custom.json (this file is manually maintained; check if any block IDs need updating)
 - item_tags_custom.json (this file is manually maintained; check if any item IDs need updating)
+- recipes.json
 
 **Step two, update the files under the unpacked directory**:
 

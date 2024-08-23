@@ -18,12 +18,14 @@ Allay借助Endstone DevTools从BDS导出所需的海量数据。故在更新Alla
 
 - biome_definitions.nbt (从pmmp/BedrockData获取)
 - block_states.json
+- block_types.json
 - creative_items.nbt
 - entity_identifiers.nbt (从pmmp/BedrockData获取)
 - items.json
 - materials.json
 - block_tags_custom.json(此文件人工维护，你需要检查是否有方块id需要更新)
 - item_tags_custom.json(此文件人工维护，你需要检查是否有物品id需要更新)
+- recipes.json
 
 **第二步，更新unpacked目录下的文件**。这些文件虽然说不会被打包进jar内，但是会在代码生成阶段被使用：
 
