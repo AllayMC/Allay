@@ -1,6 +1,5 @@
 package org.allaymc.api.world.storage;
 
-import org.allaymc.api.utils.exception.WorldStorageException;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
@@ -15,19 +14,19 @@ import java.util.concurrent.CompletableFuture;
 public interface WorldStorage {
     default void tick(long currentTick) {}
 
-    CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) throws WorldStorageException;
+    CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
 
-    Chunk readChunkSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo) throws WorldStorageException;
+    Chunk readChunkSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
 
-    CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException;
+    CompletableFuture<Void> writeChunk(Chunk chunk);
 
-    void writeChunkSync(Chunk chunk) throws WorldStorageException;
+    void writeChunkSync(Chunk chunk);
 
     boolean containChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
 
-    void writeWorldData(WorldData worldData) throws WorldStorageException;
+    void writeWorldData(WorldData worldData);
 
-    WorldData readWorldData() throws WorldStorageException;
+    WorldData readWorldData();
 
     void shutdown();
 }

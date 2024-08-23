@@ -30,11 +30,11 @@ public interface ChunkService extends ChunkAccessible {
     @SlowOperation
     Chunk getOrLoadChunkSync(int x, int z);
 
-    boolean unloadChunk(int x, int z);
+    CompletableFuture<Boolean> unloadChunk(int x, int z);
 
-    boolean unloadChunk(long chunkHash);
+    CompletableFuture<Boolean> unloadChunk(long chunkHash);
 
-    void unloadAllChunks();
+    CompletableFuture<Void> unloadAllChunks();
 
     boolean isChunkLoaded(int x, int z);
 

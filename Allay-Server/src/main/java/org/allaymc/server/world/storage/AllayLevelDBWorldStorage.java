@@ -53,14 +53,14 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     private final DB db;
     private final String worldName;
 
-    public AllayLevelDBWorldStorage(Path path) throws WorldStorageException {
+    public AllayLevelDBWorldStorage(Path path) {
         this(path, new Options()
                 .createIfMissing(true)
                 .compressionType(CompressionType.ZLIB_RAW)
                 .blockSize(64 * 1024)
         );
     }
-    public AllayLevelDBWorldStorage(Path path, Options options) throws WorldStorageException {
+    public AllayLevelDBWorldStorage(Path path, Options options) {
         worldName = path.getName(path.getNameCount() - 1).toString();
         var file = path.toFile();
         if (!file.exists() && !file.mkdirs()) {
@@ -98,7 +98,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     }
 
     @Override
-    public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
+    public CompletableFuture<Chunk> readChunk(int x, int z, DimensionInfo dimensionInfo) {
         return CompletableFuture
                 .supplyAsync(() -> readChunkSync(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(e -> {
@@ -108,7 +108,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     }
 
     @Override
-    public Chunk readChunkSync(int x, int z, DimensionInfo dimensionInfo) throws WorldStorageException {
+    public Chunk readChunkSync(int x, int z, DimensionInfo dimensionInfo) {
         var builder = AllayUnsafeChunk.builder()
                 .chunkX(x)
                 .chunkZ(z)
@@ -132,7 +132,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     }
 
     @Override
-    public CompletableFuture<Void> writeChunk(Chunk chunk) throws WorldStorageException {
+    public CompletableFuture<Void> writeChunk(Chunk chunk) {
         return CompletableFuture
                 .runAsync(() -> writeChunkSync(chunk), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(e -> {
@@ -142,7 +142,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     }
 
     @Override
-    public void writeChunkSync(Chunk chunk) throws WorldStorageException {
+    public void writeChunkSync(Chunk chunk) {
         try (var writeBatch = this.db.createWriteBatch()) {
             writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{LATEST_CHUNK_VERSION});
             writeBatch.put(
@@ -197,7 +197,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
     }
 
     @Override
-    public WorldData readWorldData() throws WorldStorageException {
+    public WorldData readWorldData() {
         var levelDat = path.resolve("level.dat").toFile();
         if (!levelDat.exists()) return createWorldData(worldName);
         try (var input = new FileInputStream(levelDat)) {

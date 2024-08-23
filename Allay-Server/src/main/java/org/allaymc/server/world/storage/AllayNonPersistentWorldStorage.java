@@ -64,26 +64,26 @@ public class AllayNonPersistentWorldStorage implements WorldStorage {
     }
 
     @Override
-    public void writeChunkSync(Chunk chunk) throws WorldStorageException {
+    public void writeChunkSync(Chunk chunk) {
         var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
         chunks.put(hash, chunk);
         writeEntities(hash, chunk.getEntities().values());
         writeBlockEntities(hash, chunk.getBlockEntities().values());
     }
 
-    protected Set<NbtMap> readEntities(long chunkHash) throws WorldStorageException {
+    protected Set<NbtMap> readEntities(long chunkHash) {
         return entities.getOrDefault(chunkHash, Set.of());
     }
 
-    protected Set<NbtMap> readBlockEntities(long chunkHash) throws WorldStorageException {
+    protected Set<NbtMap> readBlockEntities(long chunkHash) {
         return blockEntities.getOrDefault(chunkHash, Set.of());
     }
 
-    protected void writeEntities(long chunkHash, Collection<Entity> entities) throws WorldStorageException {
+    protected void writeEntities(long chunkHash, Collection<Entity> entities) {
         this.entities.put(chunkHash, entities.stream().map(Entity::saveNBT).collect(Collectors.toSet()));
     }
 
-    protected void writeBlockEntities(long chunkHash, Collection<BlockEntity> blockEntities) throws WorldStorageException {
+    protected void writeBlockEntities(long chunkHash, Collection<BlockEntity> blockEntities) {
         this.blockEntities.put(chunkHash, blockEntities.stream().map(BlockEntity::saveNBT).collect(Collectors.toSet()));
     }
 
