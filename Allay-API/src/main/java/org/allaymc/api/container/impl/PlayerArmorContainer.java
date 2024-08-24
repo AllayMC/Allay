@@ -8,6 +8,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.cloudburstmc.protocol.bedrock.packet.MobArmorEquipmentPacket;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -29,20 +31,39 @@ public class PlayerArmorContainer extends BaseContainer {
     public PlayerArmorContainer(Supplier<EntityPlayer> playerSupplier) {
         super(FullContainerType.ARMOR);
         this.playerSupplier = playerSupplier;
-        addOnSlotChangeListener(0, this::recalculateKnockbackResistance);
-        addOnSlotChangeListener(1, this::recalculateKnockbackResistance);
-        addOnSlotChangeListener(2, this::recalculateKnockbackResistance);
-        addOnSlotChangeListener(3, this::recalculateKnockbackResistance);
+        addOnSlotChangeListener(0, this::onArmorChange);
+        addOnSlotChangeListener(1, this::onArmorChange);
+        addOnSlotChangeListener(2, this::onArmorChange);
+        addOnSlotChangeListener(3, this::onArmorChange);
     }
 
-    protected void recalculateKnockbackResistance(ItemStack $) {
+    protected void onArmorChange(ItemStack newItemStack) {
+        // Recalculate knockback resistance
         var knockbackResistance = AttributeType.KNOCKBACK_RESISTANCE.getDefaultValue();
         for (var itemStack : content) {
             if (itemStack == ItemAirStack.AIR_STACK) continue;
             if (ItemHelper.getArmorTier(itemStack.getItemType()) != ArmorTier.NETHERITE) continue;
             knockbackResistance += KNOCKBACK_RESISTANCE_PER_NETHERITE_ARMOR;
         }
-        playerSupplier.get().setAttribute(AttributeType.KNOCKBACK_RESISTANCE, knockbackResistance);
+        var player = playerSupplier.get();
+        player.setAttribute(AttributeType.KNOCKBACK_RESISTANCE, knockbackResistance);
+        // Send armor to viewers
+        player.sendPacketToViewers(buildArmorEquipmentPacket(player.getRuntimeId()));
+    }
+
+    public void sendArmorEquipmentPacketTo(EntityPlayer player) {
+        player.sendPacket(buildArmorEquipmentPacket(playerSupplier.get().getRuntimeId()));
+    }
+
+    private @NotNull MobArmorEquipmentPacket buildArmorEquipmentPacket(long runtimeId) {
+        var pk = new MobArmorEquipmentPacket();
+        pk.setRuntimeEntityId(runtimeId);
+        pk.setBody(ItemAirStack.AIR_STACK.toNetworkItemData());
+        pk.setHelmet(getHelmet().toNetworkItemData());
+        pk.setChestplate(getChestplate().toNetworkItemData());
+        pk.setLeggings(getLeggings().toNetworkItemData());
+        pk.setBoots(getBoots().toNetworkItemData());
+        return pk;
     }
 
     public ItemStack getHelmet() {

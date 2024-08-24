@@ -1,10 +1,8 @@
 package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.container.impl.*;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
-import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.component.EntityContainerHolderComponentImpl;
@@ -23,7 +21,6 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         super(
                 new PlayerCursorContainer(),
                 new PlayerCreatedOutputContainer(),
-                new PlayerOffhandContainer(),
                 new CraftingGridContainer(),
                 new CraftingTableContainer()
         );
@@ -31,6 +28,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         // because at that time thisPlayer is null
         addContainer(new PlayerArmorContainer(() -> thisPlayer));
         addContainer(new PlayerInventoryContainer(() -> thisPlayer));
+        addContainer(new PlayerOffhandContainer(() -> thisPlayer));
     }
 
     @Override

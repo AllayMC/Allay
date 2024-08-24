@@ -301,6 +301,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void spawnTo(EntityPlayer player) {
         if (thisPlayer != player) {
             super.spawnTo(player);
+            containerHolderComponent.getContainer(FullContainerType.ARMOR).sendArmorEquipmentPacketTo(player);
+            containerHolderComponent.getContainer(FullContainerType.OFFHAND).sendEquipmentPacketTo(player);
         }
     }
 
@@ -375,6 +377,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(runtimeId);
+        packet.setContainerId(FixedContainerId.PLAYER_INVENTORY);
         packet.setItem(itemStack.toNetworkItemData());
         packet.setInventorySlot(handSlot);
         packet.setHotbarSlot(handSlot);
