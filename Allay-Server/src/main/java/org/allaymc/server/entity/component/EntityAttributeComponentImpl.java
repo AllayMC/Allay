@@ -54,7 +54,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @EventHandler
-    private void onLoadNBT(CEntityLoadNBTEvent event) {
+    protected void onLoadNBT(CEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
         nbt.listenForList("Attributes", NbtType.COMPOUND, attributesNbt -> {
             attributesNbt.forEach(attributeNbt -> {
@@ -67,7 +67,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @EventHandler
-    private void onSaveNBT(CEntitySaveNBTEvent event) {
+    protected void onSaveNBT(CEntitySaveNBTEvent event) {
         event.getNbt().putList(
                 "Attributes",
                 NbtType.COMPOUND,
@@ -120,11 +120,12 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @Override
     public void setHealth(float value) {
+        value = max(0, min(value, this.getMaxHealth()));
         var event = new EntityHealthChangeEvent(thisEntity, getHealth(), value);
         event.call();
         if (event.isCancelled()) return;
 
-        setAttribute(AttributeType.HEALTH, max(0, min(event.getNewHealth(), this.getMaxHealth())));
+        setAttribute(AttributeType.HEALTH, event.getNewHealth());
     }
 
     @Override

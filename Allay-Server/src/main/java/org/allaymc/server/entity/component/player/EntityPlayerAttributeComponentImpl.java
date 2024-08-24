@@ -195,12 +195,16 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     }
 
     @EventHandler
+    @Override
     protected void onSaveNBT(CEntitySaveNBTEvent event) {
+        super.onSaveNBT(event);
         event.getNbt().putInt("foodTickTimer", foodTickTimer);
     }
 
     @EventHandler
+    @Override
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
+        super.onLoadNBT(event);
         event.getNbt().listenForInt("foodTickTimer", value -> foodTickTimer = value);
     }
 }

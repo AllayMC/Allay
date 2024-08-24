@@ -14,7 +14,6 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.api.world.storage.NativeFileWorldStorage;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -30,6 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @Slf4j
 public class AllayWorld implements World {
+    // Send the time to client every 12 seconds
     public static final long TIME_SENDING_INTERVAL = 12 * 20;
 
     public static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
@@ -180,7 +180,7 @@ public class AllayWorld implements World {
 
         if (currentTick >= nextTimeSendTick) {
             worldData.addTime(TIME_SENDING_INTERVAL);
-            nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL; // Send the time to client every 12 seconds
+            nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
         }
     }
 

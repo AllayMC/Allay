@@ -256,6 +256,8 @@ public class LevelDBChunkSerializer {
                 return;
             }
             for (Entity e : entities) {
+                // Player entity won't be saved to chunk
+                // As we will save player data through player storage
                 if (e instanceof EntityPlayer) continue;
                 NBTOutputStream writerLE = NbtUtils.createWriterLE(bufStream);
                 writerLE.writeTag(e.saveNBT());

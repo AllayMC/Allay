@@ -30,7 +30,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     protected final BlockEntityType<T> blockEntityType;
 
     @EventHandler
-    private void onBlockPlace(CBlockOnPlaceEvent event) {
+    protected void onBlockPlace(CBlockOnPlaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
 
         createBlockEntityAt(pos, false);
@@ -45,7 +45,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     }
 
     @EventHandler
-    private void onBlockRemove(CBlockOnReplaceEvent event) {
+    protected void onBlockRemove(CBlockOnReplaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
         var blockEntity = getBlockEntityAt(pos);
         if (blockEntity == null) {
@@ -57,14 +57,14 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     }
 
     @EventHandler
-    private void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
+    protected void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().pos());
         var blockEntity = getBlockEntityAt(pos);
         blockEntity.onNeighborUpdate(event);
     }
 
     @EventHandler
-    private void onInteract(CBlockOnInteractEvent event) {
+    protected void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickBlockPos();
         var blockEntity = getBlockEntityAt(pos.x(), pos.y(), pos.z(), event.getDimension());
         blockEntity.onInteract(event);

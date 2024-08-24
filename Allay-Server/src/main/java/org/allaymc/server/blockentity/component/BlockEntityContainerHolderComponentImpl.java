@@ -59,7 +59,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @EventHandler
-    private void onLoadNBT(CBlockEntityLoadNBTEvent event) {
+    protected void onLoadNBT(CBlockEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
         nbt.listenForList("Items", NbtType.COMPOUND, items -> container.loadNBT(items));
         if (container instanceof BlockContainer blockContainer) {
@@ -68,7 +68,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @EventHandler
-    private void onSaveNBT(CBlockEntitySaveNBTEvent event) {
+    protected void onSaveNBT(CBlockEntitySaveNBTEvent event) {
         var builder = event.getNbt();
         builder.putList(
                 "Items",
@@ -78,7 +78,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @EventHandler
-    private void onInteract(CBlockOnInteractEvent event) {
+    protected void onInteract(CBlockOnInteractEvent event) {
         var player = event.getInteractInfo().player();
         if (player == null || player.isSneaking()) return;
 
@@ -91,7 +91,7 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
     }
 
     @EventHandler
-    private void onReplace(CBlockOnReplaceEvent event) {
+    protected void onReplace(CBlockOnReplaceEvent event) {
         if (!dropItemWhenBreak()) return;
 
         var pos = event.getCurrentBlockState().pos();

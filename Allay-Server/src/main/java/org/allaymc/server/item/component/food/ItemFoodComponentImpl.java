@@ -51,12 +51,12 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
     }
 
     @EventHandler
-    private void onTryUseItem(CItemTryUseEvent event) {
+    protected void onTryUseItem(CItemTryUseEvent event) {
         event.setCanBeUsed(canBeAlwaysEaten() || event.getPlayer().canEat());
     }
 
     @EventHandler
-    private void onItemUsed(CItemUsedEvent event) {
+    protected void onItemUsed(CItemUsedEvent event) {
         if (event.getUsedTime() < eatingTime) {
             event.setCanBeUsed(false);
             return;

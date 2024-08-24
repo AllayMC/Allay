@@ -160,7 +160,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     }
 
     @EventHandler
-    private void onEntityFall(CEntityFallEvent event) {
+    protected void onEntityFall(CEntityFallEvent event) {
         if (!hasFallDamage()) return;
 
         var damage = Math.round((event.getFallDistance() - 3) - baseComponent.getEffectLevel(VanillaEffectTypes.JUMP_BOOST));
