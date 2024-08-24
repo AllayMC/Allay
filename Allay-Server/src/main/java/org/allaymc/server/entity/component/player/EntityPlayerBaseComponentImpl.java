@@ -815,14 +815,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public void setAbsorption(float absorption) {
-        if (absorption == absorption) return;
+        if (this.absorption == absorption) return;
         super.setAbsorption(absorption);
         attributeComponent.setAttribute(AttributeType.ABSORPTION, absorption);
     }
 
     @Override
-    public void knockback(Vector3fc source, float kb) {
-        var kbMotion = calculateKnockbackMotion(source, kb);
+    public void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
+        var kbMotion = calculateKnockbackMotion(source, kb, ignoreKnockbackResistance);
         setMotion(kbMotion);
     }
 

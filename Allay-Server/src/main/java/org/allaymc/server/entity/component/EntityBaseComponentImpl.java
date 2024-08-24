@@ -445,22 +445,17 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void knockback(Vector3fc source) {
-        var resistance = 0.6f;
-        if (attributeComponent != null) {
-            resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+    public void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
+        motion = calculateKnockbackMotion(source, kb, ignoreKnockbackResistance);
+    }
+
+    protected Vector3f calculateKnockbackMotion(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
+        if (!ignoreKnockbackResistance) {
+            var resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+            if (resistance > 0) {
+                kb *= 1 - resistance;
+            }
         }
-        var kb = 1 - resistance;
-        if (kb <= 0) return;
-        knockback(source, kb);
-    }
-
-    @Override
-    public void knockback(Vector3fc source, float kb) {
-        motion = calculateKnockbackMotion(source, kb);
-    }
-
-    protected Vector3f calculateKnockbackMotion(Vector3fc source, float kb) {
         Vector3f vec;
         if (getLocation().distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
             // Generate a random kb direction if distance <= 0.01m

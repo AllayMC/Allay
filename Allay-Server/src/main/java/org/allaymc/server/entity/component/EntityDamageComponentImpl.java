@@ -7,6 +7,7 @@ import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.data.VanillaEffectTypes;
+import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
@@ -15,6 +16,7 @@ import org.allaymc.api.entity.component.event.CEntityDamageEvent;
 import org.allaymc.api.entity.component.event.CEntityFallEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -76,7 +78,17 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         if (damage.hasCustomKnockback()) {
             baseComponent.knockback(attacker.getLocation(), damage.getCustomKnockback());
         } else {
-            baseComponent.knockback(attacker.getLocation());
+            if (attacker instanceof EntityPlayer player) {
+                // TODO: Zombies and other creatures that can hold weapons need to be considered
+                var kb = EntityBaseComponent.DEFAULT_KNOCKBACK;
+                var kbEnchantmentLevel = player.getItemInHand().getEnchantmentLevel(VanillaEnchantmentTypes.KNOCKBACK);
+                if (kbEnchantmentLevel != 0) {
+                    kb += kbEnchantmentLevel * 0.1f;
+                }
+                baseComponent.knockback(attacker.getLocation(), kb);
+            } else {
+                baseComponent.knockback(attacker.getLocation());
+            }
         }
     }
 

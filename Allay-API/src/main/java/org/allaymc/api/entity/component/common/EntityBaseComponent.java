@@ -1,9 +1,9 @@
 package org.allaymc.api.entity.component.common;
 
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
@@ -47,6 +47,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     float SNEAKING_MOVEMENT_FACTOR = 0.3f;
     float STOP_MOVEMENT_FACTOR = 0f;
     float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
+    float DEFAULT_KNOCKBACK = 0.4f;
 
     private static boolean isWaterType(BlockType<?> blockType) {
         return blockType == BlockTypes.FLOWING_WATER || blockType == BlockTypes.WATER;
@@ -322,9 +323,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
         }
     }
 
-    void knockback(Vector3fc source);
+    default void knockback(Vector3fc source) {
+        knockback(source, DEFAULT_KNOCKBACK);
+    }
 
-    void knockback(Vector3fc source, float kb);
+    default void knockback(Vector3fc source, float kb) {
+        knockback(source, kb, false);
+    }
+
+    void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance);
 
     default void applyEntityEvent(EntityEventType event, int data) {
         var pk = new EntityEventPacket();
