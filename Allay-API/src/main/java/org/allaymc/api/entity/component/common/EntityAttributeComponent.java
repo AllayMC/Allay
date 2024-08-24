@@ -46,6 +46,10 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     void setHealth(float value);
 
+    default void resetHealth() {
+        setHealth(getMaxHealth());
+    }
+
     default float getMaxHealth() {
         return this.getAttribute(AttributeType.HEALTH).getMaxValue();
     }

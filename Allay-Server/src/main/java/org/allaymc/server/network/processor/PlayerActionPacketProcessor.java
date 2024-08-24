@@ -104,7 +104,8 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
         player.setSprinting(false);
         player.setSneaking(false);
         player.removeAllEffects();
-        player.setHealth(player.getMaxHealth());
+        player.resetHealth();
+        player.resetFoodData();
         player.setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, (short) 400);
     }
 

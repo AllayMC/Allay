@@ -13,6 +13,10 @@ import java.util.Arrays;
  */
 public interface EntityPlayerAttributeComponent extends EntityAttributeComponent {
 
+    int MAX_FOOD_LEVEL = 20;
+    int MAX_FOOD_SATURATION_LEVEL = 20;
+    int MAX_FOOD_EXHAUSTION_LEVEL = 5;
+
     static AttributeType[] basicPlayerAttributes() {
         var list = Lists.newArrayList(
                 AttributeType.PLAYER_HUNGER,
@@ -61,6 +65,12 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
         } else {
             return 7 + (level << 1);
         }
+    }
+
+    default void resetFoodData() {
+        setFoodLevel((int) AttributeType.PLAYER_HUNGER.getDefaultValue());
+        setFoodSaturationLevel(AttributeType.PLAYER_SATURATION.getDefaultValue());
+        setFoodExhaustionLevel(AttributeType.PLAYER_EXHAUSTION.getDefaultValue());
     }
 
     int getFoodLevel();

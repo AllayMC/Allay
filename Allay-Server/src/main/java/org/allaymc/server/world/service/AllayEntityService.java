@@ -72,7 +72,7 @@ public class AllayEntityService implements EntityService {
     @Override
     public void addEntity(Entity entity, Runnable callback) {
         if (!entity.canBeSpawned()) {
-            log.warn("Trying to add an entity twice! Entity: {}", entity);
+            log.warn("Trying to add an entity which can't be added! Entity: {}", entity);
             return;
         }
 

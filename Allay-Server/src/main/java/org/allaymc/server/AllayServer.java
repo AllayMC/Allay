@@ -263,10 +263,10 @@ public final class AllayServer implements Server {
 
         if (player.isLoggedIn()) {
             broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
+            playerStorage.savePlayerData(player);
         }
 
         if (player.isSpawned()) {
-            this.getPlayerStorage().savePlayerData(player);
             player.getDimension().removePlayer(player);
 
             var pk = new PlayerListPacket();

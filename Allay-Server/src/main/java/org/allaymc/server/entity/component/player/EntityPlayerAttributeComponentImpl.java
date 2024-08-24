@@ -22,10 +22,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
  */
 public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponentImpl implements EntityPlayerAttributeComponent {
 
-    private static final int MAX_FOOD_LEVEL = 20;
-    private static final int MAX_FOOD_SATURATION_LEVEL = 20;
-    private static final int MAX_FOOD_EXHAUSTION_LEVEL = 5;
-
     @ComponentedObject
     private EntityPlayer thisPlayer;
     private int foodTickTimer;
