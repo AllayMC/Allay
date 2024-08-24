@@ -194,6 +194,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         syncData();
     }
 
+    @Override
+    protected void onDie() {
+        super.onDie();
+
+        var respawnPacket = new RespawnPacket();
+        respawnPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.ZERO);
+        respawnPacket.setState(RespawnPacket.State.SERVER_SEARCHING);
+        networkComponent.sendPacket(respawnPacket);
+    }
+
     protected void tickPlayerDataAutoSave() {
         // We use server's tick instead of world's tick
         // because player may teleport between worlds

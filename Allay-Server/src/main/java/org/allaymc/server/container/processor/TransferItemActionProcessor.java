@@ -37,7 +37,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
         var sourItem = source.getItemStack(sourceSlot);
         if (sourItem.getItemType() == AIR) {
-            log.warn("place an air item is not allowed");
+            log.warn("pick an air item is not allowed!");
             return error();
         }
 

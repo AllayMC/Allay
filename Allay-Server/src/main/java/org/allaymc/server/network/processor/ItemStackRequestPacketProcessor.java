@@ -8,6 +8,7 @@ import org.allaymc.server.container.processor.ActionResponse;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
 import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponse;
@@ -83,11 +84,11 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
     private ItemStackResponse encodeActionResponses(List<ActionResponse> responses, int requestId) {
         Map<ContainerSlotType, List<ItemStackResponseSlot>> changedContainers = new HashMap<>();
         responses.forEach(response -> response.containers().forEach(container -> {
-            changedContainers.computeIfAbsent(container.getContainer(), $ -> new ArrayList<>()).addAll(container.getItems());
+            changedContainers.computeIfAbsent(container.getContainerName().getContainer(), $ -> new ArrayList<>()).addAll(container.getItems());
         }));
 
         var containers = changedContainers.entrySet().stream()
-                .map(entry -> new ItemStackResponseContainer(entry.getKey(), entry.getValue(), null))
+                .map(entry -> new ItemStackResponseContainer(entry.getKey(), entry.getValue(), new FullContainerName(entry.getKey(), 0)))
                 .toList();
         return new ItemStackResponse(ItemStackResponseStatus.OK, requestId, containers);
     }

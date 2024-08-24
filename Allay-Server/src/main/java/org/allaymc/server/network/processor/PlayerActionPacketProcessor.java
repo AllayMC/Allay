@@ -20,8 +20,10 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
     public PacketSignal handleAsync(EntityPlayer player, PlayerActionPacket packet, long receiveTime) {
         return switch (packet.getAction()) {
             case RESPAWN -> {
-                // Player is not fully dead
-                if (!player.canBeSpawned()) yield PacketSignal.HANDLED;
+                if (!player.canBeSpawned()) {
+                    log.warn("Player {} tried to respawn but he can't be spawned!", player.getOriginName());
+                    yield PacketSignal.HANDLED;
+                }
 
                 var spawnPoint = player.getSpawnPoint();
                 var spawnDimension = spawnPoint.dimension();

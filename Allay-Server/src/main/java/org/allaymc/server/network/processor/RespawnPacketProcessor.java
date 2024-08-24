@@ -14,11 +14,12 @@ public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
         if (packet.getState() != RespawnPacket.State.CLIENT_READY) return PacketSignal.HANDLED;
 
         var respawnPacket = new RespawnPacket();
-        respawnPacket.setRuntimeEntityId(player.getRuntimeId());
+        // NOTICE: No need to set runtime entity id
         var sp = player.getSpawnPoint();
         respawnPacket.setPosition(Vector3f.from(sp.x(), sp.y(), sp.z()));
         respawnPacket.setState(RespawnPacket.State.SERVER_READY);
         player.sendPacket(respawnPacket);
+
         return PacketSignal.HANDLED;
     }
 
