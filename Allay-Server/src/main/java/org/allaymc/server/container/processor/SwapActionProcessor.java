@@ -2,6 +2,7 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.SwapAction;
@@ -21,8 +22,8 @@ import java.util.Map;
 public class SwapActionProcessor implements ContainerActionProcessor<SwapAction> {
     @Override
     public ActionResponse handle(SwapAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
-        var destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainer());
+        var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
+        var destinationContainer = player.getReachableContainerBySlotType(action.getDestination().getContainerName().getContainer());
 
         var sourceSlot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
         var destinationSlot = destinationContainer.fromNetworkSlotIndex(action.getDestination().getSlot());
@@ -56,7 +57,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 destinationItem.getDurability()
                                         )
                                 ),
-                                null
+                                new FullContainerName(sourceContainer.getSlotType(sourceSlot), 0)
                         ),
                         new ItemStackResponseContainer(
                                 destinationContainer.getSlotType(destinationSlot),
@@ -70,7 +71,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 sourceItem.getDurability()
                                         )
                                 ),
-                                null
+                                new FullContainerName(destinationContainer.getSlotType(destinationSlot), 0)
                         )
                 )
         );

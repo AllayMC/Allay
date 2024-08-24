@@ -3,6 +3,7 @@ package org.allaymc.server.container.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -24,7 +25,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
     @Override
     public ActionResponse handle(ConsumeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
-        var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainer());
+        var sourceContainer = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
         var sourceStackNetworkId = action.getSource().getStackNetworkId();
         var slot = sourceContainer.fromNetworkSlotIndex(action.getSource().getSlot());
 
@@ -73,7 +74,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
                                                 item.getDurability()
                                         )
                                 ),
-                                null
+                                new FullContainerName(sourceContainer.getSlotType(slot), 0)
                         )
                 )
         );

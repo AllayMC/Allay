@@ -5,6 +5,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TransferItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemStackResponseContainer;
@@ -25,8 +26,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
     @Override
     public ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        var source = player.getReachableContainerBySlotType(action.getSource().getContainer());
-        var destination = player.getReachableContainerBySlotType(action.getDestination().getContainer());
+        var source = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
+        var destination = player.getReachableContainerBySlotType(action.getDestination().getContainerName().getContainer());
 
         int sourceSlot = source.fromNetworkSlotIndex(action.getSource().getSlot());
         int sourceStackNetworkId = action.getSource().getStackNetworkId();
@@ -117,7 +118,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                 resultDestItem.getDurability()
                         )
                 ),
-                null
+                new FullContainerName(destination.getSlotType(destinationSlot), 0)
         );
         // No need to respond to CREATED_OUTPUT (mj's strange hack)
         if (source.getContainerType() != FullContainerType.CREATED_OUTPUT) {
@@ -135,7 +136,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                             resultSourItem.getDurability()
                                     )
                             ),
-                            null
+                            new FullContainerName(source.getSlotType(sourceSlot), 0)
                     ), destItemStackResponseSlot)
             );
         } else {

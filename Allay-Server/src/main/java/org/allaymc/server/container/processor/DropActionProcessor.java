@@ -2,6 +2,7 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DropAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
@@ -22,7 +23,7 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 public class DropActionProcessor implements ContainerActionProcessor<DropAction> {
     @Override
     public ActionResponse handle(DropAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        var container = player.getReachableContainerBySlotType(action.getSource().getContainer());
+        var container = player.getReachableContainerBySlotType(action.getSource().getContainerName().getContainer());
         var count = action.getCount();
         var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());
 
@@ -59,7 +60,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                                 item.getDurability()
                                         )
                                 ),
-                                null
+                                new FullContainerName(container.getSlotType(slot), 0)
                         )
                 )
         );
