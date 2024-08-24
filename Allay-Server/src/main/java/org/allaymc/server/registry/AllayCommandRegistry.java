@@ -60,6 +60,8 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new GiveCommand());
         register(new DifficultyCommand());
         register(new ListCommand());
+        register(new SetWorldSpawnCommand());
+        register(new GCCommand());
     }
 
     @Override
