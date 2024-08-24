@@ -27,9 +27,9 @@ public class CreateActionProcessor implements ContainerActionProcessor<CreateAct
             return error();
         }
 
+        // No need to copy because when we get item from created output, we will copy it
         var output = recipe.getOutputs()[action.getSlot()];
-        var createdOutput = player.getContainer(CREATED_OUTPUT);
-        createdOutput.setItemStack(0, output);
+        player.getContainer(CREATED_OUTPUT).setItemStack(0, output);
         return null;
     }
 

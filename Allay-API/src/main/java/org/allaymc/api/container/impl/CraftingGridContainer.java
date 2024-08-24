@@ -17,7 +17,7 @@ public class CraftingGridContainer extends CraftingContainer {
     }
 
     @Override
-    public int calculateShouldConsumedItemCount() {
+    public int calculateShouldConsumedItemSlotCount() {
         var count = 0;
         for (var i = 0; i < 4; i++) {
             if (!isEmpty(i)) count++;

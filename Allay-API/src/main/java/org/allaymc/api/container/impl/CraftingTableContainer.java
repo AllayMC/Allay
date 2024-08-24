@@ -25,7 +25,7 @@ public class CraftingTableContainer extends CraftingContainer {
     }
 
     @Override
-    public int calculateShouldConsumedItemCount() {
+    public int calculateShouldConsumedItemSlotCount() {
         return (int) IntStream.range(0, 9).filter(i -> !isEmpty(i)).count();
     }
 }

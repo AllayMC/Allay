@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.CraftingContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ConsumeAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.CraftRecipeAction;
@@ -32,32 +33,51 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             // The player is not opening a crafting table, using crafting grid instead
             craftingContainer = player.getContainer(FullContainerType.CRAFTING_GRID);
         }
+        var numberOfRequestedCrafts = action.getNumberOfRequestedCrafts();
 
+        // Validate item type
         var recipe = Registries.RECIPES.get(action.getRecipeNetworkId());
         var input = craftingContainer.createCraftingInput();
-
         var matched = recipe.match(input);
         if (!matched) {
             log.warn("Mismatched recipe! Network id: {}", recipe.getNetworkId());
             return error();
         }
 
-        dataPool.put(RECIPE_DATA_KEY, recipe);
+        // Validate if the player has provided enough ingredients
+        var itemStackArray = craftingContainer.getItemStackArray();
+        for (int slot = 0; slot < itemStackArray.length; slot++) {
+            var ingredient = itemStackArray[slot];
+            // Skip empty slot because we have checked item type above
+            if (ingredient == ItemAirStack.AIR_STACK) continue;
+            if (ingredient.getCount() < numberOfRequestedCrafts) {
+                log.warn("Not enough ingredients in slot {}! Expected: {}, Actual: {}", slot, numberOfRequestedCrafts, ingredient.getCount());
+                return error();
+            }
+        }
+
         // Validate the consume action count which client sent
         // Some checks are also placed in ConsumeActionProcessor (e.g., item consumption count check)
         var consumeActions = findAllConsumeActions(actions, currentActionIndex + 1);
-        var consumeActionCountNeeded = craftingContainer.calculateShouldConsumedItemCount();
+        var consumeActionCountNeeded = craftingContainer.calculateShouldConsumedItemSlotCount();
         if (consumeActions.size() != consumeActionCountNeeded) {
             log.warn("Mismatched consume action count! Expected: {}, Actual: {}", consumeActionCountNeeded, consumeActions.size());
             return error();
         }
 
         if (recipe.getOutputs().length == 1) {
-            // If the recipe output is 1 item, the client will not send a CreateAction, so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
+            // If the recipe outputs a single item, the client will not send a CreateAction, so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
+            var output = recipe.getOutputs()[0].copy(false);
+            output.setCount(output.getCount() * numberOfRequestedCrafts);
+            player.getContainer(CREATED_OUTPUT).setItemStack(0, output);
+        } else {
+            if (numberOfRequestedCrafts != 1) {
+                log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);
+                return error();
+            }
             // If the recipe outputs multiple items, the client will send a CreateAction, so we will set the output in CREATED_OUTPUT in CreateActionProcessor
-            var output = recipe.getOutputs()[0];
-            var createdOutput = player.getContainer(CREATED_OUTPUT);
-            createdOutput.setItemStack(0, output);
+            // Put recipe to data pool so that CreateActionProcessor can get it
+            dataPool.put(RECIPE_DATA_KEY, recipe);
         }
 
         return null;

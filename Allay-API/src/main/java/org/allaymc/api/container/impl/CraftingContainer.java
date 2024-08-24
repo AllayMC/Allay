@@ -25,5 +25,5 @@ public abstract class CraftingContainer extends BlockContainer {
 
     public abstract CraftingInput createCraftingInput();
 
-    public abstract int calculateShouldConsumedItemCount();
+    public abstract int calculateShouldConsumedItemSlotCount();
 }
