@@ -23,16 +23,14 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         super(
                 new PlayerCursorContainer(),
                 new PlayerCreatedOutputContainer(),
-                new PlayerArmorContainer(),
                 new PlayerOffhandContainer(),
                 new CraftingGridContainer(),
                 new CraftingTableContainer()
         );
-    }
-
-    @OnInitFinish
-    public void onInitFinish(EntityInitInfo initInfo) {
-        addContainer(new PlayerInventoryContainer(thisPlayer));
+        // We shouldn't provide thisPlayer object directly
+        // because at that time thisPlayer is null
+        addContainer(new PlayerArmorContainer(() -> thisPlayer));
+        addContainer(new PlayerInventoryContainer(() -> thisPlayer));
     }
 
     @Override

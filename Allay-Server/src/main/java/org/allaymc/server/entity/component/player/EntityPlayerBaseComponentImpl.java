@@ -19,9 +19,9 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
-import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
+import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
@@ -81,7 +81,7 @@ import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCOR
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl implements EntityPlayerBaseComponent {
 
     @Dependency
-    protected EntityContainerHolderComponent containerHolderComponent;
+    protected EntityPlayerContainerHolderComponent containerHolderComponent;
     @Dependency
     protected EntityPlayerNetworkComponent networkComponent;
     @Getter

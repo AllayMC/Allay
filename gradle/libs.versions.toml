@@ -21,6 +21,7 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.2" }
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.16.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "24.1.0" }
 # Zlib
+# NOTICE: This lib seems won't be used in the future, need to have more checks
 libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0.0.2-PNX" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }

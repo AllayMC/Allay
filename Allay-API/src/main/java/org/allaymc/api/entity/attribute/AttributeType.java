@@ -17,7 +17,7 @@ public enum AttributeType {
 
     // Base Entity
     ABSORPTION("minecraft:absorption", 0, Float.MAX_VALUE, 0),
-    KNOCKBACK_RESISTANCE("minecraft:knockback_resistance", 0, 1, 0.6f),
+    KNOCKBACK_RESISTANCE("minecraft:knockback_resistance", 0, 1, 0),
     HEALTH("minecraft:health", 0, 20, 20),
     MOVEMENT_SPEED("minecraft:movement", 0.1f, 1, 0.1f),
     UNDER_WATER_MOVEMENT_SPEED("minecraft:underwater_movement", 0, Float.MAX_VALUE, 0.02f),

@@ -2,11 +2,8 @@ package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.data.ArmorTier;
-import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.server.entity.component.EntityDamageComponentImpl;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -42,9 +39,14 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
 
         int durabilityIncreased = Math.max(1, (int)(damage.getSourceDamage() / 4.0f));
         var armorContainer = thisPlayer.getContainer(FullContainerType.ARMOR);
-        for (var item : armorContainer.getItemStacks()) {
+        var itemStackArray = armorContainer.getItemStackArray();
+        for (int slot = 0; slot < itemStackArray.length; slot++) {
+            var item = itemStackArray[slot];
+            if (!item.getItemData().isDamageable()) {
+                continue;
+            }
             item.increaseDurability(durabilityIncreased);
-            armorContainer.onAllSlotsChange();
+            armorContainer.onSlotChange(slot);
         }
 
         if (damage.getDamageType() == DamageContainer.DamageType.FALL) {
@@ -57,7 +59,6 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
         var totalArmorValue = 0.0f;
         var totalToughnessValue = 0.0f;
         var enchantmentProtectionFactor = 0;
-        var knockbackResistance = 0.0f;
 
         for (var item : armorContainer.getItemStacks()) {
             if (item == ItemAirStack.AIR_STACK) continue;
@@ -65,13 +66,8 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
             totalArmorValue += item.getItemData().armorValue();
             totalToughnessValue += item.getItemData().toughnessValue();
             enchantmentProtectionFactor += item.getEnchantmentProtectionFactor(damage.getDamageType());
-            if (ItemHelper.getArmorTier(item.getItemType()) == ArmorTier.NETHERITE) {
-                knockbackResistance += 0.1f;
-            }
         }
         enchantmentProtectionFactor = Math.min(20, enchantmentProtectionFactor);
-        // Update knockback resistance until we use it
-        thisPlayer.setAttribute(AttributeType.KNOCKBACK_RESISTANCE, knockbackResistance);
 
         // See https://minecraft.wiki/w/Armor#Damage_reduction
         final var v = totalArmorValue;
