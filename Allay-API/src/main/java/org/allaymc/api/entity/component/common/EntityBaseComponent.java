@@ -384,8 +384,4 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     default boolean onInteract(EntityPlayer player, ItemStack itemStack) {
         return false;
     }
-
-    float getAbsorption();
-
-    void setAbsorption(float absorption);
 }

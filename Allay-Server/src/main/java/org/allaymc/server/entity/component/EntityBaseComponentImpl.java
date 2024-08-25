@@ -118,9 +118,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Setter
     protected String displayName;
     protected Set<String> tags = new HashSet<>();
-    @Getter
-    @Setter
-    protected float absorption;
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
         this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());

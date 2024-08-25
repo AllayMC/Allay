@@ -2,11 +2,16 @@ package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.entity.component.event.CEntityDieEvent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.component.EntityDamageComponentImpl;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.packet.DeathInfoPacket;
 
 /**
  * Allay Project 2024/1/19
@@ -101,5 +106,17 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
 
         final var epf = enchantmentProtectionFactor;
         damage.updateFinalDamage(d -> d * (1.0f - epf / 25.0f));
+    }
+
+    @EventHandler
+    protected void onDie(CEntityDieEvent event) {
+        var deathInfo = lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker());
+
+        Server.getInstance().broadcastTr(deathInfo.first(), deathInfo.second());
+
+        var pk = new DeathInfoPacket();
+        // Translate it server-side
+        pk.setCauseAttackName(I18n.get().tr(thisPlayer.getLangCode(), deathInfo.first(), deathInfo.second()));
+        thisPlayer.sendPacket(pk);
     }
 }

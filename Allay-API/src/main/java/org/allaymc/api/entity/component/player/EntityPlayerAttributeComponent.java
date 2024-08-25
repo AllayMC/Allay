@@ -73,17 +73,29 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
         setFoodExhaustionLevel(AttributeType.PLAYER_EXHAUSTION.getDefaultValue());
     }
 
-    int getFoodLevel();
+    default int getFoodLevel() {
+        return (int) getAttributeValue(AttributeType.PLAYER_HUNGER);
+    }
 
     void setFoodLevel(int value);
 
-    float getFoodSaturationLevel();
+    default float getFoodSaturationLevel() {
+        return getAttributeValue(AttributeType.PLAYER_SATURATION);
+    }
 
-    void setFoodSaturationLevel(float value);
+    default void setFoodSaturationLevel(float value) {
+        value = Math.max(0, Math.min(value, MAX_FOOD_SATURATION_LEVEL));
+        setAttribute(AttributeType.PLAYER_SATURATION, value);
+    }
 
-    float getFoodExhaustionLevel();
+    default float getFoodExhaustionLevel() {
+        return getAttributeValue(AttributeType.PLAYER_EXHAUSTION);
+    }
 
-    void setFoodExhaustionLevel(float value);
+    default void setFoodExhaustionLevel(float value) {
+        value = Math.max(0, Math.min(value, MAX_FOOD_EXHAUSTION_LEVEL));
+        setAttribute(AttributeType.PLAYER_EXHAUSTION, value);
+    }
 
     void exhaust(float level);
 

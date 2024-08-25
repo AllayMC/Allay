@@ -1,11 +1,24 @@
 package org.allaymc.api.entity.damage;
 
+import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.Pair;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
+
+import static org.allaymc.api.entity.damage.DamageContainer.DamageType.*;
 
 /**
  * Allay Project 2024/1/12
@@ -15,8 +28,17 @@ import java.util.function.UnaryOperator;
 @Getter
 public class DamageContainer {
     public static final int DEFAULT_DAMAGE_COOL_DOWN = 10;
+    public static Set<DamageType> CANNOT_BE_REDUCED_BY_ARMOR_DAMAGE_TYPES = Sets.newHashSet(
+            FIRE_TICK, SUFFOCATION, DROWNING,
+            STARVE, VOID, MAGIC, COMMAND,
+            FLY_INTO_WALL, FREEZING, SONIC_BOOM
+    );
 
-    protected Entity attacker;
+    /**
+     * The attacker of the damage <br>
+     * Attacker not only can be an entity, but also can be a block or even null!
+     */
+    protected Object attacker;
     protected DamageType damageType;
     protected float sourceDamage;
     @Setter
@@ -29,33 +51,38 @@ public class DamageContainer {
     @Setter
     protected boolean critical;
 
-    public DamageContainer(Entity attacker, DamageType damageType, float sourceDamage) {
+    public DamageContainer(Object attacker, DamageType damageType, float sourceDamage) {
         // attacker is nullable
         this.attacker = attacker;
-        if (attacker != null) this.critical = attacker.canCriticalAttack();
         this.damageType = Objects.requireNonNull(damageType);
         this.sourceDamage = sourceDamage;
         this.finalDamage = sourceDamage;
     }
 
+    public <T> T getAttacker() {
+        return (T) attacker;
+    }
+
     public static DamageContainer simpleAttack(float sourceDamage) {
-        return new DamageContainer(null, DamageType.API, sourceDamage);
+        return new DamageContainer(null, API, sourceDamage);
     }
 
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
-        return new DamageContainer(attacker, DamageType.ENTITY_ATTACK, sourceDamage);
+        var damageContainer = new DamageContainer(attacker, ENTITY_ATTACK, sourceDamage);
+        damageContainer.setCritical(attacker.canCriticalAttack());
+        return damageContainer;
     }
 
     public static DamageContainer starve(float sourceDamage) {
-        return new DamageContainer(null, DamageType.STARVE, sourceDamage);
+        return new DamageContainer(null, STARVE, sourceDamage);
     }
 
     public static DamageContainer fall(float sourceDamage) {
-        return new DamageContainer(null, DamageType.FALL, sourceDamage);
+        return new DamageContainer(null, FALL, sourceDamage);
     }
 
     public static DamageContainer magicEffect(float sourceDamage) {
-        return new DamageContainer(null, DamageType.MAGIC, sourceDamage);
+        return new DamageContainer(null, MAGIC, sourceDamage);
     }
 
     public boolean hasCustomKnockback() {
@@ -67,103 +94,196 @@ public class DamageContainer {
     }
 
     public boolean canBeReducedByArmor() {
-        return switch (this.damageType) {
-            case FIRE_TICK, SUFFOCATION, DROWNING,
-                 STARVE, VOID, MAGIC, COMMAND,
-                 FLY_INTO_WALL, FREEZING, SONIC_BOOM -> false;
-            default -> true;
-        };
+        return !CANNOT_BE_REDUCED_BY_ARMOR_DAMAGE_TYPES.contains(damageType);
     }
 
-    public enum DamageType {
-        ANVIL,
+    public static class DamageType {
+        public static DamageType ANVIL = fixed(TrKeys.M_DEATH_ATTACK_ANVIL);
         /**
          * Block explosion damage
          */
-        BLOCK_EXPLOSION,
-        CHARGING,
+        public static DamageType BLOCK_EXPLOSION = dynamic(
+                block -> {
+                    if (block == BlockTypes.BED) {
+                        return TrKeys.M_DEATH_ATTACK_EXPLOSION_BY_BED;
+                    }
+                    return TrKeys.M_DEATH_ATTACK_EXPLOSION;
+                });
+        public static DamageType CHARGING = defaultFixed(); // TODO
         /**
          * Damage caused by contact with a block such as a Cactus
          */
-        CONTACT,
+        public static DamageType CONTACT = dynamic(
+                block -> {
+                    if (block == BlockTypes.CACTUS) {
+                        return TrKeys.M_DEATH_ATTACK_CACTUS;
+                    }
+                    if (block == BlockTypes.SWEET_BERRY_BUSH) {
+                        return TrKeys.M_DEATH_ATTACK_SWEETBERRY;
+                    }
+                    return TrKeys.M_DEATH_ATTACK_GENERIC;
+                });
         /**
          * Damage caused by running out of air underwater
          */
-        DROWNING,
+        public static DamageType DROWNING = fixed(TrKeys.M_DEATH_ATTACK_DROWN);
         /**
          * Damage caused by being attacked by another entity
          */
-        ENTITY_ATTACK,
+        public static DamageType ENTITY_ATTACK = dynamicWithExtraSingleParam(
+                attacker -> switch (attacker) {
+                    case EntityPlayer $ -> TrKeys.M_DEATH_ATTACK_PLAYER;
+                    case Entity $ -> TrKeys.M_DEATH_ATTACK_MOB;
+                    default -> TrKeys.M_DEATH_ATTACK_GENERIC;
+                },
+                attacker -> switch (attacker) {
+                    case EntityPlayer player -> player.getDisplayName();
+                    case Entity entity -> entity.getNameTag() == null ? entity.getDisplayName() : entity.getNameTag();
+                    default -> null;
+                });
         /**
          * Entity explosion damage
          */
-        ENTITY_EXPLOSION,
+        public static DamageType ENTITY_EXPLOSION = dynamicWithExtraSingleParam(
+                attacker -> {
+                    if (attacker instanceof Entity) {
+                        return TrKeys.M_DEATH_ATTACK_EXPLOSION_PLAYER;
+                    }
+                    return TrKeys.M_DEATH_ATTACK_EXPLOSION;
+                },
+                attacker -> switch (attacker) {
+                    case EntityPlayer player -> player.getDisplayName();
+                    case Entity entity -> entity.getNameTag() == null ? entity.getDisplayName() : entity.getNameTag();
+                    default -> null;
+                });
         /**
          * Fall damage
          */
-        FALL,
-        FALLING_BLOCK,
+        public static DamageType FALL = fixed(TrKeys.M_DEATH_ATTACK_FALL);
+        public static DamageType FALLING_BLOCK = fixed(TrKeys.M_DEATH_ATTACK_FALLINGBLOCK);
         /**
          * Damage caused by standing in fire
          */
-        FIRE,
-        FIREBALL,
+        public static DamageType FIRE = fixed(TrKeys.M_DEATH_ATTACK_ONFIRE);
+        public static DamageType FIREBALL = fixed(TrKeys.M_DEATH_ATTACK_FIREBALL);
         /**
          * Burn damage
          */
-        FIRE_TICK,
-        FIREWORKS,
-        FLY_INTO_WALL,
-        FREEZING,
+        public static DamageType FIRE_TICK = fixed(TrKeys.M_DEATH_ATTACK_INFIRE);
+        public static DamageType FIREWORKS = fixed(TrKeys.M_DEATH_ATTACK_FIREWORKS);
+        public static DamageType FLY_INTO_WALL = fixed(TrKeys.M_DEATH_ATTACK_FLYINTOWALL);
+        public static DamageType FREEZING = fixed(TrKeys.M_DEATH_ATTACK_FREEZE);
         /**
          * Damage caused by standing in lava
          */
-        LAVA,
+        public static DamageType LAVA = fixed(TrKeys.M_DEATH_ATTACK_LAVA);
         /**
          * Damage caused by being struck by lightning
          */
-        LIGHTNING,
+        public static DamageType LIGHTNING = fixed(TrKeys.M_DEATH_ATTACK_LIGHTNINGBOLT);
         /**
          * Potion or spell damage
          */
-        MAGIC,
+        public static DamageType MAGIC = fixed(TrKeys.M_DEATH_ATTACK_MAGIC);
         /**
          * Damage caused by standing on magma block
          */
-        MAGMA,
-        PISTON,
+        public static DamageType MAGMA = fixed(TrKeys.M_DEATH_ATTACK_MAGMA);
+        public static DamageType PISTON = defaultFixed(); // TODO
         /**
          * Damage caused by being hit by a projectile such as an Arrow
          */
-        PROJECTILE,
-        RAM_ATTACK,
-        STALACTITE,
+        public static DamageType PROJECTILE = fixedWithExtraSingleParam(
+                TrKeys.M_DEATH_ATTACK_ARROW,
+                attacker -> switch (attacker) {
+                    case EntityPlayer player -> player.getDisplayName();
+                    case Entity entity -> entity.getNameTag() == null ? entity.getDisplayName() : entity.getNameTag();
+                    default -> null;
+                });
+        public static DamageType RAM_ATTACK = defaultFixed(); // TODO
+        public static DamageType STALACTITE = fixed(TrKeys.M_DEATH_ATTACK_STALACTITE);
         /**
          * Damage caused by hunger
          */
-        STARVE,
+        public static DamageType STARVE = fixed(TrKeys.M_DEATH_ATTACK_STARVE);
         /**
          * Damage caused by being put in a block
          */
-        SUFFOCATION,
+        public static DamageType SUFFOCATION = fixed(TrKeys.M_DEATH_ATTACK_INWALL);
         /**
          * Damage caused by submitting /kill command
          */
-        COMMAND,
-        SONIC_BOOM,
-        TEMPERATURE,
+        public static DamageType COMMAND = defaultFixed();
+        public static DamageType SONIC_BOOM = fixed(TrKeys.M_DEATH_ATTACK_SONICBOOM);
+        public static DamageType TEMPERATURE = defaultFixed(); // TODO
         /**
          * Damage caused by thorns enchantment
          */
-        THORNS,
+        public static DamageType THORNS = fixedWithExtraSingleParam(
+                TrKeys.M_DEATH_ATTACK_THORNS,
+                attacker -> switch (attacker) {
+                    case EntityPlayer player -> player.getDisplayName();
+                    case Entity entity -> entity.getNameTag() == null ? entity.getDisplayName() : entity.getNameTag();
+                    default -> null;
+                });
         /**
          * Damage caused by falling into the void
          */
-        VOID,
-        WITHER,
+        public static DamageType VOID = fixed(TrKeys.M_DEATH_ATTACK_OUTOFWORLD);
+        public static DamageType WITHER = fixed(TrKeys.M_DEATH_ATTACK_WITHER);
         /**
          * Plugins
          */
-        API,
+        public static DamageType API = defaultFixed();
+
+        protected Function<Object, String> deathInfoProvider;
+        protected Function<Object, String[]> deathInfoExtraParamsProvider;
+        
+        public static DamageType fixed(@MayContainTrKey String deathInfo) {
+            return new DamageType($ -> deathInfo);
+        }
+
+        public static DamageType dynamic(Function<Object, String> deathInfoProvider) {
+            return new DamageType(deathInfoProvider);
+        }
+
+        public static DamageType dynamicWithExtraParams(Function<Object, String> deathInfoProvider, Function<Object, String[]> deathInfoExtraParamsProvider) {
+            return new DamageType(deathInfoProvider, deathInfoExtraParamsProvider);
+        }
+
+        public static DamageType dynamicWithExtraSingleParam(Function<Object, String> deathInfoProvider, Function<Object, String> deathInfoExtraSingleParamProvider) {
+            return new DamageType(deathInfoProvider, attacker -> {
+                var singleParam = deathInfoExtraSingleParamProvider.apply(attacker);
+                return singleParam != null ? new String[]{singleParam} : Utils.EMPTY_STRING_ARRAY;
+            });
+        }
+
+        public static DamageType fixedWithExtraSingleParam(@MayContainTrKey String deathInfo, Function<Object, String> deathInfoExtraSingleParamProvider) {
+            return new DamageType($ -> deathInfo, attacker -> {
+                var singleParam = deathInfoExtraSingleParamProvider.apply(attacker);
+                return singleParam != null ? new String[]{singleParam} : Utils.EMPTY_STRING_ARRAY;
+            });
+        }
+        
+        public static DamageType defaultFixed() {
+            return new DamageType($ -> TrKeys.M_DEATH_ATTACK_GENERIC);
+        }
+
+        private DamageType(Function<Object, String> deathInfoProvider) {
+            this(deathInfoProvider, $ -> Utils.EMPTY_STRING_ARRAY);
+        }
+
+        private DamageType(Function<Object, String> deathInfoProvider, Function<Object, String[]> deathInfoExtraParamsProvider) {
+            this.deathInfoProvider = deathInfoProvider;
+            this.deathInfoExtraParamsProvider = deathInfoExtraParamsProvider;
+        }
+
+        public Pair<String, String[]> getDeathInfo(Entity victim, Object attacker) {
+            // Put victim name to the first place
+            var params = new ArrayList<String>();
+            params.add(victim.getDisplayName());
+            params.addAll(Arrays.asList(deathInfoExtraParamsProvider.apply(attacker)));
+            return Pair.of(deathInfoProvider.apply(attacker), params.toArray(String[]::new));
+        }
     }
 }

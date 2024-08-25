@@ -38,7 +38,9 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     void setAttribute(Attribute attribute);
 
-    float getAttributeValue(AttributeType attributeType);
+    default float getAttributeValue(AttributeType attributeType) {
+        return this.getAttribute(attributeType).getCurrentValue();
+    }
 
     default float getHealth() {
         return getAttributeValue(AttributeType.HEALTH);
@@ -54,7 +56,19 @@ public interface EntityAttributeComponent extends EntityComponent {
         return this.getAttribute(AttributeType.HEALTH).getMaxValue();
     }
 
-    void setMaxHealth(float value);
+    default void setMaxHealth(float value) {
+        var maxHealth = this.getAttribute(AttributeType.HEALTH);
+        maxHealth.setMaxValue(value);
+        this.setAttribute(maxHealth);
+    }
+
+    default float getAbsorption() {
+        return getAttributeValue(AttributeType.ABSORPTION);
+    }
+
+    default void setAbsorption(float absorption) {
+        setAttribute(AttributeType.ABSORPTION, absorption);
+    }
 
     default List<NbtMap> saveAttributes() {
         return getAttributes().stream().map(Attribute::toNBT).toList();

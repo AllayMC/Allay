@@ -50,7 +50,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public boolean attack(DamageContainer damage) {
         if (!canBeAttacked(damage)) return false;
-        if (!checkCoolDown(damage)) return false;
+        if (!checkAndUpdateCoolDown(damage)) return false;
 
         applyAttacker(damage);
         applyVictim(damage);
@@ -68,7 +68,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             attributeComponent.exhaust(0.1f);
         }
 
-        var attacker = damage.getAttacker();
+        Entity attacker = damage.getAttacker();
         if (attacker == null) return;
 
         if (attacker instanceof EntityPlayerAttributeComponent attributeComponent) {
@@ -92,7 +92,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         }
     }
 
-    protected boolean checkCoolDown(DamageContainer damage) {
+    protected boolean checkAndUpdateCoolDown(DamageContainer damage) {
         var currentTime = baseComponent.getWorld().getTick();
         if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return false;
 
@@ -108,9 +108,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected void applyEffects(DamageContainer damage) {
         // Damage absorption
-        var absorption = baseComponent.getAbsorption();
+        var absorption = attributeComponent.getAbsorption();
         if (absorption > 0) {
-            baseComponent.setAbsorption(Math.max(0, absorption - damage.getFinalDamage()));
+            attributeComponent.setAbsorption(Math.max(0, absorption - damage.getFinalDamage()));
             damage.updateFinalDamage(d -> Math.max(0, d - absorption));
         }
     }
@@ -120,9 +120,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     }
 
     protected void applyAttacker(DamageContainer damage) {
-        var attacker = damage.getAttacker();
-
-        if (attacker != null) {
+        if (damage.getAttacker() instanceof Entity attacker) {
             var strengthLevel = attacker.getEffectLevel(VanillaEffectTypes.STRENGTH);
             if (strengthLevel > 0) {
                 damage.updateFinalDamage(d -> {
@@ -160,7 +158,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     }
 
     @EventHandler
-    protected void onEntityFall(CEntityFallEvent event) {
+    protected void onFall(CEntityFallEvent event) {
         if (!hasFallDamage()) return;
 
         var damage = Math.round((event.getFallDistance() - 3) - baseComponent.getEffectLevel(VanillaEffectTypes.JUMP_BOOST));

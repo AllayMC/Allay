@@ -112,11 +112,6 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     }
 
     @Override
-    public int getFoodLevel() {
-        return (int) getAttributeValue(AttributeType.PLAYER_HUNGER);
-    }
-
-    @Override
     public void setFoodLevel(int value) {
         value = Math.max(0, Math.min(value, MAX_FOOD_LEVEL));
 
@@ -130,28 +125,6 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     public void setFoodTickTimer(int foodTickTimer) {
         this.foodTickTimer = Math.max(foodTickTimer, 0);
-    }
-
-    @Override
-    public float getFoodSaturationLevel() {
-        return getAttributeValue(AttributeType.PLAYER_SATURATION);
-    }
-
-    @Override
-    public void setFoodSaturationLevel(float value) {
-        value = Math.max(0, Math.min(value, MAX_FOOD_SATURATION_LEVEL));
-        setAttribute(AttributeType.PLAYER_SATURATION, value);
-    }
-
-    @Override
-    public float getFoodExhaustionLevel() {
-        return getAttributeValue(AttributeType.PLAYER_EXHAUSTION);
-    }
-
-    @Override
-    public void setFoodExhaustionLevel(float value) {
-        value = Math.max(0, Math.min(value, MAX_FOOD_EXHAUSTION_LEVEL));
-        setAttribute(AttributeType.PLAYER_EXHAUSTION, value);
     }
 
     @Override

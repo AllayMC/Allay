@@ -104,11 +104,6 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @Override
-    public float getAttributeValue(AttributeType attributeType) {
-        return this.getAttribute(attributeType).getCurrentValue();
-    }
-
-    @Override
     public void sendAttributesToClient() {
         if (networkComponent == null) return;
         var packet = new UpdateAttributesPacket();
@@ -128,10 +123,4 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         setAttribute(AttributeType.HEALTH, event.getNewHealth());
     }
 
-    @Override
-    public void setMaxHealth(float value) {
-        var maxHealth = this.getAttribute(AttributeType.HEALTH);
-        maxHealth.setMaxValue(value);
-        this.setAttribute(maxHealth);
-    }
 }
