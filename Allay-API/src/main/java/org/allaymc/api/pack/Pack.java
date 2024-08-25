@@ -123,7 +123,7 @@ public abstract class Pack implements AutoCloseable {
                 this.getId().toString(),
                 this.getStringVersion(),
                 this.getSize(),
-                "",
+                this.getContentKey(),
                 "",
                 this.getId().toString(),
                 this.getType() == Pack.Type.SCRIPT,
