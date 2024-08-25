@@ -2,8 +2,8 @@ package org.allaymc.api.container.impl;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 
@@ -15,15 +15,13 @@ import java.util.function.Supplier;
  * @author daoge_cmd
  */
 @Getter
-public class PlayerInventoryContainer extends BaseContainer {
+public class PlayerInventoryContainer extends PlayerContainer {
 
     @Setter
     protected int handSlot = 0;
-    protected Supplier<EntityPlayer> playerSupplier;
 
     public PlayerInventoryContainer(Supplier<EntityPlayer> playerSupplier) {
-        super(FullContainerType.PLAYER_INVENTORY);
-        this.playerSupplier = playerSupplier;
+        super(FullContainerType.PLAYER_INVENTORY, playerSupplier);
     }
 
     public ItemStack getItemInHand() {
@@ -39,13 +37,7 @@ public class PlayerInventoryContainer extends BaseContainer {
     }
 
     @Override
-    public void onSlotChange(int slot) {
-        super.onSlotChange(slot);
-        // Because even if the client has not opened the player inventory, they can always see their own hot bar.
-        // Therefore, we need to send an inventory packet to the client as well.
-        var player = playerSupplier.get();
-        if (!viewers.containsValue(player)) {
-            player.onSlotChange(this, slot);
-        }
+    public int getUnopenedContainerId() {
+        return UnopenedContainerId.PLAYER_INVENTORY;
     }
 }

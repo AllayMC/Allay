@@ -4,8 +4,8 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
@@ -60,9 +60,9 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("rfinv")
                 .exec((context, player) -> {
-                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
-                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
-                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
+                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.PLAYER_INVENTORY), UnopenedContainerId.PLAYER_INVENTORY);
+                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.ARMOR), UnopenedContainerId.ARMOR);
+                    player.sendContentsWithSpecificContainerId(player.getContainer(FullContainerType.OFFHAND), UnopenedContainerId.OFFHAND);
                     context.addOutput("Inventory is refreshed!");
                     return context.success();
                 }, SenderType.PLAYER)

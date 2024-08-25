@@ -110,7 +110,9 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
 
     @EventHandler
     protected void onDie(CEntityDieEvent event) {
-        var deathInfo = lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker());
+        var deathInfo = lastDamage != null ?
+                lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker()) :
+                DamageContainer.DamageType.API.getDeathInfo(thisPlayer, null);
 
         Server.getInstance().broadcastTr(deathInfo.first(), deathInfo.second());
 

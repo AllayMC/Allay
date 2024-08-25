@@ -1,10 +1,12 @@
 package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.component.annotation.ComponentedObject;
+import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
+import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
@@ -14,6 +16,7 @@ import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
 /**
  * Allay Project 2024/8/3
@@ -24,6 +27,8 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @ComponentedObject
     private EntityPlayer thisPlayer;
+    @Dependency(soft = true)
+    protected EntityPlayerNetworkComponent networkComponent;
     private int foodTickTimer;
 
     public EntityPlayerAttributeComponentImpl(AttributeType... attributeTypes) {
@@ -35,7 +40,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         super.tick();
 
         if (
-                !thisPlayer.isSpawned() || thisPlayer.isDead() ||
+                thisPlayer.isDead() ||
                 thisPlayer.getGameType() == GameType.CREATIVE ||
                 thisPlayer.getGameType() == GameType.SPECTATOR
         ) return;
@@ -161,6 +166,15 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         }
 
         setFoodSaturationLevel(currentFoodSaturationLevel);
+    }
+
+    @Override
+    public void sendAttributesToClient() {
+        var packet = new UpdateAttributesPacket();
+        packet.setRuntimeEntityId(thisEntity.getRuntimeId());
+        attributes.values().forEach(attribute -> packet.getAttributes().add(attribute.toNetwork()));
+        packet.setTick(thisEntity.getWorld().getTick());
+        networkComponent.sendPacket(packet);
     }
 
     @EventHandler

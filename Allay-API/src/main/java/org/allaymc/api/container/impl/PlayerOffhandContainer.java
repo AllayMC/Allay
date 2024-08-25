@@ -1,8 +1,7 @@
 package org.allaymc.api.container.impl;
 
-import org.allaymc.api.container.BaseContainer;
-import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
@@ -14,15 +13,12 @@ import java.util.function.Supplier;
  *
  * @author daoge_cmd
  */
-public class PlayerOffhandContainer extends BaseContainer {
+public class PlayerOffhandContainer extends PlayerContainer {
 
     public static final int OFFHAND_SLOT = 0;
 
-    protected Supplier<EntityPlayer> playerSupplier;
-
     public PlayerOffhandContainer(Supplier<EntityPlayer> playerSupplier) {
-        super(FullContainerType.OFFHAND);
-        this.playerSupplier = playerSupplier;
+        super(FullContainerType.OFFHAND, playerSupplier);
         addOnSlotChangeListener(0, this::onOffhandChange);
     }
 
@@ -45,12 +41,17 @@ public class PlayerOffhandContainer extends BaseContainer {
     protected MobEquipmentPacket buildEquipmentPacket() {
         var pk = new MobEquipmentPacket();
         pk.setRuntimeEntityId(playerSupplier.get().getRuntimeId());
-        pk.setContainerId(FixedContainerId.OFFHAND);
+        pk.setContainerId(UnopenedContainerId.OFFHAND);
         // Network slot index for offhand is 1
         // See FullContainerType.OFFHAND
         // And hotbar slot is unused
         pk.setInventorySlot(1);
         pk.setItem(getOffhand().toNetworkItemData());
         return pk;
+    }
+
+    @Override
+    public int getUnopenedContainerId() {
+        return UnopenedContainerId.OFFHAND;
     }
 }

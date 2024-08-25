@@ -1,7 +1,7 @@
 package org.allaymc.api.container.impl;
 
-import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.data.ArmorTier;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  *
  * @author daoge_cmd
  */
-public class PlayerArmorContainer extends BaseContainer {
+public class PlayerArmorContainer extends PlayerContainer {
 
     public static final int HELMET_SLOT = 0;
     public static final int CHESTPLATE_SLOT = 1;
@@ -26,11 +26,8 @@ public class PlayerArmorContainer extends BaseContainer {
     public static final int BOOTS_SLOT = 3;
     public static final float KNOCKBACK_RESISTANCE_PER_NETHERITE_ARMOR = 0.1f;
 
-    protected Supplier<EntityPlayer> playerSupplier;
-
     public PlayerArmorContainer(Supplier<EntityPlayer> playerSupplier) {
-        super(FullContainerType.ARMOR);
-        this.playerSupplier = playerSupplier;
+        super(FullContainerType.ARMOR, playerSupplier);
         addOnSlotChangeListener(0, this::onArmorChange);
         addOnSlotChangeListener(1, this::onArmorChange);
         addOnSlotChangeListener(2, this::onArmorChange);
@@ -96,5 +93,10 @@ public class PlayerArmorContainer extends BaseContainer {
 
     public void setBoots(ItemStack itemStack) {
         setItemStack(BOOTS_SLOT, itemStack);
+    }
+
+    @Override
+    public int getUnopenedContainerId() {
+        return UnopenedContainerId.ARMOR;
     }
 }

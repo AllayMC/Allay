@@ -10,8 +10,8 @@ import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
-import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -259,9 +259,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     private void sendInventories() {
-        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY), FixedContainerId.PLAYER_INVENTORY);
-        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.OFFHAND), FixedContainerId.OFFHAND);
-        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.ARMOR), FixedContainerId.ARMOR);
+        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.PLAYER_INVENTORY), UnopenedContainerId.PLAYER_INVENTORY);
+        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.OFFHAND), UnopenedContainerId.OFFHAND);
+        thisPlayer.sendContentsWithSpecificContainerId(thisPlayer.getContainer(FullContainerType.ARMOR), UnopenedContainerId.ARMOR);
         // No need to send cursor's content to client because there is nothing in cursor
     }
 

@@ -14,8 +14,8 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.OnInitFinish;
-import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
@@ -262,7 +262,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             }
             // Because of the new inventory system, the client will expect a transaction confirmation, but instead of doing that
             // It's much easier to just resend the inventory.
-            thisPlayer.sendContentsWithSpecificContainerId(inventory, FixedContainerId.PLAYER_INVENTORY, slot);
+            thisPlayer.sendContentsWithSpecificContainerId(inventory, UnopenedContainerId.PLAYER_INVENTORY, slot);
         }
     }
 
@@ -377,7 +377,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         var packet = new MobEquipmentPacket();
         packet.setRuntimeEntityId(runtimeId);
-        packet.setContainerId(FixedContainerId.PLAYER_INVENTORY);
+        packet.setContainerId(UnopenedContainerId.PLAYER_INVENTORY);
         packet.setItem(itemStack.toNetworkItemData());
         packet.setInventorySlot(handSlot);
         packet.setHotbarSlot(handSlot);

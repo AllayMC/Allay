@@ -2,19 +2,16 @@ package org.allaymc.server.entity.component;
 
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
-import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -38,8 +35,6 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @ComponentedObject
     protected Entity thisEntity;
-    @Dependency(soft = true)
-    protected EntityPlayerNetworkComponent networkComponent;
 
     public EntityAttributeComponentImpl(AttributeType... attributeTypes) {
         for (AttributeType attributeType : attributeTypes) {
@@ -104,18 +99,16 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @Override
-    public void sendAttributesToClient() {
-        if (networkComponent == null) return;
-        var packet = new UpdateAttributesPacket();
-        packet.setRuntimeEntityId(thisEntity.getRuntimeId());
-        attributes.values().forEach(attribute -> packet.getAttributes().add(attribute.toNetwork()));
-        packet.setTick(thisEntity.getWorld().getTick());
-        networkComponent.sendPacket(packet);
-    }
-
-    @Override
     public void setHealth(float value) {
-        value = max(0, min(value, this.getMaxHealth()));
+        if (value > 0 && value < 1) {
+            // Client will think he is dead if the health is less than 1
+            // But server doesn't think so, which would causes bug
+            // So we need to set the health to 1 if it's less than 1 and bigger than 0
+            value = 1;
+        } else {
+            value = max(0, min(value, this.getMaxHealth()));
+        }
+
         var event = new EntityHealthChangeEvent(thisEntity, getHealth(), value);
         event.call();
         if (event.isCancelled()) return;

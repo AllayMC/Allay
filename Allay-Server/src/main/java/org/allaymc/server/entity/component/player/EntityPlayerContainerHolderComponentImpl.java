@@ -19,7 +19,6 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
 
     public EntityPlayerContainerHolderComponentImpl() {
         super(
-                new PlayerCursorContainer(),
                 new PlayerCreatedOutputContainer(),
                 new CraftingGridContainer(),
                 new CraftingTableContainer()
@@ -29,6 +28,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         addContainer(new PlayerArmorContainer(() -> thisPlayer));
         addContainer(new PlayerInventoryContainer(() -> thisPlayer));
         addContainer(new PlayerOffhandContainer(() -> thisPlayer));
+        addContainer(new PlayerCursorContainer(() -> thisPlayer));
     }
 
     @Override

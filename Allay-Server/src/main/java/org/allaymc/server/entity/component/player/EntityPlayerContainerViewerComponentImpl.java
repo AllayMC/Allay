@@ -7,9 +7,9 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FixedContainerId;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.BlockContainer;
+import org.allaymc.api.container.impl.PlayerContainer;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.common.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
@@ -24,6 +24,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.allaymc.api.container.FullContainerType.ARMOR;
 import static org.allaymc.api.container.FullContainerType.CRAFTING_GRID;
 
 /**
@@ -141,7 +142,13 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @Override
     public void onSlotChange(Container container, int slot) {
         var id = idToContainer.inverse().get(container);
-        sendContentsWithSpecificContainerId(container, id != null ? id : FixedContainerId.PLAYER_INVENTORY, slot);
+        if (id == null) {
+            if (!(container instanceof PlayerContainer playerContainer)) return;
+            // Player can see player container even if it's not opened
+            sendContentsWithSpecificContainerId(playerContainer, playerContainer.getUnopenedContainerId(), slot);
+            return;
+        }
+        sendContentsWithSpecificContainerId(container, id, slot);
     }
 
     @Override
@@ -150,7 +157,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         Container container = null;
         if (isPlayerInventoryOpened()) {
             if (
-                    type == FullContainerType.ARMOR ||
+                    type == ARMOR ||
                     type == FullContainerType.OFFHAND ||
                     type == CRAFTING_GRID
             ) {
@@ -168,7 +175,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         FullContainerType<?> fullType = null;
         if (isPlayerInventoryOpened()) {
             fullType = switch (slotType) {
-                case ARMOR -> FullContainerType.ARMOR;
+                case ARMOR -> ARMOR;
                 case OFFHAND -> FullContainerType.OFFHAND;
                 case CRAFTING_INPUT -> FullContainerType.CRAFTING_GRID;
                 default -> null;
