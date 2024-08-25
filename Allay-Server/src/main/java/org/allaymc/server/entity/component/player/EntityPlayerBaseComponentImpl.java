@@ -623,7 +623,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     public String getCommandSenderName() {
-        return thisPlayer.getOriginName();
+        return thisPlayer.getDisplayName();
     }
 
     @Override

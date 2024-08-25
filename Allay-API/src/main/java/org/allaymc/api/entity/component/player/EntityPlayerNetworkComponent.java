@@ -46,6 +46,11 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
         return getLoginData().isXboxAuthenticated();
     }
 
+    /**
+     * Origin name is the xbox id of a player, which won't be changed unless the player do changes in his xbox account <br>
+     * This name is used for identifying a player in the server. Check display name if you want to edit the appearance of player's name
+     * @return the origin name of the player
+     */
     default String getOriginName() {
         return getLoginData().getDisplayName();
     }

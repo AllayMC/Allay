@@ -120,6 +120,14 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
         return true;
     }
 
+    /**
+     * Display name is used in chat, damage message and etc <br>
+     * Normally, it is equal to the origin name, however you can change the display name
+     * compared to the origin name <br>
+     * This is very useful for plugin especially if plugin wants to change the appearance of player name in chat
+     * because origin name cannot be changed
+     * @return the display name of the player
+     */
     String getDisplayName();
 
     void setDisplayName(String displayName);

@@ -28,7 +28,7 @@ public class KickCommand extends SimpleCommand {
                     String name = context.getResult(0);
                     String reason = context.getResult(1);
                     for (var player : Server.getInstance().getOnlinePlayers().values()) {
-                        if (player.getOriginName().equals(name)) {
+                        if (player.getDisplayName().equals(name)) {
                             var event = new PlayerKickEvent(player, reason);
                             Server.getInstance().getEventBus().callEvent(event);
                             if (event.isCancelled()) {

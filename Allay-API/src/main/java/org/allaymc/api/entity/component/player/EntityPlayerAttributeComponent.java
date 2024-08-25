@@ -52,6 +52,14 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
         setExperienceLevel(currentLevel);
     }
 
+    default int getRequireExperienceForCurrentLevel() {
+        return calculateRequireExperience(getExperienceLevel());
+    }
+
+    default int getExperienceInCurrentLevel() {
+        return (int) (getExperienceProgress() * getRequireExperienceForCurrentLevel());
+    }
+
     /**
      * Calculate experience required for the level
      * @param level level

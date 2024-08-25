@@ -8,8 +8,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  *
  * @author daoge_cmd
  */
-public class PlayerLoggedInEvent extends PlayerEvent implements CancellableEvent {
-    public PlayerLoggedInEvent(EntityPlayer player) {
+public class PlayerLoginEvent extends PlayerEvent implements CancellableEvent {
+    public PlayerLoginEvent(EntityPlayer player) {
         super(player);
     }
 }

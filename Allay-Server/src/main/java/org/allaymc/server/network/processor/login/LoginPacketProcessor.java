@@ -3,7 +3,6 @@ package org.allaymc.server.network.processor.login;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.player.PlayerLoggedInEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;

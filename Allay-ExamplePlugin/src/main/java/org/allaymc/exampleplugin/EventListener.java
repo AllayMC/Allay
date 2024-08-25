@@ -1,6 +1,7 @@
 package org.allaymc.exampleplugin;
 
 import org.allaymc.api.data.BlockFace;
+import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
@@ -8,6 +9,7 @@ import org.allaymc.api.form.Forms;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.MathUtils;
 
 import java.util.ArrayList;
 
@@ -53,26 +55,40 @@ public class EventListener {
         if (!player.isInWorld()) return;
 
         var lines = new ArrayList<String>();
-        lines.add("Online: §a" + Server.getInstance().getOnlinePlayerCount() + "/" + Server.getInstance().getNetworkServer().getMaxPlayerCount());
-        lines.add("Time: §a" + player.getWorld().getWorldData().getTime());
-        lines.add("World: §a" + player.getWorld().getWorldData().getName());
+
+        // World info
+        var worldInfo = "World: §a" + player.getWorld().getWorldData().getName() + "\n§f" +
+                        "Time: §a" + player.getWorld().getWorldData().getTime();
+        lines.add(worldInfo);
+
         var loc = player.getLocation();
         var chunk = player.getCurrentChunk();
-        var blockUnder = player.getDimension().getBlockState(BlockFace.DOWN.offsetPos((int) loc.x(), (int) loc.y(), (int) loc.z()));
-        lines.add("BlockUnder: §a" + blockUnder.getBlockType().getIdentifier().path());
         var itemInHand = player.getItemInHand();
-        lines.add("ItemInHand: §a" + itemInHand.getItemType().getIdentifier().path() + (itemInHand.getMeta() != 0 ? ":" + itemInHand.getMeta() : ""));
-        lines.add("Chunk: §a" + chunk.getX() + ", " + chunk.getZ());
-        lines.add("Loaded: §a" + player.getDimension().getChunkService().getLoadedChunks().size());
-        lines.add("Loading: §a" + player.getDimension().getChunkService().getLoadingChunks().size());
+        var blockUnder = player.getDimension().getBlockState(BlockFace.DOWN.offsetPos((int) loc.x(), (int) loc.y(), (int) loc.z()));
+        lines.add(
+                "ItemInHand:\n§a" + itemInHand.getItemType().getIdentifier().path() + (itemInHand.getMeta() != 0 ? ":" + itemInHand.getMeta() : "") + "\n§f" +
+                "BlockUnder:\n§a" + blockUnder.getBlockType().getIdentifier().path()
+        );
+        var chunkInfo =
+                "Chunk: §a" + chunk.getX() + "," + chunk.getZ() + "\n§f" +
+                "Loaded: §a" + player.getDimension().getChunkService().getLoadedChunks().size() + "\n§f" +
+                "Loading: §a" + player.getDimension().getChunkService().getLoadingChunks().size() + "\n§f";
         try {
-            lines.add("Biome: §a" + player.getCurrentChunk().getBiome((int) loc.x() & 15, (int) loc.y(), (int) loc.z() & 15));
+            chunkInfo += "Biome:\n§a" + player.getCurrentChunk().getBiome((int) loc.x() & 15, (int) loc.y(), (int) loc.z() & 15).toString().toLowerCase();
         } catch (IllegalArgumentException e) {
-            // y坐标超出范围了
-            lines.add("Biome: §aN/A");
+            // y coordinate is out of range
+            chunkInfo += "Biome: §aN/A";
         }
-        lines.add("Ping: " + player.getPing());
-        lines.add("ItlSkyLight: " + player.getWorld().getInternalSkyLight());
+        lines.add(chunkInfo);
+
+        // Player info
+        var playerInfo = "Ping: §a" + player.getPing() + "\n§f" +
+                         "Food: §a" + player.getFoodLevel() + "/" + EntityPlayerAttributeComponent.MAX_FOOD_LEVEL + "\n§f" +
+                         "Exhaustion: §a" + MathUtils.round(player.getFoodExhaustionLevel(), 2) + "/" + EntityPlayerAttributeComponent.MAX_FOOD_EXHAUSTION_LEVEL + "\n§f" +
+                         "Saturation: §a" + MathUtils.round(player.getFoodSaturationLevel(), 2) + "/" + EntityPlayerAttributeComponent.MAX_FOOD_SATURATION_LEVEL + "\n§f" +
+                         "Exp: §a" + player.getExperienceInCurrentLevel() + "/" + player.getRequireExperienceForCurrentLevel();
+        lines.add(playerInfo);
+
         scoreboard.setLines(lines);
     }
 }

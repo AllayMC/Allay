@@ -51,7 +51,7 @@ public class GiveCommand extends SimpleCommand {
                             TrKeys.M_COMMANDS_GIVE_SUCCESS,
                             itemType.getIdentifier().toString(),
                             amount,
-                            players.stream().map(EntityPlayer::getOriginName).collect(Collectors.joining(", "))
+                            players.stream().map(EntityPlayer::getDisplayName).collect(Collectors.joining(", "))
                     );
                     return context.success();
                 });
