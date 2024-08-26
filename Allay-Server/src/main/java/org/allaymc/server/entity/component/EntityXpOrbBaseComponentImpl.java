@@ -8,7 +8,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.server.entity.component.event.CEntityDamageEvent;
+import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.joml.primitives.AABBf;
@@ -109,7 +109,7 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     }
 
     @EventHandler
-    protected void onDamage(CEntityDamageEvent event) {
+    protected void onDamage(CEntityTryDamageEvent event) {
         var damageType = event.getDamage().getDamageType();
         event.setCanAttack(damageType != DamageContainer.DamageType.FALL);
     }

@@ -13,9 +13,7 @@ import org.allaymc.api.eventbus.event.player.PlayerExperienceProgressChangeEvent
 import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
-import org.allaymc.server.entity.component.event.CEntityAttributeChangeEvent;
-import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
-import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
+import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
@@ -195,5 +193,15 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
         super.onLoadNBT(event);
         event.getNbt().listenForInt("foodTickTimer", value -> foodTickTimer = value);
+    }
+
+    @EventHandler
+    protected void onDamage(CEntityAfterDamageEvent event) {
+        exhaust(0.1f);
+    }
+
+    @EventHandler
+    protected void onAttack(CEntityAttackEvent event) {
+        exhaust(0.1f);
     }
 }

@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @AllArgsConstructor
 @Getter
-public class CEntityDamageEvent extends Event {
+public class CEntityTryDamageEvent extends Event {
     protected DamageContainer damage;
     @Setter
     protected boolean canAttack;

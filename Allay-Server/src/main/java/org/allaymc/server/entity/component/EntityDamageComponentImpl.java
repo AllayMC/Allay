@@ -12,14 +12,15 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
-import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.entity.component.event.CEntityDamageEvent;
+import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
+import org.allaymc.server.entity.component.event.CEntityAttackEvent;
 import org.allaymc.server.entity.component.event.CEntityFallEvent;
+import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
@@ -64,16 +65,12 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
         if (damage.isCritical()) baseComponent.applyAnimation(AnimatePacket.Action.CRITICAL_HIT);
 
-        if (thisEntity instanceof EntityPlayerAttributeComponent attributeComponent) {
-            attributeComponent.exhaust(0.1f);
-        }
+        manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
 
         Entity attacker = damage.getAttacker();
         if (attacker == null) return;
 
-        if (attacker instanceof EntityPlayerAttributeComponent attributeComponent) {
-            attributeComponent.exhaust(0.1f);
-        }
+        ((EntityBaseComponentImpl)attacker).getManager().callEvent(CEntityAttackEvent.INSTANCE);
 
         if (damage.hasCustomKnockback()) {
             baseComponent.knockback(attacker.getLocation(), damage.getCustomKnockback());
@@ -147,7 +144,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
-        var event = new CEntityDamageEvent(damage, true);
+        var event = new CEntityTryDamageEvent(damage, true);
         manager.callEvent(event);
         return event.isCanAttack();
     }
