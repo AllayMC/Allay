@@ -23,6 +23,7 @@ import org.allaymc.api.world.generator.function.Lighter;
 import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.server.AllayServer;
+import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
 import java.util.*;
@@ -132,7 +133,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
                 statusPopulatedToFinished(chunk);
                 var chunkHash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
                 // Remove recorded futures
-                chunk.setChunkSetCallback(() -> {
+                ((AllayChunk)chunk).setChunkSetCallback(() -> {
                     chunkNoiseFutures.remove(chunkHash);
                     chunkFutures.remove(chunkHash);
                 });
@@ -229,7 +230,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
             }
         }
 
-        chunk.setState(ChunkState.NOISED);
+        ((AllayChunk)chunk).setState(ChunkState.NOISED);
         return chunk;
     }
 
@@ -242,7 +243,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
             }
         }
 
-        chunk.setState(ChunkState.POPULATED);
+        ((AllayChunk)chunk).setState(ChunkState.POPULATED);
     }
 
     private void statusPopulatedToFinished(Chunk chunk) {
@@ -254,7 +255,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
             }
         }
 
-        chunk.setState(ChunkState.LIGHTED);
+        ((AllayChunk)chunk).setState(ChunkState.LIGHTED);
 
         // Generate entities
         var entitySpawnContext = new EntitySpawnContext(chunk.toUnsafeChunk());
@@ -264,8 +265,8 @@ public final class AllayWorldGenerator implements WorldGenerator {
             }
         }
 
-        chunk.setState(ChunkState.ENTITY_SPAWNED);
-        chunk.setState(ChunkState.FINISHED);
+        ((AllayChunk)chunk).setState(ChunkState.ENTITY_SPAWNED);
+        ((AllayChunk)chunk).setState(ChunkState.FINISHED);
     }
 
     protected static final class AllayWorldGeneratorBuilder implements WorldGenerator.WorldGeneratorBuilder {

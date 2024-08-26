@@ -4,7 +4,6 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
@@ -18,6 +17,5 @@ public interface BlockEntityType<T extends BlockEntity> {
 
     List<ComponentProvider<? extends BlockEntityComponent>> getComponentProviders();
 
-    @ApiStatus.Internal
     T createBlockEntity(BlockEntityInitInfo info);
 }

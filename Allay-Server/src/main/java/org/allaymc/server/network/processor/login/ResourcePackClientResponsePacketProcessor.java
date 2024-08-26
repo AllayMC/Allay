@@ -31,7 +31,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
                 }
             }
             case HAVE_ALL_PACKS -> player.sendPacket(EntityPlayerNetworkComponentImpl.DeferredData.getResourcesPackStackPacket());
-            case COMPLETED -> player.initializePlayer();
+            case COMPLETED -> player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).initializePlayer();
             default -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
         }
     }

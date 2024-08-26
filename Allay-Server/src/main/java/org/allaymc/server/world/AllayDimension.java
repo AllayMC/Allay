@@ -2,8 +2,8 @@ package org.allaymc.server.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.block.BlockStateWithPos;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -13,10 +13,6 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.api.world.service.BlockUpdateService;
-import org.allaymc.api.world.service.ChunkService;
-import org.allaymc.api.world.service.EntityPhysicsService;
-import org.allaymc.api.world.service.EntityService;
 import org.allaymc.server.world.service.AllayBlockUpdateService;
 import org.allaymc.server.world.service.AllayChunkService;
 import org.allaymc.server.world.service.AllayEntityPhysicsService;
@@ -41,10 +37,10 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
 @Getter
 public class AllayDimension implements Dimension {
     protected final WorldGenerator worldGenerator;
-    protected final ChunkService chunkService;
-    protected final EntityPhysicsService entityPhysicsService;
-    protected final BlockUpdateService blockUpdateService;
-    protected final EntityService entityService;
+    protected final AllayChunkService chunkService;
+    protected final AllayEntityPhysicsService entityPhysicsService;
+    protected final AllayBlockUpdateService blockUpdateService;
+    protected final AllayEntityService entityService;
     protected final DimensionInfo dimensionInfo;
     protected final World world;
 

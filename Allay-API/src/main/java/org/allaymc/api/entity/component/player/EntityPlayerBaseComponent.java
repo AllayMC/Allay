@@ -12,7 +12,6 @@ import org.allaymc.api.scoreboard.ScoreboardViewer;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -145,9 +144,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     void setSpawnPoint(Location3ic spawnPoint);
 
     void sendLocationToSelf();
-
-    @ApiStatus.Internal
-    void sendDimensionChangeSuccess();
 
     @UnmodifiableView
     Map<Integer, Form> getForms();

@@ -1,7 +1,5 @@
 package org.allaymc.api.plugin;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.util.Map;
 
 /**
@@ -10,15 +8,6 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface PluginManager {
-
-    @ApiStatus.Internal
-    void loadPlugins();
-
-    @ApiStatus.Internal
-    void enablePlugins();
-
-    @ApiStatus.Internal
-    void disablePlugins();
 
     void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory);
 

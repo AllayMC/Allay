@@ -6,6 +6,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.ILoginPacketProcessor;
 import org.allaymc.api.server.Server;
+import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
 import org.cloudburstmc.protocol.bedrock.packet.ServerToClientHandshakePacket;
@@ -26,7 +27,8 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     @Override
     public void handle(EntityPlayer player, LoginPacket packet) {
         var loginData = LoginData.decode(packet);
-        player.setLoginData(loginData);
+        var networkComponent = player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER);
+        networkComponent.setLoginData(loginData);
 
         var server = Server.getInstance();
         if (Server.SETTINGS.genericSettings().isWhitelisted() && !server.isWhitelisted(player.getOriginName())) {
@@ -62,7 +64,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
         }
 
         if (!Server.SETTINGS.networkSettings().enableNetworkEncryption()) {
-            player.completeLogin();
+            networkComponent.completeLogin();
             return;
         }
 
@@ -74,9 +76,9 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
                     encryptionKeyPair.getPrivate(), clientKey,
                     encryptionToken
             );
-            player.setEncryptionSecretKey(encryptionSecretKey);
+            networkComponent.setEncryptionSecretKey(encryptionSecretKey);
             var encryptionJWT = EncryptionUtils.createHandshakeJwt(encryptionKeyPair, encryptionToken);
-            player.setNetworkEncryptionEnabled(true);
+            networkComponent.setNetworkEncryptionEnabled(true);
             var handshakePacket = new ServerToClientHandshakePacket();
             handshakePacket.setJwt(encryptionJWT);
             player.sendPacketImmediately(handshakePacket);

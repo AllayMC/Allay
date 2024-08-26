@@ -5,6 +5,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.network.processor.PacketProcessor;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
@@ -41,7 +43,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 yield PacketSignal.HANDLED;
             }
             case DIMENSION_CHANGE_SUCCESS -> {
-                player.sendDimensionChangeSuccess();
+                player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).sendDimensionChangeSuccess();
                 yield PacketSignal.HANDLED;
             }
             case DIMENSION_CHANGE_REQUEST_OR_CREATIVE_DESTROY_BLOCK -> {

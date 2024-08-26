@@ -4,8 +4,8 @@ import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.datastruct.aabbtree.AABBOverlapFilter;
 import org.allaymc.api.datastruct.aabbtree.AABBTree;
@@ -20,8 +20,8 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.EntityPhysicsService;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
-import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
@@ -487,12 +487,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
         entity.broadcastMoveToViewers(newLoc);
-        entity.setLocationAndCheckChunk(newLoc);
+        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setLocationAndCheckChunk(newLoc);
         return true;
     }
 
-    @Override
-    @ApiStatus.Internal
+    /**
+     * Please call it before run tick()!
+     */
     public void addEntity(Entity entity) {
         if (entities.containsKey(entity.getRuntimeId()))
             throw new IllegalArgumentException("Entity " + entity.getRuntimeId() + " is already added!");
@@ -500,8 +501,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         entityAABBTree.add(entity);
     }
 
-    @Override
-    @ApiStatus.Internal
+    /**
+     * Please call it before run tick()!
+     */
     public void removeEntity(Entity entity) {
         if (!entities.containsKey(entity.getRuntimeId())) return;
         entities.remove(entity.getRuntimeId());

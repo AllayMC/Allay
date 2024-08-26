@@ -22,7 +22,6 @@ import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.heightmap.HeightMap;
 import org.cloudburstmc.nbt.NbtMap;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -113,15 +112,29 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
-    @ApiStatus.Internal
-    @Override
+    /**
+     * Gets Chunk section, range -1 -> -4, 0 -> 59
+     * <p>
+     * Since the array index starts at 0, the maximum value is 59
+     *
+     * @param sectionY the sectionY
+     *
+     * @return the section
+     */
     public ChunkSection getSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
         return sections[sectionY - this.getDimensionInfo().minSectionY()];
     }
 
-    @ApiStatus.Internal
-    @Override
+    /**
+     * Gets Chunk section, range -1 -> -4, 0 -> 59
+     * <p>
+     * Since the array index starts at 0, the maximum value is 59
+     *
+     * @param sectionY the y
+     *
+     * @return the section
+     */
     public ChunkSection getOrCreateSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
 
@@ -269,7 +282,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return new AllayChunk(this);
     }
 
-    @Override
     public void setState(ChunkState next) {
         ChunkState curr;
         do {

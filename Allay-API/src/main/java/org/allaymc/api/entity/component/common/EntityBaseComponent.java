@@ -25,7 +25,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -94,23 +93,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     boolean willBeSpawnedNextTick();
 
-    @ApiStatus.Internal
-    void setWillBeSpawnedNextTick(boolean willBeSpawnedNextTick);
-
     boolean willBeDespawnedNextTick();
-
-    @ApiStatus.Internal
-    void setWillBeDespawnedNextTick(boolean willBeDespawnedNextTick);
 
     boolean isSpawned();
 
-    @ApiStatus.Internal
-    void setSpawned(boolean spawned);
-
     boolean canBeSpawned();
-
-    @ApiStatus.Internal
-    void setLocationAndCheckChunk(Location3fc newLoc);
 
     void teleport(Location3fc location);
 

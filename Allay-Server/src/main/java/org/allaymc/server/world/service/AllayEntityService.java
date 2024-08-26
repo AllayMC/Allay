@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
-import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityService;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.world.chunk.AllayChunk;
 
 import java.util.Queue;
@@ -20,7 +20,7 @@ import java.util.Queue;
 @Slf4j
 @RequiredArgsConstructor
 public class AllayEntityService implements EntityService {
-    protected final EntityPhysicsService entityPhysicsService;
+    protected final AllayEntityPhysicsService entityPhysicsService;
     protected final Queue<EntityUpdateOperation> entityUpdateOperationQueue = PlatformDependent.newMpscQueue();
 
     @Override
@@ -49,8 +49,8 @@ public class AllayEntityService implements EntityService {
         entityPhysicsService.removeEntity(entity);
 
         entity.despawnFromAll();
-        entity.setWillBeDespawnedNextTick(false);
-        entity.setSpawned(false);
+        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setWillBeDespawnedNextTick(false);
+        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setSpawned(false);
     }
 
     private void addEntityImmediately(Entity entity) {
@@ -65,8 +65,8 @@ public class AllayEntityService implements EntityService {
         entity.spawnTo(chunk.getPlayerChunkLoaders());
 
         entityPhysicsService.addEntity(entity);
-        entity.setWillBeSpawnedNextTick(false);
-        entity.setSpawned(true);
+        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setWillBeSpawnedNextTick(false);
+        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setSpawned(true);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class AllayEntityService implements EntityService {
             return;
         }
 
-        entity.setWillBeSpawnedNextTick(true);
+        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setWillBeSpawnedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
                 EntityUpdateType.ADD,
@@ -91,7 +91,7 @@ public class AllayEntityService implements EntityService {
             return;
         }
 
-        entity.setWillBeDespawnedNextTick(true);
+        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setWillBeDespawnedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
                 EntityUpdateType.REMOVE,

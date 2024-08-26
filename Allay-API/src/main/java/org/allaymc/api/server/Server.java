@@ -22,7 +22,6 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Map;
@@ -89,12 +88,6 @@ public interface Server extends TaskCreator, CommandSender {
                 .findFirst()
                 .orElse(null);
     }
-
-    @ApiStatus.Internal
-    void onLoggedIn(EntityPlayer player);
-
-    @ApiStatus.Internal
-    void onDisconnect(EntityPlayer player, String reason);
 
     WorldPool getWorldPool();
 

@@ -3,6 +3,7 @@ package org.allaymc.server.network.processor.login;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.network.processor.ILoginPacketProcessor;
+import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ClientToServerHandshakePacket;
 
@@ -15,7 +16,7 @@ import org.cloudburstmc.protocol.bedrock.packet.ClientToServerHandshakePacket;
 public class ClientToServerHandshakePacketProcessor extends ILoginPacketProcessor<ClientToServerHandshakePacket> {
     @Override
     public void handle(EntityPlayer player, ClientToServerHandshakePacket packet) {
-        if (player.isNetworkEncryptionEnabled()) player.completeLogin();
+        if (player.isNetworkEncryptionEnabled()) player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).completeLogin();
         else log.warn("Client {} sent ClientToServerHandshakePacket without encryption enabled", player.getOriginName());
     }
 

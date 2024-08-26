@@ -4,8 +4,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.processor.ILoginPacketProcessor;
-import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.TextFormat;
+import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.SetLocalPlayerAsInitializedPacket;
 
@@ -24,7 +23,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
         // Otherwise the client will snap into the ground
         player.sendLocationToSelf();
-        player.setInitialized();
+        player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).setInitialized();
     }
 
     @Override

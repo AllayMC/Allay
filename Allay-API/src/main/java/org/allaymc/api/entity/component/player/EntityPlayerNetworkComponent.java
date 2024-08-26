@@ -8,7 +8,6 @@ import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.jetbrains.annotations.ApiStatus;
 
 import javax.crypto.SecretKey;
 import java.util.UUID;
@@ -20,9 +19,6 @@ import java.util.UUID;
  */
 public interface EntityPlayerNetworkComponent extends EntityComponent {
     LoginData getLoginData();
-
-    @ApiStatus.Internal
-    void setLoginData(LoginData loginData);
 
     PacketProcessorHolder getPacketProcessorHolder();
 
@@ -65,13 +61,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
 
     boolean isNetworkEncryptionEnabled();
 
-    @ApiStatus.Internal
-    void setNetworkEncryptionEnabled(boolean enabled);
-
     SecretKey getEncryptionSecretKey();
-
-    @ApiStatus.Internal
-    void setEncryptionSecretKey(SecretKey secretKey);
 
     /**
      * Has the player been fully initialized?
@@ -79,27 +69,9 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
      */
     boolean isInitialized();
 
-    @ApiStatus.Internal
-    void setInitialized();
-
     boolean isLoggedIn();
 
-    @ApiStatus.Internal
-    void handleDataPacket(BedrockPacket packet, long time);
-
     BedrockServerSession getClientSession();
-
-    @ApiStatus.Internal
-    void setClientSession(BedrockServerSession session);
-
-    @ApiStatus.Internal
-    void onChunkInRangeSent();
-
-    @ApiStatus.Internal
-    void initializePlayer();
-
-    @ApiStatus.Internal
-    void completeLogin();
 
     int getPing();
 }

@@ -1,6 +1,5 @@
 package org.allaymc.api.world.service;
 
-import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkAccessible;
 import org.allaymc.api.world.chunk.ChunkLoader;
@@ -27,7 +26,6 @@ public interface ChunkService extends ChunkAccessible {
 
     CompletableFuture<Chunk> loadChunk(int x, int z);
 
-    @SlowOperation
     Chunk getOrLoadChunkSync(int x, int z);
 
     CompletableFuture<Boolean> unloadChunk(int x, int z);

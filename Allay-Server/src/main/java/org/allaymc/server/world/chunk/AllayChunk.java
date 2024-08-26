@@ -21,7 +21,6 @@ import org.allaymc.api.world.chunk.*;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -51,6 +50,7 @@ public class AllayChunk implements Chunk {
     // Whether the chunk has been loaded into the world
     @Getter
     protected boolean loaded = false;
+    // The callback to be called when the chunk is loaded into the world
     @Setter
     protected Runnable chunkSetCallback = () -> {};
 
@@ -63,6 +63,15 @@ public class AllayChunk implements Chunk {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(y >= -512 && y <= 511);
         Preconditions.checkArgument(z >= 0 && z <= 15);
+    }
+
+    public void tick(long currentTick) {
+        if (!getBlockEntities().isEmpty()) {
+            getBlockEntities().values().forEach(blockEntity -> blockEntity.tick(currentTick));
+        }
+        if (!getEntities().isEmpty()) {
+            getEntities().values().forEach(entity -> entity.tick(currentTick));
+        }
     }
 
     @Override
@@ -341,7 +350,6 @@ public class AllayChunk implements Chunk {
         return unsafeChunk;
     }
 
-    @Override
     public LevelChunkPacket createSubChunkLevelChunkPacket() {
         var levelChunkPacket = new LevelChunkPacket();
         levelChunkPacket.setDimension(getDimensionInfo().dimensionId());
@@ -355,7 +363,6 @@ public class AllayChunk implements Chunk {
         return levelChunkPacket;
     }
 
-    @Override
     public LevelChunkPacket createFullLevelChunkPacketChunk() {
         var levelChunkPacket = new LevelChunkPacket();
         levelChunkPacket.setDimension(getDimensionInfo().dimensionId());
@@ -426,19 +433,8 @@ public class AllayChunk implements Chunk {
         return unsafeChunk.getState();
     }
 
-    @Override
     public void setState(ChunkState next) {
         unsafeChunk.setState(next);
-    }
-
-    @Override
-    public void tick(long currentTick) {
-        if (!getBlockEntities().isEmpty()) {
-            getBlockEntities().values().forEach(blockEntity -> blockEntity.tick(currentTick));
-        }
-        if (!getEntities().isEmpty()) {
-            getEntities().values().forEach(entity -> entity.tick(currentTick));
-        }
     }
 
     @Override
@@ -456,12 +452,10 @@ public class AllayChunk implements Chunk {
         return unsafeChunk.getZ();
     }
 
-    @ApiStatus.Internal
     public void addEntity(Entity entity) {
         unsafeChunk.addEntity(entity);
     }
 
-    @ApiStatus.Internal
     public Entity removeEntity(long runtimeId) {
         return unsafeChunk.removeEntity(runtimeId);
     }
@@ -497,8 +491,6 @@ public class AllayChunk implements Chunk {
         return unsafeChunk.getEntity(runtimeId);
     }
 
-    @ApiStatus.Internal
-    @Override
     public ChunkSection getSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
         var stamp = blockLock.tryOptimisticRead();
@@ -514,26 +506,20 @@ public class AllayChunk implements Chunk {
         }
     }
 
-    @Override
-    @ApiStatus.Internal
     public ChunkSection[] getSections() {
         return unsafeChunk.getSections();
     }
 
-    @Override
     public void beforeSetChunk(Dimension dimension) {
         unsafeChunk.beforeSetChunk(dimension);
     }
 
-    @Override
     public void afterSetChunk(Dimension dimension) {
         chunkSetCallback.run();
         loaded = true;
         unsafeChunk.afterSetChunk(dimension);
     }
 
-    @Override
-    @ApiStatus.Internal
     public ChunkSection getOrCreateSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
         var stamp = blockLock.writeLock();

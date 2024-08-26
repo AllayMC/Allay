@@ -15,7 +15,6 @@ import org.allaymc.api.world.gamerule.GameRules;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.SetTimePacket;
 import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -251,12 +250,10 @@ public class WorldData {
         this.world.syncInternalSkyLight();
     }
 
-    @ApiStatus.Internal
     public void sendTime(Collection<EntityPlayer> players) {
         players.forEach(this::sendTime);
     }
 
-    @ApiStatus.Internal
     public void sendTime(EntityPlayer player) {
         var setTimePk = new SetTimePacket();
         setTimePk.setTime((int) time);
@@ -341,7 +338,6 @@ public class WorldData {
         this.spawnPoint = event.getNewPos();
     }
 
-    @ApiStatus.Internal
     public void setWorld(World world) {
         this.world = world;
     }

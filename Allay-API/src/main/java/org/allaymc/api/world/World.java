@@ -4,7 +4,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
@@ -18,9 +17,6 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface World {
-    @ApiStatus.Internal
-    void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time);
-
     Thread getThread();
 
     long getTick();

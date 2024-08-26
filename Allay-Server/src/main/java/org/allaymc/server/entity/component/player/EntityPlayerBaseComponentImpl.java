@@ -561,10 +561,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             sendDimensionChangeSuccess();
         }
         chunk.spawnEntitiesTo(thisPlayer);
-        networkComponent.onChunkInRangeSent();
+        thisPlayer.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).onChunkInRangeSent();
     }
 
-    @Override
     public void sendDimensionChangeSuccess() {
         var packet = new PlayerActionPacket();
         packet.setAction(PlayerActionType.DIMENSION_CHANGE_SUCCESS);

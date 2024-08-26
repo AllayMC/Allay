@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.annotation.SlowOperation;
 import org.allaymc.api.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.api.eventbus.event.world.ChunkLoadEvent;
 import org.allaymc.api.eventbus.event.world.ChunkPreLoadEvent;
@@ -20,6 +19,7 @@ import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
@@ -66,7 +66,7 @@ public final class AllayChunkService implements ChunkService {
     private void tickChunks(long currentTick) {
         for (Chunk chunk : loadedChunks.values()) {
             try {
-                chunk.tick(currentTick);
+                ((AllayChunk)chunk).tick(currentTick);
             } catch (Throwable t) {
                 log.error("Error while ticking chunk({}, {})!", chunk.getX(), chunk.getZ(), t);
             }
@@ -140,7 +140,6 @@ public final class AllayChunkService implements ChunkService {
         return loadingChunks.get(HashUtils.hashXZ(x, z));
     }
 
-    @SlowOperation
     @Override
     public Chunk getOrLoadChunkSync(int x, int z) {
         return getOrLoadChunk(x, z).join();
@@ -201,9 +200,9 @@ public final class AllayChunkService implements ChunkService {
             log.error("Error while generating chunk ({},{}) !", x, z, t);
             return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         }).thenApply(preparedChunk -> {
-            preparedChunk.beforeSetChunk(dimension);
+            ((AllayChunk)preparedChunk).beforeSetChunk(dimension);
             setChunk(x, z, preparedChunk);
-            preparedChunk.afterSetChunk(dimension);
+            ((AllayChunk)preparedChunk).afterSetChunk(dimension);
             future.complete(preparedChunk);
             loadingChunks.remove(hashXZ);
 
@@ -315,7 +314,7 @@ public final class AllayChunkService implements ChunkService {
         loadedChunks.remove(chunkHash);
         chunk.getEntities().forEach((runtimeId, entity) -> {
             entity.despawnFromAll();
-            dimension.getEntityPhysicsService().removeEntity(entity);
+            ((AllayEntityPhysicsService)dimension.getEntityPhysicsService()).removeEntity(entity);
         });
 
         var future = new CompletableFuture<Boolean>();
@@ -475,8 +474,8 @@ public final class AllayChunkService implements ChunkService {
                     var lcpStream = chunkReadyToSend.values().stream();
                     lcpStream.sorted(chunkDistanceComparator).forEachOrdered(chunk -> {
                         var lcp = useSubChunkSendingSystem ?
-                                chunk.createSubChunkLevelChunkPacket() :
-                                chunk.createFullLevelChunkPacketChunk();
+                                ((AllayChunk)chunk).createSubChunkLevelChunkPacket() :
+                                ((AllayChunk)chunk).createFullLevelChunkPacketChunk();
                         chunkLoader.sendLevelChunkPacket(lcp);
                         chunkLoader.onChunkInRangeSent(chunk);
                     });
@@ -511,7 +510,7 @@ public final class AllayChunkService implements ChunkService {
             private void tick() {
                 while (!chunkSendingQueue.isEmpty()) {
                     var chunk = chunkSendingQueue.poll();
-                    var lcp = chunk.createFullLevelChunkPacketChunk();
+                    var lcp = ((AllayChunk)chunk).createFullLevelChunkPacketChunk();
                     chunkLoader.sendLevelChunkPacket(lcp);
                     chunkLoader.onChunkInRangeSent(chunk);
                 }

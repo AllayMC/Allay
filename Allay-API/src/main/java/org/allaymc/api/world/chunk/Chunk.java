@@ -3,10 +3,7 @@ package org.allaymc.api.world.chunk;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.ThreadSafe;
@@ -21,9 +18,6 @@ import java.util.stream.Collectors;
  */
 @ThreadSafe
 public interface Chunk extends UnsafeChunk {
-    @ApiStatus.Internal
-    void tick(long currentTick);
-
     boolean isLoaded();
 
     @UnmodifiableView
@@ -36,14 +30,6 @@ public interface Chunk extends UnsafeChunk {
                 .map(EntityPlayer.class::cast)
                 .collect(Collectors.toSet());
     }
-
-    /**
-     * Set the callback to be called when the chunk is loaded into the world
-     *
-     * @param callback the callback
-     */
-    @ApiStatus.Internal
-    void setChunkSetCallback(Runnable callback);
 
     void addChunkLoader(ChunkLoader chunkLoader);
 
@@ -74,12 +60,6 @@ public interface Chunk extends UnsafeChunk {
     void batchProcess(UnsafeChunkOperate operate);
 
     UnsafeChunk toUnsafeChunk();
-
-    @ApiStatus.Internal
-    LevelChunkPacket createSubChunkLevelChunkPacket();
-
-    @ApiStatus.Internal
-    LevelChunkPacket createFullLevelChunkPacketChunk();
 
     default void spawnEntitiesTo(EntityPlayer player) {
         getEntities().values().forEach(player::spawnEntity);

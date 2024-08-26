@@ -33,8 +33,10 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.network.processor.AllayPacketProcessorHolder;
+import org.allaymc.server.world.AllayWorld;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -103,7 +105,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected BedrockServerSession session;
     protected AtomicBoolean disconnected = new AtomicBoolean(false);
 
-    @Override
     public void handleDataPacket(BedrockPacket packet, long time) {
         var processor = packetProcessorHolder.getProcessor(packet);
         // processor won't be null as we have checked it the time it arrived
@@ -114,10 +115,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var event = new PlayerQuitEvent(thisPlayer, disconnectReason);
         event.call();
         thisPlayer.closeAllContainers();
-        server.onDisconnect(thisPlayer, disconnectReason);
+        ((AllayServer)server).onDisconnect(thisPlayer, disconnectReason);
     }
 
-    @Override
     public void setInitialized() {
         if (initialized) log.warn("Player.initialized is set twice");
         this.initialized = true;
@@ -128,7 +128,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         return session;
     }
 
-    @Override
     public void setClientSession(BedrockServerSession session) {
         this.session = session;
         session.setPacketHandler(new BedrockPacketHandler() {
@@ -159,7 +158,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     // Packet processors should make sure that PacketProcessor.handleSync() won't be called
                     // if player is not in any world
                     Objects.requireNonNull(world, "Player that is not in any world cannot handle sync packet");
-                    world.addSyncPacketToQueue(thisPlayer, packet, time);
+                    ((AllayWorld)world).addSyncPacketToQueue(thisPlayer, packet, time);
                 }
 
                 return PacketSignal.HANDLED;
@@ -410,7 +409,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(playStatusPacket);
 
         loggedIn = true;
-        server.onLoggedIn(thisPlayer);
+        ((AllayServer)server).onLoggedIn(thisPlayer);
         // TODO: plugin event
         manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
         sendPacket(DeferredData.getResourcePacksInfoPacket());

@@ -5,7 +5,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.jetbrains.annotations.ApiStatus;
 import org.joml.primitives.AABBfc;
 
 import java.util.List;
@@ -18,18 +17,6 @@ import java.util.List;
 public interface EntityPhysicsService {
 
     void tick();
-
-    /**
-     * Please call it before run tick()!
-     */
-    @ApiStatus.Internal
-    void addEntity(Entity entity);
-
-    /**
-     * Please call it before run tick()!
-     */
-    @ApiStatus.Internal
-    void removeEntity(Entity entity);
 
     boolean containEntity(Entity entity);
 

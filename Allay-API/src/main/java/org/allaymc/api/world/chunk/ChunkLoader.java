@@ -4,7 +4,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3fc;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Set;
 
@@ -39,12 +38,9 @@ public interface ChunkLoader {
         onChunkOutOfRange(Set.of(chunkHash));
     }
 
-    @ApiStatus.Internal
     void sendLevelChunkPacket(LevelChunkPacket lcp);
 
-    @ApiStatus.Internal
     void handleChunkPacket(BedrockPacket packet);
 
-    @ApiStatus.Internal
     void handleChunkPacketImmediately(BedrockPacket packet);
 }

@@ -20,7 +20,6 @@ import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.entity.type.EntityTypeBuildException;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +75,6 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         return new Builder<>(interfaceClass);
     }
 
-    @ApiStatus.Internal
     @SneakyThrows
     @Override
     public T createBlockEntity(BlockEntityInitInfo info) {

@@ -2,7 +2,6 @@ package org.allaymc.api.world;
 
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -37,9 +36,6 @@ public interface WorldPool {
         var vec = getDefaultWorld().getWorldData().getSpawnPoint();
         return new Vector3f(vec.x(), vec.y(), vec.z());
     }
-
-    @ApiStatus.Internal
-    void loadWorlds();
 
     void shutdown();
 }

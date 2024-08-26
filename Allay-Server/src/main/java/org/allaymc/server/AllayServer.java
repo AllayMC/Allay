@@ -39,7 +39,6 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.WorldPool;
 import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.eventbus.AllayEventBus;
@@ -75,7 +74,7 @@ public final class AllayServer implements Server {
     private final boolean debug = Server.SETTINGS.genericSettings().debug();
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
     @Getter
-    private final WorldPool worldPool = new AllayWorldPool();
+    private final AllayWorldPool worldPool = new AllayWorldPool();
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
@@ -153,7 +152,7 @@ public final class AllayServer implements Server {
 
         terminalConsoleThread.start();
 
-        pluginManager.loadPlugins();
+        ((AllayPluginManager)pluginManager).loadPlugins();
 
         worldPool.loadWorlds();
 
@@ -165,7 +164,7 @@ public final class AllayServer implements Server {
         );
         scoreboardService.read();
 
-        pluginManager.enablePlugins();
+        ((AllayPluginManager)pluginManager).enablePlugins();
 
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         networkServer.start();
@@ -217,7 +216,7 @@ public final class AllayServer implements Server {
         event.call();
 
         // Disable all plugins firstly
-        pluginManager.disablePlugins();
+        ((AllayPluginManager)pluginManager).disablePlugins();
 
         // Save all configurations & data
         SETTINGS.save();
