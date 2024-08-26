@@ -3,6 +3,8 @@ package org.allaymc.server.entity.component;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
+import org.allaymc.api.component.annotation.Manager;
+import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
@@ -10,6 +12,7 @@ import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.entity.component.event.CEntityAttributeChangeEvent;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.cloudburstmc.nbt.NbtType;
@@ -37,6 +40,8 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @ComponentedObject
     protected Entity thisEntity;
+    @Manager
+    protected ComponentManager manager;
 
     public EntityAttributeComponentImpl(AttributeType... attributeTypes) {
         for (AttributeType attributeType : attributeTypes) {
@@ -67,8 +72,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
                 var attribute = Attribute.fromNBT(attributeNbt);
                 attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
             });
-
-            sendAttributesToClient();
+            // NOTICE: Caller should call sendAttributesToClient() to send attributes to client if he want
         });
     }
 
@@ -103,7 +107,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
             throw unsupportAttributeTypeException(attributeType);
         }
         attribute.setCurrentValue(value);
-        sendAttributesToClient();
+        manager.callEvent(CEntityAttributeChangeEvent.INSTANCE);
     }
 
     @Override
@@ -113,7 +117,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
             throw unsupportAttributeTypeException(attributeType);
         }
         this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
-        sendAttributesToClient();
+        manager.callEvent(CEntityAttributeChangeEvent.INSTANCE);
     }
 
     @Override

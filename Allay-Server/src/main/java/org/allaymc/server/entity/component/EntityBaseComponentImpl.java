@@ -209,7 +209,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         var event = new EntityDieEvent(thisEntity);
         event.call();
 
-        manager.callEvent(new CEntityDieEvent());
+        manager.callEvent(CEntityDieEvent.INSTANCE);
         dead = true;
         deadTimer = DEFAULT_DEAD_TIMER;
         applyEntityEvent(EntityEventType.DEATH, 0);

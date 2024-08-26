@@ -108,4 +108,6 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
     boolean canEat();
 
     void setFoodTickTimer(int foodTickTimer);
+
+    void sendAttributesToClient();
 }

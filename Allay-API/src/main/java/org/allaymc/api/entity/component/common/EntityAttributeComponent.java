@@ -85,6 +85,4 @@ public interface EntityAttributeComponent extends EntityComponent {
     default List<NbtMap> saveAttributes() {
         return getAttributes().stream().map(Attribute::toNBT).toList();
     }
-
-    default void sendAttributesToClient() {}
 }

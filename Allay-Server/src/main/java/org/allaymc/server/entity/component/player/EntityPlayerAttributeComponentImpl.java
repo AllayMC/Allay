@@ -13,6 +13,7 @@ import org.allaymc.api.eventbus.event.player.PlayerExperienceProgressChangeEvent
 import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
+import org.allaymc.server.entity.component.event.CEntityAttributeChangeEvent;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -175,6 +176,11 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         attributes.values().forEach(attribute -> packet.getAttributes().add(attribute.toNetwork()));
         packet.setTick(thisEntity.getWorld().getTick());
         networkComponent.sendPacket(packet);
+    }
+
+    @EventHandler
+    protected void onAttributeChange(CEntityAttributeChangeEvent event) {
+        sendAttributesToClient();
     }
 
     @EventHandler
