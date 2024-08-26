@@ -26,7 +26,7 @@ disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.16.1" }
 # bytecode
-bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.14.19" }
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.15.0" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 # K-V DataBase
@@ -62,7 +62,7 @@ sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graalvm" }
 chromeinspector-tool = { group = "org.graalvm.tools", name = "chromeinspector-tool", version.ref = "graalvm" }
 profiler-tool = { group = "org.graalvm.tools", name = "profiler-tool", version.ref = "graalvm" }
 # Native Operating System and Hardware Information
-oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.6.2" }
+oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.6.3" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.5.1" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
