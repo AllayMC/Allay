@@ -4,8 +4,8 @@ import com.google.gson.*;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.api.utils.SemVersion;
 
 import java.io.IOException;
 import java.nio.file.Path;

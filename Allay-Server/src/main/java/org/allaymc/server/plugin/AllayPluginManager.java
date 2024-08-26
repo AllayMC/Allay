@@ -1,11 +1,11 @@
 package org.allaymc.server.plugin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.datastruct.dag.DAGCycleException;
-import org.allaymc.api.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.*;
+import org.allaymc.server.datastruct.dag.DAGCycleException;
+import org.allaymc.server.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
 import org.allaymc.server.plugin.js.JsPluginLoader;
 

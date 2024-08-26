@@ -5,7 +5,6 @@ import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
-import org.allaymc.api.network.processor.PacketProcessorHolder;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
@@ -19,8 +18,6 @@ import java.util.UUID;
  */
 public interface EntityPlayerNetworkComponent extends EntityComponent {
     LoginData getLoginData();
-
-    PacketProcessorHolder getPacketProcessorHolder();
 
     default String getXUID() {
         return getLoginData().getXuid();

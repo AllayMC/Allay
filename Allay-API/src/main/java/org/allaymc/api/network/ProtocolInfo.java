@@ -1,9 +1,8 @@
 package org.allaymc.api.network;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.datastruct.SemVersion;
+import org.allaymc.api.utils.SemVersion;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v686.Bedrock_v686;
 import org.cloudburstmc.protocol.bedrock.codec.v712.Bedrock_v712;
 
 @UtilityClass

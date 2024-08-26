@@ -2,7 +2,6 @@ package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.server.container.SimpleContainerActionProcessorHolder;
 import org.allaymc.server.container.processor.ActionResponse;
 import org.allaymc.server.container.processor.ContainerActionProcessor;

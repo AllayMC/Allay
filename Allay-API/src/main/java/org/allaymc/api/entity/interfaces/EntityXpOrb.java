@@ -2,9 +2,9 @@ package org.allaymc.api.entity.interfaces;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityAttributeComponent;
+import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
-import org.allaymc.api.entity.component.common.EntityAttributeComponent;
-import org.allaymc.api.entity.component.common.EntityDamageComponent;
 
 import java.util.List;
 

@@ -7,7 +7,6 @@ import com.google.gson.stream.JsonWriter;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
 import org.allaymc.api.utils.exception.FormativeException;

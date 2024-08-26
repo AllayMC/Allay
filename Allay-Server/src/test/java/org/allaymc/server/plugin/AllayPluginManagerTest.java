@@ -1,7 +1,7 @@
 package org.allaymc.server.plugin;
 
-import org.allaymc.api.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.api.plugin.PluginDependency;
+import org.allaymc.server.datastruct.dag.HashDirectedAcyclicGraph;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

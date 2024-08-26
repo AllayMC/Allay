@@ -8,7 +8,7 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
-import org.allaymc.api.entity.component.common.EntityAttributeComponent;
+import org.allaymc.api.entity.component.EntityAttributeComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
 import org.allaymc.api.utils.Identifier;

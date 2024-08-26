@@ -1,6 +1,6 @@
 package org.allaymc.api.entity.component.player;
 
-import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 
 /**
  * Allay Project 2023/12/2

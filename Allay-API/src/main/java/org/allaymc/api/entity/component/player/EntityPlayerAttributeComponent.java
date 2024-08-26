@@ -2,7 +2,7 @@ package org.allaymc.api.entity.component.player;
 
 import com.google.common.collect.Lists;
 import org.allaymc.api.entity.attribute.AttributeType;
-import org.allaymc.api.entity.component.common.EntityAttributeComponent;
+import org.allaymc.api.entity.component.EntityAttributeComponent;
 
 import java.util.Arrays;
 

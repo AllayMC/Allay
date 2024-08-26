@@ -5,10 +5,10 @@ import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.utils.ReflectionUtils;
 import org.allaymc.server.item.type.InternalItemTypeData;
 import org.allaymc.server.item.type.ItemTypeDefaultInitializer;
 import org.allaymc.server.item.type.ItemTypeInitializer;
+import org.allaymc.server.utils.ReflectionUtils;
 
 import static org.allaymc.server.utils.Utils.callInitializer;
 

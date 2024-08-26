@@ -1,7 +1,7 @@
 package org.allaymc.server;
 
-import org.allaymc.api.datastruct.aabbtree.AABBTree;
-import org.allaymc.api.datastruct.aabbtree.TestEntity;
+import org.allaymc.server.datastruct.aabb.AABBTree;
+import org.allaymc.server.datastruct.aabbtree.TestEntity;
 import org.joml.primitives.AABBf;
 import org.openjdk.jmh.annotations.*;
 

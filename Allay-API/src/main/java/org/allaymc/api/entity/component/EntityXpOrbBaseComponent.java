@@ -1,7 +1,5 @@
 package org.allaymc.api.entity.component;
 
-import org.allaymc.api.entity.component.common.EntityBaseComponent;
-
 /**
  * Allay Project 2024/8/12
  *

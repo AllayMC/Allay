@@ -7,7 +7,7 @@ import org.allaymc.api.eventbus.EventException;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.ReflectionUtils;
+import org.allaymc.server.utils.ReflectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;

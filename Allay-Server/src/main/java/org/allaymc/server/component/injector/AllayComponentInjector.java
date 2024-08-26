@@ -16,10 +16,10 @@ import org.allaymc.api.component.interfaces.*;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.utils.ReflectionUtils;
 import org.allaymc.api.utils.exception.ComponentInjectException;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
+import org.allaymc.server.utils.ReflectionUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

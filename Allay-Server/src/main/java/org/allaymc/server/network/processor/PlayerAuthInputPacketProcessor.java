@@ -5,10 +5,10 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
@@ -265,7 +265,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var pk = new ItemStackRequestPacket();
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor
-        player.getPacketProcessorHolder().getProcessor(pk).handleSync(player, pk, receiveTime);
+        player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).getPacketProcessorHolder().getProcessor(pk).handleSync(player, pk, receiveTime);
     }
 
     protected boolean notReadyForInput(EntityPlayer player) {

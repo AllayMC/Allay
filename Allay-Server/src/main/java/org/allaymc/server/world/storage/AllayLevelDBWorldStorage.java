@@ -2,8 +2,8 @@ package org.allaymc.server.world.storage;
 
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.datastruct.SemVersion;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.SemVersion;
 import org.allaymc.api.utils.exception.WorldStorageException;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.DimensionInfo;

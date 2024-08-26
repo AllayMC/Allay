@@ -10,7 +10,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
 
-import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicEntityAttributes;
+import static org.allaymc.api.entity.component.EntityAttributeComponent.basicEntityAttributes;
 
 /**
  * Allay Project 2024/3/9

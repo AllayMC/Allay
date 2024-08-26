@@ -2,13 +2,12 @@ package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.PlayerInteractInfo;
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.container.FullContainerType;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.data.VanillaBlockTags;
-import org.allaymc.api.entity.component.common.EntityDamageComponent;
+import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.utils.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.inventory.transaction.InventorySource;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;

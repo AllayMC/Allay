@@ -1,7 +1,6 @@
 package org.allaymc.api.entity.component;
 
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.entity.component.common.EntityBaseComponent;
 
 /**
  * Allay Project 27/06/2024

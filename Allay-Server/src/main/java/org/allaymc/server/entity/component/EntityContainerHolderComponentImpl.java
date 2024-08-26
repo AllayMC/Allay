@@ -6,7 +6,7 @@ import org.allaymc.api.container.BaseContainerHolder;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
+import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.Identifier;
