@@ -26,9 +26,7 @@ import org.allaymc.api.entity.init.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.player.PlayerGameTypeChangeEvent;
-import org.allaymc.api.eventbus.event.player.PlayerItemHeldEvent;
-import org.allaymc.api.eventbus.event.player.PlayerJumpEvent;
+import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.i18n.I18n;
@@ -852,5 +850,54 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void onJump() {
         new PlayerJumpEvent(thisPlayer).call();
         manager.callEvent(CPlayerJumpEvent.INSTANCE);
+    }
+
+    @Override
+    public void setSprinting(boolean sprinting) {
+        if (sprinting == isSprinting()) return;
+
+        new PlayerToggleSprintEvent(thisPlayer, sprinting).call();
+
+        var speed = getMovementSpeed();
+        if (sprinting) speed *= 1.3f;
+        else speed /= 1.3f;
+        setMovementSpeed(speed);
+        setAndSendEntityFlag(EntityFlag.SPRINTING, sprinting);
+    }
+
+    @Override
+    public void setSneaking(boolean sneaking) {
+        if (sneaking == isSneaking()) return;
+
+        new PlayerToggleSneakEvent(thisPlayer, sneaking).call();
+
+        setAndSendEntityFlag(EntityFlag.SNEAKING, sneaking);
+    }
+
+    @Override
+    public void setSwimming(boolean swimming) {
+        if (swimming == isSwimming()) return;
+
+        new PlayerToggleSwimEvent(thisPlayer, swimming).call();
+
+        setAndSendEntityFlag(EntityFlag.SWIMMING, swimming);
+    }
+
+    @Override
+    public void setGliding(boolean gliding) {
+        if (gliding == isGliding()) return;
+
+        new PlayerToggleGlideEvent(thisPlayer, gliding).call();
+
+        setAndSendEntityFlag(EntityFlag.GLIDING, gliding);
+    }
+
+    @Override
+    public void setCrawling(boolean crawling) {
+        if (crawling == isCrawling()) return;
+
+        new PlayerToggleCrawlEvent(thisPlayer, crawling).call();
+
+        setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
     }
 }

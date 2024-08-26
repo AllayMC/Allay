@@ -28,49 +28,31 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
         return getMetadata().get(EntityFlag.SPRINTING);
     }
 
-    default void setSprinting(boolean sprinting) {
-        if (sprinting == isSprinting()) return;
-
-        var speed = getMovementSpeed();
-        if (sprinting) speed *= 1.3f;
-        else speed /= 1.3f;
-
-        setMovementSpeed(speed);
-
-        setAndSendEntityFlag(EntityFlag.SPRINTING, sprinting);
-    }
+    void setSprinting(boolean sprinting);
 
     default boolean isSneaking() {
         return getMetadata().get(EntityFlag.SNEAKING);
     }
 
-    default void setSneaking(boolean sneaking) {
-        setAndSendEntityFlag(EntityFlag.SNEAKING, sneaking);
-    }
+    void setSneaking(boolean sneaking);
 
     default boolean isSwimming() {
         return getMetadata().get(EntityFlag.SWIMMING);
     }
 
-    default void setSwimming(boolean swimming) {
-        setAndSendEntityFlag(EntityFlag.SWIMMING, swimming);
-    }
+    void setSwimming(boolean swimming);
 
     default boolean isGliding() {
         return getMetadata().get(EntityFlag.GLIDING);
     }
 
-    default void setGliding(boolean gliding) {
-        setAndSendEntityFlag(EntityFlag.GLIDING, gliding);
-    }
+    void setGliding(boolean gliding);
 
     default boolean isCrawling() {
         return getMetadata().get(EntityFlag.CRAWLING);
     }
 
-    default void setCrawling(boolean crawling) {
-        setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
-    }
+    void setCrawling(boolean crawling);
 
     boolean isUsingItemOnBlock();
 

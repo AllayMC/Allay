@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.utils.MathUtils;
@@ -224,49 +223,17 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (player.isDead()) return;
         for (var input : inputData) {
             switch (input) {
-                case START_SPRINTING -> {
-                    new PlayerToggleSprintEvent(player, true).call();
-                    player.setSprinting(true);
-                }
-                case STOP_SPRINTING -> {
-                    new PlayerToggleSprintEvent(player, false).call();
-                    player.setSprinting(false);
-                }
-                case START_SNEAKING -> {
-                    new PlayerToggleSneakEvent(player, true).call();
-                    player.setSneaking(true);
-                }
-                case STOP_SNEAKING -> {
-                    new PlayerToggleSneakEvent(player, false).call();
-                    player.setSneaking(false);
-                }
-                case START_SWIMMING -> {
-                    new PlayerToggleSwimEvent(player, true).call();
-                    player.setSwimming(true);
-                }
-                case STOP_SWIMMING -> {
-                    new PlayerToggleSwimEvent(player, false).call();
-                    player.setSwimming(false);
-                }
-                case START_GLIDING -> {
-                    new PlayerToggleGlideEvent(player, true).call();
-                    player.setGliding(true);
-                }
-                case STOP_GLIDING -> {
-                    new PlayerToggleGlideEvent(player, false).call();
-                    player.setGliding(false);
-                }
-                case START_CRAWLING -> {
-                    new PlayerToggleCrawlEvent(player, true).call();
-                    player.setCrawling(true);
-                }
-                case STOP_CRAWLING -> {
-                    new PlayerToggleCrawlEvent(player, false).call();
-                    player.setCrawling(false);
-                }
-                case START_JUMPING -> {
-                    player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).onJump();
-                }
+                case START_SPRINTING -> player.setSprinting(true);
+                case STOP_SPRINTING -> player.setSprinting(false);
+                case START_SNEAKING -> player.setSneaking(true);
+                case STOP_SNEAKING -> player.setSneaking(false);
+                case START_SWIMMING -> player.setSwimming(true);
+                case STOP_SWIMMING -> player.setSwimming(false);
+                case START_GLIDING -> player.setGliding(true);
+                case STOP_GLIDING -> player.setGliding(false);
+                case START_CRAWLING -> player.setCrawling(true);
+                case STOP_CRAWLING -> player.setCrawling(false);
+                case START_JUMPING -> player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).onJump();
             }
         }
     }
