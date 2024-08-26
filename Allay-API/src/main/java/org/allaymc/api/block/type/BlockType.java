@@ -49,6 +49,26 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     Map<String, BlockPropertyType<?>> getProperties();
 
     /**
+     * Check if the block type has the specified property.
+     *
+     * @param name the property name.
+     * @return true if the block type has the property, false otherwise.
+     */
+    default boolean hasProperty(String name) {
+        return getProperties().containsKey(name);
+    }
+
+    /**
+     * Check if the block type has the specified property.
+     *
+     * @param propertyType the property type.
+     * @return true if the block type has the property, false otherwise.
+     */
+    default boolean hasProperty(BlockPropertyType<?> propertyType) {
+        return getProperties().containsKey(propertyType.getName());
+    }
+
+    /**
      * Gets all possible states of this block type.
      *
      * @return an unmodifiable view of the collection of all block states.

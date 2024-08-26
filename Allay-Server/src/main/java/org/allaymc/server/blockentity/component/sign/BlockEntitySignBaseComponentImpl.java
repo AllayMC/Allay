@@ -4,9 +4,9 @@ import lombok.Getter;
 import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.data.CompassRoseDirection;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -162,7 +162,12 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     }
 
     protected boolean isFrontSideInteracted(BlockFace interactedFace) {
-        var signDirection = CompassRoseDirection.from(getBlockState().getPropertyValue(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION));
+        var blockState = getBlockState();
+        if (blockState.getBlockType().hasProperty(VanillaBlockPropertyTypes.FACING_DIRECTION)) {
+            // Wall sign
+            return interactedFace == BlockFace.fromId(blockState.getPropertyValue(VanillaBlockPropertyTypes.FACING_DIRECTION));
+        }
+        var signDirection = CompassRoseDirection.from(blockState.getPropertyValue(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION));
         return switch (signDirection) {
             case EAST -> interactedFace == BlockFace.EAST;
             case SOUTH -> interactedFace == BlockFace.SOUTH;
