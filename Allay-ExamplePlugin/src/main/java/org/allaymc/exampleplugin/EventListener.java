@@ -1,7 +1,7 @@
 package org.allaymc.exampleplugin;
 
 import org.allaymc.api.data.BlockFace;
-import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
+import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
@@ -83,9 +83,9 @@ public class EventListener {
 
         // Player info
         var playerInfo = "Ping: §a" + player.getPing() + "\n§f" +
-                         "Food: §a" + player.getFoodLevel() + "/" + EntityPlayerAttributeComponent.MAX_FOOD_LEVEL + "\n§f" +
-                         "Exhaustion: §a" + MathUtils.round(player.getFoodExhaustionLevel(), 2) + "/" + EntityPlayerAttributeComponent.MAX_FOOD_EXHAUSTION_LEVEL + "\n§f" +
-                         "Saturation: §a" + MathUtils.round(player.getFoodSaturationLevel(), 2) + "/" + EntityPlayerAttributeComponent.MAX_FOOD_SATURATION_LEVEL + "\n§f" +
+                         "Food: §a" + player.getFoodLevel() + "/" + (int) AttributeType.PLAYER_HUNGER.getMaxValue() + "\n§f" +
+                         "Exhaustion: §a" + MathUtils.round(player.getFoodExhaustionLevel(), 2) + "/" + (int) AttributeType.PLAYER_EXHAUSTION.getMaxValue() + "\n§f" +
+                         "Saturation: §a" + MathUtils.round(player.getFoodSaturationLevel(), 2) + "/" + (int) AttributeType.PLAYER_SATURATION.getMaxValue() + "\n§f" +
                          "Exp: §a" + player.getExperienceInCurrentLevel() + "/" + player.getRequireExperienceForCurrentLevel();
         lines.add(playerInfo);
 

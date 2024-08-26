@@ -83,7 +83,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public boolean canEat() {
-        return getFoodLevel() < MAX_FOOD_LEVEL ||
+        return getFoodLevel() < (int) AttributeType.PLAYER_HUNGER.getMaxValue() ||
                thisPlayer.getGameType() == GameType.CREATIVE ||
                thisPlayer.getWorld().getWorldData().getDifficulty() == Difficulty.PEACEFUL;
     }
@@ -118,7 +118,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
 
     @Override
     public void setFoodLevel(int value) {
-        value = Math.max(0, Math.min(value, MAX_FOOD_LEVEL));
+        value = Math.max(0, Math.min(value, (int) AttributeType.PLAYER_HUNGER.getMaxValue()));
 
         var event = new PlayerFoodLevelChangeEvent(thisPlayer, getFoodLevel(), value);
         event.call();
