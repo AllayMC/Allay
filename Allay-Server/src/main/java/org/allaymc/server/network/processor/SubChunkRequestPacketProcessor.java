@@ -11,6 +11,7 @@ import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.ChunkSection;
+import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
@@ -97,9 +98,8 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                 continue;
             }
 
-            int
-                    cx = centerPosition.getX() + offset.getX(),
-                    cz = centerPosition.getZ() + offset.getZ();
+            int cx = centerPosition.getX() + offset.getX();
+            int cz = centerPosition.getZ() + offset.getZ();
             var chunk = player.getDimension().getChunkService().getChunk(cx, cz);
             if (chunk == null) {
                 log.warn("Player {} requested sub chunk which is not loaded", player.getOriginName());
@@ -156,7 +156,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                 heightMapData = Unpooled.wrappedBuffer(hMap);
             }
 
-            var subChunk = chunk.getOrCreateSection(sectionY);
+            var subChunk = ((AllayChunk)chunk).getOrCreateSection(sectionY);
             SubChunkRequestResult subChunkRequestResult;
             if (subChunk.isEmpty()) subChunkRequestResult = SubChunkRequestResult.SUCCESS_ALL_AIR;
             else subChunkRequestResult = SubChunkRequestResult.SUCCESS;

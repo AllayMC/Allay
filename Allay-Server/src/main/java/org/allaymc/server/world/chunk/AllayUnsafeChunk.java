@@ -78,7 +78,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
-    @Override
     public void beforeSetChunk(Dimension dimension) {
         if (blockEntityNbtList != null && !blockEntityNbtList.isEmpty()) {
             for (var nbt : blockEntityNbtList) {
@@ -94,7 +93,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
     }
 
-    @Override
     public void afterSetChunk(Dimension dimension) {
         if (entityNbtList != null && !entityNbtList.isEmpty()) {
             for (var nbt : entityNbtList) {

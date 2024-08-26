@@ -120,7 +120,6 @@ public class AllayWorld implements World {
         }
     }
 
-    @Override
     public void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time) {
         packetQueue.add(new PacketQueueEntry(player, packet, time));
     }

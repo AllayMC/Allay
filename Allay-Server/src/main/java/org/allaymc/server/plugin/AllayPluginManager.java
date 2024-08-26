@@ -43,7 +43,6 @@ public class AllayPluginManager implements PluginManager {
         registerLoaderFactory(new JsPluginLoader.JsPluginLoaderFactory());
     }
 
-    @Override
     public void loadPlugins() {
         if (descriptors == null) {
             descriptors = new HashMap<>();
@@ -158,7 +157,6 @@ public class AllayPluginManager implements PluginManager {
         }
     }
 
-    @Override
     public void disablePlugins() {
         for (var s : pluginsSortedList) {
             if (!isPluginEnabled(s)) continue;

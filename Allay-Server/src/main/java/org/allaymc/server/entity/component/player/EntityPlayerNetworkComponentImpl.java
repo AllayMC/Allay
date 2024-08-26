@@ -177,7 +177,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         });
     }
 
-    @Override
     public void onChunkInRangeSent() {
         if (doFirstSpawnChunkThreshold.get() > 0 && doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
             doFirstSpawn();
@@ -264,7 +263,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // No need to send cursor's content to client because there is nothing in cursor
     }
 
-    @Override
     public void initializePlayer() {
         // initializePlayer() method will read all the data in PlayerData except playerNBT
         // To be more exactly, we will validate and set player's current pos and spawn point in this method
@@ -390,7 +388,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         thisPlayer.setSpawnPoint(spawnPoint);
     }
 
-    @Override
     public void completeLogin() {
         if (server.getOnlinePlayerCount() >= Server.SETTINGS.genericSettings().maxClientCount()) {
             disconnect(TrKeys.M_DISCONNECTIONSCREEN_SERVERFULL_TITLE);

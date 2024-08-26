@@ -286,7 +286,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return willBeSpawnedNextTick;
     }
 
-    @Override
     public void setLocationAndCheckChunk(Location3fc newLoc) {
         checkChunk(this.location, newLoc);
         setLocation(newLoc, true);

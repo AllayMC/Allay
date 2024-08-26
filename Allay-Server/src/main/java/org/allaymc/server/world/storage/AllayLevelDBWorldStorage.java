@@ -21,7 +21,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.iq80.leveldb.CompressionType;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3i;
 
 import java.io.*;
@@ -151,7 +150,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                             .writeIntLE((chunk.getState() == ChunkState.FINISHED ? VANILLA_CHUNK_STATE_FINISHED : VANILLA_CHUNK_STATE_NEW) - 1)
                             .array()
             );
-            chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, c));
+            chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, (AllayUnsafeChunk)c));
             this.db.write(writeBatch);
         } catch (IOException e) {
             throw new RuntimeException(e);

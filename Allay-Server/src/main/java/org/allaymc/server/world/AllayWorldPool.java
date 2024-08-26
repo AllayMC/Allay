@@ -40,7 +40,6 @@ public final class AllayWorldPool implements WorldPool {
         loadWorldConfig();
     }
 
-    @Override
     public void loadWorlds() {
         worldConfig.worlds().forEach(this::loadWorld);
     }
