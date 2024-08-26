@@ -36,10 +36,8 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * @author daoge_cmd
  */
 public class AllayComponentInjector<T> implements ComponentInjector<T> {
-    public static final String INITIALIZER_FIELD_NAME = "initializer";
-
+    protected static final String INITIALIZER_FIELD_NAME = "initializer";
     protected static final String INIT_METHOD_NAME = "initComponents";
-
     protected static final String MANAGER_FIELD_NAME = "manager";
     protected static final String MANAGER_GETTER_METHOD_NAME = "getManager";
 
