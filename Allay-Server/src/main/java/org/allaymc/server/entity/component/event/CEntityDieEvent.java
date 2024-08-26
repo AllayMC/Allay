@@ -1,4 +1,4 @@
-package org.allaymc.api.entity.component.event;
+package org.allaymc.server.entity.component.event;
 
 import org.allaymc.api.eventbus.event.Event;
 

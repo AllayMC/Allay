@@ -1,9 +1,9 @@
-package org.allaymc.api.block.component.event;
+package org.allaymc.server.block.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.BlockStateWithPos;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.eventbus.event.Event;
 
 /**

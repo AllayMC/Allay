@@ -4,9 +4,9 @@ import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.ItemBaseComponent;
-import org.allaymc.api.item.component.event.CItemAttackEntityEvent;
-import org.allaymc.api.item.component.event.CItemBreakBlockEvent;
 import org.allaymc.api.item.component.tool.ItemSwordComponent;
+import org.allaymc.server.item.component.event.CItemAttackEntityEvent;
+import org.allaymc.server.item.component.event.CItemBreakBlockEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 /**

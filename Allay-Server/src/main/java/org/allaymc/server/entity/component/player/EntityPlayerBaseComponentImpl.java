@@ -19,7 +19,6 @@ import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.EntityItemBaseComponent;
-import org.allaymc.api.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
@@ -48,6 +47,7 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -715,7 +715,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setMovementSpeed(float speed) {
         movementSpeed = speed;
-        attributeComponent.setAttribute(AttributeType.MOVEMENT_SPEED, movementSpeed);
+        attributeComponent.setAttributeValue(AttributeType.MOVEMENT_SPEED, movementSpeed);
         // NOTICE: abilities.setWalkSpeed(speed) shouldn't be called otherwise player can't sprint
     }
 

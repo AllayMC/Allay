@@ -3,8 +3,6 @@ package org.allaymc.server.entity.component.player;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.entity.attribute.AttributeType;
-import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
-import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
@@ -15,6 +13,8 @@ import org.allaymc.api.eventbus.event.player.PlayerExperienceProgressChangeEvent
 import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
+import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
+import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
@@ -99,7 +99,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         event.call();
         if (event.isCancelled()) return;
 
-        setAttribute(AttributeType.PLAYER_EXPERIENCE_LEVEL, event.getNewExperienceLevel());
+        setAttributeValue(AttributeType.PLAYER_EXPERIENCE_LEVEL, event.getNewExperienceLevel());
     }
 
     @Override
@@ -113,7 +113,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         event.call();
         if (event.isCancelled()) return;
 
-        setAttribute(AttributeType.PLAYER_EXPERIENCE_PROGRESS, event.getNewExperienceProgress());
+        setAttributeValue(AttributeType.PLAYER_EXPERIENCE_PROGRESS, event.getNewExperienceProgress());
     }
 
     @Override
@@ -124,7 +124,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         event.call();
         if (event.isCancelled()) return;
 
-        setAttribute(AttributeType.PLAYER_HUNGER, value);
+        setAttributeValue(AttributeType.PLAYER_HUNGER, value);
     }
 
     @Override

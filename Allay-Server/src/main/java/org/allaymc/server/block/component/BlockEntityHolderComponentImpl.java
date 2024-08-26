@@ -4,16 +4,17 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockEntityHolderComponent;
-import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
-import org.allaymc.api.block.component.event.CBlockOnNeighborUpdateEvent;
-import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.api.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
+import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
+import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
+import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
+import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 
 /**
  * Allay Project 2023/9/15
@@ -35,7 +36,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
         createBlockEntityAt(pos, false);
         var blockEntity = getBlockEntityAt(pos);
-        blockEntity.onPlace(event);
+        ((BlockEntityBaseComponentImpl)blockEntity).onPlace(event);
 
         // Send block entity to client after onPlace()
         // because onPlace() method may make some changes on this block entity
@@ -52,7 +53,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
             log.warn("Block entity not found at pos: {}", pos);
             return;
         }
-        blockEntity.onReplace(event);
+        ((BlockEntityBaseComponentImpl)blockEntity).onReplace(event);
         removeBlockEntityAt(pos);
     }
 
@@ -60,13 +61,13 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     protected void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().pos());
         var blockEntity = getBlockEntityAt(pos);
-        blockEntity.onNeighborUpdate(event);
+        ((BlockEntityBaseComponentImpl)blockEntity).onNeighborUpdate(event);
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickBlockPos();
         var blockEntity = getBlockEntityAt(pos.x(), pos.y(), pos.z(), event.getDimension());
-        blockEntity.onInteract(event);
+        ((BlockEntityBaseComponentImpl)blockEntity).onInteract(event);
     }
 }

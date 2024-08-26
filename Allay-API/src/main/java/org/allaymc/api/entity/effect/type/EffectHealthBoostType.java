@@ -18,14 +18,14 @@ public class EffectHealthBoostType extends AbstractEffectType {
 
     @Override
     public void onAdd(Entity entity, EffectInstance effectInstance) {
-        if (!(entity instanceof EntityAttributeComponent attributeComponent)) return;
+        if (!(entity instanceof EntityAttributeComponent attributeComponent) || !attributeComponent.supportHealth()) return;
         var level = effectInstance.getLevel();
         attributeComponent.setMaxHealth(attributeComponent.getMaxHealth() + (level * 4));
     }
 
     @Override
     public void onRemove(Entity entity, EffectInstance effectInstance) {
-        if (!(entity instanceof EntityAttributeComponent attributeComponent)) return;
+        if (!(entity instanceof EntityAttributeComponent attributeComponent) || !attributeComponent.supportHealth()) return;
         var level = effectInstance.getLevel();
         attributeComponent.setMaxHealth(attributeComponent.getMaxHealth() - (level * 4));
         if (attributeComponent.getHealth() > attributeComponent.getMaxHealth()) {

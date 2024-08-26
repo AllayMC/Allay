@@ -1,4 +1,4 @@
-package org.allaymc.api.entity.component.event;
+package org.allaymc.server.item.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +14,6 @@ import org.cloudburstmc.nbt.NbtMap;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CEntityLoadNBTEvent extends Event {
-    protected NbtMap nbt;
+public class CItemLoadExtraTagEvent extends Event {
+    protected NbtMap extraTag;
 }

@@ -2,13 +2,7 @@ package org.allaymc.server.blockentity.component;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
-import org.allaymc.api.block.component.event.CBlockOnNeighborUpdateEvent;
-import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.api.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
-import org.allaymc.api.blockentity.component.event.CBlockEntityLoadNBTEvent;
-import org.allaymc.api.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
@@ -18,6 +12,12 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
+import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
+import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
+import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
+import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
+import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
@@ -78,22 +78,18 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
         manager.callEvent(event);
     }
 
-    @Override
     public void onNeighborUpdate(CBlockOnNeighborUpdateEvent event) {
         manager.callEvent(event);
     }
 
-    @Override
     public void onPlace(CBlockOnPlaceEvent event) {
         manager.callEvent(event);
     }
 
-    @Override
     public void onReplace(CBlockOnReplaceEvent event) {
         manager.callEvent(event);
     }
 
-    @Override
     public void onInteract(CBlockOnInteractEvent event) {
         manager.callEvent(event);
     }

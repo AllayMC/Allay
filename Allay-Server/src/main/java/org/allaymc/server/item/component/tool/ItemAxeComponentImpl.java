@@ -2,8 +2,8 @@ package org.allaymc.server.item.component.tool;
 
 import org.allaymc.api.block.component.BlockWoodBaseComponent;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.item.component.event.CItemRightClickOnBlockEvent;
 import org.allaymc.api.item.component.tool.ItemAxeComponent;
+import org.allaymc.server.item.component.event.CItemRightClickOnBlockEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 /**

@@ -43,7 +43,7 @@ public class PlayerArmorContainer extends PlayerContainer {
             knockbackResistance += KNOCKBACK_RESISTANCE_PER_NETHERITE_ARMOR;
         }
         var player = playerSupplier.get();
-        player.setAttribute(AttributeType.KNOCKBACK_RESISTANCE, knockbackResistance);
+        player.setAttributeValue(AttributeType.KNOCKBACK_RESISTANCE, knockbackResistance);
         // Send armor to viewers
         player.sendPacketToViewers(buildArmorEquipmentPacket(player.getRuntimeId()));
     }

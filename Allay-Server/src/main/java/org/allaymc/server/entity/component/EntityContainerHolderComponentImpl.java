@@ -7,11 +7,11 @@ import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityContainerHolderComponent;
-import org.allaymc.api.entity.component.event.CEntityDieEvent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.entity.component.event.CEntityDieEvent;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 

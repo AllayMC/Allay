@@ -1,4 +1,4 @@
-package org.allaymc.api.item.component.event;
+package org.allaymc.server.item.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +14,7 @@ import org.allaymc.api.eventbus.event.Event;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CItemUsedEvent extends Event {
+public class CItemTryUseEvent extends Event {
     protected EntityPlayer player;
-    protected long usedTime;
     protected boolean canBeUsed;
 }

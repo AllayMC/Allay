@@ -1,4 +1,4 @@
-package org.allaymc.api.block.component.event;
+package org.allaymc.server.block.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -89,7 +89,7 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
 
     default void setFoodSaturationLevel(float value) {
         value = Math.max(0, Math.min(value, (int) AttributeType.PLAYER_SATURATION.getMaxValue()));
-        setAttribute(AttributeType.PLAYER_SATURATION, value);
+        setAttributeValue(AttributeType.PLAYER_SATURATION, value);
     }
 
     default float getFoodExhaustionLevel() {
@@ -98,7 +98,7 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
 
     default void setFoodExhaustionLevel(float value) {
         value = Math.max(0, Math.min(value, (int) AttributeType.PLAYER_EXHAUSTION.getMaxValue()));
-        setAttribute(AttributeType.PLAYER_EXHAUSTION, value);
+        setAttributeValue(AttributeType.PLAYER_EXHAUSTION, value);
     }
 
     void exhaust(float level);

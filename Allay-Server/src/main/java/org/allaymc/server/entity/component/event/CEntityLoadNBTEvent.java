@@ -1,4 +1,4 @@
-package org.allaymc.api.blockentity.component.event;
+package org.allaymc.server.entity.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +14,6 @@ import org.cloudburstmc.nbt.NbtMap;
 @Getter
 @Setter
 @AllArgsConstructor
-public class CBlockEntityLoadNBTEvent extends Event {
+public class CEntityLoadNBTEvent extends Event {
     protected NbtMap nbt;
 }

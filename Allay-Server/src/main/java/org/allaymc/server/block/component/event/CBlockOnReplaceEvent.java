@@ -1,9 +1,9 @@
-package org.allaymc.api.block.component.event;
+package org.allaymc.server.block.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.block.BlockStateWithPos;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.Event;
 
@@ -14,7 +14,7 @@ import org.allaymc.api.eventbus.event.Event;
  */
 @Getter
 @AllArgsConstructor
-public class CBlockOnPlaceEvent extends Event {
+public class CBlockOnReplaceEvent extends Event {
     protected BlockStateWithPos currentBlockState;
     protected BlockState newBlockState;
     protected PlayerInteractInfo placementInfo; // Can be null

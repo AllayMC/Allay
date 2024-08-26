@@ -1,16 +1,17 @@
 package org.allaymc.server.entity.component;
 
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.Attribute;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
-import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
-import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
+import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.cloudburstmc.nbt.NbtType;
 
 import java.util.Collection;
@@ -26,6 +27,7 @@ import static java.lang.Math.min;
  *
  * @author daoge_cmd
  */
+@Slf4j
 public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @ComponentIdentifier
@@ -43,6 +45,15 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     public EntityAttributeComponentImpl(Attribute... attributes) {
+        for (Attribute attribute : attributes) {
+            this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
+        }
+    }
+
+    public EntityAttributeComponentImpl(AttributeType[] attributeTypes, Attribute... attributes) {
+        for (AttributeType attributeType : attributeTypes) {
+            addAttribute(attributeType);
+        }
         for (Attribute attribute : attributes) {
             this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
         }
@@ -86,20 +97,41 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     }
 
     @Override
-    public void setAttribute(AttributeType attributeType, float value) {
+    public void setAttributeValue(AttributeType attributeType, float value) {
         var attribute = this.attributes.get(attributeType);
-        if (attribute != null) attribute.setCurrentValue(value);
+        if (attribute == null) {
+            throw unsupportAttributeTypeException(attributeType);
+        }
+        attribute.setCurrentValue(value);
         sendAttributesToClient();
     }
 
     @Override
     public void setAttribute(Attribute attribute) {
+        var attributeType = AttributeType.byKey(attribute.getKey());
+        if (!this.attributes.containsKey(attributeType)) {
+            throw unsupportAttributeTypeException(attributeType);
+        }
         this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
         sendAttributesToClient();
     }
 
     @Override
+    public float getAttributeValue(AttributeType attributeType) {
+        var attribute = this.getAttribute(attributeType);
+        if (attribute == null) {
+            throw unsupportAttributeTypeException(attributeType);
+        }
+        return attribute.getCurrentValue();
+    }
+
+    @Override
     public void setHealth(float value) {
+        if (!supportHealth()) {
+            // Check if health is supported by the entity here
+            // To make sure that if health is not supported, event won't be called
+            throw unsupportAttributeTypeException(AttributeType.HEALTH);
+        }
         if (value > 0 && value < 1) {
             // Client will think he is dead if the health is less than 1
             // But server doesn't think so, which would causes bug
@@ -113,7 +145,10 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         event.call();
         if (event.isCancelled()) return;
 
-        setAttribute(AttributeType.HEALTH, event.getNewHealth());
+        setAttributeValue(AttributeType.HEALTH, event.getNewHealth());
     }
 
+    protected IllegalArgumentException unsupportAttributeTypeException(AttributeType attributeType) {
+        return new IllegalArgumentException("Attribute type " + attributeType + " is not found in entity " + thisEntity.getEntityType().getIdentifier());
+    }
 }

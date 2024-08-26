@@ -12,14 +12,14 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
 import org.allaymc.api.entity.component.common.EntityDamageComponent;
-import org.allaymc.api.entity.component.event.CEntityDamageEvent;
-import org.allaymc.api.entity.component.event.CEntityFallEvent;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.entity.component.event.CEntityDamageEvent;
+import org.allaymc.server.entity.component.event.CEntityFallEvent;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
@@ -108,10 +108,12 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected void applyEffects(DamageContainer damage) {
         // Damage absorption
-        var absorption = attributeComponent.getAbsorption();
-        if (absorption > 0) {
-            attributeComponent.setAbsorption(Math.max(0, absorption - damage.getFinalDamage()));
-            damage.updateFinalDamage(d -> Math.max(0, d - absorption));
+        if (attributeComponent.supportAbsorption()) {
+            var absorption = attributeComponent.getAbsorption();
+            if (absorption > 0) {
+                attributeComponent.setAbsorption(Math.max(0, absorption - damage.getFinalDamage()));
+                damage.updateFinalDamage(d -> Math.max(0, d - absorption));
+            }
         }
     }
 

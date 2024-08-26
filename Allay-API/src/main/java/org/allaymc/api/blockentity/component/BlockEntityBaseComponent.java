@@ -1,9 +1,5 @@
 package org.allaymc.api.blockentity.component;
 
-import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
-import org.allaymc.api.block.component.event.CBlockOnNeighborUpdateEvent;
-import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.api.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -44,14 +40,6 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
     default void applyClientChange(EntityPlayer player, NbtMap nbt) {
         loadNBT(nbt);
     }
-
-    void onNeighborUpdate(CBlockOnNeighborUpdateEvent event);
-
-    void onPlace(CBlockOnPlaceEvent event);
-
-    void onReplace(CBlockOnReplaceEvent event);
-
-    void onInteract(CBlockOnInteractEvent event);
 
     default BlockEntityDataPacket createBlockEntityDataPacket() {
         var packet = new BlockEntityDataPacket();

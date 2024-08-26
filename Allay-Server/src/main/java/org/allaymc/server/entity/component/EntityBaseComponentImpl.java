@@ -11,10 +11,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.attribute.AttributeType;
 import org.allaymc.api.entity.component.common.EntityAttributeComponent;
 import org.allaymc.api.entity.component.common.EntityBaseComponent;
-import org.allaymc.api.entity.component.event.CEntityDieEvent;
-import org.allaymc.api.entity.component.event.CEntityFallEvent;
-import org.allaymc.api.entity.component.event.CEntityLoadNBTEvent;
-import org.allaymc.api.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.init.EntityInitInfo;
@@ -33,6 +29,10 @@ import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.server.entity.component.event.CEntityDieEvent;
+import org.allaymc.server.entity.component.event.CEntityFallEvent;
+import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
+import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
@@ -188,7 +188,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void checkDead() {
-        if (attributeComponent == null) return;
+        if (attributeComponent == null || !attributeComponent.supportHealth()) return;
         if (attributeComponent.getHealth() == 0 && !dead) {
             onDie();
         }

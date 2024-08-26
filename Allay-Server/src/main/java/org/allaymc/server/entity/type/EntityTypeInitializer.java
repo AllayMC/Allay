@@ -7,11 +7,7 @@ import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.interfaces.*;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.server.entity.component.EntityFallingBlockBaseComponentImpl;
-import org.allaymc.server.entity.component.EntityItemBaseComponentImpl;
-import org.allaymc.server.entity.component.EntityXpOrbBaseComponentImpl;
-import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
-import org.allaymc.server.entity.component.EntityDamageComponentImpl;
+import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
 
 import static org.allaymc.api.entity.component.common.EntityAttributeComponent.basicEntityAttributes;
@@ -40,6 +36,7 @@ public final class EntityTypeInitializer {
                 .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
                 .addComponent(
                         () -> new EntityAttributeComponentImpl(
+
                                 AttributeType.HEALTH.newAttributeInstance().setMaxValue(5).setCurrentValue(5)
                         ),
                         EntityAttributeComponentImpl.class

@@ -2,8 +2,6 @@ package org.allaymc.server.blockentity.component.sign;
 
 import lombok.Getter;
 import org.allaymc.api.block.BlockStateWithPos;
-import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
-import org.allaymc.api.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
 import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
 import org.allaymc.api.data.BlockFace;
@@ -15,6 +13,8 @@ import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.MathUtils;
+import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
+import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;

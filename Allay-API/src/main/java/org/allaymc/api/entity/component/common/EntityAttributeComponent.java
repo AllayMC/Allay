@@ -32,14 +32,21 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     Collection<Attribute> getAttributes();
 
+    /**
+     * Get attribute by type
+     * @param attributeType attribute type
+     * @return attribute, or null if type is not supported
+     */
     Attribute getAttribute(AttributeType attributeType);
-
-    void setAttribute(AttributeType attributeType, float value);
 
     void setAttribute(Attribute attribute);
 
-    default float getAttributeValue(AttributeType attributeType) {
-        return this.getAttribute(attributeType).getCurrentValue();
+    float getAttributeValue(AttributeType attributeType);
+
+    void setAttributeValue(AttributeType attributeType, float value);
+
+    default boolean supportHealth() {
+        return getAttribute(AttributeType.HEALTH) != null;
     }
 
     default float getHealth() {
@@ -48,18 +55,23 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     void setHealth(float value);
 
-    default void resetHealth() {
-        setHealth(getMaxHealth());
-    }
-
     default float getMaxHealth() {
         return this.getAttribute(AttributeType.HEALTH).getMaxValue();
     }
 
     default void setMaxHealth(float value) {
+        // TODO: Event
         var maxHealth = this.getAttribute(AttributeType.HEALTH);
         maxHealth.setMaxValue(value);
         this.setAttribute(maxHealth);
+    }
+
+    default void resetHealth() {
+        setHealth(getMaxHealth());
+    }
+
+    default boolean supportAbsorption() {
+        return getAttribute(AttributeType.ABSORPTION) != null;
     }
 
     default float getAbsorption() {
@@ -67,7 +79,7 @@ public interface EntityAttributeComponent extends EntityComponent {
     }
 
     default void setAbsorption(float absorption) {
-        setAttribute(AttributeType.ABSORPTION, absorption);
+        setAttributeValue(AttributeType.ABSORPTION, absorption);
     }
 
     default List<NbtMap> saveAttributes() {

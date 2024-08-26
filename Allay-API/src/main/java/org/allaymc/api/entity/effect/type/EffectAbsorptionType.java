@@ -18,14 +18,14 @@ public class EffectAbsorptionType extends AbstractEffectType {
 
     @Override
     public void onAdd(Entity entity, EffectInstance effectInstance) {
-        if (entity instanceof EntityAttributeComponent attributeComponent) {
+        if (entity instanceof EntityAttributeComponent attributeComponent && attributeComponent.supportAbsorption()) {
             attributeComponent.setAbsorption(effectInstance.getLevel() * 4);
         }
     }
 
     @Override
     public void onRemove(Entity entity, EffectInstance effectInstance) {
-        if (entity instanceof EntityAttributeComponent attributeComponent) {
+        if (entity instanceof EntityAttributeComponent attributeComponent && attributeComponent.supportAbsorption()) {
             attributeComponent.setAbsorption(0);
         }
     }

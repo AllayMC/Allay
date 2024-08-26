@@ -1,23 +1,21 @@
-package org.allaymc.api.item.component.event;
+package org.allaymc.server.item.component.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import org.allaymc.api.block.component.PlayerInteractInfo;
 import org.allaymc.api.eventbus.event.Event;
-import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 2024/6/21
+ * Allay Project 2024/8/18
  *
  * @author daoge_cmd
  */
 @Getter
-@Setter
 @AllArgsConstructor
-public class CItemPlacedAsBlockEvent extends Event {
+public class CItemRightClickOnBlockEvent extends Event {
     protected Dimension dimension;
     protected Vector3ic placeBlockPos;
-    protected ItemStack itemStack;
+    protected PlayerInteractInfo interactInfo;
 }

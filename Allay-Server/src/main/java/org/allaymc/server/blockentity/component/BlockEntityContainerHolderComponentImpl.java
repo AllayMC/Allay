@@ -1,12 +1,8 @@
 package org.allaymc.server.blockentity.component;
 
 import lombok.Setter;
-import org.allaymc.api.block.component.event.CBlockOnInteractEvent;
-import org.allaymc.api.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
-import org.allaymc.api.blockentity.component.event.CBlockEntityLoadNBTEvent;
-import org.allaymc.api.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.container.Container;
@@ -16,6 +12,10 @@ import org.allaymc.api.container.impl.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
+import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
+import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
+import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.joml.Vector3f;
