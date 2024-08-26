@@ -306,6 +306,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             super.spawnTo(player);
             containerHolderComponent.getContainer(FullContainerType.ARMOR).sendArmorEquipmentPacketTo(player);
             containerHolderComponent.getContainer(FullContainerType.OFFHAND).sendEquipmentPacketTo(player);
+            // Skin should be sent to the player
+            // Otherwise player's skin will become steve
+            // in other player's eyes after respawn
+            player.sendPacket(createSkinPacket(skin));
         }
     }
 
@@ -387,7 +391,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setSkin(Skin skin) {
         this.skin = skin;
+        var server = Server.getInstance();
+        server.broadcastPacket(createSkinPacket(skin));
+        server.onSkinUpdate(thisPlayer);
+    }
 
+    protected PlayerSkinPacket createSkinPacket(Skin skin) {
         var packet = new PlayerSkinPacket();
         packet.setUuid(networkComponent.getLoginData().getUuid());
         packet.setSkin(skin.toNetwork());
@@ -395,10 +404,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // It seems that old skin name is unused
         packet.setOldSkinName("");
         packet.setTrustedSkin(true);
-
-        var server = Server.getInstance();
-        server.broadcastPacket(packet);
-        server.onSkinUpdate(thisPlayer);
+        return packet;
     }
 
     @Override
