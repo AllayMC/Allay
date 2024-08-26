@@ -36,7 +36,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
         createBlockEntityAt(pos, false);
         var blockEntity = getBlockEntityAt(pos);
-        ((BlockEntityBaseComponentImpl)blockEntity).onPlace(event);
+        blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onPlace(event);
 
         // Send block entity to client after onPlace()
         // because onPlace() method may make some changes on this block entity
@@ -53,7 +53,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
             log.warn("Block entity not found at pos: {}", pos);
             return;
         }
-        ((BlockEntityBaseComponentImpl)blockEntity).onReplace(event);
+        blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onReplace(event);
         removeBlockEntityAt(pos);
     }
 
@@ -61,13 +61,13 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     protected void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().pos());
         var blockEntity = getBlockEntityAt(pos);
-        ((BlockEntityBaseComponentImpl)blockEntity).onNeighborUpdate(event);
+        blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onNeighborUpdate(event);
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickBlockPos();
         var blockEntity = getBlockEntityAt(pos.x(), pos.y(), pos.z(), event.getDimension());
-        ((BlockEntityBaseComponentImpl)blockEntity).onInteract(event);
+        blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onInteract(event);
     }
 }

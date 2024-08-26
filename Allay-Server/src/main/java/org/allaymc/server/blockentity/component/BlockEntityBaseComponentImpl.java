@@ -25,7 +25,6 @@ import org.cloudburstmc.nbt.NbtMap;
  *
  * @author daoge_cmd
  */
-@Getter
 public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     @ComponentIdentifier
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
@@ -33,8 +32,11 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     @Manager
     protected ComponentManager manager;
 
+    @Getter
     protected BlockEntityType<?> blockEntityType;
+    @Getter
     protected Position3ic position;
+    @Getter
     @Setter
     protected String customName;
 

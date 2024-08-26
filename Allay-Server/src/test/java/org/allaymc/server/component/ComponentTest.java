@@ -63,13 +63,14 @@ class ComponentTest {
         assertEquals(20, sheep.getHealth());
         sheep.attack(10);
         assertEquals(10, sheep.getHealth());
-        var runtime = (ComponentedObject) sheep;
-        assertEquals(componentProviders.stream().map(ComponentProvider::getComponentClass).toList(), runtime.getComponents().stream().map(Object::getClass).toList());
+        componentProviders.stream().map(ComponentProvider::findComponentIdentifier).forEach(identifier -> assertNotNull(sheep.getManager().getComponent(identifier)));
+        assertNotNull(sheep.getManager().getComponent(SimpleNameComponent.IDENTIFIER));
+        assertInstanceOf(ComponentedObject.class, sheep);
         Assertions.assertEquals(sheep.getName(), ((NameComponent) sheep.getNameComponent()).getName());
         Assertions.assertEquals(sheep.getHealth(), ((HealthComponent) sheep.getHealthComponent()).getHealth());
         assertEquals(sheep.getMaxHealth(), ((HealthComponent) sheep.getHealthComponent()).getMaxHealth());
         ((AttackComponent) sheep.getAttackComponent()).attack(10);
-        assert sheep.isDead();
+        assertTrue(sheep.isDead());
         assertEquals(114514, sheep.getData());
     }
 

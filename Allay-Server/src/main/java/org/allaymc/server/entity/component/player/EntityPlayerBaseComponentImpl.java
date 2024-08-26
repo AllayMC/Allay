@@ -28,6 +28,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerGameTypeChangeEvent;
 import org.allaymc.api.eventbus.event.player.PlayerItemHeldEvent;
+import org.allaymc.api.eventbus.event.player.PlayerJumpEvent;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.i18n.I18n;
@@ -47,7 +48,9 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
+import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -320,11 +323,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         // loc.add(0, getBaseOffset(), 0f);
 
         if (!teleporting) {
-            var exhaust = 0f;
-            var distance = getLocation().distance(newLoc);
-            if (isSwimming()) exhaust += 0.01f * distance;
-            if (isSprinting()) exhaust += 0.1f * distance;
-            thisPlayer.exhaust(exhaust);
+            manager.callEvent(new CPlayerMoveEvent(newLoc));
         }
 
         super.broadcastMoveToViewers(loc, teleporting);
@@ -842,5 +841,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public void sendEntityData(EntityDataType<?>... dataTypes) {
         super.sendEntityData(dataTypes);
         networkComponent.sendPacket(createSetEntityDataPacket(dataTypes, new EntityFlag[0]));
+    }
+
+    public void onJump() {
+        new PlayerJumpEvent(thisPlayer).call();
+        manager.callEvent(CPlayerJumpEvent.INSTANCE);
     }
 }

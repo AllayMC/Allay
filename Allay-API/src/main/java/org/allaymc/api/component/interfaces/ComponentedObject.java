@@ -1,7 +1,5 @@
 package org.allaymc.api.component.interfaces;
 
-import java.util.List;
-
 /**
  * The object which has been built by {@link ComponentInjector}.
  * <p>
@@ -12,8 +10,4 @@ import java.util.List;
  * @author daoge_cmd
  */
 public interface ComponentedObject {
-    /**
-     * @return Components injected into this object
-     */
-    List<Component> getComponents();
 }

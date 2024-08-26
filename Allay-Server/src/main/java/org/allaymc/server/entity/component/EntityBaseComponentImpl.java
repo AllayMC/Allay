@@ -89,7 +89,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     // Will be reset in method loadUniqueId()
     @Getter
     protected long uniqueId = Long.MAX_VALUE;
-    @Getter
     @Manager
     protected ComponentManager manager;
     @ComponentedObject

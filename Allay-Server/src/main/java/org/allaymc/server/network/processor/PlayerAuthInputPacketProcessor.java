@@ -1,13 +1,15 @@
 package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.network.processor.PacketProcessor;
 import org.allaymc.api.utils.MathUtils;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerAuthInputData;
@@ -263,8 +265,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     player.setCrawling(false);
                 }
                 case START_JUMPING -> {
-                    new PlayerJumpEvent(player).call();
-                    player.exhaust(player.isSprinting() ? 0.2f : 0.05f);
+                    player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).onJump();
                 }
             }
         }

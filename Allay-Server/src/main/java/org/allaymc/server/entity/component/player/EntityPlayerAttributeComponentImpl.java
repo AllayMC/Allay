@@ -204,4 +204,31 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     protected void onAttack(CEntityAttackEvent event) {
         exhaust(0.1f);
     }
+
+    protected float swimDistance = 0;
+    protected float sprintDistance = 0;
+
+    @EventHandler
+    protected void onMove(CPlayerMoveEvent event) {
+        var distance = thisPlayer.getLocation().distance(event.getNewLoc());
+
+        if (thisPlayer.isSwimming()) swimDistance += distance;
+        if (thisPlayer.isSprinting()) sprintDistance += distance;
+
+        // To reduce network traffic, we only update food data
+        // every 10 blocks of movement
+        if (swimDistance >= 10) {
+            exhaust(0.01f * swimDistance);
+            swimDistance = 0;
+        }
+        if (sprintDistance >= 10) {
+            exhaust(0.1f * sprintDistance);
+            sprintDistance = 0;
+        }
+    }
+
+    @EventHandler
+    protected void onJump(CPlayerJumpEvent event) {
+        exhaust(thisPlayer.isSprinting() ? 0.2f : 0.05f);
+    }
 }
