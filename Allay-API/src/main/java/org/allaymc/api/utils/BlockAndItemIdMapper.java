@@ -1,7 +1,7 @@
 package org.allaymc.api.utils;
 
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaItemId;
+import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.item.data.ItemId;
 
 /**
  * Allay Project 2023/12/8
@@ -50,8 +50,8 @@ public final class BlockAndItemIdMapper {
      */
     public static Identifier itemIdToPossibleBlockId(Identifier itemId) {
         // 特例：甘蔗
-        if (itemId.equals(VanillaItemId.SUGAR_CANE.getIdentifier())) {
-            return VanillaBlockId.REEDS.getIdentifier();
+        if (itemId.equals(ItemId.SUGAR_CANE.getIdentifier())) {
+            return BlockId.REEDS.getIdentifier();
         }
         var blockId = itemId.clone();
         if (blockId.path().contains(NAMING_CONFLICT_PATH_PREFIX)) {
@@ -69,8 +69,8 @@ public final class BlockAndItemIdMapper {
      */
     public static Identifier blockIdToActualBlockItemId(Identifier blockId) {
         // 特例：甘蔗
-        if (blockId.equals(VanillaBlockId.REEDS.getIdentifier())) {
-            return VanillaItemId.SUGAR_CANE.getIdentifier();
+        if (blockId.equals(BlockId.REEDS.getIdentifier())) {
+            return ItemId.SUGAR_CANE.getIdentifier();
         }
         return blockId;
     }

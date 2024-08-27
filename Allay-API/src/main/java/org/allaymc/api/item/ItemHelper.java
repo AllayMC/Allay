@@ -2,11 +2,11 @@ package org.allaymc.api.item;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.data.ArmorTier;
 import org.allaymc.api.item.data.ToolTier;
 import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
@@ -74,34 +74,34 @@ public final class ItemHelper {
     }
 
     public static boolean isTool(ItemType<?> itemType) {
-        return itemType.hasItemTag(VanillaItemTags.IS_TOOL);
+        return itemType.hasItemTag(ItemTags.IS_TOOL);
     }
 
     public static boolean isSword(ItemType<?> itemType) {
-        return itemType.hasItemTag(VanillaItemTags.IS_SWORD);
+        return itemType.hasItemTag(ItemTags.IS_SWORD);
     }
 
     public static boolean isPickaxe(ItemType<?> itemType) {
-        return itemType.hasItemTag(VanillaItemTags.IS_PICKAXE);
+        return itemType.hasItemTag(ItemTags.IS_PICKAXE);
     }
 
     public static boolean isHoe(ItemType<?> itemType) {
-        return itemType.hasItemTag(VanillaItemTags.IS_HOE);
+        return itemType.hasItemTag(ItemTags.IS_HOE);
     }
 
     public static boolean isAxe(ItemType<?> itemType) {
-        return itemType.hasItemTag(VanillaItemTags.IS_AXE);
+        return itemType.hasItemTag(ItemTags.IS_AXE);
     }
 
     public static boolean isShovel(ItemType<?> itemType) {
-        return itemType.hasItemTag(VanillaItemTags.IS_SHOVEL);
+        return itemType.hasItemTag(ItemTags.IS_SHOVEL);
     }
 
     public static boolean isArmor(ItemType<?> itemType) {
-        return itemType.hasItemTag(VanillaItemTags.IS_ARMOR);
+        return itemType.hasItemTag(ItemTags.IS_ARMOR);
     }
 
     public static boolean isTrimmableArmor(ItemType<?> itemType) {
-        return itemType.hasItemTag(VanillaItemTags.TRIMMABLE_ARMORS);
+        return itemType.hasItemTag(ItemTags.TRIMMABLE_ARMORS);
     }
 }

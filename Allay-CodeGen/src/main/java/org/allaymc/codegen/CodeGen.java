@@ -14,9 +14,9 @@ public class CodeGen {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public static void main(String[] args) {
-        VanillaBiomeIdEnumGen.main(args);
-        VanillaBlockInterfaceGen.main(args);
-        VanillaEntityInterfaceGen.main(args);
-        VanillaItemInterfaceGen.main(args);
+        BiomeIdEnumGen.main(args);
+        BlockInterfaceGen.main(args);
+        EntityInterfaceGen.main(args);
+        ItemInterfaceGen.main(args);
     }
 }

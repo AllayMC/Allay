@@ -1,7 +1,6 @@
 package org.allaymc.api.block.type;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTag;
@@ -32,13 +31,6 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * @return the block behavior.
      */
     T getBlockBehavior();
-
-    /**
-     * Gets the list of components associated with this block type.
-     *
-     * @return the list of block components.
-     */
-    List<? extends BlockComponent> getComponents();
 
     /**
      * Gets the properties of this block type.

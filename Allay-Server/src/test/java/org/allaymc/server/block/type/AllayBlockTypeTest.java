@@ -5,12 +5,8 @@ import org.allaymc.api.block.property.enums.WallConnectionTypeEast;
 import org.allaymc.api.block.property.enums.WallConnectionTypeNorth;
 import org.allaymc.api.block.property.enums.WallConnectionTypeSouth;
 import org.allaymc.api.block.property.enums.WallConnectionTypeWest;
-import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.block.property.type.BooleanPropertyType;
-import org.allaymc.api.block.property.type.EnumPropertyType;
-import org.allaymc.api.block.property.type.IntPropertyType;
+import org.allaymc.api.block.property.type.*;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.TestComponentImpl;
 import org.allaymc.server.block.component.TestComponentImplV2;
@@ -136,16 +132,16 @@ class AllayBlockTypeTest {
     @Test
     void testBlockStateHash() {
         var b1 = COBBLED_DEEPSLATE_WALL.getDefaultState();
-        b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
-        b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
-        b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
-        b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
-        b1 = b1.setProperty(VanillaBlockPropertyTypes.WALL_POST_BIT, true);
+        b1 = b1.setProperty(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, WallConnectionTypeEast.NONE);
+        b1 = b1.setProperty(BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, WallConnectionTypeNorth.TALL);
+        b1 = b1.setProperty(BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, WallConnectionTypeSouth.SHORT);
+        b1 = b1.setProperty(BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, WallConnectionTypeWest.NONE);
+        b1 = b1.setProperty(BlockPropertyTypes.WALL_POST_BIT, true);
         assertEquals(1789459903, b1.unsignedBlockStateHash());
 
         var b2 = BLUE_CANDLE.getDefaultState();
-        b2 = b2.setProperty(VanillaBlockPropertyTypes.CANDLES, 2);
-        b2 = b2.setProperty(VanillaBlockPropertyTypes.LIT, false);
+        b2 = b2.setProperty(BlockPropertyTypes.CANDLES, 2);
+        b2 = b2.setProperty(BlockPropertyTypes.LIT, false);
         assertEquals(4220034033L, b2.unsignedBlockStateHash());
     }
 

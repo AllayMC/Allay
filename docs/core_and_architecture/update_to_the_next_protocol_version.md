@@ -57,18 +57,18 @@ item_meta_block_state_bimap.nbt based on creative_items.nbt. Remember to delete 
 
 Allay completes most repetitive work through code generation. Next, we'll focus on `Allay-CodeGen`.
 
-**Step one, check if there are any new biomes in `biome_id_and_type.json`**. If so, run `VanillaBiomeIdEnumGen`. This
+**Step one, check if there are any new biomes in `biome_id_and_type.json`**. If so, run `BiomeIdEnumGen`. This
 file usually doesn't change much in minor updates.
 
-**Step two, check if there are any new entities in `entity_id_map.json`**. If so, first run `VanillaEntityIdEnumGen`,
-then run `VanillaEntityInterfaceGen`. This file usually doesn't change much in minor updates.
+**Step two, check if there are any new entities in `entity_id_map.json`**. If so, first run `EntityIdEnumGen`,
+then run `EntityInterfaceGen`. This file usually doesn't change much in minor updates.
 
-**Step three, check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `VanillaItemTagGen`
-or `VanillaBlockTagGen`.
+**Step three, check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `ItemTagGen`
+or `BlockTagGen`.
 
-**Step four, check for changes in `block_property_types.json`**. If changes exist, run `VanillaBlockPropertyTypeGen`.
+**Step four, check for changes in `block_property_types.json`**. If changes exist, run `BlockPropertyTypeGen`.
 
-**Step five, run VanillaBlockInterfaceGen**. This step requires more manual operation:
+**Step five, run BlockInterfaceGen**. This step requires more manual operation:
 
 - You need to manually delete old blocks. If there are changes in block properties, you need to manually modify them to
   adapt. You can refer to [StateUpdater](https://github.com/AllayMC/StateUpdater) to understand block
@@ -80,20 +80,20 @@ or `VanillaBlockTagGen`.
   the block's code logic**, which is crucial!
 
 - If there is a batch of similar blocks, you need to register new sub-packages in the `registerSubPackages()` method
-  of `VanillaBlockInterfaceGen` to avoid overcrowding the block class group.
+  of `BlockInterfaceGen` to avoid overcrowding the block class group.
 
-**Step six, run `VanillaItemInterfaceGen`**. Similar to blocks, this step also requires a certain amount of manual
+**Step six, run `ItemInterfaceGen`**. Similar to blocks, this step also requires a certain amount of manual
 operation, but the workload is less than before:
 
-- You need to manually delete old items. If an item has only changed its name, you need to migrate code logic from the
-  old item to the new one.
+- You need to manually delete old items. If an item has only changed its name, you need `to migrate code logic from the
+  old item to the new one.`
 
 - Even if there are no additions or deletions of items, the logic of implemented items may change in the original
   version. To respect the original version, Allay needs to synchronize changes. However, if we are only discussing
   protocol updates, this can be deferred.
 
 - If there is a batch of similar items, you need to register new sub-packages in the `registerSubPackages()` method
-  of `VanillaItemInterfaceGen` to avoid overcrowding the item class group.
+  of `ItemInterfaceGen` to avoid overcrowding the item class group.
 
 ## 4. Update Dependencies
 

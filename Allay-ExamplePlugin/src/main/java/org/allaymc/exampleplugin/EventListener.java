@@ -58,7 +58,9 @@ public class EventListener {
 
         // World info
         var worldInfo = "World: §a" + player.getWorld().getWorldData().getName() + "\n§f" +
-                        "Time: §a" + player.getWorld().getWorldData().getTime();
+                        "Time: §a" + player.getWorld().getWorldData().getTime() + "\n§f" +
+                        "TPS: §a" + MathUtils.round(player.getWorld().getTps(), 2) + "\n§f" +
+                        "MSPT: §a" + MathUtils.round(player.getWorld().getMSPT(), 2);
         lines.add(worldInfo);
 
         var loc = player.getLocation();

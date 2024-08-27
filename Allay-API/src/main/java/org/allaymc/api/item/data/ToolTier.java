@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.item.tag.ItemTag;
 
-import static org.allaymc.api.data.VanillaItemTags.*;
+import static org.allaymc.api.item.tag.ItemTags.*;
 
 /**
  * Allay Project 2024/6/12

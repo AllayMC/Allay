@@ -1,9 +1,9 @@
 package org.allaymc.server;
 
 import org.allaymc.api.block.property.enums.MinecraftFacingDirection;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.openjdk.jmh.annotations.*;
 
@@ -31,12 +31,12 @@ public class BlockStateUpdateJMHTest {
 
     @Benchmark
     public void test1() {
-        observer = observer.setProperty(VanillaBlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
+        observer = observer.setProperty(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
     }
 
     @Benchmark
     public void test2() {
-        observer = observer.setProperty(VanillaBlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
-        observer = observer.setProperty(VanillaBlockPropertyTypes.POWERED_BIT, true);
+        observer = observer.setProperty(BlockPropertyTypes.MINECRAFT_FACING_DIRECTION, MinecraftFacingDirection.UP);
+        observer = observer.setProperty(BlockPropertyTypes.POWERED_BIT, true);
     }
 }

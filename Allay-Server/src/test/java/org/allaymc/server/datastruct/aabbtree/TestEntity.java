@@ -1,5 +1,7 @@
 package org.allaymc.server.datastruct.aabbtree;
 
+import org.allaymc.api.world.service.HasAABB;
+import org.allaymc.api.world.service.HasLongId;
 import org.joml.primitives.AABBf;
 
 public class TestEntity implements HasAABB, HasLongId {

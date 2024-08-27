@@ -1,7 +1,7 @@
 package org.allaymc.server.registry.populator;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.data.VanillaEffectTypes;
+import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 
@@ -15,7 +15,7 @@ public class EffectTypeRegistryPopulator implements Runnable {
     @Override
     public void run() {
         log.info(I18n.get().tr(TrKeys.A_EFFECTTYPE_LOADING));
-        var $ = VanillaEffectTypes.ABSORPTION;
-        log.info(I18n.get().tr(TrKeys.A_EFFECTTYPE_LOADED, VanillaEffectTypes.class.getFields().length));
+        var $ = EffectTypes.ABSORPTION;
+        log.info(I18n.get().tr(TrKeys.A_EFFECTTYPE_LOADED, EffectTypes.class.getFields().length));
     }
 }

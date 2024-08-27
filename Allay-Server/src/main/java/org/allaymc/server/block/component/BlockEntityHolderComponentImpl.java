@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockEntityHolderComponent;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
@@ -15,6 +14,7 @@ import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
+import org.allaymc.server.component.annotation.ComponentIdentifier;
 
 /**
  * Allay Project 2023/9/15

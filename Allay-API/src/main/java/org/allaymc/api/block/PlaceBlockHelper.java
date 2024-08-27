@@ -5,12 +5,12 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.CompassRoseDirection;
 import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.PillarAxis;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.joml.Vector3ic;
 
 import static java.lang.Math.abs;
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.*;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
  * Allay Project 2024/8/15
@@ -48,7 +48,7 @@ public final class PlaceBlockHelper {
 
     public static BlockState processGroundSignDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) return blockState;
-        blockState = blockState.setProperty(VanillaBlockPropertyTypes.GROUND_SIGN_DIRECTION.createValue(
+        blockState = blockState.setProperty(BlockPropertyTypes.GROUND_SIGN_DIRECTION.createValue(
                 CompassRoseDirection.getClosestFromYaw(placementInfo.player().getLocation().yaw()).getIndex()
         ));
         return blockState;

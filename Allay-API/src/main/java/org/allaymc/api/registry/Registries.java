@@ -1,18 +1,18 @@
 package org.allaymc.api.registry;
 
 import org.allaymc.api.block.component.data.BlockStateData;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.material.MaterialType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.command.CommandRegistry;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.data.ItemData;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.NetworkRecipe;
@@ -38,7 +38,8 @@ import java.util.function.Function;
 public final class Registries {
     // Item
     public static DoubleKeyMappedRegistry<Integer, Identifier, EnchantmentType> ENCHANTMENTS;
-    public static SimpleMappedRegistry<VanillaItemId, ItemData> VANILLA_ITEM_DATA;
+    // NOTICE: Only vanilla item data is stored in the item data registry.
+    public static SimpleMappedRegistry<ItemId, ItemData> ITEM_DATA;
     public static SimpleMappedRegistry<Identifier, ItemType<?>> ITEMS;
 
     // BlockEntity
@@ -47,7 +48,8 @@ public final class Registries {
     // Block
     public static SimpleMappedRegistry<MaterialType, Material> MATERIALS;
     public static IntMappedRegistry<BlockState> BLOCK_STATE_PALETTE;
-    public static SimpleMappedRegistry<VanillaBlockId, Map<Integer, BlockStateData>> VANILLA_BLOCK_STATE_DATA;
+    // NOTICE: Only vanilla block state data is stored in the block state data registry.
+    public static SimpleMappedRegistry<BlockId, Map<Integer, BlockStateData>> BLOCK_STATE_DATA;
     public static SimpleMappedRegistry<Identifier, BlockType<?>> BLOCKS;
 
     // Entity

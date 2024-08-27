@@ -9,10 +9,10 @@ import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
+import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
-import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
@@ -45,14 +45,14 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var oldBlock = dimension.getBlockState(placeBlockPos);
         var torchFace = map.get(placementInfo.blockFace());
 
-        if (!oldBlock.getBlockType().hasBlockTag(VanillaBlockTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN) return false;
+        if (!oldBlock.getBlockType().hasBlockTag(BlockTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN) return false;
 
         var targetBlock = dimension.getBlockState(placementInfo.clickBlockPos());
         BlockType<?> blockType2 = targetBlock.getBlockType();
         if (blockType2.getMaterial().isSolid()) {
-            blockState = blockState.setProperty(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
+            blockState = blockState.setProperty(BlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
         } else {
-            blockState = blockState.setProperty(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION, TorchFacingDirection.TOP);
+            blockState = blockState.setProperty(BlockPropertyTypes.TORCH_FACING_DIRECTION, TorchFacingDirection.TOP);
             var downBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
             BlockType<?> blockType1 = downBlock.getBlockType();
             if (!blockType1.getMaterial().isSolid()) return false;
@@ -65,7 +65,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         if (face == BlockFace.UP) return true;
-        var torchFacingDirection = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION);
+        var torchFacingDirection = current.blockState().getPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION);
         var blockFace = map.inverse().get(torchFacingDirection);
         var block = current.pos().dimension().getBlockState(blockFace.opposite().offsetPos(current.pos()));
         return block.getBlockType().getMaterial().isSolid();

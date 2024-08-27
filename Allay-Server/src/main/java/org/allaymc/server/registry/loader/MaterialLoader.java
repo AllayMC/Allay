@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.material.MaterialType;
-import org.allaymc.api.data.VanillaMaterialTypes;
+import org.allaymc.api.block.material.MaterialTypes;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Utils;
 
@@ -29,7 +29,7 @@ public class MaterialLoader implements RegistryLoader<Void, Map<MaterialType, Ma
             var loaded = new HashMap<MaterialType, Material>();
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
                 var key = entry.getKey();
-                var type = VanillaMaterialTypes.getMaterialTypeByName(key);
+                var type = MaterialTypes.getMaterialTypeByName(key);
                 if (type == null) {
                     log.error("Unknown material type: {}", key);
                     return;

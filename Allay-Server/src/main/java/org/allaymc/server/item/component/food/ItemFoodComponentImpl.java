@@ -1,12 +1,12 @@
 package org.allaymc.server.item.component.food;
 
 import lombok.Getter;
-import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEatFoodEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemFoodComponent;
+import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.item.component.event.CItemTryUseEvent;
 import org.allaymc.server.item.component.event.CItemUsedEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;

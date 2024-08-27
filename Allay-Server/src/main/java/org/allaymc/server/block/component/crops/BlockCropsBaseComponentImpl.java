@@ -15,8 +15,8 @@ import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
 import static org.allaymc.api.block.type.BlockTypes.FARMLAND;
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.GROWTH;
 
 /**
  * Allay Project 2024/8/15

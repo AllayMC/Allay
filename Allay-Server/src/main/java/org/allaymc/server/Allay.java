@@ -6,22 +6,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.property.BlockPropertyProcessor;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.component.interfaces.ComponentInjector;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.registry.DoubleKeyMappedRegistry;
 import org.allaymc.api.registry.IntMappedRegistry;
@@ -32,18 +27,13 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.server.block.type.AllayBlockType;
-import org.allaymc.server.blockentity.type.AllayBlockEntityType;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
-import org.allaymc.server.component.injector.AllayComponentInjector;
-import org.allaymc.server.entity.type.AllayEntityType;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
-import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.perm.tree.AllayPermTree;
 import org.allaymc.server.registry.AllayCommandRegistry;
 import org.allaymc.server.registry.loader.*;
@@ -138,22 +128,9 @@ public final class Allay {
         ComponentClassCacheUtils.readCacheMapping();
 
         // Common
-        api.bind(ComponentInjector.ComponentInjectorFactory.class, () -> AllayComponentInjector::new);
         api.bind(Server.class, AllayServer::getInstance);
         api.bind(Scheduler.SchedulerFactory.class, () -> AllayScheduler::new);
         api.bind(EventBus.Factory.class, () -> AllayEventBus::new);
-
-        // Item
-        api.bind(ItemTypeBuilder.ItemTypeBuilderFactory.class, () -> AllayItemType::builder);
-
-        // BlockEntity
-        api.bind(BlockEntityTypeBuilder.BlockEntityTypeBuilderFactory.class, () -> AllayBlockEntityType::builder);
-
-        // Block
-        api.bind(BlockTypeBuilder.BlockTypeBuilderFactory.class, () -> AllayBlockType::builder);
-
-        // Entity
-        api.bind(EntityTypeBuilder.EntityTypeBuilderFactory.class, () -> AllayEntityType::builder);
 
         // World
         api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
@@ -176,7 +153,7 @@ public final class Allay {
                 r -> Registries.ENCHANTMENTS = r,
                 new EnchantmentTypeRegistryPopulator()
         );
-        Registries.VANILLA_ITEM_DATA = SimpleMappedRegistry.create(new VanillaItemDataLoader());
+        Registries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
                 r -> Registries.ITEMS = r,
@@ -192,7 +169,7 @@ public final class Allay {
 
         // Block
         Registries.MATERIALS = SimpleMappedRegistry.create(new MaterialLoader());
-        Registries.VANILLA_BLOCK_STATE_DATA = SimpleMappedRegistry.create(new VanillaBlockStateDataLoader());
+        Registries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataLoader());
         Registries.BLOCK_STATE_PALETTE = IntMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, BlockType<?>>()),

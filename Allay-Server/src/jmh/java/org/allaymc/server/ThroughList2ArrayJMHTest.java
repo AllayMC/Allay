@@ -2,7 +2,7 @@ package org.allaymc.server;
 
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -23,13 +23,13 @@ public class ThroughList2ArrayJMHTest {
     @Setup
     public void setup() throws MissingImplementationException {
         Allay.initAllay();
-        data1[0] = VanillaBlockPropertyTypes.AGE_16.createValue(5);
-        data1[1] = VanillaBlockPropertyTypes.ACTIVE.createValue(false);
-        data1[2] = VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION.createValue(TorchFacingDirection.WEST);
+        data1[0] = BlockPropertyTypes.AGE_16.createValue(5);
+        data1[1] = BlockPropertyTypes.ACTIVE.createValue(false);
+        data1[2] = BlockPropertyTypes.TORCH_FACING_DIRECTION.createValue(TorchFacingDirection.WEST);
 
-        data2.add(VanillaBlockPropertyTypes.AGE_16.createValue(5));
-        data2.add(VanillaBlockPropertyTypes.ACTIVE.createValue(false));
-        data2.add(VanillaBlockPropertyTypes.TORCH_FACING_DIRECTION.createValue(TorchFacingDirection.WEST));
+        data2.add(BlockPropertyTypes.AGE_16.createValue(5));
+        data2.add(BlockPropertyTypes.ACTIVE.createValue(false));
+        data2.add(BlockPropertyTypes.TORCH_FACING_DIRECTION.createValue(TorchFacingDirection.WEST));
     }
 
     @Benchmark

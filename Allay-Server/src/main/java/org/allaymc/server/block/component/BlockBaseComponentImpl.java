@@ -4,18 +4,16 @@ import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
@@ -24,6 +22,8 @@ import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.block.type.BlockLootTable;
+import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.loottable.context.BreakBlockContext;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3f;
@@ -67,7 +67,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        var vanillaBlockId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
+        var vanillaBlockId = BlockId.fromIdentifier(blockType.getIdentifier());
         if (vanillaBlockId != null) {
             var lootTable = BlockLootTable.getLootTable(vanillaBlockId);
             if (lootTable != null) {
@@ -119,7 +119,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
         var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);
         var dimension = blockState.pos().dimension();
-        if (usedItem != null && usedItem.hasEnchantment(VanillaEnchantmentTypes.SILK_TOUCH)) {
+        if (usedItem != null && usedItem.hasEnchantment(EnchantmentTypes.SILK_TOUCH)) {
             // Silk Touch, directly drop the block itself
             dimension.dropItem(getSilkTouchDrop(blockState), dropPos);
             return;

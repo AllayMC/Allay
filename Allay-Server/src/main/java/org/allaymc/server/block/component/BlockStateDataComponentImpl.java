@@ -2,13 +2,13 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.component.data.BlockStateData;
 import org.allaymc.api.block.component.data.BlockStateDataComponent;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.component.annotation.ComponentIdentifier;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 
 import java.util.HashMap;
@@ -69,9 +69,9 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
 
     public static BlockStateDataComponentImpl ofRedefinedAABB(Function<BlockState, VoxelShape> aabbRedefiner) {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
-            var vanillaId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
+            var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());
             Objects.requireNonNull(vanillaId);
-            var attributeMap = Registries.VANILLA_BLOCK_STATE_DATA.get(vanillaId);
+            var attributeMap = Registries.BLOCK_STATE_DATA.get(vanillaId);
             Objects.requireNonNull(attributeMap);
             var newAttributeMap = new HashMap<Integer, BlockStateData>();
             attributeMap.forEach((blockStateHash, attribute) ->

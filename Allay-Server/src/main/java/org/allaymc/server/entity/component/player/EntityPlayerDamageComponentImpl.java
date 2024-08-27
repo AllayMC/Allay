@@ -1,6 +1,5 @@
 package org.allaymc.server.entity.component.player;
 
-import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -8,6 +7,7 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.server.Server;
+import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.entity.component.EntityDamageComponentImpl;
 import org.allaymc.server.entity.component.event.CEntityDieEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;

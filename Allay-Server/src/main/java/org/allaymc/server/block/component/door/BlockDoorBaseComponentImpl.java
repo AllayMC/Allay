@@ -8,9 +8,9 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.utils.Utils;
@@ -22,7 +22,7 @@ import org.joml.Vector3ic;
 
 import java.util.Set;
 
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.*;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
  * Allay Project 2024/8/16
@@ -65,7 +65,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var upBlockState = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z());
-        if (!upBlockState.getBlockType().hasBlockTag(VanillaBlockTags.REPLACEABLE)) {
+        if (!upBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             return false;
         }
 

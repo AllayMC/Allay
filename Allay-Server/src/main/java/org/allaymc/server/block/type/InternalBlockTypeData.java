@@ -2,12 +2,12 @@ package org.allaymc.server.block.type;
 
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.material.MaterialType;
+import org.allaymc.api.block.material.MaterialTypes;
 import org.allaymc.api.block.tag.BlockTag;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaBlockTags;
-import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.data.VanillaMaterialTypes;
+import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 
@@ -25,29 +25,29 @@ import java.util.*;
 public final class InternalBlockTypeData {
 
     // Use array instead of set to reduce memory usage
-    private static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS = new HashMap<>();
+    private static final Map<BlockId, BlockTag[]> VANILLA_BLOCK_TAGS = new HashMap<>();
 
-    private static final Map<VanillaBlockId, BlockTag[]> VANILLA_BLOCK_TAGS_CUSTOM = new HashMap<>();
+    private static final Map<BlockId, BlockTag[]> VANILLA_BLOCK_TAGS_CUSTOM = new HashMap<>();
 
-    private static final Map<VanillaBlockId, MaterialType> VANILLA_BLOCK_MATERIAL_TYPES = new HashMap<>();
+    private static final Map<BlockId, MaterialType> VANILLA_BLOCK_MATERIAL_TYPES = new HashMap<>();
 
     // Stores the correct tool sets for blocks that require tool quality
-    private static final EnumMap<VanillaBlockId, VanillaItemId[]> VANILLA_BLOCK_SPECIAL_TOOLS = new EnumMap<>(VanillaBlockId.class);
+    private static final EnumMap<BlockId, ItemId[]> VANILLA_BLOCK_SPECIAL_TOOLS = new EnumMap<>(BlockId.class);
 
     public static void init() {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_types.json")))) {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
-                var id = VanillaBlockId.fromIdentifier(new Identifier(entry.getKey()));
+                var id = BlockId.fromIdentifier(new Identifier(entry.getKey()));
                 var obj = entry.getValue().getAsJsonObject();
                 // Material
-                var materialType = VanillaMaterialTypes.getMaterialTypeByName(obj.get("material").getAsString());
+                var materialType = MaterialTypes.getMaterialTypeByName(obj.get("material").getAsString());
                 VANILLA_BLOCK_MATERIAL_TYPES.put(id, materialType);
                 // Tags (can be null)
                 if (obj.has("tags")) {
                     var tags = obj.get("tags").getAsJsonArray();
                     var blockTags = new BlockTag[tags.size()];
                     for (int i = 0; i < tags.size(); i++) {
-                        var tag = VanillaBlockTags.getTagByName(tags.get(i).getAsString());
+                        var tag = BlockTags.getTagByName(tags.get(i).getAsString());
                         if (tag == null) {
                             log.warn("Unknown block tag: {}", tags.get(i).getAsString());
                             continue;
@@ -61,9 +61,9 @@ public final class InternalBlockTypeData {
                 // Special tools (can be null)
                 if (obj.has("specialTools")) {
                     var tools = obj.get("specialTools").getAsJsonArray();
-                    var specialTools = new VanillaItemId[tools.size()];
+                    var specialTools = new ItemId[tools.size()];
                     for (int i = 0; i < tools.size(); i++) {
-                        specialTools[i] = VanillaItemId.fromIdentifier(new Identifier(tools.get(i).getAsString()));
+                        specialTools[i] = ItemId.fromIdentifier(new Identifier(tools.get(i).getAsString()));
                     }
                     VANILLA_BLOCK_SPECIAL_TOOLS.put(id, specialTools);
                 } else {
@@ -74,12 +74,12 @@ public final class InternalBlockTypeData {
             throw new RuntimeException(e);
         }
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_tags_custom.json")))) {
-            var map = new HashMap<VanillaBlockId, Set<BlockTag>>();
+            var map = new HashMap<BlockId, Set<BlockTag>>();
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
-                var tag = VanillaBlockTags.getTagByName(entry.getKey());
+                var tag = BlockTags.getTagByName(entry.getKey());
                 for (var obj : entry.getValue().getAsJsonArray()) {
                     var blockId = obj.getAsString();
-                    var id = VanillaBlockId.fromIdentifier(new Identifier(blockId));
+                    var id = BlockId.fromIdentifier(new Identifier(blockId));
                     if (id == null) {
                         log.warn("Unknown block id: {}", blockId);
                         return;
@@ -95,7 +95,7 @@ public final class InternalBlockTypeData {
                 }
                 VANILLA_BLOCK_TAGS_CUSTOM.put(id, blockTags);
             });
-            for (var id : VanillaBlockId.values()) {
+            for (var id : BlockId.values()) {
                 VANILLA_BLOCK_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_BLOCK_TAG_ARRAY);
             }
         } catch (IOException e) {
@@ -103,11 +103,11 @@ public final class InternalBlockTypeData {
         }
     }
 
-    public static MaterialType getMaterialType(VanillaBlockId id) {
+    public static MaterialType getMaterialType(BlockId id) {
         return VANILLA_BLOCK_MATERIAL_TYPES.get(id);
     }
 
-    public static BlockTag[] getBlockTags(VanillaBlockId id) {
+    public static BlockTag[] getBlockTags(BlockId id) {
         var vanilla = VANILLA_BLOCK_TAGS.get(id);
         var custom = VANILLA_BLOCK_TAGS_CUSTOM.get(id);
         var tags = new BlockTag[vanilla.length + custom.length];
@@ -116,7 +116,7 @@ public final class InternalBlockTypeData {
         return tags;
     }
 
-    public static VanillaItemId[] getSpecialTools(VanillaBlockId id) {
+    public static ItemId[] getSpecialTools(BlockId id) {
         return VANILLA_BLOCK_SPECIAL_TOOLS.get(id);
     }
 }

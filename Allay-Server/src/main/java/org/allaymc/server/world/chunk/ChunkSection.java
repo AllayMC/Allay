@@ -2,7 +2,7 @@ package org.allaymc.server.world.chunk;
 
 import io.netty.buffer.ByteBuf;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.data.VanillaBiomeId;
+import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.datastruct.NibbleArray;
@@ -34,7 +34,7 @@ public record ChunkSection(
         this(
                 sectionY,
                 new Palette[]{new Palette<>(AIR.getDefaultState()), new Palette<>(AIR.getDefaultState())},
-                new Palette<>(VanillaBiomeId.PLAINS),
+                new Palette<>(BiomeId.PLAINS),
                 new NibbleArray(Chunk.SECTION_SIZE),
                 new NibbleArray(Chunk.SECTION_SIZE)
         );
@@ -43,7 +43,7 @@ public record ChunkSection(
     public ChunkSection(byte sectionY, Palette<BlockState>[] blockLayer) {
         this(
                 sectionY, blockLayer,
-                new Palette<>(VanillaBiomeId.PLAINS),
+                new Palette<>(BiomeId.PLAINS),
                 new NibbleArray(Chunk.SECTION_SIZE),
                 new NibbleArray(Chunk.SECTION_SIZE)
         );

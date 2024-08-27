@@ -17,8 +17,8 @@ import org.joml.Vector3ic;
 
 import java.time.Duration;
 
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.BUTTON_PRESSED_BIT;
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.BUTTON_PRESSED_BIT;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
 
 /**
  * Allay Project 2024/8/15

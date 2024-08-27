@@ -2,8 +2,8 @@ package org.allaymc.server.item.component;
 
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.poi.PlayerInteractInfo;
-import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.item.component.ItemSignBaseComponent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
@@ -18,10 +18,10 @@ import org.joml.Vector3ic;
 public class ItemSignBaseComponentImpl extends ItemBaseComponentImpl implements ItemSignBaseComponent {
 
     // NOTICE: We shouldn't use BlockType<?> here because item types are initialized earlier than block types.
-    protected VanillaBlockId wallSignId;
-    protected VanillaBlockId standingSignId;
+    protected BlockId wallSignId;
+    protected BlockId standingSignId;
 
-    public ItemSignBaseComponentImpl(ItemStackInitInfo initInfo, VanillaBlockId wallSignId, VanillaBlockId standingSignId) {
+    public ItemSignBaseComponentImpl(ItemStackInitInfo initInfo, BlockId wallSignId, BlockId standingSignId) {
         super(initInfo);
         this.wallSignId = wallSignId;
         this.standingSignId = standingSignId;

@@ -5,8 +5,8 @@ import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
@@ -31,7 +31,7 @@ public class BlockWallSignBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        var signFaceOpposite = BlockFace.fromId(current.blockState().getPropertyValue(VanillaBlockPropertyTypes.FACING_DIRECTION)).opposite();
+        var signFaceOpposite = BlockFace.fromId(current.blockState().getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)).opposite();
         if (face != signFaceOpposite) return true;
         return neighbor.blockState().getBlockType().getMaterial().isSolid();
     }

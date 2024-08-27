@@ -6,8 +6,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerMoveEvent;
 import org.allaymc.api.math.location.Location3f;
@@ -224,8 +224,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         // 1. Multiplier factors
         var movementFactor = entity.getMovementFactor();
 
-        var speedLevel = entity.getEffectLevel(VanillaEffectTypes.SPEED);
-        var slownessLevel = entity.getEffectLevel(VanillaEffectTypes.SLOWNESS);
+        var speedLevel = entity.getEffectLevel(EffectTypes.SPEED);
+        var slownessLevel = entity.getEffectLevel(EffectTypes.SLOWNESS);
 
         var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
 

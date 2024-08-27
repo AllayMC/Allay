@@ -1,7 +1,7 @@
 package org.allaymc.api.item.descriptor;
 
-import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
+import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class ItemDescriptorTest {
     @Test
     void testItemTagDescriptor() {
-        var descriptor = new ItemTagDescriptor(VanillaItemTags.PLANKS);
+        var descriptor = new ItemTagDescriptor(ItemTags.PLANKS);
         var plankItemStack = ACACIA_PLANKS.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()
         );
