@@ -2,7 +2,7 @@ package org.allaymc.codegen;
 
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
-import org.allaymc.dependence.VanillaBlockId;
+import org.allaymc.dependence.BlockId;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
@@ -12,21 +12,19 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
-import static org.allaymc.codegen.VanillaBlockIdEnumGen.MAPPED_BLOCK_PALETTE_NBT;
-import static org.allaymc.codegen.VanillaBlockPropertyTypeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
+import static org.allaymc.codegen.BlockIdEnumGen.MAPPED_BLOCK_PALETTE_NBT;
+import static org.allaymc.codegen.BlockPropertyTypeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 
 /**
- * Depend on VanillaBlockIdEnumGen execution
- * <p>
  * Allay Project 2023/4/8
  *
  * @author daoge_cmd | Cool_Loong
  */
-public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
+public class BlockInterfaceGen extends BaseInterfaceGen {
 
     public static final ClassName BLOCK_BEHAVIOR_CLASS_NAME = ClassName.get("org.allaymc.api.block", "BlockBehavior");
-    public static final ClassName VANILLA_BLOCK_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaBlockId");
-    public static final ClassName VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaBlockPropertyTypes");
+    public static final ClassName BLOCK_ID_CLASS_NAME = ClassName.get("org.allaymc.api.block", "BlockId");
+    public static final ClassName BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.block.property.type", "BlockPropertyTypes");
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockTypes");
     public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockTypeBuilder");
@@ -41,8 +39,8 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
-        // NOTICE: Please run VanillaBlockIdEnumGen.generate() first before running this method
-        VanillaBlockPropertyTypeGen.generate();
+        // NOTICE: Please run BlockIdEnumGen.generate() first before running this method
+        BlockPropertyTypeGen.generate();
         generate();
     }
 
@@ -51,10 +49,8 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackages();
         var interfaceDir = Path.of("Allay-API/src/main/java/org/allaymc/api/block/interfaces");
         if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
-        var initializerDir = Path.of("Allay-Server/src/main/java/org/allaymc/server/block/initializer");
-        if (!Files.exists(initializerDir)) Files.createDirectories(initializerDir);
         var typesClass = TypeSpec.classBuilder(BLOCK_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        for (var id : VanillaBlockId.values()) {
+        for (var id : BlockId.values()) {
             typesClass.addField(
                     FieldSpec.builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -82,12 +78,12 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/block/type/" + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
 
-    private static void addDefaultBlockTypeInitializer(VanillaBlockId id, ClassName blockClassName) {
+    private static void addDefaultBlockTypeInitializer(BlockId id, ClassName blockClassName) {
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T.$N = $T\n", BLOCK_TYPES_CLASS_NAME, id.name(), BLOCK_TYPE_BUILDER_CLASS_NAME)
                 .add("        .builder($T.class)\n", blockClassName)
-                .add("        .vanillaBlock($T.$N)\n", VANILLA_BLOCK_ID_CLASS_NAME, id.name());
+                .add("        .vanillaBlock($T.$N)\n", BLOCK_ID_CLASS_NAME, id.name());
         var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(id.getIdentifier().toString());
         var states = blockPaletteData.getCompound("states");
         if (!states.isEmpty()) {
@@ -96,7 +92,7 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
             states.forEach((name, value) -> {
                 var propertyName = BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name.replaceAll(":", "_")) && BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.containsKey(id.getIdentifier().toString()) ?
                         BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(id.getIdentifier().toString()).get(name.replaceAll(":", "_")).toUpperCase() : name.replaceAll(":", "_").toUpperCase();
-                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), VANILLA_BLOCK_PROPERTY_TYPES_CLASS_NAME, propertyName);
+                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), BLOCK_PROPERTY_TYPES_CLASS_NAME, propertyName);
             });
             initializer.add(")\n");
         }
@@ -126,17 +122,17 @@ public class VanillaBlockInterfaceGen extends BaseInterfaceGen {
         Files.writeString(filePath, javaFile.toString());
     }
 
-    private static ClassName generateClassFullName(VanillaBlockId id) {
+    private static ClassName generateClassFullName(BlockId id) {
         var simpleName = generateClassSimpleName(id);
         var folderName = tryFindSpecifiedFolderName(simpleName);
         return ClassName.get("org.allaymc.api.block.interfaces" + (folderName != null ? "." + folderName : ""), simpleName);
     }
 
-    private static String generateClassSimpleName(VanillaBlockId id) {
+    private static String generateClassSimpleName(BlockId id) {
         return "Block" + Utils.convertToPascalCase(id.getIdentifier().path()) + "Behavior";
     }
 
-    private static String generateInitializerMethodName(VanillaBlockId id) {
+    private static String generateInitializerMethodName(BlockId id) {
         return "init" + Utils.convertToPascalCase(id.getIdentifier().path());
     }
 

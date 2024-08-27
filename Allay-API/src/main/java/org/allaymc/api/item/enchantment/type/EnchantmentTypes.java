@@ -1,7 +1,6 @@
-package org.allaymc.api.data;
+package org.allaymc.api.item.enchantment.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.item.enchantment.type.*;
 
 /**
  * Allay Project 16/07/2024
@@ -10,7 +9,7 @@ import org.allaymc.api.item.enchantment.type.*;
  */
 @SuppressWarnings("unused")
 @UtilityClass
-public class VanillaEnchantmentTypes {
+public class EnchantmentTypes {
     public static final EnchantmentAquaAffinityType AQUA_AFFINITY = new EnchantmentAquaAffinityType();
     public static final EnchantmentBaneOfArthropodsType BANE_OF_ARTHROPODS = new EnchantmentBaneOfArthropodsType();
     public static final EnchantmentBindingType BINDING = new EnchantmentBindingType();

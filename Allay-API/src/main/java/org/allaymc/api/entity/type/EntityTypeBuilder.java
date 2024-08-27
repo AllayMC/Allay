@@ -2,9 +2,9 @@ package org.allaymc.api.entity.type;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.component.interfaces.ComponentProvider;
-import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
+import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.utils.Identifier;
 
@@ -31,7 +31,7 @@ public interface EntityTypeBuilder<T extends Entity> {
 
     EntityTypeBuilder<T> identifier(String identifier);
 
-    EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId);
+    EntityTypeBuilder<T> vanillaEntity(EntityId entityId);
 
     default EntityTypeBuilder<T> setComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
         return setComponents(toMap(componentProviders));

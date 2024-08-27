@@ -3,11 +3,11 @@ package org.allaymc.api.utils;
 import com.google.common.base.Preconditions;
 import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.data.VanillaBlockId;
-import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.tag.ItemTag;
 
 import java.io.*;
@@ -30,8 +30,8 @@ public class Utils {
     public static final BlockState[][][] EMPTY_BLOCK_STATE_ARRAY_3D = new BlockState[0][0][0];
     public static final BlockTag[] EMPTY_BLOCK_TAG_ARRAY = new BlockTag[0];
     public static final ItemTag[] EMPTY_ITEM_TAG_ARRAY = new ItemTag[0];
-    public static final VanillaItemId[] EMPTY_VANILLA_ITEM_ID_ARRAY = new VanillaItemId[0];
-    public static final VanillaBlockId[] EMPTY_VANILLA_BLOCK_ID_ARRAY = new VanillaBlockId[0];
+    public static final ItemId[] EMPTY_VANILLA_ITEM_ID_ARRAY = new ItemId[0];
+    public static final BlockId[] EMPTY_VANILLA_BLOCK_ID_ARRAY = new BlockId[0];
     public static final ItemStack[] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0];
     public static final Set<ItemStack> EMPTY_ITEM_STACK_SET = Set.of();
 

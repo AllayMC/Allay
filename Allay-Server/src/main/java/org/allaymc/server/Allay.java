@@ -176,7 +176,7 @@ public final class Allay {
                 r -> Registries.ENCHANTMENTS = r,
                 new EnchantmentTypeRegistryPopulator()
         );
-        Registries.VANILLA_ITEM_DATA = SimpleMappedRegistry.create(new VanillaItemDataLoader());
+        Registries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
                 r -> Registries.ITEMS = r,
@@ -192,7 +192,7 @@ public final class Allay {
 
         // Block
         Registries.MATERIALS = SimpleMappedRegistry.create(new MaterialLoader());
-        Registries.VANILLA_BLOCK_STATE_DATA = SimpleMappedRegistry.create(new VanillaBlockStateDataLoader());
+        Registries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataLoader());
         Registries.BLOCK_STATE_PALETTE = IntMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, BlockType<?>>()),

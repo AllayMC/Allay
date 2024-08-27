@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component.food;
 
-import org.allaymc.api.data.VanillaEffectTypes;
+import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
@@ -16,6 +16,6 @@ public class ItemHoneyBottleBaseComponentImpl extends ItemFoodComponentImpl {
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        player.removeEffect(VanillaEffectTypes.POISON);
+        player.removeEffect(EffectTypes.POISON);
     }
 }

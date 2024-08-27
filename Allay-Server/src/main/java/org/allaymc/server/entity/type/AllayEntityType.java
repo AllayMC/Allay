@@ -7,9 +7,9 @@ import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
-import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
+import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
@@ -101,8 +101,8 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         }
 
         @Override
-        public EntityTypeBuilder<T> vanillaEntity(VanillaEntityId vanillaEntityId) {
-            this.identifier = vanillaEntityId.getIdentifier();
+        public EntityTypeBuilder<T> vanillaEntity(EntityId entityId) {
+            this.identifier = entityId.getIdentifier();
             return this;
         }
 

@@ -1,7 +1,6 @@
-package org.allaymc.api.data;
+package org.allaymc.api.entity.effect.type;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.entity.effect.type.*;
 
 /**
  * Allay Project 16/07/2024
@@ -10,7 +9,7 @@ import org.allaymc.api.entity.effect.type.*;
  */
 @SuppressWarnings("unused")
 @UtilityClass
-public final class VanillaEffectTypes {
+public final class EffectTypes {
     public static final EffectAbsorptionType ABSORPTION = new EffectAbsorptionType();
     public static final EffectBadOmenType BAD_OMEN = new EffectBadOmenType();
     public static final EffectBlindnessType BLINDNESS = new EffectBlindnessType();

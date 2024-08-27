@@ -5,9 +5,9 @@ import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
 
 /**
  * Suitable for two-block high plants that can drop wheat seeds
@@ -27,7 +27,7 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
         if (face != BlockFace.UP && face != BlockFace.DOWN) return true;
 
         var dimension = current.pos().dimension();
-        var isUpperBlock = current.blockState().getPropertyValue(VanillaBlockPropertyTypes.UPPER_BLOCK_BIT);
+        var isUpperBlock = current.blockState().getPropertyValue(BlockPropertyTypes.UPPER_BLOCK_BIT);
         var willBreak = false;
         if (isUpperBlock) {
             willBreak = notSamePlant(dimension.getBlockState(BlockFace.DOWN.offsetPos(current.pos())));

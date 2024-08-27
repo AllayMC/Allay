@@ -1,6 +1,6 @@
-package org.allaymc.api.data;
+package org.allaymc.api.blockentity.data;
 
-public interface VanillaBlockEntityId {
+public interface BlockEntityId {
     String BANNER = "Banner";
 
     String BARREL = "Barrel";

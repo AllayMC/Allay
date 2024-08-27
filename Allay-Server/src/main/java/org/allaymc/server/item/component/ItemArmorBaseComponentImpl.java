@@ -2,11 +2,11 @@ package org.allaymc.server.item.component;
 
 import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
+import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
@@ -43,7 +43,7 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
 
     @Override
     public boolean willDamageItem() {
-        var level = getEnchantmentLevel(VanillaEnchantmentTypes.UNBREAKING);
+        var level = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
         if (level == 0) return true;
 
         var possibility = 0.6f + 0.4f / (level + 1f);
@@ -88,7 +88,7 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
 
     @Override
     protected boolean canIncreaseDurabilityThisTime() {
-        var unbreakingLevel = getEnchantmentLevel(VanillaEnchantmentTypes.UNBREAKING);
+        var unbreakingLevel = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
         if (unbreakingLevel == 0) return true;
 
         var possibility = 0.6f + 0.4f / (unbreakingLevel + 1f);

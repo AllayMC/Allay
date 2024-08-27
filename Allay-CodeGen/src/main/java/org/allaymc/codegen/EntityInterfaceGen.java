@@ -2,23 +2,21 @@ package org.allaymc.codegen;
 
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
-import org.allaymc.dependence.VanillaEntityId;
+import org.allaymc.dependence.EntityId;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Depend on VanillaEntityIdEnumGen execution
- * <p>
  * Allay Project 2023/5/26
  *
  * @author daoge_cmd | Cool_Loong
  */
-public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
+public class EntityInterfaceGen extends BaseInterfaceGen {
 
     public static final ClassName ENTITY_CLASS_NAME = ClassName.get("org.allaymc.api.entity", "Entity");
-    public static final ClassName VANILLA_ENTITY_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaEntityId");
+    public static final ClassName ENTITY_ID_CLASS_NAME = ClassName.get("org.allaymc.api.entity.data", "EntityId");
     public static final ClassName ENTITY_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityType");
     public static final ClassName ENTITY_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityTypes");
     public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityTypeBuilder");
@@ -31,7 +29,7 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
     public static void main(String[] args) {
-        VanillaEntityIdEnumGen.generate();
+        EntityIdEnumGen.generate();
         generate();
     }
 
@@ -42,7 +40,7 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
         var initializerDir = Path.of("Allay-Server/src/main/java/org/allaymc/server/entity/initializer");
         if (!Files.exists(initializerDir)) Files.createDirectories(initializerDir);
         var typesClass = TypeSpec.classBuilder(ENTITY_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        for (var id : VanillaEntityId.values()) {
+        for (var id : EntityId.values()) {
             typesClass.addField(
                     FieldSpec.builder(ParameterizedTypeName.get(ENTITY_TYPE_CLASS_NAME, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -66,12 +64,12 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/entity/type/" + ENTITY_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
 
-    private static void addDefaultEntityTypeInitializer(VanillaEntityId id, ClassName entityClassName) {
+    private static void addDefaultEntityTypeInitializer(EntityId id, ClassName entityClassName) {
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T.$N = $T\n", ENTITY_TYPES_CLASS_NAME, id.name(), ENTITY_TYPE_BUILDER_CLASS_NAME)
                 .add("        .builder($T.class)\n", entityClassName)
-                .add("        .vanillaEntity($T.$N)\n", VANILLA_ENTITY_ID_CLASS_NAME, id.name())
+                .add("        .vanillaEntity($T.$N)\n", ENTITY_ID_CLASS_NAME, id.name())
                 .add("        .build();");
         ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER
                 .addMethod(
@@ -98,47 +96,15 @@ public class VanillaEntityInterfaceGen extends BaseInterfaceGen {
         Files.writeString(filePath, javaFile.toString());
     }
 
-    @SneakyThrows
-    private static void generateEntityTypeInitializer(VanillaEntityId id, ClassName entityClassName) {
-        var className = ClassName.get("org.allaymc.server.entity.initializer", entityClassName.simpleName() + "Initializer");
-        var initializer = CodeBlock.builder();
-        initializer
-                .add("$T.$N = $T\n", ENTITY_TYPES_CLASS_NAME, id.name() + "_TYPE", ENTITY_TYPE_BUILDER_CLASS_NAME)
-                .add("        .builder($T.class)\n", entityClassName)
-                .add("        .vanillaEntity($T.$N)\n", VANILLA_ENTITY_ID_CLASS_NAME, id.name())
-                .add("        .build();");
-        var clazz = TypeSpec.interfaceBuilder(className)
-                .addModifiers(Modifier.PUBLIC)
-                .addJavadoc(
-                        "@author daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
-                .addMethod(
-                        MethodSpec.methodBuilder("init")
-                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addCode(initializer.build())
-                                .build()
-                )
-                .build();
-        var filePath = Path.of("Allay-Server/src/main/java/org/allaymc/server/entity/initializer/" + className.simpleName() + ".java");
-        if (!Files.exists(filePath)) {
-            var javaFile = JavaFile.builder("org.allaymc.server.entity.initializer", clazz)
-                    .indent(Utils.INDENT)
-                    .skipJavaLangImports(true)
-                    .build();
-            System.out.println("Generating " + className.simpleName() + ".java ...");
-            Files.writeString(filePath, javaFile.toString());
-        }
-    }
-
-    private static String generateClassSimpleName(VanillaEntityId id) {
+    private static String generateClassSimpleName(EntityId id) {
         return "Entity" + Utils.convertToPascalCase(id.getIdentifier().path());
     }
 
-    private static String generateInitializerMethodName(VanillaEntityId id) {
+    private static String generateInitializerMethodName(EntityId id) {
         return "init" + Utils.convertToPascalCase(id.getIdentifier().path());
     }
 
-    private static ClassName generateClassFullName(VanillaEntityId id) {
+    private static ClassName generateClassFullName(EntityId id) {
         return ClassName.get("org.allaymc.api.entity.interfaces", generateClassSimpleName(id));
     }
 }

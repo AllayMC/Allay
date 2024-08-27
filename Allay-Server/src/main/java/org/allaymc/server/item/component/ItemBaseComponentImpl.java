@@ -3,21 +3,25 @@ package org.allaymc.server.item.component;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.block.material.MaterialTypes;
 import org.allaymc.api.block.poi.PlayerInteractInfo;
+import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.component.annotation.*;
 import org.allaymc.api.component.interfaces.ComponentManager;
-import org.allaymc.api.data.*;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.data.ItemDataComponent;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
+import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
@@ -167,7 +171,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean willDamageItem() {
-        var level = getEnchantmentLevel(VanillaEnchantmentTypes.UNBREAKING);
+        var level = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
         if (level == 0) return true;
 
         var possibility = 1f / (level + 1f);
@@ -279,7 +283,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
 
         var oldBlockState = dimension.getBlockState(placeBlockPos);
-        if (!oldBlockState.getBlockType().hasBlockTag(VanillaBlockTags.REPLACEABLE)) return false;
+        if (!oldBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) return false;
 
         var blockType = blockState.getBlockType();
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
@@ -384,7 +388,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected boolean canIncreaseDurabilityThisTime() {
-        var unbreakingLevel = getEnchantmentLevel(VanillaEnchantmentTypes.UNBREAKING);
+        var unbreakingLevel = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
         if (unbreakingLevel == 0) return true;
 
         var possibility = 1f / (unbreakingLevel + 1f);
@@ -395,8 +399,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public boolean isCorrectToolFor(BlockState blockState) {
         var blockType = blockState.getBlockType();
 
-        var vanillaItemId = VanillaItemId.fromIdentifier(itemType.getIdentifier());
-        var vanillaBlockId = VanillaBlockId.fromIdentifier(blockType.getIdentifier());
+        var vanillaItemId = ItemId.fromIdentifier(itemType.getIdentifier());
+        var vanillaBlockId = BlockId.fromIdentifier(blockType.getIdentifier());
         if (vanillaItemId != null && vanillaBlockId != null) {
             var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
             if (specialTools.length != 0)
@@ -407,20 +411,20 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         if (itemType == ItemTypes.SHEARS) {
             if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) return true;
 
-            return materialType == VanillaMaterialTypes.CLOTH ||
-                   materialType == VanillaMaterialTypes.LEAVES ||
-                   materialType == VanillaMaterialTypes.PLANT ||
-                   materialType == VanillaMaterialTypes.WEB;
+            return materialType == MaterialTypes.CLOTH ||
+                   materialType == MaterialTypes.LEAVES ||
+                   materialType == MaterialTypes.PLANT ||
+                   materialType == MaterialTypes.WEB;
         }
 
-        if (isAxe(itemType)) return materialType == VanillaMaterialTypes.WOOD;
+        if (isAxe(itemType)) return materialType == MaterialTypes.WOOD;
 
         if (isShovel(itemType))
-            return materialType == VanillaMaterialTypes.DIRT ||
-                   materialType == VanillaMaterialTypes.CLAY ||
-                   materialType == VanillaMaterialTypes.SAND ||
-                   materialType == VanillaMaterialTypes.SNOW ||
-                   materialType == VanillaMaterialTypes.TOPSNOW;
+            return materialType == MaterialTypes.DIRT ||
+                   materialType == MaterialTypes.CLAY ||
+                   materialType == MaterialTypes.SAND ||
+                   materialType == MaterialTypes.SNOW ||
+                   materialType == MaterialTypes.TOPSNOW;
 
         if (isHoe(itemType)) {
             if (
@@ -431,9 +435,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                     blockType == BlockTypes.MOSS_BLOCK
             ) return true;
 
-            return materialType == VanillaMaterialTypes.LEAVES ||
-                   materialType == VanillaMaterialTypes.NETHERWART ||
-                   materialType == VanillaMaterialTypes.SCULK;
+            return materialType == MaterialTypes.LEAVES ||
+                   materialType == MaterialTypes.NETHERWART ||
+                   materialType == MaterialTypes.SCULK;
         }
 
         if (isSword(itemType)) {
@@ -446,9 +450,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                     blockType == BlockTypes.GLOW_LICHEN
             ) return true;
 
-            return materialType == VanillaMaterialTypes.VEGETABLE ||
-                   materialType == VanillaMaterialTypes.LEAVES ||
-                   materialType == VanillaMaterialTypes.WEB;
+            return materialType == MaterialTypes.VEGETABLE ||
+                   materialType == MaterialTypes.LEAVES ||
+                   materialType == MaterialTypes.WEB;
         }
 
         return false;

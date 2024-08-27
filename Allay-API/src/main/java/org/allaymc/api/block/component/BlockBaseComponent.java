@@ -9,11 +9,11 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.data.VanillaEffectTypes;
-import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
+import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
@@ -212,26 +212,26 @@ public interface BlockBaseComponent extends BlockComponent {
         if (entity != null) {
             isInWater = entity.isInWater();
             isOnGround = entity.isOnGround();
-            hasteEffectLevel = entity.getEffectLevel(VanillaEffectTypes.HASTE);
+            hasteEffectLevel = entity.getEffectLevel(EffectTypes.HASTE);
             // Conduit Power ensures at least level 2 haste effect
-            if (entity.hasEffect(VanillaEffectTypes.CONDUIT_POWER)) {
+            if (entity.hasEffect(EffectTypes.CONDUIT_POWER)) {
                 hasteEffectLevel = Integer.max(hasteEffectLevel, 2);
             }
 
-            miningFatigueLevel = entity.getEffectLevel(VanillaEffectTypes.HASTE);
+            miningFatigueLevel = entity.getEffectLevel(EffectTypes.HASTE);
 
             if (entity instanceof EntityContainerHolderComponent containerHolder) {
                 if (containerHolder.hasContainer(FullContainerType.ARMOR))
                     hasAquaAffinity = containerHolder
                             .getContainer(FullContainerType.ARMOR)
                             .getItemStack(0)
-                            .hasEnchantment(VanillaEnchantmentTypes.AQUA_AFFINITY);
+                            .hasEnchantment(EnchantmentTypes.AQUA_AFFINITY);
 
                 if (containerHolder.hasContainer(FullContainerType.PLAYER_INVENTORY))
                     efficiencyLevel = containerHolder
                             .getContainer(FullContainerType.PLAYER_INVENTORY)
                             .getItemInHand()
-                            .getEnchantmentLevel(VanillaEnchantmentTypes.EFFICIENCY);
+                            .getEnchantmentLevel(EnchantmentTypes.EFFICIENCY);
             }
         }
 

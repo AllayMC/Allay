@@ -9,7 +9,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.FACING_DIRECTION;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
 
 /**
  * Allay Project 2024/8/15

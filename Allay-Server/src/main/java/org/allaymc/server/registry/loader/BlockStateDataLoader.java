@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.data.BlockStateData;
-import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
@@ -21,15 +21,15 @@ import java.util.Map;
  * @author daoge_cmd
  */
 @Slf4j
-public class VanillaBlockStateDataLoader implements RegistryLoader<Void, Map<VanillaBlockId, Map<Integer, BlockStateData>>> {
+public class BlockStateDataLoader implements RegistryLoader<Void, Map<BlockId, Map<Integer, BlockStateData>>> {
     @Override
     @SneakyThrows
-    public Map<VanillaBlockId, Map<Integer, BlockStateData>> load(Void $) {
+    public Map<BlockId, Map<Integer, BlockStateData>> load(Void $) {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_states.json")))) {
-            var loaded = new EnumMap<VanillaBlockId, Map<Integer, BlockStateData>>(VanillaBlockId.class);
+            var loaded = new EnumMap<BlockId, Map<Integer, BlockStateData>>(BlockId.class);
             JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> {
                 var obj = entry.getAsJsonObject();
-                var type = VanillaBlockId.fromIdentifier(new Identifier(obj.get("name").getAsString()));
+                var type = BlockId.fromIdentifier(new Identifier(obj.get("name").getAsString()));
                 if (type == null) {
                     log.warn("Unknown block id: {}", obj.get("name").getAsString());
                     return;

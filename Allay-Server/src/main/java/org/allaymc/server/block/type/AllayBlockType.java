@@ -7,9 +7,10 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.RequireBlockProperty;
-import org.allaymc.api.block.component.BlockBaseComponent;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTag;
@@ -19,7 +20,6 @@ import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentProvider;
-import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
@@ -382,16 +382,16 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         }
 
         @Override
-        public Builder<T> vanillaBlock(VanillaBlockId vanillaBlockId) {
+        public Builder<T> vanillaBlock(BlockId blockId) {
             this.isCustomBlock = false;
-            this.identifier = vanillaBlockId.getIdentifier();
-            var dataMap = Registries.VANILLA_BLOCK_STATE_DATA.get(vanillaBlockId);
+            this.identifier = blockId.getIdentifier();
+            var dataMap = Registries.BLOCK_STATE_DATA.get(blockId);
             if (dataMap == null)
-                throw new BlockTypeBuildException("Cannot find vanilla block data component for " + vanillaBlockId + " from vanilla block data registry!");
+                throw new BlockTypeBuildException("Cannot find vanilla block data component for " + blockId + " from vanilla block data registry!");
             components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
-            var tags = InternalBlockTypeData.getBlockTags(vanillaBlockId);
+            var tags = InternalBlockTypeData.getBlockTags(blockId);
             if (tags.length != 0) setBlockTags(tags);
-            setMaterial(Registries.MATERIALS.get(InternalBlockTypeData.getMaterialType(vanillaBlockId)));
+            setMaterial(Registries.MATERIALS.get(InternalBlockTypeData.getMaterialType(blockId)));
             return this;
         }
 

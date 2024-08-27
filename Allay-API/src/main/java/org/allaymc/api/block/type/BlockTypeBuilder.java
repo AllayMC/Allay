@@ -2,13 +2,13 @@ package org.allaymc.api.block.type;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.component.BlockBaseComponent;
+import org.allaymc.api.block.component.BlockComponent;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.utils.Identifier;
 
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public interface BlockTypeBuilder<T extends BlockBehavior> {
         return identifier(new Identifier(identifier));
     }
 
-    BlockTypeBuilder<T> vanillaBlock(VanillaBlockId vanillaBlockId);
+    BlockTypeBuilder<T> vanillaBlock(BlockId blockId);
 
     BlockTypeBuilder<T> bindBlockEntity(BlockEntityType<?> blockEntityType);
 

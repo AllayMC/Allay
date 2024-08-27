@@ -1,8 +1,8 @@
 package org.allaymc.api.math.voxelshape;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -37,8 +37,8 @@ public abstract class CommonShapes {
     }
 
     public static VoxelShape buildStairShape(BlockState stairBlockState) {
-        var isDownwards = stairBlockState.getPropertyValue(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT);
-        var face = getBlockFaceByStairDirectionValue(stairBlockState.getPropertyValue(VanillaBlockPropertyTypes.WEIRDO_DIRECTION));
+        var isDownwards = stairBlockState.getPropertyValue(BlockPropertyTypes.UPSIDE_DOWN_BIT);
+        var face = getBlockFaceByStairDirectionValue(stairBlockState.getPropertyValue(BlockPropertyTypes.WEIRDO_DIRECTION));
         return isDownwards ? DOWNWARDS_STAIR_SHAPES.get(face) : UPWARDS_STAIR_SHAPES.get(face);
     }
 }

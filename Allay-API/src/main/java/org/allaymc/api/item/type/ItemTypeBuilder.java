@@ -2,9 +2,9 @@ package org.allaymc.api.item.type;
 
 import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.component.interfaces.ComponentProvider;
-import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.utils.Identifier;
@@ -34,7 +34,7 @@ public interface ItemTypeBuilder<T extends ItemStack> {
         return identifier(new Identifier(identifier));
     }
 
-    ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId);
+    ItemTypeBuilder<T> vanillaItem(ItemId itemId);
 
     ItemTypeBuilder<T> runtimeId(int runtimeId);
 

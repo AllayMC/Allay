@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.heightmap.HeightMap;
@@ -271,10 +271,10 @@ public class LevelDBChunkSerializer {
     }
 
     private BiomeType getBiomeByIdNonNull(int id) {
-        var biome = VanillaBiomeId.fromId(id);
+        var biome = BiomeId.fromId(id);
         if (biome == null) {
             log.warn("Unknown biome id: {}", id);
-            biome = VanillaBiomeId.PLAINS;
+            biome = BiomeId.PLAINS;
         }
         return biome;
     }

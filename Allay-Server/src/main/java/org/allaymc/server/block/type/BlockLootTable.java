@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.data.VanillaBlockId;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.loottable.LootTable;
 import org.allaymc.server.loottable.LootTableType;
@@ -49,7 +49,7 @@ public final class BlockLootTable {
             .supportCondition("match_tool", MatchToolCondition.deserializer())
             .build();
 
-    public static final Map<VanillaBlockId, LootTable<BreakBlockContext>> BLOCK_LOOT_TABLES = new EnumMap<>(VanillaBlockId.class);
+    public static final Map<BlockId, LootTable<BreakBlockContext>> BLOCK_LOOT_TABLES = new EnumMap<>(BlockId.class);
 
     public static void init() {
         readFrom(new InputStreamReader(new BufferedInputStream(Utils.getResource("loot_tables/blocks.json"))));
@@ -69,12 +69,12 @@ public final class BlockLootTable {
 
             try {
                 var regex = Pattern.compile(entry.getKey());
-                var blocks = Arrays.stream(VanillaBlockId.values())
-                        .map(VanillaBlockId::getIdentifier)
+                var blocks = Arrays.stream(BlockId.values())
+                        .map(BlockId::getIdentifier)
                         .toList();
                 for (var block : blocks) {
                     if (regex.matcher(block.toString()).matches()) {
-                        var blockId = VanillaBlockId.fromIdentifier(block);
+                        var blockId = BlockId.fromIdentifier(block);
                         BLOCK_LOOT_TABLES.put(blockId, new LootTable<>(BLOCK_LOOT_TABLE_TYPE, pools));
                     }
                 }
@@ -131,7 +131,7 @@ public final class BlockLootTable {
         return rolls;
     }
 
-    public static LootTable<BreakBlockContext> getLootTable(VanillaBlockId blockId) {
+    public static LootTable<BreakBlockContext> getLootTable(BlockId blockId) {
         return BLOCK_LOOT_TABLES.get(blockId);
     }
 }

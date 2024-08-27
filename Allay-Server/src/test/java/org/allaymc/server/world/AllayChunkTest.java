@@ -3,8 +3,8 @@ package org.allaymc.server.world;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.initinfo.SimpleBlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
-import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -35,8 +35,8 @@ class AllayChunkTest {
 
     @Test
     void testUpdateBiome() {
-        chunk.setBiome(0, 10, 0, VanillaBiomeId.CHERRY_GROVE);
-        assertEquals(VanillaBiomeId.CHERRY_GROVE, chunk.getBiome(0, 10, 0));
+        chunk.setBiome(0, 10, 0, BiomeId.CHERRY_GROVE);
+        assertEquals(BiomeId.CHERRY_GROVE, chunk.getBiome(0, 10, 0));
     }
 
     @Test

@@ -2,8 +2,8 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.registry.Registries;
@@ -50,7 +50,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
 
         var floorPos = location.floor(new Vector3f());
         var block = getDimension().getBlockState(floorPos);
-        if (!block.getBlockType().hasBlockTag(VanillaBlockTags.REPLACEABLE)) {
+        if (!block.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
             getDimension().getEntityService().removeEntity(thisEntity, () -> {
                 getDimension().addLevelEvent(
                         location.x(), location.y(), location.z(),

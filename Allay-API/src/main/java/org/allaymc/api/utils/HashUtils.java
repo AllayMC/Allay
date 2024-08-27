@@ -2,8 +2,8 @@ package org.allaymc.api.utils;
 
 import com.google.common.base.Preconditions;
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.property.type.BlockPropertyType;
-import org.allaymc.api.data.VanillaBlockId;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
@@ -24,7 +24,7 @@ public class HashUtils {
     private static final int FNV1_PRIME_32 = 0x01000193;
 
     public int computeBlockStateHash(Identifier identifier, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
-        if (identifier.equals(VanillaBlockId.UNKNOWN.getIdentifier())) {
+        if (identifier.equals(BlockId.UNKNOWN.getIdentifier())) {
             return -2; // This is special case
         }
 
@@ -42,7 +42,7 @@ public class HashUtils {
     }
 
     public int computeBlockStateHash(Identifier identifier, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
-        if (identifier.equals(VanillaBlockId.UNKNOWN.getIdentifier())) {
+        if (identifier.equals(BlockId.UNKNOWN.getIdentifier())) {
             return -2; // This is special case
         }
 

@@ -5,7 +5,7 @@ import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.joml.Vector3ic;
 
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.*;
+import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
  * Allay Project 2024/8/18

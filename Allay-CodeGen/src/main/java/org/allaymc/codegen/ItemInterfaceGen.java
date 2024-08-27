@@ -2,7 +2,7 @@ package org.allaymc.codegen;
 
 import com.squareup.javapoet.*;
 import lombok.SneakyThrows;
-import org.allaymc.dependence.VanillaItemId;
+import org.allaymc.dependence.ItemId;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
@@ -16,10 +16,10 @@ import java.util.regex.Pattern;
  *
  * @author daoge_cmd
  */
-public class VanillaItemInterfaceGen extends BaseInterfaceGen {
+public class ItemInterfaceGen extends BaseInterfaceGen {
 
     public static final ClassName ITEM_STACK_CLASS_NAME = ClassName.get("org.allaymc.api.item", "ItemStack");
-    public static final ClassName VANILLA_ITEM_ID_CLASS_NAME = ClassName.get("org.allaymc.api.data", "VanillaItemId");
+    public static final ClassName ITEM_ID_CLASS_NAME = ClassName.get("org.allaymc.api.item.data", "ItemId");
     public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemType");
     public static final ClassName ITEM_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemTypes");
     public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemTypeBuilder");
@@ -33,7 +33,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
-        // NOTICE: Please run VanillaItemIdEnumGen.generate() first before running this method
+        // NOTICE: Please run ItemIdEnumGen.generate() first before running this method
         generate();
     }
 
@@ -45,7 +45,7 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         var initializerDir = Path.of("Allay-Server/src/main/java/org/allaymc/server/item/initializer");
         if (!Files.exists(initializerDir)) Files.createDirectories(initializerDir);
         var typesClass = TypeSpec.classBuilder(ITEM_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        for (var id : VanillaItemId.values()) {
+        for (var id : ItemId.values()) {
             typesClass.addField(
                     FieldSpec.builder(ParameterizedTypeName.get(ITEM_TYPE_CLASS_NAME, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -73,12 +73,12 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/item/type/" + ITEM_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
     }
 
-    private static void addDefaultItemTypeInitializer(VanillaItemId id, ClassName itemClassName) {
+    private static void addDefaultItemTypeInitializer(ItemId id, ClassName itemClassName) {
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T.$N = $T\n", ITEM_TYPES_CLASS_NAME, id.name(), ITEM_TYPE_BUILDER_CLASS_NAME)
                 .add("        .builder($T.class)\n", itemClassName)
-                .add("        .vanillaItem($T.$N)\n", VANILLA_ITEM_ID_CLASS_NAME, id.name())
+                .add("        .vanillaItem($T.$N)\n", ITEM_ID_CLASS_NAME, id.name())
                 .add("        .build();");
         ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER
                 .addMethod(
@@ -105,25 +105,25 @@ public class VanillaItemInterfaceGen extends BaseInterfaceGen {
         Files.writeString(filePath, javaFile.toString());
     }
 
-    private static ClassName generateClassFullName(VanillaItemId id) {
+    private static ClassName generateClassFullName(ItemId id) {
         var simpleName = generateClassSimpleName(id);
         var folderName = tryFindSpecifiedFolderName(simpleName);
         return ClassName.get("org.allaymc.api.item.interfaces" + (folderName != null ? "." + folderName : ""), simpleName);
     }
 
-    private static String generateClassSimpleName(VanillaItemId id) {
+    private static String generateClassSimpleName(ItemId id) {
         // Windows环境对大小写不敏感，所以需要特殊处理一部分物品id
         // netherbrick和nether_brick需要特殊处理
-        if (id == VanillaItemId.NETHERBRICK) return "ItemNetherbrick0Stack";
+        if (id == ItemId.NETHERBRICK) return "ItemNetherbrick0Stack";
         // tallgrass和tall_grass需要特殊处理
-        if (id == VanillaItemId.TALLGRASS) return "ItemTallgrass0Stack";
+        if (id == ItemId.TALLGRASS) return "ItemTallgrass0Stack";
         return "Item" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_")) + "Stack";
     }
 
-    private static String generateInitializerMethodName(VanillaItemId id) {
+    private static String generateInitializerMethodName(ItemId id) {
         // 同上
-        if (id == VanillaItemId.NETHERBRICK) return "initNetherbrick0";
-        if (id == VanillaItemId.TALLGRASS) return "initTallgrass0";
+        if (id == ItemId.NETHERBRICK) return "initNetherbrick0";
+        if (id == ItemId.TALLGRASS) return "initTallgrass0";
         return "init" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_"));
     }
 

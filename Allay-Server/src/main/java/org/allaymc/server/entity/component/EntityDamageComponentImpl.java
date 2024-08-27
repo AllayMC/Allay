@@ -6,15 +6,15 @@ import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
-import org.allaymc.api.data.VanillaEffectTypes;
-import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
@@ -78,7 +78,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             if (attacker instanceof EntityPlayer player) {
                 // TODO: Zombies and other creatures that can hold weapons need to be considered
                 var kb = EntityBaseComponent.DEFAULT_KNOCKBACK;
-                var kbEnchantmentLevel = player.getItemInHand().getEnchantmentLevel(VanillaEnchantmentTypes.KNOCKBACK);
+                var kbEnchantmentLevel = player.getItemInHand().getEnchantmentLevel(EnchantmentTypes.KNOCKBACK);
                 if (kbEnchantmentLevel != 0) {
                     kb += kbEnchantmentLevel * 0.1f;
                 }
@@ -120,7 +120,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected void applyAttacker(DamageContainer damage) {
         if (damage.getAttacker() instanceof Entity attacker) {
-            var strengthLevel = attacker.getEffectLevel(VanillaEffectTypes.STRENGTH);
+            var strengthLevel = attacker.getEffectLevel(EffectTypes.STRENGTH);
             if (strengthLevel > 0) {
                 damage.updateFinalDamage(d -> {
                     var pow = Math.pow(1.3, strengthLevel);
@@ -128,7 +128,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
                 });
             }
 
-            var weaknessLevel = attacker.getEffectLevel(VanillaEffectTypes.WEAKNESS);
+            var weaknessLevel = attacker.getEffectLevel(EffectTypes.WEAKNESS);
             if (weaknessLevel > 0) {
                 damage.updateFinalDamage(d -> {
                     var pow = Math.pow(0.8, weaknessLevel);
@@ -152,7 +152,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public boolean hasFallDamage() {
         return baseComponent.hasGravity() ||
-               !baseComponent.hasEffect(VanillaEffectTypes.SLOW_FALLING) ||
+               !baseComponent.hasEffect(EffectTypes.SLOW_FALLING) ||
                (boolean) baseComponent.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE);
     }
 
@@ -160,7 +160,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     protected void onFall(CEntityFallEvent event) {
         if (!hasFallDamage()) return;
 
-        var damage = Math.round((event.getFallDistance() - 3) - baseComponent.getEffectLevel(VanillaEffectTypes.JUMP_BOOST));
+        var damage = Math.round((event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST));
         if (damage > 0) this.attack(DamageContainer.fall(damage));
     }
 }

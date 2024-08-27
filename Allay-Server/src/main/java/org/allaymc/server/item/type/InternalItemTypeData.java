@@ -2,9 +2,9 @@ package org.allaymc.server.item.type;
 
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.data.VanillaItemId;
-import org.allaymc.api.data.VanillaItemTags;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.tag.ItemTag;
+import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 
@@ -23,21 +23,21 @@ import java.util.Set;
  */
 @Slf4j
 public final class InternalItemTypeData {
-    private static final Map<VanillaItemId, ItemTag[]> VANILLA_ITEM_TAGS = new HashMap<>();
+    private static final Map<ItemId, ItemTag[]> VANILLA_ITEM_TAGS = new HashMap<>();
 
-    private static final Map<VanillaItemId, ItemTag[]> VANILLA_ITEM_TAGS_CUSTOM = new HashMap<>();
+    private static final Map<ItemId, ItemTag[]> VANILLA_ITEM_TAGS_CUSTOM = new HashMap<>();
 
     public static void init() {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("items.json")))) {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
-                var id = VanillaItemId.fromIdentifier(new Identifier(entry.getKey()));
+                var id = ItemId.fromIdentifier(new Identifier(entry.getKey()));
                 var obj = entry.getValue().getAsJsonObject();
                 // Tags (can be null)
                 if (obj.has("tags")) {
                     var tags = obj.get("tags").getAsJsonArray();
                     var itemTags = new ItemTag[tags.size()];
                     for (int i = 0; i < tags.size(); i++) {
-                        var tag = VanillaItemTags.getTagByName(tags.get(i).getAsString());
+                        var tag = ItemTags.getTagByName(tags.get(i).getAsString());
                         if (tag == null) {
                             log.warn("Unknown item tag: {}", tags.get(i).getAsString());
                             continue;
@@ -53,12 +53,12 @@ public final class InternalItemTypeData {
             throw new RuntimeException(e);
         }
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("item_tags_custom.json")))) {
-            var map = new HashMap<VanillaItemId, Set<ItemTag>>();
+            var map = new HashMap<ItemId, Set<ItemTag>>();
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
-                var tag = VanillaItemTags.getTagByName(entry.getKey());
+                var tag = ItemTags.getTagByName(entry.getKey());
                 for (var obj : entry.getValue().getAsJsonArray()) {
                     var itemId = obj.getAsString();
-                    var id = VanillaItemId.fromIdentifier(new Identifier(itemId));
+                    var id = ItemId.fromIdentifier(new Identifier(itemId));
                     if (id == null) {
                         log.warn("Unknown item id: {}", itemId);
                         return;
@@ -74,7 +74,7 @@ public final class InternalItemTypeData {
                 }
                 VANILLA_ITEM_TAGS_CUSTOM.put(id, itemTags);
             });
-            for (var id : VanillaItemId.values()) {
+            for (var id : ItemId.values()) {
                 VANILLA_ITEM_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_ITEM_TAG_ARRAY);
             }
         } catch (IOException e) {
@@ -82,7 +82,7 @@ public final class InternalItemTypeData {
         }
     }
 
-    public static ItemTag[] getItemTags(VanillaItemId id) {
+    public static ItemTag[] getItemTags(ItemId id) {
         var vanilla = VANILLA_ITEM_TAGS.get(id);
         var custom = VANILLA_ITEM_TAGS_CUSTOM.get(id);
         var tags = new ItemTag[vanilla.length + custom.length];

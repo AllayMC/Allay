@@ -2,12 +2,12 @@ package org.allaymc.server.registry.loader;
 
 import com.google.gson.JsonObject;
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
 import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
+import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
@@ -65,7 +65,7 @@ public final class RecipeJsonUtils {
 
     public static ItemTagDescriptor parseItemTagDescriptor(JsonObject jsonObject) {
         var tagId = jsonObject.get("tag").getAsString();
-        var itemTag = VanillaItemTags.getTagByName(tagId);
+        var itemTag = ItemTags.getTagByName(tagId);
         Objects.requireNonNull(itemTag, "Unknown item tag: " + tagId);
         return new ItemTagDescriptor(itemTag);
     }

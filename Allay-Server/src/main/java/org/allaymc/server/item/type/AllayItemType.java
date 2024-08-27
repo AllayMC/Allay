@@ -9,9 +9,9 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentProvider;
-import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
@@ -128,20 +128,20 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         @Override
-        public ItemTypeBuilder<T> vanillaItem(VanillaItemId vanillaItemId) {
-            this.identifier = vanillaItemId.getIdentifier();
-            this.runtimeId = vanillaItemId.getRuntimeId();
+        public ItemTypeBuilder<T> vanillaItem(ItemId itemId) {
+            this.identifier = itemId.getIdentifier();
+            this.runtimeId = itemId.getRuntimeId();
 
             // Attributes for vanilla item
-            var itemData = Registries.VANILLA_ITEM_DATA.get(vanillaItemId);
+            var itemData = Registries.ITEM_DATA.get(itemId);
             if (itemData == null)
-                throw new ItemTypeBuildException("Cannot find vanilla item data component for " + vanillaItemId + " from vanilla item attribute registry!");
+                throw new ItemTypeBuildException("Cannot find vanilla item data component for " + itemId + " from vanilla item attribute registry!");
 
             var attributeComponent = new ItemDataComponentImpl(itemData);
             componentProviders.put(ItemDataComponentImpl.IDENTIFIER, ComponentProvider.ofSingleton(attributeComponent));
 
             // Tags for vanilla item
-            var tags = InternalItemTypeData.getItemTags(vanillaItemId);
+            var tags = InternalItemTypeData.getItemTags(itemId);
             if (tags.length != 0) setItemTags(tags);
             return this;
         }

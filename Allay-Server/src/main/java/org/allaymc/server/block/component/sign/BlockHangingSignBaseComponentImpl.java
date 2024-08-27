@@ -7,9 +7,9 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
@@ -36,7 +36,7 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
         var face = placementInfo.blockFace();
         if (face == BlockFace.UP) return false;
         if (face == BlockFace.DOWN) {
-            blockState = blockState.setProperty(VanillaBlockPropertyTypes.HANGING, true);
+            blockState = blockState.setProperty(BlockPropertyTypes.HANGING, true);
             var upperBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z());
             if (!upperBlock.getBlockType().getMaterial().isSolid()) return false;
 
@@ -44,13 +44,13 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
             var full = shape.isFull(BlockFace.DOWN);
             var centerFull = shape.isCenterFull(BlockFace.DOWN);
             if (placementInfo.player().isSneaking() || (centerFull && !full)) {
-                blockState = blockState.setProperty(VanillaBlockPropertyTypes.ATTACHED_BIT, true);
+                blockState = blockState.setProperty(BlockPropertyTypes.ATTACHED_BIT, true);
                 blockState = PlaceBlockHelper.processGroundSignDirectionProperty(blockState, placeBlockPos, placementInfo);
             } else if (full) {
                 blockState = PlaceBlockHelper.processFacingDirectionProperty(blockState, placeBlockPos, placementInfo);
             } else return false;
         } else {
-            blockState = blockState.setProperty(VanillaBlockPropertyTypes.FACING_DIRECTION, face.opposite().rotateY().ordinal());
+            blockState = blockState.setProperty(BlockPropertyTypes.FACING_DIRECTION, face.opposite().rotateY().ordinal());
         }
 
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
@@ -59,7 +59,7 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (!current.blockState().getPropertyValue(VanillaBlockPropertyTypes.HANGING)) return true;
+        if (!current.blockState().getPropertyValue(BlockPropertyTypes.HANGING)) return true;
         if (face != BlockFace.UP) return true;
         var upperBlock = neighbor.blockState();
         if (!upperBlock.getBlockType().getMaterial().isSolid()) return false;

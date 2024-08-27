@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.data.VanillaItemTags.*;
-import static org.allaymc.api.data.VanillaMaterialTypes.*;
+import static org.allaymc.api.block.material.MaterialTypes.*;
+import static org.allaymc.api.item.tag.ItemTags.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
 /**

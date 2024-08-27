@@ -5,9 +5,9 @@ import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
@@ -33,9 +33,9 @@ public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
 
         var blockFace = placementInfo.blockFace();
         var stairFace = placementInfo.player().getHorizontalFace();
-        blockState = blockState.setProperty(VanillaBlockPropertyTypes.WEIRDO_DIRECTION, stairFace.toStairDirectionValue());
+        blockState = blockState.setProperty(BlockPropertyTypes.WEIRDO_DIRECTION, stairFace.toStairDirectionValue());
         if ((placementInfo.clickPos().y() > 0.5 && blockFace != BlockFace.UP) || blockFace == BlockFace.DOWN) {
-            blockState = blockState.setProperty(VanillaBlockPropertyTypes.UPSIDE_DOWN_BIT, true);
+            blockState = blockState.setProperty(BlockPropertyTypes.UPSIDE_DOWN_BIT, true);
         }
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
