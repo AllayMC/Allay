@@ -1,4 +1,4 @@
-package org.allaymc.api.item;
+package org.allaymc.api.item.component.data;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

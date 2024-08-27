@@ -1,7 +1,7 @@
 package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
-import org.allaymc.api.block.BlockStateWithPos;
+import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 

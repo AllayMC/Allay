@@ -1,7 +1,7 @@
 package org.allaymc.exampleplugin;
 
-import org.allaymc.api.data.BlockFace;
-import org.allaymc.api.entity.attribute.AttributeType;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;

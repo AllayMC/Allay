@@ -1,7 +1,7 @@
 package org.allaymc.server.item.component.spawnegg;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.PlayerInteractInfo;
+import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.entity.init.SimpleEntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.init.ItemStackInitInfo;

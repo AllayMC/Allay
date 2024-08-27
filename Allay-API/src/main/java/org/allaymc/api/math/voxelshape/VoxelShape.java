@@ -3,7 +3,7 @@ package org.allaymc.api.math.voxelshape;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.data.BlockFace;
+import org.allaymc.api.block.data.BlockFace;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;

@@ -2,12 +2,13 @@ package org.allaymc.api.block.component;
 
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.BlockStateWithPos;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.poi.BlockStateWithPos;
+import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.data.VanillaEffectTypes;
 import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.Entity;

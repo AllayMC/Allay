@@ -2,8 +2,8 @@ package org.allaymc.server.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.BlockStateWithPos;
-import org.allaymc.api.block.component.PlayerInteractInfo;
+import org.allaymc.api.block.poi.BlockStateWithPos;
+import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;

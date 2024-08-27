@@ -1,15 +1,15 @@
 package org.allaymc.server.block.component.door;
 
-import java.util.Set;
-
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.component.RequireBlockProperty;
-import org.allaymc.api.block.component.PlayerInteractInfo;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.poi.BlockStateWithPos;
+import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
@@ -20,13 +20,9 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import java.util.Set;
 
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.DIRECTION;
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.DOOR_HINGE_BIT;
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.OPEN_BIT;
-import static org.allaymc.api.data.VanillaBlockPropertyTypes.UPPER_BLOCK_BIT;
+import static org.allaymc.api.data.VanillaBlockPropertyTypes.*;
 
 /**
  * Allay Project 2024/8/16

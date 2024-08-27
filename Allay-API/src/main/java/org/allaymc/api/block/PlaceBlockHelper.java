@@ -1,11 +1,11 @@
 package org.allaymc.api.block;
 
 import lombok.experimental.UtilityClass;
-import org.allaymc.api.block.component.PlayerInteractInfo;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.data.CompassRoseDirection;
+import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.PillarAxis;
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.data.CompassRoseDirection;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 import org.joml.Vector3ic;
 

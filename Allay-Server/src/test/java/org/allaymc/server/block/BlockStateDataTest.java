@@ -1,7 +1,7 @@
 package org.allaymc.server.block;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.BlockStateData;
+import org.allaymc.api.block.component.data.BlockStateData;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.registry.Registries;

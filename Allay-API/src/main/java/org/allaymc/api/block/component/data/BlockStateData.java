@@ -1,4 +1,4 @@
-package org.allaymc.api.block;
+package org.allaymc.api.block.component.data;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,8 +15,6 @@ import org.joml.primitives.AABBf;
 import java.awt.*;
 
 /**
- * BlockAttributes store some of the metadata of the block
- * <p>
  * Allay Project 2023/5/1
  *
  * @author daoge_cmd | CoolLoong

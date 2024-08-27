@@ -1,6 +1,6 @@
 package org.allaymc.server.block.type;
 
-import org.allaymc.api.block.BlockStateData;
+import org.allaymc.api.block.component.data.BlockStateData;
 import org.allaymc.api.block.property.enums.WallConnectionTypeEast;
 import org.allaymc.api.block.property.enums.WallConnectionTypeNorth;
 import org.allaymc.api.block.property.enums.WallConnectionTypeSouth;
@@ -11,9 +11,9 @@ import org.allaymc.api.block.property.type.EnumPropertyType;
 import org.allaymc.api.block.property.type.IntPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
+import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.TestComponentImpl;
 import org.allaymc.server.block.component.TestComponentImplV2;
-import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

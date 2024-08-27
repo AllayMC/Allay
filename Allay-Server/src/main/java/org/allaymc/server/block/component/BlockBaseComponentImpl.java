@@ -2,15 +2,15 @@ package org.allaymc.server.block.component;
 
 import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.BlockStateWithPos;
 import org.allaymc.api.block.component.BlockBaseComponent;
-import org.allaymc.api.block.component.PlayerInteractInfo;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.poi.BlockStateWithPos;
+import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
-import org.allaymc.api.data.BlockFace;
 import org.allaymc.api.data.VanillaBlockId;
 import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.Entity;

@@ -1,4 +1,4 @@
-package org.allaymc.api.data;
+package org.allaymc.api.item.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

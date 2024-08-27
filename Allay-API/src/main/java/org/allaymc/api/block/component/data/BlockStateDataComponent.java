@@ -1,6 +1,6 @@
-package org.allaymc.api.block.component;
+package org.allaymc.api.block.component.data;
 
-import org.allaymc.api.block.BlockStateData;
+import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.type.BlockState;
 
 /**

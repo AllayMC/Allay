@@ -2,7 +2,7 @@ package org.allaymc.server.entity.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.data.VanillaEntityId;
-import org.allaymc.api.entity.attribute.AttributeType;
+import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.interfaces.*;
 import org.allaymc.api.entity.type.EntityTypeBuilder;
@@ -10,7 +10,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
 
-import static org.allaymc.api.entity.component.EntityAttributeComponent.basicEntityAttributes;
+import static org.allaymc.api.entity.component.attribute.EntityAttributeComponent.basicEntityAttributes;
 
 /**
  * Allay Project 2024/3/9

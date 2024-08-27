@@ -3,8 +3,8 @@ package org.allaymc.server.item.component;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.item.ItemData;
-import org.allaymc.api.item.component.ItemDataComponent;
+import org.allaymc.api.item.component.data.ItemData;
+import org.allaymc.api.item.component.data.ItemDataComponent;
 import org.allaymc.api.utils.Identifier;
 
 /**

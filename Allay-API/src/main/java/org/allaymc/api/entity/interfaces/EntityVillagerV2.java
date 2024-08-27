@@ -1,8 +1,8 @@
 package org.allaymc.api.entity.interfaces;
 
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.component.EntityAttributeComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 
 /**
  * @author daoge_cmd <br>

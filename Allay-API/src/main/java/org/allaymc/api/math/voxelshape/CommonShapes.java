@@ -1,13 +1,13 @@
 package org.allaymc.api.math.voxelshape;
 
-import org.allaymc.api.data.BlockFace;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.VanillaBlockPropertyTypes;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import static org.allaymc.api.data.BlockFace.getBlockFaceByStairDirectionValue;
+import static org.allaymc.api.block.data.BlockFace.getBlockFaceByStairDirectionValue;
 
 /**
  * Allay Project 2023/9/2

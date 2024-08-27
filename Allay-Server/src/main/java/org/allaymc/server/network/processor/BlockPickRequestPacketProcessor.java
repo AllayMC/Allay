@@ -1,7 +1,7 @@
 package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.BlockStateWithPos;
+import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;

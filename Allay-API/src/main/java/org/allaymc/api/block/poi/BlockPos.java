@@ -1,4 +1,4 @@
-package org.allaymc.api.block;
+package org.allaymc.api.block.poi;
 
 import org.allaymc.api.world.World;
 

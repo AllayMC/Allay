@@ -2,7 +2,7 @@ package org.allaymc.server.entity.component.player;
 
 import org.allaymc.api.component.annotation.ComponentedObject;
 import org.allaymc.api.component.annotation.Dependency;
-import org.allaymc.api.entity.attribute.AttributeType;
+import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
 import org.allaymc.api.entity.damage.DamageContainer;

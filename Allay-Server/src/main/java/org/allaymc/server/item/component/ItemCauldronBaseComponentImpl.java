@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component;
 
-import org.allaymc.api.block.component.PlayerInteractInfo;
+import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.item.init.ItemStackInitInfo;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;

@@ -1,6 +1,6 @@
 package org.allaymc.api.eventbus.event.block;
 
-import org.allaymc.api.block.BlockStateWithPos;
+import org.allaymc.api.block.poi.BlockStateWithPos;
 
 /**
  * Allay Project 2024/8/8

@@ -1,6 +1,6 @@
 package org.allaymc.server.item.component;
 
-import org.allaymc.api.block.component.PlayerInteractInfo;
+import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.data.VanillaEnchantmentTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;

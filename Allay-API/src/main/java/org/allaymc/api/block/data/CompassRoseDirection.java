@@ -1,4 +1,4 @@
-package org.allaymc.api.data;
+package org.allaymc.api.block.data;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;

@@ -1,7 +1,6 @@
-package org.allaymc.api.entity.component;
+package org.allaymc.api.entity.component.attribute;
 
-import org.allaymc.api.entity.attribute.Attribute;
-import org.allaymc.api.entity.attribute.AttributeType;
+import org.allaymc.api.entity.component.EntityComponent;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.Collection;

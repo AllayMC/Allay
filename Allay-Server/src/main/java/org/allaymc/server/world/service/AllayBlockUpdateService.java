@@ -2,8 +2,8 @@ package org.allaymc.server.world.service;
 
 import lombok.RequiredArgsConstructor;
 import org.allaymc.api.block.component.BlockLiquidComponent;
-import org.allaymc.api.data.BlockFace;
-import org.allaymc.api.block.BlockStateWithPos;
+import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
