@@ -7,7 +7,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
-import org.allaymc.api.item.init.ItemStackInitInfo;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;

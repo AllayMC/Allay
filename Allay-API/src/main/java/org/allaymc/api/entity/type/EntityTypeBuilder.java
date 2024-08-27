@@ -5,7 +5,7 @@ import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaEntityId;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
-import org.allaymc.api.entity.init.EntityInitInfo;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.utils.Identifier;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package org.allaymc.server.blockentity.component;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.blockentity.component.BlockEntityBaseComponent;
-import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.Manager;

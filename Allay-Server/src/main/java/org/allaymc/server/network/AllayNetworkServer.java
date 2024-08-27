@@ -16,7 +16,7 @@ import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.init.SimpleEntityInitInfo;
+import org.allaymc.api.entity.initinfo.SimpleEntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.i18n.I18n;

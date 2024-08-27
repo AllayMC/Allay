@@ -1,6 +1,6 @@
 package org.allaymc.server.item.type;
 
-import org.allaymc.api.item.init.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;

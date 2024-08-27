@@ -1,7 +1,7 @@
 package org.allaymc.server.item;
 
 import org.allaymc.api.item.component.ItemBaseComponent;
-import org.allaymc.api.item.init.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;

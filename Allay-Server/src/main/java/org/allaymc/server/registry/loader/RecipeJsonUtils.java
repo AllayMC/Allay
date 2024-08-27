@@ -7,7 +7,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
-import org.allaymc.api.item.init.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;

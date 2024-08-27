@@ -1,6 +1,6 @@
 package org.allaymc.server.blockentity.component.sign;
 
-import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 
 /**
  * Allay Project 2024/8/17

@@ -8,7 +8,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.init.SimpleEntityInitInfo;
+import org.allaymc.api.entity.initinfo.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.i18n.I18n;

@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.data.VanillaItemTags;
 import org.allaymc.api.item.data.ArmorTier;
 import org.allaymc.api.item.data.ToolTier;
-import org.allaymc.api.item.init.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;

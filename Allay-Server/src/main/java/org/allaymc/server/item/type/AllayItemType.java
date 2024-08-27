@@ -12,7 +12,7 @@ import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.data.VanillaItemId;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
-import org.allaymc.api.item.init.ItemStackInitInfo;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypeBuilder;

@@ -1,7 +1,7 @@
 package org.allaymc.api.block.component;
 
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.init.SimpleBlockEntityInitInfo;
+import org.allaymc.api.blockentity.initinfo.SimpleBlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;

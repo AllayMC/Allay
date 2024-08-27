@@ -1,7 +1,7 @@
 package org.allaymc.server.world;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.blockentity.init.SimpleBlockEntityInitInfo;
+import org.allaymc.api.blockentity.initinfo.SimpleBlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.data.VanillaBiomeId;
 import org.allaymc.api.world.DimensionInfo;

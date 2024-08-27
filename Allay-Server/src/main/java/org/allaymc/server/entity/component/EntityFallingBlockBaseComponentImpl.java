@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.data.VanillaBlockTags;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
-import org.allaymc.api.entity.init.EntityInitInfo;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;

@@ -1,4 +1,4 @@
-package org.allaymc.api.blockentity.init;
+package org.allaymc.api.blockentity.initinfo;
 
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;

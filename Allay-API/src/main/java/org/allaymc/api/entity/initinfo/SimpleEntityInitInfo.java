@@ -1,4 +1,4 @@
-package org.allaymc.api.entity.init;
+package org.allaymc.api.entity.initinfo;
 
 import lombok.Getter;
 import lombok.Setter;

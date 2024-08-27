@@ -1,4 +1,4 @@
-package org.allaymc.api.entity.init;
+package org.allaymc.api.entity.initinfo;
 
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.entity.Entity;

@@ -2,7 +2,7 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.allaymc.api.entity.init.EntityInitInfo;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 

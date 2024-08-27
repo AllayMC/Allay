@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityXpOrbBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.init.EntityInitInfo;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;

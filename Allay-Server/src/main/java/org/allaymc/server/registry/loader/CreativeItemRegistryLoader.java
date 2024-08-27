@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.init.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Identifier;

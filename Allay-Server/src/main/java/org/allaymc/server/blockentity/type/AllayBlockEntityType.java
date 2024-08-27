@@ -6,7 +6,7 @@ import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
-import org.allaymc.api.blockentity.init.BlockEntityInitInfo;
+import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.component.interfaces.Component;

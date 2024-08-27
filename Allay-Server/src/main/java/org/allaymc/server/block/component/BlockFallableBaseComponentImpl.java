@@ -9,7 +9,7 @@ import org.allaymc.api.block.poi.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.init.SimpleEntityInitInfo;
+import org.allaymc.api.entity.initinfo.SimpleEntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityFallingBlock;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;

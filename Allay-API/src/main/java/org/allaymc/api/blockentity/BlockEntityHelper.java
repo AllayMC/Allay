@@ -2,7 +2,7 @@ package org.allaymc.api.blockentity;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.blockentity.init.SimpleBlockEntityInitInfo;
+import org.allaymc.api.blockentity.initinfo.SimpleBlockEntityInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
