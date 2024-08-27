@@ -83,8 +83,9 @@ public final class AllayServer implements Server {
     @Getter
     private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(
             Server.SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ? Runtime.getRuntime().availableProcessors() : Server.SETTINGS.genericSettings().maxComputeThreadCount(),
-            Server.SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ? Runtime.getRuntime().availableProcessors() : Server.SETTINGS.genericSettings().maxComputeThreadCount(),
-            0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), AllayComputeThread::new);
+            // maximumPoolSize and keepAliveTime are both meaningless, because we are using LinkedBlockingQueue
+            Server.SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ? Runtime.getRuntime().availableProcessors() : Server.SETTINGS.genericSettings().maxComputeThreadCount(), 0, TimeUnit.MILLISECONDS,
+            new LinkedBlockingQueue<>(), AllayComputeThread::new);
     // Thread pool for executing I/O-intensive tasks
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();

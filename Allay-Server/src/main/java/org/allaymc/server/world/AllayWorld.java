@@ -86,7 +86,7 @@ public class AllayWorld implements World {
         this.thread = Thread.ofPlatform()
                 .name("World Thread - " + this.getWorldData().getName())
                 .unstarted(gameLoop::startLoop);
-        this.networkThread = Thread.ofVirtual()
+        this.networkThread = Thread.ofPlatform()
                 .name("World Network Thread - " + this.getWorldData().getName())
                 .unstarted(this::networkTick);
         

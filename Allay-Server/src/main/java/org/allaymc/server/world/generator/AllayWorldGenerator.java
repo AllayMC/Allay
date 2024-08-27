@@ -81,7 +81,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
         GameLoop populationQueueLoop = GameLoop.builder()
                 .onTick(this::processPopulationQueue)
                 .build();
-        Thread.ofVirtual().start(populationQueueLoop::startLoop);
+        Thread.ofPlatform().start(populationQueueLoop::startLoop);
     }
 
     public static WorldGeneratorBuilder builder() {
