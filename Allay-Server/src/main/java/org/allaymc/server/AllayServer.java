@@ -81,7 +81,10 @@ public final class AllayServer implements Server {
     private final PlayerStorage playerStorage = Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE;
     // Thread pool for executing CPU-intensive tasks
     @Getter
-    private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(Runtime.getRuntime().availableProcessors(), Runtime.getRuntime().availableProcessors(), 0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), AllayComputeThread::new);
+    private final ThreadPoolExecutor computeThreadPool = new ThreadPoolExecutor(
+            Server.SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ? Runtime.getRuntime().availableProcessors() : Server.SETTINGS.genericSettings().maxComputeThreadCount(),
+            Server.SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ? Runtime.getRuntime().availableProcessors() : Server.SETTINGS.genericSettings().maxComputeThreadCount(),
+            0, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), AllayComputeThread::new);
     // Thread pool for executing I/O-intensive tasks
     @Getter
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();

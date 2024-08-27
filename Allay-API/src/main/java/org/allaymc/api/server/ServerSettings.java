@@ -62,6 +62,11 @@ public class ServerSettings extends OkaeriConfig {
 
         @Comment("Whether to display the GUI")
         private boolean enableGui = true;
+
+        @CustomKey("max-compute-thread-count")
+        @Comment("Decide the maximum count of threads in compute thread pool")
+        @Comment("If the value <= 0, the count will be same to the count of available processors")
+        private int maxComputeThreadCount = 0;
     }
 
     @Getter
