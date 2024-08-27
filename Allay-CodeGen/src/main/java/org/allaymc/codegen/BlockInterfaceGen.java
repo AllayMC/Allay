@@ -23,11 +23,11 @@ import static org.allaymc.codegen.BlockPropertyTypeGen.BLOCK_PROPERTY_TYPE_INFO_
 public class BlockInterfaceGen extends BaseInterfaceGen {
 
     public static final ClassName BLOCK_BEHAVIOR_CLASS_NAME = ClassName.get("org.allaymc.api.block", "BlockBehavior");
-    public static final ClassName BLOCK_ID_CLASS_NAME = ClassName.get("org.allaymc.api.block", "BlockId");
+    public static final ClassName BLOCK_ID_CLASS_NAME = ClassName.get("org.allaymc.api.block.data", "BlockId");
     public static final ClassName BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.block.property.type", "BlockPropertyTypes");
     public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockType");
     public static final ClassName BLOCK_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockTypes");
-    public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockTypeBuilder");
+    public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.server.block.type", "AllayBlockType");
     public static final ClassName BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.block.type", "BlockTypeDefaultInitializer");
     public static final TypeSpec.Builder BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
             TypeSpec.classBuilder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)

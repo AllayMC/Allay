@@ -8,24 +8,22 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.component.BlockEntityComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
-import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
-import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.injector.AllayComponentInjector;
+import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.entity.type.EntityTypeBuildException;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Allay Project 2023/9/15
@@ -35,43 +33,16 @@ import java.util.function.Function;
 public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityType<T> {
 
     protected final FastConstructor<T> constructor;
-    protected Class<T> interfaceClass;
-    protected Class<T> injectedClass;
-    @Getter
-    protected List<ComponentProvider<? extends BlockEntityComponent>> componentProviders;
     @Getter
     protected String name;
 
     @SneakyThrows
-    protected AllayBlockEntityType(
-            Class<T> interfaceClass,
-            List<ComponentProvider<? extends BlockEntityComponent>> componentProviders,
-            String name
-    ) {
-        this.interfaceClass = interfaceClass;
-        this.componentProviders = componentProviders;
+    protected AllayBlockEntityType(FastConstructor<T> constructor, String name) {
+        this.constructor = constructor;
         this.name = name;
-
-        try {
-            List<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
-            injectedClass = new AllayComponentInjector<T>()
-                    .interfaceClass(interfaceClass)
-                    .component(components)
-                    .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
-                    .inject(false);
-        } catch (Exception e) {
-            throw new EntityTypeBuildException("Failed to create block entity type!", e);
-        }
-
-        var fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
-        this.constructor = FastConstructor.create(
-                injectedClass.getConstructor(ComponentInitInfo.class),
-                fastMemberLoader,
-                false
-        );
     }
 
-    public static <T extends BlockEntity> BlockEntityTypeBuilder<T> builder(Class<T> interfaceClass) {
+    public static <T extends BlockEntity> Builder<T> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
 
@@ -82,7 +53,7 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         return (T) constructor.invoke(info);
     }
 
-    public static class Builder<T extends BlockEntity> implements BlockEntityTypeBuilder<T> {
+    public static class Builder<T extends BlockEntity> {
 
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders = new HashMap<>();
@@ -92,46 +63,64 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
             this.interfaceClass = interfaceClass;
         }
 
-        @Override
-        public BlockEntityTypeBuilder<T> name(String name) {
+        public Builder<T> name(String name) {
             this.name = name;
             return this;
         }
 
-        @Override
-        public BlockEntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
+        public Builder<T> setComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
             if (componentProviders == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
             this.componentProviders = new HashMap<>(componentProviders);
             return this;
         }
 
-        @Override
-        public BlockEntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
+        public Builder<T> addComponents(Map<Identifier, ComponentProvider<? extends BlockEntityComponent>> componentProviders) {
             this.componentProviders.putAll(componentProviders);
             return this;
         }
 
-        @Override
-        public BlockEntityTypeBuilder<T> addComponent(Function<BlockEntityInitInfo, ? extends BlockEntityComponent> provider, Class<?> componentClass) {
+        public Builder<T> addComponent(Function<BlockEntityInitInfo, ? extends BlockEntityComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.SimpleComponentProvider<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
-        @Override
-        public BlockEntityTypeBuilder<T> addComponent(ComponentProvider<? extends BlockEntityComponent> p) {
+        public Builder<T> addComponent(Supplier<? extends BlockEntityComponent> supplier, Class<?> componentClass) {
+            return addComponent(info -> supplier.get(), componentClass);
+        }
+
+        public Builder<T> addComponent(ComponentProvider<? extends BlockEntityComponent> p) {
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
-        @Override
         public BlockEntityType<T> build() {
             if (!componentProviders.containsKey(BlockEntityBaseComponentImpl.IDENTIFIER)) {
                 addComponent(BlockEntityBaseComponentImpl::new, BlockEntityBaseComponentImpl.class);
             }
             if (name == null) throw new EntityTypeBuildException("name cannot be null!");
-            var type = new AllayBlockEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), name);
+
+            FastConstructor<T> constructor;
+            try {
+                var injectedClass = new AllayComponentInjector<T>()
+                        .interfaceClass(interfaceClass)
+                        .component(new ArrayList<>(componentProviders.values()))
+                        .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
+                        .inject(false);
+
+
+                var fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
+                constructor = FastConstructor.create(
+                        injectedClass.getConstructor(ComponentInitInfo.class),
+                        fastMemberLoader,
+                        false
+                );
+            } catch (Exception e) {
+                throw new EntityTypeBuildException("Failed to create block entity type!", e);
+            }
+
+            var type = new AllayBlockEntityType<>(constructor, name);
             Registries.BLOCK_ENTITIES.register(name, type);
             return type;
         }

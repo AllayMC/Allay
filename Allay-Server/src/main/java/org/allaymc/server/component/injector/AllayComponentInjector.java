@@ -10,13 +10,19 @@ import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.Implementation;
 import net.bytebuddy.implementation.MethodCall;
 import net.bytebuddy.implementation.MethodDelegation;
-import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.*;
-import org.allaymc.api.component.interfaces.*;
+import org.allaymc.api.component.annotation.DoNotInject;
+import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.component.interfaces.ComponentInitInfo;
+import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.ComponentInjectException;
+import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.utils.ReflectionUtils;
@@ -35,7 +41,7 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  *
  * @author daoge_cmd
  */
-public class AllayComponentInjector<T> implements ComponentInjector<T> {
+public class AllayComponentInjector<T> {
     protected static final String INITIALIZER_FIELD_NAME = "initializer";
     protected static final String INIT_METHOD_NAME = "initComponents";
     protected static final String MANAGER_FIELD_NAME = "manager";
@@ -45,29 +51,56 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
     protected Class<T> injectedClass;
     protected List<ComponentProvider<? extends Component>> componentProviders = new ArrayList<>();
 
-    @Override
-    public ComponentInjector<T> interfaceClass(Class<T> interfaceClass) {
+    /**
+     * Defines the parent class for this injector
+     *
+     * @param interfaceClass the interface class
+     *
+     * @return the injector
+     */
+    public AllayComponentInjector<T> interfaceClass(Class<T> interfaceClass) {
         Objects.requireNonNull(interfaceClass, "The interface class cannot be null");
         if (!interfaceClass.isInterface()) throw new ComponentInjectException("Interface class must be an interface!");
         this.interfaceClass = interfaceClass;
         return this;
     }
 
-    @Override
-    public ComponentInjector<T> component(List<ComponentProvider<? extends Component>> providers) {
+    /**
+     * Bind a set of implementations for the injector.
+     * <p>
+     * When the dynamic class is instantiated, the component instance will be obtained from the Provider.
+     * <p>
+     * If there are multiple implementation methods for a method to be injected, they will be executed in the order in the component list
+     * and the return value is the return value of the last executed method
+     *
+     * @param providers component providers
+     *
+     * @return the injector
+     */
+    public AllayComponentInjector<T> component(List<ComponentProvider<? extends Component>> providers) {
         Objects.requireNonNull(providers, "The component providers cannot be null");
         this.componentProviders.addAll(providers);
         return this;
     }
 
-    @Override
-    public ComponentInjector<T> useCachedClass(Class<T> cachedClass) {
+    /**
+     * Use a cached class for the injector to speed up the injection process.
+     * @param cachedClass the cached class
+     * @return the injector
+     */
+    public AllayComponentInjector<T> useCachedClass(Class<T> cachedClass) {
         injectedClass = cachedClass;
         return this;
     }
 
+    /**
+     * Build the class.
+     * <p>
+     * Note that we guarantee that the returned class implements the {@link org.allaymc.api.component.interfaces.ComponentedObject} interface
+     *
+     * @return the class
+     */
     @SneakyThrows
-    @Override
     public Class<T> inject(boolean alwaysUpdate) {
         injectedClass = ComponentClassCacheUtils.getCacheClass(interfaceClass);
         if (alwaysUpdate || injectedClass == null) {
@@ -184,11 +217,15 @@ public class AllayComponentInjector<T> implements ComponentInjector<T> {
         return bb;
     }
 
+    // NOTICE: This field should be public and static
+    // because generated dynamic classes must be able to touch this class
+    public static final ComponentInitInfo EMPTY = new ComponentInitInfo(){};
+
     protected DynamicType.Builder<T> buildConstructor(DynamicType.Builder<T> bb) {
         try {
-            // Default constructor
+            // NOTICE: Default constructor shouldn't be removed!
             bb = bb.constructor(isDefaultConstructor()).intercept(MethodCall.invoke(Object.class.getDeclaredConstructor())
-                    .andThen(MethodCall.invoke(named(INIT_METHOD_NAME)).withThis().with(ComponentInitInfo.EMPTY))
+                    .andThen(MethodCall.invoke(named(INIT_METHOD_NAME)).withThis().with(EMPTY))
             );
             // Constructor with ComponentInitInfo
             bb = bb.defineConstructor(Visibility.PUBLIC)

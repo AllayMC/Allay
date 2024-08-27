@@ -20,7 +20,6 @@ import org.allaymc.api.block.interfaces.wallsign.*;
 import org.allaymc.api.block.interfaces.wood.*;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.item.type.ItemType;
@@ -52,55 +51,55 @@ import java.util.function.Function;
 @UtilityClass
 public final class BlockTypeInitializer {
     public static void initLeaves() {
-        BlockTypes.ACACIA_LEAVES = BlockTypeBuilder
+        BlockTypes.ACACIA_LEAVES = AllayBlockType
                 .builder(BlockAcaciaLeavesBehavior.class)
                 .vanillaBlock(BlockId.ACACIA_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
-        BlockTypes.AZALEA_LEAVES = BlockTypeBuilder
+        BlockTypes.AZALEA_LEAVES = AllayBlockType
                 .builder(BlockAzaleaLeavesBehavior.class)
                 .vanillaBlock(BlockId.AZALEA_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
-        BlockTypes.BIRCH_LEAVES = BlockTypeBuilder
+        BlockTypes.BIRCH_LEAVES = AllayBlockType
                 .builder(BlockBirchLeavesBehavior.class)
                 .vanillaBlock(BlockId.BIRCH_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
-        BlockTypes.CHERRY_LEAVES = BlockTypeBuilder
+        BlockTypes.CHERRY_LEAVES = AllayBlockType
                 .builder(BlockCherryLeavesBehavior.class)
                 .vanillaBlock(BlockId.CHERRY_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
-        BlockTypes.DARK_OAK_LEAVES = BlockTypeBuilder
+        BlockTypes.DARK_OAK_LEAVES = AllayBlockType
                 .builder(BlockDarkOakLeavesBehavior.class)
                 .vanillaBlock(BlockId.DARK_OAK_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
-        BlockTypes.JUNGLE_LEAVES = BlockTypeBuilder
+        BlockTypes.JUNGLE_LEAVES = AllayBlockType
                 .builder(BlockJungleLeavesBehavior.class)
                 .vanillaBlock(BlockId.JUNGLE_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
-        BlockTypes.MANGROVE_LEAVES = BlockTypeBuilder
+        BlockTypes.MANGROVE_LEAVES = AllayBlockType
                 .builder(BlockMangroveLeavesBehavior.class)
                 .vanillaBlock(BlockId.MANGROVE_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
-        BlockTypes.OAK_LEAVES = BlockTypeBuilder
+        BlockTypes.OAK_LEAVES = AllayBlockType
                 .builder(BlockOakLeavesBehavior.class)
                 .vanillaBlock(BlockId.OAK_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
-        BlockTypes.SPRUCE_LEAVES = BlockTypeBuilder
+        BlockTypes.SPRUCE_LEAVES = AllayBlockType
                 .builder(BlockSpruceLeavesBehavior.class)
                 .vanillaBlock(BlockId.SPRUCE_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
@@ -109,17 +108,17 @@ public final class BlockTypeInitializer {
     }
 
     public static void initFallable() {
-        BlockTypes.GRAVEL = BlockTypeBuilder
+        BlockTypes.GRAVEL = AllayBlockType
                 .builder(BlockGravelBehavior.class)
                 .vanillaBlock(BlockId.GRAVEL)
                 .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
                 .build();
-        BlockTypes.SAND = BlockTypeBuilder
+        BlockTypes.SAND = AllayBlockType
                 .builder(BlockSandBehavior.class)
                 .vanillaBlock(BlockId.SAND)
                 .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
                 .build();
-        BlockTypes.RED_SAND = BlockTypeBuilder
+        BlockTypes.RED_SAND = AllayBlockType
                 .builder(BlockRedSandBehavior.class)
                 .vanillaBlock(BlockId.RED_SAND)
                 .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
@@ -127,103 +126,103 @@ public final class BlockTypeInitializer {
     }
 
     public static void initShulkerBox() {
-        BlockTypes.YELLOW_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.YELLOW_SHULKER_BOX = AllayBlockType
                 .builder(BlockYellowShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.YELLOW_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.WHITE_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.WHITE_SHULKER_BOX = AllayBlockType
                 .builder(BlockWhiteShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.WHITE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.UNDYED_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.UNDYED_SHULKER_BOX = AllayBlockType
                 .builder(BlockUndyedShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.UNDYED_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.RED_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.RED_SHULKER_BOX = AllayBlockType
                 .builder(BlockRedShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.RED_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.PURPLE_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.PURPLE_SHULKER_BOX = AllayBlockType
                 .builder(BlockPurpleShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.PURPLE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.PINK_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.PINK_SHULKER_BOX = AllayBlockType
                 .builder(BlockPinkShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.PINK_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.ORANGE_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.ORANGE_SHULKER_BOX = AllayBlockType
                 .builder(BlockOrangeShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.ORANGE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.MAGENTA_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.MAGENTA_SHULKER_BOX = AllayBlockType
                 .builder(BlockMagentaShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.MAGENTA_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.LIME_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.LIME_SHULKER_BOX = AllayBlockType
                 .builder(BlockLimeShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.LIME_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.LIGHT_GRAY_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.LIGHT_GRAY_SHULKER_BOX = AllayBlockType
                 .builder(BlockLightGrayShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.LIGHT_BLUE_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.LIGHT_BLUE_SHULKER_BOX = AllayBlockType
                 .builder(BlockLightBlueShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.GREEN_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.GREEN_SHULKER_BOX = AllayBlockType
                 .builder(BlockGreenShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.GREEN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.GRAY_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.GRAY_SHULKER_BOX = AllayBlockType
                 .builder(BlockGrayShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.GRAY_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.CYAN_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.CYAN_SHULKER_BOX = AllayBlockType
                 .builder(BlockCyanShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.CYAN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.BROWN_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.BROWN_SHULKER_BOX = AllayBlockType
                 .builder(BlockBrownShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.BROWN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.BLUE_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.BLUE_SHULKER_BOX = AllayBlockType
                 .builder(BlockBlueShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.BLUE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
-        BlockTypes.BLACK_SHULKER_BOX = BlockTypeBuilder
+        BlockTypes.BLACK_SHULKER_BOX = AllayBlockType
                 .builder(BlockBlackShulkerBoxBehavior.class)
                 .vanillaBlock(BlockId.BLACK_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
@@ -232,7 +231,7 @@ public final class BlockTypeInitializer {
     }
 
     public static void initGrassBlock() {
-        BlockTypes.GRASS_BLOCK = BlockTypeBuilder
+        BlockTypes.GRASS_BLOCK = AllayBlockType
                 .builder(BlockGrassBlockBehavior.class)
                 .vanillaBlock(BlockId.GRASS_BLOCK)
                 .setBlockBaseComponentSupplier(BlockGrassBlockBaseComponentImpl::new)
@@ -240,12 +239,12 @@ public final class BlockTypeInitializer {
     }
 
     public static void initShortGrass() {
-        BlockTypes.SHORT_GRASS = BlockTypeBuilder
+        BlockTypes.SHORT_GRASS = AllayBlockType
                 .builder(BlockShortGrassBehavior.class)
                 .vanillaBlock(BlockId.SHORT_GRASS)
                 .setBlockBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
                 .build();
-        BlockTypes.FERN = BlockTypeBuilder
+        BlockTypes.FERN = AllayBlockType
                 .builder(BlockFernBehavior.class)
                 .vanillaBlock(BlockId.FERN)
                 .setBlockBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
@@ -253,13 +252,13 @@ public final class BlockTypeInitializer {
     }
 
     public static void initTallGrass() {
-        BlockTypes.TALL_GRASS = BlockTypeBuilder
+        BlockTypes.TALL_GRASS = AllayBlockType
                 .builder(BlockTallGrassBehavior.class)
                 .vanillaBlock(BlockId.TALL_GRASS)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBlockBaseComponentSupplier(BlockTallGrassBaseComponentImpl::new)
                 .build();
-        BlockTypes.LARGE_FERN = BlockTypeBuilder
+        BlockTypes.LARGE_FERN = AllayBlockType
                 .builder(BlockLargeFernBehavior.class)
                 .vanillaBlock(BlockId.LARGE_FERN)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
@@ -268,7 +267,7 @@ public final class BlockTypeInitializer {
     }
 
     public static void initBarrel() {
-        BlockTypes.BARREL = BlockTypeBuilder
+        BlockTypes.BARREL = AllayBlockType
                 .builder(BlockBarrelBehavior.class)
                 .vanillaBlock(BlockId.BARREL)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.OPEN_BIT)
@@ -277,7 +276,7 @@ public final class BlockTypeInitializer {
     }
 
     public static void initChest() {
-        BlockTypes.CHEST = BlockTypeBuilder
+        BlockTypes.CHEST = AllayBlockType
                 .builder(BlockChestBehavior.class)
                 .vanillaBlock(BlockId.CHEST)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
@@ -286,7 +285,7 @@ public final class BlockTypeInitializer {
     }
 
     public static void initCraftingTable() {
-        BlockTypes.CRAFTING_TABLE = BlockTypeBuilder
+        BlockTypes.CRAFTING_TABLE = AllayBlockType
                 .builder(BlockCraftingTableBehavior.class)
                 .vanillaBlock(BlockId.CRAFTING_TABLE)
                 .setBlockBaseComponentSupplier(BlockCraftingTableBaseComponentImpl::new)
@@ -294,392 +293,392 @@ public final class BlockTypeInitializer {
     }
 
     public static void initStairs() {
-        BlockTypes.ACACIA_STAIRS = BlockTypeBuilder
+        BlockTypes.ACACIA_STAIRS = AllayBlockType
                 .builder(BlockAcaciaStairsBehavior.class)
                 .vanillaBlock(BlockId.ACACIA_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.ANDESITE_STAIRS = BlockTypeBuilder
+        BlockTypes.ANDESITE_STAIRS = AllayBlockType
                 .builder(BlockAndesiteStairsBehavior.class)
                 .vanillaBlock(BlockId.ANDESITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.BAMBOO_MOSAIC_STAIRS = BlockTypeBuilder
+        BlockTypes.BAMBOO_MOSAIC_STAIRS = AllayBlockType
                 .builder(BlockBambooMosaicStairsBehavior.class)
                 .vanillaBlock(BlockId.BAMBOO_MOSAIC_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.BAMBOO_STAIRS = BlockTypeBuilder
+        BlockTypes.BAMBOO_STAIRS = AllayBlockType
                 .builder(BlockBambooStairsBehavior.class)
                 .vanillaBlock(BlockId.BAMBOO_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.BIRCH_STAIRS = BlockTypeBuilder
+        BlockTypes.BIRCH_STAIRS = AllayBlockType
                 .builder(BlockBirchStairsBehavior.class)
                 .vanillaBlock(BlockId.BIRCH_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.BLACKSTONE_STAIRS = BlockTypeBuilder
+        BlockTypes.BLACKSTONE_STAIRS = AllayBlockType
                 .builder(BlockBlackstoneStairsBehavior.class)
                 .vanillaBlock(BlockId.BLACKSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.BRICK_STAIRS = AllayBlockType
                 .builder(BlockBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.CHERRY_STAIRS = BlockTypeBuilder
+        BlockTypes.CHERRY_STAIRS = AllayBlockType
                 .builder(BlockCherryStairsBehavior.class)
                 .vanillaBlock(BlockId.CHERRY_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.COBBLED_DEEPSLATE_STAIRS = BlockTypeBuilder
+        BlockTypes.COBBLED_DEEPSLATE_STAIRS = AllayBlockType
                 .builder(BlockCobbledDeepslateStairsBehavior.class)
                 .vanillaBlock(BlockId.COBBLED_DEEPSLATE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.CRIMSON_STAIRS = BlockTypeBuilder
+        BlockTypes.CRIMSON_STAIRS = AllayBlockType
                 .builder(BlockCrimsonStairsBehavior.class)
                 .vanillaBlock(BlockId.CRIMSON_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.CUT_COPPER_STAIRS = BlockTypeBuilder
+        BlockTypes.CUT_COPPER_STAIRS = AllayBlockType
                 .builder(BlockCutCopperStairsBehavior.class)
                 .vanillaBlock(BlockId.CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.DARK_OAK_STAIRS = BlockTypeBuilder
+        BlockTypes.DARK_OAK_STAIRS = AllayBlockType
                 .builder(BlockDarkOakStairsBehavior.class)
                 .vanillaBlock(BlockId.DARK_OAK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.DARK_PRISMARINE_STAIRS = BlockTypeBuilder
+        BlockTypes.DARK_PRISMARINE_STAIRS = AllayBlockType
                 .builder(BlockDarkPrismarineStairsBehavior.class)
                 .vanillaBlock(BlockId.DARK_PRISMARINE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.DEEPSLATE_BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.DEEPSLATE_BRICK_STAIRS = AllayBlockType
                 .builder(BlockDeepslateBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.DEEPSLATE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.DEEPSLATE_TILE_STAIRS = BlockTypeBuilder
+        BlockTypes.DEEPSLATE_TILE_STAIRS = AllayBlockType
                 .builder(BlockDeepslateTileStairsBehavior.class)
                 .vanillaBlock(BlockId.DEEPSLATE_TILE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.DIORITE_STAIRS = BlockTypeBuilder
+        BlockTypes.DIORITE_STAIRS = AllayBlockType
                 .builder(BlockDioriteStairsBehavior.class)
                 .vanillaBlock(BlockId.DIORITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.END_BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.END_BRICK_STAIRS = AllayBlockType
                 .builder(BlockEndBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.END_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.EXPOSED_CUT_COPPER_STAIRS = BlockTypeBuilder
+        BlockTypes.EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
                 .builder(BlockExposedCutCopperStairsBehavior.class)
                 .vanillaBlock(BlockId.EXPOSED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.GRANITE_STAIRS = BlockTypeBuilder
+        BlockTypes.GRANITE_STAIRS = AllayBlockType
                 .builder(BlockGraniteStairsBehavior.class)
                 .vanillaBlock(BlockId.GRANITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.JUNGLE_STAIRS = BlockTypeBuilder
+        BlockTypes.JUNGLE_STAIRS = AllayBlockType
                 .builder(BlockJungleStairsBehavior.class)
                 .vanillaBlock(BlockId.JUNGLE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.MANGROVE_STAIRS = BlockTypeBuilder
+        BlockTypes.MANGROVE_STAIRS = AllayBlockType
                 .builder(BlockMangroveStairsBehavior.class)
                 .vanillaBlock(BlockId.MANGROVE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.MOSSY_COBBLESTONE_STAIRS = BlockTypeBuilder
+        BlockTypes.MOSSY_COBBLESTONE_STAIRS = AllayBlockType
                 .builder(BlockMossyCobblestoneStairsBehavior.class)
                 .vanillaBlock(BlockId.MOSSY_COBBLESTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.MOSSY_STONE_BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.MOSSY_STONE_BRICK_STAIRS = AllayBlockType
                 .builder(BlockMossyStoneBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.MOSSY_STONE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.MUD_BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.MUD_BRICK_STAIRS = AllayBlockType
                 .builder(BlockMudBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.MUD_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.NETHER_BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.NETHER_BRICK_STAIRS = AllayBlockType
                 .builder(BlockNetherBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.NETHER_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.NORMAL_STONE_STAIRS = BlockTypeBuilder
+        BlockTypes.NORMAL_STONE_STAIRS = AllayBlockType
                 .builder(BlockNormalStoneStairsBehavior.class)
                 .vanillaBlock(BlockId.NORMAL_STONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.OAK_STAIRS = BlockTypeBuilder
+        BlockTypes.OAK_STAIRS = AllayBlockType
                 .builder(BlockOakStairsBehavior.class)
                 .vanillaBlock(BlockId.OAK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = BlockTypeBuilder
+        BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
                 .builder(BlockOxidizedCutCopperStairsBehavior.class)
                 .vanillaBlock(BlockId.OXIDIZED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.POLISHED_ANDESITE_STAIRS = BlockTypeBuilder
+        BlockTypes.POLISHED_ANDESITE_STAIRS = AllayBlockType
                 .builder(BlockPolishedAndesiteStairsBehavior.class)
                 .vanillaBlock(BlockId.POLISHED_ANDESITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = AllayBlockType
                 .builder(BlockPolishedBlackstoneBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.POLISHED_BLACKSTONE_STAIRS = BlockTypeBuilder
+        BlockTypes.POLISHED_BLACKSTONE_STAIRS = AllayBlockType
                 .builder(BlockPolishedBlackstoneStairsBehavior.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.POLISHED_DEEPSLATE_STAIRS = BlockTypeBuilder
+        BlockTypes.POLISHED_DEEPSLATE_STAIRS = AllayBlockType
                 .builder(BlockPolishedDeepslateStairsBehavior.class)
                 .vanillaBlock(BlockId.POLISHED_DEEPSLATE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.POLISHED_DIORITE_STAIRS = BlockTypeBuilder
+        BlockTypes.POLISHED_DIORITE_STAIRS = AllayBlockType
                 .builder(BlockPolishedDioriteStairsBehavior.class)
                 .vanillaBlock(BlockId.POLISHED_DIORITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.POLISHED_GRANITE_STAIRS = BlockTypeBuilder
+        BlockTypes.POLISHED_GRANITE_STAIRS = AllayBlockType
                 .builder(BlockPolishedGraniteStairsBehavior.class)
                 .vanillaBlock(BlockId.POLISHED_GRANITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.POLISHED_TUFF_STAIRS = BlockTypeBuilder
+        BlockTypes.POLISHED_TUFF_STAIRS = AllayBlockType
                 .builder(BlockPolishedTuffStairsBehavior.class)
                 .vanillaBlock(BlockId.POLISHED_TUFF_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.PRISMARINE_BRICKS_STAIRS = BlockTypeBuilder
+        BlockTypes.PRISMARINE_BRICKS_STAIRS = AllayBlockType
                 .builder(BlockPrismarineBricksStairsBehavior.class)
                 .vanillaBlock(BlockId.PRISMARINE_BRICKS_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.PRISMARINE_STAIRS = BlockTypeBuilder
+        BlockTypes.PRISMARINE_STAIRS = AllayBlockType
                 .builder(BlockPrismarineStairsBehavior.class)
                 .vanillaBlock(BlockId.PRISMARINE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.PURPUR_STAIRS = BlockTypeBuilder
+        BlockTypes.PURPUR_STAIRS = AllayBlockType
                 .builder(BlockPurpurStairsBehavior.class)
                 .vanillaBlock(BlockId.PURPUR_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.QUARTZ_STAIRS = BlockTypeBuilder
+        BlockTypes.QUARTZ_STAIRS = AllayBlockType
                 .builder(BlockQuartzStairsBehavior.class)
                 .vanillaBlock(BlockId.QUARTZ_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.RED_NETHER_BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.RED_NETHER_BRICK_STAIRS = AllayBlockType
                 .builder(BlockRedNetherBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.RED_NETHER_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.RED_SANDSTONE_STAIRS = BlockTypeBuilder
+        BlockTypes.RED_SANDSTONE_STAIRS = AllayBlockType
                 .builder(BlockRedSandstoneStairsBehavior.class)
                 .vanillaBlock(BlockId.RED_SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.SANDSTONE_STAIRS = BlockTypeBuilder
+        BlockTypes.SANDSTONE_STAIRS = AllayBlockType
                 .builder(BlockSandstoneStairsBehavior.class)
                 .vanillaBlock(BlockId.SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.SMOOTH_QUARTZ_STAIRS = BlockTypeBuilder
+        BlockTypes.SMOOTH_QUARTZ_STAIRS = AllayBlockType
                 .builder(BlockSmoothQuartzStairsBehavior.class)
                 .vanillaBlock(BlockId.SMOOTH_QUARTZ_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS = BlockTypeBuilder
+        BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS = AllayBlockType
                 .builder(BlockSmoothRedSandstoneStairsBehavior.class)
                 .vanillaBlock(BlockId.SMOOTH_RED_SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.SMOOTH_SANDSTONE_STAIRS = BlockTypeBuilder
+        BlockTypes.SMOOTH_SANDSTONE_STAIRS = AllayBlockType
                 .builder(BlockSmoothSandstoneStairsBehavior.class)
                 .vanillaBlock(BlockId.SMOOTH_SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.SPRUCE_STAIRS = BlockTypeBuilder
+        BlockTypes.SPRUCE_STAIRS = AllayBlockType
                 .builder(BlockSpruceStairsBehavior.class)
                 .vanillaBlock(BlockId.SPRUCE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.STONE_BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.STONE_BRICK_STAIRS = AllayBlockType
                 .builder(BlockStoneBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.STONE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.STONE_STAIRS = BlockTypeBuilder
+        BlockTypes.STONE_STAIRS = AllayBlockType
                 .builder(BlockStoneStairsBehavior.class)
                 .vanillaBlock(BlockId.STONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.TUFF_BRICK_STAIRS = BlockTypeBuilder
+        BlockTypes.TUFF_BRICK_STAIRS = AllayBlockType
                 .builder(BlockTuffBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.TUFF_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.TUFF_STAIRS = BlockTypeBuilder
+        BlockTypes.TUFF_STAIRS = AllayBlockType
                 .builder(BlockTuffStairsBehavior.class)
                 .vanillaBlock(BlockId.TUFF_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.WARPED_STAIRS = BlockTypeBuilder
+        BlockTypes.WARPED_STAIRS = AllayBlockType
                 .builder(BlockWarpedStairsBehavior.class)
                 .vanillaBlock(BlockId.WARPED_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.WAXED_CUT_COPPER_STAIRS = BlockTypeBuilder
+        BlockTypes.WAXED_CUT_COPPER_STAIRS = AllayBlockType
                 .builder(BlockWaxedCutCopperStairsBehavior.class)
                 .vanillaBlock(BlockId.WAXED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = BlockTypeBuilder
+        BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
                 .builder(BlockWaxedExposedCutCopperStairsBehavior.class)
                 .vanillaBlock(BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = BlockTypeBuilder
+        BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
                 .builder(BlockWaxedOxidizedCutCopperStairsBehavior.class)
                 .vanillaBlock(BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = BlockTypeBuilder
+        BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
                 .builder(BlockWaxedWeatheredCutCopperStairsBehavior.class)
                 .vanillaBlock(BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(CommonShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
-        BlockTypes.WEATHERED_CUT_COPPER_STAIRS = BlockTypeBuilder
+        BlockTypes.WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
                 .builder(BlockWeatheredCutCopperStairsBehavior.class)
                 .vanillaBlock(BlockId.WEATHERED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
@@ -689,13 +688,13 @@ public final class BlockTypeInitializer {
     }
 
     public static void initColoredTorch() {
-        BlockTypes.COLORED_TORCH_BP = BlockTypeBuilder
+        BlockTypes.COLORED_TORCH_BP = AllayBlockType
                 .builder(BlockColoredTorchBpBehavior.class)
                 .vanillaBlock(BlockId.COLORED_TORCH_BP)
                 .setProperties(BlockPropertyTypes.COLOR_BIT, BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockColoredTorchBaseComponentImpl::new)
                 .build();
-        BlockTypes.COLORED_TORCH_RG = BlockTypeBuilder
+        BlockTypes.COLORED_TORCH_RG = AllayBlockType
                 .builder(BlockColoredTorchRgBehavior.class)
                 .vanillaBlock(BlockId.COLORED_TORCH_RG)
                 .setProperties(BlockPropertyTypes.COLOR_BIT, BlockPropertyTypes.TORCH_FACING_DIRECTION)
@@ -704,32 +703,32 @@ public final class BlockTypeInitializer {
     }
 
     public static void initTorch() {
-        BlockTypes.REDSTONE_TORCH = BlockTypeBuilder
+        BlockTypes.REDSTONE_TORCH = AllayBlockType
                 .builder(BlockRedstoneTorchBehavior.class)
                 .vanillaBlock(BlockId.REDSTONE_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
-        BlockTypes.SOUL_TORCH = BlockTypeBuilder
+        BlockTypes.SOUL_TORCH = AllayBlockType
                 .builder(BlockSoulTorchBehavior.class)
                 .vanillaBlock(BlockId.SOUL_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
-        BlockTypes.TORCH = BlockTypeBuilder
+        BlockTypes.TORCH = AllayBlockType
                 .builder(BlockTorchBehavior.class)
                 .vanillaBlock(BlockId.TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
 
-        BlockTypes.UNDERWATER_TORCH = BlockTypeBuilder
+        BlockTypes.UNDERWATER_TORCH = AllayBlockType
                 .builder(BlockUnderwaterTorchBehavior.class)
                 .vanillaBlock(BlockId.UNDERWATER_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
-        BlockTypes.UNLIT_REDSTONE_TORCH = BlockTypeBuilder
+        BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
                 .builder(BlockUnlitRedstoneTorchBehavior.class)
                 .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
@@ -738,37 +737,37 @@ public final class BlockTypeInitializer {
     }
 
     public static void initFurnace() {
-        BlockTypes.FURNACE = BlockTypeBuilder
+        BlockTypes.FURNACE = AllayBlockType
                 .builder(BlockFurnaceBehavior.class)
                 .vanillaBlock(BlockId.FURNACE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.FURNACE)
                 .build();
-        BlockTypes.LIT_FURNACE = BlockTypeBuilder
+        BlockTypes.LIT_FURNACE = AllayBlockType
                 .builder(BlockLitFurnaceBehavior.class)
                 .vanillaBlock(BlockId.LIT_FURNACE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.FURNACE)
                 .build();
-        BlockTypes.BLAST_FURNACE = BlockTypeBuilder
+        BlockTypes.BLAST_FURNACE = AllayBlockType
                 .builder(BlockBlastFurnaceBehavior.class)
                 .vanillaBlock(BlockId.BLAST_FURNACE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
                 .build();
-        BlockTypes.LIT_BLAST_FURNACE = BlockTypeBuilder
+        BlockTypes.LIT_BLAST_FURNACE = AllayBlockType
                 .builder(BlockLitBlastFurnaceBehavior.class)
                 .vanillaBlock(BlockId.LIT_BLAST_FURNACE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
                 .build();
-        BlockTypes.SMOKER = BlockTypeBuilder
+        BlockTypes.SMOKER = AllayBlockType
                 .builder(BlockSmokerBehavior.class)
                 .vanillaBlock(BlockId.SMOKER)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.SMOKER)
                 .build();
-        BlockTypes.LIT_SMOKER = BlockTypeBuilder
+        BlockTypes.LIT_SMOKER = AllayBlockType
                 .builder(BlockLitSmokerBehavior.class)
                 .vanillaBlock(BlockId.LIT_SMOKER)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
@@ -860,13 +859,13 @@ public final class BlockTypeInitializer {
     }
 
     public static void initRods() {
-        BlockTypes.END_ROD = BlockTypeBuilder
+        BlockTypes.END_ROD = AllayBlockType
                 .builder(BlockEndRodBehavior.class)
                 .vanillaBlock(BlockId.END_ROD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockRodBaseComponentImpl::new)
                 .build();
-        BlockTypes.LIGHTNING_ROD = BlockTypeBuilder
+        BlockTypes.LIGHTNING_ROD = AllayBlockType
                 .builder(BlockLightningRodBehavior.class)
                 .vanillaBlock(BlockId.LIGHTNING_ROD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
@@ -875,7 +874,7 @@ public final class BlockTypeInitializer {
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildWood(Class<T> clazz, BlockId blockId, BlockId strippedBlockId) {
-        return BlockTypeBuilder
+        return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
@@ -884,7 +883,7 @@ public final class BlockTypeInitializer {
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildStrippedWood(Class<T> clazz, BlockId blockId) {
-        return BlockTypeBuilder
+        return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
@@ -893,7 +892,7 @@ public final class BlockTypeInitializer {
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildOldWood(Class<T> clazz, BlockId blockId, BlockId strippedBlockId) {
-        return BlockTypeBuilder
+        return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)
                 // NOTICE: STRIPPED_BIT is deprecated and shouldn't be used!
@@ -907,7 +906,7 @@ public final class BlockTypeInitializer {
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildButton(Class<T> clazz, BlockId blockId, Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
-        return BlockTypeBuilder
+        return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
@@ -920,7 +919,7 @@ public final class BlockTypeInitializer {
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildDoor(Class<T> clazz, BlockId blockId, Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
-        return BlockTypeBuilder
+        return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
@@ -943,7 +942,7 @@ public final class BlockTypeInitializer {
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildWallSign(Class<T> clazz, BlockId blockId, ItemType<?> dropItemType) {
-        return BlockTypeBuilder
+        return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
@@ -967,7 +966,7 @@ public final class BlockTypeInitializer {
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildStandingSign(Class<T> clazz, BlockId blockId, ItemType<?> dropItemType) {
-        return BlockTypeBuilder
+        return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION)
@@ -991,7 +990,7 @@ public final class BlockTypeInitializer {
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildHangingSign(Class<T> clazz, BlockId blockId) {
-        return BlockTypeBuilder
+        return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROUND_SIGN_DIRECTION, BlockPropertyTypes.HANGING)

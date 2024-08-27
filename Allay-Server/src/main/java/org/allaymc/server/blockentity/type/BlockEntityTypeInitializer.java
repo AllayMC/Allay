@@ -3,7 +3,6 @@ package org.allaymc.server.blockentity.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.blockentity.data.BlockEntityId;
 import org.allaymc.api.blockentity.interfaces.*;
-import org.allaymc.api.blockentity.type.BlockEntityTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.container.impl.*;
 import org.allaymc.server.blockentity.component.BlockEntityBarrelBaseComponentImpl;
@@ -25,7 +24,7 @@ import org.allaymc.server.blockentity.component.sign.BlockEntitySignBaseComponen
 @UtilityClass
 public final class BlockEntityTypeInitializer {
     public static void initBarrel() {
-        BlockEntityTypes.BARREL = BlockEntityTypeBuilder
+        BlockEntityTypes.BARREL = AllayBlockEntityType
                 .builder(BlockEntityBarrel.class)
                 .name(BlockEntityId.BARREL)
                 .addComponent(BlockEntityBarrelBaseComponentImpl::new, BlockEntityBarrelBaseComponentImpl.class)
@@ -34,7 +33,7 @@ public final class BlockEntityTypeInitializer {
     }
 
     public static void initChest() {
-        BlockEntityTypes.CHEST = BlockEntityTypeBuilder
+        BlockEntityTypes.CHEST = AllayBlockEntityType
                 .builder(BlockEntityChest.class)
                 .name(BlockEntityId.CHEST)
                 .addComponent(BlockEntityChestBaseComponentImpl::new, BlockEntityChestBaseComponentImpl.class)
@@ -43,7 +42,7 @@ public final class BlockEntityTypeInitializer {
     }
 
     public static void initShulkerBox() {
-        BlockEntityTypes.SHULKER_BOX = BlockEntityTypeBuilder
+        BlockEntityTypes.SHULKER_BOX = AllayBlockEntityType
                 .builder(BlockEntityShulkerBox.class)
                 .name(BlockEntityId.SHULKER_BOX)
                 .addComponent(BlockEntityShulkerBoxBaseComponentImpl::new, BlockEntityShulkerBoxBaseComponentImpl.class)
@@ -52,19 +51,19 @@ public final class BlockEntityTypeInitializer {
     }
 
     public static void initFurnace() {
-        BlockEntityTypes.FURNACE = BlockEntityTypeBuilder
+        BlockEntityTypes.FURNACE = AllayBlockEntityType
                 .builder(BlockEntityFurnace.class)
                 .name(BlockEntityId.FURNACE)
                 .addComponent(BlockEntityFurnaceBaseComponentImpl::new, BlockEntityFurnaceBaseComponentImpl.class)
                 .addComponent(() -> new BlockEntityContainerHolderComponentImpl(FurnaceContainer::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
-        BlockEntityTypes.BLAST_FURNACE = BlockEntityTypeBuilder
+        BlockEntityTypes.BLAST_FURNACE = AllayBlockEntityType
                 .builder(BlockEntityBlastFurnace.class)
                 .name(BlockEntityId.BLAST_FURNACE)
                 .addComponent(BlockEntityBlastFurnaceBaseComponentImpl::new, BlockEntityBlastFurnaceBaseComponentImpl.class)
                 .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BlastFurnaceContainer::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
-        BlockEntityTypes.SMOKER = BlockEntityTypeBuilder
+        BlockEntityTypes.SMOKER = AllayBlockEntityType
                 .builder(BlockEntitySmoker.class)
                 .name(BlockEntityId.SMOKER)
                 .addComponent(BlockEntitySmokerFurnaceBaseComponentImpl::new, BlockEntitySmokerFurnaceBaseComponentImpl.class)
@@ -73,12 +72,12 @@ public final class BlockEntityTypeInitializer {
     }
 
     public static void initSign() {
-        BlockEntityTypes.SIGN = BlockEntityTypeBuilder
+        BlockEntityTypes.SIGN = AllayBlockEntityType
                 .builder(BlockEntitySign.class)
                 .name(BlockEntityId.SIGN)
                 .addComponent(BlockEntitySignBaseComponentImpl::new, BlockEntitySignBaseComponentImpl.class)
                 .build();
-        BlockEntityTypes.HANGING_SIGN = BlockEntityTypeBuilder
+        BlockEntityTypes.HANGING_SIGN = AllayBlockEntityType
                 .builder(BlockEntityHangingSign.class)
                 .name(BlockEntityId.HANGING_SIGN)
                 .addComponent(BlockEntityHangingSignBaseComponentImpl::new, BlockEntityHangingSignBaseComponentImpl.class)

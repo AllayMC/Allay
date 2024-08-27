@@ -1,10 +1,12 @@
-package org.allaymc.api.component.interfaces;
+package org.allaymc.server.component.interfaces;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
+import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.component.annotation.ComponentIdentifier;
 
 import java.util.HashMap;
 import java.util.List;

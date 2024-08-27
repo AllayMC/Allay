@@ -4,20 +4,18 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import me.sunlan.fastreflection.FastConstructor;
 import me.sunlan.fastreflection.FastMemberLoader;
-import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.Allay;
 import org.allaymc.server.block.type.BlockTypeBuildException;
 import org.allaymc.server.component.injector.AllayComponentInjector;
+import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 
 import java.util.ArrayList;
@@ -25,6 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static org.allaymc.server.component.interfaces.ComponentProvider.toMap;
 
 /**
  * Allay Project 2023/5/20
@@ -33,42 +34,19 @@ import java.util.function.Function;
  */
 public class AllayEntityType<T extends Entity> implements EntityType<T> {
     protected final FastConstructor<T> constructor;
-    protected Class<T> interfaceClass;
-    protected Class<T> injectedClass;
-    @Getter
-    protected List<ComponentProvider<? extends EntityComponent>> componentProviders;
     @Getter
     protected Identifier identifier;
 
     @SneakyThrows
     protected AllayEntityType(
-            Class<T> interfaceClass,
-            List<ComponentProvider<? extends EntityComponent>> componentProviders,
+            FastConstructor<T> constructor,
             Identifier identifier
     ) {
-        this.interfaceClass = interfaceClass;
-        this.componentProviders = componentProviders;
+        this.constructor = constructor;
         this.identifier = identifier;
-
-        try {
-            List<ComponentProvider<? extends Component>> components = new ArrayList<>(componentProviders);
-            this.injectedClass = new AllayComponentInjector<T>()
-                    .interfaceClass(interfaceClass)
-                    .component(components)
-                    .inject(false); // todo custom entity is always update
-        } catch (Exception e) {
-            throw new EntityTypeBuildException("Failed to create entity type!", e);
-        }
-
-        var fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
-        this.constructor = FastConstructor.create(
-                this.injectedClass.getConstructor(ComponentInitInfo.class),
-                fastMemberLoader,
-                false
-        );
     }
 
-    public static <T extends Entity> EntityTypeBuilder<T> builder(Class<T> interfaceClass) {
+    public static <T extends Entity> Builder<T> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
 
@@ -79,7 +57,7 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         return (T) constructor.invoke(info);
     }
 
-    public static class Builder<T extends Entity> implements EntityTypeBuilder<T> {
+    public static class Builder<T extends Entity> {
         protected Class<T> interfaceClass;
         protected Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders = new HashMap<>();
         protected Identifier identifier;
@@ -88,52 +66,56 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
             this.interfaceClass = interfaceClass;
         }
 
-        @Override
-        public EntityTypeBuilder<T> identifier(Identifier identifier) {
+        public Builder<T> identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
-        @Override
-        public EntityTypeBuilder<T> identifier(String identifier) {
+        public Builder<T> identifier(String identifier) {
             this.identifier = new Identifier(identifier);
             return this;
         }
 
-        @Override
-        public EntityTypeBuilder<T> vanillaEntity(EntityId entityId) {
+        public Builder<T> vanillaEntity(EntityId entityId) {
             this.identifier = entityId.getIdentifier();
             return this;
         }
 
-        @Override
-        public EntityTypeBuilder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
+        public Builder<T> setComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
             if (componentProviders == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
             this.componentProviders = new HashMap<>(componentProviders);
             return this;
         }
 
-        @Override
-        public EntityTypeBuilder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
+        public Builder<T> addComponents(Map<Identifier, ComponentProvider<? extends EntityComponent>> componentProviders) {
             this.componentProviders.putAll(componentProviders);
             return this;
         }
 
-        @Override
-        public EntityTypeBuilder<T> addComponent(Function<EntityInitInfo, ? extends EntityComponent> provider, Class<?> componentClass) {
+        public Builder<T> addComponent(Function<EntityInitInfo, ? extends EntityComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.SimpleComponentProvider<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
-        @Override
-        public EntityTypeBuilder<T> addComponent(ComponentProvider<? extends EntityComponent> p) {
+        public Builder<T> addComponent(ComponentProvider<? extends EntityComponent> p) {
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
-        @Override
+        public Builder<T> setComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
+            return setComponents(toMap(componentProviders));
+        }
+
+        public Builder<T> addComponents(List<ComponentProvider<? extends EntityComponent>> componentProviders) {
+            return addComponents(toMap(componentProviders));
+        }
+
+        public Builder<T> addComponent(Supplier<? extends EntityComponent> supplier, Class<?> componentClass) {
+            return addComponent($ -> supplier.get(), componentClass);
+        }
+
         public EntityType<T> build() {
             if (!componentProviders.containsKey(EntityBaseComponentImpl.IDENTIFIER)) {
                 addComponent(EntityBaseComponentImpl::new, EntityBaseComponentImpl.class);
@@ -141,7 +123,25 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
             if (identifier == null) {
                 throw new EntityTypeBuildException("identifier cannot be null!");
             }
-            var type = new AllayEntityType<>(interfaceClass, new ArrayList<>(componentProviders.values()), identifier);
+
+            FastConstructor<T> constructor;
+            try {
+                var injectedClass = new AllayComponentInjector<T>()
+                        .interfaceClass(interfaceClass)
+                        .component(new ArrayList<>(componentProviders.values()))
+                        .inject(false);
+
+                var fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
+                constructor = FastConstructor.create(
+                        injectedClass.getConstructor(ComponentInitInfo.class),
+                        fastMemberLoader,
+                        false
+                );
+            } catch (Exception e) {
+                throw new EntityTypeBuildException("Failed to create entity type!", e);
+            }
+
+            var type = new AllayEntityType<>(constructor, identifier);
             Registries.ENTITIES.register(identifier, type);
             return type;
         }

@@ -1,9 +1,6 @@
 package org.allaymc.server.entity.component;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.attribute.Attribute;
@@ -12,6 +9,9 @@ import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CEntityAttributeChangeEvent;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;

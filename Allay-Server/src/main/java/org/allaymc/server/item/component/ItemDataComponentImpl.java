@@ -2,10 +2,10 @@ package org.allaymc.server.item.component;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.item.component.data.ItemData;
 import org.allaymc.api.item.component.data.ItemDataComponent;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.component.annotation.ComponentIdentifier;
 
 /**
  * Allay Project 2023/5/20

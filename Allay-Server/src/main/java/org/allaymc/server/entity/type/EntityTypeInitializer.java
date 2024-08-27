@@ -5,7 +5,6 @@ import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.interfaces.*;
-import org.allaymc.api.entity.type.EntityTypeBuilder;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
@@ -21,7 +20,7 @@ import static org.allaymc.api.entity.component.attribute.EntityAttributeComponen
 @UtilityClass
 public final class EntityTypeInitializer {
     public static void initFallingBlock() {
-        EntityTypes.FALLING_BLOCK = EntityTypeBuilder
+        EntityTypes.FALLING_BLOCK = AllayEntityType
                 .builder(EntityFallingBlock.class)
                 .vanillaEntity(EntityId.FALLING_BLOCK)
                 .addComponent(EntityFallingBlockBaseComponentImpl::new, EntityFallingBlockBaseComponentImpl.class)
@@ -29,7 +28,7 @@ public final class EntityTypeInitializer {
     }
 
     public static void initItem() {
-        EntityTypes.ITEM = EntityTypeBuilder
+        EntityTypes.ITEM = AllayEntityType
                 .builder(EntityItem.class)
                 .vanillaEntity(EntityId.ITEM)
                 .addComponent(EntityItemBaseComponentImpl::new, EntityItemBaseComponentImpl.class)
@@ -45,7 +44,7 @@ public final class EntityTypeInitializer {
     }
 
     public static void initPlayer() {
-        EntityTypes.PLAYER = EntityTypeBuilder
+        EntityTypes.PLAYER = AllayEntityType
                 .builder(EntityPlayer.class)
                 .vanillaEntity(EntityId.PLAYER)
                 .addComponent(EntityPlayerBaseComponentImpl::new, EntityPlayerBaseComponentImpl.class)
@@ -58,7 +57,7 @@ public final class EntityTypeInitializer {
     }
 
     public static void initVillagerV2() {
-        EntityTypes.VILLAGER_V2 = EntityTypeBuilder
+        EntityTypes.VILLAGER_V2 = AllayEntityType
                 .builder(EntityVillagerV2.class)
                 .vanillaEntity(EntityId.VILLAGER_V2)
                 .addComponent(() -> new EntityAttributeComponentImpl(basicEntityAttributes()), EntityAttributeComponentImpl.class)
@@ -67,7 +66,7 @@ public final class EntityTypeInitializer {
     }
 
     public static void initXBOrb() {
-        EntityTypes.XP_ORB = EntityTypeBuilder
+        EntityTypes.XP_ORB = AllayEntityType
                 .builder(EntityXpOrb.class)
                 .vanillaEntity(EntityId.XP_ORB)
                 .addComponent(EntityXpOrbBaseComponentImpl::new, EntityXpOrbBaseComponentImpl.class)

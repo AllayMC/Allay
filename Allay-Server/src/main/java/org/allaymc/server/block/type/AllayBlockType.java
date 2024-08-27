@@ -16,14 +16,11 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.block.type.BlockTypeBuilder;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.Component;
-import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.item.type.ItemTypeBuilder;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
@@ -34,6 +31,8 @@ import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.component.injector.AllayComponentInjector;
+import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
@@ -43,7 +42,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.component.interfaces.ComponentProvider.findComponentIdentifierInCertainClass;
+import static org.allaymc.server.component.interfaces.ComponentProvider.findComponentIdentifierInCertainClass;
 
 /**
  * Allay Project 2023/4/15
@@ -52,8 +51,6 @@ import static org.allaymc.api.component.interfaces.ComponentProvider.findCompone
  */
 @Getter
 public final class AllayBlockType<T extends BlockBehavior> implements BlockType<T> {
-    private final Class<T> interfaceClass;
-    private final List<BlockComponent> components;
     private final Map<String, BlockPropertyType<?>> properties;
     private final Identifier identifier;
     private final Set<BlockTag> blockTags;
@@ -63,21 +60,16 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private final byte specialValueBits;
     private final Map<Long, BlockState> specialValueMap;
 
-    private Class<T> injectedClass;
     private BlockState defaultState;
     private T blockBehavior;
 
     private AllayBlockType(
-            Class<T> interfaceClass,
-            List<BlockComponent> components,
             Map<String, BlockPropertyType<?>> properties,
             Identifier identifier,
             ItemType<?> blockItemType,
             Set<BlockTag> blockTags,
             Material material
     ) {
-        this.interfaceClass = interfaceClass;
-        this.components = components;
         this.properties = Collections.unmodifiableMap(properties);
         this.identifier = identifier;
         this.blockTags = blockTags;
@@ -120,7 +112,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         return specialValue;
     }
 
-    public static <T extends BlockBehavior> BlockTypeBuilder<T> builder(Class<T> interfaceClass) {
+    public static <T extends BlockBehavior> Builder<T> builder(Class<T> interfaceClass) {
         return new Builder<>(interfaceClass);
     }
 
@@ -356,7 +348,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     }
 
     @Slf4j
-    public static class Builder<T extends BlockBehavior> implements BlockTypeBuilder<T> {
+    public static class Builder<T extends BlockBehavior> {
 
         protected Class<T> interfaceClass;
         protected Map<Identifier, BlockComponent> components = new HashMap<>();
@@ -375,13 +367,15 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             this.interfaceClass = interfaceClass;
         }
 
-        @Override
         public Builder<T> identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
-        @Override
+        public Builder<T> identifier(String identifier) {
+            return identifier(new Identifier(identifier));
+        }
+
         public Builder<T> vanillaBlock(BlockId blockId) {
             this.isCustomBlock = false;
             this.identifier = blockId.getIdentifier();
@@ -395,24 +389,20 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
-        @Override
-        public BlockTypeBuilder<T> bindBlockEntity(BlockEntityType<?> blockEntityType) {
+        public Builder<T> bindBlockEntity(BlockEntityType<?> blockEntityType) {
             return addComponent(new BlockEntityHolderComponentImpl<>(blockEntityType));
         }
 
-        @Override
         public Builder<T> setProperties(BlockPropertyType<?>... properties) {
             this.properties = Arrays.stream(properties).collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
             return this;
         }
 
-        @Override
         public Builder<T> setProperties(List<BlockPropertyType<?>> properties) {
             this.properties = properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
             return this;
         }
 
-        @Override
         public Builder<T> setComponents(Map<Identifier, BlockComponent> components) {
             if (components == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
@@ -420,47 +410,62 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
-        @Override
         public Builder<T> addComponents(Map<Identifier, BlockComponent> components) {
             this.components.putAll(components);
             return this;
         }
 
-        @Override
         public Builder<T> addComponent(BlockComponent component) {
             this.components.put(findComponentIdentifierInCertainClass(component.getClass()), component);
             return this;
         }
 
-        @Override
+        public Builder<T> setComponents(List<BlockComponent> components) {
+            return setComponents(listComponentToMap(components));
+        }
+
+        public Builder<T> addComponents(List<BlockComponent> components) {
+            return addComponents(listComponentToMap(components));
+        }
+
+        private Map<Identifier, BlockComponent> listComponentToMap(List<BlockComponent> components) {
+            var map = new HashMap<Identifier, BlockComponent>();
+            components.forEach(component -> {
+                var id = findComponentIdentifierInCertainClass(component.getClass());
+                if (map.containsKey(id))
+                    throw new IllegalArgumentException("Duplicate component: " + id);
+                map.put(id, component);
+            });
+            return map;
+        }
+
         public Builder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
             this.blockBaseComponentSupplier = blockBaseComponentSupplier;
             return this;
         }
 
-        @Override
         public Builder<T> setBlockTags(BlockTag... blockTags) {
             // Unmodifiable set
             this.blockTags = Set.of(blockTags);
             return this;
         }
 
-        @Override
         public Builder<T> setMaterial(Material material) {
             this.material = material;
             return this;
         }
 
-        @Override
         public AllayBlockType<T> build() {
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
+            var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, material);
+
             var listComponents = new ArrayList<>(components.values());
-            var type = new AllayBlockType<>(interfaceClass, listComponents, properties, identifier, itemType, blockTags, material);
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
                 listComponents.add(blockBaseComponentSupplier.apply(type));
             if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER))
                 listComponents.add(BlockStateDataComponentImpl.ofDefault());
+
             List<ComponentProvider<? extends Component>> componentProviders = listComponents.stream().map(singleton -> {
                 var currentClass = singleton.getClass();
                 //For anonymous class, we give it's super class to component provider
@@ -470,12 +475,12 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             }).collect(Collectors.toList());
             try {
                 checkPropertyValid();
-                type.injectedClass = new AllayComponentInjector<T>()
+                var injectedClass = new AllayComponentInjector<T>()
                         .interfaceClass(interfaceClass)
                         .component(componentProviders)
                         .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
                         .inject(isCustomBlock);
-                type.blockBehavior = type.injectedClass.getConstructor().newInstance();
+                type.blockBehavior = injectedClass.getConstructor().newInstance();
             } catch (Exception e) {
                 throw new BlockTypeBuildException("Failed to create block type!", e);
             }
@@ -489,7 +494,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             itemType = Registries.ITEMS.get(itemId);
             if (itemType == null) {
                 // If the corresponding block item is not explicitly registered, automatically register one
-                itemType = ItemTypeBuilder
+                itemType = AllayItemType
                         .builder(ItemStack.class)
                         .identifier(itemId)
                         .build();
@@ -500,7 +505,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 // Allay will pre-register block items with the "item." prefix in the vanilla registry, so let's check again for this ID
                 hardItemType = Registries.ITEMS.get(hardItemId);
                 if (hardItemType == null) {
-                    hardItemType = ItemTypeBuilder
+                    hardItemType = AllayItemType
                             .builder(ItemStack.class)
                             .identifier(hardItemId)
                             .build();

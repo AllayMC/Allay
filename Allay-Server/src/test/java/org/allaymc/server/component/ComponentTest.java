@@ -1,18 +1,14 @@
 package org.allaymc.server.component;
 
 import lombok.SneakyThrows;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.api.component.interfaces.ComponentProvider;
 import org.allaymc.api.component.interfaces.ComponentedObject;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.ComponentInjectException;
+import org.allaymc.server.component.annotation.ComponentIdentifier;
 import org.allaymc.server.component.impl.*;
 import org.allaymc.server.component.injector.AllayComponentInjector;
-import org.allaymc.server.component.interfaces.AttackComponent;
-import org.allaymc.server.component.interfaces.HealthComponent;
-import org.allaymc.server.component.interfaces.NameComponent;
-import org.allaymc.server.component.interfaces.Sheep;
+import org.allaymc.server.component.interfaces.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

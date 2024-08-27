@@ -19,7 +19,7 @@ public class EntityInterfaceGen extends BaseInterfaceGen {
     public static final ClassName ENTITY_ID_CLASS_NAME = ClassName.get("org.allaymc.api.entity.data", "EntityId");
     public static final ClassName ENTITY_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityType");
     public static final ClassName ENTITY_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityTypes");
-    public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.entity.type", "EntityTypeBuilder");
+    public static final ClassName ENTITY_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.server.entity.type", "AllayEntityType");
     public static final ClassName ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.entity.type", "EntityTypeDefaultInitializer");
     public static final TypeSpec.Builder ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
             TypeSpec.classBuilder(ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
@@ -37,8 +37,6 @@ public class EntityInterfaceGen extends BaseInterfaceGen {
     public static void generate() {
         var interfaceDir = Path.of("Allay-API/src/main/java/org/allaymc/api/entity/interfaces");
         if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
-        var initializerDir = Path.of("Allay-Server/src/main/java/org/allaymc/server/entity/initializer");
-        if (!Files.exists(initializerDir)) Files.createDirectories(initializerDir);
         var typesClass = TypeSpec.classBuilder(ENTITY_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : EntityId.values()) {
             typesClass.addField(

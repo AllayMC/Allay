@@ -5,11 +5,11 @@ import org.allaymc.api.block.component.BlockEntityHolderComponent;
 import org.allaymc.api.block.poi.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityShulkerBox;
-import org.allaymc.api.component.annotation.Dependency;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemItemStorableComponent;
+import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 import java.util.Set;

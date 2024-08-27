@@ -1,7 +1,7 @@
 package org.allaymc.api.component.interfaces;
 
-import org.allaymc.api.component.annotation.ComponentIdentifier;
 import org.allaymc.api.component.annotation.DoNotInject;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Describe the implementation of a component.
@@ -10,7 +10,7 @@ import org.allaymc.api.component.annotation.DoNotInject;
  * <p>
  * The namespace ID of this component implementation will be used when injecting component dependencies.
  * <p>
- * Which should be a 'static' constant annotated with {@link ComponentIdentifier}.
+ * Which should be a 'static' constant annotated with @ComponentIdentifier.
  * <p>
  * Allay Project 2023/3/4
  *
@@ -18,6 +18,7 @@ import org.allaymc.api.component.annotation.DoNotInject;
  */
 public interface Component {
     @DoNotInject
+    @ApiStatus.Internal
     default ComponentManager getManager() {
         throw new UnsupportedOperationException("You cannot call this method on component instance, please call it on componented object!");
     }

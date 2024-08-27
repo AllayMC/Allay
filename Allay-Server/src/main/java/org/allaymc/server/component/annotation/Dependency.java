@@ -1,4 +1,4 @@
-package org.allaymc.api.component.annotation;
+package org.allaymc.server.component.annotation;
 
 import org.allaymc.api.utils.exception.ComponentInjectException;
 

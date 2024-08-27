@@ -1,4 +1,4 @@
-package org.allaymc.api.component.annotation;
+package org.allaymc.server.component.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

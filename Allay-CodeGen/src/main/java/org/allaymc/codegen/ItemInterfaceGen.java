@@ -22,7 +22,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
     public static final ClassName ITEM_ID_CLASS_NAME = ClassName.get("org.allaymc.api.item.data", "ItemId");
     public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemType");
     public static final ClassName ITEM_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemTypes");
-    public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemTypeBuilder");
+    public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.server.item.type", "AllayItemType");
     public static final ClassName ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.item.type", "ItemTypeDefaultInitializer");
     public static final TypeSpec.Builder ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
             TypeSpec.classBuilder(ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
@@ -42,8 +42,6 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
         registerSubPackages();
         var interfaceDir = Path.of("Allay-API/src/main/java/org/allaymc/api/item/interfaces");
         if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
-        var initializerDir = Path.of("Allay-Server/src/main/java/org/allaymc/server/item/initializer");
-        if (!Files.exists(initializerDir)) Files.createDirectories(initializerDir);
         var typesClass = TypeSpec.classBuilder(ITEM_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : ItemId.values()) {
             typesClass.addField(

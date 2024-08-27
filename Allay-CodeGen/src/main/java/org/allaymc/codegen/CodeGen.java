@@ -17,6 +17,6 @@ public class CodeGen {
         BiomeIdEnumGen.main(args);
         BlockInterfaceGen.main(args);
         EntityInterfaceGen.main(args);
-        VanillaItemInterfaceGen.main(args);
+        ItemInterfaceGen.main(args);
     }
 }

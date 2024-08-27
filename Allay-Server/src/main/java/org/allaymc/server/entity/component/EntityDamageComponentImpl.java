@@ -1,10 +1,6 @@
 package org.allaymc.server.entity.component;
 
 import lombok.Getter;
-import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.component.annotation.ComponentedObject;
-import org.allaymc.api.component.annotation.Dependency;
-import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityBaseComponent;
@@ -17,6 +13,10 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
 import org.allaymc.server.entity.component.event.CEntityAttackEvent;
 import org.allaymc.server.entity.component.event.CEntityFallEvent;

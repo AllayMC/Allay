@@ -1,9 +1,9 @@
 package org.allaymc.server.component.impl;
 
-import org.allaymc.api.component.annotation.ComponentIdentifier;
-import org.allaymc.api.component.annotation.Manager;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.event.TestEvent;
 import org.allaymc.server.component.interfaces.TestEventTriggerComponent;
 

@@ -4,9 +4,9 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
-import org.allaymc.api.component.annotation.Dependency;
-import org.allaymc.api.component.annotation.OnInitFinish;
 import org.allaymc.api.container.impl.BarrelContainer;
+import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.OnInitFinish;
 
 /**
  * Allay Project 2023/12/6
