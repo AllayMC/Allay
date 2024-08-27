@@ -2,7 +2,7 @@ package org.allaymc.server.block.component.grass;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.poi.BlockStateWithPos;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 

@@ -3,7 +3,7 @@ package org.allaymc.server.world.service;
 import lombok.RequiredArgsConstructor;
 import org.allaymc.api.block.component.BlockLiquidComponent;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.poi.BlockStateWithPos;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
@@ -23,7 +23,6 @@ public class AllayBlockUpdateService implements BlockUpdateService {
     protected final Map<Vector3ic, Long> scheduledUpdates = new ConcurrentHashMap<>();
     protected final Queue<NeighborUpdate> neighborUpdates = new LinkedList<>();
 
-    @Override
     public void tick(long tick) {
         List<Vector3ic> positions = new ArrayList<>(scheduledUpdates.size() / 4);
         for (var entry : scheduledUpdates.entrySet()) {

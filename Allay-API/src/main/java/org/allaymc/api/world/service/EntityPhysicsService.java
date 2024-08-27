@@ -1,8 +1,6 @@
 package org.allaymc.api.world.service;
 
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.joml.primitives.AABBfc;
 
@@ -14,12 +12,7 @@ import java.util.List;
  * @author daoge_cmd
  */
 public interface EntityPhysicsService {
-
-    void tick();
-
     boolean containEntity(Entity entity);
-
-    void offerClientMove(EntityPlayer player, Location3fc newLoc);
 
     default List<Entity> computeCollidingEntities(Entity entity) {
         return computeCollidingEntities(entity.getOffsetAABB(), other -> other.getRuntimeId() != entity.getRuntimeId());

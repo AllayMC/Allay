@@ -2,7 +2,7 @@ package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.poi.PlayerInteractInfo;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.EntityDamageComponent;

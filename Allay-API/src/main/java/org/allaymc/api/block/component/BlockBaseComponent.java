@@ -3,8 +3,8 @@ package org.allaymc.api.block.component;
 import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.poi.BlockStateWithPos;
-import org.allaymc.api.block.poi.PlayerInteractInfo;
+import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -185,6 +185,10 @@ public interface BlockBaseComponent extends BlockComponent {
     default boolean canDamageItem(ItemStack itemStack) {
         return true;
     }
+
+    boolean canResetFallDistance();
+
+    default void onEntityFallOn(Entity entity, BlockState blockState) {}
 
     /**
      * Calculate how long can break a specific block state

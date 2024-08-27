@@ -149,7 +149,7 @@ public class AllayWorld implements World {
         syncData();
         tickTime(currentTick);
         scheduler.tick();
-        getDimensions().values().forEach(d -> d.tick(currentTick));
+        getDimensions().values().forEach(d -> ((AllayDimension)d).tick(currentTick));
         worldStorage.tick(currentTick);
     }
 
@@ -222,7 +222,7 @@ public class AllayWorld implements World {
     @Override
     public void shutdown() {
         isRunning.set(false);
-        dimensionMap.values().forEach(Dimension::shutdown);
+        dimensionMap.values().forEach(dimension -> ((AllayDimension)dimension).shutdown());
         saveWorldData();
         worldStorage.shutdown();
     }

@@ -237,8 +237,17 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void setLocation(Location3fc location, boolean calculateFallDistance) {
         if (calculateFallDistance && !this.onGround) {
-            if (this.fallDistance < 0) this.fallDistance = 0;
+            if (this.fallDistance < 0) {
+                // Entity start falling
+                this.fallDistance = 0;
+            }
+            // fall distance < 0 -> move up
+            // fall distance > 0 -> move down
             this.fallDistance -= location.y() - this.location.y();
+            // Check if the current block will reset fall distance
+            if (location.dimension().getBlockState(location).getBlockType().getBlockBehavior().canResetFallDistance()) {
+                this.fallDistance = 0;
+            }
         }
 
         this.location.set(location);
@@ -684,6 +693,14 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (event.isCancelled()) {
             this.fallDistance = 0;
             return;
+        }
+
+        var blockUnder = getDimension().getBlockState((int) location.x, (int) (location.y - 1), (int) location.z);
+        blockUnder.getBehavior().onEntityFallOn(thisEntity, blockUnder);
+        // Check whether the block fall on will reset fall distance
+        // for example, slime block
+        if (blockUnder.getBlockType().getBlockBehavior().canResetFallDistance()) {
+            event.setFallDistance(0);
         }
 
         this.manager.callEvent(new CEntityFallEvent(event.getFallDistance()));

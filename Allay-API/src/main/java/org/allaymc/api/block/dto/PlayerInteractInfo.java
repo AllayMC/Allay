@@ -1,4 +1,4 @@
-package org.allaymc.api.block.poi;
+package org.allaymc.api.block.dto;
 
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
