@@ -70,7 +70,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         Entity attacker = damage.getAttacker();
         if (attacker == null) return;
 
-        ((EntityBaseComponentImpl)attacker).getManager().callEvent(CEntityAttackEvent.INSTANCE);
+        attacker.getManager().callEvent(CEntityAttackEvent.INSTANCE);
 
         if (damage.hasCustomKnockback()) {
             baseComponent.knockback(attacker.getLocation(), damage.getCustomKnockback());
