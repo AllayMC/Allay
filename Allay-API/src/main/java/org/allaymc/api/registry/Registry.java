@@ -36,6 +36,14 @@ import java.util.function.Consumer;
  */
 public interface Registry<CONTENT> {
     /**
+     * Registers what is specified in the given
+     * {@link Consumer} into the underlying value.
+     *
+     * @param consumer the consumer
+     */
+    void register(Consumer<CONTENT> consumer);
+
+    /**
      * Gets the underlying value held by this registry.
      *
      * @return the underlying value held by this registry.
@@ -50,12 +58,4 @@ public interface Registry<CONTENT> {
      * @param content the underlying value held by this registry
      */
     void setContent(CONTENT content);
-
-    /**
-     * Registers what is specified in the given
-     * {@link Consumer} into the underlying value.
-     *
-     * @param consumer the consumer
-     */
-    void register(Consumer<CONTENT> consumer);
 }

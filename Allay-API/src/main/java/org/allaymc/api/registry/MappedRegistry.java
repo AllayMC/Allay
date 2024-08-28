@@ -17,7 +17,6 @@ import java.util.function.Supplier;
  * @author GeyserMC | daoge_cmd
  */
 public class MappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> extends AbstractMappedRegistry<KEY, VALUE, MAPPING> {
-
     protected <INPUT> MappedRegistry(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {
         super(input, registryLoader);
     }

@@ -79,6 +79,9 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
         return this.content.get(i);
     }
 
+    /**
+     * @deprecated Use {@link #get(int)} instead.
+     */
     @Nullable
     @Override
     @Deprecated
@@ -100,6 +103,9 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
         return this.content.getOrDefault(i, defaultValue);
     }
 
+    /**
+     * @deprecated Use {@link #getOrDefault(int, V)} instead.
+     */
     @Override
     @Deprecated
     public V getOrDefault(Integer key, V defaultValue) {
@@ -118,6 +124,9 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
         return this.content.put(i, value);
     }
 
+    /**
+     * @deprecated Use {@link #register(int, V)} instead.
+     */
     @Override
     @Deprecated
     public V register(Integer key, V value) {

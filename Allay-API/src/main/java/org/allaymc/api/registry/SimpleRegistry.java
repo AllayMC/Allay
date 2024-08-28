@@ -14,7 +14,6 @@ import java.util.function.Supplier;
  * @author GeyserMC | daoge_cmd
  */
 public class SimpleRegistry<CONTENT> extends AbstractRegistry<CONTENT> {
-
     protected CONTENT content;
 
     protected <INPUT> SimpleRegistry(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {

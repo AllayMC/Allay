@@ -14,7 +14,6 @@ package org.allaymc.api.registry;
  */
 @FunctionalInterface
 public interface RegistryLoader<INPUT, OUTPUT> {
-
     /**
      * Loads an output from the given input.
      *
