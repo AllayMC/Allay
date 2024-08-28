@@ -3,7 +3,7 @@ package org.allaymc.api.block;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.CompassRoseDirection;
-import org.allaymc.api.block.poi.PlayerInteractInfo;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.PillarAxis;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;

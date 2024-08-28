@@ -3,8 +3,8 @@ package org.allaymc.api.world;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.poi.BlockStateWithPos;
-import org.allaymc.api.block.poi.PlayerInteractInfo;
+import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
@@ -53,10 +53,6 @@ public interface Dimension {
         updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
         return updateBlockPacket;
     }
-
-    void tick(long currentTick);
-
-    void shutdown();
 
     WorldGenerator getWorldGenerator();
 

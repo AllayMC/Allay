@@ -998,4 +998,12 @@ public final class BlockTypeInitializer {
                 .bindBlockEntity(BlockEntityTypes.HANGING_SIGN)
                 .build();
     }
+
+    public static void initSlimeBlock() {
+        BlockTypes.SLIME = AllayBlockType
+                .builder(BlockSlimeBehavior.class)
+                .vanillaBlock(BlockId.SLIME)
+                .setBlockBaseComponentSupplier(BlockSlimeBaseComponentImpl::new)
+                .build();
+    }
 }

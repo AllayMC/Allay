@@ -2,8 +2,8 @@ package org.allaymc.server.world;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.poi.BlockStateWithPos;
-import org.allaymc.api.block.poi.PlayerInteractInfo;
+import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -58,7 +58,6 @@ public class AllayDimension implements Dimension {
         this.blockUpdateService = new AllayBlockUpdateService(this);
     }
 
-    @Override
     public void tick(long currentTick) {
         chunkService.tick(currentTick);
         entityService.tick();
@@ -66,7 +65,6 @@ public class AllayDimension implements Dimension {
         blockUpdateService.tick(currentTick);
     }
 
-    @Override
     public void shutdown() {
         chunkService.unloadAllChunks().join();
     }

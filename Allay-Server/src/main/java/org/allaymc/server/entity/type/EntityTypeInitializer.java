@@ -32,7 +32,12 @@ public final class EntityTypeInitializer {
                 .builder(EntityItem.class)
                 .vanillaEntity(EntityId.ITEM)
                 .addComponent(EntityItemBaseComponentImpl::new, EntityItemBaseComponentImpl.class)
-                .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
+                .addComponent(() -> new EntityDamageComponentImpl() {
+                    @Override
+                    public boolean hasFallDamage() {
+                        return false;
+                    }
+                }, EntityDamageComponentImpl.class)
                 .addComponent(
                         () -> new EntityAttributeComponentImpl(
 

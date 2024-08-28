@@ -1,6 +1,6 @@
 package org.allaymc.api.eventbus.event.block;
 
-import org.allaymc.api.block.poi.BlockStateWithPos;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**

@@ -5,8 +5,8 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.poi.BlockStateWithPos;
-import org.allaymc.api.block.poi.PlayerInteractInfo;
+import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.component.interfaces.ComponentManager;
@@ -80,6 +80,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             return Set.of(getSilkTouchDrop(blockState));
 
         return Utils.EMPTY_ITEM_STACK_SET;
+    }
+
+    @Override
+    public boolean canResetFallDistance() {
+        return blockType.getMaterial().isLiquid();
     }
 
     @Override

@@ -51,7 +51,6 @@ public final class AllayChunkService implements ChunkService {
     private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
     private final Set<Long> keepLoadingChunks = Sets.newConcurrentHashSet();
 
-    @Override
     public void tick(long currentTick) {
         sendChunkPackets();
         tickChunkLoaders();

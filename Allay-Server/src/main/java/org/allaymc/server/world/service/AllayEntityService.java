@@ -23,7 +23,6 @@ public class AllayEntityService implements EntityService {
     protected final AllayEntityPhysicsService entityPhysicsService;
     protected final Queue<EntityUpdateOperation> entityUpdateOperationQueue = PlatformDependent.newMpscQueue();
 
-    @Override
     public void tick() {
         while (!entityUpdateOperationQueue.isEmpty()) {
             var operation = entityUpdateOperationQueue.poll();

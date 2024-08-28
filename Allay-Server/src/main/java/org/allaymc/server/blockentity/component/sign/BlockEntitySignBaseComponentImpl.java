@@ -3,7 +3,7 @@ package org.allaymc.server.blockentity.component.sign;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.data.CompassRoseDirection;
-import org.allaymc.api.block.poi.BlockStateWithPos;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.blockentity.component.BlockEntitySignBaseComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;

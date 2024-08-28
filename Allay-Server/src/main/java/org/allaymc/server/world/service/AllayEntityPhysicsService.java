@@ -81,7 +81,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         this.dimension = dimension;
     }
 
-    @Override
     public void tick() {
         handleClientMoveQueue();
         cacheEntityCollisionResult();
@@ -277,8 +276,17 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         // First move along the Y axis
         var yResult = moveAlongAxisAndStopWhenCollision(aabb, my, pos, Y);
-        my = yResult.left();
-        entity.setOnGround(yResult.right());
+        var isOnGround = yResult.right();
+        var isFallOnBlock = isOnGround && !entity.isOnGround();
+        // Let entity know that he is on ground
+        entity.setOnGround(isOnGround);
+        if (isFallOnBlock && entity.getMotion().y() > 0) {
+            // Motion value alone y-axis is changed by block or something else
+            // for example, falling on slime block
+            my = entity.getMotion().y();
+        } else {
+            my = yResult.left();
+        }
 
         if (abs(mx) >= abs(mz)) {
             // First handle the X axis, then handle the Z axis
@@ -520,7 +528,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * Please note that this method usually been called asynchronously <p/>
      * See {@link org.allaymc.server.network.processor.PlayerAuthInputPacketProcessor#handleAsync(EntityPlayer, PlayerAuthInputPacket, long)}
      */
-    @Override
     public void offerClientMove(EntityPlayer player, Location3fc newLoc) {
         if (!entities.containsKey(player.getRuntimeId())) return;
         if (player.getLocation().equals(newLoc)) return;
