@@ -424,7 +424,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                    materialType == MaterialTypes.CLAY ||
                    materialType == MaterialTypes.SAND ||
                    materialType == MaterialTypes.SNOW ||
-                   materialType == MaterialTypes.TOPSNOW;
+                   materialType == MaterialTypes.TOP_SNOW;
 
         if (isHoe(itemType)) {
             if (
