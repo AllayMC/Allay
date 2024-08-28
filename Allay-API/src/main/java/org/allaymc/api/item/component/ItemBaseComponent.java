@@ -38,9 +38,9 @@ public interface ItemBaseComponent extends ItemComponent {
 
     int getCount();
 
-    boolean isFull();
-
     void setCount(int count);
+
+    boolean isFull();
 
     default void reduceCount(int count) {
         setCount(getCount() - count);
@@ -252,25 +252,25 @@ public interface ItemBaseComponent extends ItemComponent {
         var materialType = blockState.getBlockType().getMaterial().materialType();
         // Swords break cobwebs faster
         if (itemType.hasItemTag(IS_SWORD)) {
-            if (materialType == WEB) return 15.0;
+            if (materialType == WEB) return 15d;
         }
         if (itemType == SHEARS) {
             // Shears break wool and leaves faster
             if (materialType == CLOTH) {
-                return 5.0;
+                return 5d;
             } else if (materialType == WEB || materialType == LEAVES) {
-                return 15.0;
+                return 15d;
             }
-            return 1.0;
+            return 1d;
         }
-        if (!itemType.hasItemTag(IS_TOOL)) return 1.0;
-        if (itemType.hasItemTag(GOLDEN_TIER)) return 12.0;
-        if (itemType.hasItemTag(NETHERITE_TIER)) return 9.0;
-        if (itemType.hasItemTag(DIAMOND_TIER)) return 8.0;
-        if (itemType.hasItemTag(IRON_TIER)) return 6.0;
-        if (itemType.hasItemTag(STONE_TIER)) return 4.0;
-        if (itemType.hasItemTag(WOODEN_TIER)) return 2.0;
-        return 1.0;
+        if (!itemType.hasItemTag(IS_TOOL)) return 1d;
+        if (itemType.hasItemTag(GOLDEN_TIER)) return 12d;
+        if (itemType.hasItemTag(NETHERITE_TIER)) return 9d;
+        if (itemType.hasItemTag(DIAMOND_TIER)) return 8d;
+        if (itemType.hasItemTag(IRON_TIER)) return 6d;
+        if (itemType.hasItemTag(STONE_TIER)) return 4d;
+        if (itemType.hasItemTag(WOODEN_TIER)) return 2d;
+        return 1d;
     }
 
     /**
@@ -302,7 +302,7 @@ public interface ItemBaseComponent extends ItemComponent {
     default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {
         return getEnchantments().stream()
                 .map(EnchantmentInstance::getType)
-                .filter(enchantmentInstanceType -> enchantmentInstanceType.checkIncompatible(type))
+                .filter(enchantmentType -> enchantmentType.checkIncompatible(type))
                 .collect(Collectors.toSet());
     }
 }

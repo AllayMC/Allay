@@ -18,9 +18,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Allay Project 2023/3/19
- * <p>
  * Interface representing a type of block.
+ * <p>
+ * Allay Project 2023/3/19
+ *
  * @author daoge_cmd
  */
 public interface BlockType<T extends BlockBehavior> extends Identified {
@@ -44,6 +45,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Check if the block type has the specified property.
      *
      * @param name the property name.
+     *
      * @return true if the block type has the property, false otherwise.
      */
     default boolean hasProperty(String name) {
@@ -54,6 +56,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Check if the block type has the specified property.
      *
      * @param propertyType the property type.
+     *
      * @return true if the block type has the property, false otherwise.
      */
     default boolean hasProperty(BlockPropertyType<?> propertyType) {
@@ -120,6 +123,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Creates a block state from the given list of property values.
      *
      * @param propertyValues the list of property values.
+     *
      * @return the block state, or null if the given property values is invalid
      */
     BlockState ofState(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
@@ -129,6 +133,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * The given block state's type must have same property types as this block type.
      *
      * @param other the block state to copy property values from.
+     *
      * @return the block state, or null if the given block state is invalid
      */
     default BlockState copyPropertyValuesFrom(BlockState other) {
@@ -139,6 +144,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Creates a block state from the given block state hash.
      *
      * @param blockStateHash the block state hash.
+     *
      * @return the block state, or null if the given block state hash is invalid
      */
     default BlockState ofState(int blockStateHash) {
@@ -149,6 +155,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Creates a block state from the given array of property values.
      *
      * @param propertyValues the array of property values.
+     *
      * @return the block state, or null if the given property values is invalid
      */
     default BlockState ofState(BlockPropertyType.BlockPropertyValue<?, ?, ?>... propertyValues) {
@@ -194,6 +201,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      * Checks if this block type has the specified tag.
      *
      * @param blockTag the block tag.
+     *
      * @return true if the block type has the tag, false otherwise.
      */
     default boolean hasBlockTag(BlockTag blockTag) {

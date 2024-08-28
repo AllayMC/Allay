@@ -7,7 +7,7 @@ package org.allaymc.api.registry;
  * <p>
  * Allay Project 2023/3/18
  *
- * @param <INPUT> the input to load the registry from
+ * @param <INPUT>  the input to load the registry from
  * @param <OUTPUT> the output of the registry
  *
  * @author GeyserMC | daoge_cmd

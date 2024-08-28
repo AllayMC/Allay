@@ -14,12 +14,12 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  */
 @FunctionalInterface
 public interface BlockPropertyProcessor {
-    BlockState process(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
-
     static void init() {
         PILLAR_AXIS.setProcessor(PlaceBlockHelper::processPillarAxisProperty);
         MINECRAFT_CARDINAL_DIRECTION.setProcessor(PlaceBlockHelper::processMinecraftCardinalDirectionProperty);
         FACING_DIRECTION.setProcessor(PlaceBlockHelper::processFacingDirectionProperty);
         GROUND_SIGN_DIRECTION.setProcessor(PlaceBlockHelper::processGroundSignDirectionProperty);
     }
+
+    BlockState process(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
 }

@@ -107,6 +107,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * compared to the origin name <br>
      * This is very useful for plugin especially if plugin wants to change the appearance of player name in chat
      * because origin name cannot be changed
+     *
      * @return the display name of the player
      */
     String getDisplayName();

@@ -42,6 +42,10 @@ public class FurnaceRecipe implements Recipe, TaggedRecipe, IdentifiedRecipe {
         this.identifier = buildFurnaceRecipeIdentifier(ingredient.getItemType(), tag);
     }
 
+    public static Identifier buildFurnaceRecipeIdentifier(ItemType<?> ingredient, String tag) {
+        return new Identifier(ingredient.getIdentifier() + "_" + tag);
+    }
+
     @Override
     public boolean match(Input input) {
         if (!(input instanceof FurnaceInput furnaceInput)) return false;
@@ -77,9 +81,5 @@ public class FurnaceRecipe implements Recipe, TaggedRecipe, IdentifiedRecipe {
                 getType(), ingredient.getItemType().getRuntimeId(),
                 0, output.toNetworkItemData(), tag
         );
-    }
-
-    public static Identifier buildFurnaceRecipeIdentifier(ItemType<?> ingredient, String tag) {
-        return new Identifier(ingredient.getIdentifier() + "_" + tag);
     }
 }

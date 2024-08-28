@@ -48,9 +48,10 @@ public class SimpleMappedRegistry<K, V> extends AbstractMappedRegistry<K, V, Map
      * predefined, or the registry is populated at a later point.
      *
      * @param registryLoader the registry loader
-     * @param <I> the input
-     * @param <K> the map key
-     * @param <V> the map value
+     * @param <I>            the input
+     * @param <K>            the map key
+     * @param <V>            the map value
+     *
      * @return a new registry with the given RegistryLoader
      */
     public static <I, K, V> SimpleMappedRegistry<K, V> create(RegistryLoader<I, Map<K, V>> registryLoader) {
@@ -66,11 +67,12 @@ public class SimpleMappedRegistry<K, V> extends AbstractMappedRegistry<K, V, Map
     /**
      * Creates a new mapped registry with the given {@link RegistryLoader} and input.
      *
-     * @param input the input
+     * @param input          the input
      * @param registryLoader the registry loader
-     * @param <I> the input
-     * @param <K> the map key
-     * @param <V> the map value
+     * @param <I>            the input
+     * @param <K>            the map key
+     * @param <V>            the map value
+     *
      * @return a new registry with the given RegistryLoader
      */
     public static <I, K, V> SimpleMappedRegistry<K, V> create(I input, RegistryLoader<I, Map<K, V>> registryLoader) {
@@ -83,9 +85,10 @@ public class SimpleMappedRegistry<K, V> extends AbstractMappedRegistry<K, V, Map
      * predefined, or the registry is populated at a later point.
      *
      * @param registryLoader the registry loader supplier
-     * @param <I> the input
-     * @param <K> the map key
-     * @param <V> the map value
+     * @param <I>            the input
+     * @param <K>            the map key
+     * @param <V>            the map value
+     *
      * @return a new registry with the given RegistryLoader supplier
      */
     public static <I, K, V> SimpleMappedRegistry<K, V> create(Supplier<RegistryLoader<I, Map<K, V>>> registryLoader) {
@@ -96,9 +99,10 @@ public class SimpleMappedRegistry<K, V> extends AbstractMappedRegistry<K, V, Map
      * Creates a new mapped registry with the given {@link RegistryLoader} and input.
      *
      * @param registryLoader the registry loader
-     * @param <I> the input
-     * @param <K> the map key
-     * @param <V> the map value
+     * @param <I>            the input
+     * @param <K>            the map key
+     * @param <V>            the map value
+     *
      * @return a new registry with the given RegistryLoader supplier
      */
     public static <I, K, V> SimpleMappedRegistry<K, V> create(I input, Supplier<RegistryLoader<I, Map<K, V>>> registryLoader) {

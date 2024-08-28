@@ -32,7 +32,9 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     /**
      * Get attribute by type
+     *
      * @param attributeType attribute type
+     *
      * @return attribute, or null if type is not supported
      */
     Attribute getAttribute(AttributeType attributeType);

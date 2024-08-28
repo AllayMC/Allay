@@ -41,9 +41,38 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
     }
 
     /**
+     * Creates a new integer mapped registry with the given {@link RegistryLoader}. The
+     * input type is not specified here, meaning the loader return type is either
+     * predefined, or the registry is populated at a later point.
+     *
+     * @param registryLoader the registry loader
+     * @param <I>            the input
+     * @param <V>            the map value
+     *
+     * @return a new registry with the given RegistryLoader
+     */
+    public static <I, V> IntMappedRegistry<V> create(RegistryLoader<I, Int2ObjectMap<V>> registryLoader) {
+        return new IntMappedRegistry<>(null, registryLoader);
+    }
+
+    /**
+     * Creates a new integer mapped registry with the given {@link RegistryLoader} and input.
+     *
+     * @param registryLoader the registry loader
+     * @param <I>            the input
+     * @param <V>            the map value
+     *
+     * @return a new registry with the given RegistryLoader supplier
+     */
+    public static <I, V> IntMappedRegistry<V> create(I input, Supplier<RegistryLoader<I, Int2ObjectMap<V>>> registryLoader) {
+        return new IntMappedRegistry<>(input, registryLoader.get());
+    }
+
+    /**
      * Returns the value registered by the given integer.
      *
      * @param i the integer
+     *
      * @return the value registered by the given integer.
      */
     public V get(int i) {
@@ -61,10 +90,11 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
      * Returns the value registered by the given key or the default value
      * specified if null.
      *
-     * @param i the key
+     * @param i            the key
      * @param defaultValue the default value
+     *
      * @return the value registered by the given key or the default value
-     *         specified if null.
+     * specified if null.
      */
     public V getOrDefault(int i, V defaultValue) {
         return this.content.getOrDefault(i, defaultValue);
@@ -79,8 +109,9 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
     /**
      * Registers a new value into this registry with the given key.
      *
-     * @param i the key
+     * @param i     the key
      * @param value the value
+     *
      * @return a new value into this registry with the given key.
      */
     public V register(int i, V value) {
@@ -91,31 +122,5 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
     @Deprecated
     public V register(Integer key, V value) {
         return super.register(key, value);
-    }
-
-    /**
-     * Creates a new integer mapped registry with the given {@link RegistryLoader}. The
-     * input type is not specified here, meaning the loader return type is either
-     * predefined, or the registry is populated at a later point.
-     *
-     * @param registryLoader the registry loader
-     * @param <I> the input
-     * @param <V> the map value
-     * @return a new registry with the given RegistryLoader
-     */
-    public static <I, V> IntMappedRegistry<V> create(RegistryLoader<I, Int2ObjectMap<V>> registryLoader) {
-        return new IntMappedRegistry<>(null, registryLoader);
-    }
-
-    /**
-     * Creates a new integer mapped registry with the given {@link RegistryLoader} and input.
-     *
-     * @param registryLoader the registry loader
-     * @param <I> the input
-     * @param <V> the map value
-     * @return a new registry with the given RegistryLoader supplier
-     */
-    public static <I, V> IntMappedRegistry<V> create(I input, Supplier<RegistryLoader<I, Int2ObjectMap<V>>> registryLoader) {
-        return new IntMappedRegistry<>(input, registryLoader.get());
     }
 }

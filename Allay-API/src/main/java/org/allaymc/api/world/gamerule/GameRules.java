@@ -35,6 +35,20 @@ public class GameRules {
         this.gameRules.putAll(gameRules);
     }
 
+    public static GameRules readFromNBT(NbtMap nbt) {
+        Map<GameRule, Object> gameRules = new HashMap<>();
+        for (GameRule gameRule : GameRule.values()) {
+            var key = gameRule.getName().toLowerCase();
+            if (nbt.containsKey(key)) {
+                switch (gameRule.getType()) {
+                    case INT -> gameRules.put(gameRule, nbt.getInt(key));
+                    case BOOLEAN -> gameRules.put(gameRule, nbt.getBoolean(key));
+                }
+            }
+        }
+        return new GameRules(gameRules);
+    }
+
     @UnmodifiableView
     public Map<GameRule, Object> getGameRules() {
         return Collections.unmodifiableMap(gameRules);
@@ -77,19 +91,5 @@ public class GameRules {
                 case BOOLEAN -> builder.putBoolean(key, (Boolean) entry.getValue());
             }
         }
-    }
-
-    public static GameRules readFromNBT(NbtMap nbt) {
-        Map<GameRule, Object> gameRules = new HashMap<>();
-        for (GameRule gameRule : GameRule.values()) {
-            var key = gameRule.getName().toLowerCase();
-            if (nbt.containsKey(key)) {
-                switch (gameRule.getType()) {
-                    case INT -> gameRules.put(gameRule, nbt.getInt(key));
-                    case BOOLEAN -> gameRules.put(gameRule, nbt.getBoolean(key));
-                }
-            }
-        }
-        return new GameRules(gameRules);
     }
 }

@@ -14,7 +14,8 @@ public interface EntityService {
 
     /**
      * NOTICE: Before call this method, you should make sure the chunk which this entity will be spawned in has been loaded!
-     * @param entity The entity pending to be spawned
+     *
+     * @param entity   The entity pending to be spawned
      * @param callback Called after the entity been pawned
      */
     void addEntity(Entity entity, Runnable callback);

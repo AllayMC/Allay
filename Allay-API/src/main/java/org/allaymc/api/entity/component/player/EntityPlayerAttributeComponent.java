@@ -25,6 +25,23 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
         return list.toArray(AttributeType[]::new);
     }
 
+    /**
+     * Calculate experience required for the level
+     *
+     * @param level level
+     *
+     * @return required experience
+     */
+    static int calculateRequireExperience(int level) {
+        if (level >= 30) {
+            return 112 + (level - 30) * 9;
+        } else if (level >= 15) {
+            return 37 + (level - 15) * 5;
+        } else {
+            return 7 + (level << 1);
+        }
+    }
+
     int getExperienceLevel();
 
     void setExperienceLevel(int value);
@@ -54,21 +71,6 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
 
     default int getExperienceInCurrentLevel() {
         return (int) (getExperienceProgress() * getRequireExperienceForCurrentLevel());
-    }
-
-    /**
-     * Calculate experience required for the level
-     * @param level level
-     * @return required experience
-     */
-    static int calculateRequireExperience(int level) {
-        if (level >= 30) {
-            return 112 + (level - 30) * 9;
-        } else if (level >= 15) {
-            return 37 + (level - 15) * 5;
-        } else {
-            return 7 + (level << 1);
-        }
     }
 
     default void resetFoodData() {

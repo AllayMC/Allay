@@ -42,7 +42,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
     protected void applyArmor(DamageContainer damage) {
         if (!damage.canBeReducedByArmor()) return;
 
-        int durabilityIncreased = Math.max(1, (int)(damage.getSourceDamage() / 4.0f));
+        int durabilityIncreased = Math.max(1, (int) (damage.getSourceDamage() / 4f));
         var armorContainer = thisPlayer.getContainer(FullContainerType.ARMOR);
         var itemStackArray = armorContainer.getItemStackArray();
         for (int slot = 0; slot < itemStackArray.length; slot++) {
@@ -61,8 +61,8 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
             return;
         }
 
-        var totalArmorValue = 0.0f;
-        var totalToughnessValue = 0.0f;
+        var totalArmorValue = 0f;
+        var totalToughnessValue = 0f;
         var enchantmentProtectionFactor = 0;
 
         for (var item : armorContainer.getItemStacks()) {
@@ -79,17 +79,17 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
         final var t = totalToughnessValue;
         damage.updateFinalDamage(d -> {
             if (0 <= d && d <= 1.6f * v + 0.2f * v * t) {
-                return (1.0f / (6.25f + 50.0f)) * d * d +
-                       (1.0f - v / 25.0f) * d;
+                return (1f / (6.25f + 50f)) * d * d +
+                       (1f - v / 25f) * d;
             } else {
-                return (1.0f - v / 125.0f) * d;
+                return (1f - v / 125f) * d;
             }
         });
 
         // See https://minecraft.wiki/w/Armor#Enchantments
         final var epf = enchantmentProtectionFactor;
         if (epf != 0) {
-            damage.updateFinalDamage(d -> d * (1.0f - epf / 25.0f));
+            damage.updateFinalDamage(d -> d * (1f - epf / 25f));
         }
     }
 
@@ -105,7 +105,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
         if (enchantmentProtectionFactor == 0) return;
 
         final var epf = enchantmentProtectionFactor;
-        damage.updateFinalDamage(d -> d * (1.0f - epf / 25.0f));
+        damage.updateFinalDamage(d -> d * (1f - epf / 25f));
     }
 
     @EventHandler
@@ -116,9 +116,9 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
 
         Server.getInstance().broadcastTr(deathInfo.first(), deathInfo.second());
 
-        var pk = new DeathInfoPacket();
+        var packet = new DeathInfoPacket();
         // Translate it server-side
-        pk.setCauseAttackName(I18n.get().tr(thisPlayer.getLangCode(), deathInfo.first(), deathInfo.second()));
-        thisPlayer.sendPacket(pk);
+        packet.setCauseAttackName(I18n.get().tr(thisPlayer.getLangCode(), deathInfo.first(), deathInfo.second()));
+        thisPlayer.sendPacket(packet);
     }
 }

@@ -13,6 +13,12 @@ public class DoubleKeyMappedRegistry<K1, K2, VALUE> extends AbstractRegistry<Dou
         super(input, registryLoader);
     }
 
+    public static <I, K1, K2, VALUE> void create(RegistryLoader<I, MapPair<K1, K2, VALUE>> registryLoader, Consumer<DoubleKeyMappedRegistry<K1, K2, VALUE>> setter, Runnable afterSet) {
+        var registry = new DoubleKeyMappedRegistry<>(null, registryLoader);
+        setter.accept(registry);
+        afterSet.run();
+    }
+
     public VALUE getByK1(K1 k1) {
         return content.m1.get(k1);
     }
@@ -32,12 +38,6 @@ public class DoubleKeyMappedRegistry<K1, K2, VALUE> extends AbstractRegistry<Dou
     public void register(K1 k1, K2 k2, VALUE value) {
         content.m1.put(k1, value);
         content.m2.put(k2, value);
-    }
-
-    public static <I, K1, K2, VALUE> void create(RegistryLoader<I, MapPair<K1, K2, VALUE>> registryLoader, Consumer<DoubleKeyMappedRegistry<K1, K2, VALUE>> setter, Runnable afterSet) {
-        var registry = new DoubleKeyMappedRegistry<>(null, registryLoader);
-        setter.accept(registry);
-        afterSet.run();
     }
 
     public record MapPair<K1, K2, VALUE>(Map<K1, VALUE> m1, Map<K2, VALUE> m2) {}

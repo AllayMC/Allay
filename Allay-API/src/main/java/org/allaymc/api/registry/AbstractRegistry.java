@@ -1,5 +1,8 @@
 package org.allaymc.api.registry;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.function.Consumer;
 
 /**
@@ -32,28 +35,20 @@ import java.util.function.Consumer;
  * though, the first parameter would be a location of some sort, such as a file path
  * where the loader will load the mappings from.
  *
- * @param <CONTENT> the value being held by the registry
- *
  * <p>
  * Allay Project 2024/7/19
  *
+ * @param <CONTENT> the value being held by the registry
+ *
  * @author GeyserMC | daoge_cmd
  */
+@Getter
+@Setter
 public abstract class AbstractRegistry<CONTENT> implements Registry<CONTENT> {
     protected CONTENT content;
 
     protected <INPUT> AbstractRegistry(INPUT input, RegistryLoader<INPUT, CONTENT> registryLoader) {
         this.content = registryLoader.load(input);
-    }
-
-    @Override
-    public CONTENT getContent() {
-        return content;
-    }
-
-    @Override
-    public void setContent(CONTENT content) {
-        this.content = content;
     }
 
     @Override

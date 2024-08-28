@@ -12,6 +12,7 @@ public interface EntityItemBaseComponent extends EntityBaseComponent {
 
     /**
      * Set the item stack of this entity item
+     *
      * @param itemStack the item stack, can be null
      */
     void setItemStack(ItemStack itemStack);

@@ -53,42 +53,42 @@ public class PlayerArmorContainer extends PlayerContainer {
     }
 
     private @NotNull MobArmorEquipmentPacket buildArmorEquipmentPacket(long runtimeId) {
-        var pk = new MobArmorEquipmentPacket();
-        pk.setRuntimeEntityId(runtimeId);
-        pk.setBody(ItemAirStack.AIR_STACK.toNetworkItemData());
-        pk.setHelmet(getHelmet().toNetworkItemData());
-        pk.setChestplate(getChestplate().toNetworkItemData());
-        pk.setLeggings(getLeggings().toNetworkItemData());
-        pk.setBoots(getBoots().toNetworkItemData());
-        return pk;
+        var packet = new MobArmorEquipmentPacket();
+        packet.setRuntimeEntityId(runtimeId);
+        packet.setBody(ItemAirStack.AIR_STACK.toNetworkItemData());
+        packet.setHelmet(getHelmet().toNetworkItemData());
+        packet.setChestplate(getChestplate().toNetworkItemData());
+        packet.setLeggings(getLeggings().toNetworkItemData());
+        packet.setBoots(getBoots().toNetworkItemData());
+        return packet;
     }
 
     public ItemStack getHelmet() {
         return getItemStack(HELMET_SLOT);
     }
 
-    public ItemStack getChestplate() {
-        return getItemStack(CHESTPLATE_SLOT);
-    }
-
-    public ItemStack getLeggings() {
-        return getItemStack(LEGGINGS_SLOT);
-    }
-
-    public ItemStack getBoots() {
-        return getItemStack(BOOTS_SLOT);
-    }
-
     public void setHelmet(ItemStack itemStack) {
         setItemStack(HELMET_SLOT, itemStack);
+    }
+
+    public ItemStack getChestplate() {
+        return getItemStack(CHESTPLATE_SLOT);
     }
 
     public void setChestplate(ItemStack itemStack) {
         setItemStack(CHESTPLATE_SLOT, itemStack);
     }
 
+    public ItemStack getLeggings() {
+        return getItemStack(LEGGINGS_SLOT);
+    }
+
     public void setLeggings(ItemStack itemStack) {
         setItemStack(LEGGINGS_SLOT, itemStack);
+    }
+
+    public ItemStack getBoots() {
+        return getItemStack(BOOTS_SLOT);
     }
 
     public void setBoots(ItemStack itemStack) {

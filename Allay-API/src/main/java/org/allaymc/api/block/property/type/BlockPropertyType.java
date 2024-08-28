@@ -35,12 +35,14 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
 
     /**
      * Get the processor for this property type
+     *
      * @return the processor, null if not present
      */
     BlockPropertyProcessor getProcessor();
 
     /**
      * Set the processor for this property type
+     *
      * @param processor the processor, or null to remove
      */
     void setProcessor(BlockPropertyProcessor processor);
