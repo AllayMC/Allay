@@ -11,6 +11,7 @@ public class CommandRequestPacketProcessor extends PacketProcessor<CommandReques
     public void handleSync(EntityPlayer player, CommandRequestPacket packet, long receiveTime) {
         // The packet returns `/command args`, this gets rid of the `/` at the start
         var command = packet.getCommand().substring(1);
+        if (command.isEmpty()) return;
 
         var event = new PlayerCommandEvent(player, command);
         event.call();
