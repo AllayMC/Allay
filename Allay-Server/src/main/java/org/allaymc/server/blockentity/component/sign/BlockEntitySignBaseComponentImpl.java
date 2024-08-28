@@ -173,10 +173,14 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             case SOUTH -> interactedFace == BlockFace.SOUTH;
             case WEST -> interactedFace == BlockFace.WEST;
             case NORTH -> interactedFace == BlockFace.NORTH;
-            case NORTH_EAST, NORTH_NORTH_EAST, EAST_NORTH_EAST -> interactedFace == BlockFace.EAST || interactedFace == BlockFace.NORTH;
-            case NORTH_WEST, NORTH_NORTH_WEST, WEST_NORTH_WEST -> interactedFace == BlockFace.WEST || interactedFace == BlockFace.NORTH;
-            case SOUTH_EAST, SOUTH_SOUTH_EAST, EAST_SOUTH_EAST -> interactedFace == BlockFace.EAST || interactedFace == BlockFace.SOUTH;
-            case SOUTH_WEST, SOUTH_SOUTH_WEST, WEST_SOUTH_WEST -> interactedFace == BlockFace.WEST || interactedFace == BlockFace.SOUTH;
+            case NORTH_EAST, NORTH_NORTH_EAST, EAST_NORTH_EAST ->
+                    interactedFace == BlockFace.EAST || interactedFace == BlockFace.NORTH;
+            case NORTH_WEST, NORTH_NORTH_WEST, WEST_NORTH_WEST ->
+                    interactedFace == BlockFace.WEST || interactedFace == BlockFace.NORTH;
+            case SOUTH_EAST, SOUTH_SOUTH_EAST, EAST_SOUTH_EAST ->
+                    interactedFace == BlockFace.EAST || interactedFace == BlockFace.SOUTH;
+            case SOUTH_WEST, SOUTH_SOUTH_WEST, WEST_SOUTH_WEST ->
+                    interactedFace == BlockFace.WEST || interactedFace == BlockFace.SOUTH;
         };
     }
 
@@ -197,6 +201,15 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         protected boolean glowing = false;
         // TODO: Color
 
+        private static void sanitizeText(String[] lines) {
+            for (int i = 0; i < lines.length; i++) {
+                // Don't allow excessive text per line.
+                if (lines[i] != null) {
+                    lines[i] = lines[i].substring(0, Math.min(255, lines[i].length()));
+                }
+            }
+        }
+
         @Override
         public String[] getText() {
             return text;
@@ -207,15 +220,6 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
             sanitizeText(text);
             this.text = text;
             sendBlockEntityDataPacketToViewers();
-        }
-
-        private static void sanitizeText(String[] lines) {
-            for (int i = 0; i < lines.length; i++) {
-                // Don't allow excessive text per line.
-                if (lines[i] != null) {
-                    lines[i] = lines[i].substring(0, Math.min(255, lines[i].length()));
-                }
-            }
         }
 
         @Override

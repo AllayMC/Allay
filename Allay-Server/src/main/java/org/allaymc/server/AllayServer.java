@@ -156,7 +156,7 @@ public final class AllayServer implements Server {
 
         terminalConsoleThread.start();
 
-        ((AllayPluginManager)pluginManager).loadPlugins();
+        ((AllayPluginManager) pluginManager).loadPlugins();
 
         worldPool.loadWorlds();
 
@@ -168,7 +168,7 @@ public final class AllayServer implements Server {
         );
         scoreboardService.read();
 
-        ((AllayPluginManager)pluginManager).enablePlugins();
+        ((AllayPluginManager) pluginManager).enablePlugins();
 
         sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
         networkServer.start();
@@ -220,7 +220,7 @@ public final class AllayServer implements Server {
         event.call();
 
         // Disable all plugins firstly
-        ((AllayPluginManager)pluginManager).disablePlugins();
+        ((AllayPluginManager) pluginManager).disablePlugins();
 
         // Save all configurations & data
         SETTINGS.save();

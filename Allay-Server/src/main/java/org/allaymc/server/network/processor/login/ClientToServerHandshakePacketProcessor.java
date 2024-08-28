@@ -16,8 +16,10 @@ import org.cloudburstmc.protocol.bedrock.packet.ClientToServerHandshakePacket;
 public class ClientToServerHandshakePacketProcessor extends ILoginPacketProcessor<ClientToServerHandshakePacket> {
     @Override
     public void handle(EntityPlayer player, ClientToServerHandshakePacket packet) {
-        if (player.isNetworkEncryptionEnabled()) player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).completeLogin();
-        else log.warn("Client {} sent ClientToServerHandshakePacket without encryption enabled", player.getOriginName());
+        if (player.isNetworkEncryptionEnabled())
+            player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).completeLogin();
+        else
+            log.warn("Client {} sent ClientToServerHandshakePacket without encryption enabled", player.getOriginName());
     }
 
     @Override

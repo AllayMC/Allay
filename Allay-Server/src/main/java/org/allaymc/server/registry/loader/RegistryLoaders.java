@@ -45,7 +45,8 @@ public class RegistryLoaders {
      * not take in any input value.
      *
      * @param supplier the supplier
-     * @param <V> the value
+     * @param <V>      the value
+     *
      * @return a RegistryLoader wrapping the given Supplier
      */
     public static <V> RegistryLoader<Object, V> empty(Supplier<V> supplier) {
@@ -58,6 +59,7 @@ public class RegistryLoaders {
      *
      * @param <I> the input
      * @param <V> the value
+     *
      * @return a RegistryLoader that is yet to contain a value.
      */
     public static <I, V> RegistryLoader<I, V> uninitialized() {

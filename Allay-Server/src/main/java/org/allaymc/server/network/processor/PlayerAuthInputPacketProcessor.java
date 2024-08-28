@@ -59,7 +59,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
         var world = player.getLocation().dimension();
-        ((AllayEntityPhysicsService)world.getEntityPhysicsService()).offerClientMove(player, new Location3f(
+        ((AllayEntityPhysicsService) world.getEntityPhysicsService()).offerClientMove(player, new Location3f(
                 newPos.getX(), newPos.getY(), newPos.getZ(),
                 newRot.getX(), newRot.getY(), newRot.getZ(),
                 world
@@ -234,7 +234,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case STOP_GLIDING -> player.setGliding(false);
                 case START_CRAWLING -> player.setCrawling(true);
                 case STOP_CRAWLING -> player.setCrawling(false);
-                case START_JUMPING -> player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).onJump();
+                case START_JUMPING ->
+                        player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).onJump();
             }
         }
     }

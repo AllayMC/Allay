@@ -45,7 +45,8 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var oldBlock = dimension.getBlockState(placeBlockPos);
         var torchFace = map.get(placementInfo.blockFace());
 
-        if (!oldBlock.getBlockType().hasBlockTag(BlockTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN) return false;
+        if (!oldBlock.getBlockType().hasBlockTag(BlockTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN)
+            return false;
 
         var targetBlock = dimension.getBlockState(placementInfo.clickBlockPos());
         BlockType<?> blockType2 = targetBlock.getBlockType();

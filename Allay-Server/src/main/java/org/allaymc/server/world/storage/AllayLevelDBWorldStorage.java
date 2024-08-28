@@ -59,6 +59,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                 .blockSize(64 * 1024)
         );
     }
+
     public AllayLevelDBWorldStorage(Path path, Options options) {
         worldName = path.getName(path.getNameCount() - 1).toString();
         var file = path.toFile();
@@ -76,6 +77,10 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static byte[] int2ByteArrayLE(int value) {
+        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array();
     }
 
     private WorldData createWorldData(String worldName) {
@@ -150,7 +155,7 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                             .writeIntLE((chunk.getState() == ChunkState.FINISHED ? VANILLA_CHUNK_STATE_FINISHED : VANILLA_CHUNK_STATE_NEW) - 1)
                             .array()
             );
-            chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, (AllayUnsafeChunk)c));
+            chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, (AllayUnsafeChunk) c));
             this.db.write(writeBatch);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -189,10 +194,6 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
         } catch (IOException e) {
             throw new WorldStorageException(e);
         }
-    }
-
-    private static byte[] int2ByteArrayLE(int value) {
-        return ByteBuffer.allocate(4).order(ByteOrder.LITTLE_ENDIAN).putInt(value).array();
     }
 
     @Override

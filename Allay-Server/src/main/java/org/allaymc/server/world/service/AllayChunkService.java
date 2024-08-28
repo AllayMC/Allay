@@ -65,7 +65,7 @@ public final class AllayChunkService implements ChunkService {
     private void tickChunks(long currentTick) {
         for (Chunk chunk : loadedChunks.values()) {
             try {
-                ((AllayChunk)chunk).tick(currentTick);
+                ((AllayChunk) chunk).tick(currentTick);
             } catch (Throwable t) {
                 log.error("Error while ticking chunk({}, {})!", chunk.getX(), chunk.getZ(), t);
             }
@@ -199,9 +199,9 @@ public final class AllayChunkService implements ChunkService {
             log.error("Error while generating chunk ({},{}) !", x, z, t);
             return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         }).thenApply(preparedChunk -> {
-            ((AllayChunk)preparedChunk).beforeSetChunk(dimension);
+            ((AllayChunk) preparedChunk).beforeSetChunk(dimension);
             setChunk(x, z, preparedChunk);
-            ((AllayChunk)preparedChunk).afterSetChunk(dimension);
+            ((AllayChunk) preparedChunk).afterSetChunk(dimension);
             future.complete(preparedChunk);
             loadingChunks.remove(hashXZ);
 
@@ -313,7 +313,7 @@ public final class AllayChunkService implements ChunkService {
         loadedChunks.remove(chunkHash);
         chunk.getEntities().forEach((runtimeId, entity) -> {
             entity.despawnFromAll();
-            ((AllayEntityPhysicsService)dimension.getEntityPhysicsService()).removeEntity(entity);
+            ((AllayEntityPhysicsService) dimension.getEntityPhysicsService()).removeEntity(entity);
         });
 
         var future = new CompletableFuture<Boolean>();
@@ -473,8 +473,8 @@ public final class AllayChunkService implements ChunkService {
                     var lcpStream = chunkReadyToSend.values().stream();
                     lcpStream.sorted(chunkDistanceComparator).forEachOrdered(chunk -> {
                         var lcp = useSubChunkSendingSystem ?
-                                ((AllayChunk)chunk).createSubChunkLevelChunkPacket() :
-                                ((AllayChunk)chunk).createFullLevelChunkPacketChunk();
+                                ((AllayChunk) chunk).createSubChunkLevelChunkPacket() :
+                                ((AllayChunk) chunk).createFullLevelChunkPacketChunk();
                         chunkLoader.sendLevelChunkPacket(lcp);
                         chunkLoader.onChunkInRangeSent(chunk);
                     });
@@ -509,7 +509,7 @@ public final class AllayChunkService implements ChunkService {
             private void tick() {
                 while (!chunkSendingQueue.isEmpty()) {
                     var chunk = chunkSendingQueue.poll();
-                    var lcp = ((AllayChunk)chunk).createFullLevelChunkPacketChunk();
+                    var lcp = ((AllayChunk) chunk).createFullLevelChunkPacketChunk();
                     chunkLoader.sendLevelChunkPacket(lcp);
                     chunkLoader.onChunkInRangeSent(chunk);
                 }

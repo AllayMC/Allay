@@ -97,7 +97,6 @@ public class AllayPluginManager implements PluginManager {
                 }
             }
 
-            
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_LOADING, descriptor.getName()));
 
             PluginContainer pluginContainer;

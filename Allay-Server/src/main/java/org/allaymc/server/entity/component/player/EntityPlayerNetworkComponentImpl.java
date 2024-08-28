@@ -115,7 +115,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var event = new PlayerQuitEvent(thisPlayer, disconnectReason);
         event.call();
         thisPlayer.closeAllContainers();
-        ((AllayServer)server).onDisconnect(thisPlayer, disconnectReason);
+        ((AllayServer) server).onDisconnect(thisPlayer, disconnectReason);
     }
 
     public void setInitialized() {
@@ -158,7 +158,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                     // Packet processors should make sure that PacketProcessor.handleSync() won't be called
                     // if player is not in any world
                     Objects.requireNonNull(world, "Player that is not in any world cannot handle sync packet");
-                    ((AllayWorld)world).addSyncPacketToQueue(thisPlayer, packet, time);
+                    ((AllayWorld) world).addSyncPacketToQueue(thisPlayer, packet, time);
                 }
 
                 return PacketSignal.HANDLED;
@@ -406,7 +406,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(playStatusPacket);
 
         loggedIn = true;
-        ((AllayServer)server).onLoggedIn(thisPlayer);
+        ((AllayServer) server).onLoggedIn(thisPlayer);
         // TODO: plugin event
         manager.callEvent(CPlayerLoggedInEvent.INSTANCE);
         sendPacket(DeferredData.getResourcePacksInfoPacket());

@@ -24,10 +24,15 @@ import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
  */
 public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponentImpl implements EntityPlayerAttributeComponent {
 
-    @ComponentedObject
-    private EntityPlayer thisPlayer;
     @Dependency(soft = true)
     protected EntityPlayerNetworkComponent networkComponent;
+
+    protected float swimDistance = 0;
+    protected float sprintDistance = 0;
+
+    @ComponentedObject
+    private EntityPlayer thisPlayer;
+
     private int foodTickTimer;
 
     public EntityPlayerAttributeComponentImpl(AttributeType... attributeTypes) {
@@ -204,9 +209,6 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     protected void onAttack(CEntityAttackEvent event) {
         exhaust(0.1f);
     }
-
-    protected float swimDistance = 0;
-    protected float sprintDistance = 0;
 
     @EventHandler
     protected void onMove(CPlayerMoveEvent event) {

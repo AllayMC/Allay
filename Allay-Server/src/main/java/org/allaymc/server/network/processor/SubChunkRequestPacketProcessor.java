@@ -155,7 +155,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                 heightMapData = Unpooled.wrappedBuffer(hMap);
             }
 
-            var subChunk = ((AllayChunk)chunk).getOrCreateSection(sectionY);
+            var subChunk = ((AllayChunk) chunk).getOrCreateSection(sectionY);
             SubChunkRequestResult subChunkRequestResult;
             if (subChunk.isEmpty()) subChunkRequestResult = SubChunkRequestResult.SUCCESS_ALL_AIR;
             else subChunkRequestResult = SubChunkRequestResult.SUCCESS;

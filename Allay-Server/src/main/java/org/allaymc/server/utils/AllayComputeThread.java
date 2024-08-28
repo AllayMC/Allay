@@ -6,12 +6,7 @@ package org.allaymc.server.utils;
  * @author daoge_cmd
  */
 public class AllayComputeThread extends Thread {
-
     public static final String ALLAY_COMPUTATION_THREAD_PREFIX = "allay-compute-thread-";
-
-    public static boolean isAllayComputeThread(Thread thread) {
-        return thread instanceof AllayComputeThread;
-    }
 
     public AllayComputeThread(Runnable task) {
         super(task);

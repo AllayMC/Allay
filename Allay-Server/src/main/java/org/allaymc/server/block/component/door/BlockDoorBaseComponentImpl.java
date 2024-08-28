@@ -59,7 +59,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var downBlockState = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
-        BlockType<?> blockType1 = downBlockState.getBlockType();
+        var blockType1 = downBlockState.getBlockType();
         if (!blockType1.getMaterial().isSolid()) {
             return false;
         }
@@ -69,7 +69,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        BlockFace face =  BlockFace.SOUTH;
+        BlockFace face = BlockFace.SOUTH;
         if (placementInfo != null) {
             face = placementInfo.player().getHorizontalFace();
         }
@@ -82,15 +82,15 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         dimension.setBlockState(
-            placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
-            blockState.setProperty(UPPER_BLOCK_BIT, false),
-            placementInfo
+                placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
+                blockState.setProperty(UPPER_BLOCK_BIT, false),
+                placementInfo
         ); //Bottom
 
         dimension.setBlockState(
-            placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(),
-            blockState.setProperty(UPPER_BLOCK_BIT, true),
-            placementInfo
+                placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z(),
+                blockState.setProperty(UPPER_BLOCK_BIT, true),
+                placementInfo
         ); //Top
 
         return true;

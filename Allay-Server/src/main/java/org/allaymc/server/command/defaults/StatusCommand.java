@@ -109,10 +109,10 @@ public class StatusCommand extends SimpleCommand {
         var processorIdentifier = cpu.getProcessorIdentifier();
         sender.sendText(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "CPU Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
         sender.sendText(TextFormat.GOLD + "CPU: " + TextFormat.AQUA + processorIdentifier.getName() + TextFormat.GRAY +
-                          " (" + formatFreq(cpu.getMaxFreq()) + " baseline; " + cpu.getPhysicalProcessorCount() + " cores, " + cpu.getLogicalProcessorCount() + " logical cores)");
+                        " (" + formatFreq(cpu.getMaxFreq()) + " baseline; " + cpu.getPhysicalProcessorCount() + " cores, " + cpu.getLogicalProcessorCount() + " logical cores)");
         sender.sendText(TextFormat.GOLD + "Thread count: " + TextFormat.GREEN + Thread.getAllStackTraces().size());
         sender.sendText(TextFormat.GOLD + "CPU Features: " + TextFormat.RESET + (processorIdentifier.isCpu64bit() ? "64bit, " : "32bit, ") +
-                          processorIdentifier.getModel() + ", micro-arch: " + processorIdentifier.getMicroarchitecture());
+                        processorIdentifier.getModel() + ", micro-arch: " + processorIdentifier.getMicroarchitecture());
         sender.sendText("");
     }
 
@@ -142,8 +142,8 @@ public class StatusCommand extends SimpleCommand {
         var mxBean = ManagementFactory.getRuntimeMXBean();
         sender.sendText(TextFormat.YELLOW + ">>> " + TextFormat.WHITE + "OS & JVM Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET);
         sender.sendText(TextFormat.GOLD + "OS: " + TextFormat.AQUA + os.getFamily() + " " + os.getManufacturer() + " " +
-                          os.getVersionInfo().getVersion() + " " + os.getVersionInfo().getCodeName() + " " + os.getBitness() + "bit, " +
-                          "build " + os.getVersionInfo().getBuildNumber());
+                        os.getVersionInfo().getVersion() + " " + os.getVersionInfo().getCodeName() + " " + os.getBitness() + "bit, " +
+                        "build " + os.getVersionInfo().getBuildNumber());
         sender.sendText(TextFormat.GOLD + "JVM: " + TextFormat.AQUA + mxBean.getVmName() + " " + mxBean.getVmVendor() + " " + mxBean.getVmVersion());
         try {
             var vm = detectVM();
@@ -198,7 +198,7 @@ public class StatusCommand extends SimpleCommand {
         }
 
         sender.sendText(TextFormat.GOLD + "Players: " + playerColor + server.getOnlinePlayers().size() + TextFormat.GREEN + " online, " +
-                          TextFormat.RED + server.getNetworkServer().getMaxPlayerCount() + TextFormat.GREEN + " max. ");
+                        TextFormat.RED + server.getNetworkServer().getMaxPlayerCount() + TextFormat.GREEN + " max. ");
     }
 
     protected static String toKB(long bytes) {

@@ -85,7 +85,8 @@ public final class ItemTypeInitializer {
                         $ -> new ItemFoodComponentImpl(3, 1.8f),
                         ItemFoodComponentImpl.class
                 )
-                .build();ItemTypes.MUTTON = AllayItemType
+                .build();
+        ItemTypes.MUTTON = AllayItemType
                 .builder(ItemMuttonStack.class)
                 .vanillaItem(ItemId.MUTTON)
                 .addComponent(
@@ -148,7 +149,8 @@ public final class ItemTypeInitializer {
                         $ -> new ItemFoodComponentImpl(2, 1.2f),
                         ItemFoodComponentImpl.class
                 )
-                .build();ItemTypes.GOLDEN_CARROT = AllayItemType
+                .build();
+        ItemTypes.GOLDEN_CARROT = AllayItemType
                 .builder(ItemGoldenCarrotStack.class)
                 .vanillaItem(ItemId.GOLDEN_CARROT)
                 .addComponent(
@@ -227,7 +229,8 @@ public final class ItemTypeInitializer {
                         $ -> new ItemFoodComponentImpl(6, 7.2f),
                         ItemFoodComponentImpl.class
                 )
-                .build();ItemTypes.CARROT = AllayItemType
+                .build();
+        ItemTypes.CARROT = AllayItemType
                 .builder(ItemCarrotStack.class)
                 .vanillaItem(ItemId.CARROT)
                 .addComponent(

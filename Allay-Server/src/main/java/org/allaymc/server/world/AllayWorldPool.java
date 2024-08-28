@@ -87,13 +87,13 @@ public final class AllayWorldPool implements WorldPool {
         }
     }
 
-    private static WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldEntry.DimensionSettings overworldSettings) {
-        var factory = Registries.WORLD_GENERATOR_FACTORIES.get(overworldSettings.generatorType());
+    private WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldEntry.DimensionSettings settings) {
+        var factory = Registries.WORLD_GENERATOR_FACTORIES.get(settings.generatorType());
         if (factory == null) {
-            log.error("Cannot find world generator {}", overworldSettings.generatorType());
+            log.error("Cannot find world generator {}", settings.generatorType());
             factory = Registries.WORLD_GENERATOR_FACTORIES.get("VOID");
         }
-        return factory.apply(overworldSettings.generatorPreset());
+        return factory.apply(settings.generatorPreset());
     }
 
     private void loadWorldConfig() {

@@ -42,6 +42,10 @@ import static net.bytebuddy.matcher.ElementMatchers.*;
  * @author daoge_cmd
  */
 public class AllayComponentInjector<T> {
+    // NOTICE: This field should be public and static
+    // because generated dynamic classes must be able to touch this class
+    public static final ComponentInitInfo EMPTY = new ComponentInitInfo() {};
+
     protected static final String INITIALIZER_FIELD_NAME = "initializer";
     protected static final String INIT_METHOD_NAME = "initComponents";
     protected static final String MANAGER_FIELD_NAME = "manager";
@@ -85,7 +89,9 @@ public class AllayComponentInjector<T> {
 
     /**
      * Use a cached class for the injector to speed up the injection process.
+     *
      * @param cachedClass the cached class
+     *
      * @return the injector
      */
     public AllayComponentInjector<T> useCachedClass(Class<T> cachedClass) {
@@ -216,10 +222,6 @@ public class AllayComponentInjector<T> {
                 .intercept(MethodDelegation.toField(INITIALIZER_FIELD_NAME));
         return bb;
     }
-
-    // NOTICE: This field should be public and static
-    // because generated dynamic classes must be able to touch this class
-    public static final ComponentInitInfo EMPTY = new ComponentInitInfo(){};
 
     protected DynamicType.Builder<T> buildConstructor(DynamicType.Builder<T> bb) {
         try {

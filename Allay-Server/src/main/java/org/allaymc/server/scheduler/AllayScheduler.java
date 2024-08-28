@@ -3,7 +3,6 @@ package org.allaymc.server.scheduler;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.Task;
 import org.allaymc.api.scheduler.TaskCreator;
-import org.allaymc.api.server.Server;
 
 import java.util.Comparator;
 import java.util.concurrent.ExecutorService;
