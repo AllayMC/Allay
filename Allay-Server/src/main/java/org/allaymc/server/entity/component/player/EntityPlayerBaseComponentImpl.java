@@ -291,6 +291,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 var packet = new ChangeDimensionPacket();
                 packet.setDimension(targetDim.getDimensionInfo().dimensionId());
                 packet.setPosition(MathUtils.JOMLVecToCBVec(target));
+                packet.setRespawn(!thisPlayer.isAlive());
                 networkComponent.sendPacket(packet);
                 awaitingDimensionChangeACK = true;
             }
@@ -547,7 +548,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void publishClientChunkUpdate() {
+    public void beforeSendChunks() {
         var packet = new NetworkChunkPublisherUpdatePacket();
         var loc = getLocation();
         packet.setPosition(org.cloudburstmc.math.vector.Vector3i.from(loc.x(), loc.y(), loc.z()));
@@ -556,7 +557,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void onChunkInRangeSent(Chunk chunk) {
+    public void onChunkInRangeSend(Chunk chunk) {
         if (awaitingDimensionChangeACK) {
             sendDimensionChangeSuccess();
         }

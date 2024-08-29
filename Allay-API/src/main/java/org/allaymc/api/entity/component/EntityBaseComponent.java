@@ -88,13 +88,17 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     World getWorld();
 
-    boolean isDead();
-
     boolean willBeSpawnedNextTick();
 
     boolean willBeDespawnedNextTick();
 
+    boolean isDead();
+
     boolean isSpawned();
+
+    default boolean isAlive() {
+        return isSpawned() && !isDead();
+    }
 
     boolean canBeSpawned();
 

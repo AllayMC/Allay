@@ -24,9 +24,9 @@ public interface ChunkLoader {
 
     int getChunkTrySendCountPerTick();
 
-    void publishClientChunkUpdate();
+    void beforeSendChunks();
 
-    void onChunkInRangeSent(Chunk chunk);
+    void onChunkInRangeSend(Chunk chunk);
 
     void spawnEntity(Entity entity);
 

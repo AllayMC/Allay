@@ -457,7 +457,7 @@ public final class AllayChunkService implements ChunkService {
             } while (!chunkSendingQueue.isEmpty() && triedSendChunkCount < chunkTrySendCountPerTick);
 
             if (!chunkReadyToSend.isEmpty()) {
-                chunkLoader.publishClientChunkUpdate();
+                chunkLoader.beforeSendChunks();
                 var chunkSendingStrategy = Server.SETTINGS.worldSettings().chunkSendingStrategy();
                 var useSubChunkSendingSystem = Server.SETTINGS.worldSettings().useSubChunkSendingSystem();
                 if (useSubChunkSendingSystem) {
@@ -476,7 +476,7 @@ public final class AllayChunkService implements ChunkService {
                                 ((AllayChunk) chunk).createSubChunkLevelChunkPacket() :
                                 ((AllayChunk) chunk).createFullLevelChunkPacketChunk();
                         chunkLoader.sendLevelChunkPacket(lcp);
-                        chunkLoader.onChunkInRangeSent(chunk);
+                        chunkLoader.onChunkInRangeSend(chunk);
                     });
                 }
 
@@ -511,7 +511,7 @@ public final class AllayChunkService implements ChunkService {
                     var chunk = chunkSendingQueue.poll();
                     var lcp = ((AllayChunk) chunk).createFullLevelChunkPacketChunk();
                     chunkLoader.sendLevelChunkPacket(lcp);
-                    chunkLoader.onChunkInRangeSent(chunk);
+                    chunkLoader.onChunkInRangeSend(chunk);
                 }
             }
         }
