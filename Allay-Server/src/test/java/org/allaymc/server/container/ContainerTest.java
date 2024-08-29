@@ -11,8 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Allay Project 2023/10/14
@@ -60,5 +59,25 @@ public class ContainerTest {
         });
         container.onClose(null);
         assertTrue(closeFlag.get());
+    }
+
+    @Test
+    void testContainerSlotListener() {
+        AtomicBoolean slotFlag = new AtomicBoolean(false);
+        container.addOnSlotChangeListener(0, newItem -> {
+            slotFlag.set(true);
+        });
+        container.addOnSlotChangeListener(1, newItem -> {
+            slotFlag.set(false);
+        });
+        container.setItemStack(0, AIR_STACK);
+        assertTrue(slotFlag.get());
+
+        container.setItemStack(1, AIR_STACK);
+        assertFalse(slotFlag.get());
+
+        // No listener on slot 2
+        container.setItemStack(2, AIR_STACK);
+        assertFalse(slotFlag.get());
     }
 }

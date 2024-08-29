@@ -46,7 +46,7 @@ public class EventBusTest {
     }
 
     @Test
-    void testEventCancel() {
+    void testCancelEvent() {
         TestCancellableEvent event = new TestCancellableEvent();
         eventBus.callEvent(event);
         assertTrue(event.isCancelled());

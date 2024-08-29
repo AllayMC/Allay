@@ -253,7 +253,6 @@ class RecipeTest {
         );
     }
 
-
     private ItemGrassBlockStack grass() {
         return GRASS_BLOCK.createItemStack(
                 SimpleItemStackInitInfo.builder().count(1).build()

@@ -22,7 +22,7 @@ public class MathTest {
     Dimension dim;
 
     @Test
-    void position() {
+    void testPosition() {
         var pos = new Position3i(1, 1, 1, dim);
         assertNotNull(pos.dimension());
         assertEquals(1, pos.x());
@@ -35,7 +35,7 @@ public class MathTest {
     }
 
     @Test
-    void location() {
+    void testLocation() {
         var loc = new Location3i(1, 1, 1, dim);
         assertNotNull(loc.dimension());
         assertEquals(0d, loc.yaw());

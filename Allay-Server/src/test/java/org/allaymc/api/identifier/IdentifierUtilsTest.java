@@ -17,14 +17,14 @@ class IdentifierUtilsTest {
     static final String idStr2 = "pnx;love";
 
     @Test
-    void splitOn() {
+    void testSplitOn() {
         var id1 = IdentifierUtils.splitOn(idStr, ":");
         var id2 = IdentifierUtils.splitOn(idStr2, ";");
         assert id1.equals(id2);
     }
 
     @Test
-    void tryParse() {
+    void testTryParse() {
         var id = IdentifierUtils.tryParse(idStr);
         assert id != null;
         assertEquals("pnx", id.namespace());
@@ -32,7 +32,7 @@ class IdentifierUtilsTest {
     }
 
     @Test
-    void of() {
+    void testOf() {
         var id = IdentifierUtils.of("pnx", "love");
         assert id != null;
         assertEquals("pnx", id.namespace());
@@ -40,13 +40,13 @@ class IdentifierUtilsTest {
     }
 
     @Test
-    void isValid() {
+    void testIsValid() {
         assert IdentifierUtils.isValid(idStr);
         assert !IdentifierUtils.isValid(idStr2);
     }
 
     @Test
-    void assertValid() {
+    void testAssertValid() {
         assertDoesNotThrow(() -> IdentifierUtils.assertValid(idStr));
         assertThrows(InvalidIdentifierException.class, () -> IdentifierUtils.assertValid(idStr2));
     }
