@@ -1,8 +1,6 @@
 package org.allaymc.server.block.component.torch;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.RequireBlockProperty;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 
 /**
@@ -10,8 +8,6 @@ import org.allaymc.api.block.type.BlockType;
  *
  * @author IWareQ
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "color_bit")
-@RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "torch_facing_direction")
 public class BlockColoredTorchBaseComponentImpl extends BlockTorchBaseComponentImpl {
     public BlockColoredTorchBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

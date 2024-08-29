@@ -3,12 +3,10 @@ package org.allaymc.server.block.component.torch;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.EnumBiMap;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
@@ -17,7 +15,11 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
-@RequireBlockProperty(type = BlockPropertyType.Type.ENUM, name = "torch_facing_direction")
+/**
+ * Allay Project 25/06/2024
+ *
+ * @author daoge_cmd
+ */
 public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
     private static final BiMap<BlockFace, TorchFacingDirection> map = EnumBiMap.create(BlockFace.class, TorchFacingDirection.class);
 

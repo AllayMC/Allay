@@ -1,9 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
@@ -16,7 +14,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRE
  *
  * @author Dhaiven
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "facing_direction")
 public class BlockRodBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockRodBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

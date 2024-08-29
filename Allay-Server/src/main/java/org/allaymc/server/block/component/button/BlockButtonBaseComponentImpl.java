@@ -2,11 +2,9 @@ package org.allaymc.server.block.component.button;
 
 import lombok.Getter;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
@@ -25,8 +23,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRE
  *
  * @author Dhaiven
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "facing_direction")
-@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "button_pressed_bit")
 public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     @Getter
     protected final Duration activationTime;

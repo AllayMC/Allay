@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockComponent;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.property.type.BlockPropertyType;
@@ -26,7 +25,6 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.utils.exception.BlockComponentInjectException;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
@@ -474,7 +472,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 return ComponentProvider.of(initInfo -> singleton, currentClass.isAnonymousClass() ? currentClass.getSuperclass() : currentClass);
             }).collect(Collectors.toList());
             try {
-                checkPropertyValid();
                 var injectedClass = new AllayComponentInjector<T>()
                         .interfaceClass(interfaceClass)
                         .component(componentProviders)
@@ -509,23 +506,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                             .builder(ItemStack.class)
                             .identifier(hardItemId)
                             .build();
-                }
-            }
-        }
-
-        private void checkPropertyValid() {
-            for (var component : components.values()) {
-                var annotation = component.getClass().getAnnotation(RequireBlockProperty.Requirements.class);
-                if (annotation == null) continue;
-                var requirements = annotation.value();
-                for (var requirement : requirements) {
-                    var type = requirement.type();
-                    var name = requirement.name();
-                    var match = properties.get(name);
-                    if (match == null)
-                        throw new BlockComponentInjectException("Component " + component.getClass().getSimpleName() + " expects a block property of type " + type + " named " + name + ", but there is no match");
-                    if (match.getType() != type)
-                        throw new BlockComponentInjectException("Component " + component.getClass().getSimpleName() + " expects a block property of type " + type + " named " + name + ", but the type is " + properties.get(name).getType());
                 }
             }
         }

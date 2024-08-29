@@ -9,7 +9,6 @@ import org.allaymc.api.block.property.type.*;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.block.component.TestComponentImpl;
-import org.allaymc.server.block.component.TestComponentImplV2;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -65,24 +64,6 @@ class AllayBlockTypeTest {
     }
 
     @Test
-    public void testBlockTypeBuildException() {
-        assertThrows(BlockTypeBuildException.class,
-                () -> AllayBlockType
-                        .builder(TestBlock.class)
-                        .identifier("minecraft:test_block_v2")
-                        .setProperties(
-                                TEST_BOOLEAN_PROPERTY_TYPE,
-                                TEST_INT_PROPERTY_TYPE,
-                                TEST_ENUM_PROPERTY_TYPE)
-                        .setComponents(List.of(
-                                new TestComponentImplV2(),
-                                BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.DEFAULT)
-                        ))
-                        .build()
-        );
-    }
-
-    @Test
     void testDefaultItemType() {
         assertNotNull(testBlockType1.getItemType());
         assertNotNull(testBlockType2.getItemType());
@@ -108,25 +89,6 @@ class AllayBlockTypeTest {
         assertEquals(TestEnum.A, state.getPropertyValue(TEST_ENUM_PROPERTY_TYPE));
         state = state.setProperty(TEST_ENUM_PROPERTY_TYPE, TestEnum.B);
         assertEquals(TestEnum.B, state.getPropertyValue(TEST_ENUM_PROPERTY_TYPE));
-    }
-
-    @Test
-    void testRequirePropertyAnnotation() {
-        assertThrows(
-                BlockTypeBuildException.class,
-                () -> AllayBlockType
-                        .builder(TestBlock.class)
-                        .identifier("minecraft:test_block")
-                        .setProperties(
-                                TEST_BOOLEAN_PROPERTY_TYPE,
-                                // TEST_INT_PROPERTY_TYPE,
-                                TEST_ENUM_PROPERTY_TYPE)
-                        .setComponents(List.of(
-                                new TestComponentImpl(),
-                                BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.DEFAULT)
-                        ))
-                        .build()
-        );
     }
 
     @Test

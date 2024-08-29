@@ -3,11 +3,9 @@ package org.allaymc.server.block.component.door;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -29,10 +27,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  *
  * @author Dhaiven
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "direction")
-@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "door_hinge_bit")
-@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "open_bit")
-@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "upper_block_bit")
 public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
     protected final static BiMap<BlockFace, Integer> DOOR_DIRECTION = HashBiMap.create(4);
 

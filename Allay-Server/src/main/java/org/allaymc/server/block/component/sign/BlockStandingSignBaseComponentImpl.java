@@ -1,10 +1,8 @@
 package org.allaymc.server.block.component.sign;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
@@ -18,7 +16,6 @@ import java.util.Set;
  *
  * @author daoge_cmd
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "ground_sign_direction")
 public class BlockStandingSignBaseComponentImpl extends BlockBaseComponentImpl {
 
     protected ItemType<?> dropItemType;

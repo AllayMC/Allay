@@ -2,11 +2,9 @@ package org.allaymc.server.block.component.sign;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.PlaceBlockHelper;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -19,10 +17,6 @@ import org.joml.Vector3ic;
  *
  * @author daoge_cmd
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "attached_bit")
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "facing_direction")
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "ground_sign_direction")
-@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "hanging")
 public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockHangingSignBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

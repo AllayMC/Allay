@@ -1,11 +1,9 @@
 package org.allaymc.server.block.component.crops;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemBoneMealStack;
@@ -24,7 +22,6 @@ import static org.allaymc.api.block.type.BlockTypes.FARMLAND;
  * @author Dhaiven
  */
 // TODO
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "growth")
 public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockCropsBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

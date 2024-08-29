@@ -1,10 +1,8 @@
 package org.allaymc.server.block.component.grass;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -16,7 +14,6 @@ import org.allaymc.api.block.type.BlockType;
  *
  * @author daoge_cmd
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "upper_block_bit")
 public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponentImpl {
     public BlockTallGrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);

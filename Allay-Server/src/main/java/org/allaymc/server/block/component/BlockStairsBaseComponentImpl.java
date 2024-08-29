@@ -1,10 +1,8 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.RequireBlockProperty;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -16,8 +14,6 @@ import org.joml.Vector3ic;
  *
  * @author daoge_cmd
  */
-@RequireBlockProperty(type = BlockPropertyType.Type.INT, name = "weirdo_direction")
-@RequireBlockProperty(type = BlockPropertyType.Type.BOOLEAN, name = "upside_down_bit")
 public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockStairsBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
