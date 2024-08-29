@@ -105,6 +105,10 @@ public class AllayCommandRegistry extends CommandRegistry {
         cmd = event.getCommand();
 
         var spilt = splitCommandArgs(cmd);
+        if (spilt.isEmpty()) {
+            sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, "");
+            return CommandResult.fail();
+        }
         var commandName = spilt.pop();
 
         var command = this.findCommand(commandName);

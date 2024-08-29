@@ -27,7 +27,6 @@ public class AllayTerminalConsole extends SimpleTerminalConsole {
     @Override
     protected void runCommand(String cmd) {
         if (cmd.startsWith("/")) cmd = cmd.substring(1);
-        if (cmd.isEmpty()) return;
         Registries.COMMANDS.execute(server, cmd);
     }
 
