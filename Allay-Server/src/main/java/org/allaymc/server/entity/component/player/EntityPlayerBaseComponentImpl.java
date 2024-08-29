@@ -592,7 +592,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .filter(Objects::nonNull)
                 .forEach(chunk -> {
                     chunk.despawnEntitiesFrom(thisPlayer);
-                    chunk.removeChunkLoader(thisPlayer);
                 });
     }
 

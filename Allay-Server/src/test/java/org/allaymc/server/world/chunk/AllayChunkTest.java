@@ -1,4 +1,4 @@
-package org.allaymc.server.world;
+package org.allaymc.server.world.chunk;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.blockentity.initinfo.SimpleBlockEntityInitInfo;
@@ -6,8 +6,6 @@ import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.world.chunk.AllayChunk;
-import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

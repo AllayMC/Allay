@@ -1,4 +1,4 @@
-package org.allaymc.server.world;
+package org.allaymc.server.world.storage;
 
 import lombok.SneakyThrows;
 import org.allaymc.api.eventbus.EventBus;
@@ -11,7 +11,6 @@ import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import org.allaymc.server.world.storage.AllayLevelDBWorldStorage;
 import org.allaymc.testutils.AllayTestExtension;
 import org.apache.commons.io.FileUtils;
 import org.joml.Vector3i;
@@ -52,8 +51,8 @@ class LevelDBWorldStorageTest {
             throw new RuntimeException(e);
         }
         levelDBWorldStorage = new AllayLevelDBWorldStorage(levelDat.resolve("Allay-Server/src/test/resources/beworld"));
-        @SuppressWarnings("resource") MockedStatic<Server> serve = Mockito.mockStatic(Server.class);
-        serve.when(Server::getInstance).thenReturn(server);
+        @SuppressWarnings("resource") MockedStatic<Server> serverClass = Mockito.mockStatic(Server.class);
+        serverClass.when(Server::getInstance).thenReturn(server);
         Mockito.when(server.getEventBus()).thenReturn(eventBus);
         Mockito.when(server.getVirtualThreadPool()).thenReturn(Executors.newVirtualThreadPerTaskExecutor());
         Mockito.when(mockWorld.getPlayers()).thenReturn(List.of());

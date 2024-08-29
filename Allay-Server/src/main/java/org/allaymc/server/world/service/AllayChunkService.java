@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.world.ChunkLoadEvent;
 import org.allaymc.api.eventbus.event.world.ChunkPreLoadEvent;
@@ -50,6 +51,8 @@ public final class AllayChunkService implements ChunkService {
     private final WorldStorage worldStorage;
     private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
     private final Set<Long> keepLoadingChunks = Sets.newConcurrentHashSet();
+    @Setter
+    private int removeUnneededChunkCycle = Server.SETTINGS.worldSettings().removeUnneededChunkCycle();
 
     public void tick(long currentTick) {
         sendChunkPackets();
@@ -104,7 +107,7 @@ public final class AllayChunkService implements ChunkService {
                     // will return CompletableFuture.completedFuture(false) so we can
                     // use getNow() method here
                     shouldRemove = false;
-                    entry.setValue(Server.SETTINGS.worldSettings().removeUnneededChunkCycle());
+                    entry.setValue(removeUnneededChunkCycle);
                 }
             }
             return shouldRemove;
@@ -113,7 +116,7 @@ public final class AllayChunkService implements ChunkService {
         // Add unused chunk to the clear countdown map
         loadedChunks.forEach((chunkHash, loadedChunk) -> {
             if (loadedChunk.getChunkLoaderCount() == 0 && !keepLoadingChunks.contains(chunkHash) && !unusedChunkClearCountDown.containsKey(chunkHash)) {
-                unusedChunkClearCountDown.put(chunkHash, Server.SETTINGS.worldSettings().removeUnneededChunkCycle());
+                unusedChunkClearCountDown.put(chunkHash, removeUnneededChunkCycle);
             }
         });
     }
@@ -388,6 +391,7 @@ public final class AllayChunkService implements ChunkService {
         }
 
         public void onRemoved() {
+            removeChunkLoaderInChunks(sentChunks);
             chunkLoader.onChunkOutOfRange(sentChunks);
             if (asyncChunkSendingManager != null)
                 asyncChunkSendingManager.stop();
@@ -424,10 +428,18 @@ public final class AllayChunkService implements ChunkService {
 
         private void removeOutOfRadiusChunks() {
             var difference = Sets.difference(sentChunks, inRadiusChunks);
+            removeChunkLoaderInChunks(difference);
             // Unload chunks out of range
             chunkLoader.onChunkOutOfRange(difference);
             // The intersection of sentChunks and inRadiusChunks
             sentChunks.removeAll(difference);
+        }
+
+        private void removeChunkLoaderInChunks(Set<Long> chunkHashes) {
+            chunkHashes.stream()
+                .map(AllayChunkService.this::getChunk)
+                .filter(Objects::nonNull)
+                .forEach(chunk -> chunk.removeChunkLoader(chunkLoader));
         }
 
         private void updateChunkSendingQueue() {

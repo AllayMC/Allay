@@ -34,10 +34,6 @@ public interface ChunkLoader {
 
     void onChunkOutOfRange(Set<Long> chunkHashes);
 
-    default void unloadChunk(Long chunkHash) {
-        onChunkOutOfRange(Set.of(chunkHash));
-    }
-
     void sendLevelChunkPacket(LevelChunkPacket lcp);
 
     void handleChunkPacket(BedrockPacket packet);
