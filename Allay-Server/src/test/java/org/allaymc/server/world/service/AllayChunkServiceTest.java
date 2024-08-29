@@ -63,7 +63,7 @@ public class AllayChunkServiceTest {
 
     static void tick(int count) {
         for (int i = 0; i < count; i++) {
-            chunkService.tick(i);
+            chunkService.tick(0);
         }
     }
 }
