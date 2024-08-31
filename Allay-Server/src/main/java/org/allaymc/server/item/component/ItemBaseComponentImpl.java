@@ -12,6 +12,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.world.BlockPlaceEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.data.ItemDataComponent;
@@ -281,16 +282,22 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             player = placementInfo.player();
         }
 
-
         var oldBlockState = dimension.getBlockState(placeBlockPos);
         if (!oldBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) return false;
 
         var blockType = blockState.getBlockType();
+
+        var event = new BlockPlaceEvent(dimension, placeBlockPos, blockState, oldBlockState, thisItemStack, player, placementInfo);
+        event.call();
+        if (event.isCancelled()) {
+            return false;
+        }
+
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
         if (result && player != null) {
             tryConsumeItem(player);
-            var event = new CItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
-            manager.callEvent(event);
+            var e = new CItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
+            manager.callEvent(e);
         }
         return result;
     }

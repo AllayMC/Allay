@@ -68,6 +68,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                                 // Player places a block
                                 if (itemInHand.getItemType() == AIR) break;
+
                                 if (!itemInHand.placeBlock(dimension, placeBlockPos, interactInfo)) {
                                     var blockStateReplaced = dimension.getBlockState(placeBlockPos);
                                     dimension.sendBlockUpdateTo(blockStateReplaced, placeBlockPos, 0, player);

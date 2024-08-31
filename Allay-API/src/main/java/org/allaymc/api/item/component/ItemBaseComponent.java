@@ -134,6 +134,10 @@ public interface ItemBaseComponent extends ItemComponent {
      * However, it will decide the base block variant using the information from item_meta_block_state_bimap.nbt <br>
      * Use which block state really will be decided in BlockBaseComponent::place() method <br>
      *
+     * @param dimension The dimension
+     * @param placeBlockPos The position where the block will be placed
+     * @param placementInfo The placement information, can be null
+     *
      * @return {@code true} if the block is successfully placed,
      * {@code false} if placement fails (reasons: not a block item, placement check fails, event is canceled)
      */
