@@ -37,7 +37,6 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
     }
 
     // TODO: Implement breach enchantment
-    // TODO: Enchantment Protection Factor
     @Override
     protected void applyArmor(DamageContainer damage) {
         if (!damage.canBeReducedByArmor()) return;
