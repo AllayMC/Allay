@@ -515,8 +515,10 @@ public interface Dimension {
      * @param z        The z coordinate of the block
      * @param usedItem The item used to break the block, can be null
      * @param player   The player who breaks the block, can be null
+     *
+     * @return Whether the block is successfully broken
      */
-    void breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player);
+    boolean breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player);
 
     default int getInternalLightLevel(Vector3ic pos) {
         return getInternalLightLevel(pos.x(), pos.y(), pos.z());
