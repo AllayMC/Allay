@@ -2,6 +2,7 @@ package org.allaymc.server.network.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
@@ -25,6 +26,8 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                     log.warn("Player {} tried to respawn but he can't be spawned!", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
+
+                new PlayerRespawnEvent(player).call();
 
                 var spawnPoint = player.getSpawnPoint();
                 var spawnDimension = spawnPoint.dimension();
