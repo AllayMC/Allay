@@ -22,9 +22,6 @@ dependencies {
     implementation(libs.mcterminal)
     implementation(libs.bundles.logging)
     implementation(libs.disruptor)
-    implementation(libs.progressbar) {
-        exclude(group = "org.apache.logging.log4j", module = "log4j-core")
-    }
     implementation(libs.bytebuddy) {
         exclude(group = "org.jline", module = "jline")
     }

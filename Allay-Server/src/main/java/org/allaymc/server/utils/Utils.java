@@ -1,7 +1,6 @@
 package org.allaymc.server.utils;
 
 import lombok.experimental.UtilityClass;
-import me.tongfei.progressbar.ProgressBar;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -13,13 +12,11 @@ import java.lang.reflect.Method;
  */
 @UtilityClass
 public class Utils {
-    public static void callInitializer(Method method, ProgressBar progressBar) {
+    public static void callInitializer(Method method) {
         try {
             method.invoke(null);
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
-        } finally {
-            if (progressBar != null) progressBar.step();
         }
     }
 }

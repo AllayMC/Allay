@@ -5,8 +5,6 @@ import com.google.gson.JsonParser;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
-import me.tongfei.progressbar.ConsoleProgressBarConsumer;
-import me.tongfei.progressbar.ProgressBar;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
@@ -37,24 +35,19 @@ public class RecipeRegistryLoader implements RegistryLoader<Void, Int2ObjectMap<
         var obj = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
         var shapedRecipes = obj.getAsJsonArray("shaped");
         var shapelessRecipes = obj.getAsJsonArray("shapeless");
-        var initialMax = shapedRecipes.size() + shapelessRecipes.size();
-        try (var pgbar = ProgressBar
-                .builder()
-                .setInitialMax(initialMax)
-                .setTaskName("Loading Vanilla Recipes")
-                .setConsumer(new ConsoleProgressBarConsumer(System.out))
-                .build()) {
-            for (var shapedRecipe : shapedRecipes) {
-                var recipe = parseShaped(shapedRecipe.getAsJsonObject());
-                recipes.put(recipe.getNetworkId(), recipe);
-                pgbar.step();
-            }
-            for (var shapelessRecipe : shapelessRecipes) {
-                var recipe = parseShapeless(shapelessRecipe.getAsJsonObject());
-                recipes.put(recipe.getNetworkId(), recipe);
-                pgbar.step();
-            }
+
+        // Shaped recipe
+        for (var shapedRecipe : shapedRecipes) {
+            var recipe = parseShaped(shapedRecipe.getAsJsonObject());
+            recipes.put(recipe.getNetworkId(), recipe);
         }
+
+        // Shapeless recipe
+        for (var shapelessRecipe : shapelessRecipes) {
+            var recipe = parseShapeless(shapelessRecipe.getAsJsonObject());
+            recipes.put(recipe.getNetworkId(), recipe);
+        }
+
         log.info(I18n.get().tr(TrKeys.A_RECIPE_LOADED, recipes.size()));
         return recipes;
     }
