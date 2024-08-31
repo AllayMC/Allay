@@ -8,6 +8,8 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
 import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
+import org.allaymc.api.eventbus.event.scoreboard.ScoreboardAddEvent;
+import org.allaymc.api.eventbus.event.scoreboard.ScoreboardRemoveEvent;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.scorer.EntityScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
@@ -44,10 +46,12 @@ public final class ScoreboardService {
     }
 
     public boolean add(Scoreboard scoreboard) {
-        // TODO: event
-        //       var event = new ScoreboardObjectiveChangeEvent(scoreboard, ScoreboardObjectiveChangeEvent.ActionType.ADD);
-        //       Server.getInstance().getPluginManager().callEvent(event);
-        //       if (event.isCancelled()) return false;
+        var event = new ScoreboardAddEvent(scoreboard);
+        event.call();
+        if (event.isCancelled()) {
+            return false;
+        }
+
         scoreboards.put(scoreboard.getObjectiveName(), scoreboard);
         // TODO: soft enum
         //       CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(UpdateSoftEnumPacket.Type.ADD, scoreboard.getObjectiveName());
@@ -59,12 +63,16 @@ public final class ScoreboardService {
     }
 
     public boolean remove(String objectiveName) {
-        var removed = scoreboards.remove(objectiveName);
+        var removed = scoreboards.get(objectiveName);
         if (removed == null) return false;
-        // TODO: event
-        //       var event = new ScoreboardObjectiveChangeEvent(removed, ScoreboardObjectiveChangeEvent.ActionType.REMOVE);
-        //       Server.getInstance().getPluginManager().callEvent(event);
-        //       if (event.isCancelled()) return false;
+
+        var event = new ScoreboardRemoveEvent(removed);
+        event.call();
+        if (event.isCancelled()) {
+            return false;
+        }
+
+        scoreboards.remove(objectiveName);
         // TODO: soft enum
         //       CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(UpdateSoftEnumPacket.Type.REMOVE, objectiveName);
         viewers.forEach(viewer -> viewer.removeScoreboard(removed));
