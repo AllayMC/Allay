@@ -166,6 +166,7 @@ public final class ScoreboardService {
         @EventHandler
         public void onPlayerQuit(PlayerQuitEvent event) {
             var player = event.getPlayer();
+            if (!player.isInitialized()) return;
             var scorer = new PlayerScorer(player);
             scoreboards.values().forEach(scoreboard -> {
                 if (scoreboard.containLine(scorer)) {
