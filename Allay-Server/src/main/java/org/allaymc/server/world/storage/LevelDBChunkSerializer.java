@@ -276,11 +276,11 @@ public class LevelDBChunkSerializer {
     }
 
     private BiomeType getBiomeByIdNonNull(int id) {
-        var biome = BiomeId.fromId(id);
-        if (biome == null) {
+        try {
+            return BiomeId.fromId(id);
+        } catch (ArrayIndexOutOfBoundsException e) {
             log.warn("Unknown biome id: {}", id);
-            biome = BiomeId.PLAINS;
+            return BiomeId.PLAINS;
         }
-        return biome;
     }
 }

@@ -104,7 +104,7 @@ public final class Palette<V> {
 
     public void writeToStorageRuntime(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
         if (writeLast(byteBuf, last)) return;
-        if (writeEmpty(byteBuf)) return;
+        if (writeEmpty(byteBuf, serializer)) return;
 
         byteBuf.writeByte(Palette.getPaletteHeader(this.bitArray.version(), true));
         for (int word : this.bitArray.words())
@@ -224,10 +224,10 @@ public final class Palette<V> {
         return false;
     }
 
-    private boolean writeEmpty(ByteBuf byteBuf) {
+    private boolean writeEmpty(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer) {
         if (this.isEmpty()) {
             byteBuf.writeByte(Palette.getPaletteHeader(BitArrayVersion.V0, true));
-            byteBuf.writeIntLE(0);
+            byteBuf.writeIntLE(serializer.serialize(this.palette.getFirst()));
             return true;
         }
 
