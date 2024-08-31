@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.material.MaterialTypes;
 import org.allaymc.api.block.tag.BlockTags;
@@ -12,7 +13,7 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.world.BlockPlaceEvent;
+import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.data.ItemDataComponent;
@@ -26,6 +27,7 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.type.InternalBlockTypeData;
@@ -287,7 +289,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         var blockType = blockState.getBlockType();
 
-        var event = new BlockPlaceEvent(dimension, placeBlockPos, blockState, oldBlockState, thisItemStack, player, placementInfo);
+        var event = new BlockPlaceEvent(
+                new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension), 0),
+                oldBlockState, thisItemStack, player, placementInfo
+        );
         event.call();
         if (event.isCancelled()) {
             return false;

@@ -7,7 +7,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.event.world.BlockBreakEvent;
+import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
@@ -22,7 +22,6 @@ import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3i;
 
 import java.util.Collections;
 import java.util.Set;
@@ -133,7 +132,10 @@ public class AllayDimension implements Dimension {
             return false;
         }
 
-        var event = new BlockBreakEvent(this, new Vector3i(x, y, z), usedItem, player);
+        var event = new BlockBreakEvent(
+                new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
+                usedItem, player
+        );
         event.call();
         if (event.isCancelled()) {
             return false;

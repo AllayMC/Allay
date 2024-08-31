@@ -1,6 +1,7 @@
-package org.allaymc.api.eventbus.event.world;
+package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
@@ -13,23 +14,21 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 @Getter
-public class BlockBreakEvent extends WorldEvent implements CancellableEvent {
+public class BlockBreakEvent extends BlockEvent implements CancellableEvent {
     protected Dimension dimension;
     protected Vector3ic blockPos;
     /**
      * Can be null
      */
-    protected ItemStack itemUsed;
+    protected ItemStack usedItem;
     /**
      * Can be null
      */
     protected EntityPlayer player;
 
-    public BlockBreakEvent(Dimension dimension, Vector3ic blockPos, ItemStack itemUsed, EntityPlayer player) {
-        super(dimension.getWorld());
-        this.dimension = dimension;
-        this.blockPos = blockPos;
-        this.itemUsed = itemUsed;
+    public BlockBreakEvent(BlockStateWithPos block, ItemStack usedItem, EntityPlayer player) {
+        super(block);
+        this.usedItem = usedItem;
         this.player = player;
     }
 }
