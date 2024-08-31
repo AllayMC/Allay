@@ -10,6 +10,7 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -52,6 +53,12 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     public boolean attack(DamageContainer damage) {
         if (!canBeAttacked(damage)) return false;
         if (!checkAndUpdateCoolDown(damage)) return false;
+
+        var event = new EntityDamageEvent(thisEntity, damage);
+        event.call();
+        if (event.isCancelled()) {
+            return false;
+        }
 
         applyAttacker(damage);
         applyVictim(damage);
