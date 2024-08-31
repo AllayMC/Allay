@@ -7,7 +7,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -30,11 +29,10 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      *                     <p>
      *                     Only one Location object will be used on a parsing chain.
      *
-     * @return {@code Predicate<Entity>}
+     * @return {@code Predicate<Entity>}, can be null
      *
      * @throws SelectorSyntaxException when parsing error occurs
      */
-    @Nullable
     default Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3f basePos, String... arguments) throws SelectorSyntaxException {
         return null;
     }
@@ -99,9 +97,8 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      * @param selectorType the selector type
      * @param sender       the command executor
      *
-     * @return the default value of this argument
+     * @return the default value of this argument, can be null
      */
-    @Nullable
     default String getDefaultValue(Map<String, List<String>> values, SelectorType selectorType, CommandSender sender) {
         return null;
     }

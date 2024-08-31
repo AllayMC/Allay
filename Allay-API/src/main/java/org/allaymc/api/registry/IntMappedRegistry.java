@@ -26,7 +26,6 @@
 package org.allaymc.api.registry;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.Supplier;
 
@@ -82,7 +81,6 @@ public class IntMappedRegistry<V> extends AbstractMappedRegistry<Integer, V, Int
     /**
      * @deprecated Use {@link #get(int)} instead.
      */
-    @Nullable
     @Override
     @Deprecated
     public V get(Integer key) {

@@ -9,7 +9,6 @@ import org.allaymc.api.scoreboard.scorer.FakeScorer;
 import org.allaymc.api.scoreboard.scorer.Scorer;
 import org.allaymc.api.server.Server;
 
-import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -142,7 +141,7 @@ public final class Scoreboard {
      *
      * @return Corresponding line
      */
-    public @Nullable ScoreboardLine getLine(Scorer scorer) {
+    public ScoreboardLine getLine(Scorer scorer) {
         return this.lines.get(scorer);
     }
 

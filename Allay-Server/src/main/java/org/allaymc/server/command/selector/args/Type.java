@@ -6,7 +6,6 @@ import org.allaymc.api.command.selector.args.CachedSimpleSelectorArgument;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.server.command.selector.ParseUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class Type extends CachedSimpleSelectorArgument {
     }
 
     @Override
-    public @Nullable String getDefaultValue(Map<String, List<String>> values, SelectorType selectorType, CommandSender sender) {
+    public String getDefaultValue(Map<String, List<String>> values, SelectorType selectorType, CommandSender sender) {
         return selectorType == SelectorType.RANDOM_PLAYER ? "minecraft:player" : null;
     }
 
