@@ -9,6 +9,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.player.PlayerMoveEvent;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
@@ -103,8 +104,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 // Do not calculate other motion exclude block collision motion
                 computeBlockCollisionMotion(entity, collidedBlocks);
                 entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
-                forceApplyMotion(entity);
-                updatedEntities.put(entity.getRuntimeId(), entity);
+                if (forceApplyMotion(entity)) {
+                    updatedEntities.put(entity.getRuntimeId(), entity);
+                }
             }
         });
         updatedEntities.values().forEach(entityAABBTree::update);
@@ -260,10 +262,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return motion;
     }
 
-    protected void forceApplyMotion(Entity entity) {
+    protected boolean forceApplyMotion(Entity entity) {
         var loc = new Location3f(entity.getLocation());
         loc.add(entity.getMotion());
-        updateEntityLocation(entity, loc);
+        return updateEntityLocation(entity, loc);
     }
 
     protected boolean applyMotion(Entity entity) {
@@ -494,6 +496,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
+        var event = new EntityMoveEvent(entity, entity.getLocation(), newLoc);
+        event.call();
+        if (event.isCancelled()) {
+            return false;
+        }
+        newLoc = event.getTo();
+
         entity.broadcastMoveToViewers(newLoc);
         entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setLocationAndCheckChunk(newLoc);
         return true;
