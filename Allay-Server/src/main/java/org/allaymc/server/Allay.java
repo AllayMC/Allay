@@ -56,7 +56,7 @@ public final class Allay {
 
     public static void main(String[] args) {
         long initialTime = System.currentTimeMillis();
-        ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED);
+        ResourceLeakDetector.setLevel(Server.SETTINGS.networkSettings().resourceLeakDetectorLevel());
         System.setProperty("joml.format", "false"); // Set JOML vectors are output without a scientific notation
         System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // Enable async logging
         initI18n();

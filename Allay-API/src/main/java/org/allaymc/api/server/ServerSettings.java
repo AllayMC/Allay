@@ -3,6 +3,7 @@ package org.allaymc.api.server;
 import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.Comment;
 import eu.okaeri.configs.annotation.CustomKey;
+import io.netty.util.ResourceLeakDetector;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -96,6 +97,11 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("max-synced-packets-handle-count-once")
         @Comment("The maximum number of packets that can be processed at once")
         private int maxSyncedPacketsHandleCountAtOnce = 128;
+
+        @Comment("Represents the level of resource leak detection.")
+        @Comment("Possible values: DISABLED, SIMPLE, ADVANCED, PARANOID")
+        @CustomKey("resource-leak-detector-level")
+        private ResourceLeakDetector.Level resourceLeakDetectorLevel = ResourceLeakDetector.Level.DISABLED;
     }
 
     @Getter
