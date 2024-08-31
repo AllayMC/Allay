@@ -3,6 +3,7 @@ package org.allaymc.server.container.processor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.container.ContainerItemMoveEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
@@ -65,6 +66,16 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
 
         if (destItem.getCount() + count > destItem.getItemData().maxStackSize()) {
             log.warn("destination stack size bigger than the max stack size!");
+            return error();
+        }
+
+        var event = new ContainerItemMoveEvent(
+                source, sourceSlot,
+                destination, destinationSlot,
+                sourItem.getItemType(), count
+        );
+        event.call();
+        if (event.isCancelled()) {
             return error();
         }
 
