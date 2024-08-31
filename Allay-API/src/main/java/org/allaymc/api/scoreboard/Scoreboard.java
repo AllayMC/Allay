@@ -3,6 +3,9 @@ package org.allaymc.api.scoreboard;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.eventbus.event.scoreboard.ScoreboardAllLinesRemoveEvent;
+import org.allaymc.api.eventbus.event.scoreboard.ScoreboardLineAddEvent;
+import org.allaymc.api.eventbus.event.scoreboard.ScoreboardLineRemoveEvent;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.FakeScorer;
@@ -154,11 +157,11 @@ public final class Scoreboard {
      */
     public boolean addLine(ScoreboardLine line) {
         if (wouldCallEvent()) {
-            // TODO: event
-            //       var event = new ScoreboardLineChangeEvent(this, line, line.getScore(), line.getScore(), ScoreboardLineChangeEvent.ActionType.ADD_LINE);
-            //       Server.getInstance().getPluginManager().callEvent(event);
-            //       if (event.isCancelled()) return false;
-            //       line = event.getLine();
+            var event = new ScoreboardLineAddEvent(this, line);
+            event.call();
+            if (event.isCancelled()) {
+                return false;
+            }
         }
         this.lines.put(line.getScorer(), line);
         updateScore(line);
@@ -204,10 +207,11 @@ public final class Scoreboard {
         if (removed == null) return false;
 
         if (wouldCallEvent()) {
-            // TODO: event
-            //       var event = new ScoreboardLineChangeEvent(this, removed, removed.getScore(), removed.getScore(), ScoreboardLineChangeEvent.ActionType.REMOVE_LINE);
-            //       Server.getInstance().getPluginManager().callEvent(event);
-            //       if (event.isCancelled()) return false;
+            var event = new ScoreboardLineRemoveEvent(this, removed);
+            event.call();
+            if (event.isCancelled()) {
+                return false;
+            }
         }
         this.lines.remove(scorer);
         getAllViewers().forEach(viewer -> viewer.removeScoreboardLine(removed));
@@ -224,10 +228,11 @@ public final class Scoreboard {
     public boolean removeAllLines(boolean send) {
         if (lines.isEmpty()) return false;
         if (wouldCallEvent()) {
-            // TODO: event
-            //       var event = new ScoreboardLineChangeEvent(this, null, 0, 0, ScoreboardLineChangeEvent.ActionType.REMOVE_ALL_LINES);
-            //       Server.getInstance().getPluginManager().callEvent(event);
-            //       if (event.isCancelled()) return false;
+            var event = new ScoreboardAllLinesRemoveEvent(this);
+            event.call();
+            if (event.isCancelled()) {
+                return false;
+            }
         }
         if (send) this.lines.keySet().forEach(this::removeLine);
         else this.lines.clear();

@@ -1,6 +1,7 @@
 package org.allaymc.api.scoreboard;
 
 import lombok.Getter;
+import org.allaymc.api.eventbus.event.scoreboard.ScoreboardLineValueChangeEvent;
 import org.allaymc.api.scoreboard.scorer.Scorer;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
@@ -47,11 +48,11 @@ public final class ScoreboardLine {
 
     public boolean setScore(int score) {
         if (scoreboard.wouldCallEvent()) {
-            // TODO: event
-            //       var event = new ScoreboardLineChangeEvent(scoreboard, this, score, this.score, ScoreboardLineChangeEvent.ActionType.SCORE_CHANGE);
-            //       Server.getInstance().getPluginManager().callEvent(event);
-            //       if (event.isCancelled()) return false;
-            //       score = event.getNewValue();
+            var event = new ScoreboardLineValueChangeEvent(scoreboard, this, this.score, score);
+            event.call();
+            if (event.isCancelled()) {
+                return false;
+            }
         }
         this.score = score;
         updateScore();
