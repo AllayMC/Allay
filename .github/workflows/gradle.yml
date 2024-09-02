@@ -5,17 +5,15 @@ on:
     branches: [ "master" ]
     paths:
       - .github/workflows/build.yml
-      - Allay-API/src/**
-      - Allay-Server/src/**
+      - Allay-API/**
+      - Allay-Server/**
       - Allay-Data/**
-      - buildSrc/**
   pull_request:
     paths:
       - .github/workflows/build.yml
-      - Allay-API/src/**
-      - Allay-Server/src/**
+      - Allay-API/**
+      - Allay-Server/**
       - Allay-Data/**
-      - buildSrc/**
   workflow_dispatch:
 
 jobs:
@@ -55,7 +53,7 @@ jobs:
         if: success() && contains(github.ref_name, 'master')
         with:
           name: Allay-API
-          path: Allay-API/build/libs/Allay-API-*.jar
+          path: Allay-API/build/libs/Allay-API-*-all.jar
       - name: Upload Allay-Server
         uses: actions/upload-artifact@v4
         if: success() && contains(github.ref_name, 'master')
