@@ -3,8 +3,8 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCach
 plugins {
     id("jacoco")
     id("application")
-    id("me.champeau.jmh") version "0.7.2"
-    id("com.gorylenko.gradle-git-properties") version "2.4.2"
+    alias(libs.plugins.jmh)
+    alias(libs.plugins.gitproperties)
     alias(libs.plugins.shadow)
 }
 

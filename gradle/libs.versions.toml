@@ -77,3 +77,5 @@ junit = ["junit-jupiter", "mockito-junit-jupiter"]
 
 [plugins]
 shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
+gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.4.2" }
+jmh = { id = "me.champeau.jmh", version = "0.7.2" }
