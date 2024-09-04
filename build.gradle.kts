@@ -1,9 +1,11 @@
 plugins {
     id("java-library")
+    id("maven-publish")
 }
 
 subprojects {
     apply(plugin = "java-library")
+    apply(plugin = "maven-publish")
 
     group = "org.allaymc"
 
@@ -27,6 +29,45 @@ subprojects {
 
         testCompileOnly(rootProject.libs.lombok)
         testAnnotationProcessor(rootProject.libs.lombok)
+    }
+
+    publishing {
+        repositories {
+            // Jitpack requires us to publish artifacts to local maven repo
+            mavenLocal()
+        }
+
+        publications {
+            create<MavenPublication>("maven") {
+                from(components["java"])
+                pom {
+                    inceptionYear.set("2023")
+                    packaging = "jar"
+                    url.set("https://github.com/AllayMC/Allay")
+
+                    scm {
+                        connection.set("scm:git:git://github.com/AllayMC/Allay.git")
+                        developerConnection.set("scm:git:ssh://github.com/AllayMC/Allay.git")
+                        url.set("https://github.com/AllayMC/Allay")
+                    }
+
+                    licenses {
+                        license {
+                            name.set("LGPL 3.0")
+                            url.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            name.set("AllayMC Team")
+                            organization.set("AllayMC")
+                            organizationUrl.set("https://github.com/AllayMC")
+                        }
+                    }
+                }
+            }
+        }
     }
 
     tasks {
