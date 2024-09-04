@@ -291,8 +291,9 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 } else newPropertyValues[i] = blockPropertyValues[i];
             }
 
-            if (!succeed)
-                throw new IllegalArgumentException("Property " + propertyValue.getPropertyType() + " is not supported by this block");
+            if (!succeed) {
+                throw new IllegalArgumentException("Property " + propertyValue.getPropertyType() + " is not supported by block " + blockType.getIdentifier());
+            }
 
             return getNewBlockState(newPropertyValues);
         }
@@ -340,6 +341,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 Objects.requireNonNull(specialValueMap);
                 return specialValueMap.get(computeSpecialValue(bits, values));
             } else {
+                // If the special value is greater than 64 bits, fallback to compute the block state hash
                 return blockType.getBlockStateHashMap().get(HashUtils.computeBlockStateHash(this.blockType.getIdentifier(), values));
             }
         }

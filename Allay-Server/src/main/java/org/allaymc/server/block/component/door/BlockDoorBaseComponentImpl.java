@@ -122,8 +122,8 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         var isOpen = !blockState.getPropertyValue(OPEN_BIT);
 
-        updateBlockProperty(OPEN_BIT, isOpen, pos, dimension);
-        updateBlockProperty(OPEN_BIT, isOpen, otherPos, dimension);
+        dimension.updateBlockProperty(OPEN_BIT, isOpen, pos);
+        dimension.updateBlockProperty(OPEN_BIT, isOpen, otherPos);
 
         dimension.addLevelSoundEvent(pos.x(), pos.y(), pos.z(), isOpen ? SoundEvent.DOOR_OPEN : SoundEvent.DOOR_CLOSE);
         return true;

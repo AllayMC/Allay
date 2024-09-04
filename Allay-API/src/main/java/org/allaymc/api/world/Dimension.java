@@ -2,9 +2,11 @@ package org.allaymc.api.world;
 
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
@@ -241,6 +243,38 @@ public interface Dimension {
         return blockStates;
     }
 
+    default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z) {
+        updateBlockProperty(propertyType, value, x, y, z, 0);
+    }
+
+    default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, Vector3ic pos) {
+        updateBlockProperty(propertyType, value, pos.x(), pos.y(), pos.z(), 0);
+    }
+
+    /**
+     * Update a specific property of a specific block
+     *
+     * @param propertyType       the property type needs to be updated
+     * @param value              the new property value
+     * @param x                  block's x coordinate
+     * @param y                  block's y coordinate
+     * @param z                  block's z coordinate
+     * @param layer              the layer which contains the block
+     */
+    default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, int layer) {
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        if (chunk == null) return;
+
+        var xIndex = x & 15;
+        var zIndex = z & 15;
+        var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
+
+        var newBlockState = oldBlockState.setProperty(propertyType, value);
+        if (oldBlockState == newBlockState) return;
+
+        chunk.setBlockState(xIndex, y, zIndex, newBlockState, layer);
+        chunk.sendChunkPacket(createBlockUpdatePacket(newBlockState, x, y, z, layer));
+    }
 
     default BlockState[][][] getCollidingBlocks(AABBfc aabb) {
         return getCollidingBlocks(aabb, 0);

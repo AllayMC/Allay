@@ -66,6 +66,6 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
         if (newAge > GROWTH.getMax()) newAge = GROWTH.getMax();
 
         //TODO: event
-        updateBlockProperty(GROWTH, newAge, pos, dimension);
+        dimension.updateBlockProperty(GROWTH, newAge, pos);
     }
 }
