@@ -3,6 +3,7 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCach
 plugins {
     id("jacoco")
     id("application")
+    id("maven-publish")
     alias(libs.plugins.jmh)
     alias(libs.plugins.gitproperties)
     alias(libs.plugins.shadow)
