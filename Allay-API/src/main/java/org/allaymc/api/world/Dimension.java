@@ -188,7 +188,7 @@ public interface Dimension {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
             return AIR.getDefaultState();
 
-        var chunk = getChunkService().getChunkByLevelPos(x, z);
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
@@ -396,7 +396,7 @@ public interface Dimension {
     }
 
     default BlockEntity getBlockEntity(int x, int y, int z) {
-        var chunk = getChunkService().getChunkByLevelPos(x, z);
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
         return chunk.getBlockEntity(x & 15, y, z & 15);
     }
@@ -418,7 +418,7 @@ public interface Dimension {
         pk.setType(particleType);
         pk.setPosition(MathUtils.JOMLVecToCBVec(pos));
         pk.setData(data);
-        getChunkService().getChunkByLevelPos((int) pos.x(), (int) pos.z()).addChunkPacket(pk);
+        getChunkService().getChunkByDimensionPos((int) pos.x(), (int) pos.z()).addChunkPacket(pk);
     }
 
     default void broadcastPacket(BedrockPacket packet) {
@@ -443,7 +443,7 @@ public interface Dimension {
         packet.setPitch(pitch);
         packet.setPosition(Vector3f.from(x, y, z));
 
-        getChunkService().getChunkByLevelPos((int) x, (int) z).addChunkPacket(packet);
+        getChunkService().getChunkByDimensionPos((int) x, (int) z).addChunkPacket(packet);
     }
 
     default void dropItem(ItemStack itemStack, Vector3fc pos) {
@@ -530,7 +530,7 @@ public interface Dimension {
     default int getInternalLightLevel(int x, int y, int z) {
         if (getDimensionInfo() != DimensionInfo.OVERWORLD) return 0;
 
-        var chunk = getChunkService().getChunkByLevelPos(x, z);
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
         int level = 0;
         if (chunk != null) {
             level = chunk.getSkyLight(x & 15, y, z & 15) - getWorld().getInternalSkyLight();

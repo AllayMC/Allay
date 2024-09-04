@@ -54,7 +54,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param layer        the layer which contains the block
      */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, Dimension dimension, int layer) {
-        var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
+        var chunk = dimension.getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) return;
 
         var xIndex = x & 15;

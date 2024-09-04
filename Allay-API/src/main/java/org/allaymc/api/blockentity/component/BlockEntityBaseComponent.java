@@ -59,7 +59,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
 
     default void sendPacketToViewers(BedrockPacket packet) {
         var pos = getPosition();
-        var chunk = pos.dimension().getChunkService().getChunkByLevelPos(pos.x(), pos.z());
+        var chunk = pos.dimension().getChunkService().getChunkByDimensionPos(pos.x(), pos.z());
         Objects.requireNonNull(chunk, "The chunk located at pos " + pos + " is not loaded!");
         chunk.sendChunkPacket(packet);
     }

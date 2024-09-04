@@ -256,7 +256,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 var packet = new TakeItemEntityPacket();
                 packet.setRuntimeEntityId(runtimeId);
                 packet.setItemRuntimeEntityId(entityItem.getRuntimeId());
-                Objects.requireNonNull(dimension.getChunkService().getChunkByLevelPos((int) location.x, (int) location.z)).sendChunkPacket(packet);
+                Objects.requireNonNull(dimension.getChunkService().getChunkByDimensionPos((int) location.x, (int) location.z)).sendChunkPacket(packet);
                 // Set item to null to prevent others from picking this item twice
                 entityItem.setItemStack(null);
                 entityItem.despawn();

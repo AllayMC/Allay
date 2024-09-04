@@ -73,7 +73,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      */
     default void createBlockEntityAt(int x, int y, int z, Dimension dimension, boolean sendToClient) {
         Objects.requireNonNull(dimension);
-        var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
+        var chunk = dimension.getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             throw new IllegalStateException("Trying to create a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }
@@ -104,7 +104,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      */
     default void removeBlockEntityAt(int x, int y, int z, Dimension dimension) {
         Objects.requireNonNull(dimension);
-        var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
+        var chunk = dimension.getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             throw new IllegalStateException("Trying to remove a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }

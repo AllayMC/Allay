@@ -11,7 +11,7 @@ public interface ChunkAccessible {
 
     Chunk getChunk(int x, int z);
 
-    default Chunk getChunkByLevelPos(int x, int z) {
+    default Chunk getChunkByDimensionPos(int x, int z) {
         return getChunk(x >> 4, z >> 4);
     }
 
