@@ -83,8 +83,8 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public boolean canResetFallDistance() {
-        return blockType.getMaterial().isLiquid();
+    public float getFallDamageReductionFactor() {
+        return 0.0f;
     }
 
     @Override

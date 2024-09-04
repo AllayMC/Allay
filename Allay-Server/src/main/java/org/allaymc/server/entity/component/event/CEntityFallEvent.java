@@ -13,4 +13,5 @@ import org.allaymc.api.eventbus.event.Event;
 @AllArgsConstructor
 public class CEntityFallEvent extends Event {
     protected float fallDistance;
+    protected float damageReductionFactor;
 }

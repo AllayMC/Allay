@@ -166,8 +166,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @EventHandler
     protected void onFall(CEntityFallEvent event) {
         if (!hasFallDamage()) return;
-
-        var damage = Math.round((event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST));
+        float rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
+        var damage = Math.round(rawDamage - (rawDamage * event.getDamageReductionFactor()));
         if (damage > 0) this.attack(DamageContainer.fall(damage));
     }
 }

@@ -24,7 +24,7 @@ public class BlockSlimeBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canResetFallDistance() {
-        return true;
+    public float getFallDamageReductionFactor() {
+        return 1.0f;
     }
 }

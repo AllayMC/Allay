@@ -1006,4 +1006,13 @@ public final class BlockTypeInitializer {
                 .setBlockBaseComponentSupplier(BlockSlimeBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initHayBlock() {
+        BlockTypes.HAY_BLOCK = AllayBlockType
+                .builder(BlockHayBlockBehavior.class)
+                .vanillaBlock(BlockId.HAY_BLOCK)
+                .setProperties(BlockPropertyTypes.DEPRECATED, BlockPropertyTypes.PILLAR_AXIS)
+                .setBlockBaseComponentSupplier(BlockHayBaseComponentImpl::new)
+                .build();
+    }
 }
