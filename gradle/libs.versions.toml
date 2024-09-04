@@ -64,7 +64,18 @@ oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.6.3" }
 # GUI
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.5.1" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
+# JUnit
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.10.2" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.12.0" }
+# Lombok
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.32" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 graalvm = ["sdk", "js", "polyglot", "chromeinspector-tool", "profiler-tool"]
+junit = ["junit-jupiter", "mockito-junit-jupiter"]
+
+[plugins]
+shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
+gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.4.2" }
+jmh = { id = "me.champeau.jmh", version = "0.7.2" }

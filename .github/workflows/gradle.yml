@@ -5,17 +5,15 @@ on:
     branches: [ "master" ]
     paths:
       - .github/workflows/build.yml
-      - Allay-API/src/**
-      - Allay-Server/src/**
+      - Allay-API/**
+      - Allay-Server/**
       - Allay-Data/**
-      - buildSrc/**
   pull_request:
     paths:
       - .github/workflows/build.yml
-      - Allay-API/src/**
-      - Allay-Server/src/**
+      - Allay-API/**
+      - Allay-Server/**
       - Allay-Data/**
-      - buildSrc/**
   workflow_dispatch:
 
 jobs:
@@ -34,16 +32,19 @@ jobs:
         with:
           java-version: '21'
           distribution: 'zulu'
-      - name: Build
-        uses: gradle/gradle-build-action@v3
+      - name: Setup gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: wrapper
           cache-overwrite-existing: true
           cache-read-only: false
           build-scan-publish: true
-          build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
-          build-scan-terms-of-service-agree: "yes"
-          arguments: buildForGithubAction -p Allay-Server --scan
+          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-use-agree: "yes"
+      - name: Build
+        run: ./gradlew build
+      - name: Generate coverage reports
+        run: ./gradlew jacocoTestReport
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.5.0
         with:
@@ -55,7 +56,7 @@ jobs:
         if: success() && contains(github.ref_name, 'master')
         with:
           name: Allay-API
-          path: Allay-API/build/libs/Allay-API-*.jar
+          path: Allay-API/build/libs/Allay-API-*-all.jar
       - name: Upload Allay-Server
         uses: actions/upload-artifact@v4
         if: success() && contains(github.ref_name, 'master')
@@ -79,7 +80,7 @@ jobs:
         with:
           timeZone: 8
           format: 'YYYY/MM/DD-HH:mm:ss'
-      # Publish to minebbs
+      # Publish to MineBBS
       - name: Update MineBBS Infomation
         uses: fjogeleit/http-request-action@v1
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
