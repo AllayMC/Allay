@@ -3,6 +3,8 @@ plugins {
     id("maven-publish")
 }
 
+val publishedModules = listOf("Allay-API", "Allay-Server")
+
 subprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
@@ -31,38 +33,40 @@ subprojects {
         testAnnotationProcessor(rootProject.libs.lombok)
     }
 
-    publishing {
-        repositories {
-            // Jitpack requires us to publish artifacts to local maven repo
-            mavenLocal()
-        }
+    if (publishedModules.contains(name)) {
+        publishing {
+            repositories {
+                // Jitpack requires us to publish artifacts to local maven repo
+                mavenLocal()
+            }
 
-        publications {
-            create<MavenPublication>("maven") {
-                from(components["java"])
-                pom {
-                    inceptionYear.set("2023")
-                    packaging = "jar"
-                    url.set("https://github.com/AllayMC/Allay")
-
-                    scm {
-                        connection.set("scm:git:git://github.com/AllayMC/Allay.git")
-                        developerConnection.set("scm:git:ssh://github.com/AllayMC/Allay.git")
+            publications {
+                create<MavenPublication>("maven") {
+                    from(components["java"])
+                    pom {
+                        inceptionYear.set("2023")
+                        packaging = "jar"
                         url.set("https://github.com/AllayMC/Allay")
-                    }
 
-                    licenses {
-                        license {
-                            name.set("LGPL 3.0")
-                            url.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
+                        scm {
+                            connection.set("scm:git:git://github.com/AllayMC/Allay.git")
+                            developerConnection.set("scm:git:ssh://github.com/AllayMC/Allay.git")
+                            url.set("https://github.com/AllayMC/Allay")
                         }
-                    }
 
-                    developers {
-                        developer {
-                            name.set("AllayMC Team")
-                            organization.set("AllayMC")
-                            organizationUrl.set("https://github.com/AllayMC")
+                        licenses {
+                            license {
+                                name.set("LGPL 3.0")
+                                url.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                name.set("AllayMC Team")
+                                organization.set("AllayMC")
+                                organizationUrl.set("https://github.com/AllayMC")
+                            }
                         }
                     }
                 }
