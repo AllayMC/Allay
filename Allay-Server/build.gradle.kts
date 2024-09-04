@@ -77,7 +77,9 @@ jacoco {
 tasks.create("cleanWorkingDir") {
     description = "Clean all files in `.run` directory except `Allay.run.xml` file"
     group = "application"
-    rootProject.rootDir.resolve(".run").listFiles { f -> !f.name.equals("Allay.run.xml") }?.forEach {
-        delete(it)
+    doLast {
+        rootProject.rootDir.resolve(".run").listFiles { f -> !f.name.equals("Allay.run.xml") }?.forEach {
+            delete(it)
+        }
     }
 }
