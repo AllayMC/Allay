@@ -32,6 +32,9 @@ subprojects {
     tasks {
         withType<JavaCompile> {
             options.encoding = "UTF-8"
+            configureEach {
+                options.isFork = true
+            }
         }
 
         withType<Test> {
