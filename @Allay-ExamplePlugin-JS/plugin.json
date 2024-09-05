@@ -1,8 +1,0 @@
-{
-  "entrance": "main.js",
-  "name": "ExamplePlugin-JS",
-  "authors": ["daoge_cmd"],
-  "version": "1.0.0",
-  "order": "POST_WORLD"/*,
-  "debugPort": 9229*/
-}
