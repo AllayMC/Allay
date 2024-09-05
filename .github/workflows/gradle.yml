@@ -14,7 +14,6 @@ on:
       - Allay-API/**
       - Allay-Server/**
       - Allay-Data/**
-  workflow_dispatch:
 
 jobs:
   build:
