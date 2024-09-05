@@ -51,8 +51,6 @@ netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", vers
 netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version = "4.1.112.Final" }
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.2" }
-# JeGenerator
-jegenerator = { group = "org.allaymc", name = "JEGeneratorBinary", version = "1.20.6-R0.2" }
 # GraalJS
 js = { group = "org.graalvm.polyglot", name = "js-community", version.ref = "graalvm" }
 polyglot = { group = "org.graalvm.polyglot", name = "polyglot", version.ref = "graalvm" }
