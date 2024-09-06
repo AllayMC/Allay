@@ -14,6 +14,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.utils.exception.MissingRequirementException;
 import org.allaymc.api.world.generator.WorldGenerator;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -35,6 +36,7 @@ import java.util.function.Supplier;
  */
 @Slf4j
 @Getter
+@ApiStatus.Internal
 public final class AllayAPI {
 
     public static final String API_VERSION = "1.0.0";

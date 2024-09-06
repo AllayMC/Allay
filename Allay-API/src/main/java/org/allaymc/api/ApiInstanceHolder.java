@@ -1,6 +1,7 @@
 package org.allaymc.api;
 
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Allay Project 2023/3/17
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
  * @author daoge_cmd
  */
 @NoArgsConstructor
+@ApiStatus.Internal
 public final class ApiInstanceHolder<T> {
 
     private T instance;
