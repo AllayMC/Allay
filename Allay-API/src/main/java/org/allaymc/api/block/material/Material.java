@@ -3,9 +3,11 @@ package org.allaymc.api.block.material;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Allay Project 2024/6/11
+ * Represents the data of a type of material.
  * <p>
  * See <a href="https://zh.minecraft.wiki/w/%E5%9F%BA%E5%B2%A9%E7%89%88%E6%9D%90%E6%96%99">Bedrock Materials</a> for details
+ * <p>
+ * Allay Project 2024/6/11
  *
  * @author daoge_cmd
  */
