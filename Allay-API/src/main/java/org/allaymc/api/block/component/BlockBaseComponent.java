@@ -62,6 +62,14 @@ public interface BlockBaseComponent extends BlockComponent {
      */
     void onRandomUpdate(BlockStateWithPos blockState);
 
+    /**
+     * Check the parameters of the place method
+     *
+     * @param dimension     The dimension where the block is placed
+     * @param blockState    The block that is being placed
+     * @param placeBlockPos The pos that the player is trying to place the block on
+     * @param placementInfo The player placement info, can be null
+     */
     default void checkPlaceMethodParam(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         Preconditions.checkState(getBlockType() == blockState.getBlockType());
         Preconditions.checkNotNull(dimension);

@@ -34,8 +34,8 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     protected void onBlockPlace(CBlockOnPlaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
 
-        createBlockEntityAt(pos, false);
-        var blockEntity = getBlockEntityAt(pos);
+        createBlockEntity(pos, false);
+        var blockEntity = getBlockEntity(pos);
         blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onPlace(event);
 
         // Send block entity to client after onPlace()
@@ -48,26 +48,26 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     @EventHandler
     protected void onBlockRemove(CBlockOnReplaceEvent event) {
         var pos = event.getCurrentBlockState().pos();
-        var blockEntity = getBlockEntityAt(pos);
+        var blockEntity = getBlockEntity(pos);
         if (blockEntity == null) {
             log.warn("Block entity not found at pos: {}", pos);
             return;
         }
         blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onReplace(event);
-        removeBlockEntityAt(pos);
+        removeBlockEntity(pos);
     }
 
     @EventHandler
     protected void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().pos());
-        var blockEntity = getBlockEntityAt(pos);
+        var blockEntity = getBlockEntity(pos);
         blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onNeighborUpdate(event);
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickBlockPos();
-        var blockEntity = getBlockEntityAt(pos.x(), pos.y(), pos.z(), event.getDimension());
+        var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension());
         blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onInteract(event);
     }
 }

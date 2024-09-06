@@ -39,7 +39,7 @@ public class BlockShulkerBoxBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     protected ItemStack createShulkerBoxDrop(BlockStateWithPos blockState) {
-        var blockEntity = blockEntityHolderComponent.getBlockEntityAt(blockState.pos());
+        var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.pos());
         var container = blockEntity.getContainer();
         var containerItems = container.saveNBT();
         var drop = blockState.blockState().toItemStack();
@@ -53,7 +53,7 @@ public class BlockShulkerBoxBaseComponentImpl extends BlockBaseComponentImpl {
         // The data exported by BDS is not quite correct. In theory, shulker boxes can be mined with bare hands, but the exported data shows they cannot.
         // Considering the special drop logic of shulker boxes (if they contain items, they will still drop when mined in creative mode), it is suspected to be an internal bug of BDS. Therefore, isDroppable() is overridden here.
         // The data exported by BDS is not used.
-        var blockEntity = blockEntityHolderComponent.getBlockEntityAt(blockState.pos());
+        var blockEntity = blockEntityHolderComponent.getBlockEntity(blockState.pos());
         var container = blockEntity.getContainer();
         if (!container.isEmpty()) return true;
         return !(entity instanceof EntityPlayer player) || player.getGameType() != GameType.CREATIVE;
