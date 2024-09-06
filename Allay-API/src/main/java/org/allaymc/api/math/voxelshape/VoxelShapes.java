@@ -10,11 +10,13 @@ import java.util.Map;
 import static org.allaymc.api.block.data.BlockFace.getBlockFaceByStairDirectionValue;
 
 /**
+ * A class contains some useful voxel shapes
+ * <p>
  * Allay Project 2023/9/2
  *
  * @author daoge_cmd
  */
-public abstract class CommonShapes {
+public final class VoxelShapes {
 
     // Stairs
     public static final Map<BlockFace, VoxelShape> UPWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
@@ -30,11 +32,13 @@ public abstract class CommonShapes {
             .build();
 
     static {
-        for (var face : BlockFace.getHorizontal()) {
+        for (var face : BlockFace.getHorizontalBlockFaces()) {
             UPWARDS_STAIR_SHAPES.put(face, UPWARDS_STAIR_SHAPE.rotate(face));
             DOWNWARDS_STAIR_SHAPES.put(face, DOWNWARDS_STAIR_SHAPE.rotate(face));
         }
     }
+
+    private VoxelShapes() {}
 
     public static VoxelShape buildStairShape(BlockState stairBlockState) {
         var isDownwards = stairBlockState.getPropertyValue(BlockPropertyTypes.UPSIDE_DOWN_BIT);

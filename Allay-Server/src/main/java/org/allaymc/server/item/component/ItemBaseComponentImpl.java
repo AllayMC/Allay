@@ -308,8 +308,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     protected void tryConsumeItem(EntityPlayer player) {
-        if (player == null || player.getGameType() != GameType.CREATIVE)
+        if (player == null || player.getGameType() != GameType.CREATIVE) {
             thisItemStack.setCount(thisItemStack.getCount() - 1);
+        }
     }
 
     protected boolean hasEntityCollision(Dimension dimension, Vector3ic placePos, BlockState blockState) {
