@@ -34,7 +34,6 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         if (placementInfo != null) {
             blockState = blockState.setProperty(FACING_DIRECTION, placementInfo.blockFace().ordinal());
         }

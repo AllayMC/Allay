@@ -89,7 +89,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         dimension.setBlockState(
                 placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(),
                 processBlockProperties(blockState, placeBlockPos, placementInfo),

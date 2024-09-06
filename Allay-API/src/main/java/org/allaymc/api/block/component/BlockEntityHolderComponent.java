@@ -69,7 +69,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      * @param y            block entity's y coordinate
      * @param z            block entity's z coordinate
      * @param dimension    the dimension which the block entity will be in
-     * @param sendToClient whether to send the block entity creating packet to the client
+     * @param sendToClient whether to send the block entity data packet to the client
      */
     default void createBlockEntity(int x, int y, int z, Dimension dimension, boolean sendToClient) {
         Objects.requireNonNull(dimension);

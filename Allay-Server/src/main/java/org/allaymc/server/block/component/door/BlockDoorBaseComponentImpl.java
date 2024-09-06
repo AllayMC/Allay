@@ -43,7 +43,6 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         if (placeBlockPos.y() >= dimension.getDimensionInfo().maxHeight()) {
             return false;
         }
