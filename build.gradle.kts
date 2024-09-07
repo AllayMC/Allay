@@ -48,6 +48,11 @@ subprojects {
             publications {
                 create<MavenPublication>("maven") {
                     from(components["java"])
+
+                    groupId = project.group.toString()
+                    artifactId = project.name
+                    version = project.version.toString()
+
                     pom {
                         inceptionYear.set("2023")
                         packaging = "jar"
