@@ -15,8 +15,6 @@ subprojects {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
         }
-        withSourcesJar()
-        withJavadocJar()
     }
 
     repositories {
@@ -36,6 +34,11 @@ subprojects {
     }
 
     if (publishedModules.contains(name)) {
+        java {
+            withSourcesJar()
+            withJavadocJar()
+        }
+
         publishing {
             repositories {
                 // Jitpack requires us to publish artifacts to local maven repo
