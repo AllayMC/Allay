@@ -9,12 +9,14 @@ subprojects {
     apply(plugin = "java-library")
     apply(plugin = "maven-publish")
 
-    group = "org.allaymc"
+    group = "org.allaymc.allay"
 
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(21)
         }
+        withSourcesJar()
+        withJavadocJar()
     }
 
     repositories {
