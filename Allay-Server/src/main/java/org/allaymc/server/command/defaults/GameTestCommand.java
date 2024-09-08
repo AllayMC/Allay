@@ -14,6 +14,7 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -152,6 +154,32 @@ public class GameTestCommand extends SimpleCommand {
                     JSONUtils.toFile("cmd_pk_allay.json", cmdPk, writer -> writer.setIndent("  "));
                     return context.success();
                 }, SenderType.PLAYER)
+                .root()
+                .key("dumpitemidtoblockstatehashmap")
+                .exec(context -> {
+                    var map = new HashMap<>();
+
+                    for (var blockState : Registries.BLOCK_STATE_PALETTE.getContent().values()) {
+                        var itemStack = blockState.toItemStack();
+                        var itemId = ItemId.fromIdentifier(itemStack.getItemType().getIdentifier());
+                        if (itemId == null) {
+                            // Is not vanilla item
+                            continue;
+                        }
+                        var meta = itemStack.getMeta();
+                        map.put(itemId.getRuntimeId() + (meta == 0 ? "" : ":" + meta), blockState.blockStateHash());
+                    }
+
+                    try {
+                        Files.deleteIfExists(Path.of("item_id_to_block_state_hash_map.json"));
+                    } catch (IOException e) {
+                        context.addOutput(TextFormat.RED + "" + e);
+                        return context.fail();
+                    }
+
+                    JSONUtils.toFile("item_id_to_block_state_hash_map.json", map, writer -> writer.setIndent("  "));
+                    return context.success();
+                })
                 .root()
                 .key("suicide")
                 .exec((context, player) -> {
