@@ -66,7 +66,7 @@ formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.10.2" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.12.0" }
 # Lombok
-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.32" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.34" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
