@@ -48,7 +48,7 @@ joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.1
 # Netty epoll
 netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.112.Final" }
 # Netty kqueue
-netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version = "4.1.112.Final" }
+netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version = "4.1.113.Final" }
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.2" }
 # GraalJS
