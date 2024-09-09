@@ -24,7 +24,7 @@ import java.awt.*;
 @Accessors(fluent = true)
 @Builder(toBuilder = true)
 @EqualsAndHashCode
-public class BlockStateData {
+public class  BlockStateData {
 
     /**
      * @see <a href="https://www.mcpk.wiki/wiki/Slipperiness">Slipperiness</a>
@@ -61,6 +61,8 @@ public class BlockStateData {
     protected boolean canContainLiquid = false;
     @Builder.Default
     protected VoxelShape collisionShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
+    @Builder.Default
+    protected float fallDamageReductionFactor = 0.0f;
     @Builder.Default
     protected float hardness = 1;
     @Builder.Default

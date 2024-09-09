@@ -696,11 +696,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         // Change damage applying reduction factor
         // for example, slime block
         float fallDistance = event.getFallDistance();
-
-        float damageReductionFactor = blockUnder.getBlockType().getBlockBehavior().getFallDamageReductionFactor();
-        event.setFallDistance(fallDistance - (fallDistance * blockUnder.getBlockType().getBlockBehavior().getFallDamageReductionFactor()));
-
-        this.manager.callEvent(new CEntityFallEvent(event.getFallDistance(), damageReductionFactor));
+        this.manager.callEvent(new CEntityFallEvent(event.getFallDistance()));
         this.fallDistance = 0;
     }
 

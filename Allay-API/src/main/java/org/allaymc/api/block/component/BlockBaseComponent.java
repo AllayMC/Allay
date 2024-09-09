@@ -186,8 +186,6 @@ public interface BlockBaseComponent extends BlockComponent {
         return true;
     }
 
-    float getFallDamageReductionFactor();
-
     default void onEntityFallOn(Entity entity, BlockState blockState) {}
 
     /**

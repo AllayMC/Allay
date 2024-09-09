@@ -83,11 +83,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public float getFallDamageReductionFactor() {
-        return 0.0f;
-    }
-
-    @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         dimension.setBlockState(
