@@ -5,7 +5,6 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.container.FullContainerType;
@@ -33,42 +32,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * @return block type
      */
     BlockType<? extends BlockBehavior> getBlockType();
-
-    default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, Vector3ic pos, Dimension dimension) {
-        updateBlockProperty(propertyType, value, pos.x(), pos.y(), pos.z(), dimension, 0);
-    }
-
-    default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, Dimension dimension) {
-        updateBlockProperty(propertyType, value, x, y, z, dimension, 0);
-    }
-
-    /**
-     * Update a specific property of a specific block
-     *
-     * @param propertyType the property type needs to be updated
-     * @param value        the new property value
-     * @param x            block's x coordinate
-     * @param y            block's y coordinate
-     * @param z            block's z coordinate
-     * @param dimension    the dimension which the block is in
-     * @param layer        the layer which contains the block
-     */
-    default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, Dimension dimension, int layer) {
-        var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
-        if (chunk == null) return;
-
-        var xIndex = x & 15;
-        var zIndex = z & 15;
-        var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
-        if (oldBlockState.getBlockType() != getBlockType())
-            throw new IllegalArgumentException("Block type is not match! Expected: " + getBlockType().getIdentifier() + ", actual: " + oldBlockState.getBlockType().getIdentifier());
-
-        var newBlockState = oldBlockState.setProperty(propertyType, value);
-        if (oldBlockState == newBlockState) return;
-
-        chunk.setBlockState(xIndex, y, zIndex, newBlockState, layer);
-        chunk.sendChunkPacket(Dimension.createBlockUpdatePacket(newBlockState, x, y, z, layer));
-    }
 
     /**
      * Check if the block can remain in its current position when a neighboring block updates.
@@ -98,14 +61,6 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param blockState the block
      */
     void onRandomUpdate(BlockStateWithPos blockState);
-
-    default void checkPlaceMethodParam(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        Preconditions.checkState(getBlockType() == blockState.getBlockType());
-        Preconditions.checkNotNull(dimension);
-        Preconditions.checkNotNull(blockState);
-        Preconditions.checkNotNull(placeBlockPos);
-        // PlacementInfo is nullable
-    }
 
     /**
      * Try to place a block

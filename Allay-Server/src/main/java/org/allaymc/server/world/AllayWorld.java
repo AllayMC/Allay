@@ -52,16 +52,10 @@ public class AllayWorld implements World {
     protected final Thread networkThread;
     protected long nextTimeSendTick;
 
-    @Getter
-    protected int internalSkyLight;
-
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
         this.worldData = worldStorage.readWorldData();
         this.worldData.setWorld(this);
-
-//        if (worldStorage instanceof NativeFileWorldStorage nativeFileWorldStorage)
-//            this.worldData.setName(nativeFileWorldStorage.getWorldFolderPath().toFile().getName());
 
         this.gameLoop = GameLoop.builder().onTick(gameLoop -> {
             if (!isRunning.get()) {
@@ -89,8 +83,6 @@ public class AllayWorld implements World {
         this.networkThread = Thread.ofPlatform()
                 .name("World Network Thread - " + this.getWorldData().getName())
                 .unstarted(this::networkTick);
-
-        syncInternalSkyLight();
     }
 
     protected void networkTick() {
@@ -124,6 +116,14 @@ public class AllayWorld implements World {
         packetQueue.add(new PacketQueueEntry(player, packet, time));
     }
 
+    protected void tick(long currentTick) {
+        syncData();
+        tickTime(currentTick);
+        scheduler.tick();
+        getDimensions().values().forEach(d -> ((AllayDimension) d).tick(currentTick));
+        worldStorage.tick(currentTick);
+    }
+
     @Override
     public long getTick() {
         return gameLoop.getTick();
@@ -144,28 +144,10 @@ public class AllayWorld implements World {
         return gameLoop.getTickUsage();
     }
 
-    @Override
-    public void tick(long currentTick) {
-        syncData();
-        tickTime(currentTick);
-        scheduler.tick();
-        getDimensions().values().forEach(d -> ((AllayDimension) d).tick(currentTick));
-        worldStorage.tick(currentTick);
-    }
-
     protected void syncData() {
         worldData.getGameRules().sync(this);
     }
 
-    /**
-     * TODO: called when rain and thunder change
-     */
-    @Override
-    public void syncInternalSkyLight() {
-        this.internalSkyLight = worldData.calculateInternalSkyLight();
-    }
-
-    @Override
     public void startTick() {
         if (thread.getState() != Thread.State.NEW) {
             throw new IllegalStateException("World is already start ticking!");
@@ -206,7 +188,6 @@ public class AllayWorld implements World {
         );
     }
 
-    @Override
     public void setDimension(Dimension dimension) {
         Preconditions.checkArgument(!this.dimensionMap.containsKey(dimension.getDimensionInfo().dimensionId()));
         this.dimensionMap.put(dimension.getDimensionInfo().dimensionId(), dimension);
@@ -219,7 +200,6 @@ public class AllayWorld implements World {
         getWorldStorage().writeWorldData(worldData);
     }
 
-    @Override
     public void shutdown() {
         isRunning.set(false);
         dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());

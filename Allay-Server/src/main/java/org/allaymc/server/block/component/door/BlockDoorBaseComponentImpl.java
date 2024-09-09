@@ -43,7 +43,6 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         if (placeBlockPos.y() >= dimension.getDimensionInfo().maxHeight()) {
             return false;
         }
@@ -122,8 +121,8 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         var isOpen = !blockState.getPropertyValue(OPEN_BIT);
 
-        updateBlockProperty(OPEN_BIT, isOpen, pos, dimension);
-        updateBlockProperty(OPEN_BIT, isOpen, otherPos, dimension);
+        dimension.updateBlockProperty(OPEN_BIT, isOpen, pos);
+        dimension.updateBlockProperty(OPEN_BIT, isOpen, otherPos);
 
         dimension.addLevelSoundEvent(pos.x(), pos.y(), pos.z(), isOpen ? SoundEvent.DOOR_OPEN : SoundEvent.DOOR_CLOSE);
         return true;

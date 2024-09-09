@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * The base class for block property type (boolean, enum, int)
+ * <p>
  * Allay Project 2023/3/19
  *
  * @author daoge_cmd

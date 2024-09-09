@@ -65,8 +65,6 @@ public interface Server extends TaskCreator, CommandSender {
 
     PluginManager getPluginManager();
 
-    void tick(long currentTick);
-
     long getTick();
 
     void shutdown();

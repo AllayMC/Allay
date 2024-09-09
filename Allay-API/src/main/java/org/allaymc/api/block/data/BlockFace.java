@@ -3,6 +3,7 @@ package org.allaymc.api.block.data;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3i;
@@ -29,7 +30,7 @@ public enum BlockFace {
     WEST(1, new Vector3i(-1, 0, 0)),
     EAST(3, new Vector3i(1, 0, 0));
 
-    public static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE = new BlockFace[]{
+    private static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE = new BlockFace[]{
             BlockFace.EAST, BlockFace.WEST,
             BlockFace.SOUTH, BlockFace.NORTH
     };
@@ -37,6 +38,12 @@ public enum BlockFace {
     private final int horizontalIndex;
     private final Vector3ic offset;
 
+    /**
+     * Get the block face by index
+     *
+     * @param value the index
+     * @return the block face
+     */
     public static BlockFace fromId(int value) {
         return switch (value) {
             case 0 -> BlockFace.DOWN;
@@ -49,11 +56,21 @@ public enum BlockFace {
         };
     }
 
-    public static BlockFace[] getHorizontal() {
+    /**
+     * Get horizontal block faces
+     *
+     * @return the horizontal block faces
+     */
+    public static BlockFace[] getHorizontalBlockFaces() {
         return new BlockFace[]{NORTH, EAST, SOUTH, WEST};
     }
 
-    public static BlockFace[] getVertical() {
+    /**
+     * Get vertical block faces
+     *
+     * @return the vertical block faces
+     */
+    public static BlockFace[] getVerticalBlockFaces() {
         return new BlockFace[]{UP, DOWN};
     }
 
@@ -61,14 +78,34 @@ public enum BlockFace {
         return STAIR_DIRECTION_VALUE_TO_BLOCK_FACE[value];
     }
 
+    /**
+     * Add current block face offset to the given pos
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param z the z coordinate
+     * @return the result pos
+     */
     public Vector3ic offsetPos(int x, int y, int z) {
         return offset.add(x, y, z, new Vector3i());
     }
 
+    /**
+     * Add current block face offset to the given pos
+     *
+     * @param pos the pos
+     * @return the result pos
+     */
     public Vector3ic offsetPos(Vector3ic pos) {
         return offset.add(pos, new Vector3i());
     }
 
+    /**
+     * Rotate the given AABB
+     *
+     * @param aabb the AABB
+     * @return the rotated AABB
+     */
     public AABBf rotateAABB(AABBfc aabb) {
         var c1 = new Vector3f(aabb.minX(), aabb.minY(), aabb.minZ());
         var c2 = new Vector3f(aabb.maxX(), aabb.maxY(), aabb.maxZ());
@@ -84,6 +121,12 @@ public enum BlockFace {
         );
     }
 
+    /**
+     * Rotate the given vector
+     *
+     * @param vec the vector
+     * @return the rotated vector
+     */
     @SuppressWarnings("SuspiciousNameCombination")
     public Vector3f rotateVector(Vector3fc vec) {
         Vector3f result = new Vector3f(vec);
@@ -127,6 +170,11 @@ public enum BlockFace {
         return result;
     }
 
+    /**
+     * Get the opposite block face
+     *
+     * @return the opposite block face
+     */
     public BlockFace opposite() {
         return switch (this) {
             case DOWN -> UP;
@@ -168,10 +216,21 @@ public enum BlockFace {
         };
     }
 
+    /**
+     * Check if this block face is vertical
+     *
+     * @return true if vertical, false if not
+     */
     public boolean isHorizontal() {
         return this == NORTH || this == EAST || this == SOUTH || this == WEST;
     }
 
+    /**
+     * Get the stair direction value which represents this block face
+     *
+     * @return the stair direction value
+     */
+    @ApiStatus.Experimental
     public int toStairDirectionValue() {
         return switch (this) {
             case EAST -> 0;
@@ -182,6 +241,12 @@ public enum BlockFace {
         };
     }
 
+    /**
+     * Get the Minecraft cardinal direction which represents this block face
+     *
+     * @return the Minecraft cardinal direction
+     */
+    @ApiStatus.Experimental
     public MinecraftCardinalDirection toMinecraftCardinalDirection() {
         return switch (this) {
             case NORTH -> MinecraftCardinalDirection.NORTH;

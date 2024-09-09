@@ -34,11 +34,6 @@ public class AllayPluginManager implements PluginManager {
 
     public AllayPluginManager() {
         registerSource(new DefaultPluginSource());
-        // Only for testing example-plugin-js more convenient
-        // Only works when the server is running in {project-dir}/run folder
-//        registerSource(() -> Set.of(
-//                Path.of("../@Allay-ExamplePlugin-JS")
-//        ));
         registerLoaderFactory(new JarPluginLoader.JarPluginLoaderFactory());
         registerLoaderFactory(new JsPluginLoader.JsPluginLoaderFactory());
     }

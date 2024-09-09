@@ -75,23 +75,6 @@ public class Utils {
         return payload;
     }
 
-    /**
-     * Spin until end = true
-     *
-     * @param end      the end
-     * @param interval the interval
-     */
-    public void spinUntil(Supplier<Boolean> end, Duration interval) {
-        while (end.get()) {
-            try {
-                long times = MILLISECONDS.convert(interval);
-                Thread.sleep(times);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     public String[] objectArrayToStringArray(Object[] objectArray) {
         String[] stringArray = new String[objectArray.length];
         for (int i = 0; i < objectArray.length; i++) {

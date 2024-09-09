@@ -3,7 +3,6 @@ package org.allaymc.server.registry.loader;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.world.storage.AllayLevelDBWorldStorage;
-import org.allaymc.server.world.storage.AllayNonPersistentWorldStorage;
 
 import java.nio.file.Path;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ public class WorldStorageFactoryRegistryLoader implements RegistryLoader<Void, M
     @Override
     public Map<String, Function<Path, WorldStorage>> load(Void $) {
         var map = new HashMap<String, Function<Path, WorldStorage>>();
-        map.put("NON_PERSISTENT", $1 -> new AllayNonPersistentWorldStorage());
         map.put("LEVELDB", AllayLevelDBWorldStorage::new);
         return map;
     }

@@ -31,7 +31,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      *
      * @return the block entity, or null if block entity is not found
      */
-    default T getBlockEntityAt(int x, int y, int z, Dimension dimension) {
+    default T getBlockEntity(int x, int y, int z, Dimension dimension) {
         var blockEntity = dimension.getBlockEntity(x, y, z);
         if (blockEntity == null) return null;
         if (blockEntity.getBlockEntityType() != this.getBlockEntityType()) {
@@ -46,20 +46,20 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         return (T) blockEntity;
     }
 
-    default T getBlockEntityAt(Position3ic pos) {
-        return getBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.dimension());
+    default T getBlockEntity(Position3ic pos) {
+        return getBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
-    default void createBlockEntityAt(Position3ic pos) {
-        createBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.dimension());
+    default void createBlockEntity(Position3ic pos) {
+        createBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
-    default void createBlockEntityAt(int x, int y, int z, Dimension dimension) {
-        createBlockEntityAt(x, y, z, dimension, true);
+    default void createBlockEntity(int x, int y, int z, Dimension dimension) {
+        createBlockEntity(x, y, z, dimension, true);
     }
 
-    default void createBlockEntityAt(Position3ic pos, boolean sendToClient) {
-        createBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.dimension(), sendToClient);
+    default void createBlockEntity(Position3ic pos, boolean sendToClient) {
+        createBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension(), sendToClient);
     }
 
     /**
@@ -69,11 +69,11 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      * @param y            block entity's y coordinate
      * @param z            block entity's z coordinate
      * @param dimension    the dimension which the block entity will be in
-     * @param sendToClient whether to send the block entity creating packet to the client
+     * @param sendToClient whether to send the block entity data packet to the client
      */
-    default void createBlockEntityAt(int x, int y, int z, Dimension dimension, boolean sendToClient) {
+    default void createBlockEntity(int x, int y, int z, Dimension dimension, boolean sendToClient) {
         Objects.requireNonNull(dimension);
-        var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
+        var chunk = dimension.getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             throw new IllegalStateException("Trying to create a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }
@@ -88,8 +88,8 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         }
     }
 
-    default void removeBlockEntityAt(Position3ic pos) {
-        removeBlockEntityAt(pos.x(), pos.y(), pos.z(), pos.dimension());
+    default void removeBlockEntity(Position3ic pos) {
+        removeBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
     /**
@@ -102,9 +102,9 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
      *
      * @throws IllegalStateException if chunk isn't loaded or the block entity not exists
      */
-    default void removeBlockEntityAt(int x, int y, int z, Dimension dimension) {
+    default void removeBlockEntity(int x, int y, int z, Dimension dimension) {
         Objects.requireNonNull(dimension);
-        var chunk = dimension.getChunkService().getChunkByLevelPos(x, z);
+        var chunk = dimension.getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) {
             throw new IllegalStateException("Trying to remove a block entity in an unload chunk! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z);
         }

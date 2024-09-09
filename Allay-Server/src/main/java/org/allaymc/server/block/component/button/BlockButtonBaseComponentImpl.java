@@ -34,7 +34,6 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         if (placementInfo != null) {
             blockState = blockState.setProperty(FACING_DIRECTION, placementInfo.blockFace().ordinal());
         }
@@ -56,7 +55,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
         var pos = interactInfo.clickBlockPos();
         var blockState = dimension.getBlockState(pos);
         if (!blockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
-            updateBlockProperty(BUTTON_PRESSED_BIT, true, pos, dimension);
+            dimension.updateBlockProperty(BUTTON_PRESSED_BIT, true, pos);
             dimension.getBlockUpdateService().scheduleBlockUpdate(pos, getActivationTime());
             dimension.addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_ON);
         }
@@ -68,7 +67,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
         var pos = blockStateWithPos.pos();
         var blockState = blockStateWithPos.blockState();
         if (blockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
-            updateBlockProperty(BUTTON_PRESSED_BIT, false, pos, pos.dimension());
+            pos.dimension().updateBlockProperty(BUTTON_PRESSED_BIT, false, pos);
             pos.dimension().addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_OFF);
         }
     }

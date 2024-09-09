@@ -1,16 +1,13 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
 
 plugins {
-    `java-library`
-    jacoco
-    application
-    id("me.champeau.jmh") version "0.7.2"
-    id("com.gorylenko.gradle-git-properties") version "2.4.2"
-    id("buildlogic.common")
+    id("jacoco")
+    id("application")
+    alias(libs.plugins.jmh)
+    alias(libs.plugins.gitproperties)
+    alias(libs.plugins.shadow)
 }
 
-group = "org.allaymc"
-description = "server"
 version = "1.0.0"
 
 application {
@@ -19,20 +16,17 @@ application {
 
 dependencies {
     api(project(":Allay-API"))
+    implementation(libs.commonsio)
     implementation(libs.mcterminal)
     implementation(libs.bundles.logging)
     implementation(libs.disruptor)
-    implementation(libs.bytebuddy) {
-        exclude(group = "org.jline", module = "jline")
-    }
+    implementation(libs.bytebuddy)
     implementation(libs.libdeflate)
     implementation(libs.leveldbjni)
     implementation(libs.netty.epoll)
     implementation(libs.netty.kqueue)
-    implementation(libs.jegenerator)
     implementation(libs.fastreflect)
     implementation(libs.reflections)
-    implementation(libs.caffeine)
     implementation(libs.polyglot)
     implementation(libs.js)
     implementation(libs.bundles.graalvm)
@@ -40,7 +34,8 @@ dependencies {
     implementation(libs.flatlaf)
     implementation(libs.formsrt)
 
-    testImplementation(libs.bytebuddy)
+    testImplementation(libs.bundles.junit)
+    testAnnotationProcessor(libs.lombok)
 }
 
 gitProperties {
@@ -52,52 +47,17 @@ tasks.processResources {
     dependsOn("generateGitProperties")
     // input directory
     from("${rootProject.projectDir}/Allay-Data/resources")
-    // exclude unpacked folder and block palette.nbt
-    exclude("**/unpacked/**")
-}
-
-// disable, please use `java -jar` to start directly
-tasks.startScripts {
-    enabled = false
-}
-// disable
-tasks.startShadowScripts {
-    enabled = false
-}
-// disable
-tasks.distTar {
-    enabled = false
-}
-// disable
-tasks.distZip {
-    enabled = false
-}
-
-tasks.sourcesJar {
-    dependsOn("generateGitProperties")
+    // exclude unpacked folder and block_palette.nbt
+    exclude("${rootProject.projectDir}/unpacked/**")
 }
 
 tasks.runShadow {
-    workingDir = File("${rootProject.projectDir}/.run/")
+    workingDir = file("${rootProject.projectDir}/.run/")
     this.jarFile = file("build/libs/Allay-Server-$version-all.jar")
-}
-
-tasks.installShadowDist {
-    enabled = false
-}
-
-tasks.jar {
-    manifest {
-        attributes["Multi-Release"] = "true"
-    }
 }
 
 tasks.shadowJar {
     transform(Log4j2PluginsCacheFileTransformer())
-}
-
-tasks.test {
-    finalizedBy("jacocoTestReport")
 }
 
 tasks.jacocoTestReport {
@@ -105,11 +65,20 @@ tasks.jacocoTestReport {
         xml.required = true
         html.required = false
     }
-    dependsOn("test")
     additionalClassDirs(file("${rootProject.projectDir}/Allay-API/build/classes/java/main"))
     additionalSourceDirs(file("${rootProject.projectDir}/Allay-API/src/main/java"))
 }
 
 jacoco {
     reportsDirectory = layout.buildDirectory.dir("${rootProject.projectDir}/.jacoco")
+}
+
+tasks.create("cleanWorkingDir") {
+    description = "Clean all files in `.run` directory except `Allay.run.xml` file"
+    group = "application"
+    doLast {
+        rootProject.rootDir.resolve(".run").listFiles { f -> !f.name.equals("Allay.run.xml") }?.forEach {
+            delete(it)
+        }
+    }
 }

@@ -1,8 +1,0 @@
-{
-  "entrance": "org.allaymc.exampleplugin.ExamplePlugin",
-  "name": "ExamplePlugin",
-  "authors": [
-    "daoge_cmd"
-  ],
-  "version": "1.0.0"
-}

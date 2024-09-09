@@ -32,12 +32,16 @@ public class TestChunkLoader implements ChunkLoader {
     @Setter
     protected Location3fc location = new Location3f(0, 0, 0, null);
 
+    @Override
+    public void sendLevelChunkPacket(LevelChunkPacket lcp) {
+        lcp.release();
+    }
+
     @Override public void beforeSendChunks() {}
     @Override public void onChunkInRangeSend(Chunk chunk) {}
     @Override public void spawnEntity(Entity entity) {}
     @Override public void despawnEntity(Entity entity) {}
     @Override public void onChunkOutOfRange(Set<Long> chunkHashes) {}
-    @Override public void sendLevelChunkPacket(LevelChunkPacket lcp) {}
     @Override public void handleChunkPacket(BedrockPacket packet) {}
     @Override public void handleChunkPacketImmediately(BedrockPacket packet) {}
 }

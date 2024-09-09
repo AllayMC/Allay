@@ -190,8 +190,7 @@ public final class AllayServer implements Server {
         players.values().forEach(player -> player.disconnect(TrKeys.M_DISCONNECT_CLOSED));
     }
 
-    @Override
-    public void tick(long currentTick) {
+    private void tick(long currentTick) {
         this.scheduler.tick();
         playerStorage.tick(currentTick);
     }
@@ -259,12 +258,13 @@ public final class AllayServer implements Server {
         Server.getInstance().broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED, player.getOriginName());
     }
 
-    public void onDisconnect(EntityPlayer player, String reason) {
+    public void onDisconnect(EntityPlayer player) {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
         if (player.isLoggedIn()) {
             broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
             playerStorage.savePlayerData(player);
+            players.remove(player.getUUID());
         }
 
         if (player.isSpawned()) {
@@ -276,7 +276,6 @@ public final class AllayServer implements Server {
             broadcastPacket(pk);
         }
 
-        players.remove(player.getUUID());
         networkServer.setPlayerCount(players.size());
     }
 

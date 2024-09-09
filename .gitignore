@@ -1,35 +1,29 @@
-/.gradle/
-
+.gradle
+.jacoco
 .idea/**
-### Add the codestyle to the repo
+# Code style files should be included
 !/.idea/codeStyles
 !/.idea/codeStyles/*
 !/.idea/codeStyles/codeStyleConfig.xml
 !/.idea/codeStyles/Project.xml
-### Add the inspectionProfiles to the repo
+# Inspection profiles should be included
 !/.idea/inspectionProfiles
 !/.idea/inspectionProfiles/Project_Default.xml
-
-**/build/
-**/bin/
-!.run/Allay.run.xml
-#runing output file
+# Files because of building the project
+**/build
+**/bin
+**/out
+# Working dir
 .run/**
-/Allay-Server/caches/
-/Allay-Server/logs/
-/Allay-Server/players/
-/Allay-Server/resource_packs/
+!.run/Allay.run.xml
+# Files due to running `gradle run`
+/Allay-Server/caches
+/Allay-Server/command_data
+/Allay-Server/logs
+/Allay-Server/players
+/Allay-Server/plugins
+/Allay-Server/resource_packs
 /Allay-Server/server-settings.yml
-/Allay-Server/worlds/
-/jegenerator/
-/resource_packs/
-/players/
-/worlds/
-/caches/
-/logs/
-/server-settings.yml
+/Allay-Server/worlds
 /Allay-Server/ban-info.yml
 /Allay-Server/whitelist.yml
-/.jacoco/
-/.vscode/
-/buildSrc/.gradle/

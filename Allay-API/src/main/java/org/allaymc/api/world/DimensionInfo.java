@@ -4,9 +4,7 @@ import com.google.common.base.Preconditions;
 import org.allaymc.api.utils.Identifier;
 
 /**
- * Provide some information for dimension, dimension id, minimum buildable height, maximum buildable height, and number of sub-chunks
- * <p>
- * Allay Project 2023/5/31
+ * DimensionInfo contains some information about a dimension.
  *
  * @author Cool_Loong | daoge_cmd
  */

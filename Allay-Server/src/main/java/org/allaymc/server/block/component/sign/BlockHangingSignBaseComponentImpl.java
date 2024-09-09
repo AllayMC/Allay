@@ -24,7 +24,6 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        checkPlaceMethodParam(dimension, blockState, placeBlockPos, placementInfo);
         if (placementInfo == null) return super.place(dimension, blockState, placeBlockPos, null);
 
         var face = placementInfo.blockFace();

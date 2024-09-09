@@ -10,66 +10,129 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Describe a world
- * <p>
- * Allay Project 2023/3/4
+ * Represents a world in the server.
  *
  * @author daoge_cmd
  */
 public interface World {
+    /**
+     * Get the thread which the world is running on.
+     *
+     * @return the thread which the world is running on.
+     */
     Thread getThread();
 
+    /**
+     * Get the tick of the world.
+     *
+     * @return the tick of the world.
+     */
     long getTick();
 
+    /**
+     * Get the TPS of the world.
+     *
+     * @return the TPS of the world.
+     */
     float getTps();
 
+    /**
+     * Get the MSPT of the world.
+     *
+     * @return the MSPT of the world.
+     */
     float getMSPT();
 
+    /**
+     * Get the tick usage of the world.
+     *
+     * @return the tick usage of the world.
+     */
     float getTickUsage();
 
-    void startTick();
-
+    /**
+     * Get the dimension by the dimension id in this world.
+     *
+     * @param dimensionId the dimension id.
+     * @return the dimension, or {@code null} if the dimension is not found.
+     */
     Dimension getDimension(int dimensionId);
 
+    /**
+     * Get the overworld dimension in this world.
+     *
+     * @return the overworld dimension, {@code null} should never being returned.
+     */
     default Dimension getOverWorld() {
         return getDimension(DimensionInfo.OVERWORLD.dimensionId());
     }
 
+    /**
+     * Get the nether dimension in this world.
+     *
+     * @return the nether dimension, or {@code null} if the nether dimension is not found.
+     */
     default Dimension getNether() {
         return getDimension(DimensionInfo.NETHER.dimensionId());
     }
 
+    /**
+     * Get the end dimension in this world.
+     *
+     * @return the end dimension, or {@code null} if the end dimension is not found.
+     */
     default Dimension getTheEnd() {
         return getDimension(DimensionInfo.THE_END.dimensionId());
     }
 
+    /**
+     * Get all dimensions in this world.
+     *
+     * @return all dimensions in this world.
+     */
     @UnmodifiableView
     Map<Integer, Dimension> getDimensions();
 
+    /**
+     * Get the players in this world.
+     *
+     * @return the players in this world.
+     */
     @UnmodifiableView
     Collection<EntityPlayer> getPlayers();
 
-    void tick(long currentTick);
-
-    void syncInternalSkyLight();
-
+    /**
+     * Get the scheduler of the world.
+     *
+     * @return the scheduler of the world.
+     */
     Scheduler getScheduler();
 
-    WorldStorage getWorldStorage();
-
+    /**
+     * Get the world data of the world.
+     *
+     * @return the world data of the world.
+     */
     WorldData getWorldData();
 
+    /**
+     * Save the world data of the world.
+     */
     void saveWorldData();
 
-    void shutdown();
-
+    /**
+     * Check if the world is running.
+     *
+     * @return {@code true} if the world is running, otherwise {@code false}.
+     */
     boolean isRunning();
 
-    void setDimension(Dimension dimension);
-
+    /**
+     * Broadcast a packet to all players in this world.
+     *
+     * @param packet the packet to broadcast.
+     */
     default void broadcastPacket(BedrockPacket packet) {
         getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
     }
-
-    int getInternalSkyLight();
 }

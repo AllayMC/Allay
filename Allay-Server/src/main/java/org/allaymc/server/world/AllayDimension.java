@@ -43,12 +43,12 @@ public class AllayDimension implements Dimension {
     protected final AllayBlockUpdateService blockUpdateService;
     protected final AllayEntityService entityService;
     protected final DimensionInfo dimensionInfo;
-    protected final World world;
+    protected final AllayWorld world;
 
     protected final Set<EntityPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<>());
     protected final Set<EntityPlayer> unmodifiablePlayersView = Collections.unmodifiableSet(this.players);
 
-    public AllayDimension(World world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
+    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
@@ -101,7 +101,7 @@ public class AllayDimension implements Dimension {
 
     @Override
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
-        var chunk = getChunkService().getChunkByLevelPos(x, z);
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
         if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
 
         var xIndex = x & 15;
@@ -145,7 +145,7 @@ public class AllayDimension implements Dimension {
         pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
         pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));
         pk.setData(block.blockStateHash());
-        getChunkService().getChunkByLevelPos(x, z).addChunkPacket(pk);
+        getChunkService().getChunkByDimensionPos(x, z).addChunkPacket(pk);
 
         block.getBehavior().onBreak(
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),

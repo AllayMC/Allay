@@ -1,7 +1,6 @@
 package org.allaymc.server.blockentity.component;
 
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.container.impl.BarrelContainer;
@@ -28,25 +27,23 @@ public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponent
         BarrelContainer container = containerHolderComponent.getContainer();
         container.addOnOpenListener(viewer -> {
             if (container.getViewers().size() == 1) {
-                BlockTypes.BARREL.getBlockBehavior().updateBlockProperty(
+                position.dimension().updateBlockProperty(
                         BlockPropertyTypes.OPEN_BIT,
                         true,
                         position.x(),
                         position.y(),
-                        position.z(),
-                        position.dimension()
+                        position.z()
                 );
             }
         });
         container.addOnCloseListener(viewer -> {
             if (container.getViewers().isEmpty()) {
-                BlockTypes.BARREL.getBlockBehavior().updateBlockProperty(
+                position.dimension().updateBlockProperty(
                         BlockPropertyTypes.OPEN_BIT,
                         false,
                         position.x(),
                         position.y(),
-                        position.z(),
-                        position.dimension()
+                        position.z()
                 );
             }
         });

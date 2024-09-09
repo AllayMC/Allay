@@ -56,7 +56,14 @@ public final class ItemMetaBlockStateBiMap {
             throw new IllegalStateException();
         }
         var map = ITEM_TYPE_TO_META_MAP.get(itemType);
-        return map != null ? map::get : ($ -> itemType.getBlockType().getDefaultState());
+        return map != null ? key -> {
+            var blockState = map.get(key);
+            if (blockState == null) {
+                log.warn("Cannot find block state by meta: {}, item type: {}", key, itemType.getIdentifier());
+                return itemType.getBlockType().getDefaultState();
+            }
+            return blockState;
+        } : ($ -> itemType.getBlockType().getDefaultState());
     }
 
     public static Function<Integer, Integer> getBlockStateHashToMetaMapper(BlockType<?> blockType) {
@@ -64,6 +71,13 @@ public final class ItemMetaBlockStateBiMap {
             throw new IllegalStateException();
         }
         var map = BLOCK_STATE_HASH_TO_META_MAP.get(blockType);
-        return map != null ? map::get : ($ -> 0);
+        return map != null ? key -> {
+            var meta = map.get(key);
+            if (meta == null) {
+                log.warn("Cannot find meta by block state hash: {}, block type: {}", key, blockType.getIdentifier());
+                return 0;
+            }
+            return meta;
+        } : ($ -> 0);
     }
 }

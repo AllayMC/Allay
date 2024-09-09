@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Allay Project 2024/8/16
+ * Represents a 16 direction compass rose.
  * <p>
- * Represents a 16 direction compass rose. <br>
- * https://en.wikipedia.org/wiki/Compass_rose#/media/File:Brosen_windrose.svg
+ * See <a href="https://en.wikipedia.org/wiki/Compass_rose#/media/File:Brosen_windrose.svg">wiki</a> for more information.
+ * <p>
+ * Allay Project 2024/8/16
  *
  * @author joserobjr | Cool_Loong
  */
@@ -59,6 +60,16 @@ public enum CompassRoseDirection {
     }
 
     /**
+     * Gets the direction from the given index.
+     *
+     * @param index The index of the direction
+     * @return The direction from the given index
+     */
+    public static CompassRoseDirection from(int index) {
+        return VALUES[index];
+    }
+
+    /**
      * Get the amount of X-coordinates to modify to get the represented block
      *
      * @return Amount of X-coordinates to modify
@@ -79,11 +90,18 @@ public enum CompassRoseDirection {
     /**
      * Gets the closest face for this direction. For example, NNE returns N.
      * Even directions like NE will return the direction to the left, N in this case.
+     * <p>
+     * @return The closest face for this direction
      */
     public BlockFace getClosestBlockFace() {
         return closestBlockFace;
     }
 
+    /**
+     * Get the index of this direction.
+     *
+     * @return The index of this direction
+     */
     public int getIndex() {
         return index;
     }
@@ -108,6 +126,11 @@ public enum CompassRoseDirection {
         return getClosestFromYaw(yaw, Precision.SECONDARY_INTER_CARDINAL);
     }
 
+    /**
+     * Gets the opposite face of this direction.
+     *
+     * @return The opposite face of this direction
+     */
     public CompassRoseDirection getOppositeFace() {
         return switch (this) {
             case NORTH -> CompassRoseDirection.SOUTH;
@@ -136,10 +159,6 @@ public enum CompassRoseDirection {
      */
     public float getYaw() {
         return yaw;
-    }
-
-    public static CompassRoseDirection from(int index) {
-        return VALUES[index];
     }
 
     @RequiredArgsConstructor

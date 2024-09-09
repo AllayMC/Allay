@@ -14,6 +14,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.exception.MissingImplementationException;
 import org.allaymc.api.utils.exception.MissingRequirementException;
 import org.allaymc.api.world.generator.WorldGenerator;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -23,20 +24,18 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * This class is used to manage the implementation of the API to the module<br>
- * The Allay-API defines a number of interfaces that need to be implemented in advance, <br>
- * and in Allay-Server, this will be implemented through such registrations<br>
- * <p>
- * Note that for each interface that needs to be implemented, there is only one instance of the implementation class in runtime
- * <p>
- * Allay Project 2023/3/11
+ * AllayAPI is used to manage api classes and the implementations of api instances.
  *
  * @author daoge_cmd
  */
 @Slf4j
 @Getter
+@ApiStatus.Internal
 public final class AllayAPI {
 
+    /**
+     * The version of allay api.
+     */
     public static final String API_VERSION = "1.0.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
@@ -51,6 +50,8 @@ public final class AllayAPI {
     }
 
     /**
+     * Get the instance of the AllayAPI.
+     *
      * @return the API instance
      */
     public static AllayAPI getInstance() {
@@ -58,7 +59,9 @@ public final class AllayAPI {
     }
 
     /**
-     * After you have finished registering your implementation, you need to call this method to complete the implementation injection
+     * Mark api as implemented with the specific core name.
+     * <p>
+     * After finish binding api instances, this method should be called to complete api injection process.
      *
      * @throws MissingImplementationException If there are interface which are not been implemented
      */
@@ -90,10 +93,9 @@ public final class AllayAPI {
     }
 
     /**
-     * Add an interface to be implemented<br>
-     * It needs to be implemented by the server
+     * Add an api class which needs to be implemented.
      *
-     * @param api the interface
+     * @param api the api
      */
     public <T> void requireImpl(Class<T> api, Consumer<T> apiInstanceConsumer) {
         bindings.put(api, null);
@@ -104,6 +106,14 @@ public final class AllayAPI {
         bind(api, supplier, null);
     }
 
+    /**
+     * Bind an api with the specific api instance.
+     *
+     * @param api the api.
+     * @param bindingAction the supplier which provides the api instance.
+     * @param afterBound the consumer which will be called after the api instance has been bound.
+     * @param <T> the type of the api class.
+     */
     public <T> void bind(Class<T> api, Supplier<T> bindingAction, Consumer<T> afterBound) {
         Objects.requireNonNull(api);
         Objects.requireNonNull(bindingAction);
@@ -118,12 +128,13 @@ public final class AllayAPI {
     }
 
     /**
-     * Each interface has only one instance of the corresponding implementation class, so if you call this method with the same parameters, you will return an identical object <br>
-     * If the interface has not been implemented, it will throw an exception <br>
+     * Get the implementation instance of the specific api class.
+     * <p>
+     * Each api class has only one implementation instance, so calling this method with the same parameters will return an identical object
      *
      * @param api the interface
-     *
      * @return the implementation instance of the specific interface
+     * @throws RuntimeException if the interface has not been implemented
      */
     public <T> T getAPIInstance(Class<T> api) {
         if (!implemented)

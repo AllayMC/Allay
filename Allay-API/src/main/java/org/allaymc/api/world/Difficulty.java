@@ -1,7 +1,7 @@
 package org.allaymc.api.world;
 
 /**
- * Allay Project 2023/5/31
+ * Difficulty enum contains all valid difficulties in the game.
  *
  * @author LucGamesYT | daoge_cmd
  */
@@ -11,6 +11,12 @@ public enum Difficulty {
     NORMAL,
     HARD;
 
+    /**
+     * Get difficulty from int value.
+     *
+     * @param value int value of difficulty.
+     * @return difficulty, or {@code null} if not found.
+     */
     public static Difficulty from(int value) {
         return switch (value) {
             case 0 -> Difficulty.PEACEFUL;
@@ -21,6 +27,12 @@ public enum Difficulty {
         };
     }
 
+    /**
+     * Get difficulty from string value.
+     *
+     * @param value string value of difficulty.
+     * @return difficulty, or {@code null} if not found.
+     */
     public static Difficulty from(String value) {
         return switch (value) {
             case "peaceful", "p" -> Difficulty.PEACEFUL;
