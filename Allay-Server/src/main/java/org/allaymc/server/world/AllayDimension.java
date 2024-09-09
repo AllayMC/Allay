@@ -43,12 +43,12 @@ public class AllayDimension implements Dimension {
     protected final AllayBlockUpdateService blockUpdateService;
     protected final AllayEntityService entityService;
     protected final DimensionInfo dimensionInfo;
-    protected final World world;
+    protected final AllayWorld world;
 
     protected final Set<EntityPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<>());
     protected final Set<EntityPlayer> unmodifiablePlayersView = Collections.unmodifiableSet(this.players);
 
-    public AllayDimension(World world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
+    public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
         this.worldGenerator = worldGenerator;
