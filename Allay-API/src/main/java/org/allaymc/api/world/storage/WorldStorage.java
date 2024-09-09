@@ -14,6 +14,8 @@ import java.util.concurrent.CompletableFuture;
 public interface WorldStorage {
     default void tick(long currentTick) {}
 
+    default void shutdown() {}
+
     CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
 
     Chunk readChunkSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
@@ -27,6 +29,4 @@ public interface WorldStorage {
     void writeWorldData(WorldData worldData);
 
     WorldData readWorldData();
-
-    void shutdown();
 }

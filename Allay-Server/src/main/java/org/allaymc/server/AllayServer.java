@@ -190,8 +190,7 @@ public final class AllayServer implements Server {
         players.values().forEach(player -> player.disconnect(TrKeys.M_DISCONNECT_CLOSED));
     }
 
-    @Override
-    public void tick(long currentTick) {
+    private void tick(long currentTick) {
         this.scheduler.tick();
         playerStorage.tick(currentTick);
     }

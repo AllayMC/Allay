@@ -36,9 +36,4 @@ public class AllayEmptyPlayerStorage implements PlayerStorage {
     public boolean hasPlayerData(UUID uuid) {
         return false;
     }
-
-    @Override
-    public void shutdown() {
-        // Do nothing
-    }
 }

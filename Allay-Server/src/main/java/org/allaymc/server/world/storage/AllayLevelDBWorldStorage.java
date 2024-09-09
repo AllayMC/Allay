@@ -11,7 +11,7 @@ import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.gamerule.GameRules;
-import org.allaymc.api.world.storage.NativeFileWorldStorage;
+import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.utils.LevelDBKeyUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NBTInputStream;
@@ -38,7 +38,7 @@ import java.util.concurrent.CompletableFuture;
  * @author Cool_Loong
  */
 @Slf4j
-public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
+public class AllayLevelDBWorldStorage implements WorldStorage {
     private static final int CURRENT_LEVEL_DAT_VERSION = 10;
 
     private static final int LATEST_CHUNK_VERSION = 40;
@@ -419,10 +419,5 @@ public class AllayLevelDBWorldStorage implements NativeFileWorldStorage {
                 .putFloat("flySpeed", worldData.getAbilities().getFlySpeed())
                 .putFloat("walkSpeed", worldData.getAbilities().getWalkSpeed())
                 .build();
-    }
-
-    @Override
-    public Path getWorldFolderPath() {
-        return path;
     }
 }

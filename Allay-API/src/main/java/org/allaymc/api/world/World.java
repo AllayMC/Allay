@@ -49,8 +49,6 @@ public interface World {
     @UnmodifiableView
     Collection<EntityPlayer> getPlayers();
 
-    void tick(long currentTick);
-
     void syncInternalSkyLight();
 
     Scheduler getScheduler();
@@ -60,8 +58,6 @@ public interface World {
     WorldData getWorldData();
 
     void saveWorldData();
-
-    void shutdown();
 
     boolean isRunning();
 

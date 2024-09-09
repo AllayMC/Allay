@@ -32,7 +32,7 @@ public final class AllayWorldPool implements WorldPool {
     public static final Path WORLDS_FOLDER = Path.of("worlds");
     public static final String SETTINGS_FILE_NAME = "world-settings.yml";
 
-    private final Map<String, World> worlds = new ConcurrentHashMap<>();
+    private final Map<String, AllayWorld> worlds = new ConcurrentHashMap<>();
     @Getter
     private WorldSettings worldConfig;
 
@@ -44,9 +44,8 @@ public final class AllayWorldPool implements WorldPool {
         worldConfig.worlds().forEach(this::loadWorld);
     }
 
-    @Override
     public void shutdown() {
-        worlds.values().forEach(World::shutdown);
+        worlds.values().forEach(AllayWorld::shutdown);
     }
 
     @Override
@@ -58,7 +57,7 @@ public final class AllayWorldPool implements WorldPool {
             throw new IllegalArgumentException("World " + name + " already exists");
 
         var overworldSettings = settings.overworld();
-        Preconditions.checkNotNull(overworldSettings, "A world must has overworld dimension");
+        Preconditions.checkNotNull(overworldSettings, "World must has overworld dimension");
 
         var netherSettings = settings.nether();
         var theEndSettings = settings.theEnd();
@@ -133,7 +132,7 @@ public final class AllayWorldPool implements WorldPool {
         return Collections.unmodifiableMap(worlds);
     }
 
-    private boolean addWorld(World world) {
+    private boolean addWorld(AllayWorld world) {
         var event = new WorldLoadEvent(world);
         event.call();
         if (event.isCancelled()) return false;

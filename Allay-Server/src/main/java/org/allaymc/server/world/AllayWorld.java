@@ -124,6 +124,14 @@ public class AllayWorld implements World {
         packetQueue.add(new PacketQueueEntry(player, packet, time));
     }
 
+    protected void tick(long currentTick) {
+        syncData();
+        tickTime(currentTick);
+        scheduler.tick();
+        getDimensions().values().forEach(d -> ((AllayDimension) d).tick(currentTick));
+        worldStorage.tick(currentTick);
+    }
+
     @Override
     public long getTick() {
         return gameLoop.getTick();
@@ -142,15 +150,6 @@ public class AllayWorld implements World {
     @Override
     public float getTickUsage() {
         return gameLoop.getTickUsage();
-    }
-
-    @Override
-    public void tick(long currentTick) {
-        syncData();
-        tickTime(currentTick);
-        scheduler.tick();
-        getDimensions().values().forEach(d -> ((AllayDimension) d).tick(currentTick));
-        worldStorage.tick(currentTick);
     }
 
     protected void syncData() {
@@ -219,7 +218,6 @@ public class AllayWorld implements World {
         getWorldStorage().writeWorldData(worldData);
     }
 
-    @Override
     public void shutdown() {
         isRunning.set(false);
         dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());

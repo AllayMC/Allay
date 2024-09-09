@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 import java.util.Map;
 
 /**
- * Allay Project 2024/2/3
+ * WorldSettings contains the settings of all worlds in the server.
  *
  * @author daoge_cmd
  */

@@ -1,10 +1,9 @@
 package org.allaymc.server.client.storage;
 
-import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.client.storage.NativeFilePlayerStorage;
 import org.allaymc.api.client.storage.PlayerData;
+import org.allaymc.api.client.storage.PlayerStorage;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
@@ -18,8 +17,7 @@ import java.util.UUID;
  * @author daoge_cmd
  */
 @Slf4j
-public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
-    @Getter
+public class AllayNBTFilePlayerStorage implements PlayerStorage {
     protected Path dataFolderPath;
 
     @SneakyThrows
@@ -77,11 +75,6 @@ public class AllayNBTFilePlayerStorage implements NativeFilePlayerStorage {
     @Override
     public boolean hasPlayerData(UUID uuid) {
         return Files.exists(buildPlayerDataFilePath(uuid));
-    }
-
-    @Override
-    public void shutdown() {
-        // Do nothing
     }
 
     protected Path buildPlayerDataFilePath(UUID uuid) {

@@ -12,6 +12,8 @@ import java.util.UUID;
 public interface PlayerStorage {
     default void tick(long currentTick) {}
 
+    default void shutdown() {}
+
     PlayerData readPlayerData(UUID uuid);
 
     default PlayerData readPlayerData(EntityPlayer player) {
@@ -31,6 +33,4 @@ public interface PlayerStorage {
     default boolean hasPlayerData(EntityPlayer player) {
         return hasPlayerData(player.getUUID());
     }
-
-    void shutdown();
 }
