@@ -87,6 +87,26 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         });
     }
 
+    public static BlockStateDataComponentImpl ofRedefinedDamageReductionFactor(Function<BlockState, Float> reductionRedefiner) {
+        return ofMappedBlockStateHashLazyLoad(blockType -> {
+            var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());
+            Objects.requireNonNull(vanillaId);
+            var attributeMap = Registries.BLOCK_STATE_DATA.get(vanillaId);
+            Objects.requireNonNull(attributeMap);
+            var newAttributeMap = new HashMap<Integer, BlockStateData>();
+            attributeMap.forEach((blockStateHash, attribute) ->
+                    newAttributeMap.put(
+                            blockStateHash,
+                            attribute
+                                    .toBuilder()
+                                    .fallDamageReductionFactor(reductionRedefiner.apply(Objects.requireNonNull(blockType.ofState(blockStateHash))))
+                                    .build()
+                    )
+            );
+            return newAttributeMap;
+        });
+    }
+
     @Override
     public BlockStateData getBlockStateData(BlockState blockState) {
         return attributeAccessor.apply(blockState);
