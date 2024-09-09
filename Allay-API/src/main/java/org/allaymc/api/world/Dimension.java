@@ -553,26 +553,4 @@ public interface Dimension {
      * @return Whether the block is successfully broken
      */
     boolean breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player);
-
-    default int getInternalLightLevel(Vector3ic pos) {
-        return getInternalLightLevel(pos.x(), pos.y(), pos.z());
-    }
-
-    /**
-     * @see <a href="https://minecraft.wiki/w/Light#Internal_light_level">Internal light level</a>
-     */
-    default int getInternalLightLevel(int x, int y, int z) {
-        if (getDimensionInfo() != DimensionInfo.OVERWORLD) return 0;
-
-        var chunk = getChunkService().getChunkByDimensionPos(x, z);
-        int level = 0;
-        if (chunk != null) {
-            level = chunk.getSkyLight(x & 15, y, z & 15) - getWorld().getInternalSkyLight();
-            if (level < 15) {
-                level = Math.max(chunk.getBlockLight(x & 15, y, z & 15), level);
-            }
-        }
-
-        return level;
-    }
 }
