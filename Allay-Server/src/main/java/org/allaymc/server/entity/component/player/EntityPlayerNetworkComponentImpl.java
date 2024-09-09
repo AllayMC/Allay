@@ -115,7 +115,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var event = new PlayerQuitEvent(thisPlayer, disconnectReason);
         event.call();
         thisPlayer.closeAllContainers();
-        ((AllayServer) server).onDisconnect(thisPlayer, disconnectReason);
+        ((AllayServer) server).onDisconnect(thisPlayer);
     }
 
     public void setInitialized() {
