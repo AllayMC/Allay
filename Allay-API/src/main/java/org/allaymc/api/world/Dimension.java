@@ -275,6 +275,15 @@ public interface Dimension {
         return getBlockState(x, y, z, 0);
     }
 
+    /**
+     * Get the block state at the specified pos.
+     *
+     * @param x the x coordinate of the block.
+     * @param y the y coordinate of the block.
+     * @param z the z coordinate of the block.
+     * @param layer the layer which contains the block.
+     * @return the block state at the specified pos, or {@code BlockTypes.AIR.getDefaultState()} if not found.
+     */
     default BlockState getBlockState(int x, int y, int z, int layer) {
         if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
             return AIR.getDefaultState();
@@ -284,6 +293,18 @@ public interface Dimension {
         return chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 
+    /**
+     * Get the block state at the specified region.
+     *
+     * @param x the start x coordinate of the region.
+     * @param y the start y coordinate of the region.
+     * @param z the start z coordinate of the region.
+     * @param sizeX the size of the region in the x-axis.
+     * @param sizeY the size of the region in the y-axis.
+     * @param sizeZ the size of the region in the z-axis.
+     * @param layer the layer which contains the block.
+     * @return the block states at the specified region.
+     */
     default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
         if (sizeX < 1 || sizeY < 1 || sizeZ < 1) return Utils.EMPTY_BLOCK_STATE_ARRAY_3D;
 
@@ -582,22 +603,22 @@ public interface Dimension {
     }
 
     /**
-     * Check if the specified pos is in a valid and loaded area.
+     * Check if the specified pos is in a valid and loaded region.
      *
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
-     * @return {@code true} if the pos is in a valid and loaded area, otherwise {@code false}.
+     * @return {@code true} if the pos is in a valid and loaded region, otherwise {@code false}.
      */
     default boolean isInWorld(float x, float y, float z) {
         return isYInRange(y) && getChunkService().isChunkLoaded((int) x >> 4, (int) z >> 4);
     }
 
     /**
-     * Check if the aabb is in a valid and loaded area.
+     * Check if the aabb is in a valid and loaded region.
      *
      * @param aabb the aabb.
-     * @return {@code true} if the aabb is in a valid and loaded area, otherwise {@code false}.
+     * @return {@code true} if the aabb is in a valid and loaded region, otherwise {@code false}.
      */
     default boolean isAABBInWorld(AABBfc aabb) {
         return isInWorld(aabb.maxX(), aabb.maxY(), aabb.maxZ()) && isInWorld(aabb.minX(), aabb.minY(), aabb.minZ());
