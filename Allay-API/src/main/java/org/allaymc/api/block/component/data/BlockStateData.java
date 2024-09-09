@@ -24,7 +24,7 @@ import java.awt.*;
 @Accessors(fluent = true)
 @Builder(toBuilder = true)
 @EqualsAndHashCode
-public class  BlockStateData {
+public class BlockStateData {
 
     /**
      * @see <a href="https://www.mcpk.wiki/wiki/Slipperiness">Slipperiness</a>
