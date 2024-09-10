@@ -50,10 +50,11 @@ public interface Dimension {
      * Create a block update packet.
      *
      * @param newBlockState the new block state.
-     * @param x the x coordinate of the block.
-     * @param y the y coordinate of the block.
-     * @param z the z coordinate of the block.
-     * @param layer the layer which contains the block.
+     * @param x             the x coordinate of the block.
+     * @param y             the y coordinate of the block.
+     * @param z             the z coordinate of the block.
+     * @param layer         the layer which contains the block.
+     *
      * @return the created block update packet.
      */
     static UpdateBlockPacket createBlockUpdatePacket(BlockState newBlockState, int x, int y, int z, int layer) {
@@ -139,6 +140,7 @@ public interface Dimension {
      * Get the entity by its runtime id.
      *
      * @param runtimeId the runtime id of the entity.
+     *
      * @return the entity with the specified runtime id, or {@code null} if not found.
      */
     default Entity getEntityByRuntimeId(long runtimeId) {
@@ -148,6 +150,7 @@ public interface Dimension {
                 .findFirst()
                 .orElse(null);
     }
+
     default void addPlayer(EntityPlayer player) {
         addPlayer(player, () -> {});
     }
@@ -155,7 +158,7 @@ public interface Dimension {
     /**
      * Add a player to this dimension.
      *
-     * @param player the player to add.
+     * @param player   the player to add.
      * @param runnable the callback to run after the player is added.
      */
     void addPlayer(EntityPlayer player, Runnable runnable);
@@ -167,7 +170,7 @@ public interface Dimension {
     /**
      * Remove a player from this dimension.
      *
-     * @param player the player to remove.
+     * @param player   the player to remove.
      * @param runnable the callback to run after the player is removed.
      */
     void removePlayer(EntityPlayer player, Runnable runnable);
@@ -235,15 +238,15 @@ public interface Dimension {
     /**
      * Set the block state at the specified pos.
      *
-     * @param x the x coordinate of the block.
-     * @param y the y coordinate of the block.
-     * @param z the z coordinate of the block.
-     * @param blockState the block state to set.
-     * @param layer the layer which contains the block.
-     * @param send whether to send the block update packet.
-     * @param update whether to update the blocks around the block.
+     * @param x                 the x coordinate of the block.
+     * @param y                 the y coordinate of the block.
+     * @param z                 the z coordinate of the block.
+     * @param blockState        the block state to set.
+     * @param layer             the layer which contains the block.
+     * @param send              whether to send the block update packet.
+     * @param update            whether to update the blocks around the block.
      * @param callBlockBehavior whether to call the block behavior.
-     * @param placementInfo the placement info.
+     * @param placementInfo     the placement info.
      */
     void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
 
@@ -256,15 +259,16 @@ public interface Dimension {
     }
 
     default BlockState getBlockState(Vector3fc pos) {
-        return getBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), 0);
+        return getBlockState(pos, 0);
     }
 
     default BlockState getBlockState(Vector3fc pos, int layer) {
+        pos = pos.floor(new org.joml.Vector3f());
         return getBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), layer);
     }
 
     default BlockState getBlockState(Vector3ic pos) {
-        return getBlockState(pos.x(), pos.y(), pos.z(), 0);
+        return getBlockState(pos, 0);
     }
 
     default BlockState getBlockState(Vector3ic pos, int layer) {
@@ -278,10 +282,11 @@ public interface Dimension {
     /**
      * Get the block state at the specified pos.
      *
-     * @param x the x coordinate of the block.
-     * @param y the y coordinate of the block.
-     * @param z the z coordinate of the block.
+     * @param x     the x coordinate of the block.
+     * @param y     the y coordinate of the block.
+     * @param z     the z coordinate of the block.
      * @param layer the layer which contains the block.
+     *
      * @return the block state at the specified pos, or {@code BlockTypes.AIR.getDefaultState()} if not found.
      */
     default BlockState getBlockState(int x, int y, int z, int layer) {
@@ -296,13 +301,14 @@ public interface Dimension {
     /**
      * Get the block state at the specified region.
      *
-     * @param x the start x coordinate of the region.
-     * @param y the start y coordinate of the region.
-     * @param z the start z coordinate of the region.
+     * @param x     the start x coordinate of the region.
+     * @param y     the start y coordinate of the region.
+     * @param z     the start z coordinate of the region.
      * @param sizeX the size of the region in the x-axis.
      * @param sizeY the size of the region in the y-axis.
      * @param sizeZ the size of the region in the z-axis.
      * @param layer the layer which contains the block.
+     *
      * @return the block states at the specified region.
      */
     default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
@@ -365,11 +371,11 @@ public interface Dimension {
      * Update a specific property of a specific block.
      *
      * @param propertyType the property type needs to be updated.
-     * @param value the new property value.
-     * @param x block's x coordinate.
-     * @param y block's y coordinate.
-     * @param z block's z coordinate.
-     * @param layer the layer which contains the block.
+     * @param value        the new property value.
+     * @param x            block's x coordinate.
+     * @param y            block's y coordinate.
+     * @param z            block's z coordinate.
+     * @param layer        the layer which contains the block.
      */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z, int layer) {
         var chunk = getChunkService().getChunkByDimensionPos(x, z);
@@ -397,9 +403,10 @@ public interface Dimension {
     /**
      * Get the block states that collide with the specified AABB.
      *
-     * @param aabb the AABB to check.
-     * @param layer the layer which contains the block.
+     * @param aabb            the AABB to check.
+     * @param layer           the layer which contains the block.
      * @param ignoreCollision include blocks that don't have collision.
+     *
      * @return the block states that collide with the specified AABB.
      */
     default BlockState[][][] getCollidingBlocks(AABBfc aabb, int layer, boolean ignoreCollision) {
@@ -445,11 +452,11 @@ public interface Dimension {
     /**
      * Add a level event at the specified position.
      *
-     * @param x the x coordinate of the position.
-     * @param y the y coordinate of the position.
-     * @param z the z coordinate of the position.
+     * @param x              the x coordinate of the position.
+     * @param y              the y coordinate of the position.
+     * @param z              the z coordinate of the position.
      * @param levelEventType the level event type.
-     * @param data the data of the level event.
+     * @param data           the data of the level event.
      */
     default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType, int data) {
         var chunk = getChunkService().getChunkByDimensionPos((int) x, (int) z);
@@ -477,13 +484,13 @@ public interface Dimension {
     /**
      * Add a level sound event at the specified position.
      *
-     * @param x the x coordinate of the position.
-     * @param y the y coordinate of the position.
-     * @param z the z coordinate of the position.
-     * @param soundEvent the sound event.
-     * @param extraData the extra data of the sound event.
-     * @param identifier the identifier of the sound event.
-     * @param babySound whether the sound is a baby sound.
+     * @param x                      the x coordinate of the position.
+     * @param y                      the y coordinate of the position.
+     * @param z                      the z coordinate of the position.
+     * @param soundEvent             the sound event.
+     * @param extraData              the extra data of the sound event.
+     * @param identifier             the identifier of the sound event.
+     * @param babySound              whether the sound is a baby sound.
      * @param relativeVolumeDisabled whether the relative volume is disabled.
      */
     default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent, int extraData, String identifier, boolean babySound, boolean relativeVolumeDisabled) {
@@ -507,7 +514,7 @@ public interface Dimension {
     /**
      * Update the blocks around a pos, ignoring some faces.
      *
-     * @param pos the specified pos.
+     * @param pos         the specified pos.
      * @param ignoreFaces the faces to ignore.
      */
     default void updateAroundIgnoreFace(Vector3ic pos, BlockFace... ignoreFaces) {
@@ -544,9 +551,9 @@ public interface Dimension {
     /**
      * Update the specific face of a block.
      *
-     * @param x the x coordinate of the block.
-     * @param y the y coordinate of the block.
-     * @param z the z coordinate of the block.
+     * @param x    the x coordinate of the block.
+     * @param y    the y coordinate of the block.
+     * @param z    the z coordinate of the block.
      * @param face the face of the block.
      */
     default void updateAtFace(int x, int y, int z, BlockFace face) {
@@ -556,7 +563,7 @@ public interface Dimension {
     /**
      * Update the block at the specified face of the specified block.
      *
-     * @param pos the pos of the block.
+     * @param pos  the pos of the block.
      * @param face the face of the block.
      */
     default void updateAtFace(Vector3ic pos, BlockFace face) {
@@ -568,6 +575,7 @@ public interface Dimension {
      * Get blocks around a pos.
      *
      * @param pos the pos.
+     *
      * @return the blocks around the pos.
      */
     default BlockStateWithPos[] getNeighborsBlockState(Vector3ic pos) {
@@ -580,6 +588,7 @@ public interface Dimension {
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
+     *
      * @return the blocks around the pos.
      */
     default BlockStateWithPos[] getNeighborsBlockState(int x, int y, int z) {
@@ -596,6 +605,7 @@ public interface Dimension {
      * Check if the y coordinate is in the range of this dimension.
      *
      * @param y the y coordinate.
+     *
      * @return {@code true} if the y coordinate is in the range of this dimension, otherwise {@code false}.
      */
     default boolean isYInRange(float y) {
@@ -608,6 +618,7 @@ public interface Dimension {
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
+     *
      * @return {@code true} if the pos is in a valid and loaded region, otherwise {@code false}.
      */
     default boolean isInWorld(float x, float y, float z) {
@@ -618,6 +629,7 @@ public interface Dimension {
      * Check if the aabb is in a valid and loaded region.
      *
      * @param aabb the aabb.
+     *
      * @return {@code true} if the aabb is in a valid and loaded region, otherwise {@code false}.
      */
     default boolean isAABBInWorld(AABBfc aabb) {
@@ -630,6 +642,7 @@ public interface Dimension {
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
+     *
      * @return the block entity at the specified pos, or {@code null} if not found.
      */
     default BlockEntity getBlockEntity(int x, int y, int z) {
@@ -660,8 +673,8 @@ public interface Dimension {
      * Add particle at the specified pos.
      *
      * @param particleType the particle type.
-     * @param pos the pos.
-     * @param data the data of the particle.
+     * @param pos          the pos.
+     * @param data         the data of the particle.
      */
     default void addParticle(ParticleType particleType, Vector3fc pos, int data) {
         var pk = new LevelEventPacket();
@@ -691,12 +704,12 @@ public interface Dimension {
     /**
      * Add a sound at the specified pos.
      *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
-     * @param sound the sound.
+     * @param x      the x coordinate of the pos.
+     * @param y      the y coordinate of the pos.
+     * @param z      the z coordinate of the pos.
+     * @param sound  the sound.
      * @param volume the volume of the sound.
-     * @param pitch the pitch of the sound.
+     * @param pitch  the pitch of the sound.
      */
     default void addSound(float x, float y, float z, String sound, float volume, float pitch) {
         Preconditions.checkArgument(volume >= 0 && volume <= 1, "Sound volume must be between 0 and 1");
@@ -717,7 +730,7 @@ public interface Dimension {
      * This method will add a random motion to the item entity.
      *
      * @param itemStack the item stack to drop.
-     * @param pos the pos to drop the item.
+     * @param pos       the pos to drop the item.
      */
     default void dropItem(ItemStack itemStack, Vector3fc pos) {
         var rand = ThreadLocalRandom.current();
@@ -731,9 +744,9 @@ public interface Dimension {
     /**
      * Drop an item at the specified pos with the specified motion and pickup delay.
      *
-     * @param itemStack the item stack to drop.
-     * @param pos the pos to drop the item.
-     * @param motion the motion of the item entity.
+     * @param itemStack   the item stack to drop.
+     * @param pos         the pos to drop the item.
+     * @param motion      the motion of the item entity.
      * @param pickupDelay the pickup delay of the item entity.
      */
     default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion, int pickupDelay) {
@@ -756,7 +769,7 @@ public interface Dimension {
      * which means that it won't drop a single xp orb with a large amount of xp.
      *
      * @param pos the pos to drop the xp orbs.
-     * @param xp the amount of xp to drop.
+     * @param xp  the amount of xp to drop.
      */
     default void splitAndDropXpOrb(Vector3fc pos, int xp) {
         for (var split : EntityXpOrb.splitIntoOrbSizes(xp)) {
@@ -770,7 +783,7 @@ public interface Dimension {
      * This method will add a random motion to the xp orb entity.
      *
      * @param pos the pos to drop the xp orb.
-     * @param xp the amount of xp to drop.
+     * @param xp  the amount of xp to drop.
      */
     default void dropXpOrb(Vector3fc pos, int xp) {
         var rand = ThreadLocalRandom.current();
@@ -789,9 +802,9 @@ public interface Dimension {
     /**
      * Drop a xp orb at the specified pos with the specified xp amount, motion and pickup delay.
      *
-     * @param pos the pos to drop the xp orb.
-     * @param xp the amount of xp to drop.
-     * @param motion the motion of the xp orb entity.
+     * @param pos         the pos to drop the xp orb.
+     * @param xp          the amount of xp to drop.
+     * @param motion      the motion of the xp orb entity.
      * @param pickupDelay the pickup delay of the xp orb entity.
      */
     default void dropXpOrb(Vector3fc pos, int xp, Vector3fc motion, int pickupDelay) {

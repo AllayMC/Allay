@@ -132,6 +132,21 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
+                .key("setblock")
+                .str("blockType")
+                .exec((context, player) -> {
+                    var blockType = Registries.BLOCKS.get(new Identifier((String) context.getResult(1)));
+                    if (blockType == null) {
+                        context.addOutput(TextFormat.RED + "Unknown block type!");
+                        return context.fail();
+                    }
+
+                    var loc = player.getLocation();
+                    var floorLoc = loc.floor(new Vector3f());
+                    loc.dimension().setBlockState((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), blockType.getDefaultState());
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
                 .key("cleare")
                 .exec((context, player) -> {
                     player.getLocation().dimension().getEntities().values().stream()
