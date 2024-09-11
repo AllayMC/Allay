@@ -62,6 +62,13 @@ jobs:
         with:
           name: Allay-Server
           path: Allay-Server/build/libs/Allay-Server-*-all.jar
+      # Publish to JitPack
+      - name: Publish to JitPack
+        uses: fjogeleit/http-request-action@v1
+        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        with:
+          url: 'https://jitpack.io/#AllayMC/Allay/master-SNAPSHOT'
+          method: 'GET'
       # Generate information
       - name: Get Short SHA
         id: vars
@@ -79,13 +86,6 @@ jobs:
         with:
           timeZone: 8
           format: 'YYYY/MM/DD-HH:mm:ss'
-      # Publish to JitPack
-      - name: Publish to JitPack
-        uses: fjogeleit/http-request-action@v1
-        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        with:
-          url: 'https://jitpack.io/#AllayMC/Allay/master-SNAPSHOT'
-          method: 'GET'
       # Publish to MineBBS
       - name: Update MineBBS Infomation
         uses: fjogeleit/http-request-action@v1
