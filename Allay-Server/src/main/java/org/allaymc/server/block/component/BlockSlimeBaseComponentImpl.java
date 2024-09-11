@@ -22,9 +22,4 @@ public class BlockSlimeBaseComponentImpl extends BlockBaseComponentImpl {
         var currentMotion = entity.getMotion();
         entity.setMotion(currentMotion.x(), -currentMotion.y(), currentMotion.z());
     }
-
-    @Override
-    public boolean canResetFallDistance() {
-        return true;
-    }
 }

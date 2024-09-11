@@ -141,8 +141,6 @@ public interface BlockBaseComponent extends BlockComponent {
         return true;
     }
 
-    boolean canResetFallDistance();
-
     default void onEntityFallOn(Entity entity, BlockState blockState) {}
 
     /**

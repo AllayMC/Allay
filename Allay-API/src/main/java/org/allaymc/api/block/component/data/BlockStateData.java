@@ -62,6 +62,8 @@ public class BlockStateData {
     @Builder.Default
     protected VoxelShape collisionShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
     @Builder.Default
+    protected float fallDamageReductionFactor = 0.0f;
+    @Builder.Default
     protected float hardness = 1;
     @Builder.Default
     protected float explosionResistance = 15;
