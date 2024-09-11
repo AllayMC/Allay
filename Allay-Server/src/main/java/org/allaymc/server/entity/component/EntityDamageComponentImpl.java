@@ -167,14 +167,10 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @EventHandler
     protected void onFall(CEntityFallEvent event) {
         if (!hasFallDamage()) return;
-        var blockUnder = thisEntity.getDimension().getBlockState(thisEntity.getLocation().sub(0, 1, 0, new Vector3f()));
-        float damageReductionFactor = blockUnder.getBlockStateData().fallDamageReductionFactor();
 
-        if(blockUnder.getBlockType().getMaterial().isLiquid()) damageReductionFactor = 1.0f;
-
+        var blockStateStandingOn = thisEntity.getBlockStateStandingOn();
         float rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
-
-        var damage = Math.round(rawDamage - (rawDamage * damageReductionFactor));
+        var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBlockStateData().fallDamageReductionFactor()));
         if (damage > 0) this.attack(DamageContainer.fall(damage));
     }
 }

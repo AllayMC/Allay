@@ -62,8 +62,6 @@ public class BlockStateData {
     @Builder.Default
     protected VoxelShape collisionShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
     @Builder.Default
-    protected float fallDamageReductionFactor = 0.0f;
-    @Builder.Default
     protected float hardness = 1;
     @Builder.Default
     protected float explosionResistance = 15;
@@ -79,6 +77,10 @@ public class BlockStateData {
     protected Color mapColor = Color.BLACK;
     @Builder.Default
     protected float thickness = 0;
+    @Builder.Default
+    protected float fallDamageReductionFactor = 0.0f;
+    @Builder.Default
+    protected boolean canResetFallDistance = false;
 
     public static BlockStateData fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockStateData.class);

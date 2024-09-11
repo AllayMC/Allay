@@ -1,6 +1,7 @@
 package org.allaymc.api.entity.component;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
@@ -374,4 +375,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     default boolean onInteract(EntityPlayer player, ItemStack itemStack) {
         return false;
     }
+
+    BlockState getBlockStateStandingOn();
 }

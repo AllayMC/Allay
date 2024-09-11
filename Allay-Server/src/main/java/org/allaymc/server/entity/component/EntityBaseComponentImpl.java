@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
@@ -34,6 +36,7 @@ import org.allaymc.server.entity.component.event.CEntityFallEvent;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.server.world.chunk.AllayChunk;
+import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -244,6 +247,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             // fall distance < 0 -> move up
             // fall distance > 0 -> move down
             this.fallDistance -= location.y() - this.location.y();
+            var currentBlockState = location.dimension().getBlockState(location);
+            if (currentBlockState.getBlockStateData().canResetFallDistance() &&
+                currentBlockState.getBlockStateData().computeOffsetCollisionShape(location).intersectsAABB(thisEntity.getOffsetAABB())) {
+                this.fallDistance = 0;
+            }
         }
 
         this.location.set(location);
@@ -842,5 +850,16 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @UnmodifiableView
     public Set<String> getTags() {
         return Collections.unmodifiableSet(tags);
+    }
+
+    @Override
+    public BlockState getBlockStateStandingOn() {
+        var air = BlockTypes.AIR.getDefaultState();
+        if (!isOnGround()) return air;
+
+        var loc = getLocation();
+        var currentBlockState = getDimension().getBlockState(loc.x(), loc.y(), loc.z());
+        if (currentBlockState != air) return currentBlockState;
+        else return getDimension().getBlockState(loc.x(), loc.y() - 1, loc.z());
     }
 }

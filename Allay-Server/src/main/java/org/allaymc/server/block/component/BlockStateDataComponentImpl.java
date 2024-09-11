@@ -10,10 +10,12 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.annotation.ComponentIdentifier;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
+import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -68,26 +70,18 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
     }
 
     public static BlockStateDataComponentImpl ofRedefinedAABB(Function<BlockState, VoxelShape> aabbRedefiner) {
-        return ofMappedBlockStateHashLazyLoad(blockType -> {
-            var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());
-            Objects.requireNonNull(vanillaId);
-            var attributeMap = Registries.BLOCK_STATE_DATA.get(vanillaId);
-            Objects.requireNonNull(attributeMap);
-            var newAttributeMap = new HashMap<Integer, BlockStateData>();
-            attributeMap.forEach((blockStateHash, attribute) ->
-                    newAttributeMap.put(
-                            blockStateHash,
-                            attribute
-                                    .toBuilder()
-                                    .collisionShape(aabbRedefiner.apply(Objects.requireNonNull(blockType.ofState(blockStateHash))))
-                                    .build()
-                    )
-            );
-            return newAttributeMap;
-        });
+        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.collisionShape(aabbRedefiner.apply(blockType.ofState(blockStateHash))).build());
     }
 
     public static BlockStateDataComponentImpl ofRedefinedDamageReductionFactor(Function<BlockState, Float> reductionRedefiner) {
+        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.fallDamageReductionFactor(reductionRedefiner.apply(blockType.ofState(blockStateHash))).build());
+    }
+
+    public static BlockStateDataComponentImpl ofRedefinedCanResetFallDistance(Function<BlockState, Boolean> canResetFallDistanceRedefiner) {
+        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.canResetFallDistance(canResetFallDistanceRedefiner.apply(blockType.ofState(blockStateHash))).build());
+    }
+
+    private static BlockStateDataComponentImpl ofRedefinedData(TriFunction<BlockStateData.BlockStateDataBuilder, BlockType<?>, Integer, BlockStateData> redefiner) {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
             var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());
             Objects.requireNonNull(vanillaId);
@@ -97,10 +91,7 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
             attributeMap.forEach((blockStateHash, attribute) ->
                     newAttributeMap.put(
                             blockStateHash,
-                            attribute
-                                    .toBuilder()
-                                    .fallDamageReductionFactor(reductionRedefiner.apply(Objects.requireNonNull(blockType.ofState(blockStateHash))))
-                                    .build()
+                            redefiner.apply(attribute.toBuilder(), blockType, blockStateHash)
                     )
             );
             return newAttributeMap;
