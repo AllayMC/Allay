@@ -5,6 +5,9 @@ import org.joml.Vector3ic;
 
 import java.time.Duration;
 
+/**
+ * @author Cool_Loong
+ */
 public interface BlockUpdateService {
     void scheduleBlockUpdate(Vector3ic pos, Duration duration);
 

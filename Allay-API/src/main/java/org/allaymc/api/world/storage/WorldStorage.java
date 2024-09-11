@@ -7,9 +7,10 @@ import org.allaymc.api.world.chunk.Chunk;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Allay Project 2023/5/30
+ * WorldStorage represents the storage of a world,
+ * which is responsible for reading and writing chunks and world data.
  *
- * @author Cool_Loong
+ * @author daoge_cmd | Cool_Loong
  */
 public interface WorldStorage {
     default void tick(long currentTick) {}
