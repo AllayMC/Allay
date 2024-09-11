@@ -7,8 +7,8 @@ import org.allaymc.dependence.BlockId;
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -37,16 +37,18 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
                     )
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
+    public static Map<InitBuilder, Set<BlockId>> BUILD_GROUPERS = new ConcurrentHashMap<>();
 
     public static void main(String[] args) {
         // NOTICE: Please run BlockIdEnumGen.generate() first before running this method
-        BlockPropertyTypeGen.generate();
+//        BlockPropertyTypeGen.generate();
         generate();
     }
 
     @SneakyThrows
     public static void generate() {
         registerSubPackages();
+        registerBuilders();
         var interfaceDir = Path.of("Allay-API/src/main/java/org/allaymc/api/block/interfaces");
         if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
         var typesClass = TypeSpec.classBuilder(BLOCK_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
@@ -79,6 +81,15 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
     }
 
     private static void addDefaultBlockTypeInitializer(BlockId id, ClassName blockClassName) {
+        for (var entry : BUILD_GROUPERS.entrySet()) {
+            if (entry.getKey().regex().matcher(id.name()).find()) {
+                var blocks = entry.getValue();
+                blocks.add(id);
+                BUILD_GROUPERS.put(entry.getKey(), blocks);
+                return;
+            }
+        }
+
         var initializer = CodeBlock.builder();
         initializer
                 .add("$T.$N = $T\n", BLOCK_TYPES_CLASS_NAME, id.name(), BLOCK_TYPE_BUILDER_CLASS_NAME)
@@ -97,14 +108,13 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
             initializer.add(")\n");
         }
         initializer.add("        .build();");
-        BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER
-                .addMethod(
-                        MethodSpec.methodBuilder(generateInitializerMethodName(id))
-                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addStatement("if ($T.$N != null) return", BLOCK_TYPES_CLASS_NAME, id.name())
-                                .addCode(initializer.build())
-                                .build()
-                );
+        BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.addMethod(
+                MethodSpec.methodBuilder(generateInitializerMethodName(id))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addStatement("if ($T.$N != null) return", BLOCK_TYPES_CLASS_NAME, id.name())
+                        .addCode(initializer.build())
+                        .build()
+        );
     }
 
     @SneakyThrows
@@ -114,6 +124,67 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath))
             Files.createDirectories(folderPath);
+
+        var blockBehaviorClass = ClassName.get("org.allaymc.api.block", "BlockBehavior");
+
+        for (var entry : BUILD_GROUPERS.entrySet()) {
+            var initBuilder = entry.getKey();
+            var blocks = entry.getValue();
+
+            var initBlocks = CodeBlock.builder();
+            blocks.forEach(block -> {
+                var blockClassFullName = generateClassFullName(block);
+                initBlocks.addStatement(
+                        "if ($T.$N == null) $T.$N = build$N($T.class, $T.$N)",
+                        BLOCK_TYPES_CLASS_NAME, block.name(),
+                        BLOCK_TYPES_CLASS_NAME, block.name(),
+                        initBuilder.buildName(),
+                        blockClassFullName, BLOCK_ID_CLASS_NAME, block.name()
+                );
+            });
+
+            BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.addMethod(
+                    MethodSpec.methodBuilder("init" + initBuilder.initName())
+                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                            .addCode(initBlocks.build())
+                            .build()
+            );
+
+            var buildBlock = MethodSpec.methodBuilder("build" + initBuilder.buildName())
+                    .addModifiers(Modifier.PRIVATE, Modifier.STATIC)
+                    .addTypeVariable(TypeVariableName.get("T", blockBehaviorClass))
+                    .returns(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, TypeVariableName.get("T")))
+                    .addParameter(ParameterizedTypeName.get(ClassName.get("java.lang", "Class"), TypeVariableName.get("T")), "clazz")
+                    .addParameter(BLOCK_ID_CLASS_NAME, "blockId");
+
+
+            var builderCode = new StringJoiner("\n");
+            builderCode.add("return AllayBlockType.builder(clazz)");
+            builderCode.add("       .vanillaBlock(blockId)");
+
+            for (var block : blocks) {
+                var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(block.getIdentifier().toString());
+                var states = blockPaletteData.getCompound("states");
+                if (!states.isEmpty()) {
+                    var propertiesBuilder = new StringJoiner(", ");
+                    Set<String> propertyNames = new HashSet<>();
+                    states.forEach((name, value) -> {
+                        propertyNames.add(BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name.replaceAll(":", "_")) && BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.containsKey(block.getIdentifier().toString()) ?
+                                BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(block.getIdentifier().toString()).get(name.replaceAll(":", "_")).toUpperCase() : name.replaceAll(":", "_").toUpperCase());
+                    });
+                    propertyNames.forEach(propertyName -> propertiesBuilder.add("BlockPropertyTypes." + propertyName));
+                    builderCode.add("       .setProperties(" + propertiesBuilder + ")");
+                    break;
+                }
+            }
+
+            buildBlock.addCode(builderCode + "\n");
+
+            buildBlock.addStatement("       .build()");
+
+            BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.addMethod(buildBlock.build());
+        }
+
         var javaFile = JavaFile.builder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
                 .indent(Utils.INDENT)
                 .skipJavaLangImports(true)
@@ -198,4 +269,49 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*SandBehavior"), "sand");
         registerSubPackage(Pattern.compile(".*SandstoneBehavior"), "sandstone");
     }
+
+    private static void registerBuilders() {
+        registerBuild("\\w+_BUTTON", "Button", "Buttons");
+        registerBuild("\\w+_LEAVES\\b", "Leaves", "Leaves");
+        registerBuild("\\w+_SHULKER_BOX", "ShulkerBox", "ShulkerBoxes");
+        registerBuild("\\w+_STAIRS", "Stairs", "Stairs");
+        registerBuild("\\b(?!STRIPPED_)\\w+_LOG", "Log", "Logs");
+        registerBuild("\\bSTRIPPED_\\w+_LOG", "StrippedLog", "StrippedLogs");
+        registerBuild("\\w+_HANGING_SIGN", "HangingSign", "HangingSigns");
+        registerBuild("(\\w+)?STANDING_SIGN", "StandingSign", "StandingSigns");
+        registerBuild("\\w+_WOOL", "Wool", "Wools");
+        registerBuild("\\w+_GLAZED_TERRACOTTA\\b", "GlazedTerracotta", "GlazedTerracotta");
+        registerBuild("\\w+(?!GLAZED)_TERRACOTTA", "Terracotta", "Terracotta");
+        registerBuild("\\w+_STAINED_GLASS_PANE", "StainedGlassPane", "StainedGlassPanes");
+        registerBuild("\\w+_STAINED_GLASS\\b", "StainedGlass", "StainedGlass");
+        registerBuild("\\w+_CONCRETE_POWDER", "ConcretePowder", "ConcretePowders");
+        registerBuild("\\w+_CONCRETE\\b", "Concrete", "Concretes");
+        registerBuild("\\w+_CARPET", "Carpet", "Carpets");
+        registerBuild("\\w+_CANDLE_CAKE", "CandleCake", "CandleCakes");
+        registerBuild("\\w+_CANDLE\\b", "Candle", "Candles");
+        registerBuild("\\w+_PRESSURE_PLATE", "PressurePlate", "PressurePlates");
+        registerBuild("\\w+_DOOR", "Door", "Doors");
+        registerBuild("\\w+_TULIP", "Tulip", "Tulips");
+        registerBuild("\\b\\w*DOUBLE\\w*_SLAB\\b", "DoubleSlab", "DoubleSlabs");
+        registerBuild("\\w+(?!DOUBLE)_SLAB", "Slab", "Slabs");
+        registerBuild("(\\w+)?TRAPDOOR", "Trapdoor", "Trapdoors");
+        registerBuild("\\w+_COPPER_GRATE", "CopperGrate", "CopperGrates");
+        registerBuild("\\w+_CUT_COPPER\\b", "CutCopper", "CutCoppers");
+        registerBuild("\\w+_COPPER_BULB", "CopperBulb", "CopperBulbs");
+        registerBuild("(\\w+)?WALL_SIGN", "WallSign", "WallSigns");
+        registerBuild("\\w+_PLANKS", "Planks", "Planks");
+        registerBuild("\\w+_FENCE(?!_GATE)", "Fence", "Fences");
+        registerBuild("\\w+_FENCE_GATE", "FenceGate", "FenceGates");
+        registerBuild("\\w+_WALL\\b", "Wall", "Walls");
+        registerBuild("\\b(?!STRIPPED_)\\w+_WOOD", "Wood", "Woods");
+        registerBuild("\\bSTRIPPED_\\w+_WOOD", "StrippedWood", "StrippedWoods");
+        registerBuild("\\w+_SAPLING", "Sapling", "Saplings");
+        registerBuild("\\bELEMENT_[0-9]", "Element", "Elements");
+    }
+
+    private static void registerBuild(String regex, String buildName, String initName) {
+        BUILD_GROUPERS.put(new InitBuilder(Pattern.compile(regex), buildName, initName), new TreeSet<>());
+    }
+
+    public record InitBuilder(Pattern regex, String buildName, String initName) {}
 }

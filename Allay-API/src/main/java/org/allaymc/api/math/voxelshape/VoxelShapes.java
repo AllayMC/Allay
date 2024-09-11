@@ -1,5 +1,6 @@
 package org.allaymc.api.math.voxelshape;
 
+import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
@@ -16,6 +17,7 @@ import static org.allaymc.api.block.data.BlockFace.getBlockFaceByStairDirectionV
  *
  * @author daoge_cmd
  */
+@UtilityClass
 public final class VoxelShapes {
 
     // Stairs
@@ -37,8 +39,6 @@ public final class VoxelShapes {
             DOWNWARDS_STAIR_SHAPES.put(face, DOWNWARDS_STAIR_SHAPE.rotate(face));
         }
     }
-
-    private VoxelShapes() {}
 
     public static VoxelShape buildStairShape(BlockState stairBlockState) {
         var isDownwards = stairBlockState.getPropertyValue(BlockPropertyTypes.UPSIDE_DOWN_BIT);
