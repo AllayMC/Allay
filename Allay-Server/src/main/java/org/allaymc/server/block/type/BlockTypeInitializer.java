@@ -9,6 +9,10 @@ import org.allaymc.api.block.interfaces.button.*;
 import org.allaymc.api.block.interfaces.door.*;
 import org.allaymc.api.block.interfaces.hangingsign.*;
 import org.allaymc.api.block.interfaces.leaves.*;
+import org.allaymc.api.block.interfaces.liquid.BlockFlowingLavaBehavior;
+import org.allaymc.api.block.interfaces.liquid.BlockFlowingWaterBehavior;
+import org.allaymc.api.block.interfaces.liquid.BlockLavaBehavior;
+import org.allaymc.api.block.interfaces.liquid.BlockWaterBehavior;
 import org.allaymc.api.block.interfaces.log.*;
 import org.allaymc.api.block.interfaces.sand.BlockRedSandBehavior;
 import org.allaymc.api.block.interfaces.sand.BlockSandBehavior;
@@ -1004,6 +1008,46 @@ public final class BlockTypeInitializer {
                 .builder(BlockSlimeBehavior.class)
                 .vanillaBlock(BlockId.SLIME)
                 .setBlockBaseComponentSupplier(BlockSlimeBaseComponentImpl::new)
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedDamageReductionFactor(blockState -> 1.0f))
+                .build();
+    }
+
+    public static void initHayBlock() {
+        BlockTypes.HAY_BLOCK = AllayBlockType
+                .builder(BlockHayBlockBehavior.class)
+                .vanillaBlock(BlockId.HAY_BLOCK)
+                .setProperties(BlockPropertyTypes.DEPRECATED, BlockPropertyTypes.PILLAR_AXIS)
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedDamageReductionFactor(blockState -> 0.8f))
+                .build();
+    }
+
+    public static void initWater() {
+        BlockTypes.WATER = AllayBlockType
+                .builder(BlockWaterBehavior.class)
+                .vanillaBlock(BlockId.WATER)
+                .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedCanResetFallDistance(blockState -> true))
+                .build();
+        BlockTypes.FLOWING_WATER = AllayBlockType
+                .builder(BlockFlowingWaterBehavior.class)
+                .vanillaBlock(BlockId.FLOWING_WATER)
+                .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedCanResetFallDistance(blockState -> true))
+                .build();
+    }
+
+    public static void initLava() {
+        BlockTypes.LAVA = AllayBlockType
+                .builder(BlockLavaBehavior.class)
+                .vanillaBlock(BlockId.LAVA)
+                .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedCanResetFallDistance(blockState -> true))
+                .build();
+        BlockTypes.FLOWING_LAVA = AllayBlockType
+                .builder(BlockFlowingLavaBehavior.class)
+                .vanillaBlock(BlockId.FLOWING_LAVA)
+                .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedCanResetFallDistance(blockState -> true))
                 .build();
     }
 }

@@ -24,6 +24,7 @@ import org.allaymc.server.entity.component.event.CEntityFallEvent;
 import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
+import org.joml.Vector3f;
 
 /**
  * Allay Project 2024/1/12
@@ -167,7 +168,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     protected void onFall(CEntityFallEvent event) {
         if (!hasFallDamage()) return;
 
-        var damage = Math.round((event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST));
+        var blockStateStandingOn = thisEntity.getBlockStateStandingOn();
+        float rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
+        var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBlockStateData().fallDamageReductionFactor()));
         if (damage > 0) this.attack(DamageContainer.fall(damage));
     }
 }

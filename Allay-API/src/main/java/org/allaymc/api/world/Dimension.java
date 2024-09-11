@@ -267,6 +267,14 @@ public interface Dimension {
         return getBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), layer);
     }
 
+    default BlockState getBlockState(float x, float y, float z) {
+        return getBlockState(x, y, z, 0);
+    }
+
+    default BlockState getBlockState(float x, float y, float z, int layer) {
+        return getBlockState((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z), layer);
+    }
+
     default BlockState getBlockState(Vector3ic pos) {
         return getBlockState(pos, 0);
     }
