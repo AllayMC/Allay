@@ -586,7 +586,6 @@ public class Metrics {
             metrics.addCustomChart(new Metrics.SingleLineChart("players", server::getOnlinePlayerCount));
             metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", ProtocolInfo::getMinecraftVersionStr));
             metrics.addCustomChart(new Metrics.SimplePie("allay_api_version", () -> AllayAPI.API_VERSION));
-            // TODO: git version
             metrics.addCustomChart(new Metrics.SimplePie("xbox_auth", () -> Server.SETTINGS.networkSettings().xboxAuth() ? "Required" : "Not required"));
 
             metrics.addCustomChart(new Metrics.AdvancedPie("player_platform", () -> server.getOnlinePlayers().values().stream()
