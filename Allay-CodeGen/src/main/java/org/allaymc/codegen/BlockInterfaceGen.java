@@ -37,7 +37,7 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
                     )
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
-    public static Map<InitBuilder, Set<BlockId>> BUILD_GROUPERS = new ConcurrentHashMap<>();
+    public static Map<InitBuilder, Set<BlockId>> BUILD_GROUPERS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
         // NOTICE: Please run BlockIdEnumGen.generate() first before running this method
@@ -303,10 +303,12 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         registerBuild("\\w+_FENCE(?!_GATE)", "Fence", "Fences");
         registerBuild("\\w+_FENCE_GATE", "FenceGate", "FenceGates");
         registerBuild("\\w+_WALL\\b", "Wall", "Walls");
-        registerBuild("\\b(?!STRIPPED_)\\w+_WOOD", "Wood", "Woods");
-        registerBuild("\\bSTRIPPED_\\w+_WOOD", "StrippedWood", "StrippedWoods");
+        registerBuild("\\b(?!STRIPPED_)\\w+(_WOOD|_HYPHAE)", "Wood", "Woods");
+        registerBuild("\\bSTRIPPED_\\w+(_WOOD|_HYPHAE)", "StrippedWood", "StrippedWoods");
         registerBuild("\\w+_SAPLING", "Sapling", "Saplings");
         registerBuild("\\bELEMENT_[0-9]", "Element", "Elements");
+        registerBuild("\\w+_COPPER\\b", "Copper", "Coppers");
+        registerBuild("\\w+_ORE", "Ore", "Ores");
     }
 
     private static void registerBuild(String regex, String buildName, String initName) {

@@ -1795,14 +1795,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initChiseledCopper() {
-        if (BlockTypes.CHISELED_COPPER != null) return;
-        BlockTypes.CHISELED_COPPER = AllayBlockType
-                .builder(BlockChiseledCopperBehavior.class)
-                .vanillaBlock(BlockId.CHISELED_COPPER)
-                .build();
-    }
-
     public static void initChiseledDeepslate() {
         if (BlockTypes.CHISELED_DEEPSLATE != null) return;
         BlockTypes.CHISELED_DEEPSLATE = AllayBlockType
@@ -1917,14 +1909,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initCoalOre() {
-        if (BlockTypes.COAL_ORE != null) return;
-        BlockTypes.COAL_ORE = AllayBlockType
-                .builder(BlockCoalOreBehavior.class)
-                .vanillaBlock(BlockId.COAL_ORE)
-                .build();
-    }
-
     public static void initCoarseDirt() {
         if (BlockTypes.COARSE_DIRT != null) return;
         BlockTypes.COARSE_DIRT = AllayBlockType
@@ -2027,14 +2011,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initCopperOre() {
-        if (BlockTypes.COPPER_ORE != null) return;
-        BlockTypes.COPPER_ORE = AllayBlockType
-                .builder(BlockCopperOreBehavior.class)
-                .vanillaBlock(BlockId.COPPER_ORE)
-                .build();
-    }
-
     public static void initCornflower() {
         if (BlockTypes.CORNFLOWER != null) return;
         BlockTypes.CORNFLOWER = AllayBlockType
@@ -2108,15 +2084,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initCrimsonHyphae() {
-        if (BlockTypes.CRIMSON_HYPHAE != null) return;
-        BlockTypes.CRIMSON_HYPHAE = AllayBlockType
-                .builder(BlockCrimsonHyphaeBehavior.class)
-                .vanillaBlock(BlockId.CRIMSON_HYPHAE)
-                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-                .build();
-    }
-
     public static void initCrimsonNylium() {
         if (BlockTypes.CRIMSON_NYLIUM != null) return;
         BlockTypes.CRIMSON_NYLIUM = AllayBlockType
@@ -2147,14 +2114,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.CRYING_OBSIDIAN = AllayBlockType
                 .builder(BlockCryingObsidianBehavior.class)
                 .vanillaBlock(BlockId.CRYING_OBSIDIAN)
-                .build();
-    }
-
-    public static void initCutCopper() {
-        if (BlockTypes.CUT_COPPER != null) return;
-        BlockTypes.CUT_COPPER = AllayBlockType
-                .builder(BlockCutCopperBehavior.class)
-                .vanillaBlock(BlockId.CUT_COPPER)
                 .build();
     }
 
@@ -2421,70 +2380,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initDeepslateCoalOre() {
-        if (BlockTypes.DEEPSLATE_COAL_ORE != null) return;
-        BlockTypes.DEEPSLATE_COAL_ORE = AllayBlockType
-                .builder(BlockDeepslateCoalOreBehavior.class)
-                .vanillaBlock(BlockId.DEEPSLATE_COAL_ORE)
-                .build();
-    }
-
-    public static void initDeepslateCopperOre() {
-        if (BlockTypes.DEEPSLATE_COPPER_ORE != null) return;
-        BlockTypes.DEEPSLATE_COPPER_ORE = AllayBlockType
-                .builder(BlockDeepslateCopperOreBehavior.class)
-                .vanillaBlock(BlockId.DEEPSLATE_COPPER_ORE)
-                .build();
-    }
-
-    public static void initDeepslateDiamondOre() {
-        if (BlockTypes.DEEPSLATE_DIAMOND_ORE != null) return;
-        BlockTypes.DEEPSLATE_DIAMOND_ORE = AllayBlockType
-                .builder(BlockDeepslateDiamondOreBehavior.class)
-                .vanillaBlock(BlockId.DEEPSLATE_DIAMOND_ORE)
-                .build();
-    }
-
-    public static void initDeepslateEmeraldOre() {
-        if (BlockTypes.DEEPSLATE_EMERALD_ORE != null) return;
-        BlockTypes.DEEPSLATE_EMERALD_ORE = AllayBlockType
-                .builder(BlockDeepslateEmeraldOreBehavior.class)
-                .vanillaBlock(BlockId.DEEPSLATE_EMERALD_ORE)
-                .build();
-    }
-
-    public static void initDeepslateGoldOre() {
-        if (BlockTypes.DEEPSLATE_GOLD_ORE != null) return;
-        BlockTypes.DEEPSLATE_GOLD_ORE = AllayBlockType
-                .builder(BlockDeepslateGoldOreBehavior.class)
-                .vanillaBlock(BlockId.DEEPSLATE_GOLD_ORE)
-                .build();
-    }
-
-    public static void initDeepslateIronOre() {
-        if (BlockTypes.DEEPSLATE_IRON_ORE != null) return;
-        BlockTypes.DEEPSLATE_IRON_ORE = AllayBlockType
-                .builder(BlockDeepslateIronOreBehavior.class)
-                .vanillaBlock(BlockId.DEEPSLATE_IRON_ORE)
-                .build();
-    }
-
-    public static void initDeepslateLapisOre() {
-        if (BlockTypes.DEEPSLATE_LAPIS_ORE != null) return;
-        BlockTypes.DEEPSLATE_LAPIS_ORE = AllayBlockType
-                .builder(BlockDeepslateLapisOreBehavior.class)
-                .vanillaBlock(BlockId.DEEPSLATE_LAPIS_ORE)
-                .build();
-    }
-
-    public static void initDeepslateRedstoneOre() {
-        if (BlockTypes.DEEPSLATE_REDSTONE_ORE != null) return;
-        BlockTypes.DEEPSLATE_REDSTONE_ORE = AllayBlockType
-                .builder(BlockDeepslateRedstoneOreBehavior.class)
-                .vanillaBlock(BlockId.DEEPSLATE_REDSTONE_ORE)
-                .build();
-    }
-
     public static void initDeepslateTiles() {
         if (BlockTypes.DEEPSLATE_TILES != null) return;
         BlockTypes.DEEPSLATE_TILES = AllayBlockType
@@ -2524,14 +2419,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.DIAMOND_BLOCK = AllayBlockType
                 .builder(BlockDiamondBlockBehavior.class)
                 .vanillaBlock(BlockId.DIAMOND_BLOCK)
-                .build();
-    }
-
-    public static void initDiamondOre() {
-        if (BlockTypes.DIAMOND_ORE != null) return;
-        BlockTypes.DIAMOND_ORE = AllayBlockType
-                .builder(BlockDiamondOreBehavior.class)
-                .vanillaBlock(BlockId.DIAMOND_ORE)
                 .build();
     }
 
@@ -2609,14 +2496,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initEmeraldOre() {
-        if (BlockTypes.EMERALD_ORE != null) return;
-        BlockTypes.EMERALD_ORE = AllayBlockType
-                .builder(BlockEmeraldOreBehavior.class)
-                .vanillaBlock(BlockId.EMERALD_ORE)
-                .build();
-    }
-
     public static void initEnchantingTable() {
         if (BlockTypes.ENCHANTING_TABLE != null) return;
         BlockTypes.ENCHANTING_TABLE = AllayBlockType
@@ -2681,22 +2560,6 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockEnderChestBehavior.class)
                 .vanillaBlock(BlockId.ENDER_CHEST)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
-                .build();
-    }
-
-    public static void initExposedChiseledCopper() {
-        if (BlockTypes.EXPOSED_CHISELED_COPPER != null) return;
-        BlockTypes.EXPOSED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockExposedChiseledCopperBehavior.class)
-                .vanillaBlock(BlockId.EXPOSED_CHISELED_COPPER)
-                .build();
-    }
-
-    public static void initExposedCopper() {
-        if (BlockTypes.EXPOSED_COPPER != null) return;
-        BlockTypes.EXPOSED_COPPER = AllayBlockType
-                .builder(BlockExposedCopperBehavior.class)
-                .vanillaBlock(BlockId.EXPOSED_COPPER)
                 .build();
     }
 
@@ -2910,14 +2773,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.GOLD_BLOCK = AllayBlockType
                 .builder(BlockGoldBlockBehavior.class)
                 .vanillaBlock(BlockId.GOLD_BLOCK)
-                .build();
-    }
-
-    public static void initGoldOre() {
-        if (BlockTypes.GOLD_ORE != null) return;
-        BlockTypes.GOLD_ORE = AllayBlockType
-                .builder(BlockGoldOreBehavior.class)
-                .vanillaBlock(BlockId.GOLD_ORE)
                 .build();
     }
 
@@ -3184,14 +3039,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initIronOre() {
-        if (BlockTypes.IRON_ORE != null) return;
-        BlockTypes.IRON_ORE = AllayBlockType
-                .builder(BlockIronOreBehavior.class)
-                .vanillaBlock(BlockId.IRON_ORE)
-                .build();
-    }
-
     public static void initJigsaw() {
         if (BlockTypes.JIGSAW != null) return;
         BlockTypes.JIGSAW = AllayBlockType
@@ -3241,14 +3088,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.LAPIS_BLOCK = AllayBlockType
                 .builder(BlockLapisBlockBehavior.class)
                 .vanillaBlock(BlockId.LAPIS_BLOCK)
-                .build();
-    }
-
-    public static void initLapisOre() {
-        if (BlockTypes.LAPIS_ORE != null) return;
-        BlockTypes.LAPIS_ORE = AllayBlockType
-                .builder(BlockLapisOreBehavior.class)
-                .vanillaBlock(BlockId.LAPIS_ORE)
                 .build();
     }
 
@@ -3460,14 +3299,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initLitDeepslateRedstoneOre() {
-        if (BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE != null) return;
-        BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE = AllayBlockType
-                .builder(BlockLitDeepslateRedstoneOreBehavior.class)
-                .vanillaBlock(BlockId.LIT_DEEPSLATE_REDSTONE_ORE)
-                .build();
-    }
-
     public static void initLitFurnace() {
         if (BlockTypes.LIT_FURNACE != null) return;
         BlockTypes.LIT_FURNACE = AllayBlockType
@@ -3491,14 +3322,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.LIT_REDSTONE_LAMP = AllayBlockType
                 .builder(BlockLitRedstoneLampBehavior.class)
                 .vanillaBlock(BlockId.LIT_REDSTONE_LAMP)
-                .build();
-    }
-
-    public static void initLitRedstoneOre() {
-        if (BlockTypes.LIT_REDSTONE_ORE != null) return;
-        BlockTypes.LIT_REDSTONE_ORE = AllayBlockType
-                .builder(BlockLitRedstoneOreBehavior.class)
-                .vanillaBlock(BlockId.LIT_REDSTONE_ORE)
                 .build();
     }
 
@@ -3660,14 +3483,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initNetherGoldOre() {
-        if (BlockTypes.NETHER_GOLD_ORE != null) return;
-        BlockTypes.NETHER_GOLD_ORE = AllayBlockType
-                .builder(BlockNetherGoldOreBehavior.class)
-                .vanillaBlock(BlockId.NETHER_GOLD_ORE)
-                .build();
-    }
-
     public static void initNetherSprouts() {
         if (BlockTypes.NETHER_SPROUTS != null) return;
         BlockTypes.NETHER_SPROUTS = AllayBlockType
@@ -3756,22 +3571,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.OXEYE_DAISY = AllayBlockType
                 .builder(BlockOxeyeDaisyBehavior.class)
                 .vanillaBlock(BlockId.OXEYE_DAISY)
-                .build();
-    }
-
-    public static void initOxidizedChiseledCopper() {
-        if (BlockTypes.OXIDIZED_CHISELED_COPPER != null) return;
-        BlockTypes.OXIDIZED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockOxidizedChiseledCopperBehavior.class)
-                .vanillaBlock(BlockId.OXIDIZED_CHISELED_COPPER)
-                .build();
-    }
-
-    public static void initOxidizedCopper() {
-        if (BlockTypes.OXIDIZED_COPPER != null) return;
-        BlockTypes.OXIDIZED_COPPER = AllayBlockType
-                .builder(BlockOxidizedCopperBehavior.class)
-                .vanillaBlock(BlockId.OXIDIZED_COPPER)
                 .build();
     }
 
@@ -4048,14 +3847,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initQuartzOre() {
-        if (BlockTypes.QUARTZ_ORE != null) return;
-        BlockTypes.QUARTZ_ORE = AllayBlockType
-                .builder(BlockQuartzOreBehavior.class)
-                .vanillaBlock(BlockId.QUARTZ_ORE)
-                .build();
-    }
-
     public static void initQuartzPillar() {
         if (BlockTypes.QUARTZ_PILLAR != null) return;
         BlockTypes.QUARTZ_PILLAR = AllayBlockType
@@ -4152,14 +3943,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.REDSTONE_LAMP = AllayBlockType
                 .builder(BlockRedstoneLampBehavior.class)
                 .vanillaBlock(BlockId.REDSTONE_LAMP)
-                .build();
-    }
-
-    public static void initRedstoneOre() {
-        if (BlockTypes.REDSTONE_ORE != null) return;
-        BlockTypes.REDSTONE_ORE = AllayBlockType
-                .builder(BlockRedstoneOreBehavior.class)
-                .vanillaBlock(BlockId.REDSTONE_ORE)
                 .build();
     }
 
@@ -4601,29 +4384,11 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initStrippedCrimsonHyphae() {
-        if (BlockTypes.STRIPPED_CRIMSON_HYPHAE != null) return;
-        BlockTypes.STRIPPED_CRIMSON_HYPHAE = AllayBlockType
-                .builder(BlockStrippedCrimsonHyphaeBehavior.class)
-                .vanillaBlock(BlockId.STRIPPED_CRIMSON_HYPHAE)
-                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-                .build();
-    }
-
     public static void initStrippedCrimsonStem() {
         if (BlockTypes.STRIPPED_CRIMSON_STEM != null) return;
         BlockTypes.STRIPPED_CRIMSON_STEM = AllayBlockType
                 .builder(BlockStrippedCrimsonStemBehavior.class)
                 .vanillaBlock(BlockId.STRIPPED_CRIMSON_STEM)
-                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-                .build();
-    }
-
-    public static void initStrippedWarpedHyphae() {
-        if (BlockTypes.STRIPPED_WARPED_HYPHAE != null) return;
-        BlockTypes.STRIPPED_WARPED_HYPHAE = AllayBlockType
-                .builder(BlockStrippedWarpedHyphaeBehavior.class)
-                .vanillaBlock(BlockId.STRIPPED_WARPED_HYPHAE)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                 .build();
     }
@@ -4943,15 +4708,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initWarpedHyphae() {
-        if (BlockTypes.WARPED_HYPHAE != null) return;
-        BlockTypes.WARPED_HYPHAE = AllayBlockType
-                .builder(BlockWarpedHyphaeBehavior.class)
-                .vanillaBlock(BlockId.WARPED_HYPHAE)
-                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-                .build();
-    }
-
     public static void initWarpedNylium() {
         if (BlockTypes.WARPED_NYLIUM != null) return;
         BlockTypes.WARPED_NYLIUM = AllayBlockType
@@ -5002,86 +4758,6 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initWaxedChiseledCopper() {
-        if (BlockTypes.WAXED_CHISELED_COPPER != null) return;
-        BlockTypes.WAXED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWaxedChiseledCopperBehavior.class)
-                .vanillaBlock(BlockId.WAXED_CHISELED_COPPER)
-                .build();
-    }
-
-    public static void initWaxedCopper() {
-        if (BlockTypes.WAXED_COPPER != null) return;
-        BlockTypes.WAXED_COPPER = AllayBlockType
-                .builder(BlockWaxedCopperBehavior.class)
-                .vanillaBlock(BlockId.WAXED_COPPER)
-                .build();
-    }
-
-    public static void initWaxedExposedChiseledCopper() {
-        if (BlockTypes.WAXED_EXPOSED_CHISELED_COPPER != null) return;
-        BlockTypes.WAXED_EXPOSED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWaxedExposedChiseledCopperBehavior.class)
-                .vanillaBlock(BlockId.WAXED_EXPOSED_CHISELED_COPPER)
-                .build();
-    }
-
-    public static void initWaxedExposedCopper() {
-        if (BlockTypes.WAXED_EXPOSED_COPPER != null) return;
-        BlockTypes.WAXED_EXPOSED_COPPER = AllayBlockType
-                .builder(BlockWaxedExposedCopperBehavior.class)
-                .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER)
-                .build();
-    }
-
-    public static void initWaxedOxidizedChiseledCopper() {
-        if (BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER != null) return;
-        BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWaxedOxidizedChiseledCopperBehavior.class)
-                .vanillaBlock(BlockId.WAXED_OXIDIZED_CHISELED_COPPER)
-                .build();
-    }
-
-    public static void initWaxedOxidizedCopper() {
-        if (BlockTypes.WAXED_OXIDIZED_COPPER != null) return;
-        BlockTypes.WAXED_OXIDIZED_COPPER = AllayBlockType
-                .builder(BlockWaxedOxidizedCopperBehavior.class)
-                .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER)
-                .build();
-    }
-
-    public static void initWaxedWeatheredChiseledCopper() {
-        if (BlockTypes.WAXED_WEATHERED_CHISELED_COPPER != null) return;
-        BlockTypes.WAXED_WEATHERED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWaxedWeatheredChiseledCopperBehavior.class)
-                .vanillaBlock(BlockId.WAXED_WEATHERED_CHISELED_COPPER)
-                .build();
-    }
-
-    public static void initWaxedWeatheredCopper() {
-        if (BlockTypes.WAXED_WEATHERED_COPPER != null) return;
-        BlockTypes.WAXED_WEATHERED_COPPER = AllayBlockType
-                .builder(BlockWaxedWeatheredCopperBehavior.class)
-                .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER)
-                .build();
-    }
-
-    public static void initWeatheredChiseledCopper() {
-        if (BlockTypes.WEATHERED_CHISELED_COPPER != null) return;
-        BlockTypes.WEATHERED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWeatheredChiseledCopperBehavior.class)
-                .vanillaBlock(BlockId.WEATHERED_CHISELED_COPPER)
-                .build();
-    }
-
-    public static void initWeatheredCopper() {
-        if (BlockTypes.WEATHERED_COPPER != null) return;
-        BlockTypes.WEATHERED_COPPER = AllayBlockType
-                .builder(BlockWeatheredCopperBehavior.class)
-                .vanillaBlock(BlockId.WEATHERED_COPPER)
-                .build();
-    }
-
     public static void initWeb() {
         if (BlockTypes.WEB != null) return;
         BlockTypes.WEB = AllayBlockType
@@ -5114,6 +4790,593 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockWitherRoseBehavior.class)
                 .vanillaBlock(BlockId.WITHER_ROSE)
                 .build();
+    }
+
+    public static void initButtons() {
+        if (BlockTypes.ACACIA_BUTTON == null) BlockTypes.ACACIA_BUTTON = buildButton(BlockAcaciaButtonBehavior.class, BlockId.ACACIA_BUTTON);
+        if (BlockTypes.BAMBOO_BUTTON == null) BlockTypes.BAMBOO_BUTTON = buildButton(BlockBambooButtonBehavior.class, BlockId.BAMBOO_BUTTON);
+        if (BlockTypes.BIRCH_BUTTON == null) BlockTypes.BIRCH_BUTTON = buildButton(BlockBirchButtonBehavior.class, BlockId.BIRCH_BUTTON);
+        if (BlockTypes.CHERRY_BUTTON == null) BlockTypes.CHERRY_BUTTON = buildButton(BlockCherryButtonBehavior.class, BlockId.CHERRY_BUTTON);
+        if (BlockTypes.CRIMSON_BUTTON == null) BlockTypes.CRIMSON_BUTTON = buildButton(BlockCrimsonButtonBehavior.class, BlockId.CRIMSON_BUTTON);
+        if (BlockTypes.DARK_OAK_BUTTON == null) BlockTypes.DARK_OAK_BUTTON = buildButton(BlockDarkOakButtonBehavior.class, BlockId.DARK_OAK_BUTTON);
+        if (BlockTypes.JUNGLE_BUTTON == null) BlockTypes.JUNGLE_BUTTON = buildButton(BlockJungleButtonBehavior.class, BlockId.JUNGLE_BUTTON);
+        if (BlockTypes.MANGROVE_BUTTON == null) BlockTypes.MANGROVE_BUTTON = buildButton(BlockMangroveButtonBehavior.class, BlockId.MANGROVE_BUTTON);
+        if (BlockTypes.POLISHED_BLACKSTONE_BUTTON == null) BlockTypes.POLISHED_BLACKSTONE_BUTTON = buildButton(BlockPolishedBlackstoneButtonBehavior.class, BlockId.POLISHED_BLACKSTONE_BUTTON);
+        if (BlockTypes.SPRUCE_BUTTON == null) BlockTypes.SPRUCE_BUTTON = buildButton(BlockSpruceButtonBehavior.class, BlockId.SPRUCE_BUTTON);
+        if (BlockTypes.STONE_BUTTON == null) BlockTypes.STONE_BUTTON = buildButton(BlockStoneButtonBehavior.class, BlockId.STONE_BUTTON);
+        if (BlockTypes.WARPED_BUTTON == null) BlockTypes.WARPED_BUTTON = buildButton(BlockWarpedButtonBehavior.class, BlockId.WARPED_BUTTON);
+        if (BlockTypes.WOODEN_BUTTON == null) BlockTypes.WOODEN_BUTTON = buildButton(BlockWoodenButtonBehavior.class, BlockId.WOODEN_BUTTON);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildButton(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.BUTTON_PRESSED_BIT)
+               .build();
+    }
+
+    public static void initLeaves() {
+        if (BlockTypes.ACACIA_LEAVES == null) BlockTypes.ACACIA_LEAVES = buildLeaves(BlockAcaciaLeavesBehavior.class, BlockId.ACACIA_LEAVES);
+        if (BlockTypes.AZALEA_LEAVES == null) BlockTypes.AZALEA_LEAVES = buildLeaves(BlockAzaleaLeavesBehavior.class, BlockId.AZALEA_LEAVES);
+        if (BlockTypes.BIRCH_LEAVES == null) BlockTypes.BIRCH_LEAVES = buildLeaves(BlockBirchLeavesBehavior.class, BlockId.BIRCH_LEAVES);
+        if (BlockTypes.CHERRY_LEAVES == null) BlockTypes.CHERRY_LEAVES = buildLeaves(BlockCherryLeavesBehavior.class, BlockId.CHERRY_LEAVES);
+        if (BlockTypes.DARK_OAK_LEAVES == null) BlockTypes.DARK_OAK_LEAVES = buildLeaves(BlockDarkOakLeavesBehavior.class, BlockId.DARK_OAK_LEAVES);
+        if (BlockTypes.JUNGLE_LEAVES == null) BlockTypes.JUNGLE_LEAVES = buildLeaves(BlockJungleLeavesBehavior.class, BlockId.JUNGLE_LEAVES);
+        if (BlockTypes.MANGROVE_LEAVES == null) BlockTypes.MANGROVE_LEAVES = buildLeaves(BlockMangroveLeavesBehavior.class, BlockId.MANGROVE_LEAVES);
+        if (BlockTypes.OAK_LEAVES == null) BlockTypes.OAK_LEAVES = buildLeaves(BlockOakLeavesBehavior.class, BlockId.OAK_LEAVES);
+        if (BlockTypes.SPRUCE_LEAVES == null) BlockTypes.SPRUCE_LEAVES = buildLeaves(BlockSpruceLeavesBehavior.class, BlockId.SPRUCE_LEAVES);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildLeaves(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
+               .build();
+    }
+
+    public static void initShulkerBoxes() {
+        if (BlockTypes.BLACK_SHULKER_BOX == null) BlockTypes.BLACK_SHULKER_BOX = buildShulkerBox(BlockBlackShulkerBoxBehavior.class, BlockId.BLACK_SHULKER_BOX);
+        if (BlockTypes.BLUE_SHULKER_BOX == null) BlockTypes.BLUE_SHULKER_BOX = buildShulkerBox(BlockBlueShulkerBoxBehavior.class, BlockId.BLUE_SHULKER_BOX);
+        if (BlockTypes.BROWN_SHULKER_BOX == null) BlockTypes.BROWN_SHULKER_BOX = buildShulkerBox(BlockBrownShulkerBoxBehavior.class, BlockId.BROWN_SHULKER_BOX);
+        if (BlockTypes.CYAN_SHULKER_BOX == null) BlockTypes.CYAN_SHULKER_BOX = buildShulkerBox(BlockCyanShulkerBoxBehavior.class, BlockId.CYAN_SHULKER_BOX);
+        if (BlockTypes.GRAY_SHULKER_BOX == null) BlockTypes.GRAY_SHULKER_BOX = buildShulkerBox(BlockGrayShulkerBoxBehavior.class, BlockId.GRAY_SHULKER_BOX);
+        if (BlockTypes.GREEN_SHULKER_BOX == null) BlockTypes.GREEN_SHULKER_BOX = buildShulkerBox(BlockGreenShulkerBoxBehavior.class, BlockId.GREEN_SHULKER_BOX);
+        if (BlockTypes.LIGHT_BLUE_SHULKER_BOX == null) BlockTypes.LIGHT_BLUE_SHULKER_BOX = buildShulkerBox(BlockLightBlueShulkerBoxBehavior.class, BlockId.LIGHT_BLUE_SHULKER_BOX);
+        if (BlockTypes.LIGHT_GRAY_SHULKER_BOX == null) BlockTypes.LIGHT_GRAY_SHULKER_BOX = buildShulkerBox(BlockLightGrayShulkerBoxBehavior.class, BlockId.LIGHT_GRAY_SHULKER_BOX);
+        if (BlockTypes.LIME_SHULKER_BOX == null) BlockTypes.LIME_SHULKER_BOX = buildShulkerBox(BlockLimeShulkerBoxBehavior.class, BlockId.LIME_SHULKER_BOX);
+        if (BlockTypes.MAGENTA_SHULKER_BOX == null) BlockTypes.MAGENTA_SHULKER_BOX = buildShulkerBox(BlockMagentaShulkerBoxBehavior.class, BlockId.MAGENTA_SHULKER_BOX);
+        if (BlockTypes.ORANGE_SHULKER_BOX == null) BlockTypes.ORANGE_SHULKER_BOX = buildShulkerBox(BlockOrangeShulkerBoxBehavior.class, BlockId.ORANGE_SHULKER_BOX);
+        if (BlockTypes.PINK_SHULKER_BOX == null) BlockTypes.PINK_SHULKER_BOX = buildShulkerBox(BlockPinkShulkerBoxBehavior.class, BlockId.PINK_SHULKER_BOX);
+        if (BlockTypes.PURPLE_SHULKER_BOX == null) BlockTypes.PURPLE_SHULKER_BOX = buildShulkerBox(BlockPurpleShulkerBoxBehavior.class, BlockId.PURPLE_SHULKER_BOX);
+        if (BlockTypes.RED_SHULKER_BOX == null) BlockTypes.RED_SHULKER_BOX = buildShulkerBox(BlockRedShulkerBoxBehavior.class, BlockId.RED_SHULKER_BOX);
+        if (BlockTypes.UNDYED_SHULKER_BOX == null) BlockTypes.UNDYED_SHULKER_BOX = buildShulkerBox(BlockUndyedShulkerBoxBehavior.class, BlockId.UNDYED_SHULKER_BOX);
+        if (BlockTypes.WHITE_SHULKER_BOX == null) BlockTypes.WHITE_SHULKER_BOX = buildShulkerBox(BlockWhiteShulkerBoxBehavior.class, BlockId.WHITE_SHULKER_BOX);
+        if (BlockTypes.YELLOW_SHULKER_BOX == null) BlockTypes.YELLOW_SHULKER_BOX = buildShulkerBox(BlockYellowShulkerBoxBehavior.class, BlockId.YELLOW_SHULKER_BOX);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildShulkerBox(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initStairs() {
+        if (BlockTypes.ACACIA_STAIRS == null) BlockTypes.ACACIA_STAIRS = buildStairs(BlockAcaciaStairsBehavior.class, BlockId.ACACIA_STAIRS);
+        if (BlockTypes.ANDESITE_STAIRS == null) BlockTypes.ANDESITE_STAIRS = buildStairs(BlockAndesiteStairsBehavior.class, BlockId.ANDESITE_STAIRS);
+        if (BlockTypes.BAMBOO_MOSAIC_STAIRS == null) BlockTypes.BAMBOO_MOSAIC_STAIRS = buildStairs(BlockBambooMosaicStairsBehavior.class, BlockId.BAMBOO_MOSAIC_STAIRS);
+        if (BlockTypes.BAMBOO_STAIRS == null) BlockTypes.BAMBOO_STAIRS = buildStairs(BlockBambooStairsBehavior.class, BlockId.BAMBOO_STAIRS);
+        if (BlockTypes.BIRCH_STAIRS == null) BlockTypes.BIRCH_STAIRS = buildStairs(BlockBirchStairsBehavior.class, BlockId.BIRCH_STAIRS);
+        if (BlockTypes.BLACKSTONE_STAIRS == null) BlockTypes.BLACKSTONE_STAIRS = buildStairs(BlockBlackstoneStairsBehavior.class, BlockId.BLACKSTONE_STAIRS);
+        if (BlockTypes.BRICK_STAIRS == null) BlockTypes.BRICK_STAIRS = buildStairs(BlockBrickStairsBehavior.class, BlockId.BRICK_STAIRS);
+        if (BlockTypes.CHERRY_STAIRS == null) BlockTypes.CHERRY_STAIRS = buildStairs(BlockCherryStairsBehavior.class, BlockId.CHERRY_STAIRS);
+        if (BlockTypes.COBBLED_DEEPSLATE_STAIRS == null) BlockTypes.COBBLED_DEEPSLATE_STAIRS = buildStairs(BlockCobbledDeepslateStairsBehavior.class, BlockId.COBBLED_DEEPSLATE_STAIRS);
+        if (BlockTypes.CRIMSON_STAIRS == null) BlockTypes.CRIMSON_STAIRS = buildStairs(BlockCrimsonStairsBehavior.class, BlockId.CRIMSON_STAIRS);
+        if (BlockTypes.CUT_COPPER_STAIRS == null) BlockTypes.CUT_COPPER_STAIRS = buildStairs(BlockCutCopperStairsBehavior.class, BlockId.CUT_COPPER_STAIRS);
+        if (BlockTypes.DARK_OAK_STAIRS == null) BlockTypes.DARK_OAK_STAIRS = buildStairs(BlockDarkOakStairsBehavior.class, BlockId.DARK_OAK_STAIRS);
+        if (BlockTypes.DARK_PRISMARINE_STAIRS == null) BlockTypes.DARK_PRISMARINE_STAIRS = buildStairs(BlockDarkPrismarineStairsBehavior.class, BlockId.DARK_PRISMARINE_STAIRS);
+        if (BlockTypes.DEEPSLATE_BRICK_STAIRS == null) BlockTypes.DEEPSLATE_BRICK_STAIRS = buildStairs(BlockDeepslateBrickStairsBehavior.class, BlockId.DEEPSLATE_BRICK_STAIRS);
+        if (BlockTypes.DEEPSLATE_TILE_STAIRS == null) BlockTypes.DEEPSLATE_TILE_STAIRS = buildStairs(BlockDeepslateTileStairsBehavior.class, BlockId.DEEPSLATE_TILE_STAIRS);
+        if (BlockTypes.DIORITE_STAIRS == null) BlockTypes.DIORITE_STAIRS = buildStairs(BlockDioriteStairsBehavior.class, BlockId.DIORITE_STAIRS);
+        if (BlockTypes.END_BRICK_STAIRS == null) BlockTypes.END_BRICK_STAIRS = buildStairs(BlockEndBrickStairsBehavior.class, BlockId.END_BRICK_STAIRS);
+        if (BlockTypes.EXPOSED_CUT_COPPER_STAIRS == null) BlockTypes.EXPOSED_CUT_COPPER_STAIRS = buildStairs(BlockExposedCutCopperStairsBehavior.class, BlockId.EXPOSED_CUT_COPPER_STAIRS);
+        if (BlockTypes.GRANITE_STAIRS == null) BlockTypes.GRANITE_STAIRS = buildStairs(BlockGraniteStairsBehavior.class, BlockId.GRANITE_STAIRS);
+        if (BlockTypes.JUNGLE_STAIRS == null) BlockTypes.JUNGLE_STAIRS = buildStairs(BlockJungleStairsBehavior.class, BlockId.JUNGLE_STAIRS);
+        if (BlockTypes.MANGROVE_STAIRS == null) BlockTypes.MANGROVE_STAIRS = buildStairs(BlockMangroveStairsBehavior.class, BlockId.MANGROVE_STAIRS);
+        if (BlockTypes.MOSSY_COBBLESTONE_STAIRS == null) BlockTypes.MOSSY_COBBLESTONE_STAIRS = buildStairs(BlockMossyCobblestoneStairsBehavior.class, BlockId.MOSSY_COBBLESTONE_STAIRS);
+        if (BlockTypes.MOSSY_STONE_BRICK_STAIRS == null) BlockTypes.MOSSY_STONE_BRICK_STAIRS = buildStairs(BlockMossyStoneBrickStairsBehavior.class, BlockId.MOSSY_STONE_BRICK_STAIRS);
+        if (BlockTypes.MUD_BRICK_STAIRS == null) BlockTypes.MUD_BRICK_STAIRS = buildStairs(BlockMudBrickStairsBehavior.class, BlockId.MUD_BRICK_STAIRS);
+        if (BlockTypes.NETHER_BRICK_STAIRS == null) BlockTypes.NETHER_BRICK_STAIRS = buildStairs(BlockNetherBrickStairsBehavior.class, BlockId.NETHER_BRICK_STAIRS);
+        if (BlockTypes.NORMAL_STONE_STAIRS == null) BlockTypes.NORMAL_STONE_STAIRS = buildStairs(BlockNormalStoneStairsBehavior.class, BlockId.NORMAL_STONE_STAIRS);
+        if (BlockTypes.OAK_STAIRS == null) BlockTypes.OAK_STAIRS = buildStairs(BlockOakStairsBehavior.class, BlockId.OAK_STAIRS);
+        if (BlockTypes.OXIDIZED_CUT_COPPER_STAIRS == null) BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = buildStairs(BlockOxidizedCutCopperStairsBehavior.class, BlockId.OXIDIZED_CUT_COPPER_STAIRS);
+        if (BlockTypes.POLISHED_ANDESITE_STAIRS == null) BlockTypes.POLISHED_ANDESITE_STAIRS = buildStairs(BlockPolishedAndesiteStairsBehavior.class, BlockId.POLISHED_ANDESITE_STAIRS);
+        if (BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS == null) BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = buildStairs(BlockPolishedBlackstoneBrickStairsBehavior.class, BlockId.POLISHED_BLACKSTONE_BRICK_STAIRS);
+        if (BlockTypes.POLISHED_BLACKSTONE_STAIRS == null) BlockTypes.POLISHED_BLACKSTONE_STAIRS = buildStairs(BlockPolishedBlackstoneStairsBehavior.class, BlockId.POLISHED_BLACKSTONE_STAIRS);
+        if (BlockTypes.POLISHED_DEEPSLATE_STAIRS == null) BlockTypes.POLISHED_DEEPSLATE_STAIRS = buildStairs(BlockPolishedDeepslateStairsBehavior.class, BlockId.POLISHED_DEEPSLATE_STAIRS);
+        if (BlockTypes.POLISHED_DIORITE_STAIRS == null) BlockTypes.POLISHED_DIORITE_STAIRS = buildStairs(BlockPolishedDioriteStairsBehavior.class, BlockId.POLISHED_DIORITE_STAIRS);
+        if (BlockTypes.POLISHED_GRANITE_STAIRS == null) BlockTypes.POLISHED_GRANITE_STAIRS = buildStairs(BlockPolishedGraniteStairsBehavior.class, BlockId.POLISHED_GRANITE_STAIRS);
+        if (BlockTypes.POLISHED_TUFF_STAIRS == null) BlockTypes.POLISHED_TUFF_STAIRS = buildStairs(BlockPolishedTuffStairsBehavior.class, BlockId.POLISHED_TUFF_STAIRS);
+        if (BlockTypes.PRISMARINE_BRICKS_STAIRS == null) BlockTypes.PRISMARINE_BRICKS_STAIRS = buildStairs(BlockPrismarineBricksStairsBehavior.class, BlockId.PRISMARINE_BRICKS_STAIRS);
+        if (BlockTypes.PRISMARINE_STAIRS == null) BlockTypes.PRISMARINE_STAIRS = buildStairs(BlockPrismarineStairsBehavior.class, BlockId.PRISMARINE_STAIRS);
+        if (BlockTypes.PURPUR_STAIRS == null) BlockTypes.PURPUR_STAIRS = buildStairs(BlockPurpurStairsBehavior.class, BlockId.PURPUR_STAIRS);
+        if (BlockTypes.QUARTZ_STAIRS == null) BlockTypes.QUARTZ_STAIRS = buildStairs(BlockQuartzStairsBehavior.class, BlockId.QUARTZ_STAIRS);
+        if (BlockTypes.RED_NETHER_BRICK_STAIRS == null) BlockTypes.RED_NETHER_BRICK_STAIRS = buildStairs(BlockRedNetherBrickStairsBehavior.class, BlockId.RED_NETHER_BRICK_STAIRS);
+        if (BlockTypes.RED_SANDSTONE_STAIRS == null) BlockTypes.RED_SANDSTONE_STAIRS = buildStairs(BlockRedSandstoneStairsBehavior.class, BlockId.RED_SANDSTONE_STAIRS);
+        if (BlockTypes.SANDSTONE_STAIRS == null) BlockTypes.SANDSTONE_STAIRS = buildStairs(BlockSandstoneStairsBehavior.class, BlockId.SANDSTONE_STAIRS);
+        if (BlockTypes.SMOOTH_QUARTZ_STAIRS == null) BlockTypes.SMOOTH_QUARTZ_STAIRS = buildStairs(BlockSmoothQuartzStairsBehavior.class, BlockId.SMOOTH_QUARTZ_STAIRS);
+        if (BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS == null) BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS = buildStairs(BlockSmoothRedSandstoneStairsBehavior.class, BlockId.SMOOTH_RED_SANDSTONE_STAIRS);
+        if (BlockTypes.SMOOTH_SANDSTONE_STAIRS == null) BlockTypes.SMOOTH_SANDSTONE_STAIRS = buildStairs(BlockSmoothSandstoneStairsBehavior.class, BlockId.SMOOTH_SANDSTONE_STAIRS);
+        if (BlockTypes.SPRUCE_STAIRS == null) BlockTypes.SPRUCE_STAIRS = buildStairs(BlockSpruceStairsBehavior.class, BlockId.SPRUCE_STAIRS);
+        if (BlockTypes.STONE_BRICK_STAIRS == null) BlockTypes.STONE_BRICK_STAIRS = buildStairs(BlockStoneBrickStairsBehavior.class, BlockId.STONE_BRICK_STAIRS);
+        if (BlockTypes.STONE_STAIRS == null) BlockTypes.STONE_STAIRS = buildStairs(BlockStoneStairsBehavior.class, BlockId.STONE_STAIRS);
+        if (BlockTypes.TUFF_BRICK_STAIRS == null) BlockTypes.TUFF_BRICK_STAIRS = buildStairs(BlockTuffBrickStairsBehavior.class, BlockId.TUFF_BRICK_STAIRS);
+        if (BlockTypes.TUFF_STAIRS == null) BlockTypes.TUFF_STAIRS = buildStairs(BlockTuffStairsBehavior.class, BlockId.TUFF_STAIRS);
+        if (BlockTypes.WARPED_STAIRS == null) BlockTypes.WARPED_STAIRS = buildStairs(BlockWarpedStairsBehavior.class, BlockId.WARPED_STAIRS);
+        if (BlockTypes.WAXED_CUT_COPPER_STAIRS == null) BlockTypes.WAXED_CUT_COPPER_STAIRS = buildStairs(BlockWaxedCutCopperStairsBehavior.class, BlockId.WAXED_CUT_COPPER_STAIRS);
+        if (BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS == null) BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = buildStairs(BlockWaxedExposedCutCopperStairsBehavior.class, BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS);
+        if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS == null) BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = buildStairs(BlockWaxedOxidizedCutCopperStairsBehavior.class, BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS);
+        if (BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS == null) BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = buildStairs(BlockWaxedWeatheredCutCopperStairsBehavior.class, BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS);
+        if (BlockTypes.WEATHERED_CUT_COPPER_STAIRS == null) BlockTypes.WEATHERED_CUT_COPPER_STAIRS = buildStairs(BlockWeatheredCutCopperStairsBehavior.class, BlockId.WEATHERED_CUT_COPPER_STAIRS);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildStairs(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+               .build();
+    }
+
+    public static void initLogs() {
+        if (BlockTypes.ACACIA_LOG == null) BlockTypes.ACACIA_LOG = buildLog(BlockAcaciaLogBehavior.class, BlockId.ACACIA_LOG);
+        if (BlockTypes.BIRCH_LOG == null) BlockTypes.BIRCH_LOG = buildLog(BlockBirchLogBehavior.class, BlockId.BIRCH_LOG);
+        if (BlockTypes.CHERRY_LOG == null) BlockTypes.CHERRY_LOG = buildLog(BlockCherryLogBehavior.class, BlockId.CHERRY_LOG);
+        if (BlockTypes.DARK_OAK_LOG == null) BlockTypes.DARK_OAK_LOG = buildLog(BlockDarkOakLogBehavior.class, BlockId.DARK_OAK_LOG);
+        if (BlockTypes.JUNGLE_LOG == null) BlockTypes.JUNGLE_LOG = buildLog(BlockJungleLogBehavior.class, BlockId.JUNGLE_LOG);
+        if (BlockTypes.MANGROVE_LOG == null) BlockTypes.MANGROVE_LOG = buildLog(BlockMangroveLogBehavior.class, BlockId.MANGROVE_LOG);
+        if (BlockTypes.OAK_LOG == null) BlockTypes.OAK_LOG = buildLog(BlockOakLogBehavior.class, BlockId.OAK_LOG);
+        if (BlockTypes.SPRUCE_LOG == null) BlockTypes.SPRUCE_LOG = buildLog(BlockSpruceLogBehavior.class, BlockId.SPRUCE_LOG);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildLog(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+               .build();
+    }
+
+    public static void initStrippedLogs() {
+        if (BlockTypes.STRIPPED_ACACIA_LOG == null) BlockTypes.STRIPPED_ACACIA_LOG = buildStrippedLog(BlockStrippedAcaciaLogBehavior.class, BlockId.STRIPPED_ACACIA_LOG);
+        if (BlockTypes.STRIPPED_BIRCH_LOG == null) BlockTypes.STRIPPED_BIRCH_LOG = buildStrippedLog(BlockStrippedBirchLogBehavior.class, BlockId.STRIPPED_BIRCH_LOG);
+        if (BlockTypes.STRIPPED_CHERRY_LOG == null) BlockTypes.STRIPPED_CHERRY_LOG = buildStrippedLog(BlockStrippedCherryLogBehavior.class, BlockId.STRIPPED_CHERRY_LOG);
+        if (BlockTypes.STRIPPED_DARK_OAK_LOG == null) BlockTypes.STRIPPED_DARK_OAK_LOG = buildStrippedLog(BlockStrippedDarkOakLogBehavior.class, BlockId.STRIPPED_DARK_OAK_LOG);
+        if (BlockTypes.STRIPPED_JUNGLE_LOG == null) BlockTypes.STRIPPED_JUNGLE_LOG = buildStrippedLog(BlockStrippedJungleLogBehavior.class, BlockId.STRIPPED_JUNGLE_LOG);
+        if (BlockTypes.STRIPPED_MANGROVE_LOG == null) BlockTypes.STRIPPED_MANGROVE_LOG = buildStrippedLog(BlockStrippedMangroveLogBehavior.class, BlockId.STRIPPED_MANGROVE_LOG);
+        if (BlockTypes.STRIPPED_OAK_LOG == null) BlockTypes.STRIPPED_OAK_LOG = buildStrippedLog(BlockStrippedOakLogBehavior.class, BlockId.STRIPPED_OAK_LOG);
+        if (BlockTypes.STRIPPED_SPRUCE_LOG == null) BlockTypes.STRIPPED_SPRUCE_LOG = buildStrippedLog(BlockStrippedSpruceLogBehavior.class, BlockId.STRIPPED_SPRUCE_LOG);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildStrippedLog(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+               .build();
+    }
+
+    public static void initHangingSigns() {
+        if (BlockTypes.ACACIA_HANGING_SIGN == null) BlockTypes.ACACIA_HANGING_SIGN = buildHangingSign(BlockAcaciaHangingSignBehavior.class, BlockId.ACACIA_HANGING_SIGN);
+        if (BlockTypes.BAMBOO_HANGING_SIGN == null) BlockTypes.BAMBOO_HANGING_SIGN = buildHangingSign(BlockBambooHangingSignBehavior.class, BlockId.BAMBOO_HANGING_SIGN);
+        if (BlockTypes.BIRCH_HANGING_SIGN == null) BlockTypes.BIRCH_HANGING_SIGN = buildHangingSign(BlockBirchHangingSignBehavior.class, BlockId.BIRCH_HANGING_SIGN);
+        if (BlockTypes.CHERRY_HANGING_SIGN == null) BlockTypes.CHERRY_HANGING_SIGN = buildHangingSign(BlockCherryHangingSignBehavior.class, BlockId.CHERRY_HANGING_SIGN);
+        if (BlockTypes.CRIMSON_HANGING_SIGN == null) BlockTypes.CRIMSON_HANGING_SIGN = buildHangingSign(BlockCrimsonHangingSignBehavior.class, BlockId.CRIMSON_HANGING_SIGN);
+        if (BlockTypes.DARK_OAK_HANGING_SIGN == null) BlockTypes.DARK_OAK_HANGING_SIGN = buildHangingSign(BlockDarkOakHangingSignBehavior.class, BlockId.DARK_OAK_HANGING_SIGN);
+        if (BlockTypes.JUNGLE_HANGING_SIGN == null) BlockTypes.JUNGLE_HANGING_SIGN = buildHangingSign(BlockJungleHangingSignBehavior.class, BlockId.JUNGLE_HANGING_SIGN);
+        if (BlockTypes.MANGROVE_HANGING_SIGN == null) BlockTypes.MANGROVE_HANGING_SIGN = buildHangingSign(BlockMangroveHangingSignBehavior.class, BlockId.MANGROVE_HANGING_SIGN);
+        if (BlockTypes.OAK_HANGING_SIGN == null) BlockTypes.OAK_HANGING_SIGN = buildHangingSign(BlockOakHangingSignBehavior.class, BlockId.OAK_HANGING_SIGN);
+        if (BlockTypes.SPRUCE_HANGING_SIGN == null) BlockTypes.SPRUCE_HANGING_SIGN = buildHangingSign(BlockSpruceHangingSignBehavior.class, BlockId.SPRUCE_HANGING_SIGN);
+        if (BlockTypes.WARPED_HANGING_SIGN == null) BlockTypes.WARPED_HANGING_SIGN = buildHangingSign(BlockWarpedHangingSignBehavior.class, BlockId.WARPED_HANGING_SIGN);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildHangingSign(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION, BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.HANGING)
+               .build();
+    }
+
+    public static void initStandingSigns() {
+        if (BlockTypes.ACACIA_STANDING_SIGN == null) BlockTypes.ACACIA_STANDING_SIGN = buildStandingSign(BlockAcaciaStandingSignBehavior.class, BlockId.ACACIA_STANDING_SIGN);
+        if (BlockTypes.BAMBOO_STANDING_SIGN == null) BlockTypes.BAMBOO_STANDING_SIGN = buildStandingSign(BlockBambooStandingSignBehavior.class, BlockId.BAMBOO_STANDING_SIGN);
+        if (BlockTypes.BIRCH_STANDING_SIGN == null) BlockTypes.BIRCH_STANDING_SIGN = buildStandingSign(BlockBirchStandingSignBehavior.class, BlockId.BIRCH_STANDING_SIGN);
+        if (BlockTypes.CHERRY_STANDING_SIGN == null) BlockTypes.CHERRY_STANDING_SIGN = buildStandingSign(BlockCherryStandingSignBehavior.class, BlockId.CHERRY_STANDING_SIGN);
+        if (BlockTypes.CRIMSON_STANDING_SIGN == null) BlockTypes.CRIMSON_STANDING_SIGN = buildStandingSign(BlockCrimsonStandingSignBehavior.class, BlockId.CRIMSON_STANDING_SIGN);
+        if (BlockTypes.DARKOAK_STANDING_SIGN == null) BlockTypes.DARKOAK_STANDING_SIGN = buildStandingSign(BlockDarkoakStandingSignBehavior.class, BlockId.DARKOAK_STANDING_SIGN);
+        if (BlockTypes.JUNGLE_STANDING_SIGN == null) BlockTypes.JUNGLE_STANDING_SIGN = buildStandingSign(BlockJungleStandingSignBehavior.class, BlockId.JUNGLE_STANDING_SIGN);
+        if (BlockTypes.MANGROVE_STANDING_SIGN == null) BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockMangroveStandingSignBehavior.class, BlockId.MANGROVE_STANDING_SIGN);
+        if (BlockTypes.SPRUCE_STANDING_SIGN == null) BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockSpruceStandingSignBehavior.class, BlockId.SPRUCE_STANDING_SIGN);
+        if (BlockTypes.STANDING_SIGN == null) BlockTypes.STANDING_SIGN = buildStandingSign(BlockStandingSignBehavior.class, BlockId.STANDING_SIGN);
+        if (BlockTypes.WARPED_STANDING_SIGN == null) BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockWarpedStandingSignBehavior.class, BlockId.WARPED_STANDING_SIGN);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildStandingSign(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION)
+               .build();
+    }
+
+    public static void initWools() {
+        if (BlockTypes.BLACK_WOOL == null) BlockTypes.BLACK_WOOL = buildWool(BlockBlackWoolBehavior.class, BlockId.BLACK_WOOL);
+        if (BlockTypes.BLUE_WOOL == null) BlockTypes.BLUE_WOOL = buildWool(BlockBlueWoolBehavior.class, BlockId.BLUE_WOOL);
+        if (BlockTypes.BROWN_WOOL == null) BlockTypes.BROWN_WOOL = buildWool(BlockBrownWoolBehavior.class, BlockId.BROWN_WOOL);
+        if (BlockTypes.CYAN_WOOL == null) BlockTypes.CYAN_WOOL = buildWool(BlockCyanWoolBehavior.class, BlockId.CYAN_WOOL);
+        if (BlockTypes.GRAY_WOOL == null) BlockTypes.GRAY_WOOL = buildWool(BlockGrayWoolBehavior.class, BlockId.GRAY_WOOL);
+        if (BlockTypes.GREEN_WOOL == null) BlockTypes.GREEN_WOOL = buildWool(BlockGreenWoolBehavior.class, BlockId.GREEN_WOOL);
+        if (BlockTypes.LIGHT_BLUE_WOOL == null) BlockTypes.LIGHT_BLUE_WOOL = buildWool(BlockLightBlueWoolBehavior.class, BlockId.LIGHT_BLUE_WOOL);
+        if (BlockTypes.LIGHT_GRAY_WOOL == null) BlockTypes.LIGHT_GRAY_WOOL = buildWool(BlockLightGrayWoolBehavior.class, BlockId.LIGHT_GRAY_WOOL);
+        if (BlockTypes.LIME_WOOL == null) BlockTypes.LIME_WOOL = buildWool(BlockLimeWoolBehavior.class, BlockId.LIME_WOOL);
+        if (BlockTypes.MAGENTA_WOOL == null) BlockTypes.MAGENTA_WOOL = buildWool(BlockMagentaWoolBehavior.class, BlockId.MAGENTA_WOOL);
+        if (BlockTypes.ORANGE_WOOL == null) BlockTypes.ORANGE_WOOL = buildWool(BlockOrangeWoolBehavior.class, BlockId.ORANGE_WOOL);
+        if (BlockTypes.PINK_WOOL == null) BlockTypes.PINK_WOOL = buildWool(BlockPinkWoolBehavior.class, BlockId.PINK_WOOL);
+        if (BlockTypes.PURPLE_WOOL == null) BlockTypes.PURPLE_WOOL = buildWool(BlockPurpleWoolBehavior.class, BlockId.PURPLE_WOOL);
+        if (BlockTypes.RED_WOOL == null) BlockTypes.RED_WOOL = buildWool(BlockRedWoolBehavior.class, BlockId.RED_WOOL);
+        if (BlockTypes.WHITE_WOOL == null) BlockTypes.WHITE_WOOL = buildWool(BlockWhiteWoolBehavior.class, BlockId.WHITE_WOOL);
+        if (BlockTypes.YELLOW_WOOL == null) BlockTypes.YELLOW_WOOL = buildWool(BlockYellowWoolBehavior.class, BlockId.YELLOW_WOOL);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildWool(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initGlazedTerracotta() {
+        if (BlockTypes.BLACK_GLAZED_TERRACOTTA == null) BlockTypes.BLACK_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockBlackGlazedTerracottaBehavior.class, BlockId.BLACK_GLAZED_TERRACOTTA);
+        if (BlockTypes.BLUE_GLAZED_TERRACOTTA == null) BlockTypes.BLUE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockBlueGlazedTerracottaBehavior.class, BlockId.BLUE_GLAZED_TERRACOTTA);
+        if (BlockTypes.BROWN_GLAZED_TERRACOTTA == null) BlockTypes.BROWN_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockBrownGlazedTerracottaBehavior.class, BlockId.BROWN_GLAZED_TERRACOTTA);
+        if (BlockTypes.CYAN_GLAZED_TERRACOTTA == null) BlockTypes.CYAN_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockCyanGlazedTerracottaBehavior.class, BlockId.CYAN_GLAZED_TERRACOTTA);
+        if (BlockTypes.GRAY_GLAZED_TERRACOTTA == null) BlockTypes.GRAY_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockGrayGlazedTerracottaBehavior.class, BlockId.GRAY_GLAZED_TERRACOTTA);
+        if (BlockTypes.GREEN_GLAZED_TERRACOTTA == null) BlockTypes.GREEN_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockGreenGlazedTerracottaBehavior.class, BlockId.GREEN_GLAZED_TERRACOTTA);
+        if (BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA == null) BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockLightBlueGlazedTerracottaBehavior.class, BlockId.LIGHT_BLUE_GLAZED_TERRACOTTA);
+        if (BlockTypes.LIME_GLAZED_TERRACOTTA == null) BlockTypes.LIME_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockLimeGlazedTerracottaBehavior.class, BlockId.LIME_GLAZED_TERRACOTTA);
+        if (BlockTypes.MAGENTA_GLAZED_TERRACOTTA == null) BlockTypes.MAGENTA_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockMagentaGlazedTerracottaBehavior.class, BlockId.MAGENTA_GLAZED_TERRACOTTA);
+        if (BlockTypes.ORANGE_GLAZED_TERRACOTTA == null) BlockTypes.ORANGE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockOrangeGlazedTerracottaBehavior.class, BlockId.ORANGE_GLAZED_TERRACOTTA);
+        if (BlockTypes.PINK_GLAZED_TERRACOTTA == null) BlockTypes.PINK_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockPinkGlazedTerracottaBehavior.class, BlockId.PINK_GLAZED_TERRACOTTA);
+        if (BlockTypes.PURPLE_GLAZED_TERRACOTTA == null) BlockTypes.PURPLE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockPurpleGlazedTerracottaBehavior.class, BlockId.PURPLE_GLAZED_TERRACOTTA);
+        if (BlockTypes.RED_GLAZED_TERRACOTTA == null) BlockTypes.RED_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockRedGlazedTerracottaBehavior.class, BlockId.RED_GLAZED_TERRACOTTA);
+        if (BlockTypes.SILVER_GLAZED_TERRACOTTA == null) BlockTypes.SILVER_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockSilverGlazedTerracottaBehavior.class, BlockId.SILVER_GLAZED_TERRACOTTA);
+        if (BlockTypes.WHITE_GLAZED_TERRACOTTA == null) BlockTypes.WHITE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockWhiteGlazedTerracottaBehavior.class, BlockId.WHITE_GLAZED_TERRACOTTA);
+        if (BlockTypes.YELLOW_GLAZED_TERRACOTTA == null) BlockTypes.YELLOW_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockYellowGlazedTerracottaBehavior.class, BlockId.YELLOW_GLAZED_TERRACOTTA);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildGlazedTerracotta(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+               .build();
+    }
+
+    public static void initTerracotta() {
+        if (BlockTypes.BLACK_TERRACOTTA == null) BlockTypes.BLACK_TERRACOTTA = buildTerracotta(BlockBlackTerracottaBehavior.class, BlockId.BLACK_TERRACOTTA);
+        if (BlockTypes.BLUE_TERRACOTTA == null) BlockTypes.BLUE_TERRACOTTA = buildTerracotta(BlockBlueTerracottaBehavior.class, BlockId.BLUE_TERRACOTTA);
+        if (BlockTypes.BROWN_TERRACOTTA == null) BlockTypes.BROWN_TERRACOTTA = buildTerracotta(BlockBrownTerracottaBehavior.class, BlockId.BROWN_TERRACOTTA);
+        if (BlockTypes.CYAN_TERRACOTTA == null) BlockTypes.CYAN_TERRACOTTA = buildTerracotta(BlockCyanTerracottaBehavior.class, BlockId.CYAN_TERRACOTTA);
+        if (BlockTypes.GRAY_TERRACOTTA == null) BlockTypes.GRAY_TERRACOTTA = buildTerracotta(BlockGrayTerracottaBehavior.class, BlockId.GRAY_TERRACOTTA);
+        if (BlockTypes.GREEN_TERRACOTTA == null) BlockTypes.GREEN_TERRACOTTA = buildTerracotta(BlockGreenTerracottaBehavior.class, BlockId.GREEN_TERRACOTTA);
+        if (BlockTypes.LIGHT_BLUE_TERRACOTTA == null) BlockTypes.LIGHT_BLUE_TERRACOTTA = buildTerracotta(BlockLightBlueTerracottaBehavior.class, BlockId.LIGHT_BLUE_TERRACOTTA);
+        if (BlockTypes.LIGHT_GRAY_TERRACOTTA == null) BlockTypes.LIGHT_GRAY_TERRACOTTA = buildTerracotta(BlockLightGrayTerracottaBehavior.class, BlockId.LIGHT_GRAY_TERRACOTTA);
+        if (BlockTypes.LIME_TERRACOTTA == null) BlockTypes.LIME_TERRACOTTA = buildTerracotta(BlockLimeTerracottaBehavior.class, BlockId.LIME_TERRACOTTA);
+        if (BlockTypes.MAGENTA_TERRACOTTA == null) BlockTypes.MAGENTA_TERRACOTTA = buildTerracotta(BlockMagentaTerracottaBehavior.class, BlockId.MAGENTA_TERRACOTTA);
+        if (BlockTypes.ORANGE_TERRACOTTA == null) BlockTypes.ORANGE_TERRACOTTA = buildTerracotta(BlockOrangeTerracottaBehavior.class, BlockId.ORANGE_TERRACOTTA);
+        if (BlockTypes.PINK_TERRACOTTA == null) BlockTypes.PINK_TERRACOTTA = buildTerracotta(BlockPinkTerracottaBehavior.class, BlockId.PINK_TERRACOTTA);
+        if (BlockTypes.PURPLE_TERRACOTTA == null) BlockTypes.PURPLE_TERRACOTTA = buildTerracotta(BlockPurpleTerracottaBehavior.class, BlockId.PURPLE_TERRACOTTA);
+        if (BlockTypes.RED_TERRACOTTA == null) BlockTypes.RED_TERRACOTTA = buildTerracotta(BlockRedTerracottaBehavior.class, BlockId.RED_TERRACOTTA);
+        if (BlockTypes.WHITE_TERRACOTTA == null) BlockTypes.WHITE_TERRACOTTA = buildTerracotta(BlockWhiteTerracottaBehavior.class, BlockId.WHITE_TERRACOTTA);
+        if (BlockTypes.YELLOW_TERRACOTTA == null) BlockTypes.YELLOW_TERRACOTTA = buildTerracotta(BlockYellowTerracottaBehavior.class, BlockId.YELLOW_TERRACOTTA);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildTerracotta(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initStainedGlassPanes() {
+        if (BlockTypes.BLACK_STAINED_GLASS_PANE == null) BlockTypes.BLACK_STAINED_GLASS_PANE = buildStainedGlassPane(BlockBlackStainedGlassPaneBehavior.class, BlockId.BLACK_STAINED_GLASS_PANE);
+        if (BlockTypes.BLUE_STAINED_GLASS_PANE == null) BlockTypes.BLUE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockBlueStainedGlassPaneBehavior.class, BlockId.BLUE_STAINED_GLASS_PANE);
+        if (BlockTypes.BROWN_STAINED_GLASS_PANE == null) BlockTypes.BROWN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockBrownStainedGlassPaneBehavior.class, BlockId.BROWN_STAINED_GLASS_PANE);
+        if (BlockTypes.CYAN_STAINED_GLASS_PANE == null) BlockTypes.CYAN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockCyanStainedGlassPaneBehavior.class, BlockId.CYAN_STAINED_GLASS_PANE);
+        if (BlockTypes.GRAY_STAINED_GLASS_PANE == null) BlockTypes.GRAY_STAINED_GLASS_PANE = buildStainedGlassPane(BlockGrayStainedGlassPaneBehavior.class, BlockId.GRAY_STAINED_GLASS_PANE);
+        if (BlockTypes.GREEN_STAINED_GLASS_PANE == null) BlockTypes.GREEN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockGreenStainedGlassPaneBehavior.class, BlockId.GREEN_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_BLACK_STAINED_GLASS_PANE == null) BlockTypes.HARD_BLACK_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardBlackStainedGlassPaneBehavior.class, BlockId.HARD_BLACK_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_BLUE_STAINED_GLASS_PANE == null) BlockTypes.HARD_BLUE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardBlueStainedGlassPaneBehavior.class, BlockId.HARD_BLUE_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_BROWN_STAINED_GLASS_PANE == null) BlockTypes.HARD_BROWN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardBrownStainedGlassPaneBehavior.class, BlockId.HARD_BROWN_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_CYAN_STAINED_GLASS_PANE == null) BlockTypes.HARD_CYAN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardCyanStainedGlassPaneBehavior.class, BlockId.HARD_CYAN_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_GRAY_STAINED_GLASS_PANE == null) BlockTypes.HARD_GRAY_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardGrayStainedGlassPaneBehavior.class, BlockId.HARD_GRAY_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_GREEN_STAINED_GLASS_PANE == null) BlockTypes.HARD_GREEN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardGreenStainedGlassPaneBehavior.class, BlockId.HARD_GREEN_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE == null) BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardLightBlueStainedGlassPaneBehavior.class, BlockId.HARD_LIGHT_BLUE_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE == null) BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardLightGrayStainedGlassPaneBehavior.class, BlockId.HARD_LIGHT_GRAY_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_LIME_STAINED_GLASS_PANE == null) BlockTypes.HARD_LIME_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardLimeStainedGlassPaneBehavior.class, BlockId.HARD_LIME_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_MAGENTA_STAINED_GLASS_PANE == null) BlockTypes.HARD_MAGENTA_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardMagentaStainedGlassPaneBehavior.class, BlockId.HARD_MAGENTA_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_ORANGE_STAINED_GLASS_PANE == null) BlockTypes.HARD_ORANGE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardOrangeStainedGlassPaneBehavior.class, BlockId.HARD_ORANGE_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_PINK_STAINED_GLASS_PANE == null) BlockTypes.HARD_PINK_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardPinkStainedGlassPaneBehavior.class, BlockId.HARD_PINK_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_PURPLE_STAINED_GLASS_PANE == null) BlockTypes.HARD_PURPLE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardPurpleStainedGlassPaneBehavior.class, BlockId.HARD_PURPLE_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_RED_STAINED_GLASS_PANE == null) BlockTypes.HARD_RED_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardRedStainedGlassPaneBehavior.class, BlockId.HARD_RED_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_WHITE_STAINED_GLASS_PANE == null) BlockTypes.HARD_WHITE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardWhiteStainedGlassPaneBehavior.class, BlockId.HARD_WHITE_STAINED_GLASS_PANE);
+        if (BlockTypes.HARD_YELLOW_STAINED_GLASS_PANE == null) BlockTypes.HARD_YELLOW_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardYellowStainedGlassPaneBehavior.class, BlockId.HARD_YELLOW_STAINED_GLASS_PANE);
+        if (BlockTypes.LIGHT_BLUE_STAINED_GLASS_PANE == null) BlockTypes.LIGHT_BLUE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockLightBlueStainedGlassPaneBehavior.class, BlockId.LIGHT_BLUE_STAINED_GLASS_PANE);
+        if (BlockTypes.LIGHT_GRAY_STAINED_GLASS_PANE == null) BlockTypes.LIGHT_GRAY_STAINED_GLASS_PANE = buildStainedGlassPane(BlockLightGrayStainedGlassPaneBehavior.class, BlockId.LIGHT_GRAY_STAINED_GLASS_PANE);
+        if (BlockTypes.LIME_STAINED_GLASS_PANE == null) BlockTypes.LIME_STAINED_GLASS_PANE = buildStainedGlassPane(BlockLimeStainedGlassPaneBehavior.class, BlockId.LIME_STAINED_GLASS_PANE);
+        if (BlockTypes.MAGENTA_STAINED_GLASS_PANE == null) BlockTypes.MAGENTA_STAINED_GLASS_PANE = buildStainedGlassPane(BlockMagentaStainedGlassPaneBehavior.class, BlockId.MAGENTA_STAINED_GLASS_PANE);
+        if (BlockTypes.ORANGE_STAINED_GLASS_PANE == null) BlockTypes.ORANGE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockOrangeStainedGlassPaneBehavior.class, BlockId.ORANGE_STAINED_GLASS_PANE);
+        if (BlockTypes.PINK_STAINED_GLASS_PANE == null) BlockTypes.PINK_STAINED_GLASS_PANE = buildStainedGlassPane(BlockPinkStainedGlassPaneBehavior.class, BlockId.PINK_STAINED_GLASS_PANE);
+        if (BlockTypes.PURPLE_STAINED_GLASS_PANE == null) BlockTypes.PURPLE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockPurpleStainedGlassPaneBehavior.class, BlockId.PURPLE_STAINED_GLASS_PANE);
+        if (BlockTypes.RED_STAINED_GLASS_PANE == null) BlockTypes.RED_STAINED_GLASS_PANE = buildStainedGlassPane(BlockRedStainedGlassPaneBehavior.class, BlockId.RED_STAINED_GLASS_PANE);
+        if (BlockTypes.WHITE_STAINED_GLASS_PANE == null) BlockTypes.WHITE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockWhiteStainedGlassPaneBehavior.class, BlockId.WHITE_STAINED_GLASS_PANE);
+        if (BlockTypes.YELLOW_STAINED_GLASS_PANE == null) BlockTypes.YELLOW_STAINED_GLASS_PANE = buildStainedGlassPane(BlockYellowStainedGlassPaneBehavior.class, BlockId.YELLOW_STAINED_GLASS_PANE);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildStainedGlassPane(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initStainedGlass() {
+        if (BlockTypes.BLACK_STAINED_GLASS == null) BlockTypes.BLACK_STAINED_GLASS = buildStainedGlass(BlockBlackStainedGlassBehavior.class, BlockId.BLACK_STAINED_GLASS);
+        if (BlockTypes.BLUE_STAINED_GLASS == null) BlockTypes.BLUE_STAINED_GLASS = buildStainedGlass(BlockBlueStainedGlassBehavior.class, BlockId.BLUE_STAINED_GLASS);
+        if (BlockTypes.BROWN_STAINED_GLASS == null) BlockTypes.BROWN_STAINED_GLASS = buildStainedGlass(BlockBrownStainedGlassBehavior.class, BlockId.BROWN_STAINED_GLASS);
+        if (BlockTypes.CYAN_STAINED_GLASS == null) BlockTypes.CYAN_STAINED_GLASS = buildStainedGlass(BlockCyanStainedGlassBehavior.class, BlockId.CYAN_STAINED_GLASS);
+        if (BlockTypes.GRAY_STAINED_GLASS == null) BlockTypes.GRAY_STAINED_GLASS = buildStainedGlass(BlockGrayStainedGlassBehavior.class, BlockId.GRAY_STAINED_GLASS);
+        if (BlockTypes.GREEN_STAINED_GLASS == null) BlockTypes.GREEN_STAINED_GLASS = buildStainedGlass(BlockGreenStainedGlassBehavior.class, BlockId.GREEN_STAINED_GLASS);
+        if (BlockTypes.HARD_BLACK_STAINED_GLASS == null) BlockTypes.HARD_BLACK_STAINED_GLASS = buildStainedGlass(BlockHardBlackStainedGlassBehavior.class, BlockId.HARD_BLACK_STAINED_GLASS);
+        if (BlockTypes.HARD_BLUE_STAINED_GLASS == null) BlockTypes.HARD_BLUE_STAINED_GLASS = buildStainedGlass(BlockHardBlueStainedGlassBehavior.class, BlockId.HARD_BLUE_STAINED_GLASS);
+        if (BlockTypes.HARD_BROWN_STAINED_GLASS == null) BlockTypes.HARD_BROWN_STAINED_GLASS = buildStainedGlass(BlockHardBrownStainedGlassBehavior.class, BlockId.HARD_BROWN_STAINED_GLASS);
+        if (BlockTypes.HARD_CYAN_STAINED_GLASS == null) BlockTypes.HARD_CYAN_STAINED_GLASS = buildStainedGlass(BlockHardCyanStainedGlassBehavior.class, BlockId.HARD_CYAN_STAINED_GLASS);
+        if (BlockTypes.HARD_GRAY_STAINED_GLASS == null) BlockTypes.HARD_GRAY_STAINED_GLASS = buildStainedGlass(BlockHardGrayStainedGlassBehavior.class, BlockId.HARD_GRAY_STAINED_GLASS);
+        if (BlockTypes.HARD_GREEN_STAINED_GLASS == null) BlockTypes.HARD_GREEN_STAINED_GLASS = buildStainedGlass(BlockHardGreenStainedGlassBehavior.class, BlockId.HARD_GREEN_STAINED_GLASS);
+        if (BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS == null) BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS = buildStainedGlass(BlockHardLightBlueStainedGlassBehavior.class, BlockId.HARD_LIGHT_BLUE_STAINED_GLASS);
+        if (BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS == null) BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS = buildStainedGlass(BlockHardLightGrayStainedGlassBehavior.class, BlockId.HARD_LIGHT_GRAY_STAINED_GLASS);
+        if (BlockTypes.HARD_LIME_STAINED_GLASS == null) BlockTypes.HARD_LIME_STAINED_GLASS = buildStainedGlass(BlockHardLimeStainedGlassBehavior.class, BlockId.HARD_LIME_STAINED_GLASS);
+        if (BlockTypes.HARD_MAGENTA_STAINED_GLASS == null) BlockTypes.HARD_MAGENTA_STAINED_GLASS = buildStainedGlass(BlockHardMagentaStainedGlassBehavior.class, BlockId.HARD_MAGENTA_STAINED_GLASS);
+        if (BlockTypes.HARD_ORANGE_STAINED_GLASS == null) BlockTypes.HARD_ORANGE_STAINED_GLASS = buildStainedGlass(BlockHardOrangeStainedGlassBehavior.class, BlockId.HARD_ORANGE_STAINED_GLASS);
+        if (BlockTypes.HARD_PINK_STAINED_GLASS == null) BlockTypes.HARD_PINK_STAINED_GLASS = buildStainedGlass(BlockHardPinkStainedGlassBehavior.class, BlockId.HARD_PINK_STAINED_GLASS);
+        if (BlockTypes.HARD_PURPLE_STAINED_GLASS == null) BlockTypes.HARD_PURPLE_STAINED_GLASS = buildStainedGlass(BlockHardPurpleStainedGlassBehavior.class, BlockId.HARD_PURPLE_STAINED_GLASS);
+        if (BlockTypes.HARD_RED_STAINED_GLASS == null) BlockTypes.HARD_RED_STAINED_GLASS = buildStainedGlass(BlockHardRedStainedGlassBehavior.class, BlockId.HARD_RED_STAINED_GLASS);
+        if (BlockTypes.HARD_WHITE_STAINED_GLASS == null) BlockTypes.HARD_WHITE_STAINED_GLASS = buildStainedGlass(BlockHardWhiteStainedGlassBehavior.class, BlockId.HARD_WHITE_STAINED_GLASS);
+        if (BlockTypes.HARD_YELLOW_STAINED_GLASS == null) BlockTypes.HARD_YELLOW_STAINED_GLASS = buildStainedGlass(BlockHardYellowStainedGlassBehavior.class, BlockId.HARD_YELLOW_STAINED_GLASS);
+        if (BlockTypes.LIGHT_BLUE_STAINED_GLASS == null) BlockTypes.LIGHT_BLUE_STAINED_GLASS = buildStainedGlass(BlockLightBlueStainedGlassBehavior.class, BlockId.LIGHT_BLUE_STAINED_GLASS);
+        if (BlockTypes.LIGHT_GRAY_STAINED_GLASS == null) BlockTypes.LIGHT_GRAY_STAINED_GLASS = buildStainedGlass(BlockLightGrayStainedGlassBehavior.class, BlockId.LIGHT_GRAY_STAINED_GLASS);
+        if (BlockTypes.LIME_STAINED_GLASS == null) BlockTypes.LIME_STAINED_GLASS = buildStainedGlass(BlockLimeStainedGlassBehavior.class, BlockId.LIME_STAINED_GLASS);
+        if (BlockTypes.MAGENTA_STAINED_GLASS == null) BlockTypes.MAGENTA_STAINED_GLASS = buildStainedGlass(BlockMagentaStainedGlassBehavior.class, BlockId.MAGENTA_STAINED_GLASS);
+        if (BlockTypes.ORANGE_STAINED_GLASS == null) BlockTypes.ORANGE_STAINED_GLASS = buildStainedGlass(BlockOrangeStainedGlassBehavior.class, BlockId.ORANGE_STAINED_GLASS);
+        if (BlockTypes.PINK_STAINED_GLASS == null) BlockTypes.PINK_STAINED_GLASS = buildStainedGlass(BlockPinkStainedGlassBehavior.class, BlockId.PINK_STAINED_GLASS);
+        if (BlockTypes.PURPLE_STAINED_GLASS == null) BlockTypes.PURPLE_STAINED_GLASS = buildStainedGlass(BlockPurpleStainedGlassBehavior.class, BlockId.PURPLE_STAINED_GLASS);
+        if (BlockTypes.RED_STAINED_GLASS == null) BlockTypes.RED_STAINED_GLASS = buildStainedGlass(BlockRedStainedGlassBehavior.class, BlockId.RED_STAINED_GLASS);
+        if (BlockTypes.WHITE_STAINED_GLASS == null) BlockTypes.WHITE_STAINED_GLASS = buildStainedGlass(BlockWhiteStainedGlassBehavior.class, BlockId.WHITE_STAINED_GLASS);
+        if (BlockTypes.YELLOW_STAINED_GLASS == null) BlockTypes.YELLOW_STAINED_GLASS = buildStainedGlass(BlockYellowStainedGlassBehavior.class, BlockId.YELLOW_STAINED_GLASS);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildStainedGlass(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initConcretePowders() {
+        if (BlockTypes.BLACK_CONCRETE_POWDER == null) BlockTypes.BLACK_CONCRETE_POWDER = buildConcretePowder(BlockBlackConcretePowderBehavior.class, BlockId.BLACK_CONCRETE_POWDER);
+        if (BlockTypes.BLUE_CONCRETE_POWDER == null) BlockTypes.BLUE_CONCRETE_POWDER = buildConcretePowder(BlockBlueConcretePowderBehavior.class, BlockId.BLUE_CONCRETE_POWDER);
+        if (BlockTypes.BROWN_CONCRETE_POWDER == null) BlockTypes.BROWN_CONCRETE_POWDER = buildConcretePowder(BlockBrownConcretePowderBehavior.class, BlockId.BROWN_CONCRETE_POWDER);
+        if (BlockTypes.CYAN_CONCRETE_POWDER == null) BlockTypes.CYAN_CONCRETE_POWDER = buildConcretePowder(BlockCyanConcretePowderBehavior.class, BlockId.CYAN_CONCRETE_POWDER);
+        if (BlockTypes.GRAY_CONCRETE_POWDER == null) BlockTypes.GRAY_CONCRETE_POWDER = buildConcretePowder(BlockGrayConcretePowderBehavior.class, BlockId.GRAY_CONCRETE_POWDER);
+        if (BlockTypes.GREEN_CONCRETE_POWDER == null) BlockTypes.GREEN_CONCRETE_POWDER = buildConcretePowder(BlockGreenConcretePowderBehavior.class, BlockId.GREEN_CONCRETE_POWDER);
+        if (BlockTypes.LIGHT_BLUE_CONCRETE_POWDER == null) BlockTypes.LIGHT_BLUE_CONCRETE_POWDER = buildConcretePowder(BlockLightBlueConcretePowderBehavior.class, BlockId.LIGHT_BLUE_CONCRETE_POWDER);
+        if (BlockTypes.LIGHT_GRAY_CONCRETE_POWDER == null) BlockTypes.LIGHT_GRAY_CONCRETE_POWDER = buildConcretePowder(BlockLightGrayConcretePowderBehavior.class, BlockId.LIGHT_GRAY_CONCRETE_POWDER);
+        if (BlockTypes.LIME_CONCRETE_POWDER == null) BlockTypes.LIME_CONCRETE_POWDER = buildConcretePowder(BlockLimeConcretePowderBehavior.class, BlockId.LIME_CONCRETE_POWDER);
+        if (BlockTypes.MAGENTA_CONCRETE_POWDER == null) BlockTypes.MAGENTA_CONCRETE_POWDER = buildConcretePowder(BlockMagentaConcretePowderBehavior.class, BlockId.MAGENTA_CONCRETE_POWDER);
+        if (BlockTypes.ORANGE_CONCRETE_POWDER == null) BlockTypes.ORANGE_CONCRETE_POWDER = buildConcretePowder(BlockOrangeConcretePowderBehavior.class, BlockId.ORANGE_CONCRETE_POWDER);
+        if (BlockTypes.PINK_CONCRETE_POWDER == null) BlockTypes.PINK_CONCRETE_POWDER = buildConcretePowder(BlockPinkConcretePowderBehavior.class, BlockId.PINK_CONCRETE_POWDER);
+        if (BlockTypes.PURPLE_CONCRETE_POWDER == null) BlockTypes.PURPLE_CONCRETE_POWDER = buildConcretePowder(BlockPurpleConcretePowderBehavior.class, BlockId.PURPLE_CONCRETE_POWDER);
+        if (BlockTypes.RED_CONCRETE_POWDER == null) BlockTypes.RED_CONCRETE_POWDER = buildConcretePowder(BlockRedConcretePowderBehavior.class, BlockId.RED_CONCRETE_POWDER);
+        if (BlockTypes.WHITE_CONCRETE_POWDER == null) BlockTypes.WHITE_CONCRETE_POWDER = buildConcretePowder(BlockWhiteConcretePowderBehavior.class, BlockId.WHITE_CONCRETE_POWDER);
+        if (BlockTypes.YELLOW_CONCRETE_POWDER == null) BlockTypes.YELLOW_CONCRETE_POWDER = buildConcretePowder(BlockYellowConcretePowderBehavior.class, BlockId.YELLOW_CONCRETE_POWDER);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildConcretePowder(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initConcretes() {
+        if (BlockTypes.BLACK_CONCRETE == null) BlockTypes.BLACK_CONCRETE = buildConcrete(BlockBlackConcreteBehavior.class, BlockId.BLACK_CONCRETE);
+        if (BlockTypes.BLUE_CONCRETE == null) BlockTypes.BLUE_CONCRETE = buildConcrete(BlockBlueConcreteBehavior.class, BlockId.BLUE_CONCRETE);
+        if (BlockTypes.BROWN_CONCRETE == null) BlockTypes.BROWN_CONCRETE = buildConcrete(BlockBrownConcreteBehavior.class, BlockId.BROWN_CONCRETE);
+        if (BlockTypes.CYAN_CONCRETE == null) BlockTypes.CYAN_CONCRETE = buildConcrete(BlockCyanConcreteBehavior.class, BlockId.CYAN_CONCRETE);
+        if (BlockTypes.GRAY_CONCRETE == null) BlockTypes.GRAY_CONCRETE = buildConcrete(BlockGrayConcreteBehavior.class, BlockId.GRAY_CONCRETE);
+        if (BlockTypes.GREEN_CONCRETE == null) BlockTypes.GREEN_CONCRETE = buildConcrete(BlockGreenConcreteBehavior.class, BlockId.GREEN_CONCRETE);
+        if (BlockTypes.LIGHT_BLUE_CONCRETE == null) BlockTypes.LIGHT_BLUE_CONCRETE = buildConcrete(BlockLightBlueConcreteBehavior.class, BlockId.LIGHT_BLUE_CONCRETE);
+        if (BlockTypes.LIGHT_GRAY_CONCRETE == null) BlockTypes.LIGHT_GRAY_CONCRETE = buildConcrete(BlockLightGrayConcreteBehavior.class, BlockId.LIGHT_GRAY_CONCRETE);
+        if (BlockTypes.LIME_CONCRETE == null) BlockTypes.LIME_CONCRETE = buildConcrete(BlockLimeConcreteBehavior.class, BlockId.LIME_CONCRETE);
+        if (BlockTypes.MAGENTA_CONCRETE == null) BlockTypes.MAGENTA_CONCRETE = buildConcrete(BlockMagentaConcreteBehavior.class, BlockId.MAGENTA_CONCRETE);
+        if (BlockTypes.ORANGE_CONCRETE == null) BlockTypes.ORANGE_CONCRETE = buildConcrete(BlockOrangeConcreteBehavior.class, BlockId.ORANGE_CONCRETE);
+        if (BlockTypes.PINK_CONCRETE == null) BlockTypes.PINK_CONCRETE = buildConcrete(BlockPinkConcreteBehavior.class, BlockId.PINK_CONCRETE);
+        if (BlockTypes.PURPLE_CONCRETE == null) BlockTypes.PURPLE_CONCRETE = buildConcrete(BlockPurpleConcreteBehavior.class, BlockId.PURPLE_CONCRETE);
+        if (BlockTypes.RED_CONCRETE == null) BlockTypes.RED_CONCRETE = buildConcrete(BlockRedConcreteBehavior.class, BlockId.RED_CONCRETE);
+        if (BlockTypes.WHITE_CONCRETE == null) BlockTypes.WHITE_CONCRETE = buildConcrete(BlockWhiteConcreteBehavior.class, BlockId.WHITE_CONCRETE);
+        if (BlockTypes.YELLOW_CONCRETE == null) BlockTypes.YELLOW_CONCRETE = buildConcrete(BlockYellowConcreteBehavior.class, BlockId.YELLOW_CONCRETE);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildConcrete(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initCarpets() {
+        if (BlockTypes.BLACK_CARPET == null) BlockTypes.BLACK_CARPET = buildCarpet(BlockBlackCarpetBehavior.class, BlockId.BLACK_CARPET);
+        if (BlockTypes.BLUE_CARPET == null) BlockTypes.BLUE_CARPET = buildCarpet(BlockBlueCarpetBehavior.class, BlockId.BLUE_CARPET);
+        if (BlockTypes.BROWN_CARPET == null) BlockTypes.BROWN_CARPET = buildCarpet(BlockBrownCarpetBehavior.class, BlockId.BROWN_CARPET);
+        if (BlockTypes.CYAN_CARPET == null) BlockTypes.CYAN_CARPET = buildCarpet(BlockCyanCarpetBehavior.class, BlockId.CYAN_CARPET);
+        if (BlockTypes.GRAY_CARPET == null) BlockTypes.GRAY_CARPET = buildCarpet(BlockGrayCarpetBehavior.class, BlockId.GRAY_CARPET);
+        if (BlockTypes.GREEN_CARPET == null) BlockTypes.GREEN_CARPET = buildCarpet(BlockGreenCarpetBehavior.class, BlockId.GREEN_CARPET);
+        if (BlockTypes.LIGHT_BLUE_CARPET == null) BlockTypes.LIGHT_BLUE_CARPET = buildCarpet(BlockLightBlueCarpetBehavior.class, BlockId.LIGHT_BLUE_CARPET);
+        if (BlockTypes.LIGHT_GRAY_CARPET == null) BlockTypes.LIGHT_GRAY_CARPET = buildCarpet(BlockLightGrayCarpetBehavior.class, BlockId.LIGHT_GRAY_CARPET);
+        if (BlockTypes.LIME_CARPET == null) BlockTypes.LIME_CARPET = buildCarpet(BlockLimeCarpetBehavior.class, BlockId.LIME_CARPET);
+        if (BlockTypes.MAGENTA_CARPET == null) BlockTypes.MAGENTA_CARPET = buildCarpet(BlockMagentaCarpetBehavior.class, BlockId.MAGENTA_CARPET);
+        if (BlockTypes.MOSS_CARPET == null) BlockTypes.MOSS_CARPET = buildCarpet(BlockMossCarpetBehavior.class, BlockId.MOSS_CARPET);
+        if (BlockTypes.ORANGE_CARPET == null) BlockTypes.ORANGE_CARPET = buildCarpet(BlockOrangeCarpetBehavior.class, BlockId.ORANGE_CARPET);
+        if (BlockTypes.PINK_CARPET == null) BlockTypes.PINK_CARPET = buildCarpet(BlockPinkCarpetBehavior.class, BlockId.PINK_CARPET);
+        if (BlockTypes.PURPLE_CARPET == null) BlockTypes.PURPLE_CARPET = buildCarpet(BlockPurpleCarpetBehavior.class, BlockId.PURPLE_CARPET);
+        if (BlockTypes.RED_CARPET == null) BlockTypes.RED_CARPET = buildCarpet(BlockRedCarpetBehavior.class, BlockId.RED_CARPET);
+        if (BlockTypes.WHITE_CARPET == null) BlockTypes.WHITE_CARPET = buildCarpet(BlockWhiteCarpetBehavior.class, BlockId.WHITE_CARPET);
+        if (BlockTypes.YELLOW_CARPET == null) BlockTypes.YELLOW_CARPET = buildCarpet(BlockYellowCarpetBehavior.class, BlockId.YELLOW_CARPET);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildCarpet(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initCandleCakes() {
+        if (BlockTypes.BLACK_CANDLE_CAKE == null) BlockTypes.BLACK_CANDLE_CAKE = buildCandleCake(BlockBlackCandleCakeBehavior.class, BlockId.BLACK_CANDLE_CAKE);
+        if (BlockTypes.BLUE_CANDLE_CAKE == null) BlockTypes.BLUE_CANDLE_CAKE = buildCandleCake(BlockBlueCandleCakeBehavior.class, BlockId.BLUE_CANDLE_CAKE);
+        if (BlockTypes.BROWN_CANDLE_CAKE == null) BlockTypes.BROWN_CANDLE_CAKE = buildCandleCake(BlockBrownCandleCakeBehavior.class, BlockId.BROWN_CANDLE_CAKE);
+        if (BlockTypes.CYAN_CANDLE_CAKE == null) BlockTypes.CYAN_CANDLE_CAKE = buildCandleCake(BlockCyanCandleCakeBehavior.class, BlockId.CYAN_CANDLE_CAKE);
+        if (BlockTypes.GRAY_CANDLE_CAKE == null) BlockTypes.GRAY_CANDLE_CAKE = buildCandleCake(BlockGrayCandleCakeBehavior.class, BlockId.GRAY_CANDLE_CAKE);
+        if (BlockTypes.GREEN_CANDLE_CAKE == null) BlockTypes.GREEN_CANDLE_CAKE = buildCandleCake(BlockGreenCandleCakeBehavior.class, BlockId.GREEN_CANDLE_CAKE);
+        if (BlockTypes.LIGHT_BLUE_CANDLE_CAKE == null) BlockTypes.LIGHT_BLUE_CANDLE_CAKE = buildCandleCake(BlockLightBlueCandleCakeBehavior.class, BlockId.LIGHT_BLUE_CANDLE_CAKE);
+        if (BlockTypes.LIGHT_GRAY_CANDLE_CAKE == null) BlockTypes.LIGHT_GRAY_CANDLE_CAKE = buildCandleCake(BlockLightGrayCandleCakeBehavior.class, BlockId.LIGHT_GRAY_CANDLE_CAKE);
+        if (BlockTypes.LIME_CANDLE_CAKE == null) BlockTypes.LIME_CANDLE_CAKE = buildCandleCake(BlockLimeCandleCakeBehavior.class, BlockId.LIME_CANDLE_CAKE);
+        if (BlockTypes.MAGENTA_CANDLE_CAKE == null) BlockTypes.MAGENTA_CANDLE_CAKE = buildCandleCake(BlockMagentaCandleCakeBehavior.class, BlockId.MAGENTA_CANDLE_CAKE);
+        if (BlockTypes.ORANGE_CANDLE_CAKE == null) BlockTypes.ORANGE_CANDLE_CAKE = buildCandleCake(BlockOrangeCandleCakeBehavior.class, BlockId.ORANGE_CANDLE_CAKE);
+        if (BlockTypes.PINK_CANDLE_CAKE == null) BlockTypes.PINK_CANDLE_CAKE = buildCandleCake(BlockPinkCandleCakeBehavior.class, BlockId.PINK_CANDLE_CAKE);
+        if (BlockTypes.PURPLE_CANDLE_CAKE == null) BlockTypes.PURPLE_CANDLE_CAKE = buildCandleCake(BlockPurpleCandleCakeBehavior.class, BlockId.PURPLE_CANDLE_CAKE);
+        if (BlockTypes.RED_CANDLE_CAKE == null) BlockTypes.RED_CANDLE_CAKE = buildCandleCake(BlockRedCandleCakeBehavior.class, BlockId.RED_CANDLE_CAKE);
+        if (BlockTypes.WHITE_CANDLE_CAKE == null) BlockTypes.WHITE_CANDLE_CAKE = buildCandleCake(BlockWhiteCandleCakeBehavior.class, BlockId.WHITE_CANDLE_CAKE);
+        if (BlockTypes.YELLOW_CANDLE_CAKE == null) BlockTypes.YELLOW_CANDLE_CAKE = buildCandleCake(BlockYellowCandleCakeBehavior.class, BlockId.YELLOW_CANDLE_CAKE);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildCandleCake(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.LIT)
+               .build();
+    }
+
+    public static void initCandles() {
+        if (BlockTypes.BLACK_CANDLE == null) BlockTypes.BLACK_CANDLE = buildCandle(BlockBlackCandleBehavior.class, BlockId.BLACK_CANDLE);
+        if (BlockTypes.BLUE_CANDLE == null) BlockTypes.BLUE_CANDLE = buildCandle(BlockBlueCandleBehavior.class, BlockId.BLUE_CANDLE);
+        if (BlockTypes.BROWN_CANDLE == null) BlockTypes.BROWN_CANDLE = buildCandle(BlockBrownCandleBehavior.class, BlockId.BROWN_CANDLE);
+        if (BlockTypes.CYAN_CANDLE == null) BlockTypes.CYAN_CANDLE = buildCandle(BlockCyanCandleBehavior.class, BlockId.CYAN_CANDLE);
+        if (BlockTypes.GRAY_CANDLE == null) BlockTypes.GRAY_CANDLE = buildCandle(BlockGrayCandleBehavior.class, BlockId.GRAY_CANDLE);
+        if (BlockTypes.GREEN_CANDLE == null) BlockTypes.GREEN_CANDLE = buildCandle(BlockGreenCandleBehavior.class, BlockId.GREEN_CANDLE);
+        if (BlockTypes.LIGHT_BLUE_CANDLE == null) BlockTypes.LIGHT_BLUE_CANDLE = buildCandle(BlockLightBlueCandleBehavior.class, BlockId.LIGHT_BLUE_CANDLE);
+        if (BlockTypes.LIGHT_GRAY_CANDLE == null) BlockTypes.LIGHT_GRAY_CANDLE = buildCandle(BlockLightGrayCandleBehavior.class, BlockId.LIGHT_GRAY_CANDLE);
+        if (BlockTypes.LIME_CANDLE == null) BlockTypes.LIME_CANDLE = buildCandle(BlockLimeCandleBehavior.class, BlockId.LIME_CANDLE);
+        if (BlockTypes.MAGENTA_CANDLE == null) BlockTypes.MAGENTA_CANDLE = buildCandle(BlockMagentaCandleBehavior.class, BlockId.MAGENTA_CANDLE);
+        if (BlockTypes.ORANGE_CANDLE == null) BlockTypes.ORANGE_CANDLE = buildCandle(BlockOrangeCandleBehavior.class, BlockId.ORANGE_CANDLE);
+        if (BlockTypes.PINK_CANDLE == null) BlockTypes.PINK_CANDLE = buildCandle(BlockPinkCandleBehavior.class, BlockId.PINK_CANDLE);
+        if (BlockTypes.PURPLE_CANDLE == null) BlockTypes.PURPLE_CANDLE = buildCandle(BlockPurpleCandleBehavior.class, BlockId.PURPLE_CANDLE);
+        if (BlockTypes.RED_CANDLE == null) BlockTypes.RED_CANDLE = buildCandle(BlockRedCandleBehavior.class, BlockId.RED_CANDLE);
+        if (BlockTypes.WHITE_CANDLE == null) BlockTypes.WHITE_CANDLE = buildCandle(BlockWhiteCandleBehavior.class, BlockId.WHITE_CANDLE);
+        if (BlockTypes.YELLOW_CANDLE == null) BlockTypes.YELLOW_CANDLE = buildCandle(BlockYellowCandleBehavior.class, BlockId.YELLOW_CANDLE);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildCandle(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
+               .build();
+    }
+
+    public static void initPressurePlates() {
+        if (BlockTypes.ACACIA_PRESSURE_PLATE == null) BlockTypes.ACACIA_PRESSURE_PLATE = buildPressurePlate(BlockAcaciaPressurePlateBehavior.class, BlockId.ACACIA_PRESSURE_PLATE);
+        if (BlockTypes.BAMBOO_PRESSURE_PLATE == null) BlockTypes.BAMBOO_PRESSURE_PLATE = buildPressurePlate(BlockBambooPressurePlateBehavior.class, BlockId.BAMBOO_PRESSURE_PLATE);
+        if (BlockTypes.BIRCH_PRESSURE_PLATE == null) BlockTypes.BIRCH_PRESSURE_PLATE = buildPressurePlate(BlockBirchPressurePlateBehavior.class, BlockId.BIRCH_PRESSURE_PLATE);
+        if (BlockTypes.CHERRY_PRESSURE_PLATE == null) BlockTypes.CHERRY_PRESSURE_PLATE = buildPressurePlate(BlockCherryPressurePlateBehavior.class, BlockId.CHERRY_PRESSURE_PLATE);
+        if (BlockTypes.CRIMSON_PRESSURE_PLATE == null) BlockTypes.CRIMSON_PRESSURE_PLATE = buildPressurePlate(BlockCrimsonPressurePlateBehavior.class, BlockId.CRIMSON_PRESSURE_PLATE);
+        if (BlockTypes.DARK_OAK_PRESSURE_PLATE == null) BlockTypes.DARK_OAK_PRESSURE_PLATE = buildPressurePlate(BlockDarkOakPressurePlateBehavior.class, BlockId.DARK_OAK_PRESSURE_PLATE);
+        if (BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE == null) BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE = buildPressurePlate(BlockHeavyWeightedPressurePlateBehavior.class, BlockId.HEAVY_WEIGHTED_PRESSURE_PLATE);
+        if (BlockTypes.JUNGLE_PRESSURE_PLATE == null) BlockTypes.JUNGLE_PRESSURE_PLATE = buildPressurePlate(BlockJunglePressurePlateBehavior.class, BlockId.JUNGLE_PRESSURE_PLATE);
+        if (BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE == null) BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE = buildPressurePlate(BlockLightWeightedPressurePlateBehavior.class, BlockId.LIGHT_WEIGHTED_PRESSURE_PLATE);
+        if (BlockTypes.MANGROVE_PRESSURE_PLATE == null) BlockTypes.MANGROVE_PRESSURE_PLATE = buildPressurePlate(BlockMangrovePressurePlateBehavior.class, BlockId.MANGROVE_PRESSURE_PLATE);
+        if (BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE == null) BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE = buildPressurePlate(BlockPolishedBlackstonePressurePlateBehavior.class, BlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE);
+        if (BlockTypes.SPRUCE_PRESSURE_PLATE == null) BlockTypes.SPRUCE_PRESSURE_PLATE = buildPressurePlate(BlockSprucePressurePlateBehavior.class, BlockId.SPRUCE_PRESSURE_PLATE);
+        if (BlockTypes.STONE_PRESSURE_PLATE == null) BlockTypes.STONE_PRESSURE_PLATE = buildPressurePlate(BlockStonePressurePlateBehavior.class, BlockId.STONE_PRESSURE_PLATE);
+        if (BlockTypes.WARPED_PRESSURE_PLATE == null) BlockTypes.WARPED_PRESSURE_PLATE = buildPressurePlate(BlockWarpedPressurePlateBehavior.class, BlockId.WARPED_PRESSURE_PLATE);
+        if (BlockTypes.WOODEN_PRESSURE_PLATE == null) BlockTypes.WOODEN_PRESSURE_PLATE = buildPressurePlate(BlockWoodenPressurePlateBehavior.class, BlockId.WOODEN_PRESSURE_PLATE);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildPressurePlate(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
+               .build();
+    }
+
+    public static void initDoors() {
+        if (BlockTypes.ACACIA_DOOR == null) BlockTypes.ACACIA_DOOR = buildDoor(BlockAcaciaDoorBehavior.class, BlockId.ACACIA_DOOR);
+        if (BlockTypes.BAMBOO_DOOR == null) BlockTypes.BAMBOO_DOOR = buildDoor(BlockBambooDoorBehavior.class, BlockId.BAMBOO_DOOR);
+        if (BlockTypes.BIRCH_DOOR == null) BlockTypes.BIRCH_DOOR = buildDoor(BlockBirchDoorBehavior.class, BlockId.BIRCH_DOOR);
+        if (BlockTypes.CHERRY_DOOR == null) BlockTypes.CHERRY_DOOR = buildDoor(BlockCherryDoorBehavior.class, BlockId.CHERRY_DOOR);
+        if (BlockTypes.COPPER_DOOR == null) BlockTypes.COPPER_DOOR = buildDoor(BlockCopperDoorBehavior.class, BlockId.COPPER_DOOR);
+        if (BlockTypes.CRIMSON_DOOR == null) BlockTypes.CRIMSON_DOOR = buildDoor(BlockCrimsonDoorBehavior.class, BlockId.CRIMSON_DOOR);
+        if (BlockTypes.DARK_OAK_DOOR == null) BlockTypes.DARK_OAK_DOOR = buildDoor(BlockDarkOakDoorBehavior.class, BlockId.DARK_OAK_DOOR);
+        if (BlockTypes.EXPOSED_COPPER_DOOR == null) BlockTypes.EXPOSED_COPPER_DOOR = buildDoor(BlockExposedCopperDoorBehavior.class, BlockId.EXPOSED_COPPER_DOOR);
+        if (BlockTypes.IRON_DOOR == null) BlockTypes.IRON_DOOR = buildDoor(BlockIronDoorBehavior.class, BlockId.IRON_DOOR);
+        if (BlockTypes.JUNGLE_DOOR == null) BlockTypes.JUNGLE_DOOR = buildDoor(BlockJungleDoorBehavior.class, BlockId.JUNGLE_DOOR);
+        if (BlockTypes.MANGROVE_DOOR == null) BlockTypes.MANGROVE_DOOR = buildDoor(BlockMangroveDoorBehavior.class, BlockId.MANGROVE_DOOR);
+        if (BlockTypes.OXIDIZED_COPPER_DOOR == null) BlockTypes.OXIDIZED_COPPER_DOOR = buildDoor(BlockOxidizedCopperDoorBehavior.class, BlockId.OXIDIZED_COPPER_DOOR);
+        if (BlockTypes.SPRUCE_DOOR == null) BlockTypes.SPRUCE_DOOR = buildDoor(BlockSpruceDoorBehavior.class, BlockId.SPRUCE_DOOR);
+        if (BlockTypes.WARPED_DOOR == null) BlockTypes.WARPED_DOOR = buildDoor(BlockWarpedDoorBehavior.class, BlockId.WARPED_DOOR);
+        if (BlockTypes.WAXED_COPPER_DOOR == null) BlockTypes.WAXED_COPPER_DOOR = buildDoor(BlockWaxedCopperDoorBehavior.class, BlockId.WAXED_COPPER_DOOR);
+        if (BlockTypes.WAXED_EXPOSED_COPPER_DOOR == null) BlockTypes.WAXED_EXPOSED_COPPER_DOOR = buildDoor(BlockWaxedExposedCopperDoorBehavior.class, BlockId.WAXED_EXPOSED_COPPER_DOOR);
+        if (BlockTypes.WAXED_OXIDIZED_COPPER_DOOR == null) BlockTypes.WAXED_OXIDIZED_COPPER_DOOR = buildDoor(BlockWaxedOxidizedCopperDoorBehavior.class, BlockId.WAXED_OXIDIZED_COPPER_DOOR);
+        if (BlockTypes.WAXED_WEATHERED_COPPER_DOOR == null) BlockTypes.WAXED_WEATHERED_COPPER_DOOR = buildDoor(BlockWaxedWeatheredCopperDoorBehavior.class, BlockId.WAXED_WEATHERED_COPPER_DOOR);
+        if (BlockTypes.WEATHERED_COPPER_DOOR == null) BlockTypes.WEATHERED_COPPER_DOOR = buildDoor(BlockWeatheredCopperDoorBehavior.class, BlockId.WEATHERED_COPPER_DOOR);
+        if (BlockTypes.WOODEN_DOOR == null) BlockTypes.WOODEN_DOOR = buildDoor(BlockWoodenDoorBehavior.class, BlockId.WOODEN_DOOR);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildDoor(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT, BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT)
+               .build();
+    }
+
+    public static void initTulips() {
+        if (BlockTypes.ORANGE_TULIP == null) BlockTypes.ORANGE_TULIP = buildTulip(BlockOrangeTulipBehavior.class, BlockId.ORANGE_TULIP);
+        if (BlockTypes.PINK_TULIP == null) BlockTypes.PINK_TULIP = buildTulip(BlockPinkTulipBehavior.class, BlockId.PINK_TULIP);
+        if (BlockTypes.RED_TULIP == null) BlockTypes.RED_TULIP = buildTulip(BlockRedTulipBehavior.class, BlockId.RED_TULIP);
+        if (BlockTypes.WHITE_TULIP == null) BlockTypes.WHITE_TULIP = buildTulip(BlockWhiteTulipBehavior.class, BlockId.WHITE_TULIP);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildTulip(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
     }
 
     public static void initDoubleSlabs() {
@@ -5187,72 +5450,136 @@ public final class BlockTypeDefaultInitializer {
                .build();
     }
 
-    public static void initDoors() {
-        if (BlockTypes.ACACIA_DOOR == null) BlockTypes.ACACIA_DOOR = buildDoor(BlockAcaciaDoorBehavior.class, BlockId.ACACIA_DOOR);
-        if (BlockTypes.BAMBOO_DOOR == null) BlockTypes.BAMBOO_DOOR = buildDoor(BlockBambooDoorBehavior.class, BlockId.BAMBOO_DOOR);
-        if (BlockTypes.BIRCH_DOOR == null) BlockTypes.BIRCH_DOOR = buildDoor(BlockBirchDoorBehavior.class, BlockId.BIRCH_DOOR);
-        if (BlockTypes.CHERRY_DOOR == null) BlockTypes.CHERRY_DOOR = buildDoor(BlockCherryDoorBehavior.class, BlockId.CHERRY_DOOR);
-        if (BlockTypes.COPPER_DOOR == null) BlockTypes.COPPER_DOOR = buildDoor(BlockCopperDoorBehavior.class, BlockId.COPPER_DOOR);
-        if (BlockTypes.CRIMSON_DOOR == null) BlockTypes.CRIMSON_DOOR = buildDoor(BlockCrimsonDoorBehavior.class, BlockId.CRIMSON_DOOR);
-        if (BlockTypes.DARK_OAK_DOOR == null) BlockTypes.DARK_OAK_DOOR = buildDoor(BlockDarkOakDoorBehavior.class, BlockId.DARK_OAK_DOOR);
-        if (BlockTypes.EXPOSED_COPPER_DOOR == null) BlockTypes.EXPOSED_COPPER_DOOR = buildDoor(BlockExposedCopperDoorBehavior.class, BlockId.EXPOSED_COPPER_DOOR);
-        if (BlockTypes.IRON_DOOR == null) BlockTypes.IRON_DOOR = buildDoor(BlockIronDoorBehavior.class, BlockId.IRON_DOOR);
-        if (BlockTypes.JUNGLE_DOOR == null) BlockTypes.JUNGLE_DOOR = buildDoor(BlockJungleDoorBehavior.class, BlockId.JUNGLE_DOOR);
-        if (BlockTypes.MANGROVE_DOOR == null) BlockTypes.MANGROVE_DOOR = buildDoor(BlockMangroveDoorBehavior.class, BlockId.MANGROVE_DOOR);
-        if (BlockTypes.OXIDIZED_COPPER_DOOR == null) BlockTypes.OXIDIZED_COPPER_DOOR = buildDoor(BlockOxidizedCopperDoorBehavior.class, BlockId.OXIDIZED_COPPER_DOOR);
-        if (BlockTypes.SPRUCE_DOOR == null) BlockTypes.SPRUCE_DOOR = buildDoor(BlockSpruceDoorBehavior.class, BlockId.SPRUCE_DOOR);
-        if (BlockTypes.WARPED_DOOR == null) BlockTypes.WARPED_DOOR = buildDoor(BlockWarpedDoorBehavior.class, BlockId.WARPED_DOOR);
-        if (BlockTypes.WAXED_COPPER_DOOR == null) BlockTypes.WAXED_COPPER_DOOR = buildDoor(BlockWaxedCopperDoorBehavior.class, BlockId.WAXED_COPPER_DOOR);
-        if (BlockTypes.WAXED_EXPOSED_COPPER_DOOR == null) BlockTypes.WAXED_EXPOSED_COPPER_DOOR = buildDoor(BlockWaxedExposedCopperDoorBehavior.class, BlockId.WAXED_EXPOSED_COPPER_DOOR);
-        if (BlockTypes.WAXED_OXIDIZED_COPPER_DOOR == null) BlockTypes.WAXED_OXIDIZED_COPPER_DOOR = buildDoor(BlockWaxedOxidizedCopperDoorBehavior.class, BlockId.WAXED_OXIDIZED_COPPER_DOOR);
-        if (BlockTypes.WAXED_WEATHERED_COPPER_DOOR == null) BlockTypes.WAXED_WEATHERED_COPPER_DOOR = buildDoor(BlockWaxedWeatheredCopperDoorBehavior.class, BlockId.WAXED_WEATHERED_COPPER_DOOR);
-        if (BlockTypes.WEATHERED_COPPER_DOOR == null) BlockTypes.WEATHERED_COPPER_DOOR = buildDoor(BlockWeatheredCopperDoorBehavior.class, BlockId.WEATHERED_COPPER_DOOR);
-        if (BlockTypes.WOODEN_DOOR == null) BlockTypes.WOODEN_DOOR = buildDoor(BlockWoodenDoorBehavior.class, BlockId.WOODEN_DOOR);
+    public static void initSlabs() {
+        if (BlockTypes.ACACIA_SLAB == null) BlockTypes.ACACIA_SLAB = buildSlab(BlockAcaciaSlabBehavior.class, BlockId.ACACIA_SLAB);
+        if (BlockTypes.ANDESITE_SLAB == null) BlockTypes.ANDESITE_SLAB = buildSlab(BlockAndesiteSlabBehavior.class, BlockId.ANDESITE_SLAB);
+        if (BlockTypes.BAMBOO_MOSAIC_SLAB == null) BlockTypes.BAMBOO_MOSAIC_SLAB = buildSlab(BlockBambooMosaicSlabBehavior.class, BlockId.BAMBOO_MOSAIC_SLAB);
+        if (BlockTypes.BAMBOO_SLAB == null) BlockTypes.BAMBOO_SLAB = buildSlab(BlockBambooSlabBehavior.class, BlockId.BAMBOO_SLAB);
+        if (BlockTypes.BIRCH_SLAB == null) BlockTypes.BIRCH_SLAB = buildSlab(BlockBirchSlabBehavior.class, BlockId.BIRCH_SLAB);
+        if (BlockTypes.BLACKSTONE_SLAB == null) BlockTypes.BLACKSTONE_SLAB = buildSlab(BlockBlackstoneSlabBehavior.class, BlockId.BLACKSTONE_SLAB);
+        if (BlockTypes.BRICK_SLAB == null) BlockTypes.BRICK_SLAB = buildSlab(BlockBrickSlabBehavior.class, BlockId.BRICK_SLAB);
+        if (BlockTypes.CHERRY_SLAB == null) BlockTypes.CHERRY_SLAB = buildSlab(BlockCherrySlabBehavior.class, BlockId.CHERRY_SLAB);
+        if (BlockTypes.COBBLED_DEEPSLATE_SLAB == null) BlockTypes.COBBLED_DEEPSLATE_SLAB = buildSlab(BlockCobbledDeepslateSlabBehavior.class, BlockId.COBBLED_DEEPSLATE_SLAB);
+        if (BlockTypes.COBBLESTONE_SLAB == null) BlockTypes.COBBLESTONE_SLAB = buildSlab(BlockCobblestoneSlabBehavior.class, BlockId.COBBLESTONE_SLAB);
+        if (BlockTypes.CRIMSON_SLAB == null) BlockTypes.CRIMSON_SLAB = buildSlab(BlockCrimsonSlabBehavior.class, BlockId.CRIMSON_SLAB);
+        if (BlockTypes.CUT_COPPER_SLAB == null) BlockTypes.CUT_COPPER_SLAB = buildSlab(BlockCutCopperSlabBehavior.class, BlockId.CUT_COPPER_SLAB);
+        if (BlockTypes.CUT_RED_SANDSTONE_SLAB == null) BlockTypes.CUT_RED_SANDSTONE_SLAB = buildSlab(BlockCutRedSandstoneSlabBehavior.class, BlockId.CUT_RED_SANDSTONE_SLAB);
+        if (BlockTypes.CUT_SANDSTONE_SLAB == null) BlockTypes.CUT_SANDSTONE_SLAB = buildSlab(BlockCutSandstoneSlabBehavior.class, BlockId.CUT_SANDSTONE_SLAB);
+        if (BlockTypes.DARK_OAK_SLAB == null) BlockTypes.DARK_OAK_SLAB = buildSlab(BlockDarkOakSlabBehavior.class, BlockId.DARK_OAK_SLAB);
+        if (BlockTypes.DARK_PRISMARINE_SLAB == null) BlockTypes.DARK_PRISMARINE_SLAB = buildSlab(BlockDarkPrismarineSlabBehavior.class, BlockId.DARK_PRISMARINE_SLAB);
+        if (BlockTypes.DEEPSLATE_BRICK_SLAB == null) BlockTypes.DEEPSLATE_BRICK_SLAB = buildSlab(BlockDeepslateBrickSlabBehavior.class, BlockId.DEEPSLATE_BRICK_SLAB);
+        if (BlockTypes.DEEPSLATE_TILE_SLAB == null) BlockTypes.DEEPSLATE_TILE_SLAB = buildSlab(BlockDeepslateTileSlabBehavior.class, BlockId.DEEPSLATE_TILE_SLAB);
+        if (BlockTypes.DIORITE_SLAB == null) BlockTypes.DIORITE_SLAB = buildSlab(BlockDioriteSlabBehavior.class, BlockId.DIORITE_SLAB);
+        if (BlockTypes.END_STONE_BRICK_SLAB == null) BlockTypes.END_STONE_BRICK_SLAB = buildSlab(BlockEndStoneBrickSlabBehavior.class, BlockId.END_STONE_BRICK_SLAB);
+        if (BlockTypes.EXPOSED_CUT_COPPER_SLAB == null) BlockTypes.EXPOSED_CUT_COPPER_SLAB = buildSlab(BlockExposedCutCopperSlabBehavior.class, BlockId.EXPOSED_CUT_COPPER_SLAB);
+        if (BlockTypes.GRANITE_SLAB == null) BlockTypes.GRANITE_SLAB = buildSlab(BlockGraniteSlabBehavior.class, BlockId.GRANITE_SLAB);
+        if (BlockTypes.JUNGLE_SLAB == null) BlockTypes.JUNGLE_SLAB = buildSlab(BlockJungleSlabBehavior.class, BlockId.JUNGLE_SLAB);
+        if (BlockTypes.MANGROVE_SLAB == null) BlockTypes.MANGROVE_SLAB = buildSlab(BlockMangroveSlabBehavior.class, BlockId.MANGROVE_SLAB);
+        if (BlockTypes.MOSSY_COBBLESTONE_SLAB == null) BlockTypes.MOSSY_COBBLESTONE_SLAB = buildSlab(BlockMossyCobblestoneSlabBehavior.class, BlockId.MOSSY_COBBLESTONE_SLAB);
+        if (BlockTypes.MOSSY_STONE_BRICK_SLAB == null) BlockTypes.MOSSY_STONE_BRICK_SLAB = buildSlab(BlockMossyStoneBrickSlabBehavior.class, BlockId.MOSSY_STONE_BRICK_SLAB);
+        if (BlockTypes.MUD_BRICK_SLAB == null) BlockTypes.MUD_BRICK_SLAB = buildSlab(BlockMudBrickSlabBehavior.class, BlockId.MUD_BRICK_SLAB);
+        if (BlockTypes.NETHER_BRICK_SLAB == null) BlockTypes.NETHER_BRICK_SLAB = buildSlab(BlockNetherBrickSlabBehavior.class, BlockId.NETHER_BRICK_SLAB);
+        if (BlockTypes.NORMAL_STONE_SLAB == null) BlockTypes.NORMAL_STONE_SLAB = buildSlab(BlockNormalStoneSlabBehavior.class, BlockId.NORMAL_STONE_SLAB);
+        if (BlockTypes.OAK_SLAB == null) BlockTypes.OAK_SLAB = buildSlab(BlockOakSlabBehavior.class, BlockId.OAK_SLAB);
+        if (BlockTypes.OXIDIZED_CUT_COPPER_SLAB == null) BlockTypes.OXIDIZED_CUT_COPPER_SLAB = buildSlab(BlockOxidizedCutCopperSlabBehavior.class, BlockId.OXIDIZED_CUT_COPPER_SLAB);
+        if (BlockTypes.PETRIFIED_OAK_SLAB == null) BlockTypes.PETRIFIED_OAK_SLAB = buildSlab(BlockPetrifiedOakSlabBehavior.class, BlockId.PETRIFIED_OAK_SLAB);
+        if (BlockTypes.POLISHED_ANDESITE_SLAB == null) BlockTypes.POLISHED_ANDESITE_SLAB = buildSlab(BlockPolishedAndesiteSlabBehavior.class, BlockId.POLISHED_ANDESITE_SLAB);
+        if (BlockTypes.POLISHED_BLACKSTONE_BRICK_SLAB == null) BlockTypes.POLISHED_BLACKSTONE_BRICK_SLAB = buildSlab(BlockPolishedBlackstoneBrickSlabBehavior.class, BlockId.POLISHED_BLACKSTONE_BRICK_SLAB);
+        if (BlockTypes.POLISHED_BLACKSTONE_SLAB == null) BlockTypes.POLISHED_BLACKSTONE_SLAB = buildSlab(BlockPolishedBlackstoneSlabBehavior.class, BlockId.POLISHED_BLACKSTONE_SLAB);
+        if (BlockTypes.POLISHED_DEEPSLATE_SLAB == null) BlockTypes.POLISHED_DEEPSLATE_SLAB = buildSlab(BlockPolishedDeepslateSlabBehavior.class, BlockId.POLISHED_DEEPSLATE_SLAB);
+        if (BlockTypes.POLISHED_DIORITE_SLAB == null) BlockTypes.POLISHED_DIORITE_SLAB = buildSlab(BlockPolishedDioriteSlabBehavior.class, BlockId.POLISHED_DIORITE_SLAB);
+        if (BlockTypes.POLISHED_GRANITE_SLAB == null) BlockTypes.POLISHED_GRANITE_SLAB = buildSlab(BlockPolishedGraniteSlabBehavior.class, BlockId.POLISHED_GRANITE_SLAB);
+        if (BlockTypes.POLISHED_TUFF_SLAB == null) BlockTypes.POLISHED_TUFF_SLAB = buildSlab(BlockPolishedTuffSlabBehavior.class, BlockId.POLISHED_TUFF_SLAB);
+        if (BlockTypes.PRISMARINE_BRICK_SLAB == null) BlockTypes.PRISMARINE_BRICK_SLAB = buildSlab(BlockPrismarineBrickSlabBehavior.class, BlockId.PRISMARINE_BRICK_SLAB);
+        if (BlockTypes.PRISMARINE_SLAB == null) BlockTypes.PRISMARINE_SLAB = buildSlab(BlockPrismarineSlabBehavior.class, BlockId.PRISMARINE_SLAB);
+        if (BlockTypes.PURPUR_SLAB == null) BlockTypes.PURPUR_SLAB = buildSlab(BlockPurpurSlabBehavior.class, BlockId.PURPUR_SLAB);
+        if (BlockTypes.QUARTZ_SLAB == null) BlockTypes.QUARTZ_SLAB = buildSlab(BlockQuartzSlabBehavior.class, BlockId.QUARTZ_SLAB);
+        if (BlockTypes.RED_NETHER_BRICK_SLAB == null) BlockTypes.RED_NETHER_BRICK_SLAB = buildSlab(BlockRedNetherBrickSlabBehavior.class, BlockId.RED_NETHER_BRICK_SLAB);
+        if (BlockTypes.RED_SANDSTONE_SLAB == null) BlockTypes.RED_SANDSTONE_SLAB = buildSlab(BlockRedSandstoneSlabBehavior.class, BlockId.RED_SANDSTONE_SLAB);
+        if (BlockTypes.SANDSTONE_SLAB == null) BlockTypes.SANDSTONE_SLAB = buildSlab(BlockSandstoneSlabBehavior.class, BlockId.SANDSTONE_SLAB);
+        if (BlockTypes.SMOOTH_QUARTZ_SLAB == null) BlockTypes.SMOOTH_QUARTZ_SLAB = buildSlab(BlockSmoothQuartzSlabBehavior.class, BlockId.SMOOTH_QUARTZ_SLAB);
+        if (BlockTypes.SMOOTH_RED_SANDSTONE_SLAB == null) BlockTypes.SMOOTH_RED_SANDSTONE_SLAB = buildSlab(BlockSmoothRedSandstoneSlabBehavior.class, BlockId.SMOOTH_RED_SANDSTONE_SLAB);
+        if (BlockTypes.SMOOTH_SANDSTONE_SLAB == null) BlockTypes.SMOOTH_SANDSTONE_SLAB = buildSlab(BlockSmoothSandstoneSlabBehavior.class, BlockId.SMOOTH_SANDSTONE_SLAB);
+        if (BlockTypes.SMOOTH_STONE_SLAB == null) BlockTypes.SMOOTH_STONE_SLAB = buildSlab(BlockSmoothStoneSlabBehavior.class, BlockId.SMOOTH_STONE_SLAB);
+        if (BlockTypes.SPRUCE_SLAB == null) BlockTypes.SPRUCE_SLAB = buildSlab(BlockSpruceSlabBehavior.class, BlockId.SPRUCE_SLAB);
+        if (BlockTypes.STONE_BRICK_SLAB == null) BlockTypes.STONE_BRICK_SLAB = buildSlab(BlockStoneBrickSlabBehavior.class, BlockId.STONE_BRICK_SLAB);
+        if (BlockTypes.TUFF_BRICK_SLAB == null) BlockTypes.TUFF_BRICK_SLAB = buildSlab(BlockTuffBrickSlabBehavior.class, BlockId.TUFF_BRICK_SLAB);
+        if (BlockTypes.TUFF_SLAB == null) BlockTypes.TUFF_SLAB = buildSlab(BlockTuffSlabBehavior.class, BlockId.TUFF_SLAB);
+        if (BlockTypes.WARPED_SLAB == null) BlockTypes.WARPED_SLAB = buildSlab(BlockWarpedSlabBehavior.class, BlockId.WARPED_SLAB);
+        if (BlockTypes.WAXED_CUT_COPPER_SLAB == null) BlockTypes.WAXED_CUT_COPPER_SLAB = buildSlab(BlockWaxedCutCopperSlabBehavior.class, BlockId.WAXED_CUT_COPPER_SLAB);
+        if (BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB == null) BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB = buildSlab(BlockWaxedExposedCutCopperSlabBehavior.class, BlockId.WAXED_EXPOSED_CUT_COPPER_SLAB);
+        if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB == null) BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = buildSlab(BlockWaxedOxidizedCutCopperSlabBehavior.class, BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB);
+        if (BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB == null) BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB = buildSlab(BlockWaxedWeatheredCutCopperSlabBehavior.class, BlockId.WAXED_WEATHERED_CUT_COPPER_SLAB);
+        if (BlockTypes.WEATHERED_CUT_COPPER_SLAB == null) BlockTypes.WEATHERED_CUT_COPPER_SLAB = buildSlab(BlockWeatheredCutCopperSlabBehavior.class, BlockId.WEATHERED_CUT_COPPER_SLAB);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildDoor(Class<T> clazz,
+    private static <T extends BlockBehavior> BlockType<T> buildSlab(Class<T> clazz,
             BlockId blockId) {
         return AllayBlockType.builder(clazz)
                .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT, BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT)
+               .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                .build();
     }
 
-    public static void initCandleCakes() {
-        if (BlockTypes.BLACK_CANDLE_CAKE == null) BlockTypes.BLACK_CANDLE_CAKE = buildCandleCake(BlockBlackCandleCakeBehavior.class, BlockId.BLACK_CANDLE_CAKE);
-        if (BlockTypes.BLUE_CANDLE_CAKE == null) BlockTypes.BLUE_CANDLE_CAKE = buildCandleCake(BlockBlueCandleCakeBehavior.class, BlockId.BLUE_CANDLE_CAKE);
-        if (BlockTypes.BROWN_CANDLE_CAKE == null) BlockTypes.BROWN_CANDLE_CAKE = buildCandleCake(BlockBrownCandleCakeBehavior.class, BlockId.BROWN_CANDLE_CAKE);
-        if (BlockTypes.CYAN_CANDLE_CAKE == null) BlockTypes.CYAN_CANDLE_CAKE = buildCandleCake(BlockCyanCandleCakeBehavior.class, BlockId.CYAN_CANDLE_CAKE);
-        if (BlockTypes.GRAY_CANDLE_CAKE == null) BlockTypes.GRAY_CANDLE_CAKE = buildCandleCake(BlockGrayCandleCakeBehavior.class, BlockId.GRAY_CANDLE_CAKE);
-        if (BlockTypes.GREEN_CANDLE_CAKE == null) BlockTypes.GREEN_CANDLE_CAKE = buildCandleCake(BlockGreenCandleCakeBehavior.class, BlockId.GREEN_CANDLE_CAKE);
-        if (BlockTypes.LIGHT_BLUE_CANDLE_CAKE == null) BlockTypes.LIGHT_BLUE_CANDLE_CAKE = buildCandleCake(BlockLightBlueCandleCakeBehavior.class, BlockId.LIGHT_BLUE_CANDLE_CAKE);
-        if (BlockTypes.LIGHT_GRAY_CANDLE_CAKE == null) BlockTypes.LIGHT_GRAY_CANDLE_CAKE = buildCandleCake(BlockLightGrayCandleCakeBehavior.class, BlockId.LIGHT_GRAY_CANDLE_CAKE);
-        if (BlockTypes.LIME_CANDLE_CAKE == null) BlockTypes.LIME_CANDLE_CAKE = buildCandleCake(BlockLimeCandleCakeBehavior.class, BlockId.LIME_CANDLE_CAKE);
-        if (BlockTypes.MAGENTA_CANDLE_CAKE == null) BlockTypes.MAGENTA_CANDLE_CAKE = buildCandleCake(BlockMagentaCandleCakeBehavior.class, BlockId.MAGENTA_CANDLE_CAKE);
-        if (BlockTypes.ORANGE_CANDLE_CAKE == null) BlockTypes.ORANGE_CANDLE_CAKE = buildCandleCake(BlockOrangeCandleCakeBehavior.class, BlockId.ORANGE_CANDLE_CAKE);
-        if (BlockTypes.PINK_CANDLE_CAKE == null) BlockTypes.PINK_CANDLE_CAKE = buildCandleCake(BlockPinkCandleCakeBehavior.class, BlockId.PINK_CANDLE_CAKE);
-        if (BlockTypes.PURPLE_CANDLE_CAKE == null) BlockTypes.PURPLE_CANDLE_CAKE = buildCandleCake(BlockPurpleCandleCakeBehavior.class, BlockId.PURPLE_CANDLE_CAKE);
-        if (BlockTypes.RED_CANDLE_CAKE == null) BlockTypes.RED_CANDLE_CAKE = buildCandleCake(BlockRedCandleCakeBehavior.class, BlockId.RED_CANDLE_CAKE);
-        if (BlockTypes.WHITE_CANDLE_CAKE == null) BlockTypes.WHITE_CANDLE_CAKE = buildCandleCake(BlockWhiteCandleCakeBehavior.class, BlockId.WHITE_CANDLE_CAKE);
-        if (BlockTypes.YELLOW_CANDLE_CAKE == null) BlockTypes.YELLOW_CANDLE_CAKE = buildCandleCake(BlockYellowCandleCakeBehavior.class, BlockId.YELLOW_CANDLE_CAKE);
+    public static void initTrapdoors() {
+        if (BlockTypes.ACACIA_TRAPDOOR == null) BlockTypes.ACACIA_TRAPDOOR = buildTrapdoor(BlockAcaciaTrapdoorBehavior.class, BlockId.ACACIA_TRAPDOOR);
+        if (BlockTypes.BAMBOO_TRAPDOOR == null) BlockTypes.BAMBOO_TRAPDOOR = buildTrapdoor(BlockBambooTrapdoorBehavior.class, BlockId.BAMBOO_TRAPDOOR);
+        if (BlockTypes.BIRCH_TRAPDOOR == null) BlockTypes.BIRCH_TRAPDOOR = buildTrapdoor(BlockBirchTrapdoorBehavior.class, BlockId.BIRCH_TRAPDOOR);
+        if (BlockTypes.CHERRY_TRAPDOOR == null) BlockTypes.CHERRY_TRAPDOOR = buildTrapdoor(BlockCherryTrapdoorBehavior.class, BlockId.CHERRY_TRAPDOOR);
+        if (BlockTypes.COPPER_TRAPDOOR == null) BlockTypes.COPPER_TRAPDOOR = buildTrapdoor(BlockCopperTrapdoorBehavior.class, BlockId.COPPER_TRAPDOOR);
+        if (BlockTypes.CRIMSON_TRAPDOOR == null) BlockTypes.CRIMSON_TRAPDOOR = buildTrapdoor(BlockCrimsonTrapdoorBehavior.class, BlockId.CRIMSON_TRAPDOOR);
+        if (BlockTypes.DARK_OAK_TRAPDOOR == null) BlockTypes.DARK_OAK_TRAPDOOR = buildTrapdoor(BlockDarkOakTrapdoorBehavior.class, BlockId.DARK_OAK_TRAPDOOR);
+        if (BlockTypes.EXPOSED_COPPER_TRAPDOOR == null) BlockTypes.EXPOSED_COPPER_TRAPDOOR = buildTrapdoor(BlockExposedCopperTrapdoorBehavior.class, BlockId.EXPOSED_COPPER_TRAPDOOR);
+        if (BlockTypes.IRON_TRAPDOOR == null) BlockTypes.IRON_TRAPDOOR = buildTrapdoor(BlockIronTrapdoorBehavior.class, BlockId.IRON_TRAPDOOR);
+        if (BlockTypes.JUNGLE_TRAPDOOR == null) BlockTypes.JUNGLE_TRAPDOOR = buildTrapdoor(BlockJungleTrapdoorBehavior.class, BlockId.JUNGLE_TRAPDOOR);
+        if (BlockTypes.MANGROVE_TRAPDOOR == null) BlockTypes.MANGROVE_TRAPDOOR = buildTrapdoor(BlockMangroveTrapdoorBehavior.class, BlockId.MANGROVE_TRAPDOOR);
+        if (BlockTypes.OXIDIZED_COPPER_TRAPDOOR == null) BlockTypes.OXIDIZED_COPPER_TRAPDOOR = buildTrapdoor(BlockOxidizedCopperTrapdoorBehavior.class, BlockId.OXIDIZED_COPPER_TRAPDOOR);
+        if (BlockTypes.SPRUCE_TRAPDOOR == null) BlockTypes.SPRUCE_TRAPDOOR = buildTrapdoor(BlockSpruceTrapdoorBehavior.class, BlockId.SPRUCE_TRAPDOOR);
+        if (BlockTypes.TRAPDOOR == null) BlockTypes.TRAPDOOR = buildTrapdoor(BlockTrapdoorBehavior.class, BlockId.TRAPDOOR);
+        if (BlockTypes.WARPED_TRAPDOOR == null) BlockTypes.WARPED_TRAPDOOR = buildTrapdoor(BlockWarpedTrapdoorBehavior.class, BlockId.WARPED_TRAPDOOR);
+        if (BlockTypes.WAXED_COPPER_TRAPDOOR == null) BlockTypes.WAXED_COPPER_TRAPDOOR = buildTrapdoor(BlockWaxedCopperTrapdoorBehavior.class, BlockId.WAXED_COPPER_TRAPDOOR);
+        if (BlockTypes.WAXED_EXPOSED_COPPER_TRAPDOOR == null) BlockTypes.WAXED_EXPOSED_COPPER_TRAPDOOR = buildTrapdoor(BlockWaxedExposedCopperTrapdoorBehavior.class, BlockId.WAXED_EXPOSED_COPPER_TRAPDOOR);
+        if (BlockTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR == null) BlockTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR = buildTrapdoor(BlockWaxedOxidizedCopperTrapdoorBehavior.class, BlockId.WAXED_OXIDIZED_COPPER_TRAPDOOR);
+        if (BlockTypes.WAXED_WEATHERED_COPPER_TRAPDOOR == null) BlockTypes.WAXED_WEATHERED_COPPER_TRAPDOOR = buildTrapdoor(BlockWaxedWeatheredCopperTrapdoorBehavior.class, BlockId.WAXED_WEATHERED_COPPER_TRAPDOOR);
+        if (BlockTypes.WEATHERED_COPPER_TRAPDOOR == null) BlockTypes.WEATHERED_COPPER_TRAPDOOR = buildTrapdoor(BlockWeatheredCopperTrapdoorBehavior.class, BlockId.WEATHERED_COPPER_TRAPDOOR);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildCandleCake(Class<T> clazz,
+    private static <T extends BlockBehavior> BlockType<T> buildTrapdoor(Class<T> clazz,
             BlockId blockId) {
         return AllayBlockType.builder(clazz)
                .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.LIT)
+               .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.OPEN_BIT)
                .build();
     }
 
-    public static void initTulips() {
-        if (BlockTypes.ORANGE_TULIP == null) BlockTypes.ORANGE_TULIP = buildTulip(BlockOrangeTulipBehavior.class, BlockId.ORANGE_TULIP);
-        if (BlockTypes.PINK_TULIP == null) BlockTypes.PINK_TULIP = buildTulip(BlockPinkTulipBehavior.class, BlockId.PINK_TULIP);
-        if (BlockTypes.RED_TULIP == null) BlockTypes.RED_TULIP = buildTulip(BlockRedTulipBehavior.class, BlockId.RED_TULIP);
-        if (BlockTypes.WHITE_TULIP == null) BlockTypes.WHITE_TULIP = buildTulip(BlockWhiteTulipBehavior.class, BlockId.WHITE_TULIP);
+    public static void initCopperGrates() {
+        if (BlockTypes.EXPOSED_COPPER_GRATE == null) BlockTypes.EXPOSED_COPPER_GRATE = buildCopperGrate(BlockExposedCopperGrateBehavior.class, BlockId.EXPOSED_COPPER_GRATE);
+        if (BlockTypes.OXIDIZED_COPPER_GRATE == null) BlockTypes.OXIDIZED_COPPER_GRATE = buildCopperGrate(BlockOxidizedCopperGrateBehavior.class, BlockId.OXIDIZED_COPPER_GRATE);
+        if (BlockTypes.WAXED_COPPER_GRATE == null) BlockTypes.WAXED_COPPER_GRATE = buildCopperGrate(BlockWaxedCopperGrateBehavior.class, BlockId.WAXED_COPPER_GRATE);
+        if (BlockTypes.WAXED_EXPOSED_COPPER_GRATE == null) BlockTypes.WAXED_EXPOSED_COPPER_GRATE = buildCopperGrate(BlockWaxedExposedCopperGrateBehavior.class, BlockId.WAXED_EXPOSED_COPPER_GRATE);
+        if (BlockTypes.WAXED_OXIDIZED_COPPER_GRATE == null) BlockTypes.WAXED_OXIDIZED_COPPER_GRATE = buildCopperGrate(BlockWaxedOxidizedCopperGrateBehavior.class, BlockId.WAXED_OXIDIZED_COPPER_GRATE);
+        if (BlockTypes.WAXED_WEATHERED_COPPER_GRATE == null) BlockTypes.WAXED_WEATHERED_COPPER_GRATE = buildCopperGrate(BlockWaxedWeatheredCopperGrateBehavior.class, BlockId.WAXED_WEATHERED_COPPER_GRATE);
+        if (BlockTypes.WEATHERED_COPPER_GRATE == null) BlockTypes.WEATHERED_COPPER_GRATE = buildCopperGrate(BlockWeatheredCopperGrateBehavior.class, BlockId.WEATHERED_COPPER_GRATE);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildTulip(Class<T> clazz,
+    private static <T extends BlockBehavior> BlockType<T> buildCopperGrate(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initCutCoppers() {
+        if (BlockTypes.EXPOSED_CUT_COPPER == null) BlockTypes.EXPOSED_CUT_COPPER = buildCutCopper(BlockExposedCutCopperBehavior.class, BlockId.EXPOSED_CUT_COPPER);
+        if (BlockTypes.OXIDIZED_CUT_COPPER == null) BlockTypes.OXIDIZED_CUT_COPPER = buildCutCopper(BlockOxidizedCutCopperBehavior.class, BlockId.OXIDIZED_CUT_COPPER);
+        if (BlockTypes.WAXED_CUT_COPPER == null) BlockTypes.WAXED_CUT_COPPER = buildCutCopper(BlockWaxedCutCopperBehavior.class, BlockId.WAXED_CUT_COPPER);
+        if (BlockTypes.WAXED_EXPOSED_CUT_COPPER == null) BlockTypes.WAXED_EXPOSED_CUT_COPPER = buildCutCopper(BlockWaxedExposedCutCopperBehavior.class, BlockId.WAXED_EXPOSED_CUT_COPPER);
+        if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER == null) BlockTypes.WAXED_OXIDIZED_CUT_COPPER = buildCutCopper(BlockWaxedOxidizedCutCopperBehavior.class, BlockId.WAXED_OXIDIZED_CUT_COPPER);
+        if (BlockTypes.WAXED_WEATHERED_CUT_COPPER == null) BlockTypes.WAXED_WEATHERED_CUT_COPPER = buildCutCopper(BlockWaxedWeatheredCutCopperBehavior.class, BlockId.WAXED_WEATHERED_CUT_COPPER);
+        if (BlockTypes.WEATHERED_CUT_COPPER == null) BlockTypes.WEATHERED_CUT_COPPER = buildCutCopper(BlockWeatheredCutCopperBehavior.class, BlockId.WEATHERED_CUT_COPPER);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildCutCopper(Class<T> clazz,
             BlockId blockId) {
         return AllayBlockType.builder(clazz)
                .vanillaBlock(blockId)
@@ -5277,18 +5604,129 @@ public final class BlockTypeDefaultInitializer {
                .build();
     }
 
-    public static void initStrippedLogs() {
-        if (BlockTypes.STRIPPED_ACACIA_LOG == null) BlockTypes.STRIPPED_ACACIA_LOG = buildStrippedLog(BlockStrippedAcaciaLogBehavior.class, BlockId.STRIPPED_ACACIA_LOG);
-        if (BlockTypes.STRIPPED_BIRCH_LOG == null) BlockTypes.STRIPPED_BIRCH_LOG = buildStrippedLog(BlockStrippedBirchLogBehavior.class, BlockId.STRIPPED_BIRCH_LOG);
-        if (BlockTypes.STRIPPED_CHERRY_LOG == null) BlockTypes.STRIPPED_CHERRY_LOG = buildStrippedLog(BlockStrippedCherryLogBehavior.class, BlockId.STRIPPED_CHERRY_LOG);
-        if (BlockTypes.STRIPPED_DARK_OAK_LOG == null) BlockTypes.STRIPPED_DARK_OAK_LOG = buildStrippedLog(BlockStrippedDarkOakLogBehavior.class, BlockId.STRIPPED_DARK_OAK_LOG);
-        if (BlockTypes.STRIPPED_JUNGLE_LOG == null) BlockTypes.STRIPPED_JUNGLE_LOG = buildStrippedLog(BlockStrippedJungleLogBehavior.class, BlockId.STRIPPED_JUNGLE_LOG);
-        if (BlockTypes.STRIPPED_MANGROVE_LOG == null) BlockTypes.STRIPPED_MANGROVE_LOG = buildStrippedLog(BlockStrippedMangroveLogBehavior.class, BlockId.STRIPPED_MANGROVE_LOG);
-        if (BlockTypes.STRIPPED_OAK_LOG == null) BlockTypes.STRIPPED_OAK_LOG = buildStrippedLog(BlockStrippedOakLogBehavior.class, BlockId.STRIPPED_OAK_LOG);
-        if (BlockTypes.STRIPPED_SPRUCE_LOG == null) BlockTypes.STRIPPED_SPRUCE_LOG = buildStrippedLog(BlockStrippedSpruceLogBehavior.class, BlockId.STRIPPED_SPRUCE_LOG);
+    public static void initWallSigns() {
+        if (BlockTypes.ACACIA_WALL_SIGN == null) BlockTypes.ACACIA_WALL_SIGN = buildWallSign(BlockAcaciaWallSignBehavior.class, BlockId.ACACIA_WALL_SIGN);
+        if (BlockTypes.BAMBOO_WALL_SIGN == null) BlockTypes.BAMBOO_WALL_SIGN = buildWallSign(BlockBambooWallSignBehavior.class, BlockId.BAMBOO_WALL_SIGN);
+        if (BlockTypes.BIRCH_WALL_SIGN == null) BlockTypes.BIRCH_WALL_SIGN = buildWallSign(BlockBirchWallSignBehavior.class, BlockId.BIRCH_WALL_SIGN);
+        if (BlockTypes.CHERRY_WALL_SIGN == null) BlockTypes.CHERRY_WALL_SIGN = buildWallSign(BlockCherryWallSignBehavior.class, BlockId.CHERRY_WALL_SIGN);
+        if (BlockTypes.CRIMSON_WALL_SIGN == null) BlockTypes.CRIMSON_WALL_SIGN = buildWallSign(BlockCrimsonWallSignBehavior.class, BlockId.CRIMSON_WALL_SIGN);
+        if (BlockTypes.DARKOAK_WALL_SIGN == null) BlockTypes.DARKOAK_WALL_SIGN = buildWallSign(BlockDarkoakWallSignBehavior.class, BlockId.DARKOAK_WALL_SIGN);
+        if (BlockTypes.JUNGLE_WALL_SIGN == null) BlockTypes.JUNGLE_WALL_SIGN = buildWallSign(BlockJungleWallSignBehavior.class, BlockId.JUNGLE_WALL_SIGN);
+        if (BlockTypes.MANGROVE_WALL_SIGN == null) BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockMangroveWallSignBehavior.class, BlockId.MANGROVE_WALL_SIGN);
+        if (BlockTypes.SPRUCE_WALL_SIGN == null) BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockSpruceWallSignBehavior.class, BlockId.SPRUCE_WALL_SIGN);
+        if (BlockTypes.WALL_SIGN == null) BlockTypes.WALL_SIGN = buildWallSign(BlockWallSignBehavior.class, BlockId.WALL_SIGN);
+        if (BlockTypes.WARPED_WALL_SIGN == null) BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockWarpedWallSignBehavior.class, BlockId.WARPED_WALL_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildStrippedLog(Class<T> clazz,
+    private static <T extends BlockBehavior> BlockType<T> buildWallSign(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.FACING_DIRECTION)
+               .build();
+    }
+
+    public static void initPlanks() {
+        if (BlockTypes.ACACIA_PLANKS == null) BlockTypes.ACACIA_PLANKS = buildPlanks(BlockAcaciaPlanksBehavior.class, BlockId.ACACIA_PLANKS);
+        if (BlockTypes.BAMBOO_PLANKS == null) BlockTypes.BAMBOO_PLANKS = buildPlanks(BlockBambooPlanksBehavior.class, BlockId.BAMBOO_PLANKS);
+        if (BlockTypes.BIRCH_PLANKS == null) BlockTypes.BIRCH_PLANKS = buildPlanks(BlockBirchPlanksBehavior.class, BlockId.BIRCH_PLANKS);
+        if (BlockTypes.CHERRY_PLANKS == null) BlockTypes.CHERRY_PLANKS = buildPlanks(BlockCherryPlanksBehavior.class, BlockId.CHERRY_PLANKS);
+        if (BlockTypes.CRIMSON_PLANKS == null) BlockTypes.CRIMSON_PLANKS = buildPlanks(BlockCrimsonPlanksBehavior.class, BlockId.CRIMSON_PLANKS);
+        if (BlockTypes.DARK_OAK_PLANKS == null) BlockTypes.DARK_OAK_PLANKS = buildPlanks(BlockDarkOakPlanksBehavior.class, BlockId.DARK_OAK_PLANKS);
+        if (BlockTypes.JUNGLE_PLANKS == null) BlockTypes.JUNGLE_PLANKS = buildPlanks(BlockJunglePlanksBehavior.class, BlockId.JUNGLE_PLANKS);
+        if (BlockTypes.MANGROVE_PLANKS == null) BlockTypes.MANGROVE_PLANKS = buildPlanks(BlockMangrovePlanksBehavior.class, BlockId.MANGROVE_PLANKS);
+        if (BlockTypes.OAK_PLANKS == null) BlockTypes.OAK_PLANKS = buildPlanks(BlockOakPlanksBehavior.class, BlockId.OAK_PLANKS);
+        if (BlockTypes.SPRUCE_PLANKS == null) BlockTypes.SPRUCE_PLANKS = buildPlanks(BlockSprucePlanksBehavior.class, BlockId.SPRUCE_PLANKS);
+        if (BlockTypes.WARPED_PLANKS == null) BlockTypes.WARPED_PLANKS = buildPlanks(BlockWarpedPlanksBehavior.class, BlockId.WARPED_PLANKS);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildPlanks(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initFences() {
+        if (BlockTypes.ACACIA_FENCE == null) BlockTypes.ACACIA_FENCE = buildFence(BlockAcaciaFenceBehavior.class, BlockId.ACACIA_FENCE);
+        if (BlockTypes.BAMBOO_FENCE == null) BlockTypes.BAMBOO_FENCE = buildFence(BlockBambooFenceBehavior.class, BlockId.BAMBOO_FENCE);
+        if (BlockTypes.BIRCH_FENCE == null) BlockTypes.BIRCH_FENCE = buildFence(BlockBirchFenceBehavior.class, BlockId.BIRCH_FENCE);
+        if (BlockTypes.CHERRY_FENCE == null) BlockTypes.CHERRY_FENCE = buildFence(BlockCherryFenceBehavior.class, BlockId.CHERRY_FENCE);
+        if (BlockTypes.CRIMSON_FENCE == null) BlockTypes.CRIMSON_FENCE = buildFence(BlockCrimsonFenceBehavior.class, BlockId.CRIMSON_FENCE);
+        if (BlockTypes.DARK_OAK_FENCE == null) BlockTypes.DARK_OAK_FENCE = buildFence(BlockDarkOakFenceBehavior.class, BlockId.DARK_OAK_FENCE);
+        if (BlockTypes.JUNGLE_FENCE == null) BlockTypes.JUNGLE_FENCE = buildFence(BlockJungleFenceBehavior.class, BlockId.JUNGLE_FENCE);
+        if (BlockTypes.MANGROVE_FENCE == null) BlockTypes.MANGROVE_FENCE = buildFence(BlockMangroveFenceBehavior.class, BlockId.MANGROVE_FENCE);
+        if (BlockTypes.NETHER_BRICK_FENCE == null) BlockTypes.NETHER_BRICK_FENCE = buildFence(BlockNetherBrickFenceBehavior.class, BlockId.NETHER_BRICK_FENCE);
+        if (BlockTypes.OAK_FENCE == null) BlockTypes.OAK_FENCE = buildFence(BlockOakFenceBehavior.class, BlockId.OAK_FENCE);
+        if (BlockTypes.SPRUCE_FENCE == null) BlockTypes.SPRUCE_FENCE = buildFence(BlockSpruceFenceBehavior.class, BlockId.SPRUCE_FENCE);
+        if (BlockTypes.WARPED_FENCE == null) BlockTypes.WARPED_FENCE = buildFence(BlockWarpedFenceBehavior.class, BlockId.WARPED_FENCE);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildFence(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .build();
+    }
+
+    public static void initFenceGates() {
+        if (BlockTypes.ACACIA_FENCE_GATE == null) BlockTypes.ACACIA_FENCE_GATE = buildFenceGate(BlockAcaciaFenceGateBehavior.class, BlockId.ACACIA_FENCE_GATE);
+        if (BlockTypes.BAMBOO_FENCE_GATE == null) BlockTypes.BAMBOO_FENCE_GATE = buildFenceGate(BlockBambooFenceGateBehavior.class, BlockId.BAMBOO_FENCE_GATE);
+        if (BlockTypes.BIRCH_FENCE_GATE == null) BlockTypes.BIRCH_FENCE_GATE = buildFenceGate(BlockBirchFenceGateBehavior.class, BlockId.BIRCH_FENCE_GATE);
+        if (BlockTypes.CHERRY_FENCE_GATE == null) BlockTypes.CHERRY_FENCE_GATE = buildFenceGate(BlockCherryFenceGateBehavior.class, BlockId.CHERRY_FENCE_GATE);
+        if (BlockTypes.CRIMSON_FENCE_GATE == null) BlockTypes.CRIMSON_FENCE_GATE = buildFenceGate(BlockCrimsonFenceGateBehavior.class, BlockId.CRIMSON_FENCE_GATE);
+        if (BlockTypes.DARK_OAK_FENCE_GATE == null) BlockTypes.DARK_OAK_FENCE_GATE = buildFenceGate(BlockDarkOakFenceGateBehavior.class, BlockId.DARK_OAK_FENCE_GATE);
+        if (BlockTypes.JUNGLE_FENCE_GATE == null) BlockTypes.JUNGLE_FENCE_GATE = buildFenceGate(BlockJungleFenceGateBehavior.class, BlockId.JUNGLE_FENCE_GATE);
+        if (BlockTypes.MANGROVE_FENCE_GATE == null) BlockTypes.MANGROVE_FENCE_GATE = buildFenceGate(BlockMangroveFenceGateBehavior.class, BlockId.MANGROVE_FENCE_GATE);
+        if (BlockTypes.SPRUCE_FENCE_GATE == null) BlockTypes.SPRUCE_FENCE_GATE = buildFenceGate(BlockSpruceFenceGateBehavior.class, BlockId.SPRUCE_FENCE_GATE);
+        if (BlockTypes.WARPED_FENCE_GATE == null) BlockTypes.WARPED_FENCE_GATE = buildFenceGate(BlockWarpedFenceGateBehavior.class, BlockId.WARPED_FENCE_GATE);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildFenceGate(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT)
+               .build();
+    }
+
+    public static void initWalls() {
+        if (BlockTypes.BLACKSTONE_WALL == null) BlockTypes.BLACKSTONE_WALL = buildWall(BlockBlackstoneWallBehavior.class, BlockId.BLACKSTONE_WALL);
+        if (BlockTypes.COBBLED_DEEPSLATE_WALL == null) BlockTypes.COBBLED_DEEPSLATE_WALL = buildWall(BlockCobbledDeepslateWallBehavior.class, BlockId.COBBLED_DEEPSLATE_WALL);
+        if (BlockTypes.COBBLESTONE_WALL == null) BlockTypes.COBBLESTONE_WALL = buildWall(BlockCobblestoneWallBehavior.class, BlockId.COBBLESTONE_WALL);
+        if (BlockTypes.DEEPSLATE_BRICK_WALL == null) BlockTypes.DEEPSLATE_BRICK_WALL = buildWall(BlockDeepslateBrickWallBehavior.class, BlockId.DEEPSLATE_BRICK_WALL);
+        if (BlockTypes.DEEPSLATE_TILE_WALL == null) BlockTypes.DEEPSLATE_TILE_WALL = buildWall(BlockDeepslateTileWallBehavior.class, BlockId.DEEPSLATE_TILE_WALL);
+        if (BlockTypes.MUD_BRICK_WALL == null) BlockTypes.MUD_BRICK_WALL = buildWall(BlockMudBrickWallBehavior.class, BlockId.MUD_BRICK_WALL);
+        if (BlockTypes.POLISHED_BLACKSTONE_BRICK_WALL == null) BlockTypes.POLISHED_BLACKSTONE_BRICK_WALL = buildWall(BlockPolishedBlackstoneBrickWallBehavior.class, BlockId.POLISHED_BLACKSTONE_BRICK_WALL);
+        if (BlockTypes.POLISHED_BLACKSTONE_WALL == null) BlockTypes.POLISHED_BLACKSTONE_WALL = buildWall(BlockPolishedBlackstoneWallBehavior.class, BlockId.POLISHED_BLACKSTONE_WALL);
+        if (BlockTypes.POLISHED_DEEPSLATE_WALL == null) BlockTypes.POLISHED_DEEPSLATE_WALL = buildWall(BlockPolishedDeepslateWallBehavior.class, BlockId.POLISHED_DEEPSLATE_WALL);
+        if (BlockTypes.POLISHED_TUFF_WALL == null) BlockTypes.POLISHED_TUFF_WALL = buildWall(BlockPolishedTuffWallBehavior.class, BlockId.POLISHED_TUFF_WALL);
+        if (BlockTypes.TUFF_BRICK_WALL == null) BlockTypes.TUFF_BRICK_WALL = buildWall(BlockTuffBrickWallBehavior.class, BlockId.TUFF_BRICK_WALL);
+        if (BlockTypes.TUFF_WALL == null) BlockTypes.TUFF_WALL = buildWall(BlockTuffWallBehavior.class, BlockId.TUFF_WALL);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildWall(Class<T> clazz,
+            BlockId blockId) {
+        return AllayBlockType.builder(clazz)
+               .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.WALL_POST_BIT, BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST)
+               .build();
+    }
+
+    public static void initWoods() {
+        if (BlockTypes.ACACIA_WOOD == null) BlockTypes.ACACIA_WOOD = buildWood(BlockAcaciaWoodBehavior.class, BlockId.ACACIA_WOOD);
+        if (BlockTypes.BIRCH_WOOD == null) BlockTypes.BIRCH_WOOD = buildWood(BlockBirchWoodBehavior.class, BlockId.BIRCH_WOOD);
+        if (BlockTypes.CHERRY_WOOD == null) BlockTypes.CHERRY_WOOD = buildWood(BlockCherryWoodBehavior.class, BlockId.CHERRY_WOOD);
+        if (BlockTypes.CRIMSON_HYPHAE == null) BlockTypes.CRIMSON_HYPHAE = buildWood(BlockCrimsonHyphaeBehavior.class, BlockId.CRIMSON_HYPHAE);
+        if (BlockTypes.DARK_OAK_WOOD == null) BlockTypes.DARK_OAK_WOOD = buildWood(BlockDarkOakWoodBehavior.class, BlockId.DARK_OAK_WOOD);
+        if (BlockTypes.JUNGLE_WOOD == null) BlockTypes.JUNGLE_WOOD = buildWood(BlockJungleWoodBehavior.class, BlockId.JUNGLE_WOOD);
+        if (BlockTypes.MANGROVE_WOOD == null) BlockTypes.MANGROVE_WOOD = buildWood(BlockMangroveWoodBehavior.class, BlockId.MANGROVE_WOOD);
+        if (BlockTypes.OAK_WOOD == null) BlockTypes.OAK_WOOD = buildWood(BlockOakWoodBehavior.class, BlockId.OAK_WOOD);
+        if (BlockTypes.SPRUCE_WOOD == null) BlockTypes.SPRUCE_WOOD = buildWood(BlockSpruceWoodBehavior.class, BlockId.SPRUCE_WOOD);
+        if (BlockTypes.WARPED_HYPHAE == null) BlockTypes.WARPED_HYPHAE = buildWood(BlockWarpedHyphaeBehavior.class, BlockId.WARPED_HYPHAE);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildWood(Class<T> clazz,
             BlockId blockId) {
         return AllayBlockType.builder(clazz)
                .vanillaBlock(blockId)
@@ -5296,20 +5734,24 @@ public final class BlockTypeDefaultInitializer {
                .build();
     }
 
-    public static void initCopperGrates() {
-        if (BlockTypes.EXPOSED_COPPER_GRATE == null) BlockTypes.EXPOSED_COPPER_GRATE = buildCopperGrate(BlockExposedCopperGrateBehavior.class, BlockId.EXPOSED_COPPER_GRATE);
-        if (BlockTypes.OXIDIZED_COPPER_GRATE == null) BlockTypes.OXIDIZED_COPPER_GRATE = buildCopperGrate(BlockOxidizedCopperGrateBehavior.class, BlockId.OXIDIZED_COPPER_GRATE);
-        if (BlockTypes.WAXED_COPPER_GRATE == null) BlockTypes.WAXED_COPPER_GRATE = buildCopperGrate(BlockWaxedCopperGrateBehavior.class, BlockId.WAXED_COPPER_GRATE);
-        if (BlockTypes.WAXED_EXPOSED_COPPER_GRATE == null) BlockTypes.WAXED_EXPOSED_COPPER_GRATE = buildCopperGrate(BlockWaxedExposedCopperGrateBehavior.class, BlockId.WAXED_EXPOSED_COPPER_GRATE);
-        if (BlockTypes.WAXED_OXIDIZED_COPPER_GRATE == null) BlockTypes.WAXED_OXIDIZED_COPPER_GRATE = buildCopperGrate(BlockWaxedOxidizedCopperGrateBehavior.class, BlockId.WAXED_OXIDIZED_COPPER_GRATE);
-        if (BlockTypes.WAXED_WEATHERED_COPPER_GRATE == null) BlockTypes.WAXED_WEATHERED_COPPER_GRATE = buildCopperGrate(BlockWaxedWeatheredCopperGrateBehavior.class, BlockId.WAXED_WEATHERED_COPPER_GRATE);
-        if (BlockTypes.WEATHERED_COPPER_GRATE == null) BlockTypes.WEATHERED_COPPER_GRATE = buildCopperGrate(BlockWeatheredCopperGrateBehavior.class, BlockId.WEATHERED_COPPER_GRATE);
+    public static void initStrippedWoods() {
+        if (BlockTypes.STRIPPED_ACACIA_WOOD == null) BlockTypes.STRIPPED_ACACIA_WOOD = buildStrippedWood(BlockStrippedAcaciaWoodBehavior.class, BlockId.STRIPPED_ACACIA_WOOD);
+        if (BlockTypes.STRIPPED_BIRCH_WOOD == null) BlockTypes.STRIPPED_BIRCH_WOOD = buildStrippedWood(BlockStrippedBirchWoodBehavior.class, BlockId.STRIPPED_BIRCH_WOOD);
+        if (BlockTypes.STRIPPED_CHERRY_WOOD == null) BlockTypes.STRIPPED_CHERRY_WOOD = buildStrippedWood(BlockStrippedCherryWoodBehavior.class, BlockId.STRIPPED_CHERRY_WOOD);
+        if (BlockTypes.STRIPPED_CRIMSON_HYPHAE == null) BlockTypes.STRIPPED_CRIMSON_HYPHAE = buildStrippedWood(BlockStrippedCrimsonHyphaeBehavior.class, BlockId.STRIPPED_CRIMSON_HYPHAE);
+        if (BlockTypes.STRIPPED_DARK_OAK_WOOD == null) BlockTypes.STRIPPED_DARK_OAK_WOOD = buildStrippedWood(BlockStrippedDarkOakWoodBehavior.class, BlockId.STRIPPED_DARK_OAK_WOOD);
+        if (BlockTypes.STRIPPED_JUNGLE_WOOD == null) BlockTypes.STRIPPED_JUNGLE_WOOD = buildStrippedWood(BlockStrippedJungleWoodBehavior.class, BlockId.STRIPPED_JUNGLE_WOOD);
+        if (BlockTypes.STRIPPED_MANGROVE_WOOD == null) BlockTypes.STRIPPED_MANGROVE_WOOD = buildStrippedWood(BlockStrippedMangroveWoodBehavior.class, BlockId.STRIPPED_MANGROVE_WOOD);
+        if (BlockTypes.STRIPPED_OAK_WOOD == null) BlockTypes.STRIPPED_OAK_WOOD = buildStrippedWood(BlockStrippedOakWoodBehavior.class, BlockId.STRIPPED_OAK_WOOD);
+        if (BlockTypes.STRIPPED_SPRUCE_WOOD == null) BlockTypes.STRIPPED_SPRUCE_WOOD = buildStrippedWood(BlockStrippedSpruceWoodBehavior.class, BlockId.STRIPPED_SPRUCE_WOOD);
+        if (BlockTypes.STRIPPED_WARPED_HYPHAE == null) BlockTypes.STRIPPED_WARPED_HYPHAE = buildStrippedWood(BlockStrippedWarpedHyphaeBehavior.class, BlockId.STRIPPED_WARPED_HYPHAE);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildCopperGrate(Class<T> clazz,
+    private static <T extends BlockBehavior> BlockType<T> buildStrippedWood(Class<T> clazz,
             BlockId blockId) {
         return AllayBlockType.builder(clazz)
                .vanillaBlock(blockId)
+               .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                .build();
     }
 
@@ -5329,128 +5771,6 @@ public final class BlockTypeDefaultInitializer {
         return AllayBlockType.builder(clazz)
                .vanillaBlock(blockId)
                .setProperties(BlockPropertyTypes.AGE_BIT)
-               .build();
-    }
-
-    public static void initLogs() {
-        if (BlockTypes.ACACIA_LOG == null) BlockTypes.ACACIA_LOG = buildLog(BlockAcaciaLogBehavior.class, BlockId.ACACIA_LOG);
-        if (BlockTypes.BIRCH_LOG == null) BlockTypes.BIRCH_LOG = buildLog(BlockBirchLogBehavior.class, BlockId.BIRCH_LOG);
-        if (BlockTypes.CHERRY_LOG == null) BlockTypes.CHERRY_LOG = buildLog(BlockCherryLogBehavior.class, BlockId.CHERRY_LOG);
-        if (BlockTypes.DARK_OAK_LOG == null) BlockTypes.DARK_OAK_LOG = buildLog(BlockDarkOakLogBehavior.class, BlockId.DARK_OAK_LOG);
-        if (BlockTypes.JUNGLE_LOG == null) BlockTypes.JUNGLE_LOG = buildLog(BlockJungleLogBehavior.class, BlockId.JUNGLE_LOG);
-        if (BlockTypes.MANGROVE_LOG == null) BlockTypes.MANGROVE_LOG = buildLog(BlockMangroveLogBehavior.class, BlockId.MANGROVE_LOG);
-        if (BlockTypes.OAK_LOG == null) BlockTypes.OAK_LOG = buildLog(BlockOakLogBehavior.class, BlockId.OAK_LOG);
-        if (BlockTypes.SPRUCE_LOG == null) BlockTypes.SPRUCE_LOG = buildLog(BlockSpruceLogBehavior.class, BlockId.SPRUCE_LOG);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildLog(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-               .build();
-    }
-
-    public static void initStrippedWoods() {
-        if (BlockTypes.STRIPPED_ACACIA_WOOD == null) BlockTypes.STRIPPED_ACACIA_WOOD = buildStrippedWood(BlockStrippedAcaciaWoodBehavior.class, BlockId.STRIPPED_ACACIA_WOOD);
-        if (BlockTypes.STRIPPED_BIRCH_WOOD == null) BlockTypes.STRIPPED_BIRCH_WOOD = buildStrippedWood(BlockStrippedBirchWoodBehavior.class, BlockId.STRIPPED_BIRCH_WOOD);
-        if (BlockTypes.STRIPPED_CHERRY_WOOD == null) BlockTypes.STRIPPED_CHERRY_WOOD = buildStrippedWood(BlockStrippedCherryWoodBehavior.class, BlockId.STRIPPED_CHERRY_WOOD);
-        if (BlockTypes.STRIPPED_DARK_OAK_WOOD == null) BlockTypes.STRIPPED_DARK_OAK_WOOD = buildStrippedWood(BlockStrippedDarkOakWoodBehavior.class, BlockId.STRIPPED_DARK_OAK_WOOD);
-        if (BlockTypes.STRIPPED_JUNGLE_WOOD == null) BlockTypes.STRIPPED_JUNGLE_WOOD = buildStrippedWood(BlockStrippedJungleWoodBehavior.class, BlockId.STRIPPED_JUNGLE_WOOD);
-        if (BlockTypes.STRIPPED_MANGROVE_WOOD == null) BlockTypes.STRIPPED_MANGROVE_WOOD = buildStrippedWood(BlockStrippedMangroveWoodBehavior.class, BlockId.STRIPPED_MANGROVE_WOOD);
-        if (BlockTypes.STRIPPED_OAK_WOOD == null) BlockTypes.STRIPPED_OAK_WOOD = buildStrippedWood(BlockStrippedOakWoodBehavior.class, BlockId.STRIPPED_OAK_WOOD);
-        if (BlockTypes.STRIPPED_SPRUCE_WOOD == null) BlockTypes.STRIPPED_SPRUCE_WOOD = buildStrippedWood(BlockStrippedSpruceWoodBehavior.class, BlockId.STRIPPED_SPRUCE_WOOD);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildStrippedWood(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-               .build();
-    }
-
-    public static void initStainedGlass() {
-        if (BlockTypes.BLACK_STAINED_GLASS == null) BlockTypes.BLACK_STAINED_GLASS = buildStainedGlass(BlockBlackStainedGlassBehavior.class, BlockId.BLACK_STAINED_GLASS);
-        if (BlockTypes.BLUE_STAINED_GLASS == null) BlockTypes.BLUE_STAINED_GLASS = buildStainedGlass(BlockBlueStainedGlassBehavior.class, BlockId.BLUE_STAINED_GLASS);
-        if (BlockTypes.BROWN_STAINED_GLASS == null) BlockTypes.BROWN_STAINED_GLASS = buildStainedGlass(BlockBrownStainedGlassBehavior.class, BlockId.BROWN_STAINED_GLASS);
-        if (BlockTypes.CYAN_STAINED_GLASS == null) BlockTypes.CYAN_STAINED_GLASS = buildStainedGlass(BlockCyanStainedGlassBehavior.class, BlockId.CYAN_STAINED_GLASS);
-        if (BlockTypes.GRAY_STAINED_GLASS == null) BlockTypes.GRAY_STAINED_GLASS = buildStainedGlass(BlockGrayStainedGlassBehavior.class, BlockId.GRAY_STAINED_GLASS);
-        if (BlockTypes.GREEN_STAINED_GLASS == null) BlockTypes.GREEN_STAINED_GLASS = buildStainedGlass(BlockGreenStainedGlassBehavior.class, BlockId.GREEN_STAINED_GLASS);
-        if (BlockTypes.HARD_BLACK_STAINED_GLASS == null) BlockTypes.HARD_BLACK_STAINED_GLASS = buildStainedGlass(BlockHardBlackStainedGlassBehavior.class, BlockId.HARD_BLACK_STAINED_GLASS);
-        if (BlockTypes.HARD_BLUE_STAINED_GLASS == null) BlockTypes.HARD_BLUE_STAINED_GLASS = buildStainedGlass(BlockHardBlueStainedGlassBehavior.class, BlockId.HARD_BLUE_STAINED_GLASS);
-        if (BlockTypes.HARD_BROWN_STAINED_GLASS == null) BlockTypes.HARD_BROWN_STAINED_GLASS = buildStainedGlass(BlockHardBrownStainedGlassBehavior.class, BlockId.HARD_BROWN_STAINED_GLASS);
-        if (BlockTypes.HARD_CYAN_STAINED_GLASS == null) BlockTypes.HARD_CYAN_STAINED_GLASS = buildStainedGlass(BlockHardCyanStainedGlassBehavior.class, BlockId.HARD_CYAN_STAINED_GLASS);
-        if (BlockTypes.HARD_GRAY_STAINED_GLASS == null) BlockTypes.HARD_GRAY_STAINED_GLASS = buildStainedGlass(BlockHardGrayStainedGlassBehavior.class, BlockId.HARD_GRAY_STAINED_GLASS);
-        if (BlockTypes.HARD_GREEN_STAINED_GLASS == null) BlockTypes.HARD_GREEN_STAINED_GLASS = buildStainedGlass(BlockHardGreenStainedGlassBehavior.class, BlockId.HARD_GREEN_STAINED_GLASS);
-        if (BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS == null) BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS = buildStainedGlass(BlockHardLightBlueStainedGlassBehavior.class, BlockId.HARD_LIGHT_BLUE_STAINED_GLASS);
-        if (BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS == null) BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS = buildStainedGlass(BlockHardLightGrayStainedGlassBehavior.class, BlockId.HARD_LIGHT_GRAY_STAINED_GLASS);
-        if (BlockTypes.HARD_LIME_STAINED_GLASS == null) BlockTypes.HARD_LIME_STAINED_GLASS = buildStainedGlass(BlockHardLimeStainedGlassBehavior.class, BlockId.HARD_LIME_STAINED_GLASS);
-        if (BlockTypes.HARD_MAGENTA_STAINED_GLASS == null) BlockTypes.HARD_MAGENTA_STAINED_GLASS = buildStainedGlass(BlockHardMagentaStainedGlassBehavior.class, BlockId.HARD_MAGENTA_STAINED_GLASS);
-        if (BlockTypes.HARD_ORANGE_STAINED_GLASS == null) BlockTypes.HARD_ORANGE_STAINED_GLASS = buildStainedGlass(BlockHardOrangeStainedGlassBehavior.class, BlockId.HARD_ORANGE_STAINED_GLASS);
-        if (BlockTypes.HARD_PINK_STAINED_GLASS == null) BlockTypes.HARD_PINK_STAINED_GLASS = buildStainedGlass(BlockHardPinkStainedGlassBehavior.class, BlockId.HARD_PINK_STAINED_GLASS);
-        if (BlockTypes.HARD_PURPLE_STAINED_GLASS == null) BlockTypes.HARD_PURPLE_STAINED_GLASS = buildStainedGlass(BlockHardPurpleStainedGlassBehavior.class, BlockId.HARD_PURPLE_STAINED_GLASS);
-        if (BlockTypes.HARD_RED_STAINED_GLASS == null) BlockTypes.HARD_RED_STAINED_GLASS = buildStainedGlass(BlockHardRedStainedGlassBehavior.class, BlockId.HARD_RED_STAINED_GLASS);
-        if (BlockTypes.HARD_WHITE_STAINED_GLASS == null) BlockTypes.HARD_WHITE_STAINED_GLASS = buildStainedGlass(BlockHardWhiteStainedGlassBehavior.class, BlockId.HARD_WHITE_STAINED_GLASS);
-        if (BlockTypes.HARD_YELLOW_STAINED_GLASS == null) BlockTypes.HARD_YELLOW_STAINED_GLASS = buildStainedGlass(BlockHardYellowStainedGlassBehavior.class, BlockId.HARD_YELLOW_STAINED_GLASS);
-        if (BlockTypes.LIGHT_BLUE_STAINED_GLASS == null) BlockTypes.LIGHT_BLUE_STAINED_GLASS = buildStainedGlass(BlockLightBlueStainedGlassBehavior.class, BlockId.LIGHT_BLUE_STAINED_GLASS);
-        if (BlockTypes.LIGHT_GRAY_STAINED_GLASS == null) BlockTypes.LIGHT_GRAY_STAINED_GLASS = buildStainedGlass(BlockLightGrayStainedGlassBehavior.class, BlockId.LIGHT_GRAY_STAINED_GLASS);
-        if (BlockTypes.LIME_STAINED_GLASS == null) BlockTypes.LIME_STAINED_GLASS = buildStainedGlass(BlockLimeStainedGlassBehavior.class, BlockId.LIME_STAINED_GLASS);
-        if (BlockTypes.MAGENTA_STAINED_GLASS == null) BlockTypes.MAGENTA_STAINED_GLASS = buildStainedGlass(BlockMagentaStainedGlassBehavior.class, BlockId.MAGENTA_STAINED_GLASS);
-        if (BlockTypes.ORANGE_STAINED_GLASS == null) BlockTypes.ORANGE_STAINED_GLASS = buildStainedGlass(BlockOrangeStainedGlassBehavior.class, BlockId.ORANGE_STAINED_GLASS);
-        if (BlockTypes.PINK_STAINED_GLASS == null) BlockTypes.PINK_STAINED_GLASS = buildStainedGlass(BlockPinkStainedGlassBehavior.class, BlockId.PINK_STAINED_GLASS);
-        if (BlockTypes.PURPLE_STAINED_GLASS == null) BlockTypes.PURPLE_STAINED_GLASS = buildStainedGlass(BlockPurpleStainedGlassBehavior.class, BlockId.PURPLE_STAINED_GLASS);
-        if (BlockTypes.RED_STAINED_GLASS == null) BlockTypes.RED_STAINED_GLASS = buildStainedGlass(BlockRedStainedGlassBehavior.class, BlockId.RED_STAINED_GLASS);
-        if (BlockTypes.WHITE_STAINED_GLASS == null) BlockTypes.WHITE_STAINED_GLASS = buildStainedGlass(BlockWhiteStainedGlassBehavior.class, BlockId.WHITE_STAINED_GLASS);
-        if (BlockTypes.YELLOW_STAINED_GLASS == null) BlockTypes.YELLOW_STAINED_GLASS = buildStainedGlass(BlockYellowStainedGlassBehavior.class, BlockId.YELLOW_STAINED_GLASS);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildStainedGlass(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .build();
-    }
-
-    public static void initStainedGlassPanes() {
-        if (BlockTypes.BLACK_STAINED_GLASS_PANE == null) BlockTypes.BLACK_STAINED_GLASS_PANE = buildStainedGlassPane(BlockBlackStainedGlassPaneBehavior.class, BlockId.BLACK_STAINED_GLASS_PANE);
-        if (BlockTypes.BLUE_STAINED_GLASS_PANE == null) BlockTypes.BLUE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockBlueStainedGlassPaneBehavior.class, BlockId.BLUE_STAINED_GLASS_PANE);
-        if (BlockTypes.BROWN_STAINED_GLASS_PANE == null) BlockTypes.BROWN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockBrownStainedGlassPaneBehavior.class, BlockId.BROWN_STAINED_GLASS_PANE);
-        if (BlockTypes.CYAN_STAINED_GLASS_PANE == null) BlockTypes.CYAN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockCyanStainedGlassPaneBehavior.class, BlockId.CYAN_STAINED_GLASS_PANE);
-        if (BlockTypes.GRAY_STAINED_GLASS_PANE == null) BlockTypes.GRAY_STAINED_GLASS_PANE = buildStainedGlassPane(BlockGrayStainedGlassPaneBehavior.class, BlockId.GRAY_STAINED_GLASS_PANE);
-        if (BlockTypes.GREEN_STAINED_GLASS_PANE == null) BlockTypes.GREEN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockGreenStainedGlassPaneBehavior.class, BlockId.GREEN_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_BLACK_STAINED_GLASS_PANE == null) BlockTypes.HARD_BLACK_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardBlackStainedGlassPaneBehavior.class, BlockId.HARD_BLACK_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_BLUE_STAINED_GLASS_PANE == null) BlockTypes.HARD_BLUE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardBlueStainedGlassPaneBehavior.class, BlockId.HARD_BLUE_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_BROWN_STAINED_GLASS_PANE == null) BlockTypes.HARD_BROWN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardBrownStainedGlassPaneBehavior.class, BlockId.HARD_BROWN_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_CYAN_STAINED_GLASS_PANE == null) BlockTypes.HARD_CYAN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardCyanStainedGlassPaneBehavior.class, BlockId.HARD_CYAN_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_GRAY_STAINED_GLASS_PANE == null) BlockTypes.HARD_GRAY_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardGrayStainedGlassPaneBehavior.class, BlockId.HARD_GRAY_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_GREEN_STAINED_GLASS_PANE == null) BlockTypes.HARD_GREEN_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardGreenStainedGlassPaneBehavior.class, BlockId.HARD_GREEN_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE == null) BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardLightBlueStainedGlassPaneBehavior.class, BlockId.HARD_LIGHT_BLUE_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE == null) BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardLightGrayStainedGlassPaneBehavior.class, BlockId.HARD_LIGHT_GRAY_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_LIME_STAINED_GLASS_PANE == null) BlockTypes.HARD_LIME_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardLimeStainedGlassPaneBehavior.class, BlockId.HARD_LIME_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_MAGENTA_STAINED_GLASS_PANE == null) BlockTypes.HARD_MAGENTA_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardMagentaStainedGlassPaneBehavior.class, BlockId.HARD_MAGENTA_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_ORANGE_STAINED_GLASS_PANE == null) BlockTypes.HARD_ORANGE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardOrangeStainedGlassPaneBehavior.class, BlockId.HARD_ORANGE_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_PINK_STAINED_GLASS_PANE == null) BlockTypes.HARD_PINK_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardPinkStainedGlassPaneBehavior.class, BlockId.HARD_PINK_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_PURPLE_STAINED_GLASS_PANE == null) BlockTypes.HARD_PURPLE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardPurpleStainedGlassPaneBehavior.class, BlockId.HARD_PURPLE_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_RED_STAINED_GLASS_PANE == null) BlockTypes.HARD_RED_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardRedStainedGlassPaneBehavior.class, BlockId.HARD_RED_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_WHITE_STAINED_GLASS_PANE == null) BlockTypes.HARD_WHITE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardWhiteStainedGlassPaneBehavior.class, BlockId.HARD_WHITE_STAINED_GLASS_PANE);
-        if (BlockTypes.HARD_YELLOW_STAINED_GLASS_PANE == null) BlockTypes.HARD_YELLOW_STAINED_GLASS_PANE = buildStainedGlassPane(BlockHardYellowStainedGlassPaneBehavior.class, BlockId.HARD_YELLOW_STAINED_GLASS_PANE);
-        if (BlockTypes.LIGHT_BLUE_STAINED_GLASS_PANE == null) BlockTypes.LIGHT_BLUE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockLightBlueStainedGlassPaneBehavior.class, BlockId.LIGHT_BLUE_STAINED_GLASS_PANE);
-        if (BlockTypes.LIGHT_GRAY_STAINED_GLASS_PANE == null) BlockTypes.LIGHT_GRAY_STAINED_GLASS_PANE = buildStainedGlassPane(BlockLightGrayStainedGlassPaneBehavior.class, BlockId.LIGHT_GRAY_STAINED_GLASS_PANE);
-        if (BlockTypes.LIME_STAINED_GLASS_PANE == null) BlockTypes.LIME_STAINED_GLASS_PANE = buildStainedGlassPane(BlockLimeStainedGlassPaneBehavior.class, BlockId.LIME_STAINED_GLASS_PANE);
-        if (BlockTypes.MAGENTA_STAINED_GLASS_PANE == null) BlockTypes.MAGENTA_STAINED_GLASS_PANE = buildStainedGlassPane(BlockMagentaStainedGlassPaneBehavior.class, BlockId.MAGENTA_STAINED_GLASS_PANE);
-        if (BlockTypes.ORANGE_STAINED_GLASS_PANE == null) BlockTypes.ORANGE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockOrangeStainedGlassPaneBehavior.class, BlockId.ORANGE_STAINED_GLASS_PANE);
-        if (BlockTypes.PINK_STAINED_GLASS_PANE == null) BlockTypes.PINK_STAINED_GLASS_PANE = buildStainedGlassPane(BlockPinkStainedGlassPaneBehavior.class, BlockId.PINK_STAINED_GLASS_PANE);
-        if (BlockTypes.PURPLE_STAINED_GLASS_PANE == null) BlockTypes.PURPLE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockPurpleStainedGlassPaneBehavior.class, BlockId.PURPLE_STAINED_GLASS_PANE);
-        if (BlockTypes.RED_STAINED_GLASS_PANE == null) BlockTypes.RED_STAINED_GLASS_PANE = buildStainedGlassPane(BlockRedStainedGlassPaneBehavior.class, BlockId.RED_STAINED_GLASS_PANE);
-        if (BlockTypes.WHITE_STAINED_GLASS_PANE == null) BlockTypes.WHITE_STAINED_GLASS_PANE = buildStainedGlassPane(BlockWhiteStainedGlassPaneBehavior.class, BlockId.WHITE_STAINED_GLASS_PANE);
-        if (BlockTypes.YELLOW_STAINED_GLASS_PANE == null) BlockTypes.YELLOW_STAINED_GLASS_PANE = buildStainedGlassPane(BlockYellowStainedGlassPaneBehavior.class, BlockId.YELLOW_STAINED_GLASS_PANE);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildStainedGlassPane(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
                .build();
     }
 
@@ -5583,643 +5903,59 @@ public final class BlockTypeDefaultInitializer {
                .build();
     }
 
-    public static void initPressurePlates() {
-        if (BlockTypes.ACACIA_PRESSURE_PLATE == null) BlockTypes.ACACIA_PRESSURE_PLATE = buildPressurePlate(BlockAcaciaPressurePlateBehavior.class, BlockId.ACACIA_PRESSURE_PLATE);
-        if (BlockTypes.BAMBOO_PRESSURE_PLATE == null) BlockTypes.BAMBOO_PRESSURE_PLATE = buildPressurePlate(BlockBambooPressurePlateBehavior.class, BlockId.BAMBOO_PRESSURE_PLATE);
-        if (BlockTypes.BIRCH_PRESSURE_PLATE == null) BlockTypes.BIRCH_PRESSURE_PLATE = buildPressurePlate(BlockBirchPressurePlateBehavior.class, BlockId.BIRCH_PRESSURE_PLATE);
-        if (BlockTypes.CHERRY_PRESSURE_PLATE == null) BlockTypes.CHERRY_PRESSURE_PLATE = buildPressurePlate(BlockCherryPressurePlateBehavior.class, BlockId.CHERRY_PRESSURE_PLATE);
-        if (BlockTypes.CRIMSON_PRESSURE_PLATE == null) BlockTypes.CRIMSON_PRESSURE_PLATE = buildPressurePlate(BlockCrimsonPressurePlateBehavior.class, BlockId.CRIMSON_PRESSURE_PLATE);
-        if (BlockTypes.DARK_OAK_PRESSURE_PLATE == null) BlockTypes.DARK_OAK_PRESSURE_PLATE = buildPressurePlate(BlockDarkOakPressurePlateBehavior.class, BlockId.DARK_OAK_PRESSURE_PLATE);
-        if (BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE == null) BlockTypes.HEAVY_WEIGHTED_PRESSURE_PLATE = buildPressurePlate(BlockHeavyWeightedPressurePlateBehavior.class, BlockId.HEAVY_WEIGHTED_PRESSURE_PLATE);
-        if (BlockTypes.JUNGLE_PRESSURE_PLATE == null) BlockTypes.JUNGLE_PRESSURE_PLATE = buildPressurePlate(BlockJunglePressurePlateBehavior.class, BlockId.JUNGLE_PRESSURE_PLATE);
-        if (BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE == null) BlockTypes.LIGHT_WEIGHTED_PRESSURE_PLATE = buildPressurePlate(BlockLightWeightedPressurePlateBehavior.class, BlockId.LIGHT_WEIGHTED_PRESSURE_PLATE);
-        if (BlockTypes.MANGROVE_PRESSURE_PLATE == null) BlockTypes.MANGROVE_PRESSURE_PLATE = buildPressurePlate(BlockMangrovePressurePlateBehavior.class, BlockId.MANGROVE_PRESSURE_PLATE);
-        if (BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE == null) BlockTypes.POLISHED_BLACKSTONE_PRESSURE_PLATE = buildPressurePlate(BlockPolishedBlackstonePressurePlateBehavior.class, BlockId.POLISHED_BLACKSTONE_PRESSURE_PLATE);
-        if (BlockTypes.SPRUCE_PRESSURE_PLATE == null) BlockTypes.SPRUCE_PRESSURE_PLATE = buildPressurePlate(BlockSprucePressurePlateBehavior.class, BlockId.SPRUCE_PRESSURE_PLATE);
-        if (BlockTypes.STONE_PRESSURE_PLATE == null) BlockTypes.STONE_PRESSURE_PLATE = buildPressurePlate(BlockStonePressurePlateBehavior.class, BlockId.STONE_PRESSURE_PLATE);
-        if (BlockTypes.WARPED_PRESSURE_PLATE == null) BlockTypes.WARPED_PRESSURE_PLATE = buildPressurePlate(BlockWarpedPressurePlateBehavior.class, BlockId.WARPED_PRESSURE_PLATE);
-        if (BlockTypes.WOODEN_PRESSURE_PLATE == null) BlockTypes.WOODEN_PRESSURE_PLATE = buildPressurePlate(BlockWoodenPressurePlateBehavior.class, BlockId.WOODEN_PRESSURE_PLATE);
+    public static void initCoppers() {
+        if (BlockTypes.CHISELED_COPPER == null) BlockTypes.CHISELED_COPPER = buildCopper(BlockChiseledCopperBehavior.class, BlockId.CHISELED_COPPER);
+        if (BlockTypes.CUT_COPPER == null) BlockTypes.CUT_COPPER = buildCopper(BlockCutCopperBehavior.class, BlockId.CUT_COPPER);
+        if (BlockTypes.EXPOSED_CHISELED_COPPER == null) BlockTypes.EXPOSED_CHISELED_COPPER = buildCopper(BlockExposedChiseledCopperBehavior.class, BlockId.EXPOSED_CHISELED_COPPER);
+        if (BlockTypes.EXPOSED_COPPER == null) BlockTypes.EXPOSED_COPPER = buildCopper(BlockExposedCopperBehavior.class, BlockId.EXPOSED_COPPER);
+        if (BlockTypes.OXIDIZED_CHISELED_COPPER == null) BlockTypes.OXIDIZED_CHISELED_COPPER = buildCopper(BlockOxidizedChiseledCopperBehavior.class, BlockId.OXIDIZED_CHISELED_COPPER);
+        if (BlockTypes.OXIDIZED_COPPER == null) BlockTypes.OXIDIZED_COPPER = buildCopper(BlockOxidizedCopperBehavior.class, BlockId.OXIDIZED_COPPER);
+        if (BlockTypes.WAXED_CHISELED_COPPER == null) BlockTypes.WAXED_CHISELED_COPPER = buildCopper(BlockWaxedChiseledCopperBehavior.class, BlockId.WAXED_CHISELED_COPPER);
+        if (BlockTypes.WAXED_COPPER == null) BlockTypes.WAXED_COPPER = buildCopper(BlockWaxedCopperBehavior.class, BlockId.WAXED_COPPER);
+        if (BlockTypes.WAXED_EXPOSED_CHISELED_COPPER == null) BlockTypes.WAXED_EXPOSED_CHISELED_COPPER = buildCopper(BlockWaxedExposedChiseledCopperBehavior.class, BlockId.WAXED_EXPOSED_CHISELED_COPPER);
+        if (BlockTypes.WAXED_EXPOSED_COPPER == null) BlockTypes.WAXED_EXPOSED_COPPER = buildCopper(BlockWaxedExposedCopperBehavior.class, BlockId.WAXED_EXPOSED_COPPER);
+        if (BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER == null) BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER = buildCopper(BlockWaxedOxidizedChiseledCopperBehavior.class, BlockId.WAXED_OXIDIZED_CHISELED_COPPER);
+        if (BlockTypes.WAXED_OXIDIZED_COPPER == null) BlockTypes.WAXED_OXIDIZED_COPPER = buildCopper(BlockWaxedOxidizedCopperBehavior.class, BlockId.WAXED_OXIDIZED_COPPER);
+        if (BlockTypes.WAXED_WEATHERED_CHISELED_COPPER == null) BlockTypes.WAXED_WEATHERED_CHISELED_COPPER = buildCopper(BlockWaxedWeatheredChiseledCopperBehavior.class, BlockId.WAXED_WEATHERED_CHISELED_COPPER);
+        if (BlockTypes.WAXED_WEATHERED_COPPER == null) BlockTypes.WAXED_WEATHERED_COPPER = buildCopper(BlockWaxedWeatheredCopperBehavior.class, BlockId.WAXED_WEATHERED_COPPER);
+        if (BlockTypes.WEATHERED_CHISELED_COPPER == null) BlockTypes.WEATHERED_CHISELED_COPPER = buildCopper(BlockWeatheredChiseledCopperBehavior.class, BlockId.WEATHERED_CHISELED_COPPER);
+        if (BlockTypes.WEATHERED_COPPER == null) BlockTypes.WEATHERED_COPPER = buildCopper(BlockWeatheredCopperBehavior.class, BlockId.WEATHERED_COPPER);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildPressurePlate(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.REDSTONE_SIGNAL)
-               .build();
-    }
-
-    public static void initCarpets() {
-        if (BlockTypes.BLACK_CARPET == null) BlockTypes.BLACK_CARPET = buildCarpet(BlockBlackCarpetBehavior.class, BlockId.BLACK_CARPET);
-        if (BlockTypes.BLUE_CARPET == null) BlockTypes.BLUE_CARPET = buildCarpet(BlockBlueCarpetBehavior.class, BlockId.BLUE_CARPET);
-        if (BlockTypes.BROWN_CARPET == null) BlockTypes.BROWN_CARPET = buildCarpet(BlockBrownCarpetBehavior.class, BlockId.BROWN_CARPET);
-        if (BlockTypes.CYAN_CARPET == null) BlockTypes.CYAN_CARPET = buildCarpet(BlockCyanCarpetBehavior.class, BlockId.CYAN_CARPET);
-        if (BlockTypes.GRAY_CARPET == null) BlockTypes.GRAY_CARPET = buildCarpet(BlockGrayCarpetBehavior.class, BlockId.GRAY_CARPET);
-        if (BlockTypes.GREEN_CARPET == null) BlockTypes.GREEN_CARPET = buildCarpet(BlockGreenCarpetBehavior.class, BlockId.GREEN_CARPET);
-        if (BlockTypes.LIGHT_BLUE_CARPET == null) BlockTypes.LIGHT_BLUE_CARPET = buildCarpet(BlockLightBlueCarpetBehavior.class, BlockId.LIGHT_BLUE_CARPET);
-        if (BlockTypes.LIGHT_GRAY_CARPET == null) BlockTypes.LIGHT_GRAY_CARPET = buildCarpet(BlockLightGrayCarpetBehavior.class, BlockId.LIGHT_GRAY_CARPET);
-        if (BlockTypes.LIME_CARPET == null) BlockTypes.LIME_CARPET = buildCarpet(BlockLimeCarpetBehavior.class, BlockId.LIME_CARPET);
-        if (BlockTypes.MAGENTA_CARPET == null) BlockTypes.MAGENTA_CARPET = buildCarpet(BlockMagentaCarpetBehavior.class, BlockId.MAGENTA_CARPET);
-        if (BlockTypes.MOSS_CARPET == null) BlockTypes.MOSS_CARPET = buildCarpet(BlockMossCarpetBehavior.class, BlockId.MOSS_CARPET);
-        if (BlockTypes.ORANGE_CARPET == null) BlockTypes.ORANGE_CARPET = buildCarpet(BlockOrangeCarpetBehavior.class, BlockId.ORANGE_CARPET);
-        if (BlockTypes.PINK_CARPET == null) BlockTypes.PINK_CARPET = buildCarpet(BlockPinkCarpetBehavior.class, BlockId.PINK_CARPET);
-        if (BlockTypes.PURPLE_CARPET == null) BlockTypes.PURPLE_CARPET = buildCarpet(BlockPurpleCarpetBehavior.class, BlockId.PURPLE_CARPET);
-        if (BlockTypes.RED_CARPET == null) BlockTypes.RED_CARPET = buildCarpet(BlockRedCarpetBehavior.class, BlockId.RED_CARPET);
-        if (BlockTypes.WHITE_CARPET == null) BlockTypes.WHITE_CARPET = buildCarpet(BlockWhiteCarpetBehavior.class, BlockId.WHITE_CARPET);
-        if (BlockTypes.YELLOW_CARPET == null) BlockTypes.YELLOW_CARPET = buildCarpet(BlockYellowCarpetBehavior.class, BlockId.YELLOW_CARPET);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildCarpet(Class<T> clazz,
+    private static <T extends BlockBehavior> BlockType<T> buildCopper(Class<T> clazz,
             BlockId blockId) {
         return AllayBlockType.builder(clazz)
                .vanillaBlock(blockId)
                .build();
     }
 
-    public static void initCutCoppers() {
-        if (BlockTypes.EXPOSED_CUT_COPPER == null) BlockTypes.EXPOSED_CUT_COPPER = buildCutCopper(BlockExposedCutCopperBehavior.class, BlockId.EXPOSED_CUT_COPPER);
-        if (BlockTypes.OXIDIZED_CUT_COPPER == null) BlockTypes.OXIDIZED_CUT_COPPER = buildCutCopper(BlockOxidizedCutCopperBehavior.class, BlockId.OXIDIZED_CUT_COPPER);
-        if (BlockTypes.WAXED_CUT_COPPER == null) BlockTypes.WAXED_CUT_COPPER = buildCutCopper(BlockWaxedCutCopperBehavior.class, BlockId.WAXED_CUT_COPPER);
-        if (BlockTypes.WAXED_EXPOSED_CUT_COPPER == null) BlockTypes.WAXED_EXPOSED_CUT_COPPER = buildCutCopper(BlockWaxedExposedCutCopperBehavior.class, BlockId.WAXED_EXPOSED_CUT_COPPER);
-        if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER == null) BlockTypes.WAXED_OXIDIZED_CUT_COPPER = buildCutCopper(BlockWaxedOxidizedCutCopperBehavior.class, BlockId.WAXED_OXIDIZED_CUT_COPPER);
-        if (BlockTypes.WAXED_WEATHERED_CUT_COPPER == null) BlockTypes.WAXED_WEATHERED_CUT_COPPER = buildCutCopper(BlockWaxedWeatheredCutCopperBehavior.class, BlockId.WAXED_WEATHERED_CUT_COPPER);
-        if (BlockTypes.WEATHERED_CUT_COPPER == null) BlockTypes.WEATHERED_CUT_COPPER = buildCutCopper(BlockWeatheredCutCopperBehavior.class, BlockId.WEATHERED_CUT_COPPER);
+    public static void initOres() {
+        if (BlockTypes.COAL_ORE == null) BlockTypes.COAL_ORE = buildOre(BlockCoalOreBehavior.class, BlockId.COAL_ORE);
+        if (BlockTypes.COPPER_ORE == null) BlockTypes.COPPER_ORE = buildOre(BlockCopperOreBehavior.class, BlockId.COPPER_ORE);
+        if (BlockTypes.DEEPSLATE_COAL_ORE == null) BlockTypes.DEEPSLATE_COAL_ORE = buildOre(BlockDeepslateCoalOreBehavior.class, BlockId.DEEPSLATE_COAL_ORE);
+        if (BlockTypes.DEEPSLATE_COPPER_ORE == null) BlockTypes.DEEPSLATE_COPPER_ORE = buildOre(BlockDeepslateCopperOreBehavior.class, BlockId.DEEPSLATE_COPPER_ORE);
+        if (BlockTypes.DEEPSLATE_DIAMOND_ORE == null) BlockTypes.DEEPSLATE_DIAMOND_ORE = buildOre(BlockDeepslateDiamondOreBehavior.class, BlockId.DEEPSLATE_DIAMOND_ORE);
+        if (BlockTypes.DEEPSLATE_EMERALD_ORE == null) BlockTypes.DEEPSLATE_EMERALD_ORE = buildOre(BlockDeepslateEmeraldOreBehavior.class, BlockId.DEEPSLATE_EMERALD_ORE);
+        if (BlockTypes.DEEPSLATE_GOLD_ORE == null) BlockTypes.DEEPSLATE_GOLD_ORE = buildOre(BlockDeepslateGoldOreBehavior.class, BlockId.DEEPSLATE_GOLD_ORE);
+        if (BlockTypes.DEEPSLATE_IRON_ORE == null) BlockTypes.DEEPSLATE_IRON_ORE = buildOre(BlockDeepslateIronOreBehavior.class, BlockId.DEEPSLATE_IRON_ORE);
+        if (BlockTypes.DEEPSLATE_LAPIS_ORE == null) BlockTypes.DEEPSLATE_LAPIS_ORE = buildOre(BlockDeepslateLapisOreBehavior.class, BlockId.DEEPSLATE_LAPIS_ORE);
+        if (BlockTypes.DEEPSLATE_REDSTONE_ORE == null) BlockTypes.DEEPSLATE_REDSTONE_ORE = buildOre(BlockDeepslateRedstoneOreBehavior.class, BlockId.DEEPSLATE_REDSTONE_ORE);
+        if (BlockTypes.DIAMOND_ORE == null) BlockTypes.DIAMOND_ORE = buildOre(BlockDiamondOreBehavior.class, BlockId.DIAMOND_ORE);
+        if (BlockTypes.EMERALD_ORE == null) BlockTypes.EMERALD_ORE = buildOre(BlockEmeraldOreBehavior.class, BlockId.EMERALD_ORE);
+        if (BlockTypes.GOLD_ORE == null) BlockTypes.GOLD_ORE = buildOre(BlockGoldOreBehavior.class, BlockId.GOLD_ORE);
+        if (BlockTypes.IRON_ORE == null) BlockTypes.IRON_ORE = buildOre(BlockIronOreBehavior.class, BlockId.IRON_ORE);
+        if (BlockTypes.LAPIS_ORE == null) BlockTypes.LAPIS_ORE = buildOre(BlockLapisOreBehavior.class, BlockId.LAPIS_ORE);
+        if (BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE == null) BlockTypes.LIT_DEEPSLATE_REDSTONE_ORE = buildOre(BlockLitDeepslateRedstoneOreBehavior.class, BlockId.LIT_DEEPSLATE_REDSTONE_ORE);
+        if (BlockTypes.LIT_REDSTONE_ORE == null) BlockTypes.LIT_REDSTONE_ORE = buildOre(BlockLitRedstoneOreBehavior.class, BlockId.LIT_REDSTONE_ORE);
+        if (BlockTypes.NETHER_GOLD_ORE == null) BlockTypes.NETHER_GOLD_ORE = buildOre(BlockNetherGoldOreBehavior.class, BlockId.NETHER_GOLD_ORE);
+        if (BlockTypes.QUARTZ_ORE == null) BlockTypes.QUARTZ_ORE = buildOre(BlockQuartzOreBehavior.class, BlockId.QUARTZ_ORE);
+        if (BlockTypes.REDSTONE_ORE == null) BlockTypes.REDSTONE_ORE = buildOre(BlockRedstoneOreBehavior.class, BlockId.REDSTONE_ORE);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildCutCopper(Class<T> clazz,
+    private static <T extends BlockBehavior> BlockType<T> buildOre(Class<T> clazz,
             BlockId blockId) {
         return AllayBlockType.builder(clazz)
                .vanillaBlock(blockId)
-               .build();
-    }
-
-    public static void initStairs() {
-        if (BlockTypes.ACACIA_STAIRS == null) BlockTypes.ACACIA_STAIRS = buildStairs(BlockAcaciaStairsBehavior.class, BlockId.ACACIA_STAIRS);
-        if (BlockTypes.ANDESITE_STAIRS == null) BlockTypes.ANDESITE_STAIRS = buildStairs(BlockAndesiteStairsBehavior.class, BlockId.ANDESITE_STAIRS);
-        if (BlockTypes.BAMBOO_MOSAIC_STAIRS == null) BlockTypes.BAMBOO_MOSAIC_STAIRS = buildStairs(BlockBambooMosaicStairsBehavior.class, BlockId.BAMBOO_MOSAIC_STAIRS);
-        if (BlockTypes.BAMBOO_STAIRS == null) BlockTypes.BAMBOO_STAIRS = buildStairs(BlockBambooStairsBehavior.class, BlockId.BAMBOO_STAIRS);
-        if (BlockTypes.BIRCH_STAIRS == null) BlockTypes.BIRCH_STAIRS = buildStairs(BlockBirchStairsBehavior.class, BlockId.BIRCH_STAIRS);
-        if (BlockTypes.BLACKSTONE_STAIRS == null) BlockTypes.BLACKSTONE_STAIRS = buildStairs(BlockBlackstoneStairsBehavior.class, BlockId.BLACKSTONE_STAIRS);
-        if (BlockTypes.BRICK_STAIRS == null) BlockTypes.BRICK_STAIRS = buildStairs(BlockBrickStairsBehavior.class, BlockId.BRICK_STAIRS);
-        if (BlockTypes.CHERRY_STAIRS == null) BlockTypes.CHERRY_STAIRS = buildStairs(BlockCherryStairsBehavior.class, BlockId.CHERRY_STAIRS);
-        if (BlockTypes.COBBLED_DEEPSLATE_STAIRS == null) BlockTypes.COBBLED_DEEPSLATE_STAIRS = buildStairs(BlockCobbledDeepslateStairsBehavior.class, BlockId.COBBLED_DEEPSLATE_STAIRS);
-        if (BlockTypes.CRIMSON_STAIRS == null) BlockTypes.CRIMSON_STAIRS = buildStairs(BlockCrimsonStairsBehavior.class, BlockId.CRIMSON_STAIRS);
-        if (BlockTypes.CUT_COPPER_STAIRS == null) BlockTypes.CUT_COPPER_STAIRS = buildStairs(BlockCutCopperStairsBehavior.class, BlockId.CUT_COPPER_STAIRS);
-        if (BlockTypes.DARK_OAK_STAIRS == null) BlockTypes.DARK_OAK_STAIRS = buildStairs(BlockDarkOakStairsBehavior.class, BlockId.DARK_OAK_STAIRS);
-        if (BlockTypes.DARK_PRISMARINE_STAIRS == null) BlockTypes.DARK_PRISMARINE_STAIRS = buildStairs(BlockDarkPrismarineStairsBehavior.class, BlockId.DARK_PRISMARINE_STAIRS);
-        if (BlockTypes.DEEPSLATE_BRICK_STAIRS == null) BlockTypes.DEEPSLATE_BRICK_STAIRS = buildStairs(BlockDeepslateBrickStairsBehavior.class, BlockId.DEEPSLATE_BRICK_STAIRS);
-        if (BlockTypes.DEEPSLATE_TILE_STAIRS == null) BlockTypes.DEEPSLATE_TILE_STAIRS = buildStairs(BlockDeepslateTileStairsBehavior.class, BlockId.DEEPSLATE_TILE_STAIRS);
-        if (BlockTypes.DIORITE_STAIRS == null) BlockTypes.DIORITE_STAIRS = buildStairs(BlockDioriteStairsBehavior.class, BlockId.DIORITE_STAIRS);
-        if (BlockTypes.END_BRICK_STAIRS == null) BlockTypes.END_BRICK_STAIRS = buildStairs(BlockEndBrickStairsBehavior.class, BlockId.END_BRICK_STAIRS);
-        if (BlockTypes.EXPOSED_CUT_COPPER_STAIRS == null) BlockTypes.EXPOSED_CUT_COPPER_STAIRS = buildStairs(BlockExposedCutCopperStairsBehavior.class, BlockId.EXPOSED_CUT_COPPER_STAIRS);
-        if (BlockTypes.GRANITE_STAIRS == null) BlockTypes.GRANITE_STAIRS = buildStairs(BlockGraniteStairsBehavior.class, BlockId.GRANITE_STAIRS);
-        if (BlockTypes.JUNGLE_STAIRS == null) BlockTypes.JUNGLE_STAIRS = buildStairs(BlockJungleStairsBehavior.class, BlockId.JUNGLE_STAIRS);
-        if (BlockTypes.MANGROVE_STAIRS == null) BlockTypes.MANGROVE_STAIRS = buildStairs(BlockMangroveStairsBehavior.class, BlockId.MANGROVE_STAIRS);
-        if (BlockTypes.MOSSY_COBBLESTONE_STAIRS == null) BlockTypes.MOSSY_COBBLESTONE_STAIRS = buildStairs(BlockMossyCobblestoneStairsBehavior.class, BlockId.MOSSY_COBBLESTONE_STAIRS);
-        if (BlockTypes.MOSSY_STONE_BRICK_STAIRS == null) BlockTypes.MOSSY_STONE_BRICK_STAIRS = buildStairs(BlockMossyStoneBrickStairsBehavior.class, BlockId.MOSSY_STONE_BRICK_STAIRS);
-        if (BlockTypes.MUD_BRICK_STAIRS == null) BlockTypes.MUD_BRICK_STAIRS = buildStairs(BlockMudBrickStairsBehavior.class, BlockId.MUD_BRICK_STAIRS);
-        if (BlockTypes.NETHER_BRICK_STAIRS == null) BlockTypes.NETHER_BRICK_STAIRS = buildStairs(BlockNetherBrickStairsBehavior.class, BlockId.NETHER_BRICK_STAIRS);
-        if (BlockTypes.NORMAL_STONE_STAIRS == null) BlockTypes.NORMAL_STONE_STAIRS = buildStairs(BlockNormalStoneStairsBehavior.class, BlockId.NORMAL_STONE_STAIRS);
-        if (BlockTypes.OAK_STAIRS == null) BlockTypes.OAK_STAIRS = buildStairs(BlockOakStairsBehavior.class, BlockId.OAK_STAIRS);
-        if (BlockTypes.OXIDIZED_CUT_COPPER_STAIRS == null) BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = buildStairs(BlockOxidizedCutCopperStairsBehavior.class, BlockId.OXIDIZED_CUT_COPPER_STAIRS);
-        if (BlockTypes.POLISHED_ANDESITE_STAIRS == null) BlockTypes.POLISHED_ANDESITE_STAIRS = buildStairs(BlockPolishedAndesiteStairsBehavior.class, BlockId.POLISHED_ANDESITE_STAIRS);
-        if (BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS == null) BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = buildStairs(BlockPolishedBlackstoneBrickStairsBehavior.class, BlockId.POLISHED_BLACKSTONE_BRICK_STAIRS);
-        if (BlockTypes.POLISHED_BLACKSTONE_STAIRS == null) BlockTypes.POLISHED_BLACKSTONE_STAIRS = buildStairs(BlockPolishedBlackstoneStairsBehavior.class, BlockId.POLISHED_BLACKSTONE_STAIRS);
-        if (BlockTypes.POLISHED_DEEPSLATE_STAIRS == null) BlockTypes.POLISHED_DEEPSLATE_STAIRS = buildStairs(BlockPolishedDeepslateStairsBehavior.class, BlockId.POLISHED_DEEPSLATE_STAIRS);
-        if (BlockTypes.POLISHED_DIORITE_STAIRS == null) BlockTypes.POLISHED_DIORITE_STAIRS = buildStairs(BlockPolishedDioriteStairsBehavior.class, BlockId.POLISHED_DIORITE_STAIRS);
-        if (BlockTypes.POLISHED_GRANITE_STAIRS == null) BlockTypes.POLISHED_GRANITE_STAIRS = buildStairs(BlockPolishedGraniteStairsBehavior.class, BlockId.POLISHED_GRANITE_STAIRS);
-        if (BlockTypes.POLISHED_TUFF_STAIRS == null) BlockTypes.POLISHED_TUFF_STAIRS = buildStairs(BlockPolishedTuffStairsBehavior.class, BlockId.POLISHED_TUFF_STAIRS);
-        if (BlockTypes.PRISMARINE_BRICKS_STAIRS == null) BlockTypes.PRISMARINE_BRICKS_STAIRS = buildStairs(BlockPrismarineBricksStairsBehavior.class, BlockId.PRISMARINE_BRICKS_STAIRS);
-        if (BlockTypes.PRISMARINE_STAIRS == null) BlockTypes.PRISMARINE_STAIRS = buildStairs(BlockPrismarineStairsBehavior.class, BlockId.PRISMARINE_STAIRS);
-        if (BlockTypes.PURPUR_STAIRS == null) BlockTypes.PURPUR_STAIRS = buildStairs(BlockPurpurStairsBehavior.class, BlockId.PURPUR_STAIRS);
-        if (BlockTypes.QUARTZ_STAIRS == null) BlockTypes.QUARTZ_STAIRS = buildStairs(BlockQuartzStairsBehavior.class, BlockId.QUARTZ_STAIRS);
-        if (BlockTypes.RED_NETHER_BRICK_STAIRS == null) BlockTypes.RED_NETHER_BRICK_STAIRS = buildStairs(BlockRedNetherBrickStairsBehavior.class, BlockId.RED_NETHER_BRICK_STAIRS);
-        if (BlockTypes.RED_SANDSTONE_STAIRS == null) BlockTypes.RED_SANDSTONE_STAIRS = buildStairs(BlockRedSandstoneStairsBehavior.class, BlockId.RED_SANDSTONE_STAIRS);
-        if (BlockTypes.SANDSTONE_STAIRS == null) BlockTypes.SANDSTONE_STAIRS = buildStairs(BlockSandstoneStairsBehavior.class, BlockId.SANDSTONE_STAIRS);
-        if (BlockTypes.SMOOTH_QUARTZ_STAIRS == null) BlockTypes.SMOOTH_QUARTZ_STAIRS = buildStairs(BlockSmoothQuartzStairsBehavior.class, BlockId.SMOOTH_QUARTZ_STAIRS);
-        if (BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS == null) BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS = buildStairs(BlockSmoothRedSandstoneStairsBehavior.class, BlockId.SMOOTH_RED_SANDSTONE_STAIRS);
-        if (BlockTypes.SMOOTH_SANDSTONE_STAIRS == null) BlockTypes.SMOOTH_SANDSTONE_STAIRS = buildStairs(BlockSmoothSandstoneStairsBehavior.class, BlockId.SMOOTH_SANDSTONE_STAIRS);
-        if (BlockTypes.SPRUCE_STAIRS == null) BlockTypes.SPRUCE_STAIRS = buildStairs(BlockSpruceStairsBehavior.class, BlockId.SPRUCE_STAIRS);
-        if (BlockTypes.STONE_BRICK_STAIRS == null) BlockTypes.STONE_BRICK_STAIRS = buildStairs(BlockStoneBrickStairsBehavior.class, BlockId.STONE_BRICK_STAIRS);
-        if (BlockTypes.STONE_STAIRS == null) BlockTypes.STONE_STAIRS = buildStairs(BlockStoneStairsBehavior.class, BlockId.STONE_STAIRS);
-        if (BlockTypes.TUFF_BRICK_STAIRS == null) BlockTypes.TUFF_BRICK_STAIRS = buildStairs(BlockTuffBrickStairsBehavior.class, BlockId.TUFF_BRICK_STAIRS);
-        if (BlockTypes.TUFF_STAIRS == null) BlockTypes.TUFF_STAIRS = buildStairs(BlockTuffStairsBehavior.class, BlockId.TUFF_STAIRS);
-        if (BlockTypes.WARPED_STAIRS == null) BlockTypes.WARPED_STAIRS = buildStairs(BlockWarpedStairsBehavior.class, BlockId.WARPED_STAIRS);
-        if (BlockTypes.WAXED_CUT_COPPER_STAIRS == null) BlockTypes.WAXED_CUT_COPPER_STAIRS = buildStairs(BlockWaxedCutCopperStairsBehavior.class, BlockId.WAXED_CUT_COPPER_STAIRS);
-        if (BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS == null) BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = buildStairs(BlockWaxedExposedCutCopperStairsBehavior.class, BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS);
-        if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS == null) BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = buildStairs(BlockWaxedOxidizedCutCopperStairsBehavior.class, BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS);
-        if (BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS == null) BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = buildStairs(BlockWaxedWeatheredCutCopperStairsBehavior.class, BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS);
-        if (BlockTypes.WEATHERED_CUT_COPPER_STAIRS == null) BlockTypes.WEATHERED_CUT_COPPER_STAIRS = buildStairs(BlockWeatheredCutCopperStairsBehavior.class, BlockId.WEATHERED_CUT_COPPER_STAIRS);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildStairs(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-               .build();
-    }
-
-    public static void initPlanks() {
-        if (BlockTypes.ACACIA_PLANKS == null) BlockTypes.ACACIA_PLANKS = buildPlanks(BlockAcaciaPlanksBehavior.class, BlockId.ACACIA_PLANKS);
-        if (BlockTypes.BAMBOO_PLANKS == null) BlockTypes.BAMBOO_PLANKS = buildPlanks(BlockBambooPlanksBehavior.class, BlockId.BAMBOO_PLANKS);
-        if (BlockTypes.BIRCH_PLANKS == null) BlockTypes.BIRCH_PLANKS = buildPlanks(BlockBirchPlanksBehavior.class, BlockId.BIRCH_PLANKS);
-        if (BlockTypes.CHERRY_PLANKS == null) BlockTypes.CHERRY_PLANKS = buildPlanks(BlockCherryPlanksBehavior.class, BlockId.CHERRY_PLANKS);
-        if (BlockTypes.CRIMSON_PLANKS == null) BlockTypes.CRIMSON_PLANKS = buildPlanks(BlockCrimsonPlanksBehavior.class, BlockId.CRIMSON_PLANKS);
-        if (BlockTypes.DARK_OAK_PLANKS == null) BlockTypes.DARK_OAK_PLANKS = buildPlanks(BlockDarkOakPlanksBehavior.class, BlockId.DARK_OAK_PLANKS);
-        if (BlockTypes.JUNGLE_PLANKS == null) BlockTypes.JUNGLE_PLANKS = buildPlanks(BlockJunglePlanksBehavior.class, BlockId.JUNGLE_PLANKS);
-        if (BlockTypes.MANGROVE_PLANKS == null) BlockTypes.MANGROVE_PLANKS = buildPlanks(BlockMangrovePlanksBehavior.class, BlockId.MANGROVE_PLANKS);
-        if (BlockTypes.OAK_PLANKS == null) BlockTypes.OAK_PLANKS = buildPlanks(BlockOakPlanksBehavior.class, BlockId.OAK_PLANKS);
-        if (BlockTypes.SPRUCE_PLANKS == null) BlockTypes.SPRUCE_PLANKS = buildPlanks(BlockSprucePlanksBehavior.class, BlockId.SPRUCE_PLANKS);
-        if (BlockTypes.WARPED_PLANKS == null) BlockTypes.WARPED_PLANKS = buildPlanks(BlockWarpedPlanksBehavior.class, BlockId.WARPED_PLANKS);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildPlanks(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .build();
-    }
-
-    public static void initGlazedTerracotta() {
-        if (BlockTypes.BLACK_GLAZED_TERRACOTTA == null) BlockTypes.BLACK_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockBlackGlazedTerracottaBehavior.class, BlockId.BLACK_GLAZED_TERRACOTTA);
-        if (BlockTypes.BLUE_GLAZED_TERRACOTTA == null) BlockTypes.BLUE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockBlueGlazedTerracottaBehavior.class, BlockId.BLUE_GLAZED_TERRACOTTA);
-        if (BlockTypes.BROWN_GLAZED_TERRACOTTA == null) BlockTypes.BROWN_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockBrownGlazedTerracottaBehavior.class, BlockId.BROWN_GLAZED_TERRACOTTA);
-        if (BlockTypes.CYAN_GLAZED_TERRACOTTA == null) BlockTypes.CYAN_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockCyanGlazedTerracottaBehavior.class, BlockId.CYAN_GLAZED_TERRACOTTA);
-        if (BlockTypes.GRAY_GLAZED_TERRACOTTA == null) BlockTypes.GRAY_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockGrayGlazedTerracottaBehavior.class, BlockId.GRAY_GLAZED_TERRACOTTA);
-        if (BlockTypes.GREEN_GLAZED_TERRACOTTA == null) BlockTypes.GREEN_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockGreenGlazedTerracottaBehavior.class, BlockId.GREEN_GLAZED_TERRACOTTA);
-        if (BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA == null) BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockLightBlueGlazedTerracottaBehavior.class, BlockId.LIGHT_BLUE_GLAZED_TERRACOTTA);
-        if (BlockTypes.LIME_GLAZED_TERRACOTTA == null) BlockTypes.LIME_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockLimeGlazedTerracottaBehavior.class, BlockId.LIME_GLAZED_TERRACOTTA);
-        if (BlockTypes.MAGENTA_GLAZED_TERRACOTTA == null) BlockTypes.MAGENTA_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockMagentaGlazedTerracottaBehavior.class, BlockId.MAGENTA_GLAZED_TERRACOTTA);
-        if (BlockTypes.ORANGE_GLAZED_TERRACOTTA == null) BlockTypes.ORANGE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockOrangeGlazedTerracottaBehavior.class, BlockId.ORANGE_GLAZED_TERRACOTTA);
-        if (BlockTypes.PINK_GLAZED_TERRACOTTA == null) BlockTypes.PINK_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockPinkGlazedTerracottaBehavior.class, BlockId.PINK_GLAZED_TERRACOTTA);
-        if (BlockTypes.PURPLE_GLAZED_TERRACOTTA == null) BlockTypes.PURPLE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockPurpleGlazedTerracottaBehavior.class, BlockId.PURPLE_GLAZED_TERRACOTTA);
-        if (BlockTypes.RED_GLAZED_TERRACOTTA == null) BlockTypes.RED_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockRedGlazedTerracottaBehavior.class, BlockId.RED_GLAZED_TERRACOTTA);
-        if (BlockTypes.SILVER_GLAZED_TERRACOTTA == null) BlockTypes.SILVER_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockSilverGlazedTerracottaBehavior.class, BlockId.SILVER_GLAZED_TERRACOTTA);
-        if (BlockTypes.WHITE_GLAZED_TERRACOTTA == null) BlockTypes.WHITE_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockWhiteGlazedTerracottaBehavior.class, BlockId.WHITE_GLAZED_TERRACOTTA);
-        if (BlockTypes.YELLOW_GLAZED_TERRACOTTA == null) BlockTypes.YELLOW_GLAZED_TERRACOTTA = buildGlazedTerracotta(BlockYellowGlazedTerracottaBehavior.class, BlockId.YELLOW_GLAZED_TERRACOTTA);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildGlazedTerracotta(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.FACING_DIRECTION)
-               .build();
-    }
-
-    public static void initWools() {
-        if (BlockTypes.BLACK_WOOL == null) BlockTypes.BLACK_WOOL = buildWool(BlockBlackWoolBehavior.class, BlockId.BLACK_WOOL);
-        if (BlockTypes.BLUE_WOOL == null) BlockTypes.BLUE_WOOL = buildWool(BlockBlueWoolBehavior.class, BlockId.BLUE_WOOL);
-        if (BlockTypes.BROWN_WOOL == null) BlockTypes.BROWN_WOOL = buildWool(BlockBrownWoolBehavior.class, BlockId.BROWN_WOOL);
-        if (BlockTypes.CYAN_WOOL == null) BlockTypes.CYAN_WOOL = buildWool(BlockCyanWoolBehavior.class, BlockId.CYAN_WOOL);
-        if (BlockTypes.GRAY_WOOL == null) BlockTypes.GRAY_WOOL = buildWool(BlockGrayWoolBehavior.class, BlockId.GRAY_WOOL);
-        if (BlockTypes.GREEN_WOOL == null) BlockTypes.GREEN_WOOL = buildWool(BlockGreenWoolBehavior.class, BlockId.GREEN_WOOL);
-        if (BlockTypes.LIGHT_BLUE_WOOL == null) BlockTypes.LIGHT_BLUE_WOOL = buildWool(BlockLightBlueWoolBehavior.class, BlockId.LIGHT_BLUE_WOOL);
-        if (BlockTypes.LIGHT_GRAY_WOOL == null) BlockTypes.LIGHT_GRAY_WOOL = buildWool(BlockLightGrayWoolBehavior.class, BlockId.LIGHT_GRAY_WOOL);
-        if (BlockTypes.LIME_WOOL == null) BlockTypes.LIME_WOOL = buildWool(BlockLimeWoolBehavior.class, BlockId.LIME_WOOL);
-        if (BlockTypes.MAGENTA_WOOL == null) BlockTypes.MAGENTA_WOOL = buildWool(BlockMagentaWoolBehavior.class, BlockId.MAGENTA_WOOL);
-        if (BlockTypes.ORANGE_WOOL == null) BlockTypes.ORANGE_WOOL = buildWool(BlockOrangeWoolBehavior.class, BlockId.ORANGE_WOOL);
-        if (BlockTypes.PINK_WOOL == null) BlockTypes.PINK_WOOL = buildWool(BlockPinkWoolBehavior.class, BlockId.PINK_WOOL);
-        if (BlockTypes.PURPLE_WOOL == null) BlockTypes.PURPLE_WOOL = buildWool(BlockPurpleWoolBehavior.class, BlockId.PURPLE_WOOL);
-        if (BlockTypes.RED_WOOL == null) BlockTypes.RED_WOOL = buildWool(BlockRedWoolBehavior.class, BlockId.RED_WOOL);
-        if (BlockTypes.WHITE_WOOL == null) BlockTypes.WHITE_WOOL = buildWool(BlockWhiteWoolBehavior.class, BlockId.WHITE_WOOL);
-        if (BlockTypes.YELLOW_WOOL == null) BlockTypes.YELLOW_WOOL = buildWool(BlockYellowWoolBehavior.class, BlockId.YELLOW_WOOL);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildWool(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .build();
-    }
-
-    public static void initButtons() {
-        if (BlockTypes.ACACIA_BUTTON == null) BlockTypes.ACACIA_BUTTON = buildButton(BlockAcaciaButtonBehavior.class, BlockId.ACACIA_BUTTON);
-        if (BlockTypes.BAMBOO_BUTTON == null) BlockTypes.BAMBOO_BUTTON = buildButton(BlockBambooButtonBehavior.class, BlockId.BAMBOO_BUTTON);
-        if (BlockTypes.BIRCH_BUTTON == null) BlockTypes.BIRCH_BUTTON = buildButton(BlockBirchButtonBehavior.class, BlockId.BIRCH_BUTTON);
-        if (BlockTypes.CHERRY_BUTTON == null) BlockTypes.CHERRY_BUTTON = buildButton(BlockCherryButtonBehavior.class, BlockId.CHERRY_BUTTON);
-        if (BlockTypes.CRIMSON_BUTTON == null) BlockTypes.CRIMSON_BUTTON = buildButton(BlockCrimsonButtonBehavior.class, BlockId.CRIMSON_BUTTON);
-        if (BlockTypes.DARK_OAK_BUTTON == null) BlockTypes.DARK_OAK_BUTTON = buildButton(BlockDarkOakButtonBehavior.class, BlockId.DARK_OAK_BUTTON);
-        if (BlockTypes.JUNGLE_BUTTON == null) BlockTypes.JUNGLE_BUTTON = buildButton(BlockJungleButtonBehavior.class, BlockId.JUNGLE_BUTTON);
-        if (BlockTypes.MANGROVE_BUTTON == null) BlockTypes.MANGROVE_BUTTON = buildButton(BlockMangroveButtonBehavior.class, BlockId.MANGROVE_BUTTON);
-        if (BlockTypes.POLISHED_BLACKSTONE_BUTTON == null) BlockTypes.POLISHED_BLACKSTONE_BUTTON = buildButton(BlockPolishedBlackstoneButtonBehavior.class, BlockId.POLISHED_BLACKSTONE_BUTTON);
-        if (BlockTypes.SPRUCE_BUTTON == null) BlockTypes.SPRUCE_BUTTON = buildButton(BlockSpruceButtonBehavior.class, BlockId.SPRUCE_BUTTON);
-        if (BlockTypes.STONE_BUTTON == null) BlockTypes.STONE_BUTTON = buildButton(BlockStoneButtonBehavior.class, BlockId.STONE_BUTTON);
-        if (BlockTypes.WARPED_BUTTON == null) BlockTypes.WARPED_BUTTON = buildButton(BlockWarpedButtonBehavior.class, BlockId.WARPED_BUTTON);
-        if (BlockTypes.WOODEN_BUTTON == null) BlockTypes.WOODEN_BUTTON = buildButton(BlockWoodenButtonBehavior.class, BlockId.WOODEN_BUTTON);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildButton(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.BUTTON_PRESSED_BIT)
-               .build();
-    }
-
-    public static void initFences() {
-        if (BlockTypes.ACACIA_FENCE == null) BlockTypes.ACACIA_FENCE = buildFence(BlockAcaciaFenceBehavior.class, BlockId.ACACIA_FENCE);
-        if (BlockTypes.BAMBOO_FENCE == null) BlockTypes.BAMBOO_FENCE = buildFence(BlockBambooFenceBehavior.class, BlockId.BAMBOO_FENCE);
-        if (BlockTypes.BIRCH_FENCE == null) BlockTypes.BIRCH_FENCE = buildFence(BlockBirchFenceBehavior.class, BlockId.BIRCH_FENCE);
-        if (BlockTypes.CHERRY_FENCE == null) BlockTypes.CHERRY_FENCE = buildFence(BlockCherryFenceBehavior.class, BlockId.CHERRY_FENCE);
-        if (BlockTypes.CRIMSON_FENCE == null) BlockTypes.CRIMSON_FENCE = buildFence(BlockCrimsonFenceBehavior.class, BlockId.CRIMSON_FENCE);
-        if (BlockTypes.DARK_OAK_FENCE == null) BlockTypes.DARK_OAK_FENCE = buildFence(BlockDarkOakFenceBehavior.class, BlockId.DARK_OAK_FENCE);
-        if (BlockTypes.JUNGLE_FENCE == null) BlockTypes.JUNGLE_FENCE = buildFence(BlockJungleFenceBehavior.class, BlockId.JUNGLE_FENCE);
-        if (BlockTypes.MANGROVE_FENCE == null) BlockTypes.MANGROVE_FENCE = buildFence(BlockMangroveFenceBehavior.class, BlockId.MANGROVE_FENCE);
-        if (BlockTypes.NETHER_BRICK_FENCE == null) BlockTypes.NETHER_BRICK_FENCE = buildFence(BlockNetherBrickFenceBehavior.class, BlockId.NETHER_BRICK_FENCE);
-        if (BlockTypes.OAK_FENCE == null) BlockTypes.OAK_FENCE = buildFence(BlockOakFenceBehavior.class, BlockId.OAK_FENCE);
-        if (BlockTypes.SPRUCE_FENCE == null) BlockTypes.SPRUCE_FENCE = buildFence(BlockSpruceFenceBehavior.class, BlockId.SPRUCE_FENCE);
-        if (BlockTypes.WARPED_FENCE == null) BlockTypes.WARPED_FENCE = buildFence(BlockWarpedFenceBehavior.class, BlockId.WARPED_FENCE);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildFence(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .build();
-    }
-
-    public static void initSlabs() {
-        if (BlockTypes.ACACIA_SLAB == null) BlockTypes.ACACIA_SLAB = buildSlab(BlockAcaciaSlabBehavior.class, BlockId.ACACIA_SLAB);
-        if (BlockTypes.ANDESITE_SLAB == null) BlockTypes.ANDESITE_SLAB = buildSlab(BlockAndesiteSlabBehavior.class, BlockId.ANDESITE_SLAB);
-        if (BlockTypes.BAMBOO_MOSAIC_SLAB == null) BlockTypes.BAMBOO_MOSAIC_SLAB = buildSlab(BlockBambooMosaicSlabBehavior.class, BlockId.BAMBOO_MOSAIC_SLAB);
-        if (BlockTypes.BAMBOO_SLAB == null) BlockTypes.BAMBOO_SLAB = buildSlab(BlockBambooSlabBehavior.class, BlockId.BAMBOO_SLAB);
-        if (BlockTypes.BIRCH_SLAB == null) BlockTypes.BIRCH_SLAB = buildSlab(BlockBirchSlabBehavior.class, BlockId.BIRCH_SLAB);
-        if (BlockTypes.BLACKSTONE_SLAB == null) BlockTypes.BLACKSTONE_SLAB = buildSlab(BlockBlackstoneSlabBehavior.class, BlockId.BLACKSTONE_SLAB);
-        if (BlockTypes.BRICK_SLAB == null) BlockTypes.BRICK_SLAB = buildSlab(BlockBrickSlabBehavior.class, BlockId.BRICK_SLAB);
-        if (BlockTypes.CHERRY_SLAB == null) BlockTypes.CHERRY_SLAB = buildSlab(BlockCherrySlabBehavior.class, BlockId.CHERRY_SLAB);
-        if (BlockTypes.COBBLED_DEEPSLATE_SLAB == null) BlockTypes.COBBLED_DEEPSLATE_SLAB = buildSlab(BlockCobbledDeepslateSlabBehavior.class, BlockId.COBBLED_DEEPSLATE_SLAB);
-        if (BlockTypes.COBBLESTONE_SLAB == null) BlockTypes.COBBLESTONE_SLAB = buildSlab(BlockCobblestoneSlabBehavior.class, BlockId.COBBLESTONE_SLAB);
-        if (BlockTypes.CRIMSON_SLAB == null) BlockTypes.CRIMSON_SLAB = buildSlab(BlockCrimsonSlabBehavior.class, BlockId.CRIMSON_SLAB);
-        if (BlockTypes.CUT_COPPER_SLAB == null) BlockTypes.CUT_COPPER_SLAB = buildSlab(BlockCutCopperSlabBehavior.class, BlockId.CUT_COPPER_SLAB);
-        if (BlockTypes.CUT_RED_SANDSTONE_SLAB == null) BlockTypes.CUT_RED_SANDSTONE_SLAB = buildSlab(BlockCutRedSandstoneSlabBehavior.class, BlockId.CUT_RED_SANDSTONE_SLAB);
-        if (BlockTypes.CUT_SANDSTONE_SLAB == null) BlockTypes.CUT_SANDSTONE_SLAB = buildSlab(BlockCutSandstoneSlabBehavior.class, BlockId.CUT_SANDSTONE_SLAB);
-        if (BlockTypes.DARK_OAK_SLAB == null) BlockTypes.DARK_OAK_SLAB = buildSlab(BlockDarkOakSlabBehavior.class, BlockId.DARK_OAK_SLAB);
-        if (BlockTypes.DARK_PRISMARINE_SLAB == null) BlockTypes.DARK_PRISMARINE_SLAB = buildSlab(BlockDarkPrismarineSlabBehavior.class, BlockId.DARK_PRISMARINE_SLAB);
-        if (BlockTypes.DEEPSLATE_BRICK_SLAB == null) BlockTypes.DEEPSLATE_BRICK_SLAB = buildSlab(BlockDeepslateBrickSlabBehavior.class, BlockId.DEEPSLATE_BRICK_SLAB);
-        if (BlockTypes.DEEPSLATE_TILE_SLAB == null) BlockTypes.DEEPSLATE_TILE_SLAB = buildSlab(BlockDeepslateTileSlabBehavior.class, BlockId.DEEPSLATE_TILE_SLAB);
-        if (BlockTypes.DIORITE_SLAB == null) BlockTypes.DIORITE_SLAB = buildSlab(BlockDioriteSlabBehavior.class, BlockId.DIORITE_SLAB);
-        if (BlockTypes.END_STONE_BRICK_SLAB == null) BlockTypes.END_STONE_BRICK_SLAB = buildSlab(BlockEndStoneBrickSlabBehavior.class, BlockId.END_STONE_BRICK_SLAB);
-        if (BlockTypes.EXPOSED_CUT_COPPER_SLAB == null) BlockTypes.EXPOSED_CUT_COPPER_SLAB = buildSlab(BlockExposedCutCopperSlabBehavior.class, BlockId.EXPOSED_CUT_COPPER_SLAB);
-        if (BlockTypes.GRANITE_SLAB == null) BlockTypes.GRANITE_SLAB = buildSlab(BlockGraniteSlabBehavior.class, BlockId.GRANITE_SLAB);
-        if (BlockTypes.JUNGLE_SLAB == null) BlockTypes.JUNGLE_SLAB = buildSlab(BlockJungleSlabBehavior.class, BlockId.JUNGLE_SLAB);
-        if (BlockTypes.MANGROVE_SLAB == null) BlockTypes.MANGROVE_SLAB = buildSlab(BlockMangroveSlabBehavior.class, BlockId.MANGROVE_SLAB);
-        if (BlockTypes.MOSSY_COBBLESTONE_SLAB == null) BlockTypes.MOSSY_COBBLESTONE_SLAB = buildSlab(BlockMossyCobblestoneSlabBehavior.class, BlockId.MOSSY_COBBLESTONE_SLAB);
-        if (BlockTypes.MOSSY_STONE_BRICK_SLAB == null) BlockTypes.MOSSY_STONE_BRICK_SLAB = buildSlab(BlockMossyStoneBrickSlabBehavior.class, BlockId.MOSSY_STONE_BRICK_SLAB);
-        if (BlockTypes.MUD_BRICK_SLAB == null) BlockTypes.MUD_BRICK_SLAB = buildSlab(BlockMudBrickSlabBehavior.class, BlockId.MUD_BRICK_SLAB);
-        if (BlockTypes.NETHER_BRICK_SLAB == null) BlockTypes.NETHER_BRICK_SLAB = buildSlab(BlockNetherBrickSlabBehavior.class, BlockId.NETHER_BRICK_SLAB);
-        if (BlockTypes.NORMAL_STONE_SLAB == null) BlockTypes.NORMAL_STONE_SLAB = buildSlab(BlockNormalStoneSlabBehavior.class, BlockId.NORMAL_STONE_SLAB);
-        if (BlockTypes.OAK_SLAB == null) BlockTypes.OAK_SLAB = buildSlab(BlockOakSlabBehavior.class, BlockId.OAK_SLAB);
-        if (BlockTypes.OXIDIZED_CUT_COPPER_SLAB == null) BlockTypes.OXIDIZED_CUT_COPPER_SLAB = buildSlab(BlockOxidizedCutCopperSlabBehavior.class, BlockId.OXIDIZED_CUT_COPPER_SLAB);
-        if (BlockTypes.PETRIFIED_OAK_SLAB == null) BlockTypes.PETRIFIED_OAK_SLAB = buildSlab(BlockPetrifiedOakSlabBehavior.class, BlockId.PETRIFIED_OAK_SLAB);
-        if (BlockTypes.POLISHED_ANDESITE_SLAB == null) BlockTypes.POLISHED_ANDESITE_SLAB = buildSlab(BlockPolishedAndesiteSlabBehavior.class, BlockId.POLISHED_ANDESITE_SLAB);
-        if (BlockTypes.POLISHED_BLACKSTONE_BRICK_SLAB == null) BlockTypes.POLISHED_BLACKSTONE_BRICK_SLAB = buildSlab(BlockPolishedBlackstoneBrickSlabBehavior.class, BlockId.POLISHED_BLACKSTONE_BRICK_SLAB);
-        if (BlockTypes.POLISHED_BLACKSTONE_SLAB == null) BlockTypes.POLISHED_BLACKSTONE_SLAB = buildSlab(BlockPolishedBlackstoneSlabBehavior.class, BlockId.POLISHED_BLACKSTONE_SLAB);
-        if (BlockTypes.POLISHED_DEEPSLATE_SLAB == null) BlockTypes.POLISHED_DEEPSLATE_SLAB = buildSlab(BlockPolishedDeepslateSlabBehavior.class, BlockId.POLISHED_DEEPSLATE_SLAB);
-        if (BlockTypes.POLISHED_DIORITE_SLAB == null) BlockTypes.POLISHED_DIORITE_SLAB = buildSlab(BlockPolishedDioriteSlabBehavior.class, BlockId.POLISHED_DIORITE_SLAB);
-        if (BlockTypes.POLISHED_GRANITE_SLAB == null) BlockTypes.POLISHED_GRANITE_SLAB = buildSlab(BlockPolishedGraniteSlabBehavior.class, BlockId.POLISHED_GRANITE_SLAB);
-        if (BlockTypes.POLISHED_TUFF_SLAB == null) BlockTypes.POLISHED_TUFF_SLAB = buildSlab(BlockPolishedTuffSlabBehavior.class, BlockId.POLISHED_TUFF_SLAB);
-        if (BlockTypes.PRISMARINE_BRICK_SLAB == null) BlockTypes.PRISMARINE_BRICK_SLAB = buildSlab(BlockPrismarineBrickSlabBehavior.class, BlockId.PRISMARINE_BRICK_SLAB);
-        if (BlockTypes.PRISMARINE_SLAB == null) BlockTypes.PRISMARINE_SLAB = buildSlab(BlockPrismarineSlabBehavior.class, BlockId.PRISMARINE_SLAB);
-        if (BlockTypes.PURPUR_SLAB == null) BlockTypes.PURPUR_SLAB = buildSlab(BlockPurpurSlabBehavior.class, BlockId.PURPUR_SLAB);
-        if (BlockTypes.QUARTZ_SLAB == null) BlockTypes.QUARTZ_SLAB = buildSlab(BlockQuartzSlabBehavior.class, BlockId.QUARTZ_SLAB);
-        if (BlockTypes.RED_NETHER_BRICK_SLAB == null) BlockTypes.RED_NETHER_BRICK_SLAB = buildSlab(BlockRedNetherBrickSlabBehavior.class, BlockId.RED_NETHER_BRICK_SLAB);
-        if (BlockTypes.RED_SANDSTONE_SLAB == null) BlockTypes.RED_SANDSTONE_SLAB = buildSlab(BlockRedSandstoneSlabBehavior.class, BlockId.RED_SANDSTONE_SLAB);
-        if (BlockTypes.SANDSTONE_SLAB == null) BlockTypes.SANDSTONE_SLAB = buildSlab(BlockSandstoneSlabBehavior.class, BlockId.SANDSTONE_SLAB);
-        if (BlockTypes.SMOOTH_QUARTZ_SLAB == null) BlockTypes.SMOOTH_QUARTZ_SLAB = buildSlab(BlockSmoothQuartzSlabBehavior.class, BlockId.SMOOTH_QUARTZ_SLAB);
-        if (BlockTypes.SMOOTH_RED_SANDSTONE_SLAB == null) BlockTypes.SMOOTH_RED_SANDSTONE_SLAB = buildSlab(BlockSmoothRedSandstoneSlabBehavior.class, BlockId.SMOOTH_RED_SANDSTONE_SLAB);
-        if (BlockTypes.SMOOTH_SANDSTONE_SLAB == null) BlockTypes.SMOOTH_SANDSTONE_SLAB = buildSlab(BlockSmoothSandstoneSlabBehavior.class, BlockId.SMOOTH_SANDSTONE_SLAB);
-        if (BlockTypes.SMOOTH_STONE_SLAB == null) BlockTypes.SMOOTH_STONE_SLAB = buildSlab(BlockSmoothStoneSlabBehavior.class, BlockId.SMOOTH_STONE_SLAB);
-        if (BlockTypes.SPRUCE_SLAB == null) BlockTypes.SPRUCE_SLAB = buildSlab(BlockSpruceSlabBehavior.class, BlockId.SPRUCE_SLAB);
-        if (BlockTypes.STONE_BRICK_SLAB == null) BlockTypes.STONE_BRICK_SLAB = buildSlab(BlockStoneBrickSlabBehavior.class, BlockId.STONE_BRICK_SLAB);
-        if (BlockTypes.TUFF_BRICK_SLAB == null) BlockTypes.TUFF_BRICK_SLAB = buildSlab(BlockTuffBrickSlabBehavior.class, BlockId.TUFF_BRICK_SLAB);
-        if (BlockTypes.TUFF_SLAB == null) BlockTypes.TUFF_SLAB = buildSlab(BlockTuffSlabBehavior.class, BlockId.TUFF_SLAB);
-        if (BlockTypes.WARPED_SLAB == null) BlockTypes.WARPED_SLAB = buildSlab(BlockWarpedSlabBehavior.class, BlockId.WARPED_SLAB);
-        if (BlockTypes.WAXED_CUT_COPPER_SLAB == null) BlockTypes.WAXED_CUT_COPPER_SLAB = buildSlab(BlockWaxedCutCopperSlabBehavior.class, BlockId.WAXED_CUT_COPPER_SLAB);
-        if (BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB == null) BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB = buildSlab(BlockWaxedExposedCutCopperSlabBehavior.class, BlockId.WAXED_EXPOSED_CUT_COPPER_SLAB);
-        if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB == null) BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = buildSlab(BlockWaxedOxidizedCutCopperSlabBehavior.class, BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB);
-        if (BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB == null) BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB = buildSlab(BlockWaxedWeatheredCutCopperSlabBehavior.class, BlockId.WAXED_WEATHERED_CUT_COPPER_SLAB);
-        if (BlockTypes.WEATHERED_CUT_COPPER_SLAB == null) BlockTypes.WEATHERED_CUT_COPPER_SLAB = buildSlab(BlockWeatheredCutCopperSlabBehavior.class, BlockId.WEATHERED_CUT_COPPER_SLAB);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildSlab(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
-               .build();
-    }
-
-    public static void initStandingSigns() {
-        if (BlockTypes.ACACIA_STANDING_SIGN == null) BlockTypes.ACACIA_STANDING_SIGN = buildStandingSign(BlockAcaciaStandingSignBehavior.class, BlockId.ACACIA_STANDING_SIGN);
-        if (BlockTypes.BAMBOO_STANDING_SIGN == null) BlockTypes.BAMBOO_STANDING_SIGN = buildStandingSign(BlockBambooStandingSignBehavior.class, BlockId.BAMBOO_STANDING_SIGN);
-        if (BlockTypes.BIRCH_STANDING_SIGN == null) BlockTypes.BIRCH_STANDING_SIGN = buildStandingSign(BlockBirchStandingSignBehavior.class, BlockId.BIRCH_STANDING_SIGN);
-        if (BlockTypes.CHERRY_STANDING_SIGN == null) BlockTypes.CHERRY_STANDING_SIGN = buildStandingSign(BlockCherryStandingSignBehavior.class, BlockId.CHERRY_STANDING_SIGN);
-        if (BlockTypes.CRIMSON_STANDING_SIGN == null) BlockTypes.CRIMSON_STANDING_SIGN = buildStandingSign(BlockCrimsonStandingSignBehavior.class, BlockId.CRIMSON_STANDING_SIGN);
-        if (BlockTypes.DARKOAK_STANDING_SIGN == null) BlockTypes.DARKOAK_STANDING_SIGN = buildStandingSign(BlockDarkoakStandingSignBehavior.class, BlockId.DARKOAK_STANDING_SIGN);
-        if (BlockTypes.JUNGLE_STANDING_SIGN == null) BlockTypes.JUNGLE_STANDING_SIGN = buildStandingSign(BlockJungleStandingSignBehavior.class, BlockId.JUNGLE_STANDING_SIGN);
-        if (BlockTypes.MANGROVE_STANDING_SIGN == null) BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockMangroveStandingSignBehavior.class, BlockId.MANGROVE_STANDING_SIGN);
-        if (BlockTypes.SPRUCE_STANDING_SIGN == null) BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockSpruceStandingSignBehavior.class, BlockId.SPRUCE_STANDING_SIGN);
-        if (BlockTypes.STANDING_SIGN == null) BlockTypes.STANDING_SIGN = buildStandingSign(BlockStandingSignBehavior.class, BlockId.STANDING_SIGN);
-        if (BlockTypes.WARPED_STANDING_SIGN == null) BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockWarpedStandingSignBehavior.class, BlockId.WARPED_STANDING_SIGN);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildStandingSign(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION)
-               .build();
-    }
-
-    public static void initConcretePowders() {
-        if (BlockTypes.BLACK_CONCRETE_POWDER == null) BlockTypes.BLACK_CONCRETE_POWDER = buildConcretePowder(BlockBlackConcretePowderBehavior.class, BlockId.BLACK_CONCRETE_POWDER);
-        if (BlockTypes.BLUE_CONCRETE_POWDER == null) BlockTypes.BLUE_CONCRETE_POWDER = buildConcretePowder(BlockBlueConcretePowderBehavior.class, BlockId.BLUE_CONCRETE_POWDER);
-        if (BlockTypes.BROWN_CONCRETE_POWDER == null) BlockTypes.BROWN_CONCRETE_POWDER = buildConcretePowder(BlockBrownConcretePowderBehavior.class, BlockId.BROWN_CONCRETE_POWDER);
-        if (BlockTypes.CYAN_CONCRETE_POWDER == null) BlockTypes.CYAN_CONCRETE_POWDER = buildConcretePowder(BlockCyanConcretePowderBehavior.class, BlockId.CYAN_CONCRETE_POWDER);
-        if (BlockTypes.GRAY_CONCRETE_POWDER == null) BlockTypes.GRAY_CONCRETE_POWDER = buildConcretePowder(BlockGrayConcretePowderBehavior.class, BlockId.GRAY_CONCRETE_POWDER);
-        if (BlockTypes.GREEN_CONCRETE_POWDER == null) BlockTypes.GREEN_CONCRETE_POWDER = buildConcretePowder(BlockGreenConcretePowderBehavior.class, BlockId.GREEN_CONCRETE_POWDER);
-        if (BlockTypes.LIGHT_BLUE_CONCRETE_POWDER == null) BlockTypes.LIGHT_BLUE_CONCRETE_POWDER = buildConcretePowder(BlockLightBlueConcretePowderBehavior.class, BlockId.LIGHT_BLUE_CONCRETE_POWDER);
-        if (BlockTypes.LIGHT_GRAY_CONCRETE_POWDER == null) BlockTypes.LIGHT_GRAY_CONCRETE_POWDER = buildConcretePowder(BlockLightGrayConcretePowderBehavior.class, BlockId.LIGHT_GRAY_CONCRETE_POWDER);
-        if (BlockTypes.LIME_CONCRETE_POWDER == null) BlockTypes.LIME_CONCRETE_POWDER = buildConcretePowder(BlockLimeConcretePowderBehavior.class, BlockId.LIME_CONCRETE_POWDER);
-        if (BlockTypes.MAGENTA_CONCRETE_POWDER == null) BlockTypes.MAGENTA_CONCRETE_POWDER = buildConcretePowder(BlockMagentaConcretePowderBehavior.class, BlockId.MAGENTA_CONCRETE_POWDER);
-        if (BlockTypes.ORANGE_CONCRETE_POWDER == null) BlockTypes.ORANGE_CONCRETE_POWDER = buildConcretePowder(BlockOrangeConcretePowderBehavior.class, BlockId.ORANGE_CONCRETE_POWDER);
-        if (BlockTypes.PINK_CONCRETE_POWDER == null) BlockTypes.PINK_CONCRETE_POWDER = buildConcretePowder(BlockPinkConcretePowderBehavior.class, BlockId.PINK_CONCRETE_POWDER);
-        if (BlockTypes.PURPLE_CONCRETE_POWDER == null) BlockTypes.PURPLE_CONCRETE_POWDER = buildConcretePowder(BlockPurpleConcretePowderBehavior.class, BlockId.PURPLE_CONCRETE_POWDER);
-        if (BlockTypes.RED_CONCRETE_POWDER == null) BlockTypes.RED_CONCRETE_POWDER = buildConcretePowder(BlockRedConcretePowderBehavior.class, BlockId.RED_CONCRETE_POWDER);
-        if (BlockTypes.WHITE_CONCRETE_POWDER == null) BlockTypes.WHITE_CONCRETE_POWDER = buildConcretePowder(BlockWhiteConcretePowderBehavior.class, BlockId.WHITE_CONCRETE_POWDER);
-        if (BlockTypes.YELLOW_CONCRETE_POWDER == null) BlockTypes.YELLOW_CONCRETE_POWDER = buildConcretePowder(BlockYellowConcretePowderBehavior.class, BlockId.YELLOW_CONCRETE_POWDER);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildConcretePowder(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .build();
-    }
-
-    public static void initCandles() {
-        if (BlockTypes.BLACK_CANDLE == null) BlockTypes.BLACK_CANDLE = buildCandle(BlockBlackCandleBehavior.class, BlockId.BLACK_CANDLE);
-        if (BlockTypes.BLUE_CANDLE == null) BlockTypes.BLUE_CANDLE = buildCandle(BlockBlueCandleBehavior.class, BlockId.BLUE_CANDLE);
-        if (BlockTypes.BROWN_CANDLE == null) BlockTypes.BROWN_CANDLE = buildCandle(BlockBrownCandleBehavior.class, BlockId.BROWN_CANDLE);
-        if (BlockTypes.CYAN_CANDLE == null) BlockTypes.CYAN_CANDLE = buildCandle(BlockCyanCandleBehavior.class, BlockId.CYAN_CANDLE);
-        if (BlockTypes.GRAY_CANDLE == null) BlockTypes.GRAY_CANDLE = buildCandle(BlockGrayCandleBehavior.class, BlockId.GRAY_CANDLE);
-        if (BlockTypes.GREEN_CANDLE == null) BlockTypes.GREEN_CANDLE = buildCandle(BlockGreenCandleBehavior.class, BlockId.GREEN_CANDLE);
-        if (BlockTypes.LIGHT_BLUE_CANDLE == null) BlockTypes.LIGHT_BLUE_CANDLE = buildCandle(BlockLightBlueCandleBehavior.class, BlockId.LIGHT_BLUE_CANDLE);
-        if (BlockTypes.LIGHT_GRAY_CANDLE == null) BlockTypes.LIGHT_GRAY_CANDLE = buildCandle(BlockLightGrayCandleBehavior.class, BlockId.LIGHT_GRAY_CANDLE);
-        if (BlockTypes.LIME_CANDLE == null) BlockTypes.LIME_CANDLE = buildCandle(BlockLimeCandleBehavior.class, BlockId.LIME_CANDLE);
-        if (BlockTypes.MAGENTA_CANDLE == null) BlockTypes.MAGENTA_CANDLE = buildCandle(BlockMagentaCandleBehavior.class, BlockId.MAGENTA_CANDLE);
-        if (BlockTypes.ORANGE_CANDLE == null) BlockTypes.ORANGE_CANDLE = buildCandle(BlockOrangeCandleBehavior.class, BlockId.ORANGE_CANDLE);
-        if (BlockTypes.PINK_CANDLE == null) BlockTypes.PINK_CANDLE = buildCandle(BlockPinkCandleBehavior.class, BlockId.PINK_CANDLE);
-        if (BlockTypes.PURPLE_CANDLE == null) BlockTypes.PURPLE_CANDLE = buildCandle(BlockPurpleCandleBehavior.class, BlockId.PURPLE_CANDLE);
-        if (BlockTypes.RED_CANDLE == null) BlockTypes.RED_CANDLE = buildCandle(BlockRedCandleBehavior.class, BlockId.RED_CANDLE);
-        if (BlockTypes.WHITE_CANDLE == null) BlockTypes.WHITE_CANDLE = buildCandle(BlockWhiteCandleBehavior.class, BlockId.WHITE_CANDLE);
-        if (BlockTypes.YELLOW_CANDLE == null) BlockTypes.YELLOW_CANDLE = buildCandle(BlockYellowCandleBehavior.class, BlockId.YELLOW_CANDLE);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildCandle(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
-               .build();
-    }
-
-    public static void initWalls() {
-        if (BlockTypes.BLACKSTONE_WALL == null) BlockTypes.BLACKSTONE_WALL = buildWall(BlockBlackstoneWallBehavior.class, BlockId.BLACKSTONE_WALL);
-        if (BlockTypes.COBBLED_DEEPSLATE_WALL == null) BlockTypes.COBBLED_DEEPSLATE_WALL = buildWall(BlockCobbledDeepslateWallBehavior.class, BlockId.COBBLED_DEEPSLATE_WALL);
-        if (BlockTypes.COBBLESTONE_WALL == null) BlockTypes.COBBLESTONE_WALL = buildWall(BlockCobblestoneWallBehavior.class, BlockId.COBBLESTONE_WALL);
-        if (BlockTypes.DEEPSLATE_BRICK_WALL == null) BlockTypes.DEEPSLATE_BRICK_WALL = buildWall(BlockDeepslateBrickWallBehavior.class, BlockId.DEEPSLATE_BRICK_WALL);
-        if (BlockTypes.DEEPSLATE_TILE_WALL == null) BlockTypes.DEEPSLATE_TILE_WALL = buildWall(BlockDeepslateTileWallBehavior.class, BlockId.DEEPSLATE_TILE_WALL);
-        if (BlockTypes.MUD_BRICK_WALL == null) BlockTypes.MUD_BRICK_WALL = buildWall(BlockMudBrickWallBehavior.class, BlockId.MUD_BRICK_WALL);
-        if (BlockTypes.POLISHED_BLACKSTONE_BRICK_WALL == null) BlockTypes.POLISHED_BLACKSTONE_BRICK_WALL = buildWall(BlockPolishedBlackstoneBrickWallBehavior.class, BlockId.POLISHED_BLACKSTONE_BRICK_WALL);
-        if (BlockTypes.POLISHED_BLACKSTONE_WALL == null) BlockTypes.POLISHED_BLACKSTONE_WALL = buildWall(BlockPolishedBlackstoneWallBehavior.class, BlockId.POLISHED_BLACKSTONE_WALL);
-        if (BlockTypes.POLISHED_DEEPSLATE_WALL == null) BlockTypes.POLISHED_DEEPSLATE_WALL = buildWall(BlockPolishedDeepslateWallBehavior.class, BlockId.POLISHED_DEEPSLATE_WALL);
-        if (BlockTypes.POLISHED_TUFF_WALL == null) BlockTypes.POLISHED_TUFF_WALL = buildWall(BlockPolishedTuffWallBehavior.class, BlockId.POLISHED_TUFF_WALL);
-        if (BlockTypes.TUFF_BRICK_WALL == null) BlockTypes.TUFF_BRICK_WALL = buildWall(BlockTuffBrickWallBehavior.class, BlockId.TUFF_BRICK_WALL);
-        if (BlockTypes.TUFF_WALL == null) BlockTypes.TUFF_WALL = buildWall(BlockTuffWallBehavior.class, BlockId.TUFF_WALL);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildWall(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.WALL_POST_BIT, BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST)
-               .build();
-    }
-
-    public static void initTerracotta() {
-        if (BlockTypes.BLACK_TERRACOTTA == null) BlockTypes.BLACK_TERRACOTTA = buildTerracotta(BlockBlackTerracottaBehavior.class, BlockId.BLACK_TERRACOTTA);
-        if (BlockTypes.BLUE_TERRACOTTA == null) BlockTypes.BLUE_TERRACOTTA = buildTerracotta(BlockBlueTerracottaBehavior.class, BlockId.BLUE_TERRACOTTA);
-        if (BlockTypes.BROWN_TERRACOTTA == null) BlockTypes.BROWN_TERRACOTTA = buildTerracotta(BlockBrownTerracottaBehavior.class, BlockId.BROWN_TERRACOTTA);
-        if (BlockTypes.CYAN_TERRACOTTA == null) BlockTypes.CYAN_TERRACOTTA = buildTerracotta(BlockCyanTerracottaBehavior.class, BlockId.CYAN_TERRACOTTA);
-        if (BlockTypes.GRAY_TERRACOTTA == null) BlockTypes.GRAY_TERRACOTTA = buildTerracotta(BlockGrayTerracottaBehavior.class, BlockId.GRAY_TERRACOTTA);
-        if (BlockTypes.GREEN_TERRACOTTA == null) BlockTypes.GREEN_TERRACOTTA = buildTerracotta(BlockGreenTerracottaBehavior.class, BlockId.GREEN_TERRACOTTA);
-        if (BlockTypes.LIGHT_BLUE_TERRACOTTA == null) BlockTypes.LIGHT_BLUE_TERRACOTTA = buildTerracotta(BlockLightBlueTerracottaBehavior.class, BlockId.LIGHT_BLUE_TERRACOTTA);
-        if (BlockTypes.LIGHT_GRAY_TERRACOTTA == null) BlockTypes.LIGHT_GRAY_TERRACOTTA = buildTerracotta(BlockLightGrayTerracottaBehavior.class, BlockId.LIGHT_GRAY_TERRACOTTA);
-        if (BlockTypes.LIME_TERRACOTTA == null) BlockTypes.LIME_TERRACOTTA = buildTerracotta(BlockLimeTerracottaBehavior.class, BlockId.LIME_TERRACOTTA);
-        if (BlockTypes.MAGENTA_TERRACOTTA == null) BlockTypes.MAGENTA_TERRACOTTA = buildTerracotta(BlockMagentaTerracottaBehavior.class, BlockId.MAGENTA_TERRACOTTA);
-        if (BlockTypes.ORANGE_TERRACOTTA == null) BlockTypes.ORANGE_TERRACOTTA = buildTerracotta(BlockOrangeTerracottaBehavior.class, BlockId.ORANGE_TERRACOTTA);
-        if (BlockTypes.PINK_TERRACOTTA == null) BlockTypes.PINK_TERRACOTTA = buildTerracotta(BlockPinkTerracottaBehavior.class, BlockId.PINK_TERRACOTTA);
-        if (BlockTypes.PURPLE_TERRACOTTA == null) BlockTypes.PURPLE_TERRACOTTA = buildTerracotta(BlockPurpleTerracottaBehavior.class, BlockId.PURPLE_TERRACOTTA);
-        if (BlockTypes.RED_TERRACOTTA == null) BlockTypes.RED_TERRACOTTA = buildTerracotta(BlockRedTerracottaBehavior.class, BlockId.RED_TERRACOTTA);
-        if (BlockTypes.WHITE_TERRACOTTA == null) BlockTypes.WHITE_TERRACOTTA = buildTerracotta(BlockWhiteTerracottaBehavior.class, BlockId.WHITE_TERRACOTTA);
-        if (BlockTypes.YELLOW_TERRACOTTA == null) BlockTypes.YELLOW_TERRACOTTA = buildTerracotta(BlockYellowTerracottaBehavior.class, BlockId.YELLOW_TERRACOTTA);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildTerracotta(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .build();
-    }
-
-    public static void initShulkerBoxes() {
-        if (BlockTypes.BLACK_SHULKER_BOX == null) BlockTypes.BLACK_SHULKER_BOX = buildShulkerBox(BlockBlackShulkerBoxBehavior.class, BlockId.BLACK_SHULKER_BOX);
-        if (BlockTypes.BLUE_SHULKER_BOX == null) BlockTypes.BLUE_SHULKER_BOX = buildShulkerBox(BlockBlueShulkerBoxBehavior.class, BlockId.BLUE_SHULKER_BOX);
-        if (BlockTypes.BROWN_SHULKER_BOX == null) BlockTypes.BROWN_SHULKER_BOX = buildShulkerBox(BlockBrownShulkerBoxBehavior.class, BlockId.BROWN_SHULKER_BOX);
-        if (BlockTypes.CYAN_SHULKER_BOX == null) BlockTypes.CYAN_SHULKER_BOX = buildShulkerBox(BlockCyanShulkerBoxBehavior.class, BlockId.CYAN_SHULKER_BOX);
-        if (BlockTypes.GRAY_SHULKER_BOX == null) BlockTypes.GRAY_SHULKER_BOX = buildShulkerBox(BlockGrayShulkerBoxBehavior.class, BlockId.GRAY_SHULKER_BOX);
-        if (BlockTypes.GREEN_SHULKER_BOX == null) BlockTypes.GREEN_SHULKER_BOX = buildShulkerBox(BlockGreenShulkerBoxBehavior.class, BlockId.GREEN_SHULKER_BOX);
-        if (BlockTypes.LIGHT_BLUE_SHULKER_BOX == null) BlockTypes.LIGHT_BLUE_SHULKER_BOX = buildShulkerBox(BlockLightBlueShulkerBoxBehavior.class, BlockId.LIGHT_BLUE_SHULKER_BOX);
-        if (BlockTypes.LIGHT_GRAY_SHULKER_BOX == null) BlockTypes.LIGHT_GRAY_SHULKER_BOX = buildShulkerBox(BlockLightGrayShulkerBoxBehavior.class, BlockId.LIGHT_GRAY_SHULKER_BOX);
-        if (BlockTypes.LIME_SHULKER_BOX == null) BlockTypes.LIME_SHULKER_BOX = buildShulkerBox(BlockLimeShulkerBoxBehavior.class, BlockId.LIME_SHULKER_BOX);
-        if (BlockTypes.MAGENTA_SHULKER_BOX == null) BlockTypes.MAGENTA_SHULKER_BOX = buildShulkerBox(BlockMagentaShulkerBoxBehavior.class, BlockId.MAGENTA_SHULKER_BOX);
-        if (BlockTypes.ORANGE_SHULKER_BOX == null) BlockTypes.ORANGE_SHULKER_BOX = buildShulkerBox(BlockOrangeShulkerBoxBehavior.class, BlockId.ORANGE_SHULKER_BOX);
-        if (BlockTypes.PINK_SHULKER_BOX == null) BlockTypes.PINK_SHULKER_BOX = buildShulkerBox(BlockPinkShulkerBoxBehavior.class, BlockId.PINK_SHULKER_BOX);
-        if (BlockTypes.PURPLE_SHULKER_BOX == null) BlockTypes.PURPLE_SHULKER_BOX = buildShulkerBox(BlockPurpleShulkerBoxBehavior.class, BlockId.PURPLE_SHULKER_BOX);
-        if (BlockTypes.RED_SHULKER_BOX == null) BlockTypes.RED_SHULKER_BOX = buildShulkerBox(BlockRedShulkerBoxBehavior.class, BlockId.RED_SHULKER_BOX);
-        if (BlockTypes.UNDYED_SHULKER_BOX == null) BlockTypes.UNDYED_SHULKER_BOX = buildShulkerBox(BlockUndyedShulkerBoxBehavior.class, BlockId.UNDYED_SHULKER_BOX);
-        if (BlockTypes.WHITE_SHULKER_BOX == null) BlockTypes.WHITE_SHULKER_BOX = buildShulkerBox(BlockWhiteShulkerBoxBehavior.class, BlockId.WHITE_SHULKER_BOX);
-        if (BlockTypes.YELLOW_SHULKER_BOX == null) BlockTypes.YELLOW_SHULKER_BOX = buildShulkerBox(BlockYellowShulkerBoxBehavior.class, BlockId.YELLOW_SHULKER_BOX);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildShulkerBox(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .build();
-    }
-
-    public static void initWallSigns() {
-        if (BlockTypes.ACACIA_WALL_SIGN == null) BlockTypes.ACACIA_WALL_SIGN = buildWallSign(BlockAcaciaWallSignBehavior.class, BlockId.ACACIA_WALL_SIGN);
-        if (BlockTypes.BAMBOO_WALL_SIGN == null) BlockTypes.BAMBOO_WALL_SIGN = buildWallSign(BlockBambooWallSignBehavior.class, BlockId.BAMBOO_WALL_SIGN);
-        if (BlockTypes.BIRCH_WALL_SIGN == null) BlockTypes.BIRCH_WALL_SIGN = buildWallSign(BlockBirchWallSignBehavior.class, BlockId.BIRCH_WALL_SIGN);
-        if (BlockTypes.CHERRY_WALL_SIGN == null) BlockTypes.CHERRY_WALL_SIGN = buildWallSign(BlockCherryWallSignBehavior.class, BlockId.CHERRY_WALL_SIGN);
-        if (BlockTypes.CRIMSON_WALL_SIGN == null) BlockTypes.CRIMSON_WALL_SIGN = buildWallSign(BlockCrimsonWallSignBehavior.class, BlockId.CRIMSON_WALL_SIGN);
-        if (BlockTypes.DARKOAK_WALL_SIGN == null) BlockTypes.DARKOAK_WALL_SIGN = buildWallSign(BlockDarkoakWallSignBehavior.class, BlockId.DARKOAK_WALL_SIGN);
-        if (BlockTypes.JUNGLE_WALL_SIGN == null) BlockTypes.JUNGLE_WALL_SIGN = buildWallSign(BlockJungleWallSignBehavior.class, BlockId.JUNGLE_WALL_SIGN);
-        if (BlockTypes.MANGROVE_WALL_SIGN == null) BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockMangroveWallSignBehavior.class, BlockId.MANGROVE_WALL_SIGN);
-        if (BlockTypes.SPRUCE_WALL_SIGN == null) BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockSpruceWallSignBehavior.class, BlockId.SPRUCE_WALL_SIGN);
-        if (BlockTypes.WALL_SIGN == null) BlockTypes.WALL_SIGN = buildWallSign(BlockWallSignBehavior.class, BlockId.WALL_SIGN);
-        if (BlockTypes.WARPED_WALL_SIGN == null) BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockWarpedWallSignBehavior.class, BlockId.WARPED_WALL_SIGN);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildWallSign(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.FACING_DIRECTION)
-               .build();
-    }
-
-    public static void initFenceGates() {
-        if (BlockTypes.ACACIA_FENCE_GATE == null) BlockTypes.ACACIA_FENCE_GATE = buildFenceGate(BlockAcaciaFenceGateBehavior.class, BlockId.ACACIA_FENCE_GATE);
-        if (BlockTypes.BAMBOO_FENCE_GATE == null) BlockTypes.BAMBOO_FENCE_GATE = buildFenceGate(BlockBambooFenceGateBehavior.class, BlockId.BAMBOO_FENCE_GATE);
-        if (BlockTypes.BIRCH_FENCE_GATE == null) BlockTypes.BIRCH_FENCE_GATE = buildFenceGate(BlockBirchFenceGateBehavior.class, BlockId.BIRCH_FENCE_GATE);
-        if (BlockTypes.CHERRY_FENCE_GATE == null) BlockTypes.CHERRY_FENCE_GATE = buildFenceGate(BlockCherryFenceGateBehavior.class, BlockId.CHERRY_FENCE_GATE);
-        if (BlockTypes.CRIMSON_FENCE_GATE == null) BlockTypes.CRIMSON_FENCE_GATE = buildFenceGate(BlockCrimsonFenceGateBehavior.class, BlockId.CRIMSON_FENCE_GATE);
-        if (BlockTypes.DARK_OAK_FENCE_GATE == null) BlockTypes.DARK_OAK_FENCE_GATE = buildFenceGate(BlockDarkOakFenceGateBehavior.class, BlockId.DARK_OAK_FENCE_GATE);
-        if (BlockTypes.JUNGLE_FENCE_GATE == null) BlockTypes.JUNGLE_FENCE_GATE = buildFenceGate(BlockJungleFenceGateBehavior.class, BlockId.JUNGLE_FENCE_GATE);
-        if (BlockTypes.MANGROVE_FENCE_GATE == null) BlockTypes.MANGROVE_FENCE_GATE = buildFenceGate(BlockMangroveFenceGateBehavior.class, BlockId.MANGROVE_FENCE_GATE);
-        if (BlockTypes.SPRUCE_FENCE_GATE == null) BlockTypes.SPRUCE_FENCE_GATE = buildFenceGate(BlockSpruceFenceGateBehavior.class, BlockId.SPRUCE_FENCE_GATE);
-        if (BlockTypes.WARPED_FENCE_GATE == null) BlockTypes.WARPED_FENCE_GATE = buildFenceGate(BlockWarpedFenceGateBehavior.class, BlockId.WARPED_FENCE_GATE);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildFenceGate(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT)
-               .build();
-    }
-
-    public static void initLeaves() {
-        if (BlockTypes.ACACIA_LEAVES == null) BlockTypes.ACACIA_LEAVES = buildLeaves(BlockAcaciaLeavesBehavior.class, BlockId.ACACIA_LEAVES);
-        if (BlockTypes.AZALEA_LEAVES == null) BlockTypes.AZALEA_LEAVES = buildLeaves(BlockAzaleaLeavesBehavior.class, BlockId.AZALEA_LEAVES);
-        if (BlockTypes.BIRCH_LEAVES == null) BlockTypes.BIRCH_LEAVES = buildLeaves(BlockBirchLeavesBehavior.class, BlockId.BIRCH_LEAVES);
-        if (BlockTypes.CHERRY_LEAVES == null) BlockTypes.CHERRY_LEAVES = buildLeaves(BlockCherryLeavesBehavior.class, BlockId.CHERRY_LEAVES);
-        if (BlockTypes.DARK_OAK_LEAVES == null) BlockTypes.DARK_OAK_LEAVES = buildLeaves(BlockDarkOakLeavesBehavior.class, BlockId.DARK_OAK_LEAVES);
-        if (BlockTypes.JUNGLE_LEAVES == null) BlockTypes.JUNGLE_LEAVES = buildLeaves(BlockJungleLeavesBehavior.class, BlockId.JUNGLE_LEAVES);
-        if (BlockTypes.MANGROVE_LEAVES == null) BlockTypes.MANGROVE_LEAVES = buildLeaves(BlockMangroveLeavesBehavior.class, BlockId.MANGROVE_LEAVES);
-        if (BlockTypes.OAK_LEAVES == null) BlockTypes.OAK_LEAVES = buildLeaves(BlockOakLeavesBehavior.class, BlockId.OAK_LEAVES);
-        if (BlockTypes.SPRUCE_LEAVES == null) BlockTypes.SPRUCE_LEAVES = buildLeaves(BlockSpruceLeavesBehavior.class, BlockId.SPRUCE_LEAVES);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildLeaves(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-               .build();
-    }
-
-    public static void initConcretes() {
-        if (BlockTypes.BLACK_CONCRETE == null) BlockTypes.BLACK_CONCRETE = buildConcrete(BlockBlackConcreteBehavior.class, BlockId.BLACK_CONCRETE);
-        if (BlockTypes.BLUE_CONCRETE == null) BlockTypes.BLUE_CONCRETE = buildConcrete(BlockBlueConcreteBehavior.class, BlockId.BLUE_CONCRETE);
-        if (BlockTypes.BROWN_CONCRETE == null) BlockTypes.BROWN_CONCRETE = buildConcrete(BlockBrownConcreteBehavior.class, BlockId.BROWN_CONCRETE);
-        if (BlockTypes.CYAN_CONCRETE == null) BlockTypes.CYAN_CONCRETE = buildConcrete(BlockCyanConcreteBehavior.class, BlockId.CYAN_CONCRETE);
-        if (BlockTypes.GRAY_CONCRETE == null) BlockTypes.GRAY_CONCRETE = buildConcrete(BlockGrayConcreteBehavior.class, BlockId.GRAY_CONCRETE);
-        if (BlockTypes.GREEN_CONCRETE == null) BlockTypes.GREEN_CONCRETE = buildConcrete(BlockGreenConcreteBehavior.class, BlockId.GREEN_CONCRETE);
-        if (BlockTypes.LIGHT_BLUE_CONCRETE == null) BlockTypes.LIGHT_BLUE_CONCRETE = buildConcrete(BlockLightBlueConcreteBehavior.class, BlockId.LIGHT_BLUE_CONCRETE);
-        if (BlockTypes.LIGHT_GRAY_CONCRETE == null) BlockTypes.LIGHT_GRAY_CONCRETE = buildConcrete(BlockLightGrayConcreteBehavior.class, BlockId.LIGHT_GRAY_CONCRETE);
-        if (BlockTypes.LIME_CONCRETE == null) BlockTypes.LIME_CONCRETE = buildConcrete(BlockLimeConcreteBehavior.class, BlockId.LIME_CONCRETE);
-        if (BlockTypes.MAGENTA_CONCRETE == null) BlockTypes.MAGENTA_CONCRETE = buildConcrete(BlockMagentaConcreteBehavior.class, BlockId.MAGENTA_CONCRETE);
-        if (BlockTypes.ORANGE_CONCRETE == null) BlockTypes.ORANGE_CONCRETE = buildConcrete(BlockOrangeConcreteBehavior.class, BlockId.ORANGE_CONCRETE);
-        if (BlockTypes.PINK_CONCRETE == null) BlockTypes.PINK_CONCRETE = buildConcrete(BlockPinkConcreteBehavior.class, BlockId.PINK_CONCRETE);
-        if (BlockTypes.PURPLE_CONCRETE == null) BlockTypes.PURPLE_CONCRETE = buildConcrete(BlockPurpleConcreteBehavior.class, BlockId.PURPLE_CONCRETE);
-        if (BlockTypes.RED_CONCRETE == null) BlockTypes.RED_CONCRETE = buildConcrete(BlockRedConcreteBehavior.class, BlockId.RED_CONCRETE);
-        if (BlockTypes.WHITE_CONCRETE == null) BlockTypes.WHITE_CONCRETE = buildConcrete(BlockWhiteConcreteBehavior.class, BlockId.WHITE_CONCRETE);
-        if (BlockTypes.YELLOW_CONCRETE == null) BlockTypes.YELLOW_CONCRETE = buildConcrete(BlockYellowConcreteBehavior.class, BlockId.YELLOW_CONCRETE);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildConcrete(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .build();
-    }
-
-    public static void initTrapdoors() {
-        if (BlockTypes.ACACIA_TRAPDOOR == null) BlockTypes.ACACIA_TRAPDOOR = buildTrapdoor(BlockAcaciaTrapdoorBehavior.class, BlockId.ACACIA_TRAPDOOR);
-        if (BlockTypes.BAMBOO_TRAPDOOR == null) BlockTypes.BAMBOO_TRAPDOOR = buildTrapdoor(BlockBambooTrapdoorBehavior.class, BlockId.BAMBOO_TRAPDOOR);
-        if (BlockTypes.BIRCH_TRAPDOOR == null) BlockTypes.BIRCH_TRAPDOOR = buildTrapdoor(BlockBirchTrapdoorBehavior.class, BlockId.BIRCH_TRAPDOOR);
-        if (BlockTypes.CHERRY_TRAPDOOR == null) BlockTypes.CHERRY_TRAPDOOR = buildTrapdoor(BlockCherryTrapdoorBehavior.class, BlockId.CHERRY_TRAPDOOR);
-        if (BlockTypes.COPPER_TRAPDOOR == null) BlockTypes.COPPER_TRAPDOOR = buildTrapdoor(BlockCopperTrapdoorBehavior.class, BlockId.COPPER_TRAPDOOR);
-        if (BlockTypes.CRIMSON_TRAPDOOR == null) BlockTypes.CRIMSON_TRAPDOOR = buildTrapdoor(BlockCrimsonTrapdoorBehavior.class, BlockId.CRIMSON_TRAPDOOR);
-        if (BlockTypes.DARK_OAK_TRAPDOOR == null) BlockTypes.DARK_OAK_TRAPDOOR = buildTrapdoor(BlockDarkOakTrapdoorBehavior.class, BlockId.DARK_OAK_TRAPDOOR);
-        if (BlockTypes.EXPOSED_COPPER_TRAPDOOR == null) BlockTypes.EXPOSED_COPPER_TRAPDOOR = buildTrapdoor(BlockExposedCopperTrapdoorBehavior.class, BlockId.EXPOSED_COPPER_TRAPDOOR);
-        if (BlockTypes.IRON_TRAPDOOR == null) BlockTypes.IRON_TRAPDOOR = buildTrapdoor(BlockIronTrapdoorBehavior.class, BlockId.IRON_TRAPDOOR);
-        if (BlockTypes.JUNGLE_TRAPDOOR == null) BlockTypes.JUNGLE_TRAPDOOR = buildTrapdoor(BlockJungleTrapdoorBehavior.class, BlockId.JUNGLE_TRAPDOOR);
-        if (BlockTypes.MANGROVE_TRAPDOOR == null) BlockTypes.MANGROVE_TRAPDOOR = buildTrapdoor(BlockMangroveTrapdoorBehavior.class, BlockId.MANGROVE_TRAPDOOR);
-        if (BlockTypes.OXIDIZED_COPPER_TRAPDOOR == null) BlockTypes.OXIDIZED_COPPER_TRAPDOOR = buildTrapdoor(BlockOxidizedCopperTrapdoorBehavior.class, BlockId.OXIDIZED_COPPER_TRAPDOOR);
-        if (BlockTypes.SPRUCE_TRAPDOOR == null) BlockTypes.SPRUCE_TRAPDOOR = buildTrapdoor(BlockSpruceTrapdoorBehavior.class, BlockId.SPRUCE_TRAPDOOR);
-        if (BlockTypes.TRAPDOOR == null) BlockTypes.TRAPDOOR = buildTrapdoor(BlockTrapdoorBehavior.class, BlockId.TRAPDOOR);
-        if (BlockTypes.WARPED_TRAPDOOR == null) BlockTypes.WARPED_TRAPDOOR = buildTrapdoor(BlockWarpedTrapdoorBehavior.class, BlockId.WARPED_TRAPDOOR);
-        if (BlockTypes.WAXED_COPPER_TRAPDOOR == null) BlockTypes.WAXED_COPPER_TRAPDOOR = buildTrapdoor(BlockWaxedCopperTrapdoorBehavior.class, BlockId.WAXED_COPPER_TRAPDOOR);
-        if (BlockTypes.WAXED_EXPOSED_COPPER_TRAPDOOR == null) BlockTypes.WAXED_EXPOSED_COPPER_TRAPDOOR = buildTrapdoor(BlockWaxedExposedCopperTrapdoorBehavior.class, BlockId.WAXED_EXPOSED_COPPER_TRAPDOOR);
-        if (BlockTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR == null) BlockTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR = buildTrapdoor(BlockWaxedOxidizedCopperTrapdoorBehavior.class, BlockId.WAXED_OXIDIZED_COPPER_TRAPDOOR);
-        if (BlockTypes.WAXED_WEATHERED_COPPER_TRAPDOOR == null) BlockTypes.WAXED_WEATHERED_COPPER_TRAPDOOR = buildTrapdoor(BlockWaxedWeatheredCopperTrapdoorBehavior.class, BlockId.WAXED_WEATHERED_COPPER_TRAPDOOR);
-        if (BlockTypes.WEATHERED_COPPER_TRAPDOOR == null) BlockTypes.WEATHERED_COPPER_TRAPDOOR = buildTrapdoor(BlockWeatheredCopperTrapdoorBehavior.class, BlockId.WEATHERED_COPPER_TRAPDOOR);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildTrapdoor(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.OPEN_BIT)
-               .build();
-    }
-
-    public static void initHangingSigns() {
-        if (BlockTypes.ACACIA_HANGING_SIGN == null) BlockTypes.ACACIA_HANGING_SIGN = buildHangingSign(BlockAcaciaHangingSignBehavior.class, BlockId.ACACIA_HANGING_SIGN);
-        if (BlockTypes.BAMBOO_HANGING_SIGN == null) BlockTypes.BAMBOO_HANGING_SIGN = buildHangingSign(BlockBambooHangingSignBehavior.class, BlockId.BAMBOO_HANGING_SIGN);
-        if (BlockTypes.BIRCH_HANGING_SIGN == null) BlockTypes.BIRCH_HANGING_SIGN = buildHangingSign(BlockBirchHangingSignBehavior.class, BlockId.BIRCH_HANGING_SIGN);
-        if (BlockTypes.CHERRY_HANGING_SIGN == null) BlockTypes.CHERRY_HANGING_SIGN = buildHangingSign(BlockCherryHangingSignBehavior.class, BlockId.CHERRY_HANGING_SIGN);
-        if (BlockTypes.CRIMSON_HANGING_SIGN == null) BlockTypes.CRIMSON_HANGING_SIGN = buildHangingSign(BlockCrimsonHangingSignBehavior.class, BlockId.CRIMSON_HANGING_SIGN);
-        if (BlockTypes.DARK_OAK_HANGING_SIGN == null) BlockTypes.DARK_OAK_HANGING_SIGN = buildHangingSign(BlockDarkOakHangingSignBehavior.class, BlockId.DARK_OAK_HANGING_SIGN);
-        if (BlockTypes.JUNGLE_HANGING_SIGN == null) BlockTypes.JUNGLE_HANGING_SIGN = buildHangingSign(BlockJungleHangingSignBehavior.class, BlockId.JUNGLE_HANGING_SIGN);
-        if (BlockTypes.MANGROVE_HANGING_SIGN == null) BlockTypes.MANGROVE_HANGING_SIGN = buildHangingSign(BlockMangroveHangingSignBehavior.class, BlockId.MANGROVE_HANGING_SIGN);
-        if (BlockTypes.OAK_HANGING_SIGN == null) BlockTypes.OAK_HANGING_SIGN = buildHangingSign(BlockOakHangingSignBehavior.class, BlockId.OAK_HANGING_SIGN);
-        if (BlockTypes.SPRUCE_HANGING_SIGN == null) BlockTypes.SPRUCE_HANGING_SIGN = buildHangingSign(BlockSpruceHangingSignBehavior.class, BlockId.SPRUCE_HANGING_SIGN);
-        if (BlockTypes.WARPED_HANGING_SIGN == null) BlockTypes.WARPED_HANGING_SIGN = buildHangingSign(BlockWarpedHangingSignBehavior.class, BlockId.WARPED_HANGING_SIGN);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildHangingSign(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION, BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.HANGING)
-               .build();
-    }
-
-    public static void initWoods() {
-        if (BlockTypes.ACACIA_WOOD == null) BlockTypes.ACACIA_WOOD = buildWood(BlockAcaciaWoodBehavior.class, BlockId.ACACIA_WOOD);
-        if (BlockTypes.BIRCH_WOOD == null) BlockTypes.BIRCH_WOOD = buildWood(BlockBirchWoodBehavior.class, BlockId.BIRCH_WOOD);
-        if (BlockTypes.CHERRY_WOOD == null) BlockTypes.CHERRY_WOOD = buildWood(BlockCherryWoodBehavior.class, BlockId.CHERRY_WOOD);
-        if (BlockTypes.DARK_OAK_WOOD == null) BlockTypes.DARK_OAK_WOOD = buildWood(BlockDarkOakWoodBehavior.class, BlockId.DARK_OAK_WOOD);
-        if (BlockTypes.JUNGLE_WOOD == null) BlockTypes.JUNGLE_WOOD = buildWood(BlockJungleWoodBehavior.class, BlockId.JUNGLE_WOOD);
-        if (BlockTypes.MANGROVE_WOOD == null) BlockTypes.MANGROVE_WOOD = buildWood(BlockMangroveWoodBehavior.class, BlockId.MANGROVE_WOOD);
-        if (BlockTypes.OAK_WOOD == null) BlockTypes.OAK_WOOD = buildWood(BlockOakWoodBehavior.class, BlockId.OAK_WOOD);
-        if (BlockTypes.SPRUCE_WOOD == null) BlockTypes.SPRUCE_WOOD = buildWood(BlockSpruceWoodBehavior.class, BlockId.SPRUCE_WOOD);
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildWood(Class<T> clazz,
-            BlockId blockId) {
-        return AllayBlockType.builder(clazz)
-               .vanillaBlock(blockId)
-               .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                .build();
     }
 }
