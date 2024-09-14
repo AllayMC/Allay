@@ -249,7 +249,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             this.fallDistance -= location.y() - this.location.y();
             var currentBlockState = location.dimension().getBlockState(location);
             if (currentBlockState.getBlockStateData().canResetFallDistance() &&
-                currentBlockState.getBlockStateData().computeOffsetCollisionShape(location).intersectsAABB(thisEntity.getOffsetAABB())) {
+                currentBlockState.getBlockStateData().computeOffsetCollisionShape(MathUtils.floor(location)).intersectsAABB(getAABB().translate(location, new AABBf()))) {
                 this.fallDistance = 0;
             }
         }

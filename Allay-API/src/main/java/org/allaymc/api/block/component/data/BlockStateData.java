@@ -10,6 +10,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.joml.Vector3fc;
+import org.joml.Vector3ic;
 import org.joml.primitives.AABBf;
 
 import java.awt.*;
@@ -95,6 +96,10 @@ public class BlockStateData {
     }
 
     public VoxelShape computeOffsetCollisionShape(Vector3fc vector) {
+        return computeOffsetCollisionShape(vector.x(), vector.y(), vector.z());
+    }
+
+    public VoxelShape computeOffsetCollisionShape(Vector3ic vector) {
         return computeOffsetCollisionShape(vector.x(), vector.y(), vector.z());
     }
 }
