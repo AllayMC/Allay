@@ -121,10 +121,7 @@ jobs:
           port: ${{ secrets.TEST_SERVER_PORT }}
           command_timeout: 20s
           script: |
-            screen -r allaymc-testserver
-            stop
             mv /root/allaymc/Allay-Server/build/libs/Allay-Server-shaded.jar /root/allaymc
             rm -r /root/allaymc/Allay-Server
-            cd /root/allaymc
-            (sleep 1s; exit) &
-            java -jar Allay-Server-shaded.jar
+            (sleep 1s; screen -r allaymc-testserver; stop; cd /root/allaymc; java -jar Allay-Server-shaded.jar) &
+            exit
