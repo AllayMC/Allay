@@ -4,13 +4,13 @@ on:
   push:
     branches: [ "master" ]
     paths:
-      - .github/workflows/build.yml
+      - .github/workflows/gradle.yml
       - Allay-API/**
       - Allay-Server/**
       - Allay-Data/**
   pull_request:
     paths:
-      - .github/workflows/build.yml
+      - .github/workflows/gradle.yml
       - Allay-API/**
       - Allay-Server/**
       - Allay-Data/**
