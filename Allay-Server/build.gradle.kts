@@ -49,6 +49,10 @@ tasks.processResources {
     exclude("${rootProject.projectDir}/unpacked/**")
 }
 
+tasks.sourcesJar {
+    dependsOn("generateGitProperties")
+}
+
 tasks.runShadow {
     workingDir = file("${rootProject.projectDir}/.run/")
     this.jarFile = file("build/libs/Allay-Server-shaded.jar")

@@ -3,6 +3,10 @@ plugins {
     id("maven-publish")
 }
 
+tasks.jar {
+    enabled = false
+}
+
 val publishedModules = listOf("Allay-API", "Allay-Server")
 
 subprojects {
@@ -40,10 +44,9 @@ subprojects {
                 mavenLocal()
             }
 
-            // TODO: withSourcesJar() will fail in github action
-            //java {
-            //    withSourcesJar()
-            //}
+            java {
+                withSourcesJar()
+            }
 
             publications {
                 create<MavenPublication>("maven") {
