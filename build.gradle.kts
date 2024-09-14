@@ -40,6 +40,11 @@ subprojects {
                 mavenLocal()
             }
 
+            java {
+                withSourcesJar()
+                withJavadocJar()
+            }
+
             publications {
                 create<MavenPublication>("maven") {
                     from(components["java"])
