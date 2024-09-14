@@ -109,7 +109,6 @@ jobs:
           key: ${{ secrets.TEST_SERVER_SSH_KEY }}
           passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
           source: "Allay-Server/build/libs/Allay-Server-shaded.jar"
-          rm: true
           target: "/root/allaymc"
       # Restart test server
       - name: Restart Test Server
@@ -122,7 +121,9 @@ jobs:
           port: ${{ secrets.TEST_SERVER_PORT }}
           command_timeout: 20s
           script: |
+            screen -r allaymc
+            stop
+            mv /root/allaymc/Allay-Server/build/libs/Allay-Server-shaded.jar /root/allaymc
+            rm -r /root/allaymc/Allay-Server
             cd /root/allaymc
-            ps -ef | grep Allay-Server-shaded.jar | grep -v grep | awk '{print $2}' | xargs kill -9 
-            nohup java -jar Allay-Server-shaded.jar > nohup.out &
-            exit
+            java -jar Allay-Server-shaded.jar
