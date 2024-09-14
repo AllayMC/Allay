@@ -25,7 +25,7 @@ public class EnchantCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .playerTarget("player")
-                .enchantmentNode("enchantmentName")
+                .enchantment("enchantmentName")
                 .intNum("level")
                 .exec(ctx -> {
                     Collection<EntityPlayer> players = ctx.getResult(0);

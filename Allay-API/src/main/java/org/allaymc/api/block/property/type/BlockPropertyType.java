@@ -139,5 +139,10 @@ public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyTyp
          * @return the serialized value
          */
         public abstract SERIALIZED_DATATYPE getSerializedValue();
+
+        @Override
+        public String toString() {
+            return propertyType.getName() + "=" + getSerializedValue();
+        }
     }
 }

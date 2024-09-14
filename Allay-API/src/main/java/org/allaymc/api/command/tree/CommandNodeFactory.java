@@ -1,6 +1,8 @@
 package org.allaymc.api.command.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
+import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -63,11 +65,15 @@ public interface CommandNodeFactory {
 
     CommandNode wildcardTarget(String name, CommandNode parent, String defaultValue);
 
-    CommandNode enchantmentNode(String name, CommandNode parent, EnchantmentType defaultValue);
+    CommandNode enchantment(String name, CommandNode parent, EnchantmentType defaultValue);
 
-    CommandNode effectNode(String name, CommandNode parent, EffectType defaultValue);
+    CommandNode effect(String name, CommandNode parent, EffectType defaultValue);
 
-    CommandNode itemTypeNode(String name, CommandNode parent, ItemType<?> defaultValue);
+    CommandNode itemType(String name, CommandNode parent, ItemType<?> defaultValue);
 
-    CommandNode difficultyNode(String name, CommandNode parent, Difficulty defaultValue);
+    CommandNode blockType(String name, CommandNode parent, BlockType<?> defaultValue);
+
+    CommandNode difficulty(String name, CommandNode parent, Difficulty defaultValue);
+
+    CommandNode blockPropertyValues(String name, CommandNode parent, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue);
 }

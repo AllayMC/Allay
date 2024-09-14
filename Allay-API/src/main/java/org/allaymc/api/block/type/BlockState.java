@@ -56,6 +56,8 @@ public interface BlockState {
      * @param property the specific property type
      *
      * @return the value of the specific property type
+     *
+     * @throws IllegalArgumentException if the property type is not supported by this block type
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getPropertyValue(PROPERTY property);
 
@@ -65,6 +67,8 @@ public interface BlockState {
      * @param propertyValue the specific property value
      *
      * @return the new block state
+     *
+     * @throws IllegalArgumentException if the property value is not supported by this block type
      */
     BlockState setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
 
@@ -75,6 +79,8 @@ public interface BlockState {
      * @param value    the value you want to be set
      *
      * @return the new block state
+     *
+     * @throws IllegalArgumentException if the property type or value is not supported by this block type
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setProperty(PROPERTY property, DATATYPE value);
 
@@ -84,6 +90,8 @@ public interface BlockState {
      * @param propertyValues the property values
      *
      * @return the new block state
+     *
+     * @throws IllegalArgumentException if the property values are not supported by this block type
      */
     BlockState setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 

@@ -183,6 +183,23 @@ public interface Dimension {
     @UnmodifiableView
     Set<EntityPlayer> getPlayers();
 
+    default void setBlockState(Vector3fc pos, BlockState blockState) {
+        setBlockState(pos, blockState, 0);
+    }
+
+    default void setBlockState(Vector3fc pos, BlockState blockState, int layer) {
+        pos = pos.floor(new org.joml.Vector3f());
+        setBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), blockState, layer);
+    }
+
+    default void setBlockState(float x, float y, float z, BlockState blockState) {
+        setBlockState(x, y, z, blockState, 0);
+    }
+
+    default void setBlockState(float x, float y, float z, BlockState blockState, int layer) {
+        setBlockState((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z), blockState, layer);
+    }
+
     default void setBlockState(int x, int y, int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0, true, true);
     }

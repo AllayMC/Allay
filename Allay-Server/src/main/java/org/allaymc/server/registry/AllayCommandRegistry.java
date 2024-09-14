@@ -66,6 +66,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new DeOpCommand());
         register(new XpCommand());
         register(new AlwaysDayCommand());
+        register(new SetBlockCommand());
     }
 
     @Override

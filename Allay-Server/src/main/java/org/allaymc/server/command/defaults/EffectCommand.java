@@ -22,7 +22,7 @@ public class EffectCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .playerTarget("player")
-                .effectNode("effect")
+                .effect("effect")
                 .intNum("seconds", 30).optional()
                 .intNum("amplifier").optional()
                 .bool("hideParticles").optional()

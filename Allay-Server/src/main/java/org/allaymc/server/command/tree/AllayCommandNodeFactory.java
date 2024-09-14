@@ -1,5 +1,7 @@
 package org.allaymc.server.command.tree;
 
+import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.entity.Entity;
@@ -116,22 +118,32 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     }
 
     @Override
-    public CommandNode enchantmentNode(String name, CommandNode parent, EnchantmentType defaultValue) {
+    public CommandNode enchantment(String name, CommandNode parent, EnchantmentType defaultValue) {
         return new EnchantmentNode(name, parent, defaultValue);
     }
 
     @Override
-    public CommandNode effectNode(String name, CommandNode parent, EffectType defaultValue) {
+    public CommandNode effect(String name, CommandNode parent, EffectType defaultValue) {
         return new EffectNode(name, parent, defaultValue);
     }
 
     @Override
-    public CommandNode itemTypeNode(String name, CommandNode parent, ItemType<?> defaultValue) {
+    public CommandNode itemType(String name, CommandNode parent, ItemType<?> defaultValue) {
         return new ItemTypeNode(name, parent, defaultValue);
     }
 
     @Override
-    public CommandNode difficultyNode(String name, CommandNode parent, Difficulty defaultValue) {
+    public CommandNode blockType(String name, CommandNode parent, BlockType<?> defaultValue) {
+        return new BlockTypeNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode difficulty(String name, CommandNode parent, Difficulty defaultValue) {
         return new DifficultyNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode blockPropertyValues(String name, CommandNode parent, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue) {
+        return new BlockPropertyValuesNode(name, parent, defaultValue);
     }
 }

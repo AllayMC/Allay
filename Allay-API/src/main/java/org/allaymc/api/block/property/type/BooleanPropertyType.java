@@ -38,8 +38,12 @@ public final class BooleanPropertyType extends BaseBlockPropertyType<Boolean> {
             return bool ? TRUE : FALSE;
         } else if (value instanceof Number number) {
             var intValue = number.intValue();
-            if (intValue == 0 || intValue == 1)
+            if (intValue == 0 || intValue == 1) {
                 return intValue == 1 ? TRUE : FALSE;
+            }
+        } else if (value instanceof String string) {
+            if (string.equalsIgnoreCase("true")) return TRUE;
+            if (string.equalsIgnoreCase("false")) return FALSE;
         }
         throw new IllegalArgumentException("Invalid value for boolean property type: " + value);
     }

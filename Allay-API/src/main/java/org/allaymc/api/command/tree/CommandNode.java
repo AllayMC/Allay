@@ -1,6 +1,8 @@
 package org.allaymc.api.command.tree;
 
 import com.google.common.collect.Lists;
+import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
@@ -273,35 +275,51 @@ public interface CommandNode {
         return addLeaf(getFactory().wildcardTarget(name, this, defaultValue));
     }
 
-    default CommandNode enchantmentNode(String name) {
-        return enchantmentNode(name, null);
+    default CommandNode enchantment(String name) {
+        return enchantment(name, null);
     }
 
-    default CommandNode enchantmentNode(String name, EnchantmentType defaultValue) {
-        return addLeaf(getFactory().enchantmentNode(name, this, defaultValue));
+    default CommandNode enchantment(String name, EnchantmentType defaultValue) {
+        return addLeaf(getFactory().enchantment(name, this, defaultValue));
     }
 
-    default CommandNode effectNode(String name) {
-        return effectNode(name, null);
+    default CommandNode effect(String name) {
+        return effect(name, null);
     }
 
-    default CommandNode effectNode(String name, EffectType defaultValue) {
-        return addLeaf(getFactory().effectNode(name, this, defaultValue));
+    default CommandNode effect(String name, EffectType defaultValue) {
+        return addLeaf(getFactory().effect(name, this, defaultValue));
     }
 
-    default CommandNode itemTypeNode(String name) {
-        return itemTypeNode(name, null);
+    default CommandNode itemType(String name) {
+        return itemType(name, null);
     }
 
-    default CommandNode itemTypeNode(String name, ItemType<?> defaultValue) {
-        return addLeaf(getFactory().itemTypeNode(name, this, defaultValue));
+    default CommandNode itemType(String name, ItemType<?> defaultValue) {
+        return addLeaf(getFactory().itemType(name, this, defaultValue));
     }
 
-    default CommandNode difficultyNode(String name) {
-        return difficultyNode(name, null);
+    default CommandNode blockType(String name) {
+        return blockType(name, null);
     }
 
-    default CommandNode difficultyNode(String name, Difficulty defaultValue) {
-        return addLeaf(getFactory().difficultyNode(name, this, defaultValue));
+    default CommandNode blockType(String name, BlockType<?> defaultValue) {
+        return addLeaf(getFactory().blockType(name, this, defaultValue));
+    }
+
+    default CommandNode difficulty(String name) {
+        return difficulty(name, null);
+    }
+
+    default CommandNode difficulty(String name, Difficulty defaultValue) {
+        return addLeaf(getFactory().difficulty(name, this, defaultValue));
+    }
+
+    default CommandNode blockPropertyValues(String name) {
+        return blockPropertyValues(name, Lists.newArrayList());
+    }
+
+    default CommandNode blockPropertyValues(String name, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue) {
+        return addLeaf(getFactory().blockPropertyValues(name, this, defaultValue));
     }
 }

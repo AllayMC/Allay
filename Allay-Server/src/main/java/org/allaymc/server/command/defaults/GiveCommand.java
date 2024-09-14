@@ -25,7 +25,7 @@ public class GiveCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .playerTarget("player")
-                .itemTypeNode("itemName")
+                .itemType("itemName")
                 .intNum("amount", 1)
                 .optional()
                 .intNum("data", 0)

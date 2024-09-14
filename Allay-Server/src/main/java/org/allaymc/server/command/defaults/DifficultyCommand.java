@@ -18,7 +18,7 @@ public class DifficultyCommand extends SimpleCommand {
 
     @Override
     public void prepareCommandTree(CommandTree tree) {
-        tree.getRoot().difficultyNode("difficulty").exec((context, player) -> {
+        tree.getRoot().difficulty("difficulty").exec((context, player) -> {
             Difficulty difficulty = context.getResult(0);
             player.getWorld().getWorldData().setDifficulty(difficulty);
             context.addOutput(TrKeys.M_COMMANDS_DIFFICULTY_SUCCESS, difficulty);

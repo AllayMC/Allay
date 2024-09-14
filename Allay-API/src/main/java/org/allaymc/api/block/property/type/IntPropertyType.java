@@ -46,7 +46,16 @@ public final class IntPropertyType extends BaseBlockPropertyType<Integer> {
     public IntPropertyValue tryCreateValue(Object value) {
         if (value instanceof Number number) {
             return cachedValues[number.intValue() - min];
-        } else throw new IllegalArgumentException("Invalid value for int property type: " + value);
+        } else if (value instanceof String string) {
+            int intValue;
+            try {
+                intValue = Integer.parseInt(string);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Invalid value for int property type: " + value);
+            }
+            return cachedValues[intValue - min];
+        }
+        throw new IllegalArgumentException("Invalid value for int property type: " + value);
     }
 
     public final class IntPropertyValue extends BlockPropertyValue<Integer, IntPropertyType, Integer> {
