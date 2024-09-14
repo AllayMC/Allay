@@ -55,13 +55,13 @@ jobs:
         if: success() && contains(github.ref_name, 'master')
         with:
           name: Allay-API
-          path: Allay-API/build/libs/Allay-API-*-all.jar
+          path: Allay-API/build/libs/Allay-API-*-shaded.jar
       - name: Upload Allay-Server
         uses: actions/upload-artifact@v4
         if: success() && contains(github.ref_name, 'master')
         with:
           name: Allay-Server
-          path: Allay-Server/build/libs/Allay-Server-*-all.jar
+          path: Allay-Server/build/libs/Allay-Server-shaded.jar
       # Publish to JitPack
       - name: Publish to JitPack
         uses: fjogeleit/http-request-action@v1
@@ -107,6 +107,7 @@ jobs:
           username: ${{ secrets.TEST_SERVER_USER_NAME }}
           port: ${{ secrets.TEST_SERVER_PORT }}
           key: ${{ secrets.TEST_SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
           source: "Allay-Server/build/libs/Allay-Server-shaded.jar"
           rm: true
           target: "/root/allaymc"
@@ -117,6 +118,7 @@ jobs:
           host: ${{ secrets.TEST_SERVER_HOST }}
           username: ${{ secrets.TEST_SERVER_USER_NAME }}
           key: ${{ secrets.TEST_SERVER_SSH_KEY }}
+          passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
           port: ${{ secrets.TEST_SERVER_PORT }}
           command_timeout: 20s
           script: |
