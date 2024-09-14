@@ -115,9 +115,9 @@ jobs:
           port: ${{ secrets.TEST_SERVER_PORT }}
           command_timeout: 60s
           script: |
+            screen -S allay -X stuff 'stop\n'
+            sleep 15s
             mv /root/allaymc/Allay-Server/build/libs/Allay-Server-shaded.jar /root/allaymc
             rm -r /root/allaymc/Allay-Server
-            screen -S allay -X stuff 'stop'
-            sleep 15s
             screen -S allay -X stuff 'cd /root/allaymc; java -jar Allay-Server-shaded.jar\n'
             exit
