@@ -45,8 +45,8 @@ public class Metrics {
     // Should failed requests be logged?
     private static boolean logFailedRequests = false;
     // Executor service for requests
-    // We use an executor service because the Bukkit scheduler is affected by server lags
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    // We use an executor service because the server scheduler is affected by server lags
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1, t -> new Thread(t, "metrics-scheduler-thread"));
     // The name of the server software
     private final String name;
 
