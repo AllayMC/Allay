@@ -42,7 +42,6 @@ subprojects {
 
             java {
                 withSourcesJar()
-                withJavadocJar()
             }
 
             publications {
