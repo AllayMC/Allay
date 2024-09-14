@@ -40,6 +40,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.eventbus.AllayEventBus;
+import org.allaymc.server.metrics.Metrics;
 import org.allaymc.server.network.AllayNetworkServer;
 import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
@@ -179,6 +180,8 @@ public final class AllayServer implements Server {
                 String.valueOf(SETTINGS.networkSettings().port()),
                 String.valueOf(startTime - initialTime)
         );
+
+        Metrics.AllayMetrics.startMetrics();
 
         if (SETTINGS.genericSettings().enableGui()) Allay.DASHBOARD.serverStarted();
 

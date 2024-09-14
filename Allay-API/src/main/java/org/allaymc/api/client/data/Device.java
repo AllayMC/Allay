@@ -11,23 +11,24 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Device {
-    UNKNOWN(-1),
-    ANDROID(1),
-    IOS(2),
-    OSX(3),
-    AMAZON(4),
-    GEAR_VR(5),
-    HOLOLENS(6),
-    WINDOWS(7),
-    WINDOWS_32(8),
-    DEDICATED(9),
-    TVOS(10),
-    PLAYSTATION(11),
-    NINTENDO(12),
-    XBOX(13),
-    WINDOWS_PHONE(14);
+    UNKNOWN(-1, "Unknown"),
+    ANDROID(1, "Android"),
+    IOS(2, "iOS"),
+    OSX(3, "macOS"),
+    AMAZON(4, "Fire OS"),
+    GEAR_VR(5, "Gear VR"),
+    HOLOLENS(6, "HoloLens"),
+    WINDOWS(7, "Windows 10"),
+    WINDOWS_32(8, "Windows"),
+    DEDICATED(9, "Dedicated"),
+    TVOS(10, "tvOS"),
+    PLAYSTATION(11, "PlayStation"),
+    NINTENDO(12, "Switch"),
+    XBOX(13, "Xbox"),
+    WINDOWS_PHONE(14, "Windows Phone");
 
     private final int id;
+    private final String name;
 
     public static Device getDevice(int id) {
         return switch (id) {

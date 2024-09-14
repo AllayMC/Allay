@@ -68,7 +68,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         registerArgument(new RXM());
         registerArgument(new RY());
         registerArgument(new RYM());
-         registerArgument(new Scores());
+        registerArgument(new Scores());
     }
 
     @Override

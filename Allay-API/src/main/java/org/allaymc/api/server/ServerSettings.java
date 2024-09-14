@@ -12,6 +12,8 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
 
+import java.util.UUID;
+
 @Getter
 @Accessors(fluent = true)
 public class ServerSettings extends OkaeriConfig {
@@ -28,6 +30,8 @@ public class ServerSettings extends OkaeriConfig {
     private StorageSettings storageSettings = new StorageSettings();
     @CustomKey("resource-pack-settings")
     private ResourcePackSettings resourcePackSettings = new ResourcePackSettings();
+    @CustomKey("bstats-settings")
+    private BStatsSettings bStatsSettings = new BStatsSettings();
 
     @Getter
     @Setter
@@ -214,5 +218,27 @@ public class ServerSettings extends OkaeriConfig {
         private boolean forceResourcePacks = false;
 
         // TODO: URL packs configuration
+    }
+
+    @Getter
+    @Accessors(fluent = true)
+    public static class BStatsSettings extends OkaeriConfig {
+        @Comment("bStats (https://bStats.org) collects some basic information for plugin authors, like how")
+        @Comment("many people use their plugin and their total player count. It's recommended to keep bStats")
+        @Comment("enabled, but if you're not comfortable with this, you can turn this setting off. There is no")
+        @Comment("performance penalty associated with having metrics enabled, and data sent to bStats is fully anonymous.")
+        private boolean enable = true;
+
+        @CustomKey("server-uuid")
+        private String serverUUID = UUID.randomUUID().toString();
+
+        @CustomKey("log-failed-requests")
+        private boolean logFailedRequests = false;
+
+        @CustomKey("log-sent-data")
+        private boolean logSentData = false;
+
+        @CustomKey("log-response-status-text")
+        private boolean logResponseStatusText = false;
     }
 }
