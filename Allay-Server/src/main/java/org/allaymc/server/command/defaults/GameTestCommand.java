@@ -276,6 +276,12 @@ public class GameTestCommand extends SimpleCommand {
                 .exec((context, player) -> {
                     player.attack(DamageContainer.entityAttack(player, context.getResult(1)));
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("printblockunder")
+                .exec((context, player) -> {
+                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3f())).toString());
+                    return context.success();
                 }, SenderType.PLAYER);
     }
 }
