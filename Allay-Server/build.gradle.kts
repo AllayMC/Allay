@@ -33,7 +33,6 @@ dependencies {
     implementation(libs.oshi)
     implementation(libs.flatlaf)
     implementation(libs.formsrt)
-    implementation(libs.jose4j)
 
     testImplementation(libs.bundles.junit)
     testAnnotationProcessor(libs.lombok)
