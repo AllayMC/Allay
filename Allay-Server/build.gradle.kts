@@ -8,8 +8,6 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
-version = "1.0.0"
-
 application {
     mainClass.set("org.allaymc.server.Allay")
 }
@@ -53,11 +51,12 @@ tasks.processResources {
 
 tasks.runShadow {
     workingDir = file("${rootProject.projectDir}/.run/")
-    this.jarFile = file("build/libs/Allay-Server-$version-all.jar")
+    this.jarFile = file("build/libs/Allay-Server-shaded.jar")
 }
 
 tasks.shadowJar {
     transform(Log4j2PluginsCacheFileTransformer())
+    archiveClassifier = "shaded"
 }
 
 tasks.jacocoTestReport {

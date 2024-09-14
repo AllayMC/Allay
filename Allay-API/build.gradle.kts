@@ -26,3 +26,7 @@ dependencies {
     api(libs.snakeyaml)
     api(libs.caffeine)
 }
+
+tasks.shadowJar {
+    archiveClassifier = "shaded"
+}
