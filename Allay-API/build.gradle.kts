@@ -1,7 +1,3 @@
-plugins {
-    alias(libs.plugins.shadow)
-}
-
 version = "1.0.0"
 
 dependencies {
@@ -25,8 +21,4 @@ dependencies {
     }
     api(libs.snakeyaml)
     api(libs.caffeine)
-}
-
-tasks.shadowJar {
-    archiveClassifier = "shaded"
 }

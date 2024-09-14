@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Support for ipv6
-      - name: Set up WARP
+      - name: Setup WARP
         uses: fscarmen/warp-on-actions@v1.1
         if: contains(github.ref_name, 'master')
         with:
@@ -31,7 +31,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'zulu'
-      - name: Setup gradle
+      - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: wrapper
@@ -49,13 +49,7 @@ jobs:
         with:
           directory: .jacoco/test/
           token: ${{ secrets.CODECOV_TOKEN }}
-      # Upload artifacts
-      - name: Upload Allay-API
-        uses: actions/upload-artifact@v4
-        if: success() && contains(github.ref_name, 'master')
-        with:
-          name: Allay-API
-          path: Allay-API/build/libs/Allay-API-*-shaded.jar
+      # Upload Allay-Server
       - name: Upload Allay-Server
         uses: actions/upload-artifact@v4
         if: success() && contains(github.ref_name, 'master')
