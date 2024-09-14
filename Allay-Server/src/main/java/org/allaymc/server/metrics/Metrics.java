@@ -332,6 +332,7 @@ public class Metrics {
             this.callable = callable;
         }
 
+        @SuppressWarnings("DuplicatedCode")
         @Override
         protected JsonObject getChartData() throws Exception {
             JsonObject data = new JsonObject();
@@ -457,6 +458,7 @@ public class Metrics {
             this.callable = callable;
         }
 
+        @SuppressWarnings("DuplicatedCode")
         @Override
         protected JsonObject getChartData() throws Exception {
             JsonObject data = new JsonObject();
@@ -622,7 +624,7 @@ public class Metrics {
                 release = "Java " + javaVersion.substring(0, indexOf);
             } else {
                 // of course, it really wouldn't be all that simple if they didn't add a quirk, now would it
-                // valid strings for the major may potentially include values such as -ea to deannotate a pre release
+                // valid strings for the major may potentially include values such as -ea to deannotate a pre-release
                 Matcher versionMatcher = Pattern.compile("\\d+").matcher(majorVersion);
                 if (versionMatcher.find()) {
                     majorVersion = versionMatcher.group(0);
