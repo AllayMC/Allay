@@ -278,17 +278,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         // First move along the Y axis
         var yResult = moveAlongAxisAndStopWhenCollision(aabb, my, pos, Y);
-        var isOnGround = yResult.right();
-        var isFallOnBlock = isOnGround && !entity.isOnGround();
-        // Let entity know that he is on ground
-        entity.setOnGround(isOnGround);
-        if (isFallOnBlock && entity.getMotion().y() > 0) {
-            // Motion value alone y-axis is changed by block or something else
-            // for example, falling on slime block
-            my = entity.getMotion().y();
-        } else {
-            my = yResult.left();
-        }
+        my = yResult.left();
 
         if (abs(mx) >= abs(mz)) {
             // First handle the X axis, then handle the Z axis
@@ -300,8 +290,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
 
         entity.setMotion(new Vector3f(mx, my, mz));
-        var updated = !pos.equals(entity.getLocation());
-        return updated && updateEntityLocation(entity, pos);
+        if (!pos.equals(entity.getLocation()) && updateEntityLocation(entity, pos)) {
+            // Update onGround status after updated entity location
+            // to make sure that some block (for example: water) can reset
+            // entity's fallDistance before onFall() called
+            entity.setOnGround(yResult.right());
+        }
+        return false;
     }
 
     /**

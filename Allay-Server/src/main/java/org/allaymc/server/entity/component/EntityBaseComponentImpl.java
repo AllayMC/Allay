@@ -102,7 +102,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected EntityType<? extends Entity> entityType;
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
     protected Map<EffectType, EffectInstance> effects = new HashMap<>();
+    @Getter
     protected Vector3f motion = new Vector3f();
+    @Getter
+    protected Vector3f lastMotion = new Vector3f();
     @Getter
     protected boolean onGround = true;
     @Setter
@@ -433,19 +436,17 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public Vector3fc getMotion() {
-        return motion;
-    }
-
-    @Override
     public void setMotion(Vector3fc motion) {
+        this.lastMotion = this.motion;
         this.motion = new Vector3f(motion);
     }
 
     @Override
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
-        if (onGround && this.fallDistance > 0) this.onFall();
+        if (onGround && this.fallDistance > 0) {
+            this.onFall();
+        }
     }
 
     @Override

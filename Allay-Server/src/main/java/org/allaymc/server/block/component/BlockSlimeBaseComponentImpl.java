@@ -18,8 +18,10 @@ public class BlockSlimeBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onEntityFallOn(Entity entity, BlockState blockState) {
         // Client will handle the bounce
-        if (!entity.computeMovementServerSide()) return;
-        var currentMotion = entity.getMotion();
-        entity.setMotion(currentMotion.x(), -currentMotion.y(), currentMotion.z());
+        if (!entity.computeMovementServerSide()) {
+            return;
+        }
+        var lastMotion = entity.getLastMotion();
+        entity.setMotion(lastMotion.x(), -lastMotion.y(), lastMotion.z());
     }
 }
