@@ -602,7 +602,6 @@ public class Metrics {
 
     private static class JavaVersionRetriever implements Callable<Map<String, Map<String, Integer>>> {
         // The following code can be attributed to the PaperMC project
-        // https://github.com/PaperMC/Paper/blob/master/Spigot-Server-Patches/0005-Paper-Metrics.patch#L614
         @Override
         public Map<String, Map<String, Integer>> call() {
             Map<String, Map<String, Integer>> map = new HashMap<>();
