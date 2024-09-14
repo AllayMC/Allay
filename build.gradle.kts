@@ -40,9 +40,10 @@ subprojects {
                 mavenLocal()
             }
 
-            java {
-                withSourcesJar()
-            }
+            // TODO: withSourcesJar() will fail in github action
+            //java {
+            //    withSourcesJar()
+            //}
 
             publications {
                 create<MavenPublication>("maven") {
