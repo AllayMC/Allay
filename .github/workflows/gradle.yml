@@ -117,5 +117,5 @@ jobs:
           script: |
             mv /root/allaymc/Allay-Server/build/libs/Allay-Server-shaded.jar /root/allaymc
             rm -r /root/allaymc/Allay-Server
-            ((sleep 5s; screen -r allay; stop; cd /root/allaymc; java -jar Allay-Server-shaded.jar) &)
+            screen -S allay -X stuff 'stop; cd /root/allaymc; java -jar Allay-Server-shaded.jar\n'
             exit
