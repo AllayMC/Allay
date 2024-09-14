@@ -81,7 +81,7 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         return ofRedefinedData((builder, blockType, blockStateHash) -> builder.canResetFallDistance(canResetFallDistanceRedefiner.apply(blockType.ofState(blockStateHash))).build());
     }
 
-    private static BlockStateDataComponentImpl ofRedefinedData(TriFunction<BlockStateData.BlockStateDataBuilder, BlockType<?>, Integer, BlockStateData> redefiner) {
+    public static BlockStateDataComponentImpl ofRedefinedData(TriFunction<BlockStateData.BlockStateDataBuilder, BlockType<?>, Integer, BlockStateData> redefiner) {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
             var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());
             Objects.requireNonNull(vanillaId);
