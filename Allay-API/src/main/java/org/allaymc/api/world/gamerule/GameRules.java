@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2023/3/4
+ * GameRules is a container for storing and managing game rules.
  *
  * @author Jukebox | Cool_Loong
  */
@@ -23,18 +23,35 @@ public class GameRules {
 
     private final Map<GameRule, Object> gameRules = new HashMap<>();
 
+    /**
+     * Whether the game rules have been modified since last sending to the players.
+     */
     private boolean dirty;
 
+    /**
+     * Creates a new GameRules instance with default values.
+     */
     public GameRules() {
         for (GameRule gameRule : GameRule.values()) {
             this.gameRules.put(gameRule, gameRule.getDefaultValue());
         }
     }
 
+    /**
+     * Creates a new GameRules instance with the specified game rules.
+     *
+     * @param gameRules the game rules to be added
+     */
     public GameRules(Map<GameRule, Object> gameRules) {
         this.gameRules.putAll(gameRules);
     }
 
+    /**
+     * Reads game rules from NBT.
+     *
+     * @param nbt the NBT to read from
+     * @return the game rules
+     */
     public static GameRules readFromNBT(NbtMap nbt) {
         Map<GameRule, Object> gameRules = new HashMap<>();
         for (GameRule gameRule : GameRule.values()) {
@@ -49,39 +66,77 @@ public class GameRules {
         return new GameRules(gameRules);
     }
 
+    /**
+     * Get the game rules.
+     *
+     * @return the game rules
+     */
     @UnmodifiableView
     public Map<GameRule, Object> getGameRules() {
         return Collections.unmodifiableMap(gameRules);
     }
 
-    public void put(GameRule gameRule, Object o) {
-        gameRules.put(gameRule, o);
+    /**
+     * Set a game rule's value.
+     *
+     * @param gameRule the game rule
+     * @param value the value
+     */
+    public void put(GameRule gameRule, Object value) {
+        gameRules.put(gameRule, value);
         dirty = true;
     }
 
+    /**
+     * Get a game rule's value.
+     *
+     * @param gameRule the game rule
+     * @param <V> the type of the value
+     * @return the value
+     */
     @SuppressWarnings("unchecked")
     public <V> V get(GameRule gameRule) {
         return (V) gameRules.getOrDefault(gameRule, gameRule.getDefaultValue());
     }
 
+    /**
+     * Send the game rules to the players in a world.
+     *
+     * @param world the world which players are in.
+     */
     public void sync(World world) {
         if (!dirty) return;
         world.broadcastPacket(buildPacket());
         dirty = false;
     }
 
+    /**
+     * Builds a GameRulesChangedPacket from the game rules.
+     *
+     * @return the packet
+     */
     public GameRulesChangedPacket buildPacket() {
         var pk = new GameRulesChangedPacket();
         pk.getGameRules().addAll(toNetworkGameRuleData());
         return pk;
     }
 
+    /**
+     * Converts the game rules to a list of GameRuleData.
+     *
+     * @return the list of GameRuleData
+     */
     public List<GameRuleData<?>> toNetworkGameRuleData() {
         return this.getGameRules().entrySet().stream()
                 .map(entry -> new GameRuleData<>(entry.getKey().getName(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Writes the game rules to NBT.
+     *
+     * @param builder the NbtMapBuilder to write to
+     */
     public void writeToNBT(NbtMapBuilder builder) {
         for (Map.Entry<GameRule, Object> entry : this.gameRules.entrySet()) {
             // Lower case name should be used for key

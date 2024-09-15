@@ -7,7 +7,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 import java.util.Arrays;
 
 /**
- * Allay Project 2023/3/4
+ * GameRule represents a game rule in the game
  *
  * @author Jukebox | Cool_Loong
  */
@@ -52,23 +52,17 @@ public enum GameRule {
     private final Object defaultValue;
     private final Type type;
 
+    /**
+     * Get a game rule by name.
+     *
+     * @param name the name of the game rule
+     * @return the game rule, or {@code null} if not found
+     */
     public static GameRule fromName(String name) {
         return Arrays.stream(values())
                 .filter(gameRule -> gameRule.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
-    }
-
-    public static boolean parseByteToBoolean(byte value) {
-        return value == 1;
-    }
-
-    public GameRuleData<?> toNetwork() {
-        return new GameRuleData<>(name, defaultValue);
-    }
-
-    public <T> GameRuleData<T> toNetwork(T value) {
-        return new GameRuleData<>(name, value);
     }
 
     public enum Type {
