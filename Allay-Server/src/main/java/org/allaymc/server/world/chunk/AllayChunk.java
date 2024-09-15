@@ -66,12 +66,8 @@ public class AllayChunk implements Chunk {
     }
 
     public void tick(long currentTick) {
-        if (!getBlockEntities().isEmpty()) {
-            getBlockEntities().values().forEach(blockEntity -> blockEntity.tick(currentTick));
-        }
-        if (!getEntities().isEmpty()) {
-            getEntities().values().forEach(entity -> entity.tick(currentTick));
-        }
+        getBlockEntities().values().forEach(blockEntity -> blockEntity.tick(currentTick));
+        getEntities().values().forEach(entity -> entity.tick(currentTick));
     }
 
     @Override
