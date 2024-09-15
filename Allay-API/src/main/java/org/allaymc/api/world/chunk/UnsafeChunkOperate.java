@@ -1,7 +1,7 @@
 package org.allaymc.api.world.chunk;
 
 /**
- * Allay Project 8/24/2023
+ * UnsafeChunkOperate is used in {@link Chunk#batchProcess(UnsafeChunkOperate)} method.
  *
  * @author Cool_Loong
  */
