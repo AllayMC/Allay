@@ -13,6 +13,7 @@ import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.utils.LevelDBKeyUtils;
+import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
@@ -107,7 +108,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 .supplyAsync(() -> readChunkSync(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(e -> {
                     log.error("Failed to read chunk {}, {}", x, z, e);
-                    return null;
+                    return AllayUnsafeChunk.builder().emptyChunk(x, z, dimensionInfo).toSafeChunk();
                 });
     }
 
