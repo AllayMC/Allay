@@ -76,7 +76,7 @@ jobs:
       - name: Get Time
         id: time
         uses: nanzm/get-time-action@v2.0
-        if: github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         with:
           timeZone: 8
           format: 'YYYY/MM/DD-HH:mm:ss'
@@ -96,6 +96,7 @@ jobs:
       # Copy jar to test server
       - name: Copy Jar to Test Server
         uses: appleboy/scp-action@master
+        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         with:
           host: ${{ secrets.TEST_SERVER_HOST }}
           username: ${{ secrets.TEST_SERVER_USER_NAME }}
@@ -107,6 +108,7 @@ jobs:
       # Restart test server
       - name: Restart Test Server
         uses: appleboy/ssh-action@master
+        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         with:
           host: ${{ secrets.TEST_SERVER_HOST }}
           username: ${{ secrets.TEST_SERVER_USER_NAME }}
