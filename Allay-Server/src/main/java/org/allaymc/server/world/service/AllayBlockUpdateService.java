@@ -108,13 +108,13 @@ public class AllayBlockUpdateService implements BlockUpdateService {
     }
 
     @Override
-    public void scheduleBlockUpdate(Vector3ic pos, Duration delay) {
-        scheduledUpdates.putIfAbsent(pos, dimension.getWorld().getTick() + delay.toNanos() / 50_000_000);
+    public void scheduleBlockUpdate(Vector3ic pos, long delay) {
+        scheduledUpdates.putIfAbsent(pos, dimension.getWorld().getTick() + delay);
     }
 
     @Override
-    public void neighborBlockUpdate(Vector3ic pos, Vector3ic neighborPos, BlockFace blockFace) {
-        neighborUpdates.add(new NeighborUpdate(pos, neighborPos, blockFace));
+    public void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace) {
+        neighborUpdates.add(new NeighborUpdate(pos, changedNeighbour, blockFace));
     }
 
     protected record NeighborUpdate(Vector3ic pos, Vector3ic neighborPos, BlockFace blockFace) {}

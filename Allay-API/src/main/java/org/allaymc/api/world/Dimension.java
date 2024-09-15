@@ -574,7 +574,7 @@ public interface Dimension {
     }
 
     /**
-     * Update the specific face of a block.
+     * Update the block which is at the specified face of the specified block.
      *
      * @param x    the x coordinate of the block.
      * @param y    the y coordinate of the block.
@@ -586,7 +586,7 @@ public interface Dimension {
     }
 
     /**
-     * Update the block at the specified face of the specified block.
+     * Update the block which is at the specified face of the specified block.
      *
      * @param pos  the pos of the block.
      * @param face the face of the block.
