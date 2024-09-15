@@ -523,11 +523,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         entityCollisionCache.remove(entity.getRuntimeId());
     }
 
-    @Override
-    public boolean containEntity(Entity entity) {
-        return entities.containsKey(entity.getRuntimeId());
-    }
-
     /**
      * Please note that this method usually been called asynchronously <p/>
      * See {@link org.allaymc.server.network.processor.PlayerAuthInputPacketProcessor#handleAsync(EntityPlayer, PlayerAuthInputPacket, long)}

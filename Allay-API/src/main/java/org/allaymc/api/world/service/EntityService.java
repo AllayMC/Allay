@@ -3,7 +3,7 @@ package org.allaymc.api.world.service;
 import org.allaymc.api.entity.Entity;
 
 /**
- * Allay Project 11/12/2023
+ * EntityService is responsible for adding, removing and ticking entities.
  *
  * @author Cool_Loong
  */
@@ -13,10 +13,14 @@ public interface EntityService {
     }
 
     /**
-     * NOTICE: Before call this method, you should make sure the chunk which this entity will be spawned in has been loaded!
+     * Add an entity to the world.
+     * <p>
+     * The entity won't be added to the world immediately.
+     * It will be added to the world in the next tick, and
+     * the callback will be called.
      *
-     * @param entity   The entity pending to be spawned
-     * @param callback Called after the entity been pawned
+     * @param entity The entity pending to be spawned
+     * @param callback The callback to be called after the entity is added to the world
      */
     void addEntity(Entity entity, Runnable callback);
 
@@ -24,5 +28,15 @@ public interface EntityService {
         removeEntity(entity, () -> {});
     }
 
+    /**
+     * Remove an entity from the world.
+     * <p>
+     * The entity won't be removed from the world immediately.
+     * It will be removed from the world in the next tick, and
+     * the callback will be called.
+     *
+     * @param entity The entity pending to be despawned
+     * @param callback The callback to be called after the entity is removed from the world
+     */
     void removeEntity(Entity entity, Runnable callback);
 }
