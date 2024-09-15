@@ -48,10 +48,11 @@ import static org.allaymc.api.block.type.BlockTypes.UNKNOWN;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LevelDBChunkSerializer {
     public static final LevelDBChunkSerializer INSTANCE = new LevelDBChunkSerializer();
+    public static final int CHUNK_VERSION = 40;
 
     public void serialize(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         serializeBlock(writeBatch, chunk);
-        writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{UnsafeChunk.CHUNK_VERSION});
+        writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{CHUNK_VERSION});
         serializeHeightAndBiome(writeBatch, chunk);
         serializeEntityAndBlockEntity(writeBatch, chunk);
     }

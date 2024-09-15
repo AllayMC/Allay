@@ -7,6 +7,7 @@ import org.allaymc.api.world.generator.function.EntitySpawner;
 import org.allaymc.api.world.generator.function.Lighter;
 import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -73,12 +74,14 @@ public interface WorldGenerator {
      * Set the dimension of this generator.
      * <p>
      * This method is called by the implementation and
-     * should only be called by the implementation.
-     * Calling this method from outside the implementation will result in throwing IllegalStateException
+     * should only be called by the implementation. Calling
+     * this method from outside the implementation will result
+     * in throwing IllegalStateException
      *
      * @param dimension the dimension
      * @throws IllegalStateException if the method is called twice
      */
+    @ApiStatus.OverrideOnly
     void setDimension(Dimension dimension);
 
     /**

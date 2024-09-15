@@ -1,7 +1,7 @@
 package org.allaymc.api.world.chunk;
 
 /**
- * Allay Project 2023/9/10
+ * ChunkState represents the state of a chunk.
  *
  * @author daoge_cmd
  */
