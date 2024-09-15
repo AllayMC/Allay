@@ -105,6 +105,7 @@ jobs:
           passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
           source: "Allay-Server/build/libs/Allay-Server-shaded.jar"
           strip_components: 3
+          overwrite: true
           target: "/root/allaymc"
       # Restart test server
       - name: Restart Test Server
