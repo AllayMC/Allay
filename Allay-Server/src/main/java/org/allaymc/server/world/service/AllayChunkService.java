@@ -487,7 +487,7 @@ public final class AllayChunkService implements ChunkService {
                         var lcp = useSubChunkSendingSystem ?
                                 ((AllayChunk) chunk).createSubChunkLevelChunkPacket() :
                                 ((AllayChunk) chunk).createFullLevelChunkPacketChunk();
-                        chunkLoader.sendLevelChunkPacket(lcp);
+                        chunkLoader.sendPacket(lcp);
                         chunkLoader.onChunkInRangeSend(chunk);
                     });
                 }
@@ -522,7 +522,7 @@ public final class AllayChunkService implements ChunkService {
                 while (!chunkSendingQueue.isEmpty()) {
                     var chunk = chunkSendingQueue.poll();
                     var lcp = ((AllayChunk) chunk).createFullLevelChunkPacketChunk();
-                    chunkLoader.sendLevelChunkPacket(lcp);
+                    chunkLoader.sendPacket(lcp);
                     chunkLoader.onChunkInRangeSend(chunk);
                 }
             }

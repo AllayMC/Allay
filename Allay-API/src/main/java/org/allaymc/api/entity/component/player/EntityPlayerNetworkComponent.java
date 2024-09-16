@@ -5,6 +5,7 @@ import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.network.PacketReceiver;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
@@ -16,7 +17,7 @@ import java.util.UUID;
  *
  * @author daoge_cmd
  */
-public interface EntityPlayerNetworkComponent extends EntityComponent {
+public interface EntityPlayerNetworkComponent extends EntityComponent, PacketReceiver {
     LoginData getLoginData();
 
     default String getXUID() {
@@ -48,10 +49,6 @@ public interface EntityPlayerNetworkComponent extends EntityComponent {
     default String getOriginName() {
         return getLoginData().getDisplayName();
     }
-
-    void sendPacket(BedrockPacket packet);
-
-    void sendPacketImmediately(BedrockPacket packet);
 
     void disconnect(@MayContainTrKey String reason);
 

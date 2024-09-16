@@ -596,18 +596,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void handleChunkPacket(BedrockPacket packet) {
+    public void sendPacket(BedrockPacket packet) {
         networkComponent.sendPacket(packet);
     }
 
     @Override
-    public void handleChunkPacketImmediately(BedrockPacket packet) {
+    public void sendPacketImmediately(BedrockPacket packet) {
         networkComponent.sendPacketImmediately(packet);
-    }
-
-    @Override
-    public void sendLevelChunkPacket(LevelChunkPacket lcp) {
-        networkComponent.sendPacket(lcp);
     }
 
     @Override

@@ -574,14 +574,14 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void sendChunkPacket(BedrockPacket packet) {
-        chunkLoaders.forEach(chunkLoader -> chunkLoader.handleChunkPacket(packet));
+        chunkLoaders.forEach(chunkLoader -> chunkLoader.sendPacket(packet));
     }
 
     @Override
     public void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {
         chunkLoaders.stream()
                 .filter(chunkLoader -> chunkLoaderPredicate == null || chunkLoaderPredicate.test(chunkLoader))
-                .forEach(chunkLoader -> chunkLoader.handleChunkPacket(packet));
+                .forEach(chunkLoader -> chunkLoader.sendPacket(packet));
     }
 
     protected record ChunkPacketEntry(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {}

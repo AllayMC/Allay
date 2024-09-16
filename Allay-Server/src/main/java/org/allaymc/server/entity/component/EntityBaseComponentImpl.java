@@ -36,7 +36,6 @@ import org.allaymc.server.entity.component.event.CEntityFallEvent;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
 import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
 import org.allaymc.server.world.chunk.AllayChunk;
-import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -524,7 +523,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void sendPacketToViewersImmediately(BedrockPacket packet) {
-        viewers.values().forEach(client -> client.handleChunkPacketImmediately(packet));
+        viewers.values().forEach(client -> client.sendPacketImmediately(packet));
     }
 
     @Override
