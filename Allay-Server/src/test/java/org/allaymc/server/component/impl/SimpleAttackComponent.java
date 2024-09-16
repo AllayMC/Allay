@@ -1,7 +1,6 @@
 package org.allaymc.server.component.impl;
 
-import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.interfaces.AttackComponent;
 import org.allaymc.server.component.interfaces.HealthComponent;
@@ -12,8 +11,8 @@ import org.allaymc.server.component.interfaces.HealthComponent;
  * @author daoge_cmd
  */
 public class SimpleAttackComponent implements AttackComponent {
-    @ComponentIdentifier
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:attack_component");
+    @Identifier
+    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:attack_component");
 
     @Dependency
     protected HealthComponent healthComponent;

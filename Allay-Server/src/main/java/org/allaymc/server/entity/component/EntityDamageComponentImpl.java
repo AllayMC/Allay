@@ -12,9 +12,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
@@ -24,7 +23,6 @@ import org.allaymc.server.entity.component.event.CEntityFallEvent;
 import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
-import org.joml.Vector3f;
 
 /**
  * Allay Project 2024/1/12
@@ -32,8 +30,8 @@ import org.joml.Vector3f;
  * @author daoge_cmd
  */
 public class EntityDamageComponentImpl implements EntityDamageComponent {
-    @ComponentIdentifier
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_damage_component");
+    @Identifier
+    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:entity_damage_component");
 
     @Dependency
     protected EntityBaseComponent baseComponent;

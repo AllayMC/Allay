@@ -9,12 +9,11 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.BlockContainer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
-import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
@@ -30,8 +29,8 @@ import java.util.function.Supplier;
  * @author daoge_cmd
  */
 public class BlockEntityContainerHolderComponentImpl implements BlockEntityContainerHolderComponent {
-    @ComponentIdentifier
-    protected static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_inventory_holder_component");
+    @Identifier
+    protected static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:block_entity_inventory_holder_component");
 
     @Dependency
     protected BlockEntityBaseComponent baseComponent;

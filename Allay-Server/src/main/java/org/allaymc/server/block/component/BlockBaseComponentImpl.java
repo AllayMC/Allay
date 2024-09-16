@@ -14,7 +14,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
@@ -22,7 +21,7 @@ import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.block.type.BlockLootTable;
-import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.loottable.context.BreakBlockContext;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -38,8 +37,8 @@ import java.util.Set;
  */
 public class BlockBaseComponentImpl implements BlockBaseComponent {
 
-    @ComponentIdentifier
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_base_component");
+    @Identifier
+    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:block_base_component");
 
     @Manager
     protected ComponentManager manager;

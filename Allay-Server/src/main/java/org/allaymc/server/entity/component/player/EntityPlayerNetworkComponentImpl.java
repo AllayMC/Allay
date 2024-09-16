@@ -25,11 +25,10 @@ import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
@@ -74,8 +73,8 @@ import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 @Slf4j
 public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComponent {
 
-    @ComponentIdentifier
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
+    @Identifier
+    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:player_network_component");
 
     protected final Server server = Server.getInstance();
 

@@ -7,9 +7,8 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.entity.component.event.CEntityDieEvent;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -25,8 +24,8 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class EntityContainerHolderComponentImpl extends BaseContainerHolder implements EntityContainerHolderComponent {
 
-    @ComponentIdentifier
-    protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_holder_component");
+    @Identifier
+    protected static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:entity_inventory_holder_component");
 
     @ComponentedObject
     protected static Entity thisEntity;

@@ -17,8 +17,6 @@ import java.lang.annotation.Target;
  * If so, the injector will try to find the corresponding component instance through inheritance relationships (if identifier is empty) or through identifier (if identifier is not empty), and inject it into the field.
  * <p>
  * The scope of dependency lookup is limited by the list of components provided to the injector, and if the dependency is not found, will throw {@link ComponentInjectException}
- * <p>
- * Allay Project 2023/3/4
  *
  * @author daoge_cmd
  */

@@ -12,9 +12,8 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.MathUtils;
-import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
@@ -34,8 +33,8 @@ import static org.allaymc.api.container.FullContainerType.CRAFTING_GRID;
  */
 public class EntityPlayerContainerViewerComponentImpl implements EntityContainerViewerComponent {
 
-    @ComponentIdentifier
-    protected static final Identifier IDENTIFIER = new Identifier("minecraft:entity_inventory_viewer_component");
+    @Identifier
+    protected static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:entity_inventory_viewer_component");
 
     protected byte idCounter = 1;
     @Dependency

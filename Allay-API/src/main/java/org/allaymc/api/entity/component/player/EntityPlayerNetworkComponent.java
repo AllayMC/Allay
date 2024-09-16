@@ -6,6 +6,7 @@ import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.network.PacketReceiver;
+import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
@@ -13,7 +14,7 @@ import javax.crypto.SecretKey;
 import java.util.UUID;
 
 /**
- * Allay Project 2023/10/14
+ * EntityPlayerNetworkComponent is the component that manages network related things of a player.
  *
  * @author daoge_cmd
  */

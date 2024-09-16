@@ -28,7 +28,6 @@ import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.type.InternalBlockTypeData;
 import org.allaymc.server.component.annotation.*;
@@ -53,8 +52,8 @@ import static org.allaymc.api.item.ItemHelper.*;
 @Slf4j
 public class ItemBaseComponentImpl implements ItemBaseComponent {
 
-    @ComponentIdentifier
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
+    @Identifier
+    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:item_base_component");
 
     // TODO: Due to differences between server-side and client-side block placement checks,
     //  which cannot be synchronized 100%, "block swallowing" phenomenon may occur.

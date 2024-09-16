@@ -7,15 +7,13 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -26,8 +24,8 @@ import java.util.function.Supplier;
  */
 public class BlockStateDataComponentImpl implements BlockStateDataComponent {
 
-    @ComponentIdentifier
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_state_data_component");
+    @Identifier
+    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:block_state_data_component");
 
     protected static final BlockStateDataComponentImpl DEFAULT = BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.DEFAULT);
 

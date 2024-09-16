@@ -8,8 +8,7 @@ import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
-import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.component.annotation.ComponentIdentifier;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CEntityAttributeChangeEvent;
@@ -33,8 +32,8 @@ import static java.lang.Math.min;
 @Slf4j
 public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
-    @ComponentIdentifier
-    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_attribute_component");
+    @Identifier
+    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:entity_attribute_component");
 
     protected final Map<AttributeType, Attribute> attributes = new EnumMap<>(AttributeType.class);
 

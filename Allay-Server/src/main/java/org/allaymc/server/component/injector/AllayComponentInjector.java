@@ -18,10 +18,7 @@ import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.exception.ComponentInjectException;
-import org.allaymc.server.component.annotation.ComponentedObject;
-import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.component.annotation.OnInitFinish;
+import org.allaymc.server.component.annotation.*;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
@@ -163,8 +160,10 @@ public class AllayComponentInjector<T> {
                 var componentFieldName = componentFieldNameMapping.get(provider);
                 try {
                     var methodImpl = provider.getComponentClass().getMethod(methodShouldBeInject.getName(), methodShouldBeInject.getParameterTypes());
-                    //This method must be a default method, and the component implementation doesn't override it
-                    //So that we don't need to handle it, as it has a default implementation
+                    // This method is annotated with @Ignore, which means that it won't be used as a method impl, so we skip it
+                    if (methodImpl.isAnnotationPresent(Ignore.class)) continue;
+                    // This method must be a default method, and the component implementation doesn't override it
+                    // So that we don't need to handle it, as it has a default implementation
                     if (methodImpl.equals(methodShouldBeInject)) continue;
 
                     if (methodDelegation == null)
