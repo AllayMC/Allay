@@ -95,8 +95,10 @@ jobs:
           ignoreStatusCodes: '400,404,401,403,429,500,502,503,504'
       # Copy jar to test server
       - name: Copy Jar to Test Server
+        id: deploy-jar
         uses: appleboy/scp-action@master
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        continue-on-error: true
         with:
           host: ${{ secrets.TEST_SERVER_HOST }}
           username: ${{ secrets.TEST_SERVER_USER_NAME }}
@@ -110,7 +112,8 @@ jobs:
       # Restart test server
       - name: Restart Test Server
         uses: appleboy/ssh-action@master
-        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        if: steps.deploy-jar.outcome == 'success' && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        continue-on-error: true
         with:
           host: ${{ secrets.TEST_SERVER_HOST }}
           username: ${{ secrets.TEST_SERVER_USER_NAME }}
