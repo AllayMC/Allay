@@ -107,8 +107,7 @@ jobs:
           passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
           source: "Allay-Server/build/libs/Allay-Server-shaded.jar"
           strip_components: 3
-          overwrite: true
-          target: "/root/allaymc"
+          target: "/root/allaymc/tmp"
       # Restart test server
       - name: Restart Test Server
         uses: appleboy/ssh-action@master
@@ -125,5 +124,7 @@ jobs:
             if ! screen -list | grep -q "allay"; then screen -S "allay"; fi
             cd /root/allaymc
             if lsof "Allay-Server-shaded.jar" > /dev/null; then screen -S allay -X stuff 'stop\n'; sleep 15s; fi
+            mv tmp/Allay-Server-shaded.jar Allay-Server-shaded.jar
+            rm -r tmp
             screen -S allay -X stuff 'cd /root/allaymc; java -jar Allay-Server-shaded.jar\n'
             exit
