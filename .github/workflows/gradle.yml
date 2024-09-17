@@ -121,8 +121,8 @@ jobs:
           port: ${{ secrets.TEST_SERVER_PORT }}
           command_timeout: 60s
           script: |
-            script /dev/null
-            if ! screen -list | grep -q "allay"; then screen -S "allay"; fi
+            screen -d -R allay
+            exit
             cd /root/allaymc
             if lsof "Allay-Server-shaded.jar" > /dev/null; then screen -S allay -X stuff 'stop\n'; sleep 15s; fi
             mv tmp/Allay-Server-shaded.jar Allay-Server-shaded.jar
