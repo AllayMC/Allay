@@ -100,7 +100,6 @@ jobs:
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         continue-on-error: true
         with:
-          debug: true
           host: ${{ secrets.TEST_SERVER_HOST }}
           username: ${{ secrets.TEST_SERVER_USER_NAME }}
           port: ${{ secrets.TEST_SERVER_PORT }}
