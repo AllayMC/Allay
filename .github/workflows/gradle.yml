@@ -5,12 +5,14 @@ on:
     branches: [ "master" ]
     paths:
       - .github/workflows/gradle.yml
+      - gradle/libs.versions.toml
       - Allay-API/**
       - Allay-Server/**
       - Allay-Data/**
   pull_request:
     paths:
       - .github/workflows/gradle.yml
+      - gradle/libs.versions.toml
       - Allay-API/**
       - Allay-Server/**
       - Allay-Data/**
