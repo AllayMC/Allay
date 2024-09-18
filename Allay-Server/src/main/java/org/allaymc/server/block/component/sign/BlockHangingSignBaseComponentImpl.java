@@ -1,7 +1,7 @@
 package org.allaymc.server.block.component.sign;
 
 import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.PlaceBlockHelper;
+import org.allaymc.api.block.BlockPlaceHelper;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -38,9 +38,9 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
             var centerFull = shape.isCenterFull(BlockFace.DOWN);
             if (placementInfo.player().isSneaking() || (centerFull && !full)) {
                 blockState = blockState.setProperty(BlockPropertyTypes.ATTACHED_BIT, true);
-                blockState = PlaceBlockHelper.processGroundSignDirectionProperty(blockState, placeBlockPos, placementInfo);
+                blockState = BlockPlaceHelper.processGroundSignDirectionProperty(blockState, placeBlockPos, placementInfo);
             } else if (full) {
-                blockState = PlaceBlockHelper.processFacingDirectionProperty(blockState, placeBlockPos, placementInfo);
+                blockState = BlockPlaceHelper.processFacingDirectionProperty(blockState, placeBlockPos, placementInfo);
             } else return false;
         } else {
             blockState = blockState.setProperty(BlockPropertyTypes.FACING_DIRECTION, face.opposite().rotateY().ordinal());

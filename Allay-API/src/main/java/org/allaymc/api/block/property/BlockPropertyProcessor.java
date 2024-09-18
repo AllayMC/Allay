@@ -1,6 +1,6 @@
 package org.allaymc.api.block.property;
 
-import org.allaymc.api.block.PlaceBlockHelper;
+import org.allaymc.api.block.BlockPlaceHelper;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.joml.Vector3ic;
@@ -22,10 +22,10 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 @FunctionalInterface
 public interface BlockPropertyProcessor {
     static void init() {
-        PILLAR_AXIS.setProcessor(PlaceBlockHelper::processPillarAxisProperty);
-        MINECRAFT_CARDINAL_DIRECTION.setProcessor(PlaceBlockHelper::processMinecraftCardinalDirectionProperty);
-        FACING_DIRECTION.setProcessor(PlaceBlockHelper::processFacingDirectionProperty);
-        GROUND_SIGN_DIRECTION.setProcessor(PlaceBlockHelper::processGroundSignDirectionProperty);
+        PILLAR_AXIS.setProcessor(BlockPlaceHelper::processPillarAxisProperty);
+        MINECRAFT_CARDINAL_DIRECTION.setProcessor(BlockPlaceHelper::processMinecraftCardinalDirectionProperty);
+        FACING_DIRECTION.setProcessor(BlockPlaceHelper::processFacingDirectionProperty);
+        GROUND_SIGN_DIRECTION.setProcessor(BlockPlaceHelper::processGroundSignDirectionProperty);
     }
 
     BlockState process(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
