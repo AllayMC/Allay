@@ -52,13 +52,16 @@ public class AllayNBTFilePlayerStorage implements PlayerStorage {
         }
 
         // Rename current file to uuid_old.nbt
-        if (Files.exists(path)) Files.move(path, oldPath);
+        var currentFileExists = Files.exists(path);
+        if (currentFileExists) Files.move(path, oldPath);
 
         try (var writer = NbtUtils.createGZIPWriter(Files.newOutputStream(path))) {
             writer.writeTag(playerData.toNBT());
         } catch (Throwable e) {
-            // error, rename uuid_old.nbt file to uuid.nbt
-            Files.move(oldPath, path);
+            if (currentFileExists) {
+                // error, rename uuid_old.nbt file to uuid.nbt
+                Files.move(oldPath, path);
+            }
             log.error("Error while writing player data {}", uuid, e);
         }
 
