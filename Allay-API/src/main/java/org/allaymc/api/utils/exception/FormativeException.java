@@ -4,8 +4,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
  * 支持格式化字符串的自定义运行时异常
- * <p>
- * Allay Project 11/24/2023
  *
  * @author duanxinyuan
  */

@@ -7,8 +7,6 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 @AllArgsConstructor

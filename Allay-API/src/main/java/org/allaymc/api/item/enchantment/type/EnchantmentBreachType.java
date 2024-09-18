@@ -6,8 +6,6 @@ import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
 
 /**
- * Allay Project 2024/6/18
- *
  * @author daoge_cmd
  */
 public class EnchantmentBreachType extends AbstractEnchantmentType {

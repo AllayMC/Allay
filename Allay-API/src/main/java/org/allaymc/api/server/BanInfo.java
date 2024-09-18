@@ -10,8 +10,6 @@ import lombok.experimental.Accessors;
 import java.util.Set;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 @Getter

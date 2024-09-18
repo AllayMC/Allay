@@ -4,7 +4,6 @@ import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.type.BlockState;
 
 /**
- * Allay Project 2023/3/25
  *
  * @author daoge_cmd | CoolLoong
  */

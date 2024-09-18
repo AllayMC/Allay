@@ -15,8 +15,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
 import java.util.Objects;
 
 /**
- * Allay Project 2023/9/15
- *
  * @author daoge_cmd
  */
 public interface BlockEntityBaseComponent extends BlockEntityComponent {

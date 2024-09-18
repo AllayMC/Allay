@@ -6,8 +6,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 
 /**
- * Allay Project 2023/11/26
- *
  * @author daoge_cmd
  */
 @Getter

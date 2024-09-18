@@ -3,8 +3,6 @@ package org.allaymc.api.blockentity.component;
 import org.allaymc.api.block.type.BlockType;
 
 /**
- * Allay Project 2024/8/11
- *
  * @author daoge_cmd
  */
 public interface BlockEntityFurnaceBaseComponent extends BlockEntityBaseComponent {

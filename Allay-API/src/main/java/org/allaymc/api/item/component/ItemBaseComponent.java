@@ -26,8 +26,6 @@ import static org.allaymc.api.item.tag.ItemTags.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
 /**
- * Allay Project 2023/5/19
- *
  * @author daoge_cmd
  */
 public interface ItemBaseComponent extends ItemComponent {

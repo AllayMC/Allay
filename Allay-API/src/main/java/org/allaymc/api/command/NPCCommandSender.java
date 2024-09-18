@@ -14,8 +14,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import java.util.UUID;
 
 /**
- * Allay Project 2024/2/25
- *
  * @author daoge_cmd
  */
 @Getter

@@ -4,8 +4,6 @@ import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
- * Allay Project 2024/8/3
- *
  * @author daoge_cmd
  */
 @Getter

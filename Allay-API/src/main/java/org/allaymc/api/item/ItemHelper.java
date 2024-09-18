@@ -17,8 +17,6 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Allay Project 2023/9/23
- *
  * @author daoge_cmd
  */
 @UtilityClass

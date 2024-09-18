@@ -14,8 +14,6 @@ import java.nio.IntBuffer;
 import java.text.NumberFormat;
 
 /**
- * Allay Project 7/30/2023
- *
  * @author Cool_Loong
  */
 public class Position3i extends Vector3i implements Position3ic {

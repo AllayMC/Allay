@@ -6,8 +6,6 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 @Getter

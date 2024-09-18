@@ -4,8 +4,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.utils.Identifier;
 
 /**
- * Allay Project 2023/10/27
- *
  * @author daoge_cmd
  */
 public interface EffectType {

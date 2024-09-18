@@ -4,8 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Allay Project 2023/3/12
- *
  * @author daoge_cmd
  */
 public interface Task {

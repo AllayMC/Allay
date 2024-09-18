@@ -8,8 +8,6 @@ import org.allaymc.api.command.CommandSender;
 import java.util.List;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public interface CommandTree {

@@ -13,8 +13,6 @@ import static java.lang.Math.abs;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
- * Allay Project 2024/8/15
- *
  * @author daoge_cmd
  */
 @UtilityClass

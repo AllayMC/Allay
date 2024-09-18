@@ -10,8 +10,6 @@ import org.allaymc.api.item.ItemStack;
 import java.util.function.Supplier;
 
 /**
- * Allay Project 2023/7/22
- *
  * @author daoge_cmd
  */
 @Getter

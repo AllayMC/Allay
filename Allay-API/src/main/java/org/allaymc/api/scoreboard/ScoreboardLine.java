@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * <p>
  * Composed of {@link Scorer} and score
  * <p>
- * Allay Project 2024/2/27
  *
  * @author daoge_cmd
  */

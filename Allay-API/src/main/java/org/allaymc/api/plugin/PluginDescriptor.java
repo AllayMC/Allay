@@ -5,7 +5,6 @@ import org.cloudburstmc.protocol.common.util.Preconditions;
 import java.util.List;
 
 /**
- * Allay Project 2024/2/8
  *
  * @author daoge_cmd
  * <p>

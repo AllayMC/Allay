@@ -5,7 +5,6 @@ package org.allaymc.api.scheduler;
  * <p>
  * Each time a task is executed, the creator of the task is first checked to be valid, and if not, the task is canceled
  * <p>
- * Allay Project 2023/3/12
  *
  * @author daoge_cmd
  */

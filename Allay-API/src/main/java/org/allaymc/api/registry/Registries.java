@@ -31,7 +31,6 @@ import java.util.function.Function;
  * Holds all the common registries in allay.
  *
  * <p>
- * Allay Project 2024/7/19
  *
  * @author daoge_cmd
  */

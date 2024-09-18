@@ -6,8 +6,6 @@ import lombok.Setter;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Allay Project 2023/10/27
- *
  * @author daoge_cmd
  */
 @Getter

@@ -7,8 +7,6 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.input.CraftingInput;
 
 /**
- * Allay Project 2024/1/19
- *
  * @author daoge_cmd
  */
 public abstract class CraftingContainer extends BlockContainer {

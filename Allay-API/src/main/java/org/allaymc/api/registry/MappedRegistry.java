@@ -8,7 +8,6 @@ import java.util.function.Supplier;
  * The M represents the map class, which can be anything that extends {@link Map}. The
  * {@code KEY} and {@code VALUE} generics are the key and value respectively.
  * <p>
- * Allay Project 2023/3/18
  *
  * @param <KEY>     the key
  * @param <VALUE>   the value

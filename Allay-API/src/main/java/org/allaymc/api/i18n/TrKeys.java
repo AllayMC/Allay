@@ -1,8 +1,7 @@
 package org.allaymc.api.i18n;
 
 /**
- * @author daoge_cmd <br>
- * Allay Project <br>
+ * @author daoge_cmd
  */
 public interface TrKeys {
     String A_ALLAY_STARTING = "allay:allay.starting";

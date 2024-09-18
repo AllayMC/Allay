@@ -12,7 +12,6 @@ import org.jetbrains.annotations.ApiStatus;
  * <p>
  * Which should be a 'static' constant annotated with @ComponentIdentifier.
  * <p>
- * Allay Project 2023/3/4
  *
  * @author daoge_cmd
  */

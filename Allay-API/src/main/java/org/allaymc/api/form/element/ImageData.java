@@ -5,8 +5,6 @@ import lombok.Setter;
 import org.allaymc.api.form.FormException;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 @Setter

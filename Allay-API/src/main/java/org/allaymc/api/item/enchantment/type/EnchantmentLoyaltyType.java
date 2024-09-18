@@ -6,8 +6,7 @@ import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
 
 /**
- * @author daoge_cmd <br>
- * Allay Project <br>
+ * @author daoge_cmd
  */
 public class EnchantmentLoyaltyType extends AbstractEnchantmentType {
     public EnchantmentLoyaltyType() {

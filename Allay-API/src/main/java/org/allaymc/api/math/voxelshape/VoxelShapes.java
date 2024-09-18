@@ -12,7 +12,6 @@ import static org.allaymc.api.block.data.BlockFace.getBlockFaceByStairDirectionV
 /**
  * A class contains some useful voxel shapes
  * <p>
- * Allay Project 2023/9/2
  *
  * @author daoge_cmd
  */

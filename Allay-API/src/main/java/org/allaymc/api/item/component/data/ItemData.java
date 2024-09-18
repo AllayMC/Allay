@@ -7,8 +7,6 @@ import lombok.experimental.Accessors;
 import org.allaymc.api.utils.JSONUtils;
 
 /**
- * Allay Project 2023/5/19
- *
  * @author daoge_cmd
  */
 @Getter

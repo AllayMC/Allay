@@ -28,7 +28,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * This interface is for /scoreboard command;
  * if you just want to display information, please operate directly on the scoreboard object
  * <p>
- * Allay Project 2024/2/28
  *
  * @author daoge_cmd
  */

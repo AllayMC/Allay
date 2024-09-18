@@ -6,8 +6,6 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Allay Project 2024/8/31
- *
  * @author daoge_cmd
  */
 @Getter

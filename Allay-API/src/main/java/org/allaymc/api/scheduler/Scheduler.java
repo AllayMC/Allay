@@ -5,8 +5,6 @@ import org.allaymc.api.ApiInstanceHolder;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Allay Project 2023/3/12
- *
  * @author daoge_cmd
  */
 public interface Scheduler {

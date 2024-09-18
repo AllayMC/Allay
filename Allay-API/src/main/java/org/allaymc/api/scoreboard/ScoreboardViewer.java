@@ -9,7 +9,6 @@ import org.allaymc.api.scoreboard.data.DisplaySlot;
  * <p>
  * The term "Scoreboard" is deliberately used in the method names to prevent confusion with other EntityPlayer interfaces
  * <p>
- * Allay Project 2024/2/27
  *
  * @author daoge_cmd
  */

@@ -7,8 +7,6 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Allay Project 2023/7/9
- *
  * @author daoge_cmd
  */
 public interface EntityAttributeComponent extends EntityComponent {

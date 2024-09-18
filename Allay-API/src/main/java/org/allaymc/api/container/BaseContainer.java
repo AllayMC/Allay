@@ -23,8 +23,6 @@ import java.util.function.Consumer;
 import static org.allaymc.api.item.ItemHelper.fromNBT;
 
 /**
- * Allay Project 2023/7/15
- *
  * @author daoge_cmd
  */
 @Slf4j

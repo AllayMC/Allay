@@ -1,8 +1,6 @@
 package org.allaymc.api.perm;
 
 /**
- * Allay Project 2024/1/6
- *
  * @author daoge_cmd
  */
 public interface PermKeys {

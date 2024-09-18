@@ -5,8 +5,6 @@ import org.allaymc.api.perm.tree.PermTree;
 import java.util.Collection;
 
 /**
- * Allay Project 2023/12/30
- *
  * @author daoge_cmd
  */
 public interface Permissible {

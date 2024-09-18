@@ -5,8 +5,6 @@ import org.allaymc.api.item.type.ItemType;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Allay Project 2023/5/19
- *
  * @author daoge_cmd
  */
 public interface ItemStackInitInfo extends ComponentInitInfo {

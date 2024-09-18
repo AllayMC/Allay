@@ -11,8 +11,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
- * Allay Project 2023/7/27
- *
  * @author daoge_cmd
  */
 public record FullContainerType<T extends Container>(

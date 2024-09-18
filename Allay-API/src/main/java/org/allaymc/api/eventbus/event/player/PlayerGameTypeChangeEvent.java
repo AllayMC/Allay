@@ -7,7 +7,6 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 /**
- * Allay Project 2024/8/3
  *
  * @author daoge_cmd | Dhaiven
  */

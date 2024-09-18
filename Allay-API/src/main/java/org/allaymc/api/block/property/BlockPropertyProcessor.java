@@ -15,7 +15,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  * <br>
  * This prevents writing a lot of complicated code for the blocks which are using the same block property type.
  * <p>
- * Allay Project 2024/8/18
  *
  * @author daoge_cmd
  */

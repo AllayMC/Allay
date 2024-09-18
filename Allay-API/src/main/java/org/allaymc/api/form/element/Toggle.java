@@ -4,8 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public final class Toggle extends CustomFormElement {

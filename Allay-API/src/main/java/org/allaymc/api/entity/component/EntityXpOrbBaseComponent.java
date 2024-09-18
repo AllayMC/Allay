@@ -1,8 +1,6 @@
 package org.allaymc.api.entity.component;
 
 /**
- * Allay Project 2024/8/12
- *
  * @author daoge_cmd
  */
 public interface EntityXpOrbBaseComponent extends EntityBaseComponent {

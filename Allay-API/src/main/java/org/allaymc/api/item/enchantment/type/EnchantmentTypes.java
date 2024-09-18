@@ -3,8 +3,6 @@ package org.allaymc.api.item.enchantment.type;
 import lombok.experimental.UtilityClass;
 
 /**
- * Allay Project 16/07/2024
- *
  * @author IWareQ
  */
 @SuppressWarnings("unused")

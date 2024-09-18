@@ -1,8 +1,6 @@
 package org.allaymc.api.item.recipe;
 
 /**
- * Allay Project 2023/11/26
- *
  * @author daoge_cmd
  */
 public interface TaggedRecipe extends Recipe {

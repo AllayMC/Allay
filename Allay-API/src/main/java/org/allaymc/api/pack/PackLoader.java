@@ -7,8 +7,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
- * Allay Project 28/01/2024
- *
  * @author IWareQ, Cloudburst Server
  */
 public interface PackLoader extends AutoCloseable {

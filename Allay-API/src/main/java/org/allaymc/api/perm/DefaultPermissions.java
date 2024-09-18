@@ -6,8 +6,6 @@ import org.allaymc.api.perm.tree.PermTree;
 import static org.allaymc.api.perm.PermKeys.*;
 
 /**
- * Allay Project 2023/12/30
- *
  * @author daoge_cmd
  */
 public final class DefaultPermissions {

@@ -1,8 +1,6 @@
 package org.allaymc.api.form;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public class FormException extends RuntimeException {

@@ -6,8 +6,6 @@ import org.allaymc.api.world.service.HasLongId;
 import org.joml.primitives.AABBf;
 
 /**
- * Allay Project 2023/5/20
- *
  * @author daoge_cmd
  */
 public interface Entity extends

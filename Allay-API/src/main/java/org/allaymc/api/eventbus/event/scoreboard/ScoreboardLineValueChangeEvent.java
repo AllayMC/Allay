@@ -6,8 +6,6 @@ import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 
 /**
- * Allay Project 2024/8/31
- *
  * @author daoge_cmd
  */
 @Getter

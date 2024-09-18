@@ -1,8 +1,6 @@
 package org.allaymc.api.utils.exception;
 
 /**
- * Allay Project 2023/9/22
- *
  * @author daoge_cmd
  */
 public class ContainerException extends RuntimeException {

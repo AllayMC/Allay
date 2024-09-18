@@ -35,8 +35,6 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Allay Project 2023/5/26
- *
  * @author daoge_cmd
  */
 public interface EntityBaseComponent extends EntityComponent, CommandSender {

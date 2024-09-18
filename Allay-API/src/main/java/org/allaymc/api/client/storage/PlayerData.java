@@ -11,8 +11,6 @@ import org.joml.Vector3ic;
 import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 
 /**
- * Allay Project 2024/1/27
- *
  * @author daoge_cmd
  */
 @Getter

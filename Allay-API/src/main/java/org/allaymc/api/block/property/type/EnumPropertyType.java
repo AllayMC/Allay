@@ -8,8 +8,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 
 /**
- * Allay Project 2023/3/19
- *
  * @author daoge_cmd
  */
 public final class EnumPropertyType<T extends Enum<T>> extends BaseBlockPropertyType<T> {

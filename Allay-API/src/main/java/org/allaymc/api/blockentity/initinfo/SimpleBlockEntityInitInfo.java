@@ -10,8 +10,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 
 /**
- * Allay Project 2023/9/15
- *
  * @author daoge_cmd
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)

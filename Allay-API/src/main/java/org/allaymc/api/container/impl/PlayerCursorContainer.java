@@ -7,8 +7,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import java.util.function.Supplier;
 
 /**
- * Allay Project 2023/7/15
- *
  * @author daoge_cmd
  */
 public class PlayerCursorContainer extends PlayerContainer {

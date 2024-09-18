@@ -24,8 +24,6 @@ import java.util.function.Function;
 import static org.allaymc.api.command.tree.CommandNodeFactory.getFactory;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public interface CommandNode {

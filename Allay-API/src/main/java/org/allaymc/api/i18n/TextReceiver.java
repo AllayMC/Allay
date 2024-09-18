@@ -4,8 +4,6 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.utils.Utils;
 
 /**
- * Allay Project 2023/12/15
- *
  * @author daoge_cmd
  */
 public interface TextReceiver {

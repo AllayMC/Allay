@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Allay Project 2023/7/15
- *
  * @author daoge_cmd
  */
 public interface Container {

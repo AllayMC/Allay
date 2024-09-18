@@ -8,8 +8,6 @@ import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 import java.util.Map;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public abstract class CommandRegistry extends SimpleMappedRegistry<String, Command> {

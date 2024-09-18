@@ -7,7 +7,6 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 
 /**
- * Allay Project 2024/08/03
  *
  * @author Dhaiven
  */

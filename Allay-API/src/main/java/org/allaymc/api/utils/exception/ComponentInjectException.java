@@ -3,7 +3,6 @@ package org.allaymc.api.utils.exception;
 /**
  * Thrown when component injection encounters a problem
  * <p>
- * Allay Project 2023/3/4
  *
  * @author daoge_cmd
  */

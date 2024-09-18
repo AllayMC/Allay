@@ -7,8 +7,6 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 /**
- * Allay Project 2024/2/27
- *
  * @author daoge_cmd
  */
 @Getter

@@ -5,7 +5,6 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 
 /**
- * Allay Project 2024/08/03
  *
  * @author Dhaiven
  */

@@ -8,8 +8,6 @@ import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.server.Server;
 
 /**
- * Allay Project 2024/2/8
- *
  * @author daoge_cmd
  */
 @Getter

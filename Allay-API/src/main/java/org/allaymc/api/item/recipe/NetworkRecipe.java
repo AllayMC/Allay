@@ -3,8 +3,6 @@ package org.allaymc.api.item.recipe;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Allay Project 2023/11/26
- *
  * @author daoge_cmd
  */
 public interface NetworkRecipe extends Recipe {

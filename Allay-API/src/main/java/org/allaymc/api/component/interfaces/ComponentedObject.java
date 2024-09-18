@@ -5,7 +5,6 @@ package org.allaymc.api.component.interfaces;
  * <p>
  * Any class spawned from component injector will implement this interface and can be used for judgment.
  * <p>
- * Allay Project 2023/3/4
  *
  * @author daoge_cmd
  */

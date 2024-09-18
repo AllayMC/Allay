@@ -8,8 +8,6 @@ import org.allaymc.api.block.property.BlockPropertyProcessor;
 import java.util.List;
 
 /**
- * Allay Project 2023/3/19
- *
  * @author daoge_cmd
  */
 public sealed interface BlockPropertyType<DATATYPE> permits BaseBlockPropertyType {

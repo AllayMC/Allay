@@ -1,7 +1,6 @@
 package org.allaymc.api.client.data;
 
 /**
- * Allay Project 2023/6/23
  *
  * @author LucGamesYT | daoge_cmd
  */

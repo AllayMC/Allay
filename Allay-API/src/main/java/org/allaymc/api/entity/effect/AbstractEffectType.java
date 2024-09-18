@@ -5,7 +5,6 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
 /**
- * Allay Project 2023/10/27
  *
  * @author daoge_cmd
  * @see <a href="https://minecraft.wiki/w/Effect#Effect_list">Effect list</a>

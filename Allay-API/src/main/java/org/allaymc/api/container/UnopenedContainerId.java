@@ -1,7 +1,6 @@
 package org.allaymc.api.container;
 
 /**
- * Allay Project 2023/10/6
  * <p>
  *
  * @author daoge_cmd

@@ -7,8 +7,6 @@ import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Allay Project 2023/5/20
- *
  * @author daoge_cmd
  */
 public interface EntityInitInfo extends ComponentInitInfo {

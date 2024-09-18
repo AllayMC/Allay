@@ -4,8 +4,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Allay Project 2023/10/27
- *
  * @author daoge_cmd
  */
 public class DoubleKeyMappedRegistry<K1, K2, VALUE> extends AbstractRegistry<DoubleKeyMappedRegistry.MapPair<K1, K2, VALUE>> {

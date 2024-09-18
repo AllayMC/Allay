@@ -13,8 +13,6 @@ import java.util.UUID;
 import static org.cloudburstmc.protocol.bedrock.data.ScoreInfo.ScorerType.PLAYER;
 
 /**
- * Allay Project 2024/2/27
- *
  * @author daoge_cmd
  */
 @Getter

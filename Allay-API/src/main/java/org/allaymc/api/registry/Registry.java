@@ -28,7 +28,6 @@ import java.util.function.Consumer;
  * though, the first parameter would be a location of some sort, such as a file path
  * where the loader will load the mappings from.
  * <p>
- * Allay Project 2023/3/18
  *
  * @param <CONTENT> the type of the value which is being held by the registry
  *

@@ -7,7 +7,6 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.gamerule.GameRule;
 
 /**
- * Allay Project 2024/08/12
  *
  * @author Dhaiven
  */

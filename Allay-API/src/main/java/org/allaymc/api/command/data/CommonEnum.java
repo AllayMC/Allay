@@ -10,8 +10,6 @@ import java.util.Arrays;
 import static org.cloudburstmc.protocol.bedrock.data.GameType.*;
 
 /**
- * Allay Project 2024/1/6
- *
  * @author daoge_cmd
  */
 public interface CommonEnum {

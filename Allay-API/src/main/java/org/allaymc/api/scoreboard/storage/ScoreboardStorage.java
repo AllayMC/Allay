@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * Allay Project 2024/2/27
- *
  * @author daoge_cmd
  */
 public interface ScoreboardStorage {

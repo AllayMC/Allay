@@ -20,7 +20,6 @@ import java.util.Set;
 /**
  * Interface representing a type of block.
  * <p>
- * Allay Project 2023/3/19
  *
  * @author daoge_cmd
  */

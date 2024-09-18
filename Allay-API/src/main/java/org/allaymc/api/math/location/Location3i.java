@@ -16,8 +16,6 @@ import java.nio.IntBuffer;
 import java.text.NumberFormat;
 
 /**
- * Allay Project 7/30/2023
- *
  * @author Cool_Loong
  */
 public class Location3i extends Position3i implements Location3ic {

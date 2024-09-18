@@ -4,8 +4,6 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Allay Project 2024/8/11
- *
  * @author daoge_cmd
  */
 public class FurnaceContainer extends BlockContainer {

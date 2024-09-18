@@ -1,8 +1,6 @@
 package org.allaymc.api.utils.exception;
 
 /**
- * Allay Project 2023/7/2
- *
  * @author daoge_cmd
  */
 public class WorldStorageException extends RuntimeException {

@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Allay Project 2023/9/16
- *
  * @author daoge_cmd
  */
 public class BaseContainerHolder implements ContainerHolder {

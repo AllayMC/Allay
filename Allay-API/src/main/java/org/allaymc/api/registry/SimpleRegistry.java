@@ -7,7 +7,6 @@ import java.util.function.Supplier;
  * for simple registrations of any given type without restrictions on what
  * the input or output can be.
  * <p>
- * Allay Project 2023/3/18
  *
  * @param <CONTENT> the value being held by the registry
  *

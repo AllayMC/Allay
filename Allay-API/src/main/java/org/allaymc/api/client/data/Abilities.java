@@ -19,8 +19,6 @@ import java.util.function.Consumer;
 import static org.allaymc.api.perm.tree.PermTree.PermChangeType.ADD;
 
 /**
- * Allay Project 2024/1/6
- *
  * @author daoge_cmd
  */
 @Getter

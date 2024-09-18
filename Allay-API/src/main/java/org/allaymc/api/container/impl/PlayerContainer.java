@@ -8,8 +8,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import java.util.function.Supplier;
 
 /**
- * Allay Project 2024/8/25
- *
  * @author daoge_cmd
  */
 public abstract class PlayerContainer extends BaseContainer {

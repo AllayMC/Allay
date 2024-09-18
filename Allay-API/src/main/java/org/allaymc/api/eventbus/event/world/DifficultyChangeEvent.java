@@ -7,8 +7,6 @@ import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.World;
 
 /**
- * Allay Project 2024/8/6
- *
  * @author daoge_cmd
  */
 @Getter

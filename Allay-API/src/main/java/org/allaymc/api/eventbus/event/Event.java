@@ -6,8 +6,6 @@ import org.allaymc.api.eventbus.EventException;
 import org.allaymc.api.server.Server;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public abstract class Event {

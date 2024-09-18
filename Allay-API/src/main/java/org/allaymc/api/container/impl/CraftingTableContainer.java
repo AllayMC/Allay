@@ -6,8 +6,6 @@ import org.allaymc.api.item.recipe.input.CraftingInput;
 import java.util.stream.IntStream;
 
 /**
- * Allay Project 2024/1/19
- *
  * @author daoge_cmd
  */
 public class CraftingTableContainer extends CraftingContainer {

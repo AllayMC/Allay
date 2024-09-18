@@ -16,8 +16,6 @@ import java.nio.FloatBuffer;
 import java.text.NumberFormat;
 
 /**
- * Allay Project 7/30/2023
- *
  * @author Cool_Loong
  */
 @Setter

@@ -14,9 +14,7 @@ import java.util.function.Function;
  * @param <MAPPING> the map
  *                  <p>
  *
- * @author daoge_cmd <br>
- * Date: 2023/3/18 <br>
- * Allay Project <br>
+ * @author daoge_cmd
  */
 public abstract class AbstractMappedRegistry<KEY, VALUE, MAPPING extends Map<KEY, VALUE>> extends AbstractRegistry<MAPPING> {
     protected <INPUT> AbstractMappedRegistry(INPUT input, RegistryLoader<INPUT, MAPPING> registryLoader) {

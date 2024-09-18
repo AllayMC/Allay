@@ -5,8 +5,6 @@ import org.allaymc.api.i18n.MayContainTrKey;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public abstract class SimpleCommand extends BaseCommand {

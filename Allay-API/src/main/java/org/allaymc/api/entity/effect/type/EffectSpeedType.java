@@ -7,8 +7,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.Identifier;
 
 /**
- * Allay Project 2023/10/27
- *
  * @author daoge_cmd
  */
 public class EffectSpeedType extends AbstractEffectType {

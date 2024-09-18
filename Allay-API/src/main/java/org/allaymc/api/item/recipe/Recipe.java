@@ -6,8 +6,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataTyp
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 
 /**
- * Allay Project 2023/11/25
- *
  * @author daoge_cmd
  */
 public interface Recipe {

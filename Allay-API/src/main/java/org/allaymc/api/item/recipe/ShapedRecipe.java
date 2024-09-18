@@ -17,8 +17,6 @@ import java.util.*;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
- * Allay Project 2023/11/25
- *
  * @author daoge_cmd
  */
 @Getter

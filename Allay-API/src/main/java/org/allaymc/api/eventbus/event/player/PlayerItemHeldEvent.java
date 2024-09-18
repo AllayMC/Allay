@@ -5,8 +5,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Allay Project 2024/8/3
- *
  * @author daoge_cmd
  */
 @Getter

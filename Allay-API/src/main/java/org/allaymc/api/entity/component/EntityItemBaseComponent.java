@@ -3,8 +3,6 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Allay Project 2023/9/23
- *
  * @author daoge_cmd
  */
 public interface EntityItemBaseComponent extends EntityBaseComponent {

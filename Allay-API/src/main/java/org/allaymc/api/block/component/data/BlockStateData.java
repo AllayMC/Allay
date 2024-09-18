@@ -16,7 +16,6 @@ import org.joml.primitives.AABBf;
 import java.awt.*;
 
 /**
- * Allay Project 2023/5/1
  *
  * @author daoge_cmd | CoolLoong
  */

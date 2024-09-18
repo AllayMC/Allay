@@ -9,8 +9,6 @@ import org.allaymc.api.world.Dimension;
 import java.util.Objects;
 
 /**
- * Allay Project 2023/9/15
- *
  * @author daoge_cmd
  */
 public interface BlockEntityHolderComponent<T extends BlockEntity> extends BlockComponent {

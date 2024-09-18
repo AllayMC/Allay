@@ -10,7 +10,6 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 import static org.allaymc.api.item.component.ItemBaseComponent.EMPTY_STACK_NETWORK_ID;
 
 /**
- * Allay Project 2023/9/14
  *
  * @author Cool_Loong | daoge_cmd
  */

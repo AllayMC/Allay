@@ -7,8 +7,6 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.Map;
 
 /**
- * Allay Project 2023/5/6
- *
  * @author daoge_cmd
  */
 @ApiStatus.Internal

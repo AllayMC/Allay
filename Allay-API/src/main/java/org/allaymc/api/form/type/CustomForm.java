@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 @Getter

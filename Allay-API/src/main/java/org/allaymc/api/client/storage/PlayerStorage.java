@@ -5,8 +5,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import java.util.UUID;
 
 /**
- * Allay Project 2023/9/16
- *
  * @author daoge_cmd
  */
 public interface PlayerStorage {

@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
  * <p>
  * See <a href="https://zh.minecraft.wiki/w/%E5%9F%BA%E5%B2%A9%E7%89%88%E6%9D%90%E6%96%99">Bedrock Materials</a> for details
  * <p>
- * Allay Project 2024/6/11
  *
  * @author daoge_cmd
  */

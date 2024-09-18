@@ -7,8 +7,6 @@ import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import java.util.Arrays;
 
 /**
- * Allay Project 2023/10/14
- *
  * @author daoge_cmd
  */
 public interface EntityPlayerAttributeComponent extends EntityAttributeComponent {

@@ -8,7 +8,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 
 /**
- * Allay Project 2023/7/9
  *
  * @author JukeboxMC | daoge_cmd
  */

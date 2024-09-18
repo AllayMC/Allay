@@ -6,8 +6,6 @@ import lombok.Getter;
 import java.util.List;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public final class StepSlider extends CustomFormElement {

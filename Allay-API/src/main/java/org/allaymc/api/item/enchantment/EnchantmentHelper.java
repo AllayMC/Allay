@@ -6,8 +6,6 @@ import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Allay Project 2023/10/21
- *
  * @author daoge_cmd
  */
 @Slf4j

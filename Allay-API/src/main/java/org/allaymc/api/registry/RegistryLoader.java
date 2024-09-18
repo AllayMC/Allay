@@ -5,7 +5,6 @@ package org.allaymc.api.registry;
  * but is commonly a file path or something similar. {@link OUTPUT} represents the output
  * type returned by this, which can also be anything.
  * <p>
- * Allay Project 2023/3/18
  *
  * @param <INPUT>  the input to load the registry from
  * @param <OUTPUT> the output of the registry

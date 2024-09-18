@@ -14,8 +14,6 @@ import java.nio.FloatBuffer;
 import java.text.NumberFormat;
 
 /**
- * Allay Project 7/30/2023
- *
  * @author Cool_Loong
  */
 public class Position3f extends Vector3f implements Position3fc {

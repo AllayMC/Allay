@@ -7,8 +7,6 @@ import org.allaymc.api.utils.Utils;
 import java.util.stream.IntStream;
 
 /**
- * Allay Project 2023/3/19
- *
  * @author daoge_cmd
  */
 @Getter

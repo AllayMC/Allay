@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Allay Project 2023/11/25
- *
  * @author daoge_cmd
  */
 @Getter

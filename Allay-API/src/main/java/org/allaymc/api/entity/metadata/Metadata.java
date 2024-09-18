@@ -8,7 +8,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import java.util.Objects;
 
 /**
- * Allay Project 2023/7/9
  *
  * @author JukeboxMC | daoge_cmd
  */

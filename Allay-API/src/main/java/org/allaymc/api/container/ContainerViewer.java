@@ -5,8 +5,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.jetbrains.annotations.UnmodifiableView;
 
 /**
- * Allay Project 2023/7/15
- *
  * @author daoge_cmd
  */
 public interface ContainerViewer {

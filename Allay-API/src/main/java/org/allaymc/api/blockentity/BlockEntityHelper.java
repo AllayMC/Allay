@@ -8,8 +8,6 @@ import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Allay Project 2023/9/23
- *
  * @author daoge_cmd
  */
 @Slf4j

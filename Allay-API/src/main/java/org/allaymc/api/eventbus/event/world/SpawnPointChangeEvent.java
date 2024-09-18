@@ -7,7 +7,6 @@ import org.allaymc.api.world.World;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 2024/08/12
  *
  * @author Dhaiven
  */

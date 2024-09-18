@@ -9,8 +9,6 @@ import org.allaymc.api.container.FullContainerType;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 11/08/2024
- *
  * @author IWareQ
  */
 public class BlockContainer extends BaseContainer {

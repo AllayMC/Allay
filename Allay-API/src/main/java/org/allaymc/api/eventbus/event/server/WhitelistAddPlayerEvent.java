@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Allay Project 2024/8/5
  *
  * @author Dhaiven
  */

@@ -3,8 +3,6 @@ package org.allaymc.api.command;
 import org.allaymc.api.command.tree.CommandContext;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public record CommandResult(int status, CommandContext context) {

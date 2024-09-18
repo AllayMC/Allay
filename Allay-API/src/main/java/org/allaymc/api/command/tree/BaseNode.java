@@ -18,8 +18,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public abstract class BaseNode implements CommandNode {

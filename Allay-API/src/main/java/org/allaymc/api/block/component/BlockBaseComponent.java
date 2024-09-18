@@ -21,8 +21,6 @@ import java.util.Set;
 import static org.allaymc.api.item.ItemHelper.isSword;
 
 /**
- * Allay Project 2023/4/8
- *
  * @author daoge_cmd
  */
 public interface BlockBaseComponent extends BlockComponent {

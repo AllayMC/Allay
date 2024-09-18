@@ -10,7 +10,6 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.joml.Vector3fc;
 
 /**
- * Allay Project 2023/9/14
  *
  * @author Cool_Loong
  */

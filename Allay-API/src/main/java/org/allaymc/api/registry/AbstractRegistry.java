@@ -36,7 +36,6 @@ import java.util.function.Consumer;
  * where the loader will load the mappings from.
  *
  * <p>
- * Allay Project 2024/7/19
  *
  * @param <CONTENT> the value being held by the registry
  *

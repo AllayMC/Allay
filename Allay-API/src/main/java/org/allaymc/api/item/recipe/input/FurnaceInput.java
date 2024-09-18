@@ -4,8 +4,6 @@ import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 
 /**
- * Allay Project 2024/8/11
- *
  * @author daoge_cmd
  */
 @Getter

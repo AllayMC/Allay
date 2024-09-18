@@ -12,8 +12,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2023/8/26
- *
  * @author daoge_cmd
  */
 @Getter

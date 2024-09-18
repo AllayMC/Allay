@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Compass_rose#/media/File:Brosen_windrose.svg">wiki</a> for more information.
  * <p>
- * Allay Project 2024/8/16
  *
  * @author joserobjr | Cool_Loong
  */

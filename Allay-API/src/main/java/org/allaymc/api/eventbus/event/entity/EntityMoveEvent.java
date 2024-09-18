@@ -6,8 +6,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.location.Location3fc;
 
 /**
- * Allay Project 2024/8/31
- *
  * @author daoge_cmd
  */
 @Getter

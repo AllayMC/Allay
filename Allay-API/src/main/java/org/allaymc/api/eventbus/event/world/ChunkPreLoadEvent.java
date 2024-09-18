@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.allaymc.api.world.Dimension;
 
 /**
- * Allay Project 2024/08/03
  *
  * @author Dhaiven
  */

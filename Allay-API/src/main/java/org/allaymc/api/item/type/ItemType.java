@@ -14,8 +14,6 @@ import org.jetbrains.annotations.Unmodifiable;
 import java.util.Set;
 
 /**
- * Allay Project 2023/5/19
- *
  * @author daoge_cmd
  */
 public interface ItemType<T extends ItemStack> extends Identified {

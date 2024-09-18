@@ -14,8 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 /**
- * Allay Project 2023/7/22
- *
  * @author daoge_cmd
  */
 public class PlayerArmorContainer extends PlayerContainer {

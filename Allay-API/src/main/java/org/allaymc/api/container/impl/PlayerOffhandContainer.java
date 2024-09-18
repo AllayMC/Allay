@@ -9,8 +9,6 @@ import org.cloudburstmc.protocol.bedrock.packet.MobEquipmentPacket;
 import java.util.function.Supplier;
 
 /**
- * Allay Project 2023/7/22
- *
  * @author daoge_cmd
  */
 public class PlayerOffhandContainer extends PlayerContainer {

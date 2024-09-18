@@ -3,8 +3,6 @@ package org.allaymc.api.form.element;
 import lombok.Getter;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public final class Label extends CustomFormElement {

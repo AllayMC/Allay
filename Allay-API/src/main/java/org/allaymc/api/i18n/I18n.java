@@ -5,8 +5,6 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.utils.Utils;
 
 /**
- * Allay Project 2023/12/15
- *
  * @author daoge_cmd
  */
 public interface I18n {

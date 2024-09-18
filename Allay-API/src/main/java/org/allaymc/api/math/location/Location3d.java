@@ -15,8 +15,6 @@ import java.nio.DoubleBuffer;
 import java.text.NumberFormat;
 
 /**
- * Allay Project 7/30/2023
- *
  * @author Cool_Loong
  */
 public class Location3d extends Position3d implements Location3dc {

@@ -13,8 +13,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.FurnaceR
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 
 /**
- * Allay Project 2024/8/11
- *
  * @author daoge_cmd
  */
 public class FurnaceRecipe implements Recipe, TaggedRecipe, IdentifiedRecipe {

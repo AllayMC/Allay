@@ -5,8 +5,6 @@ import org.allaymc.api.i18n.I18n;
 import java.nio.file.Path;
 
 /**
- * Allay Project 2024/2/8
- *
  * @author daoge_cmd
  */
 public record PluginContainer(

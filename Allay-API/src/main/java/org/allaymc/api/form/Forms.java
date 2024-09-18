@@ -5,8 +5,6 @@ import org.allaymc.api.form.type.ModalForm;
 import org.allaymc.api.form.type.SimpleForm;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public interface Forms {

@@ -13,8 +13,6 @@ import java.util.function.Consumer;
 import static org.allaymc.api.perm.DefaultPermissions.*;
 
 /**
- * Allay Project 2023/12/30
- *
  * @author daoge_cmd
  */
 public interface PermTree {

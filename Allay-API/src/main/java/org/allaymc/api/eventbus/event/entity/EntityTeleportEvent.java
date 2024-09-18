@@ -8,8 +8,6 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 @Getter

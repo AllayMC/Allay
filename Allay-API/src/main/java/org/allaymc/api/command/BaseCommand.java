@@ -13,8 +13,6 @@ import java.util.*;
 import static org.cloudburstmc.protocol.bedrock.data.command.CommandData.Flag.NOT_CHEAT;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public abstract class BaseCommand implements Command {

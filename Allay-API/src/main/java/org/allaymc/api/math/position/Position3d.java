@@ -14,8 +14,6 @@ import java.nio.DoubleBuffer;
 import java.text.NumberFormat;
 
 /**
- * Allay Project 7/30/2023
- *
  * @author Cool_Loong
  */
 public class Position3d extends Vector3d implements Position3dc {

@@ -11,8 +11,6 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public interface CommandSender extends TextReceiver, Permissible {

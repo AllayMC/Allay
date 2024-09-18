@@ -18,8 +18,6 @@ import java.util.function.UnaryOperator;
 import static org.allaymc.api.entity.damage.DamageContainer.DamageType.*;
 
 /**
- * Allay Project 2024/1/12
- *
  * @author daoge_cmd
  */
 @Getter

@@ -6,7 +6,6 @@ import lombok.Getter;
 /**
  * Scoreboard display slot enum
  * <p>
- * Allay Project 2024/2/27
  *
  * @author daoge_cmd
  */

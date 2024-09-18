@@ -19,8 +19,6 @@ import java.security.MessageDigest;
 import java.util.UUID;
 
 /**
- * Allay Project 28/01/2024
- *
  * @author IWareQ, Cloudburst Server
  */
 @Getter

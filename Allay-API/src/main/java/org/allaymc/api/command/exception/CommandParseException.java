@@ -1,8 +1,6 @@
 package org.allaymc.api.command.exception;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public class CommandParseException extends RuntimeException {

@@ -3,8 +3,6 @@ package org.allaymc.api.registry;
 import com.google.common.collect.BiMap;
 
 /**
- * Allay Project 2023/10/28
- *
  * @author daoge_cmd
  */
 public class BiMappedRegistry<LEFT, RIGHT> extends AbstractRegistry<BiMap<LEFT, RIGHT>> {

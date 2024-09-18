@@ -11,8 +11,6 @@ import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;
 import static org.cloudburstmc.protocol.bedrock.data.GameType.SPECTATOR;
 
 /**
- * Allay Project 2023/7/9
- *
  * @author daoge_cmd
  */
 @Getter

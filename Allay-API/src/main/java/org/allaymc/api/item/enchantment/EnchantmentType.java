@@ -3,8 +3,6 @@ package org.allaymc.api.item.enchantment;
 import org.allaymc.api.utils.Identifier;
 
 /**
- * Allay Project 2023/10/21
- *
  * @author daoge_cmd
  */
 public interface EnchantmentType {

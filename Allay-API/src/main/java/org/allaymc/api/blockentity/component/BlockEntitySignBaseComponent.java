@@ -4,8 +4,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Allay Project 2024/8/16
- *
  * @author daoge_cmd
  */
 public interface BlockEntitySignBaseComponent extends BlockEntityBaseComponent {

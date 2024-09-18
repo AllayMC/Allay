@@ -13,7 +13,6 @@ import org.joml.Vector3ic;
  * @param clickPos      The precise pos where the player clicked
  * @param blockFace     The face of the block that the player clicked on
  * <p>
- * Allay Project 2024/6/20
  *
  * @author daoge_cmd
  */

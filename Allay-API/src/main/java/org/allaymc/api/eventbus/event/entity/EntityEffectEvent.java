@@ -6,8 +6,6 @@ import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- * Allay Project 2024/8/3
- *
  * @author daoge_cmd
  */
 @Getter

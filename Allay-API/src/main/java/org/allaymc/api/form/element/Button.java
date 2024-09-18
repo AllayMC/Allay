@@ -7,8 +7,6 @@ import org.allaymc.api.form.type.SimpleForm;
 import java.util.function.Consumer;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 @Setter

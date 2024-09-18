@@ -5,8 +5,6 @@ import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {

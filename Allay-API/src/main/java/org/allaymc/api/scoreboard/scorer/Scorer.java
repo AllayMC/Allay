@@ -7,7 +7,6 @@ import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 /**
  * Describes a scoreboard tracking object
  * <p>
- * Allay Project 2024/2/27
  *
  * @author daoge_cmd
  */

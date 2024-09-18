@@ -4,8 +4,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.damage.DamageContainer;
 
 /**
- * Allay Project 2024/1/12
- *
  * @author daoge_cmd
  */
 public interface EntityDamageComponent extends EntityComponent {

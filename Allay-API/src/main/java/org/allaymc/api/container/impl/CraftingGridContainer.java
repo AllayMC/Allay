@@ -6,8 +6,6 @@ import org.allaymc.api.item.recipe.input.CraftingInput;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 2023/12/1
- *
  * @author daoge_cmd
  */
 @Getter

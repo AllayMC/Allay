@@ -7,8 +7,6 @@ import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
 /**
- * Allay Project 2023/10/27
- *
  * @author daoge_cmd
  */
 public class EffectInvisibilityType extends AbstractEffectType {

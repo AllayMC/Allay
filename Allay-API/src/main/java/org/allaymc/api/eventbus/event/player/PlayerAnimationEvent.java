@@ -6,8 +6,6 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
 /**
- * Allay Project 2024/8/3
- *
  * @author daoge_cmd
  */
 @Getter
