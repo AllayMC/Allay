@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.utils.SemVersion;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.v712.Bedrock_v712;
+import org.cloudburstmc.protocol.bedrock.codec.v729.Bedrock_v729;
 
 /**
  * @author daoge_cmd
@@ -11,7 +12,7 @@ import org.cloudburstmc.protocol.bedrock.codec.v712.Bedrock_v712;
 @UtilityClass
 public final class ProtocolInfo {
 
-    public static final BedrockCodec PACKET_CODEC = Bedrock_v712.CODEC;
+    public static final BedrockCodec PACKET_CODEC = Bedrock_v729.CODEC;
 
     public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 30, 0, 0);
 
