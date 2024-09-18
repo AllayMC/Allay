@@ -12,18 +12,15 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static org.allaymc.codegen.ClassNames.HASH_MAP;
+
 /**
  * Allay Project 2023/6/3
  *
  * @author daoge_cmd
  */
 public class BiomeIdEnumGen {
-    private static final ClassName BIOME_TYPE_CLASS = ClassName.get("org.allaymc.api.world.biome", "BiomeType");
-    private static final ClassName IDENTIFIER_CLASS = ClassName.get("org.allaymc.api.utils", "Identifier");
     private static final Map<String, BiomeData> BIOME_DATA = new LinkedHashMap<>();
-    private static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
-    private static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
-    private static final ClassName BIOME_ARRAY_CLASS = ClassName.get("org.allaymc.api.world.biome", "BiomeId[]");
     private static final String PACKAGE_NAME = "org.allaymc.api.world.biome";
     private static final Path TARGET_PATH = Path.of("Allay-API/src/main/java/org/allaymc/api/world/biome/BiomeId.java");
     private static final String JAVA_DOC = """
@@ -54,7 +51,7 @@ public class BiomeIdEnumGen {
         TypeSpec.Builder codeBuilder = TypeSpec.enumBuilder("BiomeId")
                 .addJavadoc(JAVA_DOC)
                 .addModifiers(Modifier.PUBLIC)
-                .addAnnotation(GETTER_CLASS)
+                .addAnnotation(ClassNames.GETTER)
                 .addStaticBlock(
                         CodeBlock.builder()
                                 .add("MAP1 = $L;", "new BiomeId[256]")
@@ -68,28 +65,28 @@ public class BiomeIdEnumGen {
                                 .build()
                 )
                 .addField(FieldSpec
-                        .builder(BIOME_ARRAY_CLASS, "VALUES", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        .builder(ClassNames.BIOME_ARRAY, "VALUES", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                         .initializer("values()")
                         .build())
                 .addField(FieldSpec
-                        .builder(BIOME_ARRAY_CLASS, "MAP1", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                        .builder(ClassNames.BIOME_ARRAY, "MAP1", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
-                        .builder(ParameterizedTypeName.get(ClassName.get(HashMap.class), IDENTIFIER_CLASS, BIOME_TYPE_CLASS), "MAP2", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
+                        .builder(ParameterizedTypeName.get(HASH_MAP, ClassNames.API_IDENTIFIER, ClassNames.BIOME_TYPE), "MAP2", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
                         .build())
                 .addField(FieldSpec
-                        .builder(IDENTIFIER_CLASS, "identifier", Modifier.PRIVATE, Modifier.FINAL)
+                        .builder(ClassNames.API_IDENTIFIER, "identifier", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
                         .builder(int.class, "id", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
-                        .builder(STRING_CLASS, "type", Modifier.PRIVATE, Modifier.FINAL)
+                        .builder(ClassNames.STRING, "type", Modifier.PRIVATE, Modifier.FINAL)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(IDENTIFIER_CLASS, "identifier")
+                        .addParameter(ClassNames.API_IDENTIFIER, "identifier")
                         .addParameter(int.class, "id")
-                        .addParameter(STRING_CLASS, "type")
+                        .addParameter(ClassNames.STRING, "type")
                         .addStatement("this.identifier = identifier")
                         .addStatement("this.id = id")
                         .addStatement("this.type = type")
@@ -102,21 +99,21 @@ public class BiomeIdEnumGen {
             var type = entry.getValue().type;
             codeBuilder.addEnumConstant(entry.getKey().toUpperCase(), TypeSpec.anonymousClassBuilder("$L, $L, $S", identifier, id, type).build());
         }
-        codeBuilder.addSuperinterface(BIOME_TYPE_CLASS);
+        codeBuilder.addSuperinterface(ClassNames.BIOME_TYPE);
 
         codeBuilder.addMethod(MethodSpec
                 .methodBuilder("fromId")
                 .addParameter(int.class, "id")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addCode("return MAP1[id];")
-                .returns(BIOME_TYPE_CLASS)
+                .returns(ClassNames.BIOME_TYPE)
                 .build());
         codeBuilder.addMethod(MethodSpec
                 .methodBuilder("fromIdentifier")
-                .addParameter(IDENTIFIER_CLASS, "identifier")
+                .addParameter(ClassNames.API_IDENTIFIER, "identifier")
                 .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
                 .addCode("return MAP2.get(identifier);")
-                .returns(BIOME_TYPE_CLASS)
+                .returns(ClassNames.BIOME_TYPE)
                 .build());
         var builtCode = codeBuilder.build();
         var javaFile = JavaFile.builder(PACKAGE_NAME, builtCode)

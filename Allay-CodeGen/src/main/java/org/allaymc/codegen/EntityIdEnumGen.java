@@ -18,10 +18,6 @@ import java.util.TreeMap;
  * @author daoge_cmd
  */
 public class EntityIdEnumGen {
-    public static final ClassName API_IDENTIFIER_CLASS = ClassName.get("org.allaymc.api.utils", "Identifier");
-    public static final ClassName DEP_IDENTIFIER_CLASS = ClassName.get("org.allaymc.dependence", "Identifier");
-    public static final ClassName STRING_CLASS = ClassName.get("java.lang", "String");
-    public static final ClassName GETTER_CLASS = ClassName.get("lombok", "Getter");
     static final Path ENTITY_ID_MAP_FILE_PATH = Path.of(CodeGen.DATA_PATH + "unpacked/entity_id_map.json");
     static final Map<String, Integer> ENTITY_ID_MAP = new TreeMap<>();
     private static final String PACKAGE_NAME = "org.allaymc.api.entity.data";
@@ -48,8 +44,8 @@ public class EntityIdEnumGen {
     }
 
     public static void generate() {
-        generateTo(PACKAGE_NAME, Path.of("Allay-API/src/main/java/org/allaymc/api/entity/data/EntityId.java"), API_IDENTIFIER_CLASS);
-        generateTo("org.allaymc.dependence", Path.of("Allay-CodeGen/src/main/java/org/allaymc/dependence/EntityId.java"), DEP_IDENTIFIER_CLASS);
+        generateTo(PACKAGE_NAME, Path.of("Allay-API/src/main/java/org/allaymc/api/entity/data/EntityId.java"), ClassNames.API_IDENTIFIER);
+        generateTo("org.allaymc.dependence", Path.of("Allay-CodeGen/src/main/java/org/allaymc/dependence/EntityId.java"), ClassNames.DEP_IDENTIFIER);
     }
 
     @SneakyThrows
@@ -59,14 +55,14 @@ public class EntityIdEnumGen {
                 .addModifiers(Modifier.PUBLIC)
                 .addField(FieldSpec
                         .builder(identifierClassName, "identifier", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(GETTER_CLASS)
+                        .addAnnotation(ClassNames.GETTER)
                         .build())
                 .addField(FieldSpec
                         .builder(int.class, "networkId", Modifier.PRIVATE, Modifier.FINAL)
-                        .addAnnotation(GETTER_CLASS)
+                        .addAnnotation(ClassNames.GETTER)
                         .build())
                 .addMethod(MethodSpec.constructorBuilder()
-                        .addParameter(STRING_CLASS, "identifier")
+                        .addParameter(ClassNames.STRING, "identifier")
                         .addParameter(int.class, "networkId")
                         .addStatement("this.$N = new $T($N)", "identifier", identifierClassName, "identifier")
                         .addStatement("this.$N = $N", "networkId", "networkId")

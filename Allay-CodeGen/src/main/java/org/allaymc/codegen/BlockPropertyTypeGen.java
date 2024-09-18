@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.allaymc.codegen.ClassNames.*;
 import static org.allaymc.codegen.Utils.convertToPascalCase;
 
 /**
@@ -53,9 +54,6 @@ public class BlockPropertyTypeGen {
         TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder("BlockPropertyTypes")
                 .addJavadoc(JAVA_DOC)
                 .addModifiers(Modifier.PUBLIC);
-        var enumPropertyClass = ClassName.get("org.allaymc.api.block.property.type", "EnumPropertyType");
-        var booleanPropertyClass = ClassName.get("org.allaymc.api.block.property.type", "BooleanPropertyType");
-        var intPropertyClass = ClassName.get("org.allaymc.api.block.property.type", "IntPropertyType");
         for (var entry : BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.entrySet()) {
             var key = entry.getKey().toUpperCase();
             var blockPropertyTypeInfo = entry.getValue();
@@ -65,16 +63,16 @@ public class BlockPropertyTypeGen {
                     var enumClass = ClassName.get("org.allaymc.api.block.property.enums", blockPropertyTypeInfo.getEnumClassName());
                     codeBuilder.addField(
                             FieldSpec
-                                    .builder(ParameterizedTypeName.get(enumPropertyClass, enumClass), key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.of($S, $T.class, $T.values()[0])", enumPropertyClass, name, enumClass, enumClass)
+                                    .builder(ParameterizedTypeName.get(ENUM_PROPERTY, enumClass), key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                                    .initializer("$T.of($S, $T.class, $T.values()[0])", ENUM_PROPERTY, name, enumClass, enumClass)
                                     .build()
                     );
                 }
                 case BOOLEAN -> {
                     codeBuilder.addField(
                             FieldSpec
-                                    .builder(booleanPropertyClass, key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.of($S, $N)", booleanPropertyClass, name, blockPropertyTypeInfo.values.get(0))
+                                    .builder(BOOLEAN_PROPERTY, key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                                    .initializer("$T.of($S, $N)", BOOLEAN_PROPERTY, name, blockPropertyTypeInfo.values.get(0))
                                     .build()
                     );
                 }
@@ -92,15 +90,14 @@ public class BlockPropertyTypeGen {
                     }
                     codeBuilder.addField(
                             FieldSpec
-                                    .builder(intPropertyClass, key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                                    .initializer("$T.of($S, $L, $L, $L)", intPropertyClass, name, min, max, blockPropertyTypeInfo.values.get(0))
+                                    .builder(INT_PROPERTY, key, Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                                    .initializer("$T.of($S, $L, $L, $L)", INT_PROPERTY, name, min, max, blockPropertyTypeInfo.values.get(0))
                                     .build()
                     );
                 }
             }
         }
-        var propertyClass = ClassName.get("org.allaymc.api.block.property.type", "BlockPropertyType");
-        var listClass = ParameterizedTypeName.get(ClassName.get("java.util", "List"), ParameterizedTypeName.get(propertyClass, WildcardTypeName.subtypeOf(Object.class)));
+        var listClass = ParameterizedTypeName.get(LIST, ParameterizedTypeName.get(BLOCK_PROPERTY_TYPE, WildcardTypeName.subtypeOf(Object.class)));
         String paramStr = BLOCK_PROPERTY_TYPE_INFO_FILE.propertyTypes.keySet().stream().map(String::toUpperCase).collect(Collectors.joining(", "));
         codeBuilder.addField(
                 FieldSpec
