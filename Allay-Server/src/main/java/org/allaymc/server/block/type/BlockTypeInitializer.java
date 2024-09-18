@@ -692,16 +692,17 @@ public final class BlockTypeInitializer {
     }
 
     public static void initColoredTorch() {
-        BlockTypes.COLORED_TORCH_BP = AllayBlockType
-                .builder(BlockColoredTorchBpBehavior.class)
-                .vanillaBlock(BlockId.COLORED_TORCH_BP)
-                .setProperties(BlockPropertyTypes.COLOR_BIT, BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockColoredTorchBaseComponentImpl::new)
-                .build();
-        BlockTypes.COLORED_TORCH_RG = AllayBlockType
-                .builder(BlockColoredTorchRgBehavior.class)
-                .vanillaBlock(BlockId.COLORED_TORCH_RG)
-                .setProperties(BlockPropertyTypes.COLOR_BIT, BlockPropertyTypes.TORCH_FACING_DIRECTION)
+        BlockTypes.COLORED_TORCH_RED = buildColoredTorch(BlockColoredTorchRedBehavior.class, BlockId.COLORED_TORCH_RED);
+        BlockTypes.COLORED_TORCH_BLUE = buildColoredTorch(BlockColoredTorchBlueBehavior.class, BlockId.COLORED_TORCH_BLUE);
+        BlockTypes.COLORED_TORCH_GREEN = buildColoredTorch(BlockColoredTorchGreenBehavior.class, BlockId.COLORED_TORCH_GREEN);
+        BlockTypes.COLORED_TORCH_PURPLE = buildColoredTorch(BlockColoredTorchPurpleBehavior.class, BlockId.COLORED_TORCH_PURPLE);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildColoredTorch(Class<T> clazz, BlockId blockId) {
+        return AllayBlockType
+                .builder(clazz)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockColoredTorchBaseComponentImpl::new)
                 .build();
     }

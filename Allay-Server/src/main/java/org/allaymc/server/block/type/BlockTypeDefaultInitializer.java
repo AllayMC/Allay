@@ -1,7 +1,371 @@
 package org.allaymc.server.block.type;
 
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.interfaces.*;
+import org.allaymc.api.block.interfaces.BlockAcaciaPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockActivatorRailBehavior;
+import org.allaymc.api.block.interfaces.BlockAirBehavior;
+import org.allaymc.api.block.interfaces.BlockAlliumBehavior;
+import org.allaymc.api.block.interfaces.BlockAllowBehavior;
+import org.allaymc.api.block.interfaces.BlockAmethystBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockAmethystClusterBehavior;
+import org.allaymc.api.block.interfaces.BlockAncientDebrisBehavior;
+import org.allaymc.api.block.interfaces.BlockAndesiteBehavior;
+import org.allaymc.api.block.interfaces.BlockAzaleaBehavior;
+import org.allaymc.api.block.interfaces.BlockAzureBluetBehavior;
+import org.allaymc.api.block.interfaces.BlockBambooBehavior;
+import org.allaymc.api.block.interfaces.BlockBambooBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBambooMosaicBehavior;
+import org.allaymc.api.block.interfaces.BlockBambooPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockBarrelBehavior;
+import org.allaymc.api.block.interfaces.BlockBarrierBehavior;
+import org.allaymc.api.block.interfaces.BlockBasaltBehavior;
+import org.allaymc.api.block.interfaces.BlockBeaconBehavior;
+import org.allaymc.api.block.interfaces.BlockBedBehavior;
+import org.allaymc.api.block.interfaces.BlockBedrockBehavior;
+import org.allaymc.api.block.interfaces.BlockBeeNestBehavior;
+import org.allaymc.api.block.interfaces.BlockBeehiveBehavior;
+import org.allaymc.api.block.interfaces.BlockBeetrootBehavior;
+import org.allaymc.api.block.interfaces.BlockBellBehavior;
+import org.allaymc.api.block.interfaces.BlockBigDripleafBehavior;
+import org.allaymc.api.block.interfaces.BlockBirchPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockBlackstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockBlastFurnaceBehavior;
+import org.allaymc.api.block.interfaces.BlockBlueIceBehavior;
+import org.allaymc.api.block.interfaces.BlockBlueOrchidBehavior;
+import org.allaymc.api.block.interfaces.BlockBoneBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBookshelfBehavior;
+import org.allaymc.api.block.interfaces.BlockBorderBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBrewingStandBehavior;
+import org.allaymc.api.block.interfaces.BlockBrickBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBrownMushroomBehavior;
+import org.allaymc.api.block.interfaces.BlockBrownMushroomBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBubbleColumnBehavior;
+import org.allaymc.api.block.interfaces.BlockBuddingAmethystBehavior;
+import org.allaymc.api.block.interfaces.BlockCactusBehavior;
+import org.allaymc.api.block.interfaces.BlockCakeBehavior;
+import org.allaymc.api.block.interfaces.BlockCalciteBehavior;
+import org.allaymc.api.block.interfaces.BlockCalibratedSculkSensorBehavior;
+import org.allaymc.api.block.interfaces.BlockCameraBehavior;
+import org.allaymc.api.block.interfaces.BlockCampfireBehavior;
+import org.allaymc.api.block.interfaces.BlockCarrotsBehavior;
+import org.allaymc.api.block.interfaces.BlockCartographyTableBehavior;
+import org.allaymc.api.block.interfaces.BlockCarvedPumpkinBehavior;
+import org.allaymc.api.block.interfaces.BlockCauldronBehavior;
+import org.allaymc.api.block.interfaces.BlockCaveVinesBehavior;
+import org.allaymc.api.block.interfaces.BlockCaveVinesBodyWithBerriesBehavior;
+import org.allaymc.api.block.interfaces.BlockCaveVinesHeadWithBerriesBehavior;
+import org.allaymc.api.block.interfaces.BlockChainBehavior;
+import org.allaymc.api.block.interfaces.BlockChainCommandBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockChemicalHeatBehavior;
+import org.allaymc.api.block.interfaces.BlockCherryPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockChestBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledBookshelfBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledPolishedBlackstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledQuartzBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockChiseledTuffBehavior;
+import org.allaymc.api.block.interfaces.BlockChorusFlowerBehavior;
+import org.allaymc.api.block.interfaces.BlockChorusPlantBehavior;
+import org.allaymc.api.block.interfaces.BlockClayBehavior;
+import org.allaymc.api.block.interfaces.BlockClientRequestPlaceholderBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockCoalBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockCoalOreBehavior;
+import org.allaymc.api.block.interfaces.BlockCobbledDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockCobblestoneBehavior;
+import org.allaymc.api.block.interfaces.BlockCocoaBehavior;
+import org.allaymc.api.block.interfaces.BlockCommandBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockComposterBehavior;
+import org.allaymc.api.block.interfaces.BlockCompoundCreatorBehavior;
+import org.allaymc.api.block.interfaces.BlockConduitBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperBulbBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperGrateBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperOreBehavior;
+import org.allaymc.api.block.interfaces.BlockCornflowerBehavior;
+import org.allaymc.api.block.interfaces.BlockCrackedDeepslateTilesBehavior;
+import org.allaymc.api.block.interfaces.BlockCrafterBehavior;
+import org.allaymc.api.block.interfaces.BlockCraftingTableBehavior;
+import org.allaymc.api.block.interfaces.BlockCrimsonFungusBehavior;
+import org.allaymc.api.block.interfaces.BlockCrimsonHyphaeBehavior;
+import org.allaymc.api.block.interfaces.BlockCrimsonNyliumBehavior;
+import org.allaymc.api.block.interfaces.BlockCrimsonPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockCrimsonRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockCrimsonStemBehavior;
+import org.allaymc.api.block.interfaces.BlockCryingObsidianBehavior;
+import org.allaymc.api.block.interfaces.BlockDandelionBehavior;
+import org.allaymc.api.block.interfaces.BlockDarkOakPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockDarkPrismarineBehavior;
+import org.allaymc.api.block.interfaces.BlockDaylightDetectorBehavior;
+import org.allaymc.api.block.interfaces.BlockDaylightDetectorInvertedBehavior;
+import org.allaymc.api.block.interfaces.BlockDeadbushBehavior;
+import org.allaymc.api.block.interfaces.BlockDecoratedPotBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateCoalOreBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateCopperOreBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateDiamondOreBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateEmeraldOreBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateGoldOreBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateIronOreBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateLapisOreBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateRedstoneOreBehavior;
+import org.allaymc.api.block.interfaces.BlockDeepslateTilesBehavior;
+import org.allaymc.api.block.interfaces.BlockDenyBehavior;
+import org.allaymc.api.block.interfaces.BlockDeprecatedPurpurBlock1Behavior;
+import org.allaymc.api.block.interfaces.BlockDeprecatedPurpurBlock2Behavior;
+import org.allaymc.api.block.interfaces.BlockDetectorRailBehavior;
+import org.allaymc.api.block.interfaces.BlockDiamondBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockDiamondOreBehavior;
+import org.allaymc.api.block.interfaces.BlockDioriteBehavior;
+import org.allaymc.api.block.interfaces.BlockDirtWithRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockDispenserBehavior;
+import org.allaymc.api.block.interfaces.BlockDragonEggBehavior;
+import org.allaymc.api.block.interfaces.BlockDriedKelpBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockDripstoneBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockDropperBehavior;
+import org.allaymc.api.block.interfaces.BlockEmeraldBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockEmeraldOreBehavior;
+import org.allaymc.api.block.interfaces.BlockEnchantingTableBehavior;
+import org.allaymc.api.block.interfaces.BlockEndGatewayBehavior;
+import org.allaymc.api.block.interfaces.BlockEndPortalBehavior;
+import org.allaymc.api.block.interfaces.BlockEndPortalFrameBehavior;
+import org.allaymc.api.block.interfaces.BlockEndRodBehavior;
+import org.allaymc.api.block.interfaces.BlockEndStoneBehavior;
+import org.allaymc.api.block.interfaces.BlockEnderChestBehavior;
+import org.allaymc.api.block.interfaces.BlockExposedCopperBulbBehavior;
+import org.allaymc.api.block.interfaces.BlockExposedCopperGrateBehavior;
+import org.allaymc.api.block.interfaces.BlockFarmlandBehavior;
+import org.allaymc.api.block.interfaces.BlockFernBehavior;
+import org.allaymc.api.block.interfaces.BlockFireBehavior;
+import org.allaymc.api.block.interfaces.BlockFletchingTableBehavior;
+import org.allaymc.api.block.interfaces.BlockFlowerPotBehavior;
+import org.allaymc.api.block.interfaces.BlockFloweringAzaleaBehavior;
+import org.allaymc.api.block.interfaces.BlockFrameBehavior;
+import org.allaymc.api.block.interfaces.BlockFrogSpawnBehavior;
+import org.allaymc.api.block.interfaces.BlockFrostedIceBehavior;
+import org.allaymc.api.block.interfaces.BlockFurnaceBehavior;
+import org.allaymc.api.block.interfaces.BlockGildedBlackstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockGlowFrameBehavior;
+import org.allaymc.api.block.interfaces.BlockGlowLichenBehavior;
+import org.allaymc.api.block.interfaces.BlockGlowingobsidianBehavior;
+import org.allaymc.api.block.interfaces.BlockGlowstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockGoldBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockGoldOreBehavior;
+import org.allaymc.api.block.interfaces.BlockGoldenRailBehavior;
+import org.allaymc.api.block.interfaces.BlockGraniteBehavior;
+import org.allaymc.api.block.interfaces.BlockGrassBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockGrassPathBehavior;
+import org.allaymc.api.block.interfaces.BlockGravelBehavior;
+import org.allaymc.api.block.interfaces.BlockGrindstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockHangingRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockHardenedClayBehavior;
+import org.allaymc.api.block.interfaces.BlockHayBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockHeavyCoreBehavior;
+import org.allaymc.api.block.interfaces.BlockHeavyWeightedPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockHoneyBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockHoneycombBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockHopperBehavior;
+import org.allaymc.api.block.interfaces.BlockIceBehavior;
+import org.allaymc.api.block.interfaces.BlockInfestedCobblestoneBehavior;
+import org.allaymc.api.block.interfaces.BlockInfestedDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockInfestedStoneBehavior;
+import org.allaymc.api.block.interfaces.BlockInfoUpdate2Behavior;
+import org.allaymc.api.block.interfaces.BlockInfoUpdateBehavior;
+import org.allaymc.api.block.interfaces.BlockInvisibleBedrockBehavior;
+import org.allaymc.api.block.interfaces.BlockIronBarsBehavior;
+import org.allaymc.api.block.interfaces.BlockIronBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockIronOreBehavior;
+import org.allaymc.api.block.interfaces.BlockJigsawBehavior;
+import org.allaymc.api.block.interfaces.BlockJukeboxBehavior;
+import org.allaymc.api.block.interfaces.BlockJunglePressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockKelpBehavior;
+import org.allaymc.api.block.interfaces.BlockLabTableBehavior;
+import org.allaymc.api.block.interfaces.BlockLadderBehavior;
+import org.allaymc.api.block.interfaces.BlockLanternBehavior;
+import org.allaymc.api.block.interfaces.BlockLapisBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockLapisOreBehavior;
+import org.allaymc.api.block.interfaces.BlockLargeFernBehavior;
+import org.allaymc.api.block.interfaces.BlockLecternBehavior;
+import org.allaymc.api.block.interfaces.BlockLeverBehavior;
+import org.allaymc.api.block.interfaces.BlockLightWeightedPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockLightningRodBehavior;
+import org.allaymc.api.block.interfaces.BlockLilacBehavior;
+import org.allaymc.api.block.interfaces.BlockLilyOfTheValleyBehavior;
+import org.allaymc.api.block.interfaces.BlockLitBlastFurnaceBehavior;
+import org.allaymc.api.block.interfaces.BlockLitDeepslateRedstoneOreBehavior;
+import org.allaymc.api.block.interfaces.BlockLitFurnaceBehavior;
+import org.allaymc.api.block.interfaces.BlockLitPumpkinBehavior;
+import org.allaymc.api.block.interfaces.BlockLitRedstoneLampBehavior;
+import org.allaymc.api.block.interfaces.BlockLitRedstoneOreBehavior;
+import org.allaymc.api.block.interfaces.BlockLitSmokerBehavior;
+import org.allaymc.api.block.interfaces.BlockLodestoneBehavior;
+import org.allaymc.api.block.interfaces.BlockLoomBehavior;
+import org.allaymc.api.block.interfaces.BlockMagmaBehavior;
+import org.allaymc.api.block.interfaces.BlockMangrovePressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockMangrovePropaguleBehavior;
+import org.allaymc.api.block.interfaces.BlockMangroveRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockMaterialReducerBehavior;
+import org.allaymc.api.block.interfaces.BlockMelonBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockMelonStemBehavior;
+import org.allaymc.api.block.interfaces.BlockMobSpawnerBehavior;
+import org.allaymc.api.block.interfaces.BlockMossBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockMossyCobblestoneBehavior;
+import org.allaymc.api.block.interfaces.BlockMovingBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockMudBehavior;
+import org.allaymc.api.block.interfaces.BlockMuddyMangroveRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockMyceliumBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherBrickBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherGoldOreBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherSproutsBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherWartBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherWartBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockNetheriteBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherrackBehavior;
+import org.allaymc.api.block.interfaces.BlockNetherreactorBehavior;
+import org.allaymc.api.block.interfaces.BlockNoteblockBehavior;
+import org.allaymc.api.block.interfaces.BlockObserverBehavior;
+import org.allaymc.api.block.interfaces.BlockObsidianBehavior;
+import org.allaymc.api.block.interfaces.BlockOchreFroglightBehavior;
+import org.allaymc.api.block.interfaces.BlockOrangeTulipBehavior;
+import org.allaymc.api.block.interfaces.BlockOxeyeDaisyBehavior;
+import org.allaymc.api.block.interfaces.BlockOxidizedCopperBulbBehavior;
+import org.allaymc.api.block.interfaces.BlockOxidizedCopperGrateBehavior;
+import org.allaymc.api.block.interfaces.BlockPackedIceBehavior;
+import org.allaymc.api.block.interfaces.BlockPackedMudBehavior;
+import org.allaymc.api.block.interfaces.BlockPearlescentFroglightBehavior;
+import org.allaymc.api.block.interfaces.BlockPeonyBehavior;
+import org.allaymc.api.block.interfaces.BlockPinkPetalsBehavior;
+import org.allaymc.api.block.interfaces.BlockPinkTulipBehavior;
+import org.allaymc.api.block.interfaces.BlockPitcherCropBehavior;
+import org.allaymc.api.block.interfaces.BlockPitcherPlantBehavior;
+import org.allaymc.api.block.interfaces.BlockPodzolBehavior;
+import org.allaymc.api.block.interfaces.BlockPointedDripstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedAndesiteBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedBasaltBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedBlackstoneBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedBlackstonePressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedDioriteBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedGraniteBehavior;
+import org.allaymc.api.block.interfaces.BlockPolishedTuffBehavior;
+import org.allaymc.api.block.interfaces.BlockPoppyBehavior;
+import org.allaymc.api.block.interfaces.BlockPortalBehavior;
+import org.allaymc.api.block.interfaces.BlockPotatoesBehavior;
+import org.allaymc.api.block.interfaces.BlockPowderSnowBehavior;
+import org.allaymc.api.block.interfaces.BlockPoweredComparatorBehavior;
+import org.allaymc.api.block.interfaces.BlockPoweredRepeaterBehavior;
+import org.allaymc.api.block.interfaces.BlockPrismarineBehavior;
+import org.allaymc.api.block.interfaces.BlockPumpkinBehavior;
+import org.allaymc.api.block.interfaces.BlockPumpkinStemBehavior;
+import org.allaymc.api.block.interfaces.purpur.BlockPurpurBlockBehavior;
+import org.allaymc.api.block.interfaces.purpur.BlockPurpurPillarBehavior;
+import org.allaymc.api.block.interfaces.BlockQuartzBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockQuartzOreBehavior;
+import org.allaymc.api.block.interfaces.BlockQuartzPillarBehavior;
+import org.allaymc.api.block.interfaces.BlockRailBehavior;
+import org.allaymc.api.block.interfaces.BlockRawCopperBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRawGoldBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRawIronBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRedMushroomBehavior;
+import org.allaymc.api.block.interfaces.BlockRedMushroomBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRedNetherBrickBehavior;
+import org.allaymc.api.block.interfaces.BlockRedTulipBehavior;
+import org.allaymc.api.block.interfaces.BlockRedstoneBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockRedstoneLampBehavior;
+import org.allaymc.api.block.interfaces.BlockRedstoneOreBehavior;
+import org.allaymc.api.block.interfaces.BlockRedstoneWireBehavior;
+import org.allaymc.api.block.interfaces.BlockReedsBehavior;
+import org.allaymc.api.block.interfaces.BlockReinforcedDeepslateBehavior;
+import org.allaymc.api.block.interfaces.BlockRepeatingCommandBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockReserved6Behavior;
+import org.allaymc.api.block.interfaces.BlockRespawnAnchorBehavior;
+import org.allaymc.api.block.interfaces.BlockRoseBushBehavior;
+import org.allaymc.api.block.interfaces.BlockScaffoldingBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkCatalystBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkSensorBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkShriekerBehavior;
+import org.allaymc.api.block.interfaces.BlockSculkVeinBehavior;
+import org.allaymc.api.block.interfaces.BlockSeaLanternBehavior;
+import org.allaymc.api.block.interfaces.BlockSeaPickleBehavior;
+import org.allaymc.api.block.interfaces.BlockSeagrassBehavior;
+import org.allaymc.api.block.interfaces.BlockShortGrassBehavior;
+import org.allaymc.api.block.interfaces.BlockShroomlightBehavior;
+import org.allaymc.api.block.interfaces.BlockSkullBehavior;
+import org.allaymc.api.block.interfaces.BlockSlimeBehavior;
+import org.allaymc.api.block.interfaces.BlockSmallDripleafBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockSmithingTableBehavior;
+import org.allaymc.api.block.interfaces.BlockSmokerBehavior;
+import org.allaymc.api.block.interfaces.BlockSmoothBasaltBehavior;
+import org.allaymc.api.block.interfaces.BlockSmoothQuartzBehavior;
+import org.allaymc.api.block.interfaces.BlockSmoothStoneBehavior;
+import org.allaymc.api.block.interfaces.BlockSnifferEggBehavior;
+import org.allaymc.api.block.interfaces.BlockSnowBehavior;
+import org.allaymc.api.block.interfaces.BlockSnowLayerBehavior;
+import org.allaymc.api.block.interfaces.BlockSoulCampfireBehavior;
+import org.allaymc.api.block.interfaces.BlockSoulFireBehavior;
+import org.allaymc.api.block.interfaces.BlockSoulLanternBehavior;
+import org.allaymc.api.block.interfaces.BlockSoulSoilBehavior;
+import org.allaymc.api.block.interfaces.sponge.BlockSpongeBehavior;
+import org.allaymc.api.block.interfaces.BlockSporeBlossomBehavior;
+import org.allaymc.api.block.interfaces.BlockSprucePressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockStandingBannerBehavior;
+import org.allaymc.api.block.interfaces.BlockStoneBehavior;
+import org.allaymc.api.block.interfaces.BlockStonePressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockStonecutterBehavior;
+import org.allaymc.api.block.interfaces.BlockStonecutterBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockStrippedBambooBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockStrippedCrimsonHyphaeBehavior;
+import org.allaymc.api.block.interfaces.BlockStrippedCrimsonStemBehavior;
+import org.allaymc.api.block.interfaces.BlockStrippedWarpedHyphaeBehavior;
+import org.allaymc.api.block.interfaces.BlockStrippedWarpedStemBehavior;
+import org.allaymc.api.block.interfaces.BlockStructureBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockStructureVoidBehavior;
+import org.allaymc.api.block.interfaces.BlockSunflowerBehavior;
+import org.allaymc.api.block.interfaces.BlockSuspiciousGravelBehavior;
+import org.allaymc.api.block.interfaces.BlockSweetBerryBushBehavior;
+import org.allaymc.api.block.interfaces.BlockTallGrassBehavior;
+import org.allaymc.api.block.interfaces.BlockTargetBehavior;
+import org.allaymc.api.block.interfaces.tnt.BlockTntBehavior;
+import org.allaymc.api.block.interfaces.BlockTrappedChestBehavior;
+import org.allaymc.api.block.interfaces.BlockTrialSpawnerBehavior;
+import org.allaymc.api.block.interfaces.BlockTripWireBehavior;
+import org.allaymc.api.block.interfaces.BlockTripwireHookBehavior;
+import org.allaymc.api.block.interfaces.BlockTuffBehavior;
+import org.allaymc.api.block.interfaces.BlockTurtleEggBehavior;
+import org.allaymc.api.block.interfaces.BlockTwistingVinesBehavior;
+import org.allaymc.api.block.interfaces.tnt.BlockUnderwaterTntBehavior;
+import org.allaymc.api.block.interfaces.BlockUnknownBehavior;
+import org.allaymc.api.block.interfaces.BlockUnpoweredComparatorBehavior;
+import org.allaymc.api.block.interfaces.BlockUnpoweredRepeaterBehavior;
+import org.allaymc.api.block.interfaces.BlockVaultBehavior;
+import org.allaymc.api.block.interfaces.BlockVerdantFroglightBehavior;
+import org.allaymc.api.block.interfaces.BlockVineBehavior;
+import org.allaymc.api.block.interfaces.BlockWallBannerBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedFungusBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedHyphaeBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedNyliumBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedPressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedRootsBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedStemBehavior;
+import org.allaymc.api.block.interfaces.BlockWarpedWartBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockWaterlilyBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedCopperBulbBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedCopperGrateBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedExposedCopperBulbBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedExposedCopperGrateBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedOxidizedCopperBulbBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedOxidizedCopperGrateBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedWeatheredCopperBulbBehavior;
+import org.allaymc.api.block.interfaces.BlockWaxedWeatheredCopperGrateBehavior;
+import org.allaymc.api.block.interfaces.BlockWeatheredCopperBulbBehavior;
+import org.allaymc.api.block.interfaces.BlockWeatheredCopperGrateBehavior;
+import org.allaymc.api.block.interfaces.BlockWebBehavior;
+import org.allaymc.api.block.interfaces.BlockWeepingVinesBehavior;
+import org.allaymc.api.block.interfaces.sponge.BlockWetSpongeBehavior;
+import org.allaymc.api.block.interfaces.BlockWheatBehavior;
+import org.allaymc.api.block.interfaces.BlockWhiteTulipBehavior;
+import org.allaymc.api.block.interfaces.BlockWitherRoseBehavior;
+import org.allaymc.api.block.interfaces.BlockWoodenPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.amethystbud.BlockLargeAmethystBudBehavior;
 import org.allaymc.api.block.interfaces.amethystbud.BlockMediumAmethystBudBehavior;
 import org.allaymc.api.block.interfaces.amethystbud.BlockSmallAmethystBudBehavior;
@@ -9,68 +373,849 @@ import org.allaymc.api.block.interfaces.anvil.BlockAnvilBehavior;
 import org.allaymc.api.block.interfaces.anvil.BlockChippedAnvilBehavior;
 import org.allaymc.api.block.interfaces.anvil.BlockDamagedAnvilBehavior;
 import org.allaymc.api.block.interfaces.anvil.BlockDeprecatedAnvilBehavior;
-import org.allaymc.api.block.interfaces.bricks.*;
-import org.allaymc.api.block.interfaces.button.*;
-import org.allaymc.api.block.interfaces.candle.*;
-import org.allaymc.api.block.interfaces.candlecake.*;
-import org.allaymc.api.block.interfaces.carpet.*;
-import org.allaymc.api.block.interfaces.concrete.*;
-import org.allaymc.api.block.interfaces.concretepowder.*;
-import org.allaymc.api.block.interfaces.copper.*;
-import org.allaymc.api.block.interfaces.coral.*;
-import org.allaymc.api.block.interfaces.coralblock.*;
-import org.allaymc.api.block.interfaces.coralfan.*;
-import org.allaymc.api.block.interfaces.coralwallfan.*;
+import org.allaymc.api.block.interfaces.bricks.BlockChiseledNetherBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockChiseledStoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockChiseledTuffBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockCrackedDeepslateBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockCrackedNetherBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockCrackedPolishedBlackstoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockCrackedStoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockDeepslateBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockEndBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockInfestedChiseledStoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockInfestedCrackedStoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockInfestedMossyStoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockInfestedStoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockMossyStoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockMudBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockPolishedBlackstoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockPrismarineBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockQuartzBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockStoneBricksBehavior;
+import org.allaymc.api.block.interfaces.bricks.BlockTuffBricksBehavior;
+import org.allaymc.api.block.interfaces.button.BlockAcaciaButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockBambooButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockBirchButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockCherryButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockCrimsonButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockDarkOakButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockJungleButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockMangroveButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockPolishedBlackstoneButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockSpruceButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockStoneButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockWarpedButtonBehavior;
+import org.allaymc.api.block.interfaces.button.BlockWoodenButtonBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockBlackCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockBlueCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockBrownCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockCyanCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockGrayCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockGreenCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockLightBlueCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockLightGrayCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockLimeCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockMagentaCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockOrangeCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockPinkCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockPurpleCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockRedCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockWhiteCandleBehavior;
+import org.allaymc.api.block.interfaces.candle.BlockYellowCandleBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockBlackCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockBlueCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockBrownCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockCyanCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockGrayCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockGreenCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockLightBlueCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockLightGrayCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockLimeCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockMagentaCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockOrangeCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockPinkCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockPurpleCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockRedCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockWhiteCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.candlecake.BlockYellowCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockBlackCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockBlueCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockBrownCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockCyanCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockGrayCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockGreenCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockLightBlueCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockLightGrayCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockLimeCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockMagentaCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockMossCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockOrangeCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockPinkCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockPurpleCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockRedCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockWhiteCarpetBehavior;
+import org.allaymc.api.block.interfaces.carpet.BlockYellowCarpetBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockBlackConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockBlueConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockBrownConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockCyanConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockGrayConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockGreenConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockLightBlueConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockLightGrayConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockLimeConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockMagentaConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockOrangeConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockPinkConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockPurpleConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockRedConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockWhiteConcreteBehavior;
+import org.allaymc.api.block.interfaces.concrete.BlockYellowConcreteBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockBlackConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockBlueConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockBrownConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockCyanConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockGrayConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockGreenConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockLightBlueConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockLightGrayConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockLimeConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockMagentaConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockOrangeConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockPinkConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockPurpleConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockRedConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockWhiteConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.concretepowder.BlockYellowConcretePowderBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockChiseledCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockCutCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockExposedChiseledCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockExposedCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockExposedCutCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockOxidizedChiseledCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockOxidizedCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockOxidizedCutCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedChiseledCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedCutCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedExposedChiseledCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedExposedCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedExposedCutCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedOxidizedChiseledCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedOxidizedCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedOxidizedCutCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedWeatheredChiseledCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedWeatheredCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWaxedWeatheredCutCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWeatheredChiseledCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWeatheredCopperBehavior;
+import org.allaymc.api.block.interfaces.copper.BlockWeatheredCutCopperBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockBrainCoralBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockBubbleCoralBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockDeadBrainCoralBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockDeadBubbleCoralBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockDeadFireCoralBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockDeadHornCoralBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockDeadTubeCoralBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockFireCoralBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockHornCoralBehavior;
+import org.allaymc.api.block.interfaces.coral.BlockTubeCoralBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockBrainCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockBubbleCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockDeadBrainCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockDeadBubbleCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockDeadFireCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockDeadHornCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockDeadTubeCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockFireCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockHornCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralblock.BlockTubeCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockBrainCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockBubbleCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadBrainCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadBubbleCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadFireCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadHornCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockDeadTubeCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockFireCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockHornCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralfan.BlockTubeCoralFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockBrainCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockBubbleCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadBrainCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadBubbleCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadFireCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadHornCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadTubeCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockFireCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockHornCoralWallFanBehavior;
+import org.allaymc.api.block.interfaces.coralwallfan.BlockTubeCoralWallFanBehavior;
 import org.allaymc.api.block.interfaces.dirt.BlockCoarseDirtBehavior;
 import org.allaymc.api.block.interfaces.dirt.BlockDirtBehavior;
-import org.allaymc.api.block.interfaces.door.*;
-import org.allaymc.api.block.interfaces.element.*;
-import org.allaymc.api.block.interfaces.fence.*;
-import org.allaymc.api.block.interfaces.fencegate.*;
+import org.allaymc.api.block.interfaces.door.BlockAcaciaDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockBambooDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockBirchDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockCherryDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockCopperDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockCrimsonDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockDarkOakDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockExposedCopperDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockIronDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockJungleDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockMangroveDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockOxidizedCopperDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockSpruceDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockWarpedDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockWaxedCopperDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockWaxedExposedCopperDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockWaxedOxidizedCopperDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockWaxedWeatheredCopperDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockWeatheredCopperDoorBehavior;
+import org.allaymc.api.block.interfaces.door.BlockWoodenDoorBehavior;
+import org.allaymc.api.block.interfaces.element.BlockElement0Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement100Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement101Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement102Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement103Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement104Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement105Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement106Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement107Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement108Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement109Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement10Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement110Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement111Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement112Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement113Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement114Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement115Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement116Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement117Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement118Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement11Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement12Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement13Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement14Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement15Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement16Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement17Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement18Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement19Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement1Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement20Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement21Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement22Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement23Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement24Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement25Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement26Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement27Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement28Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement29Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement2Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement30Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement31Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement32Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement33Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement34Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement35Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement36Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement37Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement38Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement39Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement3Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement40Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement41Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement42Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement43Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement44Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement45Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement46Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement47Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement48Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement49Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement4Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement50Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement51Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement52Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement53Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement54Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement55Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement56Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement57Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement58Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement59Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement5Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement60Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement61Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement62Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement63Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement64Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement65Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement66Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement67Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement68Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement69Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement6Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement70Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement71Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement72Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement73Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement74Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement75Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement76Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement77Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement78Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement79Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement7Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement80Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement81Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement82Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement83Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement84Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement85Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement86Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement87Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement88Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement89Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement8Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement90Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement91Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement92Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement93Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement94Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement95Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement96Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement97Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement98Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement99Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElement9Behavior;
+import org.allaymc.api.block.interfaces.element.BlockElementConstructorBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockAcaciaFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockBambooFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockBirchFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockCherryFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockCrimsonFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockDarkOakFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockJungleFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockMangroveFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockNetherBrickFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockOakFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockSpruceFenceBehavior;
+import org.allaymc.api.block.interfaces.fence.BlockWarpedFenceBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockAcaciaFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockBambooFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockBirchFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockCherryFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockCrimsonFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockDarkOakFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockJungleFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockMangroveFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockSpruceFenceGateBehavior;
+import org.allaymc.api.block.interfaces.fencegate.BlockWarpedFenceGateBehavior;
 import org.allaymc.api.block.interfaces.glass.BlockGlassBehavior;
 import org.allaymc.api.block.interfaces.glass.BlockHardGlassBehavior;
 import org.allaymc.api.block.interfaces.glass.BlockTintedGlassBehavior;
 import org.allaymc.api.block.interfaces.glasspane.BlockGlassPaneBehavior;
 import org.allaymc.api.block.interfaces.glasspane.BlockHardGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.hangingsign.*;
-import org.allaymc.api.block.interfaces.leaves.*;
-import org.allaymc.api.block.interfaces.lightblock.*;
+import org.allaymc.api.block.interfaces.hangingsign.BlockAcaciaHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockBambooHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockBirchHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockCherryHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockCrimsonHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockDarkOakHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockJungleHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockMangroveHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockOakHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockSpruceHangingSignBehavior;
+import org.allaymc.api.block.interfaces.hangingsign.BlockWarpedHangingSignBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockAcaciaLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockAzaleaLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockAzaleaLeavesFloweredBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockBirchLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockCherryLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockDarkOakLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockJungleLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockMangroveLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockOakLeavesBehavior;
+import org.allaymc.api.block.interfaces.leaves.BlockSpruceLeavesBehavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock0Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock10Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock11Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock12Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock13Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock14Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock15Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock1Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock2Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock3Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock4Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock5Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock6Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock7Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock8Behavior;
+import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock9Behavior;
 import org.allaymc.api.block.interfaces.liquid.BlockFlowingLavaBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockFlowingWaterBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockLavaBehavior;
 import org.allaymc.api.block.interfaces.liquid.BlockWaterBehavior;
-import org.allaymc.api.block.interfaces.log.*;
+import org.allaymc.api.block.interfaces.log.BlockAcaciaLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockBirchLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockCherryLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockDarkOakLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockJungleLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockMangroveLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockOakLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockSpruceLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockStrippedAcaciaLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockStrippedBirchLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockStrippedCherryLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockStrippedDarkOakLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockStrippedJungleLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockStrippedMangroveLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockStrippedOakLogBehavior;
+import org.allaymc.api.block.interfaces.log.BlockStrippedSpruceLogBehavior;
 import org.allaymc.api.block.interfaces.piston.BlockPistonArmCollisionBehavior;
 import org.allaymc.api.block.interfaces.piston.BlockPistonBehavior;
 import org.allaymc.api.block.interfaces.piston.BlockStickyPistonArmCollisionBehavior;
 import org.allaymc.api.block.interfaces.piston.BlockStickyPistonBehavior;
-import org.allaymc.api.block.interfaces.planks.*;
+import org.allaymc.api.block.interfaces.planks.BlockAcaciaPlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockBambooPlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockBirchPlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockCherryPlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockCrimsonPlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockDarkOakPlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockJunglePlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockMangrovePlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockOakPlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockSprucePlanksBehavior;
+import org.allaymc.api.block.interfaces.planks.BlockWarpedPlanksBehavior;
 import org.allaymc.api.block.interfaces.sand.BlockRedSandBehavior;
 import org.allaymc.api.block.interfaces.sand.BlockSandBehavior;
 import org.allaymc.api.block.interfaces.sand.BlockSoulSandBehavior;
 import org.allaymc.api.block.interfaces.sand.BlockSuspiciousSandBehavior;
-import org.allaymc.api.block.interfaces.sandstone.*;
-import org.allaymc.api.block.interfaces.sapling.*;
-import org.allaymc.api.block.interfaces.shulkerbox.*;
-import org.allaymc.api.block.interfaces.slab.*;
-import org.allaymc.api.block.interfaces.stainedglass.*;
-import org.allaymc.api.block.interfaces.stainedglasspane.*;
-import org.allaymc.api.block.interfaces.stairs.*;
-import org.allaymc.api.block.interfaces.standingsign.*;
-import org.allaymc.api.block.interfaces.terracotta.*;
-import org.allaymc.api.block.interfaces.torch.*;
-import org.allaymc.api.block.interfaces.trapdoor.*;
-import org.allaymc.api.block.interfaces.wall.*;
-import org.allaymc.api.block.interfaces.wallsign.*;
-import org.allaymc.api.block.interfaces.wood.*;
-import org.allaymc.api.block.interfaces.wool.*;
+import org.allaymc.api.block.interfaces.sandstone.BlockChiseledRedSandstoneBehavior;
+import org.allaymc.api.block.interfaces.sandstone.BlockChiseledSandstoneBehavior;
+import org.allaymc.api.block.interfaces.sandstone.BlockCutRedSandstoneBehavior;
+import org.allaymc.api.block.interfaces.sandstone.BlockCutSandstoneBehavior;
+import org.allaymc.api.block.interfaces.sandstone.BlockRedSandstoneBehavior;
+import org.allaymc.api.block.interfaces.sandstone.BlockSandstoneBehavior;
+import org.allaymc.api.block.interfaces.sandstone.BlockSmoothRedSandstoneBehavior;
+import org.allaymc.api.block.interfaces.sandstone.BlockSmoothSandstoneBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockAcaciaSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockBambooSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockBirchSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockCherrySaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockDarkOakSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockJungleSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockOakSaplingBehavior;
+import org.allaymc.api.block.interfaces.sapling.BlockSpruceSaplingBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockBlackShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockBlueShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockBrownShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockCyanShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockGrayShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockGreenShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockLightBlueShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockLightGrayShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockLimeShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockMagentaShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockOrangeShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockPinkShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockPurpleShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockRedShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockUndyedShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockWhiteShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.shulkerbox.BlockYellowShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockAcaciaDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockAcaciaSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockAndesiteDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockAndesiteSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBambooDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBambooMosaicDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBambooMosaicSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBambooSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBirchDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBirchSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBlackstoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBlackstoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCherryDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCherrySlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCobbledDeepslateDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCobbledDeepslateSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCobblestoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCobblestoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCrimsonDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCrimsonSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCutRedSandstoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCutRedSandstoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCutSandstoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockCutSandstoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDarkOakDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDarkOakSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDarkPrismarineDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDarkPrismarineSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDeepslateBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDeepslateBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDeepslateTileDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDeepslateTileSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDioriteDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDioriteSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockEndStoneBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockEndStoneBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockExposedCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockExposedDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockGraniteDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockGraniteSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockJungleDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockJungleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockMangroveDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockMangroveSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockMossyCobblestoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockMossyCobblestoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockMossyStoneBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockMossyStoneBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockMudBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockMudBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockNetherBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockNetherBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockNormalStoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockNormalStoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockOakDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockOakSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockOxidizedCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockOxidizedDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPetrifiedOakDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPetrifiedOakSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedAndesiteDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedAndesiteSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedDeepslateDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedDeepslateSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedDioriteDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedDioriteSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedGraniteDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedGraniteSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedTuffDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPolishedTuffSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPrismarineBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPrismarineBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPrismarineDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPrismarineSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPurpurDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockPurpurSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockQuartzDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockQuartzSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockRedNetherBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockRedNetherBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockRedSandstoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockRedSandstoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSandstoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSandstoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSmoothQuartzDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSmoothQuartzSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSmoothRedSandstoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSmoothRedSandstoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSmoothSandstoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSmoothSandstoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSmoothStoneDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSmoothStoneSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSpruceDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockSpruceSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockStoneBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockStoneBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockTuffBrickDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockTuffBrickSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockTuffDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockTuffSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWarpedDoubleSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWarpedSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWaxedCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWaxedDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWaxedExposedCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWaxedExposedDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWaxedOxidizedCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWaxedOxidizedDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWaxedWeatheredCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWaxedWeatheredDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWeatheredCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.slab.BlockWeatheredDoubleCutCopperSlabBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockBlackStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockBlueStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockBrownStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockCyanStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockGrayStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockGreenStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardBlackStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardBlueStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardBrownStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardCyanStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardGrayStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardGreenStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardLightBlueStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardLightGrayStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardLimeStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardMagentaStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardOrangeStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardPinkStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardPurpleStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardRedStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardWhiteStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockHardYellowStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockLightBlueStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockLightGrayStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockLimeStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockMagentaStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockOrangeStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockPinkStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockPurpleStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockRedStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockWhiteStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglass.BlockYellowStainedGlassBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockBlackStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockBlueStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockBrownStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockCyanStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockGrayStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockGreenStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardBlackStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardBlueStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardBrownStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardCyanStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardGrayStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardGreenStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardLightBlueStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardLightGrayStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardLimeStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardMagentaStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardOrangeStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardPinkStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardPurpleStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardRedStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardWhiteStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardYellowStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockLightBlueStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockLightGrayStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockLimeStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockMagentaStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockOrangeStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockPinkStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockPurpleStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockRedStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockWhiteStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stainedglasspane.BlockYellowStainedGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockAcaciaStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockAndesiteStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockBambooMosaicStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockBambooStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockBirchStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockBlackstoneStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockCherryStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockCobbledDeepslateStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockCrimsonStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockCutCopperStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockDarkOakStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockDarkPrismarineStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockDeepslateBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockDeepslateTileStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockDioriteStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockEndBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockExposedCutCopperStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockGraniteStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockJungleStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockMangroveStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockMossyCobblestoneStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockMossyStoneBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockMudBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockNetherBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockNormalStoneStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockOakStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockOxidizedCutCopperStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPolishedAndesiteStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPolishedBlackstoneBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPolishedBlackstoneStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPolishedDeepslateStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPolishedDioriteStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPolishedGraniteStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPolishedTuffStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPrismarineBricksStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPrismarineStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockPurpurStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockQuartzStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockRedNetherBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockRedSandstoneStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockSandstoneStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockSmoothQuartzStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockSmoothRedSandstoneStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockSmoothSandstoneStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockSpruceStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockStoneBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockStoneStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockTuffBrickStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockTuffStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockWarpedStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockWaxedCutCopperStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockWaxedExposedCutCopperStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockWaxedOxidizedCutCopperStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockWaxedWeatheredCutCopperStairsBehavior;
+import org.allaymc.api.block.interfaces.stairs.BlockWeatheredCutCopperStairsBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockAcaciaStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockBambooStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockBirchStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockCherryStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockCrimsonStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockDarkoakStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockJungleStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockMangroveStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockSpruceStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockStandingSignBehavior;
+import org.allaymc.api.block.interfaces.standingsign.BlockWarpedStandingSignBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockBlackGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockBlackTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockBlueGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockBlueTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockBrownGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockBrownTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockCyanGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockCyanTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockGrayGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockGrayTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockGreenGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockGreenTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockLightBlueGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockLightBlueTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockLightGrayTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockLimeGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockLimeTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockMagentaGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockMagentaTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockOrangeGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockOrangeTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockPinkGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockPinkTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockPurpleGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockPurpleTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockRedGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockRedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockSilverGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockWhiteGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockWhiteTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockYellowGlazedTerracottaBehavior;
+import org.allaymc.api.block.interfaces.terracotta.BlockYellowTerracottaBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockColoredTorchBlueBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockColoredTorchGreenBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockColoredTorchPurpleBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockColoredTorchRedBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockRedstoneTorchBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockSoulTorchBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockTorchBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockTorchflowerBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockTorchflowerCropBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockUnderwaterTorchBehavior;
+import org.allaymc.api.block.interfaces.torch.BlockUnlitRedstoneTorchBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockAcaciaTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockBambooTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockBirchTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockCherryTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockCrimsonTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockDarkOakTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockExposedCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockIronTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockJungleTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockMangroveTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockOxidizedCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockSpruceTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockWarpedTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockWaxedCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockWaxedExposedCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockWaxedOxidizedCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockWaxedWeatheredCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.trapdoor.BlockWeatheredCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockAndesiteWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockBlackstoneWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockCobbledDeepslateWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockCobblestoneWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockDeepslateBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockDeepslateTileWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockDioriteWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockEndStoneBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockGraniteWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockMossyCobblestoneWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockMossyStoneBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockMudBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockNetherBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockPolishedBlackstoneBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockPolishedBlackstoneWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockPolishedDeepslateWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockPolishedTuffWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockPrismarineWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockRedNetherBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockRedSandstoneWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockSandstoneWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockStoneBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockTuffBrickWallBehavior;
+import org.allaymc.api.block.interfaces.wall.BlockTuffWallBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockAcaciaWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockBambooWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockBirchWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockCherryWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockCrimsonWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockDarkoakWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockJungleWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockMangroveWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockSpruceWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockWallSignBehavior;
+import org.allaymc.api.block.interfaces.wallsign.BlockWarpedWallSignBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockAcaciaWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockBirchWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockCherryWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockDarkOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockJungleWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockMangroveWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockSpruceWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedAcaciaWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedBirchWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedCherryWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedDarkOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedJungleWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedMangroveWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedOakWoodBehavior;
+import org.allaymc.api.block.interfaces.wood.BlockStrippedSpruceWoodBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockBlackWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockBlueWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockBrownWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockCyanWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockGrayWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockGreenWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockLightBlueWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockLightGrayWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockLimeWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockMagentaWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockOrangeWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockPinkWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockPurpleWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockRedWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockWhiteWoolBehavior;
+import org.allaymc.api.block.interfaces.wool.BlockYellowWoolBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockTypes;
 
-/**
- * @author daoge_cmd <br>
- * Allay Project <br>
- */
 public final class BlockTypeDefaultInitializer {
     public static void initAcaciaButton() {
         if (BlockTypes.ACACIA_BUTTON != null) return;
@@ -313,6 +1458,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockAndesiteStairsBehavior.class)
                 .vanillaBlock(BlockId.ANDESITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+                .build();
+    }
+
+    public static void initAndesiteWall() {
+        if (BlockTypes.ANDESITE_WALL != null) return;
+        BlockTypes.ANDESITE_WALL = AllayBlockType
+                .builder(BlockAndesiteWallBehavior.class)
+                .vanillaBlock(BlockId.ANDESITE_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -1139,6 +2293,15 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
+    public static void initBrickWall() {
+        if (BlockTypes.BRICK_WALL != null) return;
+        BlockTypes.BRICK_WALL = AllayBlockType
+                .builder(BlockBrickWallBehavior.class)
+                .vanillaBlock(BlockId.BRICK_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
+                .build();
+    }
+
     public static void initBrownCandle() {
         if (BlockTypes.BROWN_CANDLE != null) return;
         BlockTypes.BROWN_CANDLE = AllayBlockType
@@ -1453,15 +2616,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.CHEMICAL_HEAT = AllayBlockType
                 .builder(BlockChemicalHeatBehavior.class)
                 .vanillaBlock(BlockId.CHEMICAL_HEAT)
-                .build();
-    }
-
-    public static void initChemistryTable() {
-        if (BlockTypes.CHEMISTRY_TABLE != null) return;
-        BlockTypes.CHEMISTRY_TABLE = AllayBlockType
-                .builder(BlockChemistryTableBehavior.class)
-                .vanillaBlock(BlockId.CHEMISTRY_TABLE)
-                .setProperties(BlockPropertyTypes.CHEMISTRY_TABLE_TYPE, BlockPropertyTypes.DIRECTION)
                 .build();
     }
 
@@ -1856,7 +3010,7 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.COBBLESTONE_WALL = AllayBlockType
                 .builder(BlockCobblestoneWallBehavior.class)
                 .vanillaBlock(BlockId.COBBLESTONE_WALL)
-                .setProperties(BlockPropertyTypes.WALL_BLOCK_TYPE, BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -1869,21 +3023,39 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initColoredTorchBp() {
-        if (BlockTypes.COLORED_TORCH_BP != null) return;
-        BlockTypes.COLORED_TORCH_BP = AllayBlockType
-                .builder(BlockColoredTorchBpBehavior.class)
-                .vanillaBlock(BlockId.COLORED_TORCH_BP)
-                .setProperties(BlockPropertyTypes.COLOR_BIT, BlockPropertyTypes.TORCH_FACING_DIRECTION)
+    public static void initColoredTorchBlue() {
+        if (BlockTypes.COLORED_TORCH_BLUE != null) return;
+        BlockTypes.COLORED_TORCH_BLUE = AllayBlockType
+                .builder(BlockColoredTorchBlueBehavior.class)
+                .vanillaBlock(BlockId.COLORED_TORCH_BLUE)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .build();
     }
 
-    public static void initColoredTorchRg() {
-        if (BlockTypes.COLORED_TORCH_RG != null) return;
-        BlockTypes.COLORED_TORCH_RG = AllayBlockType
-                .builder(BlockColoredTorchRgBehavior.class)
-                .vanillaBlock(BlockId.COLORED_TORCH_RG)
-                .setProperties(BlockPropertyTypes.COLOR_BIT, BlockPropertyTypes.TORCH_FACING_DIRECTION)
+    public static void initColoredTorchGreen() {
+        if (BlockTypes.COLORED_TORCH_GREEN != null) return;
+        BlockTypes.COLORED_TORCH_GREEN = AllayBlockType
+                .builder(BlockColoredTorchGreenBehavior.class)
+                .vanillaBlock(BlockId.COLORED_TORCH_GREEN)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
+                .build();
+    }
+
+    public static void initColoredTorchPurple() {
+        if (BlockTypes.COLORED_TORCH_PURPLE != null) return;
+        BlockTypes.COLORED_TORCH_PURPLE = AllayBlockType
+                .builder(BlockColoredTorchPurpleBehavior.class)
+                .vanillaBlock(BlockId.COLORED_TORCH_PURPLE)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
+                .build();
+    }
+
+    public static void initColoredTorchRed() {
+        if (BlockTypes.COLORED_TORCH_RED != null) return;
+        BlockTypes.COLORED_TORCH_RED = AllayBlockType
+                .builder(BlockColoredTorchRedBehavior.class)
+                .vanillaBlock(BlockId.COLORED_TORCH_RED)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .build();
     }
 
@@ -1902,6 +3074,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockComposterBehavior.class)
                 .vanillaBlock(BlockId.COMPOSTER)
                 .setProperties(BlockPropertyTypes.COMPOSTER_FILL_LEVEL)
+                .build();
+    }
+
+    public static void initCompoundCreator() {
+        if (BlockTypes.COMPOUND_CREATOR != null) return;
+        BlockTypes.COMPOUND_CREATOR = AllayBlockType
+                .builder(BlockCompoundCreatorBehavior.class)
+                .vanillaBlock(BlockId.COMPOUND_CREATOR)
+                .setProperties(BlockPropertyTypes.DIRECTION)
                 .build();
     }
 
@@ -2949,6 +4130,24 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
+    public static void initDeprecatedPurpurBlock1() {
+        if (BlockTypes.DEPRECATED_PURPUR_BLOCK_1 != null) return;
+        BlockTypes.DEPRECATED_PURPUR_BLOCK_1 = AllayBlockType
+                .builder(BlockDeprecatedPurpurBlock1Behavior.class)
+                .vanillaBlock(BlockId.DEPRECATED_PURPUR_BLOCK_1)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                .build();
+    }
+
+    public static void initDeprecatedPurpurBlock2() {
+        if (BlockTypes.DEPRECATED_PURPUR_BLOCK_2 != null) return;
+        BlockTypes.DEPRECATED_PURPUR_BLOCK_2 = AllayBlockType
+                .builder(BlockDeprecatedPurpurBlock2Behavior.class)
+                .vanillaBlock(BlockId.DEPRECATED_PURPUR_BLOCK_2)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                .build();
+    }
+
     public static void initDetectorRail() {
         if (BlockTypes.DETECTOR_RAIL != null) return;
         BlockTypes.DETECTOR_RAIL = AllayBlockType
@@ -3006,6 +4205,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockDioriteStairsBehavior.class)
                 .vanillaBlock(BlockId.DIORITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+                .build();
+    }
+
+    public static void initDioriteWall() {
+        if (BlockTypes.DIORITE_WALL != null) return;
+        BlockTypes.DIORITE_WALL = AllayBlockType
+                .builder(BlockDioriteWallBehavior.class)
+                .vanillaBlock(BlockId.DIORITE_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -4028,6 +5236,15 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
+    public static void initElementConstructor() {
+        if (BlockTypes.ELEMENT_CONSTRUCTOR != null) return;
+        BlockTypes.ELEMENT_CONSTRUCTOR = AllayBlockType
+                .builder(BlockElementConstructorBehavior.class)
+                .vanillaBlock(BlockId.ELEMENT_CONSTRUCTOR)
+                .setProperties(BlockPropertyTypes.DIRECTION)
+                .build();
+    }
+
     public static void initEmeraldBlock() {
         if (BlockTypes.EMERALD_BLOCK != null) return;
         BlockTypes.EMERALD_BLOCK = AllayBlockType
@@ -4126,6 +5343,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockEndStoneBrickSlabBehavior.class)
                 .vanillaBlock(BlockId.END_STONE_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+                .build();
+    }
+
+    public static void initEndStoneBrickWall() {
+        if (BlockTypes.END_STONE_BRICK_WALL != null) return;
+        BlockTypes.END_STONE_BRICK_WALL = AllayBlockType
+                .builder(BlockEndStoneBrickWallBehavior.class)
+                .vanillaBlock(BlockId.END_STONE_BRICK_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -4486,6 +5712,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockGraniteStairsBehavior.class)
                 .vanillaBlock(BlockId.GRANITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+                .build();
+    }
+
+    public static void initGraniteWall() {
+        if (BlockTypes.GRANITE_WALL != null) return;
+        BlockTypes.GRANITE_WALL = AllayBlockType
+                .builder(BlockGraniteWallBehavior.class)
+                .vanillaBlock(BlockId.GRANITE_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -5385,6 +6620,15 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
+    public static void initLabTable() {
+        if (BlockTypes.LAB_TABLE != null) return;
+        BlockTypes.LAB_TABLE = AllayBlockType
+                .builder(BlockLabTableBehavior.class)
+                .vanillaBlock(BlockId.LAB_TABLE)
+                .setProperties(BlockPropertyTypes.DIRECTION)
+                .build();
+    }
+
     public static void initLadder() {
         if (BlockTypes.LADDER != null) return;
         BlockTypes.LADDER = AllayBlockType
@@ -6226,6 +7470,15 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
+    public static void initMaterialReducer() {
+        if (BlockTypes.MATERIAL_REDUCER != null) return;
+        BlockTypes.MATERIAL_REDUCER = AllayBlockType
+                .builder(BlockMaterialReducerBehavior.class)
+                .vanillaBlock(BlockId.MATERIAL_REDUCER)
+                .setProperties(BlockPropertyTypes.DIRECTION)
+                .build();
+    }
+
     public static void initMediumAmethystBud() {
         if (BlockTypes.MEDIUM_AMETHYST_BUD != null) return;
         BlockTypes.MEDIUM_AMETHYST_BUD = AllayBlockType
@@ -6311,6 +7564,15 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
+    public static void initMossyCobblestoneWall() {
+        if (BlockTypes.MOSSY_COBBLESTONE_WALL != null) return;
+        BlockTypes.MOSSY_COBBLESTONE_WALL = AllayBlockType
+                .builder(BlockMossyCobblestoneWallBehavior.class)
+                .vanillaBlock(BlockId.MOSSY_COBBLESTONE_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
+                .build();
+    }
+
     public static void initMossyStoneBrickDoubleSlab() {
         if (BlockTypes.MOSSY_STONE_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.MOSSY_STONE_BRICK_DOUBLE_SLAB = AllayBlockType
@@ -6335,6 +7597,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockMossyStoneBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.MOSSY_STONE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+                .build();
+    }
+
+    public static void initMossyStoneBrickWall() {
+        if (BlockTypes.MOSSY_STONE_BRICK_WALL != null) return;
+        BlockTypes.MOSSY_STONE_BRICK_WALL = AllayBlockType
+                .builder(BlockMossyStoneBrickWallBehavior.class)
+                .vanillaBlock(BlockId.MOSSY_STONE_BRICK_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -6463,6 +7734,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockNetherBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.NETHER_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+                .build();
+    }
+
+    public static void initNetherBrickWall() {
+        if (BlockTypes.NETHER_BRICK_WALL != null) return;
+        BlockTypes.NETHER_BRICK_WALL = AllayBlockType
+                .builder(BlockNetherBrickWallBehavior.class)
+                .vanillaBlock(BlockId.NETHER_BRICK_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -7508,6 +8788,15 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
+    public static void initPrismarineWall() {
+        if (BlockTypes.PRISMARINE_WALL != null) return;
+        BlockTypes.PRISMARINE_WALL = AllayBlockType
+                .builder(BlockPrismarineWallBehavior.class)
+                .vanillaBlock(BlockId.PRISMARINE_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
+                .build();
+    }
+
     public static void initPumpkin() {
         if (BlockTypes.PUMPKIN != null) return;
         BlockTypes.PUMPKIN = AllayBlockType
@@ -7622,7 +8911,7 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.PURPUR_BLOCK = AllayBlockType
                 .builder(BlockPurpurBlockBehavior.class)
                 .vanillaBlock(BlockId.PURPUR_BLOCK)
-                .setProperties(BlockPropertyTypes.CHISEL_TYPE, BlockPropertyTypes.PILLAR_AXIS)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                 .build();
     }
 
@@ -7632,6 +8921,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockPurpurDoubleSlabBehavior.class)
                 .vanillaBlock(BlockId.PURPUR_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
+                .build();
+    }
+
+    public static void initPurpurPillar() {
+        if (BlockTypes.PURPUR_PILLAR != null) return;
+        BlockTypes.PURPUR_PILLAR = AllayBlockType
+                .builder(BlockPurpurPillarBehavior.class)
+                .vanillaBlock(BlockId.PURPUR_PILLAR)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                 .build();
     }
 
@@ -7850,6 +9148,15 @@ public final class BlockTypeDefaultInitializer {
                 .build();
     }
 
+    public static void initRedNetherBrickWall() {
+        if (BlockTypes.RED_NETHER_BRICK_WALL != null) return;
+        BlockTypes.RED_NETHER_BRICK_WALL = AllayBlockType
+                .builder(BlockRedNetherBrickWallBehavior.class)
+                .vanillaBlock(BlockId.RED_NETHER_BRICK_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
+                .build();
+    }
+
     public static void initRedSand() {
         if (BlockTypes.RED_SAND != null) return;
         BlockTypes.RED_SAND = AllayBlockType
@@ -7890,6 +9197,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockRedSandstoneStairsBehavior.class)
                 .vanillaBlock(BlockId.RED_SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+                .build();
+    }
+
+    public static void initRedSandstoneWall() {
+        if (BlockTypes.RED_SANDSTONE_WALL != null) return;
+        BlockTypes.RED_SANDSTONE_WALL = AllayBlockType
+                .builder(BlockRedSandstoneWallBehavior.class)
+                .vanillaBlock(BlockId.RED_SANDSTONE_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -8075,6 +9391,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockSandstoneStairsBehavior.class)
                 .vanillaBlock(BlockId.SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+                .build();
+    }
+
+    public static void initSandstoneWall() {
+        if (BlockTypes.SANDSTONE_WALL != null) return;
+        BlockTypes.SANDSTONE_WALL = AllayBlockType
+                .builder(BlockSandstoneWallBehavior.class)
+                .vanillaBlock(BlockId.SANDSTONE_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -8457,7 +9782,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.SPONGE = AllayBlockType
                 .builder(BlockSpongeBehavior.class)
                 .vanillaBlock(BlockId.SPONGE)
-                .setProperties(BlockPropertyTypes.SPONGE_TYPE)
                 .build();
     }
 
@@ -8688,6 +10012,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockStoneBrickStairsBehavior.class)
                 .vanillaBlock(BlockId.STONE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
+                .build();
+    }
+
+    public static void initStoneBrickWall() {
+        if (BlockTypes.STONE_BRICK_WALL != null) return;
+        BlockTypes.STONE_BRICK_WALL = AllayBlockType
+                .builder(BlockStoneBrickWallBehavior.class)
+                .vanillaBlock(BlockId.STONE_BRICK_WALL)
+                .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
     }
 
@@ -8946,7 +10279,6 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.STRUCTURE_VOID = AllayBlockType
                 .builder(BlockStructureVoidBehavior.class)
                 .vanillaBlock(BlockId.STRUCTURE_VOID)
-                .setProperties(BlockPropertyTypes.STRUCTURE_VOID_TYPE)
                 .build();
     }
 
@@ -9016,7 +10348,7 @@ public final class BlockTypeDefaultInitializer {
         BlockTypes.TNT = AllayBlockType
                 .builder(BlockTntBehavior.class)
                 .vanillaBlock(BlockId.TNT)
-                .setProperties(BlockPropertyTypes.ALLOW_UNDERWATER_BIT, BlockPropertyTypes.EXPLODE_BIT)
+                .setProperties(BlockPropertyTypes.EXPLODE_BIT)
                 .build();
     }
 
@@ -9228,6 +10560,15 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockTwistingVinesBehavior.class)
                 .vanillaBlock(BlockId.TWISTING_VINES)
                 .setProperties(BlockPropertyTypes.TWISTING_VINES_AGE)
+                .build();
+    }
+
+    public static void initUnderwaterTnt() {
+        if (BlockTypes.UNDERWATER_TNT != null) return;
+        BlockTypes.UNDERWATER_TNT = AllayBlockType
+                .builder(BlockUnderwaterTntBehavior.class)
+                .vanillaBlock(BlockId.UNDERWATER_TNT)
+                .setProperties(BlockPropertyTypes.EXPLODE_BIT)
                 .build();
     }
 
@@ -9954,6 +11295,14 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockWeepingVinesBehavior.class)
                 .vanillaBlock(BlockId.WEEPING_VINES)
                 .setProperties(BlockPropertyTypes.WEEPING_VINES_AGE)
+                .build();
+    }
+
+    public static void initWetSponge() {
+        if (BlockTypes.WET_SPONGE != null) return;
+        BlockTypes.WET_SPONGE = AllayBlockType
+                .builder(BlockWetSpongeBehavior.class)
+                .vanillaBlock(BlockId.WET_SPONGE)
                 .build();
     }
 

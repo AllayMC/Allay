@@ -1,4 +1,4 @@
-package org.allaymc.api.block.interfaces;
+package org.allaymc.api.block.interfaces.tnt;
 
 import org.allaymc.api.block.BlockBehavior;
 

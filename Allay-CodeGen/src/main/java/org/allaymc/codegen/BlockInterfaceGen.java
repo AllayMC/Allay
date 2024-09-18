@@ -184,5 +184,8 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*DirtBehavior"), "dirt");
         registerSubPackage(Pattern.compile(".*SandBehavior"), "sand");
         registerSubPackage(Pattern.compile(".*SandstoneBehavior"), "sandstone");
+        registerSubPackage(Pattern.compile("BlockPurpur.*"), "purpur");
+        registerSubPackage(Pattern.compile(".*SpongeBehavior"), "sponge");
+        registerSubPackage(Pattern.compile(".*TntBehavior"), "tnt");
     }
 }
