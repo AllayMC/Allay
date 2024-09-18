@@ -57,7 +57,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 destinationItem.getDurability()
                                         )
                                 ),
-                                new FullContainerName(sourceContainer.getSlotType(sourceSlot), 0)
+                                new FullContainerName(sourceContainer.getSlotType(sourceSlot), null)
                         ),
                         new ItemStackResponseContainer(
                                 destinationContainer.getSlotType(destinationSlot),
@@ -71,7 +71,7 @@ public class SwapActionProcessor implements ContainerActionProcessor<SwapAction>
                                                 sourceItem.getDurability()
                                         )
                                 ),
-                                new FullContainerName(destinationContainer.getSlotType(destinationSlot), 0)
+                                new FullContainerName(destinationContainer.getSlotType(destinationSlot), null)
                         )
                 )
         );

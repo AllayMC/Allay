@@ -74,7 +74,7 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
                                                 item.getDurability()
                                         )
                                 ),
-                                new FullContainerName(sourceContainer.getSlotType(slot), 0)
+                                new FullContainerName(sourceContainer.getSlotType(slot), null)
                         )
                 )
         );

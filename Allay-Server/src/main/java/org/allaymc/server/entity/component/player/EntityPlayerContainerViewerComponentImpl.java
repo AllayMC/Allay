@@ -17,6 +17,7 @@ import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
+import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -66,6 +67,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     public void sendContentsWithSpecificContainerId(Container container, int containerId) {
         var packet = new InventoryContentPacket();
         packet.setContainerId(containerId);
+        packet.setContainerNameData(new FullContainerName(ContainerSlotType.UNKNOwWN, containerId));
         packet.setContents(container.toNetworkItemData());
         networkComponent.sendPacket(packet);
     }
@@ -75,6 +77,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         var packet = new InventorySlotPacket();
         packet.setContainerId(containerId);
         packet.setSlot(container.toNetworkSlotIndex(slot));
+        packet.setContainerNameData(new FullContainerName(container.getSlotType(slot), null));
         packet.setItem(container.getItemStack(slot).toNetworkItemData());
         networkComponent.sendPacket(packet);
     }

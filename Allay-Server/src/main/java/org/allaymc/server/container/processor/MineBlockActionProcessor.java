@@ -53,7 +53,7 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
                                                 itemInHand.getDurability()
                                         )
                                 ),
-                                new FullContainerName(container.getSlotType(handSlot), 0)
+                                new FullContainerName(container.getSlotType(handSlot), null)
                         )
                 )
         );
