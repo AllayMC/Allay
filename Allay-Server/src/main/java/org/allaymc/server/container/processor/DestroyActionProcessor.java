@@ -73,7 +73,7 @@ public class DestroyActionProcessor implements ContainerActionProcessor<DestroyA
                                                 item.getDurability()
                                         )
                                 ),
-                                new FullContainerName(container.getSlotType(slot), 0)
+                                new FullContainerName(container.getSlotType(slot), null)
                         )
                 )
         );

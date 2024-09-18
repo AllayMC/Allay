@@ -183,9 +183,14 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*AxeStack"), "axe");
         registerSubPackage(Pattern.compile(".*SandstoneStack"), "sandstone");
         registerSubPackage(Pattern.compile(".*SandStack"), "sand");
+        registerSubPackage(Pattern.compile(".*Torchflower.*Behavior"), "torchflower");
+        registerSubPackage(Pattern.compile(".*Torch.*Stack"), "torch");
         registerSubPackage(Pattern.compile(".*LightBlock.*Stack"), "lightblock");
         registerSubPackage(Pattern.compile(".*DirtStack"), "dirt");
         registerSubPackage(Pattern.compile(".*AnvilStack"), "anvil");
         registerSubPackage(Pattern.compile(".*CoralWallFanStack"), "coralwallfan");
+        registerSubPackage(Pattern.compile("ItemPurpur.*"), "purpur");
+        registerSubPackage(Pattern.compile(".*SpongeStack"), "sponge");
+        registerSubPackage(Pattern.compile(".*TntStack"), "tnt");
     }
 }

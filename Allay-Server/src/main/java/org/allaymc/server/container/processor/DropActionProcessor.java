@@ -60,7 +60,7 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                                 item.getDurability()
                                         )
                                 ),
-                                new FullContainerName(container.getSlotType(slot), 0)
+                                new FullContainerName(container.getSlotType(slot), null)
                         )
                 )
         );

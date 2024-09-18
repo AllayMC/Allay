@@ -15,8 +15,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Allay Project 2024/1/20
- *
  * @author daoge_cmd
  */
 public class CmdPkExportUtil {

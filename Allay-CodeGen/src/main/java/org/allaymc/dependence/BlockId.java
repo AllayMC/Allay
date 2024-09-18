@@ -62,6 +62,8 @@ public enum BlockId {
 
     ANDESITE_STAIRS("minecraft:andesite_stairs"),
 
+    ANDESITE_WALL("minecraft:andesite_wall"),
+
     ANVIL("minecraft:anvil"),
 
     AZALEA("minecraft:azalea"),
@@ -252,6 +254,8 @@ public enum BlockId {
 
     BRICK_STAIRS("minecraft:brick_stairs"),
 
+    BRICK_WALL("minecraft:brick_wall"),
+
     BROWN_CANDLE("minecraft:brown_candle"),
 
     BROWN_CANDLE_CAKE("minecraft:brown_candle_cake"),
@@ -325,8 +329,6 @@ public enum BlockId {
     CHAIN_COMMAND_BLOCK("minecraft:chain_command_block"),
 
     CHEMICAL_HEAT("minecraft:chemical_heat"),
-
-    CHEMISTRY_TABLE("minecraft:chemistry_table"),
 
     CHERRY_BUTTON("minecraft:cherry_button"),
 
@@ -422,13 +424,19 @@ public enum BlockId {
 
     COCOA("minecraft:cocoa"),
 
-    COLORED_TORCH_BP("minecraft:colored_torch_bp"),
+    COLORED_TORCH_BLUE("minecraft:colored_torch_blue"),
 
-    COLORED_TORCH_RG("minecraft:colored_torch_rg"),
+    COLORED_TORCH_GREEN("minecraft:colored_torch_green"),
+
+    COLORED_TORCH_PURPLE("minecraft:colored_torch_purple"),
+
+    COLORED_TORCH_RED("minecraft:colored_torch_red"),
 
     COMMAND_BLOCK("minecraft:command_block"),
 
     COMPOSTER("minecraft:composter"),
+
+    COMPOUND_CREATOR("minecraft:compound_creator"),
 
     CONDUIT("minecraft:conduit"),
 
@@ -674,6 +682,10 @@ public enum BlockId {
 
     DEPRECATED_ANVIL("minecraft:deprecated_anvil"),
 
+    DEPRECATED_PURPUR_BLOCK_1("minecraft:deprecated_purpur_block_1"),
+
+    DEPRECATED_PURPUR_BLOCK_2("minecraft:deprecated_purpur_block_2"),
+
     DETECTOR_RAIL("minecraft:detector_rail"),
 
     DIAMOND_BLOCK("minecraft:diamond_block"),
@@ -687,6 +699,8 @@ public enum BlockId {
     DIORITE_SLAB("minecraft:diorite_slab"),
 
     DIORITE_STAIRS("minecraft:diorite_stairs"),
+
+    DIORITE_WALL("minecraft:diorite_wall"),
 
     DIRT("minecraft:dirt"),
 
@@ -942,6 +956,8 @@ public enum BlockId {
 
     ELEMENT_99("minecraft:element_99"),
 
+    ELEMENT_CONSTRUCTOR("minecraft:element_constructor"),
+
     EMERALD_BLOCK("minecraft:emerald_block"),
 
     EMERALD_ORE("minecraft:emerald_ore"),
@@ -965,6 +981,8 @@ public enum BlockId {
     END_STONE_BRICK_DOUBLE_SLAB("minecraft:end_stone_brick_double_slab"),
 
     END_STONE_BRICK_SLAB("minecraft:end_stone_brick_slab"),
+
+    END_STONE_BRICK_WALL("minecraft:end_stone_brick_wall"),
 
     ENDER_CHEST("minecraft:ender_chest"),
 
@@ -1049,6 +1067,8 @@ public enum BlockId {
     GRANITE_SLAB("minecraft:granite_slab"),
 
     GRANITE_STAIRS("minecraft:granite_stairs"),
+
+    GRANITE_WALL("minecraft:granite_wall"),
 
     GRASS_BLOCK("minecraft:grass_block"),
 
@@ -1266,6 +1286,8 @@ public enum BlockId {
 
     KELP("minecraft:kelp"),
 
+    LAB_TABLE("minecraft:lab_table"),
+
     LADDER("minecraft:ladder"),
 
     LANTERN("minecraft:lantern"),
@@ -1466,6 +1488,8 @@ public enum BlockId {
 
     MANGROVE_WOOD("minecraft:mangrove_wood"),
 
+    MATERIAL_REDUCER("minecraft:material_reducer"),
+
     MEDIUM_AMETHYST_BUD("minecraft:medium_amethyst_bud"),
 
     MELON_BLOCK("minecraft:melon_block"),
@@ -1486,11 +1510,15 @@ public enum BlockId {
 
     MOSSY_COBBLESTONE_STAIRS("minecraft:mossy_cobblestone_stairs"),
 
+    MOSSY_COBBLESTONE_WALL("minecraft:mossy_cobblestone_wall"),
+
     MOSSY_STONE_BRICK_DOUBLE_SLAB("minecraft:mossy_stone_brick_double_slab"),
 
     MOSSY_STONE_BRICK_SLAB("minecraft:mossy_stone_brick_slab"),
 
     MOSSY_STONE_BRICK_STAIRS("minecraft:mossy_stone_brick_stairs"),
+
+    MOSSY_STONE_BRICK_WALL("minecraft:mossy_stone_brick_wall"),
 
     MOSSY_STONE_BRICKS("minecraft:mossy_stone_bricks"),
 
@@ -1521,6 +1549,8 @@ public enum BlockId {
     NETHER_BRICK_SLAB("minecraft:nether_brick_slab"),
 
     NETHER_BRICK_STAIRS("minecraft:nether_brick_stairs"),
+
+    NETHER_BRICK_WALL("minecraft:nether_brick_wall"),
 
     NETHER_GOLD_ORE("minecraft:nether_gold_ore"),
 
@@ -1764,6 +1794,8 @@ public enum BlockId {
 
     PRISMARINE_STAIRS("minecraft:prismarine_stairs"),
 
+    PRISMARINE_WALL("minecraft:prismarine_wall"),
+
     PUMPKIN("minecraft:pumpkin"),
 
     PUMPKIN_STEM("minecraft:pumpkin_stem"),
@@ -1793,6 +1825,8 @@ public enum BlockId {
     PURPUR_BLOCK("minecraft:purpur_block"),
 
     PURPUR_DOUBLE_SLAB("minecraft:purpur_double_slab"),
+
+    PURPUR_PILLAR("minecraft:purpur_pillar"),
 
     PURPUR_SLAB("minecraft:purpur_slab"),
 
@@ -1844,6 +1878,8 @@ public enum BlockId {
 
     RED_NETHER_BRICK_STAIRS("minecraft:red_nether_brick_stairs"),
 
+    RED_NETHER_BRICK_WALL("minecraft:red_nether_brick_wall"),
+
     RED_SAND("minecraft:red_sand"),
 
     RED_SANDSTONE("minecraft:red_sandstone"),
@@ -1853,6 +1889,8 @@ public enum BlockId {
     RED_SANDSTONE_SLAB("minecraft:red_sandstone_slab"),
 
     RED_SANDSTONE_STAIRS("minecraft:red_sandstone_stairs"),
+
+    RED_SANDSTONE_WALL("minecraft:red_sandstone_wall"),
 
     RED_SHULKER_BOX("minecraft:red_shulker_box"),
 
@@ -1897,6 +1935,8 @@ public enum BlockId {
     SANDSTONE_SLAB("minecraft:sandstone_slab"),
 
     SANDSTONE_STAIRS("minecraft:sandstone_stairs"),
+
+    SANDSTONE_WALL("minecraft:sandstone_wall"),
 
     SCAFFOLDING("minecraft:scaffolding"),
 
@@ -2038,6 +2078,8 @@ public enum BlockId {
 
     STONE_BRICK_STAIRS("minecraft:stone_brick_stairs"),
 
+    STONE_BRICK_WALL("minecraft:stone_brick_wall"),
+
     STONE_BRICKS("minecraft:stone_bricks"),
 
     STONE_BUTTON("minecraft:stone_button"),
@@ -2159,6 +2201,8 @@ public enum BlockId {
     TURTLE_EGG("minecraft:turtle_egg"),
 
     TWISTING_VINES("minecraft:twisting_vines"),
+
+    UNDERWATER_TNT("minecraft:underwater_tnt"),
 
     UNDERWATER_TORCH("minecraft:underwater_torch"),
 
@@ -2327,6 +2371,8 @@ public enum BlockId {
     WEB("minecraft:web"),
 
     WEEPING_VINES("minecraft:weeping_vines"),
+
+    WET_SPONGE("minecraft:wet_sponge"),
 
     WHEAT("minecraft:wheat"),
 

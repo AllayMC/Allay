@@ -15,8 +15,6 @@ import java.util.*;
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 
 /**
- * Allay Project 2023/12/15
- *
  * @author daoge_cmd
  */
 public class LangBuilder {

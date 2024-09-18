@@ -414,6 +414,17 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
+    "minecraft:andesite_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -974,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:angler_pottery_sherd": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -444,7 +455,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 257,
+        "id": 261,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -921,7 +932,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 767,
+        "id": 770,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -1807,7 +1818,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 1200.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 765,
+        "id": 768,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -2006,7 +2017,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 261,
+        "id": 257,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -2104,6 +2115,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": 108,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:brick_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -976,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -2731,7 +2753,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 238,
+        "id": 762,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -3495,7 +3517,7 @@
         ],
         "toughnessValue": 0
     },
-    "minecraft:colored_torch_bp": {
+    "minecraft:colored_torch_blue": {
         "armorValue": 0,
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
@@ -3506,12 +3528,56 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
-    "minecraft:colored_torch_rg": {
+    "minecraft:colored_torch_bp": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": 766,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:colored_torch_green": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -963,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:colored_torch_purple": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -964,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:colored_torch_red": {
         "armorValue": 0,
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": 202,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:colored_torch_rg": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": 765,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -3581,6 +3647,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": 614,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:compound_creator": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": 238,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -5320,6 +5397,28 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
+    "minecraft:deprecated_purpur_block_1": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -950,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:deprecated_purpur_block_2": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -952,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:detector_rail": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -5582,6 +5681,17 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
+    "minecraft:diorite_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -973,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:dirt": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -5822,7 +5932,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 766,
+        "id": 769,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -7173,6 +7283,17 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
+    "minecraft:element_constructor": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -987,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:elytra": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -7300,7 +7421,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 769,
+        "id": 772,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -7378,6 +7499,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": -162,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:end_stone_brick_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -980,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -8120,7 +8252,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 770,
+        "id": 773,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -8530,6 +8662,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": -169,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:granite_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -972,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -9253,7 +9396,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 762,
+        "id": 763,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -9264,7 +9407,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 763,
+        "id": 764,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -10586,6 +10729,17 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
+    "minecraft:lab_table": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -988,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:ladder": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -10837,7 +10991,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 764,
+        "id": 767,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -12082,6 +12236,17 @@
         ],
         "toughnessValue": 0
     },
+    "minecraft:material_reducer": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -986,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:medicine": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -12303,6 +12468,17 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
+    "minecraft:mossy_cobblestone_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -971,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:mossy_stone_brick_double_slab": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -12331,6 +12507,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": -175,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:mossy_stone_brick_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -978,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -12844,6 +13031,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": 114,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:nether_brick_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -979,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -14831,6 +15029,17 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
+    "minecraft:prismarine_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -981,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:prize_pottery_sherd": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -15087,6 +15296,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": -911,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:purpur_pillar": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -951,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -15556,6 +15776,17 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
+    "minecraft:red_nether_brick_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -983,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:red_sand": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -15609,6 +15840,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": 180,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:red_sandstone_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -982,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -15951,6 +16193,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": 128,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:sandstone_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -975,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -16777,7 +17030,7 @@
         "attackDamage": 0,
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
-        "id": 768,
+        "id": 771,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -17323,6 +17576,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": 109,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:stone_brick_wall": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -977,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,
@@ -18452,6 +18716,17 @@
         "maxStackSize": 64,
         "toughnessValue": 0
     },
+    "minecraft:underwater_tnt": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -985,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
     "minecraft:underwater_torch": {
         "armorValue": 0,
         "attackDamage": 0,
@@ -19555,6 +19830,17 @@
         "furnaceBurnDuration": 0.0,
         "furnaceXPMultiplier": 0.0,
         "id": -231,
+        "isDamageable": false,
+        "maxDamage": 0,
+        "maxStackSize": 64,
+        "toughnessValue": 0
+    },
+    "minecraft:wet_sponge": {
+        "armorValue": 0,
+        "attackDamage": 0,
+        "furnaceBurnDuration": 0.0,
+        "furnaceXPMultiplier": 0.0,
+        "id": -984,
         "isDamageable": false,
         "maxDamage": 0,
         "maxStackSize": 64,

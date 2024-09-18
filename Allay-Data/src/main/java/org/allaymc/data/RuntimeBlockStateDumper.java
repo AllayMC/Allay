@@ -13,6 +13,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
+/**
+ * @author Cool_Loong
+ */
 public class RuntimeBlockStateDumper {
     public static void main(String[] args) throws IOException {
         StringBuilder stringBuilder = new StringBuilder("# WARNING! Don't edit this file! It's automatically regenerated!");

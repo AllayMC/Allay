@@ -7,8 +7,6 @@ import org.allaymc.api.block.property.enums.BambooLeafSize;
 import org.allaymc.api.block.property.enums.BambooStalkThickness;
 import org.allaymc.api.block.property.enums.BigDripleafTilt;
 import org.allaymc.api.block.property.enums.CauldronLiquid;
-import org.allaymc.api.block.property.enums.ChemistryTableType;
-import org.allaymc.api.block.property.enums.ChiselType;
 import org.allaymc.api.block.property.enums.CrackedState;
 import org.allaymc.api.block.property.enums.DripstoneThickness;
 import org.allaymc.api.block.property.enums.LeverDirection;
@@ -20,13 +18,10 @@ import org.allaymc.api.block.property.enums.Orientation;
 import org.allaymc.api.block.property.enums.PillarAxis;
 import org.allaymc.api.block.property.enums.PortalAxis;
 import org.allaymc.api.block.property.enums.SeaGrassType;
-import org.allaymc.api.block.property.enums.SpongeType;
 import org.allaymc.api.block.property.enums.StructureBlockType;
-import org.allaymc.api.block.property.enums.StructureVoidType;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.enums.TurtleEggCount;
 import org.allaymc.api.block.property.enums.VaultState;
-import org.allaymc.api.block.property.enums.WallBlockType;
 import org.allaymc.api.block.property.enums.WallConnectionTypeEast;
 import org.allaymc.api.block.property.enums.WallConnectionTypeNorth;
 import org.allaymc.api.block.property.enums.WallConnectionTypeSouth;
@@ -48,8 +43,6 @@ public interface BlockPropertyTypes {
     IntPropertyType AGE_6 = IntPropertyType.of("age", 0, 5, 0);
 
     BooleanPropertyType AGE_BIT = BooleanPropertyType.of("age_bit", false);
-
-    BooleanPropertyType ALLOW_UNDERWATER_BIT = BooleanPropertyType.of("allow_underwater_bit", false);
 
     BooleanPropertyType ATTACHED_BIT = BooleanPropertyType.of("attached_bit", false);
 
@@ -85,13 +78,7 @@ public interface BlockPropertyTypes {
 
     EnumPropertyType<CauldronLiquid> CAULDRON_LIQUID = EnumPropertyType.of("cauldron_liquid", CauldronLiquid.class, CauldronLiquid.values()[0]);
 
-    EnumPropertyType<ChemistryTableType> CHEMISTRY_TABLE_TYPE = EnumPropertyType.of("chemistry_table_type", ChemistryTableType.class, ChemistryTableType.values()[0]);
-
-    EnumPropertyType<ChiselType> CHISEL_TYPE = EnumPropertyType.of("chisel_type", ChiselType.class, ChiselType.values()[0]);
-
     IntPropertyType CLUSTER_COUNT = IntPropertyType.of("cluster_count", 0, 3, 0);
-
-    BooleanPropertyType COLOR_BIT = BooleanPropertyType.of("color_bit", false);
 
     IntPropertyType COMPOSTER_FILL_LEVEL = IntPropertyType.of("composter_fill_level", 0, 8, 0);
 
@@ -215,8 +202,6 @@ public interface BlockPropertyTypes {
 
     EnumPropertyType<SeaGrassType> SEA_GRASS_TYPE = EnumPropertyType.of("sea_grass_type", SeaGrassType.class, SeaGrassType.values()[0]);
 
-    EnumPropertyType<SpongeType> SPONGE_TYPE = EnumPropertyType.of("sponge_type", SpongeType.class, SpongeType.values()[0]);
-
     IntPropertyType STABILITY = IntPropertyType.of("stability", 0, 7, 0);
 
     BooleanPropertyType STABILITY_CHECK = BooleanPropertyType.of("stability_check", false);
@@ -224,8 +209,6 @@ public interface BlockPropertyTypes {
     BooleanPropertyType STRIPPED_BIT = BooleanPropertyType.of("stripped_bit", false);
 
     EnumPropertyType<StructureBlockType> STRUCTURE_BLOCK_TYPE = EnumPropertyType.of("structure_block_type", StructureBlockType.class, StructureBlockType.values()[0]);
-
-    EnumPropertyType<StructureVoidType> STRUCTURE_VOID_TYPE = EnumPropertyType.of("structure_void_type", StructureVoidType.class, StructureVoidType.values()[0]);
 
     BooleanPropertyType SUSPENDED_BIT = BooleanPropertyType.of("suspended_bit", false);
 
@@ -251,8 +234,6 @@ public interface BlockPropertyTypes {
 
     IntPropertyType VINE_DIRECTION_BITS = IntPropertyType.of("vine_direction_bits", 0, 15, 0);
 
-    EnumPropertyType<WallBlockType> WALL_BLOCK_TYPE = EnumPropertyType.of("wall_block_type", WallBlockType.class, WallBlockType.values()[0]);
-
     EnumPropertyType<WallConnectionTypeEast> WALL_CONNECTION_TYPE_EAST = EnumPropertyType.of("wall_connection_type_east", WallConnectionTypeEast.class, WallConnectionTypeEast.values()[0]);
 
     EnumPropertyType<WallConnectionTypeNorth> WALL_CONNECTION_TYPE_NORTH = EnumPropertyType.of("wall_connection_type_north", WallConnectionTypeNorth.class, WallConnectionTypeNorth.values()[0]);
@@ -267,7 +248,7 @@ public interface BlockPropertyTypes {
 
     IntPropertyType WEIRDO_DIRECTION = IntPropertyType.of("weirdo_direction", 0, 3, 0);
 
-    List<BlockPropertyType<?>> VALUES = List.of(ACTIVE, AGE_16, AGE_3, AGE_4, AGE_6, AGE_BIT, ALLOW_UNDERWATER_BIT, ATTACHED_BIT, ATTACHMENT, BAMBOO_LEAF_SIZE, BAMBOO_STALK_THICKNESS, BIG_DRIPLEAF_HEAD, BIG_DRIPLEAF_TILT, BITE_COUNTER, BLOOM, BOOKS_STORED, BREWING_STAND_SLOT_A_BIT, BREWING_STAND_SLOT_B_BIT, BREWING_STAND_SLOT_C_BIT, BRUSHED_PROGRESS, BUTTON_PRESSED_BIT, CAN_SUMMON, CANDLES, CAULDRON_LIQUID, CHEMISTRY_TABLE_TYPE, CHISEL_TYPE, CLUSTER_COUNT, COLOR_BIT, COMPOSTER_FILL_LEVEL, CONDITIONAL_BIT, CORAL_DIRECTION, CORAL_FAN_DIRECTION, COVERED_BIT, CRACKED_STATE, CRAFTING, DEAD_BIT, DEPRECATED, DIRECTION, DISARMED_BIT, DOOR_HINGE_BIT, DRAG_DOWN, DRIPSTONE_THICKNESS, END_PORTAL_EYE_BIT, EXPLODE_BIT, EXTINGUISHED, FACING_DIRECTION, FILL_LEVEL, GROUND_SIGN_DIRECTION, GROWING_PLANT_AGE, GROWTH, HANGING, HEAD_PIECE_BIT, HEIGHT, HONEY_LEVEL, HUGE_MUSHROOM_BITS, IN_WALL_BIT, INFINIBURN_BIT, ITEM_FRAME_MAP_BIT, ITEM_FRAME_PHOTO_BIT, KELP_AGE, LEVER_DIRECTION, LIQUID_DEPTH, LIT, MINECRAFT_BLOCK_FACE, MINECRAFT_CARDINAL_DIRECTION, MINECRAFT_FACING_DIRECTION, MINECRAFT_VERTICAL_HALF, MOISTURIZED_AMOUNT, MULTI_FACE_DIRECTION_BITS, OCCUPIED_BIT, OMINOUS, OPEN_BIT, ORIENTATION, OUTPUT_LIT_BIT, OUTPUT_SUBTRACT_BIT, PERSISTENT_BIT, PILLAR_AXIS, PORTAL_AXIS, POWERED_BIT, PROPAGULE_STAGE, RAIL_DATA_BIT, RAIL_DIRECTION_10, RAIL_DIRECTION_6, REDSTONE_SIGNAL, REPEATER_DELAY, RESPAWN_ANCHOR_CHARGE, ROTATION, SCULK_SENSOR_PHASE, SEA_GRASS_TYPE, SPONGE_TYPE, STABILITY, STABILITY_CHECK, STRIPPED_BIT, STRUCTURE_BLOCK_TYPE, STRUCTURE_VOID_TYPE, SUSPENDED_BIT, TOGGLE_BIT, TORCH_FACING_DIRECTION, TRIAL_SPAWNER_STATE, TRIGGERED_BIT, TURTLE_EGG_COUNT, TWISTING_VINES_AGE, UPDATE_BIT, UPPER_BLOCK_BIT, UPSIDE_DOWN_BIT, VAULT_STATE, VINE_DIRECTION_BITS, WALL_BLOCK_TYPE, WALL_CONNECTION_TYPE_EAST, WALL_CONNECTION_TYPE_NORTH, WALL_CONNECTION_TYPE_SOUTH, WALL_CONNECTION_TYPE_WEST, WALL_POST_BIT, WEEPING_VINES_AGE, WEIRDO_DIRECTION);
+    List<BlockPropertyType<?>> VALUES = List.of(ACTIVE, AGE_16, AGE_3, AGE_4, AGE_6, AGE_BIT, ATTACHED_BIT, ATTACHMENT, BAMBOO_LEAF_SIZE, BAMBOO_STALK_THICKNESS, BIG_DRIPLEAF_HEAD, BIG_DRIPLEAF_TILT, BITE_COUNTER, BLOOM, BOOKS_STORED, BREWING_STAND_SLOT_A_BIT, BREWING_STAND_SLOT_B_BIT, BREWING_STAND_SLOT_C_BIT, BRUSHED_PROGRESS, BUTTON_PRESSED_BIT, CAN_SUMMON, CANDLES, CAULDRON_LIQUID, CLUSTER_COUNT, COMPOSTER_FILL_LEVEL, CONDITIONAL_BIT, CORAL_DIRECTION, CORAL_FAN_DIRECTION, COVERED_BIT, CRACKED_STATE, CRAFTING, DEAD_BIT, DEPRECATED, DIRECTION, DISARMED_BIT, DOOR_HINGE_BIT, DRAG_DOWN, DRIPSTONE_THICKNESS, END_PORTAL_EYE_BIT, EXPLODE_BIT, EXTINGUISHED, FACING_DIRECTION, FILL_LEVEL, GROUND_SIGN_DIRECTION, GROWING_PLANT_AGE, GROWTH, HANGING, HEAD_PIECE_BIT, HEIGHT, HONEY_LEVEL, HUGE_MUSHROOM_BITS, IN_WALL_BIT, INFINIBURN_BIT, ITEM_FRAME_MAP_BIT, ITEM_FRAME_PHOTO_BIT, KELP_AGE, LEVER_DIRECTION, LIQUID_DEPTH, LIT, MINECRAFT_BLOCK_FACE, MINECRAFT_CARDINAL_DIRECTION, MINECRAFT_FACING_DIRECTION, MINECRAFT_VERTICAL_HALF, MOISTURIZED_AMOUNT, MULTI_FACE_DIRECTION_BITS, OCCUPIED_BIT, OMINOUS, OPEN_BIT, ORIENTATION, OUTPUT_LIT_BIT, OUTPUT_SUBTRACT_BIT, PERSISTENT_BIT, PILLAR_AXIS, PORTAL_AXIS, POWERED_BIT, PROPAGULE_STAGE, RAIL_DATA_BIT, RAIL_DIRECTION_10, RAIL_DIRECTION_6, REDSTONE_SIGNAL, REPEATER_DELAY, RESPAWN_ANCHOR_CHARGE, ROTATION, SCULK_SENSOR_PHASE, SEA_GRASS_TYPE, STABILITY, STABILITY_CHECK, STRIPPED_BIT, STRUCTURE_BLOCK_TYPE, SUSPENDED_BIT, TOGGLE_BIT, TORCH_FACING_DIRECTION, TRIAL_SPAWNER_STATE, TRIGGERED_BIT, TURTLE_EGG_COUNT, TWISTING_VINES_AGE, UPDATE_BIT, UPPER_BLOCK_BIT, UPSIDE_DOWN_BIT, VAULT_STATE, VINE_DIRECTION_BITS, WALL_CONNECTION_TYPE_EAST, WALL_CONNECTION_TYPE_NORTH, WALL_CONNECTION_TYPE_SOUTH, WALL_CONNECTION_TYPE_WEST, WALL_POST_BIT, WEEPING_VINES_AGE, WEIRDO_DIRECTION);
 
     static List<BlockPropertyType<?>> values() {
         return VALUES;
