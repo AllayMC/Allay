@@ -20,10 +20,6 @@ import org.joml.Vector3f;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
-/**
- * @author daoge_cmd <br>
- * Allay Project <br>
- */
 public interface EntityPlayer extends
         Entity,
         EntityPlayerBaseComponent,

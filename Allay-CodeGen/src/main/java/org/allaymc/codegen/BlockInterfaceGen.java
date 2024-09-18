@@ -16,25 +16,12 @@ import static org.allaymc.codegen.BlockIdEnumGen.MAPPED_BLOCK_PALETTE_NBT;
 import static org.allaymc.codegen.BlockPropertyTypeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 
 /**
- * Allay Project 2023/4/8
- *
  * @author daoge_cmd | Cool_Loong
  */
 public class BlockInterfaceGen extends BaseInterfaceGen {
 
-    public static final ClassName BLOCK_BEHAVIOR_CLASS_NAME = ClassName.get("org.allaymc.api.block", "BlockBehavior");
-    public static final ClassName BLOCK_ID_CLASS_NAME = ClassName.get("org.allaymc.api.block.data", "BlockId");
-    public static final ClassName BLOCK_PROPERTY_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.block.property.type", "BlockPropertyTypes");
-    public static final ClassName BLOCK_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockType");
-    public static final ClassName BLOCK_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.block.type", "BlockTypes");
-    public static final ClassName BLOCK_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.server.block.type", "AllayBlockType");
-    public static final ClassName BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.block.type", "BlockTypeDefaultInitializer");
     public static final TypeSpec.Builder BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
-            TypeSpec.classBuilder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
-                    .addJavadoc(
-                            "@author daoge_cmd <br>\n" +
-                            "Allay Project <br>\n"
-                    )
+            TypeSpec.classBuilder(ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER)
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
@@ -49,10 +36,10 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackages();
         var interfaceDir = Path.of("Allay-API/src/main/java/org/allaymc/api/block/interfaces");
         if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
-        var typesClass = TypeSpec.classBuilder(BLOCK_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+        var typesClass = TypeSpec.classBuilder(ClassNames.BLOCK_TYPES).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : BlockId.values()) {
             typesClass.addField(
-                    FieldSpec.builder(ParameterizedTypeName.get(BLOCK_TYPE_CLASS_NAME, generateClassFullName(id)), id.name())
+                    FieldSpec.builder(ParameterizedTypeName.get(ClassNames.BLOCK_TYPE, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             .build()
             );
@@ -65,25 +52,25 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
                 System.out.println("Generating " + blockClassSimpleName + "...");
                 if (!Files.exists(folderPath))
                     Files.createDirectories(folderPath);
-                generateClass(BLOCK_BEHAVIOR_CLASS_NAME, blockClassFullName, path);
+                generateClass(ClassNames.BLOCK_BEHAVIOR, blockClassFullName, path);
             }
             addDefaultBlockTypeInitializer(id, blockClassFullName);
         }
         generateDefaultBlockTypeInitializer();
-        var javaFile = JavaFile.builder(BLOCK_TYPES_CLASS_NAME.packageName(), typesClass.build())
-                .indent(Utils.INDENT)
+        var javaFile = JavaFile.builder(ClassNames.BLOCK_TYPES.packageName(), typesClass.build())
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java ...");
-        Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/block/type/" + BLOCK_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
+        System.out.println("Generating " + ClassNames.BLOCK_TYPES.simpleName() + ".java ...");
+        Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/block/type/" + ClassNames.BLOCK_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
     private static void addDefaultBlockTypeInitializer(BlockId id, ClassName blockClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", BLOCK_TYPES_CLASS_NAME, id.name(), BLOCK_TYPE_BUILDER_CLASS_NAME)
+                .add("$T.$N = $T\n", ClassNames.BLOCK_TYPES, id.name(), ClassNames.ALLAY_BLOCK_TYPE)
                 .add("        .builder($T.class)\n", blockClassName)
-                .add("        .vanillaBlock($T.$N)\n", BLOCK_ID_CLASS_NAME, id.name());
+                .add("        .vanillaBlock($T.$N)\n", ClassNames.BLOCK_ID, id.name());
         var blockPaletteData = MAPPED_BLOCK_PALETTE_NBT.get(id.getIdentifier().toString());
         var states = blockPaletteData.getCompound("states");
         if (!states.isEmpty()) {
@@ -92,7 +79,7 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
             states.forEach((name, value) -> {
                 var propertyName = BLOCK_PROPERTY_TYPE_INFO_FILE.differentSizePropertyTypes.contains(name.replaceAll(":", "_")) && BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.containsKey(id.getIdentifier().toString()) ?
                         BLOCK_PROPERTY_TYPE_INFO_FILE.specialBlockTypes.get(id.getIdentifier().toString()).get(name.replaceAll(":", "_")).toUpperCase() : name.replaceAll(":", "_").toUpperCase();
-                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), BLOCK_PROPERTY_TYPES_CLASS_NAME, propertyName);
+                initializer.add("$T.$N" + (states.size() == count.incrementAndGet() ? "" : ", "), ClassNames.BLOCK_PROPERTY_TYPES, propertyName);
             });
             initializer.add(")\n");
         }
@@ -101,7 +88,7 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
                 .addMethod(
                         MethodSpec.methodBuilder(generateInitializerMethodName(id))
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addStatement("if ($T.$N != null) return", BLOCK_TYPES_CLASS_NAME, id.name())
+                                .addStatement("if ($T.$N != null) return", ClassNames.BLOCK_TYPES, id.name())
                                 .addCode(initializer.build())
                                 .build()
                 );
@@ -114,11 +101,11 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath))
             Files.createDirectories(folderPath);
-        var javaFile = JavaFile.builder(BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
-                .indent(Utils.INDENT)
+        var javaFile = JavaFile.builder(ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER.packageName(), BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.simpleName() + ".java ...");
+        System.out.println("Generating " + ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
         Files.writeString(filePath, javaFile.toString());
     }
 

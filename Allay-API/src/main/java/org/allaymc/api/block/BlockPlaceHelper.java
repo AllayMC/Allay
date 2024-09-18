@@ -18,7 +18,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  * @author daoge_cmd
  */
 @UtilityClass
-public final class PlaceBlockHelper {
+public final class BlockPlaceHelper {
     public static BlockState processFacingDirectionProperty(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         if (placementInfo == null) return blockState;
         var player = placementInfo.player();

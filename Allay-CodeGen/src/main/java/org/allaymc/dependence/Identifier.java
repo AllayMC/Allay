@@ -5,11 +5,7 @@ import static org.allaymc.dependence.IdentifierUtils.isPathValid;
 import static org.allaymc.dependence.StringUtils.fastTwoPartSplit;
 
 /**
- * A simple logging class that implements the Identified interface
- * <p>
- * Allay Project 2023/3/4
- *
- * @author daoge_cmd
+ * @author Cool_Loong
  */
 public record Identifier(String namespace, String path) {
     public static final String NAMESPACE_SEPARATOR = ":";

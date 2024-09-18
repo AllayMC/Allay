@@ -1,7 +1,6 @@
 package org.allaymc.codegen;
 
 import com.google.gson.JsonParser;
-import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
@@ -12,14 +11,13 @@ import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import static org.allaymc.codegen.ClassNames.STRING;
+
 /**
- * Allay Project 2023/12/22
- *
- * @author daoge_cmd
+ * @author daoge_cmd | IWareQ
  */
 public class TrKeysGen {
-    static final Path TR_EN_FILE_PATH = Path.of(CodeGen.DATA_PATH + "lang/en_US.json");
-    static final ClassName CLASS_NAME = ClassName.get("org.allaymc.api.i18n", "TrKeys");
+    static final Path TR_EN_FILE_PATH = Path.of(CodeGenConstants.DATA_PATH + "lang/en_US.json");
     static final Path OUTPUT_PATH = Path.of("Allay-API/src/main/java/org/allaymc/api/i18n/TrKeys.java");
 
     @SneakyThrows
@@ -28,10 +26,8 @@ public class TrKeysGen {
                 .parseReader(Files.newBufferedReader(TR_EN_FILE_PATH))
                 .getAsJsonObject()
                 .keySet();
-        var codeBuilder = TypeSpec.interfaceBuilder(CLASS_NAME)
-                .addModifiers(Modifier.PUBLIC)
-                .addJavadoc("@author daoge_cmd <br>\n" +
-                            "Allay Project <br>\n");
+        var codeBuilder = TypeSpec.interfaceBuilder(ClassNames.TR_KEYS)
+                .addModifiers(Modifier.PUBLIC);
         for (var key : keys) {
             var identifier = new Identifier(key);
             var namespace = handleNamespace(identifier.namespace());
@@ -39,16 +35,16 @@ public class TrKeysGen {
             var fieldName = namespace + "_" + path;
             codeBuilder.addField(
                     FieldSpec
-                            .builder(ClassName.get(String.class), fieldName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            .builder(STRING, fieldName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("\"" + key + "\"")
                             .build()
             );
         }
-        var javaFile = JavaFile.builder(CLASS_NAME.packageName(), codeBuilder.build())
-                .indent(Utils.INDENT)
+        var javaFile = JavaFile.builder(ClassNames.TR_KEYS.packageName(), codeBuilder.build())
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + CLASS_NAME.simpleName() + ".java ...");
+        System.out.println("Generating " + ClassNames.TR_KEYS.simpleName() + ".java ...");
         Files.deleteIfExists(OUTPUT_PATH);
         Files.createFile(OUTPUT_PATH);
         Files.writeString(OUTPUT_PATH, javaFile.toString());

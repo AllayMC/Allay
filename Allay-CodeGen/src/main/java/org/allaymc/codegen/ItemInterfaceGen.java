@@ -12,23 +12,12 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * Allay Project 2023/5/20
- *
- * @author daoge_cmd
+ * @author daoge_cmd | IWareQ
  */
 public class ItemInterfaceGen extends BaseInterfaceGen {
 
-    public static final ClassName ITEM_STACK_CLASS_NAME = ClassName.get("org.allaymc.api.item", "ItemStack");
-    public static final ClassName ITEM_ID_CLASS_NAME = ClassName.get("org.allaymc.api.item.data", "ItemId");
-    public static final ClassName ITEM_TYPE_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemType");
-    public static final ClassName ITEM_TYPES_CLASS_NAME = ClassName.get("org.allaymc.api.item.type", "ItemTypes");
-    public static final ClassName ITEM_TYPE_BUILDER_CLASS_NAME = ClassName.get("org.allaymc.server.item.type", "AllayItemType");
-    public static final ClassName ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME = ClassName.get("org.allaymc.server.item.type", "ItemTypeDefaultInitializer");
     public static final TypeSpec.Builder ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
-            TypeSpec.classBuilder(ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME)
-                    .addJavadoc(
-                            "@author daoge_cmd <br>\n" +
-                            "Allay Project <br>\n")
+            TypeSpec.classBuilder(ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER)
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
@@ -42,10 +31,10 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
         registerSubPackages();
         var interfaceDir = Path.of("Allay-API/src/main/java/org/allaymc/api/item/interfaces");
         if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
-        var typesClass = TypeSpec.classBuilder(ITEM_TYPES_CLASS_NAME).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+        var typesClass = TypeSpec.classBuilder(ClassNames.ITEM_TYPES).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : ItemId.values()) {
             typesClass.addField(
-                    FieldSpec.builder(ParameterizedTypeName.get(ITEM_TYPE_CLASS_NAME, generateClassFullName(id)), id.name())
+                    FieldSpec.builder(ParameterizedTypeName.get(ClassNames.ITEM_TYPE, generateClassFullName(id)), id.name())
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             .build()
             );
@@ -58,31 +47,31 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
                 System.out.println("Generating " + itemClassSimpleName + "...");
                 if (!Files.exists(folderPath))
                     Files.createDirectories(folderPath);
-                generateClass(ITEM_STACK_CLASS_NAME, itemClassFullName, path);
+                generateClass(ClassNames.ITEM_STACK, itemClassFullName, path);
             }
             addDefaultItemTypeInitializer(id, itemClassFullName);
         }
         generateDefaultItemTypeInitializer();
-        var javaFile = JavaFile.builder(ITEM_TYPES_CLASS_NAME.packageName(), typesClass.build())
-                .indent(Utils.INDENT)
+        var javaFile = JavaFile.builder(ClassNames.ITEM_TYPES.packageName(), typesClass.build())
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + ITEM_TYPES_CLASS_NAME.simpleName() + ".java ...");
-        Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/item/type/" + ITEM_TYPES_CLASS_NAME.simpleName() + ".java"), javaFile.toString());
+        System.out.println("Generating " + ClassNames.ITEM_TYPES.simpleName() + ".java ...");
+        Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/item/type/" + ClassNames.ITEM_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
     private static void addDefaultItemTypeInitializer(ItemId id, ClassName itemClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", ITEM_TYPES_CLASS_NAME, id.name(), ITEM_TYPE_BUILDER_CLASS_NAME)
+                .add("$T.$N = $T\n", ClassNames.ITEM_TYPES, id.name(), ClassNames.ITEM_TYPE_BUILDER)
                 .add("        .builder($T.class)\n", itemClassName)
-                .add("        .vanillaItem($T.$N)\n", ITEM_ID_CLASS_NAME, id.name())
+                .add("        .vanillaItem($T.$N)\n", ClassNames.ITEM_ID, id.name())
                 .add("        .build();");
         ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER
                 .addMethod(
                         MethodSpec.methodBuilder(generateInitializerMethodName(id))
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addStatement("if ($T.$N != null) return", ITEM_TYPES_CLASS_NAME, id.name())
+                                .addStatement("if ($T.$N != null) return", ClassNames.ITEM_TYPES, id.name())
                                 .addCode(initializer.build())
                                 .build()
                 );
@@ -95,11 +84,11 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath))
             Files.createDirectories(folderPath);
-        var javaFile = JavaFile.builder(ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.packageName(), ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
-                .indent(Utils.INDENT)
+        var javaFile = JavaFile.builder(ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER.packageName(), ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        System.out.println("Generating " + ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_NAME.simpleName() + ".java ...");
+        System.out.println("Generating " + ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
         Files.writeString(filePath, javaFile.toString());
     }
 

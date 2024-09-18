@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * String helpers
- * <p>
- * Allay Project 2023/3/4
+ * String helpers.
  *
  * @author daoge_cmd
  */

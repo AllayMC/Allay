@@ -50,7 +50,7 @@ public final class ItemHelper {
      *
      * @param itemType The {@link ItemType} of the item.
      *
-     * @return The {@link ToolTier} object, or {@code null} if the item does not have an tool tier.
+     * @return The {@link ToolTier} object, or {@code null} if the item does not have a tool tier.
      */
     public static ToolTier getToolTier(ItemType<?> itemType) {
         return Arrays.stream(ToolTier.ORDER_OF_QUALITY)
