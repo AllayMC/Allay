@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
  * @author daoge_cmd
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ElementType.TYPE, ElementType.FIELD})
 @ApiStatus.Internal
 public @interface MinecraftVersionSensitive {
 }

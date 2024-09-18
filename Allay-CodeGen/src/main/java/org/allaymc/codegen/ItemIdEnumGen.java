@@ -57,12 +57,14 @@ public class ItemIdEnumGen {
 
     @SneakyThrows
     public static void generateToAPIModule() {
-        TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER).addMethod(MethodSpec.methodBuilder("getItemType")
-                .addModifiers(Modifier.PUBLIC)
-                .addStatement("return $T.ITEMS.get(this.getIdentifier())", REGISTRIES)
-                .returns(ParameterizedTypeName.get(ITEM_TYPE, WildcardTypeName.subtypeOf(TypeName.OBJECT)))
-                .build()
-        );
+        TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER)
+                .addAnnotation(MINECRAFT_VERSION_SENSITIVE)
+                .addMethod(MethodSpec.methodBuilder("getItemType")
+                        .addModifiers(Modifier.PUBLIC)
+                        .addStatement("return $T.ITEMS.get(this.getIdentifier())", REGISTRIES)
+                        .returns(ParameterizedTypeName.get(ITEM_TYPE, WildcardTypeName.subtypeOf(TypeName.OBJECT)))
+                        .build()
+                );
         codeBuilder.addMethod(MethodSpec.methodBuilder("fromIdentifier")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 .addParameter(ClassNames.API_IDENTIFIER, "identifier")

@@ -65,6 +65,7 @@ public class BlockIdEnumGen {
     public static void generateToAPIModule() {
         var blockTypeClass = ParameterizedTypeName.get(BLOCK_TYPE, WildcardTypeName.subtypeOf(TypeName.OBJECT));
         TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER)
+                .addAnnotation(MINECRAFT_VERSION_SENSITIVE)
                 .addMethod(MethodSpec.methodBuilder("getBlockType")
                         .addModifiers(Modifier.PUBLIC)
                         .addStatement("return $T.BLOCKS.get(this.getIdentifier())", REGISTRIES)

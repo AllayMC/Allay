@@ -3,11 +3,9 @@ package org.allaymc.dependence;
 import static org.allaymc.dependence.StringUtils.fastTwoPartSplit;
 
 /**
- * Some helper for {@link Identifier}
- * <p>
- * Allay Project 2023/3/4
+ * Some helper for {@link Identifier}.
  *
- * @author daoge_cmd
+ * @author Cool_Loong
  */
 public final class IdentifierUtils {
     public static Identifier splitOn(String id, String delimiter) {

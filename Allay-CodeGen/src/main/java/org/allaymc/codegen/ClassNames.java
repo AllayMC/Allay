@@ -53,4 +53,5 @@ public interface ClassNames {
     ClassName ITEM_TAG = ClassName.get("org.allaymc.api.item.tag", "ItemTag");
 
     ClassName TR_KEYS = ClassName.get("org.allaymc.api.i18n", "TrKeys");
+    ClassName MINECRAFT_VERSION_SENSITIVE = ClassName.get("org.allaymc.api.annotation", "MinecraftVersionSensitive");
 }

@@ -8,10 +8,6 @@ import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 
 import java.util.List;
 
-/**
- * @author daoge_cmd <br>
- * Allay Project <br>
- */
 public interface EntityXpOrb extends
         Entity,
         EntityXpOrbBaseComponent,
