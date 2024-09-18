@@ -73,14 +73,6 @@
         true
       ]
     },
-    "allow_underwater_bit": {
-      "serializationName": "allow_underwater_bit",
-      "valueType": "BOOLEAN",
-      "values": [
-        false,
-        true
-      ]
-    },
     "attached_bit": {
       "serializationName": "attached_bit",
       "valueType": "BOOLEAN",
@@ -294,26 +286,6 @@
         "powder_snow"
       ]
     },
-    "chemistry_table_type": {
-      "serializationName": "chemistry_table_type",
-      "valueType": "ENUM",
-      "values": [
-        "compound_creator",
-        "material_reducer",
-        "element_constructor",
-        "lab_table"
-      ]
-    },
-    "chisel_type": {
-      "serializationName": "chisel_type",
-      "valueType": "ENUM",
-      "values": [
-        "default",
-        "chiseled",
-        "lines",
-        "smooth"
-      ]
-    },
     "cluster_count": {
       "serializationName": "cluster_count",
       "valueType": "INTEGER",
@@ -322,14 +294,6 @@
         1,
         2,
         3
-      ]
-    },
-    "color_bit": {
-      "serializationName": "color_bit",
-      "valueType": "BOOLEAN",
-      "values": [
-        false,
-        true
       ]
     },
     "composter_fill_level": {
@@ -1086,14 +1050,6 @@
         "double_bot"
       ]
     },
-    "sponge_type": {
-      "serializationName": "sponge_type",
-      "valueType": "ENUM",
-      "values": [
-        "dry",
-        "wet"
-      ]
-    },
     "stability": {
       "serializationName": "stability",
       "valueType": "INTEGER",
@@ -1134,14 +1090,6 @@
         "corner",
         "invalid",
         "export"
-      ]
-    },
-    "structure_void_type": {
-      "serializationName": "structure_void_type",
-      "valueType": "ENUM",
-      "values": [
-        "void",
-        "air"
       ]
     },
     "suspended_bit": {
@@ -1288,26 +1236,6 @@
         13,
         14,
         15
-      ]
-    },
-    "wall_block_type": {
-      "serializationName": "wall_block_type",
-      "valueType": "ENUM",
-      "values": [
-        "cobblestone",
-        "mossy_cobblestone",
-        "granite",
-        "diorite",
-        "andesite",
-        "sandstone",
-        "brick",
-        "stone_brick",
-        "mossy_stone_brick",
-        "nether_brick",
-        "end_brick",
-        "prismarine",
-        "red_sandstone",
-        "red_nether_brick"
       ]
     },
     "wall_connection_type_east": {

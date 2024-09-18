@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Allay Project 2023/10/28
- *
  * @author daoge_cmd
  */
 public class ItemMetaToBlockStateMappingsGenerator {

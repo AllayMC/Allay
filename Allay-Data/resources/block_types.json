@@ -201,6 +201,20 @@
             "minecraft:netherite_pickaxe"
         ]
     },
+    "minecraft:andesite_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
+        ]
+    },
     "minecraft:anvil": {
         "material": "Metal",
         "specialTools": [
@@ -789,6 +803,20 @@
             "minecraft:netherite_pickaxe"
         ]
     },
+    "minecraft:brick_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
+        ]
+    },
     "minecraft:brown_candle": {
         "material": "Decoration"
     },
@@ -979,17 +1007,6 @@
         ]
     },
     "minecraft:chemical_heat": {
-        "material": "Stone",
-        "specialTools": [
-            "minecraft:iron_pickaxe",
-            "minecraft:wooden_pickaxe",
-            "minecraft:stone_pickaxe",
-            "minecraft:diamond_pickaxe",
-            "minecraft:golden_pickaxe",
-            "minecraft:netherite_pickaxe"
-        ]
-    },
-    "minecraft:chemistry_table": {
         "material": "Stone",
         "specialTools": [
             "minecraft:iron_pickaxe",
@@ -1380,10 +1397,16 @@
     "minecraft:cocoa": {
         "material": "Plant"
     },
-    "minecraft:colored_torch_bp": {
+    "minecraft:colored_torch_blue": {
         "material": "Decoration"
     },
-    "minecraft:colored_torch_rg": {
+    "minecraft:colored_torch_green": {
+        "material": "Decoration"
+    },
+    "minecraft:colored_torch_purple": {
+        "material": "Decoration"
+    },
+    "minecraft:colored_torch_red": {
         "material": "Decoration"
     },
     "minecraft:command_block": {
@@ -1399,6 +1422,17 @@
     },
     "minecraft:composter": {
         "material": "Wood"
+    },
+    "minecraft:compound_creator": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ]
     },
     "minecraft:conduit": {
         "material": "StoneDecoration"
@@ -2314,6 +2348,28 @@
             "minecraft:netherite_pickaxe"
         ]
     },
+    "minecraft:deprecated_purpur_block_1": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ]
+    },
+    "minecraft:deprecated_purpur_block_2": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ]
+    },
     "minecraft:detector_rail": {
         "material": "Decoration",
         "tags": [
@@ -2385,6 +2441,20 @@
             "minecraft:diamond_pickaxe",
             "minecraft:golden_pickaxe",
             "minecraft:netherite_pickaxe"
+        ]
+    },
+    "minecraft:diorite_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
         ]
     },
     "minecraft:dirt": {
@@ -2816,6 +2886,17 @@
     "minecraft:element_99": {
         "material": "Dirt"
     },
+    "minecraft:element_constructor": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ]
+    },
     "minecraft:emerald_block": {
         "material": "Metal",
         "specialTools": [
@@ -2923,6 +3004,20 @@
             "minecraft:diamond_pickaxe",
             "minecraft:golden_pickaxe",
             "minecraft:netherite_pickaxe"
+        ]
+    },
+    "minecraft:end_stone_brick_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
         ]
     },
     "minecraft:ender_chest": {
@@ -3242,6 +3337,20 @@
             "minecraft:diamond_pickaxe",
             "minecraft:golden_pickaxe",
             "minecraft:netherite_pickaxe"
+        ]
+    },
+    "minecraft:granite_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
         ]
     },
     "minecraft:grass_block": {
@@ -3802,6 +3911,17 @@
     "minecraft:kelp": {
         "material": "Plant"
     },
+    "minecraft:lab_table": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ]
+    },
     "minecraft:ladder": {
         "material": "Decoration",
         "tags": [
@@ -4345,6 +4465,17 @@
             "minecraft:wood"
         ]
     },
+    "minecraft:material_reducer": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ]
+    },
     "minecraft:medium_amethyst_bud": {
         "material": "Amethyst",
         "specialTools": [
@@ -4434,6 +4565,20 @@
             "minecraft:netherite_pickaxe"
         ]
     },
+    "minecraft:mossy_cobblestone_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
+        ]
+    },
     "minecraft:mossy_stone_brick_double_slab": {
         "material": "Stone",
         "specialTools": [
@@ -4465,6 +4610,20 @@
             "minecraft:diamond_pickaxe",
             "minecraft:golden_pickaxe",
             "minecraft:netherite_pickaxe"
+        ]
+    },
+    "minecraft:mossy_stone_brick_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
         ]
     },
     "minecraft:mossy_stone_bricks": {
@@ -4621,6 +4780,20 @@
             "minecraft:diamond_pickaxe",
             "minecraft:golden_pickaxe",
             "minecraft:netherite_pickaxe"
+        ]
+    },
+    "minecraft:nether_brick_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
         ]
     },
     "minecraft:nether_gold_ore": {
@@ -5623,6 +5796,20 @@
             "minecraft:netherite_pickaxe"
         ]
     },
+    "minecraft:prismarine_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
+        ]
+    },
     "minecraft:pumpkin": {
         "material": "Vegetable",
         "tags": [
@@ -5701,6 +5888,17 @@
         ]
     },
     "minecraft:purpur_double_slab": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ]
+    },
+    "minecraft:purpur_pillar": {
         "material": "Stone",
         "specialTools": [
             "minecraft:iron_pickaxe",
@@ -5943,6 +6141,20 @@
             "minecraft:netherite_pickaxe"
         ]
     },
+    "minecraft:red_nether_brick_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
+        ]
+    },
     "minecraft:red_sand": {
         "material": "Sand",
         "tags": [
@@ -5991,6 +6203,20 @@
             "minecraft:diamond_pickaxe",
             "minecraft:golden_pickaxe",
             "minecraft:netherite_pickaxe"
+        ]
+    },
+    "minecraft:red_sandstone_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
         ]
     },
     "minecraft:red_shulker_box": {
@@ -6141,6 +6367,20 @@
             "minecraft:diamond_pickaxe",
             "minecraft:golden_pickaxe",
             "minecraft:netherite_pickaxe"
+        ]
+    },
+    "minecraft:sandstone_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
         ]
     },
     "minecraft:scaffolding": {
@@ -6643,6 +6883,20 @@
             "minecraft:netherite_pickaxe"
         ]
     },
+    "minecraft:stone_brick_wall": {
+        "material": "Stone",
+        "specialTools": [
+            "minecraft:iron_pickaxe",
+            "minecraft:wooden_pickaxe",
+            "minecraft:stone_pickaxe",
+            "minecraft:diamond_pickaxe",
+            "minecraft:golden_pickaxe",
+            "minecraft:netherite_pickaxe"
+        ],
+        "tags": [
+            "minecraft:stone"
+        ]
+    },
     "minecraft:stone_bricks": {
         "material": "Stone",
         "specialTools": [
@@ -7052,6 +7306,9 @@
     },
     "minecraft:twisting_vines": {
         "material": "Plant"
+    },
+    "minecraft:underwater_tnt": {
+        "material": "Explosive"
     },
     "minecraft:underwater_torch": {
         "material": "Decoration"
@@ -7806,6 +8063,9 @@
     },
     "minecraft:weeping_vines": {
         "material": "Plant"
+    },
+    "minecraft:wet_sponge": {
+        "material": "Sponge"
     },
     "minecraft:wheat": {
         "material": "Plant",
