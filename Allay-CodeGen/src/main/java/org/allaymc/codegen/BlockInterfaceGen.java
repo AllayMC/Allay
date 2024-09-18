@@ -176,8 +176,8 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile(".*GlassBehavior"), "glass");
         registerSubPackage(Pattern.compile(".*GlassPaneBehavior"), "glasspane");
         registerSubPackage(Pattern.compile(".*AmethystBudBehavior"), "amethystbud");
-        registerSubPackage(Pattern.compile(".*Torch.*Behavior"), "torch");
         registerSubPackage(Pattern.compile(".*Torchflower.*Behavior"), "torchflower");
+        registerSubPackage(Pattern.compile(".*Torch.*Behavior"), "torch");
         registerSubPackage(Pattern.compile(".*LightBlock.*Behavior"), "lightblock");
         registerSubPackage(Pattern.compile(".*CoralWallFanBehavior"), "coralwallfan");
         registerSubPackage(Pattern.compile(".*AnvilBehavior"), "anvil");

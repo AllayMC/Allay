@@ -8,8 +8,7 @@ nbt = { group = "org.allaymc", name = "NBT", version = "3.0.9" }
 # Network protocol
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta5-SNAPSHOT" }
 # State Updater
-# NOTICE: version 1.21.20 is buggy and we can't use it :(
-stateupdater = { group = "org.allaymc", name = "stateupdater", version = "83c55a9492" }
+stateupdater = { group = "org.allaymc", name = "stateupdater", version = "1.21.30" }
 # Collections
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.14" }
 guava = { group = "com.google.guava", name = "guava", version = "33.3.0-jre" }

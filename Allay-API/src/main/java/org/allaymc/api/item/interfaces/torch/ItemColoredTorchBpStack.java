@@ -1,4 +1,4 @@
-package org.allaymc.api.item.interfaces;
+package org.allaymc.api.item.interfaces.torch;
 
 import org.allaymc.api.item.ItemStack;
 

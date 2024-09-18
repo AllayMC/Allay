@@ -1,4 +1,4 @@
-package org.allaymc.api.block.interfaces.torch;
+package org.allaymc.api.block.interfaces.torchflower;
 
 import org.allaymc.api.block.BlockBehavior;
 

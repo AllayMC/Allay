@@ -2,5 +2,5 @@ package org.allaymc.api.item.interfaces;
 
 import org.allaymc.api.item.ItemStack;
 
-public interface ItemTntStack extends ItemStack {
+public interface ItemMaterialReducerStack extends ItemStack {
 }
