@@ -9,17 +9,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Allay Project 2023/5/26
- *
- * @author daoge_cmd | Cool_Loong
+ * @author daoge_cmd | Cool_Loong | IWareQ
  */
 public class EntityInterfaceGen extends BaseInterfaceGen {
 
     public static final TypeSpec.Builder ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
             TypeSpec.classBuilder(ClassNames.ENTITY_TYPE_DEFAULT_INITIALIZER)
-                    .addJavadoc(
-                            "@author daoge_cmd <br>\n" +
-                            "Allay Project <br>\n")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
 
     public static void main(String[] args) {
@@ -49,7 +44,7 @@ public class EntityInterfaceGen extends BaseInterfaceGen {
         }
         generateDefaultEntityTypeInitializer();
         var javaFile = JavaFile.builder(ClassNames.ENTITY_TYPES.packageName(), typesClass.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ENTITY_TYPES.simpleName() + ".java ...");
@@ -81,7 +76,7 @@ public class EntityInterfaceGen extends BaseInterfaceGen {
         if (!Files.exists(folderPath))
             Files.createDirectories(folderPath);
         var javaFile = JavaFile.builder(ClassNames.ENTITY_TYPE_DEFAULT_INITIALIZER.packageName(), ENTITY_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ENTITY_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");

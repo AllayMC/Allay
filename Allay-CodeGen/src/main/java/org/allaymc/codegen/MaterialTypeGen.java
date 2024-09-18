@@ -12,12 +12,10 @@ import static org.allaymc.codegen.ClassNames.MAP;
 import static org.allaymc.codegen.ClassNames.STRING;
 
 /**
- * Allay Project 2024/6/11
- *
- * @author daoge_cmd
+ * @author daoge_cmd | IWareQ
  */
 public class MaterialTypeGen {
-    static final Path MATERIAL_DATA_FILE_PATH = Path.of(CodeGen.DATA_PATH + "materials.json");
+    static final Path MATERIAL_DATA_FILE_PATH = Path.of(CodeGenConstants.DATA_PATH + "materials.json");
 
     public static void main(String[] args) throws IOException {
         generate();
@@ -64,7 +62,7 @@ public class MaterialTypeGen {
         );
 
         var javaFile = JavaFile.builder("org.allaymc.api.block.material", interfaceBuilder.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/block/material/MaterialTypes.java"), javaFile.toString());

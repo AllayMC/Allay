@@ -14,12 +14,10 @@ import java.nio.file.Path;
 import static org.allaymc.codegen.ClassNames.STRING;
 
 /**
- * Allay Project 2023/12/22
- *
- * @author daoge_cmd
+ * @author daoge_cmd | IWareQ
  */
 public class TrKeysGen {
-    static final Path TR_EN_FILE_PATH = Path.of(CodeGen.DATA_PATH + "lang/en_US.json");
+    static final Path TR_EN_FILE_PATH = Path.of(CodeGenConstants.DATA_PATH + "lang/en_US.json");
     static final Path OUTPUT_PATH = Path.of("Allay-API/src/main/java/org/allaymc/api/i18n/TrKeys.java");
 
     @SneakyThrows
@@ -29,9 +27,7 @@ public class TrKeysGen {
                 .getAsJsonObject()
                 .keySet();
         var codeBuilder = TypeSpec.interfaceBuilder(ClassNames.TR_KEYS)
-                .addModifiers(Modifier.PUBLIC)
-                .addJavadoc("@author daoge_cmd <br>\n" +
-                            "Allay Project <br>\n");
+                .addModifiers(Modifier.PUBLIC);
         for (var key : keys) {
             var identifier = new Identifier(key);
             var namespace = handleNamespace(identifier.namespace());
@@ -45,7 +41,7 @@ public class TrKeysGen {
             );
         }
         var javaFile = JavaFile.builder(ClassNames.TR_KEYS.packageName(), codeBuilder.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.TR_KEYS.simpleName() + ".java ...");

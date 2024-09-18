@@ -10,20 +10,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Allay Project 2024/2/24
- *
- * @author daoge_cmd
+ * @author daoge_cmd | IWareQ
  */
 public abstract class BaseInterfaceGen {
     protected static void generateClass(ClassName superClassName, ClassName itemClassName, Path path) throws IOException {
         TypeSpec.Builder codeBuilder = TypeSpec.interfaceBuilder(itemClassName)
                 .addSuperinterface(superClassName)
-                .addJavadoc(
-                        "@author daoge_cmd <br>\n" +
-                        "Allay Project <br>\n")
                 .addModifiers(Modifier.PUBLIC);
         var javaFile = JavaFile.builder(itemClassName.packageName(), codeBuilder.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + itemClassName + ".java ...");

@@ -11,13 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Allay Project 2023/4/8
- *
- * @author daoge_cmd
+ * @author daoge_cmd | IWareQ
  */
 public class Utils {
-    public static final String INDENT = "    ";
-
     public static String convertToPascalCase(String str) {
         var parts = StringUtils.fastSplit(str, "_");
         var output = new StringBuilder();

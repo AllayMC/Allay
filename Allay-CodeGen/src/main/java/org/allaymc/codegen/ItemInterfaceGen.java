@@ -12,17 +12,12 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * Allay Project 2023/5/20
- *
- * @author daoge_cmd
+ * @author daoge_cmd | IWareQ
  */
 public class ItemInterfaceGen extends BaseInterfaceGen {
 
     public static final TypeSpec.Builder ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
             TypeSpec.classBuilder(ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER)
-                    .addJavadoc(
-                            "@author daoge_cmd <br>\n" +
-                            "Allay Project <br>\n")
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
@@ -58,7 +53,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
         }
         generateDefaultItemTypeInitializer();
         var javaFile = JavaFile.builder(ClassNames.ITEM_TYPES.packageName(), typesClass.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ITEM_TYPES.simpleName() + ".java ...");
@@ -90,7 +85,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
         if (!Files.exists(folderPath))
             Files.createDirectories(folderPath);
         var javaFile = JavaFile.builder(ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER.packageName(), ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");

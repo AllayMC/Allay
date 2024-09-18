@@ -13,8 +13,6 @@ import java.util.stream.Collectors;
 import static org.allaymc.codegen.ClassNames.*;
 
 /**
- * Allay Project 2024/08/27
- *
  * @author IWareQ
  */
 public class TagGen {
@@ -35,7 +33,7 @@ public class TagGen {
                 );
 
         var keys = Arrays.stream(tagFiles)
-                .flatMap(file -> Utils.parseKeys(Path.of(CodeGen.DATA_PATH + file)).stream())
+                .flatMap(file -> Utils.parseKeys(Path.of(CodeGenConstants.DATA_PATH + file)).stream())
                 .collect(Collectors.toSet());
         for (var key : keys) {
             var fieldName = key.split(":")[1].toUpperCase();
@@ -66,7 +64,7 @@ public class TagGen {
         );
 
         var javaFile = JavaFile.builder(tagClass.packageName(), interfaceBuilder.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         Files.writeString(Path.of(writeTo), javaFile.toString());

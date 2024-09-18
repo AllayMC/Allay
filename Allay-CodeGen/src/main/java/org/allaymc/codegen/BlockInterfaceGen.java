@@ -16,18 +16,12 @@ import static org.allaymc.codegen.BlockIdEnumGen.MAPPED_BLOCK_PALETTE_NBT;
 import static org.allaymc.codegen.BlockPropertyTypeGen.BLOCK_PROPERTY_TYPE_INFO_FILE;
 
 /**
- * Allay Project 2023/4/8
- *
  * @author daoge_cmd | Cool_Loong
  */
 public class BlockInterfaceGen extends BaseInterfaceGen {
 
     public static final TypeSpec.Builder BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER =
             TypeSpec.classBuilder(ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER)
-                    .addJavadoc(
-                            "@author daoge_cmd <br>\n" +
-                            "Allay Project <br>\n"
-                    )
                     .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
@@ -64,7 +58,7 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         }
         generateDefaultBlockTypeInitializer();
         var javaFile = JavaFile.builder(ClassNames.BLOCK_TYPES.packageName(), typesClass.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.BLOCK_TYPES.simpleName() + ".java ...");
@@ -108,7 +102,7 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         if (!Files.exists(folderPath))
             Files.createDirectories(folderPath);
         var javaFile = JavaFile.builder(ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER.packageName(), BLOCK_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER.build())
-                .indent(Utils.INDENT)
+                .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
