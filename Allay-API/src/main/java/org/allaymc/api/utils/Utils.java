@@ -20,8 +20,6 @@ import java.util.function.Supplier;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
- * Allay Project 2023/6/23
- *
  * @author daoge_cmd
  */
 @UtilityClass

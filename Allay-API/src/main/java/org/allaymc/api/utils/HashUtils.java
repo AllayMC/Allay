@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- * Allay Project 2023/6/1
+ * Hash utilities.
  *
- * @author Cool_Loong
+ * @author Cool_Loong | daoge_cmd
  */
 @UtilityClass
 public class HashUtils {
@@ -23,6 +23,13 @@ public class HashUtils {
     private static final int FNV1_32_INIT = 0x811c9dc5;
     private static final int FNV1_PRIME_32 = 0x01000193;
 
+    /**
+     * Compute block state hash from the given identifier and property values.
+     *
+     * @param identifier the identifier.
+     * @param propertyValues the property values.
+     * @return the hash.
+     */
     public int computeBlockStateHash(Identifier identifier, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues) {
         if (identifier.equals(BlockId.UNKNOWN.getIdentifier())) {
             return -2; // This is special case
@@ -41,6 +48,13 @@ public class HashUtils {
         return fnv1a_32_nbt(tag);
     }
 
+    /**
+     * Compute block state hash from the given identifier and property values.
+     *
+     * @param identifier the identifier.
+     * @param propertyValues the property values.
+     * @return the hash.
+     */
     public int computeBlockStateHash(Identifier identifier, BlockPropertyType.BlockPropertyValue<?, ?, ?>[] propertyValues) {
         if (identifier.equals(BlockId.UNKNOWN.getIdentifier())) {
             return -2; // This is special case
@@ -59,6 +73,12 @@ public class HashUtils {
         return fnv1a_32_nbt(tag);
     }
 
+    /**
+     * FNV-1a 32-bit hash algorithm.
+     *
+     * @param tag the tag to hash.
+     * @return the hash.
+     */
     public int fnv1a_32_nbt(NbtMap tag) {
         byte[] bytes;
         try (var stream = new ByteArrayOutputStream();
@@ -72,6 +92,13 @@ public class HashUtils {
         return fnv1a_32(bytes);
     }
 
+    /**
+     * FNV-1a 32-bit hash algorithm.
+     *
+     * @param data the data to hash.
+     *
+     * @return the hash.
+     */
     public int fnv1a_32(byte[] data) {
         int hash = FNV1_32_INIT;
         for (byte datum : data) {
@@ -82,30 +109,29 @@ public class HashUtils {
     }
 
     /**
-     * Shift int x to the left by 32 bits and int z to form a long value
+     * Shift int x to the left by 32 bits and int z to form a long value.
      *
-     * @param x the int x
-     * @param z the int z
-     *
-     * @return the long
+     * @param x the int x.
+     * @param z the int z.
+     * @return the long.
      */
     public long hashXZ(int x, int z) {
         return ((long) x << 32) | (z & 0xffffffffL);
     }
 
     /**
-     * Gets x from {@link #hashXZ(int, int)}
+     * Gets x from {@link #hashXZ(int, int)}.
      *
-     * @param hashXZ a long value
+     * @param hashXZ a long value.
      */
     public int getXFromHashXZ(long hashXZ) {
         return (int) (hashXZ >> 32);
     }
 
     /**
-     * Gets z from {@link #hashXZ(int, int)}
+     * Gets z from {@link #hashXZ(int, int)}.
      *
-     * @param hashXZ a long value
+     * @param hashXZ a long value.
      */
     public int getZFromHashXZ(long hashXZ) {
         return (int) hashXZ;
@@ -134,7 +160,6 @@ public class HashUtils {
      * x occupies the highest 4 bits.
      *
      * @param encoded Encoded int containing x, y, and z.
-     *
      * @return The value of x.
      */
     public int getXFromHashChunkXYZ(int encoded) {
@@ -146,7 +171,6 @@ public class HashUtils {
      * y occupies the middle 24 bits.
      *
      * @param encoded Encoded int containing x, y, and z.
-     *
      * @return The value of y.
      */
     public int getYFromHashChunkXYZ(int encoded) {
@@ -158,7 +182,6 @@ public class HashUtils {
      * z occupies the lowest 4 bits.
      *
      * @param encoded Encoded int containing x, y, and z.
-     *
      * @return The value of z.
      */
     public static int getZFromHashChunkXYZ(int encoded) {

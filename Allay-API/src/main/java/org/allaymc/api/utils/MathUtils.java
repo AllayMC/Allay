@@ -8,9 +8,9 @@ import java.lang.Math;
 import static java.lang.StrictMath.*;
 
 /**
- * Allay Project 7/31/2023
+ * Math utilities.
  *
- * @author Cool_Loong
+ * @author Cool_Loong | daoge_cmd
  */
 @UtilityClass
 public class MathUtils {
@@ -60,6 +60,12 @@ public class MathUtils {
         return ((double) Math.round(d * pow)) / pow;
     }
 
+    /**
+     * Fast inverse square root (float).
+     *
+     * @param x value.
+     * @return result.
+     */
     public float fastFloatInverseSqrt(float x) {
         float xHalf = 0.5f * x;
         int reEncode = Float.floatToIntBits(x);
@@ -69,6 +75,12 @@ public class MathUtils {
         return x;
     }
 
+    /**
+     * Fast inverse square root (double).
+     *
+     * @param x value.
+     * @return result.
+     */
     public double fastDoubleInverseSqrt(double x) {
         double xHalf = 0.5d * x;
         long reEncode = Double.doubleToLongBits(x);
@@ -78,17 +90,25 @@ public class MathUtils {
         return x;
     }
 
+    /**
+     * Check if the value is in the range.
+     *
+     * @param l left.
+     * @param value value.
+     * @param r right.
+     * @return {@code true} if the value is in the range, otherwise {@code false}.
+     */
     public boolean isInRange(float l, float value, float r) {
         return l <= value && value <= r;
     }
 
     /**
-     * 通过yaw与pitch计算出等价的Vector3方向向量
+     * Calculate equivalent direction vector by yaw and pitch.
      *
      * @param yaw   yaw
      * @param pitch pitch
      *
-     * @return Vector3方向向量
+     * @return direction vector.
      */
     public Vector3f getDirectionVector(double yaw, double pitch) {
         var pitch0 = toRadians(pitch + 90);
@@ -100,17 +120,14 @@ public class MathUtils {
     }
 
     /**
-     * 通过方向向量计算出yaw
-     * <p>
-     * Calculate yaw from the direction vector
+     * Calculate yaw from the direction vector.
      *
-     * @param vector 方向向量
-     *
-     * @return yaw
+     * @param vector direction vector.
+     * @return yaw.
      */
     public double getYawFromVector(Vector3fc vector) {
         double length = vector.x() * vector.x() + vector.z() * vector.z();
-        // 避免NAN
+        // Prevent NAN
         if (length == 0) {
             return 0;
         }
@@ -119,20 +136,17 @@ public class MathUtils {
     }
 
     /**
-     * 通过方向向量计算出pitch
-     * <p>
-     * Calculate the pitch by the direction vector
+     * Calculate the pitch by the direction vector.
      *
-     * @param vector 方向向量
-     *
-     * @return pitch
+     * @param vector direction vector.
+     * @return pitch.
      */
     public double getPitchFromVector(Vector3fc vector) {
         double length =
                 vector.x() * vector.x() +
                 vector.z() * vector.z() +
                 vector.y() * vector.y();
-        // 避免NAN
+        // Prevent NAN
         if (length == 0) {
             return 0;
         }

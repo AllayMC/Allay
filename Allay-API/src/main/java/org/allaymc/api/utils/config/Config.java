@@ -20,11 +20,9 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Allay Project 2024/3/2
+ * TODO: refactor
  *
  * @author MagicDroidX (Nukkit) | daoge_cmd
- * <p>
- * TODO: refactor
  */
 @Slf4j
 public class Config {
@@ -34,8 +32,8 @@ public class Config {
     public static final int CNF = Config.PROPERTIES; // .cnf
     public static final int JSON = 1; // .js, .json
     public static final int YAML = 2; // .yml, .yaml
-    //public static final int EXPORT = 3; // .export, .xport
-    //public static final int SERIALIZED = 4; // .sl
+    // public static final int EXPORT = 3; // .export, .xport
+    // public static final int SERIALIZED = 4; // .sl
     public static final int ENUM = 5; // .txt, .list, .enum
     public static final int ENUMERATION = Config.ENUM;
     public static final Map<String, Integer> format = new TreeMap<>();

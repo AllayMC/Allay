@@ -7,8 +7,6 @@ import java.util.*;
 
 /**
  * String helpers
- * <p>
- * Allay Project 2023/3/4
  *
  * @author daoge_cmd
  */

@@ -5,6 +5,11 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
+/**
+ * Represents a semantic version.
+ *
+ * @see <a href="https://semver.org/">Semantic Versioning</a>
+ */
 public record SemVersion(int major, int minor, int patch, int revision, int build) {
     public static SemVersion from(int[] versions) {
         if (versions.length == 0) {

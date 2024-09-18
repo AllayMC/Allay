@@ -15,8 +15,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.Base64;
 
 /**
- * Allay Project 2023/12/2
- *
  * @author daoge_cmd
  */
 @Slf4j

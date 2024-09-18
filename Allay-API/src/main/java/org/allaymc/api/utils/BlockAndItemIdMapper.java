@@ -4,9 +4,8 @@ import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.item.data.ItemId;
 
 /**
- * Allay Project 2023/12/8
+ * TODO: translate to English and move it to docs site
  *
- * @author daoge_cmd
  * <br>
  * 一个用于描述方块和物品字符串Id之间映射关系的工具类 <br>
  * Id一直是mc中比较复杂的一部分，我们将所有相关逻辑都放到这里，方便阅读也方便后续维护 <br>
@@ -35,6 +34,8 @@ import org.allaymc.api.item.data.ItemId;
  * 请注意，对于原版方块物品，若其meta（特殊值）不等于0，则不同特殊值的物品还有可能映射到一个方块类型的不同的方块状态上 <br>
  * 具体点说，此类物品特殊值是由对应方块状态的各个方块属性序列化后全填充二进制位得到的。我们不推荐继续使用特殊值，这里也不会细讲具体逻辑<br>
  * 此类映射关系由类org.allaymc.server.util.VanillaItemMetaBlockStateBiMap维护<br>
+ *
+ * @author daoge_cmd
  */
 public final class BlockAndItemIdMapper {
 

@@ -3,11 +3,9 @@ package org.allaymc.api.utils.config;
 import java.util.*;
 
 /**
- * Allay Project 2024/3/2
+ * TODO: refactor
  *
  * @author fromgate | daoge_cmd
- * <p>
- * TODO: refactor
  */
 public class ConfigSection extends LinkedHashMap<String, Object> {
 

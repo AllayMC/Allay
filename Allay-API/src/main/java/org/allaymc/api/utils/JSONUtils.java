@@ -22,15 +22,14 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * Gson工具类
- * 优势：
- * 数据量低于1万的时候速度有绝对优势
- * API和注解支持较为完善，支持宽松解析
- * 支持的数据源较广泛（字符串，对象，文件、流、Reader）
+ * Gson Utilities.
+ * <p>
+ * Advantage:
+ * <li>When the data volume is less than 10,000, the speed has an absolute advantage</li>
+ * <li>API and annotation support is relatively complete, and loose parsing is supported</li>
+ * <li>Supports a wide range of data sources (strings, objects, files, streams, readers)</li>
  *
  * @author duanxinyuan | CoolLoong
- * <p>
- * 2023/11/24
  */
 @UtilityClass
 public class JSONUtils {
@@ -39,7 +38,8 @@ public class JSONUtils {
 
     static {
         GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss");
-        gsonBuilder.disableHtmlEscaping(); // 禁止将部分特殊字符转义为unicode编码
+        // Prevent escaping some special characters to Unicode encoding
+        gsonBuilder.disableHtmlEscaping();
         registerTypeAdapter(gsonBuilder);
         GSON = gsonBuilder.create();
     }
@@ -57,7 +57,7 @@ public class JSONUtils {
         gsonBuilder.registerTypeAdapter(Double.class, new NumberTypeAdapter<>(Double.class));
         gsonBuilder.registerTypeAdapter(BigDecimal.class, new NumberTypeAdapter<>(BigDecimal.class));
 
-        // custom
+        // Custom type adapters
         gsonBuilder.registerTypeAdapter(SemVersion.class, new SemVersion.Serializer());
         gsonBuilder.registerTypeAdapter(SemVersion.class, new SemVersion.Deserializer());
         gsonBuilder.registerTypeAdapter(Pack.Type.class, new Pack.Type.Deserializer());
@@ -67,7 +67,11 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化
+     * Parse a JSON string (from reader) to an object.
+     *
+     * @param reader the reader.
+     * @param type the type of the object.
+     * @return the object.
      */
     public static <V> V from(Reader reader, Class<V> type) {
         JsonReader jsonReader = new JsonReader(Objects.requireNonNull(reader));
@@ -75,7 +79,11 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化
+     * Parse a JSON string (from reader) to an object.
+     *
+     * @param reader the reader.
+     * @param typeToken the type of the object.
+     * @return the object.
      */
     public static <V> V from(Reader reader, TypeToken<V> typeToken) {
         JsonReader jsonReader = new JsonReader(Objects.requireNonNull(reader));
@@ -83,7 +91,11 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化
+     * Parse a JSON string (from input stream) to an object.
+     *
+     * @param inputStream the input stream.
+     * @param type the type of the object.
+     * @return the object.
      */
     public static <V> V from(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -91,7 +103,11 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化
+     * Parse a JSON string (from input stream) to an object.
+     *
+     * @param inputStream the input stream.
+     * @param typeToken the type of the object.
+     * @return the object.
      */
     public static <V> V from(InputStream inputStream, TypeToken<V> typeToken) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -99,7 +115,10 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化（List）
+     * Parse a JSON string (from input stream) to a list.
+     * @param inputStream the input stream.
+     * @param type the type of elements in the list.
+     * @return the list.
      */
     public static <V> List<V> fromList(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -108,7 +127,11 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化
+     * Parse a JSON string (in file) to an object.
+     *
+     * @param file the file.
+     * @param type the type of the object.
+     * @return the object.
      */
     public static <V> V from(File file, Class<V> type) {
         try {
@@ -120,7 +143,11 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化
+     * Parse a JSON string (in file) to an object.
+     *
+     * @param file the file.
+     * @param typeToken the type of the object.
+     * @return the object.
      */
     public static <V> V from(File file, TypeToken<V> typeToken) {
         try {
@@ -132,7 +159,11 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化（List）
+     * Parse a JSON string (in file) to a list.
+     *
+     * @param file the file.
+     * @param type the type of elements in the list.
+     * @return the list.
      */
     public static <V> List<V> fromList(File file, Class<V> type) {
         try {
@@ -145,28 +176,44 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化
+     * Parse a JSON string to an object.
+     *
+     * @param json the JSON string.
+     * @param type the type of the object.
+     * @return the object.
      */
     public static <V> V from(String json, Class<V> type) {
         return GSON.fromJson(json, type);
     }
 
     /**
-     * JSON反序列化
+     * Parse a JSON string to an object.
+     *
+     * @param json the JSON string.
+     * @param type the type of the object.
+     * @return the object.
      */
     public static <V> V from(String json, Type type) {
         return GSON.fromJson(json, type);
     }
 
     /**
-     * JSON反序列化
+     * Parse a JSON string to an object.
+     *
+     * @param json the JSON string.
+     * @param typeToken the type of the object.
+     * @return the object.
      */
     public static <V> V from(String json, TypeToken<V> typeToken) {
         return GSON.fromJson(json, typeToken.getType());
     }
 
     /**
-     * JSON反序列化（List）
+     * Parse a JSON string to a list.
+     *
+     * @param json the JSON string.
+     * @param type the type of elements in the list.
+     * @return the list.
      */
     public static <V> List<V> fromList(String json, Class<V> type) {
         TypeToken<List<V>> typeToken = (TypeToken<List<V>>) com.google.gson.reflect.TypeToken.getParameterized(ArrayList.class, type);
@@ -174,7 +221,10 @@ public class JSONUtils {
     }
 
     /**
-     * JSON反序列化（Map）
+     * Parse a JSON string to a map.
+     *
+     * @param json the JSON string.
+     * @return the map.
      */
     public static Map<String, Object> fromMap(String json) {
         return GSON.fromJson(json, new TypeToken<HashMap<String, Object>>() {
@@ -182,7 +232,11 @@ public class JSONUtils {
     }
 
     /**
-     * 宽松JSON反序列化
+     * Parse a JSON string (from input stream) to an object leniently.
+     *
+     * @param inputStream the input stream.
+     * @param type the type of the object.
+     * @return the object.
      */
     public static <V> V fromLenient(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -190,6 +244,13 @@ public class JSONUtils {
         return GSON.fromJson(reader, type);
     }
 
+    /**
+     * Parse a JSON string to an object leniently.
+     *
+     * @param inputStream the input stream.
+     * @param type the type of the object.
+     * @return the object.
+     */
     public static <V> V fromLenient(InputStream inputStream, TypeToken<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
         reader.setLenient(true);
@@ -197,7 +258,11 @@ public class JSONUtils {
     }
 
     /**
-     * 宽松JSON反序列化（List）
+     * Parse a JSON string to a list leniently.
+     *
+     * @param inputStream the input stream.
+     * @param type the type of elements in the list.
+     * @return the list.
      */
     public static <V> List<V> fromListLenient(InputStream inputStream, Class<V> type) {
         JsonReader reader = new JsonReader(new InputStreamReader(Objects.requireNonNull(inputStream)));
@@ -207,7 +272,11 @@ public class JSONUtils {
     }
 
     /**
-     * 宽松JSON反序列化
+     * Parse a JSON string (in file) to an object leniently.
+     *
+     * @param file the file.
+     * @param type the type of the object.
+     * @return the object.
      */
     public static <V> V fromLenient(File file, Class<V> type) {
         try {
@@ -220,7 +289,11 @@ public class JSONUtils {
     }
 
     /**
-     * 宽松JSON反序列化（List）
+     * Parse a JSON string (in file) to a list leniently.
+     *
+     * @param file the file.
+     * @param type the type of elements in the list.
+     * @return the list.
      */
     public static <V> List<V> fromListLenient(File file, Class<V> type) {
         try {
@@ -234,7 +307,11 @@ public class JSONUtils {
     }
 
     /**
-     * 宽松JSON反序列化
+     * Parse a JSON string to an object leniently.
+     *
+     * @param json the JSON string.
+     * @param type the type of the object.
+     * @return the object.
      */
     public static <V> V fromLenient(String json, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -246,7 +323,11 @@ public class JSONUtils {
     }
 
     /**
-     * 宽松JSON反序列化
+     * Parse a JSON string to an object leniently.
+     *
+     * @param json the JSON string.
+     * @param type the type of the object.
+     * @return the object.
      */
     public static <V> V fromLenient(String json, Type type) {
         if (StringUtils.isEmpty(json)) {
@@ -258,7 +339,11 @@ public class JSONUtils {
     }
 
     /**
-     * 宽松JSON反序列化
+     * Parse a JSON string to an object leniently.
+     *
+     * @param json the JSON string.
+     * @param typeToken the type of the object.
+     * @return the object.
      */
     public static <V> V fromLenient(String json, TypeToken<V> typeToken) {
         if (StringUtils.isEmpty(json)) {
@@ -270,7 +355,11 @@ public class JSONUtils {
     }
 
     /**
-     * 宽松JSON反序列化（List）
+     * Read a list from a JSON string leniently.
+     *
+     * @param json the JSON string.
+     * @param type the type of elements in the list.
+     * @return the list.
      */
     public static <V> List<V> fromListLenient(String json, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -283,21 +372,30 @@ public class JSONUtils {
     }
 
     /**
-     * 序列化为JSON
+     * Convert a list to a JSON string.
+     *
+     * @param list the list.
+     * @return the JSON string.
      */
     public static <V> String to(List<V> list) {
         return GSON.toJson(list);
     }
 
     /**
-     * 序列化为JSON
+     * Convert an object to a JSON string.
+     *
+     * @param v the object.
+     * @return the JSON string.
      */
     public static <V> String to(V v) {
         return GSON.toJson(v);
     }
 
     /**
-     * 序列化为JSON文件
+     * Write an object to a file.
+     *
+     * @param path the file path.
+     * @param list the list.
      */
     public static <V> void toFile(String path, List<V> list) {
         try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(path, true))) {
@@ -309,12 +407,22 @@ public class JSONUtils {
         }
     }
 
+    /**
+     * Write an object to a file.
+     *
+     * @param path the file path.
+     * @param v the object.
+     */
     public static <V> void toFile(String path, V v) {
         toFile(path, v, null);
     }
 
     /**
-     * 序列化为JSON文件
+     * Write an object to a file.
+     *
+     * @param path the file path.
+     * @param v the object.
+     * @param jsonWriterConfigurator the JSON writer configurator.
      */
     public static <V> void toFile(String path, V v, Consumer<JsonWriter> jsonWriterConfigurator) {
         try (JsonWriter jsonWriter = new JsonWriter(new FileWriter(path, true))) {
@@ -327,9 +435,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return String，默认为 null
+     * @return the value of the field, or {@code null} if the field does not exist.
      */
     public static String getAsString(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -349,9 +457,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return int，默认为 0
+     * @return the value of the field, or zero if the field does not exist.
      */
     public static int getAsInt(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -369,9 +477,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return long，默认为 0
+     * @return the value of the field, or zero if the field does not exist.
      */
     public static long getAsLong(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -389,9 +497,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return double，默认为 0.0
+     * @return the value of the field, or zero if the field does not exist.
      */
     public static double getAsDouble(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -409,9 +517,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return BigInteger，默认为 0.0
+     * @return the value of the field, or zero if the field does not exist.
      */
     public static BigInteger getAsBigInteger(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -429,9 +537,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return BigDecimal，默认为 0.0
+     * @return the value of the field, or zero if the field does not exist.
      */
     public static BigDecimal getAsBigDecimal(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -449,9 +557,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return boolean, 默认为 false
+     * @return the value of the field, or {@code false} if the field does not exist.
      */
     public static boolean getAsBoolean(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -482,9 +590,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return byte, 默认为 0
+     * @return the value of the field, or zero if the field does not exist.
      */
     public static byte getAsByte(String json, String key) {
         if (StringUtils.isEmpty(json)) {
@@ -502,9 +610,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return object, 默认为 null
+     * @return the value of the field, or {@code null} if the field does not exist.
      */
     public static <V> V getAsObject(String json, String key, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -522,9 +630,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
      *
-     * @return list, 默认为 null
+     * @return the value of the field, or {@code null} if the field does not exist.
      */
     public static <V> List<V> getAsList(String json, String key, Class<V> type) {
         if (StringUtils.isEmpty(json)) {
@@ -544,7 +652,9 @@ public class JSONUtils {
     }
 
     /**
-     * 从json串中获取某个字段
+     * Get the value of a field from a JSON string.
+     *
+     * @return the field.
      */
     public static JsonElement getAsJsonObject(String json, String key) {
         try {
@@ -557,9 +667,9 @@ public class JSONUtils {
     }
 
     /**
-     * 向json中添加属性
+     * Add a field to a JSON string.
      *
-     * @return json
+     * @return the JSON string with the field added.
      */
     public static <V> String add(String json, String key, V value) {
         JsonElement element = JsonParser.parseString(json);
@@ -569,7 +679,7 @@ public class JSONUtils {
     }
 
     /**
-     * 向json中添加属性
+     * Add a field to a JSON string.
      */
     private static <V> void add(JsonObject jsonObject, String key, V value) {
         if (value instanceof String) {
@@ -582,9 +692,9 @@ public class JSONUtils {
     }
 
     /**
-     * 除去json中的某个属性
+     * Remove a field from a JSON string.
      *
-     * @return json
+     * @return the JSON string with the field removed.
      */
     public static String remove(String json, String key) {
         JsonElement element = JsonParser.parseString(json);
@@ -594,7 +704,9 @@ public class JSONUtils {
     }
 
     /**
-     * 修改json中的属性
+     * Update a field in a JSON string.
+     *
+     * @return the JSON string with the field updated.
      */
     public static <V> String update(String json, String key, V value) {
         JsonElement element = JsonParser.parseString(json);
@@ -605,9 +717,9 @@ public class JSONUtils {
     }
 
     /**
-     * 格式化Json(美化)
+     * Format a JSON string.
      *
-     * @return json
+     * @return the formatted JSON string.
      */
     public static String format(String json) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -616,9 +728,9 @@ public class JSONUtils {
     }
 
     /**
-     * 判断字符串是否是json
+     * Check if a string is a JSON string.
      *
-     * @return json
+     * @return {@code true} if the string is a JSON string, otherwise {@code false}.
      */
     public static boolean isJson(String json) {
         try {
@@ -629,10 +741,7 @@ public class JSONUtils {
     }
 
     /**
-     * Gson解析的Number类型的字段解析适配器
-     *
      * @author duanxinyuan
-     * 2018/6/20 14:58
      */
     private static class NumberTypeAdapter<T> extends TypeAdapter<Number> {
 
@@ -709,7 +818,6 @@ public class JSONUtils {
 
     /**
      * @author duanxinyuan
-     * 2019/4/10 22:35
      */
     @Setter
     @Getter

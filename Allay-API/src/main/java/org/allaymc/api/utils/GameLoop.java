@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 /**
- * Allay Project 2023/4/14
+ * GameLoop is a simple game loop implementation.
  *
  * @author daoge_cmd
  */

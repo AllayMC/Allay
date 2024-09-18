@@ -15,8 +15,6 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
- * Allay Project 2023/8/11
- *
  * @author JukeboxMC | daoge_cmd | Dhaiven
  */
 @Getter

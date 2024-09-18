@@ -7,10 +7,6 @@ import static org.allaymc.api.utils.IdentifierUtils.isNamespaceValid;
 import static org.allaymc.api.utils.IdentifierUtils.isPathValid;
 
 /**
- * A simple logging class that implements the Identified interface
- * <p>
- * Allay Project 2023/3/4
- *
  * @author daoge_cmd
  */
 public record Identifier(String namespace, String path) implements Cloneable {

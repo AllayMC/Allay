@@ -7,8 +7,6 @@ import java.util.regex.Pattern;
 
 /**
  * All supported formatting values for chat and console.
- * <p>
- * Allay Project 2024/2/13
  *
  * @author daoge_cmd | Nukkit
  * @see <a href="https://minecraft.wiki/w/Formatting_codes#Color_codes">Color codes</a>
