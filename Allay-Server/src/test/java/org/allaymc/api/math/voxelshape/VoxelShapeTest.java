@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2023/9/2
- *
  * @author daoge_cmd
  */
 class VoxelShapeTest {

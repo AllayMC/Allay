@@ -6,8 +6,6 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.interfaces.TestDependencyComponent;
 
 /**
- * Allay Project 2023/3/4
- *
  * @author daoge_cmd
  */
 public class SimpleTestDependencyComponent implements TestDependencyComponent {

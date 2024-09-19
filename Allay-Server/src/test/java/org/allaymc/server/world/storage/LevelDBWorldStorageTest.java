@@ -30,14 +30,13 @@ import java.util.concurrent.Executors;
 import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 
 /**
- * Allay Project 2023/5/31
- *
  * @author Cool_Loong
  */
 @ExtendWith({AllayTestExtension.class, MockitoExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LevelDBWorldStorageTest {
-    static Path levelDat = Path.of("").toAbsolutePath().getParent();//this is root path,relative to the `.run` directory
+    // This is root path, relative to the `.run` directory
+    static Path levelDat = Path.of("").toAbsolutePath().getParent();
     static Server server = Mockito.mock(Server.class);
     static EventBus eventBus = Mockito.mock(EventBus.class);
     static World mockWorld = Mockito.mock(World.class);

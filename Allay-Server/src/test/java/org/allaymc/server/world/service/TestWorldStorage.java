@@ -11,8 +11,6 @@ import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Allay Project 2024/8/29
- *
  * @author daoge_cmd
  */
 public class TestWorldStorage implements WorldStorage {

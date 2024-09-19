@@ -22,8 +22,6 @@ import static org.allaymc.server.block.type.AllayBlockType.computeSpecialValue;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2023/4/16
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

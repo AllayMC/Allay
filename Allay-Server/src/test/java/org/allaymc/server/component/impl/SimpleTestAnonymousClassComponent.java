@@ -4,8 +4,6 @@ import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.interfaces.TestAnonymousClassComponent;
 
 /**
- * Allay Project 2023/9/28
- *
  * @author daoge_cmd
  */
 public class SimpleTestAnonymousClassComponent implements TestAnonymousClassComponent {

@@ -8,8 +8,6 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Allay Project 2023/12/1
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

@@ -10,8 +10,6 @@ import java.util.concurrent.Executors;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public class EventBusTest {

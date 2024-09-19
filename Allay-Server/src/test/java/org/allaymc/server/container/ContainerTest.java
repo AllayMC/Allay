@@ -14,8 +14,6 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2023/10/14
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

@@ -12,8 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Allay Project 2023/12/30
- *
  * @author daoge_cmd
  */
 public class PermTreeTest {

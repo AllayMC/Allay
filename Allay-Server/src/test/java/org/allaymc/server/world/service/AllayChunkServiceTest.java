@@ -11,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Allay Project 2024/8/29
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

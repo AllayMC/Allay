@@ -12,8 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * Allay Project 7/31/2023
- *
  * @author Cool_Loong
  */
 @ExtendWith({MockitoExtension.class})

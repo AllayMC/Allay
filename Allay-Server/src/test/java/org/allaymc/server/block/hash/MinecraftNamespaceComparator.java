@@ -6,6 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * @author daoge_cmd
+ */
 @ExtendWith(AllayTestExtension.class)
 @Slf4j
 public class MinecraftNamespaceComparator {

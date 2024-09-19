@@ -13,6 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.allaymc.api.block.type.BlockTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author Cool_Loong
+ */
 @Slf4j
 @ExtendWith(AllayTestExtension.class)
 class AllayChunkTest {

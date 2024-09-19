@@ -15,8 +15,6 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2023/3/25
- *
  * @author Cool_Loong
  */
 @ExtendWith(AllayTestExtension.class)

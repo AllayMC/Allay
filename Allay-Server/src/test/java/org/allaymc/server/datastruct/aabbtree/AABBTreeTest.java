@@ -13,6 +13,9 @@ import java.util.List;
 import static org.allaymc.server.datastruct.aabb.AABBTreeNode.INVALID_NODE_INDEX;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author daoge_cmd
+ */
 public class AABBTreeTest {
     @Test
     public void shouldAddAnObjectToTheTree() {

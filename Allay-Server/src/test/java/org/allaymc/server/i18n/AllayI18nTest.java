@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Allay Project 2023/12/15
- *
  * @author daoge_cmd
  */
 public class AllayI18nTest {

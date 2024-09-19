@@ -9,8 +9,6 @@ import java.io.IOException;
 import java.util.TreeMap;
 
 /**
- * Allay Project 2023/4/30
- *
  * @author daoge_cmd
  */
 public class PaletteHashTest {

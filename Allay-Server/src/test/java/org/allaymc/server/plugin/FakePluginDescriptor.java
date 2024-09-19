@@ -7,8 +7,6 @@ import org.allaymc.api.plugin.PluginDescriptor;
 import java.util.List;
 
 /**
- * Allay Project 2024/2/8
- *
  * @author daoge_cmd
  */
 @Getter

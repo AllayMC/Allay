@@ -6,9 +6,7 @@ import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
 /**
- * This junit extension is used to prepare the test environment
- * <p>
- * Allay Project 2023/5/1
+ * AllayTestExtension is used to prepare the test environment.
  *
  * @author daoge_cmd
  */

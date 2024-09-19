@@ -14,8 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Allay Project 2024/2/8
- *
  * @author daoge_cmd
  */
 public class AllayPluginManagerTest extends AllayPluginManager {

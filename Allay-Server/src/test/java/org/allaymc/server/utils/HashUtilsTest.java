@@ -14,6 +14,9 @@ import java.util.ArrayList;
 
 import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 
+/**
+ * @author daoge_cmd
+ */
 @ExtendWith({AllayTestExtension.class})
 public class HashUtilsTest {
     static final int testBlockStateHash = 1622499771;

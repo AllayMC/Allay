@@ -6,8 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 /**
- * Allay Project 8/9/2023
- *
  * @author Cool_Loong
  */
 public class ZlibTest {

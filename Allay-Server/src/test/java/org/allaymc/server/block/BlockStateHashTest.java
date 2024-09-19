@@ -16,10 +16,6 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
- * This test must be executed before the AllayBlockTypeTest test,
- * otherwise the generated TestBlock will cause error.
- * Allay Project 2023/9/30
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

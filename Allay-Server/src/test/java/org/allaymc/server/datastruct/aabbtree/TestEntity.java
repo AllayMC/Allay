@@ -4,6 +4,9 @@ import org.allaymc.api.world.service.HasAABB;
 import org.allaymc.api.world.service.HasLongId;
 import org.joml.primitives.AABBf;
 
+/**
+ * @author daoge_cmd
+ */
 public class TestEntity implements HasAABB, HasLongId {
 
     private final float x, y, z;

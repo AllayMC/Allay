@@ -18,8 +18,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2023/3/4
- *
  * @author daoge_cmd
  */
 class ComponentTest {

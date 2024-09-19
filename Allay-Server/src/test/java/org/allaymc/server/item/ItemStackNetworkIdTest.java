@@ -12,8 +12,6 @@ import static org.allaymc.api.item.type.ItemTypes.DIAMOND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Allay Project 2023/10/14
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

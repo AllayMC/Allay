@@ -14,8 +14,6 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Allay Project 2023/5/26
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

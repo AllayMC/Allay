@@ -20,8 +20,6 @@ import static org.allaymc.api.item.type.ItemTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2023/11/25
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

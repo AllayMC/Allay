@@ -6,8 +6,6 @@ import org.allaymc.server.component.interfaces.AttackComponent;
 import org.allaymc.server.component.interfaces.HealthComponent;
 
 /**
- * Allay Project 2023/3/4
- *
  * @author daoge_cmd
  */
 public class SimpleAttackComponent implements AttackComponent {

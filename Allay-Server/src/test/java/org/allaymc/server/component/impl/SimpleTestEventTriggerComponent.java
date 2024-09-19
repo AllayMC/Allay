@@ -7,8 +7,6 @@ import org.allaymc.server.component.event.TestEvent;
 import org.allaymc.server.component.interfaces.TestEventTriggerComponent;
 
 /**
- * Allay Project 2023/5/6
- *
  * @author daoge_cmd
  */
 public class SimpleTestEventTriggerComponent implements TestEventTriggerComponent {

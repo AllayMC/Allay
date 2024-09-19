@@ -11,8 +11,6 @@ import static org.allaymc.api.item.type.ItemTypes.PLANKS;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Allay Project 2023/11/25
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

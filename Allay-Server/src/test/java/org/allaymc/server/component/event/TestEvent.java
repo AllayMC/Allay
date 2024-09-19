@@ -6,8 +6,6 @@ import lombok.Setter;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
- * Allay Project 2023/5/6
- *
  * @author daoge_cmd
  */
 @Getter

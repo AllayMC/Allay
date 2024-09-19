@@ -8,8 +8,6 @@ import static org.allaymc.server.command.selector.ParseUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2024/5/18
- *
  * @author daoge_cmd
  */
 class ParseUtilsTest {

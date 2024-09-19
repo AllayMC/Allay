@@ -16,8 +16,6 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public class CommandTreeTest {

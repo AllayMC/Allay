@@ -4,8 +4,6 @@ import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.interfaces.TestInitArgComponent;
 
 /**
- * Allay Project 2023/4/21
- *
  * @author daoge_cmd
  */
 public class SimpleTestInitArgComponent implements TestInitArgComponent {

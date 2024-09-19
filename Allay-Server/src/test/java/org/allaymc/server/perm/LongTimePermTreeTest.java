@@ -10,8 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Allay Project 2024/1/27
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

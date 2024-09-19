@@ -9,8 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Allay Project 2023/10/27
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

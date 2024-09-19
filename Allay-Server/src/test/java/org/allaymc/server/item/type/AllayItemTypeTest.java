@@ -13,8 +13,6 @@ import static org.allaymc.api.item.type.ItemTypes.DIAMOND;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Allay Project 2023/5/20
- *
  * @author daoge_cmd
  */
 @ExtendWith(AllayTestExtension.class)

@@ -13,8 +13,6 @@ import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import java.util.Set;
 
 /**
- * Allay Project 2024/8/29
- *
  * @author daoge_cmd
  */
 public class TestChunkLoader implements ChunkLoader {
