@@ -5,6 +5,8 @@ import org.allaymc.api.i18n.I18n;
 import java.nio.file.Path;
 
 /**
+ * PluginContainer contains the related stuffs of a plugin.
+ *
  * @author daoge_cmd
  */
 public record PluginContainer(

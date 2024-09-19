@@ -5,11 +5,9 @@ import org.cloudburstmc.protocol.common.util.Preconditions;
 import java.util.List;
 
 /**
+ * PluginDescriptor contains the metadata of a plugin.
  *
  * @author daoge_cmd
- * <p>
- * If the plugin does not provide certain information,
- * it will populate an empty object/value instead of leaving it null
  */
 public interface PluginDescriptor {
 
