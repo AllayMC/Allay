@@ -30,8 +30,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
- * Allay Project 11/12/2023
- *
  * @author Cool_Loong
  */
 @Slf4j

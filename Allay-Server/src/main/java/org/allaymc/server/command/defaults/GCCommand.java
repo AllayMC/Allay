@@ -8,8 +8,6 @@ import static java.lang.Runtime.getRuntime;
 import static org.allaymc.api.utils.MathUtils.round;
 
 /**
- * Allay Project 2024/8/24
- *
  * @author daoge_cmd
  */
 public class GCCommand extends SimpleCommand {

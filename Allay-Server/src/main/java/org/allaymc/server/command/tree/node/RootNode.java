@@ -6,8 +6,6 @@ import org.allaymc.api.command.tree.CommandNode;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public class RootNode extends BaseNode {

@@ -13,8 +13,6 @@ import org.allaymc.server.world.chunk.AllayChunk;
 import java.util.Queue;
 
 /**
- * Allay Project 11/12/2023
- *
  * @author Cool_Loong
  */
 @Slf4j

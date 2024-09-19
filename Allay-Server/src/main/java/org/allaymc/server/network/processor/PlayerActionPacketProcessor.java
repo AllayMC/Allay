@@ -16,6 +16,9 @@ import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerActionPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
+/**
+ * @author daoge_cmd
+ */
 @Slf4j
 public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPacket> {
     @Override

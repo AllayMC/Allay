@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Allay Project 2023/10/28
- *
  * @author daoge_cmd
  */
 @Slf4j

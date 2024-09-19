@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- * Allay Project 2023/4/14
- *
  * @author JukeboxMC | daoge_cmd | CoolLoong
  */
 public final class Palette<V> {

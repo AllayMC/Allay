@@ -3,8 +3,6 @@ package org.allaymc.server.zlib;
 import java.io.IOException;
 
 /**
- * Allay Project 2023/6/6
- *
  * @author Cool_Loong
  */
 public interface ZlibProvider {

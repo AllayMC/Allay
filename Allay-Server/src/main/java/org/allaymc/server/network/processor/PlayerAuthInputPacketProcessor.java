@@ -28,8 +28,6 @@ import java.util.Set;
 import static org.cloudburstmc.protocol.bedrock.data.LevelEvent.*;
 
 /**
- * Allay Project 11/22/2023
- *
  * @author Cool_Loong
  */
 @Slf4j

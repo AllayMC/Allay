@@ -7,8 +7,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 public class FloatNode extends BaseNode {

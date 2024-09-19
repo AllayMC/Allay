@@ -17,8 +17,6 @@ import org.joml.Vector3fc;
 import java.util.List;
 
 /**
- * Allay Project 2024/1/5
- *
  * @author daoge_cmd
  */
 public class AllayCommandNodeFactory implements CommandNodeFactory {

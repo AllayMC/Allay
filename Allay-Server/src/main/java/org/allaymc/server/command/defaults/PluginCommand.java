@@ -7,8 +7,6 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 
 /**
- * Allay Project 2024/2/9
- *
  * @author daoge_cmd
  */
 public class PluginCommand extends SimpleCommand {

@@ -14,8 +14,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.DeathInfoPacket;
 
 /**
- * Allay Project 2024/1/19
- *
  * @author daoge_cmd
  */
 public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {

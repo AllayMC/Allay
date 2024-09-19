@@ -18,8 +18,6 @@ import java.util.Map;
 import static org.allaymc.api.container.FullContainerType.CREATED_OUTPUT;
 
 /**
- * Allay Project 2023/12/1
- *
  * @author daoge_cmd
  */
 @Slf4j

@@ -6,8 +6,6 @@ import org.allaymc.api.block.type.BlockType;
 import java.time.Duration;
 
 /**
- * Allay Project 2024/8/15
- *
  * @author Dhaiven
  */
 public class BlockWoodenButtonBaseComponentImpl extends BlockButtonBaseComponentImpl {

@@ -23,8 +23,6 @@ import java.util.function.Predicate;
 import static org.allaymc.api.command.selector.SelectorType.*;
 
 /**
- * Allay Project 2024/2/25
- *
  * @author daoge_cmd
  */
 public class AllayEntitySelectorAPI implements EntitySelectorAPI {

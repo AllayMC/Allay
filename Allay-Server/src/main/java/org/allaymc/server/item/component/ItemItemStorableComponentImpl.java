@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Allay Project 2024/6/21
- *
  * @author daoge_cmd
  */
 public class ItemItemStorableComponentImpl implements ItemItemStorableComponent {

@@ -12,8 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Allay Project 2024/2/9
- *
  * @author daoge_cmd
  */
 public class JsPlugin extends Plugin {

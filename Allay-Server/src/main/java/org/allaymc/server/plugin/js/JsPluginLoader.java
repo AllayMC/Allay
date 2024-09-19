@@ -26,8 +26,6 @@ import static org.allaymc.api.plugin.PluginContainer.createPluginContainer;
 import static org.allaymc.server.plugin.DefaultPluginSource.getOrCreateDataFolder;
 
 /**
- * Allay Project 2024/2/9
- *
  * @author daoge_cmd
  */
 @Slf4j

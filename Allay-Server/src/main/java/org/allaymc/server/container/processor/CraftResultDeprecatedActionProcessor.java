@@ -8,8 +8,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import java.util.Map;
 
 /**
- * Allay Project 2023/12/2
- *
  * @author daoge_cmd
  */
 public class CraftResultDeprecatedActionProcessor implements ContainerActionProcessor<CraftResultsDeprecatedAction> {

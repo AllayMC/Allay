@@ -8,8 +8,6 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 /**
- * Allay Project 2023/6/6
- *
  * @author Cool_Loong
  */
 public final class JavaZibThreadLocal implements ZlibProvider {

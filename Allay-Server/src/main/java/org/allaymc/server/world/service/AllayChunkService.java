@@ -36,8 +36,6 @@ import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStra
 import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
 
 /**
- * Allay Project 2023/7/1
- *
  * @author daoge_cmd
  */
 @Slf4j

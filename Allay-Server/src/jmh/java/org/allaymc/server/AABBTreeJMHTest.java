@@ -11,8 +11,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Allay Project 2023/7/30
- *
  * @author daoge_cmd
  */
 @State(Scope.Benchmark)

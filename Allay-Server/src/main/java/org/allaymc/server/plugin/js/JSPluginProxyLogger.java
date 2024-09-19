@@ -6,6 +6,9 @@ import org.graalvm.polyglot.proxy.ProxyExecutable;
 import org.graalvm.polyglot.proxy.ProxyObject;
 import org.slf4j.Logger;
 
+/**
+ * @author daoge_cmd
+ */
 public final class JSPluginProxyLogger implements ProxyObject {
     private static final Value NULL = Value.asValue(null);
 

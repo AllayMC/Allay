@@ -5,11 +5,8 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
 /**
- * Allay Project 2024/2/2
- *
  * @author daoge_cmd
  */
-// Add a 'I' prefix to prevent having same name to LoginPacketProcessor
 public abstract class ILoginPacketProcessor<T extends BedrockPacket> extends PacketProcessor<T> {
     @Override
     public void handleSync(EntityPlayer player, T packet, long receiveTime) {

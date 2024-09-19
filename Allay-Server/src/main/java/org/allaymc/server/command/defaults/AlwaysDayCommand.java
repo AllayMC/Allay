@@ -7,8 +7,6 @@ import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.gamerule.GameRule;
 
 /**
- * Allay Project 2024/8/27
- *
  * @author xingchentye
  */
 public class AlwaysDayCommand extends SimpleCommand {

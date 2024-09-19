@@ -8,7 +8,6 @@ import org.joml.Vector3f;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Allay Project 07/07/2024
  *
  * @author IWareQ, PowerNukkitX
  */

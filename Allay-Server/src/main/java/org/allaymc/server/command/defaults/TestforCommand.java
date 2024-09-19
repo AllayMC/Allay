@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2024/2/25
- *
  * @author daoge_cmd
  */
 public class TestforCommand extends SimpleCommand {

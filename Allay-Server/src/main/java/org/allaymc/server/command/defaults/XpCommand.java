@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2024/8/27
- *
  * @author xingchentye
  */
 public class XpCommand extends SimpleCommand {

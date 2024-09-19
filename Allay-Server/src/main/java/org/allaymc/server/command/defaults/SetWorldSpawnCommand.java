@@ -9,8 +9,6 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 /**
- * Allay Project 2024/8/24
- *
  * @author daoge_cmd
  */
 public class SetWorldSpawnCommand extends SimpleCommand {

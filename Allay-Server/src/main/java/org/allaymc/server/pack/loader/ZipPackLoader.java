@@ -14,8 +14,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * Allay Project 28/01/2024
- *
  * @author IWareQ, Cloudburst Server
  */
 public class ZipPackLoader implements PackLoader {

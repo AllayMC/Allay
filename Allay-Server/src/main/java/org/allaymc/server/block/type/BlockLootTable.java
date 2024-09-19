@@ -32,8 +32,6 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * Allay Project 2024/7/17
- *
  * @author daoge_cmd
  */
 @Slf4j

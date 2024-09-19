@@ -13,8 +13,6 @@ import static org.allaymc.api.container.FullContainerType.CREATED_OUTPUT;
 import static org.allaymc.server.container.processor.CraftRecipeActionProcessor.RECIPE_DATA_KEY;
 
 /**
- * Allay Project 2023/12/2
- *
  * @author daoge_cmd
  */
 @Slf4j

@@ -34,8 +34,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Allay Project 8/22/2023
- *
  * @author Cool_Loong
  */
 @Slf4j

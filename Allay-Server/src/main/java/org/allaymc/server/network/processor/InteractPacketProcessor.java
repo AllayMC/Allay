@@ -6,8 +6,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.InteractPacket;
 
 /**
- * Allay Project 11/22/2023
- *
  * @author Cool_Loong
  */
 public class InteractPacketProcessor extends PacketProcessor<InteractPacket> {

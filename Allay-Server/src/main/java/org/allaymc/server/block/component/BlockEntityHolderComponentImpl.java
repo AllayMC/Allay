@@ -16,8 +16,6 @@ import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.annotation.Identifier;
 
 /**
- * Allay Project 2023/9/15
- *
  * @author daoge_cmd
  */
 @Slf4j

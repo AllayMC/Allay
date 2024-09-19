@@ -3,8 +3,6 @@ package org.allaymc.server.network.processor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 
 /**
- * Allay Project 2024/2/2
- *
  * @author daoge_cmd
  */
 public interface PacketProcessorHolder {

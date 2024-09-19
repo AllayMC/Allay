@@ -7,8 +7,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.TextPacket;
 
 /**
- * Allay Project 11/22/2023
- *
  * @author Cool_Loong
  */
 public class TextPacketProcessor extends PacketProcessor<TextPacket> {

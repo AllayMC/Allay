@@ -34,8 +34,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2024/5/19
- *
  * @author daoge_cmd
  */
 public final class Dashboard {

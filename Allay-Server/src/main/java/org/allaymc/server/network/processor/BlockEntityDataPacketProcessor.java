@@ -5,8 +5,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
 
 /**
- * Allay Project 2024/8/16
- *
  * @author daoge_cmd
  */
 public class BlockEntityDataPacketProcessor extends PacketProcessor<BlockEntityDataPacket> {

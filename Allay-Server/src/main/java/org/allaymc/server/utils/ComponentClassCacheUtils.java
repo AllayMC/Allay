@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
+/**
+ * @author Cool_Loong
+ */
 @Slf4j
 @UtilityClass
 @SuppressWarnings("unchecked")

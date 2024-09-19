@@ -10,8 +10,6 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Allay Project 2023/4/28
- *
  * @author daoge_cmd
  */
 public class AllayScheduler implements Scheduler {

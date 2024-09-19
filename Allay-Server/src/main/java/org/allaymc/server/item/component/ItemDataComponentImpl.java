@@ -7,8 +7,6 @@ import org.allaymc.api.item.component.data.ItemDataComponent;
 import org.allaymc.server.component.annotation.Identifier;
 
 /**
- * Allay Project 2023/5/20
- *
  * @author daoge_cmd
  */
 @AllArgsConstructor

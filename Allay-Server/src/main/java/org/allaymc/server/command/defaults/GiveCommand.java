@@ -11,8 +11,6 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2024/7/8
- *
  * @author daoge_cmd
  */
 public class GiveCommand extends SimpleCommand {

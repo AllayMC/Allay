@@ -20,8 +20,6 @@ import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
- * Allay Project 2023/9/15
- *
  * @author daoge_cmd
  */
 public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {

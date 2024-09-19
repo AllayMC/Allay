@@ -6,8 +6,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.world.WorldData;
 
 /**
- * Allay Project 2024/3/23
- *
  * @author daoge_cmd
  */
 public class TimeCommand extends SimpleCommand {

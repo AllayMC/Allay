@@ -7,8 +7,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.utils.TextFormat;
 
 /**
- * Allay Project 2024/2/9
- *
  * @author daoge_cmd
  */
 public class TpsCommand extends SimpleCommand {

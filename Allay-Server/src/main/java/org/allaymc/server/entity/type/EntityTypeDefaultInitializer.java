@@ -5,8 +5,7 @@ import org.allaymc.api.entity.interfaces.*;
 import org.allaymc.api.entity.type.EntityTypes;
 
 /**
- * @author daoge_cmd <br>
- * Allay Project <br>
+ * @author daoge_cmd
  */
 public final class EntityTypeDefaultInitializer {
     public static void initAgent() {

@@ -18,8 +18,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
 
 /**
- * Allay Project 2024/8/3
- *
  * @author daoge_cmd
  */
 public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponentImpl implements EntityPlayerAttributeComponent {

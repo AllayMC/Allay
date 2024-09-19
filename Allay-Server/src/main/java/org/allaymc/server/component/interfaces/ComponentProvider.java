@@ -16,8 +16,6 @@ import java.util.function.Supplier;
 import static java.lang.reflect.Modifier.isStatic;
 
 /**
- * Allay Project 2023/4/15
- *
  * @author daoge_cmd
  */
 public interface ComponentProvider<T extends Component> {

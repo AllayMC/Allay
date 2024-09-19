@@ -5,8 +5,6 @@ import org.allaymc.api.pack.PackLoader;
 import org.allaymc.api.pack.PackManifest;
 
 /**
- * Allay Project 28/01/2024
- *
  * @author IWareQ
  */
 public class ResourcePack extends Pack {

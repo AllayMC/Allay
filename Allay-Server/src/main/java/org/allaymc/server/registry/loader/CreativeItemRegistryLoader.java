@@ -21,8 +21,6 @@ import java.io.BufferedInputStream;
 import java.util.Objects;
 
 /**
- * Allay Project 2024/7/20
- *
  * @author daoge_cmd
  */
 @Slf4j

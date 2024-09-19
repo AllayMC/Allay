@@ -19,8 +19,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.BUTTON_PRES
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
 
 /**
- * Allay Project 2024/8/15
- *
  * @author Dhaiven
  */
 public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {

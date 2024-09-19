@@ -7,8 +7,6 @@ import org.allaymc.server.component.annotation.OnInitFinish;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
- * Allay Project 2023/12/6
- *
  * @author daoge_cmd
  */
 public class ItemAirBaseComponentImpl extends ItemBaseComponentImpl {

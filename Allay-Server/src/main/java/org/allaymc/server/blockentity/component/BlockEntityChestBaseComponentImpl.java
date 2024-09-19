@@ -8,8 +8,6 @@ import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
 /**
- * Allay Project 2023/12/6
- *
  * @author daoge_cmd
  */
 public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentImpl {

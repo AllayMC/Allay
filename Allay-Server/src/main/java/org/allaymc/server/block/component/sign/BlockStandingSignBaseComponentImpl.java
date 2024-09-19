@@ -12,8 +12,6 @@ import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import java.util.Set;
 
 /**
- * Allay Project 2024/8/15
- *
  * @author daoge_cmd
  */
 public class BlockStandingSignBaseComponentImpl extends BlockBaseComponentImpl {

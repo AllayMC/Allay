@@ -6,8 +6,6 @@ import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.item.recipe.FurnaceRecipe;
 
 /**
- * Allay Project 2024/8/12
- *
  * @author daoge_cmd
  */
 public class BlockEntitySmokerFurnaceBaseComponentImpl extends BlockEntityFurnaceBaseComponentImpl {

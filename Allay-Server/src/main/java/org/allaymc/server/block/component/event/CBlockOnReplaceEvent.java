@@ -8,8 +8,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
- * Allay Project 2023/9/15
- *
  * @author daoge_cmd
  */
 @Getter

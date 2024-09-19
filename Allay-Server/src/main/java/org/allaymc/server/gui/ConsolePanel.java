@@ -37,8 +37,6 @@ import java.io.Serial;
 
 /**
  * This class was based on this <a href="https://stackoverflow.com/a/6899478/5299903">code</a>
- * <p>
- * Allay Project 2024/5/25
  *
  * @author daoge_cmd
  */

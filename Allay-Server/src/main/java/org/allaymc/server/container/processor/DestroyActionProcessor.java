@@ -17,8 +17,6 @@ import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
- * Allay Project 2023/7/28
- *
  * @author daoge_cmd
  */
 @Slf4j

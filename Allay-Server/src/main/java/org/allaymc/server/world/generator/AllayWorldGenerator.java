@@ -32,8 +32,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.Consumer;
 
 /**
- * Allay Project 2023/7/1
- *
  * @author daoge_cmd
  */
 @Slf4j

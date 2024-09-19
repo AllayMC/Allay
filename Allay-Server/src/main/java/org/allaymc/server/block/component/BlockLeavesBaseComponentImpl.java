@@ -11,8 +11,6 @@ import org.allaymc.api.utils.Utils;
 import java.util.Set;
 
 /**
- * Allay Project 2024/7/10
- *
  * @author daoge_cmd
  */
 public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {

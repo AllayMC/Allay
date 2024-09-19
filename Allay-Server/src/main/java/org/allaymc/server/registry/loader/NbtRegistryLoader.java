@@ -33,6 +33,8 @@ import org.cloudburstmc.nbt.NbtUtils;
 
 /**
  * Loads NBT data from the given resource path.
+ *
+ * @author daoge_cmd
  */
 public class NbtRegistryLoader implements RegistryLoader<String, NbtMap> {
 

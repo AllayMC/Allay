@@ -26,8 +26,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Allay Project 2023/9/15
- *
  * @author daoge_cmd
  */
 public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityType<T> {

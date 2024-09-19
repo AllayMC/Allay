@@ -6,8 +6,6 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 
 /**
- * Allay Project 2024/2/13
- *
  * @author daoge_cmd
  */
 public class VersionCommand extends SimpleCommand {

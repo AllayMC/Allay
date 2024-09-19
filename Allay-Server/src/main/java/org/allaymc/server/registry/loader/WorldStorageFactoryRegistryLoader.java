@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Allay Project 2024/7/20
- *
  * @author daoge_cmd
  */
 public class WorldStorageFactoryRegistryLoader implements RegistryLoader<Void, Map<String, Function<Path, WorldStorage>>> {

@@ -4,8 +4,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.TakeAction;
 
 /**
- * Allay Project 2023/7/28
- *
  * @author daoge_cmd
  */
 public class TakeActionProcessor extends TransferItemActionProcessor<TakeAction> {

@@ -8,8 +8,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Allay Project 2024/1/27
- *
  * @author daoge_cmd
  */
 public class AllayCachedPlayerStorage implements PlayerStorage {

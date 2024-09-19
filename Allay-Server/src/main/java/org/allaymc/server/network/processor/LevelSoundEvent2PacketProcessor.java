@@ -7,8 +7,6 @@ import org.cloudburstmc.protocol.bedrock.packet.LevelSoundEvent2Packet;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
 /**
- * Allay Project 2024/6/10
- *
  * @author daoge_cmd
  */
 public class LevelSoundEvent2PacketProcessor extends PacketProcessor<LevelSoundEvent2Packet> {

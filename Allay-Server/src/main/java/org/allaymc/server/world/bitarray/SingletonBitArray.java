@@ -3,8 +3,6 @@ package org.allaymc.server.world.bitarray;
 import io.netty.buffer.ByteBuf;
 
 /**
- * Allay Project 2023/4/14
- *
  * @author JukeboxMC | daoge_cmd
  */
 public record SingletonBitArray() implements BitArray {

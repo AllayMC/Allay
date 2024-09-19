@@ -10,8 +10,6 @@ import org.allaymc.server.item.component.event.CItemBreakBlockEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 /**
- * Allay Project 2024/6/23
- *
  * @author daoge_cmd
  */
 public class ItemSwordComponentImpl implements ItemSwordComponent {

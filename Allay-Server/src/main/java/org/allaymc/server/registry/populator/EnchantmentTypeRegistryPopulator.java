@@ -6,8 +6,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 
 /**
- * Allay Project 2024/7/20
- *
  * @author daoge_cmd
  */
 @Slf4j

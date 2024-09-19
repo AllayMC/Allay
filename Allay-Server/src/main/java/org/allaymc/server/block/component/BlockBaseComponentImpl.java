@@ -31,8 +31,6 @@ import org.joml.Vector3ic;
 import java.util.Set;
 
 /**
- * Allay Project 2023/4/8
- *
  * @author daoge_cmd
  */
 public class BlockBaseComponentImpl implements BlockBaseComponent {

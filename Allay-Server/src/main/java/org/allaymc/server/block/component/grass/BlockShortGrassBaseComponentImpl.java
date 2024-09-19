@@ -9,8 +9,6 @@ import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
- * Allay Project 2024/6/18
- *
  * @author daoge_cmd
  */
 public class BlockShortGrassBaseComponentImpl extends BlockBaseComponentImpl {

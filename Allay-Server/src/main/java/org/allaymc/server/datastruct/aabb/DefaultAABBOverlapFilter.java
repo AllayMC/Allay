@@ -5,8 +5,6 @@ import org.allaymc.api.world.service.HasAABB;
 import org.allaymc.api.world.service.HasLongId;
 
 /**
- * Allay Project 2023/7/30
- *
  * @author daoge_cmd
  */
 public class DefaultAABBOverlapFilter<T extends HasAABB & HasLongId> implements AABBOverlapFilter<T> {

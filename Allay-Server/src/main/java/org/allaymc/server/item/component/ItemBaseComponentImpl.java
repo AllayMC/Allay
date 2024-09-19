@@ -45,8 +45,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.allaymc.api.item.ItemHelper.*;
 
 /**
- * Allay Project 2023/5/19
- *
  * @author daoge_cmd
  */
 @Slf4j

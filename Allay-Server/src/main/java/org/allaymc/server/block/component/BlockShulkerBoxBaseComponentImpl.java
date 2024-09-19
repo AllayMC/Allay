@@ -15,8 +15,6 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import java.util.Set;
 
 /**
- * Allay Project 2024/6/20
- *
  * @author daoge_cmd
  */
 public class BlockShulkerBoxBaseComponentImpl extends BlockBaseComponentImpl {

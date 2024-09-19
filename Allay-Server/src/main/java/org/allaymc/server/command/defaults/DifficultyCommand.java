@@ -7,8 +7,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.world.Difficulty;
 
 /**
- * Allay Project 13/07/2024
- *
  * @author IWareQ
  */
 public class DifficultyCommand extends SimpleCommand {

@@ -7,8 +7,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import java.util.EnumMap;
 
 /**
- * Allay Project 11/22/2023
- *
  * @author Cool_Loong
  */
 public class AllayPacketProcessorHolder implements PacketProcessorHolder {

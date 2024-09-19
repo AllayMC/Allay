@@ -7,8 +7,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
 
 /**
- * Allay Project 2024/2/9
- *
  * @author daoge_cmd
  */
 public class KickCommand extends SimpleCommand {

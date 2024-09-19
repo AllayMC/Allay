@@ -21,8 +21,6 @@ import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
 
 /**
- * Allay Project 2024/8/16
- *
  * @author daoge_cmd
  */
 @Getter

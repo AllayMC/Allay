@@ -9,8 +9,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import java.util.ArrayList;
 
 /**
- * Allay Project 2024/1/5
- *
  * @author daoge_cmd
  */
 public class RemainArgNode extends BaseNode {

@@ -25,9 +25,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 /**
- * A util for encrypting pack
- * <p>
- * Allay Project 2024/2/7
+ * A util for encrypting pack.
  *
  * @author daoge_cmd
  */

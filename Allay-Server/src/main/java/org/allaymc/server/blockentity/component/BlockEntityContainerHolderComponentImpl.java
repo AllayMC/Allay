@@ -24,8 +24,6 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
- * Allay Project 2023/9/16
- *
  * @author daoge_cmd
  */
 public class BlockEntityContainerHolderComponentImpl implements BlockEntityContainerHolderComponent {

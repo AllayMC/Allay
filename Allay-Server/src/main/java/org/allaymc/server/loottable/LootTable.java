@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2024/7/15
- *
  * @author daoge_cmd
  */
 public record LootTable<CONTEXT_TYPE extends Context>(

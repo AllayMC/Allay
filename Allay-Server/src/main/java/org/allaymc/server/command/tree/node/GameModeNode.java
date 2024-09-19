@@ -6,8 +6,6 @@ import static org.allaymc.api.command.data.CommonEnum.GAMEMODE_ENUM;
 import static org.allaymc.api.command.data.CommonEnum.getGameTypeFromString;
 
 /**
- * Allay Project 2024/2/13
- *
  * @author daoge_cmd
  */
 public class GameModeNode extends EnumNode {

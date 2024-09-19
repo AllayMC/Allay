@@ -6,8 +6,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 
 /**
- * Allay Project 2024/8/28
- *
  * @author daoge_cmd
  */
 public class BlockSlimeBaseComponentImpl extends BlockBaseComponentImpl {

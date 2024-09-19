@@ -21,8 +21,6 @@ import java.util.function.Consumer;
 import static org.allaymc.api.utils.AllayStringUtils.splitCommandArgs;
 
 /**
- * Allay Project 2024/7/20
- *
  * @author daoge_cmd
  */
 @Slf4j

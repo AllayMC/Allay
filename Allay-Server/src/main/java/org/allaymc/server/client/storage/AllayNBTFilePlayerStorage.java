@@ -12,8 +12,6 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 /**
- * Allay Project 2024/1/27
- *
  * @author daoge_cmd
  */
 @Slf4j

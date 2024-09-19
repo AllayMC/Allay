@@ -4,8 +4,6 @@ import org.allaymc.api.command.tree.CommandNode;
 import org.allaymc.api.world.Difficulty;
 
 /**
- * Allay Project 13/07/2024
- *
  * @author IWareQ
  */
 public class DifficultyNode extends EnumNode {

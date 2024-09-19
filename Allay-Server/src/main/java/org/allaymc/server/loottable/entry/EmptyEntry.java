@@ -9,8 +9,6 @@ import org.allaymc.server.loottable.context.Context;
 import java.util.Set;
 
 /**
- * Allay Project 2024/7/17
- *
  * @author daoge_cmd
  */
 public class EmptyEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_TYPE> {

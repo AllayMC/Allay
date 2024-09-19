@@ -11,8 +11,6 @@ import org.cloudburstmc.protocol.bedrock.packet.ResourcePackClientResponsePacket
 import java.util.UUID;
 
 /**
- * Allay Project 2024/2/2
- *
  * @author daoge_cmd
  */
 public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProcessor<ResourcePackClientResponsePacket> {

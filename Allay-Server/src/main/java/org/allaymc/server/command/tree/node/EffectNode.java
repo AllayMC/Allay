@@ -8,8 +8,6 @@ import org.allaymc.api.utils.Identifier;
 import static org.allaymc.api.utils.Identifier.DEFAULT_NAMESPACE;
 
 /**
- * Allay Project 23/06/2024
- *
  * @author IWareQ
  */
 public class EffectNode extends EnumNode {

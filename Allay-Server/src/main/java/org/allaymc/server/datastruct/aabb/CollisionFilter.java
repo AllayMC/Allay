@@ -6,8 +6,6 @@ import org.allaymc.api.world.service.HasLongId;
 import java.util.function.BiPredicate;
 
 /**
- * Allay Project 2023/7/30
- *
  * @author daoge_cmd
  */
 @FunctionalInterface

@@ -17,8 +17,6 @@ import org.joml.Vector3ic;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Allay Project 2024/1/27
- *
  * @author daoge_cmd
  */
 public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements ItemArmorBaseComponent {

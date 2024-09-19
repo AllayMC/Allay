@@ -47,8 +47,6 @@ import java.time.Duration;
 import java.util.function.Function;
 
 /**
- * Allay Project 2024/3/9
- *
  * @author daoge_cmd
  */
 @SuppressWarnings("unused")

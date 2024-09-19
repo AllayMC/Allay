@@ -8,8 +8,6 @@ import org.allaymc.api.utils.Identifier;
 import static org.allaymc.api.utils.Identifier.DEFAULT_NAMESPACE;
 
 /**
- * Allay Project 2024/6/15
- *
  * @author daoge_cmd
  */
 public class EnchantmentNode extends EnumNode {

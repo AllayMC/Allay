@@ -11,8 +11,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import java.util.*;
 
 /**
- * Allay Project 2023/12/29
- *
  * @author daoge_cmd
  */
 @Slf4j

@@ -12,8 +12,6 @@ import org.allaymc.server.entity.component.player.*;
 import static org.allaymc.api.entity.component.attribute.EntityAttributeComponent.basicEntityAttributes;
 
 /**
- * Allay Project 2024/3/9
- *
  * @author daoge_cmd
  */
 @SuppressWarnings("unused")

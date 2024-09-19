@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import static org.allaymc.api.block.type.BlockTypes.*;
 
 /**
- * Allay Project 2023/7/8
- *
  * @author daoge_cmd
  */
 public class FlatNoiser implements Noiser {

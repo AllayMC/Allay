@@ -18,8 +18,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Allay Project 2023/3/25
- *
  * @author daoge_cmd
  */
 public class BlockStateDataComponentImpl implements BlockStateDataComponent {

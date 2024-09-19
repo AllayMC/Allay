@@ -13,6 +13,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * @author daoge_cmd
+ */
 public class C extends CachedFilterSelectorArgument {
     @Override
     public Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {

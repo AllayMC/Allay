@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Allay Project 2023/12/15
- *
  * @author daoge_cmd
  */
 public class AllayI18nLoader implements I18nLoader {

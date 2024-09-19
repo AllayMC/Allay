@@ -23,8 +23,6 @@ import java.util.Set;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
 
 /**
- * Allay Project 2024/8/16
- *
  * @author Dhaiven
  */
 public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {

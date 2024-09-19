@@ -7,8 +7,6 @@ import org.cloudburstmc.protocol.bedrock.packet.EmotePacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
 /**
- * Allay Project 2024/8/27
- *
  * @author daoge_cmd
  */
 @Slf4j

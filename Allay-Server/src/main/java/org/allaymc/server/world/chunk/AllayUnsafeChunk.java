@@ -33,6 +33,9 @@ import java.util.stream.Collectors;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
+/**
+ * @author Cool_Loong | daoge_cmd
+ */
 @NotThreadSafe
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class AllayUnsafeChunk implements UnsafeChunk {

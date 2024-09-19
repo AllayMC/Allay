@@ -3,8 +3,6 @@ package org.allaymc.server.utils;
 import org.allaymc.api.world.DimensionInfo;
 
 /**
- * Allay Project 8/22/2023
- *
  * @author Cool_Loong | Cloudburst Server
  */
 public enum LevelDBKeyUtils {

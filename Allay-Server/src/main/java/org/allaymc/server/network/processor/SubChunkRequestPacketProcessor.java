@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Allay Project 11/22/2023
- *
  * @author Cool_Loong
  */
 @Slf4j

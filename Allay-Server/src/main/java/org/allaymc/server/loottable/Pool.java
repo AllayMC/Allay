@@ -9,8 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Allay Project 2024/7/15
- *
  * @author daoge_cmd
  */
 public record Pool<CONTEXT_TYPE extends Context>(

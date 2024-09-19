@@ -40,8 +40,6 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
 import static org.allaymc.api.block.type.BlockTypes.UNKNOWN;
 
 /**
- * Allay Project 8/23/2023
- *
  * @author Cool_Loong
  */
 @Slf4j

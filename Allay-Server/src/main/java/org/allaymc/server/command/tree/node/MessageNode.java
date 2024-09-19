@@ -7,8 +7,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
 /**
- * Allay Project 2024/1/5
- *
  * @author daoge_cmd
  */
 public class MessageNode extends BaseNode {

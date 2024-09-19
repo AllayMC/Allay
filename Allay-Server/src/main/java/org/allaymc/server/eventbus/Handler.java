@@ -10,8 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public class Handler {

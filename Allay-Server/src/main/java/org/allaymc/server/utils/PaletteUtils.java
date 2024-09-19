@@ -10,8 +10,6 @@ import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
 import java.io.IOException;
 
 /**
- * Allay Project 11/12/2023
- *
  * @author Cool_Loong
  */
 public class PaletteUtils {

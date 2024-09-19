@@ -6,8 +6,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.SettingsCommandPacket;
 
 /**
- * Allay Project 2024/1/28
- *
  * @author daoge_cmd
  */
 public class SettingsCommandPacketProcessor extends PacketProcessor<SettingsCommandPacket> {

@@ -8,9 +8,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 
 /**
- * Suitable for two-block high plants that can drop wheat seeds
- * <p>
- * Allay Project 2024/6/18
+ * Suitable for two-block high plants that can drop wheat seeds.
  *
  * @author daoge_cmd
  */

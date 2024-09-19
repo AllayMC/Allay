@@ -18,8 +18,6 @@ import java.util.Objects;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
- * Allay Project 11/22/2023
- *
  * @author Cool_Loong
  */
 @Slf4j

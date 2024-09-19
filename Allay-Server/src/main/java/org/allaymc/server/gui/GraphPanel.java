@@ -35,8 +35,6 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Allay Project 2024/5/24
- *
  * @author daoge_cmd
  */
 public final class GraphPanel extends JPanel {

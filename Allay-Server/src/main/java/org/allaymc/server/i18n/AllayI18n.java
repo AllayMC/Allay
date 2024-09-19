@@ -15,8 +15,6 @@ import static org.allaymc.api.i18n.I18n.KeyInfo.EMPTY;
 import static org.allaymc.api.i18n.I18n.isValidKeyCharacter;
 
 /**
- * Allay Project 2023/12/15
- *
  * @author daoge_cmd
  */
 @Slf4j

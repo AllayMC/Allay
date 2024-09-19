@@ -3,6 +3,7 @@ package org.allaymc.server.datastruct.collections.nb;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.ints.AbstractIntSet;
 import it.unimi.dsi.fastutil.ints.IntIterator;
+import org.allaymc.server.utils.Utils;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
@@ -21,7 +22,9 @@ import java.util.function.Function;
 /**
  * A lock-free alternate implementation of {@link java.util.concurrent.ConcurrentHashMap}
  * with <strong>primitive int keys</strong>, better scaling properties and
- * generally lower costs.  The use of {@code int} keys allows for faster
+ * generally lower costs.
+ * <p>
+ * The use of {@code int} keys allows for faster
  * compares and lower memory costs.  The Map provides identical correctness
  * properties as ConcurrentHashMap.  All operations are non-blocking and
  * multi-thread safe, including all update operations.  {@link
@@ -73,7 +76,6 @@ import java.util.function.Function;
  * <p> Like {@link Hashtable} but unlike {@link HashMap}, this class
  * does <em>not</em> allow <tt>null</tt> to be used as a value.
  * <p>
- * Allay Project 2023/7/8
  *
  * @param <TypeV> the type of mapped values
  *
@@ -228,7 +230,7 @@ public class Int2ObjectNonBlockingMap<TypeV>
     }
 
     private void initialize(final int initial_sz) {
-        RangeUtil.checkPositiveOrZero(initial_sz, "initial_sz");
+        Utils.assertPositiveOrZero(initial_sz, "initial_sz");
         int i;                      // Convert to next largest power-of-2
         for (i = MIN_SIZE_LOG; (1 << i) < initial_sz; i++) {/*empty*/}
         _chm = new CHM(this, new ConcurrentAutoIntTable(), i);

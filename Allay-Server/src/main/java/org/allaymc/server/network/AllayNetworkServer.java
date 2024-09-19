@@ -38,8 +38,6 @@ import java.net.InetSocketAddress;
 import static org.allaymc.api.network.ProtocolInfo.PACKET_CODEC;
 
 /**
- * Allay Project 2023/6/23
- *
  * @author daoge_cmd
  */
 @Slf4j

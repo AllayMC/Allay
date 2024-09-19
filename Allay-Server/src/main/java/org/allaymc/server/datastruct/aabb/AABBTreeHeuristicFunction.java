@@ -4,8 +4,6 @@ import org.allaymc.api.world.service.HasAABB;
 import org.joml.primitives.AABBf;
 
 /**
- * Allay Project 2023/7/30
- *
  * @author daoge_cmd
  */
 @FunctionalInterface

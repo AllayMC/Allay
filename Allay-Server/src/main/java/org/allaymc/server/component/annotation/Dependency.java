@@ -11,11 +11,8 @@ import java.lang.annotation.Target;
  * This annotation is used to declare other components that one component depends on.
  * <p>
  * This annotation needs to be marked on a field of the component's implementation class.
- * <p>
  * When building an object, the injector checks the field list of each component implementation class instance and checks whether the fields are marked by this annotation.
- * <p>
  * If so, the injector will try to find the corresponding component instance through inheritance relationships (if identifier is empty) or through identifier (if identifier is not empty), and inject it into the field.
- * <p>
  * The scope of dependency lookup is limited by the list of components provided to the injector, and if the dependency is not found, will throw {@link ComponentInjectException}
  *
  * @author daoge_cmd

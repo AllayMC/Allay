@@ -7,8 +7,6 @@ import org.reflections.Reflections;
 import static org.reflections.scanners.Scanners.SubTypes;
 
 /**
- * Allay Project 2023/5/20
- *
  * @author daoge_cmd
  */
 @UtilityClass

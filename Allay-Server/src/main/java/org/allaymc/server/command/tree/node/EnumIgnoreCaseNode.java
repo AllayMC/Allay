@@ -3,8 +3,6 @@ package org.allaymc.server.command.tree.node;
 import org.allaymc.api.command.tree.CommandNode;
 
 /**
- * Allay Project 2024/1/28
- *
  * @author daoge_cmd
  */
 public class EnumIgnoreCaseNode extends EnumNode {

@@ -11,8 +11,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Represents a running task that contains some run presets for this task
- * <p>
- * Allay Project 2023/3/12
  *
  * @author daoge_cmd
  */

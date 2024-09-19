@@ -47,6 +47,9 @@ import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.HashMap;
 
+/**
+ * @author daoge_cmd
+ */
 @Slf4j
 public final class Allay {
 

@@ -1,8 +1,6 @@
 package org.allaymc.server.item.type;
 
 /**
- * Allay Project 2023/4/15
- *
  * @author daoge_cmd
  */
 public class ItemTypeBuildException extends RuntimeException {

@@ -33,8 +33,6 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
- * Allay Project 2024/5/25
- *
  * @author daoge_cmd
  */
 @Getter

@@ -6,8 +6,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.Map;
 
 /**
- * Allay Project 2023/7/26
- *
  * @author daoge_cmd
  */
 public interface ContainerActionProcessorHolder {

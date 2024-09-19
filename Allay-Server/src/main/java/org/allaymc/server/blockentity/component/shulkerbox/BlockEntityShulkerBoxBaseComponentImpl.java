@@ -12,8 +12,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
 /**
- * Allay Project 2024/06/18
- *
  * @author IWareQ
  */
 public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseComponentImpl {

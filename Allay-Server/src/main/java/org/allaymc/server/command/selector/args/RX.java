@@ -10,6 +10,9 @@ import org.allaymc.server.command.selector.ParseUtils;
 
 import java.util.function.Predicate;
 
+/**
+ * @author daoge_cmd
+ */
 public class RX extends CachedSimpleSelectorArgument {
     @Override
     protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {

@@ -1,8 +1,6 @@
 package org.allaymc.server.perm.tree;
 
 /**
- * Allay Project 2023/12/30
- *
  * @author daoge_cmd
  */
 public class AllayRootPermNode extends AllayPermNode {

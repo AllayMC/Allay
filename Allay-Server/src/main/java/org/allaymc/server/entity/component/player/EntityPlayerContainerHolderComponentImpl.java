@@ -8,8 +8,6 @@ import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.entity.component.EntityContainerHolderComponentImpl;
 
 /**
- * Allay Project 2023/12/2
- *
  * @author daoge_cmd
  */
 public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHolderComponentImpl implements EntityPlayerContainerHolderComponent {

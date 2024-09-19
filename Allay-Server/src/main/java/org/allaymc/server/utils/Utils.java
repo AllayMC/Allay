@@ -6,8 +6,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Allay Project 2024/7/19
- *
  * @author daoge_cmd
  */
 @UtilityClass
@@ -18,5 +16,12 @@ public class Utils {
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static int assertPositiveOrZero(int n, String name) {
+        if (n < 0) {
+            throw new IllegalArgumentException(name + ": " + n + " (expected: >= 0)");
+        }
+        return n;
     }
 }

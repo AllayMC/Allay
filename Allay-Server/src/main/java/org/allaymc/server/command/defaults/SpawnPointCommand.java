@@ -13,8 +13,6 @@ import org.joml.Vector3f;
 import java.util.List;
 
 /**
- * Allay Project 2024/8/25
- *
  * @author daoge_cmd
  */
 public class SpawnPointCommand extends SimpleCommand {

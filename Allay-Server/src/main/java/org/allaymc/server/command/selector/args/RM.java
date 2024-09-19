@@ -10,6 +10,9 @@ import org.allaymc.server.command.selector.ParseUtils;
 
 import java.util.function.Predicate;
 
+/**
+ * @author daoge_cmd
+ */
 public class RM implements SelectorArgument {
     @Override
     public Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3f basePos, String... arguments) throws SelectorSyntaxException {

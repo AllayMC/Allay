@@ -43,8 +43,6 @@ import java.util.stream.Collectors;
 import static org.allaymc.server.component.interfaces.ComponentProvider.findComponentIdentifierInCertainClass;
 
 /**
- * Allay Project 2023/4/15
- *
  * @author daoge_cmd | Cool_Loong
  */
 @Getter

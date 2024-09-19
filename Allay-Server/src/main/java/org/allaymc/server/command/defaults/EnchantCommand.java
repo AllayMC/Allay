@@ -11,8 +11,6 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import java.util.Collection;
 
 /**
- * Allay Project 2024/6/15
- *
  * @author daoge_cmd
  */
 public class EnchantCommand extends SimpleCommand {

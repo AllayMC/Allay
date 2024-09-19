@@ -8,8 +8,6 @@ import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
 /**
- * Allay Project 2024/7/7
- *
  * @author daoge_cmd
  */
 @Slf4j

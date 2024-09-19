@@ -7,8 +7,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 
 /**
- * Allay Project 2024/8/12
- *
  * @author daoge_cmd
  */
 @Setter

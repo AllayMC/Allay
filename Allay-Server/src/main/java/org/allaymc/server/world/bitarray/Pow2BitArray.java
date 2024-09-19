@@ -6,8 +6,6 @@ import org.cloudburstmc.math.GenericMath;
 import java.util.Arrays;
 
 /**
- * Allay Project 2023/4/14
- *
  * @author JukeboxMC | daoge_cmd
  */
 public record Pow2BitArray(BitArrayVersion version, int size, int[] words) implements BitArray {

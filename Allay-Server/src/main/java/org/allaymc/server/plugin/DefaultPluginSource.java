@@ -9,8 +9,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2024/2/8
- *
  * @author daoge_cmd
  */
 public class DefaultPluginSource implements PluginSource {

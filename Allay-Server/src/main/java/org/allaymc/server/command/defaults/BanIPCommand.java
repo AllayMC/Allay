@@ -6,8 +6,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public class BanIPCommand extends SimpleCommand {

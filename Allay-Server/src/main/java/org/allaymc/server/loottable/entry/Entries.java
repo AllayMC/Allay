@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Allay Project 2024/7/15
- *
  * @author daoge_cmd
  */
 public record Entries<CONTEXT_TYPE extends Context>(List<Entry<CONTEXT_TYPE>> entries) {

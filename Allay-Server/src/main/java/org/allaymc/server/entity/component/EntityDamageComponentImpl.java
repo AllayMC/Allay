@@ -25,8 +25,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
 /**
- * Allay Project 2024/1/12
- *
  * @author daoge_cmd
  */
 public class EntityDamageComponentImpl implements EntityDamageComponent {

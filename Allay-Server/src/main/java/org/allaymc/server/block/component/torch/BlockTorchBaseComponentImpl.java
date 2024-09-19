@@ -16,8 +16,6 @@ import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 25/06/2024
- *
  * @author daoge_cmd
  */
 public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {

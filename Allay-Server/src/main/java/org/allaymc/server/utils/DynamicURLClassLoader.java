@@ -8,6 +8,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+/**
+ * @author Cool_Loong
+ */
 @Slf4j
 public class DynamicURLClassLoader extends URLClassLoader {
     public DynamicURLClassLoader(ClassLoader parent) {

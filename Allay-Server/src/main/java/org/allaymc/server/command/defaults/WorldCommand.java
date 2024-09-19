@@ -10,12 +10,9 @@ import org.allaymc.api.utils.TextFormat;
 import java.util.stream.Collectors;
 
 /**
- * TODO: I18N
- * <p>
- * Allay Project 2024/2/24
- *
  * @author daoge_cmd
  */
+// TODO: I18n
 public class WorldCommand extends SimpleCommand {
     public WorldCommand() {
         super("world", "world command");

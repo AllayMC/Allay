@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Allay Project 2024/1/6
- *
  * @author daoge_cmd
  */
 public class GameModeCommand extends SimpleCommand {

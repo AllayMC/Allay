@@ -8,8 +8,6 @@ import org.allaymc.api.server.Server;
 import java.util.StringJoiner;
 
 /**
- * Allay Project 2024/8/3
- *
  * @author daoge_cmd
  */
 public class ListCommand extends SimpleCommand {

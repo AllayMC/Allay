@@ -7,8 +7,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.SetDefaultGameTypePacket;
 
 /**
- * Allay 27/01/2024
- *
  * @author IWareQ
  */
 public class SetDefaultGameTypePacketProcessor extends PacketProcessor<SetDefaultGameTypePacket> {

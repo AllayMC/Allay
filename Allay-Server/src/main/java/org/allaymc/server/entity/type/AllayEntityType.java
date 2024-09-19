@@ -28,8 +28,6 @@ import java.util.function.Supplier;
 import static org.allaymc.server.component.interfaces.ComponentProvider.toMap;
 
 /**
- * Allay Project 2023/5/20
- *
  * @author daoge_cmd
  */
 public class AllayEntityType<T extends Entity> implements EntityType<T> {

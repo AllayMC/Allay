@@ -12,8 +12,6 @@ import org.allaymc.server.item.component.event.CItemUsedEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 /**
- * Allay Project 07/07/2024
- *
  * @author IWareQ
  */
 @Getter

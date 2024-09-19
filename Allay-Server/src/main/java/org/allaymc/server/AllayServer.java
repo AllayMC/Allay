@@ -66,6 +66,9 @@ import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * @author daoge_cmd
+ */
 @Slf4j
 public final class AllayServer implements Server {
 

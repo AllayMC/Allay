@@ -8,8 +8,6 @@ import org.cloudburstmc.protocol.bedrock.packet.ServerSettingsResponsePacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 public class ServerSettingsRequestProcessor extends PacketProcessor<ServerSettingsRequestPacket> {

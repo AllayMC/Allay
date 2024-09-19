@@ -10,8 +10,6 @@ import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 27/06/2024
- *
  * @author IWareQ
  */
 @Slf4j

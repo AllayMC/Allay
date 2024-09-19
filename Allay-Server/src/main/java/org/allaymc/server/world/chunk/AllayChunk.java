@@ -30,8 +30,6 @@ import java.util.concurrent.locks.StampedLock;
 import java.util.function.Predicate;
 
 /**
- * Allay Project 5/30/2023
- *
  * @author Cool_Loong
  */
 @ThreadSafe

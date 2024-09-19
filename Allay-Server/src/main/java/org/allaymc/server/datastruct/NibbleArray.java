@@ -8,8 +8,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkElementIndex;
 
 /**
- * Allay Project 2023/5/30
- *
  * @author Cool_Loong
  */
 public final class NibbleArray implements Cloneable {

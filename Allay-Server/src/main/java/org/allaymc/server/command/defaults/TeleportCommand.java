@@ -10,8 +10,6 @@ import org.joml.Vector3f;
 import java.util.List;
 
 /**
- * Allay Project 2024/2/15
- *
  * @author daoge_cmd
  */
 public class TeleportCommand extends SimpleCommand {

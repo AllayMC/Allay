@@ -15,8 +15,6 @@ import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
 /**
- * Allay Project 2024/8/12
- *
  * @author daoge_cmd
  */
 @Getter

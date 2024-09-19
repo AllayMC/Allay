@@ -6,8 +6,6 @@ import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.math.location.Location3fc;
 
 /**
- * Allay Project 2024/8/26
- *
  * @author daoge_cmd
  */
 @AllArgsConstructor

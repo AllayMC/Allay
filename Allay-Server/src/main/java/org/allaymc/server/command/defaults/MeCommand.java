@@ -7,8 +7,6 @@ import org.allaymc.api.server.Server;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 
 /**
- * Allay Project 2023/12/30
- *
  * @author daoge_cmd
  */
 public class MeCommand extends SimpleCommand {

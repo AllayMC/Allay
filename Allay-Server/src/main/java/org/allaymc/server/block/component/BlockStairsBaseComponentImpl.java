@@ -10,8 +10,6 @@ import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 2023/9/29
- *
  * @author daoge_cmd
  */
 public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {

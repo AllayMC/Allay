@@ -28,8 +28,6 @@ import static org.allaymc.api.container.FullContainerType.ARMOR;
 import static org.allaymc.api.container.FullContainerType.CRAFTING_GRID;
 
 /**
- * Allay Project 2023/9/23
- *
  * @author daoge_cmd
  */
 public class EntityPlayerContainerViewerComponentImpl implements EntityContainerViewerComponent {

@@ -9,8 +9,6 @@ import org.allaymc.api.i18n.TrKeys;
 import java.util.Collection;
 
 /**
- * Allay Project 23/06/2024
- *
  * @author IWareQ
  */
 public class EffectCommand extends SimpleCommand {

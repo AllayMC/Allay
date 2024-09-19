@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * Allay Project 2024/2/8
- *
  * @author daoge_cmd
  */
 public class JarPluginClassLoader extends URLClassLoader {

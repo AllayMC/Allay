@@ -15,8 +15,6 @@ import java.util.Map;
 import static org.allaymc.api.item.interfaces.ItemAirStack.AIR_STACK;
 
 /**
- * Allay Project 2023/9/23
- *
  * @author daoge_cmd
  */
 @Slf4j

@@ -15,6 +15,9 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author daoge_cmd
+ */
 @RequiredArgsConstructor
 public class AllayBlockUpdateService implements BlockUpdateService {
     public static final int MAX_NU_PER_TICK = 65535;

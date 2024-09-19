@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 @RequiredArgsConstructor

@@ -5,8 +5,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.response.ItemS
 import java.util.List;
 
 /**
- * Allay Project 2023/11/4
- *
  * @author daoge_cmd
  */
 public record ActionResponse(

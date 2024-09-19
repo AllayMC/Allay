@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Allay Project 2024/7/15
- *
  * @author daoge_cmd
  */
 public class ItemEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_TYPE> {

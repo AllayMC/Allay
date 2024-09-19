@@ -8,8 +8,6 @@ import org.joml.Vector3ic;
 import static org.allaymc.api.block.type.BlockTypes.CAULDRON;
 
 /**
- * Allay Project 2023/12/6
- *
  * @author daoge_cmd
  */
 public class ItemCauldronBaseComponentImpl extends ItemBaseComponentImpl {

@@ -8,8 +8,6 @@ import org.allaymc.api.client.storage.PlayerStorage;
 import java.util.UUID;
 
 /**
- * Allay Project 2024/2/2
- *
  * @author daoge_cmd
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

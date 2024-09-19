@@ -7,8 +7,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
- * Allay Project 2024/7/7
- *
  * @author daoge_cmd
  */
 @Getter

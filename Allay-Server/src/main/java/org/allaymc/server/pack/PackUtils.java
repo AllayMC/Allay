@@ -5,8 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 
 /**
- * Allay Project 2024/2/7
- *
  * @author daoge_cmd
  */
 public class PackUtils {

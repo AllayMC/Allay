@@ -6,6 +6,9 @@ import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.CommandRequestPacket;
 
+/**
+ * @author IWareQ
+ */
 public class CommandRequestPacketProcessor extends PacketProcessor<CommandRequestPacket> {
     @Override
     public void handleSync(EntityPlayer player, CommandRequestPacket packet, long receiveTime) {

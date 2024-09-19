@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Allay Project 2023/7/26
- *
  * @author daoge_cmd
  */
 public interface ContainerActionProcessor<T extends ItemStackRequestAction> {

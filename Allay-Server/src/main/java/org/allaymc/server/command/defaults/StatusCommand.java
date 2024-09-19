@@ -24,8 +24,6 @@ import java.util.concurrent.TimeUnit;
 import static org.allaymc.api.utils.MathUtils.round;
 
 /**
- * Allay Project 2024/2/13
- *
  * @author daoge_cmd
  */
 @Slf4j

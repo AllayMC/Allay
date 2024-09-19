@@ -8,8 +8,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
 /**
- * Allay Project 2024/8/15
- *
  * @author Dhaiven
  */
 public class BlockWoodBaseComponentImpl extends BlockBaseComponentImpl implements BlockWoodBaseComponent {

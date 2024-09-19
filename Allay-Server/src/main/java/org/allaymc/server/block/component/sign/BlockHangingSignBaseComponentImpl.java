@@ -13,8 +13,6 @@ import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 2024/8/17
- *
  * @author daoge_cmd
  */
 public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {

@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+/**
+ * @author daoge_cmd
+ */
 public class Type extends CachedSimpleSelectorArgument {
 
     @Override

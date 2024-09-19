@@ -10,8 +10,6 @@ import org.cloudburstmc.protocol.bedrock.packet.ResourcePackChunkRequestPacket;
 import static org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType.RESOURCE_PACK_CHUNK_REQUEST;
 
 /**
- * Allay Project 2024/2/2
- *
  * @author daoge_cmd
  */
 public class ResourcePackChunkRequestPacketProcessor extends ILoginPacketProcessor<ResourcePackChunkRequestPacket> {

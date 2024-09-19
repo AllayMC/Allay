@@ -15,8 +15,6 @@ import org.cloudburstmc.protocol.bedrock.util.EncryptionUtils;
 import java.util.regex.Pattern;
 
 /**
- * Allay Project 2024/2/2
- *
  * @author daoge_cmd
  */
 @Slf4j

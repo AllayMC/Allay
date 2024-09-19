@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * args like dx,dy,dz.
+ * ScopeArgument is the base class for args like {@link DX}, {@link DY} and {@link DZ}.
  */
 public abstract class ScopeArgument implements SelectorArgument {
     @Override

@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Allay Project 2023/7/15
- *
  * @author daoge_cmd
  */
 public class EntityContainerHolderComponentImpl extends BaseContainerHolder implements EntityContainerHolderComponent {

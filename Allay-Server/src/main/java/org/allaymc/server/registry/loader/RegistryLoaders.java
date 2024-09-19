@@ -32,6 +32,8 @@ import java.util.function.Supplier;
 
 /**
  * Holds common {@link RegistryLoader}s or utility methods surrounding them.
+ *
+ * @author daoge_cmd
  */
 @UtilityClass
 public class RegistryLoaders {

@@ -17,8 +17,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.GROWTH;
 import static org.allaymc.api.block.type.BlockTypes.FARMLAND;
 
 /**
- * Allay Project 2024/8/15
- *
  * @author Dhaiven
  */
 // TODO

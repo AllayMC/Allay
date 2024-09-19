@@ -8,8 +8,6 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
- * Allay Project 2024/6/23
- *
  * @author daoge_cmd
  */
 @Getter

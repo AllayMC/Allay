@@ -6,8 +6,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
 
 /**
- * Allay Project 2024/8/27
- *
  * @author xingchentye
  */
 public class DeOpCommand extends SimpleCommand {

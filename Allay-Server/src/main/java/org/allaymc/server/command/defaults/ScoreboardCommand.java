@@ -22,8 +22,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Allay Project 2024/2/28
- *
  * @author daoge_cmd
  */
 public class ScoreboardCommand extends SimpleCommand {

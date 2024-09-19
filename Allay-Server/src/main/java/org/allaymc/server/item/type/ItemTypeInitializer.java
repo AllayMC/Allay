@@ -30,8 +30,6 @@ import org.allaymc.server.item.component.spawnegg.ItemTropicalFishSpawnEggBaseCo
 import org.allaymc.server.item.component.tool.*;
 
 /**
- * Allay Project 2024/3/9
- *
  * @author daoge_cmd
  */
 @SuppressWarnings("unused")

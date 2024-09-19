@@ -66,8 +66,6 @@ import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
 import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 
 /**
- * Allay Project 2023/10/14
- *
  * @author daoge_cmd
  */
 @Slf4j

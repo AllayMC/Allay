@@ -29,8 +29,6 @@ import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
 import org.joml.Vector3f;
 
 /**
- * Allay Project 2024/8/11
- *
  * @author daoge_cmd
  */
 @Slf4j

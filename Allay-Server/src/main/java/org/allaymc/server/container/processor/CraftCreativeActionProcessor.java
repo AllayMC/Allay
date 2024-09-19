@@ -12,8 +12,6 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action
 import java.util.Map;
 
 /**
- * Allay Project 2023/7/26
- *
  * @author daoge_cmd
  */
 @Slf4j

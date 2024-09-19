@@ -16,8 +16,6 @@ import static org.allaymc.api.perm.tree.PermTree.PermChangeType.ADD;
 import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;
 
 /**
- * Allay Project 2023/12/30
- *
  * @author daoge_cmd
  */
 @Getter

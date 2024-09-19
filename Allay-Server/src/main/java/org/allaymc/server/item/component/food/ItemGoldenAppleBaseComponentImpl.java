@@ -4,8 +4,6 @@ import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 
 /**
- * Allay Project 07/07/2024
- *
  * @author IWareQ
  */
 public class ItemGoldenAppleBaseComponentImpl extends ItemFoodComponentImpl {

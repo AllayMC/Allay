@@ -8,8 +8,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ClientToServerHandshakePacket;
 
 /**
- * Allay Project 2024/2/2
- *
  * @author daoge_cmd
  */
 @Slf4j

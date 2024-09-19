@@ -20,8 +20,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 27/06/2024
- *
  * @author IWareQ
  */
 public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl implements BlockFallableBaseComponent {

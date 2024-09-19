@@ -14,9 +14,7 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
 import static org.allaymc.api.world.chunk.UnsafeChunk.index;
 
 /**
- * Allay Project 2023/5/30
- *
- * @author Cool_Loong
+ * @author Cool_Loong | daoge_cmd
  */
 @NotThreadSafe
 public record ChunkSection(

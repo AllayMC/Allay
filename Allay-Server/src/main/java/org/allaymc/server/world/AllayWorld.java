@@ -24,8 +24,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Allay Project 2023/7/1
- *
  * @author daoge_cmd
  */
 @Slf4j

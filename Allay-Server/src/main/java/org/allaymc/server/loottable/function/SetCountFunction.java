@@ -8,8 +8,6 @@ import org.allaymc.api.item.ItemStack;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Allay Project 2024/7/15
- *
  * @author daoge_cmd
  */
 @AllArgsConstructor

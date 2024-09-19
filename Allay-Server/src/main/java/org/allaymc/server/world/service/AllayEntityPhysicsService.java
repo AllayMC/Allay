@@ -37,8 +37,6 @@ import static org.allaymc.api.utils.MathUtils.isInRange;
 
 /**
  * Special thanks to <a href="https://www.mcpk.wiki">MCPK Wiki</a>
- * <p>
- * Allay Project 2023/8/5
  *
  * @author daoge_cmd
  */

@@ -3,7 +3,6 @@ package org.allaymc.server.world.bitarray;
 import org.cloudburstmc.math.GenericMath;
 
 /**
- * Allay Project 2023/4/14
  *
  * @author JukeboxMC | daoge_cmd
  */

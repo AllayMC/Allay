@@ -8,8 +8,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 
 /**
- * Allay Project 2023/12/6
- *
  * @author daoge_cmd
  */
 public class BlockCraftingTableBaseComponentImpl extends BlockBaseComponentImpl {

@@ -13,8 +13,6 @@ import static org.allaymc.api.command.data.CommonEnum.BOOL_GAMERULE_ENUM;
 import static org.allaymc.api.command.data.CommonEnum.INT_GAMERULE_ENUM;
 
 /**
- * Allay Project 2024/1/19
- *
  * @author daoge_cmd
  */
 public class GameRuleCommand extends SimpleCommand {

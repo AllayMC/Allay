@@ -7,8 +7,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 
 /**
- * Allay Project 2024/8/15
- *
  * @author Dhaiven
  */
 public class BlockOldWoodBaseComponentImpl extends BlockWoodBaseComponentImpl {

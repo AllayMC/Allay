@@ -32,9 +32,7 @@ import java.util.*;
 import static net.bytebuddy.matcher.ElementMatchers.*;
 
 /**
- * The default injector which use byte-buddy
- * <p>
- * Allay Project 2023/3/4
+ * The default injector which use byte-buddy.
  *
  * @author daoge_cmd
  */

@@ -13,8 +13,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;
 
 /**
- * Allay Project 11/22/2023
- *
  * @author Cool_Loong
  */
 @Slf4j

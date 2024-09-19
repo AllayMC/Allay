@@ -64,8 +64,6 @@ import static org.allaymc.api.utils.AllayNbtUtils.readVector3f;
 import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Flag.*;
 
 /**
- * Allay Project 2023/5/26
- *
  * @author daoge_cmd
  */
 @Slf4j

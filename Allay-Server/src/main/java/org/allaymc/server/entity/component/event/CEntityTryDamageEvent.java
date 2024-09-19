@@ -7,8 +7,6 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
- * Allay Project 2024/8/12
- *
  * @author daoge_cmd
  */
 @AllArgsConstructor

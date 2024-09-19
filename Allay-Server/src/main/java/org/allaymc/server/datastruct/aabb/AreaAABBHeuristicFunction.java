@@ -6,8 +6,6 @@ import org.joml.primitives.AABBf;
 import static org.allaymc.server.datastruct.aabb.AABBUtils.getArea;
 
 /**
- * Allay Project 2023/7/30
- *
  * @author daoge_cmd
  */
 public class AreaAABBHeuristicFunction<T extends HasAABB> implements AABBTreeHeuristicFunction<T> {

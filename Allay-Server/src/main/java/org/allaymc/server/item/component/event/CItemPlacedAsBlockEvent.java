@@ -9,8 +9,6 @@ import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
 /**
- * Allay Project 2024/6/21
- *
  * @author daoge_cmd
  */
 @Getter

@@ -8,8 +8,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.joml.Vector3f;
 
 /**
- * Allay Project 2024/2/15
- *
  * @author daoge_cmd
  */
 public class PosNode extends BaseNode {

@@ -10,8 +10,6 @@ import org.openjdk.jmh.annotations.*;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Allay Project 2023/6/1
- *
  * @author Cool_Loong
  */
 @State(Scope.Benchmark)

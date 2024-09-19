@@ -18,8 +18,6 @@ import org.joml.primitives.AABBfc;
 import static org.allaymc.api.item.ItemHelper.fromNBT;
 
 /**
- * Allay Project 2023/9/23
- *
  * @author daoge_cmd
  */
 @Setter

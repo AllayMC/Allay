@@ -10,8 +10,6 @@ import org.allaymc.server.utils.ReflectionUtils;
 import org.allaymc.server.utils.Utils;
 
 /**
- * Allay Project 2024/7/20
- *
  * @author daoge_cmd
  */
 @Slf4j

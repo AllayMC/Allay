@@ -17,8 +17,6 @@ import org.allaymc.server.blockentity.component.sign.BlockEntityHangingSignBaseC
 import org.allaymc.server.blockentity.component.sign.BlockEntitySignBaseComponentImpl;
 
 /**
- * Allay Project 2024/3/9
- *
  * @author daoge_cmd
  */
 @UtilityClass

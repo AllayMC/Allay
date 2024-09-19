@@ -10,8 +10,6 @@ import org.joml.Vector3ic;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.FACING_DIRECTION;
 
 /**
- * Allay Project 2024/8/15
- *
  * @author Dhaiven
  */
 public class BlockRodBaseComponentImpl extends BlockBaseComponentImpl {

@@ -1,8 +1,6 @@
 package org.allaymc.server.utils;
 
 /**
- * Allay Project 2024/5/18
- *
  * @author daoge_cmd
  */
 public class AllayComputeThread extends Thread {

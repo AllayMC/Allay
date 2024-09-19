@@ -18,8 +18,6 @@ import org.joml.primitives.AABBfc;
 import java.util.Objects;
 
 /**
- * Allay Project 27/06/2024
- *
  * @author IWareQ
  */
 @Getter

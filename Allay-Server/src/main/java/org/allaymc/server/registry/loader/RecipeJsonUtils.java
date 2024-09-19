@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Allay Project 2024/8/11
- *
  * @author daoge_cmd
  */
 @UtilityClass

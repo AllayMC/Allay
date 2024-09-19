@@ -10,8 +10,6 @@ import java.util.EnumMap;
 import java.util.Map;
 
 /**
- * Allay Project 2023/7/26
- *
  * @author daoge_cmd
  */
 public class SimpleContainerActionProcessorHolder implements ContainerActionProcessorHolder {

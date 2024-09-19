@@ -75,8 +75,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCORE;
 
 /**
- * Allay Project 2023/9/23
- *
  * @author daoge_cmd
  */
 @Slf4j

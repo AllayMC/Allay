@@ -5,7 +5,7 @@ import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.server.Server;
 
 /**
- * Some commonly used static functions about target selector parsing
+ * ParseUtils provides some commonly used static functions about target selector parsing.
  */
 @UtilityClass
 public class ParseUtils {

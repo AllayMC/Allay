@@ -23,8 +23,6 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Allay Project 2023/7/8
- *
  * @author daoge_cmd
  */
 @Slf4j

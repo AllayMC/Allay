@@ -9,6 +9,9 @@ import org.allaymc.server.command.selector.ParseUtils;
 
 import java.util.function.Predicate;
 
+/**
+ * @author daoge_cmd
+ */
 public class X extends CoordinateArgument {
     @Override
     public Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3f basePos, String... arguments) throws SelectorSyntaxException {

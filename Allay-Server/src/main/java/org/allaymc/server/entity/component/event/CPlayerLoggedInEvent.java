@@ -5,8 +5,6 @@ import lombok.NoArgsConstructor;
 import org.allaymc.api.eventbus.event.Event;
 
 /**
- * Allay Project 2023/10/14
- *
  * @author daoge_cmd
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

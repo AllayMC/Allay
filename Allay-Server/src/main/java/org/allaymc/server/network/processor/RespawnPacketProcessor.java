@@ -6,6 +6,9 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.RespawnPacket;
 import org.cloudburstmc.protocol.common.PacketSignal;
 
+/**
+ * @author IWareQ
+ */
 public class RespawnPacketProcessor extends PacketProcessor<RespawnPacket> {
 
     @Override

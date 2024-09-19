@@ -4,8 +4,6 @@ import lombok.Getter;
 import org.allaymc.server.plugin.SimplePluginDescriptor;
 
 /**
- * Allay Project 2024/2/9
- *
  * @author daoge_cmd
  */
 @SuppressWarnings("FieldMayBeFinal")

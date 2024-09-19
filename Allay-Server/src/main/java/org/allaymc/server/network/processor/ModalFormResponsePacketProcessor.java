@@ -7,8 +7,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ModalFormResponsePacket;
 
 /**
- * Allay Project 2024/2/26
- *
  * @author daoge_cmd
  */
 @Slf4j

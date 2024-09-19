@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.function.Predicate;
 
 /**
- * Allay Project 2024/8/31
- *
  * @author daoge_cmd
  */
 public class Scores extends CachedSimpleSelectorArgument {

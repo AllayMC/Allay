@@ -7,8 +7,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import java.util.List;
 
 /**
- * Allay Project 2024/2/25
- *
  * @author daoge_cmd
  */
 public class PlayerTargetNode extends TargetNode {

@@ -9,8 +9,6 @@ import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 
 /**
- * Allay Project 2023/6/30
- *
  * @author daoge_cmd
  */
 @Slf4j

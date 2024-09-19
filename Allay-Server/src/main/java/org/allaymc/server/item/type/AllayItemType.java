@@ -30,8 +30,6 @@ import java.util.function.Supplier;
 import static org.allaymc.server.component.interfaces.ComponentProvider.toMap;
 
 /**
- * Allay Project 2023/5/19
- *
  * @author daoge_cmd
  */
 public final class AllayItemType<T extends ItemStack> implements ItemType<T> {

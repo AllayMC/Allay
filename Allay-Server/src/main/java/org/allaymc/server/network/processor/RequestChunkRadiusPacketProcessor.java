@@ -5,8 +5,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.RequestChunkRadiusPacket;
 
 /**
- * Allay Project 11/22/2023
- *
  * @author Cool_Loong
  */
 public class RequestChunkRadiusPacketProcessor extends PacketProcessor<RequestChunkRadiusPacket> {

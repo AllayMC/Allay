@@ -13,8 +13,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import java.util.LinkedHashMap;
 
 /**
- * Allay Project 2024/7/8
- *
  * @author daoge_cmd
  */
 public class ItemTypeNode extends BaseNode {

@@ -10,16 +10,15 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 
 /**
  * An auto-resizing table of {@code longs}, supporting low-contention CAS
- * operations.  Updates are done with CAS's to no particular table element.
+ * operations.
+ * <p>
+ * Updates are done with CAS's to no particular table element.
  * The intent is to support highly scalable counters, r/w locks, and other
  * structures where the updates are associative, loss-free (no-brainer), and
  * otherwise happen at such a high volume that the cache contention for
  * CAS'ing a single word is unacceptable.
- * <p>
- * Allay Project 2023/7/8
  *
  * @author SuperIceCN
- * @since 1.5
  */
 @ApiStatus.Experimental
 public class ConcurrentAutoLongTable implements Serializable {

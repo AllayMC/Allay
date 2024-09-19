@@ -8,8 +8,6 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
 
 /**
- * Allay Project 2023/12/6
- *
  * @author daoge_cmd
  */
 public class BlockEntityBarrelBaseComponentImpl extends BlockEntityBaseComponentImpl {

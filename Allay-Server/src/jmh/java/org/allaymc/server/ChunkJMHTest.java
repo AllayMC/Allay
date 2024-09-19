@@ -13,6 +13,9 @@ import java.util.concurrent.TimeUnit;
 import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 import static org.allaymc.api.block.type.BlockTypes.STONE;
 
+/**
+ * @author Cool_Loong
+ */
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.Throughput)
 @Warmup(iterations = 3)
