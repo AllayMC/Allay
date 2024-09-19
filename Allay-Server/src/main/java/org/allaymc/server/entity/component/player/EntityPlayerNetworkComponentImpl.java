@@ -235,9 +235,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
 
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
-        server.addToPlayerList(thisPlayer);
+        ((AllayServer)server).addToPlayerList(thisPlayer);
         if (server.getOnlinePlayerCount() > 1) {
-            server.sendFullPlayerListInfoTo(thisPlayer);
+            ((AllayServer)server).sendFullPlayerListInfoTo(thisPlayer);
         }
 
         thisPlayer.sendAttributesToClient();

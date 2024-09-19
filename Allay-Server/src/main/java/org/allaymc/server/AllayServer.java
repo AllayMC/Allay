@@ -20,6 +20,7 @@ import org.allaymc.api.eventbus.event.server.ServerStopEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistAddPlayerEvent;
 import org.allaymc.api.eventbus.event.server.WhitelistRemovePlayerEvent;
 import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
@@ -36,6 +37,7 @@ import org.allaymc.api.server.Whitelist;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
@@ -73,6 +75,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class AllayServer implements Server {
 
     private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
+    public static final String BAN_INFO_FILE_NAME = "ban-info.yml";
+    public static final String WHITELIST_FILE_NAME = "whitelist.yml";
     private static volatile AllayServer INSTANCE;
 
     private final boolean debug = Server.SETTINGS.genericSettings().debug();
@@ -95,8 +99,8 @@ public final class AllayServer implements Server {
     private final ExecutorService virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
     @Getter
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
-    private final BanInfo banInfo = ConfigManager.create(BanInfo.class, Server.createConfigInitializer("ban-info.yml"));
-    private final Whitelist whitelist = ConfigManager.create(Whitelist.class, Server.createConfigInitializer("whitelist.yml"));
+    private final BanInfo banInfo = ConfigManager.create(BanInfo.class, Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
+    private final Whitelist whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
 
     @Getter
     private final PluginManager pluginManager = new AllayPluginManager();
@@ -140,7 +144,6 @@ public final class AllayServer implements Server {
     }
 
     @SneakyThrows
-    @Override
     public void start(long initialTime) {
         var ctx = (LoggerContext) LogManager.getContext(false);
         var log4jConfig = ctx.getConfiguration();
@@ -191,11 +194,6 @@ public final class AllayServer implements Server {
         gameLoop.startLoop();
     }
 
-    @Override
-    public void disconnectAllPlayers() {
-        players.values().forEach(player -> player.disconnect(TrKeys.M_DISCONNECT_CLOSED));
-    }
-
     private void tick(long currentTick) {
         this.scheduler.tick();
         playerStorage.tick(currentTick);
@@ -243,11 +241,6 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public int getOnlinePlayerCount() {
-        return players.size();
-    }
-
-    @Override
     @UnmodifiableView
     public Map<UUID, EntityPlayer> getOnlinePlayers() {
         return Collections.unmodifiableMap(players);
@@ -276,16 +269,12 @@ public final class AllayServer implements Server {
             player.getDimension().removePlayer(player);
             playerStorage.savePlayerData(player);
 
-            var pk = new PlayerListPacket();
-            pk.setAction(PlayerListPacket.Action.REMOVE);
-            pk.getEntries().add(playerListEntryMap.remove(player.getUUID()));
-            broadcastPacket(pk);
+            removeFromPlayerList(player);
         }
 
         networkServer.setPlayerCount(players.size());
     }
 
-    @Override
     public void addToPlayerList(EntityPlayer player) {
         addToPlayerList(
                 player.getLoginData().getUuid(),
@@ -297,8 +286,7 @@ public final class AllayServer implements Server {
         );
     }
 
-    @Override
-    public void addToPlayerList(UUID uuid, long entityId, String name, DeviceInfo deviceInfo, String xuid, Skin skin) {
+    private void addToPlayerList(UUID uuid, long entityId, String name, DeviceInfo deviceInfo, String xuid, Skin skin) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.ADD);
 
@@ -317,32 +305,28 @@ public final class AllayServer implements Server {
         broadcastPacket(playerListPacket);
     }
 
-    @Override
     public void removeFromPlayerList(EntityPlayer player) {
+        removeFromPlayerList(player.getLoginData().getUuid());
+    }
+
+    private void removeFromPlayerList(UUID uuid) {
         var playerListPacket = new PlayerListPacket();
         playerListPacket.setAction(PlayerListPacket.Action.REMOVE);
-        playerListPacket.getEntries().add(new PlayerListPacket.Entry(player.getLoginData().getUuid()));
+        playerListPacket.getEntries().add(playerListEntryMap.remove(uuid));
         broadcastPacket(playerListPacket);
-
-        playerListEntryMap.remove(player.getLoginData().getUuid());
     }
 
-    @Override
-    public void removeFromPlayerList(UUID uuid) {
+    public void sendFullPlayerListInfoTo(EntityPlayer player) {
         var playerListPacket = new PlayerListPacket();
-        playerListPacket.setAction(PlayerListPacket.Action.REMOVE);
-        playerListPacket.getEntries().add(new PlayerListPacket.Entry(uuid));
-        broadcastPacket(playerListPacket);
-
-        playerListEntryMap.remove(uuid);
+        playerListPacket.setAction(PlayerListPacket.Action.ADD);
+        playerListEntryMap.forEach((uuid, entry) -> {
+            if (uuid != player.getUUID()) {
+                playerListPacket.getEntries().add(entry);
+            }
+        });
+        player.sendPacket(playerListPacket);
     }
 
-    @Override
-    public Map<UUID, PlayerListPacket.Entry> getPlayerListEntryMap() {
-        return Collections.unmodifiableMap(this.playerListEntryMap);
-    }
-
-    @Override
     public void onSkinUpdate(EntityPlayer player) {
         this.playerListEntryMap.get(player.getUUID()).setSkin(player.getSkin().toNetwork());
     }
@@ -353,13 +337,13 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void broadcastTr(String tr) {
+    public void broadcastTr(@MayContainTrKey String tr) {
         getOnlinePlayers().values().forEach(player -> player.sendTr(tr));
         sendTr(tr);
     }
 
     @Override
-    public void broadcastTr(String tr, String... args) {
+    public void broadcastTr(@MayContainTrKey String tr, String... args) {
         getOnlinePlayers().values().forEach(player -> player.sendTr(tr, args));
         sendTr(tr, args);
     }
@@ -514,7 +498,7 @@ public final class AllayServer implements Server {
 
     @Override
     public Location3fc getCmdExecuteLocation() {
-        return new Location3f(0, 0, 0, getDefaultWorld().getDimension(DimensionInfo.OVERWORLD.dimensionId()));
+        return new Location3f(0, 0, 0, getWorldPool().getDefaultWorld().getDimension(DimensionInfo.OVERWORLD.dimensionId()));
     }
 
     @Override

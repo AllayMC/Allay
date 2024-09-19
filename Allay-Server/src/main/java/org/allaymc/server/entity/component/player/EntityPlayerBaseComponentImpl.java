@@ -42,6 +42,7 @@ import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.server.AllayServer;
 import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Ignore;
@@ -391,7 +392,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.skin = skin;
         var server = Server.getInstance();
         server.broadcastPacket(createSkinPacket(skin));
-        server.onSkinUpdate(thisPlayer);
+        ((AllayServer)server).onSkinUpdate(thisPlayer);
     }
 
     protected PlayerSkinPacket createSkinPacket(Skin skin) {

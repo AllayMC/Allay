@@ -62,14 +62,14 @@ public class WhitelistCommand extends SimpleCommand {
                 .root()
                 .key("enable")
                 .exec(context -> {
-                    Server.getInstance().setWhitelist(true);
+                    Server.getInstance().setWhitelistStatus(true);
                     context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_ENABLED);
                     return context.success();
                 })
                 .root()
                 .key("disable")
                 .exec(context -> {
-                    Server.getInstance().setWhitelist(false);
+                    Server.getInstance().setWhitelistStatus(false);
                     context.addOutput(TrKeys.M_COMMANDS_ALLOWLIST_DISABLED);
                     return context.success();
                 });

@@ -10,6 +10,8 @@ import lombok.experimental.Accessors;
 import java.util.Set;
 
 /**
+ * BanInfo is used to store the banned player and ip list.
+ *
  * @author daoge_cmd
  */
 @Getter

@@ -20,10 +20,10 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * TODO: refactor
- *
  * @author MagicDroidX (Nukkit) | daoge_cmd
  */
+// TODO: refactor
+// TODO: add javadoc
 @Slf4j
 public class Config {
 
@@ -112,6 +112,7 @@ public class Config {
         return this.load(file, type, new ConfigSection());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public boolean load(String file, int type, ConfigSection defaultMap) {
         this.correct = true;
         this.type = type;

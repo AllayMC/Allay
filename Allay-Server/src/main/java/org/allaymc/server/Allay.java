@@ -87,7 +87,7 @@ public final class Allay {
         }
 
         try {
-            Server.getInstance().start(initialTime);
+            ((AllayServer) Server.getInstance()).start(initialTime);
         } catch (Throwable t) {
             log.error("Error while starting the server!", t);
             // The server may not be initialized correctly

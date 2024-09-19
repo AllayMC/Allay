@@ -8,6 +8,7 @@ import org.allaymc.api.eventbus.event.world.WorldLoadEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldPool;
@@ -94,13 +95,7 @@ public final class AllayWorldPool implements WorldPool {
     }
 
     private void loadWorldConfig() {
-        worldConfig = Objects.requireNonNull(ConfigManager.create(WorldSettings.class, it -> {
-            it.withConfigurer(new YamlSnakeYamlConfigurer()); // specify configurer implementation, optionally additional serdes packages
-            it.withBindFile(WORLDS_FOLDER.resolve(SETTINGS_FILE_NAME)); // specify Path, File or pathname
-            it.withRemoveOrphans(true); // automatic removal of undeclared keys
-            it.saveDefaults(); // save file if it does not exist
-            it.load(true); // load and save to update comments/new fields
-        }));
+        worldConfig = Objects.requireNonNull(ConfigManager.create(WorldSettings.class, Utils.createConfigInitializer(WORLDS_FOLDER.resolve(SETTINGS_FILE_NAME))));
 
         int changeNumber = 0;
         for (var file : Objects.requireNonNull(WORLDS_FOLDER.toFile().listFiles(File::isDirectory))) {

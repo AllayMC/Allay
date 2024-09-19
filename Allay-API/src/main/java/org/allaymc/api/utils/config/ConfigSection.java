@@ -3,10 +3,10 @@ package org.allaymc.api.utils.config;
 import java.util.*;
 
 /**
- * TODO: refactor
- *
  * @author fromgate | daoge_cmd
  */
+// TODO: refactor
+// TODO: add javadoc
 public class ConfigSection extends LinkedHashMap<String, Object> {
 
     /**

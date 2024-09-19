@@ -18,7 +18,7 @@ public class TextPacketProcessor extends PacketProcessor<TextPacket> {
         event.call();
         if (event.isCancelled()) return;
 
-        Server.getInstance().broadcastMessage(event.buildChat());
+        Server.getInstance().broadcastText(event.buildChat());
     }
 
     @Override

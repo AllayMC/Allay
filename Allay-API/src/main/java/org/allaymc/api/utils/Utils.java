@@ -1,6 +1,8 @@
 package org.allaymc.api.utils;
 
 import com.google.common.base.Preconditions;
+import eu.okaeri.configs.OkaeriConfigInitializer;
+import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import io.netty.buffer.ByteBuf;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockId;
@@ -12,6 +14,7 @@ import org.allaymc.api.item.tag.ItemTag;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.Set;
@@ -144,5 +147,26 @@ public class Utils {
      */
     public static InputStream getResource(String resourceName) {
         return Objects.requireNonNull(Utils.class.getClassLoader().getResourceAsStream(resourceName));
+    }
+
+    /**
+     * Create a default config initializer.
+     *
+     * @param file the file path.
+     * @return the config initializer.
+     */
+    public static OkaeriConfigInitializer createConfigInitializer(Path file) {
+        return it -> {
+            // Specify configurer implementation, optionally additional serdes packages
+            it.withConfigurer(new YamlSnakeYamlConfigurer());
+            // Specify Path, File or pathname
+            it.withBindFile(file);
+            // Automatic removal of undeclared keys
+            it.withRemoveOrphans(true);
+            // Save file if it does not exist
+            it.saveDefaults();
+            // Load and save to update comments/new fields
+            it.load(true);
+        };
     }
 }
