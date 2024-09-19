@@ -3,6 +3,9 @@
  */
 package org.allaymc.api.utils.exception;
 
+/**
+ * @author Cool_Loong
+ */
 public class InvalidIdentifierException extends RuntimeException {
     public InvalidIdentifierException(String message) {
         super(message);

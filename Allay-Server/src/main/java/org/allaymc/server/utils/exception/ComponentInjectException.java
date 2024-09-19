@@ -1,9 +1,6 @@
-package org.allaymc.api.utils.exception;
+package org.allaymc.server.utils.exception;
 
 /**
- * Thrown when component injection encounters a problem
- * <p>
- *
  * @author daoge_cmd
  */
 public class ComponentInjectException extends RuntimeException {

@@ -3,7 +3,7 @@ package org.allaymc.api.utils.exception;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 /**
- * 支持格式化字符串的自定义运行时异常
+ * Custom runtime exception that support formatting strings.
  *
  * @author duanxinyuan
  */

@@ -19,6 +19,12 @@ import java.util.Base64;
  */
 @Slf4j
 public final class AllayNbtUtils {
+    /**
+     * Convert NBT to Base64 (LE).
+     *
+     * @param nbtMap the NBT map.
+     * @return the Base64 string.
+     */
     public static String nbtToBase64LE(NbtMap nbtMap) {
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream(); NBTOutputStream writer = org.cloudburstmc.nbt.NbtUtils.createWriterLE(stream)) {
             writer.writeTag(nbtMap);
@@ -30,6 +36,12 @@ public final class AllayNbtUtils {
         return null;
     }
 
+    /**
+     * Convert NBT to Base64.
+     *
+     * @param nbtMap the NBT map.
+     * @return the Base64 string.
+     */
     public static String nbtToBase64(NbtMap nbtMap) {
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream(); NBTOutputStream writer = org.cloudburstmc.nbt.NbtUtils.createWriter(stream)) {
             writer.writeTag(nbtMap);
@@ -41,21 +53,53 @@ public final class AllayNbtUtils {
         return null;
     }
 
+    /**
+     * Convert Base64 to NBT (LE).
+     *
+     * @param base64 the Base64 string.
+     * @return the NBT map.
+     */
     @SneakyThrows
     public static NbtMap base64ToNbtLE(String base64) {
         return (NbtMap) org.cloudburstmc.nbt.NbtUtils.createReaderLE(new ByteArrayInputStream(Base64.getDecoder().decode(base64))).readTag();
     }
 
+    /**
+     * Convert Base64 to NBT.
+     *
+     * @param base64 the Base64 string.
+     * @return the NBT map.
+     */
     @SneakyThrows
     public static NbtMap base64ToNbt(String base64) {
         return (NbtMap) org.cloudburstmc.nbt.NbtUtils.createReader(new ByteArrayInputStream(Base64.getDecoder().decode(base64))).readTag();
     }
 
+    /**
+     * Read a vector3 from NBT.
+     *
+     * @param nbt the NBT map.
+     * @param rootName the root name.
+     * @param f1 the x field.
+     * @param f2 the y field.
+     * @param f3 the z field.
+     * @return the vector3.
+     */
     public static Vector3f readVector3f(NbtMap nbt, String rootName, String f1, String f2, String f3) {
         var pos = nbt.getCompound(rootName);
         return new Vector3f(pos.getFloat(f1), pos.getFloat(f2), pos.getFloat(f3));
     }
 
+    /**
+     * Write a vector3 to NBT.
+     *
+     * @param nbt the NBT builder.
+     * @param rootName the root name.
+     * @param f1 the x field.
+     * @param f2 the y field.
+     * @param f3 the z field.
+     * @param vector3f the vector3.
+     */
     public static void writeVector3f(NbtMapBuilder nbt, String rootName, String f1, String f2, String f3, Vector3fc vector3f) {
         var pos = NbtMap.builder()
                 .putFloat(f1, vector3f.x())
@@ -65,11 +109,29 @@ public final class AllayNbtUtils {
         nbt.putCompound(rootName, pos);
     }
 
+    /**
+     * Read a vector2 from NBT.
+     *
+     * @param nbt the NBT map.
+     * @param rootName the root name.
+     * @param f1 the x field.
+     * @param f2 the y field.
+     * @return the vector2.
+     */
     public static Vector2f readVector2f(NbtMap nbt, String rootName, String f1, String f2) {
         var pos = nbt.getCompound(rootName);
         return new Vector2f(pos.getFloat(f1), pos.getFloat(f2));
     }
 
+    /**
+     * Write a vector2 to NBT.
+     *
+     * @param nbt the NBT builder.
+     * @param rootName the root name.
+     * @param f1 the x field.
+     * @param f2 the y field.
+     * @param vector2f the vector2.
+     */
     public static void writeVector2f(NbtMapBuilder nbt, String rootName, String f1, String f2, Vector2fc vector2f) {
         var pos = NbtMap.builder()
                 .putFloat(f1, vector2f.x())

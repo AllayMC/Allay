@@ -5,7 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
- * 采用log4j的文本格式化工具
+ * Text formatting tool using log4j.
+ * <p>
  * Supports parameter formatting as used in ParameterizedMessage and ReusableParameterizedMessage.
  */
 final class ParameterFormatter {

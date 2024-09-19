@@ -11,6 +11,14 @@ import java.lang.reflect.Type;
  * @see <a href="https://semver.org/">Semantic Versioning</a>
  */
 public record SemVersion(int major, int minor, int patch, int revision, int build) {
+    /**
+     * Create a semantic version from an int[] array.
+     * <p>
+     * The length of the array must be 5.
+     *
+     * @param versions the version array
+     * @return the semantic version
+     */
     public static SemVersion from(int[] versions) {
         if (versions.length == 0) {
             return new SemVersion(0, 0, 0, 0, 0);

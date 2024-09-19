@@ -1,6 +1,8 @@
 package org.allaymc.api.utils.exception;
 
 /**
+ * An exception which may be thrown when encountering a container related problem.
+ *
  * @author daoge_cmd
  */
 public class ContainerException extends RuntimeException {

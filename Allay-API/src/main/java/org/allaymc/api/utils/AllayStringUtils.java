@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 /**
- * String helpers
+ * AllayStringUtils provides some string helper methods.
  *
  * @author daoge_cmd
  */

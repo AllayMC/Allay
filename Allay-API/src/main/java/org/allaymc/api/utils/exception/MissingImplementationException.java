@@ -1,13 +1,7 @@
 package org.allaymc.api.utils.exception;
 
-import org.allaymc.api.AllayAPI;
-
 /**
- * This exception is thrown when the API module is not fully implemented <br/>
- * <p>
- *
  * @author daoge_cmd
- * @see AllayAPI
  */
 public class MissingImplementationException extends Exception {
     public MissingImplementationException() {

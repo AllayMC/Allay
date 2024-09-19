@@ -1,6 +1,6 @@
 package org.allaymc.server.component.annotation;
 
-import org.allaymc.api.utils.exception.ComponentInjectException;
+import org.allaymc.server.utils.exception.ComponentInjectException;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

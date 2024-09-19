@@ -1,13 +1,7 @@
 package org.allaymc.api.utils.exception;
 
-import org.allaymc.api.AllayAPI;
-
 /**
- * This exception is thrown in the API where the implementation is not required<br/>
- * <p>
- *
  * @author CoolLoong
- * @see AllayAPI
  */
 public class MissingRequirementException extends RuntimeException {
     public MissingRequirementException() {
