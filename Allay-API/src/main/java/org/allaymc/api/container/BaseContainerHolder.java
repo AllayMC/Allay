@@ -1,6 +1,5 @@
 package org.allaymc.api.container;
 
-import org.allaymc.api.utils.exception.ContainerException;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.jetbrains.annotations.UnmodifiableView;
 

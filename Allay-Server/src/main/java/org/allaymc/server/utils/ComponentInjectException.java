@@ -1,4 +1,4 @@
-package org.allaymc.server.utils.exception;
+package org.allaymc.server.utils;
 
 /**
  * @author daoge_cmd

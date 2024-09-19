@@ -1,7 +1,5 @@
 package org.allaymc.api.utils;
 
-import org.allaymc.api.utils.exception.InvalidIdentifierException;
-
 import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 import static org.allaymc.api.utils.IdentifierUtils.isNamespaceValid;
 import static org.allaymc.api.utils.IdentifierUtils.isPathValid;

@@ -3,7 +3,7 @@ package org.allaymc.server.component;
 import lombok.SneakyThrows;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentedObject;
-import org.allaymc.server.utils.exception.ComponentInjectException;
+import org.allaymc.server.utils.ComponentInjectException;
 import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.impl.*;
 import org.allaymc.server.component.injector.AllayComponentInjector;

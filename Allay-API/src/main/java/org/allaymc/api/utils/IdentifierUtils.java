@@ -1,7 +1,5 @@
 package org.allaymc.api.utils;
 
-import org.allaymc.api.utils.exception.InvalidIdentifierException;
-
 /**
  * IdentifierUtils provides some helper methods for {@link Identifier}.
  *

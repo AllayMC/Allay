@@ -1,4 +1,4 @@
-package org.allaymc.api.utils.exception;
+package org.allaymc.api.utils;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;

@@ -25,7 +25,7 @@ import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.utils.exception.MissingImplementationException;
+import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;

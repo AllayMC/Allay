@@ -1,4 +1,4 @@
-package org.allaymc.api.utils.exception;
+package org.allaymc.api.container;
 
 /**
  * An exception which may be thrown when encountering a container related problem.

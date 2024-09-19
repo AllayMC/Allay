@@ -1,6 +1,6 @@
 package org.allaymc.api.plugin;
 
-import org.allaymc.api.utils.exception.FormativeException;
+import org.allaymc.api.utils.FormativeException;
 
 /**
  * @author daoge_cmd

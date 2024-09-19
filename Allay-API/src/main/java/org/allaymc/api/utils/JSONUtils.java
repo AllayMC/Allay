@@ -9,7 +9,6 @@ import lombok.Setter;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.pack.PackManifest;
-import org.allaymc.api.utils.exception.FormativeException;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
