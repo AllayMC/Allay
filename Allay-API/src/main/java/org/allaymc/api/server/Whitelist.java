@@ -9,6 +9,8 @@ import lombok.experimental.Accessors;
 import java.util.Set;
 
 /**
+ * Whitelist is used to store the whitelisted player list.
+ *
  * @author daoge_cmd
  */
 @Getter

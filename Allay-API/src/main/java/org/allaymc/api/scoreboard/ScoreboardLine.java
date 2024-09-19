@@ -8,10 +8,9 @@ import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * A single line on the scoreboard
+ * A single line on the scoreboard.
  * <p>
- * Composed of {@link Scorer} and score
- * <p>
+ * Composed of {@link Scorer} and score.
  *
  * @author daoge_cmd
  */

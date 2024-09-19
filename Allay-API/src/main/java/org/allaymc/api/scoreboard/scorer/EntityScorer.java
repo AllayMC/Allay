@@ -8,6 +8,8 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 /**
+ * EntityScorer is a scorer that represents an entity.
+ *
  * @author daoge_cmd
  */
 @Getter

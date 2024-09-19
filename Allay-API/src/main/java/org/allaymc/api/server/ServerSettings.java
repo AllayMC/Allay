@@ -14,6 +14,11 @@ import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
 
 import java.util.UUID;
 
+/**
+ * ServerSettings is used to store the settings of the server.
+ *
+ * @author daoge_cmd
+ */
 @Getter
 @Accessors(fluent = true)
 public class ServerSettings extends OkaeriConfig {

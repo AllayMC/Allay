@@ -3,12 +3,11 @@ package org.allaymc.api.scoreboard;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
 
 /**
- * Describes a scoreboard viewer (e.g., EntityPlayer)
+ * Describes a scoreboard viewer.
  * <p>
- * This interface is used to abstract the server-to-client protocol methods
- * <p>
- * The term "Scoreboard" is deliberately used in the method names to prevent confusion with other EntityPlayer interfaces
- * <p>
+ * This interface is used to abstract the server-to-client protocol methods.
+ * The term "Scoreboard" is deliberately used in the method names to prevent
+ * confusion with other EntityPlayer interfaces
  *
  * @author daoge_cmd
  */
@@ -49,5 +48,10 @@ public interface ScoreboardViewer {
      */
     void updateScore(ScoreboardLine line);
 
+    /**
+     * Check if the viewer is still valid.
+     *
+     * @return true if the viewer is still valid
+     */
     boolean isScoreboardViewerValid();
 }

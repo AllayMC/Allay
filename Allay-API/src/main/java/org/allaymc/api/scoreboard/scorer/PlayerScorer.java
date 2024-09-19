@@ -13,6 +13,8 @@ import java.util.UUID;
 import static org.cloudburstmc.protocol.bedrock.data.ScoreInfo.ScorerType.PLAYER;
 
 /**
+ * PlayerScorer is a scorer that represents a player.
+ *
  * @author daoge_cmd
  */
 @Getter

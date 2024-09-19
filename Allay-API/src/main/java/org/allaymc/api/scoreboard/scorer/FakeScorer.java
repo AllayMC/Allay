@@ -7,6 +7,10 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 /**
+ * FakeScorer is a scorer that only has a name and is not associated with any entity.
+ * <p>
+ * FakeScorer is used to display some information through scoreboard.
+ *
  * @author daoge_cmd
  */
 @Getter

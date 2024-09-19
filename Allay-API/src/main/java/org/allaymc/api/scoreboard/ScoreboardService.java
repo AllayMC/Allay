@@ -23,11 +23,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Manages and stores a batch of scoreboards
+ * Manages and stores a batch of scoreboards.
  * <p>
- * This interface is for /scoreboard command;
- * if you just want to display information, please operate directly on the scoreboard object
- * <p>
+ * This interface is for /scoreboard command.
+ * if you just want to display information, please operate directly on the scoreboard object.
  *
  * @author daoge_cmd
  */

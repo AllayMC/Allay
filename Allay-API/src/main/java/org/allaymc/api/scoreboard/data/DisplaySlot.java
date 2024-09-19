@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Scoreboard display slot enum
- * <p>
+ * Scoreboard display slot enum.
  *
  * @author daoge_cmd
  */
