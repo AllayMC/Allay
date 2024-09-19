@@ -54,7 +54,7 @@ public class AllayScheduler implements Scheduler {
     }
 
     @Override
-    public long getTotalTicks() {
+    public long getTicks() {
         return tickCounter;
     }
 
