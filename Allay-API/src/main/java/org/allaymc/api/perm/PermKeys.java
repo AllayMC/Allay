@@ -1,6 +1,8 @@
 package org.allaymc.api.perm;
 
 /**
+ * PermKeys contains all the permission keys that are used in allay.
+ *
  * @author daoge_cmd
  */
 public interface PermKeys {
