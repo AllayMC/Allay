@@ -6,7 +6,6 @@ import java.util.function.Supplier;
  * A simple registry with no defined mapping or input type. Designed to allow
  * for simple registrations of any given type without restrictions on what
  * the input or output can be.
- * <p>
  *
  * @param <CONTENT> the value being held by the registry
  *

@@ -3,6 +3,8 @@ package org.allaymc.api.registry;
 import com.google.common.collect.BiMap;
 
 /**
+ * A registry which use {@link BiMap} as the content.
+ *
  * @author daoge_cmd
  */
 public class BiMappedRegistry<LEFT, RIGHT> extends AbstractRegistry<BiMap<LEFT, RIGHT>> {

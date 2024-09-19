@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
+ * A registry which has two keys for one value.
+ *
  * @author daoge_cmd
  */
 public class DoubleKeyMappedRegistry<K1, K2, VALUE> extends AbstractRegistry<DoubleKeyMappedRegistry.MapPair<K1, K2, VALUE>> {

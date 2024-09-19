@@ -27,7 +27,6 @@ import java.util.function.Consumer;
  * however it demonstrates a fairly basic use case of how this system works. Typically
  * though, the first parameter would be a location of some sort, such as a file path
  * where the loader will load the mappings from.
- * <p>
  *
  * @param <CONTENT> the type of the value which is being held by the registry
  *

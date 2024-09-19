@@ -35,8 +35,6 @@ import java.util.function.Consumer;
  * though, the first parameter would be a location of some sort, such as a file path
  * where the loader will load the mappings from.
  *
- * <p>
- *
  * @param <CONTENT> the value being held by the registry
  *
  * @author GeyserMC | daoge_cmd

@@ -12,7 +12,6 @@ import java.util.function.Function;
  * @param <KEY>     the key
  * @param <VALUE>   the value
  * @param <MAPPING> the map
- *                  <p>
  *
  * @author daoge_cmd
  */

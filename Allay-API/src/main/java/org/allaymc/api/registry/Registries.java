@@ -28,9 +28,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 /**
- * Holds all the common registries in allay.
- *
- * <p>
+ * Registries holds all the common registries in allay.
  *
  * @author daoge_cmd
  */

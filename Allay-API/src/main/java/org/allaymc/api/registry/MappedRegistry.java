@@ -7,7 +7,6 @@ import java.util.function.Supplier;
  * A public registry holding a map of various registrations as defined by {@code MAPPING}.
  * The M represents the map class, which can be anything that extends {@link Map}. The
  * {@code KEY} and {@code VALUE} generics are the key and value respectively.
- * <p>
  *
  * @param <KEY>     the key
  * @param <VALUE>   the value
