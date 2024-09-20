@@ -50,18 +50,16 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
 
     protected void moveToNearestPlayer() {
         var nearestPlayer = findNearestPlayer();
-        if (nearestPlayer == null) {
-            return;
-        }
+        if (nearestPlayer == null) return;
 
         var playerLoc = nearestPlayer.getLocation();
-        float dX = (playerLoc.x() - this.location.x) / 8.0f;
-        float dY = (playerLoc.y() + nearestPlayer.getEyeHeight() / 2.0f - this.location.y) / 8.0f;
-        float dZ = (playerLoc.z() - this.location.z) / 8.0f;
-        float d = (float) Math.sqrt(dX * dX + dY * dY + dZ * dZ);
-        float diff = 1.0f - d;
+        var dX = (playerLoc.x() - this.location.x) / 8f;
+        var dY = (playerLoc.y() + nearestPlayer.getEyeHeight() / 2f - this.location.y) / 8f;
+        var dZ = (playerLoc.z() - this.location.z) / 8f;
+        var d = (float) Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+        var diff = 1f - d;
 
-        if (diff > 0.0D) {
+        if (diff > 0D) {
             diff = diff * diff;
             addMotion(
                     dX / d * diff * 0.1f,
@@ -73,7 +71,7 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
 
     protected EntityPlayer findNearestPlayer() {
         EntityPlayer nearestPlayer = null;
-        float nearestDistanceSquared = MAX_MOVE_DISTANCE_SQUARED;
+        var nearestDistanceSquared = MAX_MOVE_DISTANCE_SQUARED;
         for (var player : getDimension().getPlayers()) {
             var distanceSquared = player.getLocation().distanceSquared(location);
             if (distanceSquared < nearestDistanceSquared) {
@@ -103,7 +101,7 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
 
     @Override
     public AABBfc getAABB() {
-        return new AABBf(-0.05f, 0.0f, -0.05f, 0.05f, 0.1f, 0.05f);
+        return new AABBf(-0.05f, 0f, -0.05f, 0.05f, 0.1f, 0.05f);
     }
 
     @EventHandler

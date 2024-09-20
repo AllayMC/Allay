@@ -14,6 +14,14 @@ import org.cloudburstmc.nbt.NbtMap;
 @Slf4j
 @UtilityClass
 public final class EntityHelper {
+    /**
+     * Creates a new entity from a NBT map.
+     *
+     * @param dimension The dimension the entity is in.
+     * @param nbt       The NBT map to create the entity from.
+     *
+     * @return The new entity.
+     */
     public static Entity fromNBT(Dimension dimension, NbtMap nbt) {
         var identifier = new Identifier(nbt.getString("identifier"));
         var entityType = Registries.ENTITIES.get(identifier);

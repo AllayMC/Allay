@@ -2,12 +2,16 @@ package org.allaymc.api.entity.effect;
 
 import com.google.common.base.Preconditions;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
  * @author daoge_cmd
  */
+@Setter
+@Getter
 @AllArgsConstructor
 public final class EffectInstance {
     private final EffectType type;
@@ -24,36 +28,8 @@ public final class EffectInstance {
         return new EffectInstance(effectType, amplifier, duration, visible);
     }
 
-    public EffectType getType() {
-        return null;
-    }
-
-    public int getAmplifier() {
-        return amplifier;
-    }
-
-    public void setAmplifier(int amplifier) {
-        this.amplifier = amplifier;
-    }
-
     public int getLevel() {
         return getAmplifier() + 1;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 
     public NbtMap saveNBT() {

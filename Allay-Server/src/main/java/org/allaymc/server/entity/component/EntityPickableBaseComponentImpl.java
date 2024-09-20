@@ -2,6 +2,7 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.entity.component.EntityPickableBaseComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -11,11 +12,11 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
  */
 @Setter
 @Getter
-public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl {
+public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl implements EntityPickableBaseComponent {
     public static final int MAX_AGE = 6000;
     public static final int DEFAULT_PICKUP_DELAY = 10;
 
-    protected short age;
+    protected int age;
     protected int pickupDelay = DEFAULT_PICKUP_DELAY;
 
     public EntityPickableBaseComponentImpl(EntityInitInfo info) {
@@ -52,7 +53,7 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl {
     public NbtMap saveNBT() {
         var builder = super.saveNBT().toBuilder();
 
-        builder.putShort("Age", age);
+        builder.putShort("Age", (short) age);
         builder.putInt("PickupDelay", pickupDelay);
 
         return builder.build();

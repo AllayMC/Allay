@@ -8,7 +8,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.AttributeData;
 
 /**
- *
  * @author JukeboxMC | daoge_cmd
  */
 @Getter
@@ -31,6 +30,13 @@ public class Attribute implements Cloneable {
         this.defaultValue = defaultValue;
     }
 
+    /**
+     * Create an Attribute object from a NbtMap
+     *
+     * @param nbt the NbtMap
+     *
+     * @return the Attribute object
+     */
     public static Attribute fromNBT(NbtMap nbt) {
         return new Attribute(
                 nbt.getString("Name"),
@@ -41,14 +47,27 @@ public class Attribute implements Cloneable {
         );
     }
 
+    /**
+     * Reset the current value of this attribute to the default value
+     */
     public void reset() {
         this.currentValue = this.defaultValue;
     }
 
+    /**
+     * Convert this attribute to an AttributeData object for network transmission
+     *
+     * @return the AttributeData object
+     */
     public AttributeData toNetwork() {
         return new AttributeData(this.key, this.minValue, this.maxValue, this.currentValue, this.defaultValue);
     }
 
+    /**
+     * Convert this attribute to a NbtMap for storage
+     *
+     * @return the NbtMap
+     */
     public NbtMap toNBT() {
         return NbtMap.builder()
                 .putString("Name", this.key)
