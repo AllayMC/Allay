@@ -55,12 +55,12 @@ tasks.sourcesJar {
 
 tasks.runShadow {
     workingDir = file("${rootProject.projectDir}/.run/")
-    this.jarFile = file("build/libs/Allay-Server-shaded.jar")
+    this.jarFile = file("build/libs/allay-server-shaded.jar")
 }
 
 tasks.shadowJar {
     transform(Log4j2PluginsCacheFileTransformer())
-    archiveClassifier = "shaded"
+    archiveFileName = "allay-server-shaded.jar"
 }
 
 tasks.jacocoTestReport {

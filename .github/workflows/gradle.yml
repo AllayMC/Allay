@@ -56,8 +56,8 @@ jobs:
         uses: actions/upload-artifact@v4
         if: success() && contains(github.ref_name, 'master')
         with:
-          name: Allay-Server
-          path: server/build/libs/Allay-Server-shaded.jar
+          name: allay-server
+          path: server/build/libs/allay-server-shaded.jar
       # Publish to JitPack
       - name: Publish to JitPack
         uses: fjogeleit/http-request-action@v1
@@ -107,7 +107,7 @@ jobs:
           port: ${{ secrets.TEST_SERVER_PORT }}
           key: ${{ secrets.TEST_SERVER_SSH_KEY }}
           passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
-          source: "server/build/libs/Allay-Server-shaded.jar"
+          source: "server/build/libs/allay-server-shaded.jar"
           strip_components: 3
           target: "/root/allaymc/tmp"
       # Restart test server

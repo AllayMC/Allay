@@ -1,6 +1,6 @@
 {
   "allay:allay.starting": "Starting up allay...",
-  "allay:api.implemented": "This server is running §b%1§r, implement Allay-API version §b%2",
+  "allay:api.implemented": "This server is running §b%1§r, implement allay-api version §b%2",
   "allay:blockentitytype.loaded": "Loaded %1 block entity types",
   "allay:blockentitytype.loading": "Loading block entity types...",
   "allay:blocktype.loaded": "Loaded %1 block types",
