@@ -163,9 +163,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
 
     Vector3fc getMotion();
 
-    Vector3fc getLastMotion();
-
     void setMotion(Vector3fc motion);
+
+    Vector3fc getLastMotion();
 
     default void setMotion(float mx, float my, float mz) {
         setMotion(new Vector3f(mx, my, mz));

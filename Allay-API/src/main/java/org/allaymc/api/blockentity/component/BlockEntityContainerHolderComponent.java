@@ -28,7 +28,19 @@ public interface BlockEntityContainerHolderComponent extends ContainerHolder, Bl
         setContainer(container);
     }
 
+    /**
+     * Gets the container.
+     *
+     * @param <T> the type of the container
+     *
+     * @return the container
+     */
     <T extends Container> T getContainer();
 
+    /**
+     * Sets the container.
+     *
+     * @param container the container to set
+     */
     void setContainer(Container container);
 }

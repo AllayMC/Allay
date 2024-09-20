@@ -5,7 +5,12 @@ import org.allaymc.api.item.ItemStack;
 /**
  * @author daoge_cmd
  */
-public interface EntityItemBaseComponent extends EntityBaseComponent {
+public interface EntityItemBaseComponent extends EntityPickableBaseComponent {
+    /**
+     * Get the item stack of this entity item
+     *
+     * @return the item stack, can be null
+     */
     ItemStack getItemStack();
 
     /**
@@ -14,16 +19,4 @@ public interface EntityItemBaseComponent extends EntityBaseComponent {
      * @param itemStack the item stack, can be null
      */
     void setItemStack(ItemStack itemStack);
-
-    int getPickupDelay();
-
-    void setPickupDelay(int delay);
-
-    short getAge();
-
-    void setAge(short age);
-
-    default boolean canBePicked() {
-        return getPickupDelay() == 0;
-    }
 }
