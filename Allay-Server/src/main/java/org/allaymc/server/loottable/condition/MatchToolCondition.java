@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.loottable.condition.Condition;
+import org.allaymc.api.loottable.condition.ConditionDeserializer;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.loottable.context.BreakBlockContext;
@@ -27,7 +29,7 @@ public class MatchToolCondition implements Condition<BreakBlockContext> {
     protected Set<EnchantmentType> enchantmentTypes;
 
     public static ConditionDeserializer<BreakBlockContext> deserializer() {
-        return new MatchToolConditionDeserializer();
+        return new Deserializer();
     }
 
     @Override
@@ -39,7 +41,7 @@ public class MatchToolCondition implements Condition<BreakBlockContext> {
         return enchantmentTypes.stream().allMatch(usedItem::hasEnchantment);
     }
 
-    public static class MatchToolConditionDeserializer implements ConditionDeserializer<BreakBlockContext> {
+    public static class Deserializer implements ConditionDeserializer<BreakBlockContext> {
         @Override
         public Condition<BreakBlockContext> deserialize(JsonObject json) {
             ItemType<?> itemType = null;

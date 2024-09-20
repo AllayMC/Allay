@@ -1,7 +1,7 @@
-package org.allaymc.server.loottable.entry;
+package org.allaymc.api.loottable.entry;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.server.loottable.context.Context;
+import org.allaymc.api.loottable.context.Context;
 
 import java.util.List;
 import java.util.Set;
@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public record Entries<CONTEXT_TYPE extends Context>(List<Entry<CONTEXT_TYPE>> entries) {
     public Set<ItemStack> loot(CONTEXT_TYPE context) {
         var validEntries = entries.stream()
-                .filter(e -> e.test(context))
+                .filter(entry -> entry.test(context))
                 .toList();
         var weightSum = validEntries.stream().mapToInt(Entry::getWeight).sum();
 

@@ -1,7 +1,8 @@
 package org.allaymc.server.loottable;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.server.loottable.context.Context;
+import org.allaymc.api.loottable.LootTableType;
+import org.allaymc.api.loottable.context.Context;
 
 import java.util.List;
 import java.util.Set;
