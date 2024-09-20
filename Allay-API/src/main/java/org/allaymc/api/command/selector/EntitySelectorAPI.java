@@ -14,7 +14,15 @@ import java.util.regex.Pattern;
 public interface EntitySelectorAPI {
 
     ApiInstanceHolder<EntitySelectorAPI> API = ApiInstanceHolder.create();
+
+    /**
+     * Pattern for matching entity selector tokens (e.g., @a, @e, etc.).
+     */
     Pattern ENTITY_SELECTOR = Pattern.compile("^@([aeprs]|initiator)(?:\\[(.*)])?$");
+
+    /**
+     * String used to join selector arguments.
+     */
     String ARGUMENT_JOINER = "=";
 
     static EntitySelectorAPI getAPI() {
@@ -23,31 +31,40 @@ public interface EntitySelectorAPI {
 
     /**
      * Matches entities based on the given command sender and target selector token.
+     * <p>
+     * This method parses the selector token and returns a list of entities that
+     * match the criteria specified by the token.
+     * </p>
      *
-     * @param sender the command sender
-     * @param token  the target selector token
+     * @param sender the command sender, used for context (e.g., location, permissions).
+     * @param token  the target selector token, such as {@code @a} or {@code @e[type=zombie]}.
      *
-     * @return the list of matched entities
+     * @return a list of entities that match the selector criteria.
      *
-     * @throws SelectorSyntaxException if there is a syntax error in the selector token
+     * @throws SelectorSyntaxException if there is a syntax error in the selector token.
      */
     List<Entity> matchEntities(CommandSender sender, String token) throws SelectorSyntaxException;
 
     /**
-     * Checks if the given token is a valid target selector.
+     * Checks if the given token is a valid entity selector.
      *
-     * @param token the token to check
+     * @param token the token to validate (e.g., {@code @a}, {@code @e}).
      *
-     * @return true if the token is a valid target selector, false otherwise
+     * @return {@code true} if the token is a valid target selector, {@code false} otherwise.
      */
     boolean checkValid(String token);
 
     /**
-     * Registers a selector argument.
+     * Registers a custom selector argument.
+     * <p>
+     * This allows for adding custom arguments to the entity selector system, such as
+     * new filters or modifiers.
+     * </p>
      *
-     * @param argument the selector argument to register
+     * @param argument the selector argument to register.
      *
-     * @return true if registration is successful (returns false if an argument with the same key already exists)
+     * @return {@code true} if the argument was successfully registered,
+     * {@code false} if an argument with the same key already exists.
      */
     boolean registerArgument(SelectorArgument argument);
 }

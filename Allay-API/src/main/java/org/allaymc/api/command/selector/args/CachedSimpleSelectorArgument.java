@@ -37,16 +37,30 @@ public abstract class CachedSimpleSelectorArgument implements SelectorArgument {
     }
 
     /**
-     * Called when parsing the parameters if the parsing result is not found in the cache
+     * Called when the predicate for a given set of arguments is not present in the cache.
+     * <p>
+     * Subclasses must implement this method to define how the predicate is computed based on the arguments.
+     * </p>
+     *
+     * @param selectorType the type of selector (e.g., {@code @p}, {@code @e}).
+     * @param sender       the command sender who issued the selector.
+     * @param basePos      the base position used for relative coordinate parsing.
+     * @param arguments    the arguments used for the selector.
+     *
+     * @return a {@code Predicate<Entity>} that filters entities.
+     *
+     * @throws SelectorSyntaxException if the arguments cannot be parsed.
      */
     protected abstract Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException;
 
     /**
-     * Called when initializing the cache
+     * Provides the cache service used to store predicates.
      * <p>
-     * Override this method if you need your own cache implementation
+     * This method initializes a cache with a maximum size of 65,535 entries and an expiration time
+     * of 1 minute after the last access. Subclasses may override this method if they need a different cache configuration.
+     * </p>
      *
-     * @return {@code Cache<Set<String>, Predicate<Entity>>}
+     * @return a {@code Cache<Set<String>, Predicate<Entity>>} for caching predicates.
      */
     protected Cache<Set<String>, Predicate<Entity>> provideCacheService() {
         return Caffeine.newBuilder().maximumSize(65535).expireAfterAccess(1, TimeUnit.MINUTES).build();

@@ -18,50 +18,122 @@ import java.util.List;
  */
 public interface CommandContext {
 
+    /**
+     * Get the command object.
+     *
+     * @return the command object.
+     */
     Command getCommand();
 
+    /**
+     * Get the sender of the command.
+     *
+     * @return the sender of the command.
+     */
     CommandSender getSender();
 
+    /**
+     * Get the current argument index.
+     *
+     * @return the current argument index.
+     */
     int getCurrentArgIndex();
 
+    /**
+     * Get the current result index.
+     *
+     * @return the current result index.
+     */
     int getCurrentResultIndex();
 
+    /**
+     * Get the total argument count.
+     *
+     * @return the total argument count.
+     */
     int getArgCount();
 
+    /**
+     * Get the command arguments.
+     *
+     * @return the command arguments.
+     */
     String[] getArgs();
 
+    /**
+     * Check if there are unhandled arguments.
+     *
+     * @return {@code true} if there are unhandled arguments, {@code false} otherwise.
+     */
     default boolean haveUnhandledArg() {
         return getCurrentArgIndex() < getArgCount();
     }
 
+    /**
+     * Get the left argument count.
+     *
+     * @return the left argument count.
+     */
     default int getLeftArgCount() {
         return getArgCount() - getCurrentArgIndex();
     }
 
+    /**
+     * Pops and returns the next argument in the list.
+     *
+     * @return the next argument.
+     */
     String popArg();
 
+    /**
+     * Returns the argument at the specified index.
+     *
+     * @param index the index of the argument to retrieve.
+     *
+     * @return the argument at the specified index.
+     */
     String queryArg(int index);
 
+    /**
+     * Returns the current argument being processed.
+     *
+     * @return the current argument.
+     */
     default String queryArg() {
         return queryArg(getCurrentArgIndex());
     }
 
+    /**
+     * Put the result.
+     *
+     * @param result the result to put.
+     */
     void putResult(Object result);
 
+    /**
+     * Add an output.
+     *
+     * @param output the output to add.
+     * @param args   the arguments for the output.
+     */
     void addOutput(@MayContainTrKey String output, Object... args);
 
-    default void addOutput(@MayContainTrKey String output) {
-        addOutput(output, new Object[0]);
-    }
-
-    default void addError(@MayContainTrKey String output) {
-        addOutput(TextFormat.RED + output, new Object[0]);
-    }
-
+    /**
+     * Add an error.
+     *
+     * @param output the error to add.
+     * @param args   the arguments for the error.
+     */
     default void addError(@MayContainTrKey String output, Object... args) {
         addOutput(TextFormat.RED + output, args);
     }
 
+    /**
+     * Adds a syntax error message to the output, indicating the argument position
+     * where the error occurred.
+     *
+     * @param errorIndex the index of the argument where the syntax error occurred.
+     */
     default void addSyntaxError(int errorIndex) {
         var left = new StringBuilder(getCommand().getName());
         var current = "";
@@ -81,49 +153,110 @@ public interface CommandContext {
         addOutput(TrKeys.M_COMMANDS_GENERIC_SYNTAX, left.toString(), current, right.toString());
     }
 
+    /**
+     * Adds an error message indicating that the command was executed by an incorrect sender type.
+     *
+     * @param correctSenderType the correct {@link SenderType} required to execute the command.
+     */
     default void addInvalidExecutorError(SenderType<?> correctSenderType) {
         addOutput(correctSenderType.errorMsg());
     }
 
+    /**
+     * Adds an error message indicating that no targets were found for the command.
+     */
     default void addNoTargetMatchError() {
         addOutput(TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
     }
 
+    /**
+     * Adds an error message indicating that too many targets were found for the command.
+     */
     default void addTooManyTargetsError() {
         addOutput(TrKeys.M_COMMANDS_GENERIC_TOOMANYTARGETS);
     }
 
+    /**
+     * Adds an error message indicating that a player could not be found.
+     */
     default void addPlayerNotFoundError() {
         addOutput(TrKeys.M_COMMANDS_GENERIC_PLAYER_NOTFOUND);
     }
 
+    /**
+     * Checks if the specified argument index is valid.
+     *
+     * @param index the index to check.
+     *
+     * @return {@code true} if the index is valid, {@code false} otherwise.
+     */
     default boolean isValidArgIndex(int index) {
         return index >= 0 && index < getArgCount();
     }
 
+    /**
+     * Adds a syntax error message at the current argument index.
+     */
     default void addSyntaxError() {
         addSyntaxError(getCurrentArgIndex());
     }
 
+    /**
+     * Sends a whisper message to a specified player.
+     *
+     * @param player  the {@link EntityPlayer} to send the message to.
+     * @param message the message to send.
+     * @param args    optional format arguments for the message.
+     */
     default void sendWhisperTo(EntityPlayer player, @MayContainTrKey String message, Object... args) {
         if (player.getDimension().getWorld().getWorldData().getGameRule(GameRule.SEND_COMMAND_FEEDBACK)) {
             player.sendTr(message, args);
         }
     }
 
+    /**
+     * Returns the list of translation containers that represent the output messages.
+     *
+     * @return the list of {@link TrContainer} objects.
+     */
     List<TrContainer> getOutputs();
 
+    /**
+     * Returns a successful command result.
+     *
+     * @return a {@link CommandResult} representing success.
+     */
     default CommandResult success() {
         return CommandResult.success(this);
     }
 
+    /**
+     * Returns a successful command result with a specified status code.
+     *
+     * @param status the status code.
+     *
+     * @return a {@link CommandResult} representing success with the given status.
+     */
     default CommandResult success(int status) {
         return new CommandResult(status, this);
     }
 
+    /**
+     * Returns a failed command result.
+     *
+     * @return a {@link CommandResult} representing failure.
+     */
     default CommandResult fail() {
         return CommandResult.fail(this);
     }
 
+    /**
+     * Retrieves a result value by its index.
+     *
+     * @param index the index of the result.
+     * @param <T>   the type of the result.
+     *
+     * @return the result at the specified index.
+     */
     <T> T getResult(int index);
 }

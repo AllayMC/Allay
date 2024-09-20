@@ -15,56 +15,81 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
  */
 public interface CommandSender extends TextReceiver, Permissible {
 
+    /**
+     * Gets the name of the command sender.
+     *
+     * @return The name of the command sender.
+     */
     String getCommandSenderName();
 
+    /**
+     * Gets the command origin data of the command sender.
+     *
+     * @return The command origin data of the command sender.
+     */
     CommandOriginData getCommandOriginData();
 
+    /**
+     * Gets the location where the command was executed.
+     *
+     * @return The location where the command was executed.
+     */
     Location3fc getCmdExecuteLocation();
 
+    /**
+     * Handles the result of the command execution.
+     *
+     * @param result The result of the command execution.
+     */
     default void handleResult(CommandResult result) {
         if (result.context() == null) return;
-        if (getCmdExecuteLocation().dimension().getWorld().getWorldData().getGameRule(GameRule.SEND_COMMAND_FEEDBACK)) {
-            var status = result.status();
-            var outputs = result.context().getOutputs().toArray(TrContainer[]::new);
-            if (result.isSuccess()) {
-                Server.getInstance().broadcastCommandOutputs(this, status, outputs);
-            } else {
-                // If there is an error, only send message to oneself
-                sendCommandOutputs(this, status, outputs);
-            }
+        if (!(boolean) getCmdExecuteLocation().dimension().getWorld().getWorldData().getGameRule(GameRule.SEND_COMMAND_FEEDBACK))
+            return;
+
+        var status = result.status();
+        var outputs = result.context().getOutputs().toArray(TrContainer[]::new);
+        if (result.isSuccess()) {
+            Server.getInstance().broadcastCommandOutputs(this, status, outputs);
+        } else {
+            // If there is an error, only send message to oneself
+            sendCommandOutputs(this, status, outputs);
         }
     }
 
     /**
-     * @return Whether the sender is a player
+     * Checks if the sender is a player.
+     *
+     * @return Whether the sender is a player.
      */
     default boolean isPlayer() {
         return false;
     }
 
     /**
+     * Checks if the sender is an entity.
+     * <p>
      * Please use this method to check whether the sender is an entity instead of using code {@code "xxx instanceof Entity"}.
      * Because the sender may not be an instance of {@code "Entity"} but is executing commands as an entity (e.g., {@code "ExecutorCommandSender"}).
      *
-     * @return Whether the sender is an entity
+     * @return Whether the sender is an entity.
      */
     default boolean isEntity() {
         return false;
     }
 
     /**
-     * If the sender is an entity, returns the entity executing the command.
+     * Returns the entity executing the command if the sender is an entity.
      *
-     * @return Entity instance
+     * @return Entity instance.
      */
     default Entity asEntity() {
         return null;
     }
 
     /**
-     * If the sender is a player, returns the player executing the command.
+     * Returns the player executing the command if the sender is a player.
      *
-     * @return Player instance
+     * @return Player instance.
      */
     default EntityPlayer asPlayer() {
         return null;
