@@ -2,6 +2,7 @@ package org.allaymc.api.entity.initinfo;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.world.Dimension;
@@ -14,7 +15,7 @@ import org.joml.Vector3fc;
  *
  * @author Cool_Loong
  */
-public class EntityInitInfo {
+public class EntityInitInfo implements ComponentInitInfo {
     protected final Dimension dimension;
     protected final NbtMap nbt;
     @Getter

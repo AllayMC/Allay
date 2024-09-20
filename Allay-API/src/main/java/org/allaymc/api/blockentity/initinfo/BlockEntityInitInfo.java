@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -15,7 +16,7 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
  * @author daoge_cmd
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class BlockEntityInitInfo {
+public class BlockEntityInitInfo implements ComponentInitInfo {
     private final Dimension dimension;
     private final NbtMap nbt;
     @Getter

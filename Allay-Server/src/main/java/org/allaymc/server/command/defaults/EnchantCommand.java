@@ -5,6 +5,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 
 import java.util.Collection;
