@@ -10,7 +10,6 @@ import org.cloudburstmc.nbt.NbtMapBuilder;
 import static org.allaymc.api.item.component.ItemBaseComponent.EMPTY_STACK_NETWORK_ID;
 
 /**
- *
  * @author Cool_Loong | daoge_cmd
  */
 public class SimpleItemStackInitInfo implements ItemStackInitInfo {
