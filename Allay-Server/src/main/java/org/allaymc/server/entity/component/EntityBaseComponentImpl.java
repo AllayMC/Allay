@@ -422,12 +422,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void setHasEntityCollision(boolean hasEntityCollision) {
-        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
-    }
-
-    @Override
-    public @UnmodifiableView Map<Long, EntityPlayer> getViewers() {
+    @UnmodifiableView
+    public Map<Long, EntityPlayer> getViewers() {
         return Collections.unmodifiableMap(viewers);
     }
 

@@ -144,7 +144,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
         return getMetadata().get(EntityFlag.HAS_COLLISION);
     }
 
-    void setHasEntityCollision(boolean hasEntityCollision);
+    default void setHasEntityCollision(boolean hasEntityCollision) {
+        setAndSendEntityFlag(EntityFlag.HAS_COLLISION, hasEntityCollision);
+    }
 
     default boolean computeEntityCollisionMotion() {
         return hasEntityCollision();

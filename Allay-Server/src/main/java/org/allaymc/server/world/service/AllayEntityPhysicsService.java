@@ -277,14 +277,15 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         // First move along the Y axis
         var yResult = moveAlongAxisAndStopWhenCollision(aabb, my, pos, Y);
         my = yResult.left();
+        var isOnGround = yResult.right();
 
         if (abs(mx) >= abs(mz)) {
             // First handle the X axis, then handle the Z axis
-            mx = applyMotion0(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround(), X);
-            mz = applyMotion0(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround(), Z);
+            mx = applyMotion0(entity.getStepHeight(), pos, mx, aabb, isOnGround, X);
+            mz = applyMotion0(entity.getStepHeight(), pos, mz, aabb, isOnGround, Z);
         } else {
-            mz = applyMotion0(entity.getStepHeight(), pos, mz, aabb, entity.isOnGround(), Z);
-            mx = applyMotion0(entity.getStepHeight(), pos, mx, aabb, entity.isOnGround(), X);
+            mz = applyMotion0(entity.getStepHeight(), pos, mz, aabb, isOnGround, Z);
+            mx = applyMotion0(entity.getStepHeight(), pos, mx, aabb, isOnGround, X);
         }
 
         entity.setMotion(new Vector3f(mx, my, mz));
@@ -292,7 +293,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             // Update onGround status after updated entity location
             // to make sure that some block (for example: water) can reset
             // entity's fallDistance before onFall() called
-            entity.setOnGround(yResult.right());
+            entity.setOnGround(isOnGround);
+            return true;
         }
         return false;
     }
@@ -477,8 +479,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 // Calculate delta pos (motion)
                 var motion = event.getTo().sub(player.getLocation(), new Vector3f());
                 player.setMotionValueOnly(motion);
-                if (updateEntityLocation(player, clientMove.newLoc()))
+                if (updateEntityLocation(player, clientMove.newLoc())) {
                     entityAABBTree.update(player);
+                }
                 // ClientMove is not calculated by the server, but we need to calculate the onGround status
                 // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
                 var aabb = clientMove.player.getOffsetAABB();
