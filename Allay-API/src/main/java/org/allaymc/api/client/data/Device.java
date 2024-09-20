@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- *
  * @author LucGamesYT | daoge_cmd
  */
 @Getter
@@ -29,6 +28,13 @@ public enum Device {
     private final int id;
     private final String name;
 
+    /**
+     * Get device by id.
+     *
+     * @param id the id
+     *
+     * @return the device
+     */
     public static Device getDevice(int id) {
         return switch (id) {
             case 1 -> ANDROID;

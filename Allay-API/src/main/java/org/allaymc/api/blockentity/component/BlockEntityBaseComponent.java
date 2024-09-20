@@ -19,26 +19,67 @@ import java.util.Objects;
  */
 public interface BlockEntityBaseComponent extends BlockEntityComponent {
 
+    /**
+     * Gets the type of block entity.
+     *
+     * @return The type of block entity.
+     */
     BlockEntityType<? extends BlockEntity> getBlockEntityType();
 
+    /**
+     * Gets the position of the block entity.
+     *
+     * @return The position of the block entity.
+     */
     Position3ic getPosition();
 
+    /**
+     * Gets the dimension of the block entity.
+     *
+     * @return The dimension of the block entity.
+     */
     default Dimension getDimension() {
         return getPosition().dimension();
     }
 
+    /**
+     * Gets the world of the block entity.
+     *
+     * @return The world of the block entity.
+     */
     default World getWorld() {
         return getDimension().getWorld();
     }
 
+    /**
+     * Saves the NBT data of the block entity.
+     *
+     * @return The NBT data of the block entity.
+     */
     NbtMap saveNBT();
 
+    /**
+     * Loads the NBT data into the block entity.
+     *
+     * @param nbt The NBT data to load.
+     */
     void loadNBT(NbtMap nbt);
 
+    /**
+     * Applies a client change to the block entity.
+     *
+     * @param player The player who made the change.
+     * @param nbt    The NBT data of the change.
+     */
     default void applyClientChange(EntityPlayer player, NbtMap nbt) {
         loadNBT(nbt);
     }
 
+    /**
+     * Creates a BlockEntityDataPacket for the block entity.
+     *
+     * @return The BlockEntityDataPacket for the block entity.
+     */
     default BlockEntityDataPacket createBlockEntityDataPacket() {
         var packet = new BlockEntityDataPacket();
         var pos = getPosition();
@@ -47,14 +88,18 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         return packet;
     }
 
-    default void sendBlockEntityDataPacketTo(EntityPlayer player) {
-        player.sendPacket(createBlockEntityDataPacket());
-    }
-
+    /**
+     * Sends the BlockEntityDataPacket to the block entity's viewers.
+     */
     default void sendBlockEntityDataPacketToViewers() {
         sendPacketToViewers(createBlockEntityDataPacket());
     }
 
+    /**
+     * Sends a packet to the block entity's viewers.
+     *
+     * @param packet The packet to send.
+     */
     default void sendPacketToViewers(BedrockPacket packet) {
         var pos = getPosition();
         var chunk = pos.dimension().getChunkService().getChunkByDimensionPos(pos.x(), pos.z());
@@ -62,35 +107,58 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
         chunk.sendChunkPacket(packet);
     }
 
+    /**
+     * Ticks the block entity.
+     *
+     * @param currentTick The current game tick.
+     */
     default void tick(long currentTick) {}
 
+    /**
+     * Whether the block entity should be sent to the client.
+     *
+     * @return Whether the block entity should be sent to the client.
+     */
     default boolean sendToClient() {
         return true;
     }
 
+    /**
+     * Gets the block state of the block entity.
+     *
+     * @return The block state of the block entity.
+     */
     default BlockState getBlockState() {
         var pos = getPosition();
         return pos.dimension().getBlockState(pos.x(), pos.y(), pos.z());
     }
 
     /**
-     * Get the custom name of the block entity
+     * Gets the custom name of the block entity.
      *
-     * @return the custom name of the block entity, null if not present
+     * @return The custom name of the block entity, null if not present.
      */
     String getCustomName();
 
     /**
-     * Set the custom name of the block entity
+     * Sets the custom name of the block entity.
      *
-     * @param customName the custom name of the block entity, can be null to remove the custom name
+     * @param customName The custom name of the block entity, can be null to remove the custom name.
      */
     void setCustomName(String customName);
 
+    /**
+     * Whether the block entity has a custom name.
+     *
+     * @return Whether the block entity has a custom name.
+     */
     default boolean hasCustomName() {
         return getCustomName() != null;
     }
 
+    /**
+     * Clears the custom name of the block entity.
+     */
     default void clearCustomName() {
         setCustomName(null);
     }

@@ -13,6 +13,14 @@ import org.cloudburstmc.nbt.NbtMap;
 @Slf4j
 @UtilityClass
 public final class BlockEntityHelper {
+    /**
+     * Creates a new block entity from a NBT map.
+     *
+     * @param dimension the dimension the block entity is in
+     * @param nbt       the NBT map to create the block entity from
+     *
+     * @return the new block entity
+     */
     public static BlockEntity fromNBT(Dimension dimension, NbtMap nbt) {
         var id = nbt.getString("id");
         var blockEntityType = Registries.BLOCK_ENTITIES.get(id);
