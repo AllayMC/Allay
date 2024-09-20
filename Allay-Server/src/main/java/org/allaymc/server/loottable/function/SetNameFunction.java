@@ -3,6 +3,8 @@ package org.allaymc.server.loottable.function;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.loottable.function.Function;
+import org.allaymc.api.loottable.function.FunctionDeserializer;
 
 /**
  * @author daoge_cmd
@@ -12,7 +14,7 @@ public class SetNameFunction implements Function {
     protected String name;
 
     public static FunctionDeserializer deserializer() {
-        return new SetNameFunctionDeserializer();
+        return new Deserializer();
     }
 
     @Override
@@ -20,7 +22,7 @@ public class SetNameFunction implements Function {
         itemStack.setCustomName(name);
     }
 
-    public static class SetNameFunctionDeserializer implements FunctionDeserializer {
+    public static class Deserializer implements FunctionDeserializer {
         @Override
         public Function deserialize(JsonObject json) {
             var name = json.get("name").getAsString();

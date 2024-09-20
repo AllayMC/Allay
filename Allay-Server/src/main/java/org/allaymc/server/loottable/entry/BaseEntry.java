@@ -3,10 +3,11 @@ package org.allaymc.server.loottable.entry;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.allaymc.server.loottable.LootTableType;
-import org.allaymc.server.loottable.condition.Condition;
-import org.allaymc.server.loottable.condition.Conditions;
-import org.allaymc.server.loottable.context.Context;
+import org.allaymc.api.loottable.LootTableType;
+import org.allaymc.api.loottable.condition.Condition;
+import org.allaymc.api.loottable.condition.Conditions;
+import org.allaymc.api.loottable.context.Context;
+import org.allaymc.api.loottable.entry.Entry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public abstract class BaseEntry<CONTEXT_TYPE extends Context> implements Entry<C
                 list.add(lootTableType.getCondition(name, conditionObj));
             }
         }
+
         return new Conditions<>(list);
     }
 }
