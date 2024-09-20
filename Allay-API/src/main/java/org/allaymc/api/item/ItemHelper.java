@@ -22,6 +22,15 @@ import java.util.Objects;
 @UtilityClass
 @Slf4j
 public final class ItemHelper {
+
+    /**
+     * Create an {@link ItemStack} from an NBT tag.
+     * <p>
+     * This method will also update the item state to the latest version.
+     *
+     * @param nbt The NBT tag.
+     * @return The {@link ItemStack} object.
+     */
     public static ItemStack fromNBT(NbtMap nbt) {
         try {
             nbt = ItemStateUpdaters.updateItemState(nbt, ItemStateUpdaters.LATEST_VERSION);
@@ -71,34 +80,90 @@ public final class ItemHelper {
                 .orElse(null);
     }
 
+    /**
+     * Check if an item is a tool.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return {@code true} if the item is a tool, {@code false} otherwise.
+     */
     public static boolean isTool(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_TOOL);
     }
 
+    /**
+     * Check if an item is a sword.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return {@code true} if the item is a sword, {@code false} otherwise.
+     */
     public static boolean isSword(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_SWORD);
     }
 
+    /**
+     * Check if an item is a pickaxe.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return {@code true} if the item is a pickaxe, {@code false} otherwise.
+     */
     public static boolean isPickaxe(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_PICKAXE);
     }
 
+    /**
+     * Check if an item is a hoe.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return {@code true} if the item is a hoe, {@code false} otherwise.
+     */
     public static boolean isHoe(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_HOE);
     }
 
+    /**
+     * Check if an item is an axe.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return {@code true} if the item is an axe, {@code false} otherwise.
+     */
     public static boolean isAxe(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_AXE);
     }
 
+    /**
+     * Check if an item is a shovel.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return {@code true} if the item is a shovel, {@code false} otherwise.
+     */
     public static boolean isShovel(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_SHOVEL);
     }
 
+    /**
+     * Check if an item is a weapon.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return {@code true} if the item is a weapon, {@code false} otherwise.
+     */
     public static boolean isArmor(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_ARMOR);
     }
 
+    /**
+     * Check if an item is a trimmable armor.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return {@code true} if the item is a trimmable armor, {@code false} otherwise.
+     */
     public static boolean isTrimmableArmor(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.TRIMMABLE_ARMORS);
     }

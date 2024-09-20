@@ -10,8 +10,7 @@ import java.util.Map;
 import static org.allaymc.api.block.data.BlockFace.getBlockFaceByStairDirectionValue;
 
 /**
- * A class contains some useful voxel shapes
- * <p>
+ * VoxelShapes contains some useful voxel shapes.
  *
  * @author daoge_cmd
  */
