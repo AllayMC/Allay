@@ -13,9 +13,9 @@ Therefore, before updating Allay, we need to update [Endstone](https://github.co
 ## 2. Update the First Batch of Resource Files
 
 Resource files must be updated in a specific order.
-Allay's resource files are stored in the `Allay-Data/resources` directory.
+Allay's resource files are stored in the `data/resources` directory.
 
-Unless otherwise specified, the default root directory is `Allay-Data/resources`.
+Unless otherwise specified, the default root directory is `data/resources`.
 
 **Step one, directly update the following files:**
 
@@ -37,7 +37,7 @@ Although these files will not be included in the final jar, they will be used du
 - block_tags.json
 - item_tags.json
 - block_palette.nbt
-- block_property_types.json (run `BlockPropertyTypeGen` under `Allay-Data` after updating `block_palette.nbt`)
+- block_property_types.json (run `BlockPropertyTypeGen` under `data` after updating `block_palette.nbt`)
 - biome_id_and_type.json (this file does not change often)
 - entity_id_map.json (obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData) or manually updated; this
   file rarely changes)
@@ -46,16 +46,16 @@ Although these files will not be included in the final jar, they will be used du
 
 Firstly, obtain the original language files from BDS and copy them to the `unpacked/lang_raw/vanilla` directory.
 
-Then, run `LangBuilder` under `Allay-Data`.
+Then, run `LangBuilder` under `data`.
 
-Finally, run `TrKeysGen` under `Allay-CodeGen`. With this, the language file update is complete.
+Finally, run `TrKeysGen` under `codegen`. With this, the language file update is complete.
 
-**Step four, run `ItemMetaToBlockStateMappingsGenerator` under `Allay-Data`**. This script will generate
+**Step four, run `ItemMetaToBlockStateMappingsGenerator` under `data`**. This script will generate
 item_meta_block_state_bimap.nbt based on creative_items.nbt. Remember to delete the old files before running!
 
 ## 3. Code Generation
 
-Allay completes most repetitive work through code generation. Next, we'll focus on `Allay-CodeGen`.
+Allay completes most repetitive work through code generation. Next, we'll focus on `codegen`.
 
 **Step one, check if there are any new biomes in `biome_id_and_type.json`**. If so, run `BiomeIdEnumGen`. This
 file usually doesn't change much in minor updates.
@@ -74,7 +74,7 @@ or `BlockTagGen`.
   adapt. You can refer to [StateUpdater](https://github.com/AllayMC/StateUpdater) to understand block
   changes.
   By checking if there are errors
-  in `Allay-Server/src/main/java/org/allaymc/server/block/type/BlockTypeInitializer.java`, you can quickly determine
+  in `server/src/main/java/org/allaymc/server/block/type/BlockTypeInitializer.java`, you can quickly determine
   which block properties have changed.
   **Adapting block properties is not just about modifying the parameters of `setProperties()`, you also need to adapt
   the block's code logic**, which is crucial!
@@ -100,7 +100,7 @@ operation, but the workload is less than before:
 Update the protocol library [Cloudburst/Protocol](https://github.com/CloudburstMC/Protocol) and the block state
 updater [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater) to the latest version.
 
-## 5. Update `Allay-API/src/main/java/org/allaymc/api/network/ProtocolInfo.java`
+## 5. Update `api/src/main/java/org/allaymc/api/network/ProtocolInfo.java`
 
 You need to update the `PACKET_CODEC` and `MINECRAFT_VERSION` in `ProtocolInfo`. Refer
 to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP) for updating `MINECRAFT_VERSION`.

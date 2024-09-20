@@ -64,12 +64,12 @@ If you need to develop scripting plugins, we recommend using GraalVM for best pe
 
 **Run directly:**
 ```shell
-gradlew Allay-Server:runShadow
+gradlew server:runShadow
 ```
 
 **Build:**
 ```shell
-gradlew Allay-Server:build
+gradlew server:build
 ```
 
 ## Plugins
@@ -114,5 +114,5 @@ If not otherwise specified, project content is open source under the LGPL-3.0 li
 
 The contents of the following folders are open-sourced under the MIT license:
 
-- Allay-Data
-- Allay-CodeGen
+- data
+- codegen
