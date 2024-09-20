@@ -1,7 +1,7 @@
 package org.allaymc.server.item;
 
 import org.allaymc.api.item.component.ItemBaseComponent;
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
@@ -24,9 +24,9 @@ public class ItemStackNetworkIdTest {
     @Test
     void testItemStackNetworkIdAssignment() {
         var currentNID = ItemBaseComponentImpl.getCurrentStackNetworkIdCounter();
-        var itemStack = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().build());
+        var itemStack = DIAMOND.createItemStack(ItemStackInitInfo.builder().build());
         assertEquals(currentNID, itemStack.getStackNetworkId());
-        itemStack = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().stackNetworkId(1).build());
+        itemStack = DIAMOND.createItemStack(ItemStackInitInfo.builder().stackNetworkId(1).build());
         assertEquals(1, itemStack.getStackNetworkId());
     }
 }

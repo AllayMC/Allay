@@ -1,40 +1,70 @@
 package org.allaymc.api.entity.effect;
 
 import com.google.common.base.Preconditions;
+import lombok.AllArgsConstructor;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
  * @author daoge_cmd
  */
-public interface EffectInstance {
+@AllArgsConstructor
+public final class EffectInstance {
+    private final EffectType type;
+    private int amplifier;
+    private int duration;
+    private boolean visible;
 
-    static EffectInstance fromNBT(NbtMap nbt) {
+    public static EffectInstance fromNBT(NbtMap nbt) {
         var effectType = Registries.EFFECTS.getByK1((int) nbt.getByte("Id"));
         Preconditions.checkNotNull(effectType, "Effect type not found for id: " + nbt.getByte("Id") + "!");
         int amplifier = nbt.getByte("Amplifier");
         int duration = nbt.getInt("Duration");
         boolean visible = nbt.getBoolean("ShowParticles");
-        return new SimpleEffectInstance(effectType, amplifier, duration, visible);
+        return new EffectInstance(effectType, amplifier, duration, visible);
     }
 
-    EffectType getType();
+    public EffectType getType() {
+        return null;
+    }
 
-    int getAmplifier();
+    public int getAmplifier() {
+        return amplifier;
+    }
 
-    void setAmplifier(int amplifier);
+    public void setAmplifier(int amplifier) {
+        this.amplifier = amplifier;
+    }
 
-    default int getLevel() {
+    public int getLevel() {
         return getAmplifier() + 1;
     }
 
-    boolean isVisible();
+    public boolean isVisible() {
+        return visible;
+    }
 
-    void setVisible(boolean visible);
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
 
-    int getDuration();
+    public int getDuration() {
+        return duration;
+    }
 
-    void setDuration(int duration);
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
 
-    NbtMap saveNBT();
+    public NbtMap saveNBT() {
+        return NbtMap.builder()
+                .putByte("Id", (byte) type.getId())
+                .putByte("Amplifier", (byte) amplifier)
+                // TODO: DurationEasy, DurationNormal, DurationHard
+                .putInt("Duration", duration)
+                // TODO: Ambient
+                // TODO: DisplayOnScreenTextureAnimation
+                .putBoolean("ShowParticles", visible)
+                .build();
+    }
 }

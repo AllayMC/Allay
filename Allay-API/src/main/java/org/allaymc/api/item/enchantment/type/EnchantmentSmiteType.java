@@ -1,6 +1,5 @@
 package org.allaymc.api.item.enchantment.type;
 
-import org.allaymc.api.item.enchantment.AbstractEnchantmentType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
@@ -8,7 +7,7 @@ import org.allaymc.api.utils.Identifier;
 /**
  * @author daoge_cmd
  */
-public class EnchantmentSmiteType extends AbstractEnchantmentType {
+public class EnchantmentSmiteType extends EnchantmentType {
     public EnchantmentSmiteType() {
         super(new Identifier("minecraft:smite"), 10, 5, Rarity.UNCOMMON);
     }

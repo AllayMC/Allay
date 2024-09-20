@@ -6,7 +6,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
 import org.allaymc.api.item.descriptor.ItemTagDescriptor;
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayNbtUtils;
@@ -31,7 +31,7 @@ public final class RecipeJsonUtils {
         var meta = jsonObject.has("data") ? jsonObject.get("data").getAsInt() : 0;
         var nbtMap = jsonObject.has("nbt") ? AllayNbtUtils.base64ToNbt(jsonObject.get("nbt").getAsString()) : NbtMap.EMPTY;
         return itemType.createItemStack(
-                SimpleItemStackInitInfo
+                ItemStackInitInfo
                         .builder()
                         .count(count)
                         .meta(meta)

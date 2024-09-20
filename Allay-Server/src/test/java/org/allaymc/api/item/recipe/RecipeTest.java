@@ -3,7 +3,7 @@ package org.allaymc.api.item.recipe;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
 import org.allaymc.api.item.descriptor.ItemDescriptor;
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.interfaces.ItemDiamondStack;
 import org.allaymc.api.item.interfaces.ItemGrassBlockStack;
@@ -247,19 +247,19 @@ class RecipeTest {
 
     private ItemDiamondStack diamond() {
         return DIAMOND.createItemStack(
-                SimpleItemStackInitInfo.builder().count(1).build()
+                ItemStackInitInfo.builder().count(1).build()
         );
     }
 
     private ItemGrassBlockStack grass() {
         return GRASS_BLOCK.createItemStack(
-                SimpleItemStackInitInfo.builder().count(1).build()
+                ItemStackInitInfo.builder().count(1).build()
         );
     }
 
     private ItemAirStack air() {
         return AIR.createItemStack(
-                SimpleItemStackInitInfo.builder().count(1).build()
+                ItemStackInitInfo.builder().count(1).build()
         );
     }
 }

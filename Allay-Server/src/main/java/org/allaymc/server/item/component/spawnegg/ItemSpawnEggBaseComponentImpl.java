@@ -2,7 +2,7 @@ package org.allaymc.server.item.component.spawnegg;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.entity.initinfo.SimpleEntityInitInfo;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.registry.Registries;
@@ -30,7 +30,7 @@ public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl {
         var entityType = Registries.ENTITIES.get(identifier);
         if (entityType == EntityTypes.VILLAGER) entityType = EntityTypes.VILLAGER_V2;
         var entity = entityType.createEntity(
-                SimpleEntityInitInfo.builder()
+                EntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(interactInfo.clickPos().add(
                                 interactInfo.clickBlockPos().x(),

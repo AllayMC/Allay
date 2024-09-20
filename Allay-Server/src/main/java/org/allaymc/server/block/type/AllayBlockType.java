@@ -18,7 +18,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
@@ -243,7 +243,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         public ItemStack toItemStack() {
             var meta = ItemMetaBlockStateBiMap.getBlockStateHashToMetaMapper(blockType).apply(blockStateHash);
             return blockType.getItemType().createItemStack(
-                    SimpleItemStackInitInfo
+                    ItemStackInitInfo
                             .builder()
                             .meta(meta)
                             .count(1)

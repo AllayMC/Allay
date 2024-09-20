@@ -1,6 +1,6 @@
 package org.allaymc.server.item.type;
 
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.testutils.AllayTestExtension;
 import org.cloudburstmc.nbt.NbtMap;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AllayItemTypeTest {
     @Test
     void testCreation() {
-        var itemStack = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        var itemStack = DIAMOND.createItemStack(ItemStackInitInfo.builder().count(1).build());
         assertEquals(1, itemStack.getCount());
         assertEquals(0, itemStack.getMeta());
         assertEquals(0, itemStack.getDurability());
@@ -31,7 +31,7 @@ public class AllayItemTypeTest {
 
     @Test
     void testGenericFunctions() {
-        var diamond = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        var diamond = DIAMOND.createItemStack(ItemStackInitInfo.builder().count(1).build());
 
         // Count
         diamond.setCount(2);
@@ -65,7 +65,7 @@ public class AllayItemTypeTest {
 
     @Test
     void testDurability() {
-        var diamond = DIAMOND.createItemStack(SimpleItemStackInitInfo.builder().count(1).build());
+        var diamond = DIAMOND.createItemStack(ItemStackInitInfo.builder().count(1).build());
         var axe = ItemTypes.DIAMOND_AXE.createItemStack(1);
 
         // Diamond doesn't support durability

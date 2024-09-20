@@ -1,7 +1,6 @@
 package org.allaymc.server.command.tree.node;
 
 import org.allaymc.api.command.tree.CommandNode;
-import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 

@@ -3,10 +3,8 @@ package org.allaymc.api.item.type;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.utils.Identified;
-import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.SimpleItemDefinition;
 import org.jetbrains.annotations.Unmodifiable;
@@ -54,7 +52,7 @@ public interface ItemType<T extends ItemStack> extends Identified {
      * @return The created {@link ItemStack}.
      */
     default T createItemStack(int count, int meta) {
-        return createItemStack(SimpleItemStackInitInfo.builder().count(count).meta(meta).build());
+        return createItemStack(ItemStackInitInfo.builder().count(count).meta(meta).build());
     }
 
     /**

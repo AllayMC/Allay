@@ -9,7 +9,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.initinfo.SimpleEntityInitInfo;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityFallingBlock;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -78,7 +78,7 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
 
     protected EntityFallingBlock createFallingEntity(Dimension dimension, Vector3ic pos, BlockState blockState) {
         return EntityTypes.FALLING_BLOCK.createEntity(
-                SimpleEntityInitInfo.builder()
+                EntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(pos.x() + 0.5f, pos.y(), pos.z() + 0.5f)
                         .nbt(NbtMap.builder()

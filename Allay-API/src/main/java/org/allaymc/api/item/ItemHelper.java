@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.data.ArmorTier;
 import org.allaymc.api.item.data.ToolTier;
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.item.type.ItemType;
@@ -39,7 +39,7 @@ public final class ItemHelper {
             var name = nbt.getString("Name");
             var itemType = Objects.requireNonNull(Registries.ITEMS.get(new Identifier(name)), "Unknown item type " + name + "while loading container items!");
             return itemType.createItemStack(
-                    SimpleItemStackInitInfo
+                    ItemStackInitInfo
                             .builder()
                             .count(count)
                             .meta(meta)

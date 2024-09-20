@@ -1,7 +1,7 @@
 package org.allaymc.api.block.component;
 
 import org.allaymc.api.blockentity.BlockEntity;
-import org.allaymc.api.blockentity.initinfo.SimpleBlockEntityInitInfo;
+import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
@@ -79,7 +79,7 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         if (presentBlockEntity != null) {
             throw new IllegalStateException("Trying to create a block entity when block entity already exists! Dimension: " + dimension + " at pos " + x + ", " + y + ", " + z + "!");
         }
-        var blockEntity = getBlockEntityType().createBlockEntity(SimpleBlockEntityInitInfo.builder().pos(x, y, z).dimension(dimension).build());
+        var blockEntity = getBlockEntityType().createBlockEntity(BlockEntityInitInfo.builder().pos(x, y, z).dimension(dimension).build());
         chunk.addBlockEntity(blockEntity);
         if (sendToClient && blockEntity.sendToClient()) {
             blockEntity.sendBlockEntityDataPacketToViewers();

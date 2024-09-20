@@ -8,7 +8,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
-import org.allaymc.api.entity.initinfo.SimpleEntityInitInfo;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.i18n.I18n;
@@ -118,7 +118,7 @@ public class GameTestCommand extends SimpleCommand {
                         var dim = player.getLocation().dimension();
                         var loc = player.getLocation();
                         var entity = entityType.createEntity(
-                                SimpleEntityInitInfo.builder()
+                                EntityInitInfo.builder()
                                         .dimension(dim)
                                         .loc(loc)
                                         .build()
@@ -203,7 +203,7 @@ public class GameTestCommand extends SimpleCommand {
                 .key("fallblock")
                 .exec((context, player) -> {
                     var entity = EntityTypes.FALLING_BLOCK.createEntity(
-                            SimpleEntityInitInfo.builder()
+                            EntityInitInfo.builder()
                                     .loc(player.getLocation())
                                     .nbt(NbtMap.builder()
                                             .putInt("BlockStateHash", BlockTypes.SAND.getDefaultState().blockStateHash())

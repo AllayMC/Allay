@@ -2,7 +2,7 @@ package org.allaymc.api.entity;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.initinfo.SimpleEntityInitInfo;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
@@ -21,6 +21,6 @@ public final class EntityHelper {
             log.warn("Unknown entity type {}", identifier);
             return null;
         }
-        return entityType.createEntity(SimpleEntityInitInfo.builder().dimension(dimension).nbt(nbt).build());
+        return entityType.createEntity(EntityInitInfo.builder().dimension(dimension).nbt(nbt).build());
     }
 }

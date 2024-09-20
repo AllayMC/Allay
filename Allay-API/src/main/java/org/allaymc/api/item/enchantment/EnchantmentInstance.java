@@ -1,21 +1,29 @@
 package org.allaymc.api.item.enchantment;
 
+import lombok.AllArgsConstructor;
 import org.cloudburstmc.nbt.NbtMap;
 
 /**
  * @author daoge_cmd
  */
-public interface EnchantmentInstance {
+@AllArgsConstructor
+public class EnchantmentInstance {
+    protected final EnchantmentType type;
+    protected final int level;
 
-    EnchantmentType getType();
+    public EnchantmentType getType() {
+        return type;
+    }
 
-    int getLevel();
+    public int getLevel() {
+        return level;
+    }
 
-    default EnchantmentInstance setLevel(int level) {
+    public EnchantmentInstance setLevel(int level) {
         return getType().createInstance(level);
     }
 
-    default NbtMap saveNBT() {
+    public NbtMap saveNBT() {
         return NbtMap.builder()
                 .putShort("id", (short) getType().getId())
                 .putShort("lvl", (short) getLevel())

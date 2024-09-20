@@ -9,7 +9,7 @@ import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.initinfo.SimpleEntityInitInfo;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.api.entity.type.EntityTypes;
@@ -776,7 +776,7 @@ public interface Dimension {
      */
     default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion, int pickupDelay) {
         var entityItem = EntityTypes.ITEM.createEntity(
-                SimpleEntityInitInfo.builder()
+                EntityInitInfo.builder()
                         .dimension(this)
                         .pos(pos)
                         .motion(motion)
@@ -835,7 +835,7 @@ public interface Dimension {
     default void dropXpOrb(Vector3fc pos, int xp, Vector3fc motion, int pickupDelay) {
         var rand = ThreadLocalRandom.current();
         var entityXpOrb = EntityTypes.XP_ORB.createEntity(
-                SimpleEntityInitInfo.builder()
+                EntityInitInfo.builder()
                         .dimension(this)
                         .pos(pos)
                         .motion(motion)

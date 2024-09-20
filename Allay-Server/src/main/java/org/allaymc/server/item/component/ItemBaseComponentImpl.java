@@ -21,10 +21,8 @@ import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.enchantment.SimpleEnchantmentInstance;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
@@ -212,7 +210,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public ItemStack copy(boolean newStackNetworkId) {
         var extraTag = saveExtraTag();
         return itemType.createItemStack(
-                SimpleItemStackInitInfo
+                ItemStackInitInfo
                         .builder()
                         .count(count)
                         .meta(meta)
@@ -358,7 +356,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void addEnchantment(EnchantmentType enchantmentType, int level) {
-        enchantments.put(enchantmentType, new SimpleEnchantmentInstance(enchantmentType, level));
+        enchantments.put(enchantmentType, new EnchantmentInstance(enchantmentType, level));
     }
 
     @Override

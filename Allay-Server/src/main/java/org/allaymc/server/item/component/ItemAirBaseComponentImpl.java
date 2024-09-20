@@ -1,7 +1,6 @@
 package org.allaymc.server.item.component;
 
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
 import org.allaymc.server.component.annotation.OnInitFinish;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
@@ -11,8 +10,8 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
  */
 public class ItemAirBaseComponentImpl extends ItemBaseComponentImpl {
 
-    public static SimpleItemStackInitInfo AIR_TYPE_INIT_INFO =
-            SimpleItemStackInitInfo
+    public static ItemStackInitInfo AIR_TYPE_INIT_INFO =
+            ItemStackInitInfo
                     .builder()
                     .autoAssignStackNetworkId(false)
                     .build();

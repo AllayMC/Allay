@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.initinfo.SimpleItemStackInitInfo;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Identifier;
@@ -44,7 +44,7 @@ public class CreativeItemRegistryLoader implements RegistryLoader<Void, Int2Obje
                 int meta = item.getShort("damage");
                 var tag = item.getCompound("tag", NbtMap.builder().build());
                 map.put(i, itemType.createItemStack(
-                        SimpleItemStackInitInfo
+                        ItemStackInitInfo
                                 .builder()
                                 .count(1)
                                 .meta(meta)
