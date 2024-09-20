@@ -27,12 +27,16 @@ jobs:
         if: contains(github.ref_name, 'master')
         with:
           stack: dual
+
       - uses: actions/checkout@v4
+
       - run: chmod +x gradlew
+
       - uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'zulu'
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -42,39 +46,46 @@ jobs:
           build-scan-publish: true
           build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-use-agree: "yes"
+
       - name: Build
         run: ./gradlew build
+
       - name: Generate coverage reports
+        if: success()
         run: ./gradlew jacocoTestReport
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.5.0
+        if: success()
         with:
           directory: .jacoco/test/
           token: ${{ secrets.CODECOV_TOKEN }}
-      # Upload Allay-Server
+
       - name: Upload Allay-Server
         uses: actions/upload-artifact@v4
-        if: success() && contains(github.ref_name, 'master')
+        if: success()
         with:
           name: allay-server
           path: server/build/libs/allay-server-shaded.jar
-      # Publish to JitPack
+
       - name: Publish to JitPack
         uses: fjogeleit/http-request-action@v1
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         with:
           url: 'https://jitpack.io/#AllayMC/Allay/master-SNAPSHOT'
           method: 'GET'
-      # Generate information
+
       - name: Get Short SHA
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
       - name: Format ChangeLog
         id: get-changelog
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         run: |
           CHANGELOG=$(echo "${{ github.event.commits[0].message }}" | sed ':a;N;$!ba;s/\n/\\n/g')
           echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
+
       - name: Get Time
         id: time
         uses: nanzm/get-time-action@v2.0
@@ -82,8 +93,8 @@ jobs:
         with:
           timeZone: 8
           format: 'YYYY/MM/DD-HH:mm:ss'
-      # Publish to MineBBS
-      - name: Update MineBBS Infomation
+
+      - name: Publish to MineBBS
         uses: fjogeleit/http-request-action@v1
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         with:
@@ -95,7 +106,7 @@ jobs:
           escapeData: 'true'
           preventFailureOnNoResponse: 'true'
           ignoreStatusCodes: '400,404,401,403,429,500,502,503,504'
-      # Copy jar to test server
+
       - name: Copy Jar to Test Server
         id: deploy-jar
         uses: appleboy/scp-action@master
@@ -110,7 +121,7 @@ jobs:
           source: "server/build/libs/allay-server-shaded.jar"
           strip_components: 3
           target: "/root/allaymc/tmp"
-      # Restart test server
+
       - name: Restart Test Server
         uses: appleboy/ssh-action@master
         if: steps.deploy-jar.outcome == 'success' && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
