@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.loottable.function.Function;
+import org.allaymc.api.loottable.function.FunctionDeserializer;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,7 +17,7 @@ public class SetDamageFunction implements Function {
     protected float min, max;
 
     public static FunctionDeserializer deserializer() {
-        return new SetDamageFunctionDeserializer();
+        return new Deserializer();
     }
 
     @Override
@@ -24,12 +26,13 @@ public class SetDamageFunction implements Function {
         itemStack.setDurability(itemStack.getItemData().maxDamage() * rand);
     }
 
-    public static class SetDamageFunctionDeserializer implements FunctionDeserializer {
+    public static class Deserializer implements FunctionDeserializer {
         @Override
         public Function deserialize(JsonObject json) {
             var count = json.get("damage").getAsJsonObject();
             var min = count.get("min").getAsFloat();
             Preconditions.checkState(min > 0 && min <= 1, "damage must be between 0 and 1");
+
             var max = count.get("max").getAsFloat();
             Preconditions.checkState(max > 0 && max <= 1, "damage must be between 0 and 1");
             Preconditions.checkState(min < max, "max must be greater than min");

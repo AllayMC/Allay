@@ -4,6 +4,8 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.loottable.function.Function;
+import org.allaymc.api.loottable.function.FunctionDeserializer;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -15,7 +17,7 @@ public class SetCountFunction implements Function {
     protected int min, max;
 
     public static FunctionDeserializer deserializer() {
-        return new SetCountFunctionDeserializer();
+        return new Deserializer();
     }
 
     @Override
@@ -29,7 +31,7 @@ public class SetCountFunction implements Function {
         itemStack.setCount(Math.min(itemStack.getItemData().maxStackSize(), rand));
     }
 
-    public static class SetCountFunctionDeserializer implements FunctionDeserializer {
+    public static class Deserializer implements FunctionDeserializer {
         @Override
         public Function deserialize(JsonObject json) {
             var count = json.get("count").getAsJsonObject();

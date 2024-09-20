@@ -3,13 +3,14 @@ package org.allaymc.server.loottable.entry;
 import com.google.gson.JsonObject;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.loottable.LootTableType;
+import org.allaymc.api.loottable.condition.Conditions;
+import org.allaymc.api.loottable.context.Context;
+import org.allaymc.api.loottable.entry.EntryDeserializer;
+import org.allaymc.api.loottable.function.Function;
+import org.allaymc.api.loottable.function.Functions;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.loottable.LootTableType;
-import org.allaymc.server.loottable.condition.Conditions;
-import org.allaymc.server.loottable.context.Context;
-import org.allaymc.server.loottable.function.Function;
-import org.allaymc.server.loottable.function.Functions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,7 @@ public class ItemEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_T
     }
 
     public static <CONTEXT_TYPE extends Context> EntryDeserializer<CONTEXT_TYPE> deserializer() {
-        return new ItemEntryDeserializer<>();
+        return new Deserializer<>();
     }
 
     @Override
@@ -51,7 +52,7 @@ public class ItemEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_T
         return Set.of(item);
     }
 
-    public static class ItemEntryDeserializer<CONTEXT_TYPE extends Context> implements EntryDeserializer<CONTEXT_TYPE> {
+    public static class Deserializer<CONTEXT_TYPE extends Context> implements EntryDeserializer<CONTEXT_TYPE> {
         @Override
         public ItemEntry<CONTEXT_TYPE> deserialize(JsonObject json, LootTableType<CONTEXT_TYPE> lootTableType) {
             var name = json.get("name").getAsString();

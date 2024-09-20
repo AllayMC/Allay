@@ -2,9 +2,11 @@ package org.allaymc.server.loottable.entry;
 
 import com.google.gson.JsonObject;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.server.loottable.LootTableType;
-import org.allaymc.server.loottable.condition.Conditions;
-import org.allaymc.server.loottable.context.Context;
+import org.allaymc.api.loottable.LootTableType;
+import org.allaymc.api.loottable.condition.Conditions;
+import org.allaymc.api.loottable.context.Context;
+import org.allaymc.api.loottable.entry.Entry;
+import org.allaymc.api.loottable.entry.EntryDeserializer;
 
 import java.util.Set;
 
@@ -17,7 +19,7 @@ public class EmptyEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_
     }
 
     public static <CONTEXT_TYPE extends Context> EntryDeserializer<CONTEXT_TYPE> deserializer() {
-        return new EmptyEntryDeserializer<>();
+        return new Deserializer<>();
     }
 
     @Override
@@ -25,7 +27,7 @@ public class EmptyEntry<CONTEXT_TYPE extends Context> extends BaseEntry<CONTEXT_
         return Set.of();
     }
 
-    public static class EmptyEntryDeserializer<CONTEXT_TYPE extends Context> implements EntryDeserializer<CONTEXT_TYPE> {
+    public static class Deserializer<CONTEXT_TYPE extends Context> implements EntryDeserializer<CONTEXT_TYPE> {
         @Override
         public Entry<CONTEXT_TYPE> deserialize(JsonObject json, LootTableType<CONTEXT_TYPE> lootTableType) {
             var weight = 1;
