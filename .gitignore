@@ -17,13 +17,13 @@
 .run/**
 !.run/Allay.run.xml
 # Files due to running `gradle run`
-/Allay-Server/caches
-/Allay-Server/command_data
-/Allay-Server/logs
-/Allay-Server/players
-/Allay-Server/plugins
-/Allay-Server/resource_packs
-/Allay-Server/server-settings.yml
-/Allay-Server/worlds
-/Allay-Server/ban-info.yml
-/Allay-Server/whitelist.yml
+/server/caches
+/server/command_data
+/server/logs
+/server/players
+/server/plugins
+/server/resource_packs
+/server/server-settings.yml
+/server/worlds
+/server/ban-info.yml
+/server/whitelist.yml
