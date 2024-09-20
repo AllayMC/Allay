@@ -45,11 +45,11 @@ class LevelDBWorldStorageTest {
     @BeforeAll
     static void mockServerSettings() {
         try {
-            Files.copy(levelDat.resolve("Allay-Server/src/test/resources/beworld/level.dat"), levelDat.resolve("Allay-Server/src/test/resources/beworld/copy/level.dat"), StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(levelDat.resolve("server/src/test/resources/beworld/level.dat"), levelDat.resolve("server/src/test/resources/beworld/copy/level.dat"), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        levelDBWorldStorage = new AllayLevelDBWorldStorage(levelDat.resolve("Allay-Server/src/test/resources/beworld"));
+        levelDBWorldStorage = new AllayLevelDBWorldStorage(levelDat.resolve("server/src/test/resources/beworld"));
         @SuppressWarnings("resource") MockedStatic<Server> serverClass = Mockito.mockStatic(Server.class);
         serverClass.when(Server::getInstance).thenReturn(server);
         Mockito.when(server.getEventBus()).thenReturn(eventBus);
@@ -61,8 +61,8 @@ class LevelDBWorldStorageTest {
     static void end() {
         try {
             levelDBWorldStorage.shutdown();
-            Files.copy(levelDat.resolve("Allay-Server/src/test/resources/beworld/copy/level.dat"), levelDat.resolve("Allay-Server/src/test/resources/beworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
-            FileUtils.deleteDirectory(levelDat.resolve("Allay-Server/src/test/resources/beworld/db").toFile());
+            Files.copy(levelDat.resolve("server/src/test/resources/beworld/copy/level.dat"), levelDat.resolve("server/src/test/resources/beworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
+            FileUtils.deleteDirectory(levelDat.resolve("server/src/test/resources/beworld/db").toFile());
             Server.getInstance().shutdown();
         } catch (IOException e) {
             throw new RuntimeException(e);
