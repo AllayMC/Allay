@@ -8,7 +8,7 @@ import com.google.gson.GsonBuilder;
  */
 public interface CodeGenConstants {
     //The root path of used resources
-    String DATA_PATH = "Allay-Data/resources/";
+    String DATA_PATH = "data/resources/";
     Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     String INDENT = "    ";
 }

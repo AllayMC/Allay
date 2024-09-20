@@ -245,7 +245,7 @@ public class GameTestCommand extends SimpleCommand {
                 .key("reloadblockloottable")
                 .exec(context -> {
                     try {
-                        var path = Path.of("../Allay-Data/resources/loot_tables/blocks.json");
+                        var path = Path.of("../data/resources/loot_tables/blocks.json");
                         if (!Files.exists(path)) {
                             context.addError("This command can only be used in local environment!");
                             return context.fail();

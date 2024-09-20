@@ -19,8 +19,8 @@ import static org.allaymc.codegen.Utils.convertToPascalCase;
 public class BlockPropertyTypeGen {
     public static final BlockPropertyTypeFile BLOCK_PROPERTY_TYPE_INFO_FILE;
     public static final Path BLOCK_PROPERTY_TYPES_FILE = Path.of(CodeGenConstants.DATA_PATH + "unpacked/block_property_types.json");
-    private static final Path TYPE_DATA_PATH = Path.of("Allay-API/src/main/java/org/allaymc/api/block/property/type");
-    private static final Path ENUM_PATH = Path.of("Allay-API/src/main/java/org/allaymc/api/block/property/enums");
+    private static final Path TYPE_DATA_PATH = Path.of("api/src/main/java/org/allaymc/api/block/property/type");
+    private static final Path ENUM_PATH = Path.of("api/src/main/java/org/allaymc/api/block/property/enums");
     private static final String PACKAGE_NAME = "org.allaymc.api.block.property.type";
 
     static {

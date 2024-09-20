@@ -20,7 +20,7 @@ import static org.allaymc.codegen.ClassNames.*;
 public class BiomeIdEnumGen {
     private static final Map<String, BiomeData> BIOME_DATA = new LinkedHashMap<>();
     private static final String PACKAGE_NAME = "org.allaymc.api.world.biome";
-    private static final Path OUTPUT_PATH = Path.of("Allay-API/src/main/java/org/allaymc/api/world/biome/BiomeId.java");
+    private static final Path OUTPUT_PATH = Path.of("api/src/main/java/org/allaymc/api/world/biome/BiomeId.java");
 
     static {
         try {

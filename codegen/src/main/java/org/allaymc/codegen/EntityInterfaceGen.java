@@ -24,7 +24,7 @@ public class EntityInterfaceGen extends BaseInterfaceGen {
 
     @SneakyThrows
     public static void generate() {
-        var interfaceDir = Path.of("Allay-API/src/main/java/org/allaymc/api/entity/interfaces");
+        var interfaceDir = Path.of("api/src/main/java/org/allaymc/api/entity/interfaces");
         if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
         var typesClass = TypeSpec.classBuilder(ClassNames.ENTITY_TYPES).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         for (var id : EntityId.values()) {
@@ -48,7 +48,7 @@ public class EntityInterfaceGen extends BaseInterfaceGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ENTITY_TYPES.simpleName() + ".java ...");
-        Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/entity/type/" + ClassNames.ENTITY_TYPES.simpleName() + ".java"), javaFile.toString());
+        Files.writeString(Path.of("api/src/main/java/org/allaymc/api/entity/type/" + ClassNames.ENTITY_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
     private static void addDefaultEntityTypeInitializer(EntityId id, ClassName entityClassName) {
@@ -70,7 +70,7 @@ public class EntityInterfaceGen extends BaseInterfaceGen {
 
     @SneakyThrows
     private static void generateDefaultEntityTypeInitializer() {
-        var filePath = Path.of("Allay-Server/src/main/java/org/allaymc/server/entity/type/EntityTypeDefaultInitializer.java");
+        var filePath = Path.of("server/src/main/java/org/allaymc/server/entity/type/EntityTypeDefaultInitializer.java");
         Files.deleteIfExists(filePath);
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath))

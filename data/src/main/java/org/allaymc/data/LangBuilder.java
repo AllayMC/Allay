@@ -138,7 +138,7 @@ public class LangBuilder {
         }
         LANG_BUILT.forEach((langCode, lang) -> {
             var json = GSON.toJson(lang);
-            var path = Path.of("Allay-Data/resources/lang/" + langCode.name() + ".json");
+            var path = Path.of("data/resources/lang/" + langCode.name() + ".json");
             if (!Files.exists(path.getParent())) {
                 try {
                     Files.createDirectories(path.getParent());
@@ -160,7 +160,7 @@ public class LangBuilder {
     @SneakyThrows
     public static Map<String, String> buildLang(LangCode langCode) {
         var lang = new TreeMap<String, String>();
-        Files.readAllLines(Path.of("Allay-Data/resources/unpacked/lang_raw/vanilla/" + langCode.name() + ".lang")).forEach(line -> {
+        Files.readAllLines(Path.of("data/resources/unpacked/lang_raw/vanilla/" + langCode.name() + ".lang")).forEach(line -> {
             if (!line.contains("=")) {
                 return;
             }
@@ -177,7 +177,7 @@ public class LangBuilder {
                 lang.put("minecraft:" + split[0], split[1].replaceAll("\t", ""));
             }
         });
-        var allayLangPath = Path.of("Allay-Data/resources/unpacked/lang_raw/allay/" + langCode.name() + ".json");
+        var allayLangPath = Path.of("data/resources/unpacked/lang_raw/allay/" + langCode.name() + ".json");
         if (Files.exists(allayLangPath)) {
             JsonParser.parseReader(Files.newBufferedReader(allayLangPath)).getAsJsonObject().entrySet().forEach(
                     entry -> {

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 /**
  * ApiInstanceHolder is used to hold the API instance that
- * needs to be implemented and provided by api implementation (Allay-Server).
+ * needs to be implemented and provided by api implementation (server).
  *
  * @author daoge_cmd
  */

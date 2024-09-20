@@ -30,8 +30,8 @@ public class CmdPkExportUtil {
             byteBuf.skipBytes(1);
             var pk = new AvailableCommandsPacket();
             CODEC.getPacketDefinition(AvailableCommandsPacket.class).getSerializer().deserialize(byteBuf, helper, pk);
-            Files.deleteIfExists(Path.of("Allay-Data/resources/unpacked/cmd_pk.json"));
-            JSONUtils.toFile("./Allay-Data/resources/unpacked/cmd_pk.json", pk, writer -> writer.setIndent("  "));
+            Files.deleteIfExists(Path.of("data/resources/unpacked/cmd_pk.json"));
+            JSONUtils.toFile("./data/resources/unpacked/cmd_pk.json", pk, writer -> writer.setIndent("  "));
         }
     }
 }

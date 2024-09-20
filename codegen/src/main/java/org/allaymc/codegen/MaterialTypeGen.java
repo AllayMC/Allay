@@ -65,6 +65,6 @@ public class MaterialTypeGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/block/material/MaterialTypes.java"), javaFile.toString());
+        Files.writeString(Path.of("api/src/main/java/org/allaymc/api/block/material/MaterialTypes.java"), javaFile.toString());
     }
 }

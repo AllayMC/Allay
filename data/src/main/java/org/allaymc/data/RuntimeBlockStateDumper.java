@@ -20,7 +20,7 @@ public class RuntimeBlockStateDumper {
     public static void main(String[] args) throws IOException {
         StringBuilder stringBuilder = new StringBuilder("# WARNING! Don't edit this file! It's automatically regenerated!");
         stringBuilder.append('\n');
-        try (var reader = NbtUtils.createGZIPReader(new FileInputStream(Path.of("Allay-Data/resources/unpacked/block_palette.nbt").toFile()))) {
+        try (var reader = NbtUtils.createGZIPReader(new FileInputStream(Path.of("data/resources/unpacked/block_palette.nbt").toFile()))) {
             NbtMap map = (NbtMap) reader.readTag();
             var blocks = map.getList("blocks", NbtType.COMPOUND);
             int runtimeId = 0;
@@ -39,7 +39,7 @@ public class RuntimeBlockStateDumper {
                 stringBuilder.append("runtimeId=").append(runtimeId).append("\n\n");
                 runtimeId++;
             }
-            Path path = Path.of("Allay-Data/resources/unpacked/runtime_block_states.txt");
+            Path path = Path.of("data/resources/unpacked/runtime_block_states.txt");
             Files.deleteIfExists(path);
             Files.writeString(path, stringBuilder, StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW);
         }

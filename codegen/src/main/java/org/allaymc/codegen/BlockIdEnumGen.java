@@ -27,7 +27,7 @@ public class BlockIdEnumGen {
     static final Path BLOCK_PALETTE_FILE_PATH = Path.of(CodeGenConstants.DATA_PATH + "unpacked/block_palette.nbt");
     static final List<NbtMap> BLOCK_PALETTE_NBT;
     private static final String PACKAGE_NAME = "org.allaymc.api.block.data";
-    public static final Path PACKAGE_PATH = Path.of("Allay-API/src/main/java/org/allaymc/api/block/data");
+    public static final Path PACKAGE_PATH = Path.of("api/src/main/java/org/allaymc/api/block/data");
 
     static {
         try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(BLOCK_PALETTE_FILE_PATH))))) {
@@ -58,7 +58,7 @@ public class BlockIdEnumGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(Path.of("Allay-CodeGen/src/main/java/org/allaymc/dependence/BlockId.java"), javaFile.toString());
+        Files.writeString(Path.of("codegen/src/main/java/org/allaymc/dependence/BlockId.java"), javaFile.toString());
     }
 
     @SneakyThrows

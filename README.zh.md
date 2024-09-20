@@ -63,12 +63,12 @@ Allay基于Java21，故在运行&构建Allay前你需要安装Java21。
 
 **直接运行:**
 ```shell
-gradlew Allay-Server:runShadow
+gradlew server:runShadow
 ```
 
 **构建:**
 ```shell
-gradlew Allay-Server:build
+gradlew server:build
 ```
 
 ## 插件
@@ -113,5 +113,5 @@ Allay支持运行以Java/JVM或JavaScript语言编写的插件，你可以查看
 
 以下文件夹内的内容以MIT协议开源：
 
-- Allay-Data
-- Allay-CodeGen
+- data
+- codegen

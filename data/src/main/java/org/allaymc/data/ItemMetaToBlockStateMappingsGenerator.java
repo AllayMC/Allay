@@ -22,7 +22,7 @@ public class ItemMetaToBlockStateMappingsGenerator {
         //                                                itemId       meta blockStateHash
         var itemMetaToBlockStateHashFullMap = new HashMap<String, Map<String, Object>>();
         List<NbtMap> items;
-        try (var reader = NbtUtils.createGZIPReader(new FileInputStream(Path.of("Allay-Data/resources/creative_items.nbt").toFile()))) {
+        try (var reader = NbtUtils.createGZIPReader(new FileInputStream(Path.of("data/resources/creative_items.nbt").toFile()))) {
             items = ((NbtMap) reader.readTag()).getList("items", NbtType.COMPOUND);
         }
         // Build full mappings
@@ -47,7 +47,7 @@ public class ItemMetaToBlockStateMappingsGenerator {
                 resultNBT.putCompound(itemIdentifier, NbtMap.fromMap(metaToBlockStateHashMap));
             }
         });
-        var path = Path.of("Allay-Data/resources/item_meta_block_state_bimap.nbt");
+        var path = Path.of("data/resources/item_meta_block_state_bimap.nbt");
         Files.deleteIfExists(path);
         Files.createFile(path);
         var tagStream = new FileOutputStream(path.toFile());

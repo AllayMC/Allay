@@ -25,7 +25,7 @@ import java.util.*;
 @Slf4j
 public class BlockPropertyTypeGen {
     public static void main(String[] args) throws IOException {
-        File file = new File("Allay-Data/resources/unpacked/block_palette.nbt");
+        File file = new File("data/resources/unpacked/block_palette.nbt");
         InputStream stream = new FileInputStream(file);
         List<NbtMap> blocks;
         int blockStateCounter = 0;
@@ -177,14 +177,14 @@ public class BlockPropertyTypeGen {
         globalJson.put("specialBlockTypes", specialBlockTypes);
 
         writeJSONObject(globalJson);
-        log.info("Block property type data have been saved to Allay-Data/resources/unpacked/block_property_types.json");
+        log.info("Block property type data have been saved to data/resources/unpacked/block_property_types.json");
     }
 
     private static void writeJSONObject(Object obj) {
         Gson gson = new GsonBuilder().setPrettyPrinting().setNumberToNumberStrategy(JsonReader::nextLong).setObjectToNumberStrategy(JsonReader::nextLong).create();
         String json = gson.toJson(obj);
         try {
-            Path path = Path.of("Allay-Data/resources/unpacked/block_property_types.json");
+            Path path = Path.of("data/resources/unpacked/block_property_types.json");
             Files.deleteIfExists(path);
             Files.writeString(path, json, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
         } catch (IOException e) {

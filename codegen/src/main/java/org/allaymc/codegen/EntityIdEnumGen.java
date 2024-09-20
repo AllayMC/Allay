@@ -39,8 +39,8 @@ public class EntityIdEnumGen {
     }
 
     public static void generate() {
-        generateTo(PACKAGE_NAME, Path.of("Allay-API/src/main/java/org/allaymc/api/entity/data/EntityId.java"), ClassNames.API_IDENTIFIER);
-        generateTo("org.allaymc.dependence", Path.of("Allay-CodeGen/src/main/java/org/allaymc/dependence/EntityId.java"), ClassNames.DEP_IDENTIFIER);
+        generateTo(PACKAGE_NAME, Path.of("api/src/main/java/org/allaymc/api/entity/data/EntityId.java"), ClassNames.API_IDENTIFIER);
+        generateTo("org.allaymc.dependence", Path.of("codegen/src/main/java/org/allaymc/dependence/EntityId.java"), ClassNames.DEP_IDENTIFIER);
     }
 
     @SneakyThrows

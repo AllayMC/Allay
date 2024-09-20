@@ -30,7 +30,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
     @SneakyThrows
     public static void generate() {
         registerSubPackages();
-        var interfaceDir = Path.of("Allay-API/src/main/java/org/allaymc/api/item/interfaces");
+        var interfaceDir = Path.of("api/src/main/java/org/allaymc/api/item/interfaces");
         if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
         var typesClass = TypeSpec
                 .classBuilder(ClassNames.ITEM_TYPES)
@@ -62,7 +62,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ITEM_TYPES.simpleName() + ".java ...");
-        Files.writeString(Path.of("Allay-API/src/main/java/org/allaymc/api/item/type/" + ClassNames.ITEM_TYPES.simpleName() + ".java"), javaFile.toString());
+        Files.writeString(Path.of("api/src/main/java/org/allaymc/api/item/type/" + ClassNames.ITEM_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
     private static void addDefaultItemTypeInitializer(ItemId id, ClassName itemClassName) {
@@ -84,7 +84,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
 
     @SneakyThrows
     private static void generateDefaultItemTypeInitializer() {
-        var filePath = Path.of("Allay-Server/src/main/java/org/allaymc/server/item/type/ItemTypeDefaultInitializer.java");
+        var filePath = Path.of("api/src/main/java/org/allaymc/server/item/type/ItemTypeDefaultInitializer.java");
         Files.deleteIfExists(filePath);
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath))

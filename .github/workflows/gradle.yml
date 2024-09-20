@@ -6,16 +6,16 @@ on:
     paths:
       - .github/workflows/gradle.yml
       - gradle/libs.versions.toml
-      - Allay-API/**
-      - Allay-Server/**
-      - Allay-Data/**
+      - api/**
+      - server/**
+      - data/**
   pull_request:
     paths:
       - .github/workflows/gradle.yml
       - gradle/libs.versions.toml
-      - Allay-API/**
-      - Allay-Server/**
-      - Allay-Data/**
+      - api/**
+      - server/**
+      - data/**
 
 jobs:
   build:
@@ -57,7 +57,7 @@ jobs:
         if: success() && contains(github.ref_name, 'master')
         with:
           name: Allay-Server
-          path: Allay-Server/build/libs/Allay-Server-shaded.jar
+          path: server/build/libs/Allay-Server-shaded.jar
       # Publish to JitPack
       - name: Publish to JitPack
         uses: fjogeleit/http-request-action@v1
@@ -107,7 +107,7 @@ jobs:
           port: ${{ secrets.TEST_SERVER_PORT }}
           key: ${{ secrets.TEST_SERVER_SSH_KEY }}
           passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
-          source: "Allay-Server/build/libs/Allay-Server-shaded.jar"
+          source: "server/build/libs/Allay-Server-shaded.jar"
           strip_components: 3
           target: "/root/allaymc/tmp"
       # Restart test server
