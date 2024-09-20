@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.UUID;
 
 /**
+ * Represents a crafting recipe.
+ *
  * @author daoge_cmd
  */
 @Getter

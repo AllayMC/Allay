@@ -25,7 +25,7 @@ public final class BlockStateSafeGetter {
         private final NbtMapBuilder nbtBuilder = NbtMap.builder();
         private NbtMapBuilder stateBuilder;
 
-        public Getter(String name) {
+        private Getter(String name) {
             if (name.isBlank()) {
                 throw new IllegalArgumentException("Name cannot be blank");
             }

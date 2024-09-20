@@ -4,6 +4,8 @@ import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Represents a furnace input.
+ *
  * @author daoge_cmd
  */
 @Getter

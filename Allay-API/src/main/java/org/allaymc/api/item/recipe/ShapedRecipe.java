@@ -17,11 +17,16 @@ import java.util.*;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
+ * Represents a shaped recipe.
+ *
  * @author daoge_cmd
  */
 @Getter
 public class ShapedRecipe extends CraftingRecipe {
 
+    /**
+     * The character that represents an empty key in the pattern.
+     */
     public static final char EMPTY_KEY_CHAR = ' ';
 
     protected static final ItemStack[][] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0][0];
@@ -95,7 +100,7 @@ public class ShapedRecipe extends CraftingRecipe {
 
     // @formatter:off
     /**
-     * Remove useless row and column
+     * Remove useless row and column。
      *
      * @param inputs <pre>
      *               {@code

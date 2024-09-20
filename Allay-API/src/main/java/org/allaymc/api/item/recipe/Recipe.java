@@ -6,22 +6,37 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.CraftingDataTyp
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 
 /**
+ * Represents a recipe.
+ *
  * @author daoge_cmd
  */
 public interface Recipe {
     /**
-     * @param input Input
+     * Check if the input matches the recipe.
      *
-     * @return Whether the input matches the recipe
+     * @param input the input to check.
+     * @return {@code true} if the input matches the recipe, {@code false} otherwise.
      */
     boolean match(Input input);
 
     /**
-     * @return The outputs of this recipe
+     * Get the outputs of this recipe.
+     *
+     * @return the outputs of this recipe.
      */
     ItemStack[] getOutputs();
 
+    /**
+     * Get the type of this recipe.
+     *
+     * @return the type of this recipe.
+     */
     CraftingDataType getType();
 
+    /**
+     * Create the network data of this recipe.
+     *
+     * @return the network data of this recipe.
+     */
     RecipeData toNetworkRecipeData();
 }

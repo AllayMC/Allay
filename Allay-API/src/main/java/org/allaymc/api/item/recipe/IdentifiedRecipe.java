@@ -3,8 +3,7 @@ package org.allaymc.api.item.recipe;
 import org.allaymc.api.utils.Identified;
 
 /**
- * <p>
- * Recipe with an identifier.
+ * Represents an identified recipe.
  *
  * @author daoge_cmd
  */

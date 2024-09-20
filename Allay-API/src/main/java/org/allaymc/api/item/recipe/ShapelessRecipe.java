@@ -20,6 +20,8 @@ import java.util.UUID;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
+ * Represents a shapeless recipe.
+ *
  * @author daoge_cmd
  */
 public class ShapelessRecipe extends CraftingRecipe {

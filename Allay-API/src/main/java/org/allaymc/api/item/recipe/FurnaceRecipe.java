@@ -13,6 +13,8 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.FurnaceR
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
 
 /**
+ * Represents a furnace recipe.
+ *
  * @author daoge_cmd
  */
 public class FurnaceRecipe implements Recipe, TaggedRecipe, IdentifiedRecipe {

@@ -6,6 +6,8 @@ import org.allaymc.api.item.ItemStack;
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
 /**
+ * Represents a crafting input.
+ *
  * @author daoge_cmd
  */
 @Getter
