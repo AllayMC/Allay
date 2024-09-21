@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -59,12 +60,21 @@ tasks.sourcesJar {
 
 tasks.runShadow {
     workingDir = file("${rootProject.projectDir}/.run/")
-    this.jarFile = file("build/libs/allay-server-shaded.jar")
+    jarFile = file("build/libs/allay-server-${version}-${getShortGitHash()}-shaded.jar")
 }
 
 tasks.shadowJar {
     transform(Log4j2PluginsCacheFileTransformer())
-    archiveFileName = "allay-server-${version}-shaded.jar"
+    archiveFileName = "allay-server-${version}-${getShortGitHash()}-shaded.jar"
+}
+
+fun getShortGitHash(): String {
+    val stdout = ByteArrayOutputStream()
+    exec {
+        commandLine = mutableListOf("git", "rev-parse", "--short", "HEAD")
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
 }
 
 tasks.jacocoTestReport {
