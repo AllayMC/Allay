@@ -150,7 +150,7 @@ public class AllayPluginManager implements PluginManager {
     }
 
     public void disablePlugins() {
-        for (var s : pluginsSortedList) {
+        for (var s : pluginsSortedList.reversed()) {
             if (!isPluginEnabled(s)) continue;
 
             var pluginContainer = getPlugin(s);
