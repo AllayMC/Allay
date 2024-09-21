@@ -49,6 +49,7 @@ import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.scroreboard.storage.JsonScoreboardStorage;
 import org.allaymc.server.terminal.AllayTerminalConsole;
 import org.allaymc.server.utils.AllayComputeThread;
+import org.allaymc.server.utils.SignalUtils;
 import org.allaymc.server.world.AllayWorldPool;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -84,6 +85,7 @@ public final class AllayServer implements Server {
     @Getter
     private final AllayWorldPool worldPool = new AllayWorldPool();
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
+    private boolean isFullyStopped = false;
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
     private final PlayerStorage playerStorage = Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE;
@@ -153,11 +155,11 @@ public final class AllayServer implements Server {
             ctx.updateLoggers();
         }
 
-        Runtime.getRuntime().addShutdownHook(new Thread("ShutDownHookThread") {
-            @Override
-            public void run() {
-                if (isRunning.get()) return;
-                shutdown();
+        SignalUtils.addTask(() -> {
+            if (!isRunning.get()) return;
+            shutdown();
+            while (!isFullyStopped) {
+                Thread.yield();
             }
         });
 
@@ -238,6 +240,8 @@ public final class AllayServer implements Server {
         // Shutdown thread pools
         virtualThreadPool.shutdown();
         computeThreadPool.shutdown();
+
+        isFullyStopped = true;
     }
 
     @Override
