@@ -1,4 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
+import java.text.SimpleDateFormat
+import java.util.*
+
+version = SimpleDateFormat("yyyy.MM.dd.HHmmss").format(Date())
 
 plugins {
     id("jacoco")
@@ -46,7 +50,7 @@ tasks.processResources {
     // input directory
     from("${rootProject.projectDir}/data/resources")
     // exclude unpacked folder and block_palette.nbt
-    exclude("${rootProject.projectDir}/unpacked/**")
+    exclude("unpacked")
 }
 
 tasks.sourcesJar {
@@ -60,7 +64,7 @@ tasks.runShadow {
 
 tasks.shadowJar {
     transform(Log4j2PluginsCacheFileTransformer())
-    archiveFileName = "allay-server-shaded.jar"
+    archiveFileName = "allay-server-${version}-shaded.jar"
 }
 
 tasks.jacocoTestReport {
