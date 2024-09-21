@@ -148,7 +148,7 @@ public final class Allay {
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
 
         api.implement("allay");
-        log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev(), AllayAPI.API_VERSION));
+        log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev() + " " + GitProperties.getBuildVersion(), AllayAPI.API_VERSION));
     }
 
     private static void initRegistries() {

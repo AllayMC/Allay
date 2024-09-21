@@ -20,7 +20,7 @@ public class VersionCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
-            context.addOutput(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev(), AllayAPI.API_VERSION);
+            context.addOutput(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev() + " " + GitProperties.getBuildVersion(), AllayAPI.API_VERSION);
             return context.success();
         });
     }
