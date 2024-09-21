@@ -163,7 +163,9 @@ public final class AllayServer implements Server {
             }
         });
 
-        terminalConsoleThread.start();
+        if (System.console() != null) {
+            terminalConsoleThread.start();
+        }
 
         ((AllayPluginManager) pluginManager).loadPlugins();
 
