@@ -119,7 +119,7 @@ jobs:
           port: ${{ secrets.TEST_SERVER_PORT }}
           key: ${{ secrets.TEST_SERVER_SSH_KEY }}
           passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
-          source: "server/build/libs/allay-server-shaded.jar"
+          source: "server/build/libs/allay-server-*-shaded.jar"
           strip_components: 3
           target: "/root/allaymc/tmp"
 
