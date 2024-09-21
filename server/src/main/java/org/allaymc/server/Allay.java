@@ -41,6 +41,7 @@ import org.allaymc.server.registry.populator.*;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.utils.DynamicURLClassLoader;
+import org.allaymc.server.utils.GitProperties;
 import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
@@ -146,7 +147,8 @@ public final class Allay {
         api.bind(CommandTree.CommandTreeFactory.class, () -> AllayCommandTree::create);
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
 
-        api.implement("Allay");
+        api.implement("allay");
+        log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev(), AllayAPI.API_VERSION));
     }
 
     private static void initRegistries() {

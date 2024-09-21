@@ -2,7 +2,7 @@
   "server.starting": "正在启动allay...",
   "server.stopped": "服务器已关闭",
   "lang.set": "服务器语言已设置为 %1",
-  "api.implemented": "此服务器正在运行 §b%1§r, 实现allay-api版本 §b%2",
+  "api.implemented": "此服务器正在运行 §b%1§r (§a%2§r), 实现§ballay-api§r版本 §a%3",
   "network.server.starting": "启动网络服务器中...",
   "network.server.started": "网络服务器已在 %1:%2 启动 (%3 毫秒)",
   "network.client.connected": "客户端已连接, 地址: %1",

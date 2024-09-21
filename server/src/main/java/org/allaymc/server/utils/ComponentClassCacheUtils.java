@@ -50,11 +50,10 @@ public final class ComponentClassCacheUtils {
      */
     public static void checkCacheValid() {
         var cacheValid = CACHE_ROOT_PATH.resolve("cache.valid");
-        var properties = new Properties();
-        try (var input = new InputStreamReader(Objects.requireNonNull(Allay.EXTRA_RESOURCE_CLASS_LOADER.getResourceAsStream("git.properties")))) {
-            properties.load(input);
+        var commitIdAbbrev = GitProperties.getCommitIdAbbrev();
+        try {
             if (Files.exists(cacheValid) &&
-                Files.readString(cacheValid).equals(properties.getProperty("git.commit.id.abbrev")) &&
+                Files.readString(cacheValid).equals(commitIdAbbrev) &&
                 CACHE_ROOT_PATH.resolve("mapping.json").toFile().exists()
             ) {
                 log.info(I18n.get().tr(TrKeys.A_CACHE_LOAD));
@@ -72,7 +71,7 @@ public final class ComponentClassCacheUtils {
         } finally {
             try {
                 Files.deleteIfExists(CACHE_ROOT_PATH.resolve("cache.valid"));
-                Files.writeString(CACHE_ROOT_PATH.resolve("cache.valid"), properties.getProperty("git.commit.id.abbrev"), StandardCharsets.UTF_8, StandardOpenOption.CREATE);
+                Files.writeString(CACHE_ROOT_PATH.resolve("cache.valid"), commitIdAbbrev, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
             } catch (IOException ignore) {}
         }
     }

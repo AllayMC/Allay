@@ -34,7 +34,7 @@ public final class AllayAPI {
     /**
      * The version of allay api.
      */
-    public static final String API_VERSION = "1.0.0";
+    public static final String API_VERSION = "0.1.0";
 
     private static final AllayAPI INSTANCE = new AllayAPI();
     private final Map<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
@@ -82,7 +82,6 @@ public final class AllayAPI {
         }
 
         this.coreName = coreName;
-        log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, coreName, API_VERSION));
         implemented = true;
     }
 

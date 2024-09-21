@@ -4,6 +4,7 @@ import org.allaymc.api.AllayAPI;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.server.utils.GitProperties;
 
 /**
  * @author daoge_cmd
@@ -19,7 +20,7 @@ public class VersionCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
-            context.addOutput(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), AllayAPI.API_VERSION);
+            context.addOutput(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev(), AllayAPI.API_VERSION);
             return context.success();
         });
     }
