@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * Represents the rarity of an enchantment.
+ *
  * @author daoge_cmd
  */
 @Getter
