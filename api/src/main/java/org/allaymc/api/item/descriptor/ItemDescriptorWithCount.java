@@ -5,6 +5,8 @@ import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 
 /**
+ * Represents an item descriptor with count.
+ *
  * @author daoge_cmd
  */
 @Getter

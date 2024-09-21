@@ -6,6 +6,10 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.tag.ItemTag;
 
 /**
+ * Represents an item tag descriptor.
+ * <p>
+ * Item tag descriptors are used to match items based on their tags.
+ *
  * @author daoge_cmd
  */
 @Getter

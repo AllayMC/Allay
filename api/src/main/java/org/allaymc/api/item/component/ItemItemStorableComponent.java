@@ -6,11 +6,24 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.List;
 
 /**
+ * ItemItemStorableComponent is used in item that can store items,
+ * such as shulker boxes.
+ *
  * @author daoge_cmd
  */
 public interface ItemItemStorableComponent extends ItemComponent {
+    /**
+     * Get the stored items.
+     *
+     * @return The stored items.
+     */
     @UnmodifiableView
     List<NbtMap> getStoredItems();
 
+    /**
+     * Set the stored items.
+     *
+     * @param items The stored items.
+     */
     void setStoredItems(List<NbtMap> items);
 }

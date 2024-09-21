@@ -21,7 +21,7 @@ public class ItemAxeComponentImpl extends ItemBlockBreakingToolComponent impleme
         var strippedBlockState = woodBaseComponent.getStrippedBlockState(blockState);
         dimension.setBlockState(clickedBlockPos, strippedBlockState);
         var player = event.getInteractInfo().player();
-        player.getItemInHand().increaseDurability(1);
+        player.getItemInHand().reduceDurability(1);
         player.swingArm();
         dimension.addLevelSoundEvent(
                 clickedBlockPos.x() + 0.5f, clickedBlockPos.y() + 0.5f, clickedBlockPos.z() + 0.5f,

@@ -40,7 +40,7 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
     }
 
     @Override
-    public boolean willDamageItem() {
+    public boolean canBeDamagedThisTime() {
         var level = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
         if (level == 0) return true;
 

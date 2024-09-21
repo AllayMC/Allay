@@ -47,7 +47,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
             if (!item.getItemData().isDamageable()) {
                 continue;
             }
-            item.increaseDurability(durabilityIncreased);
+            item.reduceDurability(durabilityIncreased);
             armorContainer.onSlotChange(slot);
         }
 

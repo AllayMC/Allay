@@ -113,8 +113,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         loadExtraTag(initInfo.extraTag());
     }
 
-    @Override
-    public void loadExtraTag(NbtMap extraTag) {
+    protected void loadExtraTag(NbtMap extraTag) {
         this.durability = extraTag.getInt("Damage", 0);
         extraTag.listenForCompound("display", displayNbt -> {
             this.customName = displayNbt.getString("Name");
@@ -168,7 +167,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public boolean willDamageItem() {
+    public boolean canBeDamagedThisTime() {
         var level = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
         if (level == 0) return true;
 
@@ -198,12 +197,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                 .usingNetId(hasStackNetworkId())
                 .netId(stackNetworkId)
                 .build();
-    }
-
-    @Override
-    public int assignNewStackNetworkId() {
-        stackNetworkId = STACK_NETWORK_ID_COUNTER++;
-        return stackNetworkId;
     }
 
     @Override
@@ -360,8 +353,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public void removeEnchantment(EnchantmentType enchantmentType) {
-        enchantments.remove(enchantmentType);
+    public EnchantmentInstance removeEnchantment(EnchantmentType enchantmentType) {
+        return enchantments.remove(enchantmentType);
     }
 
     @Override
@@ -390,9 +383,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public void increaseDurability(int addition) {
+    public void reduceDurability(int reduction) {
         if (!canIncreaseDurabilityThisTime()) return;
-        setDurability(getDurability() + addition);
+        setDurability(getDurability() + reduction);
     }
 
     protected boolean canIncreaseDurabilityThisTime() {

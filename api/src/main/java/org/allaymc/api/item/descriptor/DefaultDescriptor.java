@@ -6,6 +6,10 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 
 /**
+ * Represents a default item descriptor.
+ * <p>
+ * This descriptor matches items based on their {@link ItemType} and meta.
+ *
  * @author daoge_cmd
  */
 @Getter
