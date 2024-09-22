@@ -2,6 +2,9 @@ package org.allaymc.api.i18n;
 
 import lombok.AllArgsConstructor;
 
+/**
+ * @author daoge_cmd
+ */
 @AllArgsConstructor
 public enum LangCode {
     en_US("English (United States)"),

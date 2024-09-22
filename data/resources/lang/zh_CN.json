@@ -1,5 +1,4 @@
 {
-  "allay:allay.starting": "正在启动allay...",
   "allay:api.implemented": "此服务器正在运行 §b%1§r (§a%2§r), 实现§ballay-api§r版本 §a%3",
   "allay:blockentitytype.loaded": "加载完成 %1 个方块实体类型",
   "allay:blockentitytype.loading": "正在加载方块实体类型...",

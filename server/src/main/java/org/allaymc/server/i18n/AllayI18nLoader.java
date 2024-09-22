@@ -1,7 +1,6 @@
 package org.allaymc.server.i18n;
 
 import com.google.gson.reflect.TypeToken;
-import org.allaymc.api.i18n.I18nLoader;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.utils.JSONUtils;
 

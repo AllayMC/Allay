@@ -1,5 +1,4 @@
 {
-  "allay:allay.starting": "Starting up allay...",
   "allay:api.implemented": "This server is running §b%1§r (§a%2§r), implement §ballay-api§r version §a%3",
   "allay:blockentitytype.loaded": "Loaded %1 block entity types",
   "allay:blockentitytype.loading": "Loading block entity types...",
@@ -86,7 +85,7 @@
   "allay:plugin.loading": "Loading plugin %1",
   "allay:recipe.loaded": "Loaded %1 recipes",
   "allay:recipe.loading": "Loading recipes...",
-  "allay:server.starting": "Starting allay...",
+  "allay:server.starting": "Starting up allay...",
   "allay:server.stopped": "Server stopped",
   "allay:world.loaded": "World %1 is loaded",
   "allay:world.loading": "Loading world %1",

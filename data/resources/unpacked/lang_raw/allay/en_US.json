@@ -1,5 +1,5 @@
 {
-  "server.starting": "Starting allay...",
+  "server.starting": "Starting up allay...",
   "server.stopped": "Server stopped",
   "lang.set": "Server language was set to %1",
   "api.implemented": "This server is running §b%1§r (§a%2§r), implement §ballay-api§r version §a%3",
@@ -7,7 +7,6 @@
   "network.server.started": "Network server started at %1:%2 (%3 ms)",
   "network.client.connected": "Client connected, IP: %1",
   "network.client.disconnected": "Client disconnected, IP: %1",
-  "allay.starting": "Starting up allay...",
   "blocktype.loading": "Loading block types...",
   "blocktype.loaded": "Loaded %1 block types",
   "blockentitytype.loading": "Loading block entity types...",

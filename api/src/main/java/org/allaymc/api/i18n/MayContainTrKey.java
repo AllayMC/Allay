@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * This annotation is used to mark the text which may contains translation key.
+ *
  * @author daoge_cmd
  */
 @Retention(RetentionPolicy.RUNTIME)

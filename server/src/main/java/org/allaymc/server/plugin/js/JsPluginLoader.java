@@ -4,7 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.i18n.I18nLoader;
+import org.allaymc.server.i18n.I18nLoader;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.plugin.PluginContainer;
 import org.allaymc.api.plugin.PluginDescriptor;
