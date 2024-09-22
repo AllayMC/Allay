@@ -18,6 +18,9 @@ import java.util.function.UnaryOperator;
 import static org.allaymc.api.entity.damage.DamageContainer.DamageType.*;
 
 /**
+ * DamageContainer is a container that stores the information of the damage,
+ * including the attacker, the damage type, the source damage, the final damage, etc.
+ *
  * @author daoge_cmd
  */
 @Getter
@@ -54,40 +57,93 @@ public class DamageContainer {
         this.finalDamage = sourceDamage;
     }
 
+    /**
+     * Create a simple attack damage container.
+     *
+     * @param sourceDamage the source damage.
+     * @return the damage container.
+     */
     public static DamageContainer simpleAttack(float sourceDamage) {
         return new DamageContainer(null, API, sourceDamage);
     }
 
+    /**
+     * Create an entity attack damage container.
+     *
+     * @param attacker the attacker.
+     * @param sourceDamage the source damage.
+     * @return the damage container.
+     */
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
         var damageContainer = new DamageContainer(attacker, ENTITY_ATTACK, sourceDamage);
         damageContainer.setCritical(attacker.canCriticalAttack());
         return damageContainer;
     }
 
+    /**
+     * Create a starve damage container.
+     *
+     * @param sourceDamage the source damage.
+     * @return the damage container.
+     */
     public static DamageContainer starve(float sourceDamage) {
         return new DamageContainer(null, STARVE, sourceDamage);
     }
 
+    /**
+     * Create a fall damage container.
+     *
+     * @param sourceDamage the source damage.
+     * @return the damage container.
+     */
     public static DamageContainer fall(float sourceDamage) {
         return new DamageContainer(null, FALL, sourceDamage);
     }
 
+    /**
+     * Create a magic effect damage container.
+     *
+     * @param sourceDamage the source damage.
+     * @return the damage container.
+     */
     public static DamageContainer magicEffect(float sourceDamage) {
         return new DamageContainer(null, MAGIC, sourceDamage);
     }
 
+    /**
+     * Get the attacker.
+     *
+     * @return the attacker, or {@code null} if the attacker is not present.
+     * @param <T> the type of the attacker.
+     */
     public <T> T getAttacker() {
+        // noinspection unchecked
         return (T) attacker;
     }
 
+    /**
+     * Check if the damage has a custom knockback.
+     *
+     * @return {@code true} if the damage has a custom knockback, otherwise {@code false}.
+     */
     public boolean hasCustomKnockback() {
         return customKnockback != -1;
     }
 
+    /**
+     * Update the final damage using the given updater.
+     *
+     * @param updater the updater.
+     */
     public void updateFinalDamage(UnaryOperator<Float> updater) {
         this.finalDamage = updater.apply(this.finalDamage);
     }
 
+    /**
+     * Check if the damage can be reduced by armor.
+     *
+     * @return {@code true} if the damage can be reduced by armor, otherwise {@code false}.
+     */
     public boolean canBeReducedByArmor() {
         return !CANNOT_BE_REDUCED_BY_ARMOR_DAMAGE_TYPES.contains(damageType);
     }

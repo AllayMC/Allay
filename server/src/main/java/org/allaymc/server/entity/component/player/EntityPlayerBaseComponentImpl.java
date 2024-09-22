@@ -637,7 +637,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void applyAnimation(AnimatePacket.Action action, float rowingTime) {
+    public void applyAction(AnimatePacket.Action action, float rowingTime) {
         var packet = new AnimatePacket();
         packet.setRuntimeEntityId(getRuntimeId());
         packet.setAction(action);

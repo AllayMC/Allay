@@ -1,6 +1,5 @@
 package org.allaymc.api.block.component;
 
-import com.google.common.base.Preconditions;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
@@ -165,7 +164,7 @@ public interface BlockBaseComponent extends BlockComponent {
         var efficiencyLevel = 0;
 
         if (entity != null) {
-            isInWater = entity.isInWater();
+            isInWater = entity.isEyesInWater();
             isOnGround = entity.isOnGround();
             hasteEffectLevel = entity.getEffectLevel(EffectTypes.HASTE);
             // Conduit Power ensures at least level 2 haste effect

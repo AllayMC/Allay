@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
@@ -246,11 +247,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             // fall distance < 0 -> move up
             // fall distance > 0 -> move down
             this.fallDistance -= location.y() - this.location.y();
-            var currentBlockState = location.dimension().getBlockState(location);
-            if (currentBlockState.getBlockStateData().canResetFallDistance() &&
-                currentBlockState.getBlockStateData().computeOffsetCollisionShape(MathUtils.floor(location)).intersectsAABB(getAABB().translate(location, new AABBf()))) {
-                this.fallDistance = 0;
-            }
+            tryResetFallDistance(location);
         }
 
         this.location.set(location);
@@ -260,14 +257,24 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.location.setDimension(location.dimension());
     }
 
-    @Override
-    public Dimension getDimension() {
-        return location.dimension;
+    private void tryResetFallDistance(Location3fc location) {
+        var currentBlockState0 = location.dimension().getBlockState(location);
+        var currentBlockState1 = location.dimension().getBlockState(location, 1);
+
+        if (!currentBlockState0.getBlockStateData().hasCollision() && currentBlockState1.getBlockType().hasBlockTag(BlockTags.WATER)) {
+            this.fallDistance = 0;
+            return;
+        }
+
+        if (currentBlockState0.getBlockStateData().canResetFallDistance() &&
+            currentBlockState0.getBlockStateData().computeOffsetCollisionShape(MathUtils.floor(location)).intersectsAABB(getAABB().translate(location, new AABBf()))) {
+            this.fallDistance = 0;
+        }
     }
 
     @Override
-    public World getWorld() {
-        return location.dimension != null ? location.dimension.getWorld() : null;
+    public Dimension getDimension() {
+        return location.dimension;
     }
 
     @Override
@@ -433,17 +440,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.motion = new Vector3f(motion);
     }
 
-    @Override
     public void setOnGround(boolean onGround) {
         this.onGround = onGround;
         if (onGround && this.fallDistance > 0) {
             this.onFall();
         }
-    }
-
-    @Override
-    public void setHasGravity(boolean hasGravity) {
-        setAndSendEntityFlag(EntityFlag.HAS_GRAVITY, hasGravity);
     }
 
     @Override
@@ -519,12 +520,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         viewers.values().forEach(client -> client.sendPacketImmediately(packet));
     }
 
-    @Override
-    public void broadcastMoveToViewers(Location3fc newLoc) {
-        broadcastMoveToViewers(newLoc, false);
-    }
-
-    @Override
     public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
         var movementPk = createMovePacket(newLoc, teleporting);
         var motionPk = createMotionPacket();

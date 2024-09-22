@@ -67,7 +67,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     protected void applyDamage(DamageContainer damage) {
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
         baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
-        if (damage.isCritical()) baseComponent.applyAnimation(AnimatePacket.Action.CRITICAL_HIT);
+        if (damage.isCritical()) baseComponent.applyAction(AnimatePacket.Action.CRITICAL_HIT);
 
         manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
 

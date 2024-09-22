@@ -293,7 +293,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             // Update onGround status after updated entity location
             // to make sure that some block (for example: water) can reset
             // entity's fallDistance before onFall() called
-            entity.setOnGround(isOnGround);
+            entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setOnGround(isOnGround);
             return true;
         }
         return false;
@@ -486,7 +486,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
                 var aabb = clientMove.player.getOffsetAABB();
                 aabb.minY -= FAT_AABB_MARGIN;
-                player.setOnGround(dimension.getCollidingBlocks(aabb) != null);
+                player.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setOnGround(dimension.getCollidingBlocks(aabb) != null);
             }
         }
     }
@@ -499,7 +499,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         newLoc = event.getTo();
 
-        entity.broadcastMoveToViewers(newLoc);
+        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).broadcastMoveToViewers(newLoc, false);
         entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setLocationAndCheckChunk(newLoc);
         return true;
     }
