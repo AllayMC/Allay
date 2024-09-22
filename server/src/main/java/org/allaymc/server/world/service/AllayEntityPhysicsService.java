@@ -22,6 +22,7 @@ import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
@@ -478,7 +479,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
                 // Calculate delta pos (motion)
                 var motion = event.getTo().sub(player.getLocation(), new Vector3f());
-                player.setMotionValueOnly(motion);
+                player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setMotionValueOnly(motion);
                 if (updateEntityLocation(player, clientMove.newLoc())) {
                     entityAABBTree.update(player);
                 }

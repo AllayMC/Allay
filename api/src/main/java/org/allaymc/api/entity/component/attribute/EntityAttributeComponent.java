@@ -12,9 +12,9 @@ import java.util.List;
 public interface EntityAttributeComponent extends EntityComponent {
 
     /**
-     * Get basic entity attributes
+     * Get basic entity attributes.
      *
-     * @return basic entity attributes
+     * @return basic entity attributes.
      */
     static AttributeType[] basicEntityAttributes() {
         return new AttributeType[]{
@@ -28,95 +28,95 @@ public interface EntityAttributeComponent extends EntityComponent {
     }
 
     /**
-     * Default tick method
+     * Default tick method.
      */
     default void tick() {}
 
     /**
-     * Add attribute to entity
+     * Add attribute to entity.
      *
      * @param attributeType attribute type
      */
     void addAttribute(AttributeType attributeType);
 
     /**
-     * Get all entity attributes
+     * Get all entity attributes.
      *
-     * @return entity attributes
+     * @return entity attributes.
      */
     Collection<Attribute> getAttributes();
 
     /**
-     * Get attribute by type
+     * Get attribute by type.
      *
      * @param attributeType attribute type
      *
-     * @return attribute, or {@code null} if type is not supported
+     * @return attribute, or {@code null} if type is not supported.
      */
     Attribute getAttribute(AttributeType attributeType);
 
     /**
-     * Set attribute to entity
+     * Set attribute to entity.
      *
-     * @param attribute attribute
+     * @param attribute attribute.
      */
     void setAttribute(Attribute attribute);
 
     /**
-     * Get attribute value by type
+     * Get attribute value by type.
      *
-     * @param attributeType attribute type
+     * @param attributeType attribute type.
      *
-     * @return attribute value
+     * @return attribute value.
      */
     float getAttributeValue(AttributeType attributeType);
 
     /**
-     * Set attribute value by type
+     * Set attribute value by type.
      *
-     * @param attributeType attribute type
-     * @param value         attribute value
+     * @param attributeType attribute type.
+     * @param value         attribute value.
      */
     void setAttributeValue(AttributeType attributeType, float value);
 
     /**
-     * Check if entity supports health attribute
+     * Check if entity supports health attribute.
      *
-     * @return {@code true} if entity supports health attribute, {@code false} otherwise
+     * @return {@code true} if entity supports health attribute, {@code false} otherwise.
      */
     default boolean supportHealth() {
         return getAttribute(AttributeType.HEALTH) != null;
     }
 
     /**
-     * Get entity health
+     * Get entity health.
      *
-     * @return entity health
+     * @return entity health.
      */
     default float getHealth() {
         return getAttributeValue(AttributeType.HEALTH);
     }
 
     /**
-     * Set entity health
+     * Set entity health.
      *
-     * @param value entity health
+     * @param value entity health.
      */
     void setHealth(float value);
 
     /**
-     * Get entity max health
+     * Get entity max health.
      *
-     * @return entity max health
+     * @return entity max health.
      */
     default float getMaxHealth() {
         return this.getAttribute(AttributeType.HEALTH).getMaxValue();
     }
 
     /**
-     * Set entity max health
+     * Set entity max health.
      *
-     * @param value entity max health
+     * @param value entity max health.
      */
     default void setMaxHealth(float value) {
         // TODO: Event
@@ -126,32 +126,32 @@ public interface EntityAttributeComponent extends EntityComponent {
     }
 
     /**
-     * Reset entity health to max health
+     * Reset entity health to max health.
      */
     default void resetHealth() {
         setHealth(getMaxHealth());
     }
 
     /**
-     * Check if entity supports absorption attribute
+     * Check if entity supports absorption attribute.
      *
-     * @return {@code true} if entity supports absorption attribute, {@code false} otherwise
+     * @return {@code true} if entity supports absorption attribute, {@code false} otherwise.
      */
     default boolean supportAbsorption() {
         return getAttribute(AttributeType.ABSORPTION) != null;
     }
 
     /**
-     * Get entity absorption
+     * Get entity absorption.
      *
-     * @return entity absorption
+     * @return entity absorption.
      */
     default float getAbsorption() {
         return getAttributeValue(AttributeType.ABSORPTION);
     }
 
     /**
-     * Set entity absorption
+     * Set entity absorption.
      *
      * @param absorption entity absorption
      */
@@ -160,9 +160,9 @@ public interface EntityAttributeComponent extends EntityComponent {
     }
 
     /**
-     * Save all entity attributes to NBT format
+     * Save all entity attributes to NBT format.
      *
-     * @return entity attributes in NBT format
+     * @return entity attributes in NBT format.
      */
     default List<NbtMap> saveAttributes() {
         return getAttributes().stream().map(Attribute::toNBT).toList();

@@ -5,16 +5,16 @@ package org.allaymc.api.entity.component;
  */
 public interface EntityXpOrbBaseComponent extends EntityPickableBaseComponent {
     /**
-     * Get the experience value of this entity xp orb
+     * Get the experience value of this entity xp orb.
      *
-     * @return the experience value
+     * @return the experience value.
      */
     int getExperienceValue();
 
     /**
-     * Set the experience value of this entity xp orb
+     * Set the experience value of this entity xp orb.
      *
-     * @param experienceValue the experience value
+     * @param experienceValue the experience value.
      */
     void setExperienceValue(int experienceValue);
 }

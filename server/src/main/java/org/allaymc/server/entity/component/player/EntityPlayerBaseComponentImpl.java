@@ -503,7 +503,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .build();
     }
 
-    @Override
     public void sendLocationToSelf() {
         networkComponent.sendPacket(createMovePacket(location, true));
     }
@@ -821,7 +820,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         setMotion(kbMotion);
     }
 
-    @Override
     public void setMotionValueOnly(Vector3fc motion) {
         this.motion = new Vector3f(motion);
     }

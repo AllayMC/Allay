@@ -3,6 +3,8 @@ package org.allaymc.server.network.processor.login;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.network.processor.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -20,7 +22,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,
         // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
         // Otherwise the client will snap into the ground
-        player.sendLocationToSelf();
+        player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).sendLocationToSelf();
         player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).setInitialized();
     }
 

@@ -5,37 +5,37 @@ package org.allaymc.api.entity.component;
  */
 public interface EntityPickableBaseComponent extends EntityBaseComponent {
     /**
-     * Get the pickup delay of this entity item
+     * Get the pickup delay of this entity item.
      *
-     * @return the pickup delay
+     * @return the pickup delay.
      */
     int getPickupDelay();
 
     /**
-     * Set the pickup delay of this entity item
+     * Set the pickup delay of this entity item.
      *
-     * @param delay the pickup delay
+     * @param delay the pickup delay.
      */
     void setPickupDelay(int delay);
 
     /**
-     * Get the age of this entity item
+     * Get the age of this entity item.
      *
-     * @return the age
+     * @return the age.
      */
     int getAge();
 
     /**
-     * Set the age of this entity item
+     * Set the age of this entity item.
      *
-     * @param age the age
+     * @param age the age.
      */
     void setAge(int age);
 
     /**
-     * Check if this entity item can be picked up
+     * Check if this entity item can be picked up.
      *
-     * @return {@code true} if the pickup delay is 0, {@code false} otherwise
+     * @return {@code true} if the pickup delay is 0, {@code false} otherwise.
      */
     default boolean canBePicked() {
         return getPickupDelay() == 0;

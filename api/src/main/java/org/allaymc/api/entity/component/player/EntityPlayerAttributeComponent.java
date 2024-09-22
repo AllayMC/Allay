@@ -12,9 +12,9 @@ import java.util.Arrays;
 public interface EntityPlayerAttributeComponent extends EntityAttributeComponent {
 
     /**
-     * Returns an array of basic player attributes.
+     * Return an array of basic player attributes.
      *
-     * @return array of basic player attributes
+     * @return array of basic player attributes.
      */
     static AttributeType[] basicPlayerAttributes() {
         var list = Lists.newArrayList(
@@ -31,9 +31,9 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
     /**
      * Calculates the required experience for a given level.
      *
-     * @param level the level
+     * @param level the level.
      *
-     * @return the required experience
+     * @return the required experience.
      */
     static int calculateRequireExperience(int level) {
         if (level >= 30) {
@@ -46,37 +46,37 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
     }
 
     /**
-     * Gets the current experience level.
+     * Get the current experience level.
      *
-     * @return the experience level
+     * @return the experience level.
      */
     int getExperienceLevel();
 
     /**
-     * Sets the experience level.
+     * Set the experience level.
      *
-     * @param value the new experience level
+     * @param value the new experience level.
      */
     void setExperienceLevel(int value);
 
     /**
-     * Gets the current experience progress.
+     * Get the current experience progress.
      *
-     * @return the experience progress
+     * @return the experience progress.
      */
     float getExperienceProgress();
 
     /**
-     * Sets the experience progress.
+     * Set the experience progress.
      *
-     * @param value the new experience progress
+     * @param value the new experience progress.
      */
     void setExperienceProgress(float value);
 
     /**
      * Adds experience to the player.
      *
-     * @param addition the amount of experience to add
+     * @param addition the amount of experience to add.
      */
     default void addExperience(int addition) {
         var currentLevel = getExperienceLevel();
@@ -94,18 +94,18 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
     }
 
     /**
-     * Gets the required experience for the current level.
+     * Get the required experience for the current level.
      *
-     * @return the required experience
+     * @return the required experience.
      */
     default int getRequireExperienceForCurrentLevel() {
         return calculateRequireExperience(getExperienceLevel());
     }
 
     /**
-     * Gets the experience in the current level.
+     * Get the experience in the current level.
      *
-     * @return the experience in the current level
+     * @return the experience in the current level.
      */
     default int getExperienceInCurrentLevel() {
         return (int) (getExperienceProgress() * getRequireExperienceForCurrentLevel());
@@ -121,34 +121,34 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
     }
 
     /**
-     * Gets the current food level.
+     * Get the current food level.
      *
-     * @return the food level
+     * @return the food level.
      */
     default int getFoodLevel() {
         return (int) getAttributeValue(AttributeType.PLAYER_HUNGER);
     }
 
     /**
-     * Sets the food level.
+     * Set the food level.
      *
-     * @param value the new food level
+     * @param value the new food level.
      */
     void setFoodLevel(int value);
 
     /**
-     * Gets the current food saturation level.
+     * Get the current food saturation level.
      *
-     * @return the food saturation level
+     * @return the food saturation level.
      */
     default float getFoodSaturationLevel() {
         return getAttributeValue(AttributeType.PLAYER_SATURATION);
     }
 
     /**
-     * Sets the food saturation level.
+     * Set the food saturation level.
      *
-     * @param value the new food saturation level
+     * @param value the new food saturation level.
      */
     default void setFoodSaturationLevel(float value) {
         value = Math.max(0, Math.min(value, (int) AttributeType.PLAYER_SATURATION.getMaxValue()));
@@ -156,18 +156,18 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
     }
 
     /**
-     * Gets the current food exhaustion level.
+     * Get the current food exhaustion level.
      *
-     * @return the food exhaustion level
+     * @return the food exhaustion level.
      */
     default float getFoodExhaustionLevel() {
         return getAttributeValue(AttributeType.PLAYER_EXHAUSTION);
     }
 
     /**
-     * Sets the food exhaustion level.
+     * Set the food exhaustion level.
      *
-     * @param value the new food exhaustion level
+     * @param value the new food exhaustion level.
      */
     default void setFoodExhaustionLevel(float value) {
         value = Math.max(0, Math.min(value, (int) AttributeType.PLAYER_EXHAUSTION.getMaxValue()));
@@ -177,34 +177,34 @@ public interface EntityPlayerAttributeComponent extends EntityAttributeComponent
     /**
      * Reduces the player's exhaustion level.
      *
-     * @param level the amount of exhaustion to reduce by
+     * @param level the amount of exhaustion to reduce by.
      */
     void exhaust(float level);
 
     /**
      * Increases the player's saturation level.
      *
-     * @param food       the amount of food to add
-     * @param saturation the amount of saturation to add
+     * @param food       the amount of food to add.
+     * @param saturation the amount of saturation to add.
      */
     void saturate(int food, float saturation);
 
     /**
-     * Checks if the player can eat.
+     * Check if the player can eat.
      *
-     * @return {@code true} if the player can eat, {@code false} otherwise
+     * @return {@code true} if the player can eat, {@code false} otherwise.
      */
     boolean canEat();
 
     /**
-     * Sets the food tick timer.
+     * Set the food tick timer.
      *
-     * @param foodTickTimer the new food tick timer
+     * @param foodTickTimer the new food tick timer.
      */
     void setFoodTickTimer(int foodTickTimer);
 
     /**
-     * Sends the attributes to the client.
+     * Send the attributes to the client.
      */
     void sendAttributesToClient();
 }
