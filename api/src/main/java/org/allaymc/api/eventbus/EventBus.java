@@ -9,14 +9,36 @@ import org.allaymc.api.eventbus.event.Event;
 public interface EventBus {
     ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
 
+    /**
+     * Create a new event bus.
+     *
+     * @return a new event bus.
+     */
     static EventBus create() {
         return FACTORY.get().create();
     }
 
+    /**
+     * Register a listener.
+     *
+     * @param listener the listener to register.
+     */
     void registerListener(Object listener);
 
+    /**
+     * Unregister a listener.
+     *
+     * @param listener the listener to unregister.
+     */
     void unregisterListener(Object listener);
 
+    /**
+     * Call an event.
+     *
+     * @param event the event to call.
+     * @return the event.
+     * @param <E> the type of the event.
+     */
     <E extends Event> E callEvent(E event);
 
     interface Factory {
