@@ -39,7 +39,7 @@ public class AABBTreeJMHTest {
         }
         testEntityAABBs = new AABBf[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {
-            testEntityAABBs[i] = testEntities[i].copyOffsetAABBTo(null);
+            testEntityAABBs[i] = new AABBf().set(testEntities[i].getOffsetAABB());
         }
         testAABBs = new AABBf[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {

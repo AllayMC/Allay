@@ -1,6 +1,6 @@
 package org.allaymc.api.world.service;
 
-import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 
 /**
  * HasAABB represents an object that has an AABB.
@@ -8,10 +8,14 @@ import org.joml.primitives.AABBf;
  * @author daoge_cmd
  */
 public interface HasAABB {
+
     /**
-     * Copy the offset AABB to the specified dest AABB.
-     *
-     * @return the copied AABB
+     * @return the AABB of the object.
      */
-    AABBf copyOffsetAABBTo(AABBf dest);
+    AABBfc getAABB();
+
+    /**
+     * @return the offset AABB of the object.
+     */
+    AABBfc getOffsetAABB();
 }

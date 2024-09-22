@@ -17,6 +17,8 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.service.HasAABB;
+import org.allaymc.api.world.service.HasLongId;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
@@ -37,7 +39,7 @@ import java.util.Set;
 /**
  * @author daoge_cmd
  */
-public interface EntityBaseComponent extends EntityComponent, CommandSender {
+public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId {
 
     float SPRINTING_MOVEMENT_FACTOR = 1.3f;
     float WALKING_MOVEMENT_FACTOR = 1f;
@@ -104,6 +106,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender {
     void teleport(Location3fc location);
 
     long getRuntimeId();
+
+    @Override
+    default long getLongId() {
+        return getRuntimeId();
+    }
 
     long getUniqueId();
 
