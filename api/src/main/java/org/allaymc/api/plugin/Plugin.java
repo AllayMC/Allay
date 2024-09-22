@@ -1,22 +1,21 @@
 package org.allaymc.api.plugin;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.server.Server;
 import org.jetbrains.annotations.ApiStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author daoge_cmd
  */
-@Getter
-@Setter
 @Slf4j
 public abstract class Plugin implements TaskCreator {
 
     protected PluginContainer pluginContainer;
+    protected Logger pluginLogger;
 
     /**
      * Called when the plugin is loaded.
@@ -58,6 +57,35 @@ public abstract class Plugin implements TaskCreator {
      */
     public I18n getPluginI18n() {
         return pluginContainer.i18n();
+    }
+
+    /**
+     * Get the plugin's logger.
+     *
+     * @return the plugin's logger.
+     */
+    public Logger getPluginLogger() {
+        return pluginLogger;
+    }
+
+    /**
+     * Set the plugin container.
+     *
+     * @param pluginContainer the plugin container.
+     */
+    @ApiStatus.OverrideOnly
+    public void setPluginContainer(PluginContainer pluginContainer) {
+        this.pluginContainer = pluginContainer;
+        pluginLogger = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
+    }
+
+    /**
+     * Get the plugin container.
+     *
+     * @return the plugin container.
+     */
+    public PluginContainer getPluginContainer() {
+        return pluginContainer;
     }
 
     /**

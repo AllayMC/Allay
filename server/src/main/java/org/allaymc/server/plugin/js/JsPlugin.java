@@ -8,8 +8,6 @@ import org.graalvm.polyglot.HostAccess;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
 import org.graalvm.polyglot.io.IOAccess;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author daoge_cmd
@@ -18,14 +16,12 @@ public class JsPlugin extends Plugin {
 
     protected Context jsContext;
     protected Value jsExport;
-    protected Logger logger;
     protected JSPluginProxyLogger proxyLogger;
 
     @Override
     public void setPluginContainer(PluginContainer pluginContainer) {
         super.setPluginContainer(pluginContainer);
-        logger = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
-        proxyLogger = new JSPluginProxyLogger(logger);
+        proxyLogger = new JSPluginProxyLogger(pluginLogger);
     }
 
     @SneakyThrows
@@ -42,7 +38,7 @@ public class JsPlugin extends Plugin {
                 .allowExperimentalOptions(true)
                 .option("js.esm-eval-returns-exports", "true");
         if (chromeDebugPort > 0) {
-            logger.info("Debug mode for js plugin {} is enabled. Port: {}", pluginContainer.descriptor().getName(), chromeDebugPort);
+            pluginLogger.info("Debug mode for js plugin {} is enabled. Port: {}", pluginContainer.descriptor().getName(), chromeDebugPort);
             // Debug mode is enabled
             cbd.option("inspect", String.valueOf(chromeDebugPort))
                     .option("inspect.Path", pluginContainer.descriptor().getName())
