@@ -15,6 +15,8 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
+ * Represents a face of a block.
+ *
  * @author JukeboxMC | daoge_cmd | Dhaiven
  */
 @Getter
@@ -37,10 +39,10 @@ public enum BlockFace {
     private final Vector3ic offset;
 
     /**
-     * Get the block face by index
+     * Get the block face by index.
      *
-     * @param value the index
-     * @return the block face
+     * @param value the index.
+     * @return the block face.
      */
     public static BlockFace fromId(int value) {
         return switch (value) {
@@ -55,18 +57,18 @@ public enum BlockFace {
     }
 
     /**
-     * Get horizontal block faces
+     * Get horizontal block faces.
      *
-     * @return the horizontal block faces
+     * @return the horizontal block faces.
      */
     public static BlockFace[] getHorizontalBlockFaces() {
         return new BlockFace[]{NORTH, EAST, SOUTH, WEST};
     }
 
     /**
-     * Get vertical block faces
+     * Get vertical block faces.
      *
-     * @return the vertical block faces
+     * @return the vertical block faces.
      */
     public static BlockFace[] getVerticalBlockFaces() {
         return new BlockFace[]{UP, DOWN};
@@ -77,32 +79,32 @@ public enum BlockFace {
     }
 
     /**
-     * Add current block face offset to the given pos
+     * Add current block face offset to the given pos.
      *
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param z the z coordinate
-     * @return the result pos
+     * @param x the x coordinate.
+     * @param y the y coordinate.
+     * @param z the z coordinate.
+     * @return the result pos.
      */
     public Vector3ic offsetPos(int x, int y, int z) {
         return offset.add(x, y, z, new Vector3i());
     }
 
     /**
-     * Add current block face offset to the given pos
+     * Add current block face offset to the given pos.
      *
-     * @param pos the pos
-     * @return the result pos
+     * @param pos the pos.
+     * @return the result pos.
      */
     public Vector3ic offsetPos(Vector3ic pos) {
         return offset.add(pos, new Vector3i());
     }
 
     /**
-     * Rotate the given AABB
+     * Rotate the given AABB.
      *
-     * @param aabb the AABB
-     * @return the rotated AABB
+     * @param aabb the AABB.
+     * @return the rotated AABB.
      */
     public AABBf rotateAABB(AABBfc aabb) {
         var c1 = new Vector3f(aabb.minX(), aabb.minY(), aabb.minZ());
@@ -120,10 +122,10 @@ public enum BlockFace {
     }
 
     /**
-     * Rotate the given vector
+     * Rotate the given vector.
      *
-     * @param vec the vector
-     * @return the rotated vector
+     * @param vec the vector.
+     * @return the rotated vector.
      */
     @SuppressWarnings("SuspiciousNameCombination")
     public Vector3f rotateVector(Vector3fc vec) {
@@ -169,9 +171,9 @@ public enum BlockFace {
     }
 
     /**
-     * Get the opposite block face
+     * Get the opposite block face.
      *
-     * @return the opposite block face
+     * @return the opposite block face.
      */
     public BlockFace opposite() {
         return switch (this) {
@@ -185,9 +187,9 @@ public enum BlockFace {
     }
 
     /**
-     * Rotate this BlockFace around the Y axis clockwise (NORTH =&gt; EAST =&gt; SOUTH =&gt; WEST =&gt; NORTH)
+     * Rotate this BlockFace around the Y axis clockwise (NORTH =&gt; EAST =&gt; SOUTH =&gt; WEST =&gt; NORTH).
      *
-     * @return block face
+     * @return block face.
      */
     public BlockFace rotateY() {
         return switch (this) {
@@ -200,9 +202,9 @@ public enum BlockFace {
     }
 
     /**
-     * Rotate this BlockFace around the Y axis counter-clockwise (NORTH =&gt; WEST =&gt; SOUTH =&gt; EAST =&gt; NORTH)
+     * Rotate this BlockFace around the Y axis counter-clockwise (NORTH =&gt; WEST =&gt; SOUTH =&gt; EAST =&gt; NORTH).
      *
-     * @return block face
+     * @return block face.
      */
     public BlockFace rotateYCCW() {
         return switch (this) {
@@ -215,18 +217,18 @@ public enum BlockFace {
     }
 
     /**
-     * Check if this block face is vertical
+     * Check if this block face is vertical.
      *
-     * @return true if vertical, false if not
+     * @return true if vertical, false if not.
      */
     public boolean isHorizontal() {
         return this == NORTH || this == EAST || this == SOUTH || this == WEST;
     }
 
     /**
-     * Get the stair direction value which represents this block face
+     * Get the stair direction value which represents this block face.
      *
-     * @return the stair direction value
+     * @return the stair direction value.
      */
     @ApiStatus.Experimental
     public int toStairDirectionValue() {
@@ -240,9 +242,9 @@ public enum BlockFace {
     }
 
     /**
-     * Get the Minecraft cardinal direction which represents this block face
+     * Get the Minecraft cardinal direction which represents this block face.
      *
-     * @return the Minecraft cardinal direction
+     * @return the Minecraft cardinal direction.
      */
     @ApiStatus.Experimental
     public MinecraftCardinalDirection toMinecraftCardinalDirection() {

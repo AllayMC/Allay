@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
  * Represents a 16 direction compass rose.
  * <p>
  * See <a href="https://en.wikipedia.org/wiki/Compass_rose#/media/File:Brosen_windrose.svg">wiki</a> for more information.
- * <p>
  *
  * @author joserobjr | Cool_Loong
  */
@@ -59,7 +58,7 @@ public enum CompassRoseDirection {
     }
 
     /**
-     * Gets the direction from the given index.
+     * Get the direction from the given index.
      *
      * @param index The index of the direction
      * @return The direction from the given index
@@ -87,7 +86,7 @@ public enum CompassRoseDirection {
     }
 
     /**
-     * Gets the closest face for this direction. For example, NNE returns N.
+     * Get the closest face for this direction. For example, NNE returns N.
      * Even directions like NE will return the direction to the left, N in this case.
      * <p>
      * @return The closest face for this direction
@@ -106,7 +105,7 @@ public enum CompassRoseDirection {
     }
 
     /**
-     * Gets the closes direction based on the given yaw.
+     * Get the closes direction based on the given yaw.
      *
      * @param yaw An entity yaw
      * @return The closest direction
@@ -116,7 +115,7 @@ public enum CompassRoseDirection {
     }
 
     /**
-     * Gets the closes direction based on the given yaw.
+     * Get the closes direction based on the given yaw.
      *
      * @param yaw An entity yaw
      * @return The closest direction
@@ -126,7 +125,7 @@ public enum CompassRoseDirection {
     }
 
     /**
-     * Gets the opposite face of this direction.
+     * Get the opposite face of this direction.
      *
      * @return The opposite face of this direction
      */
@@ -152,7 +151,7 @@ public enum CompassRoseDirection {
     }
 
     /**
-     * Gets the yaw that represents this direction.
+     * Get the yaw that represents this direction.
      *
      * @return The yaw value that can be used by entities to look at this direction.
      */
