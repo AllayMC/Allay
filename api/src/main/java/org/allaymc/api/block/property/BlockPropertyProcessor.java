@@ -14,7 +14,6 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  * base on the placement information.
  * <br>
  * This prevents writing a lot of complicated code for the blocks which are using the same block property type.
- * <p>
  *
  * @author daoge_cmd
  */
@@ -27,5 +26,13 @@ public interface BlockPropertyProcessor {
         GROUND_SIGN_DIRECTION.setProcessor(BlockPlaceHelper::processGroundSignDirectionProperty);
     }
 
+    /**
+     * Process the block state based on the placement information.
+     *
+     * @param blockState the block state to process.
+     * @param placeBlockPos the position where the block is placed.
+     * @param placementInfo the placement information.
+     * @return the processed block state.
+     */
     BlockState process(BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
 }
