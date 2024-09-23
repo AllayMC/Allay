@@ -17,8 +17,6 @@ The next-generation Minecraft: Bedrock Edition server software
 <a href="https://discord.gg/ngkkE4hPTU"><img src="https://img.shields.io/discord/1147136608290750526?label=discord&color=7289DA&logo=discord" alt="Discord" /></a>
 <a href="https://feedback.minecraft.net/hc/en-us/sections/360001186971-Release-Changelogs"><img src="https://img.shields.io/badge/minecraft-v1.21.20%20(Bedrock)-green" /></a>
 <img src="https://img.shields.io/badge/protocol-712-blue">
-
-English | [简体中文](README.zh.md) | [Русский](README.ru.md)
 </div>
 
 ## Introduction
