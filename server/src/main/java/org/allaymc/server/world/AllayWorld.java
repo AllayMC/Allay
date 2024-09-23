@@ -11,6 +11,7 @@ import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -29,9 +30,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 public class AllayWorld implements World {
     // Send the time to client every 12 seconds
-    public static final long TIME_SENDING_INTERVAL = 12 * 20;
+    protected static final long TIME_SENDING_INTERVAL = 12 * 20;
 
-    public static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
+    protected static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
 
     protected final Queue<PacketQueueEntry> packetQueue = PlatformDependent.newMpscQueue();
     protected final AtomicBoolean networkLock = new AtomicBoolean(false);
@@ -49,6 +50,11 @@ public class AllayWorld implements World {
     protected final Thread thread;
     protected final Thread networkThread;
     protected long nextTimeSendTick;
+    protected int rainTimer = Weather.CLEAR.generateRandomTimeLength();
+    protected int thunderTimer = Weather.CLEAR.generateRandomTimeLength();
+    protected boolean isRaining = false;
+    protected boolean isThundering = false;
+    protected Set<Weather> effectiveWeathers = new HashSet<>();
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
@@ -117,9 +123,59 @@ public class AllayWorld implements World {
     protected void tick(long currentTick) {
         syncData();
         tickTime(currentTick);
+        tickWeather();
         scheduler.tick();
         getDimensions().values().forEach(d -> ((AllayDimension) d).tick(currentTick));
         worldStorage.tick(currentTick);
+    }
+
+    protected void tickTime(long currentTick) {
+        if (!worldData.<Boolean>getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) return;
+
+        if (currentTick >= nextTimeSendTick) {
+            worldData.addTime(TIME_SENDING_INTERVAL);
+            nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
+        }
+    }
+
+    protected void tickWeather() {
+        if (!worldData.<Boolean>getGameRule(GameRule.DO_WEATHER_CYCLE)) {
+            return;
+        }
+
+        Set<Weather> weatherAdded = new HashSet<>();
+        Set<Weather> weatherRemoved = new HashSet<>();
+        rainTimer--;
+        if (rainTimer == 0) {
+            if (isRaining) {
+                isRaining = false;
+                rainTimer = Weather.CLEAR.generateRandomTimeLength();
+                weatherRemoved.add(Weather.RAIN);
+                effectiveWeathers.remove(Weather.RAIN);
+            } else {
+                isRaining = true;
+                rainTimer = Weather.RAIN.generateRandomTimeLength();
+                weatherAdded.add(Weather.RAIN);
+                effectiveWeathers.add(Weather.RAIN);
+            }
+        }
+
+        thunderTimer--;
+        if (thunderTimer == 0) {
+            if (isThundering) {
+                isThundering = false;
+                thunderTimer = Weather.CLEAR.generateRandomTimeLength();
+                weatherRemoved.add(Weather.THUNDER);
+                effectiveWeathers.remove(Weather.THUNDER);
+            } else {
+                isThundering = true;
+                thunderTimer = Weather.THUNDER.generateRandomTimeLength();
+                weatherAdded.add(Weather.THUNDER);
+                effectiveWeathers.add(Weather.THUNDER);
+            }
+        }
+
+        onWeatherUpdate(weatherRemoved, weatherAdded);
     }
 
     @Override
@@ -152,15 +208,6 @@ public class AllayWorld implements World {
         } else {
             thread.start();
             networkThread.start();
-        }
-    }
-
-    protected void tickTime(long currentTick) {
-        if (!worldData.<Boolean>getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) return;
-
-        if (currentTick >= nextTimeSendTick) {
-            worldData.addTime(TIME_SENDING_INTERVAL);
-            nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
         }
     }
 
@@ -208,6 +255,58 @@ public class AllayWorld implements World {
     @Override
     public boolean isRunning() {
         return isRunning.get();
+    }
+
+    @Override
+    public Set<Weather> getWeathers() {
+        return effectiveWeathers.isEmpty() ?
+                Set.of(Weather.CLEAR) :
+                Collections.unmodifiableSet(effectiveWeathers);
+    }
+
+    @Override
+    public void addWeather(Weather weather) {
+        if (weather == Weather.CLEAR) {
+            throw new IllegalArgumentException("Weather.CLEAR shouldn't be used here.");
+        }
+        if (effectiveWeathers.contains(weather)) {
+            return;
+        }
+        effectiveWeathers.add(weather);
+        onWeatherUpdate(Set.of(), Set.of(weather));
+    }
+
+    @Override
+    public void removeWeather(Weather weather) {
+        if (weather == Weather.CLEAR) {
+            throw new IllegalArgumentException("Weather.CLEAR shouldn't be used here.");
+        }
+        if (!effectiveWeathers.contains(weather)) {
+            return;
+        }
+        effectiveWeathers.remove(weather);
+        onWeatherUpdate(Set.of(weather), Set.of());
+    }
+
+    @Override
+    public void clearWeather() {
+        onWeatherUpdate(effectiveWeathers, Set.of());
+        effectiveWeathers.clear();
+    }
+
+    public void clearWeather(EntityPlayer player) {
+        effectiveWeathers.forEach(weather -> player.sendPacket(weather.createStopLevelEventPacket()));
+    }
+
+    public void sendWeather(EntityPlayer player) {
+        effectiveWeathers.forEach(weather -> player.sendPacket(weather.createStartLevelEventPacket()));
+    }
+
+    protected void onWeatherUpdate(Set<Weather> weatherRemoved, Set<Weather> weatherAdded) {
+        getPlayers().forEach(player -> {
+            weatherRemoved.forEach(weather -> player.sendPacket(weather.createStopLevelEventPacket()));
+            weatherAdded.forEach(weather -> player.sendPacket(weather.createStartLevelEventPacket()));
+        });
     }
 
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}

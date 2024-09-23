@@ -41,6 +41,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.component.annotation.ComponentedObject;
@@ -51,6 +52,7 @@ import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
+import org.allaymc.server.world.AllayWorld;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -280,8 +282,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var currentDim = location.dimension();
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
+            // Send new world's time
             targetDim.getWorld().getWorldData().sendTime(thisPlayer);
+            // Send new world's game rules
             networkComponent.sendPacket(targetDim.getWorld().getWorldData().getGameRules().buildPacket());
+            // Clear old world's weather
+            ((AllayWorld)currentDim.getWorld()).clearWeather(thisPlayer);
+            // Send new world's weather
+            ((AllayWorld)targetDim.getWorld()).sendWeather(thisPlayer);
         }
         location.dimension().removePlayer(thisPlayer, () -> {
             targetDim.getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);

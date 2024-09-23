@@ -8,6 +8,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a world in the server.
@@ -135,4 +136,33 @@ public interface World {
     default void broadcastPacket(BedrockPacket packet) {
         getDimensions().values().forEach(dim -> dim.broadcastPacket(packet));
     }
+
+    /**
+     * Get the weathers of the world.
+     *
+     * @return the weathers of the world.
+     */
+    @UnmodifiableView
+    Set<Weather> getWeathers();
+
+    /**
+     * Add a weather to the world.
+     *
+     * @param weather the weather to add, {@link Weather#CLEAR} shouldn't be used here.
+     * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}.
+     */
+    void addWeather(Weather weather);
+
+    /**
+     * Remove a weather from the world.
+     *
+     * @param weather the weather to remove, {@link Weather#CLEAR} shouldn't be used here.
+     * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}.
+     */
+    void removeWeather(Weather weather);
+
+    /**
+     * Set the weather to {@link Weather#CLEAR}.
+     */
+    void clearWeather();
 }

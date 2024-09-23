@@ -220,13 +220,14 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     protected void doFirstSpawn() {
+        var world = thisPlayer.getWorld();
         // Load EntityPlayer's NBT
         thisPlayer.loadNBT(server.getPlayerStorage().readPlayerData(thisPlayer).getPlayerNBT());
 
         var setEntityDataPacket = new SetEntityDataPacket();
         setEntityDataPacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
         setEntityDataPacket.getMetadata().putAll(thisPlayer.getMetadata().getEntityDataMap());
-        setEntityDataPacket.setTick(thisPlayer.getWorld().getTick());
+        setEntityDataPacket.setTick(world.getTick());
         sendPacket(setEntityDataPacket);
 
         // Update abilities, adventure settings, entity flags that are related to game type
@@ -248,7 +249,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
 
-        thisPlayer.getLocation().dimension().getWorld().getWorldData().sendTime(List.of(thisPlayer));
+        world.getWorldData().sendTime(thisPlayer);
+        ((AllayWorld) world).sendWeather(thisPlayer);
         // Save player data the first time
         server.getPlayerStorage().savePlayerData(thisPlayer);
     }
