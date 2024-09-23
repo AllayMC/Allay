@@ -44,7 +44,7 @@ We wish this project to be as concise, reliable, and efficient as Allay.
 - **Cross-platform:** Allay is based on the JVM, so it can run on most platforms that can run the JVM.
 - **High Performance:**
     - We fully understand the problems of Nukkit server under high load, Allay outperforms Nukkit in certain aspects (eg: entity physics) by a factor of 100 under the same load.
-    - In addition, thanks to a redesigned threading model, Allay takes full advantage of multi-core CPUs, which means you don't need to intentionally use high CPU frequencies.
+    - In addition, thanks to a redesigned threading model, Allay takes full advantage of multicore CPUs, which means you don't need to intentionally use high CPU frequencies.
     - Allay is based on the latest Java21, which theoretically gives it better performance.
 - **Easy to get started:**
     - You can write plugins for Allay in Java/JVM.
@@ -74,13 +74,13 @@ gradlew server:build
 
 ## Plugins
 
-Allay supports running plugins written in Java/JVM or JavaScript languages, you can check out the example plugins to see how to get started:
+Allay supports running plugins written in Java(JVM based language) and JavaScript, you can check out our plugin templates:
 
-**Java example**: [Allay-ExamplePlugin](Allay-ExamplePlugin)
+- [JavaPluginTemplate](https://github.com/AllayMC/JavaPluginTemplate)
+- [JavaScriptPluginTemplate](https://github.com/AllayMC/JavaScriptPluginTemplate)
+- [ScalaPluginTemplate](https://github.com/AllayMC/ScalaPluginTemplate)
 
-**JavaScript example**: [@Allay-ExamplePlugin-JS](@Allay-ExamplePlugin-JS)
-
-For more information, you can check our [documentation site](https://docs.allaymc.org/)
+For more information, you can check our [document](https://docs.allaymc.org/)
 
 ## Contribute
 
