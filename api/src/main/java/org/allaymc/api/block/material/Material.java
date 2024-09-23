@@ -5,8 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Represents the data of a type of material.
  * <p>
- * See <a href="https://zh.minecraft.wiki/w/%E5%9F%BA%E5%B2%A9%E7%89%88%E6%9D%90%E6%96%99">Bedrock Materials</a> for details
- * <p>
+ * See <a href="https://zh.minecraft.wiki/w/%E5%9F%BA%E5%B2%A9%E7%89%88%E6%9D%90%E6%96%99">Bedrock Materials</a> for details.
  *
  * @author daoge_cmd
  */

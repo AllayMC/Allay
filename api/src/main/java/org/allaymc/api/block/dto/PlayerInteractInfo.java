@@ -7,12 +7,11 @@ import org.joml.Vector3ic;
 
 /**
  * Represents the information about a player interacting with a block.
- * <p>
- * @param player        The player who is placing the block
- * @param clickBlockPos The block that the player clicked on
- * @param clickPos      The precise pos where the player clicked
- * @param blockFace     The face of the block that the player clicked on
- * <p>
+ *
+ * @param player        The player who is placing the block.
+ * @param clickBlockPos The block that the player clicked on.
+ * @param clickPos      The precise pos where the player clicked.
+ * @param blockFace     The face of the block that the player clicked on.
  *
  * @author daoge_cmd
  */
