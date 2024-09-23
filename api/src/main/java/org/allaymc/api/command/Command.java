@@ -39,14 +39,14 @@ public interface Command {
     CommandData buildNetworkDataFor(EntityPlayer player);
 
     /**
-     * Gets the name of this command.
+     * Get the name of this command.
      *
      * @return The name of this command.
      */
     String getName();
 
     /**
-     * Gets the aliases of this command.
+     * Get the aliases of this command.
      *
      * @return The aliases of this command.
      */
@@ -54,7 +54,7 @@ public interface Command {
     List<String> getAliases();
 
     /**
-     * Gets the description of this command.
+     * Get the description of this command.
      *
      * @return The description of this command.
      */
@@ -62,7 +62,7 @@ public interface Command {
     String getDescription();
 
     /**
-     * Gets the command overloads of this command.
+     * Get the command overloads of this command.
      *
      * @return The command overloads of this command.
      */
@@ -70,7 +70,7 @@ public interface Command {
     List<CommandParamData[]> getCommandOverloads();
 
     /**
-     * Gets the flags of this command.
+     * Get the flags of this command.
      *
      * @return The flags of this command.
      */
@@ -78,7 +78,7 @@ public interface Command {
     Set<CommandData.Flag> getFlags();
 
     /**
-     * Gets the permissions required to execute this command.
+     * Get the permissions required to execute this command.
      *
      * @return The permissions required to execute this command.
      */

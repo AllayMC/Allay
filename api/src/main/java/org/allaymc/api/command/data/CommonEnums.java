@@ -12,7 +12,7 @@ import static org.cloudburstmc.protocol.bedrock.data.GameType.*;
 /**
  * @author daoge_cmd
  */
-public interface CommonEnum {
+public interface CommonEnums {
 
     String[] GAMEMODE_ENUM = new String[]{
             "survival", "s", "0",
@@ -47,7 +47,7 @@ public interface CommonEnum {
     }
 
     /**
-     * Gets the translation key for the given GameType.
+     * Get the translation key for the given GameType.
      *
      * @param gameType The GameType.
      *
@@ -65,7 +65,7 @@ public interface CommonEnum {
     }
 
     /**
-     * Gets the GameRule with the given name.
+     * Get the GameRule with the given name.
      *
      * @param name The name of the GameRule.
      *

@@ -43,35 +43,35 @@ public interface CommandNode {
     Object getDefaultValue();
 
     /**
-     * Returns the minimum number of arguments consumed after selecting this branch.
+     * Return the minimum number of arguments consumed after selecting this branch.
      *
      * @return The minimum number of arguments required.
      */
     int getMinArgCostBranch();
 
     /**
-     * Sets the minimum number of arguments consumed after selecting this branch.
+     * Set the minimum number of arguments consumed after selecting this branch.
      *
      * @param minArgCostBranch The minimum number of arguments.
      */
     void setMinArgCostBranch(int minArgCostBranch);
 
     /**
-     * Returns the maximum number of arguments consumed after selecting this branch.
+     * Return the maximum number of arguments consumed after selecting this branch.
      *
      * @return The maximum number of arguments required.
      */
     int getMaxArgCostBranch();
 
     /**
-     * Sets the maximum number of arguments consumed after selecting this branch.
+     * Set the maximum number of arguments consumed after selecting this branch.
      *
      * @param maxArgCostBranch The maximum number of arguments.
      */
     void setMaxArgCostBranch(int maxArgCostBranch);
 
     /**
-     * Returns the maximum number of arguments this node can consume.
+     * Return the maximum number of arguments this node can consume.
      * A sufficiently large number is returned to indicate an infinite argument count.
      *
      * @return The maximum number of arguments.
@@ -81,7 +81,7 @@ public interface CommandNode {
     }
 
     /**
-     * Sets a default value for this node and marks it as optional.
+     * Set a default value for this node and marks it as optional.
      *
      * @param defaultValue The default value to set.
      *
@@ -104,7 +104,7 @@ public interface CommandNode {
     CommandNode getOptionalLeaf();
 
     /**
-     * Sets an optional leaf node for this command.
+     * Set an optional leaf node for this command.
      *
      * @param optionalLeaf The optional leaf to set.
      */
@@ -134,7 +134,7 @@ public interface CommandNode {
     }
 
     /**
-     * Sets the depth of this node in the command tree.
+     * Set the depth of this node in the command tree.
      *
      * @param depth The depth to set.
      */
@@ -166,7 +166,7 @@ public interface CommandNode {
     }
 
     /**
-     * Returns the root node of the command tree by moving up all levels.
+     * Return the root node of the command tree by moving up all levels.
      *
      * @return The root {@code CommandNode}.
      */
@@ -216,7 +216,7 @@ public interface CommandNode {
     CommandNode addLeaf(CommandNode leaf);
 
     /**
-     * Sets the executor for this node, binding it to a specific sender type.
+     * Set the executor for this node, binding it to a specific sender type.
      *
      * @param <SENDER_TYPE> The type of the command sender.
      * @param executor      The executor function to apply.
@@ -227,7 +227,7 @@ public interface CommandNode {
     <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> executor, SenderType<SENDER_TYPE> senderType);
 
     /**
-     * Sets the executor for this node.
+     * Set the executor for this node.
      *
      * @param executor The executor function to apply.
      *

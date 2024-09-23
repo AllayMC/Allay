@@ -1,6 +1,5 @@
 package org.allaymc.api.container.impl;
 
-
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.container.BaseContainer;

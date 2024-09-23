@@ -86,7 +86,7 @@ public interface CommandContext {
     String popArg();
 
     /**
-     * Returns the argument at the specified index.
+     * Return the argument at the specified index.
      *
      * @param index the index of the argument to retrieve.
      *
@@ -95,7 +95,7 @@ public interface CommandContext {
     String queryArg(int index);
 
     /**
-     * Returns the current argument being processed.
+     * Return the current argument being processed.
      *
      * @return the current argument.
      */
@@ -215,14 +215,14 @@ public interface CommandContext {
     }
 
     /**
-     * Returns the list of translation containers that represent the output messages.
+     * Return the list of translation containers that represent the output messages.
      *
      * @return the list of {@link TrContainer} objects.
      */
     List<TrContainer> getOutputs();
 
     /**
-     * Returns a successful command result.
+     * Return a successful command result.
      *
      * @return a {@link CommandResult} representing success.
      */
@@ -231,7 +231,7 @@ public interface CommandContext {
     }
 
     /**
-     * Returns a successful command result with a specified status code.
+     * Return a successful command result with a specified status code.
      *
      * @param status the status code.
      *
@@ -242,7 +242,7 @@ public interface CommandContext {
     }
 
     /**
-     * Returns a failed command result.
+     * Return a failed command result.
      *
      * @return a {@link CommandResult} representing failure.
      */

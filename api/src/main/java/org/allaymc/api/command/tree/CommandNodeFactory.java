@@ -22,7 +22,6 @@ import java.util.List;
  * This factory is held as an {@link ApiInstanceHolder} and can be accessed using {@link #getFactory()}.
  * The factory allows users to create nodes with different types, and their default values, which are
  * used in command arguments parsing.
- * </p>
  *
  * @author daoge_cmd
  */

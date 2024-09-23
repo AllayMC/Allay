@@ -34,7 +34,6 @@ public interface EntitySelectorAPI {
      * <p>
      * This method parses the selector token and returns a list of entities that
      * match the criteria specified by the token.
-     * </p>
      *
      * @param sender the command sender, used for context (e.g., location, permissions).
      * @param token  the target selector token, such as {@code @a} or {@code @e[type=zombie]}.
@@ -59,7 +58,6 @@ public interface EntitySelectorAPI {
      * <p>
      * This allows for adding custom arguments to the entity selector system, such as
      * new filters or modifiers.
-     * </p>
      *
      * @param argument the selector argument to register.
      *

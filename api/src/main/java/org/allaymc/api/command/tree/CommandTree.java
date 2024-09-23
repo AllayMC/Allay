@@ -29,14 +29,14 @@ public interface CommandTree {
     CommandResult parse(CommandSender sender, String[] args);
 
     /**
-     * Gets the root node of the command tree.
+     * Get the root node of the command tree.
      *
      * @return The root node of the command tree.
      */
     CommandNode getRoot();
 
     /**
-     * Gets all leaf nodes of the command tree.
+     * Get all leaf nodes of the command tree.
      *
      * @return A list of all leaf nodes of the command tree.
      */

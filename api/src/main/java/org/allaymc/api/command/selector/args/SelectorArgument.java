@@ -22,7 +22,6 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      * <p>
      * The predicate operates on a per-entity basis, filtering entities individually based on the
      * conditions specified in the arguments.
-     * </p>
      *
      * @param arguments    the list of arguments to parse.
      * @param selectorType the type of entity selector (e.g., {@code @a}, {@code @e}).
@@ -43,7 +42,6 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      * <p>
      * This method is called only if {@link #isFilter()} returns {@code true}, and it processes
      * an entire list of entities rather than filtering them individually.
-     * </p>
      *
      * @param arguments    the list of arguments to parse.
      * @param selectorType the type of entity selector.
@@ -59,18 +57,17 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
     }
 
     /**
-     * Returns the name or key identifier of the selector argument.
+     * Return the name or key identifier of the selector argument.
      *
      * @return the key name of this argument.
      */
     String getKeyName();
 
     /**
-     * Returns the parsing priority of this argument.
+     * Return the parsing priority of this argument.
      * <p>
      * The smaller the number, the earlier the argument is parsed in relation to other arguments.
      * Arguments with higher priorities can influence the parsing of subsequent arguments.
-     * </p>
      *
      * @return the parsing priority.
      */
@@ -81,7 +78,6 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      * <p>
      * If filter mode is enabled, the {@link #getFilter} method is called instead of {@link #getPredicate}.
      * This means that the argument operates on an entire list of entities rather than individual entities.
-     * </p>
      *
      * @return {@code true} if this argument operates in filter mode, {@code false} otherwise.
      */
@@ -106,7 +102,6 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      * Compares this argument with another based on their parsing priority.
      * <p>
      * This method allows arguments to be sorted by priority when being processed.
-     * </p>
      *
      * @param o the other {@code SelectorArgument} to compare to.
      *

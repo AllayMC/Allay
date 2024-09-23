@@ -5,6 +5,10 @@ import org.allaymc.api.i18n.MayContainTrKey;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
 /**
+ * SimpleCommand is a subclass of {@link Command} that provide command tree supporting.
+ * <p>
+ * In most of the cases, you should use this class to create a new command.
+ *
  * @author daoge_cmd
  */
 public abstract class SimpleCommand extends BaseCommand {
@@ -19,7 +23,7 @@ public abstract class SimpleCommand extends BaseCommand {
     }
 
     /**
-     * Prepares the command tree for this command.
+     * Prepare the command tree for this command.
      *
      * @param tree The command tree to prepare.
      */
@@ -40,14 +44,6 @@ public abstract class SimpleCommand extends BaseCommand {
         }
     }
 
-    /**
-     * Executes the command.
-     *
-     * @param sender The command sender.
-     * @param args   The command arguments.
-     *
-     * @return The result of the command execution.
-     */
     @Override
     public CommandResult execute(CommandSender sender, String[] args) {
         return commandTree.parse(sender, args);

@@ -8,7 +8,6 @@ import org.allaymc.api.server.Server;
 
 import java.util.function.Function;
 
-
 /**
  * @param validator     Validator function to check if the sender is of the correct type.
  * @param caster        Caster function to cast the sender to the correct type.

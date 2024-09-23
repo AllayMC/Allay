@@ -16,28 +16,28 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 public interface CommandSender extends TextReceiver, Permissible {
 
     /**
-     * Gets the name of the command sender.
+     * Get the name of the command sender.
      *
      * @return The name of the command sender.
      */
     String getCommandSenderName();
 
     /**
-     * Gets the command origin data of the command sender.
+     * Get the command origin data of the command sender.
      *
      * @return The command origin data of the command sender.
      */
     CommandOriginData getCommandOriginData();
 
     /**
-     * Gets the location where the command was executed.
+     * Get the location where the command was executed.
      *
      * @return The location where the command was executed.
      */
     Location3fc getCmdExecuteLocation();
 
     /**
-     * Handles the result of the command execution.
+     * Handle the result of the command execution.
      *
      * @param result The result of the command execution.
      */
@@ -78,7 +78,7 @@ public interface CommandSender extends TextReceiver, Permissible {
     }
 
     /**
-     * Returns the entity executing the command if the sender is an entity.
+     * Return the entity executing the command if the sender is an entity.
      *
      * @return Entity instance.
      */
@@ -87,7 +87,7 @@ public interface CommandSender extends TextReceiver, Permissible {
     }
 
     /**
-     * Returns the player executing the command if the sender is a player.
+     * Return the player executing the command if the sender is a player.
      *
      * @return Player instance.
      */

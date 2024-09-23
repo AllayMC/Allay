@@ -2,7 +2,7 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
-import org.allaymc.api.command.data.CommonEnum;
+import org.allaymc.api.command.data.CommonEnums;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.I18n;
@@ -48,7 +48,7 @@ public class GameModeCommand extends SimpleCommand {
                     }
 
                     for (var player : players) {
-                        var gameTypeName = I18n.get().tr(player.getLangCode(), CommonEnum.getGameTypeTrKey(gameType));
+                        var gameTypeName = I18n.get().tr(player.getLangCode(), CommonEnums.getGameTypeTrKey(gameType));
                         player.setGameType(gameType);
 
                         if (player == context.getSender()) {

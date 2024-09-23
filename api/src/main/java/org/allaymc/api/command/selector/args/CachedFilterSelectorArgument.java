@@ -46,7 +46,6 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
      * <p>
      * This method must be implemented by subclasses to define how the filter function is
      * generated based on the provided arguments.
-     * </p>
      *
      * @param selectorType the type of selector being used.
      * @param sender       the command sender invoking the selector.
@@ -65,7 +64,6 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
      * By default, this method creates a cache with a maximum size of 65,535 entries and an
      * expiration time of 1 minute after the last access. Subclasses may override this method
      * to provide their own cache configurations if necessary.
-     * </p>
      *
      * @return a {@code Cache<Set<String>, Function<List<Entity>, List<Entity>>>} to store filter functions.
      */

@@ -2,8 +2,8 @@ package org.allaymc.server.command.tree.node;
 
 import org.allaymc.api.command.tree.CommandNode;
 
-import static org.allaymc.api.command.data.CommonEnum.GAMEMODE_ENUM;
-import static org.allaymc.api.command.data.CommonEnum.getGameTypeFromString;
+import static org.allaymc.api.command.data.CommonEnums.GAMEMODE_ENUM;
+import static org.allaymc.api.command.data.CommonEnums.getGameTypeFromString;
 
 /**
  * @author daoge_cmd
