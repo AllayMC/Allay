@@ -80,6 +80,25 @@ Allay supports running plugins written in Java(JVM based language) and JavaScrip
 
 For more information, you can check our [document](https://docs.allaymc.org/)
 
+## Dependency
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven("https://www.jitpack.io/")
+    maven("https://repo.opencollab.dev/maven-releases/")
+    maven("https://repo.opencollab.dev/maven-snapshots/")
+    maven("https://storehouse.okaeri.eu/repository/maven-public/")
+}
+
+dependencies {
+    compileOnly(group = "org.allaymc.allay", name = "api", version = "master-SNAPSHOT")
+}
+```
+
+We use jitpack to publish our artifacts. If you want to use a specified api version, 
+you can check the version [here](https://jitpack.io/#AllayMC/Allay).
+
 ## Contribute
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting a PR!
