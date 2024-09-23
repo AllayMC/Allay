@@ -13,99 +13,102 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Represents a block state.
+ *
  * @author daoge_cmd
  */
 public interface BlockState {
 
     /**
-     * Get the block type of this block state
+     * Get the block type of this block state.
      *
-     * @return the block type
+     * @return the block type.
      */
     BlockType<?> getBlockType();
 
     /**
-     * Get the block state's hash
+     * Get the block state's hash.
      *
-     * @return block state's hash
+     * @return block state's hash.
      */
     int blockStateHash();
 
     /**
-     * Get the special value of this block state
-     * For all states of a block type, the states have unique special values from one state to another
-     * And the special value can be computed through the state's property values
+     * Get the special value of this block state.
+     * <p>
+     * For all states of a block type, the states have unique special values from one state to another,
+     * and the special value can be computed through the state's property values
      *
-     * @return the special value
+     * @return the special value.
      */
     long specialValue();
 
     /**
-     * Get the property value of this block state
+     * Get the property value of this block state.
      *
-     * @return the property value of this block state
+     * @return the property value of this block state.
      */
     @UnmodifiableView
     Map<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>> getPropertyValues();
 
     /**
-     * Get the value of a specific property type
+     * Get the value of a specific property type.
      *
-     * @param property the specific property type
+     * @param property the specific property type.
      *
-     * @return the value of the specific property type
+     * @return the value of the specific property type.
      *
-     * @throws IllegalArgumentException if the property type is not supported by this block type
+     * @throws IllegalArgumentException if the property type is not supported by this block type.
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> DATATYPE getPropertyValue(PROPERTY property);
 
     /**
-     * Apply a specific property value on this block state
+     * Apply a specific property value on this block state.
      *
-     * @param propertyValue the specific property value
+     * @param propertyValue the specific property value.
      *
-     * @return the new block state
+     * @return the new block state.
      *
-     * @throws IllegalArgumentException if the property value is not supported by this block type
+     * @throws IllegalArgumentException if the property value is not supported by this block type.
      */
     BlockState setProperty(BlockPropertyType.BlockPropertyValue<?, ?, ?> propertyValue);
 
     /**
-     * Set a specific property type's value
+     * Set a specific property type's value.
      *
-     * @param property the specific property type
-     * @param value    the value you want to be set
+     * @param property the specific property type.
+     * @param value    the value you want to be set.
      *
-     * @return the new block state
+     * @return the new block state.
      *
      * @throws IllegalArgumentException if the property type or value is not supported by this block type
      */
     <DATATYPE, PROPERTY extends BlockPropertyType<DATATYPE>> BlockState setProperty(PROPERTY property, DATATYPE value);
 
     /**
-     * Set multiple property values at once
+     * Set multiple property values at once.
      *
-     * @param propertyValues the property values
+     * @param propertyValues the property values.
      *
-     * @return the new block state
+     * @return the new block state.
      *
-     * @throws IllegalArgumentException if the property values are not supported by this block type
+     * @throws IllegalArgumentException if the property values are not supported by this block type.
      */
     BlockState setProperties(List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> propertyValues);
 
     long unsignedBlockStateHash();
 
     /**
-     * Get the nbt display format of this block state
+     * Get the nbt display format of this block state.
      *
-     * @return block state's nbt format
+     * @return block state's nbt format.
      */
     NbtMap getBlockStateTag();
 
     /**
-     * Get the <b>really used</b> item form of this block state
+     * Get the <b>really used</b> item form of this block state.
      *
-     * @return the <b>really used</b> item form of this block state
+     * @return the <b>really used</b> item form of this block state.
      */
     ItemStack toItemStack();
 
@@ -131,18 +134,18 @@ public interface BlockState {
     }
 
     /**
-     * Get the block state's behavior
+     * Get the block state's behavior.
      *
-     * @return the block state's behavior
+     * @return the block state's behavior.
      */
     default BlockBehavior getBehavior() {
         return getBlockType().getBlockBehavior();
     }
 
     /**
-     * Get the data of this block state
+     * Get the data of this block state.
      *
-     * @return the data of this block state
+     * @return the data of this block state.
      */
     default BlockStateData getBlockStateData() {
         return getBehavior().getBlockStateData(this);
