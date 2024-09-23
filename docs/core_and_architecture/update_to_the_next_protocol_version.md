@@ -30,8 +30,7 @@ Unless otherwise specified, the default root directory is `data/resources`.
 - item_tags_custom.json (this file is manually maintained; check if any item IDs need updating)
 - recipes.json
 
-**Step two, update the files under the unpacked directory**:
-
+**Step two, update the files under the unpacked directory**.
 Although these files will not be included in the final jar, they will be used during the code generation process:
 
 - block_tags.json

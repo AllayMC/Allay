@@ -1,5 +1,5 @@
 site_name: AllayMC
-site_url: https://allaymc.readthedocs.io/
+site_url: https://docs.allaymc.org
 site_author: daoge_cmd
 
 repo_name: AllayMC/Allay
@@ -11,9 +11,8 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/AllayMC
-
-markdown_extensions:
-  - mdx_math
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/ngkkE4hPTU
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML
@@ -23,41 +22,6 @@ extra_css:
 
 plugins:
   - search
-  - i18n:
-      docs_structure: suffix
-      fallback_to_default: true
-      languages:
-        - locale: en
-          name: English
-          build: true
-          default: true
-        - locale: zh
-          name: 中文（简体）
-          build: true
-          nav_translations: {
-            Home: 主页,
-            Q&A: 问&答,
-            Plugin Development: 插件开发,
-              How Plugin Works: 插件如何工作,
-              About Plugin Reloading: 关于插件重载,
-              I18n: 多语言,
-                Lang File Format: 语言文件格式,
-              Permission: 权限,
-                Permission Tree: 权限树,
-            Core & Architecture: 核心与架构,
-              Threading Model: 线程模型,
-              About The Chunk Lagging Issue: 关于卡区块问题,
-              Update To The Next Protocol Version: 更新到下一个协议版本,
-              Coding Specifications: 编码规范,
-            Protocol Research: 协议研究,
-              Server Auth Inventory: 服务端权威物品栏,
-                About Inventory Stack Packet: 关于物品堆栈数据包,
-                About Network Stack Id: 关于堆栈网络Id,
-                Crafting: 合成,
-              Server Auth Block Breaking: 服务端权威方块破坏,
-                Network Packets: 网络数据包细节,
-              Server Auth Block Placing: 服务端权威方块破坏
-          }
   - git-revision-date-localized:
       enabled: !ENV [CI, false]
       enable_creation_date: true
@@ -66,32 +30,6 @@ plugins:
       repository: AllayMC/Allay
       branch: master
 
-nav:
-  - Home: index.md
-  - Q&A: Q&A.md
-  - Plugin Development:
-    - How Plugin Works: plugin_development/how_plugin_works.md
-    - About Plugin Reloading: plugin_development/about_plugin_reloading.md
-    - I18n:
-      - Lang File Format: plugin_development/i18n/lang_file_format.md
-    - Permission:
-      - Permission Tree: plugin_development/permission/permission_tree.md
-  - Core & Architecture:
-    - Threading Model: core_and_architecture/architecture/threading_model.md
-    - About The Chunk Lagging Issue: core_and_architecture/about_the_chunk_lagging_issue.md
-    - Update To The Next Protocol Version: core_and_architecture/update_to_the_next_protocol_version.md
-    - Coding Specifications: core_and_architecture/coding_specifications.md
-  - Protocol Research:
-    - Server Auth Inventory:
-      - About Inventory Stack Packet: protocol_research/server_auth_inventory/about_inventory_stack_packet.md
-      - About Network Stack Id: protocol_research/server_auth_inventory/about_network_stack_id.md
-      - Crafting: protocol_research/server_auth_inventory/crafting.md
-    - Server Auth Block Breaking:
-        - Network Packet Details: protocol_research/server_auth_block_breaking/block_breaking_network_packets.md
-    - Server Auth Block Placing:
-        - Network Packet Details: protocol_research/server_auth_block_placing/block_placing_network_packets.md
-
-
 theme:
   name: 'material'
   language: en
@@ -99,6 +37,7 @@ theme:
   logo: assets/logo/allay-chan-480x.png
   favicon: assets/logo/allay-chan-480x.png
   features:
+    - announce.dismiss
     - content.action.edit
     - content.action.view
     - content.code.annotate
@@ -134,3 +73,34 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+
+markdown_extensions:
+  - mdx_math
+
+nav:
+  - Home: index.md
+  - Q&A: Q&A.md
+
+  - Plugin Development:
+    - How Plugin Works: plugin_development/how_plugin_works.md
+    - About Plugin Reloading: plugin_development/about_plugin_reloading.md
+    - I18n:
+      - Lang File Format: plugin_development/i18n/lang_file_format.md
+    - Permission:
+      - Permission Tree: plugin_development/permission/permission_tree.md
+
+  - Core & Architecture:
+    - Threading Model: core_and_architecture/architecture/threading_model.md
+    - About The Chunk Lagging Issue: core_and_architecture/about_the_chunk_lagging_issue.md
+    - Update To The Next Protocol Version: core_and_architecture/update_to_the_next_protocol_version.md
+    - Coding Specifications: core_and_architecture/coding_specifications.md
+
+  - Protocol Research:
+    - Server Auth Inventory:
+      - About Inventory Stack Packet: protocol_research/server_auth_inventory/about_inventory_stack_packet.md
+      - About Network Stack Id: protocol_research/server_auth_inventory/about_network_stack_id.md
+      - Crafting: protocol_research/server_auth_inventory/crafting.md
+    - Server Auth Block Breaking:
+        - Network Packet Details: protocol_research/server_auth_block_breaking/block_breaking_network_packets.md
+    - Server Auth Block Placing:
+        - Network Packet Details: protocol_research/server_auth_block_placing/block_placing_network_packets.md

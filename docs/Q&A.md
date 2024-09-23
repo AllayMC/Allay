@@ -2,13 +2,13 @@
 comments: true
 ---
 
-NOTICE: The following content is answered by @daoge and does not represent the opinions of others.
+NOTICE: The following content is answered by @daoge_cmd and does not represent the opinions of others.
 
 Time: 2024/4/4
 
 ## Is this server based on Nukkit?
 
-No. It is not based on PowerNukkit. Unlike PowerNukkitX, this project is completely rewritten, it is not based on Nukkit.
+No. It is not based on PowerNukkitX. Unlike PowerNukkitX, this project is completely rewritten, it is not based on Nukkit.
 
 ## What are the advantages of this server?
 

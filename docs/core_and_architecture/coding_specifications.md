@@ -115,7 +115,7 @@ excludes cases that do not meet the conditions, leaving only those that naturall
 Some methods bear heavy functionality and have complex logic, often resulting in severe code nesting. In such cases, we
 can consider extracting methods, splitting one method into a combination of multiple method calls.
 
-## Efficient Use of return Statements (Similar to Guard Clauses)
+## Efficient Use of Return Statements (Similar to Guard Clauses)
 
 In the era of C programming, the single exit principle was widely accepted, meaning "a method should only have one
 return statement". We believe this requirement is overly strict. At least in some cases, using return early can reduce

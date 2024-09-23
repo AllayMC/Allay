@@ -2,7 +2,7 @@
 comments: true
 ---
 
-Consider the following multi-language keys:
+Consider the following translation keys:
 
 ## Example 1
 
@@ -32,7 +32,7 @@ Thus, placeholders can be declared without a type.
 
 ## Regarding the Use of '%'
 
-The percent sign `%` indicates the beginning of a multi-language key.
+The percent sign `%` indicates the beginning of a translation key.
 
 For example, you can write:
 
@@ -44,11 +44,11 @@ Where `%multiplayer.player.joined` will be replaced, while the beginning `aaa` w
 
 Of course, you can also write it like this (although it makes little sense): `%multiplayer.player.joined`
 
-When determining the right boundary of a multi-language key, traversal starts from the beginning of the key
+When determining the right boundary of a translation key, traversal starts from the beginning of the key
 and moves right.
 
-If an illegal character (one that cannot be used in a multi-language key) is encountered, traversal stops,
+If an illegal character (one that cannot be used in a translation key) is encountered, traversal stops,
 and the previous character is taken as the right boundary.
 For a list of valid characters, refer to the method `org.allaymc.api.i18n.I18n.isValidKeyCharacter`.
 
-If during traversal two colons (`:`) appear consecutively, this key will not be considered a valid multi-language key.
+If during traversal two colons (`:`) appear consecutively, this key will not be considered a valid translation key.
