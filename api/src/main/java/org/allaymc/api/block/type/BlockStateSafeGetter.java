@@ -12,11 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * BlockStateSafeGetter is used to get a block state safely, which means that
+ * the plugin developers can get an item type without worrying about being broken
+ * in the next minecraft version compared to using {@link BlockTypes} directly.
+ *
  * @author daoge_cmd
  */
 @UtilityClass
 public final class BlockStateSafeGetter {
-
+    /**
+     * Get a block type by its name.
+     *
+     * @param name The name of the block type.
+     * @return The {@link BlockStateSafeGetter.Getter} object.
+     */
     public static Getter name(String name) {
         return new Getter(name);
     }
@@ -32,6 +41,13 @@ public final class BlockStateSafeGetter {
             nbtBuilder.putString("name", name);
         }
 
+        /**
+         * Set the property of the block.
+         *
+         * @param name  The name of the property.
+         * @param value The value of the property.
+         * @return The {@link Getter} object.
+         */
         public Getter property(String name, Object value) {
             if (nbtBuilder.containsKey("val")) {
                 throw new IllegalStateException("Cannot set properties when val is set");
@@ -43,6 +59,12 @@ public final class BlockStateSafeGetter {
             return this;
         }
 
+        /**
+         * Set the val of the block.
+         *
+         * @param val The val of the block.
+         * @return The {@link Getter} object.
+         */
         public Getter val(int val) {
             if (stateBuilder != null) {
                 throw new IllegalStateException("Cannot set val when properties are set");
@@ -51,6 +73,11 @@ public final class BlockStateSafeGetter {
             return this;
         }
 
+        /**
+         * Try to get the block state.
+         *
+         * @return The block state.
+         */
         public BlockState blockState() {
             if (stateBuilder != null) {
                 nbtBuilder.putCompound("states", stateBuilder.build());
