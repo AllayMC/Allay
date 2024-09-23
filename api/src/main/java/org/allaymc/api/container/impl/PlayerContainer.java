@@ -20,15 +20,20 @@ public abstract class PlayerContainer extends BaseContainer {
     }
 
     @Override
-    public void onSlotChange(int slot) {
-        super.onSlotChange(slot);
+    public void notifySlotChange(int slot) {
+        super.notifySlotChange(slot);
         // Because even if the client has not opened player container, they can always see their own hot bar.
         // Therefore, we need to send an inventory packet to the client as well.
         var player = playerSupplier.get();
         if (!viewers.containsValue(player)) {
-            player.onSlotChange(this, slot);
+            player.notifySlotChange(this, slot);
         }
     }
 
+    /**
+     * Get the unopened container id.
+     *
+     * @return the unopened container id.
+     */
     public abstract int getUnopenedContainerId();
 }

@@ -177,7 +177,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         cookTime = 0;
         if (ingredient.getCount() > 1) {
             ingredient.reduceCount(1);
-            container.onSlotChange(FurnaceContainer.INGREDIENT_SLOT);
+            container.notifySlotChange(FurnaceContainer.INGREDIENT_SLOT);
         } else {
             container.clearSlot(FurnaceContainer.INGREDIENT_SLOT);
         }
@@ -196,7 +196,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
                 return;
             }
             currentResult.increaseCount(1);
-            container.onSlotChange(FurnaceContainer.RESULT_SLOT);
+            container.notifySlotChange(FurnaceContainer.RESULT_SLOT);
         }
 
         storedXP += output.getItemData().furnaceXPMultiplier();
@@ -271,7 +271,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         } else {
             if (fuel.getCount() > 1) {
                 fuel.reduceCount(1);
-                container.onSlotChange(FurnaceContainer.FUEL_SLOT);
+                container.notifySlotChange(FurnaceContainer.FUEL_SLOT);
             } else {
                 container.clearSlot(FurnaceContainer.FUEL_SLOT);
             }

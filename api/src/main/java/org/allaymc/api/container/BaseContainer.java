@@ -79,7 +79,7 @@ public class BaseContainer implements Container {
             itemStack = ItemAirStack.AIR_STACK;
         }
         content[slot] = itemStack;
-        onSlotChange(slot);
+        notifySlotChange(slot);
     }
 
     @Override
@@ -94,7 +94,7 @@ public class BaseContainer implements Container {
             addViewer(viewer);
             return;
         }
-        var assignedId = viewer.assignInventoryId();
+        var assignedId = viewer.assignContainerId();
         if (viewers.containsKey(assignedId)) {
             removeViewer(viewers.get(assignedId));
         }
@@ -121,9 +121,9 @@ public class BaseContainer implements Container {
     }
 
     @Override
-    public void onSlotChange(int slot) {
+    public void notifySlotChange(int slot) {
         for (var viewer : viewers.values()) {
-            viewer.onSlotChange(this, slot);
+            viewer.notifySlotChange(this, slot);
         }
         var listeners = onSlotChangeListeners.get(slot);
         if (listeners == null || listeners.isEmpty()) return;

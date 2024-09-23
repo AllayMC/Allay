@@ -66,7 +66,7 @@ public interface EntityPlayer extends
         ItemStack droppedItemStack;
         if (item.getCount() > count) {
             item.setCount(item.getCount() - count);
-            container.onSlotChange(slot);
+            container.notifySlotChange(slot);
             droppedItemStack = item.copy();
             droppedItemStack.setCount(count);
         } else {
@@ -110,7 +110,7 @@ public interface EntityPlayer extends
     default void sendItemInHandUpdate() {
         var inv = getContainer(FullContainerType.PLAYER_INVENTORY);
         var itemStack = inv.getItemInHand();
-        if (itemStack.getCount() != 0) inv.onSlotChange(inv.getHandSlot());
+        if (itemStack.getCount() != 0) inv.notifySlotChange(inv.getHandSlot());
         else inv.setItemInHand(ItemAirStack.AIR_STACK);
     }
 

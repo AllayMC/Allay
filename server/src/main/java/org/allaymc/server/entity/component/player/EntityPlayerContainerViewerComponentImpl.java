@@ -48,7 +48,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     protected Map<ContainerSlotType, FullContainerType<?>> slotTypeToFullType = new HashMap<>();
 
     @Override
-    public byte assignInventoryId() {
+    public byte assignContainerId() {
         if (idCounter + 1 >= 100) idCounter = 1;
         return idCounter++;
     }
@@ -142,7 +142,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    public void onSlotChange(Container container, int slot) {
+    public void notifySlotChange(Container container, int slot) {
         var id = idToContainer.inverse().get(container);
         if (id == null) {
             if (!(container instanceof PlayerContainer playerContainer)) return;
@@ -198,12 +198,12 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     }
 
     @Override
-    public @UnmodifiableView BiMap<Byte, Container> getIdToContainer() {
+    public @UnmodifiableView BiMap<Byte, Container> getIdToContainerMap() {
         return idToContainer;
     }
 
     @Override
-    public @UnmodifiableView BiMap<FullContainerType<?>, Container> getTypeToContainer() {
+    public @UnmodifiableView BiMap<FullContainerType<?>, Container> getTypeToContainerMap() {
         return typeToContainer;
     }
 

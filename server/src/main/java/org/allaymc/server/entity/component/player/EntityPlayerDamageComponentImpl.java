@@ -48,7 +48,7 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
                 continue;
             }
             item.reduceDurability(durabilityIncreased);
-            armorContainer.onSlotChange(slot);
+            armorContainer.notifySlotChange(slot);
         }
 
         if (damage.getDamageType() == DamageContainer.DamageType.FALL) {

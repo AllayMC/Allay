@@ -87,7 +87,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 resultDestItem = destItem;
                 // Destination item is not empty, just add count, and keep the same stack network id
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.onSlotChange(destinationSlot);
+                destination.notifySlotChange(destinationSlot);
             } else {
                 // Destination item is empty, move the original stack to the new position, and use the source item's stack network id (like changing positions)
                 if (source.getContainerType() == FullContainerType.CREATED_OUTPUT) {
@@ -101,12 +101,12 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
             // Case 2: Take part of the item
             resultSourItem = sourItem;
             resultSourItem.setCount(resultSourItem.getCount() - count);
-            source.onSlotChange(sourceSlot);
+            source.notifySlotChange(sourceSlot);
             if (destItem.getItemType() != AIR) {
                 // Destination item is not empty
                 resultDestItem = destItem;
                 resultDestItem.setCount(destItem.getCount() + count);
-                destination.onSlotChange(destinationSlot);
+                destination.notifySlotChange(destinationSlot);
             } else {
                 // Destination item is empty, create a new stack network id for the separated sub-item stack
                 resultDestItem = sourItem.copy(true);

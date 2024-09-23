@@ -58,7 +58,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
             var hotBarItem = inventory.getItemStack(slot);
             if (hotBarItem.canMerge(item)) {
                 hotBarItem.setCount(hotBarItem.getItemData().maxStackSize());
-                inventory.onSlotChange(slot);
+                inventory.notifySlotChange(slot);
                 success = true;
             }
         }

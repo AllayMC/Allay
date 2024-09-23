@@ -11,6 +11,8 @@ import java.util.EnumSet;
 import java.util.Set;
 
 /**
+ * FullContainerType is a complete description of a container type.
+ *
  * @author daoge_cmd
  */
 public record FullContainerType<T extends Container>(
