@@ -74,6 +74,6 @@ graalvm = ["sdk", "js", "polyglot", "chromeinspector-tool", "profiler-tool"]
 junit = ["junit-jupiter", "mockito-junit-jupiter"]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "8.3.1" }
+shadow = { id = "com.gradleup.shadow", version = "8.3.2" }
 gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.4.2" }
 jmh = { id = "me.champeau.jmh", version = "0.7.2" }
