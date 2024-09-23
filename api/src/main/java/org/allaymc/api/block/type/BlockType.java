@@ -18,22 +18,21 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Interface representing a type of block.
- * <p>
+ * Represents a type of block.
  *
  * @author daoge_cmd
  */
 public interface BlockType<T extends BlockBehavior> extends Identified {
 
     /**
-     * Gets the block behavior associated with this block type.
+     * Get the block behavior associated with this block type.
      *
      * @return the block behavior.
      */
     T getBlockBehavior();
 
     /**
-     * Gets the properties of this block type.
+     * Get the properties of this block type.
      *
      * @return an unmodifiable view of the map of block property types.
      */
@@ -45,7 +44,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      *
      * @param name the property name.
      *
-     * @return true if the block type has the property, false otherwise.
+     * @return {@code true} if the block type has the property, {@code false} otherwise.
      */
     default boolean hasProperty(String name) {
         return getProperties().containsKey(name);
@@ -56,14 +55,14 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
      *
      * @param propertyType the property type.
      *
-     * @return true if the block type has the property, false otherwise.
+     * @return {@code true} if the block type has the property, {@code false} otherwise.
      */
     default boolean hasProperty(BlockPropertyType<?> propertyType) {
         return getProperties().containsKey(propertyType.getName());
     }
 
     /**
-     * Gets all possible states of this block type.
+     * Get all possible states of this block type.
      *
      * @return an unmodifiable view of the collection of all block states.
      */
@@ -71,7 +70,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     Collection<BlockState> getAllStates();
 
     /**
-     * Gets the hash map which contains all states of this block type.
+     * Get the hash map which contains all states of this block type.
      * The key is block state's hash.
      *
      * @return an unmodifiable view of the map of block states by their hash.
@@ -80,7 +79,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     Map<Integer, BlockState> getBlockStateHashMap();
 
     /**
-     * Gets the special value map of block states.
+     * Get the special value map of block states.
      * The key is block state's special value.
      *
      * @return an unmodifiable view of the map of block states by their special values.
@@ -89,21 +88,21 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     Map<Long, BlockState> getSpecialValueMap();
 
     /**
-     * Gets the number of bits used for special values.
+     * Get the number of bits used for special values.
      *
      * @return the number of special value bits.
      */
     byte getSpecialValueBits();
 
     /**
-     * Gets the default state of this block type.
+     * Get the default state of this block type.
      *
      * @return the default block state.
      */
     BlockState getDefaultState();
 
     /**
-     * Gets the item identifier for this block type.
+     * Get the item identifier for this block type.
      *
      * @return the item identifier.
      */
@@ -112,7 +111,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     }
 
     /**
-     * Gets the item type associated with this block type.
+     * Get the item type associated with this block type.
      *
      * @return the item type.
      */
@@ -182,7 +181,7 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     }
 
     /**
-     * Gets the set of tags associated with this block type.
+     * Get the set of tags associated with this block type.
      *
      * @return an unmodifiable set of block tags.
      */
@@ -190,18 +189,18 @@ public interface BlockType<T extends BlockBehavior> extends Identified {
     Set<BlockTag> getBlockTags();
 
     /**
-     * Gets the material of this block type.
+     * Get the material of this block type.
      *
      * @return the material.
      */
     Material getMaterial();
 
     /**
-     * Checks if this block type has the specified tag.
+     * Check if this block type has the specified tag.
      *
      * @param blockTag the block tag.
      *
-     * @return true if the block type has the tag, false otherwise.
+     * @return {@code true} if the block type has the tag, {@code false} otherwise.
      */
     default boolean hasBlockTag(BlockTag blockTag) {
         return getBlockTags().contains(blockTag);
