@@ -1,6 +1,6 @@
 [versions]
 log4j = "2.24.0"
-graalvm = "24.0.2"
+graalvm = "24.1.0"
 
 [libraries]
 # NBT
