@@ -24,9 +24,9 @@ import static org.allaymc.api.item.ItemHelper.isSword;
  */
 public interface BlockBaseComponent extends BlockComponent {
     /**
-     * Get the block type
+     * Get the block type.
      *
-     * @return block type
+     * @return block type.
      */
     BlockType<? extends BlockBehavior> getBlockType();
 
@@ -46,108 +46,126 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Call when a blockState causes another blockState to update.
      *
-     * @param current  The current block
-     * @param neighbor The neighbor block that triggered the update
-     * @param face     The face of the current block that is being updated
+     * @param current  The current block.
+     * @param neighbor The neighbor block that triggered the update.
+     * @param face     The face of the current block that is being updated.
      */
     void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face);
 
     /**
-     * Called when the block encounters random tick update
+     * Called when the block encounters random tick update.
      *
-     * @param blockState the block
+     * @param blockState the block.
      */
     void onRandomUpdate(BlockStateWithPos blockState);
 
     /**
-     * Try to place a block
+     * Try to place a block.
      *
-     * @param dimension     The dimension where the block is placed
-     * @param blockState    The block that is being placed
-     * @param placeBlockPos The pos that the player is trying to place the block on
-     * @param placementInfo The player placement info, can be null
+     * @param dimension     The dimension where the block is placed.
+     * @param blockState    The block that is being placed.
+     * @param placeBlockPos The pos that the player is trying to place the block on.
+     * @param placementInfo The player placement info, can be null.
      *
-     * @return true if the block is placed successfully, false if failed
+     * @return {@code true} if the block is placed successfully, {@code false} if failed.
      */
     boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
 
     /**
      * Called when a block is placed.
      *
-     * @param currentBlockState The block that is being replaced
-     * @param newBlockState     The block that is replacing the current block
-     * @param placementInfo     The player placement info, can be null
+     * @param currentBlockState The block that is being replaced.
+     * @param newBlockState     The block that is replacing the current block.
+     * @param placementInfo     The player placement info, can be null.
      */
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
+    /**
+     * Check if the block will drop as item when it is broke by the specified entity using the specified item.
+     *
+     * @param blockState the block being broke.
+     * @param usedItem the item used to break the block, can be {@code null}.
+     * @param entity the entity who break the block, can be {@code null}.
+     * @return {@code true} if the block will drop as item, {@code false} otherwise.
+     */
     boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     /**
-     * @param itemStack    The item in the player's hand
-     * @param interactInfo The player interaction info
+     * @param itemStack The item in the player's hand.
+     * @param interactInfo The player interaction info.
      *
      * @return Whether the operation is valid.
-     * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return true
-     * If false is returned, the useItemOn method of the player's item will continue to be called
+     *         For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return {@code true}
+     *         If {@code false} is returned, the useItemOn method of the player's item will continue to be called
      */
     boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo);
 
     /**
      * Called when a block is replaced.
      *
-     * @param currentBlockState The block that is being replaced
-     * @param newBlockState     The block that is replacing the current block
-     * @param placementInfo     The player placement info, can be null
+     * @param currentBlockState The block that is being replaced.
+     * @param newBlockState     The block that is replacing the current block.
+     * @param placementInfo     The player placement info, can be null.
      */
     void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
-     * Called when a block is broken by non-creative game mode player
+     * Called when a block is broken by non-creative game mode player.
      *
-     * @param blockState The block that was broken
-     * @param usedItem   The item that was used to break the block, can be null
-     * @param entity     The player who broke the block, can be null
+     * @param blockState The block that was broken.
+     * @param usedItem   The item that was used to break the block, can be {@code null}.
+     * @param entity     The player who broke the block, can be {@code null}.
      */
     void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     void onScheduledUpdate(BlockStateWithPos blockState);
 
     /**
-     * Get the block's drops when it is broke by item normally
+     * Get the block's drops when it is broke by item normally.
      *
-     * @param blockState the block being broke
-     * @param usedItem   the item used to break the block, can be null
-     * @param entity     the entity who break the block, can be null
-     *
-     * @return the drops
+     * @param blockState the block being broke.
+     * @param usedItem   the item used to break the block, can be {@code null}.
+     * @param entity     the entity who break the block, can be {@code null}.
+     * @return the drops.
      */
     Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     /**
-     * Get the block's drops when it is broke by an item which has silk touch enchantment
+     * Get the block's drops when it is broke by an item which has silk touch enchantment.
      *
-     * @param blockState the block which is being broke
-     *
-     * @return the drops
+     * @param blockState the block which is being broke.
+     * @return the drops.
      */
     default ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
         return blockState.blockState().toItemStack();
     }
 
+    /**
+     * Check if the block can damage the item.
+     *
+     * @param itemStack the item being damaged.
+     * @return {@code true} if the block can damage the item, {@code false} otherwise.
+     */
     default boolean canDamageItem(ItemStack itemStack) {
         return true;
     }
 
+    /**
+     * Called when an entity falls on the block.
+     *
+     * @param entity     the entity who falls on the block.
+     * @param blockState the block state the entity falls on.
+     */
     default void onEntityFallOn(Entity entity, BlockState blockState) {}
 
     /**
-     * Calculate how long can break a specific block state
+     * Calculate how long can break a specific block state.
      *
-     * @param blockState the specific block state, must belong to this block type
-     * @param usedItem   the item used, can be null
-     * @param entity     the entity who break the block, can be null
+     * @param blockState the specific block state, must belong to this block type.
+     * @param usedItem   the item used, can be {@code null}.
+     * @param entity     the entity who break the block, can be {@code null}.
      *
-     * @return the time (second)
+     * @return the time (second).
      */
     default double calculateBreakTime(BlockState blockState, ItemStack usedItem, Entity entity) {
         checkBlockType(blockState);
@@ -219,11 +237,6 @@ public interface BlockBaseComponent extends BlockComponent {
         return efficiencyLevel * efficiencyLevel + 1;
     }
 
-    /**
-     * Check if the provided block state is belong to this block type
-     *
-     * @param blockState the block state you want to check
-     */
     private void checkBlockType(BlockState blockState) {
         if (blockState.getBlockType() != getBlockType())
             throw new IllegalArgumentException("Block type is not match! Expected: " + getBlockType().getIdentifier() + ", actual: " + blockState.getBlockType().getIdentifier());
