@@ -125,3 +125,6 @@ nav:
 
   - Getting Started:
       - Installation: getting-started/installation.md
+
+  - Tutorials:
+      - Creating Your First Plugin: tutorials/creating-your-first-plugin.md
