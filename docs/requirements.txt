@@ -1,7 +1,5 @@
-mkdocs
 black
+mkdocs
 mkdocs-material
 mkdocs-git-committers-plugin-2
 mkdocs-git-revision-date-localized-plugin
-mkdocs-static-i18n
-python-markdown-math
