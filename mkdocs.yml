@@ -23,10 +23,8 @@ extra_css:
 plugins:
   - search
   - git-revision-date-localized:
-      enabled: !ENV [CI, false]
       enable_creation_date: true
   - git-committers:
-      enabled: !ENV [ CI, false ]
       repository: AllayMC/Allay
       branch: master
 
