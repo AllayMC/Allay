@@ -7,4 +7,24 @@ comments: true
 Allay is a third-party server software for Minecraft: Bedrock Edition written in Java with the goal of
 maintaining high scalability while maintaining high performance through a well-designed architecture. 
 
-## Getting started!
+## 🚀 Ready to Start?
+
+<div class="grid cards" markdown>
+
+-   **Install allay server**
+
+    ---
+
+    Follow the comprehensive guide to install and configure your allay server.
+
+    [**:octicons-arrow-right-24: Getting Started**](getting-started/installation.md)
+
+-   **Write your first plugin**
+
+    ---
+
+    Our step-by-step tutorial takes you from zero to hero as you create your first plugin.
+
+    [**:octicons-arrow-right-24: Tutorials**](tutorials/create-your-first-plugin.md)
+
+</div>
