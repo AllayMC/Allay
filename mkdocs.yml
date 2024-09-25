@@ -128,3 +128,6 @@ nav:
 
   - Tutorials:
       - Creating Your First Plugin: tutorials/creating-your-first-plugin.md
+
+  - Advanced:
+      - Use Color Codes: advanced/use-color-codes.md
