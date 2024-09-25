@@ -17,7 +17,7 @@ maintaining high scalability while maintaining high performance through a well-d
 
     Follow the comprehensive guide to install and configure your allay server.
 
-    [**:octicons-arrow-right-24: Getting Started**](getting-started/installation.md)
+    [**:octicons-arrow-right-24: Getting Started**](getting-started/installation)
 
 -   **Write your first plugin**
 
@@ -25,6 +25,6 @@ maintaining high scalability while maintaining high performance through a well-d
 
     Our step-by-step tutorial takes you from zero to hero as you create your first plugin.
 
-    [**:octicons-arrow-right-24: Tutorials**](tutorials/create-your-first-plugin.md)
+    [**:octicons-arrow-right-24: Tutorials**](tutorials/create-your-first-plugin)
 
 </div>
