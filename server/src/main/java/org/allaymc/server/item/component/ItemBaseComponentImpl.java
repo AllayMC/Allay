@@ -51,11 +51,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Identifier
     public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:item_base_component");
 
-    // TODO: Due to differences between server-side and client-side block placement checks,
-    //  which cannot be synchronized 100%, "block swallowing" phenomenon may occur.
-    //  Here, the check is temporarily disabled.
-    protected static final boolean DO_BLOCK_PLACING_CHECK = true;
-
     private static int STACK_NETWORK_ID_COUNTER = 1;
 
     @Dependency
@@ -266,7 +261,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected boolean tryPlaceBlockState(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
         EntityPlayer player = null;
         if (placementInfo != null) {
-            if (DO_BLOCK_PLACING_CHECK && hasEntityCollision(dimension, placeBlockPos, blockState)) {
+            if (hasEntityCollision(dimension, placeBlockPos, blockState)) {
                 return false;
             }
             player = placementInfo.player();
