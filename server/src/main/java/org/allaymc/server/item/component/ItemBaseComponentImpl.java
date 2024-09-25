@@ -108,11 +108,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         loadExtraTag(initInfo.extraTag());
     }
 
-    protected void loadExtraTag(NbtMap extraTag) {
+    @Override
+    public void loadExtraTag(NbtMap extraTag) {
         this.durability = extraTag.getInt("Damage", 0);
         extraTag.listenForCompound("display", displayNbt -> {
             this.customName = displayNbt.getString("Name");
-            this.lore = extraTag.getList("Lore", NbtType.STRING);
+            this.lore = displayNbt.getList("Lore", NbtType.STRING);
         });
 
         extraTag.listenForList("ench", NbtType.COMPOUND, enchsNbt -> enchsNbt.forEach(enchNbt -> {
@@ -124,6 +125,34 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
         var event = new CItemLoadExtraTagEvent(extraTag);
         manager.callEvent(event);
+    }
+
+    @Override
+    public NbtMap saveExtraTag() {
+        var nbtBuilder = NbtMap.builder();
+        if (durability != 0) nbtBuilder.putInt("Damage", durability);
+
+        var displayBuilder = NbtMap.builder();
+        if (!this.customName.isEmpty()) displayBuilder.put("Name", this.customName);
+        if (!this.lore.isEmpty()) displayBuilder.putList("Lore", NbtType.STRING, this.lore);
+        if (!displayBuilder.isEmpty()) nbtBuilder.putCompound("display", displayBuilder.build());
+
+        if (!enchantments.isEmpty()) {
+            var enchantmentNBT = this.enchantments.values().stream()
+                    .map(EnchantmentInstance::saveNBT)
+                    .toList();
+            nbtBuilder.putList("ench", NbtType.COMPOUND, enchantmentNBT);
+        }
+
+        //TODO: item lock type
+
+        // Custom NBT content
+        if (!customNBTContent.isEmpty()) nbtBuilder.put("CustomNBT", customNBTContent);
+
+        var event = new CItemSaveExtraTagEvent(nbtBuilder);
+        manager.callEvent(event);
+
+        return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }
 
     @Override
@@ -207,34 +236,6 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                         .autoAssignStackNetworkId(newStackNetworkId)
                         .build()
         );
-    }
-
-    @Override
-    public NbtMap saveExtraTag() {
-        var nbtBuilder = NbtMap.builder();
-        if (durability != 0) nbtBuilder.putInt("Damage", durability);
-
-        var displayBuilder = NbtMap.builder();
-        if (!this.customName.isEmpty()) displayBuilder.put("Name", this.customName);
-        if (!this.lore.isEmpty()) displayBuilder.putList("Lore", NbtType.STRING, this.lore);
-        if (!displayBuilder.isEmpty()) nbtBuilder.putCompound("display", displayBuilder.build());
-
-        if (!enchantments.isEmpty()) {
-            var enchantmentNBT = this.enchantments.values().stream()
-                    .map(EnchantmentInstance::saveNBT)
-                    .toList();
-            nbtBuilder.putList("ench", NbtType.COMPOUND, enchantmentNBT);
-        }
-
-        //TODO: item lock type
-
-        // Custom NBT content
-        if (!customNBTContent.isEmpty()) nbtBuilder.put("CustomNBT", customNBTContent);
-
-        var event = new CItemSaveExtraTagEvent(nbtBuilder);
-        manager.callEvent(event);
-
-        return nbtBuilder.isEmpty() ? null : nbtBuilder.build();
     }
 
     @Override

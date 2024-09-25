@@ -229,6 +229,13 @@ public interface ItemBaseComponent extends ItemComponent {
     NbtMap saveExtraTag();
 
     /**
+     * Load the extra tag.
+     *
+     * @param extraTag The extra tag.
+     */
+    void loadExtraTag(NbtMap extraTag);
+
+    /**
      * Get the custom NBT content.
      * <p>
      * Custom nbt content is stored in the item extra tag, which
