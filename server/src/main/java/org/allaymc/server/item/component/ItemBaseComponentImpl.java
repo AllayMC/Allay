@@ -54,7 +54,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     // TODO: Due to differences between server-side and client-side block placement checks,
     //  which cannot be synchronized 100%, "block swallowing" phenomenon may occur.
     //  Here, the check is temporarily disabled.
-    protected static final boolean DO_BLOCK_PLACING_CHECK = false;
+    protected static final boolean DO_BLOCK_PLACING_CHECK = true;
 
     private static int STACK_NETWORK_ID_COUNTER = 1;
 

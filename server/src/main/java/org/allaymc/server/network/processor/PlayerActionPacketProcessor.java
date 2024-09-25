@@ -78,7 +78,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
             }
             case START_ITEM_USE_ON -> {
                 if (player.isUsingItemOnBlock()) {
-                    log.warn("Player {} tried to start item use on without stopping", player.getOriginName());
+                    log.debug("Player {} tried to start item use on without stopping", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
 
@@ -87,7 +87,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
             }
             case STOP_ITEM_USE_ON -> {
                 if (!player.isUsingItemOnBlock()) {
-                    log.warn("Player {} tried to stop item use on without starting", player.getOriginName());
+                    log.debug("Player {} tried to stop item use on without starting", player.getOriginName());
                     yield PacketSignal.HANDLED;
                 }
 
