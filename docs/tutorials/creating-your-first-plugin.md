@@ -56,6 +56,6 @@ To build your plugin into a jar file, you need to run the following command:
 gradlew shadowJar
 ```
 
-And this command will produce a `MyPlugin-1.0.0-shaded.jar` file in the `build/libs` directory.
+And this command will produce a file named `MyPlugin-1.0.0-shaded.jar` in the `build/libs` directory.
 Copying this file to the `plugins` directory of your Allay server, and start the server
 to check if your plugin loads and operates as expected.
