@@ -59,7 +59,7 @@ public class HelloCommand extends SimpleCommand {
 }
 ```
 
-1.  :star: See tips
+1. :star: See tips
 
 !!! tip
 
