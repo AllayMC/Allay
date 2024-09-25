@@ -4,8 +4,8 @@ comments: true
 
 # Getting Started
 
-Starting an allay server would be very easy! The following guide will help you to 
-install and run your first allay server.
+Starting an Allay server would be very easy! The following guide will help you to 
+install and run your first Allay server.
 
 ## Install Java 21
 
@@ -24,7 +24,7 @@ And if you have your java 21 installed correctly, the java version will be shown
 ## Download Allay
 
 Allay is currently in the development stage, so no release have been published yet.
-You can download the latest version of allay from [GitHub Action](https://github.com/AllayMC/Allay/actions?query=branch%3Amaster).
+You can download the latest version of Allay from [GitHub Action](https://github.com/AllayMC/Allay/actions?query=branch%3Amaster).
 
 ## Run Allay
 

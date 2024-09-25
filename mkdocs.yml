@@ -128,6 +128,7 @@ nav:
 
   - Tutorials:
       - Creating Your First Plugin: tutorials/creating-your-first-plugin.md
+      - Register Commands: tutorials/register-commands.md
 
   - Advanced:
       - Use Color Codes: advanced/use-color-codes.md

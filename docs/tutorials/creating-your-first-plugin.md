@@ -4,6 +4,9 @@ comments: true
 
 # Create Your First Plugin
 
+Welcome to Allay! Allay provides a powerful plugin system so that you can write plugin in many languages,
+such as Java, JavaScript, Scala and Kotlin. In this section, we will guide you to create your first plugin in Java.
+
 ## Prerequisites
 
 To develop your first plugin, you will have to install the following prerequisites:
@@ -45,7 +48,7 @@ After cloning the repository, open the project in IDEA, and we need to change so
   - Change `authors` to `["yourname"]`
 - Reload gradle
 
-## Build Your Plugin
+## Build and Install Your Plugin
 
 To build your plugin into a jar file, you need to run the following command:
 
@@ -54,5 +57,5 @@ gradlew shadowJar
 ```
 
 And this command will produce a `MyPlugin-1.0.0-shaded.jar` file in the `build/libs` directory.
-Copying this file to the `plugins` directory of your allay server, and start the server
+Copying this file to the `plugins` directory of your Allay server, and start the server
 to check if your plugin loads and operates as expected.
