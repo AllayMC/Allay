@@ -34,7 +34,7 @@ Allay's resource files are stored in `data/resources` directory.
 - `item_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
 - `recipes.json`
 
-### Update the files under the unpacked directory
+### Update the files under the `unpacked` directory
 
 Although these files will not be included in the final jar, they will be used during the code generation process:
 
