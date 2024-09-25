@@ -17,10 +17,7 @@ import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.utils.JSONUtils;
-import org.allaymc.api.utils.MathUtils;
-import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.utils.*;
 import org.allaymc.server.block.type.BlockLootTable;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
@@ -313,6 +310,17 @@ public class GameTestCommand extends SimpleCommand {
                             }
                         }
                     }
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("setlore")
+                .msg("lore")
+                .exec((context, player) -> {
+                    var lore = AllayStringUtils.fastSplit(context.getResult(1), " ");
+                    var item = player.getItemInHand();
+                    item.setLore(lore);
+                    player.notifyItemInHandChange();
+                    player.sendText("Lore is set");
                     return context.success();
                 }, SenderType.PLAYER);
     }

@@ -46,7 +46,7 @@ public class EnchantCommand extends SimpleCommand {
                         }
 
                         item.addEnchantment(enchantmentType, level);
-                        player.sendItemInHandUpdate();
+                        player.notifyItemInHandChange();
                         ctx.addOutput(TrKeys.M_COMMANDS_ENCHANT_SUCCESS, enchantmentType.getIdentifier());
                     }
 

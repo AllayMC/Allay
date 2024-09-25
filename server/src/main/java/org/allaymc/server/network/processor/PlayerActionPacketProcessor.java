@@ -72,7 +72,7 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
                 if (itemInHand.isBroken()) {
                     player.clearItemInHand();
                 } else {
-                    player.sendItemInHandUpdate();
+                    player.notifyItemInHandChange();
                 }
                 yield PacketSignal.HANDLED;
             }

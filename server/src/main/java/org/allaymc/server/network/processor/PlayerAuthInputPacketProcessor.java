@@ -175,7 +175,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             if (itemInHand.isBroken()) {
                 player.clearItemInHand();
             } else {
-                player.sendItemInHandUpdate();
+                player.notifyItemInHandChange();
             }
         } else {
             log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakTime, currentTime);

@@ -165,7 +165,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
         // The item may have been changed or broken
         // So we need to send update to client
         if (itemInHand.isBroken()) player.clearItemInHand();
-        else player.sendItemInHandUpdate();
+        else player.notifyItemInHandChange();
     }
 
     @Override

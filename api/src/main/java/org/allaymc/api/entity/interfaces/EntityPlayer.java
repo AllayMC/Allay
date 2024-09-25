@@ -107,7 +107,7 @@ public interface EntityPlayer extends
         else itemInHand.setCount(itemInHand.getCount() - 1);
     }
 
-    default void sendItemInHandUpdate() {
+    default void notifyItemInHandChange() {
         var inv = getContainer(FullContainerType.PLAYER_INVENTORY);
         var itemStack = inv.getItemInHand();
         if (itemStack.getCount() != 0) inv.notifySlotChange(inv.getHandSlot());
