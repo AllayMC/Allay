@@ -4,4 +4,8 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockLiquidComponent;
 
 public interface BlockFlowingWaterBehavior extends BlockBehavior, BlockLiquidComponent {
+    @Override
+    default boolean canResetFallDistance() {
+        return true;
+    }
 }

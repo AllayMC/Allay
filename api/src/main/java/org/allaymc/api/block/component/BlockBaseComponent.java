@@ -159,6 +159,30 @@ public interface BlockBaseComponent extends BlockComponent {
     default void onEntityFallOn(Entity entity, BlockState blockState) {}
 
     /**
+     * Get the block's fall damage reduction factor.
+     * <p>
+     * Fall damage reduction factor is a value that express
+     * how much the block can reduce the fall damage.
+     * <p>
+     * For example, if fall damage is 10.0 and the reduction factor is 0.5,
+     * the actual fall damage will be 5.0.
+     *
+     * @return the fall damage reduction factor.
+     */
+    default float getFallDamageReductionFactor() {
+        return 0.0f;
+    }
+
+    /**
+     * Check if the block can reset the fall distance of the entity.
+     *
+     * @return {@code true} if the block can reset the fall distance, {@code false} otherwise.
+     */
+    default boolean canResetFallDistance() {
+        return false;
+    }
+
+    /**
      * Calculate how long can break a specific block state.
      *
      * @param blockState the specific block state, must belong to this block type.

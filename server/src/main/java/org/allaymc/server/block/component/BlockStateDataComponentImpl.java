@@ -69,14 +69,6 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         return ofRedefinedData((builder, blockType, blockStateHash) -> builder.collisionShape(aabbRedefiner.apply(blockType.ofState(blockStateHash))).build());
     }
 
-    public static BlockStateDataComponentImpl ofRedefinedDamageReductionFactor(Function<BlockState, Float> reductionRedefiner) {
-        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.fallDamageReductionFactor(reductionRedefiner.apply(blockType.ofState(blockStateHash))).build());
-    }
-
-    public static BlockStateDataComponentImpl ofRedefinedCanResetFallDistance(Function<BlockState, Boolean> canResetFallDistanceRedefiner) {
-        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.canResetFallDistance(canResetFallDistanceRedefiner.apply(blockType.ofState(blockStateHash))).build());
-    }
-
     public static BlockStateDataComponentImpl ofRedefinedData(TriFunction<BlockStateData.BlockStateDataBuilder, BlockType<?>, Integer, BlockStateData> redefiner) {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
             var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());

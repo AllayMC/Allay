@@ -1007,16 +1007,6 @@ public final class BlockTypeInitializer {
                 .builder(BlockSlimeBehavior.class)
                 .vanillaBlock(BlockId.SLIME)
                 .setBlockBaseComponentSupplier(BlockSlimeBaseComponentImpl::new)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedDamageReductionFactor(blockState -> 1.0f))
-                .build();
-    }
-
-    public static void initHayBlock() {
-        BlockTypes.HAY_BLOCK = AllayBlockType
-                .builder(BlockHayBlockBehavior.class)
-                .vanillaBlock(BlockId.HAY_BLOCK)
-                .setProperties(BlockPropertyTypes.DEPRECATED, BlockPropertyTypes.PILLAR_AXIS)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedDamageReductionFactor(blockState -> 0.8f))
                 .build();
     }
 
@@ -1025,23 +1015,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockWaterBehavior.class)
                 .vanillaBlock(BlockId.WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedData(
-                        (builder, blockType, blockStateHash) -> builder
-                                .canResetFallDistance(true)
-                                .collisionShape(VoxelShapes.buildLiquidShape(blockType.ofState(blockStateHash)))
-                                .build()
-                ))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(VoxelShapes::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_WATER = AllayBlockType
                 .builder(BlockFlowingWaterBehavior.class)
                 .vanillaBlock(BlockId.FLOWING_WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedData(
-                        (builder, blockType, blockStateHash) -> builder
-                                .canResetFallDistance(true)
-                                .collisionShape(VoxelShapes.buildLiquidShape(blockType.ofState(blockStateHash)))
-                                .build()
-                ))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(VoxelShapes::buildLiquidShape))
                 .build();
     }
 
@@ -1050,23 +1030,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockLavaBehavior.class)
                 .vanillaBlock(BlockId.LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedData(
-                        (builder, blockType, blockStateHash) -> builder
-                                .canResetFallDistance(true)
-                                .collisionShape(VoxelShapes.buildLiquidShape(blockType.ofState(blockStateHash)))
-                                .build()
-                ))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(VoxelShapes::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_LAVA = AllayBlockType
                 .builder(BlockFlowingLavaBehavior.class)
                 .vanillaBlock(BlockId.FLOWING_LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedData(
-                        (builder, blockType, blockStateHash) -> builder
-                                .canResetFallDistance(true)
-                                .collisionShape(VoxelShapes.buildLiquidShape(blockType.ofState(blockStateHash)))
-                                .build()
-                ))
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedAABB(VoxelShapes::buildLiquidShape))
                 .build();
     }
 }

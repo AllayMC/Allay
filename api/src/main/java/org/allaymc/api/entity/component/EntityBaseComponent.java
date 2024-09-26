@@ -786,7 +786,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         var currentBlockState0 = dim.getBlockState(eyeLoc);
         var currentBlockState1 = dim.getBlockState(eyeLoc, 1);
 
-        if (!currentBlockState0.getBlockStateData().hasCollision() && currentBlockState1.getBlockType().hasBlockTag(BlockTags.WATER)) {
+        if (!currentBlockState0.getBlockType().getMaterial().isSolidBlocking() && currentBlockState1.getBlockType().hasBlockTag(BlockTags.WATER)) {
             return true;
         }
 

@@ -266,7 +266,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             return;
         }
 
-        if (currentBlockState0.getBlockStateData().canResetFallDistance() &&
+        if (currentBlockState0.getBehavior().canResetFallDistance() &&
             currentBlockState0.getBlockStateData().computeOffsetCollisionShape(MathUtils.floor(location)).intersectsAABB(getAABB().translate(location, new AABBf()))) {
             this.fallDistance = 0;
         }

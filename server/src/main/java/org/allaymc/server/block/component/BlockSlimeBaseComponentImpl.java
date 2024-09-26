@@ -22,4 +22,9 @@ public class BlockSlimeBaseComponentImpl extends BlockBaseComponentImpl {
         var lastMotion = entity.getLastMotion();
         entity.setMotion(lastMotion.x(), -lastMotion.y(), lastMotion.z());
     }
+
+    @Override
+    public float getFallDamageReductionFactor() {
+        return 1.0f;
+    }
 }
