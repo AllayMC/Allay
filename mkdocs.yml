@@ -131,6 +131,7 @@ nav:
       - Register Commands: tutorials/register-commands.md
       - Register Event Handlers: tutorials/register-event-listeners.md
       - Schedule Tasks: tutorials/schedule-tasks.md
+      - Use Forms: tutorials/use-forms.md
 
   - Advanced:
       - Use Color Codes: advanced/use-color-codes.md

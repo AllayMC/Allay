@@ -2,12 +2,12 @@
 comments: true
 ---
 
-# Register event listeners
+# Register Event Listeners
 
 Allay provides a powerful event system that allows plugins to listen to various events that happen in the
 server. Let's walk you through registering a simple event listener.
 
-## Add event handlers
+## Add Event Handlers
 
 Let's say your plugin want to listen to when a player joins the server and send a message to inform everyone in the server.
 You need to put the event listener in a class and annotate the method with `@EventHandler`:
@@ -34,7 +34,7 @@ public class MyEventListener {
     Method annotated with `@EventHandler` must have one and only one parameter and return `void`.
     The type of the parameter is the event that you want to listen to.
 
-## Register listeners
+## Register Listeners
 
 Now, we need to register our event handlers to the Allay event system.
 

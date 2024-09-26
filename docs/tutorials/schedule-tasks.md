@@ -2,12 +2,12 @@
 comments: true
 ---
 
-# Schedule tasks
+# Schedule Tasks
 
 Allay provides a task scheduling system that allows plugins to schedule tasks for future execution, possibly at
 regular intervals. In this tutorial, we'll guide you on scheduling a straightforward task.
 
-## Register tasks
+## Register Tasks
 
 Here, we want an on-screen popup displaying "Hi!" to appear for every online player at a 1-second interval:
 

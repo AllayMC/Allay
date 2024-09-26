@@ -2,12 +2,12 @@
 comments: true
 ---
 
-# Register commands
+# Register Commands
 
 In this section, we'll walk you through creating a simple command. By the end of this section, you'll have
 a basic understanding of how to define and register commands with allay.
 
-## Create a command
+## Create a Command
 
 Let's start with a simple command `/hello` that greets the command sender.
 
