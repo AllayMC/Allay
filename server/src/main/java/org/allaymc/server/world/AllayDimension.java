@@ -126,7 +126,6 @@ public class AllayDimension implements Dimension {
     public boolean breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player) {
         var block = getBlockState(x, y, z);
         if (block.getBlockType() == AIR) {
-            log.warn("Trying to break air block at x={}, y={}, z={}", x, y, z);
             return false;
         }
 

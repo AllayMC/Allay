@@ -852,15 +852,15 @@ public interface Dimension {
     }
 
     /**
-     * Break a block at the specified position
+     * Break a block at the specified position.
      *
-     * @param x        The x coordinate of the block
-     * @param y        The y coordinate of the block
-     * @param z        The z coordinate of the block
-     * @param usedItem The item used to break the block, can be null
-     * @param player   The player who breaks the block, can be null
+     * @param x        The x coordinate of the block.
+     * @param y        The y coordinate of the block.
+     * @param z        The z coordinate of the block.
+     * @param usedItem The item used to break the block, can be {@code null}.
+     * @param player   The player who breaks the block, can be {@code null}.
      *
-     * @return Whether the block is successfully broken
+     * @return Whether the block is successfully broken.
      */
     boolean breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player);
 }

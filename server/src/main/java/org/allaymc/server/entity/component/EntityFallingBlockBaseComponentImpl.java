@@ -33,40 +33,55 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     @Override
     protected void initMetadata() {
         super.initMetadata();
-        Objects.requireNonNull(blockState, "blockState must not be null");
+        Objects.requireNonNull(blockState, "blockState shouldn't be null");
 
         metadata.set(EntityFlag.FIRE_IMMUNE, true);
         metadata.set(EntityDataTypes.VARIANT, blockState.blockStateHash());
         metadata.set(EntityFlag.HAS_COLLISION, false);
     }
 
+//    @Override
+//    public void tick(long currentTick) {
+//        super.tick(currentTick);
+//
+//        if (!isOnGround()) return;
+//
+//        var floorPos = location.floor(new Vector3f());
+//        var dimension = getDimension();
+//        var block = dimension.getBlockState(floorPos);
+//        if (!block.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
+//            dimension.getEntityService().removeEntity(thisEntity, () -> {
+//                dimension.addLevelEvent(
+//                        location.x(), location.y(), location.z(),
+//                        LevelEvent.BLOCK_UPDATE_BREAK, blockState.blockStateHash()
+//                );
+//                dimension.dropItem(blockState.toItemStack(), location);
+//            });
+//            return;
+//        }
+//
+//        dimension.getEntityService().removeEntity(thisEntity, () -> {
+//            dimension.setBlockState(
+//                    (int) floorPos.x(),
+//                    (int) floorPos.y(),
+//                    (int) floorPos.z(),
+//                    blockState
+//            );
+//        });
+//    }
+
     @Override
-    public void tick(long currentTick) {
-        super.tick(currentTick);
+    public void onFall() {
+        super.onFall();
+        var dimension = getDimension();
 
-        if (!isOnGround()) return;
-
-        var floorPos = location.floor(new Vector3f());
-        var block = getDimension().getBlockState(floorPos);
-        if (!block.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
-            getDimension().getEntityService().removeEntity(thisEntity, () -> {
-                getDimension().addLevelEvent(
-                        location.x(), location.y(), location.z(),
-                        LevelEvent.BLOCK_UPDATE_BREAK, blockState.blockStateHash()
-                );
-                getDimension().dropItem(blockState.toItemStack(), location);
-            });
-            return;
+        var blockReplaced = dimension.getBlockState(location);
+        var floorLoc = location.floor();
+        if (blockReplaced.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
+            dimension.breakBlock((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), null, null);
         }
 
-        getDimension().getEntityService().removeEntity(thisEntity, () -> {
-            getDimension().setBlockState(
-                    (int) floorPos.x(),
-                    (int) floorPos.y(),
-                    (int) floorPos.z(),
-                    blockState
-            );
-        });
+        dimension.getEntityService().removeEntity(thisEntity, () -> dimension.setBlockState(location, blockState));
     }
 
     @Override
