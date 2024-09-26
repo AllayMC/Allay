@@ -24,7 +24,7 @@ The next-generation Minecraft: Bedrock Edition server software
 [//]: # (Allay is the cutest software in the world!)
 
 Allay is a third-party server software for Minecraft: Bedrock Edition written in Java with the goal of maintaining high scalability while maintaining high performance through a well-designed architecture. 
-For more information, check out our [Q&A](docs/Q&A.md).
+For more information, check out docs[docs](docs.allaymc.org).
 
 > [!IMPORTANT]
 > Please note that this project is still at a very early stage and has not yet been released officially, and a large number of interfaces may be added or removed without notice. Please do not use Allay in a production environment.
