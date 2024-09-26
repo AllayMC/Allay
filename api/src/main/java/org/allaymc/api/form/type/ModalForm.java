@@ -38,13 +38,25 @@ public final class ModalForm extends Form {
         return this;
     }
 
-    public ModalForm falseButton(String falseButton) {
-        this.falseButton = falseButton;
+    public ModalForm trueButton(String trueButton, Runnable onTrue) {
+        this.trueButton = trueButton;
+        this.onTrue = onTrue;
         return this;
     }
 
     public ModalForm onTrue(Runnable onTrue) {
         this.onTrue = onTrue;
+        return this;
+    }
+
+    public ModalForm falseButton(String falseButton) {
+        this.falseButton = falseButton;
+        return this;
+    }
+
+    public ModalForm falseButton(String falseButton, Runnable onFalse) {
+        this.falseButton = falseButton;
+        this.onFalse = onFalse;
         return this;
     }
 
