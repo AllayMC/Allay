@@ -29,7 +29,7 @@ public class MyEventListener {
 ```
 
 **:partying_face: And that's it!**. [Build and install your plugin](create-your-first-plugin.md#build-and-install-your-plugin),
-and when players join the server, they will see a form with the content "Welcome to the server!":
+and when players join the server, they will see a form with the content `Welcome to the server!`:
 
 ![use-forms-p1.png](use-forms-p1.png)
 
@@ -60,10 +60,10 @@ public class MyEventListener {
 
 1. :star: Modal form is a form type that only has two buttons.
 
-And when players join the server, they will see a form with the title "Do You Like Allay?"
-and two buttons "Yes" and "No". When the player clicks on the "Yes" button, they will receive
-a message "Thank you!", and when they click on the "No" button, they will receive a message
-"Sorry to hear that!":
+And when players join the server, they will see a form with the title `Do You Like Allay?`
+and two buttons `Yes` and `No`. When the player clicks on the `Yes` button, they will receive
+a message `Thank you!`, and when they click on the `No` button, they will receive a message
+`Sorry to hear that!`:
 
 ![use-forms-p2.png](use-forms-p2.png)
 
