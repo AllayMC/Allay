@@ -73,6 +73,7 @@
   "allay:pack.loading": "正在加载资源包...",
   "allay:pack.loading.entry": "正在加载资源包 %1",
   "allay:plugin.construct.instance.error": "创建插件 %1 实例时发生错误 %2",
+  "allay:plugin.dependency.circular": "插件 %1 存在循环依赖: %2此插件将跳过加载!",
   "allay:plugin.dependency.missing": "插件 %1 缺少依赖 %2",
   "allay:plugin.disable.error": "卸载插件 %1 时发生错误: %2",
   "allay:plugin.disabling": "正在关闭插件 %1",

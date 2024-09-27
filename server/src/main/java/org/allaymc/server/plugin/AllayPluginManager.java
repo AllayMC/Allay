@@ -116,7 +116,7 @@ public class AllayPluginManager implements PluginManager {
                 try {
                     dag.setBefore(name, descriptor.getName());//set ref
                 } catch (DAGCycleException e) {
-                    log.error("Circular dependencies appear in plugin {}: {}The plugin will skip loading!", descriptor.getName(), e.getMessage());
+                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_CIRCULAR, descriptor.getName(), e.getMessage()));
                     dag.remove(descriptor.getName());
                 }
             }
