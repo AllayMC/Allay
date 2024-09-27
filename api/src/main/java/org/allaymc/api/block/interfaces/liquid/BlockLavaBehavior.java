@@ -4,8 +4,4 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockLiquidComponent;
 
 public interface BlockLavaBehavior extends BlockBehavior, BlockLiquidComponent {
-    @Override
-    default boolean canResetFallDistance() {
-        return true;
-    }
 }

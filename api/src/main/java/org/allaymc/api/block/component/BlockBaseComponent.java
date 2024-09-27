@@ -174,15 +174,6 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Check if the block can reset the fall distance of the entity.
-     *
-     * @return {@code true} if the block can reset the fall distance, {@code false} otherwise.
-     */
-    default boolean canResetFallDistance() {
-        return false;
-    }
-
-    /**
      * Calculate how long can break a specific block state.
      *
      * @param blockState the specific block state, must belong to this block type.
@@ -206,7 +197,7 @@ public interface BlockBaseComponent extends BlockComponent {
         var efficiencyLevel = 0;
 
         if (entity != null) {
-            isInWater = entity.isEyesInWater();
+            isInWater = entity.isEyesInLiquid();
             isOnGround = entity.isOnGround();
             hasteEffectLevel = entity.getEffectLevel(EffectTypes.HASTE);
             // Conduit Power ensures at least level 2 haste effect

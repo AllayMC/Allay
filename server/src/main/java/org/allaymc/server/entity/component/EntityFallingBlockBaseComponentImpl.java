@@ -40,36 +40,6 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
         metadata.set(EntityFlag.HAS_COLLISION, false);
     }
 
-//    @Override
-//    public void tick(long currentTick) {
-//        super.tick(currentTick);
-//
-//        if (!isOnGround()) return;
-//
-//        var floorPos = location.floor(new Vector3f());
-//        var dimension = getDimension();
-//        var block = dimension.getBlockState(floorPos);
-//        if (!block.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
-//            dimension.getEntityService().removeEntity(thisEntity, () -> {
-//                dimension.addLevelEvent(
-//                        location.x(), location.y(), location.z(),
-//                        LevelEvent.BLOCK_UPDATE_BREAK, blockState.blockStateHash()
-//                );
-//                dimension.dropItem(blockState.toItemStack(), location);
-//            });
-//            return;
-//        }
-//
-//        dimension.getEntityService().removeEntity(thisEntity, () -> {
-//            dimension.setBlockState(
-//                    (int) floorPos.x(),
-//                    (int) floorPos.y(),
-//                    (int) floorPos.z(),
-//                    blockState
-//            );
-//        });
-//    }
-
     @Override
     public void onFall() {
         super.onFall();

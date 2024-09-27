@@ -65,8 +65,8 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         return ofDirectDynamic(new LazyLoaderAttributeAccessor(lazyLoader));
     }
 
-    public static BlockStateDataComponentImpl ofRedefinedAABB(Function<BlockState, VoxelShape> aabbRedefiner) {
-        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.collisionShape(aabbRedefiner.apply(blockType.ofState(blockStateHash))).build());
+    public static BlockStateDataComponentImpl ofRedefinedCollisionShape(Function<BlockState, VoxelShape> shapeRedefiner) {
+        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.collisionShape(shapeRedefiner.apply(blockType.ofState(blockStateHash))).build());
     }
 
     public static BlockStateDataComponentImpl ofRedefinedData(TriFunction<BlockStateData.BlockStateDataBuilder, BlockType<?>, Integer, BlockStateData> redefiner) {

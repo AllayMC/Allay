@@ -43,11 +43,4 @@ public final class VoxelShapes {
         var face = getBlockFaceByStairDirectionValue(stairBlockState.getPropertyValue(BlockPropertyTypes.WEIRDO_DIRECTION));
         return isDownwards ? DOWNWARDS_STAIR_SHAPES.get(face) : UPWARDS_STAIR_SHAPES.get(face);
     }
-
-    public static VoxelShape buildLiquidShape(BlockState liquidBlockState) {
-        var liquidDepth = liquidBlockState.getPropertyValue(BlockPropertyTypes.LIQUID_DEPTH);
-        return VoxelShape.builder()
-                .solid(0, 0, 0, 1, 0.0625f * (liquidDepth + 1), 1)
-                .build();
-    }
 }

@@ -1,5 +1,6 @@
 package org.allaymc.api.entity.component;
 
+import org.allaymc.api.block.component.BlockLiquidComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
@@ -780,18 +781,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return {@code true} if the entity is in water, otherwise {@code false}.
      */
-    default boolean isEyesInWater() {
+    default boolean isEyesInLiquid() {
         var dim = getDimension();
         var eyeLoc = getLocation().add(0, getEyeHeight(), 0, new Vector3f());
-        var currentBlockState0 = dim.getBlockState(eyeLoc);
-        var currentBlockState1 = dim.getBlockState(eyeLoc, 1);
+        var eyesBlockState = dim.getBlockState(eyeLoc);
 
-        if (!currentBlockState0.getBlockType().getMaterial().isSolidBlocking() && currentBlockState1.getBlockType().hasBlockTag(BlockTags.WATER)) {
-            return true;
-        }
-
-        return currentBlockState0.getBlockType().hasBlockTag(BlockTags.WATER) &&
-               currentBlockState0.getBlockStateData().computeOffsetCollisionShape(MathUtils.floor(eyeLoc)).intersectsPoint(eyeLoc);
+        return eyesBlockState instanceof BlockLiquidComponent liquidComponent &&
+               liquidComponent.getLiquidAABB(MathUtils.floor(eyeLoc), eyesBlockState).containsPoint(eyeLoc);
     }
 
     /**

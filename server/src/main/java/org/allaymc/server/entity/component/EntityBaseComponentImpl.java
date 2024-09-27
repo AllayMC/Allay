@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.component.BlockLiquidComponent;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
@@ -258,16 +259,18 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     private void tryResetFallDistance(Location3fc location) {
-        var currentBlockState0 = location.dimension().getBlockState(location);
-        var currentBlockState1 = location.dimension().getBlockState(location, 1);
+        var blockState0 = location.dimension().getBlockState(location);
+        var blockState1 = location.dimension().getBlockState(location, 1);
 
-        if (!currentBlockState0.getBlockStateData().hasCollision() && currentBlockState1.getBlockType().hasBlockTag(BlockTags.WATER)) {
+        // Layer 1 contains water (hardcoded because minecraft only allows water in layer 1 currently)
+        if (!blockState0.getBlockStateData().hasCollision() && blockState1.getBlockType().hasBlockTag(BlockTags.WATER)) {
             this.fallDistance = 0;
             return;
         }
 
-        if (currentBlockState0.getBehavior().canResetFallDistance() &&
-            currentBlockState0.getBlockStateData().computeOffsetCollisionShape(MathUtils.floor(location)).intersectsAABB(getAABB().translate(location, new AABBf()))) {
+        // Layer 1 contains liquid
+        if (blockState0.getBehavior() instanceof BlockLiquidComponent liquidComponent &&
+            liquidComponent.isLiquidTouched(MathUtils.floor(location), blockState0, getAABB().translate(location, new AABBf()))) {
             this.fallDistance = 0;
         }
     }

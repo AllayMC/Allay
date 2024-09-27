@@ -3,6 +3,7 @@ package org.allaymc.api.block.component.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.annotations.SerializedName;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -53,27 +54,65 @@ public class BlockStateData {
                         color.getBlue(),
                         Integer.parseInt(str.substring(7), 16));
             }).create();
-
+    /**
+     * The probability that the block will be burned while on fire.
+     */
     @Builder.Default
     protected int burnOdds = 0;
+    /**
+     * Whether the block state can contain liquid.
+     */
     @Builder.Default
     protected boolean canContainLiquid = false;
+    /**
+     * The collision shape of the block state.
+     * <p>
+     * Collision shape is used to manage the collision with entity.
+     */
     @Builder.Default
     protected VoxelShape collisionShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
+    /**
+     * The hardness of the block state.
+     * <p>
+     * Hardness will affect the time it takes to break the block.
+     */
     @Builder.Default
     protected float hardness = 1;
+    /**
+     * The explosion resistance of the block state.
+     */
     @Builder.Default
     protected float explosionResistance = 15;
+    /**
+     * The flame odds of the block state.
+     * <p>
+     * The chance that this block will be ignited when there is a fire nearby
+     */
     @Builder.Default
     protected int flameOdds = 0;
+    /**
+     * The friction of the block state.
+     */
     @Builder.Default
     protected float friction = DEFAULT_FRICTION;
+    /**
+     * The light level of the block state.
+     */
     @Builder.Default
     protected int light = 15;
+    /**
+     * The light emission of the block state.
+     */
     @Builder.Default
     protected int lightEmission = 0;
+    /**
+     * The map color of the block state.
+     */
     @Builder.Default
     protected Color mapColor = Color.BLACK;
+    /**
+     * The thickness of the block state.
+     */
     @Builder.Default
     protected float thickness = 0;
 
