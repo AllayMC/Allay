@@ -14,16 +14,18 @@ public class FakePluginDescriptor implements PluginDescriptor {
 
     protected String name;
     protected List<PluginDependency> dependencies;
-    protected String version = "1.0.0";
+    protected String version;
     protected List<String> authors = List.of("daoge_cmd");
 
-    public FakePluginDescriptor(String name, List<PluginDependency> dependencies) {
+    public FakePluginDescriptor(String name, String version, List<PluginDependency> dependencies) {
         this.name = name;
+        this.version = version;
         this.dependencies = dependencies;
     }
 
-    public FakePluginDescriptor(String name, PluginDependency... dependencies) {
+    public FakePluginDescriptor(String name, String version, PluginDependency... dependencies) {
         this.name = name;
+        this.version = version;
         this.dependencies = List.of(dependencies);
     }
 

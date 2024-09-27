@@ -110,6 +110,56 @@ public class AllayPluginManagerTest extends AllayPluginManager {
         assertTrue(this.pluginsSortedList.contains("c"));
     }
 
+    @Test
+    void testUnexpectedDependencyVersion() {
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.0.0", null));
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.0.0", " "));
+
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", "1.2.3"));
+        assertTrue(isUnexpectedDependencyVersion(
+                "1.2.3", "1.2.2"));
+        assertTrue(isUnexpectedDependencyVersion(
+                "1.2.3", "1.2.4"));
+
+        // NPM
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", ">1.2.2"));
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", "1.1.1 || 1.2.3 - 2.0.0"));
+        assertTrue(isUnexpectedDependencyVersion(
+                "1.2.3", "1.1.*"));
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", "~1.2.1"));
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", "^1.1.1"));
+
+        // COCOAPODS
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", "> 1.2.2"));
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", "~> 1.2.1"));
+        assertTrue(isUnexpectedDependencyVersion(
+                "1.2.3", "<= 1.1.1"));
+
+        // IVY
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", "1.2.+"));
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", "(,1.8.9]"));
+        assertFalse(isUnexpectedDependencyVersion(
+                "1.2.3", "[0.2,1.4]"));
+    }
+    boolean isUnexpectedDependencyVersion(String version, String range) {
+        var name = "Test";
+        return isUnexpectedDependencyVersion(
+                new FakePluginDescriptor(name, version),
+                new PluginDependency(name, range, false)
+        );
+    }
+
     static class DescriptorMapBuilder {
 
         Map<String, FakePluginDescriptor> descriptors = new HashMap<>();
@@ -131,18 +181,19 @@ public class AllayPluginManagerTest extends AllayPluginManager {
             }
 
             DescriptorBuilder dependOn(String name) {
-                dependencies.add(new PluginDependency(name, false));
+                dependencies.add(new PluginDependency(name, null, false));
                 return this;
             }
 
             DescriptorBuilder softDependOn(String name) {
-                dependencies.add(new PluginDependency(name, true));
+                dependencies.add(new PluginDependency(name, null, true));
                 return this;
             }
 
             DescriptorMapBuilder end() {
                 descriptors.put(name, new FakePluginDescriptor(
                         name,
+                        "1.0.0",
                         dependencies
                 ));
                 return DescriptorMapBuilder.this;
