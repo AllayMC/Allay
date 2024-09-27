@@ -1,7 +1,10 @@
 package org.allaymc.server.plugin;
 
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.plugin.PluginDependency;
+import org.allaymc.server.Allay;
 import org.allaymc.server.datastruct.dag.HashDirectedAcyclicGraph;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author daoge_cmd
  */
 public class AllayPluginManagerTest extends AllayPluginManager {
+    @BeforeAll
+    static void initI18n() {
+        if (!AllayAPI.getInstance().isImplemented()) Allay.initI18n();
+    }
+
     static DescriptorMapBuilder builder() {
         return new DescriptorMapBuilder();
     }
