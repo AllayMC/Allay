@@ -86,11 +86,10 @@ public class AllayPluginManager implements PluginManager {
                 var dependencyContainer = plugins.get(dependency.name());
 
                 if (dependencyContainer == null) {
-                    if (!dependency.optional()) {
-                        log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
-                        iterator.remove();
-                        continue start;
-                    }
+                    if (dependency.optional()) continue start;
+
+                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
+                    iterator.remove();
                     continue start;
                 }
 
@@ -145,7 +144,7 @@ public class AllayPluginManager implements PluginManager {
         var dependencyVersion = dependency.getVersion();
         var dependencySemver = Semver.coerce(dependencyVersion);
         var versionRanges = RangesListFactory.create(requireVersion);
-        assert dependencySemver != null;  // already checked at org.allaymc.api.plugin.PluginDescriptor.checkDescriptorValid\
+        assert dependencySemver != null;  // already checked at org.allaymc.api.plugin.PluginDescriptor.checkDescriptorValid
         return !dependencySemver.satisfies(versionRanges);
     }
 
