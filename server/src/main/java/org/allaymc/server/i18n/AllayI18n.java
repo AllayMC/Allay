@@ -1,5 +1,6 @@
 package org.allaymc.server.i18n;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +8,9 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static java.lang.Math.min;
 import static org.allaymc.api.i18n.I18n.KeyInfo.EMPTY;
@@ -26,19 +29,21 @@ public class AllayI18n implements I18n {
     @Getter
     @Setter
     protected LangCode defaultLangCode;
-    protected I18nLoader i18NLoader;
 
-    public AllayI18n(I18nLoader i18NLoader, LangCode defaultLangCode) {
-        this.i18NLoader = i18NLoader;
+    public AllayI18n(I18nLoader i18nLoader, LangCode defaultLangCode) {
+        applyI18nLoader(i18nLoader);
         this.defaultLangCode = defaultLangCode;
-        setDefaultLangCode(defaultLangCode);
+    }
 
+    public void applyI18nLoader(I18nLoader i18nLoader) {
         for (var langCode : LangCode.values()) {
             try {
-                langMap.put(langCode, i18NLoader.getLangMap(langCode));
+                if (!langMap.containsKey(langCode)) {
+                    langMap.put(langCode, new Object2ObjectOpenHashMap<>());
+                }
+                langMap.get(langCode).putAll(i18nLoader.getLangMap(langCode));
             } catch (Exception e) {
-                log.error("Error in parse {}", langCode.name());
-                throw new RuntimeException(e);
+                log.error("Error in applying i18n loader for lang code {}", langCode, e);
             }
         }
     }
@@ -110,6 +115,16 @@ public class AllayI18n implements I18n {
         return new KeyInfo(startIndex, index - 1, colonIndex, keyBuilder.toString(), hasStarter);
     }
 
+    @Override
+    public String tr(LangCode langCode, String tr) {
+        var keyInfo = findI18nKey(tr);
+        if (keyInfo == EMPTY) return tr;
+        var lang = langMap.get(langCode).get(keyInfo.key());
+        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(keyInfo.key());
+        if (lang == null) return tr;
+        return new StringBuilder(tr).replace(keyInfo.startIndex(), keyInfo.endIndex() + 1, lang).toString();
+    }
+
     protected int findUnorderedParamIndex(String str) {
         var indexS = str.indexOf(DISORDERED_PARAM_S);
         var indexD = str.indexOf(DISORDERED_PARAM_D);
@@ -126,15 +141,5 @@ public class AllayI18n implements I18n {
 
     protected int findOrderedParamIndex(String str, int order) {
         return str.indexOf("%" + order);
-    }
-
-    @Override
-    public String tr(LangCode langCode, String tr) {
-        var keyInfo = findI18nKey(tr);
-        if (keyInfo == EMPTY) return tr;
-        var lang = langMap.get(langCode).get(keyInfo.key());
-        if (lang == null) lang = langMap.get(FALLBACK_LANG).get(keyInfo.key());
-        if (lang == null) return tr;
-        return new StringBuilder(tr).replace(keyInfo.startIndex(), keyInfo.endIndex() + 1, lang).toString();
     }
 }

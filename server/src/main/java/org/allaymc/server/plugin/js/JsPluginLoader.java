@@ -4,13 +4,13 @@ import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.server.i18n.I18nLoader;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.plugin.PluginContainer;
 import org.allaymc.api.plugin.PluginDescriptor;
 import org.allaymc.api.plugin.PluginException;
 import org.allaymc.api.plugin.PluginLoader;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.server.i18n.AllayI18n;
 
@@ -54,11 +54,14 @@ public class JsPluginLoader implements PluginLoader {
         // Read entrance js file
         var entrancePath = pluginPath.resolve(descriptor.getEntrance());
         if (!Files.exists(entrancePath)) throw new PluginException("Entrance js file not found: " + entrancePath);
+
+        // Load plugin's lang files
+        ((AllayI18n) I18n.get()).applyI18nLoader(new JsPluginI18nLoader());
+
         return createPluginContainer(
                 new JsPlugin(),
                 descriptor, this,
-                getOrCreateDataFolder(descriptor.getName()),
-                new AllayI18n(new JsPluginI18nLoader(), Server.SETTINGS.genericSettings().language())
+                getOrCreateDataFolder(descriptor.getName())
         );
     }
 

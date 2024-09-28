@@ -51,15 +51,6 @@ public abstract class Plugin implements TaskCreator {
     }
 
     /**
-     * Get the plugin's I18n instance.
-     *
-     * @return the plugin's I18n instance
-     */
-    public I18n getPluginI18n() {
-        return pluginContainer.i18n();
-    }
-
-    /**
      * Get the plugin's logger.
      *
      * @return the plugin's logger.

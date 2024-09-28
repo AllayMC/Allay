@@ -66,11 +66,13 @@ public class JarPluginLoader implements PluginLoader {
             throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_CONSTRUCT_INSTANCE_ERROR, descriptor.getName()));
         }
 
+        // Load plugin's lang files
+        ((AllayI18n)I18n.get()).applyI18nLoader(new JarPluginI18nLoader());
+
         return createPluginContainer(
                 pluginInstance,
                 descriptor, this,
-                getOrCreateDataFolder(descriptor.getName()),
-                new AllayI18n(new JarPluginI18nLoader(), Server.SETTINGS.genericSettings().language())
+                getOrCreateDataFolder(descriptor.getName())
         );
     }
 
