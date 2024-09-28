@@ -8,6 +8,8 @@ import org.allaymc.server.datastruct.dag.DAGCycleException;
 import org.allaymc.server.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
 import org.allaymc.server.plugin.js.JsPluginLoader;
+import org.semver4j.RangesListFactory;
+import org.semver4j.Semver;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -81,12 +83,22 @@ public class AllayPluginManager implements PluginManager {
 
             var loader = loaders.get(s);
             for (var dependency : descriptor.getDependencies()) {
-                if (plugins.containsKey(dependency.name())) continue;
+                var dependencyContainer = plugins.get(dependency.name());
 
-                if (!dependency.optional()) {
+                if (dependencyContainer == null) {
+                    if (dependency.optional()) continue start;
+
                     log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
                     iterator.remove();
                     continue start;
+                }
+
+                if(isUnexpectedDependencyVersion(dependencyContainer.descriptor(), dependency)) {
+                    log.warn(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_VERSION_MISMATCH,
+                            descriptor.getName(),
+                            dependency.name(),
+                            RangesListFactory.create(dependency.version()),
+                            dependency.version()));
                 }
             }
 
@@ -116,13 +128,24 @@ public class AllayPluginManager implements PluginManager {
                 try {
                     dag.setBefore(name, descriptor.getName());//set ref
                 } catch (DAGCycleException e) {
-                    log.error("Circular dependencies appear in plugin {}: {}The plugin will skip loading!", descriptor.getName(), e.getMessage());
+                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_CIRCULAR, descriptor.getName(), e.getMessage()));
                     dag.remove(descriptor.getName());
                 }
             }
         }
 
         pluginsSortedList = dag.getSortedList();
+    }
+
+    protected boolean isUnexpectedDependencyVersion(PluginDescriptor dependency, PluginDependency requirement) {
+        var requireVersion = requirement.version();
+        if (requireVersion == null || requireVersion.isBlank()) return false;
+
+        var dependencyVersion = dependency.getVersion();
+        var dependencySemver = Semver.coerce(dependencyVersion);
+        var versionRanges = RangesListFactory.create(requireVersion);
+        assert dependencySemver != null;  // already checked at org.allaymc.api.plugin.PluginDescriptor.checkDescriptorValid
+        return !dependencySemver.satisfies(versionRanges);
     }
 
     protected Set<Path> findPluginPaths() {

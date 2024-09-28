@@ -1,6 +1,7 @@
 package org.allaymc.api.plugin;
 
 import org.cloudburstmc.protocol.common.util.Preconditions;
+import org.semver4j.Semver;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ public interface PluginDescriptor {
         Preconditions.checkNotNull(descriptor.getEntrance(), "Plugin entrance cannot be null");
         Preconditions.checkNotNull(descriptor.getVersion(), "Plugin version cannot be null");
         Preconditions.checkNotNull(descriptor.getAuthors(), "Plugin authors cannot be null");
+        // noinspection DataFlowIssue
+        Preconditions.checkNotNull(Semver.coerce(descriptor.getVersion()), "Plugin version cannot be coerced (Use https://semver.org/)");
     }
 
     String getName();

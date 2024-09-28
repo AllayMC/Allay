@@ -14,6 +14,7 @@ dependencies {
     api(libs.gson)
     api(libs.annotations)
     api(libs.commonslang3)
+    api(libs.semver4j)
     api(libs.joml)
     api(libs.joml.primitives)
     api(libs.okaeri.configs.yaml.snakeyaml) {
