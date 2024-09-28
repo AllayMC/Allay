@@ -44,6 +44,7 @@
   "plugin.duplicate": "Find duplicate plugin %1",
   "plugin.loading": "Loading plugin %1",
   "plugin.load.error": "Error while loading plugin %1. Error: %2",
+  "plugin.dependency.circular": "Circular dependencies appear in plugin %1: %2 The plugin will skip loading!",
   "plugin.dependency.missing": "Plugin %1 is depending on plugin %2, which is not found",
   "plugin.enabling": "Enabling plugin %1",
   "plugin.enable.error": "Error while enabling plugin %1. Error: %2",
