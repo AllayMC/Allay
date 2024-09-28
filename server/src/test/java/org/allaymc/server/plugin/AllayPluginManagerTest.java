@@ -1,12 +1,11 @@
 package org.allaymc.server.plugin;
 
-import org.allaymc.api.AllayAPI;
 import org.allaymc.api.plugin.PluginDependency;
-import org.allaymc.server.Allay;
 import org.allaymc.server.datastruct.dag.HashDirectedAcyclicGraph;
-import org.junit.jupiter.api.BeforeAll;
+import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,12 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * @author daoge_cmd
  */
+@ExtendWith(AllayTestExtension.class)
 public class AllayPluginManagerTest extends AllayPluginManager {
-    @BeforeAll
-    static void initI18n() {
-        if (!AllayAPI.getInstance().isImplemented()) Allay.initI18n();
-    }
-
     static DescriptorMapBuilder builder() {
         return new DescriptorMapBuilder();
     }
