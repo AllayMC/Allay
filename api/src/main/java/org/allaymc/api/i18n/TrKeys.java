@@ -156,6 +156,8 @@ public interface TrKeys {
 
     String A_PLUGIN_DEPENDENCY_MISSING = "allay:plugin.dependency.missing";
 
+    String A_PLUGIN_DEPENDENCY_VERSION_MISMATCH = "allay:plugin.dependency.version.mismatch";
+
     String A_PLUGIN_DISABLE_ERROR = "allay:plugin.disable.error";
 
     String A_PLUGIN_DISABLING = "allay:plugin.disabling";

@@ -94,11 +94,11 @@ public class AllayPluginManager implements PluginManager {
                 }
 
                 if(isUnexpectedDependencyVersion(dependencyContainer.descriptor(), dependency)) {
-                    log.warn("Plugin '{}' expects dependency '{}' version in {}, but got version '{}'",
+                    log.warn(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_VERSION_MISMATCH,
                             descriptor.getName(),
                             dependency.name(),
                             RangesListFactory.create(dependency.version()),
-                            dependency.version());
+                            dependency.version()));
                 }
             }
 
