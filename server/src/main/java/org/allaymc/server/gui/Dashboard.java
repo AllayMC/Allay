@@ -21,10 +21,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.Document;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -69,7 +66,13 @@ public final class Dashboard {
         wrapSystemOutputStreams();
         JFrame frame = new JFrame(I18n.get().tr(TrKeys.A_GUI_NAME));
         frame.setContentPane(rootPane);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Server.getInstance().shutdown();
+            }
+        });
         frame.setSize(700, 700);
         frame.setLocationRelativeTo(null);
         // Set icon
