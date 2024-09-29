@@ -69,6 +69,10 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         return ofRedefinedData((builder, blockType, blockStateHash) -> builder.collisionShape(shapeRedefiner.apply(blockType.ofState(blockStateHash))).build());
     }
 
+    public static BlockStateDataComponentImpl ofRedefinedShape(Function<BlockState, VoxelShape> shapeRedefiner) {
+        return ofRedefinedData((builder, blockType, blockStateHash) -> builder.shape(shapeRedefiner.apply(blockType.ofState(blockStateHash))).build());
+    }
+
     public static BlockStateDataComponentImpl ofRedefinedData(TriFunction<BlockStateData.BlockStateDataBuilder, BlockType<?>, Integer, BlockStateData> redefiner) {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
             var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());

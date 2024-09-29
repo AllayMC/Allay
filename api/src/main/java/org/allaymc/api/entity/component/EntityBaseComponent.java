@@ -781,13 +781,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return {@code true} if the entity is in water, otherwise {@code false}.
      */
-    default boolean isEyesInLiquid() {
+    default boolean isEyesInWater() {
         var dim = getDimension();
         var eyeLoc = getLocation().add(0, getEyeHeight(), 0, new Vector3f());
         var eyesBlockState = dim.getBlockState(eyeLoc);
 
-        return eyesBlockState instanceof BlockLiquidComponent liquidComponent &&
-               liquidComponent.getLiquidAABB(MathUtils.floor(eyeLoc), eyesBlockState).containsPoint(eyeLoc);
+        return eyesBlockState.getBlockType().hasBlockTag(BlockTags.WATER) &&
+               eyesBlockState.getBlockStateData().computeOffsetShape(MathUtils.floor(eyeLoc)).intersectsPoint(eyeLoc);
     }
 
     /**

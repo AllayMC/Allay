@@ -47,6 +47,7 @@ public class BlockStateDataProcessor {
         public String mapColor;
         public float thickness;
         public String name;
+        public long blockStateHash;
     }
 
     public static class NewBlockStateData {
@@ -63,6 +64,7 @@ public class BlockStateDataProcessor {
         public String mapColor;
         public float thickness;
         public String name;
+        public long blockStateHash;
 
         public static NewBlockStateData fromRaw(RawBlockStateData raw) {
             var data = new NewBlockStateData();
@@ -78,6 +80,7 @@ public class BlockStateDataProcessor {
             data.mapColor = raw.mapColor;
             data.thickness = raw.thickness;
             data.name = raw.name;
+            data.blockStateHash = raw.blockStateHash;
 
             if (isEmptyShape(raw.collisionShape)) {
                 data.shape = clampShape(raw.outlineShape);

@@ -36,12 +36,17 @@ public class BlockStateData {
     protected static Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(VoxelShape.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var array = json.getAsJsonArray();
+                var minX = array.get(0).getAsFloat();
+                var minY = array.get(1).getAsFloat();
+                var minZ = array.get(2).getAsFloat();
+                var maxX = array.get(3).getAsFloat();
+                var maxY = array.get(4).getAsFloat();
+                var maxZ = array.get(5).getAsFloat();
+                if (minX == 0 && minY == 0 && minZ == 0 && maxX == 0 && maxY == 0 && maxZ == 0) {
+                    return VoxelShape.EMPTY;
+                }
                 return VoxelShape.builder().solid(
-                        new AABBf(
-                                array.get(0).getAsFloat(), array.get(1).getAsFloat(),
-                                array.get(2).getAsFloat(), array.get(3).getAsFloat(),
-                                array.get(4).getAsFloat(), array.get(5).getAsFloat()
-                        )
+                        new AABBf(minX, minY, minZ, maxX, maxY, maxZ)
                 ).build();
             })
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
@@ -139,5 +144,17 @@ public class BlockStateData {
 
     public VoxelShape computeOffsetCollisionShape(Vector3ic vector) {
         return computeOffsetCollisionShape(vector.x(), vector.y(), vector.z());
+    }
+
+    public VoxelShape computeOffsetShape(float x, float y, float z) {
+        return shape.translate(x, y, z);
+    }
+
+    public VoxelShape computeOffsetShape(Vector3fc vector) {
+        return computeOffsetShape(vector.x(), vector.y(), vector.z());
+    }
+
+    public VoxelShape computeOffsetShape(Vector3ic vector) {
+        return computeOffsetShape(vector.x(), vector.y(), vector.z());
     }
 }

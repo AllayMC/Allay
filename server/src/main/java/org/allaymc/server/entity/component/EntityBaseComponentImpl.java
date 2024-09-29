@@ -4,8 +4,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.BlockLiquidComponent;
-import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
@@ -29,7 +27,6 @@ import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.component.annotation.*;
 import org.allaymc.server.entity.component.event.CEntityDieEvent;
@@ -261,16 +258,17 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     private void tryResetFallDistance(Location3fc location) {
         var blockState0 = location.dimension().getBlockState(location);
         var blockState1 = location.dimension().getBlockState(location, 1);
+        var newEntityAABB = getAABB().translate(location, new AABBf());
 
-        // Layer 1 contains water (hardcoded because minecraft only allows water in layer 1 currently)
-        if (!blockState0.getBlockStateData().hasCollision() && blockState1.getBlockType().hasBlockTag(BlockTags.WATER)) {
+        if (!blockState0.getBlockStateData().hasCollision() &&
+            blockState1.getBehavior().canResetFallDamage() &&
+            blockState1.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB)) {
             this.fallDistance = 0;
             return;
         }
 
-        // Layer 1 contains liquid
-        if (blockState0.getBehavior() instanceof BlockLiquidComponent liquidComponent &&
-            liquidComponent.isLiquidTouched(MathUtils.floor(location), blockState0, getAABB().translate(location, new AABBf()))) {
+        if (blockState0.getBehavior().canResetFallDamage() &&
+            blockState0.getBlockStateData().computeOffsetShape(MathUtils.floor(location)).intersectsAABB(newEntityAABB)) {
             this.fallDistance = 0;
         }
     }

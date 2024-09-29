@@ -22,6 +22,9 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VoxelShape {
+
+    public static final VoxelShape EMPTY = new VoxelShape(Collections.emptySet(), Collections.emptySet());
+
     private final Set<AABBfc> solids;
     private final Set<AABBfc> vacancies;
 

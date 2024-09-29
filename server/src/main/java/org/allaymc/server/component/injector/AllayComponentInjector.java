@@ -164,10 +164,11 @@ public class AllayComponentInjector<T> {
                     // So that we don't need to handle it, as it has a default implementation
                     if (methodImpl.equals(methodShouldBeInject)) continue;
 
-                    if (methodDelegation == null)
+                    if (methodDelegation == null) {
                         methodDelegation = MethodCall.invoke(methodImpl).onField(componentFieldName).withAllArguments();
-                    else
+                    } else {
                         throw new ComponentInjectException("Duplicate implementation for method: " + methodShouldBeInject.getName() + " in " + provider.getComponentClass().getName());
+                    }
                 } catch (NoSuchMethodException ignored) {}
             }
 

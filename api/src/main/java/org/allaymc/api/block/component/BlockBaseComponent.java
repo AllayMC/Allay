@@ -94,7 +94,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param itemStack The item in the player's hand.
      * @param interactInfo The player interaction info.
      *
-     * @return Whether the operation is valid.
+     * @return Whether the operation is vali`d.
      *         For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return {@code true}
      *         If {@code false} is returned, the useItemOn method of the player's item will continue to be called
      */
@@ -174,6 +174,15 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
+     * Check if the block can reset fall damage.
+     *
+     * @return {@code true} if the block can reset fall damage, {@code false} otherwise.
+     */
+    default boolean canResetFallDamage() {
+        return false;
+    }
+
+    /**
      * Calculate how long can break a specific block state.
      *
      * @param blockState the specific block state, must belong to this block type.
@@ -197,7 +206,7 @@ public interface BlockBaseComponent extends BlockComponent {
         var efficiencyLevel = 0;
 
         if (entity != null) {
-            isInWater = entity.isEyesInLiquid();
+            isInWater = entity.isEyesInWater();
             isOnGround = entity.isOnGround();
             hasteEffectLevel = entity.getEffectLevel(EffectTypes.HASTE);
             // Conduit Power ensures at least level 2 haste effect
