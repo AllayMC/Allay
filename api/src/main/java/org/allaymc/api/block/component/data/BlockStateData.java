@@ -72,6 +72,11 @@ public class BlockStateData {
     @Builder.Default
     protected VoxelShape collisionShape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
     /**
+     * The shape of the block state.
+     */
+    @Builder.Default
+    protected VoxelShape shape = VoxelShape.builder().solid(0, 0, 0, 1, 1, 1).build();
+    /**
      * The hardness of the block state.
      * <p>
      * Hardness will affect the time it takes to break the block.

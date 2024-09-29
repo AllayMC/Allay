@@ -24,7 +24,6 @@ Allay's resource files are stored in `data/resources` directory.
 ### Directly update the following files
 
 - `biome_definitions.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
-- `block_states.json`
 - `block_types.json`
 - `creative_items.nbt`
 - `entity_identifiers.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
@@ -39,11 +38,16 @@ Allay's resource files are stored in `data/resources` directory.
 Although these files will not be included in the final jar, they will be used during the code generation process:
 
 - `block_tags.json`
+- `block_states_raw.json`: rename `block_states.json` to `block_states_raw.json` and place it in the `unpacked` directory.
 - `item_tags.json`
 - `block_palette.nbt`
 - `block_property_types.json`: run `BlockPropertyTypeGen` under `data` after updating `block_palette.nbt`
 - `biome_id_and_type.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `entity_id_map.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
+
+### Generate `block_states.json`
+
+**Run `BlockStateDataProcessor` under `data`**. This script will generate `block_states.json` based on `block_states_raw.json`.
 
 ### Update Lang Files
 
