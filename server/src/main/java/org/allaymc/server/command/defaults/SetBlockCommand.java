@@ -30,6 +30,10 @@ public class SetBlockCommand extends SimpleCommand {
                     List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> blockPropertyValues = context.getResult(2);
 
                     var blockState = blockType.ofState(blockPropertyValues);
+                    if (blockState == null) {
+                        context.addError("%" + TrKeys.M_COMMANDS_BLOCKSTATE_INVALIDSTATE, blockType.getIdentifier() + blockPropertyValues.toString());
+                        return context.fail();
+                    }
                     player.getDimension().setBlockState(pos, blockState);
                     context.addOutput(TrKeys.M_COMMANDS_SETBLOCK_SUCCESS);
                     return context.success();
