@@ -31,7 +31,6 @@ import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.io.Serial;
 
@@ -57,8 +56,10 @@ public class ConsolePanel extends JTextPane {
      * @param text  The text
      */
     private void append(Color color, String text) {
-        var sc = StyleContext.getDefaultStyleContext();
-        var attribute = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
+        var attribute = new SimpleAttributeSet();
+        StyleConstants.setForeground(attribute, color);
+        StyleConstants.setBold(attribute, ANSIColor.isBoldColor(color));
+
         var len = getDocument().getLength();
 
         if (text.contains("\r")) {
