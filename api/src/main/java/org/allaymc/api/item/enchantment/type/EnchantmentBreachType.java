@@ -13,7 +13,7 @@ public class EnchantmentBreachType extends EnchantmentType {
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentDensityType ||
                other instanceof EnchantmentBaneOfArthropodsType ||
                other instanceof EnchantmentSmiteType;

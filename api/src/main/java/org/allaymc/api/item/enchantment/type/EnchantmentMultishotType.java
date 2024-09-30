@@ -13,7 +13,7 @@ public class EnchantmentMultishotType extends EnchantmentType {
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentPiercingType;
     }
 }

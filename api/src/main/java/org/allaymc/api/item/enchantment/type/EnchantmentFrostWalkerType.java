@@ -13,7 +13,12 @@ public class EnchantmentFrostWalkerType extends EnchantmentType {
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentDepthStriderType;
+    }
+
+    @Override
+    public boolean isAvailableInEnchantTable() {
+        return false;
     }
 }

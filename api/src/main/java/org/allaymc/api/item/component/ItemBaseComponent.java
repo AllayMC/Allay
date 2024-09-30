@@ -386,6 +386,15 @@ public interface ItemBaseComponent extends ItemComponent {
     boolean hasEnchantment(EnchantmentType enchantmentType);
 
     /**
+     * Check if the item has any enchantments.
+     *
+     * @return {@code true} if the item has enchantments, {@code false} otherwise.
+     */
+    default boolean hasEnchantment() {
+        return getEnchantments().isEmpty();
+    }
+
+    /**
      * Check if the item has any protection type enchantment.
      *
      * @return {@code true} if the item has protection type enchantment, {@code false} otherwise.
@@ -540,7 +549,7 @@ public interface ItemBaseComponent extends ItemComponent {
     default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {
         return getEnchantments().stream()
                 .map(EnchantmentInstance::getType)
-                .filter(enchantmentType -> enchantmentType.checkIncompatible(type))
+                .filter(enchantmentType -> enchantmentType.isIncompatibleWith(type))
                 .collect(Collectors.toSet());
     }
 }

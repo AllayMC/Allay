@@ -14,7 +14,7 @@ public class EnchantmentProtectionType extends AbstractEnchantmentProtectionType
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentBlastProtectionType ||
                other instanceof EnchantmentFireProtectionType ||
                other instanceof EnchantmentProjectileProtectionType;

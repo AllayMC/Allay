@@ -12,7 +12,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
-import org.allaymc.api.world.World;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.world.service.AllayBlockUpdateService;
 import org.allaymc.server.world.service.AllayChunkService;
@@ -119,7 +118,7 @@ public class AllayDimension implements Dimension {
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
 
         if (update) updateAround(x, y, z);
-        if (send) chunk.sendChunkPacket(Dimension.createBlockUpdatePacket(blockState, x, y, z, layer));
+        if (send) chunk.sendChunkPacket(Dimension.createUpdateBlockPacket(blockState, x, y, z, layer));
     }
 
     @Override

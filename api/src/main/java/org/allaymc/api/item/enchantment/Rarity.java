@@ -21,9 +21,9 @@ public enum Rarity {
     /**
      * Converts the weight to the closest rarity using floor semantic.
      *
-     * @param weight The enchantment weight
+     * @param weight The enchantment weight.
      *
-     * @return The closest rarity
+     * @return The closest rarity.
      */
     public static Rarity fromWeight(int weight) {
         if (weight < 2) return VERY_RARE;

@@ -69,6 +69,41 @@ public abstract class EnchantmentType {
     }
 
     /**
+     * Get the minimum modified level of the enchantment.
+     *
+     * @param level The level of the enchantment.
+     *
+     * @return The minimum modified level of the enchantment.
+     * @see <a href="https://minecraft.wiki/w/Enchanting/Levels">Enchanting Levels<a/>.
+     */
+    public int getMinModifiedLevel(int level) {
+        // TODO
+        return 1 + level * 10;
+    }
+
+    /**
+     * Get the maximum modified level of the enchantment.
+     *
+     * @param level The level of the enchantment.
+     *
+     * @return The maximum modified level of the enchantment.
+     * @see <a href="https://minecraft.wiki/w/Enchanting/Levels">Enchanting Levels<a/>.
+     */
+    public int getMaxModifiedLevel(int level) {
+        // TODO
+        return getMinModifiedLevel(level) + 5;
+    }
+
+    /**
+     * Check if the enchantment is available in enchantment table.
+     *
+     * @return {@code true} if the enchantment is available in enchantment table, {@code false} otherwise.
+     */
+    public boolean isAvailableInEnchantTable() {
+        return true;
+    }
+
+    /**
      * Get the rarity of the enchantment.
      *
      * @return The rarity of the enchantment.
@@ -78,13 +113,13 @@ public abstract class EnchantmentType {
     }
 
     /**
-     * Check if the enchantment is compatible with another enchantment.
+     * Check if the enchantment is incompatible with another enchantment.
      *
      * @param other The other enchantment.
      *
-     * @return {@code true} if the enchantments are compatible, {@code false} otherwise.
+     * @return {@code true} if the enchantments are incompatible, {@code false} otherwise.
      */
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return false;
     }
 }

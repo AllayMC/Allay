@@ -31,8 +31,6 @@ public interface BlockTags {
 
     BlockTag JUNGLE = create("minecraft:jungle");
 
-    BlockTag ENCHANTMENT_POWER_PROVIDER = create("minecraft:enchantment_power_provider");
-
     BlockTag ACACIA = create("minecraft:acacia");
 
     BlockTag DARK_OAK = create("minecraft:dark_oak");

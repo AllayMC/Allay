@@ -11,4 +11,9 @@ public class EnchantmentWindBurstType extends EnchantmentType {
     public EnchantmentWindBurstType() {
         super(new Identifier("minecraft:wind_burst"), 38, 4, Rarity.RARE);
     }
+
+    @Override
+    public boolean isAvailableInEnchantTable() {
+        return false;
+    }
 }

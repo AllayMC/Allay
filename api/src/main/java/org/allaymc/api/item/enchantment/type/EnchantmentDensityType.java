@@ -13,7 +13,7 @@ public class EnchantmentDensityType extends EnchantmentType {
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentBreachType ||
                other instanceof EnchantmentBaneOfArthropodsType ||
                other instanceof EnchantmentSmiteType;

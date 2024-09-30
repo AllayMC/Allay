@@ -13,7 +13,7 @@ public class EnchantmentBaneOfArthropodsType extends EnchantmentType {
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentSmiteType ||
                other instanceof EnchantmentSharpnessType ||
                other instanceof EnchantmentBreachType ||

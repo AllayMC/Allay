@@ -13,7 +13,12 @@ public class EnchantmentMendingType extends EnchantmentType {
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentInfinityType;
+    }
+
+    @Override
+    public boolean isAvailableInEnchantTable() {
+        return false;
     }
 }
