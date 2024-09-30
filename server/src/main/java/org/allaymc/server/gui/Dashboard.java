@@ -490,7 +490,7 @@ public final class Dashboard {
 
         // Init the console
         consolePane = new ConsolePanel();
-        consolePane.setBackground(Color.BLACK);
+        consolePane.setBackground(new Color(0xff1e1e1e));
         consolePane.setEditable(false);
     }
 

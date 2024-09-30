@@ -39,26 +39,26 @@ import java.util.regex.Pattern;
 @AllArgsConstructor
 public enum ANSIColor {
     // Normal colors
-    BLACK("(0;)?30(0;)?m", Color.getHSBColor(0.000f, 0.000f, 0.000f)),
-    RED("(0;)?31(0;)?m", Color.getHSBColor(0.000f, 1.000f, 0.502f)),
-    GREEN("(0;)?32(0;)?m", Color.getHSBColor(0.333f, 1.000f, 0.502f)),
-    YELLOW("(0;)?33(0;)?m", Color.getHSBColor(0.167f, 1.000f, 0.502f)),
-    BLUE("(0;)?34(0;)?m", Color.getHSBColor(0.667f, 1.000f, 0.502f)),
-    MAGENTA("(0;)?35(0;)?m", Color.getHSBColor(0.833f, 1.000f, 0.502f)),
-    CYAN("(0;)?36(0;)?m", Color.getHSBColor(0.500f, 1.000f, 0.502f)),
-    WHITE("(0;)?37(0;)?m", Color.getHSBColor(0.000f, 0.000f, 0.753f)),
+    BLACK("(0;)?30(0;)?m", Color.BLACK),
+    RED("(0;)?31(0;)?m", new Color(0xfff0524f)),
+    GREEN("(0;)?32(0;)?m", new Color(0xff5c962c)),
+    YELLOW("(0;)?33(0;)?m", new Color(0xffa68a0d)),
+    BLUE("(0;)?34(0;)?m", new Color(0xff6cb6ff)),
+    MAGENTA("(0;)?35(0;)?m", new Color(0xffa771bf)),
+    CYAN("(0;)?36(0;)?m", new Color(0xff96d0ff)),
+    WHITE("(0;)?37(0;)?m", new Color(0xffbcbec4)),
 
     // Bold colors
-    B_BLACK("(1;30|30;1)m", Color.getHSBColor(0.000f, 0.000f, 0.502f)),
-    B_RED("(1;31|31;1)m", Color.getHSBColor(0.000f, 1.000f, 1.000f)),
-    B_GREEN("(1;32|32;1)m", Color.getHSBColor(0.333f, 1.000f, 1.000f)),
-    B_YELLOW("(1;33|33;1)m", Color.getHSBColor(0.167f, 1.000f, 1.000f)),
-    B_BLUE("(1;34|34;1)m", Color.getHSBColor(0.667f, 1.000f, 1.000f)),
-    B_MAGENTA("(1;35|35;1)m", Color.getHSBColor(0.833f, 1.000f, 1.000f)),
-    B_CYAN("(1;36|36;1)m", Color.getHSBColor(0.500f, 1.000f, 1.000f)),
-    B_WHITE("(1;37|37;1)m", Color.getHSBColor(0.000f, 0.000f, 1.000f)),
+    B_BLACK("(1;30|30;1)m", Color.BLACK),
+    B_RED("(1;31|31;1)m", new Color(0xfff0524f)),
+    B_GREEN("(1;32|32;1)m", new Color(0xff5c962c)),
+    B_YELLOW("(1;33|33;1)m", new Color(0xffa68a0d)),
+    B_BLUE("(1;34|34;1)m", new Color(0xff3993d4)),
+    B_MAGENTA("(1;35|35;1)m", new Color(0xffa771bf)),
+    B_CYAN("(1;36|36;1)m", new Color(0xff00a3a3)),
+    B_WHITE("(1;37|37;1)m", new Color(0xff808080)),
 
-    RESET("0m", Color.getHSBColor(0.000f, 0.000f, 1.000f));
+    RESET("0m", WHITE.color);
 
     private static final ANSIColor[] VALUES = values();
     private static final String PREFIX = Pattern.quote("\u001B[");
