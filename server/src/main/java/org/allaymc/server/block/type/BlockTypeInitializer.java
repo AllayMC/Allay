@@ -1058,6 +1058,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockEnchantingTableBehavior.class)
                 .vanillaBlock(BlockId.ENCHANTING_TABLE)
                 .bindBlockEntity(BlockEntityTypes.ENCHANT_TABLE)
+                .setBlockBaseComponentSupplier(BlockEnchantingTableBaseComponentImpl::new)
                 .build();
     }
 }

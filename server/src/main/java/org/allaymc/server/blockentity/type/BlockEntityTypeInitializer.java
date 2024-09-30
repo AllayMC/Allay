@@ -88,7 +88,6 @@ public final class BlockEntityTypeInitializer {
                 .builder(BlockEntityEnchantTable.class)
                 .name(BlockEntityId.ENCHANT_TABLE)
                 .addComponent(BlockEntityEnchantTableBaseComponentImpl::new, BlockEntityEnchantTableBaseComponentImpl.class)
-                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(EnchantTableContainer::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
     }
 }

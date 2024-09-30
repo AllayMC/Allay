@@ -19,7 +19,8 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         super(
                 new PlayerCreatedOutputContainer(),
                 new CraftingGridContainer(),
-                new CraftingTableContainer()
+                new CraftingTableContainer(),
+                new EnchantTableContainer()
         );
         // We shouldn't provide thisPlayer object directly
         // because at that time thisPlayer is null
