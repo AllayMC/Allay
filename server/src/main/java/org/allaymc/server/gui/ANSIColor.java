@@ -49,14 +49,14 @@ public enum ANSIColor {
     WHITE("(0;)?37(0;)?m", new Color(0xffbcbec4)),
 
     // Bold colors
-    B_BLACK("(1;30|30;1)m", Color.BLACK),
-    B_RED("(1;31|31;1)m", new Color(0xfff0524f)),
-    B_GREEN("(1;32|32;1)m", new Color(0xff5c962c)),
-    B_YELLOW("(1;33|33;1)m", new Color(0xffa68a0d)),
-    B_BLUE("(1;34|34;1)m", new Color(0xff3993d4)),
-    B_MAGENTA("(1;35|35;1)m", new Color(0xffa771bf)),
-    B_CYAN("(1;36|36;1)m", new Color(0xff00a3a3)),
-    B_WHITE("(1;37|37;1)m", new Color(0xff808080)),
+    B_BLACK("(0;)?(1;30|30;1)m", Color.BLACK),
+    B_RED("(0;)?(1;31|31;1)m", new Color(0xfff0524f)),
+    B_GREEN("(0;)?(1;32|32;1)m", new Color(0xff5c962c)),
+    B_YELLOW("(0;)?(1;33|33;1)m", new Color(0xffa68a0d)),
+    B_BLUE("(0;)?(1;34|34;1)m", new Color(0xff3993d4)),
+    B_MAGENTA("(0;)?(1;35|35;1)m", new Color(0xffa771bf)),
+    B_CYAN("(0;)?(1;36|36;1)m", new Color(0xff00a3a3)),
+    B_WHITE("(0;)?(1;37|37;1)m", new Color(0xff808080)),
 
     RESET("0m", WHITE.color);
 
