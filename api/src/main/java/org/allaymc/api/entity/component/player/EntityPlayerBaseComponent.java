@@ -446,4 +446,18 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @param speed The movement speed to set.
      */
     void setMovementSpeed(float speed);
+
+    /**
+     * Get the enchantment seed of the player.
+     *
+     * @return The enchantment seed of the player.
+     */
+    int getEnchantmentSeed();
+
+    /**
+     * Set the enchantment seed of the player.
+     *
+     * @param seed The enchantment seed to set.
+     */
+    void setEnchantmentSeed(int seed);
 }

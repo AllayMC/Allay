@@ -24,7 +24,9 @@ import java.util.stream.Collectors;
 @UtilityClass
 public final class EnchantmentOptionGenerator {
 
+    // TODO: possible OOM attack here
     private static final Int2ObjectNonBlockingMap<EnchantOptionData> ENCHANT_OPTIONS = new Int2ObjectNonBlockingMap<>();
+    // TODO: this should be based on the total number of crafting recipes - if there are ever 100k recipes, this will conflict with regular recipes
     private static final AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(100000);
     private static final int MAX_BOOKSHELF_COUNT = 15;
 
@@ -44,7 +46,7 @@ public final class EnchantmentOptionGenerator {
             "wgahnagl", "allay", "daoge", "atri", "mdx" //qwq
     );
 
-    public static List<EnchantOptionData> getEnchantOptions(Position3ic enchantTablePos, ItemStack input, int seed) {
+    public static List<EnchantOptionData> generateEnchantOptions(Position3ic enchantTablePos, ItemStack input, int seed) {
         if (input == null || input.hasEnchantment()) {
             return Collections.emptyList();
         }
@@ -59,6 +61,10 @@ public final class EnchantmentOptionGenerator {
                 createEnchantOption(random, input, (int) Math.floor(baseRequiredLevel * 2D / 3 + 1)),
                 createEnchantOption(random, input, Math.max(baseRequiredLevel, bookshelfCount * 2))
         );
+    }
+
+    public EnchantOptionData getEnchantOption(int networkId) {
+        return ENCHANT_OPTIONS.get(networkId);
     }
 
     private static EnchantOptionData createEnchantOption(AllayRandom random, ItemStack inputItem, int requiredXpLevel) {

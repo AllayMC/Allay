@@ -72,6 +72,7 @@ import org.joml.Vector3i;
 import org.joml.primitives.AABBf;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCORE;
@@ -109,6 +110,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     @Setter
     protected boolean usingItemOnBlock;
+    // Set enchantment seed to a random value
+    // and if player has enchantment seed previously,
+    // this random value will be covered
+    @Getter
+    @Setter
+    protected int enchantmentSeed = ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
     protected long startUsingItemInAirTime = -1;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
@@ -435,6 +442,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                         "Armor",
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(FullContainerType.ARMOR).saveNBT())
+                .putInt("EnchantmentSeed", enchantmentSeed)
                 .build();
     }
 
@@ -451,6 +459,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         nbt.listenForList("Armor", NbtType.COMPOUND, armorNbt ->
                 containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(armorNbt)
         );
+        nbt.listenForInt("EnchantmentSeed", this::setEnchantmentSeed);
     }
 
     @Override
