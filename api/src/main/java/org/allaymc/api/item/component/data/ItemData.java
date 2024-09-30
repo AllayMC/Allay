@@ -19,6 +19,8 @@ public class ItemData {
     @Builder.Default
     protected int armorValue = 0;
     @Builder.Default
+    protected int enchantValue = 0;
+    @Builder.Default
     protected int attackDamage = 0;
     @Builder.Default
     protected boolean isDamageable = false;
