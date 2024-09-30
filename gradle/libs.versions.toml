@@ -1,5 +1,5 @@
 [versions]
-log4j = "2.24.0"
+log4j = "2.24.1"
 graalvm = "24.1.0"
 
 [libraries]
