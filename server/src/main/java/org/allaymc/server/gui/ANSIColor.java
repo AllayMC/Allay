@@ -70,6 +70,6 @@ public enum ANSIColor {
         return Arrays.stream(VALUES)
                 .filter(value -> code.matches(PREFIX + value.ANSICode))
                 .findFirst()
-                .orElse(B_WHITE);
+                .orElse(RESET);
     }
 }
