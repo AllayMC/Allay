@@ -391,7 +391,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * @return {@code true} if the item has enchantments, {@code false} otherwise.
      */
     default boolean hasEnchantment() {
-        return getEnchantments().isEmpty();
+        return !getEnchantments().isEmpty();
     }
 
     /**
