@@ -114,6 +114,14 @@ public record FullContainerType<T extends Container>(
             .mapSlotToType(FurnaceContainer.INGREDIENT_SLOT, ContainerSlotType.SMOKER_INGREDIENT)
             .build();
 
+    public static final FullContainerType<EnchantTableContainer> ENCHANT_TABLE = builder()
+            .id(ContainerType.ENCHANTMENT)
+            .size(2)
+            .mapSlotToType(EnchantTableContainer.INPUT_SLOT, ContainerSlotType.ENCHANTING_INPUT)
+            .mapSlotToType(EnchantTableContainer.MATERIAL_SLOT, ContainerSlotType.ENCHANTING_MATERIAL)
+            .mapRangedNetworkSlotIndex(14, 15, 0)
+            .build();
+
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;

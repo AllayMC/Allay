@@ -14,4 +14,5 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntitySmoker> SMOKER;
     public static BlockEntityType<BlockEntitySign> SIGN;
     public static BlockEntityType<BlockEntityHangingSign> HANGING_SIGN;
+    public static BlockEntityType<BlockEntityEnchantTable> ENCHANT_TABLE;
 }

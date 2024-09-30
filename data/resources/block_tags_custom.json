@@ -37,5 +37,8 @@
     "minecraft:light_block_13",
     "minecraft:light_block_14",
     "minecraft:light_block_15"
+  ],
+  "minecraft:enchantment_power_provider":[
+    "minecraft:bookshelf"
   ]
 }
