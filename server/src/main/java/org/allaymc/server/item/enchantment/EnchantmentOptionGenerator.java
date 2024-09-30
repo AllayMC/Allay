@@ -7,13 +7,14 @@ import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.server.utils.AllayRandom;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantOptionData;
-import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,11 @@ import java.util.stream.Collectors;
  */
 @UtilityClass
 public final class EnchantmentOptionGenerator {
+
+    private static final Int2ObjectNonBlockingMap<EnchantOptionData> ENCHANT_OPTIONS = new Int2ObjectNonBlockingMap<>();
+    private static final AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(100000);
     private static final int MAX_BOOKSHELF_COUNT = 15;
+
     private static final List<String> WORDS = List.of(
             "air", "animal", "ball", "beast", "berata",
             "bless", "cold", "creature", "cthulhu", "cube",
@@ -96,14 +101,18 @@ public final class EnchantmentOptionGenerator {
     }
 
     private static EnchantOptionData createEnchantOptionData(int requiredXpLevel, String optionName, List<EnchantmentInstance> enchantments) {
-        return null;
-        // TODO
-//        return new EnchantOptionData(
-//                requiredXpLevel,
-//                0,
-//                optionName,
-//                enchantments.stream().map(EnchantmentInstance::toNetwork).toList()
-//        );
+        var networkId = NETWORK_ID_COUNTER.getAndIncrement();
+        var option = new EnchantOptionData(
+                requiredXpLevel,
+                0,
+                enchantments.stream().map(EnchantmentInstance::toNetwork).toList(),
+                List.of(),
+                List.of(),
+                optionName,
+                networkId
+        );
+        ENCHANT_OPTIONS.put(networkId, option);
+        return option;
     }
 
     private static int countBookshelves(Position3ic enchantTablePos) {

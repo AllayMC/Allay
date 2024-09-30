@@ -41,7 +41,6 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.component.annotation.ComponentedObject;
