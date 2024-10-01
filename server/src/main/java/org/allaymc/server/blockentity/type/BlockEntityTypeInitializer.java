@@ -8,6 +8,7 @@ import org.allaymc.api.container.impl.*;
 import org.allaymc.server.blockentity.component.BlockEntityBarrelBaseComponentImpl;
 import org.allaymc.server.blockentity.component.BlockEntityChestBaseComponentImpl;
 import org.allaymc.server.blockentity.component.BlockEntityContainerHolderComponentImpl;
+import org.allaymc.server.blockentity.component.BlockEntityEnchantTableBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityBlastFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntityFurnaceBaseComponentImpl;
 import org.allaymc.server.blockentity.component.furnace.BlockEntitySmokerFurnaceBaseComponentImpl;
@@ -79,6 +80,14 @@ public final class BlockEntityTypeInitializer {
                 .builder(BlockEntityHangingSign.class)
                 .name(BlockEntityId.HANGING_SIGN)
                 .addComponent(BlockEntityHangingSignBaseComponentImpl::new, BlockEntityHangingSignBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initEnchantTable() {
+        BlockEntityTypes.ENCHANT_TABLE = AllayBlockEntityType
+                .builder(BlockEntityEnchantTable.class)
+                .name(BlockEntityId.ENCHANT_TABLE)
+                .addComponent(BlockEntityEnchantTableBaseComponentImpl::new, BlockEntityEnchantTableBaseComponentImpl.class)
                 .build();
     }
 }

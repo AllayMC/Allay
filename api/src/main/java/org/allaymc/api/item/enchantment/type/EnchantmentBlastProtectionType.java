@@ -14,7 +14,7 @@ public class EnchantmentBlastProtectionType extends AbstractEnchantmentProtectio
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentFireProtectionType ||
                other instanceof EnchantmentProtectionType ||
                other instanceof EnchantmentProjectileProtectionType;
@@ -29,5 +29,15 @@ public class EnchantmentBlastProtectionType extends AbstractEnchantmentProtectio
             return 0;
         }
         return level * 2;
+    }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 8 + 3;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 12;
     }
 }

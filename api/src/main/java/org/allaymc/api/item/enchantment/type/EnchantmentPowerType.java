@@ -11,4 +11,14 @@ public class EnchantmentPowerType extends EnchantmentType {
     public EnchantmentPowerType() {
         super(new Identifier("minecraft:power"), 19, 5, Rarity.COMMON);
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 10 - 9;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 15;
+    }
 }

@@ -29,23 +29,23 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
 
         var count = action.getCount();
         if (count == 0) {
-            log.warn("cannot consume 0 items!");
+            log.warn("Cannot consume 0 items!");
             return error();
         }
 
         var item = sourceContainer.getItemStack(slot);
         if (failToValidateStackNetworkId(item.getStackNetworkId(), sourceStackNetworkId)) {
-            log.warn("mismatch stack network id!");
+            log.warn("Mismatch stack network id!");
             return error();
         }
 
         if (item.getItemType() == AIR) {
-            log.warn("cannot consume an air!");
+            log.warn("Cannot consume an air!");
             return error();
         }
 
         if (item.getCount() < count) {
-            log.warn("cannot consume more items than the current amount!");
+            log.warn("Cannot consume more items than the current amount!");
             return error();
         }
 
@@ -56,6 +56,11 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
             item = ItemAirStack.AIR_STACK;
             sourceContainer.clearSlot(slot);
         }
+
+//        if (dataPool.containsKey(CraftRecipeActionProcessor.IS_ENCHANT_RECIPE_KEY) && sourceContainer.getContainerType() == FullContainerType.ENCHANT_TABLE) {
+//            // Do not send response when consuming items in enchant table
+//            return null;
+//        }
 
         return new ActionResponse(
                 true,

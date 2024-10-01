@@ -349,6 +349,11 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
+    public void addEnchantments(Collection<EnchantmentInstance> enchantmentInstances) {
+        enchantmentInstances.forEach(instance -> enchantments.put(instance.getType(), instance));
+    }
+
+    @Override
     public EnchantmentInstance removeEnchantment(EnchantmentType enchantmentType) {
         return enchantments.remove(enchantmentType);
     }

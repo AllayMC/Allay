@@ -13,9 +13,19 @@ public class EnchantmentDensityType extends EnchantmentType {
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentBreachType ||
                other instanceof EnchantmentBaneOfArthropodsType ||
                other instanceof EnchantmentSmiteType;
+    }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 8 - 3;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 20;
     }
 }

@@ -11,4 +11,14 @@ public class EnchantmentPunchType extends EnchantmentType {
     public EnchantmentPunchType() {
         super(new Identifier("minecraft:punch"), 20, 2, Rarity.RARE);
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 20 - 8;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 25;
+    }
 }

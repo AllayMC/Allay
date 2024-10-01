@@ -11,4 +11,14 @@ public class EnchantmentRespirationType extends EnchantmentType {
     public EnchantmentRespirationType() {
         super(new Identifier("minecraft:respiration"), 6, 3, Rarity.RARE);
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 10;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return level * 300;
+    }
 }

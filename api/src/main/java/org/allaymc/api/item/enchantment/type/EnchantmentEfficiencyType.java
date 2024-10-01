@@ -11,4 +11,14 @@ public class EnchantmentEfficiencyType extends EnchantmentType {
     public EnchantmentEfficiencyType() {
         super(new Identifier("minecraft:efficiency"), 15, 5, Rarity.COMMON);
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 10 - 9;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 60;
+    }
 }

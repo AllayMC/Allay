@@ -13,7 +13,22 @@ public class EnchantmentMendingType extends EnchantmentType {
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentInfinityType;
+    }
+
+    @Override
+    public boolean isAvailableInEnchantTable() {
+        return false;
+    }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return 25;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return 75;
     }
 }

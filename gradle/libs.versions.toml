@@ -1,6 +1,7 @@
 [versions]
 log4j = "2.24.1"
 graalvm = "24.1.0"
+commons-rng = "1.5"
 
 [libraries]
 # NBT
@@ -68,6 +69,9 @@ junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version =
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.13.0" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.34" }
+# Random generator
+rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
+rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]

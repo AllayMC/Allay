@@ -2,6 +2,7 @@ package org.allaymc.api.item.enchantment;
 
 import lombok.AllArgsConstructor;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantData;
 
 /**
  * Represents an instance of an enchantment.
@@ -51,5 +52,9 @@ public class EnchantmentInstance {
                 .putShort("id", (short) getType().getId())
                 .putShort("lvl", (short) getLevel())
                 .build();
+    }
+
+    public EnchantData toNetwork() {
+        return new EnchantData(getType().getId(), getLevel());
     }
 }

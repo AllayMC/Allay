@@ -11,4 +11,19 @@ public class EnchantmentSwiftSneakType extends EnchantmentType {
     public EnchantmentSwiftSneakType() {
         super(new Identifier("minecraft:swift_sneak"), 37, 3, Rarity.VERY_RARE);
     }
+
+    @Override
+    public boolean isAvailableInEnchantTable() {
+        return false;
+    }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 10;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 15;
+    }
 }

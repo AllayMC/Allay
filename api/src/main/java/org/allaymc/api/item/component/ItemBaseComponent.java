@@ -386,6 +386,15 @@ public interface ItemBaseComponent extends ItemComponent {
     boolean hasEnchantment(EnchantmentType enchantmentType);
 
     /**
+     * Check if the item has any enchantments.
+     *
+     * @return {@code true} if the item has enchantments, {@code false} otherwise.
+     */
+    default boolean hasEnchantment() {
+        return !getEnchantments().isEmpty();
+    }
+
+    /**
      * Check if the item has any protection type enchantment.
      *
      * @return {@code true} if the item has protection type enchantment, {@code false} otherwise.
@@ -429,6 +438,13 @@ public interface ItemBaseComponent extends ItemComponent {
      * @param level The level of the enchantment.
      */
     void addEnchantment(EnchantmentType enchantmentType, int level);
+
+    /**
+     * Add multiple enchantments to the item.
+     *
+     * @param enchantmentInstances The enchantment instances that will be added.
+     */
+    void addEnchantments(Collection<EnchantmentInstance> enchantmentInstances);
 
     /**
      * Remove an enchantment from the item.
@@ -540,7 +556,7 @@ public interface ItemBaseComponent extends ItemComponent {
     default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {
         return getEnchantments().stream()
                 .map(EnchantmentInstance::getType)
-                .filter(enchantmentType -> enchantmentType.checkIncompatible(type))
+                .filter(enchantmentType -> enchantmentType.isIncompatibleWith(type))
                 .collect(Collectors.toSet());
     }
 }

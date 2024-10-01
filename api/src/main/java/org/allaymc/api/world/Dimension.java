@@ -57,7 +57,7 @@ public interface Dimension {
      *
      * @return the created block update packet.
      */
-    static UpdateBlockPacket createBlockUpdatePacket(BlockState newBlockState, int x, int y, int z, int layer) {
+    static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
         var updateBlockPacket = new UpdateBlockPacket();
         updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
         updateBlockPacket.setDefinition(newBlockState.toNetworkBlockDefinitionRuntime());
@@ -272,7 +272,7 @@ public interface Dimension {
     }
 
     default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, EntityPlayer player) {
-        player.sendPacket(createBlockUpdatePacket(blockState, x, y, z, layer));
+        player.sendPacket(createUpdateBlockPacket(blockState, x, y, z, layer));
     }
 
     default BlockState getBlockState(Vector3fc pos) {
@@ -414,7 +414,7 @@ public interface Dimension {
         if (oldBlockState == newBlockState) return;
 
         chunk.setBlockState(xIndex, y, zIndex, newBlockState, layer);
-        chunk.sendChunkPacket(createBlockUpdatePacket(newBlockState, x, y, z, layer));
+        chunk.sendChunkPacket(createUpdateBlockPacket(newBlockState, x, y, z, layer));
     }
 
     default BlockState[][][] getCollidingBlocks(AABBfc aabb) {

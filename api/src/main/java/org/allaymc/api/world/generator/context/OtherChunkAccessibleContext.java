@@ -41,7 +41,7 @@ public abstract class OtherChunkAccessibleContext extends Context {
         chunk.setBlockState(x & 15, y, z & 15, blockState, layer);
         if (chunk.isLoaded()) {
             // The chunk has been loaded into the world, so we need to send a block update packet
-            chunk.addChunkPacket(Dimension.createBlockUpdatePacket(blockState, x, y, z, layer));
+            chunk.addChunkPacket(Dimension.createUpdateBlockPacket(blockState, x, y, z, layer));
         }
     }
 

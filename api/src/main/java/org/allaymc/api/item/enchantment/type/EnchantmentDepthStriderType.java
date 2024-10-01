@@ -13,7 +13,17 @@ public class EnchantmentDepthStriderType extends EnchantmentType {
     }
 
     @Override
-    public boolean checkIncompatible(EnchantmentType other) {
+    public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentFrostWalkerType;
+    }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 10;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return level * 100;
     }
 }

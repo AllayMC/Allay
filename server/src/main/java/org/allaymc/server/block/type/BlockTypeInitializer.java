@@ -1052,4 +1052,13 @@ public final class BlockTypeInitializer {
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
                 .build();
     }
+
+    public static void initEnchantingTable() {
+        BlockTypes.ENCHANTING_TABLE = AllayBlockType
+                .builder(BlockEnchantingTableBehavior.class)
+                .vanillaBlock(BlockId.ENCHANTING_TABLE)
+                .bindBlockEntity(BlockEntityTypes.ENCHANT_TABLE)
+                .setBlockBaseComponentSupplier(BlockEnchantingTableBaseComponentImpl::new)
+                .build();
+    }
 }
