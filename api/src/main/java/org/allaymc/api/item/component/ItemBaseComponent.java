@@ -440,6 +440,13 @@ public interface ItemBaseComponent extends ItemComponent {
     void addEnchantment(EnchantmentType enchantmentType, int level);
 
     /**
+     * Add multiple enchantments to the item.
+     *
+     * @param enchantmentInstances The enchantment instances that will be added.
+     */
+    void addEnchantments(Collection<EnchantmentInstance> enchantmentInstances);
+
+    /**
      * Remove an enchantment from the item.
      *
      * @param enchantmentType The enchantment type.

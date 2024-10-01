@@ -1,5 +1,7 @@
 package org.allaymc.server.network.processor;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.server.container.SimpleContainerActionProcessorHolder;
@@ -79,13 +81,16 @@ public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRe
     }
 
     private ItemStackResponse encodeActionResponses(List<ActionResponse> responses, int requestId) {
-        Map<ContainerSlotType, List<ItemStackResponseSlot>> changedContainers = new HashMap<>();
+        Map<ContainerSlotType, Int2ObjectMap<ItemStackResponseSlot>> changedContainers = new HashMap<>();
         responses.forEach(response -> response.containers().forEach(container -> {
-            changedContainers.computeIfAbsent(container.getContainerName().getContainer(), $ -> new ArrayList<>()).addAll(container.getItems());
+            for (var changedSlot : container.getItems()) {
+                var changedSlots = changedContainers.computeIfAbsent(container.getContainerName().getContainer(), $ -> new Int2ObjectOpenHashMap<>());
+                changedSlots.put(changedSlot.getSlot(), changedSlot);
+            }
         }));
 
         var containers = changedContainers.entrySet().stream()
-                .map(entry -> new ItemStackResponseContainer(entry.getKey(), entry.getValue(), new FullContainerName(entry.getKey(), null)))
+                .map(entry -> new ItemStackResponseContainer(entry.getKey(), new ArrayList<>(entry.getValue().values()), new FullContainerName(entry.getKey(), null)))
                 .toList();
         return new ItemStackResponse(ItemStackResponseStatus.OK, requestId, containers);
     }

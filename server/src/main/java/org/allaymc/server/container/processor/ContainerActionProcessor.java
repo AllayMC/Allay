@@ -15,13 +15,13 @@ public interface ContainerActionProcessor<T extends ItemStackRequestAction> {
     ActionResponse ERROR_RESPONSE = new ActionResponse(false, List.of());
 
     /**
-     * @param action             action object
-     * @param player             the player who sent the action
-     * @param currentActionIndex the index of the action in the request
-     * @param actions            all actions in the request
-     * @param dataPool           a map that can be used to store data between actions
+     * @param action             action object.
+     * @param player             the player who sent the action.
+     * @param currentActionIndex the index of the action in the request.
+     * @param actions            all actions in the request.
+     * @param dataPool           a map that can be used to store data between actions.
      *
-     * @return the response to the action
+     * @return the response to the action.
      */
     ActionResponse handle(T action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool);
 

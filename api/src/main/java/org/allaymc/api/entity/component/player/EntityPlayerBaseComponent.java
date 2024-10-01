@@ -14,10 +14,10 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
-import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, ScoreboardViewer {
 
@@ -460,4 +460,11 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @param seed The enchantment seed to set.
      */
     void setEnchantmentSeed(int seed);
+
+    /**
+     * Regenerate the enchantment seed of the player.
+     */
+    default void regenerateEnchantmentSeed() {
+        setEnchantmentSeed(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE));
+    }
 }

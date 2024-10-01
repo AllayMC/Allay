@@ -24,10 +24,12 @@ import java.util.stream.Collectors;
 @UtilityClass
 public final class EnchantmentOptionGenerator {
 
-    // TODO: possible OOM attack here
-    private static final Int2ObjectNonBlockingMap<EnchantOptionData> ENCHANT_OPTIONS = new Int2ObjectNonBlockingMap<>();
     // TODO: this should be based on the total number of crafting recipes - if there are ever 100k recipes, this will conflict with regular recipes
-    private static final AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(100000);
+    public static final int NETWORK_ID_COUNTER_INITIAL_VALUE = 100000;
+
+    // TODO: possible OOM attack here
+    private static final Int2ObjectNonBlockingMap<AllayEnchantOptionData> ENCHANT_OPTIONS = new Int2ObjectNonBlockingMap<>();
+    private static final AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(NETWORK_ID_COUNTER_INITIAL_VALUE);
     private static final int MAX_BOOKSHELF_COUNT = 15;
 
     private static final List<String> WORDS = List.of(
@@ -58,17 +60,17 @@ public final class EnchantmentOptionGenerator {
         int baseRequiredLevel = random.nextRange(1, 8) + (bookshelfCount >> 1) + random.nextRange(0, bookshelfCount);
 
         return List.of(
-                createEnchantOption(random, input, (int) Math.floor(Math.max(baseRequiredLevel / 3D, 1))),
-                createEnchantOption(random, input, (int) Math.floor(baseRequiredLevel * 2D / 3 + 1)),
-                createEnchantOption(random, input, Math.max(baseRequiredLevel, bookshelfCount * 2))
+                createEnchantOption(random, input, 1, (int) Math.floor(Math.max(baseRequiredLevel / 3D, 1))),
+                createEnchantOption(random, input, 2, (int) Math.floor(baseRequiredLevel * 2D / 3 + 1)),
+                createEnchantOption(random, input, 3, Math.max(baseRequiredLevel, bookshelfCount * 2))
         );
     }
 
-    public EnchantOptionData getEnchantOption(int networkId) {
-        return ENCHANT_OPTIONS.get(networkId);
+    public AllayEnchantOptionData removeEnchantOption(int networkId) {
+        return ENCHANT_OPTIONS.remove(networkId);
     }
 
-    private static EnchantOptionData createEnchantOption(AllayRandom random, ItemStack inputItem, int requiredXpLevel) {
+    private static EnchantOptionData createEnchantOption(AllayRandom random, ItemStack inputItem, int requiredLapisLazuliCount, int requiredXpLevel) {
         int modifiedLevel = requiredXpLevel;
 
         int enchantValue = inputItem.getItemData().enchantValue();
@@ -104,10 +106,10 @@ public final class EnchantmentOptionGenerator {
                 modifiedLevel /= 2;
             }
         }
-        return createEnchantOptionData(requiredXpLevel, generateRandomOptionName(random), resultEnchantments);
+        return createEnchantOptionData(requiredLapisLazuliCount, requiredXpLevel, generateRandomOptionName(random), resultEnchantments);
     }
 
-    private static EnchantOptionData createEnchantOptionData(int requiredXpLevel, String optionName, List<EnchantmentInstance> enchantments) {
+    private static EnchantOptionData createEnchantOptionData(int requiredLapisLazuliCount, int requiredXpLevel, String optionName, List<EnchantmentInstance> enchantments) {
         var networkId = NETWORK_ID_COUNTER.getAndIncrement();
         var option = new EnchantOptionData(
                 requiredXpLevel,
@@ -118,9 +120,15 @@ public final class EnchantmentOptionGenerator {
                 optionName,
                 networkId
         );
-        ENCHANT_OPTIONS.put(networkId, option);
+        ENCHANT_OPTIONS.put(networkId, new AllayEnchantOptionData(requiredLapisLazuliCount, requiredXpLevel, enchantments));
         return option;
     }
+
+    public record AllayEnchantOptionData(
+            int requiredLapisLazuliCount,
+            int requiredXpLevel,
+            List<EnchantmentInstance> enchantments
+    ) {}
 
     private static int countBookshelves(Position3ic enchantTablePos) {
         int bookshelfCount = 0;

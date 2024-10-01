@@ -546,16 +546,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             for (var pack : Registries.PACKS.getContent().values()) {
                 var type = pack.getType();
+                if (type != Pack.Type.RESOURCES) continue;
 
-                var packEntry = pack.toEntryInfo();
-                var stackEntry = pack.toEntryStack();
-                if (type == Pack.Type.RESOURCES) {
-                    RESOURCE_PACKS_INFO_PACKET.getResourcePackInfos().add(packEntry);
-                    RESOURCES_PACK_STACK_PACKET.getResourcePacks().add(stackEntry);
-                } else if (type == Pack.Type.DATA || type == Pack.Type.SCRIPT) {
-                    RESOURCE_PACKS_INFO_PACKET.getBehaviorPackInfos().add(packEntry);
-                    RESOURCES_PACK_STACK_PACKET.getBehaviorPacks().add(stackEntry);
-                }
+                RESOURCE_PACKS_INFO_PACKET.getResourcePackInfos().add(pack.toEntryInfo());
+                RESOURCES_PACK_STACK_PACKET.getResourcePacks().add(pack.toEntryStack());
             }
         }
     }
