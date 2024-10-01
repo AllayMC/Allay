@@ -8,9 +8,12 @@ import org.cloudburstmc.nbt.NbtMap;
  */
 public class BlockEntityEnchantTableBaseComponentImpl extends BlockEntityBaseComponentImpl {
 
-    // The clockwise rotation of the book in radians. Top of the book points West when 0
-    // See https://minecraft.wiki/w/Bedrock_Edition_level_format/Block_entity_format#Enchantment_Table
-    protected float rott = 0;
+    /**
+     * The clockwise rotation of the book in radians. Top of the book points West when 0
+     *
+     * @see <a href="https://minecraft.wiki/w/Bedrock_Edition_level_format/Block_entity_format#Enchantment_Table">Enchantment Table</a>
+     */
+    protected float book_rot = 0;
 
     public BlockEntityEnchantTableBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
@@ -18,12 +21,12 @@ public class BlockEntityEnchantTableBaseComponentImpl extends BlockEntityBaseCom
 
     @Override
     public NbtMap saveNBT() {
-        return super.saveNBT().toBuilder().putFloat("rot", rott).build();
+        return super.saveNBT().toBuilder().putFloat("rott", book_rot).build();
     }
 
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForFloat("rott", value -> rott = value);
+        nbt.listenForFloat("rott", value -> book_rot = value);
     }
 }
