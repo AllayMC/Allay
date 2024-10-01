@@ -80,6 +80,7 @@ public class AllayPluginManager implements PluginManager {
         while (iterator.hasNext()) {
             var s = iterator.next();
             var descriptor = descriptors.get(s);
+            if (descriptor == null) continue;
 
             var loader = loaders.get(s);
             for (var dependency : descriptor.getDependencies()) {
