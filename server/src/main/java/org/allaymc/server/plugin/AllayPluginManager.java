@@ -99,7 +99,7 @@ public class AllayPluginManager implements PluginManager {
                             descriptor.getName(),
                             dependency.name(),
                             RangesListFactory.create(dependency.version()),
-                            dependency.version()));
+                            dependencyContainer.descriptor().getVersion()));
                 }
             }
 
