@@ -13,7 +13,7 @@ public class BlockEntityEnchantTableBaseComponentImpl extends BlockEntityBaseCom
      *
      * @see <a href="https://minecraft.wiki/w/Bedrock_Edition_level_format/Block_entity_format#Enchantment_Table">Enchantment Table</a>
      */
-    protected float book_rot = 0;
+    protected float bookRot = 0;
 
     public BlockEntityEnchantTableBaseComponentImpl(BlockEntityInitInfo initInfo) {
         super(initInfo);
@@ -21,12 +21,12 @@ public class BlockEntityEnchantTableBaseComponentImpl extends BlockEntityBaseCom
 
     @Override
     public NbtMap saveNBT() {
-        return super.saveNBT().toBuilder().putFloat("rott", book_rot).build();
+        return super.saveNBT().toBuilder().putFloat("rott", bookRot).build();
     }
 
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForFloat("rott", value -> book_rot = value);
+        nbt.listenForFloat("rott", value -> bookRot = value);
     }
 }
