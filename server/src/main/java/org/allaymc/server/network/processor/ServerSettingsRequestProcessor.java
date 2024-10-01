@@ -16,12 +16,11 @@ public class ServerSettingsRequestProcessor extends PacketProcessor<ServerSettin
     public PacketSignal handleAsync(EntityPlayer player, ServerSettingsRequestPacket packet, long receiveTime) {
         // Geyser: fixes https://bugs.mojang.com/browse/MCPE-94012 because of the delay
         player.getWorld().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
-            player.getServerSettingForms().forEach((id, form) -> {
-                var pk = new ServerSettingsResponsePacket();
-                pk.setFormId(id);
-                pk.setFormData(form.toJson());
-                player.sendPacket(pk);
-            });
+            var serverSettingForm = player.getServerSettingForm();
+            var pk = new ServerSettingsResponsePacket();
+            pk.setFormId(serverSettingForm.left());
+            pk.setFormData(serverSettingForm.right().toJson());
+            player.sendPacket(pk);
             return true;
         }, 20);
         return PacketSignal.HANDLED;

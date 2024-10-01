@@ -18,12 +18,13 @@ public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormR
         var form = player.removeForm(id);
         var isServerSettingsForm = false;
         if (form == null) {
-            form = player.getServerSettingForm(id);
-            if (form == null) {
+            var serverSettingForm = player.getServerSettingForm();
+            if (id != serverSettingForm.left()) {
                 log.warn("Received response for unknown form from player {}: {}", player.getOriginName(), packet.getFormId());
                 return;
             }
 
+            form = serverSettingForm.right();
             isServerSettingsForm = true;
         }
 

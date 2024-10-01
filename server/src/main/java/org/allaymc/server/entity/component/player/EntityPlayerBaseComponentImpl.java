@@ -1,6 +1,7 @@
 package org.allaymc.server.entity.component.player;
 
 import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
@@ -119,7 +120,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected long startUsingItemInAirTime = -1;
     protected AtomicInteger formIdCounter = new AtomicInteger(0);
     protected Map<Integer, Form> forms = new Int2ObjectOpenHashMap<>();
-    protected Map<Integer, CustomForm> serverSettingForms = new Int2ObjectOpenHashMap<>();
+    protected CustomForm serverSettingForm;
+    protected int serverSettingFormId = -1;
     @Getter
     protected float movementSpeed = DEFAULT_MOVEMENT_SPEED;
     @ComponentedObject
@@ -688,23 +690,20 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void addServerSettingForm(CustomForm form) {
-        serverSettingForms.put(assignFormId(), form);
+    public void setServerSettingForm(CustomForm form) {
+        serverSettingFormId = assignFormId();
+        serverSettingForm = form;
     }
 
     @Override
-    public Map<Integer, Form> getServerSettingForms() {
-        return Collections.unmodifiableMap(serverSettingForms);
+    public Pair<Integer, CustomForm> getServerSettingForm() {
+        return Pair.of(serverSettingFormId, serverSettingForm);
     }
 
     @Override
-    public CustomForm getServerSettingForm(int id) {
-        return serverSettingForms.get(id);
-    }
-
-    @Override
-    public CustomForm removeServerSettingForm(int id) {
-        return serverSettingForms.remove(id);
+    public void removeServerSettingForm() {
+        serverSettingForm = null;
+        serverSettingFormId = -1;
     }
 
     @Override

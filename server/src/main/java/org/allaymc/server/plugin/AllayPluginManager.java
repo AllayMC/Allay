@@ -78,11 +78,11 @@ public class AllayPluginManager implements PluginManager {
         var iterator = pluginsSortedList.iterator();
         start:
         while (iterator.hasNext()) {
-            var s = iterator.next();
-            var descriptor = descriptors.get(s);
+            var str = iterator.next();
+            var descriptor = descriptors.get(str);
             if (descriptor == null) continue;
 
-            var loader = loaders.get(s);
+            var loader = loaders.get(str);
             for (var dependency : descriptor.getDependencies()) {
                 var dependencyContainer = plugins.get(dependency.name());
 

@@ -1,5 +1,6 @@
 package org.allaymc.api.entity.component.player;
 
+import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
@@ -338,37 +339,23 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     Form removeForm(int id);
 
     /**
-     * Get the server setting forms of the player.
+     * Get the server setting form and its id.
      *
-     * @return The server setting forms of the player.
+     * @return The server setting form and its id.
      */
-    @UnmodifiableView
-    Map<Integer, Form> getServerSettingForms();
+    Pair<Integer, CustomForm> getServerSettingForm();
 
     /**
-     * Add a server setting form to the player.
+     * Set a server setting form to the player.
      *
      * @param form The form to add.
      */
-    void addServerSettingForm(CustomForm form);
+    void setServerSettingForm(CustomForm form);
 
     /**
-     * Get a server setting form by its ID.
-     *
-     * @param id The ID of the form.
-     *
-     * @return The form.
+     * Remove the server setting form.
      */
-    CustomForm getServerSettingForm(int id);
-
-    /**
-     * Remove a server setting form by its ID.
-     *
-     * @param id The ID of the form.
-     *
-     * @return The removed form.
-     */
-    CustomForm removeServerSettingForm(int id);
+    void removeServerSettingForm();
 
     /**
      * Show a form to the player.
