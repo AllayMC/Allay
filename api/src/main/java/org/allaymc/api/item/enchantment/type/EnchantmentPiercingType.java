@@ -16,4 +16,14 @@ public class EnchantmentPiercingType extends EnchantmentType {
     public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentMultishotType;
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 10 - 9;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return level * 10 + 41;
+    }
 }

@@ -27,4 +27,14 @@ public class EnchantmentProjectileProtectionType extends AbstractEnchantmentProt
         }
         return level * 2;
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 6 + 3;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 15;
+    }
 }

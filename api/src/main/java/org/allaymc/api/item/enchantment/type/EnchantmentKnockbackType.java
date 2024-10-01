@@ -11,4 +11,14 @@ public class EnchantmentKnockbackType extends EnchantmentType {
     public EnchantmentKnockbackType() {
         super(new Identifier("minecraft:knockback"), 12, 2, Rarity.UNCOMMON);
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 20 - 15;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return level * 10 + 51;
+    }
 }

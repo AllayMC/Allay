@@ -11,4 +11,14 @@ public class EnchantmentAquaAffinityType extends EnchantmentType {
     public EnchantmentAquaAffinityType() {
         super(new Identifier("minecraft:aqua_affinity"), 8, 1, Rarity.RARE);
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return 1;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return 41;
+    }
 }

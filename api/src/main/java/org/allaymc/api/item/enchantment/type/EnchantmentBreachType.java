@@ -18,4 +18,14 @@ public class EnchantmentBreachType extends EnchantmentType {
                other instanceof EnchantmentBaneOfArthropodsType ||
                other instanceof EnchantmentSmiteType;
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 9 + 6;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 50;
+    }
 }

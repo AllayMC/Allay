@@ -16,4 +16,14 @@ public class EnchantmentSilkTouchType extends EnchantmentType {
     public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentFortuneType;
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return 15;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return 61;
+    }
 }

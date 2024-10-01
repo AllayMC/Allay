@@ -19,4 +19,14 @@ public class EnchantmentBaneOfArthropodsType extends EnchantmentType {
                other instanceof EnchantmentBreachType ||
                other instanceof EnchantmentDensityType;
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 8 + 3;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 20;
+    }
 }

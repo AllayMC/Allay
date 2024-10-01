@@ -16,4 +16,14 @@ public class EnchantmentVanishingType extends EnchantmentType {
     public boolean isAvailableInEnchantTable() {
         return false;
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return 25;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return 50;
+    }
 }

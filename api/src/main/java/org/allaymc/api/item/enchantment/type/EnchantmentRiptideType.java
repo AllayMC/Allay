@@ -16,4 +16,14 @@ public class EnchantmentRiptideType extends EnchantmentType {
     public boolean isIncompatibleWith(EnchantmentType other) {
         return other instanceof EnchantmentChannelingType || other instanceof EnchantmentLoyaltyType;
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 7 + 10;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return 50;
+    }
 }

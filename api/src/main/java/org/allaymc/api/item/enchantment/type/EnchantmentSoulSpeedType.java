@@ -16,4 +16,14 @@ public class EnchantmentSoulSpeedType extends EnchantmentType {
     public boolean isAvailableInEnchantTable() {
         return false;
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 10;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 15;
+    }
 }

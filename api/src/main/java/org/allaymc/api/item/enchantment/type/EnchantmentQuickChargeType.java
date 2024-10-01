@@ -11,4 +11,14 @@ public class EnchantmentQuickChargeType extends EnchantmentType {
     public EnchantmentQuickChargeType() {
         super(new Identifier("minecraft:quick_charge"), 35, 3, Rarity.UNCOMMON);
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 20 - 8;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 50;
+    }
 }

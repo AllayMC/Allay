@@ -19,4 +19,14 @@ public class EnchantmentFeatherFallingType extends AbstractEnchantmentProtection
         }
         return level * 3;
     }
+
+    @Override
+    public int getMinModifiedLevel(int level) {
+        return level * 6 + 1;
+    }
+
+    @Override
+    public int getMaxModifiedLevel(int level) {
+        return getMinModifiedLevel(level) + 10;
+    }
 }
