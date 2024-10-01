@@ -43,8 +43,8 @@ public final class EnchantmentOptionGenerator {
             "scrolls", "self", "shorten", "shrink", "snuff",
             "sphere", "spirit", "stale", "stretch", "the",
             "towards", "twist", "undead", "water", "wet",
-            "wgahnagl", "allay", "daoge", "atri", "mdx",
-            "iwareq", "liulihaocai" // QAQ
+            "wgahnagl", "cool_loong", "allay", "daoge", "atri",
+            "mdx", "iwareq", "liulihaocai" // QAQ
     );
 
     public static List<EnchantOptionData> generateEnchantOptions(Position3ic enchantTablePos, ItemStack input, int seed) {
