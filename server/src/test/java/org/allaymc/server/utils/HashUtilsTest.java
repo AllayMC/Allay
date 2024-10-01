@@ -66,13 +66,17 @@ public class HashUtilsTest {
     @Test
     public void testHashChunkXYZ() {
         int l = HashUtils.hashChunkXYZ(8, 64, 8);
-        Assertions.assertEquals(-2147482616, l);
+        Assertions.assertEquals(-2013264888, l);
+
+        int l2 = HashUtils.hashChunkXYZ(8, -64, 8);
+        Assertions.assertEquals(-2013266936, l2);
     }
 
     @Test
     public void testGetXYZFromHashChunkXYZ() {
-        Assertions.assertEquals(8, HashUtils.getXFromHashChunkXYZ(-2147482616));
-        Assertions.assertEquals(64, HashUtils.getYFromHashChunkXYZ(-2147482616));
-        Assertions.assertEquals(8, HashUtils.getZFromHashChunkXYZ(-2147482616));
+        Assertions.assertEquals(8, HashUtils.getXFromHashChunkXYZ(-2013264888));
+        Assertions.assertEquals(64, HashUtils.getYFromHashChunkXYZ(-2013264888));
+        Assertions.assertEquals(-64, HashUtils.getYFromHashChunkXYZ(-2013266936));
+        Assertions.assertEquals(8, HashUtils.getZFromHashChunkXYZ(-2013264888));
     }
 }
