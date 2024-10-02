@@ -22,6 +22,7 @@ import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -34,8 +35,6 @@ import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
-
-import static org.allaymc.api.network.ProtocolInfo.PACKET_CODEC;
 
 /**
  * @author daoge_cmd
@@ -83,7 +82,7 @@ public class AllayNetworkServer implements NetworkServer {
                 .childHandler(new BedrockServerInitializer() {
                     @Override
                     protected void initSession(BedrockServerSession session) {
-                        session.setCodec(PACKET_CODEC);
+                        session.setCodec(ProtocolInfo.PACKET_CODEC);
 
                         var server = Server.getInstance();
                         if (server.isIPBanned(AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0])) {
@@ -116,7 +115,7 @@ public class AllayNetworkServer implements NetworkServer {
 
     @Override
     public BedrockCodec getCodec() {
-        return PACKET_CODEC;
+        return ProtocolInfo.PACKET_CODEC;
     }
 
     @Override
@@ -156,7 +155,8 @@ public class AllayNetworkServer implements NetworkServer {
                 .playerCount(0)
                 .maximumPlayerCount(settings.genericSettings().maxClientCount())
                 .gameType(settings.genericSettings().defaultGameType().name())
-                .protocolVersion(PACKET_CODEC.getProtocolVersion())
+                .version(ProtocolInfo.getMinecraftVersionStr())
+                .protocolVersion(ProtocolInfo.PACKET_CODEC.getProtocolVersion())
                 .ipv4Port(settings.networkSettings().port())
                 .ipv6Port(settings.networkSettings().port()); // TODO: ipv6
     }
