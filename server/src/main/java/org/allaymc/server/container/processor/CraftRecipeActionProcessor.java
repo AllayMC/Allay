@@ -62,7 +62,8 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
                 log.warn("Not enough experience level! Need: {}, Current: {}", data.requiredXpLevel(), player.getExperienceLevel());
                 return error();
             }
-            player.setExperienceLevel(player.getExperienceLevel() - data.requiredXpLevel());
+            // Required lapis lazuli count is also the cost of xp level
+            player.setExperienceLevel(player.getExperienceLevel() - data.requiredLapisLazuliCount());
         }
 
         var enchantedItem = inputItem.copy(true);
