@@ -30,6 +30,8 @@ import lombok.Getter;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -62,6 +64,13 @@ public enum ANSIColor {
 
     private static final ANSIColor[] VALUES = values();
     private static final String PREFIX = Pattern.quote("\u001B[");
+    private static final Map<ANSIColor, Pattern> PATTERN_MAP = new HashMap<>();
+
+    static {
+        for (ANSIColor color : VALUES) {
+            PATTERN_MAP.put(color, Pattern.compile(PREFIX + color.ANSICode));
+        }
+    }
 
     private final String ANSICode;
     private final Color color;
@@ -73,13 +82,13 @@ public enum ANSIColor {
                 || color.equals(B_YELLOW.color)
                 || color.equals(B_BLUE.color)
                 || color.equals(B_MAGENTA.color)
-                || color.equals(B_CYAN.color);
-//                || color.equals(B_WHITE.color);  // so many texts, weird
+                || color.equals(B_CYAN.color)
+                || color.equals(B_WHITE.color);
     }
 
     public static ANSIColor fromANSI(String code) {
         return Arrays.stream(VALUES)
-                .filter(value -> code.matches(PREFIX + value.ANSICode))
+                .filter(value -> PATTERN_MAP.get(value).matcher(code).matches())
                 .findFirst()
                 .orElse(RESET);
     }
