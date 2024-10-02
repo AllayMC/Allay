@@ -57,11 +57,6 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
             sourceContainer.clearSlot(slot);
         }
 
-//        if (dataPool.containsKey(CraftRecipeActionProcessor.IS_ENCHANT_RECIPE_KEY) && sourceContainer.getContainerType() == FullContainerType.ENCHANT_TABLE) {
-//            // Do not send response when consuming items in enchant table
-//            return null;
-//        }
-
         return new ActionResponse(
                 true,
                 List.of(

@@ -26,13 +26,11 @@ import static org.allaymc.api.container.FullContainerType.CREATED_OUTPUT;
 @Slf4j
 public class CraftRecipeActionProcessor implements ContainerActionProcessor<CraftRecipeAction> {
     public static final String RECIPE_DATA_KEY = "recipe";
-//    public static final String IS_ENCHANT_RECIPE_KEY = "is_enchant_recipe";
 
     @Override
     public ActionResponse handle(CraftRecipeAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
         var recipeNetworkId = action.getRecipeNetworkId();
         if (recipeNetworkId >= EnchantmentOptionGenerator.NETWORK_ID_COUNTER_INITIAL_VALUE) {
-//            dataPool.put(IS_ENCHANT_RECIPE_KEY, true);
             return handleEnchantTableRecipe(player, recipeNetworkId);
         } else {
             return handleCraftingRecipe(action, player, currentActionIndex, actions, dataPool, recipeNetworkId);

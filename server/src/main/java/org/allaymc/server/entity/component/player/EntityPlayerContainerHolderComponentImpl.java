@@ -3,6 +3,7 @@ package org.allaymc.server.entity.component.player;
 import org.allaymc.api.container.impl.*;
 import org.allaymc.api.entity.component.player.EntityPlayerContainerHolderComponent;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerEnchantOptionsRequestEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.position.Position3i;
@@ -41,7 +42,14 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
     protected void onEnchantTableContainerInputItemChange(ItemStack item, Position3ic enchantTablePos) {
         var pk = new PlayerEnchantOptionsPacket();
         if (item != ItemAirStack.AIR_STACK) {
-            pk.getOptions().addAll(EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed()));
+            var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
+            var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions);
+            event.call();
+            if (event.isCancelled()) {
+                return;
+            }
+
+            pk.getOptions().addAll(event.getEnchantOptions());
         }
 
         thisPlayer.sendPacket(pk);
