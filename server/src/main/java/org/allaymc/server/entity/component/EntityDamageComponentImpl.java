@@ -13,9 +13,9 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
 import org.allaymc.server.entity.component.event.CEntityAttackEvent;
@@ -48,8 +48,17 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean attack(DamageContainer damage) {
-        if (!canBeAttacked(damage)) return false;
-        if (!checkAndUpdateCoolDown(damage)) return false;
+        // Fire resistance effect
+        if (
+                thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE)
+                && (
+                        damage.getDamageType().equals(DamageContainer.DamageType.FIRE)
+                        || damage.getDamageType().equals(DamageContainer.DamageType.LAVA)
+                        || damage.getDamageType().equals(DamageContainer.DamageType.FIRE_TICK)
+                )
+        ) return false;
+
+        if (!canBeAttacked(damage) || !checkAndUpdateCoolDown(damage)) return false;
 
         var event = new EntityDamageEvent(thisEntity, damage);
         event.call();
@@ -103,8 +112,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     }
 
     protected void applyVictim(DamageContainer damage) {
-        applyEffects(damage);
         applyArmor(damage);
+        applyEffects(damage);
     }
 
     protected void applyEffects(DamageContainer damage) {
@@ -116,10 +125,14 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
                 damage.updateFinalDamage(d -> Math.max(0, d - absorption));
             }
         }
+
+        thisEntity.getAllEffects().values().forEach(effect ->
+                effect.getType().onEntityDamage(thisEntity, effect, lastDamage)
+        );
     }
 
     protected void applyArmor(DamageContainer damage) {
-        // Nothing here
+        // Nothing here (But love by daoge)
     }
 
     protected void applyAttacker(DamageContainer damage) {
@@ -156,8 +169,10 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Override
     public boolean hasFallDamage() {
         return baseComponent.hasGravity() ||
-               !baseComponent.hasEffect(EffectTypes.SLOW_FALLING) ||
-               (boolean) baseComponent.getWorld().getWorldData().getGameRule(GameRule.FALL_DAMAGE);
+               (!baseComponent.hasEffect(EffectTypes.LEVITATION) && !baseComponent.hasEffect(EffectTypes.SLOW_FALLING)) ||
+               (boolean) baseComponent.getWorld()
+                       .getWorldData()
+                       .getGameRule(GameRule.FALL_DAMAGE);
     }
 
     @EventHandler
