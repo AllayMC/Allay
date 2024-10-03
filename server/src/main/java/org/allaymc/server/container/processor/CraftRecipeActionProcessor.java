@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.impl.CraftingContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.player.PlayerEnchantItemEvent;
+import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
@@ -51,23 +53,34 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             return error();
         }
 
+        List<EnchantmentInstance> enchantments = data.enchantments();
+        int requiredLapisLazuliCount = data.requiredLapisLazuliCount();
+        int requiredXpLevel = data.requiredXpLevel();
+        var event = new PlayerEnchantItemEvent(player, inputItem, enchantments, requiredLapisLazuliCount);
+        event.call();
+        if (event.isCancelled()) {
+            return error();
+        }
+        enchantments = event.getEnchantments();
+        requiredLapisLazuliCount = event.getRequiredLapisLazuliCount();
+
         if (player.getGameType() != GameType.CREATIVE) {
             var material = enchantTableContainer.getMaterial();
-            if (material.getItemType() != ItemTypes.LAPIS_LAZULI || material.getCount() < data.requiredLapisLazuliCount()) {
-                log.warn("Not enough lapis lazuli! Need: {}, Current: {}", data.requiredLapisLazuliCount(), enchantTableContainer.getMaterial().getCount());
+            if (material.getItemType() != ItemTypes.LAPIS_LAZULI || material.getCount() < requiredLapisLazuliCount) {
+                log.warn("Not enough lapis lazuli! Need: {}, Current: {}", requiredLapisLazuliCount, enchantTableContainer.getMaterial().getCount());
                 return error();
             }
 
-            if (player.getExperienceLevel() < data.requiredXpLevel()) {
-                log.warn("Not enough experience level! Need: {}, Current: {}", data.requiredXpLevel(), player.getExperienceLevel());
+            if (player.getExperienceLevel() < requiredXpLevel) {
+                log.warn("Not enough experience level! Need: {}, Current: {}", requiredXpLevel, player.getExperienceLevel());
                 return error();
             }
             // Required lapis lazuli count is also the cost of xp level
-            player.setExperienceLevel(player.getExperienceLevel() - data.requiredLapisLazuliCount());
+            player.setExperienceLevel(player.getExperienceLevel() - requiredLapisLazuliCount);
         }
 
         var enchantedItem = inputItem.copy(true);
-        enchantedItem.addEnchantments(data.enchantments());
+        enchantedItem.addEnchantments(enchantments);
         // Copy the enchanted item to CREATED_OUTPUT, and client will send a PlaceAction
         // to move the enchanted item back to the input slot of the enchant table container
         player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, enchantedItem);
