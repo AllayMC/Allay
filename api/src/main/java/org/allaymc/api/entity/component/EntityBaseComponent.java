@@ -12,6 +12,7 @@ import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.utils.MathUtils;
@@ -804,6 +805,39 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
 
         return eyesBlockState.getBlockType().hasBlockTag(BlockTags.WATER) &&
                eyesBlockState.getBlockStateData().computeOffsetShape(MathUtils.floor(eyeLoc)).intersectsPoint(eyeLoc);
+    }
+
+    /**
+     * Check if the entity is a Boss mob.
+     *
+     * @return {@code true} if the entity is a Boss mob, otherwise {@code false}.
+     */
+    default boolean isBoss() {
+        return getEntityType().equals(EntityTypes.ENDER_DRAGON) ||
+               getEntityType().equals(EntityTypes.WITHER);
+    }
+
+    /**
+     * Check if the entity is an Undead mob.
+     *
+     * @return {@code true} if the entity is an Undead mob, otherwise {@code false}.
+     */
+    default boolean isUndead() {
+        return getEntityType().equals(EntityTypes.ZOMBIE) ||
+               getEntityType().equals(EntityTypes.ZOMBIE_VILLAGER) ||
+               getEntityType().equals(EntityTypes.ZOMBIE_VILLAGER_V2) ||
+               getEntityType().equals(EntityTypes.HUSK) ||
+               getEntityType().equals(EntityTypes.DROWNED) ||
+               getEntityType().equals(EntityTypes.SKELETON) ||
+               getEntityType().equals(EntityTypes.SKELETON_HORSE) ||
+               getEntityType().equals(EntityTypes.STRAY) ||
+               getEntityType().equals(EntityTypes.BOGGED) ||
+               getEntityType().equals(EntityTypes.PHANTOM) ||
+               getEntityType().equals(EntityTypes.ZOMBIE_PIGMAN) ||
+               getEntityType().equals(EntityTypes.ZOGLIN) ||
+               getEntityType().equals(EntityTypes.WITHER_SKELETON) ||
+               getEntityType().equals(EntityTypes.ZOMBIE_HORSE) ||
+               getEntityType().equals(EntityTypes.WITHER);
     }
 
     /**

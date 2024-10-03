@@ -17,11 +17,10 @@ public class EffectResistanceType extends AbstractEffectType {
     @Override
     public void onEntityDamage(Entity entity, EffectInstance effectInstance, DamageContainer damage) {
         if (
-                damage.getDamageType() == DamageContainer.DamageType.VOID ||
-                damage.getDamageType() == DamageContainer.DamageType.STARVE ||
-                damage.getDamageType() == DamageContainer.DamageType.COMMAND
+                damage.getDamageType().equals(DamageContainer.DamageType.VOID)
+                || damage.getDamageType().equals(DamageContainer.DamageType.STARVE)
+                || damage.getDamageType().equals(DamageContainer.DamageType.COMMAND)
         ) return;
-
         var level = entity.getEffectLevel(EffectTypes.RESISTANCE);
         if (level > 0) {
             damage.updateFinalDamage(d ->

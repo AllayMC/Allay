@@ -16,7 +16,10 @@ public class EffectRegenerationType extends AbstractEffectType {
 
     @Override
     public void onTick(Entity entity, EffectInstance effectInstance) {
-        if (!(entity instanceof EntityAttributeComponent attributeComponent)) return;
+        if (
+                !(entity instanceof EntityAttributeComponent attributeComponent) ||
+                entity.isUndead()
+        ) return;
         var level = effectInstance.getLevel() - 1;
 
         var ticksPerHealth = 50 >> level;

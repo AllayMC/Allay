@@ -11,7 +11,6 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
-import org.allaymc.api.entity.component.EntityUndeadComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
@@ -43,7 +42,6 @@ import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
@@ -203,18 +201,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected void checkDrowning() {
         var airSupplyBeforeTick = metadata.get(EntityDataTypes.AIR_SUPPLY);
         if (metadata.get(EntityFlag.CAN_SWIM) || !(this instanceof EntityDamageComponent)) {
+            if (isPlayer()) {
+                if (!asPlayer().isCreative() || !asPlayer().isSpectator()) return;
+            }
             metadata.set(EntityDataTypes.AIR_SUPPLY, (short) 400);
             return;
-        }
-
-        if (isPlayer()) {
-            if (
-                    asPlayer().getGameType() == GameType.CREATIVE ||
-                    asPlayer().getGameType() == GameType.SPECTATOR
-            ) {
-                metadata.set(EntityDataTypes.AIR_SUPPLY, (short) 400);
-                return;
-            }
         }
 
         if (!isEyesInWater() ||
@@ -225,19 +216,20 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             metadata.set(EntityDataTypes.AIR_SUPPLY, (short) (airSupplyBeforeTick + 20));
             return;
         }
+        //TODO: Respiration (enchantment) https://minecraft.wiki/w/Respiration
+        //TODO: In Bubble Column
 
-        if (airSupplyBeforeTick < 0) {
+        if (airSupplyBeforeTick <= 0) {
             var damageContainer = new DamageContainer(
                     null,
                     DamageContainer.DamageType.DROWNING,
                     2.0f
             );
             ((EntityDamageComponent) this).attack(damageContainer);
+            return;
         }
 
-        if (airSupplyBeforeTick > -20) {
-            metadata.set(EntityDataTypes.AIR_SUPPLY, (short) (airSupplyBeforeTick - 20));
-        }
+        metadata.set(EntityDataTypes.AIR_SUPPLY, (short) (airSupplyBeforeTick - 20));
     }
 
     protected void checkDead() {
@@ -817,22 +809,28 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
 
     protected boolean checkEffectCanBeApplied(EffectType effectType) {
-        // When the entity is immune to the effect, don't allow it to be applied.
-        if (getEntityType() == EntityTypes.ENDER_DRAGON || getEntityType() == EntityTypes.WITHER) return false;
+        if (isBoss()) return false;
         if (
-                this instanceof EntityUndeadComponent &&
+                isUndead() &&
                 (
-                        effectType == EffectTypes.POISON ||
-                        effectType == EffectTypes.FATAL_POISON ||
-                        effectType == EffectTypes.REGENERATION
+                        effectType.equals(EffectTypes.POISON) ||
+                        effectType.equals(EffectTypes.FATAL_POISON) ||
+                        effectType.equals(EffectTypes.REGENERATION)
                 )
         ) return false;
 
-        if (getEntityType() == EntityTypes.SLIME && effectType == EffectTypes.OOZING) return false;
+        if (
+                getEntityType().equals(EntityTypes.SLIME) &&
+                effectType.equals(EffectTypes.OOZING)
+        ) return false;
 
-        if (getEntityType() == EntityTypes.WITHER_SKELETON && effectType == EffectTypes.WITHER) return false;
+        if (
+                getEntityType().equals(EntityTypes.WITHER_SKELETON) &&
+                effectType.equals(EffectTypes.WITHER)
+        ) return false;
 
-        return getEntityType() != EntityTypes.SILVERFISH || effectType != EffectTypes.INFESTED;
+        return !getEntityType().equals(EntityTypes.SILVERFISH) ||
+               !effectType.equals(EffectTypes.INFESTED);
     }
 
     protected void sendMobEffectPacket(MobEffectPacket packet) {
@@ -921,5 +919,16 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @UnmodifiableView
     public Set<String> getTags() {
         return Collections.unmodifiableSet(tags);
+    }
+
+    @Override
+    public BlockState getBlockStateStandingOn() {
+        var air = BlockTypes.AIR.getDefaultState();
+        if (!isOnGround()) return air;
+
+        var loc = getLocation();
+        var currentBlockState = getDimension().getBlockState(loc.x(), loc.y(), loc.z());
+        if (currentBlockState != air) return currentBlockState;
+        else return getDimension().getBlockState(loc.x(), loc.y() - 1, loc.z());
     }
 }
