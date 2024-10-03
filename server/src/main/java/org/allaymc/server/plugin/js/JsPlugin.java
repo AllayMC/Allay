@@ -90,8 +90,8 @@ public class JsPlugin extends Plugin {
         onEnable();
     }
 
-    protected void tryCallJsFunction(String onLoad) {
-        var func = jsExport.getMember(onLoad);
+    protected void tryCallJsFunction(String functionName) {
+        var func = jsExport.getMember(functionName);
         if (func != null && func.canExecute())
             func.executeVoid();
     }
