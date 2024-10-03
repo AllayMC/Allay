@@ -1,6 +1,5 @@
 package org.allaymc.api.entity.component;
 
-import org.allaymc.api.block.component.BlockLiquidComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
@@ -12,6 +11,7 @@ import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.utils.MathUtils;
@@ -110,6 +110,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Then you need to set the entity's location before spawn the entity.
      *
      * @param location the location you want to set
+     *
      * @throws IllegalStateException if the entity is already spawned
      */
     void setLocationBeforeSpawn(Location3fc location);
@@ -472,9 +473,17 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void onFall();
 
     /**
+     * Get all the effects of the entity.
+     *
+     * @return all the effects of the entity.
+     */
+    Map<EffectType, EffectInstance> getAllEffects();
+
+    /**
      * Check if the entity has the specified effect.
      *
      * @param effectType the effect type to check.
+     *
      * @return {@code true} if the entity has the specified effect, otherwise {@code false}.
      */
     boolean hasEffect(EffectType effectType);
@@ -483,6 +492,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Get the effect level of the specified effect.
      *
      * @param effectType the effect type to get.
+     *
      * @return the effect level of the specified effect.
      */
     int getEffectLevel(EffectType effectType);
@@ -491,8 +501,10 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Add the specified effect to the entity.
      *
      * @param effectInstance the effect instance to add.
+     *
+     * @return {@code true} if the effect is added successfully, otherwise {@code false}.
      */
-    void addEffect(EffectInstance effectInstance);
+    boolean addEffect(EffectInstance effectInstance);
 
     /**
      * Remove the specified effect from the entity.
@@ -592,6 +604,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Given yaw, if the movement multiplier is not 0, the entity will move towards the direction specified by yaw.
      *
      * @return the movement factor of this entity.
+     *
      * @see <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
      */
     default float getMovementFactor() {
@@ -683,7 +696,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Knockback the entity.
      *
      * @param source the source of the knockback.
-     * @param kb the knockback strength to apply.
+     * @param kb     the knockback strength to apply.
      */
     default void knockback(Vector3fc source, float kb) {
         knockback(source, kb, false);
@@ -692,8 +705,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Knockback the entity.
      *
-     * @param source the source of the knockback.
-     * @param kb the knockback strength to apply.
+     * @param source                    the source of the knockback.
+     * @param kb                        the knockback strength to apply.
      * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored.
      */
     void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance);
@@ -702,7 +715,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Apply the entity event to the entity.
      *
      * @param event the entity event to apply.
-     * @param data the data of the entity event.
+     * @param data  the data of the entity event.
      */
     default void applyEntityEvent(EntityEventType event, int data) {
         var pk = new EntityEventPacket();
@@ -724,7 +737,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Apply an action to the entity.
      *
-     * @param action the action of the action.
+     * @param action     the action of the action.
      * @param rowingTime the rowing time of the action.
      */
     default void applyAction(AnimatePacket.Action action, float rowingTime) {
@@ -748,6 +761,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Add a tag to the entity.
      *
      * @param tag the tag to add.
+     *
      * @return {@code true} if the tag is added, otherwise {@code false}.
      */
     boolean addTag(String tag);
@@ -756,6 +770,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Remove a tag from the entity.
      *
      * @param tag the tag to remove.
+     *
      * @return {@code true} if the tag is removed, otherwise {@code false}.
      */
     boolean removeTag(String tag);
@@ -764,6 +779,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Check if the entity has the specified tag.
      *
      * @param tag the tag to check.
+     *
      * @return {@code true} if the entity has the specified tag, otherwise {@code false}.
      */
     boolean hasTag(String tag);
@@ -791,10 +807,44 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Check if the entity is a Boss mob.
+     *
+     * @return {@code true} if the entity is a Boss mob, otherwise {@code false}.
+     */
+    default boolean isBoss() {
+        return getEntityType().equals(EntityTypes.ENDER_DRAGON) ||
+               getEntityType().equals(EntityTypes.WITHER);
+    }
+
+    /**
+     * Check if the entity is an Undead mob.
+     *
+     * @return {@code true} if the entity is an Undead mob, otherwise {@code false}.
+     */
+    default boolean isUndead() {
+        return getEntityType().equals(EntityTypes.ZOMBIE) ||
+               getEntityType().equals(EntityTypes.ZOMBIE_VILLAGER) ||
+               getEntityType().equals(EntityTypes.ZOMBIE_VILLAGER_V2) ||
+               getEntityType().equals(EntityTypes.HUSK) ||
+               getEntityType().equals(EntityTypes.DROWNED) ||
+               getEntityType().equals(EntityTypes.SKELETON) ||
+               getEntityType().equals(EntityTypes.SKELETON_HORSE) ||
+               getEntityType().equals(EntityTypes.STRAY) ||
+               getEntityType().equals(EntityTypes.BOGGED) ||
+               getEntityType().equals(EntityTypes.PHANTOM) ||
+               getEntityType().equals(EntityTypes.ZOMBIE_PIGMAN) ||
+               getEntityType().equals(EntityTypes.ZOGLIN) ||
+               getEntityType().equals(EntityTypes.WITHER_SKELETON) ||
+               getEntityType().equals(EntityTypes.ZOMBIE_HORSE) ||
+               getEntityType().equals(EntityTypes.WITHER);
+    }
+
+    /**
      * Called when the entity interacts with another entity.
      *
      * @param player    The player who interacted with the entity, can be null
      * @param itemStack The item used to interact with the entity
+     *
      * @return {@code true} if the interaction is successful
      */
     default boolean onInteract(EntityPlayer player, ItemStack itemStack) {

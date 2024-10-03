@@ -10,14 +10,18 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityBaseComponent;
+import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
+import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
@@ -173,6 +177,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void tick(long currentTick) {
         checkDead();
+        tickBreathing();
         tickEffects();
         if (attributeComponent != null) attributeComponent.tick();
     }
@@ -186,6 +191,45 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 removeEffect(effect.getType());
             }
         }
+    }
+
+    protected void tickBreathing() {
+        checkDrowning();
+        //TODO: Suffocation
+    }
+
+    protected void checkDrowning() {
+        var airSupplyBeforeTick = metadata.get(EntityDataTypes.AIR_SUPPLY);
+        if (metadata.get(EntityFlag.CAN_SWIM) || !(this instanceof EntityDamageComponent)) {
+            if (isPlayer()) {
+                if (!asPlayer().isCreative() || !asPlayer().isSpectator()) return;
+            }
+            metadata.set(EntityDataTypes.AIR_SUPPLY, (short) 400);
+            return;
+        }
+
+        if (!isEyesInWater() ||
+            hasEffect(EffectTypes.WATER_BREATHING) ||
+            hasEffect(EffectTypes.CONDUIT_POWER)
+        ) {
+            if (airSupplyBeforeTick >= 400) return;
+            metadata.set(EntityDataTypes.AIR_SUPPLY, (short) (airSupplyBeforeTick + 20));
+            return;
+        }
+        //TODO: Respiration (enchantment) https://minecraft.wiki/w/Respiration
+        //TODO: In Bubble Column
+
+        if (airSupplyBeforeTick <= 0) {
+            var damageContainer = new DamageContainer(
+                    null,
+                    DamageContainer.DamageType.DROWNING,
+                    2.0f
+            );
+            ((EntityDamageComponent) this).attack(damageContainer);
+            return;
+        }
+
+        metadata.set(EntityDataTypes.AIR_SUPPLY, (short) (airSupplyBeforeTick - 20));
     }
 
     protected void checkDead() {
@@ -214,6 +258,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         dead = true;
         deadTimer = DEFAULT_DEAD_TIMER;
         applyEntityEvent(EntityEventType.DEATH, 0);
+        effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         removeAllEffects();
     }
 
@@ -351,6 +396,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             }
         }
     }
+
 
     @Override
     public void teleport(Location3fc target) {
@@ -696,6 +742,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
+    public Map<EffectType, EffectInstance> getAllEffects() {
+        return effects;
+    }
+
+    @Override
     public boolean hasEffect(EffectType effectType) {
         return effects.containsKey(effectType);
     }
@@ -707,10 +758,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void addEffect(EffectInstance effectInstance) {
+    public boolean addEffect(EffectInstance effectInstance) {
+        if (!checkEffectCanBeApplied(effectInstance.getType())) return false;
+
         var event = new EntityEffectAddEvent(thisEntity, effectInstance);
         event.call();
-        if (event.isCancelled()) return;
+        if (event.isCancelled()) return false;
 
         effectInstance = event.getEffect();
 
@@ -729,6 +782,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         sendMobEffectPacket(packet);
 
         if (old == null) syncVisibleEffects();
+        return true;
     }
 
     @Override
@@ -751,6 +805,32 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         sendMobEffectPacket(packet);
 
         syncVisibleEffects();
+    }
+
+
+    protected boolean checkEffectCanBeApplied(EffectType effectType) {
+        if (isBoss()) return false;
+        if (
+                isUndead() &&
+                (
+                        effectType.equals(EffectTypes.POISON) ||
+                        effectType.equals(EffectTypes.FATAL_POISON) ||
+                        effectType.equals(EffectTypes.REGENERATION)
+                )
+        ) return false;
+
+        if (
+                getEntityType().equals(EntityTypes.SLIME) &&
+                effectType.equals(EffectTypes.OOZING)
+        ) return false;
+
+        if (
+                getEntityType().equals(EntityTypes.WITHER_SKELETON) &&
+                effectType.equals(EffectTypes.WITHER)
+        ) return false;
+
+        return !getEntityType().equals(EntityTypes.SILVERFISH) ||
+               !effectType.equals(EffectTypes.INFESTED);
     }
 
     protected void sendMobEffectPacket(MobEffectPacket packet) {
