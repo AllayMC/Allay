@@ -133,6 +133,13 @@ public interface EntityAttributeComponent extends EntityComponent {
     }
 
     /**
+     * Kill the entity.
+     */
+    default void kill() {
+        setHealth(0);
+    }
+
+    /**
      * Check if entity supports absorption attribute.
      *
      * @return {@code true} if entity supports absorption attribute, {@code false} otherwise.
