@@ -257,7 +257,7 @@ public enum EntityId {
 
     ZOMBIE_HORSE("minecraft:zombie_horse", 27),
 
-    ZOMBIE_PIGMAN("minecraft:zombie_pigman", 36),
+    ZOMBIFIED_PIGLIN("minecraft:zombie_pigman", 36),
 
     ZOMBIE_VILLAGER("minecraft:zombie_villager", 44),
 
