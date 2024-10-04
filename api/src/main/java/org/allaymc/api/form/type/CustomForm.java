@@ -125,6 +125,11 @@ public final class CustomForm extends Form {
     }
 
     @Override
+    public CustomForm onClose(Runnable runnable) {
+        return (CustomForm) super.onClose(runnable);
+    }
+
+    @Override
     public void handleResponse(String data) {
         if (data == null) {
             onClose.run();

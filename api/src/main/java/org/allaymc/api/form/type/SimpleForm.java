@@ -61,6 +61,11 @@ public final class SimpleForm extends Form {
     }
 
     @Override
+    public SimpleForm onClose(Runnable runnable) {
+        return (SimpleForm) super.onClose(runnable);
+    }
+
+    @Override
     public void handleResponse(String data) {
         if (data == null) {
             response = null;
