@@ -1008,11 +1008,11 @@ public final class EntityTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initZombiePigman() {
-        if (EntityTypes.ZOMBIE_PIGMAN != null) return;
-        EntityTypes.ZOMBIE_PIGMAN = AllayEntityType
-                .builder(EntityZombiePigman.class)
-                .vanillaEntity(EntityId.ZOMBIE_PIGMAN)
+    public static void initZombifiedPiglin() {
+        if (EntityTypes.ZOMBIFIED_PIGLIN != null) return;
+        EntityTypes.ZOMBIFIED_PIGLIN = AllayEntityType
+                .builder(EntityZombifiedPiglin.class)
+                .vanillaEntity(EntityId.ZOMBIFIED_PIGLIN)
                 .build();
     }
 
