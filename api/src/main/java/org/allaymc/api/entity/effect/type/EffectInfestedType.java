@@ -21,25 +21,24 @@ public class EffectInfestedType extends AbstractEffectType {
 
     @Override
     public void onEntityDamage(Entity entity, EffectInstance effectInstance, DamageContainer damage) {
-        if (Math.random() <= 0.1) {
-            var silverFishNumberToSpawn = Math.random() <= 0.5 ? 1 : 2;
-            var dimension = entity.getDimension();
-            var location = entity.getLocation();
-            var motion = MathUtils.getDirectionVector(location.pitch(), location.yaw());
+        if (ThreadLocalRandom.current().nextFloat() >= 0.1) return;
+        var silverFishNumberToSpawn = ThreadLocalRandom.current().nextFloat() < 0.5 ? 1 : 2;
+        var dimension = entity.getDimension();
+        var location = entity.getLocation();
+        var motion = MathUtils.getDirectionVector(location.pitch(), location.yaw());
 
-            for (var i = 0; i < silverFishNumberToSpawn; i++) {
-                var randomOffset = ThreadLocalRandom.current().nextFloat(-1.5707964F, 1.5707964F);
-                motion.mul(0.3F).mul(1.0F, 1.5F, 1.0F).rotateY(randomOffset);
+        for (var i = 0; i < silverFishNumberToSpawn; i++) {
+            var randomOffset = ThreadLocalRandom.current().nextFloat(-1.5707964F, 1.5707964F);
+            motion.mul(0.3F).mul(1.0F, 1.5F, 1.0F).rotateY(randomOffset);
 
-                var entityInfo = EntityInitInfo.builder()
-                        .pos(location)
-                        .dimension(dimension)
-                        .motion(motion)
-                        .build();
-                var silverFishEntity = EntityTypes.SILVERFISH.createEntity(entityInfo);
-                dimension.getEntityService().addEntity(silverFishEntity);
-                dimension.addSound(location, "entity.silverfish.hurt");
-            }
+            var entityInfo = EntityInitInfo.builder()
+                    .pos(location)
+                    .dimension(dimension)
+                    .motion(motion)
+                    .build();
+            var silverFishEntity = EntityTypes.SILVERFISH.createEntity(entityInfo);
+            dimension.getEntityService().addEntity(silverFishEntity);
+            dimension.addSound(location, "entity.silverfish.hurt");
         }
     }
 }
