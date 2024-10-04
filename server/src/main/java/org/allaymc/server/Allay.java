@@ -31,6 +31,7 @@ import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
 import org.allaymc.server.eventbus.AllayEventBus;
+import org.allaymc.server.extension.ExtensionManager;
 import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
@@ -46,6 +47,7 @@ import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.apache.logging.log4j.core.async.AsyncLoggerContextSelector;
 import org.jetbrains.annotations.VisibleForTesting;
 
+import java.nio.file.Path;
 import java.util.HashMap;
 
 /**
@@ -55,15 +57,21 @@ import java.util.HashMap;
 public final class Allay {
 
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
+    private static final ExtensionManager EXTENSION_MANAGER =new ExtensionManager(Path.of("extensions"));
 
     public static Dashboard DASHBOARD;
 
     public static void main(String[] args) {
         long initialTime = System.currentTimeMillis();
         ResourceLeakDetector.setLevel(Server.SETTINGS.networkSettings().resourceLeakDetectorLevel());
-        System.setProperty("joml.format", "false"); // Set JOML vectors are output without a scientific notation
-        System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName()); // Enable async logging
+        // Disable scientific notation in joml
+        System.setProperty("joml.format", "false");
+        // Enable async logging
+        System.setProperty("log4j2.contextSelector", AsyncLoggerContextSelector.class.getName());
+
         initI18n();
+        EXTENSION_MANAGER.loadExtensions(args);
+
         // Check if the environment is headless
         if (isHeadless()) Server.SETTINGS.genericSettings().enableGui(false);
 

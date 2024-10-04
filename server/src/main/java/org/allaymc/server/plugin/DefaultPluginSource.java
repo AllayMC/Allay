@@ -17,8 +17,9 @@ public class DefaultPluginSource implements PluginSource {
 
     @SneakyThrows
     public DefaultPluginSource() {
-        if (!Files.exists(DEFAULT_PLUGIN_FOLDER))
+        if (!Files.exists(DEFAULT_PLUGIN_FOLDER)) {
             Files.createDirectory(DEFAULT_PLUGIN_FOLDER);
+        }
     }
 
     @SneakyThrows

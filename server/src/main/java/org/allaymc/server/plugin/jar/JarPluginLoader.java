@@ -55,15 +55,16 @@ public class JarPluginLoader implements PluginLoader {
     public PluginContainer loadPlugin() {
         // Load the main class
         var mainClass = findMainClass();
-        if (!Plugin.class.isAssignableFrom(mainClass))
+        if (!Plugin.class.isAssignableFrom(mainClass)) {
             throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_JAR_ENTRANCE_TYPEINVALID, descriptor.getName()));
+        }
 
         // Try to construct plugin instance
         Plugin pluginInstance;
         try {
             pluginInstance = (Plugin) mainClass.getConstructor().newInstance();
         } catch (Exception e) {
-            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_CONSTRUCT_INSTANCE_ERROR, descriptor.getName()));
+            throw new PluginException(I18n.get().tr(TrKeys.A_PLUGIN_CONSTRUCT_INSTANCE_ERROR, descriptor.getName(), e));
         }
 
         // Load plugin's lang files
@@ -78,7 +79,7 @@ public class JarPluginLoader implements PluginLoader {
 
     protected Class<?> findMainClass() {
         try {
-            // noinspection resource: No need to try-with-resources, as we want to keep the class loader alive until server shutdown
+            // noinspection resource: no need to try-with-resources, as we want to keep the class loader alive until server shutdown
             var classLoader = new JarPluginClassLoader(new URL[]{pluginPath.toUri().toURL()});
             return classLoader.loadClass(descriptor.getEntrance());
         } catch (ClassNotFoundException e1) {

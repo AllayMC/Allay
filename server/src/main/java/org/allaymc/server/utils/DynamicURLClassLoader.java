@@ -7,6 +7,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Path;
 
 /**
  * @author Cool_Loong
@@ -33,6 +34,11 @@ public class DynamicURLClassLoader extends URLClassLoader {
         } catch (MalformedURLException e) {
             log.error(e.getCause().getMessage());
         }
+    }
+
+    public void addJar(Path jarPath) {
+        Preconditions.checkNotNull(jarPath);
+        addJar(jarPath.toFile());
     }
 
     public void addJar(String jarPath) {
