@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 public class AllayPluginManager implements PluginManager {
 
     // TODO: check whether should we use concurrent collections
-    protected Set<PluginSource> sources = new HashSet<>();
-    protected Set<PluginLoader.PluginLoaderFactory> loaderFactories = new HashSet<>();
+    protected static Set<PluginSource> sources = new HashSet<>();
+    protected static Set<PluginLoader.PluginLoaderFactory> loaderFactories = new HashSet<>();
     protected Map<String, PluginContainer> plugins = new HashMap<>();
     protected HashDirectedAcyclicGraph<String> dag = new HashDirectedAcyclicGraph<>();
     protected Map<String, PluginContainer> enabledPlugins = new HashMap<>();
@@ -36,6 +36,14 @@ public class AllayPluginManager implements PluginManager {
         registerSource(new DefaultPluginSource());
         registerLoaderFactory(new JarPluginLoader.JarPluginLoaderFactory());
         registerLoaderFactory(new JsPluginLoader.JsPluginLoaderFactory());
+    }
+
+    public static void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory) {
+        loaderFactories.add(loaderFactory);
+    }
+
+    public static void registerSource(PluginSource pluginSource) {
+        sources.add(pluginSource);
     }
 
     public void loadPlugins() {
@@ -186,16 +194,6 @@ public class AllayPluginManager implements PluginManager {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), t);
             }
         }
-    }
-
-    @Override
-    public void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory) {
-        loaderFactories.add(loaderFactory);
-    }
-
-    @Override
-    public void registerSource(PluginSource pluginSource) {
-        sources.add(pluginSource);
     }
 
     @Override
