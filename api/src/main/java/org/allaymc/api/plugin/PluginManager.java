@@ -8,21 +8,6 @@ import java.util.Map;
  * @author daoge_cmd
  */
 public interface PluginManager {
-
-    /**
-     * Register a plugin loader factory.
-     *
-     * @param loaderFactory the plugin loader factory.
-     */
-    void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory);
-
-    /**
-     * Register a plugin source.
-     *
-     * @param pluginSource the plugin source.
-     */
-    void registerSource(PluginSource pluginSource);
-
     /**
      * Get all discovered plugins.
      *

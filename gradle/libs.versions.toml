@@ -53,12 +53,6 @@ netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", vers
 netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version = "4.1.113.Final" }
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.5" }
-# GraalJS
-js = { group = "org.graalvm.polyglot", name = "js-community", version.ref = "graalvm" }
-polyglot = { group = "org.graalvm.polyglot", name = "polyglot", version.ref = "graalvm" }
-sdk = { group = "org.graalvm.sdk", name = "graal-sdk", version.ref = "graalvm" }
-chromeinspector-tool = { group = "org.graalvm.tools", name = "chromeinspector-tool", version.ref = "graalvm" }
-profiler-tool = { group = "org.graalvm.tools", name = "profiler-tool", version.ref = "graalvm" }
 # Native Operating System and Hardware Information
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.6.5" }
 # GUI
@@ -75,7 +69,6 @@ rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
-graalvm = ["sdk", "js", "polyglot", "chromeinspector-tool", "profiler-tool"]
 junit = ["junit-jupiter", "mockito-junit-jupiter"]
 
 [plugins]
