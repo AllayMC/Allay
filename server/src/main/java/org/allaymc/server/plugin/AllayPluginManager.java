@@ -21,14 +21,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AllayPluginManager implements PluginManager {
 
-    // TODO: check whether should we use concurrent collections
     protected static Set<PluginSource> sources = new HashSet<>();
     protected static Set<PluginLoader.PluginLoaderFactory> loaderFactories = new HashSet<>();
+
     protected Map<String, PluginContainer> plugins = new HashMap<>();
     protected HashDirectedAcyclicGraph<String> dag = new HashDirectedAcyclicGraph<>();
     protected Map<String, PluginContainer> enabledPlugins = new HashMap<>();
     protected List<String> pluginsSortedList;
-
     protected Map<String, PluginDescriptor> descriptors;
     protected Map<String, PluginLoader> loaders;
 
