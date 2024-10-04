@@ -46,6 +46,14 @@ public interface TrKeys {
 
     String A_ENTITYTYPE_LOADING = "allay:entitytype.loading";
 
+    String A_EXTENSION_CONSTRUCT_INSTANCE_ERROR = "allay:extension.construct.instance.error";
+
+    String A_EXTENSION_ENTRANCE_MISSING = "allay:extension.entrance.missing";
+
+    String A_EXTENSION_LOADING = "allay:extension.loading";
+
+    String A_EXTENSION_MAINCLASS_TYPEINVALID = "allay:extension.mainclass.typeinvalid";
+
     String A_FURNACERECIPE_LOADED = "allay:furnacerecipe.loaded";
 
     String A_FURNACERECIPE_LOADING = "allay:furnacerecipe.loading";
