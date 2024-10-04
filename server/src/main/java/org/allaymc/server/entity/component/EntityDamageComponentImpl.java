@@ -50,11 +50,11 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     public boolean attack(DamageContainer damage) {
         // Fire resistance effect
         if (
-                thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE)
-                && (
-                        damage.getDamageType().equals(DamageContainer.DamageType.FIRE)
-                        || damage.getDamageType().equals(DamageContainer.DamageType.LAVA)
-                        || damage.getDamageType().equals(DamageContainer.DamageType.FIRE_TICK)
+                thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) &&
+                (
+                        damage.getDamageType() == DamageContainer.DamageType.FIRE ||
+                        damage.getDamageType() == DamageContainer.DamageType.LAVA ||
+                        damage.getDamageType() == DamageContainer.DamageType.FIRE_TICK
                 )
         ) return false;
 

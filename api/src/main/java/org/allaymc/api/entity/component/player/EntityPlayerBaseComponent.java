@@ -1,5 +1,6 @@
 package org.allaymc.api.entity.component.player;
 
+import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.client.data.Abilities;
 import org.allaymc.api.client.data.AdventureSettings;
 import org.allaymc.api.client.skin.Skin;
@@ -17,6 +18,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3ic;
 
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoader, ScoreboardViewer {
 
@@ -96,42 +98,6 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     default boolean isCrawling() {
         return getMetadata().get(EntityFlag.CRAWLING);
-    }
-
-    /**
-     * Check if the player is in adventure mode.
-     *
-     * @return {@code true} if the player is in adventure mode, {@code false} otherwise.
-     */
-    default boolean isAdventure() {
-        return getGameType().equals(GameType.ADVENTURE);
-    }
-
-    /**
-     * Check if the player is in survival mode.
-     *
-     * @return {@code true} if the player is in survival mode, {@code false} otherwise.
-     */
-    default boolean isSurvival() {
-        return getGameType().equals(GameType.SURVIVAL);
-    }
-
-    /**
-     * Check if the player is in creative mode.
-     *
-     * @return {@code true} if the player is in creative mode, {@code false} otherwise.
-     */
-    default boolean isCreative() {
-        return getGameType().equals(GameType.CREATIVE);
-    }
-
-    /**
-     * Check if the player is in spectator mode.
-     *
-     * @return {@code true} if the player is in spectator mode, {@code false} otherwise.
-     */
-    default boolean isSpectator() {
-        return getGameType().equals(GameType.SPECTATOR);
     }
 
     /**
@@ -373,37 +339,23 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     Form removeForm(int id);
 
     /**
-     * Get the server setting forms of the player.
+     * Get the server setting form and its id.
      *
-     * @return The server setting forms of the player.
+     * @return The server setting form and its id.
      */
-    @UnmodifiableView
-    Map<Integer, Form> getServerSettingForms();
+    Pair<Integer, CustomForm> getServerSettingForm();
 
     /**
-     * Add a server setting form to the player.
+     * Set a server setting form to the player.
      *
      * @param form The form to add.
      */
-    void addServerSettingForm(CustomForm form);
+    void setServerSettingForm(CustomForm form);
 
     /**
-     * Get a server setting form by its ID.
-     *
-     * @param id The ID of the form.
-     *
-     * @return The form.
+     * Remove the server setting form.
      */
-    CustomForm getServerSettingForm(int id);
-
-    /**
-     * Remove a server setting form by its ID.
-     *
-     * @param id The ID of the form.
-     *
-     * @return The removed form.
-     */
-    CustomForm removeServerSettingForm(int id);
+    void removeServerSettingForm();
 
     /**
      * Show a form to the player.
@@ -481,4 +433,25 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @param speed The movement speed to set.
      */
     void setMovementSpeed(float speed);
+
+    /**
+     * Get the enchantment seed of the player.
+     *
+     * @return The enchantment seed of the player.
+     */
+    int getEnchantmentSeed();
+
+    /**
+     * Set the enchantment seed of the player.
+     *
+     * @param seed The enchantment seed to set.
+     */
+    void setEnchantmentSeed(int seed);
+
+    /**
+     * Regenerate the enchantment seed of the player.
+     */
+    default void regenerateEnchantmentSeed() {
+        setEnchantmentSeed(ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE));
+    }
 }
