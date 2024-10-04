@@ -1,6 +1,6 @@
 package org.allaymc.api.entity.component;
 
-public interface EntityUndeadComponent extends EntityBaseComponent {
+public interface EntityUndeadComponent extends EntityComponent {
     /**
      * Check if the entity will catch fire under sunlight.
      *
