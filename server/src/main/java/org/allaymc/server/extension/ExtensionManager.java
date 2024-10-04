@@ -37,6 +37,7 @@ public final class ExtensionManager {
     }
 
     private void loadExtension(Path extensionPath, String[] args) {
+        log.info(I18n.get().tr(TrKeys.A_EXTENSION_LOADING, extensionPath));
         var mainClass = findMainClass(extensionPath);
         if (!Extension.class.isAssignableFrom(mainClass)) {
             throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_MAINCLASS_TYPEINVALID, mainClass.getName()));
