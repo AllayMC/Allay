@@ -22,6 +22,7 @@ We have plugin template that you can use to create your project quickly:
 - [JavaPluginTemplate](https://github.com/AllayMC/JavaPluginTemplate)
 - [JavaScriptPluginTemplate](https://github.com/AllayMC/JavaScriptPluginTemplate)
 - [ScalaPluginTemplate](https://github.com/AllayMC/ScalaPluginTemplate)
+- [KotlinPluginTemplate](https://github.com/MineBuilders/allaymc-kotlin-plugin-template)
 
 And because you are going to write your plugin in java, we choose the `JavaPluginTemplate` to create a new project:
 
