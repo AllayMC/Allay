@@ -56,7 +56,7 @@ public final class ExtensionManager {
     private Class<?> findMainClass(Path extensionPath) {
         var jarFileSystem = FileSystems.newFileSystem(extensionPath);
         try {
-            var entrance = (String) JSONUtils.fromMap(Files.readString(jarFileSystem.getPath("plugin.json"))).get("entrance");
+            var entrance = (String) JSONUtils.fromMap(Files.readString(jarFileSystem.getPath("extension.json"))).get("entrance");
             Allay.EXTRA_RESOURCE_CLASS_LOADER.addJar(extensionPath);
             return Allay.EXTRA_RESOURCE_CLASS_LOADER.loadClass(entrance);
         } catch (ClassNotFoundException e1) {
