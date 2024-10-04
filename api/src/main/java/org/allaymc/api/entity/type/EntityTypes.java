@@ -253,7 +253,7 @@ public final class EntityTypes {
 
     public static EntityType<EntityZombieHorse> ZOMBIE_HORSE;
 
-    public static EntityType<EntityZombiePigman> ZOMBIE_PIGMAN;
+    public static EntityType<EntityZombifiedPiglin> ZOMBIFIED_PIGLIN;
 
     public static EntityType<EntityZombieVillager> ZOMBIE_VILLAGER;
 

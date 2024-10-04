@@ -3,6 +3,6 @@ package org.allaymc.api.entity.interfaces;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityUndeadComponent;
 
-public interface EntityStray extends Entity, EntityUndeadComponent {
+public interface EntityZombifiedPiglin extends Entity, EntityUndeadComponent {
 
 }
