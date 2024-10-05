@@ -1,6 +1,5 @@
 [versions]
 log4j = "2.24.1"
-graalvm = "24.1.0"
 commons-rng = "1.5"
 
 [libraries]
