@@ -215,11 +215,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      */
     protected void updateMotion(Entity entity) {
         var motion = entity.getMotion();
-        var blockUnder = dimension.getBlockState(
-                (int) entity.getLocation().x(),
-                (int) (entity.getLocation().y() - 0.5),
-                (int) entity.getLocation().z()
-        );
+        var blockStateStandingOn = entity.getBlockStateStandingOn();
 
         // 1. Multiplier factors
         var movementFactor = entity.getMovementFactor();
@@ -229,8 +225,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
 
-        var slipperinessMultiplier = blockUnder != null ?
-                blockUnder.getBlockStateData().friction() :
+        var slipperinessMultiplier = blockStateStandingOn != null ?
+                blockStateStandingOn.getBlockStateData().friction() :
                 DEFAULT_FRICTION;
 
         var momentumMx = motion.x() * slipperinessMultiplier * MOMENTUM_FACTOR;

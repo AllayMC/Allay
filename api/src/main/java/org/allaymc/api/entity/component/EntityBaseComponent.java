@@ -3,6 +3,7 @@ package org.allaymc.api.entity.component;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectInstance;
@@ -822,5 +823,13 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the block state which the entity is standing on.
      */
-    BlockState getBlockStateStandingOn();
+    default BlockState getBlockStateStandingOn() {
+        var air = BlockTypes.AIR.getDefaultState();
+        if (!isOnGround()) return air;
+
+        var loc = getLocation();
+        var currentBlockState = getDimension().getBlockState(loc.x(), loc.y(), loc.z());
+        if (currentBlockState != air) return currentBlockState;
+        else return getDimension().getBlockState(loc.x(), loc.y() - 1, loc.z());
+    }
 }
