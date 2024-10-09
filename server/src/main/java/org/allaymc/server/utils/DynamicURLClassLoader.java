@@ -26,23 +26,12 @@ public class DynamicURLClassLoader extends URLClassLoader {
     public void addURL(URL url) {
         super.addURL(url);
     }
-
-    public void addJar(File jarFile) {
-        Preconditions.checkNotNull(jarFile);
+    public void addJar(Path jarPath) {
+        Preconditions.checkNotNull(jarPath);
         try {
-            addURL(jarFile.toURI().toURL());
+            addURL(jarPath.toUri().toURL());
         } catch (MalformedURLException e) {
             log.error(e.getCause().getMessage());
         }
-    }
-
-    public void addJar(Path jarPath) {
-        Preconditions.checkNotNull(jarPath);
-        addJar(jarPath.toFile());
-    }
-
-    public void addJar(String jarPath) {
-        Preconditions.checkNotNull(jarPath);
-        addJar(new File(jarPath));
     }
 }
