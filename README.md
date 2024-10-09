@@ -46,7 +46,7 @@ Allay has many features that make it stand out from other server software, and h
 - **Security:**
     - Allay has more checks on client packets than BDS, and theoretically does not have many of the pernicious vulnerabilities that BDS has.
     - Allay has network encryption enabled by default. In addition, Allay has a built-in resource packet encryption function that automatically encrypts resource packets sent to the client, preventing your data from leaking to a certain extent.
-- **Lots of New Features:** Unlike the Nukkit server, Allay uses a lot of new protocol features that have been introduced by BDS, including, but not limited to, the server-side authoritative inventory, and sub-chunk packet sending.
+- **Lots of New Features:** Unlike the Nukkit server, Allay uses a lot of new protocol features that have been introduced by BDS, such as server-side authoritative inventory, new chunk format, sub-chunk packet sending, etc.
 - **High Code Quality:** We pay a lot of attention to code quality and keep the project stable with the help of extensive unit testing and refactoring.
 
 ## Getting Started
