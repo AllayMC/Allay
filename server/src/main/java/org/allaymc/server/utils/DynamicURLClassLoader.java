@@ -18,14 +18,11 @@ public class DynamicURLClassLoader extends URLClassLoader {
         super(new URL[0], parent);
     }
 
-    public DynamicURLClassLoader(URL[] urls, ClassLoader parent) {
-        super(urls, parent);
-    }
-
     @Override
     public void addURL(URL url) {
         super.addURL(url);
     }
+
     public void addJar(Path jarPath) {
         Preconditions.checkNotNull(jarPath);
         try {
