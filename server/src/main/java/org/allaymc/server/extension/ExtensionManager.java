@@ -31,13 +31,13 @@ public final class ExtensionManager {
         if (!Files.exists(source)) {
             Files.createDirectory(source);
         }
-        try(var stream = Files.list(source)) {
+        try(var stream = Files.walk(source)) {
             stream.filter(path -> PATH_MATCHER.matches(path) && Files.isRegularFile(path)).forEach(extensionPath -> loadExtension(extensionPath, args));
         }
     }
 
     private void loadExtension(Path extensionPath, String[] args) {
-        log.info(I18n.get().tr(TrKeys.A_EXTENSION_LOADING, extensionPath.getFileName()));
+        log.info(I18n.get().tr(TrKeys.A_EXTENSION_LOADING, extensionPath));
         Allay.EXTRA_RESOURCE_CLASS_LOADER.addJar(extensionPath);
 
         // Try to load the main class of the extension if it exists
