@@ -12,6 +12,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author daoge_cmd
@@ -31,12 +33,16 @@ public final class ExtensionManager {
         if (!Files.exists(source)) {
             Files.createDirectory(source);
         }
+
+        List<Runnable> entrances = new ArrayList<>();
         try(var stream = Files.walk(source)) {
-            stream.filter(path -> PATH_MATCHER.matches(path) && Files.isRegularFile(path)).forEach(extensionPath -> loadExtension(extensionPath, args));
+            stream.filter(path -> PATH_MATCHER.matches(path) && Files.isRegularFile(path)).forEach(extensionPath -> loadExtension(extensionPath, args, entrances));
         }
+
+        entrances.forEach(Runnable::run);
     }
 
-    private void loadExtension(Path extensionPath, String[] args) {
+    private void loadExtension(Path extensionPath, String[] args, List<Runnable> entrances) {
         log.info(I18n.get().tr(TrKeys.A_EXTENSION_LOADING, extensionPath));
         Allay.EXTRA_RESOURCE_CLASS_LOADER.addJar(extensionPath);
 
@@ -58,7 +64,7 @@ public final class ExtensionManager {
             throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_CONSTRUCT_INSTANCE_ERROR, extensionPath, e));
         }
 
-        extensionInstance.main(args);
+        entrances.add(() -> extensionInstance.main(args));
     }
 
     @SneakyThrows
