@@ -23,60 +23,54 @@ The next-generation Minecraft: Bedrock Edition server software
 
 [//]: # (Allay is the cutest software in the world!)
 
-Allay is a third-party server software for Minecraft: Bedrock Edition written in Java with the goal of maintaining high scalability while maintaining high performance through a well-designed architecture. 
-For more information, check out our [documents](docs.allaymc.org).
+Allay is a third-party server software for Minecraft: Bedrock Edition written in Java with the goal of maintaining high scalability while maintaining high performance through a well-designed architecture.
 
 > [!IMPORTANT]
 > Please note that this project is still at a very early stage and has not yet been released officially, and a large number of interfaces may be added or removed without notice. Please do not use Allay in a production environment.
 >
 > You can check our roadmap for development progress.
 
-## Name
-
-As you can see, our project is called Allay，the name of an entity in Minecraft
-
-We wish this project to be as concise, reliable, and efficient as Allay.
-
 ## Features
 
-- **Cross-platform:** Allay is based on the JVM, so it can run on most platforms that can run the JVM.
+Allay has many features that make it stand out from other server software, and here are some of them:
+
+- **Cross-platform:** Allay is based on JVM, so it can run on most platforms that can run JVM.
 - **High Performance:**
-    - We fully understand the problems of Nukkit server under high load, Allay outperforms Nukkit in certain aspects (eg: entity physics) by a factor of 100 under the same load.
-    - In addition, thanks to a redesigned threading model, Allay takes full advantage of multicore CPUs, which means you don't need to intentionally use high CPU frequencies.
-    - Allay is based on the latest Java21, which theoretically gives it better performance.
-- **Easy to get started:**
-    - You can write plugins for Allay in Java/JVM.
-    - We introduced GraalVM and JavaScript support, which means you can write plugins in JavaScript/TypeScript and
-      get the same performance as Java and the ability to interoperate seamlessly.
-- **Highly Customizable:** Allay offers a large number of interfaces that BDS does not. On top of that, you can even control the sending of packets directly for maximum customization.
+    - We fully understand the problems of Nukkit server under high load, Allay is a hundred times more performant than Nukkit in some aspects (eg: entity physics).
+    - Thanks to the redesigned threading model, Allay takes full advantage of multicore CPUs, which means you don't need to intentionally use server that has high CPU frequency.
+    - Allay is based on JDK 21, which theoretically gives it better performance.
+- **Easy to Get Started:**
+    - You can write plugins for Allay in Java, Kotlin, Scala (JVM based language) and script languages such as JavaScript, Python, etc.
+    - We introduced GraalVM, which means you can write plugins in many languages and get the same performance as Java and the ability to interoperate seamlessly.
+- **Highly Customizable:** Allay offers a large number of interfaces that can be used directly, and you can't do such thing in BDS.
 - **Security:**
     - Allay has more checks on client packets than BDS, and theoretically does not have many of the pernicious vulnerabilities that BDS has.
     - Allay has network encryption enabled by default. In addition, Allay has a built-in resource packet encryption function that automatically encrypts resource packets sent to the client, preventing your data from leaking to a certain extent.
-- **Lots of new features:** Unlike the Nukkit server, Allay uses a lot of new protocol features that have been introduced by BDS, including, but not limited to, the server-side authoritative inventory, and sub-chunk packet sending.
-- **Code Quality:** We pay a lot of attention to code quality and keep the project stable with the help of extensive unit testing and refactoring.
+- **Lots of New Features:** Unlike the Nukkit server, Allay uses a lot of new protocol features that have been introduced by BDS, such as server-side authoritative inventory, new chunk format, sub-chunk packet sending, etc.
+- **High Code Quality:** We pay a lot of attention to code quality and keep the project stable with the help of extensive unit testing and refactoring.
 
 ## Getting Started
 
-Allay is based on Java21, so you need to install Java21 before running & building Allay.
-If you need to develop scripting plugins, we recommend using GraalVM for best performance.
+### For Normal Users
 
-**Run directly:**
+Check the [Installation](https://docs.allaymc.org/getting-started/installation/) page in our docs.
+
+### Run from Source Code
+
+You may want to run Allay from source code and do some debugging, and that's quiet easy:
+
 ```shell
 gradlew server:runShadow
 ```
 
-**Build:**
-```shell
-gradlew server:build
-```
-
 ## Plugins
 
-Allay supports running plugins written in Java(JVM based language) and JavaScript, you can check out our plugin templates:
+Allay supports running plugins written in Java, Kotlin, Scala (JVM based language) and script languages such as JavaScript, Python, etc. You can check out our plugin templates:
 
 - [JavaPluginTemplate](https://github.com/AllayMC/JavaPluginTemplate)
-- [JavaScriptPluginTemplate](https://github.com/AllayMC/JavaScriptPluginTemplate)
 - [ScalaPluginTemplate](https://github.com/AllayMC/ScalaPluginTemplate)
+- [KotlinPluginTemplate](https://github.com/MineBuilders/allaymc-kotlin-plugin-template)
+- [JavaScriptPluginTemplate](https://github.com/AllayMC/JavaScriptPluginTemplate)
 
 For more information, you can check our [documents](https://docs.allaymc.org/)
 

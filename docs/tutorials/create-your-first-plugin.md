@@ -20,7 +20,7 @@ To develop your first plugin, you will have to install the following prerequisit
 We have plugin template that you can use to create your project quickly:
 
 - [JavaPluginTemplate](https://github.com/AllayMC/JavaPluginTemplate)
-- [JavaScriptPluginTemplate](https://github.com/AllayMC/JavaScriptPluginTemplate) (requires [JavaScriptPluginExtension](https://github.com/AllayMC/JavaScriptPluginExtension))
+- [JavaScriptPluginTemplate](https://github.com/AllayMC/JavaScriptPluginTemplate) (requires [ScriptPluginExtension](https://github.com/AllayMC/ScriptPluginExtension))
 - [ScalaPluginTemplate](https://github.com/AllayMC/ScalaPluginTemplate)
 - [KotlinPluginTemplate](https://github.com/MineBuilders/allaymc-kotlin-plugin-template)
 

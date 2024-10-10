@@ -12,6 +12,8 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author daoge_cmd
@@ -31,14 +33,26 @@ public final class ExtensionManager {
         if (!Files.exists(source)) {
             Files.createDirectory(source);
         }
-        try(var stream = Files.list(source)) {
-            stream.filter(path -> PATH_MATCHER.matches(path) && Files.isRegularFile(path)).forEach(extensionPath -> loadExtension(extensionPath, args));
+
+        List<Runnable> entrances = new ArrayList<>();
+        try(var stream = Files.walk(source)) {
+            stream.filter(path -> PATH_MATCHER.matches(path) && Files.isRegularFile(path)).forEach(extensionPath -> loadExtension(extensionPath, args, entrances));
         }
+
+        entrances.forEach(Runnable::run);
     }
 
-    private void loadExtension(Path extensionPath, String[] args) {
+    private void loadExtension(Path extensionPath, String[] args, List<Runnable> entrances) {
         log.info(I18n.get().tr(TrKeys.A_EXTENSION_LOADING, extensionPath));
+        Allay.EXTRA_RESOURCE_CLASS_LOADER.addJar(extensionPath);
+
+        // Try to load the main class of the extension if it exists
         var mainClass = findMainClass(extensionPath);
+        if (mainClass == null) {
+            // Main class can be null
+            return;
+        }
+
         if (!Extension.class.isAssignableFrom(mainClass)) {
             throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_MAINCLASS_TYPEINVALID, mainClass.getName()));
         }
@@ -50,15 +64,18 @@ public final class ExtensionManager {
             throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_CONSTRUCT_INSTANCE_ERROR, extensionPath, e));
         }
 
-        extensionInstance.main(args);
+        entrances.add(() -> extensionInstance.main(args));
     }
 
     @SneakyThrows
     private Class<?> findMainClass(Path extensionPath) {
         var jarFileSystem = FileSystems.newFileSystem(extensionPath);
         try {
-            var entrance = (String) JSONUtils.fromMap(Files.readString(jarFileSystem.getPath("extension.json"))).get("entrance");
-            Allay.EXTRA_RESOURCE_CLASS_LOADER.addJar(extensionPath);
+            var extensionDescriptorPath = jarFileSystem.getPath("extension.json");
+            if (!Files.exists(extensionDescriptorPath)) {
+                return null;
+            }
+            var entrance = (String) JSONUtils.fromMap(Files.readString(extensionDescriptorPath)).get("entrance");
             return Allay.EXTRA_RESOURCE_CLASS_LOADER.loadClass(entrance);
         } catch (ClassNotFoundException e1) {
             throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_ENTRANCE_MISSING, extensionPath));

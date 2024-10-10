@@ -840,15 +840,4 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public Set<String> getTags() {
         return Collections.unmodifiableSet(tags);
     }
-
-    @Override
-    public BlockState getBlockStateStandingOn() {
-        var air = BlockTypes.AIR.getDefaultState();
-        if (!isOnGround()) return air;
-
-        var loc = getLocation();
-        var currentBlockState = getDimension().getBlockState(loc.x(), loc.y(), loc.z());
-        if (currentBlockState != air) return currentBlockState;
-        else return getDimension().getBlockState(loc.x(), loc.y() - 1, loc.z());
-    }
 }
