@@ -6,12 +6,5 @@ public interface EntityUndeadComponent extends EntityComponent {
      *
      * @return {@code true} if the entity will catch fire under sunlight, otherwise {@code false}.
      */
-    boolean getCatchesFireUnderSunlight();
-
-    /**
-     * Set if the entity will catch fire under sunlight.
-     *
-     * @param catchesFireUnderSunlight whether the entity will catch fire under sunlight.
-     */
-    void setCatchesFireUnderSunlight(boolean catchesFireUnderSunlight);
+    default boolean getCatchesFireUnderSunlight() { return true; };
 }
