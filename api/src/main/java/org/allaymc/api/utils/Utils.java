@@ -34,8 +34,8 @@ public class Utils {
     public static final BlockState[][][] EMPTY_BLOCK_STATE_ARRAY_3D = new BlockState[0][0][0];
     public static final BlockTag[] EMPTY_BLOCK_TAG_ARRAY = new BlockTag[0];
     public static final ItemTag[] EMPTY_ITEM_TAG_ARRAY = new ItemTag[0];
-    public static final ItemId[] EMPTY_VANILLA_ITEM_ID_ARRAY = new ItemId[0];
-    public static final BlockId[] EMPTY_VANILLA_BLOCK_ID_ARRAY = new BlockId[0];
+    public static final ItemId[] EMPTY_ITEM_ID_ARRAY = new ItemId[0];
+    public static final BlockId[] EMPTY_BLOCK_ID_ARRAY = new BlockId[0];
     public static final ItemStack[] EMPTY_ITEM_STACK_ARRAY = new ItemStack[0];
     public static final Set<ItemStack> EMPTY_ITEM_STACK_SET = Set.of();
 

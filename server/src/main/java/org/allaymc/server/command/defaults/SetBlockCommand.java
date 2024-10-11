@@ -23,7 +23,7 @@ public class SetBlockCommand extends SimpleCommand {
         tree.getRoot()
                 .pos("position")
                 .blockType("blockType")
-                .blockPropertyValues("blockPropertyValues", List.of())
+                .blockPropertyValues("blockPropertyValues")
                 .optional()
                 .exec((context, player) -> {
                     Vector3f pos = context.getResult(0);

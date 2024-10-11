@@ -23,14 +23,12 @@ import java.util.*;
 public final class InternalBlockTypeData {
 
     // Use array instead of set to reduce memory usage
-    private static final Map<BlockId, BlockTag[]> VANILLA_BLOCK_TAGS = new HashMap<>();
-
-    private static final Map<BlockId, BlockTag[]> VANILLA_BLOCK_TAGS_CUSTOM = new HashMap<>();
-
-    private static final Map<BlockId, MaterialType> VANILLA_BLOCK_MATERIAL_TYPES = new HashMap<>();
-
+    private static final EnumMap<BlockId, BlockTag[]> BLOCK_TAGS = new EnumMap<>(BlockId.class);
+    private static final EnumMap<BlockId, BlockTag[]> BLOCK_TAGS_CUSTOM = new EnumMap<>(BlockId.class);
+    private static final EnumMap<BlockId, MaterialType> BLOCK_MATERIAL_TYPES = new EnumMap<>(BlockId.class);
     // Stores the correct tool sets for blocks that require tool quality
-    private static final EnumMap<BlockId, ItemId[]> VANILLA_BLOCK_SPECIAL_TOOLS = new EnumMap<>(BlockId.class);
+    private static final EnumMap<BlockId, ItemId[]> BLOCK_SPECIAL_TOOLS = new EnumMap<>(BlockId.class);
+    private static final EnumMap<BlockId, Integer> BLOCK_DEFAULT_STATES = new EnumMap<>(BlockId.class);
 
     public static void init() {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_types.json")))) {
@@ -39,7 +37,7 @@ public final class InternalBlockTypeData {
                 var obj = entry.getValue().getAsJsonObject();
                 // Material
                 var materialType = MaterialTypes.getMaterialTypeByName(obj.get("material").getAsString());
-                VANILLA_BLOCK_MATERIAL_TYPES.put(id, materialType);
+                BLOCK_MATERIAL_TYPES.put(id, materialType);
                 // Tags (can be null)
                 if (obj.has("tags")) {
                     var tags = obj.get("tags").getAsJsonArray();
@@ -52,9 +50,9 @@ public final class InternalBlockTypeData {
                         }
                         blockTags[i] = tag;
                     }
-                    VANILLA_BLOCK_TAGS.put(id, blockTags);
+                    BLOCK_TAGS.put(id, blockTags);
                 } else {
-                    VANILLA_BLOCK_TAGS.put(id, Utils.EMPTY_BLOCK_TAG_ARRAY);
+                    BLOCK_TAGS.put(id, Utils.EMPTY_BLOCK_TAG_ARRAY);
                 }
                 // Special tools (can be null)
                 if (obj.has("specialTools")) {
@@ -63,10 +61,12 @@ public final class InternalBlockTypeData {
                     for (int i = 0; i < tools.size(); i++) {
                         specialTools[i] = ItemId.fromIdentifier(new Identifier(tools.get(i).getAsString()));
                     }
-                    VANILLA_BLOCK_SPECIAL_TOOLS.put(id, specialTools);
+                    BLOCK_SPECIAL_TOOLS.put(id, specialTools);
                 } else {
-                    VANILLA_BLOCK_SPECIAL_TOOLS.put(id, Utils.EMPTY_VANILLA_ITEM_ID_ARRAY);
+                    BLOCK_SPECIAL_TOOLS.put(id, Utils.EMPTY_ITEM_ID_ARRAY);
                 }
+                // Default state
+                BLOCK_DEFAULT_STATES.put(id, (int) obj.get("defaultBlockStateHash").getAsLong());
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -91,10 +91,10 @@ public final class InternalBlockTypeData {
                 for (var tag : tags) {
                     blockTags[i++] = tag;
                 }
-                VANILLA_BLOCK_TAGS_CUSTOM.put(id, blockTags);
+                BLOCK_TAGS_CUSTOM.put(id, blockTags);
             });
             for (var id : BlockId.values()) {
-                VANILLA_BLOCK_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_BLOCK_TAG_ARRAY);
+                BLOCK_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_BLOCK_TAG_ARRAY);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -102,12 +102,12 @@ public final class InternalBlockTypeData {
     }
 
     public static MaterialType getMaterialType(BlockId id) {
-        return VANILLA_BLOCK_MATERIAL_TYPES.get(id);
+        return BLOCK_MATERIAL_TYPES.get(id);
     }
 
     public static BlockTag[] getBlockTags(BlockId id) {
-        var vanilla = VANILLA_BLOCK_TAGS.get(id);
-        var custom = VANILLA_BLOCK_TAGS_CUSTOM.get(id);
+        var vanilla = BLOCK_TAGS.get(id);
+        var custom = BLOCK_TAGS_CUSTOM.get(id);
         var tags = new BlockTag[vanilla.length + custom.length];
         System.arraycopy(vanilla, 0, tags, 0, vanilla.length);
         System.arraycopy(custom, 0, tags, vanilla.length, custom.length);
@@ -115,6 +115,10 @@ public final class InternalBlockTypeData {
     }
 
     public static ItemId[] getSpecialTools(BlockId id) {
-        return VANILLA_BLOCK_SPECIAL_TOOLS.get(id);
+        return BLOCK_SPECIAL_TOOLS.get(id);
+    }
+
+    public static int getDefaultBlockStateHash(BlockId id) {
+        return BLOCK_DEFAULT_STATES.get(id);
     }
 }

@@ -11,19 +11,16 @@ import org.allaymc.api.utils.Utils;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author daoge_cmd
  */
 @Slf4j
 public final class InternalItemTypeData {
-    private static final Map<ItemId, ItemTag[]> VANILLA_ITEM_TAGS = new HashMap<>();
 
-    private static final Map<ItemId, ItemTag[]> VANILLA_ITEM_TAGS_CUSTOM = new HashMap<>();
+    private static final EnumMap<ItemId, ItemTag[]> ITEM_TAGS = new EnumMap<>(ItemId.class);
+    private static final EnumMap<ItemId, ItemTag[]> ITEM_TAGS_CUSTOM = new EnumMap<>(ItemId.class);
 
     public static void init() {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("items.json")))) {
@@ -42,9 +39,9 @@ public final class InternalItemTypeData {
                         }
                         itemTags[i] = tag;
                     }
-                    VANILLA_ITEM_TAGS.put(id, itemTags);
+                    ITEM_TAGS.put(id, itemTags);
                 } else {
-                    VANILLA_ITEM_TAGS.put(id, Utils.EMPTY_ITEM_TAG_ARRAY);
+                    ITEM_TAGS.put(id, Utils.EMPTY_ITEM_TAG_ARRAY);
                 }
             });
         } catch (IOException e) {
@@ -70,10 +67,10 @@ public final class InternalItemTypeData {
                 for (var tag : tags) {
                     itemTags[i++] = tag;
                 }
-                VANILLA_ITEM_TAGS_CUSTOM.put(id, itemTags);
+                ITEM_TAGS_CUSTOM.put(id, itemTags);
             });
             for (var id : ItemId.values()) {
-                VANILLA_ITEM_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_ITEM_TAG_ARRAY);
+                ITEM_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_ITEM_TAG_ARRAY);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -81,8 +78,8 @@ public final class InternalItemTypeData {
     }
 
     public static ItemTag[] getItemTags(ItemId id) {
-        var vanilla = VANILLA_ITEM_TAGS.get(id);
-        var custom = VANILLA_ITEM_TAGS_CUSTOM.get(id);
+        var vanilla = ITEM_TAGS.get(id);
+        var custom = ITEM_TAGS_CUSTOM.get(id);
         var tags = new ItemTag[vanilla.length + custom.length];
         System.arraycopy(vanilla, 0, tags, 0, vanilla.length);
         System.arraycopy(custom, 0, tags, vanilla.length, custom.length);

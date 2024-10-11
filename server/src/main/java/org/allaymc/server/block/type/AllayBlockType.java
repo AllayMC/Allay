@@ -64,14 +64,15 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             Identifier identifier,
             ItemType<?> blockItemType,
             Set<BlockTag> blockTags,
-            Material material
+            Material material,
+            Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier
     ) {
         this.properties = Collections.unmodifiableMap(properties);
         this.identifier = identifier;
         this.blockTags = blockTags;
         this.material = material;
         this.blockItemType = blockItemType;
-        this.blockStateHashMap = initStates();
+        this.blockStateHashMap = initStates(defaultStateSupplier);
 
         byte specialValueBits = 0;
         for (var value : properties.values()) specialValueBits += value.getBitSize();
@@ -129,7 +130,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         return blockStateHashMap.values();
     }
 
-    private Map<Integer, BlockState> initStates() {
+    private Map<Integer, BlockState> initStates(Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier) {
         var propertyTypeList = this.properties.values().stream().toList();
         var size = propertyTypeList.size();
         if (size == 0) {
@@ -179,15 +180,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 indices[i] = 0;
             }
         }
-        var defaultStateHash = HashUtils.computeBlockStateHash(
-                this.identifier,
-                properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList())
-        );
 
-        this.defaultState = blockStates.values().stream()
-                .filter(s -> s.blockStateHash() == defaultStateHash)
-                .findFirst()
-                .orElse(this.defaultState);
+        this.defaultState = defaultStateSupplier.apply(blockStates);
+        if (this.defaultState == null) {
+            throw new BlockTypeBuildException("Block default state supplier cannot return null!");
+        }
 
         return Collections.unmodifiableMap(blockStates);
     }
@@ -358,6 +355,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
         protected Set<BlockTag> blockTags = Set.of();
         protected Material material;
+        protected Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier = blockStates ->
+                blockStates.get(HashUtils.computeBlockStateHash(
+                        this.identifier,
+                        properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList())
+                ));
 
         public Builder(Class<T> interfaceClass) {
             if (interfaceClass == null)
@@ -377,18 +379,28 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         public Builder<T> vanillaBlock(BlockId blockId) {
             this.isCustomBlock = false;
             this.identifier = blockId.getIdentifier();
+
             var dataMap = Registries.BLOCK_STATE_DATA.get(blockId);
             if (dataMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block data component for " + blockId + " from vanilla block data registry!");
             components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
+
             var tags = InternalBlockTypeData.getBlockTags(blockId);
             if (tags.length != 0) setBlockTags(tags);
+
             setMaterial(Registries.MATERIALS.get(InternalBlockTypeData.getMaterialType(blockId)));
+
+            defaultStateSupplier = blockStates -> blockStates.get(InternalBlockTypeData.getDefaultBlockStateHash(blockId));
             return this;
         }
 
         public Builder<T> bindBlockEntity(BlockEntityType<?> blockEntityType) {
             return addComponent(new BlockEntityHolderComponentImpl<>(blockEntityType));
+        }
+
+        public Builder<T> setDefaultStateSupplier(Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier) {
+            this.defaultStateSupplier = defaultStateSupplier;
+            return this;
         }
 
         public Builder<T> setProperties(BlockPropertyType<?>... properties) {
@@ -456,7 +468,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         public AllayBlockType<T> build() {
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
-            var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, material);
+            var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, material, defaultStateSupplier);
 
             var listComponents = new ArrayList<>(components.values());
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
