@@ -6,7 +6,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.effect.type.EffectTypes;
