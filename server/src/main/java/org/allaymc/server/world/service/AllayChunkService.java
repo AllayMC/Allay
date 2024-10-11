@@ -477,7 +477,7 @@ public final class AllayChunkService implements ChunkService {
                 }
 
                 if (chunkSendingStrategy == ASYNC) {
-                    asyncChunkSendingManager.addChunk(chunkReadyToSend.values());
+                    asyncChunkSendingManager.addChunkToSendingQueue(chunkReadyToSend.values());
                 } else {
                     // Priority is given to sending chunks that are close to the chunk loader
                     var lcpStream = chunkReadyToSend.values().stream();
@@ -508,7 +508,7 @@ public final class AllayChunkService implements ChunkService {
                 Thread.ofVirtual().start(loop::startLoop);
             }
 
-            public void addChunk(Collection<Chunk> chunks) {
+            public void addChunkToSendingQueue(Collection<Chunk> chunks) {
                 chunkSendingQueue.addAll(chunks);
             }
 
