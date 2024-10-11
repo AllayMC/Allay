@@ -231,6 +231,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     protected void syncData() {
+        // These data are checked every tick, and are sent to client if changed
+        // We don't send these data immediately after changed, because they may be changed multiple times in a tick
+        // and sending these data will take up a lot of bandwidth
         abilities.sync();
         adventureSettings.sync();
     }
