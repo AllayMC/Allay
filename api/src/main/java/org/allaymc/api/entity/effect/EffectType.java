@@ -1,6 +1,7 @@
 package org.allaymc.api.entity.effect;
 
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.utils.Identifier;
 
 /**
@@ -64,6 +65,23 @@ public interface EffectType {
      * @param effectInstance The instance of the effect.
      */
     default void onRemove(Entity entity, EffectInstance effectInstance) {}
+
+    /**
+     * Called when the entity owning the effect is damaged.
+     *
+     * @param entity         The entity the effect is on.
+     * @param effectInstance The instance of the effect.
+     * @param lastDamage     The last damage taken by the entity.
+     */
+    default void onEntityDamage(Entity entity, EffectInstance effectInstance, DamageContainer lastDamage) {}
+
+    /**
+     * Called when the entity owning the effect dies.
+     *
+     * @param entity         The entity the effect is on.
+     * @param effectInstance The instance of the effect.
+     */
+    default void onEntityDies(Entity entity, EffectInstance effectInstance) {}
 
     /**
      * Gets the unique identifier of this effect type.
