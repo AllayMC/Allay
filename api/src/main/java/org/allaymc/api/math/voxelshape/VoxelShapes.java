@@ -47,7 +47,7 @@ public final class VoxelShapes {
     public static VoxelShape buildLiquidShape(BlockState liquidBlockState) {
         var liquidDepth = liquidBlockState.getPropertyValue(BlockPropertyTypes.LIQUID_DEPTH);
         return VoxelShape.builder()
-                .solid(0, 0, 0, 1, 0.0625f * (liquidDepth + 1), 1)
+                .solid(0, 0, 0, 1, liquidDepth == 0 ? 1 : 0.0625f * (liquidDepth + 1), 1)
                 .build();
     }
 }
