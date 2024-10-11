@@ -45,15 +45,6 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean attack(DamageContainer damage) {
-        // Fire resistance effect
-        if (
-                thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) &&
-                (
-                        damage.getDamageType() == DamageContainer.DamageType.FIRE ||
-                        damage.getDamageType() == DamageContainer.DamageType.LAVA ||
-                        damage.getDamageType() == DamageContainer.DamageType.FIRE_TICK
-                )
-        ) return false;
 
         if (!canBeAttacked(damage) || !checkAndUpdateCoolDown(damage)) return false;
 
@@ -158,6 +149,16 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
+        // Fire resistance effect
+        if (
+                thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) &&
+                (
+                        damage.getDamageType() == DamageContainer.DamageType.FIRE ||
+                        damage.getDamageType() == DamageContainer.DamageType.LAVA ||
+                        damage.getDamageType() == DamageContainer.DamageType.FIRE_TICK
+                )
+        ) return false;
+
         var event = new CEntityTryDamageEvent(damage, true);
         manager.callEvent(event);
         return event.isCanAttack();
