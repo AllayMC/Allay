@@ -9,7 +9,7 @@ dependencies {
     api(libs.stateupdater)
     api(libs.nbt)
     api(libs.slf4j.api)
-    api(libs.fastutil)
+    api(libs.bundles.fastutil)
     api(libs.guava)
     api(libs.gson)
     api(libs.annotations)

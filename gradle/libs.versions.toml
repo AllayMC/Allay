@@ -1,6 +1,7 @@
 [versions]
 log4j = "2.24.1"
 commons-rng = "1.6"
+fastutil = "8.5.13-SNAPSHOT"
 
 [libraries]
 # NBT
@@ -10,8 +11,28 @@ network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", ve
 # State Updater
 stateupdater = { group = "org.allaymc", name = "stateupdater", version = "1.21.30" }
 # Collections
-fastutil = { group = "it.unimi.dsi", name = "fastutil", version = "8.5.14" }
 guava = { group = "com.google.guava", name = "guava", version = "33.3.1-jre" }
+# Fastutil
+#fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
+fastutil-object-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-int-maps", version.ref = "fastutil" }
+fastutil-object-reference-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-reference-maps", version.ref = "fastutil" }
+fastutil-object-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-object-maps", version.ref = "fastutil" }
+fastutil-int-short-maps = { group = "org.cloudburstmc.fastutil.maps", name = "int-short-maps", version.ref = "fastutil" }
+fastutil-int-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "int-int-maps", version.ref = "fastutil" }
+fastutil-int-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "int-object-maps", version.ref = "fastutil" }
+fastutil-int-reference-maps = { group = "org.cloudburstmc.fastutil.maps", name = "int-reference-maps", version.ref = "fastutil" }
+fastutil-long-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "long-object-maps", version.ref = "fastutil" }
+fastutil-long-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "long-int-maps", version.ref = "fastutil" }
+fastutil-long-byte-maps = { group = "org.cloudburstmc.fastutil.maps", name = "long-byte-maps", version.ref = "fastutil" }
+fastutil-long-long-maps = { group = "org.cloudburstmc.fastutil.maps", name = "long-long-maps", version.ref = "fastutil" }
+fastutil-long-queues = { group = "org.cloudburstmc.fastutil.queues", name = "long-queues", version.ref = "fastutil" }
+fastutil-reference-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "reference-int-maps", version.ref = "fastutil" }
+fastutil-reference-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "reference-object-maps", version.ref = "fastutil" }
+fastutil-reference-reference-maps = { group = "org.cloudburstmc.fastutil.maps", name = "reference-reference-maps", version.ref = "fastutil" }
+fastutil-short-sets = { group = "org.cloudburstmc.fastutil.sets", name = "short-sets", version.ref = "fastutil" }
+fastutil-short-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "short-object-maps", version.ref = "fastutil" }
+fastutil-byte-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "byte-object-maps", version.ref = "fastutil" }
+fastutil-io = { group = "org.cloudburstmc.fastutil", name = "io", version.ref = "fastutil" }
 # Serialization
 gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.3" }
@@ -69,6 +90,13 @@ rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 junit = ["junit-jupiter", "mockito-junit-jupiter"]
+fastutil = [
+    "fastutil-object-int-maps", "fastutil-object-reference-maps", "fastutil-object-object-maps", "fastutil-int-short-maps",
+    "fastutil-int-int-maps", "fastutil-int-object-maps", "fastutil-int-reference-maps", "fastutil-long-object-maps",
+    "fastutil-long-int-maps", "fastutil-long-byte-maps", "fastutil-long-long-maps", "fastutil-long-queues",
+    "fastutil-reference-int-maps", "fastutil-reference-object-maps", "fastutil-reference-reference-maps",
+    "fastutil-short-sets", "fastutil-short-object-maps", "fastutil-byte-object-maps", "fastutil-io"
+]
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version = "8.3.3" }

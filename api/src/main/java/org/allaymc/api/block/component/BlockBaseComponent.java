@@ -199,14 +199,14 @@ public interface BlockBaseComponent extends BlockComponent {
         var isCorrectTool = usedItem.isCorrectToolFor(blockState);
         var isAlwaysDestroyable = getBlockType().getMaterial().isAlwaysDestroyable();
         var hasAquaAffinity = false;
-        var isInWater = false;
+        var isEyesInWater = false;
         var isOnGround = true;
         var hasteEffectLevel = 0;
         var miningFatigueLevel = 0;
         var efficiencyLevel = 0;
 
         if (entity != null) {
-            isInWater = entity.isEyesInWater();
+            isEyesInWater = entity.isEyesInWater();
             isOnGround = entity.isOnGround();
             hasteEffectLevel = entity.getEffectLevel(EffectTypes.HASTE);
             // Conduit Power ensures at least level 2 haste effect
@@ -250,9 +250,9 @@ public interface BlockBaseComponent extends BlockComponent {
         // Entity mining fatigue effect negative bonus
         if (miningFatigueLevel != 0) speed /= Math.pow(miningFatigueLevel, 3);
         // In water but no underwater speed mining effect
-        if (isInWater && !hasAquaAffinity) speed *= 0.2d;
+        if (isEyesInWater && !hasAquaAffinity) speed *= 0.2d;
         // In midair
-        if (!isInWater && !isOnGround) speed *= 0.2d;
+        if (!isEyesInWater && !isOnGround) speed *= 0.2d;
         return 1d / speed;
     }
 
