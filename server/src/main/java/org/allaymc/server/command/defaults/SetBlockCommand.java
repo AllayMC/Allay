@@ -23,13 +23,14 @@ public class SetBlockCommand extends SimpleCommand {
         tree.getRoot()
                 .pos("position")
                 .blockType("blockType")
-                .blockPropertyValues("blockPropertyValues")
+                .blockPropertyValues("blockPropertyValues", List.of())
+                .optional()
                 .exec((context, player) -> {
                     Vector3f pos = context.getResult(0);
                     BlockType<?> blockType = context.getResult(1);
                     List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> blockPropertyValues = context.getResult(2);
 
-                    var blockState = blockType.ofState(blockPropertyValues);
+                    var blockState = blockPropertyValues.isEmpty() ? blockType.getDefaultState() : blockType.ofState(blockPropertyValues);
                     if (blockState == null) {
                         context.addError("%" + TrKeys.M_COMMANDS_BLOCKSTATE_INVALIDSTATE, blockType.getIdentifier() + blockPropertyValues.toString());
                         return context.fail();

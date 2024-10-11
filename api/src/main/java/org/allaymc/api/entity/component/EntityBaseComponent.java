@@ -792,6 +792,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Check if the entity can breathe.
+     *
+     * @return {@code true} if the entity can breathe, otherwise {@code false}.
+     */
+    default boolean canBreathe() {
+        return !isEyesInWater();
+    }
+
+    /**
      * Called when the entity interacts with another entity.
      *
      * @param player    The player who interacted with the entity, can be null

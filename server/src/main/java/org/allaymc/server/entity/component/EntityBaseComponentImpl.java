@@ -29,10 +29,7 @@ import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.component.annotation.*;
-import org.allaymc.server.entity.component.event.CEntityDieEvent;
-import org.allaymc.server.entity.component.event.CEntityFallEvent;
-import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
-import org.allaymc.server.entity.component.event.CEntitySaveNBTEvent;
+import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
@@ -135,8 +132,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void initMetadata() {
         metadata.set(EntityDataTypes.PLAYER_INDEX, 0);
-        metadata.set(EntityDataTypes.AIR_SUPPLY, (short) 400);
-        metadata.set(EntityDataTypes.AIR_SUPPLY_MAX, (short) 400);
+        metadata.set(EntityDataTypes.AIR_SUPPLY, (short) 300);
+        metadata.set(EntityDataTypes.AIR_SUPPLY_MAX, (short) 300);
         updateHitBoxAndCollisionBoxMetadata();
         metadata.set(EntityFlag.HAS_GRAVITY, true);
         metadata.set(EntityFlag.HAS_COLLISION, true);
@@ -174,7 +171,26 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public void tick(long currentTick) {
         checkDead();
         tickEffects();
+        tickBreathe();
         if (attributeComponent != null) attributeComponent.tick();
+    }
+
+    protected void tickBreathe() {
+        short airSupply = getMetadata().get(EntityDataTypes.AIR_SUPPLY);
+        short airSupplyMax = getMetadata().get(EntityDataTypes.AIR_SUPPLY_MAX);
+        short newAirSupply = airSupply;
+        if (!thisEntity.canBreathe()) {
+            newAirSupply = (short) (airSupply - 1);
+            if (newAirSupply <= -20) {
+                manager.callEvent(CEntityDrownEvent.INSTANCE);
+                newAirSupply = 0;
+            }
+        } else if (airSupply < airSupplyMax) {
+            newAirSupply = (short) (airSupply + 4);
+        }
+        if (airSupply != newAirSupply) {
+            setAndSendEntityData(EntityDataTypes.AIR_SUPPLY, newAirSupply);
+        }
     }
 
     protected void tickEffects() {

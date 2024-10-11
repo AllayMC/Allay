@@ -17,10 +17,7 @@ import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
-import org.allaymc.server.entity.component.event.CEntityAfterDamageEvent;
-import org.allaymc.server.entity.component.event.CEntityAttackEvent;
-import org.allaymc.server.entity.component.event.CEntityFallEvent;
-import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
+import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
@@ -167,6 +164,11 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         var blockStateStandingOn = thisEntity.getBlockStateStandingOn();
         float rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));
-        if (damage > 0) this.attack(DamageContainer.fall(damage));
+        if (damage > 0) attack(DamageContainer.fall(damage));
+    }
+
+    @EventHandler
+    protected void onDrown(CEntityDrownEvent event) {
+        attack(DamageContainer.drown(2));
     }
 }

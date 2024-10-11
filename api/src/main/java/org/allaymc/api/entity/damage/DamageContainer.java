@@ -27,7 +27,7 @@ import static org.allaymc.api.entity.damage.DamageContainer.DamageType.*;
 public class DamageContainer {
     public static final int DEFAULT_DAMAGE_COOL_DOWN = 10;
     public static Set<DamageType> CANNOT_BE_REDUCED_BY_ARMOR_DAMAGE_TYPES = Sets.newHashSet(
-            FIRE_TICK, SUFFOCATION, DROWNING,
+            FIRE_TICK, SUFFOCATION, DROWN,
             STARVE, VOID, MAGIC, COMMAND,
             FLY_INTO_WALL, FREEZING, SONIC_BOOM
     );
@@ -111,6 +111,16 @@ public class DamageContainer {
     }
 
     /**
+     * Create a drown damage container.
+     *
+     * @param sourceDamage the source damage.
+     * @return the damage container.
+     */
+    public static DamageContainer drown(float sourceDamage) {
+        return new DamageContainer(null, DROWN, sourceDamage);
+    }
+
+    /**
      * Get the attacker.
      *
      * @return the attacker, or {@code null} if the attacker is not present.
@@ -169,7 +179,7 @@ public class DamageContainer {
         /**
          * Damage caused by running out of air underwater
          */
-        public static DamageType DROWNING = fixed(TrKeys.M_DEATH_ATTACK_DROWN);
+        public static DamageType DROWN = fixed(TrKeys.M_DEATH_ATTACK_DROWN);
         /**
          * Damage caused by being attacked by another entity
          */

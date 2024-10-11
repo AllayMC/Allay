@@ -41,12 +41,16 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     public void tick() {
         super.tick();
 
-        if (
-                thisPlayer.isDead() ||
-                thisPlayer.getGameType() == GameType.CREATIVE ||
-                thisPlayer.getGameType() == GameType.SPECTATOR
-        ) return;
+        if (thisPlayer.isDead() ||
+            thisPlayer.getGameType() == GameType.CREATIVE ||
+            thisPlayer.getGameType() == GameType.SPECTATOR) {
+            return;
+        }
 
+        tickFood();
+    }
+
+    protected void tickFood() {
         foodTickTimer++;
         if (foodTickTimer >= 80) foodTickTimer = 0;
 
@@ -55,12 +59,15 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         if (difficulty == Difficulty.PEACEFUL && foodTickTimer % 10 == 0) {
             setFoodLevel(currentFoodLevel + 1);
 
-            if (foodTickTimer % 20 == 0) regenerate(false);
+            if (foodTickTimer % 20 == 0) {
+                regenerate(false);
+            }
         }
 
         if (foodTickTimer == 0 && difficulty != Difficulty.PEACEFUL) {
-            if (currentFoodLevel >= 18) regenerate(true);
-            else if (currentFoodLevel == 0) {
+            if (currentFoodLevel >= 18) {
+                regenerate(true);
+            } else if (currentFoodLevel == 0) {
                 if (
                         (difficulty == Difficulty.EASY && thisPlayer.getHealth() > 10) ||
                         (difficulty == Difficulty.NORMAL && thisPlayer.getHealth() > 1) ||
