@@ -477,6 +477,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return all the effects of the entity.
      */
+    @UnmodifiableView
     Map<EffectType, EffectInstance> getAllEffects();
 
     /**

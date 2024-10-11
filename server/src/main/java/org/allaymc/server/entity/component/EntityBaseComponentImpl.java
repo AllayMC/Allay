@@ -713,7 +713,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public Map<EffectType, EffectInstance> getAllEffects() {
-        return new HashMap<>(effects);
+        return Collections.unmodifiableMap(effects);
     }
 
     @Override
