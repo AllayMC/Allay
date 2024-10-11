@@ -33,9 +33,10 @@ public class AllayWorld implements World {
     protected static final long TIME_SENDING_INTERVAL = 12 * 20;
 
     protected static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
+    protected static final boolean ENABLE_INDEPENDENT_NETWORK_THREAD = Server.SETTINGS.networkSettings().enableIndependentNetworkThread();
 
     protected final Queue<PacketQueueEntry> packetQueue = PlatformDependent.newMpscQueue();
-    protected final AtomicBoolean networkLock = new AtomicBoolean(false);
+    protected final AtomicBoolean networkLock = ENABLE_INDEPENDENT_NETWORK_THREAD ? new AtomicBoolean(false) : null;
     protected final AtomicBoolean isRunning = new AtomicBoolean(true);
     @Getter
     protected final WorldStorage worldStorage;
@@ -67,10 +68,12 @@ public class AllayWorld implements World {
                 return;
             }
 
-            //noinspection StatementWithEmptyBody
-            while (!networkLock.compareAndSet(false, true)) {
-                // Spin
-                // We don't use Thread.yield() here, because we don't want to block the world main thread
+            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
+                //noinspection StatementWithEmptyBody
+                while (!networkLock.compareAndSet(false, true)) {
+                    // Spin
+                    // We don't use Thread.yield() here, because we don't want to block the world main thread
+                }
             }
 
             try {
@@ -78,55 +81,68 @@ public class AllayWorld implements World {
             } catch (Throwable throwable) {
                 log.error("Error while ticking level {}", this.getWorldData().getName(), throwable);
             } finally {
-                networkLock.set(false);
+                if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
+                    networkLock.set(false);
+                }
             }
         }).build();
         this.thread = Thread.ofPlatform()
                 .name("World Thread - " + this.getWorldData().getName())
                 .unstarted(gameLoop::startLoop);
-        this.networkThread = Thread.ofPlatform()
-                .name("World Network Thread - " + this.getWorldData().getName())
-                .unstarted(this::networkTick);
+        if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
+            this.networkThread = Thread.ofPlatform()
+                    .name("World Network Thread - " + this.getWorldData().getName())
+                    .unstarted(() -> {
+                        while (isRunning.get()) {
+                            if (!packetQueue.isEmpty()) {
+                                while (!networkLock.compareAndSet(false, true)) {
+                                    // Spin
+                                    Thread.yield();
+                                }
+                            } else {
+                                Thread.yield();
+                                continue;
+                            }
+                            handleSyncPackets();
+                        }
+                    });
+        } else {
+            this.networkThread = null;
+        }
     }
 
-    protected void networkTick() {
-        while (isRunning.get()) {
-            if (!packetQueue.isEmpty()) {
-                while (!networkLock.compareAndSet(false, true)) {
-                    // Spin
-                    Thread.yield();
-                }
-            } else {
-                Thread.yield();
-                continue;
+    protected void handleSyncPackets() {
+        try {
+            PacketQueueEntry entry;
+            int count = 0;
+            while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
+                entry.player().getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).handleDataPacket(entry.packet(), entry.time());
+                count++;
             }
-
-            try {
-                PacketQueueEntry entry;
-                int count = 0;
-                while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
-                    entry.player().getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).handleDataPacket(entry.packet(), entry.time());
-                    count++;
-                }
-            } catch (Throwable throwable) {
-                log.error("Error while handling sync packet in world {}", this.getWorldData().getName(), throwable);
-            } finally {
+        } catch (Throwable throwable) {
+            log.error("Error while handling sync packet in world {}", this.getWorldData().getName(), throwable);
+        } finally {
+            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
                 networkLock.set(false);
             }
         }
     }
 
-    public void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time) {
-        packetQueue.add(new PacketQueueEntry(player, packet, time));
-    }
-
     protected void tick(long currentTick) {
+        if (!ENABLE_INDEPENDENT_NETWORK_THREAD) {
+            handleSyncPackets();
+        }
         syncData();
         tickTime(currentTick);
         tickWeather();
         scheduler.tick();
         getDimensions().values().forEach(d -> ((AllayDimension) d).tick(currentTick));
         worldStorage.tick(currentTick);
+    }
+
+
+    public void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time) {
+        packetQueue.add(new PacketQueueEntry(player, packet, time));
     }
 
     protected void tickTime(long currentTick) {
@@ -207,7 +223,9 @@ public class AllayWorld implements World {
             throw new IllegalStateException("World is already start ticking!");
         } else {
             thread.start();
-            networkThread.start();
+            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
+                networkThread.start();
+            }
         }
     }
 

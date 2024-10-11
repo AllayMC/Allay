@@ -107,6 +107,12 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("The maximum number of packets that can be processed at once")
         private int maxSyncedPacketsHandleCountAtOnce = 128;
 
+        @CustomKey("enable-independent-network-thread")
+        @Comment("If set to true, the network thread will be independent of the main world thread")
+        @Comment("Which will reduce packet processing delay significantly")
+        @Comment("However, independent network threads will increase CPU usage to a certain extent")
+        private boolean enableIndependentNetworkThread = true;
+
         @Comment("Represents the level of resource leak detection.")
         @Comment("Possible values: DISABLED, SIMPLE, ADVANCED, PARANOID")
         @CustomKey("resource-leak-detector-level")
@@ -133,7 +139,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("This only works if sub-chunk sending system is not enabled")
         @Comment("And will be forced to SYNC if sub-chunk sending system is enabled")
         @CustomKey("chunk-sending-strategy")
-        private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.SYNC;
+        private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.ASYNC;
 
         @CustomKey("do-first-spawn-chunk-threshold")
         private int doFirstSpawnChunkThreshold = 56;
