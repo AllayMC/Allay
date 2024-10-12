@@ -44,6 +44,8 @@ Although these files will not be included in the final jar, they will be used du
 - `block_property_types.json`: run `BlockPropertyTypeGen` under `data` after updating `block_palette.nbt`
 - `biome_id_and_type.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `entity_id_map.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
+- `music_definitions.json`: obtained from [mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/music_definitions.json)
+- `sound_definitions.json`: obtained from [mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/sound_definitions.json)
 
 ### Generate `block_states.json`
 
@@ -63,9 +65,11 @@ item_meta_block_state_bimap.nbt based on creative_items.nbt. Remember to delete 
 
 Allay completes most repetitive work through code generation. Next, we'll focus on `codegen`.
 
-**Check if there are any new biomes in `biome_id_and_type.json`**. If so, run `BiomeIdEnumGen`. This file usually doesn't change much in minor updates.
+**Check for changes in `music_definitions.json` and `sound_definitions.json`**. If changes exist, run `SoundNameGen`.
 
-**Check if there are any new entities in `entity_id_map.json`**. If so, first run `EntityIdEnumGen`, then run `EntityInterfaceGen`. This file usually doesn't change much in minor updates.
+**Check for changes in `biome_id_and_type.json`**. If changes exist, run `BiomeIdEnumGen`. This file usually doesn't change much in minor updates.
+
+**Check for changes in `entity_id_map.json`**. If changes exist, first run `EntityIdEnumGen`, then run `EntityInterfaceGen`. This file usually doesn't change much in minor updates.
 
 **Check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `ItemTagGen`or `BlockTagGen`.
 
