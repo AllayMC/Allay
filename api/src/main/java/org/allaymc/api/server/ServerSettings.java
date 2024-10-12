@@ -111,7 +111,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("If set to true, the network thread will be independent of the main world thread")
         @Comment("Which will reduce packet processing delay significantly")
         @Comment("However, independent network threads will increase CPU usage to a certain extent")
-        private boolean enableIndependentNetworkThread = true;
+        private boolean enableIndependentNetworkThread = Runtime.getRuntime().availableProcessors() > 8;
 
         @Comment("Represents the level of resource leak detection.")
         @Comment("Possible values: DISABLED, SIMPLE, ADVANCED, PARANOID")
