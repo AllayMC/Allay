@@ -29,7 +29,12 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 new CraftingTableContainer()
         );
         var enchantTableContainer = new EnchantTableContainer();
-        enchantTableContainer.addOnSlotChangeListener(EnchantTableContainer.INPUT_SLOT, item -> onEnchantTableContainerInputItemChange(item, new Position3i(enchantTableContainer.getBlockPos(), thisPlayer.getDimension())));
+        enchantTableContainer.addOnSlotChangeListener(EnchantTableContainer.INPUT_SLOT, item -> {
+            var blockPos = enchantTableContainer.getBlockPos();
+            if (blockPos != null) {
+                onEnchantTableContainerInputItemChange(item, new Position3i(blockPos, thisPlayer.getDimension()));
+            }
+        });
         addContainer(enchantTableContainer);
         // We shouldn't provide thisPlayer object directly
         // because at that time thisPlayer is null
