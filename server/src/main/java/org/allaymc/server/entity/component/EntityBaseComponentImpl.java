@@ -4,8 +4,6 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
@@ -230,6 +228,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         dead = true;
         deadTimer = DEFAULT_DEAD_TIMER;
         applyEntityEvent(EntityEventType.DEATH, 0);
+        effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         removeAllEffects();
     }
 
@@ -367,6 +366,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             }
         }
     }
+
 
     @Override
     public void teleport(Location3fc target) {
@@ -712,6 +712,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
+    public Map<EffectType, EffectInstance> getAllEffects() {
+        return Collections.unmodifiableMap(effects);
+    }
+
+    @Override
     public boolean hasEffect(EffectType effectType) {
         return effects.containsKey(effectType);
     }
@@ -723,10 +728,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void addEffect(EffectInstance effectInstance) {
+    public boolean addEffect(EffectInstance effectInstance) {
+        if (!canApplyEffect(effectInstance.getType())) return false;
+
         var event = new EntityEffectAddEvent(thisEntity, effectInstance);
         event.call();
-        if (event.isCancelled()) return;
+        if (event.isCancelled()) return false;
 
         effectInstance = event.getEffect();
 
@@ -745,6 +752,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         sendMobEffectPacket(packet);
 
         if (old == null) syncVisibleEffects();
+        return true;
     }
 
     @Override

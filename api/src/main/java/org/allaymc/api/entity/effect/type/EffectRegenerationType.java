@@ -26,6 +26,5 @@ public class EffectRegenerationType extends AbstractEffectType {
 
         var healthPerSecond = 20f / ticksPerHealth;
         attributeComponent.setHealth(attributeComponent.getHealth() + healthPerSecond);
-        // TODO: damage undead mobs
     }
 }
