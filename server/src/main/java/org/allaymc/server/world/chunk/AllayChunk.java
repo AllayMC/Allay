@@ -14,10 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.server.Server;
+import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
+import org.allaymc.api.world.storage.WorldStorage;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
@@ -51,6 +54,7 @@ public class AllayChunk implements Chunk {
     // The callback to be called when the chunk is loaded into the world
     @Setter
     protected Runnable chunkSetCallback = () -> {};
+    protected int autoSaveTimer = 0;
 
     private static void checkXZ(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
@@ -63,9 +67,19 @@ public class AllayChunk implements Chunk {
         Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
-    public void tick(long currentTick) {
+    public void tick(long currentTick, WorldStorage worldStorage) {
         getBlockEntities().values().forEach(blockEntity -> blockEntity.tick(currentTick));
         getEntities().values().forEach(entity -> entity.tick(currentTick));
+
+        checkAutoSave(worldStorage);
+    }
+
+    protected void checkAutoSave(WorldStorage worldStorage) {
+        autoSaveTimer++;
+        if (autoSaveTimer >= Server.SETTINGS.storageSettings().chunkAutoSaveCycle()) {
+            worldStorage.writeChunk(this);
+            autoSaveTimer = 0;
+        }
     }
 
     @Override

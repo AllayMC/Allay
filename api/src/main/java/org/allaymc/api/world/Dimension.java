@@ -693,7 +693,6 @@ public interface Dimension {
         addParticle(particleType, pos, 0);
     }
 
-
     /**
      * Add particle at the specified pos.
      *

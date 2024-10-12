@@ -204,9 +204,13 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("If set to false, the player's data will not be saved")
         private boolean savePlayerData = true;
 
-        @CustomKey("save-player-data-cycle")
+        @CustomKey("player-data-auto-save-cycle")
         @Comment("Determines the cycle of player data auto saving")
-        private int playerDataAutoSaveCycle = 20 * 60;
+        private int playerDataAutoSaveCycle = 20 * 60 * 5;
+
+        @CustomKey("chunk-auto-save-cycle")
+        @Comment("Determines the cycle of chunk auto saving")
+        private int chunkAutoSaveCycle = 20 * 60 * 5;
     }
 
     @Getter

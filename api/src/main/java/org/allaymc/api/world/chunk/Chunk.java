@@ -3,6 +3,7 @@ package org.allaymc.api.world.chunk;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
