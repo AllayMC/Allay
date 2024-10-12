@@ -3,6 +3,7 @@ package org.allaymc.server.blockentity.component;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.container.impl.ChestContainer;
+import org.allaymc.api.world.Sound;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
@@ -34,7 +35,7 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
                         position.x() + 0.5f,
                         position.y() + 0.5f,
                         position.z() + 0.5f,
-                        "random.chestopen"
+                        Sound.RANDOM_CHESTOPEN
                 );
                 sendPacketToViewers(pk);
             }
@@ -50,7 +51,7 @@ public class BlockEntityChestBaseComponentImpl extends BlockEntityBaseComponentI
                         position.x() + 0.5f,
                         position.y() + 0.5f,
                         position.z() + 0.5f,
-                        "random.chestclosed"
+                        Sound.RANDOM_CHESTCLOSED
                 );
                 sendPacketToViewers(pk);
             }
