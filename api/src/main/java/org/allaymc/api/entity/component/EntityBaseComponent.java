@@ -813,7 +813,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity can breathe, otherwise {@code false}.
      */
     default boolean canBreathe() {
-        return hasEffect(EffectTypes.WATER_BREATHING) || hasEffect(EffectTypes.CONDUIT_POWER) || isEyesInWater();
+        return hasEffect(EffectTypes.WATER_BREATHING) || hasEffect(EffectTypes.CONDUIT_POWER) || !isEyesInWater();
     }
 
     /**
