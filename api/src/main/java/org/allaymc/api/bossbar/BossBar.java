@@ -16,6 +16,11 @@ public interface BossBar {
 
     ApiInstanceHolder<BossBarFactory> FACTORY = ApiInstanceHolder.create();
 
+    /**
+     * Create a new boss bar.
+     *
+     * @return the boss bar.
+     */
     static BossBar create() {
         return FACTORY.get().create();
     }
