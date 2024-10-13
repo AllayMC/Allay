@@ -50,7 +50,6 @@ public class AllayCommandTree implements CommandTree {
     protected CommandResult parse0(CommandNode node, CommandContext context) {
         if (node.isLeaf()) {
             if (context.haveUnhandledArg()) {
-                // TODO
                 context.addSyntaxError();
                 return context.fail();
             }

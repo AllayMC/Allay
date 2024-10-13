@@ -18,7 +18,7 @@ public class KickCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                // TODO: Should use target(), but target() can only match players in default world
+                // TODO: Should use target(), but target() can only match players in sender's world
                 .str("player")
                 .str("reason", "You are kicked")
                 .optional()
