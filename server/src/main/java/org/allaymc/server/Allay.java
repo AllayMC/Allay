@@ -7,6 +7,7 @@ import org.allaymc.api.AllayAPI;
 import org.allaymc.api.block.property.BlockPropertyProcessor;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
+import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
@@ -27,6 +28,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.world.generator.WorldGenerator;
+import org.allaymc.server.bossbar.AllayBossBar;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
@@ -154,6 +156,9 @@ public final class Allay {
         api.bind(EntitySelectorAPI.class, AllayEntitySelectorAPI::new);
         api.bind(CommandTree.CommandTreeFactory.class, () -> AllayCommandTree::create);
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
+
+        // Misc
+        api.bind(BossBar.BossBarFactory.class, () -> AllayBossBar::new);
 
         api.implement("allay");
         log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev() + " " + GitProperties.getBuildVersion(), AllayAPI.API_VERSION));

@@ -1,6 +1,9 @@
 package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.bossbar.BossBar;
+import org.allaymc.api.bossbar.BossBarColor;
+import org.allaymc.api.bossbar.BossBarStyle;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
@@ -29,11 +32,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author daoge_cmd
  */
 public class GameTestCommand extends SimpleCommand {
+
+    protected final BossBar bossBar = BossBar.create();
+
     public GameTestCommand() {
         super("gametest", TrKeys.M_GAMETEST_DESCRIPTION);
         aliases.add("gt");
@@ -321,6 +328,54 @@ public class GameTestCommand extends SimpleCommand {
                     item.setLore(lore);
                     player.notifyItemInHandChange();
                     player.sendText("Lore is set");
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("bb")
+                .key("show")
+                .exec((context, player) -> {
+                    bossBar.addViewer(player);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .up()
+                .key("hide")
+                .exec((context, player) -> {
+                    bossBar.removeViewer(player);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .up()
+                .key("settitle")
+                .str("title")
+                .exec((context, player) -> {
+                    bossBar.setTitle(context.getResult(2));
+                    return context.success();
+                }, SenderType.PLAYER)
+                .up(2)
+                .key("setprogress")
+                .floatNum("progress")
+                .exec((context, player) -> {
+                    bossBar.setProgress(context.getResult(2));
+                    return context.success();
+                }, SenderType.PLAYER)
+                .up(2)
+                .key("setcolor")
+                .enums("color", BossBarColor.class)
+                .exec((context, player) -> {
+                    bossBar.setColor(BossBarColor.valueOf(((String) context.getResult(2)).toUpperCase()));
+                    return context.success();
+                }, SenderType.PLAYER)
+                .up(2)
+                .key("setstyle")
+                .enums("style", BossBarStyle.class)
+                .exec((context, player) -> {
+                    bossBar.setStyle(BossBarStyle.valueOf(((String) context.getResult(2)).toUpperCase()));
+                    return context.success();
+                }, SenderType.PLAYER)
+                .up(2)
+                .key("setdarkensky")
+                .bool("darkensky")
+                .exec((context, player) -> {
+                    bossBar.setDarkenSky(context.getResult(2));
                     return context.success();
                 }, SenderType.PLAYER);
     }

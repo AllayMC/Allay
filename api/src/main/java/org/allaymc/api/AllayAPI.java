@@ -2,6 +2,7 @@ package org.allaymc.api;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.bossbar.BossBar;
 import org.allaymc.api.command.selector.EntitySelectorAPI;
 import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.command.tree.CommandTree;
@@ -155,6 +156,9 @@ public final class AllayAPI {
         requireImpl(EntitySelectorAPI.class, EntitySelectorAPI.API::set);
         requireImpl(CommandTree.CommandTreeFactory.class, CommandTree.FACTORY::set);
         requireImpl(CommandNodeFactory.class, CommandNodeFactory.FACTORY::set);
+
+        // Misc
+        requireImpl(BossBar.BossBarFactory.class, BossBar.FACTORY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {}
