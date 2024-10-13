@@ -32,6 +32,10 @@ public class AllayBossBar implements BossBar {
 
     @Override
     public void addViewer(EntityPlayer viewer) {
+        if (viewers.contains(viewer)) {
+            return;
+        }
+
         viewers.add(viewer);
         var pk = new BossEventPacket();
         pk.setBossUniqueEntityId(viewer.getRuntimeId());
@@ -46,6 +50,10 @@ public class AllayBossBar implements BossBar {
 
     @Override
     public void removeViewer(EntityPlayer viewer) {
+        if (!viewers.contains(viewer)) {
+            return;
+        }
+
         viewers.remove(viewer);
         var pk = new BossEventPacket();
         pk.setBossUniqueEntityId(viewer.getRuntimeId());
