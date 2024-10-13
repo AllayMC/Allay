@@ -26,9 +26,9 @@ public interface Scheduler {
     void tick();
 
     /**
-     * Stop the scheduler.
+     * Shutdown the scheduler.
      */
-    void stop();
+    void shutdown();
 
     /**
      * Run a task later.

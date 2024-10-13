@@ -64,7 +64,7 @@ public class AllayScheduler implements Scheduler {
     }
 
     @Override
-    public void stop() {
+    public void shutdown() {
         queue.forEach(this::cancelTask);
         queue.clear();
     }

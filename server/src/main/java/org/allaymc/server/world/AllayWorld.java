@@ -265,6 +265,7 @@ public class AllayWorld implements World {
 
     public void shutdown() {
         isRunning.set(false);
+        scheduler.shutdown();
         dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());
         saveWorldData();
         worldStorage.shutdown();

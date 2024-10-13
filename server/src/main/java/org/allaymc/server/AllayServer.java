@@ -222,6 +222,7 @@ public final class AllayServer implements Server {
     private void shutdownReally() {
         // Shutdown network server to prevent new client connecting to the server
         networkServer.shutdown();
+        scheduler.shutdown();
 
         var event = new ServerStopEvent();
         event.call();
