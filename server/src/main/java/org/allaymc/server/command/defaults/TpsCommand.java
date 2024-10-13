@@ -21,7 +21,7 @@ public class TpsCommand extends SimpleCommand {
                 .key("tps")
                 .optional()
                 .exec((context, player) -> {
-                    player.sendText(TextFormat.GREEN + "TPS: " + player.getLocation().dimension().getWorld().getTps());
+                    player.sendText(TextFormat.GREEN + "TPS: " + player.getLocation().dimension().getWorld().getTPS());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()

@@ -46,7 +46,7 @@ public final class GameLoop {
         return getMSPT() / (1000f / loopCountPerSec);
     }
 
-    public float getTps() {
+    public float getTPS() {
         float sum = 0;
         int count = tickSummary.length;
         for (float tick : tickSummary) {

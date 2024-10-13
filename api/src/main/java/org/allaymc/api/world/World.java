@@ -2,7 +2,6 @@ package org.allaymc.api.world;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scheduler.Scheduler;
-import org.allaymc.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -35,7 +34,7 @@ public interface World {
      *
      * @return the TPS of the world.
      */
-    float getTps();
+    float getTPS();
 
     /**
      * Get the MSPT of the world.

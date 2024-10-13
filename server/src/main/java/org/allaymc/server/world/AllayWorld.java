@@ -200,8 +200,8 @@ public class AllayWorld implements World {
     }
 
     @Override
-    public float getTps() {
-        return gameLoop.getTps();
+    public float getTPS() {
+        return gameLoop.getTPS();
     }
 
     @Override
