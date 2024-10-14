@@ -23,7 +23,7 @@ jobs:
     steps:
       # Support for ipv6
       - name: Setup WARP
-        uses: fscarmen/warp-on-actions@v1.1
+        uses: fscarmen/warp-on-actions@v1.2
         if: contains(github.ref_name, 'master')
         with:
           stack: dual
