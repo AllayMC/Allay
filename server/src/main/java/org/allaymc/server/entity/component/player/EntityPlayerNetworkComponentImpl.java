@@ -537,9 +537,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             RESOURCES_PACK_STACK_PACKET = new ResourcePackStackPacket();
 
             var forceResourcePacks = Server.SETTINGS.resourcePackSettings().forceResourcePacks();
+            var allowClientResourcePacks = Server.SETTINGS.resourcePackSettings().allowClientResourcePacks();
             RESOURCE_PACKS_INFO_PACKET.setForcedToAccept(forceResourcePacks);
 
-            RESOURCES_PACK_STACK_PACKET.setForcedToAccept(forceResourcePacks);
+            RESOURCES_PACK_STACK_PACKET.setForcedToAccept(forceResourcePacks && !allowClientResourcePacks);
             // Just left a '*' here, if we put in an exact game version,
             // it is possible that client won't send back ResourcePackClientResponsePacket(packIds=[*], status=COMPLETED)
             RESOURCES_PACK_STACK_PACKET.setGameVersion("*");

@@ -232,6 +232,10 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("force-resource-packs")
         private boolean forceResourcePacks = false;
 
+        @Comment("If set to true, the client resource packs will be allowed")
+        @CustomKey("allow-client-resource-packs")
+        private boolean allowClientResourcePacks = false;
+
         // TODO: URL packs configuration
     }
 
