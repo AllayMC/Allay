@@ -339,7 +339,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             if (newChunk == null) {
                 // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
                 // moving to an unloaded chunk will result in the loss of the entity
-                log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
+                log.warn("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
                 return false;
             }
 

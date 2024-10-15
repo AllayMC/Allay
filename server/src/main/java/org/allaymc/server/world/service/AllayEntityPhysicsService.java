@@ -501,6 +501,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             baseComponent.broadcastMoveToViewers(newLoc, false);
             return true;
         } else {
+            // Entity is moving into unloaded chunk, and we need to reset the motion
+            // to prevent the entity from moving into unloaded chunk continuously
+            entity.setMotion(0, 0, 0);
             return false;
         }
     }
