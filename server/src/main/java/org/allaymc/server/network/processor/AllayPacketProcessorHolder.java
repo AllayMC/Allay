@@ -55,6 +55,7 @@ public class AllayPacketProcessorHolder implements PacketProcessorHolder {
         holder.registerProcessor(new EmoteListPacketProcessor());
         holder.registerProcessor(new ServerboundLoadingScreenPacketProcessor());
         holder.registerProcessor(new SetPlayerInventoryOptionsPacketProcessor());
+        holder.registerProcessor(new BossEventPacketProcessor());
     }
 
     public PacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
