@@ -10,8 +10,7 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author daoge_cmd
@@ -39,7 +38,7 @@ public class BlockPropertyValuesNode extends BaseNode {
         }
 
         BlockType<?> blockType = context.getResult(context.getCurrentResultIndex() - 1);
-        var properties = new ArrayList<BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
+        var propertyValues = new HashMap<BlockPropertyType<?>, BlockPropertyType.BlockPropertyValue<?, ?, ?>>();
         for (var propertyStr : AllayStringUtils.fastSplit(substring, ",")) {
             var split = AllayStringUtils.fastTwoPartSplit(propertyStr, "=", "");
             var key = removeQuote(split[0]);
@@ -56,10 +55,14 @@ public class BlockPropertyValuesNode extends BaseNode {
                 context.addError("%" + TrKeys.M_COMMANDS_BLOCKSTATE_VALUEERROR, key + "=" + value);
                 return false;
             }
-            properties.add(propertyValue);
+            propertyValues.put(propertyType, propertyValue);
         }
 
-        context.putResult(properties);
+        for (var propertyValue : blockType.getDefaultState().getPropertyValues().values()) {
+            propertyValues.putIfAbsent(propertyValue.getPropertyType(), propertyValue);
+        }
+
+        context.putResult(new ArrayList<>(propertyValues.values()));
         context.popArg();
         return true;
     }
