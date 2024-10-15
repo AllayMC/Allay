@@ -16,10 +16,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
-import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
-import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
-import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
+import org.allaymc.server.block.component.event.*;
 import org.allaymc.server.block.type.BlockLootTable;
 import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Manager;
@@ -107,6 +104,11 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         manager.callEvent(new CBlockOnReplaceEvent(currentBlockState, newBlockState, placementInfo));
+    }
+
+    @Override
+    public void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new CBlockAfterNeighborLayerReplaceEvent(currentBlockState, newBlockState, placementInfo));
     }
 
     @Override

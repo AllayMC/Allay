@@ -110,6 +110,18 @@ public interface BlockBaseComponent extends BlockComponent {
     void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
+     * Called when a neighbor layer block is replaced.
+     * <pr>
+     * For example, if a water block is in layer 1 and layer 0 is replaced with air,
+     * then the water block's onNeighborLayerReplace() method will be called.
+     *
+     * @param currentBlockState The block that is being replaced.
+     * @param newBlockState     The block that is replacing the current block.
+     * @param placementInfo     The player placement info, can be null.
+     */
+    void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
+
+    /**
      * Called when a block is broken by non-creative game mode player.
      *
      * @param blockState The block that was broken.

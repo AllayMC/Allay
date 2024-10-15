@@ -104,21 +104,21 @@ public class AllayDimension implements Dimension {
         var xIndex = x & 15;
         var zIndex = z & 15;
         var oldBlockState = chunk.getBlockState(xIndex, y, zIndex, layer);
-        if (oldBlockState.getBlockType() == BlockTypes.WATER && blockState.getBlockStateData().canContainLiquid()) {
-            // If the old block is water and the new block can contain liquid,
-            // we need to move water to layer 1
-            setBlockState(x, y, z, BlockTypes.WATER.getDefaultState(), 1);
-        }
 
         var blockPos = new Position3i(x, y, z, this);
+        var oldBlockStateWithPos = new BlockStateWithPos(oldBlockState, blockPos, layer);
         if (callBlockBehavior) {
-            blockState.getBehavior().onPlace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
-            oldBlockState.getBehavior().onReplace(new BlockStateWithPos(oldBlockState, blockPos, layer), blockState, placementInfo);
+            blockState.getBehavior().onPlace(oldBlockStateWithPos, blockState, placementInfo);
+            oldBlockState.getBehavior().onReplace(oldBlockStateWithPos, blockState, placementInfo);
         }
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
 
         if (update) updateAround(x, y, z);
         if (send) chunk.sendChunkPacket(Dimension.createUpdateBlockPacket(blockState, x, y, z, layer));
+
+        if (callBlockBehavior) {
+            chunk.getBlockState(xIndex, y, zIndex, layer == 0 ? 1 : 0).getBehavior().afterNeighborLayerReplace(oldBlockStateWithPos, blockState, placementInfo);
+        }
     }
 
     @Override
@@ -148,12 +148,7 @@ public class AllayDimension implements Dimension {
                 usedItem, player
         );
 
-        if (getBlockState(x, y, z, 1).getBlockType() == BlockTypes.WATER) {
-            // If layer 1 has water, move it to layer 0
-            setBlockState(x, y, z, BlockTypes.WATER.getDefaultState());
-        } else {
-            setBlockState(x, y, z, AIR.getDefaultState());
-        }
+        setBlockState(x, y, z, AIR.getDefaultState());
 
         if (player != null) player.exhaust(0.005f);
 

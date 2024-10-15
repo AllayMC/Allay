@@ -1024,7 +1024,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockWaterBehavior.class)
                 .vanillaBlock(BlockId.WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
-                .setBlockBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(BlockWaterBaseComponentImpl::new)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_WATER = AllayBlockType
