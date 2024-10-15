@@ -17,6 +17,10 @@ public class ServerSettingsRequestProcessor extends PacketProcessor<ServerSettin
         // Geyser: fixes https://bugs.mojang.com/browse/MCPE-94012 because of the delay
         player.getWorld().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
             var serverSettingForm = player.getServerSettingForm();
+            if (serverSettingForm.right() == null) {
+                return false;
+            }
+
             var pk = new ServerSettingsResponsePacket();
             pk.setFormId(serverSettingForm.left());
             pk.setFormData(serverSettingForm.right().toJson());
