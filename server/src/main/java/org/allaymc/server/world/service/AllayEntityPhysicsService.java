@@ -496,9 +496,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         newLoc = event.getTo();
 
-        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).broadcastMoveToViewers(newLoc, false);
-        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setLocationAndCheckChunk(newLoc);
-        return true;
+        var baseComponent = entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER);
+        if (baseComponent.setLocationAndCheckChunk(newLoc)) {
+            baseComponent.broadcastMoveToViewers(newLoc, false);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

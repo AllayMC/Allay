@@ -321,18 +321,28 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return willBeSpawnedNextTick;
     }
 
-    public void setLocationAndCheckChunk(Location3fc newLoc) {
-        checkChunk(this.location, newLoc);
-        setLocation(newLoc, true);
+    public boolean setLocationAndCheckChunk(Location3fc newLoc) {
+        if (checkChunk(this.location, newLoc)) {
+            setLocation(newLoc, true);
+            return true;
+        }
+        return false;
     }
 
-    protected void checkChunk(Location3fc oldLoc, Location3fc newLoc) {
+    protected boolean checkChunk(Location3fc oldLoc, Location3fc newLoc) {
         var oldChunkX = (int) oldLoc.x() >> 4;
         var oldChunkZ = (int) oldLoc.z() >> 4;
         var newChunkX = (int) newLoc.x() >> 4;
         var newChunkZ = (int) newLoc.z() >> 4;
         if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
-            // Current chunk changed
+            var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
+            if (newChunk == null) {
+                // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
+                // moving to an unloaded chunk will result in the loss of the entity
+                log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
+                return false;
+            }
+
             Chunk oldChunk = null;
             if (this.location.dimension != null) {
                 oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
@@ -343,28 +353,22 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 }
             }
 
-            var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-            if (newChunk != null) {
-                ((AllayChunk) newChunk).addEntity(thisEntity);
-                Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
-                Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
-                samePlayers.retainAll(oldChunkPlayers);
-                for (var player : oldChunkPlayers) {
-                    if (!samePlayers.contains(player) && player != thisEntity) {
-                        despawnFrom(player);
-                    }
+            ((AllayChunk) newChunk).addEntity(thisEntity);
+            Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
+            Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
+            samePlayers.retainAll(oldChunkPlayers);
+            for (var player : oldChunkPlayers) {
+                if (!samePlayers.contains(player) && player != thisEntity) {
+                    despawnFrom(player);
                 }
-                for (var player : newChunk.getPlayerChunkLoaders()) {
-                    if (!samePlayers.contains(player) && player != thisEntity) {
-                        spawnTo(player);
-                    }
+            }
+            for (var player : newChunk.getPlayerChunkLoaders()) {
+                if (!samePlayers.contains(player) && player != thisEntity) {
+                    spawnTo(player);
                 }
-            } else {
-                // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
-                // moving to an unloaded chunk will result in the loss of the entity
-                log.warn("New chunk {} {} is null while moving entity!", newChunkX, newChunkZ);
             }
         }
+        return true;
     }
 
 
@@ -398,6 +402,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected void teleportInDimension(Location3fc target) {
         // Ensure that the new chunk is loaded
         target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
+        // This method should always return true because we have loaded the chunk
         setLocationAndCheckChunk(target);
         broadcastMoveToViewers(target, true);
     }
