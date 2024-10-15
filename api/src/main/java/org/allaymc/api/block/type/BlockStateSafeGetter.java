@@ -93,9 +93,11 @@ public final class BlockStateSafeGetter {
             // Add missing properties
             var updatedStates = updatedNbt.getCompound("states");
             var updatedStatesBuilder = updatedStates.toBuilder();
-            for (var entry : blockType.getProperties().entrySet()) {
-                if (updatedStatesBuilder.containsKey(entry.getKey())) continue;
-                updatedStatesBuilder.put(entry.getKey(), entry.getValue().createDefaultValue().getSerializedValue());
+            for (var entry : blockType.getDefaultState().getPropertyValues().entrySet()) {
+                if (updatedStatesBuilder.containsKey(entry.getKey().getName())) {
+                    continue;
+                }
+                updatedStatesBuilder.put(entry.getKey().getName(), entry.getValue().getSerializedValue());
             }
             updatedStates = updatedStatesBuilder.build();
 
