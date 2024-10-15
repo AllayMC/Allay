@@ -3,6 +3,7 @@ package org.allaymc.api.client.skin;
 import it.unimi.dsi.fastutil.io.FastByteArrayOutputStream;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.cloudburstmc.protocol.bedrock.data.skin.*;
 import org.jose4j.json.internal.json_simple.JSONObject;
@@ -48,7 +49,7 @@ public class Skin {
     private boolean premium;
     private boolean persona;
     private boolean capeOnClassic;
-    private boolean trusted = false;
+    private boolean trusted = Server.SETTINGS.resourcePackSettings().trustAllSkins();
     private boolean primaryUser = true;
 
     private List<SkinAnimation> skinAnimations = new ArrayList<>();

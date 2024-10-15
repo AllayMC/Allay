@@ -236,6 +236,10 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("allow-client-resource-packs")
         private boolean allowClientResourcePacks = false;
 
+        @Comment("If set to true, all skins will be marked as trusted")
+        @CustomKey("trust-all-skins")
+        private boolean trustAllSkins = true;
+
         // TODO: URL packs configuration
     }
 
