@@ -35,6 +35,7 @@
   "command.gc.description": "Perform a JVM garbage collection immediately",
   "command.gc.completed": "Freed %1 MB of memory",
   "command.world.description": "Manage worlds",
+  "command.world.list": "Loaded worlds:",
   "command.world.unknown": "Unknown world: %1",
   "command.world.unknowndim": "Unknown dimension: %1",
   "command.world.success": "You are teleported to world %1:%2",

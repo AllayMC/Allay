@@ -23,7 +23,7 @@ public class WorldCommand extends SimpleCommand {
         tree.getRoot()
                 .key("list")
                 .exec(context -> {
-                    context.addOutput("Available world list: ");
+                    context.addOutput(TrKeys.A_COMMAND_WORLD_LIST);
                     for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
                         context.addOutput(
                                 "- " +

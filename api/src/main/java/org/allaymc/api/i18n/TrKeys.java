@@ -36,6 +36,8 @@ public interface TrKeys {
 
     String A_COMMAND_WORLD_DESCRIPTION = "allay:command.world.description";
 
+    String A_COMMAND_WORLD_LIST = "allay:command.world.list";
+
     String A_COMMAND_WORLD_SUCCESS = "allay:command.world.success";
 
     String A_COMMAND_WORLD_UNKNOWN = "allay:command.world.unknown";

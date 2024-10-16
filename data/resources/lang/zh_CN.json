@@ -15,6 +15,7 @@
   "allay:command.tps.description": "获取当前世界的TPS或MSPT",
   "allay:command.version.description": "查询服务器版本信息",
   "allay:command.world.description": "管理世界",
+  "allay:command.world.list": "已加载世界:",
   "allay:command.world.success": "已传送到世界 %1:%2",
   "allay:command.world.unknown": "未知世界: %1",
   "allay:command.world.unknowndim": "未知维度: %1",

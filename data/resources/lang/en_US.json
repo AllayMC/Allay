@@ -15,6 +15,7 @@
   "allay:command.tps.description": "Show TPS or MSPT of the current world",
   "allay:command.version.description": "Query server version information",
   "allay:command.world.description": "Manage worlds",
+  "allay:command.world.list": "Loaded worlds:",
   "allay:command.world.success": "You are teleported to world %1:%2",
   "allay:command.world.unknown": "Unknown world: %1",
   "allay:command.world.unknowndim": "Unknown dimension: %1",
