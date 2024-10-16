@@ -7,6 +7,7 @@ import org.allaymc.api.command.tree.CommandNodeFactory;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Difficulty;
@@ -133,6 +134,11 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     @Override
     public CommandNode blockType(String name, CommandNode parent, BlockType<?> defaultValue) {
         return new BlockTypeNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode entityType(String name, CommandNode parent, EntityType<?> defaultValue) {
+        return new EntityTypeNode(name, parent, defaultValue);
     }
 
     @Override

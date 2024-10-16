@@ -15,7 +15,10 @@ public class EnchantmentNode extends EnumNode {
     protected static final String[] ENCHANTMENT_STR_ARRAY =
             Registries.ENCHANTMENTS.getContent().m1().values()
                     .stream()
-                    .map(type -> type.getIdentifier().path())
+                    .<String>mapMulti((type, consumer) -> {
+                        consumer.accept(type.getIdentifier().toString());
+                        consumer.accept(type.getIdentifier().path());
+                    })
                     .toArray(String[]::new);
 
     public EnchantmentNode(String name, CommandNode parent, EnchantmentType defaultValue) {
@@ -24,6 +27,6 @@ public class EnchantmentNode extends EnumNode {
 
     @Override
     protected Object argToResult(String arg) {
-        return Registries.ENCHANTMENTS.getByK2(new Identifier(DEFAULT_NAMESPACE, arg));
+        return Registries.ENCHANTMENTS.getByK2(arg.contains(":") ? new Identifier(arg) : new Identifier(DEFAULT_NAMESPACE, arg));
     }
 }

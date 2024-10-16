@@ -6,6 +6,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Difficulty;
@@ -290,6 +291,17 @@ public interface CommandNodeFactory {
      * @return a new {@code CommandNode} for the block type argument.
      */
     CommandNode blockType(String name, CommandNode parent, BlockType<?> defaultValue);
+
+    /**
+     * Creates a command node for an entity type argument.
+     *
+     * @param name         the name of the argument.
+     * @param parent       the parent node.
+     * @param defaultValue the default entity type.
+     *
+     * @return a new {@code CommandNode} for the entity type argument.
+     */
+    CommandNode entityType(String name, CommandNode parent, EntityType<?> defaultValue);
 
     /**
      * Creates a command node for a difficulty argument.

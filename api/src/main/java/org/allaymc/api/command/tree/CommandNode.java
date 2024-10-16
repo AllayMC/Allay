@@ -9,6 +9,7 @@ import org.allaymc.api.command.SenderType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Difficulty;
@@ -817,6 +818,29 @@ public interface CommandNode {
      */
     default CommandNode blockType(String name, BlockType<?> defaultValue) {
         return addLeaf(getFactory().blockType(name, this, defaultValue));
+    }
+
+    /**
+     * Adds an entity type parameter to this command node with a default value of null.
+     *
+     * @param name The name of the parameter.
+     *
+     * @return This {@code CommandNode}.
+     */
+    default CommandNode entityType(String name) {
+        return entityType(name, null);
+    }
+
+    /**
+     * Adds an entity type parameter to this command node with a default value.
+     *
+     * @param name         The name of the parameter.
+     * @param defaultValue The default value of the parameter.
+     *
+     * @return This {@code CommandNode}.
+     */
+    default CommandNode entityType(String name, EntityType<?> defaultValue) {
+        return addLeaf(getFactory().entityType(name, this, defaultValue));
     }
 
     /**

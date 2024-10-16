@@ -68,6 +68,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new WeatherCommand());
         register(new ClearCommand());
         register(new KillCommand());
+        register(new SummonCommand());
     }
 
     @Override

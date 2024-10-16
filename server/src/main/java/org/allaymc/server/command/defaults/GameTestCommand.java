@@ -108,34 +108,6 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("spawn")
-                .str("entityType")
-                .intNum("count", 1)
-                .optional()
-                .exec((context, player) -> {
-                    var entityType = Registries.ENTITIES.get(new Identifier((String) context.getResult(1)));
-                    int count = context.getResult(2);
-                    if (entityType == null) {
-                        context.addOutput(TextFormat.RED + "Unknown entity type!");
-                        return context.fail();
-                    }
-
-                    for (var i = 1; i <= count; i++) {
-                        var dim = player.getLocation().dimension();
-                        var loc = player.getLocation();
-                        var entity = entityType.createEntity(
-                                EntityInitInfo.builder()
-                                        .dimension(dim)
-                                        .loc(loc)
-                                        .build()
-                        );
-                        dim.getEntityService().addEntity(entity);
-                    }
-
-                    context.addOutput("Spawned " + count + " " + entityType.getIdentifier().toString());
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
                 .key("setblock")
                 .str("blockType")
                 .exec((context, player) -> {
