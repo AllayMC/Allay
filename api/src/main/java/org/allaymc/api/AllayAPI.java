@@ -29,7 +29,6 @@ import java.util.function.Supplier;
  */
 @Slf4j
 @Getter
-@ApiStatus.Internal
 public final class AllayAPI {
 
     /**
@@ -65,6 +64,7 @@ public final class AllayAPI {
      * @throws MissingImplementationException If there are interface which are not been implemented
      */
     @SuppressWarnings("unchecked")
+    @ApiStatus.Internal
     public void implement(String coreName) throws MissingImplementationException {
         if (!i18nSet) throw new MissingImplementationException("Missing i18n implementation!");
         for (var entry : bindings.entrySet()) {
@@ -86,6 +86,7 @@ public final class AllayAPI {
         implemented = true;
     }
 
+    @ApiStatus.Internal
     public <T> void requireImpl(Class<T> api) {
         requireImpl(api, null);
     }
@@ -95,11 +96,13 @@ public final class AllayAPI {
      *
      * @param api the api
      */
+    @ApiStatus.Internal
     public <T> void requireImpl(Class<T> api, Consumer<T> apiInstanceConsumer) {
         bindings.put(api, null);
         if (apiInstanceConsumer != null) consumers.put(api, apiInstanceConsumer);
     }
 
+    @ApiStatus.Internal
     public <T> void bind(Class<T> api, Supplier<T> supplier) {
         bind(api, supplier, null);
     }
@@ -112,12 +115,14 @@ public final class AllayAPI {
      * @param afterBound the consumer which will be called after the api instance has been bound.
      * @param <T> the type of the api class.
      */
+    @ApiStatus.Internal
     public <T> void bind(Class<T> api, Supplier<T> bindingAction, Consumer<T> afterBound) {
         Objects.requireNonNull(api);
         Objects.requireNonNull(bindingAction);
         bindings.put(api, new ApiBindingAction<>(bindingAction, afterBound));
     }
 
+    @ApiStatus.Internal
     public void bindI18n(I18n i18nImpl) {
         Objects.requireNonNull(i18nImpl);
         I18n.I18N.set(i18nImpl);
@@ -134,6 +139,7 @@ public final class AllayAPI {
      * @return the implementation instance of the specific interface
      * @throws RuntimeException if the interface has not been implemented
      */
+    @ApiStatus.Internal
     public <T> T getAPIInstance(Class<T> api) {
         if (!implemented)
             throw new RuntimeException("AllayAPI::getAPIInstance cannot be called before it been implemented");
