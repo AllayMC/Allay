@@ -54,8 +54,8 @@ public class ClearCommand extends SimpleCommand {
                                             container.getItemStacks()
                                                     .stream()
                                                     .filter(itemStack -> itemStack.getItemType() != ItemTypes.AIR && (itemType == null || itemStack.getItemType() == itemType) && (data == -1 || itemStack.getMeta() == data))
-                                                    .toList()
-                                                    .size())
+                                                    .mapToInt(ItemStack::getCount)
+                                                    .sum())
                                     .sum();
                             context.addOutput(TrKeys.M_COMMANDS_CLEAR_TESTING, target.getOriginName(), count);
                             return context.success(count);
