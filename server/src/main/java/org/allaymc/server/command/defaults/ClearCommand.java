@@ -10,7 +10,6 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -36,8 +35,13 @@ public class ClearCommand extends SimpleCommand {
                 .intNum("maxCount", -1)
                 .optional()
                 .exec((context, sender) -> {
-                    var targets = new ArrayList<EntityPlayer>();
-                    targets.addAll(context.getResult(0) != null ? context.getResult(0) : List.of(sender));
+                    List<EntityPlayer> targets = context.getResult(0);
+                    if (targets != null && targets.isEmpty()) {
+                        context.addNoTargetMatchError();
+                        return context.fail();
+                    } else if (targets == null) {
+                        targets = List.of(sender);
+                    }
 
                     ItemType<?> itemType = context.getResult(1);
                     int data = context.getResult(2);
@@ -46,6 +50,8 @@ public class ClearCommand extends SimpleCommand {
                         maxCount = Integer.MAX_VALUE;
                     }
 
+                    boolean success = true;
+                    int status = 0;
                     for (var target : targets) {
                         var containers = Stream.of(FullContainerType.PLAYER_INVENTORY, FullContainerType.OFFHAND, FullContainerType.ARMOR).map(target::getContainer).toList();
                         if (maxCount == 0) {
@@ -58,7 +64,7 @@ public class ClearCommand extends SimpleCommand {
                                                     .sum())
                                     .sum();
                             context.addOutput(TrKeys.M_COMMANDS_CLEAR_TESTING, target.getOriginName(), count);
-                            return context.success(count);
+                            status = count;
                         } else {
                             int c = maxCount;
                             for (var container : containers) {
@@ -81,11 +87,12 @@ public class ClearCommand extends SimpleCommand {
                             if (maxCount != c) {
                                 context.addOutput(TrKeys.M_COMMANDS_CLEAR_SUCCESS, target.getOriginName(), maxCount - c);
                             } else {
-                                context.addOutput(TrKeys.M_COMMANDS_CLEAR_FAILURE_NO_ITEMS, target.getOriginName());
+                                context.addError("%" + TrKeys.M_COMMANDS_CLEAR_FAILURE_NO_ITEMS, target.getOriginName());
+                                success = false;
                             }
                         }
                     }
-                    return context.success();
+                    return success ? context.success(status) : context.fail();
                 }, SenderType.PLAYER);
     }
 

@@ -1,5 +1,6 @@
 package org.allaymc.api.entity.component.attribute;
 
+import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -134,6 +135,9 @@ public interface EntityAttributeComponent extends EntityComponent {
 
     /**
      * Kill the entity.
+     * <p>
+     * Compared to {@link EntityBaseComponent#despawn()} method, this method will set the health
+     * of this entity to zero, rather than remove the entity directly.
      */
     default void kill() {
         setHealth(0);

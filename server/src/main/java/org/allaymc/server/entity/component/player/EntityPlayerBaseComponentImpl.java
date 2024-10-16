@@ -641,11 +641,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public String getCommandSenderName() {
-        return thisPlayer.getDisplayName();
-    }
-
-    @Override
     public void applyEntityEvent(EntityEventType event, int data) {
         var packet = new EntityEventPacket();
         packet.setRuntimeEntityId(getRuntimeId());

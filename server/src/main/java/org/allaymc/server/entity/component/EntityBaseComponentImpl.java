@@ -203,6 +203,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void checkDead() {
+        // TODO: move these code to EntityAttributeComponentImpl
         if (attributeComponent == null || !attributeComponent.supportHealth()) return;
         if (attributeComponent.getHealth() == 0 && !dead) {
             onDie();
