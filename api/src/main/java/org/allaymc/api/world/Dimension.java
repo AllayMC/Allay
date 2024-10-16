@@ -64,7 +64,7 @@ public interface Dimension {
         updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
         updateBlockPacket.setDefinition(newBlockState.toNetworkBlockDefinitionRuntime());
         updateBlockPacket.setDataLayer(layer);
-        updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL);
+        updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
         return updateBlockPacket;
     }
 
