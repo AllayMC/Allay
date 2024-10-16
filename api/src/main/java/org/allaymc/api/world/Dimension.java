@@ -1,5 +1,6 @@
 package org.allaymc.api.world;
 
+import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
@@ -22,6 +23,7 @@ import org.allaymc.api.world.service.BlockUpdateService;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.api.world.service.EntityService;
+import org.apache.commons.lang3.function.TriFunction;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
@@ -346,12 +348,12 @@ public interface Dimension {
         var startZ = z >> 4;
         var endZ = (z + sizeZ - 1) >> 4;
         for (int chunkX = startX; chunkX <= endX; chunkX++) {
+            var cX = chunkX << 4;
+            var localStartX = Math.max(x - cX, 0);
+            var localEndX = Math.min(x + sizeX - cX, 16);
             for (int chunkZ = startZ; chunkZ <= endZ; chunkZ++) {
-                var cX = chunkX << 4;
                 var cZ = chunkZ << 4;
-                var localStartX = Math.max(x - cX, 0);
                 var localStartZ = Math.max(z - cZ, 0);
-                var localEndX = Math.min(x + sizeX - cX, 16);
                 var localEndZ = Math.min(z + sizeZ - cZ, 16);
 
                 var chunk = getChunkService().getChunk(chunkX, chunkZ);
@@ -382,6 +384,52 @@ public interface Dimension {
             }
         }
         return blockStates;
+    }
+
+    /**
+     * Set the block states at the specified region.
+     *
+     * @param x the start x coordinate of the region.
+     * @param y the start y coordinate of the region.
+     * @param z the start z coordinate of the region.
+     * @param sizeX the size of the region in the x-axis.
+     * @param sizeY the size of the region in the y-axis.
+     * @param sizeZ the size of the region in the z-axis.
+     * @param layer the layer which the block will be set
+     * @param blockStateSupplier the block state supplier. The supplier will be called with the global x, y, z coordinates of the pos, and it should return the block state to set.
+     */
+    default void setBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer, TriFunction<Integer, Integer, Integer, BlockState> blockStateSupplier) {
+        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) return;
+
+        var startX = x >> 4;
+        var endX = (x + sizeX - 1) >> 4;
+        var startZ = z >> 4;
+        var endZ = (z + sizeZ - 1) >> 4;
+        for (int chunkX = startX; chunkX <= endX; chunkX++) {
+            var cX = chunkX << 4;
+            var localStartX = Math.max(x - cX, 0);
+            var localEndX = Math.min(x + sizeX - cX, 16);
+            for (int chunkZ = startZ; chunkZ <= endZ; chunkZ++) {
+                var cZ = chunkZ << 4;
+                var localStartZ = Math.max(z - cZ, 0);
+                var localEndZ = Math.min(z + sizeZ - cZ, 16);
+
+                var chunk = getChunkService().getChunk(chunkX, chunkZ);
+                if (chunk != null) {
+                    chunk.batchProcess(c -> {
+                        for (int localX = localStartX; localX < localEndX; localX++) {
+                            for (int globalY = y; globalY < y + sizeY; globalY++) {
+                                for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
+                                    var globalX = cX + localX;
+                                    var globalZ = cZ + localZ;
+                                    c.setBlockState(localX, globalY, localZ, blockStateSupplier.apply(globalX, globalY, globalZ), layer);
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
     }
 
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z) {
