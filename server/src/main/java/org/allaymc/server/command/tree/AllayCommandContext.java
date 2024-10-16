@@ -56,7 +56,12 @@ public class AllayCommandContext implements CommandContext {
 
     @Override
     public <T> T getResult(int index) {
-        return (T) results.get(index);
+        var result = results.get(index);
+        try {
+            return (T) result;
+        } catch (ClassCastException e) {
+            throw new CommandParseException("Result type mismatch! Expected: " + result.getClass().getSimpleName());
+        }
     }
 
     @Override
