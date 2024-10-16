@@ -34,7 +34,7 @@ public class EffectCommand extends SimpleCommand {
                             player.removeEffect(effectType);
                             context.addOutput(
                                     TrKeys.M_COMMANDS_EFFECT_SUCCESS_REMOVED,
-                                    effectType.getIdentifier().path(), // TODO: I18N
+                                    effectType.getIdentifier().path(),
                                     player.getDisplayName()
                             );
                         });
@@ -48,7 +48,7 @@ public class EffectCommand extends SimpleCommand {
                         player.addEffect(effectType.createInstance(amplifier, time, !hideParticles));
                         context.addOutput(
                                 TrKeys.M_COMMANDS_EFFECT_SUCCESS,
-                                effectType.getIdentifier().path(), // TODO: I18N
+                                effectType.getIdentifier().path(),
                                 amplifier,
                                 player.getDisplayName(),
                                 seconds

@@ -25,13 +25,16 @@ public class WorldCommand extends SimpleCommand {
                 .exec(context -> {
                     context.addOutput("Available world list: ");
                     for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
-                        context.addOutput("- " + TextFormat.GREEN + world.getWorldData().getName());
-                        context.addOutput(" - " + TextFormat.YELLOW +
-                                          world.getDimensions()
-                                                  .values()
-                                                  .stream()
-                                                  .map(dim -> String.valueOf(dim.getDimensionInfo().dimensionId()))
-                                                  .collect(Collectors.joining(", "))
+                        context.addOutput(
+                                "- " +
+                                TextFormat.GREEN + world.getWorldData().getName() +
+                                TextFormat.YELLOW + "[" +
+                                world.getDimensions()
+                                        .values()
+                                        .stream()
+                                        .map(dim -> String.valueOf(dim.getDimensionInfo().dimensionId()))
+                                        .collect(Collectors.joining(", "))
+                                + "]"
                         );
                     }
                     return context.success();
