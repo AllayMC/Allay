@@ -58,6 +58,7 @@ public class ClearCommand extends SimpleCommand {
                                                     .size())
                                     .sum();
                             context.addOutput(TrKeys.M_COMMANDS_CLEAR_TESTING, target.getOriginName(), count);
+                            return context.success(count);
                         } else {
                             int c = maxCount;
                             for (var container : containers) {
