@@ -16,6 +16,10 @@ public interface TrKeys {
 
     String A_CACHE_LOAD = "allay:cache.load";
 
+    String A_COMMAND_GC_COMPLETED = "allay:command.gc.completed";
+
+    String A_COMMAND_GC_DESCRIPTION = "allay:command.gc.description";
+
     String A_COMMAND_GENERIC_SENDER_NOTENTITY = "allay:command.generic.sender.notEntity";
 
     String A_COMMAND_GENERIC_SENDER_NOTPLAYER = "allay:command.generic.sender.notPlayer";
@@ -29,6 +33,14 @@ public interface TrKeys {
     String A_COMMAND_TPS_DESCRIPTION = "allay:command.tps.description";
 
     String A_COMMAND_VERSION_DESCRIPTION = "allay:command.version.description";
+
+    String A_COMMAND_WORLD_DESCRIPTION = "allay:command.world.description";
+
+    String A_COMMAND_WORLD_SUCCESS = "allay:command.world.success";
+
+    String A_COMMAND_WORLD_UNKNOWN = "allay:command.world.unknown";
+
+    String A_COMMAND_WORLD_UNKNOWNDIM = "allay:command.world.unknowndim";
 
     String A_CREATIVEITEM_LOADED = "allay:creativeitem.loaded";
 

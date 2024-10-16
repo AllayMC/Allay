@@ -2,6 +2,7 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.utils.TextFormat;
 
 import static java.lang.Runtime.getRuntime;
@@ -12,8 +13,7 @@ import static org.allaymc.api.utils.MathUtils.round;
  */
 public class GCCommand extends SimpleCommand {
     public GCCommand() {
-        // TODO: i18n
-        super("gc", "Perform a JVM garbage collection immediately");
+        super("gc", TrKeys.A_COMMAND_GC_DESCRIPTION);
     }
 
     @Override
