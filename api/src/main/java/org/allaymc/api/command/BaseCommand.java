@@ -62,10 +62,12 @@ public abstract class BaseCommand implements Command {
 
     private void prepareNetworkData() {
         // Aliases
-        Map<String, Set<CommandEnumConstraint>> values = new LinkedHashMap<>();
-        for (var alias : aliases) values.put(alias, Collections.emptySet());
-        values.put(name, Collections.emptySet());
-        networkAliasesData = new CommandEnumData(name + "CommandAliases", values, false);
+        if (!aliases.isEmpty()) {
+            Map<String, Set<CommandEnumConstraint>> values = new LinkedHashMap<>();
+            for (var alias : aliases) values.put(alias, Collections.emptySet());
+            values.put(name, Collections.emptySet());
+            networkAliasesData = new CommandEnumData(name + "CommandAliases", values, false);
+        }
 
         // Overloads
         if (!overloads.isEmpty()) {

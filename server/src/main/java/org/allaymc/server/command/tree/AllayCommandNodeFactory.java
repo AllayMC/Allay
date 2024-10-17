@@ -67,8 +67,8 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     }
 
     @Override
-    public CommandNode enums(String name, CommandNode parent, String enumName, String defaultValue, String[] enums) {
-        return new EnumNode(name, parent, defaultValue, enumName, enums);
+    public CommandNode enums(String name, CommandNode parent, String enumName, String defaultValue, String[] values) {
+        return new EnumNode(name, parent, defaultValue, enumName, values);
     }
 
     @Override
@@ -149,5 +149,10 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     @Override
     public CommandNode blockPropertyValues(String name, CommandNode parent, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue) {
         return new BlockPropertyValuesNode(name, parent, defaultValue);
+    }
+
+    @Override
+    public CommandNode cmd(String name, CommandNode parent, String defaultValue) {
+        return new CmdNode(name, parent, defaultValue);
     }
 }

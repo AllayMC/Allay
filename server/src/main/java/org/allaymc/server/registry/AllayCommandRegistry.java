@@ -70,6 +70,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new KillCommand());
         register(new SummonCommand());
         register(new SetMaxPlayersCommand());
+        register(new ExecuteCommand());
     }
 
     @Override

@@ -140,11 +140,11 @@ public interface CommandNodeFactory {
      * @param parent       the parent node.
      * @param enumName     the name of the enum.
      * @param defaultValue the default enum value as a string.
-     * @param enums        the available enum options.
+     * @param values        the available enum options.
      *
      * @return a new {@code CommandNode} for the enum argument.
      */
-    CommandNode enums(String name, CommandNode parent, String enumName, String defaultValue, String[] enums);
+    CommandNode enums(String name, CommandNode parent, String enumName, String defaultValue, String[] values);
 
     /**
      * Creates a command node for an enum argument, ignoring case.
@@ -324,4 +324,15 @@ public interface CommandNodeFactory {
      * @return a new {@code CommandNode} for block property values.
      */
     CommandNode blockPropertyValues(String name, CommandNode parent, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue);
+
+    /**
+     * Creates a command node for a command argument.
+     *
+     * @param name         the name of the argument.
+     * @param parent       the parent node.
+     * @param defaultValue the default command.
+     *
+     * @return a new {@code CommandNode} for the command argument.
+     */
+    CommandNode cmd(String name, CommandNode parent, String defaultValue);
 }

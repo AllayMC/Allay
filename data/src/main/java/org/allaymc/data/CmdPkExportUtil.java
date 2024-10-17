@@ -8,6 +8,7 @@ import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.JSONUtils;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodecHelper;
+import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
 import java.io.InputStream;
@@ -23,6 +24,7 @@ public class CmdPkExportUtil {
     @SneakyThrows
     public static void main(String[] args) {
         BedrockCodecHelper helper = CODEC.createHelper();
+        helper.setEncodingSettings(EncodingSettings.UNLIMITED);
         try (InputStream resourceAsStream = CmdPkExportUtil.class.getClassLoader().getResourceAsStream("available_commands_packet.bin")) {
             Preconditions.checkNotNull(resourceAsStream);
             ByteBuf byteBuf = Unpooled.wrappedBuffer(resourceAsStream.readAllBytes());

@@ -27,6 +27,11 @@ public class RemainArgNode extends BaseNode {
     }
 
     @Override
+    public int getMaxArgCost() {
+        return Short.MAX_VALUE;
+    }
+
+    @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
         data.setType(CommandParam.MESSAGE_ROOT);

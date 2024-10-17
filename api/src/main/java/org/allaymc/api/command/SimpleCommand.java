@@ -30,8 +30,7 @@ public abstract class SimpleCommand extends BaseCommand {
     public abstract void prepareCommandTree(CommandTree tree);
 
     protected void buildOverloadsFromCommandTree() {
-        var leaves = commandTree.getLeaves();
-        for (var leaf : leaves) {
+        for (var leaf : commandTree.getLeaves()) {
             var paramArray = new CommandParamData[leaf.depth()];
             var node = leaf;
             var index = leaf.depth() - 1;

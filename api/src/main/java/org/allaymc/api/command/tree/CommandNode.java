@@ -78,9 +78,7 @@ public interface CommandNode {
      *
      * @return The maximum number of arguments.
      */
-    default int getMaxArgCost() {
-        return getOnRedirect() != null ? Short.MAX_VALUE : 1;
-    }
+    int getMaxArgCost();
 
     /**
      * Set a default value for this node and marks it as optional.
@@ -209,7 +207,7 @@ public interface CommandNode {
     List<CommandNode> getLeaves();
 
     /**
-     * Adds a leaf node to this command node.
+     * Add a leaf node to this command node.
      *
      * @param leaf The leaf node to add.
      *
@@ -264,7 +262,7 @@ public interface CommandNode {
     Consumer<CommandContext> getOnRedirect();
 
     /**
-     * Adds a parameter option to this command node.
+     * Add a parameter option to this command node.
      *
      * @param option The parameter option to add.
      *
@@ -307,7 +305,7 @@ public interface CommandNode {
     CommandParamData toNetworkData();
 
     /**
-     * Adds a key parameter to this command node with a default value.
+     * Add a key parameter to this command node with a default value.
      *
      * @param key          The key of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -319,7 +317,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a key parameter to this command node with an empty default value.
+     * Add a key parameter to this command node with an empty default value.
      *
      * @param key The key of the parameter.
      *
@@ -330,7 +328,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a string parameter to this command node with a default value.
+     * Add a string parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -342,7 +340,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a string parameter to this command node with an empty default value.
+     * Add a string parameter to this command node with an empty default value.
      *
      * @param name The name of the parameter.
      *
@@ -353,7 +351,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a short integer parameter to this command node with a default value.
+     * Add a short integer parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -365,7 +363,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a short integer parameter to this command node with a default value of zero.
+     * Add a short integer parameter to this command node with a default value of zero.
      *
      * @param name The name of the parameter.
      *
@@ -376,7 +374,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an integer parameter to this command node with a default value.
+     * Add an integer parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -388,7 +386,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an integer parameter to this command node with a default value of zero.
+     * Add an integer parameter to this command node with a default value of zero.
      *
      * @param name The name of the parameter.
      *
@@ -399,7 +397,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a long integer parameter to this command node with a default value.
+     * Add a long integer parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -411,7 +409,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a long integer parameter to this command node with a default value of zero.
+     * Add a long integer parameter to this command node with a default value of zero.
      *
      * @param name The name of the parameter.
      *
@@ -422,7 +420,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a float parameter to this command node with a default value.
+     * Add a float parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -434,7 +432,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a float parameter to this command node with a default value of zero.
+     * Add a float parameter to this command node with a default value of zero.
      *
      * @param name The name of the parameter.
      *
@@ -445,7 +443,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a double parameter to this command node with a default value.
+     * Add a double parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -457,7 +455,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a double parameter to this command node with a default value of zero.
+     * Add a double parameter to this command node with a default value of zero.
      *
      * @param name The name of the parameter.
      *
@@ -468,7 +466,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a boolean parameter to this command node with a default value.
+     * Add a boolean parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -480,7 +478,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a boolean parameter to this command node with a default value of false.
+     * Add a boolean parameter to this command node with a default value of false.
      *
      * @param name The name of the parameter.
      *
@@ -491,46 +489,46 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an enum parameter to this command node with a default value and allowed values.
+     * Add an enum parameter to this command node with a default value and allowed values.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
-     * @param enums        The allowed values for the parameter.
+     * @param values        The allowed values for the parameter.
      *
      * @return This {@code CommandNode}.
      */
-    default CommandNode enums(String name, String defaultValue, String[] enums) {
-        return addLeaf(getFactory().enums(name, this, defaultValue, enums));
+    default CommandNode enums(String name, String defaultValue, String[] values) {
+        return addLeaf(getFactory().enums(name, this, defaultValue, values));
     }
 
     /**
-     * Adds an enum parameter to this command node with a default value, allowed values, and an enum name.
+     * Add an enum parameter to this command node with a default value, allowed values, and an enum name.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
      * @param enumName     The name of the enum.
-     * @param enums        The allowed values for the parameter.
+     * @param values        The allowed values for the parameter.
      *
      * @return This {@code CommandNode}.
      */
-    default CommandNode enums(String name, String defaultValue, String enumName, String[] enums) {
-        return addLeaf(getFactory().enums(name, this, enumName, defaultValue, enums));
+    default CommandNode enums(String name, String defaultValue, String enumName, String[] values) {
+        return addLeaf(getFactory().enums(name, this, enumName, defaultValue, values));
     }
 
     /**
-     * Adds an enum parameter to this command node with allowed values and an empty default value.
+     * Add an enum parameter to this command node with allowed values and an empty default value.
      *
      * @param name  The name of the parameter.
-     * @param enums The allowed values for the parameter.
+     * @param values The allowed values for the parameter.
      *
      * @return This {@code CommandNode}.
      */
-    default CommandNode enums(String name, String... enums) {
-        return enums(name, "", enums);
+    default CommandNode enums(String name, String... values) {
+        return enums(name, "", values);
     }
 
     /**
-     * Adds an enum parameter to this command node based on the specified enum class.
+     * Add an enum parameter to this command node based on the specified enum class.
      *
      * @param name      The name of the parameter.
      * @param enumClass The class of the enum type.
@@ -548,7 +546,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an enum parameter to this command node with a default value and allowed values, ignoring case.
+     * Add an enum parameter to this command node with a default value and allowed values, ignoring case.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -561,7 +559,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an enum parameter to this command node with a default value, allowed values, and an enum name, ignoring case.
+     * Add an enum parameter to this command node with a default value, allowed values, and an enum name, ignoring case.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -575,7 +573,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a message parameter to this command node with an empty default value.
+     * Add a message parameter to this command node with an empty default value.
      *
      * @param name The name of the parameter.
      *
@@ -586,7 +584,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a message parameter to this command node with a default value.
+     * Add a message parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -598,7 +596,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a remaining parameters node to this command node with an empty default value.
+     * Add a remaining parameters node to this command node with an empty default value.
      *
      * @param name The name of the parameter.
      *
@@ -609,7 +607,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a remaining parameters node to this command node with a default value.
+     * Add a remaining parameters node to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -621,7 +619,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a target parameter to this command node with an empty default value.
+     * Add a target parameter to this command node with an empty default value.
      *
      * @param name The name of the parameter.
      *
@@ -632,7 +630,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a target parameter to this command node with a default value.
+     * Add a target parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -644,7 +642,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a player target parameter to this command node with an empty default value.
+     * Add a player target parameter to this command node with an empty default value.
      *
      * @param name The name of the parameter.
      *
@@ -655,7 +653,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a player target parameter to this command node with a default value.
+     * Add a player target parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -667,7 +665,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a game mode parameter to this command node with a default name of "gameMode".
+     * Add a game mode parameter to this command node with a default name of "gameMode".
      *
      * @return This {@code CommandNode}.
      */
@@ -676,7 +674,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a game mode parameter to this command node with a specified name.
+     * Add a game mode parameter to this command node with a specified name.
      *
      * @param name The name of the parameter.
      *
@@ -687,7 +685,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a game mode parameter to this command node with a specified name and default value.
+     * Add a game mode parameter to this command node with a specified name and default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -699,7 +697,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a position parameter to this command node with a default value of null.
+     * Add a position parameter to this command node with a default value of {@code null}.
      *
      * @param name The name of the parameter.
      *
@@ -710,7 +708,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a position parameter to this command node with a default value.
+     * Add a position parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -722,7 +720,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a wildcard target parameter to this command node with an empty default value.
+     * Add a wildcard target parameter to this command node with an empty default value.
      *
      * @param name The name of the parameter.
      *
@@ -733,7 +731,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a wildcard target parameter to this command node with a default value.
+     * Add a wildcard target parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -745,7 +743,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an enchantment parameter to this command node with a default value of null.
+     * Add an enchantment parameter to this command node with a default value of {@code null}.
      *
      * @param name The name of the parameter.
      *
@@ -756,7 +754,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an enchantment parameter to this command node with a default value.
+     * Add an enchantment parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -768,7 +766,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an effect parameter to this command node with a default value of null.
+     * Add an effect parameter to this command node with a default value of {@code null}.
      *
      * @param name The name of the parameter.
      *
@@ -779,7 +777,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an effect parameter to this command node with a default value.
+     * Add an effect parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -791,7 +789,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an item type parameter to this command node with a default value of null.
+     * Add an item type parameter to this command node with a default value of {@code null}.
      *
      * @param name The name of the parameter.
      *
@@ -802,7 +800,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an item type parameter to this command node with a default value.
+     * Add an item type parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -814,7 +812,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a block type parameter to this command node with a default value of null.
+     * Add a block type parameter to this command node with a default value of {@code null}.
      *
      * @param name The name of the parameter.
      *
@@ -825,7 +823,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a block type parameter to this command node with a default value.
+     * Add a block type parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -837,7 +835,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an entity type parameter to this command node with a default value of null.
+     * Add an entity type parameter to this command node with a default value of {@code null}.
      *
      * @param name The name of the parameter.
      *
@@ -848,7 +846,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds an entity type parameter to this command node with a default value.
+     * Add an entity type parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -860,7 +858,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a difficulty parameter to this command node with a default value of null.
+     * Add a difficulty parameter to this command node with a default value of {@code null}.
      *
      * @param name The name of the parameter.
      *
@@ -871,7 +869,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a difficulty parameter to this command node with a default value.
+     * Add a difficulty parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -883,7 +881,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a block property values parameter to this command node with an empty default value.
+     * Add a block property values parameter to this command node with an empty default value.
      *
      * @param name The name of the parameter.
      *
@@ -894,7 +892,7 @@ public interface CommandNode {
     }
 
     /**
-     * Adds a block property values parameter to this command node with a default value.
+     * Add a block property values parameter to this command node with a default value.
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
@@ -903,5 +901,28 @@ public interface CommandNode {
      */
     default CommandNode blockPropertyValues(String name, List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> defaultValue) {
         return addLeaf(getFactory().blockPropertyValues(name, this, defaultValue));
+    }
+
+    /**
+     * Add a command parameter to this command node with a default value of {@code null}.
+     *
+     * @param name The name of the parameter.
+     *
+     * @return This {@code CommandNode}.
+     */
+    default CommandNode cmd(String name) {
+        return cmd(name, "");
+    }
+
+    /**
+     * Add a command parameter to this command node with a default value of {@code null}.
+     *
+     * @param name The name of the parameter.
+     * @param defaultValue The default value of the parameter.
+     *
+     * @return This {@code CommandNode}.
+     */
+    default CommandNode cmd(String name, String defaultValue) {
+        return addLeaf(getFactory().cmd(name, this, defaultValue));
     }
 }

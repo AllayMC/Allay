@@ -207,6 +207,11 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
+    public int getMaxArgCost() {
+        return getOnRedirect() != null ? Short.MAX_VALUE : 1;
+    }
+
+    @Override
     public CommandNode redirect(Consumer<CommandContext> onRedirect) {
         if (executor != null) {
             throw new IllegalArgumentException("executor has been set, cannot set onRedirect");
