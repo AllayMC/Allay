@@ -13,6 +13,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -174,5 +176,25 @@ public class CommandTreeTest {
         assertEquals(new Vector3f(19 + 1.5f, 19 + 2.5f, 810 + 3.5f), dest);
         tree.parse(mockSender, new String[]{"19", "19", "810"});
         assertEquals(new Vector3f(19, 19, 810), dest);
+    }
+
+    @Test
+    void testRedirect() {
+        var tree = AllayCommandTree.create(mockCmd);
+        AtomicInteger v1 = new AtomicInteger();
+        AtomicInteger v2 = new AtomicInteger();
+        tree.getRoot()
+                .key("v1")
+                .intNum("value")
+                .redirect(context -> v1.set(context.getResult(1)))
+                .key("v2")
+                .intNum("value")
+                .redirect(context -> v2.set(context.getResult(1)));
+        tree.parse(mockSender, new String[]{"v1", "1", "v2", "2"});
+        assertEquals(1, v1.get());
+        assertEquals(2, v2.get());
+        tree.parse(mockSender, new String[]{"v2", "1", "v1", "2"});
+        assertEquals(2, v1.get());
+        assertEquals(1, v2.get());
     }
 }

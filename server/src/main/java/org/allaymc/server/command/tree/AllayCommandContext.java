@@ -2,6 +2,7 @@ package org.allaymc.server.command.tree;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.exception.CommandParseException;
@@ -18,6 +19,7 @@ import java.util.Map;
 @Getter
 public class AllayCommandContext implements CommandContext {
     protected Command command;
+    @Setter
     protected CommandSender sender;
     protected int currentArgIndex = 0;
     protected int currentResultIndex = 0;
@@ -52,6 +54,12 @@ public class AllayCommandContext implements CommandContext {
     @Override
     public void putResult(Object result) {
         results.put(currentResultIndex++, result);
+    }
+
+    @Override
+    public void clearResults() {
+        results.clear();
+        currentResultIndex = 0;
     }
 
     @Override

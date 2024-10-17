@@ -49,12 +49,21 @@ public class AllayCommandTree implements CommandTree {
 
     protected CommandResult parse0(CommandNode node, CommandContext context) {
         if (node.isLeaf()) {
-            if (context.haveUnhandledArg()) {
-                context.addSyntaxError();
-                return context.fail();
-            }
+            var executor = node.getExecutor();
+            var onRedirect = node.getOnRedirect();
 
-            return node.applyExecutor(context);
+            if (executor != null) {
+                if (context.haveUnhandledArg()) {
+                    context.addSyntaxError();
+                    return context.fail();
+                }
+
+                return executor.apply(context);
+            } else if (onRedirect != null) {
+                onRedirect.accept(context);
+                context.clearResults();
+                node = root;
+            }
         }
 
         var nextNode = node.nextNode(context);

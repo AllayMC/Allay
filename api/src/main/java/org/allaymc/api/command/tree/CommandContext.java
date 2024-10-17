@@ -33,6 +33,13 @@ public interface CommandContext {
     CommandSender getSender();
 
     /**
+     * Set the sender of the command.
+     *
+     * @param sender the sender of the command.
+     */
+    void setSender(CommandSender sender);
+
+    /**
      * Get the current argument index.
      *
      * @return the current argument index.
@@ -109,6 +116,11 @@ public interface CommandContext {
      * @param result the result to put.
      */
     void putResult(Object result);
+
+    /**
+     * Clear the results.
+     */
+    void clearResults();
 
     /**
      * Add an output.

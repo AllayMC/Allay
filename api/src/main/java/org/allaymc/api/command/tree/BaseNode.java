@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.SenderType;
-import org.allaymc.api.command.exception.CommandParseException;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamOption;
 
@@ -15,6 +14,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -29,7 +29,10 @@ public abstract class BaseNode implements CommandNode {
     protected CommandNode optionalLeaf;
     protected boolean optional = false;
     protected String name;
+    @Getter
     protected Function<CommandContext, CommandResult> executor;
+    @Getter
+    protected Consumer<CommandContext> onRedirect;
     @Getter
     protected Object defaultValue;
     @Getter
@@ -102,7 +105,7 @@ public abstract class BaseNode implements CommandNode {
     public CommandNode up(int count) {
         Preconditions.checkArgument(count >= 1);
         if (count > depth) {
-            throw new CommandParseException("ParamNode.up(count): count is bigger than depth");
+            throw new IllegalArgumentException("ParamNode.up(count): count is bigger than depth");
         }
         CommandNode node = this;
         for (int i = 0; i < count; i++) {
@@ -188,6 +191,9 @@ public abstract class BaseNode implements CommandNode {
 
     @Override
     public <SENDER_TYPE extends CommandSender> CommandNode exec(BiFunction<CommandContext, SENDER_TYPE, CommandResult> biExecutor, SenderType<SENDER_TYPE> senderType) {
+        if (onRedirect != null) {
+            throw new IllegalArgumentException("onRedirect has been set, cannot set redirector");
+        }
         this.executor = context -> {
             var sender = context.getSender();
             if (senderType.validate(sender)) {
@@ -201,8 +207,14 @@ public abstract class BaseNode implements CommandNode {
     }
 
     @Override
-    public CommandResult applyExecutor(CommandContext context) {
-        return executor.apply(context);
+    public CommandNode redirect(Consumer<CommandContext> onRedirect) {
+        if (executor != null) {
+            throw new IllegalArgumentException("executor has been set, cannot set onRedirect");
+        }
+        this.onRedirect = onRedirect;
+        setMaxArgCostBranch(getMaxArgCost());
+        updateMaxArgCostBranch(this);
+        return root();
     }
 
     @Override

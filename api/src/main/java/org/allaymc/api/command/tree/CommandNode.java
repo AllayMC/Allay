@@ -20,6 +20,7 @@ import org.joml.Vector3fc;
 
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static org.allaymc.api.command.tree.CommandNodeFactory.getFactory;
@@ -78,7 +79,7 @@ public interface CommandNode {
      * @return The maximum number of arguments.
      */
     default int getMaxArgCost() {
-        return 1;
+        return getOnRedirect() != null ? Short.MAX_VALUE : 1;
     }
 
     /**
@@ -239,13 +240,28 @@ public interface CommandNode {
     }
 
     /**
-     * Applies the executor for this node to the given context.
+     * Redirect to the root node.
+     * <p>
+     * This is useful for commands like /execute, which has multiple subcommands.
      *
-     * @param context The command context.
-     *
-     * @return The {@code CommandResult} after execution.
+     * @param onRedirect Called when redirecting.
+     * @return The root node.
      */
-    CommandResult applyExecutor(CommandContext context);
+    CommandNode redirect(Consumer<CommandContext> onRedirect);
+
+    /**
+     * Get the executor of this node.
+     *
+     * @return The executor function, or {@code null} if not set.
+     */
+    Function<CommandContext, CommandResult> getExecutor();
+
+    /**
+     * Get the onRedirect function of this node.
+     *
+     * @return The onRedirect function, or {@code null} if not set.
+     */
+    Consumer<CommandContext> getOnRedirect();
 
     /**
      * Adds a parameter option to this command node.
