@@ -35,8 +35,15 @@ public record DimensionInfo(
         };
     }
 
-    public static DimensionInfo fromName(Identifier name) {
-        return switch (name.toString()) {
+    public static DimensionInfo fromName(String name) {
+        if (!name.startsWith(Identifier.DEFAULT_NAMESPACE)) {
+            name = Identifier.DEFAULT_NAMESPACE + ":" + name;
+        }
+        return fromIdentifier(new Identifier(name));
+    }
+
+    public static DimensionInfo fromIdentifier(Identifier identifier) {
+        return switch (identifier.toString()) {
             case "minecraft:overworld" -> OVERWORLD;
             case "minecraft:nether" -> NETHER;
             case "minecraft:the_end" -> THE_END;

@@ -7,6 +7,7 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.world.DimensionInfo;
 
 import java.util.stream.Collectors;
 
@@ -42,25 +43,26 @@ public class WorldCommand extends SimpleCommand {
                 .root()
                 .key("tp")
                 .str("world")
-                .intNum("dimId")
+                .enums("dimension", "overworld", "nether", "the_end")
                 .optional()
                 .exec((context, entity) -> {
                     String worldName = context.getResult(1);
-                    int dimId = context.getResult(2);
+                    String dimName = context.getResult(2);
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
                     if (world == null) {
                         context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWN, worldName);
                         return context.fail();
                     }
 
-                    var dim = world.getDimension(dimId);
-                    if (dim == null) {
-                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWNDIM, dimId);
+                    var dimInfo = DimensionInfo.fromName(dimName);
+                    if (dimInfo == null) {
+                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWNDIM, dimName);
                         return context.fail();
                     }
+                    var dim = world.getDimension(dimInfo.dimensionId());
 
                     entity.teleport(new Location3f(0, 64, 0, dim));
-                    context.addOutput(TrKeys.A_COMMAND_WORLD_SUCCESS, worldName, dimId);
+                    context.addOutput(TrKeys.A_COMMAND_WORLD_SUCCESS, worldName, dimName);
                     return context.success();
                 }, SenderType.ENTITY);
     }
