@@ -33,7 +33,7 @@ public class WorldCommand extends SimpleCommand {
                                 world.getDimensions()
                                         .values()
                                         .stream()
-                                        .map(dim -> String.valueOf(dim.getDimensionInfo().dimensionId()))
+                                        .map(dim -> dim.getDimensionInfo().toString())
                                         .collect(Collectors.joining(", "))
                                 + "]"
                         );

@@ -36,17 +36,10 @@ public record DimensionInfo(
     }
 
     public static DimensionInfo fromName(String name) {
-        if (!name.startsWith(Identifier.DEFAULT_NAMESPACE)) {
-            name = Identifier.DEFAULT_NAMESPACE + ":" + name;
-        }
-        return fromIdentifier(new Identifier(name));
-    }
-
-    public static DimensionInfo fromIdentifier(Identifier identifier) {
-        return switch (identifier.toString()) {
-            case "minecraft:overworld" -> OVERWORLD;
-            case "minecraft:nether" -> NETHER;
-            case "minecraft:the_end" -> THE_END;
+        return switch (name) {
+            case "overworld" -> OVERWORLD;
+            case "nether" -> NETHER;
+            case "the_end" -> THE_END;
             default -> null;
         };
     }
@@ -57,5 +50,15 @@ public record DimensionInfo(
 
     public int maxSectionY() {
         return this.maxHeight >> 4;
+    }
+
+    @Override
+    public String toString() {
+        return switch (this.dimensionId) {
+            case 0 -> "overworld";
+            case 1 -> "nether";
+            case 2 -> "the_end";
+            default -> null;
+        };
     }
 }
