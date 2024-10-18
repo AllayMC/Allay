@@ -148,6 +148,12 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("remove-unneeded-chunk-cycle")
         private int removeUnneededChunkCycle = 1200;
 
+        @Comment("If set to true, the server will load chunks around the spawn point")
+        @Comment("Which will reduce the time on joining server")
+        @Comment("However, this will increase the server's memory usage")
+        @CustomKey("load-spawn-point-chunks")
+        private boolean loadSpawnPointChunks = true;
+
         public enum ChunkSendingStrategy {
             ASYNC,
             SYNC

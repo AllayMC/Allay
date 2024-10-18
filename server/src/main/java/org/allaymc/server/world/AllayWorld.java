@@ -6,8 +6,11 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
+import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.scheduler.Scheduler;
@@ -17,6 +20,8 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
+import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
@@ -153,19 +158,19 @@ public class AllayWorld implements World {
         isFirstTick = true;
 
         // Check spawn point
-        var spawnPoint = worldData.getSpawnPoint();
-        if (isSafeStandingPos(new Position3i(spawnPoint, getOverWorld()))) {
-            return;
+        if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), getOverWorld()))) {
+            var newSpawnPoint = getOverWorld().findSuitablePosAround(this::isSafeStandingPos, 0, 0, 32);
+            if (newSpawnPoint == null) {
+                log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
+                newSpawnPoint = new Vector3i(0, getOverWorld().getHeight(0, 0) + 1, 0);
+            }
+            worldData.setSpawnPoint(newSpawnPoint);
         }
-        var overworld = getOverWorld();
-        var newSpawnPoint = overworld.findSuitablePosAround(this::isSafeStandingPos, 0, 0, 32);
-        if (newSpawnPoint == null) {
-            log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
-            newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
-        }
-        worldData.setSpawnPoint(newSpawnPoint);
 
-        // Load chunk around spawn point TODO
+        if (Server.SETTINGS.worldSettings().loadSpawnPointChunks()) {
+            // Add spawn point chunk loader
+            getOverWorld().getChunkService().addChunkLoader(new SpawnPointChunkLoader());
+        }
     }
 
     protected boolean isSafeStandingPos(Position3ic pos) {
@@ -366,4 +371,39 @@ public class AllayWorld implements World {
     }
 
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}
+
+    protected class SpawnPointChunkLoader implements ChunkLoader {
+
+        @Override
+        public Location3fc getLocation() {
+            var spawnPoint = worldData.getSpawnPoint();
+            return new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
+        }
+
+        @Override
+        public boolean isLoaderActive() {
+            return true;
+        }
+
+        @Override
+        public int getChunkLoadingRadius() {
+            return Server.SETTINGS.worldSettings().viewDistance();
+        }
+
+        @Override
+        public void setChunkLoadingRadius(int radius) {}
+
+        @Override
+        public int getChunkTrySendCountPerTick() {
+            return Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
+        }
+
+        @Override public void beforeSendChunks() {}
+        @Override public void onChunkInRangeSend(Chunk chunk) {}
+        @Override public void spawnEntity(Entity entity) {}
+        @Override public void despawnEntity(Entity entity) {}
+        @Override public void onChunkOutOfRange(Set<Long> chunkHashes) {}
+        @Override public void sendPacket(BedrockPacket packet) {}
+        @Override public void sendPacketImmediately(BedrockPacket packet) {}
+    }
 }
