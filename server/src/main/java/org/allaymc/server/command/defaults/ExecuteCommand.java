@@ -2,7 +2,6 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.SimpleCommand;
-import org.allaymc.api.command.data.CommonEnums;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.i18n.TrKeys;
