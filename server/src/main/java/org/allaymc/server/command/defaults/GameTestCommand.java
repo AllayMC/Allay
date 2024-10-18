@@ -2,17 +2,13 @@ package org.allaymc.server.command.defaults;
 
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.bossbar.BossBar;
-import org.allaymc.api.bossbar.BossBarColor;
-import org.allaymc.api.bossbar.BossBarStyle;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
-import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
@@ -32,7 +28,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author daoge_cmd
@@ -123,15 +118,6 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("cleare")
-                .exec((context, player) -> {
-                    player.getLocation().dimension().getEntities().values().stream()
-                            .filter(entity -> !(entity instanceof EntityPlayer))
-                            .forEach(EntityBaseComponent::despawn);
-
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
                 .key("dumpcmd")
                 .exec((context, player) -> {
                     var cmdPk = Registries.COMMANDS.encodeAvailableCommandsPacketFor(player);
@@ -212,15 +198,6 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 })
                 .root()
-                .key("applymotion")
-                .floatNum("mx")
-                .floatNum("my")
-                .floatNum("mz")
-                .exec((context, player) -> {
-                    player.setMotion(new Vector3f(context.getResult(1), context.getResult(2), context.getResult(3)));
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
                 .key("reloadblockloottable")
                 .exec(context -> {
                     try {
@@ -300,54 +277,6 @@ public class GameTestCommand extends SimpleCommand {
                     item.setLore(lore);
                     player.notifyItemInHandChange();
                     player.sendText("Lore is set");
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
-                .key("bb")
-                .key("show")
-                .exec((context, player) -> {
-                    bossBar.addViewer(player);
-                    return context.success();
-                }, SenderType.PLAYER)
-                .up()
-                .key("hide")
-                .exec((context, player) -> {
-                    bossBar.removeViewer(player);
-                    return context.success();
-                }, SenderType.PLAYER)
-                .up()
-                .key("settitle")
-                .str("title")
-                .exec((context, player) -> {
-                    bossBar.setTitle(context.getResult(2));
-                    return context.success();
-                }, SenderType.PLAYER)
-                .up(2)
-                .key("setprogress")
-                .floatNum("progress")
-                .exec((context, player) -> {
-                    bossBar.setProgress(context.getResult(2));
-                    return context.success();
-                }, SenderType.PLAYER)
-                .up(2)
-                .key("setcolor")
-                .enums("color", BossBarColor.class)
-                .exec((context, player) -> {
-                    bossBar.setColor(BossBarColor.valueOf(((String) context.getResult(2)).toUpperCase()));
-                    return context.success();
-                }, SenderType.PLAYER)
-                .up(2)
-                .key("setstyle")
-                .enums("style", BossBarStyle.class)
-                .exec((context, player) -> {
-                    bossBar.setStyle(BossBarStyle.valueOf(((String) context.getResult(2)).toUpperCase()));
-                    return context.success();
-                }, SenderType.PLAYER)
-                .up(2)
-                .key("setdarkensky")
-                .bool("darkensky")
-                .exec((context, player) -> {
-                    bossBar.setDarkenSky(context.getResult(2));
                     return context.success();
                 }, SenderType.PLAYER);
     }
