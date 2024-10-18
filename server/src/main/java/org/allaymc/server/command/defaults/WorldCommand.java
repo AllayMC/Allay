@@ -44,7 +44,7 @@ public class WorldCommand extends SimpleCommand {
                 .str("world")
                 .intNum("dimId")
                 .optional()
-                .exec((context, player) -> {
+                .exec((context, entity) -> {
                     String worldName = context.getResult(1);
                     int dimId = context.getResult(2);
                     var world = Server.getInstance().getWorldPool().getWorld(worldName);
@@ -59,9 +59,9 @@ public class WorldCommand extends SimpleCommand {
                         return context.fail();
                     }
 
-                    player.teleport(new Location3f(0, 64, 0, dim));
+                    entity.teleport(new Location3f(0, 64, 0, dim));
                     context.addOutput(TrKeys.A_COMMAND_WORLD_SUCCESS, worldName, dimId);
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.ENTITY);
     }
 }

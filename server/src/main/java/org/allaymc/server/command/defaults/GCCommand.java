@@ -23,7 +23,7 @@ public class GCCommand extends SimpleCommand {
                     var memory = getCurrentMemoryUsage();
                     System.gc();
                     var freedMemory = memory - getCurrentMemoryUsage();
-                    context.getSender().sendText("Memory freed: " + TextFormat.GREEN + freedMemory + " MB");
+                    context.getSender().sendTr(TrKeys.A_COMMAND_GC_COMPLETED, freedMemory);
                     return context.success();
                 });
     }

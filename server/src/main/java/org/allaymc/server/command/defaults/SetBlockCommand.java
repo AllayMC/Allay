@@ -25,7 +25,7 @@ public class SetBlockCommand extends SimpleCommand {
                 .blockType("blockType")
                 .blockPropertyValues("blockPropertyValues")
                 .optional()
-                .exec((context, player) -> {
+                .exec((context, entity) -> {
                     Vector3f pos = context.getResult(0);
                     BlockType<?> blockType = context.getResult(1);
                     List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> blockPropertyValues = context.getResult(2);
@@ -35,9 +35,9 @@ public class SetBlockCommand extends SimpleCommand {
                         context.addError("%" + TrKeys.M_COMMANDS_BLOCKSTATE_INVALIDSTATE, blockType.getIdentifier() + blockPropertyValues.toString());
                         return context.fail();
                     }
-                    player.getDimension().setBlockState(pos, blockState);
+                    entity.getDimension().setBlockState(pos, blockState);
                     context.addOutput(TrKeys.M_COMMANDS_SETBLOCK_SUCCESS);
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.ENTITY);
     }
 }

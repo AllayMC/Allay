@@ -19,12 +19,12 @@ public class WeatherCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .enums("weather", Weather.class)
-                .exec((context, player) -> {
+                .exec(context -> {
                     Weather weather = Weather.valueOf(((String)context.getResult(0)).toUpperCase());
                     if (weather == Weather.CLEAR) {
-                        player.getWorld().clearWeather();
+                        context.getSender().getCmdExecuteLocation().dimension().getWorld().clearWeather();
                     } else {
-                        player.getWorld().addWeather(weather);
+                        context.getSender().getCmdExecuteLocation().dimension().getWorld().addWeather(weather);
                     }
                     context.addOutput(switch (weather) {
                         case CLEAR -> TrKeys.M_COMMANDS_WEATHER_CLEAR;
@@ -32,21 +32,21 @@ public class WeatherCommand extends SimpleCommand {
                         case THUNDER -> TrKeys.M_COMMANDS_WEATHER_THUNDER;
                     });
                     return context.success();
-                }, SenderType.PLAYER)
+                })
                 .root()
                 .key("query")
-                .exec((context, player) -> {
-                    var weathers = player.getWorld().getWeathers();
+                .exec(context -> {
+                    var weathers = context.getSender().getCmdExecuteLocation().dimension().getWorld().getWeathers();
                     if (weathers.contains(Weather.CLEAR)) {
-                        player.sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, "clear");
+                        context.getSender().sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, "clear");
                         return context.success();
                     }
                     if (weathers.contains(Weather.THUNDER)) {
-                        player.sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, "rain and thunder");
+                        context.getSender().sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, "rain and thunder");
                         return context.success();
                     }
-                    player.sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, "rain");
+                    context.getSender().sendTr(TrKeys.M_COMMANDS_WEATHER_QUERY, "rain");
                     return context.success();
-                }, SenderType.PLAYER);
+                });
     }
 }

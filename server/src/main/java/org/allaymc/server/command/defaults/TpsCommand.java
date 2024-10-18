@@ -20,15 +20,15 @@ public class TpsCommand extends SimpleCommand {
         tree.getRoot()
                 .key("tps")
                 .optional()
-                .exec((context, player) -> {
-                    player.sendText(TextFormat.GREEN + "TPS: " + player.getLocation().dimension().getWorld().getTPS());
+                .exec(context -> {
+                    context.getSender().sendText(TextFormat.GREEN + "TPS: " + context.getSender().getCmdExecuteLocation().dimension().getWorld().getTPS());
                     return context.success();
-                }, SenderType.PLAYER)
+                })
                 .root()
                 .key("mspt")
-                .exec((context, player) -> {
-                    player.sendText(TextFormat.GREEN + "MSPT: " + player.getLocation().dimension().getWorld().getMSPT());
+                .exec(context -> {
+                    context.getSender().sendText(TextFormat.GREEN + "MSPT: " + context.getSender().getCmdExecuteLocation().dimension().getWorld().getMSPT());
                     return context.success();
-                }, SenderType.PLAYER);
+                });
     }
 }
