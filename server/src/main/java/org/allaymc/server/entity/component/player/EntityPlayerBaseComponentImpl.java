@@ -89,7 +89,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Dependency
     protected EntityPlayerNetworkComponent networkComponent;
     @Getter
-    protected GameType gameType = GameType.CREATIVE;
+    protected GameType gameType = Server.SETTINGS.genericSettings().defaultGameType();
     @Getter
     protected Skin skin;
     @Getter
