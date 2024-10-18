@@ -278,6 +278,13 @@ public class GameTestCommand extends SimpleCommand {
                     player.notifyItemInHandChange();
                     player.sendText("Lore is set");
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("getheight")
+                .exec((context, player) -> {
+                    var floorLoc = player.getLocation().floor(new Vector3f());
+                    player.sendText("Height is " + player.getDimension().getHeight((int) floorLoc.x, (int) floorLoc.z));
+                    return context.success();
                 }, SenderType.PLAYER);
     }
 }

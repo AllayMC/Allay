@@ -20,7 +20,7 @@ public interface World {
      *
      * @return the thread which the world is running on.
      */
-    Thread getThread();
+    Thread getWorldThread();
 
     /**
      * Get the tick of the world.

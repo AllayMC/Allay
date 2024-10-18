@@ -44,10 +44,7 @@ import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.AuthoritativeMovementMode;
-import org.cloudburstmc.protocol.bedrock.data.ChatRestrictionLevel;
-import org.cloudburstmc.protocol.bedrock.data.GamePublishSetting;
-import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
+import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -265,7 +262,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void initializePlayer() {
         // initializePlayer() method will read all the data in PlayerData except playerNBT
         // To be more exactly, we will validate and set player's current pos and spawn point in this method
-        // And playerNBT will be used in EntityPlayer::loadNBT() in doFirstSpawnPlayer() method
+        // And playerNBT will be used in EntityPlayer::loadNBT() in doFirstSpawn() method
         var playerData = server.getPlayerStorage().readPlayerData(thisPlayer);
         // Validate and set player pos
         Dimension dimension;
@@ -362,24 +359,18 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         );
 
         sendPacket(DeferredData.getAvailableEntityIdentifiersPacket());
-
         sendPacket(DeferredData.getBiomeDefinitionListPacket());
-
         sendPacket(DeferredData.getCreativeContentPacket());
-
         sendPacket(DeferredData.getCraftingDataPacket());
     }
 
     protected void validateAndSetSpawnPoint(PlayerData playerData) {
         Location3ic spawnPoint;
         var spawnWorld = server.getWorldPool().getWorld(playerData.getSpawnPointWorldName());
-        if (spawnWorld == null) {
+        if (spawnWorld == null || spawnWorld.getDimension(playerData.getSpawnPointDimensionId()) == null) {
             // The world where the spawn point is located does not exist
             // Using global spawn point instead
             spawnPoint = server.getWorldPool().getGlobalSpawnPoint();
-            playerData.setSpawnPoint(spawnPoint);
-            playerData.setSpawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName());
-            playerData.setSpawnPointDimensionId(spawnPoint.dimension().getDimensionInfo().dimensionId());
         } else {
             var vec = playerData.getSpawnPoint();
             spawnPoint = new Location3i(vec.x(), vec.y(), vec.z(), spawnWorld.getDimension(playerData.getSpawnPointDimensionId()));

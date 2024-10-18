@@ -14,6 +14,7 @@ import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -850,5 +851,28 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         var currentBlockState = getDimension().getBlockState(loc.x(), loc.y(), loc.z());
         if (currentBlockState != air) return currentBlockState;
         else return getDimension().getBlockState(loc.x(), loc.y() - 1, loc.z());
+    }
+
+    default boolean canStandSafely(Position3ic pos) {
+        return canStandSafely(pos.x(), pos.y(), pos.z(), getDimension());
+    }
+
+    /**
+     * Check if the specified position is a safe standing position.
+     *
+     * @param x the x coordinate.
+     * @param y the y coordinate.
+     * @param z the z coordinate.
+     *
+     * @return {@code true} if the specified position is a safe standing position, otherwise {@code false}.
+     */
+    default boolean canStandSafely(int x, int y, int z, Dimension dimension) {
+        var blockUnder = dimension.getBlockState(x, y - 1, z);
+        var blockTypeUnder = blockUnder.getBlockType();
+        if (!blockTypeUnder.getMaterial().isSolid()) {
+            return false;
+        }
+        return dimension.getBlockState(x, y, z).getBlockType() == BlockTypes.AIR &&
+               dimension.getBlockState(x, y + 1, z).getBlockType() == BlockTypes.AIR;
     }
 }

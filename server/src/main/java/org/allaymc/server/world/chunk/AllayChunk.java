@@ -15,7 +15,6 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
@@ -33,7 +32,7 @@ import java.util.concurrent.locks.StampedLock;
 import java.util.function.Predicate;
 
 /**
- * @author Cool_Loong
+ * @author Cool_Loong | daoge_cmd
  */
 @ThreadSafe
 @Slf4j
@@ -79,21 +78,6 @@ public class AllayChunk implements Chunk {
         if (autoSaveTimer >= Server.SETTINGS.storageSettings().chunkAutoSaveCycle()) {
             worldStorage.writeChunk(this);
             autoSaveTimer = 0;
-        }
-    }
-
-    @Override
-    public short[] getHeightArray() {
-        var stamp = heightAndBiomeLock.tryOptimisticRead();
-        try {
-            for (; ; stamp = heightAndBiomeLock.readLock()) {
-                if (stamp == 0L) continue;
-                var result = unsafeChunk.getHeightArray();
-                if (!heightAndBiomeLock.validate(stamp)) continue;
-                return result;
-            }
-        } finally {
-            if (StampedLock.isReadLockStamp(stamp)) heightAndBiomeLock.unlockRead(stamp);
         }
     }
 

@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.entity.Entity;
@@ -47,6 +48,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final DimensionInfo dimensionInfo;
     @Getter
     protected final ChunkSection[] sections;
+    @Getter
     protected final HeightMap heightMap;
     protected final Map<Long, Entity> entities;
     protected final Map<Integer, BlockEntity> blockEntities;
@@ -164,7 +166,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     public int getHeight(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
-        return this.heightMap.get(x, z) + dimensionInfo.minHeight();
+        return getHeightUnsafe(HeightMap.computeIndex(x, z));
+    }
+
+    protected int getHeightUnsafe(int index) {
+        return this.heightMap.get(index) + dimensionInfo.minHeight();
     }
 
     @Override
@@ -172,7 +178,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
         Preconditions.checkArgument(height >= -512 && height <= 511);
-        this.heightMap.set(x, z, (short) (height - dimensionInfo.minHeight()));
+        setHeightUnsafe(HeightMap.computeIndex(x, z), height);
+    }
+
+    protected void setHeightUnsafe(int index, int height) {
+        this.heightMap.set(index, (short) (height - dimensionInfo.minHeight()));
     }
 
     @Override
@@ -192,11 +202,19 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         var section = this.getSection(sectionY);
         if (section == null) section = this.getOrCreateSection(sectionY);
         section.setBlockState(x, y & 0xf, z, blockState, layer);
-    }
+        if (layer != 0) return;
 
-    @Override
-    public short[] getHeightArray() {
-        return this.heightMap.getHeights();
+        // Update height map
+        var index = HeightMap.computeIndex(x, z);
+        var currentHeight = getHeightUnsafe(index);
+        if (blockState.getBlockType() == BlockTypes.AIR) {
+            // Use >= here because some maps may be broken
+            if (currentHeight >= y) {
+                setHeightUnsafe(index, y - 1);
+            }
+        } else if (currentHeight < y) {
+            setHeightUnsafe(index, y);
+        }
     }
 
     @Override
