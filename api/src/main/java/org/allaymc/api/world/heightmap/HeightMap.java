@@ -3,6 +3,8 @@ package org.allaymc.api.world.heightmap;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 /**
  * HeightMap stores the height of each pos in a chunk.
  *
@@ -14,7 +16,19 @@ public final class HeightMap {
     private final short[] heights;
 
     public HeightMap() {
-        this(new short[256]);
+        this.heights = new short[256];
+        Arrays.fill(this.heights, (short) -1);
+    }
+
+    /**
+     * Compute the index of the specified position.
+     *
+     * @param x the x coordinate of the pos.
+     * @param z the z coordinate of the pos.
+     * @return the index of the pos.
+     */
+    public static int computeIndex(int x, int z) {
+        return (x << 4) | z;
     }
 
     /**
@@ -25,7 +39,17 @@ public final class HeightMap {
      * @return the height of the pos.
      */
     public short get(int x, int z) {
-        return heights[(x << 4) | z];
+        return heights[computeIndex(x, z)];
+    }
+
+    /**
+     * Get the height of the specified position.
+     *
+     * @param index the index of the pos.
+     * @return the height of the pos.
+     */
+    public short get(int index) {
+        return heights[index];
     }
 
     /**
@@ -36,7 +60,17 @@ public final class HeightMap {
      * @param height the height of the pos.
      */
     public void set(int x, int z, short height) {
-        heights[(x << 4) | z] = height;
+        heights[computeIndex(x, z)] = height;
+    }
+
+    /**
+     * Set the height of the specified position.
+     *
+     * @param index the index of the pos.
+     * @param height the height of the pos.
+     */
+    public void set(int index, short height) {
+        heights[index] = height;
     }
 
     /**

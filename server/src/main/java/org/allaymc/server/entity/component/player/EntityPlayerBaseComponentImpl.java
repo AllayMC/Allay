@@ -448,6 +448,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(FullContainerType.ARMOR).saveNBT())
                 .putInt("EnchantmentSeed", enchantmentSeed)
+                .putInt("GameType", gameType.ordinal())
                 .build();
     }
 
@@ -465,6 +466,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(armorNbt)
         );
         nbt.listenForInt("EnchantmentSeed", this::setEnchantmentSeed);
+        nbt.listenForInt("GameType", id -> setGameType(GameType.from(id)));
     }
 
     @Override

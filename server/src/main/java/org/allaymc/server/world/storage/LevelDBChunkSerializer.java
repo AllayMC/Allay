@@ -73,7 +73,7 @@ public class LevelDBChunkSerializer {
                 buffer.writeByte(ChunkSection.LAYER_COUNT);
                 buffer.writeByte(ySection);
                 for (int i = 0; i < ChunkSection.LAYER_COUNT; i++) {
-                    section.blockLayer()[i].writeToStoragePersistent(buffer, BlockState::getBlockStateTag);
+                    section.blockLayers()[i].writeToStoragePersistent(buffer, BlockState::getBlockStateTag);
                 }
                 writeBatch.put(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(chunk.getX(), chunk.getZ(), ySection, chunk.getDimensionInfo()), Utils.convertByteBuf2Array(buffer));
             } finally {
@@ -110,7 +110,7 @@ public class LevelDBChunkSerializer {
                             section = new ChunkSection((byte) ySection, palettes);
                         }
                         for (int layer = 0; layer < layers; layer++) {
-                            section.blockLayer()[layer].readFromStoragePersistent(byteBuf, hash -> {
+                            section.blockLayers()[layer].readFromStoragePersistent(byteBuf, hash -> {
                                 BlockState blockState = Registries.BLOCK_STATE_PALETTE.get(hash);
                                 if (blockState == null) {
                                     log.error("Unknown block state hash: " + hash);
@@ -133,7 +133,7 @@ public class LevelDBChunkSerializer {
         ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
             // Serialize height map
-            for (short height : chunk.getHeightArray()) {
+            for (short height : chunk.getHeightMap().getHeights()) {
                 heightAndBiomesBuffer.writeShortLE(height);
             }
             // Serialize biome
