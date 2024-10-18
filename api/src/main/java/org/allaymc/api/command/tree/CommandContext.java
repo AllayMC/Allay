@@ -11,6 +11,7 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.gamerule.GameRule;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -232,6 +233,13 @@ public interface CommandContext {
      * @return the list of {@link TrContainer} objects.
      */
     List<TrContainer> getOutputs();
+
+    /**
+     * Add a list of translation containers.
+     *
+     * @param outputs the list of translation containers to add.
+     */
+    void addOutputs(Collection<TrContainer> outputs);
 
     /**
      * Return a successful command result.

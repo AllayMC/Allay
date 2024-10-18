@@ -1,5 +1,6 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.CommandResult;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
@@ -33,10 +34,13 @@ public class ExecuteCommand extends SimpleCommand {
                         context.addNoTargetMatchError();
                         return context.fail();
                     }
+                    var successCount = 0;
                     for (var target : targets) {
-                        tree.parse(target, remain.toArray(String[]::new));
+                        var result = tree.parse(target, remain.toArray(String[]::new));
+                        context.addOutputs(result.context().getOutputs());
+                        successCount += result.status();
                     }
-                    return context.success();
+                    return new CommandResult(successCount, context);
                 })
                 .root()
                 .key("at")
@@ -50,15 +54,19 @@ public class ExecuteCommand extends SimpleCommand {
                     var loc = sender.getCmdExecuteLocation();
                     var newLoc = new Location3f(pos.x(), pos.y(), pos.z(), loc.pitch(), loc.yaw(), loc.headYaw(), loc.dimension());
                     proxySender.setCmdExecuteLocation(newLoc);
-                    tree.parse(proxySender, remain.toArray(String[]::new));
-                    return context.success();
+                    return tree.parse(proxySender, remain.toArray(String[]::new));
                 })
                 .root()
                 .key("run")
                 .cmd("command")
                 .exec(context -> {
-                    Registries.COMMANDS.execute(context.getSender(), context.getResult(1));
-                    return context.success();
+                    String cmd = context.getResult(1);
+                    var result = Registries.COMMANDS.execute(context.getSender(), cmd);
+                    if (!result.isSuccess()) {
+                        context.addError("%" + TrKeys.M_COMMANDS_EXECUTE_FAILED, cmd, context.getSender().getCommandSenderName());
+                        context.addOutputs(result.context().getOutputs());
+                    }
+                    return new CommandResult(result.status(), context);
                 });
     }
 }

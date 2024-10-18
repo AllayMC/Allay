@@ -10,6 +10,7 @@ import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.i18n.TrContainer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -75,5 +76,10 @@ public class AllayCommandContext implements CommandContext {
     @Override
     public void addOutput(String output, Object... args) {
         outputs.add(new TrContainer(output, args));
+    }
+
+    @Override
+    public void addOutputs(Collection<TrContainer> outputs) {
+        this.outputs.addAll(outputs);
     }
 }
