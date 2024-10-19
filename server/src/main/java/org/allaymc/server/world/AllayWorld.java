@@ -27,6 +27,7 @@ import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
@@ -398,12 +399,18 @@ public class AllayWorld implements World {
             return Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
         }
 
+        @Override
+        public void sendPacket(BedrockPacket packet) {
+            if (packet instanceof LevelChunkPacket lcp) {
+                lcp.release();
+            }
+        }
+
         @Override public void beforeSendChunks() {}
         @Override public void onChunkInRangeSend(Chunk chunk) {}
         @Override public void spawnEntity(Entity entity) {}
         @Override public void despawnEntity(Entity entity) {}
         @Override public void onChunkOutOfRange(Set<Long> chunkHashes) {}
-        @Override public void sendPacket(BedrockPacket packet) {}
         @Override public void sendPacketImmediately(BedrockPacket packet) {}
     }
 }
