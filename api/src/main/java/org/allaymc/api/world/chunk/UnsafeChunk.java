@@ -179,16 +179,6 @@ public interface UnsafeChunk {
     void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height);
 
     /**
-     * Get height array.
-     * <p>
-     * Different from getHeight(), all values in the short[] array returned by this method are
-     * greater than or equal to 0 (can be understood as getHeight() - minHeight())
-     *
-     * @return the height array
-     */
-    short[] getHeightArray();
-
-    /**
      * Get height of the specified position.
      *
      * @param x the x coordinate of the position.

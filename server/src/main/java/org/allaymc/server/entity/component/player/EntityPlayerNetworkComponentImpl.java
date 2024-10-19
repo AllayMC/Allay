@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.LoginData;
-import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
@@ -20,8 +19,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3i;
-import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
@@ -44,10 +41,7 @@ import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.netty.channel.raknet.RakServerChannel;
 import org.cloudburstmc.netty.handler.codec.raknet.common.RakSessionCodec;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.data.AuthoritativeMovementMode;
-import org.cloudburstmc.protocol.bedrock.data.ChatRestrictionLevel;
-import org.cloudburstmc.protocol.bedrock.data.GamePublishSetting;
-import org.cloudburstmc.protocol.bedrock.data.SpawnBiomeType;
+import org.cloudburstmc.protocol.bedrock.data.*;
 import org.cloudburstmc.protocol.bedrock.data.definitions.BlockDefinition;
 import org.cloudburstmc.protocol.bedrock.data.definitions.ItemDefinition;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
@@ -86,7 +80,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected boolean networkEncryptionEnabled = false;
     @Getter
     protected boolean initialized = false;
-    protected AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
+    protected AtomicInteger fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
     @Manager
     protected ComponentManager manager;
     @ComponentedObject
@@ -175,8 +169,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void onChunkInRangeSent() {
-        if (doFirstSpawnChunkThreshold.get() > 0 && doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
-            doFirstSpawn();
+        if (fullyJoinChunkThreshold.get() > 0 && fullyJoinChunkThreshold.decrementAndGet() == 0) {
+            onFullyJoin();
         }
     }
 
@@ -219,10 +213,10 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         return disconnected.get();
     }
 
-    protected void doFirstSpawn() {
+    protected void onFullyJoin() {
         var world = thisPlayer.getWorld();
         // Load EntityPlayer's NBT
-        thisPlayer.loadNBT(server.getPlayerStorage().readPlayerData(thisPlayer).getPlayerNBT());
+        thisPlayer.loadNBT(server.getPlayerStorage().readPlayerData(thisPlayer).getNbt());
 
         var setEntityDataPacket = new SetEntityDataPacket();
         setEntityDataPacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
@@ -263,29 +257,30 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void initializePlayer() {
-        // initializePlayer() method will read all the data in PlayerData except playerNBT
-        // To be more exactly, we will validate and set player's current pos and spawn point in this method
-        // And playerNBT will be used in EntityPlayer::loadNBT() in doFirstSpawnPlayer() method
+        // initializePlayer() method will read all the data in PlayerData except nbt
+        // To be more exactly, we will validate and set player's current pos in this method
+        // And nbt will be used in EntityPlayer::loadNBT() in doFirstSpawn() method
         var playerData = server.getPlayerStorage().readPlayerData(thisPlayer);
         // Validate and set player pos
         Dimension dimension;
         Vector3fc currentPos;
-        var logOffWorld = server.getWorldPool().getWorld(playerData.getCurrentWorldName());
-        if (logOffWorld == null) {
-            // The world where player logged off doesn't exist
+        var logOffWorld = server.getWorldPool().getWorld(playerData.getWorld());
+        if (logOffWorld == null || logOffWorld.getDimension(playerData.getDimension()) == null) {
+            // The world or dimension where player logged off doesn't exist
+            // Fallback to global spawn point
             dimension = server.getWorldPool().getGlobalSpawnPoint().dimension();
             currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
             // The old pos stored in playerNBT is invalid, we should replace it with the new one!
-            var builder = playerData.getPlayerNBT().toBuilder();
+            var builder = playerData.getNbt().toBuilder();
             writeVector3f(builder, "Pos", "x", "y", "z", currentPos);
-            playerData.setPlayerNBT(builder.build());
+            playerData.setNbt(builder.build());
+            // Save new player data back to storage
+            server.getPlayerStorage().savePlayerData(thisPlayer.getUUID(), playerData);
         } else {
-            dimension = logOffWorld.getDimension(playerData.getCurrentDimensionId());
+            dimension = logOffWorld.getDimension(playerData.getDimension());
             // Read current pos from playerNBT
-            currentPos = readVector3f(playerData.getPlayerNBT(), "Pos", "x", "y", "z");
+            currentPos = readVector3f(playerData.getNbt(), "Pos", "x", "y", "z");
         }
-        // Validate and set spawn point
-        validateAndSetSpawnPoint(playerData);
         // Load the current point chunk firstly so that we can add player entity into the chunk
         dimension.getChunkService().getOrLoadChunkSync(
                 (int) currentPos.x() >> 4,
@@ -299,19 +294,18 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
         startGamePacket.setUniqueEntityId(thisPlayer.getRuntimeId());
         startGamePacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        startGamePacket.setPlayerGameType(thisPlayer.getGameType());
+        startGamePacket.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", Server.SETTINGS.genericSettings().defaultGameType().ordinal())));
         var loc = thisPlayer.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
         startGamePacket.setPlayerPosition(Vector3f.from(loc.x(), loc.y(), loc.z()));
         startGamePacket.setRotation(Vector2f.from(loc.pitch(), loc.yaw()));
-        // We don't send world send to client for security reason
+        // We don't send world seed to client for security reason
         startGamePacket.setSeed(0L);
         startGamePacket.setDimensionId(dimension.getDimensionInfo().dimensionId());
         startGamePacket.setGeneratorId(dimension.getWorldGenerator().getType().getId());
         startGamePacket.setLevelGameType(spawnWorld.getWorldData().getGameType());
         startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
-        // TODO: add it to server-settings.yml
         startGamePacket.setTrustingPlayers(true);
         startGamePacket.setLevelName(Server.SETTINGS.genericSettings().motd());
         startGamePacket.setLevelId("");
@@ -323,7 +317,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setItemDefinitions(DeferredData.getItemDefinitions());
         startGamePacket.setAuthoritativeMovementMode(AuthoritativeMovementMode.SERVER);
         startGamePacket.setServerAuthoritativeBlockBreaking(true);
-        // TODO: add it to server-settings.yml
         startGamePacket.setCommandsEnabled(true);
         startGamePacket.setMultiplayerGame(true);
         // TODO: add it to server-settings.yml
@@ -362,29 +355,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         );
 
         sendPacket(DeferredData.getAvailableEntityIdentifiersPacket());
-
         sendPacket(DeferredData.getBiomeDefinitionListPacket());
-
         sendPacket(DeferredData.getCreativeContentPacket());
-
         sendPacket(DeferredData.getCraftingDataPacket());
-    }
-
-    protected void validateAndSetSpawnPoint(PlayerData playerData) {
-        Location3ic spawnPoint;
-        var spawnWorld = server.getWorldPool().getWorld(playerData.getSpawnPointWorldName());
-        if (spawnWorld == null) {
-            // The world where the spawn point is located does not exist
-            // Using global spawn point instead
-            spawnPoint = server.getWorldPool().getGlobalSpawnPoint();
-            playerData.setSpawnPoint(spawnPoint);
-            playerData.setSpawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName());
-            playerData.setSpawnPointDimensionId(spawnPoint.dimension().getDimensionInfo().dimensionId());
-        } else {
-            var vec = playerData.getSpawnPoint();
-            spawnPoint = new Location3i(vec.x(), vec.y(), vec.z(), spawnWorld.getDimension(playerData.getSpawnPointDimensionId()));
-        }
-        thisPlayer.setSpawnPoint(spawnPoint);
     }
 
     public void completeLogin() {

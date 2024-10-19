@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtMap;
 import org.joml.Vector3i;
-import org.joml.Vector3ic;
 
 import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 
@@ -17,16 +16,15 @@ import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 @Setter
 @Builder
 public class PlayerData {
-    // EntityPlayer's NBT which can be generated through method EntityPlayer#saveNBT()
-    protected NbtMap playerNBT;
+    // EntityPlayer's nbt which can be generated through method EntityPlayer#saveNBT()
+    protected NbtMap nbt;
+
     // The following fields are not included in the return object of method EntityPlayer#saveNBT()
-    protected String currentWorldName;
-    protected int currentDimensionId;
-    // Can be null
-    protected Vector3ic spawnPoint;
-    // Can be null
-    protected String spawnPointWorldName;
-    protected int spawnPointDimensionId;
+    // We should store the world and dimension information of the player
+    // because the player data is not stored in chunk like other entities.
+    // Without these information, we can't know which world and dimension the player is in.
+    protected String world;
+    protected int dimension;
 
     public static PlayerData createEmpty() {
         var server = Server.getInstance();
@@ -36,43 +34,25 @@ public class PlayerData {
         var worldName = globalSpawnPoint.dimension().getWorld().getWorldData().getName();
         var dimId = globalSpawnPoint.dimension().getDimensionInfo().dimensionId();
         return builder()
-                .playerNBT(builder.build())
-                .currentWorldName(worldName)
-                .currentDimensionId(dimId)
-                .spawnPoint(globalSpawnPoint)
-                .spawnPointWorldName(worldName)
-                .spawnPointDimensionId(dimId)
+                .nbt(builder.build())
+                .world(worldName)
+                .dimension(dimId)
                 .build();
     }
 
     public static PlayerData fromNBT(NbtMap nbt) {
         var builder = builder();
-        builder.playerNBT(nbt.getCompound("PlayerNBT"))
-                .currentWorldName(nbt.getString("CurrentWorldName"))
-                .currentDimensionId(nbt.getInt("CurrentDimensionId"));
-        if (nbt.containsKey("SpawnPointX")) {
-            int spx = nbt.getInt("SpawnPointX");
-            int spy = nbt.getInt("SpawnPointY");
-            int spz = nbt.getInt("SpawnPointZ");
-            builder.spawnPoint(new Vector3i(spx, spy, spz))
-                    .spawnPointWorldName(nbt.getString("SpawnPointWorldName"))
-                    .spawnPointDimensionId(nbt.getInt("SpawnPointDimensionId"));
-        }
+        builder.nbt(nbt.getCompound("NBT"))
+                .world(nbt.getString("World"))
+                .dimension(nbt.getInt("Dimension"));
         return builder.build();
     }
 
     public NbtMap toNBT() {
         var builder = NbtMap.builder()
-                .putCompound("PlayerNBT", playerNBT)
-                .putString("CurrentWorldName", currentWorldName)
-                .putInt("CurrentDimensionId", currentDimensionId);
-        if (spawnPoint != null) {
-            builder.putInt("SpawnPointX", spawnPoint.x())
-                    .putInt("SpawnPointY", spawnPoint.y())
-                    .putInt("SpawnPointZ", spawnPoint.z())
-                    .putString("SpawnPointWorldName", spawnPointWorldName)
-                    .putInt("SpawnPointDimensionId", spawnPointDimensionId);
-        }
+                .putCompound("NBT", nbt)
+                .putString("World", world)
+                .putInt("Dimension", dimension);
         return builder.build();
     }
 }

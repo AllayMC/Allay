@@ -59,7 +59,6 @@ public class FlatNoiser implements Noiser {
         var flatChunk = context.getCurrentChunk();
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                flatChunk.setHeight(x, z, layers.length + 1);
                 for (int y = 0; y < layers.length; y++) {
                     flatChunk.setBlockState(x, y, z, layers[y]);
                 }

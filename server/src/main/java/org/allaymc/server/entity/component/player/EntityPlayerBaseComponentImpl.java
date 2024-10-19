@@ -31,6 +31,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.scoreboard.Scoreboard;
@@ -39,6 +40,7 @@ import org.allaymc.api.scoreboard.data.DisplaySlot;
 import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
@@ -89,7 +91,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Dependency
     protected EntityPlayerNetworkComponent networkComponent;
     @Getter
-    protected GameType gameType = GameType.CREATIVE;
+    protected GameType gameType = Server.SETTINGS.genericSettings().defaultGameType();
     @Getter
     protected Skin skin;
     @Getter
@@ -448,7 +450,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(FullContainerType.ARMOR).saveNBT())
                 .putInt("EnchantmentSeed", enchantmentSeed)
+                .putInt("GameType", gameType.ordinal())
+                .putCompound("SpawnPoint", saveSpawnPoint())
                 .build();
+    }
+
+    protected NbtMap saveSpawnPoint() {
+        var builder = NbtMap.builder()
+                .putString("World", spawnPoint.dimension().getWorld().getWorldData().getName())
+                .putInt("Dimension", spawnPoint.dimension().getDimensionInfo().dimensionId());
+        AllayNbtUtils.writeVector3i(builder, "Pos", "x", "y", "z", spawnPoint);
+        return builder.build();
     }
 
     @Override
@@ -465,6 +477,31 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(armorNbt)
         );
         nbt.listenForInt("EnchantmentSeed", this::setEnchantmentSeed);
+        nbt.listenForInt("GameType", id -> setGameType(GameType.from(id)));
+        if (nbt.containsKey("SpawnPoint")) {
+            loadSpawnPoint(nbt.getCompound("SpawnPoint"));
+        } else {
+            spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+        }
+    }
+
+    protected void loadSpawnPoint(NbtMap nbt) {
+        var world = Server.getInstance().getWorldPool().getWorld(nbt.getString("World"));
+        if (world == null) {
+            spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            return;
+        }
+        var dimension = world.getDimension(nbt.getInt("Dimension"));
+        if (dimension == null) {
+            spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+            return;
+        }
+        var pos = AllayNbtUtils.readVector3i(nbt, "Pos", "x", "y", "z");
+        spawnPoint = new Location3i(
+                pos,
+                0, 0, 0,
+                dimension
+        );
     }
 
     @Override
@@ -515,12 +552,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public PlayerData savePlayerData() {
         return PlayerData.builder()
-                .playerNBT(saveNBT())
-                .currentWorldName(getWorld().getWorldData().getName())
-                .currentDimensionId(getDimension().getDimensionInfo().dimensionId())
-                .spawnPoint(new Vector3i(spawnPoint.x(), spawnPoint.y(), spawnPoint.z()))
-                .spawnPointWorldName(spawnPoint.dimension().getWorld().getWorldData().getName())
-                .spawnPointDimensionId(spawnPoint.dimension().getDimensionInfo().dimensionId())
+                .nbt(saveNBT())
+                .world(getWorld().getWorldData().getName())
+                .dimension(getDimension().getDimensionInfo().dimensionId())
                 .build();
     }
 

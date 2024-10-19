@@ -286,9 +286,6 @@ public class WorldData {
         return gameRules.get(gameRule);
     }
 
-    /**
-     * The overworld default spawn point
-     */
     public Vector3ic getSpawnPoint() {
         return spawnPoint;
     }

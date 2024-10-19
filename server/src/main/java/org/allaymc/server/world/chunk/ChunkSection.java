@@ -19,7 +19,7 @@ import static org.allaymc.api.world.chunk.UnsafeChunk.index;
 @NotThreadSafe
 public record ChunkSection(
         byte sectionY,
-        Palette<BlockState>[] blockLayer,
+        Palette<BlockState>[] blockLayers,
         Palette<BiomeType> biomes,
         NibbleArray blockLights,
         NibbleArray skyLights
@@ -48,11 +48,11 @@ public record ChunkSection(
     }
 
     public BlockState getBlockState(int x, int y, int z, int layer) {
-        return blockLayer[layer].get(index(x, y, z));
+        return blockLayers[layer].get(index(x, y, z));
     }
 
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
-        blockLayer[layer].set(index(x, y, z), blockState);
+        blockLayers[layer].set(index(x, y, z), blockState);
     }
 
     public void setBiomeType(int x, int y, int z, BiomeType biomeType) {
@@ -80,7 +80,7 @@ public record ChunkSection(
     }
 
     public boolean isEmpty() {
-        return blockLayer[0].isEmpty() && blockLayer[0].get(0) == AIR.getDefaultState();
+        return blockLayers[0].isEmpty() && blockLayers[0].get(0) == AIR.getDefaultState();
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {
@@ -89,6 +89,6 @@ public record ChunkSection(
         byteBuf.writeByte(LAYER_COUNT);
         byteBuf.writeByte(sectionY & 0xFF);
 
-        for (var palette : blockLayer) palette.writeToNetwork(byteBuf, BlockState::blockStateHash);
+        for (var blockLayer : blockLayers) blockLayer.writeToNetwork(byteBuf, BlockState::blockStateHash);
     }
 }

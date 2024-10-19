@@ -180,13 +180,6 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("food")
-                .exec((context, player) -> {
-                    player.setFoodLevel(Math.min(20, player.getFoodLevel() + 5)); // bread 5 food
-                    player.setFoodSaturationLevel(player.getFoodSaturationLevel() + 6); // bread 6 saturation
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
                 .key("setperm")
                 .str("perm")
                 .bool("value")
@@ -277,6 +270,13 @@ public class GameTestCommand extends SimpleCommand {
                     item.setLore(lore);
                     player.notifyItemInHandChange();
                     player.sendText("Lore is set");
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("getheight")
+                .exec((context, player) -> {
+                    var floorLoc = player.getLocation().floor(new Vector3f());
+                    player.sendText("Height is " + player.getDimension().getHeight((int) floorLoc.x, (int) floorLoc.z));
                     return context.success();
                 }, SenderType.PLAYER);
     }

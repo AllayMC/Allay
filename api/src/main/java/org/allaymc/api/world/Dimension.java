@@ -1,6 +1,5 @@
 package org.allaymc.api.world;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
@@ -16,6 +15,7 @@ import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -30,6 +30,7 @@ import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.packet.*;
+import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3fc;
@@ -38,6 +39,7 @@ import org.joml.primitives.AABBfc;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Predicate;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
@@ -910,4 +912,59 @@ public interface Dimension {
      * @return Whether the block is successfully broken.
      */
     boolean breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player);
+
+    /**
+     * Get the height of the highest non-air block at the specified x and z coordinates.
+     * <p>
+     * Please note that this method will load the chunk if it's not loaded.
+     *
+     * @param x the x coordinate.
+     * @param z the z coordinate.
+     *
+     * @return the height of the highest non-air block at the specified x and z coordinates.
+     */
+    default int getHeight(int x, int z) {
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        if (chunk == null) chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+        return chunk.getHeight(x & 15, z & 15);
+    }
+
+    /**
+     * Get the highest block at the specified x and z coordinates.
+     *
+     * @param x the x coordinate.
+     * @param z the z coordinate.
+     *
+     * @return the highest blockstate at the specified x and z coordinates.
+     */
+    default BlockState getHighestBlockState(int x, int z) {
+        return getBlockState(x, getHeight(x, z), z);
+    }
+
+    default Vector3ic findSuitableGroundPosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range) {
+        return findSuitableGroundPosAround(predicate, x, z, range, 10);
+    }
+
+    /**
+     * Find a safe standing position around the specified x and z coordinates.
+     *
+     * @param x     the x coordinate.
+     * @param z     the z coordinate.
+     * @param range the range to search.
+     *
+     * @return a safe standing position around the specified x and z coordinates, or {@code null} if not found.
+     */
+    default Vector3ic findSuitableGroundPosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range, @Range(from = 0, to = Integer.MAX_VALUE) int attemptCount) {
+        var rand = ThreadLocalRandom.current();
+        while (attemptCount > 0) {
+            attemptCount--;
+            var px = x + rand.nextInt(-range, range + 1);
+            var pz = z + rand.nextInt(-range, range + 1);
+            var py = getHeight(px, pz) + 1;
+            if (predicate.test(new Position3i(px, py, pz, this))) {
+                return new org.joml.Vector3i(px, py, pz);
+            }
+        }
+        return null;
+    }
 }

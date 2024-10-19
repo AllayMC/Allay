@@ -1,7 +1,6 @@
 package org.allaymc.server.world;
 
 import eu.okaeri.configs.ConfigManager;
-import eu.okaeri.configs.yaml.snakeyaml.YamlSnakeYamlConfigurer;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.world.WorldLoadEvent;
@@ -64,16 +63,16 @@ public final class AllayWorldPool implements WorldPool {
         var world = new AllayWorld(storage);
         // Load overworld dimension
         var overworld = new AllayDimension(world, tryCreateWorldGenerator(overworldSettings), DimensionInfo.OVERWORLD);
-        world.setDimension(overworld);
+        world.addDimension(overworld);
         // Load nether and the end dimension if they are not null
         if (netherSettings != null) {
             var nether = new AllayDimension(world, tryCreateWorldGenerator(netherSettings), DimensionInfo.NETHER);
-            world.setDimension(nether);
+            world.addDimension(nether);
         }
 
         if (theEndSettings != null) {
             var theEnd = new AllayDimension(world, tryCreateWorldGenerator(theEndSettings), DimensionInfo.THE_END);
-            world.setDimension(theEnd);
+            world.addDimension(theEnd);
         }
 
         if (addWorld(world)) {

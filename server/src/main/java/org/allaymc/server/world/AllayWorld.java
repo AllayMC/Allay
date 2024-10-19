@@ -5,8 +5,14 @@ import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
+import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
@@ -14,12 +20,16 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
+import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3i;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -48,7 +58,7 @@ public class AllayWorld implements World {
     protected final Scheduler scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
     protected final GameLoop gameLoop;
     @Getter
-    protected final Thread thread;
+    protected final Thread worldThread;
     protected final Thread networkThread;
     protected long nextTimeSendTick;
     protected int rainTimer = Weather.CLEAR.generateRandomTimeLength();
@@ -56,6 +66,7 @@ public class AllayWorld implements World {
     protected boolean isRaining = false;
     protected boolean isThundering = false;
     protected Set<Weather> effectiveWeathers = new HashSet<>();
+    protected boolean isFirstTick = false;
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
@@ -86,7 +97,7 @@ public class AllayWorld implements World {
                 }
             }
         }).build();
-        this.thread = Thread.ofPlatform()
+        this.worldThread = Thread.ofPlatform()
                 .name("World Thread - " + this.getWorldData().getName())
                 .unstarted(gameLoop::startLoop);
         if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
@@ -129,6 +140,7 @@ public class AllayWorld implements World {
     }
 
     protected void tick(long currentTick) {
+        checkFirstTick();
         if (!ENABLE_INDEPENDENT_NETWORK_THREAD) {
             handleSyncPackets();
         }
@@ -140,6 +152,37 @@ public class AllayWorld implements World {
         worldStorage.tick(currentTick);
     }
 
+    protected void checkFirstTick() {
+        if (isFirstTick) {
+            return;
+        }
+        isFirstTick = true;
+
+        // Check spawn point
+        if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), getOverWorld()))) {
+            var newSpawnPoint = getOverWorld().findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
+            if (newSpawnPoint == null) {
+                log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
+                newSpawnPoint = new Vector3i(0, getOverWorld().getHeight(0, 0) + 1, 0);
+            }
+            worldData.setSpawnPoint(newSpawnPoint);
+        }
+
+        if (Server.SETTINGS.worldSettings().loadSpawnPointChunks()) {
+            // Add spawn point chunk loader
+            getOverWorld().getChunkService().addChunkLoader(new SpawnPointChunkLoader());
+        }
+    }
+
+    protected boolean isSafeStandingPos(Position3ic pos) {
+        var blockUnder = pos.dimension().getBlockState(pos.x(), pos.y() - 1, pos.z());
+        var blockTypeUnder = blockUnder.getBlockType();
+        if (!blockTypeUnder.getMaterial().isSolid()) {
+            return false;
+        }
+        return pos.dimension().getBlockState(pos.x(), pos.y(), pos.z()).getBlockType() == BlockTypes.AIR &&
+               pos.dimension().getBlockState(pos.x(), pos.y() + 1, pos.z()).getBlockType() == BlockTypes.AIR;
+    }
 
     public void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time) {
         packetQueue.add(new PacketQueueEntry(player, packet, time));
@@ -219,10 +262,10 @@ public class AllayWorld implements World {
     }
 
     public void startTick() {
-        if (thread.getState() != Thread.State.NEW) {
+        if (worldThread.getState() != Thread.State.NEW) {
             throw new IllegalStateException("World is already start ticking!");
         } else {
-            thread.start();
+            worldThread.start();
             if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
                 networkThread.start();
             }
@@ -251,7 +294,7 @@ public class AllayWorld implements World {
         );
     }
 
-    public void setDimension(Dimension dimension) {
+    public void addDimension(Dimension dimension) {
         Preconditions.checkArgument(!this.dimensionMap.containsKey(dimension.getDimensionInfo().dimensionId()));
         this.dimensionMap.put(dimension.getDimensionInfo().dimensionId(), dimension);
     }
@@ -329,4 +372,45 @@ public class AllayWorld implements World {
     }
 
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}
+
+    protected class SpawnPointChunkLoader implements ChunkLoader {
+
+        @Override
+        public Location3fc getLocation() {
+            var spawnPoint = worldData.getSpawnPoint();
+            return new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
+        }
+
+        @Override
+        public boolean isLoaderActive() {
+            return true;
+        }
+
+        @Override
+        public int getChunkLoadingRadius() {
+            return Server.SETTINGS.worldSettings().viewDistance();
+        }
+
+        @Override
+        public void setChunkLoadingRadius(int radius) {}
+
+        @Override
+        public int getChunkTrySendCountPerTick() {
+            return Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
+        }
+
+        @Override
+        public void sendPacket(BedrockPacket packet) {
+            if (packet instanceof LevelChunkPacket lcp) {
+                lcp.release();
+            }
+        }
+
+        @Override public void beforeSendChunks() {}
+        @Override public void onChunkInRangeSend(Chunk chunk) {}
+        @Override public void spawnEntity(Entity entity) {}
+        @Override public void despawnEntity(Entity entity) {}
+        @Override public void onChunkOutOfRange(Set<Long> chunkHashes) {}
+        @Override public void sendPacketImmediately(BedrockPacket packet) {}
+    }
 }
