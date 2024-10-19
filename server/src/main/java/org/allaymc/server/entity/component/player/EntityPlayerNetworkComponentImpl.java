@@ -80,7 +80,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected boolean networkEncryptionEnabled = false;
     @Getter
     protected boolean initialized = false;
-    protected AtomicInteger fullyJoinedChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinedChunkThreshold());
+    protected AtomicInteger fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
     @Manager
     protected ComponentManager manager;
     @ComponentedObject
@@ -169,8 +169,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void onChunkInRangeSent() {
-        if (fullyJoinedChunkThreshold.get() > 0 && fullyJoinedChunkThreshold.decrementAndGet() == 0) {
-            onFullyJoined();
+        if (fullyJoinChunkThreshold.get() > 0 && fullyJoinChunkThreshold.decrementAndGet() == 0) {
+            onFullyJoin();
         }
     }
 
@@ -213,7 +213,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         return disconnected.get();
     }
 
-    protected void onFullyJoined() {
+    protected void onFullyJoin() {
         var world = thisPlayer.getWorld();
         // Load EntityPlayer's NBT
         thisPlayer.loadNBT(server.getPlayerStorage().readPlayerData(thisPlayer).getNbt());
