@@ -1,6 +1,5 @@
 package org.allaymc.api.world;
 
-import com.google.common.base.Function;
 import com.google.common.base.Preconditions;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.allaymc.api.block.data.BlockFace;
@@ -8,7 +7,6 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -43,7 +41,6 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
 
-import static java.lang.Math.clamp;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
@@ -918,6 +915,8 @@ public interface Dimension {
 
     /**
      * Get the height of the highest non-air block at the specified x and z coordinates.
+     * <p>
+     * Please note that this method will load the chunk if it's not loaded.
      *
      * @param x the x coordinate.
      * @param z the z coordinate.
@@ -942,8 +941,8 @@ public interface Dimension {
         return getBlockState(x, getHeight(x, z), z);
     }
 
-    default Vector3ic findSuitablePosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range) {
-        return findSuitablePosAround(predicate, x, z, range, 10);
+    default Vector3ic findSuitableGroundPosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range) {
+        return findSuitableGroundPosAround(predicate, x, z, range, 10);
     }
 
     /**
@@ -955,7 +954,7 @@ public interface Dimension {
      *
      * @return a safe standing position around the specified x and z coordinates, or {@code null} if not found.
      */
-    default Vector3ic findSuitablePosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range, @Range(from = 0, to = Integer.MAX_VALUE) int attemptCount) {
+    default Vector3ic findSuitableGroundPosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range, @Range(from = 0, to = Integer.MAX_VALUE) int attemptCount) {
         var rand = ThreadLocalRandom.current();
         while (attemptCount > 0) {
             attemptCount--;

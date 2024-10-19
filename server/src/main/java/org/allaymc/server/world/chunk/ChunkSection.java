@@ -89,6 +89,6 @@ public record ChunkSection(
         byteBuf.writeByte(LAYER_COUNT);
         byteBuf.writeByte(sectionY & 0xFF);
 
-        for (var palette : blockLayers) palette.writeToNetwork(byteBuf, BlockState::blockStateHash);
+        for (var blockLayer : blockLayers) blockLayer.writeToNetwork(byteBuf, BlockState::blockStateHash);
     }
 }

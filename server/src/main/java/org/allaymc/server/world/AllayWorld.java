@@ -160,7 +160,7 @@ public class AllayWorld implements World {
 
         // Check spawn point
         if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), getOverWorld()))) {
-            var newSpawnPoint = getOverWorld().findSuitablePosAround(this::isSafeStandingPos, 0, 0, 32);
+            var newSpawnPoint = getOverWorld().findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
             if (newSpawnPoint == null) {
                 log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
                 newSpawnPoint = new Vector3i(0, getOverWorld().getHeight(0, 0) + 1, 0);
