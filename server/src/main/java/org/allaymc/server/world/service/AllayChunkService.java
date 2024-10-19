@@ -435,9 +435,9 @@ public final class AllayChunkService implements ChunkService {
 
         private void removeChunkLoaderInChunks(Set<Long> chunkHashes) {
             chunkHashes.stream()
-                .map(AllayChunkService.this::getChunk)
-                .filter(Objects::nonNull)
-                .forEach(chunk -> chunk.removeChunkLoader(chunkLoader));
+                    .map(AllayChunkService.this::getChunk)
+                    .filter(Objects::nonNull)
+                    .forEach(chunk -> chunk.removeChunkLoader(chunkLoader));
         }
 
         private void updateChunkSendingQueue() {

@@ -17,11 +17,11 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.Event;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.utils.ComponentInjectException;
 import org.allaymc.server.component.annotation.*;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
+import org.allaymc.server.utils.ComponentInjectException;
 import org.allaymc.server.utils.ReflectionUtils;
 
 import java.io.IOException;

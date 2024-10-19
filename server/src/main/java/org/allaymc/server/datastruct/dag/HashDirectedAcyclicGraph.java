@@ -62,11 +62,7 @@ public class HashDirectedAcyclicGraph<B> extends HashSet<B> implements DirectedA
      */
     @SafeVarargs
     public HashDirectedAcyclicGraph(B... member) {
-        this();
-
-        for (B m : member) {
-            add(m);
-        }
+        this(Arrays.asList(member));
     }
 
     /**

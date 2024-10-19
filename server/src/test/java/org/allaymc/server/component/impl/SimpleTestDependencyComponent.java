@@ -1,8 +1,8 @@
 package org.allaymc.server.component.impl;
 
 import org.allaymc.api.component.interfaces.Component;
-import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.interfaces.TestDependencyComponent;
 
 /**

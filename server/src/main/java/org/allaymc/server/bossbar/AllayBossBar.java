@@ -10,7 +10,10 @@ import org.cloudburstmc.protocol.bedrock.packet.BossEventPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -32,33 +35,27 @@ public class AllayBossBar implements BossBar {
 
     @Override
     public void addViewer(EntityPlayer viewer) {
-        if (viewers.contains(viewer)) {
-            return;
+        if (viewers.add(viewer)) {
+            var pk = new BossEventPacket();
+            pk.setBossUniqueEntityId(viewer.getRuntimeId());
+            pk.setAction(BossEventPacket.Action.CREATE);
+            pk.setTitle(title);
+            pk.setHealthPercentage(progress);
+            pk.setDarkenSky(darkenSky ? 1 : 0);
+            pk.setColor(color.ordinal());
+            pk.setOverlay(style.ordinal());
+            viewer.sendPacket(pk);
         }
-
-        viewers.add(viewer);
-        var pk = new BossEventPacket();
-        pk.setBossUniqueEntityId(viewer.getRuntimeId());
-        pk.setAction(BossEventPacket.Action.CREATE);
-        pk.setTitle(title);
-        pk.setHealthPercentage(progress);
-        pk.setDarkenSky(darkenSky ? 1 : 0);
-        pk.setColor(color.ordinal());
-        pk.setOverlay(style.ordinal());
-        viewer.sendPacket(pk);
     }
 
     @Override
     public void removeViewer(EntityPlayer viewer) {
-        if (!viewers.contains(viewer)) {
-            return;
+        if (viewers.remove(viewer)) {
+            var pk = new BossEventPacket();
+            pk.setBossUniqueEntityId(viewer.getRuntimeId());
+            pk.setAction(BossEventPacket.Action.REMOVE);
+            viewer.sendPacket(pk);
         }
-
-        viewers.remove(viewer);
-        var pk = new BossEventPacket();
-        pk.setBossUniqueEntityId(viewer.getRuntimeId());
-        pk.setAction(BossEventPacket.Action.REMOVE);
-        viewer.sendPacket(pk);
     }
 
     @Override

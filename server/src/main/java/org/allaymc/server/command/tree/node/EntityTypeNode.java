@@ -20,7 +20,6 @@ public class EntityTypeNode extends EnumNode {
                     .<String>mapMulti((identifier, consumer) -> {
                         consumer.accept(identifier.toString());
                         consumer.accept(identifier.path());
-                        return;
                     }).toArray(String[]::new);
 
     public EntityTypeNode(String name, CommandNode parent, EntityType<?> defaultValue) {
@@ -46,6 +45,5 @@ public class EntityTypeNode extends EnumNode {
     @Override
     protected Object argToResult(String arg) {
         return Registries.ENTITIES.get(arg.contains(":") ? new Identifier(arg) : new Identifier(DEFAULT_NAMESPACE, arg));
-
     }
 }

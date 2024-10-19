@@ -6,7 +6,7 @@ import org.allaymc.api.block.type.BlockType;
 /**
  * @author daoge_cmd
  */
-public class BlockHayBlockBaseComponentImpl extends BlockBaseComponentImpl{
+public class BlockHayBlockBaseComponentImpl extends BlockBaseComponentImpl {
     public BlockHayBlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }

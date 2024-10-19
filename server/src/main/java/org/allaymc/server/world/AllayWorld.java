@@ -406,11 +406,22 @@ public class AllayWorld implements World {
             }
         }
 
-        @Override public void beforeSendChunks() {}
-        @Override public void onChunkInRangeSend(Chunk chunk) {}
-        @Override public void spawnEntity(Entity entity) {}
-        @Override public void despawnEntity(Entity entity) {}
-        @Override public void onChunkOutOfRange(Set<Long> chunkHashes) {}
-        @Override public void sendPacketImmediately(BedrockPacket packet) {}
+        @Override
+        public void beforeSendChunks() {}
+
+        @Override
+        public void onChunkInRangeSend(Chunk chunk) {}
+
+        @Override
+        public void spawnEntity(Entity entity) {}
+
+        @Override
+        public void despawnEntity(Entity entity) {}
+
+        @Override
+        public void onChunkOutOfRange(Set<Long> chunkHashes) {}
+
+        @Override
+        public void sendPacketImmediately(BedrockPacket packet) {}
     }
 }

@@ -26,6 +26,16 @@ public class AllayChunkServiceTest {
         chunkService = new AllayChunkService(mockDimension, new TestWorldStorage());
     }
 
+    static void tick() {
+        chunkService.tick(0);
+    }
+
+    static void tick(int count) {
+        for (int i = 0; i < count; i++) {
+            chunkService.tick(0);
+        }
+    }
+
     @Test
     @Order(1)
     void testLoadChunks() {
@@ -53,15 +63,5 @@ public class AllayChunkServiceTest {
         assertNotEquals(0, chunkService.getLoadedChunks().size());
         tick(2);
         assertEquals(0, chunkService.getLoadedChunks().size());
-    }
-
-    static void tick() {
-        chunkService.tick(0);
-    }
-
-    static void tick(int count) {
-        for (int i = 0; i < count; i++) {
-            chunkService.tick(0);
-        }
     }
 }

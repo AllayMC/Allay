@@ -8,8 +8,8 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.entity.component.event.CEntityDieEvent;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
@@ -65,9 +65,9 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
                                 pos.z() + rand.nextFloat(0.5f) + 0.25f
                         ),
                         new Vector3f(
-                                rand.nextFloat(1.0f) - 0.5f,
+                                rand.nextFloat(1f) - 0.5f,
                                 0.5f,
-                                rand.nextFloat(1.0f) - 0.5f
+                                rand.nextFloat(1f) - 0.5f
                         ),
                         40
                 );

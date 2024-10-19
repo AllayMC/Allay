@@ -22,6 +22,7 @@ import java.util.List;
 public final class ExtensionManager {
 
     private static final PathMatcher PATH_MATCHER = FileSystems.getDefault().getPathMatcher("glob:**.jar");
+
     private final Path source;
 
     public ExtensionManager(Path source) {
@@ -35,8 +36,9 @@ public final class ExtensionManager {
         }
 
         List<Runnable> entrances = new ArrayList<>();
-        try(var stream = Files.walk(source)) {
-            stream.filter(path -> PATH_MATCHER.matches(path) && Files.isRegularFile(path)).forEach(extensionPath -> loadExtension(extensionPath, args, entrances));
+        try (var stream = Files.walk(source)) {
+            stream.filter(path -> PATH_MATCHER.matches(path) && Files.isRegularFile(path))
+                    .forEach(extensionPath -> loadExtension(extensionPath, args, entrances));
         }
 
         entrances.forEach(Runnable::run);

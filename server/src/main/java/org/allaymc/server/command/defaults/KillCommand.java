@@ -9,7 +9,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,7 @@ public class KillCommand extends SimpleCommand {
                         } else {
                             target.despawn();
                         }
-                        killedEntities.compute(target.getCommandSenderName(), (k ,v) -> v != null ? ++v : 1);
+                        killedEntities.compute(target.getCommandSenderName(), (k, v) -> v != null ? ++v : 1);
                     }
                     context.addOutput(TrKeys.M_COMMANDS_KILL_SUCCESSFUL, killedEntities.entrySet().stream().map(entry -> entry.getKey() + " * " + entry.getValue()).collect(Collectors.joining(", ")));
                     return context.success();

@@ -7,7 +7,7 @@ import org.allaymc.api.block.type.BlockType;
  * @author daoge_cmd
  */
 public class BlockLiquidBaseComponentImpl extends BlockBaseComponentImpl {
-     public BlockLiquidBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+    public BlockLiquidBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 

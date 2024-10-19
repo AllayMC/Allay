@@ -4,6 +4,7 @@ import io.netty.util.ResourceLeakDetector;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
+import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.block.property.BlockPropertyProcessor;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -26,7 +27,6 @@ import org.allaymc.api.registry.SimpleMappedRegistry;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.server.bossbar.AllayBossBar;
 import org.allaymc.server.command.selector.AllayEntitySelectorAPI;
@@ -59,7 +59,7 @@ import java.util.HashMap;
 public final class Allay {
 
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
-    private static final ExtensionManager EXTENSION_MANAGER =new ExtensionManager(Path.of("extensions"));
+    private static final ExtensionManager EXTENSION_MANAGER = new ExtensionManager(Path.of("extensions"));
 
     public static Dashboard DASHBOARD;
 

@@ -1,7 +1,7 @@
 package org.allaymc.server.component.impl;
 
-import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.interfaces.AttackComponent;
 import org.allaymc.server.component.interfaces.HealthComponent;
 

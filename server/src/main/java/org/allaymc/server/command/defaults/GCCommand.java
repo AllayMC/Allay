@@ -3,7 +3,6 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.utils.TextFormat;
 
 import static java.lang.Runtime.getRuntime;
 import static org.allaymc.api.utils.MathUtils.round;

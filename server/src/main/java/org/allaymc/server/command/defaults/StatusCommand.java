@@ -72,30 +72,6 @@ public class StatusCommand extends SimpleCommand {
         super("status", TrKeys.A_COMMAND_STATUS_DESCRIPTION);
     }
 
-    @Override
-    public void prepareCommandTree(CommandTree tree) {
-        tree.getRoot()
-                .bool("full", false)
-                .optional()
-                .exec(context -> {
-                    boolean full = context.getResult(0);
-                    var sender = context.getSender();
-                    sender.sendText("--- Server Status ---");
-                    printUpTimeInfo(sender);
-                    printMemoryUsageInfo(sender);
-                    printOnlinePlayerInfo(sender);
-                    sender.sendText("\n");
-                    printWorldInfo(sender);
-                    if (full) {
-                        printOperationSystemAndJVMInfo(sender);
-                        printNetworkInfo(sender);
-                        printCPUInfo(sender);
-                        printOperationSystemMemoryInfo(sender);
-                    }
-                    return context.success();
-                });
-    }
-
     protected static void printOperationSystemMemoryInfo(CommandSender sender) {
         sender.sendText("--- " + "Memory Info" + " ---");
         var globalMemory = SYSTEM_INFO.getHardware().getMemory();
@@ -221,7 +197,7 @@ public class StatusCommand extends SimpleCommand {
             playerColor = TextFormat.RED;
         }
 
-        sender.sendText("Players: " + playerColor + server.getOnlinePlayers().size() + "/" +  server.getNetworkServer().getMaxPlayerCount());
+        sender.sendText("Players: " + playerColor + server.getOnlinePlayers().size() + "/" + server.getNetworkServer().getMaxPlayerCount());
     }
 
     protected static String toKB(long bytes) {
@@ -315,6 +291,30 @@ public class StatusCommand extends SimpleCommand {
         }
 
         return null;
+    }
+
+    @Override
+    public void prepareCommandTree(CommandTree tree) {
+        tree.getRoot()
+                .bool("full", false)
+                .optional()
+                .exec(context -> {
+                    boolean full = context.getResult(0);
+                    var sender = context.getSender();
+                    sender.sendText("--- Server Status ---");
+                    printUpTimeInfo(sender);
+                    printMemoryUsageInfo(sender);
+                    printOnlinePlayerInfo(sender);
+                    sender.sendText("\n");
+                    printWorldInfo(sender);
+                    if (full) {
+                        printOperationSystemAndJVMInfo(sender);
+                        printNetworkInfo(sender);
+                        printCPUInfo(sender);
+                        printOperationSystemMemoryInfo(sender);
+                    }
+                    return context.success();
+                });
     }
 
     protected enum ComputerSystemEntry {

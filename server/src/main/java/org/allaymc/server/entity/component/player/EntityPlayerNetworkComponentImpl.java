@@ -25,9 +25,9 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.ComponentedObject;
 import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.network.processor.AllayPacketProcessorHolder;
@@ -230,9 +230,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(Registries.COMMANDS.encodeAvailableCommandsPacketFor(thisPlayer));
 
         // PlayerListPacket can only be sent in this stage, otherwise the client won't show its skin
-        ((AllayServer)server).addToPlayerList(thisPlayer);
+        ((AllayServer) server).addToPlayerList(thisPlayer);
         if (server.getOnlinePlayerCount() > 1) {
-            ((AllayServer)server).sendFullPlayerListInfoTo(thisPlayer);
+            ((AllayServer) server).sendFullPlayerListInfoTo(thisPlayer);
         }
 
         thisPlayer.sendAttributesToClient();

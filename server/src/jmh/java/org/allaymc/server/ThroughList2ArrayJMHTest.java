@@ -1,9 +1,9 @@
 package org.allaymc.server;
 
+import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.MissingImplementationException;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 

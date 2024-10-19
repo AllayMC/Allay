@@ -17,7 +17,7 @@ public class TestWorldStorage implements WorldStorage {
     @Override
     public CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         var chunk = AllayUnsafeChunk.builder().emptyChunk(chunkX, chunkZ, dimensionInfo).toSafeChunk();
-        ((AllayChunk)chunk).setState(ChunkState.FINISHED);
+        ((AllayChunk) chunk).setState(ChunkState.FINISHED);
         return CompletableFuture.completedFuture(chunk);
     }
 
@@ -26,10 +26,21 @@ public class TestWorldStorage implements WorldStorage {
         return CompletableFuture.completedFuture(null);
     }
 
-    @Override public Chunk readChunkSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {return null;}
-    @Override public void writeChunkSync(Chunk chunk) {}
-    @Override public boolean containChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {return false;}
-    @Override public void writeWorldData(WorldData worldData) {}
-    @Override public WorldData readWorldData() {return null;}
-    @Override public void shutdown() {}
+    @Override
+    public Chunk readChunkSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {return null;}
+
+    @Override
+    public void writeChunkSync(Chunk chunk) {}
+
+    @Override
+    public boolean containChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {return false;}
+
+    @Override
+    public void writeWorldData(WorldData worldData) {}
+
+    @Override
+    public WorldData readWorldData() {return null;}
+
+    @Override
+    public void shutdown() {}
 }

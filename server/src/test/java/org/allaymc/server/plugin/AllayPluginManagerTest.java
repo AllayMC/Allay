@@ -147,6 +147,7 @@ public class AllayPluginManagerTest extends AllayPluginManager {
         assertFalse(isUnexpectedDependencyVersion(
                 "1.2.3", "[0.2,1.4]"));
     }
+
     boolean isUnexpectedDependencyVersion(String version, String range) {
         var name = "Test";
         return isUnexpectedDependencyVersion(

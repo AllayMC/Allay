@@ -3,7 +3,6 @@ package org.allaymc.server.world.bitarray;
 import org.cloudburstmc.math.GenericMath;
 
 /**
- *
  * @author JukeboxMC | daoge_cmd
  */
 public enum BitArrayVersion {

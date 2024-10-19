@@ -71,7 +71,6 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
-import org.joml.Vector3i;
 import org.joml.primitives.AABBf;
 
 import java.util.*;
@@ -300,9 +299,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             // Send new world's game rules
             networkComponent.sendPacket(targetDim.getWorld().getWorldData().getGameRules().buildPacket());
             // Clear old world's weather
-            ((AllayWorld)currentDim.getWorld()).clearWeather(thisPlayer);
+            ((AllayWorld) currentDim.getWorld()).clearWeather(thisPlayer);
             // Send new world's weather
-            ((AllayWorld)targetDim.getWorld()).sendWeather(thisPlayer);
+            ((AllayWorld) targetDim.getWorld()).sendWeather(thisPlayer);
         }
         location.dimension().removePlayer(thisPlayer, () -> {
             targetDim.getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
@@ -413,7 +412,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.skin = skin;
         var server = Server.getInstance();
         server.broadcastPacket(createSkinPacket(skin));
-        ((AllayServer)server).onSkinUpdate(thisPlayer);
+        ((AllayServer) server).onSkinUpdate(thisPlayer);
     }
 
     protected PlayerSkinPacket createSkinPacket(Skin skin) {
@@ -722,14 +721,14 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void setServerSettingForm(CustomForm form) {
-        serverSettingFormId = assignFormId();
-        serverSettingForm = form;
+    public Pair<Integer, CustomForm> getServerSettingForm() {
+        return Pair.of(serverSettingFormId, serverSettingForm);
     }
 
     @Override
-    public Pair<Integer, CustomForm> getServerSettingForm() {
-        return Pair.of(serverSettingFormId, serverSettingForm);
+    public void setServerSettingForm(CustomForm form) {
+        serverSettingFormId = assignFormId();
+        serverSettingForm = form;
     }
 
     @Override

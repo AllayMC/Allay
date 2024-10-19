@@ -41,7 +41,7 @@ public class TestEntity implements HasAABB, HasLongId {
     @Override
     public AABBfc getAABB() {
         return new AABBf(
-                - width / 2f, 0, - length / 2f,
+                -width / 2f, 0, -length / 2f,
                 width / 2f, height, length / 2f
         );
     }

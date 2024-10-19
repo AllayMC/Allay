@@ -124,12 +124,6 @@ public final class EnchantmentOptionGenerator {
         return option;
     }
 
-    public record AllayEnchantOptionData(
-            int requiredLapisLazuliCount,
-            int requiredXpLevel,
-            List<EnchantmentInstance> enchantments
-    ) {}
-
     private static int countBookshelves(Position3ic enchantTablePos) {
         int bookshelfCount = 0;
         var dimension = enchantTablePos.dimension();
@@ -222,4 +216,10 @@ public final class EnchantmentOptionGenerator {
                 .filter(EnchantmentType::isAvailableInEnchantTable)
                 .toList();
     }
+
+    public record AllayEnchantOptionData(
+            int requiredLapisLazuliCount,
+            int requiredXpLevel,
+            List<EnchantmentInstance> enchantments
+    ) {}
 }

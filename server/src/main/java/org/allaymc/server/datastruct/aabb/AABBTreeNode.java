@@ -55,7 +55,7 @@ public final class AABBTreeNode<E extends HasAABB> {
         if (data == null) return;
         var offsetAABB = data.getOffsetAABB();
         aabb.setMin(offsetAABB.minX() - margin, offsetAABB.minY() - margin, offsetAABB.minZ() - margin);
-        aabb.setMax(offsetAABB.maxX() + margin, offsetAABB.maxY() + margin, offsetAABB.maxZ()+ margin);
+        aabb.setMax(offsetAABB.maxX() + margin, offsetAABB.maxY() + margin, offsetAABB.maxZ() + margin);
     }
 
     public void resetForReuse() {

@@ -8,9 +8,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import static java.lang.Math.min;
 import static org.allaymc.api.i18n.I18n.KeyInfo.EMPTY;

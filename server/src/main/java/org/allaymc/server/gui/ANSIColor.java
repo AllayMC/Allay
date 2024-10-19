@@ -76,14 +76,14 @@ public enum ANSIColor {
     private final Color color;
 
     public static boolean isBoldColor(Color color) {
-        return color.equals(B_BLACK.color)
-                || color.equals(B_RED.color)
-                || color.equals(B_GREEN.color)
-                || color.equals(B_YELLOW.color)
-                || color.equals(B_BLUE.color)
-                || color.equals(B_MAGENTA.color)
-                || color.equals(B_CYAN.color)
-                || color.equals(B_WHITE.color);
+        return color.equals(B_BLACK.color) ||
+               color.equals(B_RED.color) ||
+               color.equals(B_GREEN.color) ||
+               color.equals(B_YELLOW.color) ||
+               color.equals(B_BLUE.color) ||
+               color.equals(B_MAGENTA.color) ||
+               color.equals(B_CYAN.color) ||
+               color.equals(B_WHITE.color);
     }
 
     public static ANSIColor fromANSI(String code) {

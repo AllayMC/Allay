@@ -1,6 +1,5 @@
 package org.allaymc.server.command.defaults;
 
-import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
@@ -20,7 +19,7 @@ public class WeatherCommand extends SimpleCommand {
         tree.getRoot()
                 .enums("weather", Weather.class)
                 .exec(context -> {
-                    Weather weather = Weather.valueOf(((String)context.getResult(0)).toUpperCase());
+                    Weather weather = Weather.valueOf(((String) context.getResult(0)).toUpperCase());
                     if (weather == Weather.CLEAR) {
                         context.getSender().getCmdExecuteLocation().dimension().getWorld().clearWeather();
                     } else {

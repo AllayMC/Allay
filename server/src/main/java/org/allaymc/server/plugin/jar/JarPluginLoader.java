@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
-import org.allaymc.server.i18n.I18nLoader;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.*;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.server.i18n.AllayI18n;
+import org.allaymc.server.i18n.I18nLoader;
 import org.allaymc.server.plugin.SimplePluginDescriptor;
 
 import java.io.IOException;
@@ -68,7 +67,7 @@ public class JarPluginLoader implements PluginLoader {
         }
 
         // Load plugin's lang files
-        ((AllayI18n)I18n.get()).applyI18nLoader(new JarPluginI18nLoader());
+        ((AllayI18n) I18n.get()).applyI18nLoader(new JarPluginI18nLoader());
 
         return createPluginContainer(
                 pluginInstance,
