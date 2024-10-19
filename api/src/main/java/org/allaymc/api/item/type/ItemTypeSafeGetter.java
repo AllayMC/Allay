@@ -21,6 +21,7 @@ public class ItemTypeSafeGetter {
      * Get an item type by its name.
      *
      * @param name The name of the item type.
+     *
      * @return The {@link Getter} object.
      */
     public static Getter name(String name) {
@@ -31,6 +32,7 @@ public class ItemTypeSafeGetter {
      * Get an item type by its id.
      *
      * @param id The id of the item type.
+     *
      * @return The {@link Getter} object.
      */
     public static Getter id(int id) {
@@ -55,6 +57,7 @@ public class ItemTypeSafeGetter {
          * Set the meta of the item.
          *
          * @param meta The meta of the item.
+         *
          * @return The {@link Getter} object.
          */
         public Getter meta(int meta) {

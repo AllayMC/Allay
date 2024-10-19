@@ -2,7 +2,6 @@ package org.allaymc.api.world.gamerule;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.cloudburstmc.protocol.bedrock.data.GameRuleData;
 
 import java.util.Arrays;
 
@@ -56,6 +55,7 @@ public enum GameRule {
      * Get a game rule by name.
      *
      * @param name the name of the game rule
+     *
      * @return the game rule, or {@code null} if not found
      */
     public static GameRule fromName(String name) {

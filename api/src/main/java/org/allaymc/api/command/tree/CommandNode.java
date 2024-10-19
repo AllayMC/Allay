@@ -243,6 +243,7 @@ public interface CommandNode {
      * This is useful for commands like /execute, which has multiple subcommands.
      *
      * @param onRedirect Called when redirecting.
+     *
      * @return The root node.
      */
     CommandNode redirect(Consumer<CommandContext> onRedirect);
@@ -493,7 +494,7 @@ public interface CommandNode {
      *
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
-     * @param values        The allowed values for the parameter.
+     * @param values       The allowed values for the parameter.
      *
      * @return This {@code CommandNode}.
      */
@@ -507,7 +508,7 @@ public interface CommandNode {
      * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
      * @param enumName     The name of the enum.
-     * @param values        The allowed values for the parameter.
+     * @param values       The allowed values for the parameter.
      *
      * @return This {@code CommandNode}.
      */
@@ -518,7 +519,7 @@ public interface CommandNode {
     /**
      * Add an enum parameter to this command node with allowed values and an empty default value.
      *
-     * @param name  The name of the parameter.
+     * @param name   The name of the parameter.
      * @param values The allowed values for the parameter.
      *
      * @return This {@code CommandNode}.
@@ -917,7 +918,7 @@ public interface CommandNode {
     /**
      * Add a command parameter to this command node with a default value of {@code null}.
      *
-     * @param name The name of the parameter.
+     * @param name         The name of the parameter.
      * @param defaultValue The default value of the parameter.
      *
      * @return This {@code CommandNode}.

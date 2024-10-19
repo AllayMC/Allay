@@ -29,7 +29,7 @@ public sealed interface Scorer permits EntityScorer, PlayerScorer, FakeScorer {
      * Convert this scorer to network information
      *
      * @param scoreboard The associated scoreboard
-     * @param line The associated line
+     * @param line       The associated line
      *
      * @return The network information
      */

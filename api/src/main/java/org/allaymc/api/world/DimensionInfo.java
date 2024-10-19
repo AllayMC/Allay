@@ -1,7 +1,6 @@
 package org.allaymc.api.world;
 
 import com.google.common.base.Preconditions;
-import org.allaymc.api.utils.Identifier;
 
 /**
  * DimensionInfo contains some information about a dimension.

@@ -19,7 +19,7 @@ import static org.allaymc.api.perm.DefaultPermissions.*;
  */
 public interface PermTree {
 
-    ApiInstanceHolder<PermTreeFactory> FACTORY = ApiInstanceHolder.create();
+    ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
 
     /**
      * Creates a new permission tree.
@@ -34,6 +34,7 @@ public interface PermTree {
      * Creates a new permission tree with the given name.
      *
      * @param name the name of the permission tree.
+     *
      * @return a new permission tree.
      */
     static PermTree create(String name) {
@@ -50,8 +51,9 @@ public interface PermTree {
     /**
      * Registers a permission listener for the given permission.
      *
-     * @param perm the permission to listen for.
+     * @param perm     the permission to listen for.
      * @param callback the callback to invoke when the permission changes.
+     *
      * @return this permission tree.
      */
     PermTree registerPermListener(String perm, Consumer<PermChangeType> callback);
@@ -70,6 +72,7 @@ public interface PermTree {
      * Gets all permission listeners of this permission tree.
      *
      * @param includeParent whether to include the parent's listeners.
+     *
      * @return a map of all permission listeners.
      */
     @UnmodifiableView
@@ -89,6 +92,7 @@ public interface PermTree {
      * Checks if this permission tree contains the given subset.
      *
      * @param other the subset to check.
+     *
      * @return {@code true} if this permission tree contains the given subset, {@code false} otherwise.
      */
     boolean containsSubSet(PermTree other);
@@ -103,8 +107,9 @@ public interface PermTree {
     /**
      * Add a permission to this permission tree.
      *
-     * @param perm the permission to add.
+     * @param perm         the permission to add.
      * @param callListener whether to call the permission listener.
+     *
      * @return this permission tree.
      */
     PermTree addPerm(String perm, boolean callListener);
@@ -113,6 +118,7 @@ public interface PermTree {
      * Add a permission to this permission tree.
      *
      * @param perm the permission to add.
+     *
      * @return this permission tree.
      */
     default PermTree addPerm(String perm) {
@@ -122,8 +128,9 @@ public interface PermTree {
     /**
      * Set the value of a permission.
      *
-     * @param perm the permission to set.
+     * @param perm  the permission to set.
      * @param value the value to set.
+     *
      * @return this permission tree.
      */
     default PermTree setPerm(String perm, boolean value) {
@@ -136,6 +143,7 @@ public interface PermTree {
      * Checks if this permission tree has the given permission.
      *
      * @param perm the permission to check.
+     *
      * @return {@code true} if this permission tree has the given permission, {@code false} otherwise.
      */
     boolean hasPerm(String perm);
@@ -143,8 +151,9 @@ public interface PermTree {
     /**
      * Remove a permission from this permission tree.
      *
-     * @param perm the permission to remove.
+     * @param perm         the permission to remove.
      * @param callListener whether to call the permission listener.
+     *
      * @return this permission tree.
      */
     PermTree removePerm(String perm, boolean callListener);
@@ -153,6 +162,7 @@ public interface PermTree {
      * Remove a permission from this permission tree.
      *
      * @param perm the permission to remove.
+     *
      * @return this permission tree.
      */
     default PermTree removePerm(String perm) {
@@ -163,6 +173,7 @@ public interface PermTree {
      * Extend this permission tree from the given parent.
      *
      * @param parent the parent to extend from.
+     *
      * @return this permission tree.
      */
     default PermTree extendFrom(PermTree parent) {
@@ -172,8 +183,9 @@ public interface PermTree {
     /**
      * Extend this permission tree from the given parent.
      *
-     * @param parent the parent to extend from.
+     * @param parent       the parent to extend from.
      * @param callListener whether to call the permission listener.
+     *
      * @return this permission tree.
      */
     PermTree extendFrom(PermTree parent, boolean callListener);
@@ -182,6 +194,7 @@ public interface PermTree {
      * Copy permissions from the given parent.
      *
      * @param parent the parent to copy from.
+     *
      * @return this permission tree.
      */
     PermTree copyFrom(PermTree parent);
@@ -199,6 +212,7 @@ public interface PermTree {
      * Gets all leaves of this permission tree.
      *
      * @param includeParent whether to include the parent's leaves.
+     *
      * @return a list of all leaves.
      */
     List<PermNode> getLeaves(boolean includeParent);
@@ -214,6 +228,7 @@ public interface PermTree {
      * Sets the operator status of this permission tree.
      *
      * @param op the operator status to set.
+     *
      * @return this permission tree.
      */
     PermTree setOp(boolean op);
@@ -259,7 +274,7 @@ public interface PermTree {
     /**
      * Loads this permission tree from NBT.
      *
-     * @param nbt the NBT to load from.
+     * @param nbt          the NBT to load from.
      * @param callListener whether to call the permission listener.
      */
     default void loadNBT(NbtMap nbt, boolean callListener) {
@@ -275,7 +290,7 @@ public interface PermTree {
         REMOVE
     }
 
-    interface PermTreeFactory {
+    interface Factory {
         default PermTree create() {
             return create("");
         }

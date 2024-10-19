@@ -146,6 +146,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Find an online player by his name.
      *
      * @param playerName the name of the player.
+     *
      * @return the player if found, otherwise {@code null}.
      */
     default EntityPlayer findOnlinePlayerByName(String playerName) {
@@ -203,7 +204,7 @@ public interface Server extends TaskCreator, CommandSender {
     /**
      * Broadcast a translatable text.
      *
-     * @param tr the translatable text to broadcast.
+     * @param tr   the translatable text to broadcast.
      * @param args the arguments of the translatable text.
      */
     void broadcastTr(@MayContainTrKey String tr, String... args);
@@ -216,8 +217,8 @@ public interface Server extends TaskCreator, CommandSender {
     /**
      * Broadcast command outputs.
      *
-     * @param sender the command sender.
-     * @param status the return value of the execution of the command.
+     * @param sender  the command sender.
+     * @param status  the return value of the execution of the command.
      * @param outputs the command outputs.
      */
     default void broadcastCommandOutputs(CommandSender sender, int status, TrContainer... outputs) {
@@ -239,6 +240,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Check if the player is banned.
      *
      * @param uuidOrName the UUID or name of the player.
+     *
      * @return {@code true} if the player is banned, otherwise {@code false}.
      */
     boolean isBanned(String uuidOrName);
@@ -247,6 +249,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Ban the player.
      *
      * @param uuidOrName the UUID or name of the player.
+     *
      * @return {@code true} if the player is banned, otherwise {@code false}.
      */
     boolean ban(String uuidOrName);
@@ -255,6 +258,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Unban the player.
      *
      * @param uuidOrName the UUID or name of the player.
+     *
      * @return {@code true} if the player is unbanned, otherwise {@code false}.
      */
     boolean unban(String uuidOrName);
@@ -271,6 +275,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Check if the IP is banned.
      *
      * @param ip the IP to check.
+     *
      * @return {@code true} if the IP is banned, otherwise {@code false}.
      */
     boolean isIPBanned(String ip);
@@ -279,6 +284,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Ban the IP.
      *
      * @param ip the IP to ban.
+     *
      * @return {@code true} if the IP is banned, otherwise {@code false}.
      */
     boolean banIP(String ip);
@@ -287,6 +293,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Unban the IP.
      *
      * @param ip the IP to unban.
+     *
      * @return {@code true} if the IP is unbanned, otherwise {@code false}.
      */
     boolean unbanIP(String ip);
@@ -321,6 +328,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Check if the player is in the whitelist.
      *
      * @param player the player to check.
+     *
      * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
     default boolean isWhitelisted(EntityPlayer player) {
@@ -331,6 +339,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Check if the player is in the whitelist.
      *
      * @param uuidOrName the UUID or name of the player.
+     *
      * @return {@code true} if the player is in the whitelist, otherwise {@code false}.
      */
     boolean isWhitelisted(String uuidOrName);
@@ -339,6 +348,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Add the player to the whitelist.
      *
      * @param uuidOrName the UUID or name of the player.
+     *
      * @return {@code true} if the player is added to the whitelist, otherwise {@code false}.
      */
     boolean addToWhitelist(String uuidOrName);
@@ -347,6 +357,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Remove the player from the whitelist.
      *
      * @param uuidOrName the UUID or name of the player.
+     *
      * @return {@code true} if the player is removed from the whitelist, otherwise {@code false}.
      */
     boolean removeFromWhitelist(String uuidOrName);
@@ -377,6 +388,7 @@ public interface Server extends TaskCreator, CommandSender {
      * Get the online player by his name.
      *
      * @param name the name of the player.
+     *
      * @return the player if found, otherwise {@code null}.
      */
     default EntityPlayer getOnlinePlayerByName(String name) {

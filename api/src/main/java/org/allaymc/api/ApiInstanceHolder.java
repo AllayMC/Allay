@@ -18,8 +18,9 @@ public final class ApiInstanceHolder<T> {
     /**
      * Create a new empty api instance holder with the specific type.
      *
-     * @return the new api instance holder.
      * @param <T> the type of the api instance that the holder will hold.
+     *
+     * @return the new api instance holder.
      */
     public static <T> ApiInstanceHolder<T> create() {
         return new ApiInstanceHolder<>();

@@ -1,7 +1,6 @@
 package org.allaymc.api.plugin;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.scheduler.TaskCreator;
 import org.allaymc.api.server.Server;
 import org.jetbrains.annotations.ApiStatus;
@@ -47,7 +46,8 @@ public abstract class Plugin implements TaskCreator {
      */
     public void reload() {
         if (!isReloadable()) throw new UnsupportedOperationException("This plugin is not a reloadable plugin!");
-        else log.warn("Plugin {} is marked as reloadable but do nothing in reload() method!", pluginContainer.descriptor().getName());
+        else
+            log.warn("Plugin {} is marked as reloadable but do nothing in reload() method!", pluginContainer.descriptor().getName());
     }
 
     /**
@@ -60,6 +60,15 @@ public abstract class Plugin implements TaskCreator {
     }
 
     /**
+     * Get the plugin container.
+     *
+     * @return the plugin container.
+     */
+    public PluginContainer getPluginContainer() {
+        return pluginContainer;
+    }
+
+    /**
      * Set the plugin container.
      *
      * @param pluginContainer the plugin container.
@@ -68,15 +77,6 @@ public abstract class Plugin implements TaskCreator {
     public void setPluginContainer(PluginContainer pluginContainer) {
         this.pluginContainer = pluginContainer;
         pluginLogger = LoggerFactory.getLogger(pluginContainer.descriptor().getName());
-    }
-
-    /**
-     * Get the plugin container.
-     *
-     * @return the plugin container.
-     */
-    public PluginContainer getPluginContainer() {
-        return pluginContainer;
     }
 
     /**

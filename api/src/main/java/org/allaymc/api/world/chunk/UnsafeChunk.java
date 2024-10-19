@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * The UnsafeChunk is located inside the {@link Chunk}, which is not thread-safe.
- * <P>
+ * <p>
  * Compared to {@link Chunk}, unsafe chunk works more like a simple data container,
  * which means that it is very fast but is not thread-safe.
  * <p>
@@ -36,6 +36,7 @@ public interface UnsafeChunk {
      * @param x the x coordinate of the pos.
      * @param y the y coordinate of the pos.
      * @param z the z coordinate of the pos.
+     *
      * @return the index of the pos in the chunk.
      */
     static int index(int x, int y, int z) {
@@ -78,6 +79,7 @@ public interface UnsafeChunk {
      * Get the entity in the chunk by its runtime id.
      *
      * @param runtimeId the runtime id of the entity.
+     *
      * @return the entity in the chunk, or {@code null} if not found.
      */
     Entity getEntity(long runtimeId);
@@ -96,6 +98,7 @@ public interface UnsafeChunk {
      * @param x the x coordinate of the block entity.
      * @param y the y coordinate of the block entity.
      * @param z the z coordinate of the block entity.
+     *
      * @return the removed block entity, or {@code null} if not found.
      */
     BlockEntity removeBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
@@ -106,6 +109,7 @@ public interface UnsafeChunk {
      * @param x the x coordinate of the block entity.
      * @param y the y coordinate of the block entity.
      * @param z the z coordinate of the block entity.
+     *
      * @return the block entity in this chunk, or {@code null} if not found.
      */
     BlockEntity getBlockEntity(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
@@ -131,6 +135,7 @@ public interface UnsafeChunk {
      * Since the array index starts at 0, the maximum value is 59
      *
      * @param sectionY the y
+     *
      * @return the section
      */
     @UnmodifiableView
@@ -139,11 +144,11 @@ public interface UnsafeChunk {
     /**
      * Set block state in this chunk.
      *
-     * @param x the x coordinate of the block.
-     * @param y the y coordinate of the block.
-     * @param z the z coordinate of the block.
+     * @param x          the x coordinate of the block.
+     * @param y          the y coordinate of the block.
+     * @param z          the z coordinate of the block.
      * @param blockState the block state to set.
-     * @param layer the layer of the block.
+     * @param layer      the layer of the block.
      */
     void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer);
 
@@ -154,10 +159,11 @@ public interface UnsafeChunk {
     /**
      * Get block state in this chunk.
      *
-     * @param x the x coordinate of the block.
-     * @param y the y coordinate of the block.
-     * @param z the z coordinate of the block.
+     * @param x     the x coordinate of the block.
+     * @param y     the y coordinate of the block.
+     * @param z     the z coordinate of the block.
      * @param layer the layer of the block.
+     *
      * @return the block state in this chunk.
      */
     BlockState getBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer);
@@ -172,8 +178,8 @@ public interface UnsafeChunk {
     /**
      * Set height of the specified position.
      *
-     * @param x the x coordinate of the position.
-     * @param z the z coordinate of the position.
+     * @param x      the x coordinate of the position.
+     * @param z      the z coordinate of the position.
      * @param height the height.
      */
     void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height);
@@ -183,6 +189,7 @@ public interface UnsafeChunk {
      *
      * @param x the x coordinate of the position.
      * @param z the z coordinate of the position.
+     *
      * @return the height.
      */
     int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
@@ -190,9 +197,9 @@ public interface UnsafeChunk {
     /**
      * Set biome of the specified position.
      *
-     * @param x the x coordinate of the position.
-     * @param y the y coordinate of the position.
-     * @param z the z coordinate of the position.
+     * @param x         the x coordinate of the position.
+     * @param y         the y coordinate of the position.
+     * @param z         the z coordinate of the position.
      * @param biomeType the biome type.
      */
     void setBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BiomeType biomeType);
@@ -203,6 +210,7 @@ public interface UnsafeChunk {
      * @param x the x coordinate of the position.
      * @param y the y coordinate of the position.
      * @param z the z coordinate of the position.
+     *
      * @return the biome type.
      */
     BiomeType getBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
@@ -210,9 +218,9 @@ public interface UnsafeChunk {
     /**
      * Set skylight level of the specified position.
      *
-     * @param x the x coordinate of the position.
-     * @param y the y coordinate of the position.
-     * @param z the z coordinate of the position.
+     * @param x     the x coordinate of the position.
+     * @param y     the y coordinate of the position.
+     * @param z     the z coordinate of the position.
      * @param light the light level.
      */
     void setSkyLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int light);
@@ -223,6 +231,7 @@ public interface UnsafeChunk {
      * @param x the x coordinate of the position.
      * @param y the y coordinate of the position.
      * @param z the z coordinate of the position.
+     *
      * @return the light level.
      */
     int getSkyLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
@@ -230,9 +239,9 @@ public interface UnsafeChunk {
     /**
      * Set block light level of the specified position.
      *
-     * @param x the x coordinate of the position.
-     * @param y the y coordinate of the position.
-     * @param z the z coordinate of the position.
+     * @param x     the x coordinate of the position.
+     * @param y     the y coordinate of the position.
+     * @param z     the z coordinate of the position.
      * @param light the light level.
      */
     void setBlockLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int light);
@@ -243,6 +252,7 @@ public interface UnsafeChunk {
      * @param x the x coordinate of the position.
      * @param y the y coordinate of the position.
      * @param z the z coordinate of the position.
+     *
      * @return the light level.
      */
     int getBlockLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);

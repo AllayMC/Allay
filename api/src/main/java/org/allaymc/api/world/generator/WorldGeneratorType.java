@@ -42,6 +42,7 @@ public enum WorldGeneratorType {
      * Get the WorldGeneratorType by id
      *
      * @param id the generator id
+     *
      * @return the WorldGeneratorType
      */
     public static WorldGeneratorType of(int id) {

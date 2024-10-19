@@ -74,6 +74,7 @@ public abstract class EnchantmentType {
      * @param level The level of the enchantment.
      *
      * @return The minimum modified level of the enchantment.
+     *
      * @see <a href="https://minecraft.wiki/w/Enchanting/Levels">Enchanting Levels<a/>.
      */
     public int getMinModifiedLevel(int level) {
@@ -86,6 +87,7 @@ public abstract class EnchantmentType {
      * @param level The level of the enchantment.
      *
      * @return The maximum modified level of the enchantment.
+     *
      * @see <a href="https://minecraft.wiki/w/Enchanting/Levels">Enchanting Levels<a/>.
      */
     public int getMaxModifiedLevel(int level) {

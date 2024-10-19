@@ -69,7 +69,8 @@ public class JSONUtils {
      * Parse a JSON string (from reader) to an object.
      *
      * @param reader the reader.
-     * @param type the type of the object.
+     * @param type   the type of the object.
+     *
      * @return the object.
      */
     public static <V> V from(Reader reader, Class<V> type) {
@@ -80,8 +81,9 @@ public class JSONUtils {
     /**
      * Parse a JSON string (from reader) to an object.
      *
-     * @param reader the reader.
+     * @param reader    the reader.
      * @param typeToken the type of the object.
+     *
      * @return the object.
      */
     public static <V> V from(Reader reader, TypeToken<V> typeToken) {
@@ -93,7 +95,8 @@ public class JSONUtils {
      * Parse a JSON string (from input stream) to an object.
      *
      * @param inputStream the input stream.
-     * @param type the type of the object.
+     * @param type        the type of the object.
+     *
      * @return the object.
      */
     public static <V> V from(InputStream inputStream, Class<V> type) {
@@ -105,7 +108,8 @@ public class JSONUtils {
      * Parse a JSON string (from input stream) to an object.
      *
      * @param inputStream the input stream.
-     * @param typeToken the type of the object.
+     * @param typeToken   the type of the object.
+     *
      * @return the object.
      */
     public static <V> V from(InputStream inputStream, TypeToken<V> typeToken) {
@@ -115,8 +119,10 @@ public class JSONUtils {
 
     /**
      * Parse a JSON string (from input stream) to a list.
+     *
      * @param inputStream the input stream.
-     * @param type the type of elements in the list.
+     * @param type        the type of elements in the list.
+     *
      * @return the list.
      */
     public static <V> List<V> fromList(InputStream inputStream, Class<V> type) {
@@ -130,6 +136,7 @@ public class JSONUtils {
      *
      * @param file the file.
      * @param type the type of the object.
+     *
      * @return the object.
      */
     public static <V> V from(File file, Class<V> type) {
@@ -144,8 +151,9 @@ public class JSONUtils {
     /**
      * Parse a JSON string (in file) to an object.
      *
-     * @param file the file.
+     * @param file      the file.
      * @param typeToken the type of the object.
+     *
      * @return the object.
      */
     public static <V> V from(File file, TypeToken<V> typeToken) {
@@ -162,6 +170,7 @@ public class JSONUtils {
      *
      * @param file the file.
      * @param type the type of elements in the list.
+     *
      * @return the list.
      */
     public static <V> List<V> fromList(File file, Class<V> type) {
@@ -179,6 +188,7 @@ public class JSONUtils {
      *
      * @param json the JSON string.
      * @param type the type of the object.
+     *
      * @return the object.
      */
     public static <V> V from(String json, Class<V> type) {
@@ -190,6 +200,7 @@ public class JSONUtils {
      *
      * @param json the JSON string.
      * @param type the type of the object.
+     *
      * @return the object.
      */
     public static <V> V from(String json, Type type) {
@@ -199,8 +210,9 @@ public class JSONUtils {
     /**
      * Parse a JSON string to an object.
      *
-     * @param json the JSON string.
+     * @param json      the JSON string.
      * @param typeToken the type of the object.
+     *
      * @return the object.
      */
     public static <V> V from(String json, TypeToken<V> typeToken) {
@@ -212,6 +224,7 @@ public class JSONUtils {
      *
      * @param json the JSON string.
      * @param type the type of elements in the list.
+     *
      * @return the list.
      */
     public static <V> List<V> fromList(String json, Class<V> type) {
@@ -223,6 +236,7 @@ public class JSONUtils {
      * Parse a JSON string to a map.
      *
      * @param json the JSON string.
+     *
      * @return the map.
      */
     public static Map<String, Object> fromMap(String json) {
@@ -234,7 +248,8 @@ public class JSONUtils {
      * Parse a JSON string (from input stream) to an object leniently.
      *
      * @param inputStream the input stream.
-     * @param type the type of the object.
+     * @param type        the type of the object.
+     *
      * @return the object.
      */
     public static <V> V fromLenient(InputStream inputStream, Class<V> type) {
@@ -247,7 +262,8 @@ public class JSONUtils {
      * Parse a JSON string to an object leniently.
      *
      * @param inputStream the input stream.
-     * @param type the type of the object.
+     * @param type        the type of the object.
+     *
      * @return the object.
      */
     public static <V> V fromLenient(InputStream inputStream, TypeToken<V> type) {
@@ -260,7 +276,8 @@ public class JSONUtils {
      * Parse a JSON string to a list leniently.
      *
      * @param inputStream the input stream.
-     * @param type the type of elements in the list.
+     * @param type        the type of elements in the list.
+     *
      * @return the list.
      */
     public static <V> List<V> fromListLenient(InputStream inputStream, Class<V> type) {
@@ -275,6 +292,7 @@ public class JSONUtils {
      *
      * @param file the file.
      * @param type the type of the object.
+     *
      * @return the object.
      */
     public static <V> V fromLenient(File file, Class<V> type) {
@@ -292,6 +310,7 @@ public class JSONUtils {
      *
      * @param file the file.
      * @param type the type of elements in the list.
+     *
      * @return the list.
      */
     public static <V> List<V> fromListLenient(File file, Class<V> type) {
@@ -310,6 +329,7 @@ public class JSONUtils {
      *
      * @param json the JSON string.
      * @param type the type of the object.
+     *
      * @return the object.
      */
     public static <V> V fromLenient(String json, Class<V> type) {
@@ -326,6 +346,7 @@ public class JSONUtils {
      *
      * @param json the JSON string.
      * @param type the type of the object.
+     *
      * @return the object.
      */
     public static <V> V fromLenient(String json, Type type) {
@@ -340,8 +361,9 @@ public class JSONUtils {
     /**
      * Parse a JSON string to an object leniently.
      *
-     * @param json the JSON string.
+     * @param json      the JSON string.
      * @param typeToken the type of the object.
+     *
      * @return the object.
      */
     public static <V> V fromLenient(String json, TypeToken<V> typeToken) {
@@ -358,6 +380,7 @@ public class JSONUtils {
      *
      * @param json the JSON string.
      * @param type the type of elements in the list.
+     *
      * @return the list.
      */
     public static <V> List<V> fromListLenient(String json, Class<V> type) {
@@ -374,6 +397,7 @@ public class JSONUtils {
      * Convert a list to a JSON string.
      *
      * @param list the list.
+     *
      * @return the JSON string.
      */
     public static <V> String to(List<V> list) {
@@ -384,6 +408,7 @@ public class JSONUtils {
      * Convert an object to a JSON string.
      *
      * @param v the object.
+     *
      * @return the JSON string.
      */
     public static <V> String to(V v) {
@@ -410,7 +435,7 @@ public class JSONUtils {
      * Write an object to a file.
      *
      * @param path the file path.
-     * @param v the object.
+     * @param v    the object.
      */
     public static <V> void toFile(String path, V v) {
         toFile(path, v, null);
@@ -419,8 +444,8 @@ public class JSONUtils {
     /**
      * Write an object to a file.
      *
-     * @param path the file path.
-     * @param v the object.
+     * @param path                   the file path.
+     * @param v                      the object.
      * @param jsonWriterConfigurator the JSON writer configurator.
      */
     public static <V> void toFile(String path, V v, Consumer<JsonWriter> jsonWriterConfigurator) {

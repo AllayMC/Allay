@@ -97,14 +97,6 @@ public class BlockPropertyTypeGen {
                         .initializer("List.of($N)", paramStr)
                         .build()
         );
-        codeBuilder.addMethod(
-                MethodSpec
-                        .methodBuilder("values")
-                        .returns(listClass)
-                        .addStatement("return VALUES")
-                        .addModifiers(Modifier.STATIC, Modifier.PUBLIC)
-                        .build()
-        );
         var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)

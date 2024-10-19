@@ -19,6 +19,7 @@ public interface PluginManager {
      * Get a discovered plugin by name.
      *
      * @param name the name of the plugin.
+     *
      * @return the plugin container.
      */
     PluginContainer getPlugin(String name);
@@ -34,6 +35,7 @@ public interface PluginManager {
      * Check if a plugin is enabled.
      *
      * @param name the name of the plugin.
+     *
      * @return {@code true} if the plugin is enabled, {@code false} otherwise.
      */
     boolean isPluginEnabled(String name);

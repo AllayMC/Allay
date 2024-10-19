@@ -7,7 +7,6 @@ import org.allaymc.api.world.World;
 import org.allaymc.api.world.gamerule.GameRule;
 
 /**
- *
  * @author Dhaiven
  */
 @Getter

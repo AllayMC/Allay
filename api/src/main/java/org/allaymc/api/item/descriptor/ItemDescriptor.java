@@ -14,6 +14,7 @@ public interface ItemDescriptor {
      * Check if the given {@link ItemStack} matches this descriptor.
      *
      * @param itemStack The {@link ItemStack} to check.
+     *
      * @return {@code true} if the {@link ItemStack} matches this descriptor, {@code false} otherwise.
      */
     boolean match(ItemStack itemStack);

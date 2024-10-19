@@ -110,10 +110,10 @@ public final class AllayAPI {
     /**
      * Bind an api with the specific api instance.
      *
-     * @param api the api.
+     * @param api           the api.
      * @param bindingAction the supplier which provides the api instance.
-     * @param afterBound the consumer which will be called after the api instance has been bound.
-     * @param <T> the type of the api class.
+     * @param afterBound    the consumer which will be called after the api instance has been bound.
+     * @param <T>           the type of the api class.
      */
     @ApiStatus.Internal
     public <T> void bind(Class<T> api, Supplier<T> bindingAction, Consumer<T> afterBound) {
@@ -136,7 +136,9 @@ public final class AllayAPI {
      * Each api class has only one implementation instance, so calling this method with the same parameters will return an identical object
      *
      * @param api the interface
+     *
      * @return the implementation instance of the specific interface
+     *
      * @throws RuntimeException if the interface has not been implemented
      */
     @ApiStatus.Internal
@@ -149,22 +151,22 @@ public final class AllayAPI {
     private void defaultAPIRequirements() {
         // Common
         requireImpl(Server.class, Server.INSTANCE::set);
-        requireImpl(Scheduler.SchedulerFactory.class, Scheduler.SchedulerFactory.FACTORY::set);
+        requireImpl(Scheduler.Factory.class, Scheduler.FACTORY::set);
         requireImpl(EventBus.Factory.class, EventBus.FACTORY::set);
 
         // World
         requireImpl(WorldGenerator.WorldGeneratorBuilderFactory.class, WorldGenerator.BUILDER_FACTORY::set);
 
         // Perm
-        requireImpl(PermTree.PermTreeFactory.class, PermTree.FACTORY::set);
+        requireImpl(PermTree.Factory.class, PermTree.FACTORY::set);
 
         // Command
         requireImpl(EntitySelectorAPI.class, EntitySelectorAPI.API::set);
-        requireImpl(CommandTree.CommandTreeFactory.class, CommandTree.FACTORY::set);
+        requireImpl(CommandTree.Factory.class, CommandTree.FACTORY::set);
         requireImpl(CommandNodeFactory.class, CommandNodeFactory.FACTORY::set);
 
         // Misc
-        requireImpl(BossBar.BossBarFactory.class, BossBar.FACTORY::set);
+        requireImpl(BossBar.Factory.class, BossBar.FACTORY::set);
     }
 
     private record ApiBindingAction<T>(Supplier<T> bindingAction, Consumer<T> afterBound) {}

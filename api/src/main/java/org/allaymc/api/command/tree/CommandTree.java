@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface CommandTree {
 
-    ApiInstanceHolder<CommandTreeFactory> FACTORY = ApiInstanceHolder.create();
+    ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
 
     static CommandTree create(Command command) {
         return FACTORY.get().create(command);
@@ -42,7 +42,7 @@ public interface CommandTree {
      */
     List<CommandNode> getLeaves();
 
-    interface CommandTreeFactory {
+    interface Factory {
         /**
          * Creates a new instance of {@link CommandTree} using the provided {@link Command}.
          *

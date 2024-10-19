@@ -4,7 +4,6 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 
 /**
- *
  * @author Dhaiven
  */
 public class ChunkLoadEvent extends ChunkEvent {

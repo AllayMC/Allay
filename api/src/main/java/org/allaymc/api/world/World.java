@@ -54,6 +54,7 @@ public interface World {
      * Get the dimension by the dimension id in this world.
      *
      * @param dimensionId the dimension id.
+     *
      * @return the dimension, or {@code null} if the dimension is not found.
      */
     Dimension getDimension(int dimensionId);
@@ -148,6 +149,7 @@ public interface World {
      * Add a weather to the world.
      *
      * @param weather the weather to add, {@link Weather#CLEAR} shouldn't be used here.
+     *
      * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}.
      */
     void addWeather(Weather weather);
@@ -156,6 +158,7 @@ public interface World {
      * Remove a weather from the world.
      *
      * @param weather the weather to remove, {@link Weather#CLEAR} shouldn't be used here.
+     *
      * @throws IllegalArgumentException if the weather is {@link Weather#CLEAR}.
      */
     void removeWeather(Weather weather);

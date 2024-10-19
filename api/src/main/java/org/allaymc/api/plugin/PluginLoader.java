@@ -42,6 +42,7 @@ public interface PluginLoader {
          * Check if the plugin loader factory can load the plugin file.
          *
          * @param pluginPath the path of the plugin file.
+         *
          * @return {@code true} if the plugin loader factory can load the plugin file, {@code false} otherwise.
          */
         boolean canLoad(Path pluginPath);
@@ -50,6 +51,7 @@ public interface PluginLoader {
          * Create a plugin loader for the plugin file.
          *
          * @param pluginPath the path of the plugin file.
+         *
          * @return the plugin loader.
          */
         PluginLoader create(Path pluginPath);

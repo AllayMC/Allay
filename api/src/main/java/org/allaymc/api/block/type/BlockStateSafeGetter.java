@@ -24,6 +24,7 @@ public final class BlockStateSafeGetter {
      * Get a block type by its name.
      *
      * @param name The name of the block type.
+     *
      * @return The {@link BlockStateSafeGetter.Getter} object.
      */
     public static Getter name(String name) {
@@ -46,6 +47,7 @@ public final class BlockStateSafeGetter {
          *
          * @param name  The name of the property.
          * @param value The value of the property.
+         *
          * @return The {@link Getter} object.
          */
         public Getter property(String name, Object value) {
@@ -63,6 +65,7 @@ public final class BlockStateSafeGetter {
          * Set the val of the block.
          *
          * @param val The val of the block.
+         *
          * @return The {@link Getter} object.
          */
         public Getter val(int val) {

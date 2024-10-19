@@ -14,7 +14,7 @@ import java.util.Collection;
  */
 public interface BossBar {
 
-    ApiInstanceHolder<BossBarFactory> FACTORY = ApiInstanceHolder.create();
+    ApiInstanceHolder<Factory> FACTORY = ApiInstanceHolder.create();
 
     /**
      * Create a new boss bar.
@@ -125,7 +125,7 @@ public interface BossBar {
      */
     void setTitle(String name);
 
-    interface BossBarFactory {
+    interface Factory {
         BossBar create();
     }
 }

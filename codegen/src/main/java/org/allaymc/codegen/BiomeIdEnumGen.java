@@ -48,14 +48,12 @@ public class BiomeIdEnumGen {
                 .addAnnotation(MINECRAFT_VERSION_SENSITIVE)
                 .addStaticBlock(
                         CodeBlock.builder()
-                                .add("MAP1 = $L;", "new BiomeId[256]")
-                                .add("MAP2 = $L;", "new HashMap<>()")
-                                .add("""
-                                                
-                                        for (var b : values()) {
-                                            MAP1[b.id] = b;
-                                            MAP2.put(b.identifier, b);
-                                        }""")
+                                .addStatement("MAP1 = $L", "new BiomeId[256]")
+                                .addStatement("MAP2 = $L", "new HashMap<>()")
+                                .beginControlFlow("for (var biome : values())")
+                                .addStatement("MAP1[biome.id] = biome")
+                                .addStatement("MAP2.put(biome.identifier, biome)")
+                                .endControlFlow()
                                 .build()
                 )
                 .addField(FieldSpec

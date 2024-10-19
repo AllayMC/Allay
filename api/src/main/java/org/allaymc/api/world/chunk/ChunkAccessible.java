@@ -14,6 +14,7 @@ public interface ChunkAccessible {
      *
      * @param x the x coordinate of the chunk
      * @param z the z coordinate of the chunk
+     *
      * @return the chunk at the specified chunk coordinates, or {@code null} if not found
      */
     Chunk getChunk(int x, int z);
@@ -23,6 +24,7 @@ public interface ChunkAccessible {
      *
      * @param x the x coordinate of the dimension pos
      * @param z the z coordinate of the dimension pos
+     *
      * @return the chunk which the specified dimension pos is in, or {@code null} if not found
      */
     default Chunk getChunkByDimensionPos(int x, int z) {
@@ -33,6 +35,7 @@ public interface ChunkAccessible {
      * Get the chunk by chunk hash.
      *
      * @param chunkHash the hash of the chunk
+     *
      * @return the chunk which has the specified hash, or {@code null} if not found
      */
     default Chunk getChunk(long chunkHash) {

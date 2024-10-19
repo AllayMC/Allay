@@ -1,4 +1,5 @@
 package org.allaymc.api.block.component;
+
 /**
  * @author daoge_cmd
  */

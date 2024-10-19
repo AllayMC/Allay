@@ -15,7 +15,7 @@ public interface BlockUpdateService {
     /**
      * Schedule a block update at the specified position.
      *
-     * @param pos The position of the block to update
+     * @param pos   The position of the block to update
      * @param delay The delay of the block update, in ticks
      */
     void scheduleBlockUpdate(Vector3ic pos, long delay);
@@ -23,7 +23,7 @@ public interface BlockUpdateService {
     /**
      * Schedule a block update at the specified position.
      *
-     * @param pos The position of the block to update
+     * @param pos   The position of the block to update
      * @param delay The delay of the block update
      */
     default void scheduleBlockUpdate(Vector3ic pos, Duration delay) {
@@ -33,9 +33,9 @@ public interface BlockUpdateService {
     /**
      * Add a neighbor block update at the specified position.
      *
-     * @param pos The position of the block which will be updated.
+     * @param pos              The position of the block which will be updated.
      * @param changedNeighbour The position of the block which causes the update.
-     * @param blockFace The face which will be updated.
+     * @param blockFace        The face which will be updated.
      */
     void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace);
 }

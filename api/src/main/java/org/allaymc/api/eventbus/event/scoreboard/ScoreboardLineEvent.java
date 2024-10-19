@@ -10,6 +10,7 @@ import org.allaymc.api.scoreboard.ScoreboardLine;
 @Getter
 public class ScoreboardLineEvent extends ScoreboardEvent {
     protected ScoreboardLine line;
+
     public ScoreboardLineEvent(Scoreboard scoreboard, ScoreboardLine line) {
         super(scoreboard);
         this.line = line;

@@ -32,6 +32,7 @@ public interface Permissible {
      * Check if this object has the given permission.
      *
      * @param perm the permission to check.
+     *
      * @return {@code true} if this object has the given permission, {@code false} otherwise.
      */
     default boolean hasPerm(String perm) {
@@ -42,6 +43,7 @@ public interface Permissible {
      * Check if this object has all the given permissions.
      *
      * @param perms the permissions to check.
+     *
      * @return {@code true} if this object has all the given permissions, {@code false} otherwise.
      */
     default boolean hasPerm(Collection<String> perms) {
@@ -52,6 +54,7 @@ public interface Permissible {
      * Add a permission to this object.
      *
      * @param perm the permission to add.
+     *
      * @return this object.
      */
     default Permissible addPerm(String perm) {
@@ -63,6 +66,7 @@ public interface Permissible {
      * Remove a permission from this object.
      *
      * @param perm the permission to remove.
+     *
      * @return this object.
      */
     default Permissible removePerm(String perm) {
@@ -73,8 +77,9 @@ public interface Permissible {
     /**
      * Set the value of a permission.
      *
-     * @param perm the permission to set.
+     * @param perm  the permission to set.
      * @param value {@code true} to add the permission, {@code false} to remove it.
+     *
      * @return this object.
      */
     default Permissible setPerm(String perm, boolean value) {

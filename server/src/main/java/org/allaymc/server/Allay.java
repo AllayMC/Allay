@@ -143,22 +143,22 @@ public final class Allay {
 
         // Common
         api.bind(Server.class, AllayServer::getInstance);
-        api.bind(Scheduler.SchedulerFactory.class, () -> AllayScheduler::new);
+        api.bind(Scheduler.Factory.class, () -> AllayScheduler::new);
         api.bind(EventBus.Factory.class, () -> AllayEventBus::new);
 
         // World
         api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
 
         // Perm
-        api.bind(PermTree.PermTreeFactory.class, () -> AllayPermTree::create);
+        api.bind(PermTree.Factory.class, () -> AllayPermTree::create);
 
         // Command
         api.bind(EntitySelectorAPI.class, AllayEntitySelectorAPI::new);
-        api.bind(CommandTree.CommandTreeFactory.class, () -> AllayCommandTree::create);
+        api.bind(CommandTree.Factory.class, () -> AllayCommandTree::create);
         api.bind(CommandNodeFactory.class, AllayCommandNodeFactory::new);
 
         // Misc
-        api.bind(BossBar.BossBarFactory.class, () -> AllayBossBar::new);
+        api.bind(BossBar.Factory.class, () -> AllayBossBar::new);
 
         api.implement("allay");
         log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev() + " " + GitProperties.getBuildVersion(), AllayAPI.API_VERSION));

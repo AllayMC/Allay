@@ -21,6 +21,7 @@ public interface ChunkService extends ChunkAccessible {
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
+     *
      * @return the chunk loading future, or {@code null} if chunk is not loading or already loaded.
      */
     CompletableFuture<Chunk> getChunkLoadingFuture(int x, int z);
@@ -30,6 +31,7 @@ public interface ChunkService extends ChunkAccessible {
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
+     *
      * @return the chunk future.
      */
     CompletableFuture<Chunk> getOrLoadChunk(int x, int z);
@@ -37,9 +39,10 @@ public interface ChunkService extends ChunkAccessible {
     /**
      * Get chunks within a specified range, or load them if they are not loaded
      *
-     * @param x the x coordinate of the center.
-     * @param z the z coordinate of the center.
+     * @param x     the x coordinate of the center.
+     * @param z     the z coordinate of the center.
      * @param range the range of chunks.
+     *
      * @return the chunk future.
      */
     CompletableFuture<Set<Chunk>> getOrLoadRangedChunk(int x, int z, int range);
@@ -49,6 +52,7 @@ public interface ChunkService extends ChunkAccessible {
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
+     *
      * @return the chunk future.
      */
     CompletableFuture<Chunk> loadChunk(int x, int z);
@@ -60,6 +64,7 @@ public interface ChunkService extends ChunkAccessible {
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
+     *
      * @return the chunk.
      */
     Chunk getOrLoadChunkSync(int x, int z);
@@ -69,6 +74,7 @@ public interface ChunkService extends ChunkAccessible {
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
+     *
      * @return a future to represent the result of unloading. {@code true} if the chunk is unloaded successfully, otherwise {@code false}.
      */
     CompletableFuture<Boolean> unloadChunk(int x, int z);
@@ -77,6 +83,7 @@ public interface ChunkService extends ChunkAccessible {
      * Unload the specified chunk.
      *
      * @param chunkHash the hash of the chunk.
+     *
      * @return a future to represent the result of unloading. {@code true} if the chunk is unloaded successfully, otherwise {@code false}.
      */
     CompletableFuture<Boolean> unloadChunk(long chunkHash);
@@ -93,6 +100,7 @@ public interface ChunkService extends ChunkAccessible {
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
+     *
      * @return {@code true} if the chunk is loaded, otherwise {@code false}.
      */
     boolean isChunkLoaded(int x, int z);
@@ -101,6 +109,7 @@ public interface ChunkService extends ChunkAccessible {
      * Check if the specified chunk is loaded.
      *
      * @param hashXZ the hash of the chunk.
+     *
      * @return {@code true} if the chunk is loaded, otherwise {@code false}.
      */
     boolean isChunkLoaded(long hashXZ);
@@ -110,6 +119,7 @@ public interface ChunkService extends ChunkAccessible {
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
+     *
      * @return {@code true} if the chunk is loading, otherwise {@code false}.
      */
     boolean isChunkLoading(int x, int z);
@@ -118,6 +128,7 @@ public interface ChunkService extends ChunkAccessible {
      * Check if the specified chunk is loading.
      *
      * @param hashXZ the hash of the chunk.
+     *
      * @return {@code true} if the chunk is loading, otherwise {@code false}.
      */
     boolean isChunkLoading(long hashXZ);
@@ -127,6 +138,7 @@ public interface ChunkService extends ChunkAccessible {
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.
+     *
      * @return {@code true} if the chunk is unloaded, otherwise {@code false}.
      */
     boolean isChunkUnloaded(int x, int z);
@@ -135,6 +147,7 @@ public interface ChunkService extends ChunkAccessible {
      * Check if the specified chunk is unloaded.
      *
      * @param hashXZ the hash of the chunk.
+     *
      * @return {@code true} if the chunk is unloaded, otherwise {@code false}.
      */
     boolean isChunkUnloaded(long hashXZ);

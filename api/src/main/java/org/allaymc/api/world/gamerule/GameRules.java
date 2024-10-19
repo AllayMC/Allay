@@ -50,6 +50,7 @@ public class GameRules {
      * Reads game rules from NBT.
      *
      * @param nbt the NBT to read from
+     *
      * @return the game rules
      */
     public static GameRules readFromNBT(NbtMap nbt) {
@@ -80,7 +81,7 @@ public class GameRules {
      * Set a game rule's value.
      *
      * @param gameRule the game rule
-     * @param value the value
+     * @param value    the value
      */
     public void put(GameRule gameRule, Object value) {
         gameRules.put(gameRule, value);
@@ -91,7 +92,8 @@ public class GameRules {
      * Get a game rule's value.
      *
      * @param gameRule the game rule
-     * @param <V> the type of the value
+     * @param <V>      the type of the value
+     *
      * @return the value
      */
     @SuppressWarnings("unchecked")

@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -24,10 +25,10 @@ import static org.allaymc.codegen.ClassNames.*;
  */
 public class BlockIdEnumGen {
     public static final Map<String, NbtMap> MAPPED_BLOCK_PALETTE_NBT = new HashMap<>();
+    public static final Path PACKAGE_PATH = Path.of("api/src/main/java/org/allaymc/api/block/data");
     static final Path BLOCK_PALETTE_FILE_PATH = Path.of(CodeGenConstants.DATA_PATH + "unpacked/block_palette.nbt");
     static final List<NbtMap> BLOCK_PALETTE_NBT;
     private static final String PACKAGE_NAME = "org.allaymc.api.block.data";
-    public static final Path PACKAGE_PATH = Path.of("api/src/main/java/org/allaymc/api/block/data");
 
     static {
         try (var nbtReader = new NBTInputStream(new DataInputStream(new GZIPInputStream(Files.newInputStream(BLOCK_PALETTE_FILE_PATH))))) {
@@ -66,22 +67,21 @@ public class BlockIdEnumGen {
         var blockTypeClass = ParameterizedTypeName.get(BLOCK_TYPE, WildcardTypeName.subtypeOf(TypeName.OBJECT));
         TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER)
                 .addAnnotation(MINECRAFT_VERSION_SENSITIVE)
+                .addMethod(MethodSpec.methodBuilder("fromIdentifier")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addParameter(ClassNames.API_IDENTIFIER, "identifier")
+                        .beginControlFlow("try")
+                        .addStatement("return valueOf(identifier.path().toUpperCase($T.ENGLISH))", Locale.class)
+                        .nextControlFlow("catch ($T ignore)", IllegalArgumentException.class)
+                        .addStatement("return null")
+                        .endControlFlow()
+                        .returns(BLOCK_ID)
+                        .build()
+                )
                 .addMethod(MethodSpec.methodBuilder("getBlockType")
                         .addModifiers(Modifier.PUBLIC)
                         .addStatement("return $T.BLOCKS.get(this.getIdentifier())", REGISTRIES)
                         .returns(blockTypeClass)
-                        .build()
-                )
-                .addMethod(MethodSpec.methodBuilder("fromIdentifier")
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        .addParameter(ClassNames.API_IDENTIFIER, "identifier")
-                        .addCode("""
-                                try {
-                                    return valueOf(identifier.path().toUpperCase(java.util.Locale.ENGLISH));
-                                } catch (IllegalArgumentException ignore) {
-                                    return null;
-                                }""")
-                        .returns(BLOCK_ID)
                         .build()
                 );
         addEnums(codeBuilder);

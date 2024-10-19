@@ -61,6 +61,7 @@ public class DamageContainer {
      * Create a simple attack damage container.
      *
      * @param sourceDamage the source damage.
+     *
      * @return the damage container.
      */
     public static DamageContainer simpleAttack(float sourceDamage) {
@@ -70,8 +71,9 @@ public class DamageContainer {
     /**
      * Create an entity attack damage container.
      *
-     * @param attacker the attacker.
+     * @param attacker     the attacker.
      * @param sourceDamage the source damage.
+     *
      * @return the damage container.
      */
     public static DamageContainer entityAttack(Entity attacker, float sourceDamage) {
@@ -84,6 +86,7 @@ public class DamageContainer {
      * Create a starve damage container.
      *
      * @param sourceDamage the source damage.
+     *
      * @return the damage container.
      */
     public static DamageContainer starve(float sourceDamage) {
@@ -94,6 +97,7 @@ public class DamageContainer {
      * Create a fall damage container.
      *
      * @param sourceDamage the source damage.
+     *
      * @return the damage container.
      */
     public static DamageContainer fall(float sourceDamage) {
@@ -104,6 +108,7 @@ public class DamageContainer {
      * Create a magic effect damage container.
      *
      * @param sourceDamage the source damage.
+     *
      * @return the damage container.
      */
     public static DamageContainer magicEffect(float sourceDamage) {
@@ -114,6 +119,7 @@ public class DamageContainer {
      * Create a drown damage container.
      *
      * @param sourceDamage the source damage.
+     *
      * @return the damage container.
      */
     public static DamageContainer drown(float sourceDamage) {
@@ -123,8 +129,9 @@ public class DamageContainer {
     /**
      * Get the attacker.
      *
-     * @return the attacker, or {@code null} if the attacker is not present.
      * @param <T> the type of the attacker.
+     *
+     * @return the attacker, or {@code null} if the attacker is not present.
      */
     public <T> T getAttacker() {
         // noinspection unchecked

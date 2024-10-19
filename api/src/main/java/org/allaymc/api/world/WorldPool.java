@@ -25,6 +25,7 @@ public interface WorldPool {
      * Get the world by the name.
      *
      * @param name the name of the world.
+     *
      * @return the world, or {@code null} if the world is not found.
      */
     World getWorld(String name);
@@ -49,8 +50,9 @@ public interface WorldPool {
      * <p>
      * If the world is not exists in {@code WorldSettings}, the world will be added into the {@code WorldSettings}.
      *
-     * @param name the name of the world.
+     * @param name         the name of the world.
      * @param worldSetting the settings of the world.
+     *
      * @throws IllegalArgumentException if the world with the specific name already exists.
      */
     void loadWorld(String name, WorldSettings.WorldEntry worldSetting);

@@ -25,6 +25,7 @@ public final class HeightMap {
      *
      * @param x the x coordinate of the pos.
      * @param z the z coordinate of the pos.
+     *
      * @return the index of the pos.
      */
     public static int computeIndex(int x, int z) {
@@ -36,6 +37,7 @@ public final class HeightMap {
      *
      * @param x the x coordinate of the pos.
      * @param z the z coordinate of the pos.
+     *
      * @return the height of the pos.
      */
     public short get(int x, int z) {
@@ -46,6 +48,7 @@ public final class HeightMap {
      * Get the height of the specified position.
      *
      * @param index the index of the pos.
+     *
      * @return the height of the pos.
      */
     public short get(int index) {
@@ -55,8 +58,8 @@ public final class HeightMap {
     /**
      * Set the height of the specified position.
      *
-     * @param x the x coordinate of the pos.
-     * @param z the z coordinate of the pos.
+     * @param x      the x coordinate of the pos.
+     * @param z      the z coordinate of the pos.
      * @param height the height of the pos.
      */
     public void set(int x, int z, short height) {
@@ -66,7 +69,7 @@ public final class HeightMap {
     /**
      * Set the height of the specified position.
      *
-     * @param index the index of the pos.
+     * @param index  the index of the pos.
      * @param height the height of the pos.
      */
     public void set(int index, short height) {

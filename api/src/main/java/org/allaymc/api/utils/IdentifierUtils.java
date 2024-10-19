@@ -10,7 +10,8 @@ public final class IdentifierUtils {
      * Split the given identifier by the given delimiter and create an {@link Identifier} object.
      *
      * @param identifier the identifier.
-     * @param delimiter the delimiter.
+     * @param delimiter  the delimiter.
+     *
      * @return the identifier.
      */
     public static Identifier splitOn(String identifier, String delimiter) {
@@ -21,6 +22,7 @@ public final class IdentifierUtils {
      * Try to parse the given identifier to an {@link Identifier} object.
      *
      * @param identifier the identifier.
+     *
      * @return the identifier or {@code null} if the identifier is invalid.
      */
     public static Identifier tryParse(String identifier) {
@@ -35,7 +37,8 @@ public final class IdentifierUtils {
      * Create a new identifier from the given namespace and path.
      *
      * @param namespace the namespace.
-     * @param path the path.
+     * @param path      the path.
+     *
      * @return the identifier.
      */
     public static Identifier of(String namespace, String path) {
@@ -50,6 +53,7 @@ public final class IdentifierUtils {
      * Check if the given identifier is valid.
      *
      * @param identifier the identifier.
+     *
      * @return {@code true} if the identifier is valid, otherwise {@code false}.
      */
     public static boolean isValid(String identifier) {
@@ -61,6 +65,7 @@ public final class IdentifierUtils {
      * Check if the given character is valid.
      *
      * @param c the character.
+     *
      * @return {@code true} if the character is valid, otherwise {@code false}.
      */
     public static boolean isCharValid(char c) {
@@ -71,6 +76,7 @@ public final class IdentifierUtils {
      * Assert that the given identifier is valid.
      *
      * @param identifier the identifier.
+     *
      * @throws InvalidIdentifierException if the identifier is invalid.
      */
     public static void assertValid(String identifier) {
@@ -89,6 +95,7 @@ public final class IdentifierUtils {
      * Check if the path is valid.
      *
      * @param path the path.
+     *
      * @return {@code true} if the path is valid, otherwise {@code false}.
      */
     public static boolean isPathValid(String path) {
@@ -103,6 +110,7 @@ public final class IdentifierUtils {
      * Check if the character is a valid path character.
      *
      * @param character the character.
+     *
      * @return {@code true} if the character is a valid path character, otherwise {@code false}.
      */
     public static boolean isPathCharacterValid(char character) {
@@ -113,6 +121,7 @@ public final class IdentifierUtils {
      * Check if the namespace is valid.
      *
      * @param namespace the namespace.
+     *
      * @return {@code true} if the namespace is valid, otherwise {@code false}.
      */
     public static boolean isNamespaceValid(String namespace) {
@@ -127,6 +136,7 @@ public final class IdentifierUtils {
      * Check if the character is a valid namespace character.
      *
      * @param character the character.
+     *
      * @return {@code true} if the character is a valid namespace character, otherwise {@code false}.
      */
     public static boolean isNamespaceCharacterValid(char character) {

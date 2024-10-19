@@ -79,6 +79,7 @@ public interface WorldGenerator {
      * in throwing IllegalStateException
      *
      * @param dimension the dimension
+     *
      * @throws IllegalStateException if the method is called twice
      */
     @ApiStatus.OverrideOnly
@@ -92,6 +93,7 @@ public interface WorldGenerator {
          * Set the name of the generator.
          *
          * @param name the name
+         *
          * @return the builder
          */
         WorldGeneratorBuilder name(String name);
@@ -100,6 +102,7 @@ public interface WorldGenerator {
          * Set the type of the generator.
          *
          * @param type the type
+         *
          * @return the builder
          */
         WorldGeneratorBuilder type(WorldGeneratorType type);
@@ -108,6 +111,7 @@ public interface WorldGenerator {
          * Set the preset of the generator.
          *
          * @param preset the preset
+         *
          * @return the builder
          */
         WorldGeneratorBuilder preset(String preset);
@@ -116,6 +120,7 @@ public interface WorldGenerator {
          * Set the noisers of the generator.
          *
          * @param noisers the noisers
+         *
          * @return the builder
          */
         WorldGeneratorBuilder noisers(Noiser... noisers);
@@ -124,6 +129,7 @@ public interface WorldGenerator {
          * Set the populators of the generator.
          *
          * @param populators the populators
+         *
          * @return the builder
          */
         WorldGeneratorBuilder populators(Populator... populators);
@@ -132,6 +138,7 @@ public interface WorldGenerator {
          * Set the lighters of the generator.
          *
          * @param lighters the lighters
+         *
          * @return the builder
          */
         WorldGeneratorBuilder lighters(Lighter... lighters);
@@ -140,6 +147,7 @@ public interface WorldGenerator {
          * Set the entity spawners of the generator.
          *
          * @param entitySpawners the entity spawners
+         *
          * @return the builder
          */
         WorldGeneratorBuilder entitySpawners(EntitySpawner... entitySpawners);
@@ -148,6 +156,7 @@ public interface WorldGenerator {
          * Set the callback which will be called when the dimension is set.
          *
          * @param onDimensionSet the callback
+         *
          * @return the builder
          */
         WorldGeneratorBuilder onDimensionSet(Consumer<Dimension> onDimensionSet);

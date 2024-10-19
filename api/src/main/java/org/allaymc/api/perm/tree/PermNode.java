@@ -27,6 +27,7 @@ public interface PermNode {
      * Checks if the given node name can match this node.
      *
      * @param nodeName the node name to check.
+     *
      * @return {@code true} if the given node name can match this node, {@code false} otherwise.
      */
     boolean canMatch(String nodeName);
@@ -42,6 +43,7 @@ public interface PermNode {
      * Adds a leaf to this node.
      *
      * @param nodeName the name of the leaf to add.
+     *
      * @return the leaf node.
      */
     PermNode addLeaf(String nodeName);

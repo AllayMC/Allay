@@ -29,6 +29,7 @@ public final class ItemHelper {
      * This method will also update the item state to the latest version.
      *
      * @param nbt The NBT tag.
+     *
      * @return The {@link ItemStack} object.
      */
     public static ItemStack fromNBT(NbtMap nbt) {

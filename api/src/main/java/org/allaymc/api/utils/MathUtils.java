@@ -64,6 +64,7 @@ public class MathUtils {
      * Fast inverse square root (float).
      *
      * @param x value.
+     *
      * @return result.
      */
     public float fastFloatInverseSqrt(float x) {
@@ -79,6 +80,7 @@ public class MathUtils {
      * Fast inverse square root (double).
      *
      * @param x value.
+     *
      * @return result.
      */
     public double fastDoubleInverseSqrt(double x) {
@@ -93,9 +95,10 @@ public class MathUtils {
     /**
      * Check if the value is in the range.
      *
-     * @param l left.
+     * @param l     left.
      * @param value value.
-     * @param r right.
+     * @param r     right.
+     *
      * @return {@code true} if the value is in the range, otherwise {@code false}.
      */
     public boolean isInRange(float l, float value, float r) {
@@ -123,6 +126,7 @@ public class MathUtils {
      * Calculate yaw from the direction vector.
      *
      * @param vector direction vector.
+     *
      * @return yaw.
      */
     public double getYawFromVector(Vector3fc vector) {
@@ -139,6 +143,7 @@ public class MathUtils {
      * Calculate the pitch by the direction vector.
      *
      * @param vector direction vector.
+     *
      * @return pitch.
      */
     public double getPitchFromVector(Vector3fc vector) {

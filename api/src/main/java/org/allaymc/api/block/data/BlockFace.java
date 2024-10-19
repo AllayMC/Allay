@@ -42,6 +42,7 @@ public enum BlockFace {
      * Get the block face by index.
      *
      * @param value the index.
+     *
      * @return the block face.
      */
     public static BlockFace fromId(int value) {
@@ -84,6 +85,7 @@ public enum BlockFace {
      * @param x the x coordinate.
      * @param y the y coordinate.
      * @param z the z coordinate.
+     *
      * @return the result pos.
      */
     public Vector3ic offsetPos(int x, int y, int z) {
@@ -94,6 +96,7 @@ public enum BlockFace {
      * Add current block face offset to the given pos.
      *
      * @param pos the pos.
+     *
      * @return the result pos.
      */
     public Vector3ic offsetPos(Vector3ic pos) {
@@ -104,6 +107,7 @@ public enum BlockFace {
      * Rotate the given AABB.
      *
      * @param aabb the AABB.
+     *
      * @return the rotated AABB.
      */
     public AABBf rotateAABB(AABBfc aabb) {
@@ -125,6 +129,7 @@ public enum BlockFace {
      * Rotate the given vector.
      *
      * @param vec the vector.
+     *
      * @return the rotated vector.
      */
     @SuppressWarnings("SuspiciousNameCombination")

@@ -6,7 +6,6 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.math.location.Location3fc;
 
 /**
- *
  * @author daoge_cmd | Dhaiven
  */
 @Getter

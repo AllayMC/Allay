@@ -217,6 +217,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * Copy the item stack.
      *
      * @param newStackNetworkId Whether to generate a new stack network id.
+     *
      * @return The copied item stack.
      */
     ItemStack copy(boolean newStackNetworkId);
@@ -283,7 +284,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * However, it will decide the base block variant using the information from item_meta_block_state_bimap.nbt.
      * Use which block state really will be decided in BlockBaseComponent::place() method.
      *
-     * @param dimension The dimension.
+     * @param dimension     The dimension.
      * @param placeBlockPos The position where the block will be placed.
      * @param placementInfo The placement information, can be null.
      *
@@ -329,6 +330,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * Check if the item can merge with the specified item stack.
      *
      * @param itemStack The item stack to merge.
+     *
      * @return {@code true} if the item can merge, {@code false} otherwise.
      */
     default boolean canMerge(ItemStack itemStack) {
@@ -338,8 +340,9 @@ public interface ItemBaseComponent extends ItemComponent {
     /**
      * Check if the item can merge with the specified item stack.
      *
-     * @param itemStack The item stack to merge.
+     * @param itemStack   The item stack to merge.
      * @param ignoreCount Whether to ignore the count.
+     *
      * @return {@code true} if the item can merge, {@code false} otherwise.
      */
     boolean canMerge(ItemStack itemStack, boolean ignoreCount);
@@ -407,6 +410,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * Get the protection factor of the item.
      *
      * @param damageType The damage type.
+     *
      * @return The protection factor.
      */
     default int getEnchantmentProtectionFactor(DamageContainer.DamageType damageType) {
@@ -420,6 +424,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * Get the level of the specified enchantment.
      *
      * @param enchantmentType The enchantment type.
+     *
      * @return The level of the enchantment.
      */
     int getEnchantmentLevel(EnchantmentType enchantmentType);
@@ -435,7 +440,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * Add an enchantment to the item.
      *
      * @param enchantmentType The enchantment type.
-     * @param level The level of the enchantment.
+     * @param level           The level of the enchantment.
      */
     void addEnchantment(EnchantmentType enchantmentType, int level);
 
@@ -450,6 +455,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * Remove an enchantment from the item.
      *
      * @param enchantmentType The enchantment type.
+     *
      * @return The removed enchantment, or {@code null} if the item doesn't have the enchantment.
      */
     EnchantmentInstance removeEnchantment(EnchantmentType enchantmentType);
@@ -541,6 +547,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * Check if the specified enchantment type is compatible with this item.
      *
      * @param type The enchantment type.
+     *
      * @return {@code true} if the enchantment is compatible, {@code false} otherwise.
      */
     default boolean checkEnchantmentCompatibility(EnchantmentType type) {
@@ -551,6 +558,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * Get the incompatible enchantment types with the specified type.
      *
      * @param type The enchantment type.
+     *
      * @return The incompatible enchantment types.
      */
     default Set<EnchantmentType> getIncompatibleEnchantmentTypes(EnchantmentType type) {

@@ -84,19 +84,20 @@ public interface BlockBaseComponent extends BlockComponent {
      * Check if the block will drop as item when it is broke by the specified entity using the specified item.
      *
      * @param blockState the block being broke.
-     * @param usedItem the item used to break the block, can be {@code null}.
-     * @param entity the entity who break the block, can be {@code null}.
+     * @param usedItem   the item used to break the block, can be {@code null}.
+     * @param entity     the entity who break the block, can be {@code null}.
+     *
      * @return {@code true} if the block will drop as item, {@code false} otherwise.
      */
     boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     /**
-     * @param itemStack The item in the player's hand.
+     * @param itemStack    The item in the player's hand.
      * @param interactInfo The player interaction info.
      *
      * @return Whether the operation is vali`d.
-     *         For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return {@code true}
-     *         If {@code false} is returned, the useItemOn method of the player's item will continue to be called
+     * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return {@code true}
+     * If {@code false} is returned, the useItemOn method of the player's item will continue to be called
      */
     boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo);
 
@@ -138,6 +139,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param blockState the block being broke.
      * @param usedItem   the item used to break the block, can be {@code null}.
      * @param entity     the entity who break the block, can be {@code null}.
+     *
      * @return the drops.
      */
     Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
@@ -146,6 +148,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * Get the block's drops when it is broke by an item which has silk touch enchantment.
      *
      * @param blockState the block which is being broke.
+     *
      * @return the drops.
      */
     default ItemStack getSilkTouchDrop(BlockStateWithPos blockState) {
@@ -156,6 +159,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * Check if the block can damage the item.
      *
      * @param itemStack the item being damaged.
+     *
      * @return {@code true} if the block can damage the item, {@code false} otherwise.
      */
     default boolean canDamageItem(ItemStack itemStack) {

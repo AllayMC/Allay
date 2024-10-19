@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -59,27 +60,23 @@ public class ItemIdEnumGen {
     public static void generateToAPIModule() {
         TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER)
                 .addAnnotation(MINECRAFT_VERSION_SENSITIVE)
+                .addMethod(MethodSpec.methodBuilder("fromIdentifier")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addParameter(ClassNames.API_IDENTIFIER, "identifier")
+                        .beginControlFlow("try")
+                        .addStatement("return valueOf(identifier.path().replace(\".\", \"_\").toUpperCase($T.ENGLISH))", Locale.class)
+                        .nextControlFlow("catch ($T ignore)", IllegalArgumentException.class)
+                        .addStatement("return null")
+                        .endControlFlow()
+                        .returns(ClassNames.ITEM_ID)
+                        .build()
+                )
                 .addMethod(MethodSpec.methodBuilder("getItemType")
                         .addModifiers(Modifier.PUBLIC)
                         .addStatement("return $T.ITEMS.get(this.getIdentifier())", REGISTRIES)
                         .returns(ParameterizedTypeName.get(ITEM_TYPE, WildcardTypeName.subtypeOf(TypeName.OBJECT)))
                         .build()
                 );
-        codeBuilder.addMethod(MethodSpec.methodBuilder("fromIdentifier")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .addParameter(ClassNames.API_IDENTIFIER, "identifier")
-                .addCode(
-                        CodeBlock.builder()
-                                .beginControlFlow("try")
-                                .addStatement("return valueOf(identifier.path().replace(\".\", \"_\").toUpperCase(java.util.Locale.ENGLISH))")
-                                .nextControlFlow("catch (IllegalArgumentException ignore)")
-                                .addStatement("return null")
-                                .endControlFlow()
-                                .build()
-                )
-                .returns(ClassNames.ITEM_ID)
-                .build()
-        );
         addEnums(codeBuilder);
         var javaFile = JavaFile.builder(PACKAGE_NAME, codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)

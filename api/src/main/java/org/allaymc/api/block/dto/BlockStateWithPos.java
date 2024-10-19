@@ -7,8 +7,8 @@ import org.allaymc.api.math.position.Position3ic;
  * Represents a block state in the world.
  *
  * @param blockState the block state.
- * @param pos the position.
- * @param layer the layer.
+ * @param pos        the position.
+ * @param layer      the layer.
  *
  * @author daoge_cmd
  */

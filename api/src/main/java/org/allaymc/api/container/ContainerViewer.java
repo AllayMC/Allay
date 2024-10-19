@@ -55,7 +55,7 @@ public interface ContainerViewer {
      * Called when a container is opened.
      *
      * @param assignedId the id assigned to the container.
-     * @param container the container that was opened.
+     * @param container  the container that was opened.
      */
     @ApiStatus.OverrideOnly
     void onOpen(byte assignedId, Container container);
@@ -64,7 +64,7 @@ public interface ContainerViewer {
      * Called when a container is closed.
      *
      * @param assignedId the id assigned to the container.
-     * @param container the container that was closed.
+     * @param container  the container that was closed.
      */
     @ApiStatus.OverrideOnly
     void onClose(byte assignedId, Container container);
@@ -73,7 +73,7 @@ public interface ContainerViewer {
      * Notify an item in a slot that has been changed.
      *
      * @param container the container.
-     * @param slot the slot.
+     * @param slot      the slot.
      */
     void notifySlotChange(Container container, int slot);
 
@@ -81,6 +81,7 @@ public interface ContainerViewer {
      * Get the container that is opened with a specific type.
      *
      * @param type the type of the container.
+     *
      * @return the container.
      */
     <T extends Container> T getOpenedContainer(FullContainerType<T> type);
@@ -89,6 +90,7 @@ public interface ContainerViewer {
      * Get the container that is opened with a specific slot type.
      *
      * @param slotType the slot type of the container.
+     *
      * @return the container.
      */
     <T extends Container> T getOpenedContainerBySlotType(ContainerSlotType slotType);
@@ -97,6 +99,7 @@ public interface ContainerViewer {
      * Get the container that is opened with the assigned id.
      *
      * @param id the assigned id of the container.
+     *
      * @return the container.
      */
     Container getOpenedContainer(byte id);
@@ -128,8 +131,8 @@ public interface ContainerViewer {
      * Send container data to the viewer.
      *
      * @param assignedId the assigned id of the container.
-     * @param property the property to send.
-     * @param value the value to send.
+     * @param property   the property to send.
+     * @param value      the value to send.
      */
     void sendContainerData(byte assignedId, int property, int value);
 }

@@ -7,7 +7,6 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 /**
- *
  * @author daoge_cmd | Dhaiven
  */
 @Getter

@@ -3,7 +3,6 @@ package org.allaymc.api.world.chunk;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.storage.WorldStorage;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -86,7 +85,7 @@ public interface Chunk extends UnsafeChunk {
      * <p>
      * Chunk packet will be sent to chunk loaders that match the predicate every tick.
      *
-     * @param packet the packet to add
+     * @param packet               the packet to add
      * @param chunkLoaderPredicate the predicate to match chunk loaders
      */
     void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
@@ -99,7 +98,7 @@ public interface Chunk extends UnsafeChunk {
     /**
      * Send packet to chunk loaders that match the predicate.
      *
-     * @param packet the packet to send
+     * @param packet               the packet to send
      * @param chunkLoaderPredicate the predicate to match chunk loaders
      */
     void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
@@ -112,55 +111,55 @@ public interface Chunk extends UnsafeChunk {
     /**
      * Compare and set block at the specified position.
      *
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param z the z coordinate.
+     * @param x             the x coordinate.
+     * @param y             the y coordinate.
+     * @param z             the z coordinate.
      * @param expectedValue the expected block state.
-     * @param newValue the new block state.
-     * @param layer the layer to compare and set.
+     * @param newValue      the new block state.
+     * @param layer         the layer to compare and set.
      */
     void compareAndSetBlock(int x, int y, int z, BlockState expectedValue, BlockState newValue, int layer);
 
     /**
      * Compare and set biome at the specified position.
      *
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param z the z coordinate.
+     * @param x             the x coordinate.
+     * @param y             the y coordinate.
+     * @param z             the z coordinate.
      * @param expectedValue the expected biome type.
-     * @param newValue the new biome type.
+     * @param newValue      the new biome type.
      */
     void compareAndSetBiome(int x, int y, int z, BiomeType expectedValue, BiomeType newValue);
 
     /**
      * Compare and set block light at the specified position.
      *
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param z the z coordinate.
+     * @param x             the x coordinate.
+     * @param y             the y coordinate.
+     * @param z             the z coordinate.
      * @param expectedValue the expected block light level.
-     * @param newValue the new block light level.
+     * @param newValue      the new block light level.
      */
     void compareAndSetBlockLight(int x, int y, int z, int expectedValue, int newValue);
 
     /**
      * Compare and set skylight at the specified position.
      *
-     * @param x the x coordinate.
-     * @param y the y coordinate.
-     * @param z the z coordinate.
+     * @param x             the x coordinate.
+     * @param y             the y coordinate.
+     * @param z             the z coordinate.
      * @param expectedValue the expected skylight level.
-     * @param newValue the new skylight level.
+     * @param newValue      the new skylight level.
      */
     void compareAndSetSkyLight(int x, int y, int z, int expectedValue, int newValue);
 
     /**
      * Compare and set height at the specified position.
      *
-     * @param x the x coordinate.
-     * @param z the z coordinate.
+     * @param x             the x coordinate.
+     * @param z             the z coordinate.
      * @param expectedValue the expected height.
-     * @param newValue the new height.
+     * @param newValue      the new height.
      */
     void compareAndSetHeight(int x, int z, int expectedValue, int newValue);
 

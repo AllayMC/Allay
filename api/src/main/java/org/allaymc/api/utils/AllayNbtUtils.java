@@ -20,6 +20,7 @@ public final class AllayNbtUtils {
      * Convert NBT to Base64 (LE).
      *
      * @param nbtMap the NBT map.
+     *
      * @return the Base64 string.
      */
     public static String nbtToBase64LE(NbtMap nbtMap) {
@@ -37,6 +38,7 @@ public final class AllayNbtUtils {
      * Convert NBT to Base64.
      *
      * @param nbtMap the NBT map.
+     *
      * @return the Base64 string.
      */
     public static String nbtToBase64(NbtMap nbtMap) {
@@ -54,6 +56,7 @@ public final class AllayNbtUtils {
      * Convert Base64 to NBT (LE).
      *
      * @param base64 the Base64 string.
+     *
      * @return the NBT map.
      */
     @SneakyThrows
@@ -65,6 +68,7 @@ public final class AllayNbtUtils {
      * Convert Base64 to NBT.
      *
      * @param base64 the Base64 string.
+     *
      * @return the NBT map.
      */
     @SneakyThrows
@@ -75,11 +79,12 @@ public final class AllayNbtUtils {
     /**
      * Read a vector3 from NBT.
      *
-     * @param nbt the NBT map.
+     * @param nbt      the NBT map.
      * @param rootName the root name.
-     * @param f1 the x field.
-     * @param f2 the y field.
-     * @param f3 the z field.
+     * @param f1       the x field.
+     * @param f2       the y field.
+     * @param f3       the z field.
+     *
      * @return the vector3.
      */
     public static Vector3f readVector3f(NbtMap nbt, String rootName, String f1, String f2, String f3) {
@@ -90,11 +95,11 @@ public final class AllayNbtUtils {
     /**
      * Write a vector3 to NBT.
      *
-     * @param nbt the NBT builder.
+     * @param nbt      the NBT builder.
      * @param rootName the root name.
-     * @param f1 the x field.
-     * @param f2 the y field.
-     * @param f3 the z field.
+     * @param f1       the x field.
+     * @param f2       the y field.
+     * @param f3       the z field.
      * @param vector3f the vector3.
      */
     public static void writeVector3f(NbtMapBuilder nbt, String rootName, String f1, String f2, String f3, Vector3fc vector3f) {
@@ -109,11 +114,12 @@ public final class AllayNbtUtils {
     /**
      * Read a vector3 from NBT.
      *
-     * @param nbt the NBT map.
+     * @param nbt      the NBT map.
      * @param rootName the root name.
-     * @param f1 the x field.
-     * @param f2 the y field.
-     * @param f3 the z field.
+     * @param f1       the x field.
+     * @param f2       the y field.
+     * @param f3       the z field.
+     *
      * @return the vector3.
      */
     public static Vector3i readVector3i(NbtMap nbt, String rootName, String f1, String f2, String f3) {
@@ -124,11 +130,11 @@ public final class AllayNbtUtils {
     /**
      * Write a vector3 to NBT.
      *
-     * @param nbt the NBT builder.
+     * @param nbt      the NBT builder.
      * @param rootName the root name.
-     * @param f1 the x field.
-     * @param f2 the y field.
-     * @param f3 the z field.
+     * @param f1       the x field.
+     * @param f2       the y field.
+     * @param f3       the z field.
      * @param vector3i the vector3.
      */
     public static void writeVector3i(NbtMapBuilder nbt, String rootName, String f1, String f2, String f3, Vector3ic vector3i) {
@@ -143,10 +149,11 @@ public final class AllayNbtUtils {
     /**
      * Read a vector2 from NBT.
      *
-     * @param nbt the NBT map.
+     * @param nbt      the NBT map.
      * @param rootName the root name.
-     * @param f1 the x field.
-     * @param f2 the y field.
+     * @param f1       the x field.
+     * @param f2       the y field.
+     *
      * @return the vector2.
      */
     public static Vector2f readVector2f(NbtMap nbt, String rootName, String f1, String f2) {
@@ -157,10 +164,10 @@ public final class AllayNbtUtils {
     /**
      * Write a vector2 to NBT.
      *
-     * @param nbt the NBT builder.
+     * @param nbt      the NBT builder.
      * @param rootName the root name.
-     * @param f1 the x field.
-     * @param f2 the y field.
+     * @param f1       the x field.
+     * @param f2       the y field.
      * @param vector2f the vector2.
      */
     public static void writeVector2f(NbtMapBuilder nbt, String rootName, String f1, String f2, Vector2fc vector2f) {

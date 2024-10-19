@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 
 /**
- *
  * @author Dhaiven
  */
 @AllArgsConstructor

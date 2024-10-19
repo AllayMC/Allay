@@ -7,7 +7,6 @@ import org.allaymc.api.world.World;
 import org.joml.Vector3ic;
 
 /**
- *
  * @author Dhaiven
  */
 @Getter

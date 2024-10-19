@@ -61,10 +61,33 @@ public enum CompassRoseDirection {
      * Get the direction from the given index.
      *
      * @param index The index of the direction
+     *
      * @return The direction from the given index
      */
     public static CompassRoseDirection from(int index) {
         return VALUES[index];
+    }
+
+    /**
+     * Get the closes direction based on the given yaw.
+     *
+     * @param yaw An entity yaw
+     *
+     * @return The closest direction
+     */
+    public static CompassRoseDirection getClosestFromYaw(double yaw, @NotNull Precision precision) {
+        return CompassRoseDirection.from((int) Math.round(Math.round((yaw + 180.0) * precision.directions / 360.0) * (16.0 / precision.directions)) & 0x0f);
+    }
+
+    /**
+     * Get the closes direction based on the given yaw.
+     *
+     * @param yaw An entity yaw
+     *
+     * @return The closest direction
+     */
+    public static CompassRoseDirection getClosestFromYaw(double yaw) {
+        return getClosestFromYaw(yaw, Precision.SECONDARY_INTER_CARDINAL);
     }
 
     /**
@@ -88,7 +111,7 @@ public enum CompassRoseDirection {
     /**
      * Get the closest face for this direction. For example, NNE returns N.
      * Even directions like NE will return the direction to the left, N in this case.
-     * <p>
+     *
      * @return The closest face for this direction
      */
     public BlockFace getClosestBlockFace() {
@@ -102,26 +125,6 @@ public enum CompassRoseDirection {
      */
     public int getIndex() {
         return index;
-    }
-
-    /**
-     * Get the closes direction based on the given yaw.
-     *
-     * @param yaw An entity yaw
-     * @return The closest direction
-     */
-    public static CompassRoseDirection getClosestFromYaw(double yaw, @NotNull Precision precision) {
-        return CompassRoseDirection.from((int) Math.round(Math.round((yaw + 180.0) * precision.directions / 360.0) * (16.0 / precision.directions)) & 0x0f);
-    }
-
-    /**
-     * Get the closes direction based on the given yaw.
-     *
-     * @param yaw An entity yaw
-     * @return The closest direction
-     */
-    public static CompassRoseDirection getClosestFromYaw(double yaw) {
-        return getClosestFromYaw(yaw, Precision.SECONDARY_INTER_CARDINAL);
     }
 
     /**

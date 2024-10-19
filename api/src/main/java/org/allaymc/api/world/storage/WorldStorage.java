@@ -30,9 +30,10 @@ public interface WorldStorage {
     /**
      * Read a chunk from the storage.
      *
-     * @param chunkX the x coordinate of the chunk
-     * @param chunkZ the z coordinate of the chunk
+     * @param chunkX        the x coordinate of the chunk
+     * @param chunkZ        the z coordinate of the chunk
      * @param dimensionInfo the dimension info of the chunk
+     *
      * @return a chunk future
      */
     CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
@@ -40,9 +41,10 @@ public interface WorldStorage {
     /**
      * Read a chunk from the storage synchronously.
      *
-     * @param chunkX the x coordinate of the chunk
-     * @param chunkZ the z coordinate of the chunk
+     * @param chunkX        the x coordinate of the chunk
+     * @param chunkZ        the z coordinate of the chunk
      * @param dimensionInfo the dimension info of the chunk
+     *
      * @return the chunk
      */
     Chunk readChunkSync(int chunkX, int chunkZ, DimensionInfo dimensionInfo);
@@ -51,6 +53,7 @@ public interface WorldStorage {
      * Write a chunk to the storage.
      *
      * @param chunk the chunk to write
+     *
      * @return a future which will be completed when the chunk is written
      */
     CompletableFuture<Void> writeChunk(Chunk chunk);
@@ -65,9 +68,10 @@ public interface WorldStorage {
     /**
      * Check if the storage contains a chunk.
      *
-     * @param chunkX the x coordinate of the chunk
-     * @param chunkZ the z coordinate of the chunk
+     * @param chunkX        the x coordinate of the chunk
+     * @param chunkZ        the z coordinate of the chunk
      * @param dimensionInfo the dimension info of the chunk
+     *
      * @return {@code true} if the storage contains the chunk, {@code false} otherwise
      */
     boolean containChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo);

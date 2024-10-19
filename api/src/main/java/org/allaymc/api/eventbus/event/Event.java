@@ -34,6 +34,7 @@ public abstract class Event {
      * Cancel the event.
      *
      * @param value {@code true} if the event is cancelled, otherwise {@code false}.
+     *
      * @throws EventException if the event is not cancellable.
      */
     public void setCancelled(boolean value) {

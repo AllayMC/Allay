@@ -36,6 +36,7 @@ public class EnchantmentInstance {
      * Set the level of the enchantment.
      *
      * @param level the level of the enchantment.
+     *
      * @return the enchantment instance with the new level.
      */
     public EnchantmentInstance setLevel(int level) {

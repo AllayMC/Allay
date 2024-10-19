@@ -15,6 +15,7 @@ public interface Recipe {
      * Check if the input matches the recipe.
      *
      * @param input the input to check.
+     *
      * @return {@code true} if the input matches the recipe, {@code false} otherwise.
      */
     boolean match(Input input);

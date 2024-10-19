@@ -140,7 +140,7 @@ public interface CommandNodeFactory {
      * @param parent       the parent node.
      * @param enumName     the name of the enum.
      * @param defaultValue the default enum value as a string.
-     * @param values        the available enum options.
+     * @param values       the available enum options.
      *
      * @return a new {@code CommandNode} for the enum argument.
      */

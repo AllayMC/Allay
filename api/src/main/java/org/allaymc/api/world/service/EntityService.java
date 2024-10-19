@@ -19,7 +19,7 @@ public interface EntityService {
      * It will be added to the world in the next tick, and
      * the callback will be called.
      *
-     * @param entity The entity pending to be spawned
+     * @param entity   The entity pending to be spawned
      * @param callback The callback to be called after the entity is added to the world
      */
     void addEntity(Entity entity, Runnable callback);
@@ -35,7 +35,7 @@ public interface EntityService {
      * It will be removed from the world in the next tick, and
      * the callback will be called.
      *
-     * @param entity The entity pending to be despawned
+     * @param entity   The entity pending to be despawned
      * @param callback The callback to be called after the entity is removed from the world
      */
     void removeEntity(Entity entity, Runnable callback);

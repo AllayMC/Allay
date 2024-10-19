@@ -73,7 +73,7 @@ public interface Container {
     /**
      * Add a listener to be called when the slot is changed.
      *
-     * @param slot the slot.
+     * @param slot     the slot.
      * @param listener the listener.
      */
     void addOnSlotChangeListener(int slot, Consumer<ItemStack> listener);
@@ -81,7 +81,7 @@ public interface Container {
     /**
      * Remove a listener to be called when the slot is changed.
      *
-     * @param slot the slot.
+     * @param slot     the slot.
      * @param listener the listener.
      */
     void removeOnSlotChangeListener(int slot, Consumer<ItemStack> listener);
@@ -90,6 +90,7 @@ public interface Container {
      * Get the slot type of the slot.
      *
      * @param slot the slot.
+     *
      * @return the slot type.
      */
     default ContainerSlotType getSlotType(int slot) {
@@ -107,6 +108,7 @@ public interface Container {
      * Get the item stack of the slot.
      *
      * @param slot the slot.
+     *
      * @return the item stack.
      */
     ItemStack getItemStack(int slot);
@@ -115,6 +117,7 @@ public interface Container {
      * Check if the slot is empty.
      *
      * @param slot the slot.
+     *
      * @return {@code true} if the slot is empty, otherwise {@code false}.
      */
     default boolean isEmpty(int slot) {
@@ -161,7 +164,7 @@ public interface Container {
     /**
      * Set the item stack of the slot.
      *
-     * @param slot the slot.
+     * @param slot      the slot.
      * @param itemStack the item stack.
      */
     void setItemStack(int slot, ItemStack itemStack);
@@ -252,6 +255,7 @@ public interface Container {
      * Get the slot index from the network slot index.
      *
      * @param index the network slot index.
+     *
      * @return the slot index.
      */
     default int toNetworkSlotIndex(int index) {
@@ -262,6 +266,7 @@ public interface Container {
      * Get the network slot index from the slot index.
      *
      * @param index the slot index.
+     *
      * @return the network slot index.
      */
     default int fromNetworkSlotIndex(int index) {
@@ -281,7 +286,7 @@ public interface Container {
      * Send content of a specific slot to the viewer.
      *
      * @param viewer the viewer.
-     * @param slot the slot.
+     * @param slot   the slot.
      */
     default void sendContent(ContainerViewer viewer, int slot) {
         viewer.sendContent(this, slot);
@@ -290,9 +295,10 @@ public interface Container {
     /**
      * Try to add an item to the specified slot range of this container.
      *
-     * @param itemStack the item stack.
+     * @param itemStack    the item stack.
      * @param minSlotIndex the min slot index.
      * @param maxSlotIndex the max slot index.
+     *
      * @return the slot index where the item is added, or {@code -1} if the item is failed to be added.
      */
     default int tryAddItem(ItemStack itemStack, int minSlotIndex, int maxSlotIndex) {
@@ -346,6 +352,7 @@ public interface Container {
      * Try to add an item to the container.
      *
      * @param itemStack the item stack.
+     *
      * @return the slot index where the item is added, or {@code -1} if the item is failed to be added.
      */
     default int tryAddItem(ItemStack itemStack) {
@@ -357,7 +364,7 @@ public interface Container {
      * Send a container data to the viewers.
      *
      * @param property the property.
-     * @param value the value.
+     * @param value    the value.
      */
     default void sendContainerData(int property, int value) {
         getViewers().forEach((id, viewer) -> viewer.sendContainerData(id, property, value));

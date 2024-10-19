@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.server.Server;
 import org.cloudburstmc.nbt.NbtMap;
-import org.joml.Vector3i;
 
 import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 

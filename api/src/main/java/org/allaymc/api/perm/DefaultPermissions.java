@@ -40,6 +40,7 @@ public final class DefaultPermissions {
      * Gets a permission tree by name.
      *
      * @param name the name of the permission tree.
+     *
      * @return the permission tree, or {@code null} if not found.
      */
     public static PermTree byName(String name) {

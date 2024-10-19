@@ -819,7 +819,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
 
     /**
      * Check if the specific effect can apply on the entity.
+     *
      * @param effectType the specific effect
+     *
      * @return {@code true} if the specific effect can apply on the entity, otherwise {@code false}.
      */
     default boolean canApplyEffect(EffectType effectType) {

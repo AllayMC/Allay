@@ -17,6 +17,7 @@ public record SemVersion(int major, int minor, int patch, int revision, int buil
      * The length of the array must be 5.
      *
      * @param versions the version array
+     *
      * @return the semantic version
      */
     public static SemVersion from(int[] versions) {

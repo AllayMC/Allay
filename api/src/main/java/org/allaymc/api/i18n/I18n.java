@@ -34,6 +34,7 @@ public interface I18n {
      * Check if the character is a valid key character.
      *
      * @param character the character
+     *
      * @return true if the character is a valid key character, otherwise false
      */
     static boolean isValidKeyCharacter(char character) {
@@ -44,8 +45,9 @@ public interface I18n {
      * Translate the text which may contain translation key.
      *
      * @param langCode the lang code used.
-     * @param tr the text, which may contain translation key.
-     * @param args the arguments used in the translation.
+     * @param tr       the text, which may contain translation key.
+     * @param args     the arguments used in the translation.
+     *
      * @return the translated text.
      */
     String tr(LangCode langCode, @MayContainTrKey String tr, String... args);
@@ -54,8 +56,9 @@ public interface I18n {
      * Translate the text which may contain translation key.
      *
      * @param langCode the lang code used.
-     * @param tr the text, which may contain translation key.
-     * @param args the arguments used in the translation.
+     * @param tr       the text, which may contain translation key.
+     * @param args     the arguments used in the translation.
+     *
      * @return the translated text.
      */
     default String tr(LangCode langCode, @MayContainTrKey String tr, Object... args) {
@@ -65,8 +68,9 @@ public interface I18n {
     /**
      * Translate the text which may contain translation key, using the default lang code.
      *
-     * @param tr the text, which may contain translation key.
+     * @param tr   the text, which may contain translation key.
      * @param args the arguments used in the translation.
+     *
      * @return the translated text.
      */
     default String tr(@MayContainTrKey String tr, String... args) {
@@ -76,8 +80,9 @@ public interface I18n {
     /**
      * Translate the text which may contain translation key, using the default lang code.
      *
-     * @param tr the text, which may contain translation key.
+     * @param tr   the text, which may contain translation key.
      * @param args the arguments used in the translation.
+     *
      * @return the translated text.
      */
     default String tr(@MayContainTrKey String tr, Object... args) {
@@ -88,7 +93,8 @@ public interface I18n {
      * Translate the text which may contain translation key.
      *
      * @param langCode the lang code used.
-     * @param tr the text, which may contain translation key.
+     * @param tr       the text, which may contain translation key.
+     *
      * @return the translated text.
      */
     String tr(LangCode langCode, @MayContainTrKey String tr);
@@ -97,6 +103,7 @@ public interface I18n {
      * Translate the text which may contain translation key, using the default lang code.
      *
      * @param tr the text, which may contain translation key.
+     *
      * @return the translated text.
      */
     default String tr(@MayContainTrKey String tr) {
@@ -121,6 +128,7 @@ public interface I18n {
      * Find the I18n key info in the string.
      *
      * @param str the string.
+     *
      * @return the I18n key info.
      */
     KeyInfo findI18nKey(@MayContainTrKey String str);
@@ -153,8 +161,9 @@ public interface I18n {
      * This method will find and remove the namespace in the translation key, itself does not translate the text.
      *
      * @param langCode the lang code.
-     * @param tr the translation key.
-     * @param args the arguments.
+     * @param tr       the translation key.
+     * @param args     the arguments.
+     *
      * @return the converted text and whether the translation key is vanilla.
      */
     default Pair<String, Boolean> toClientFriendlyStyle0(LangCode langCode, @MayContainTrKey String tr, String... args) {
@@ -179,9 +188,9 @@ public interface I18n {
      * KeyInfo stores the information of the translation key in a string.
      *
      * @param startIndex the start index of the translation key.
-     * @param endIndex the end index of the translation key.
+     * @param endIndex   the end index of the translation key.
      * @param colonIndex the colon (":" character) index of the translation key.
-     * @param key the translation key.
+     * @param key        the translation key.
      * @param hasStarter whether the translation key has a starter character ("%" character).
      */
     record KeyInfo(int startIndex, int endIndex, int colonIndex, String key, boolean hasStarter) {

@@ -3,7 +3,6 @@ package org.allaymc.api.network;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.utils.SemVersion;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v712.Bedrock_v712;
 import org.cloudburstmc.protocol.bedrock.codec.v729.Bedrock_v729;
 
 /**
@@ -24,9 +23,9 @@ public final class ProtocolInfo {
      */
     public static final SemVersion BLOCK_STATE_VERSION = new SemVersion(1, 21, 30, 7, 0);
 
-    public static final int BLOCK_STATE_VERSION_NUM_NO_REVISION = (BLOCK_STATE_VERSION.major() << 24) | // major
-                                                                  (BLOCK_STATE_VERSION.minor() << 16) | // minor
-                                                                  (BLOCK_STATE_VERSION.patch() << 8); // patch
+    public static final int BLOCK_STATE_VERSION_NUM_NO_REVISION = (BLOCK_STATE_VERSION.major() << 24) |
+                                                                  (BLOCK_STATE_VERSION.minor() << 16) |
+                                                                  (BLOCK_STATE_VERSION.patch() << 8);
 
     public static final int BLOCK_STATE_VERSION_NUM = BLOCK_STATE_VERSION_NUM_NO_REVISION | BLOCK_STATE_VERSION.revision(); // revision
 

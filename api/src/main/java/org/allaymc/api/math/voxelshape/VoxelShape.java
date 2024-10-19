@@ -64,6 +64,7 @@ public final class VoxelShape {
      * Rotate this voxel shape by the specified face.
      *
      * @param face the face to rotate the voxel shape.
+     *
      * @return the rotated voxel shape.
      */
     public VoxelShape rotate(BlockFace face) {
@@ -82,6 +83,7 @@ public final class VoxelShape {
      * @param x the x offset.
      * @param y the y offset.
      * @param z the z offset.
+     *
      * @return the translated voxel shape.
      */
     public VoxelShape translate(float x, float y, float z) {
@@ -98,6 +100,7 @@ public final class VoxelShape {
      * Add a specified offset to this voxel shape.
      *
      * @param vec the offset vector.
+     *
      * @return the translated voxel shape.
      */
     public VoxelShape translate(Vector3fc vec) {
@@ -114,6 +117,7 @@ public final class VoxelShape {
      * Check if this voxel shape intersects with the specified AABB.
      *
      * @param other the AABB to check.
+     *
      * @return true if this voxel shape intersects with the specified AABB, otherwise false.
      */
     public boolean intersectsAABB(AABBfc other) {
@@ -129,6 +133,7 @@ public final class VoxelShape {
      * Check if this voxel shape intersects with the specified point.
      *
      * @param vec the point to check.
+     *
      * @return {@code true} if this voxel shape intersects with the specified point, otherwise {@code false}.
      */
     public boolean intersectsPoint(Vector3fc vec) {
@@ -142,6 +147,7 @@ public final class VoxelShape {
      * @param x the x coordinate of the point.
      * @param y the y coordinate of the point.
      * @param z the z coordinate of the point.
+     *
      * @return {@code true} if this voxel shape intersects with the specified point, otherwise {@code false}.
      */
     public boolean intersectsPoint(float x, float y, float z) {
@@ -153,15 +159,16 @@ public final class VoxelShape {
      * Check if the specified face of this voxel shape is full.
      *
      * @param face the face to check.
+     *
      * @return {@code true} if the specified face of this voxel shape is full, otherwise {@code false}.
      */
     public boolean isFull(BlockFace face) {
-        // 检查 vacancies 是否在面上造成任何空缺
+        // Check if vacancies cause any gaps on the face
         for (AABBfc vacancy : vacancies) {
             if (isAlignedWithFace(vacancy, face)) {
                 float[] uvMinMax = getUVMinMax(vacancy, face);
-                // 只要有任何空缺的存在，面就不完整
-                if (uvMinMax[0] < 1.0f || uvMinMax[1] > 0.0f || uvMinMax[2] < 1.0f || uvMinMax[3] > 0.0f) {
+                // As long as there is any gap, the face is incomplete
+                if (uvMinMax[0] < 1f || uvMinMax[1] > 0f || uvMinMax[2] < 1f || uvMinMax[3] > 0f) {
                     return false;
                 }
             }
@@ -170,7 +177,7 @@ public final class VoxelShape {
         float minU = Float.MAX_VALUE, maxU = -Float.MAX_VALUE;
         float minV = Float.MAX_VALUE, maxV = -Float.MAX_VALUE;
 
-        // 计算 solids 覆盖的范围
+        // Calculate the range covered by solids
         for (AABBfc solid : solids) {
             if (isAlignedWithFace(solid, face)) {
                 float[] uvMinMax = getUVMinMax(solid, face);
@@ -181,45 +188,44 @@ public final class VoxelShape {
             }
         }
 
-        // 如果 solids 没有完全覆盖这个面，则返回 false
-        // 面完全被 solids 覆盖且没有空缺，则返回 true
-        return minU == 0.0f && maxU == 1.0f && minV == 0.0f && maxV == 1.0f;
+        // If the solids do not completely cover the face, return false
+        // If the face is fully covered by solids with no gaps, return true
+        return minU == 0f && maxU == 1f && minV == 0f && maxV == 1f;
     }
 
     /**
      * Check if the specified face of this voxel shape is center full.
      *
      * @param face the face to check.
+     *
      * @return {@code true} if the specified face of this voxel shape is center full, otherwise {@code false}.
      */
     public boolean isCenterFull(BlockFace face) {
-        // 中心区域的边界，从 3/8 到 5/8
-        float centerMinU = 0.375f;
-        float centerMaxU = 0.625f;
-        float centerMinV = 0.375f;
-        float centerMaxV = 0.625f;
+        // The boundaries of the center region, from 3/8 to 5/8
+        float centerMinUV = (float) 3 / 8;
+        float centerMaxUV = (float) 5 / 8;
 
-        // 先检查是否有 vacancy 影响中心区域
+        // First, check if any vacancy affects the center region
         boolean vacancyAffectsCenter = vacancies.stream()
                 .filter(vacancy -> isAlignedWithFace(vacancy, face))
                 .anyMatch(vacancy -> {
                     float[] uvMinMax = getUVMinMax(vacancy, face);
-                    return uvMinMax[0] < centerMaxU && uvMinMax[1] > centerMinU
-                           && uvMinMax[2] < centerMaxV && uvMinMax[3] > centerMinV;
+                    return uvMinMax[0] < centerMaxUV && uvMinMax[1] > centerMinUV &&
+                           uvMinMax[2] < centerMaxUV && uvMinMax[3] > centerMinUV;
                 });
 
         if (vacancyAffectsCenter) {
-            return false; // 如果 vacancy 影响中心区域，则返回 false
+            return false; // If a vacancy affects the center region, return false
         }
 
-        // 再检查 solid 是否完全覆盖了中心区域
-        // 如果 solid 完全覆盖中心区域，则返回 true
+        // Then check if the solid fully covers the center region
+        // If the solid fully covers the center region, return true
         return solids.stream()
                 .filter(solid -> isAlignedWithFace(solid, face))
                 .anyMatch(solid -> {
                     float[] uvMinMax = getUVMinMax(solid, face);
-                    return uvMinMax[0] <= centerMinU && uvMinMax[1] >= centerMaxU
-                           && uvMinMax[2] <= centerMinV && uvMinMax[3] >= centerMaxV;
+                    return uvMinMax[0] <= centerMinUV && uvMinMax[1] >= centerMaxUV &&
+                           uvMinMax[2] <= centerMinUV && uvMinMax[3] >= centerMaxUV;
                 });
     }
 
@@ -231,29 +237,24 @@ public final class VoxelShape {
      * @return {@code true} if this voxel shape is full block, otherwise {@code false}.
      */
     public boolean isFullBlock() {
-        for (var face : BlockFace.values()) {
-            if (!isFull(face)) {
-                return false;
-            }
-        }
-
-        return true;
+        return Arrays.stream(BlockFace.values()).allMatch(this::isFull);
     }
 
     /**
      * Check if the specified face of this voxel shape is edge full.
      *
      * @param face the face to check.
+     *
      * @return {@code true} if the specified face of this voxel shape is edge full, otherwise {@code false}.
      */
     public boolean isEdgeFull(BlockFace face) {
-        // 定义边缘区域的宽度
+        // Define the width of the edge region
         float edgeWidth = 0.125f;
 
-        // 获取所有边缘区域的边界
+        // Get the boundaries of all edge regions
         List<float[]> edgeRegions = getEdgeRegions(face, edgeWidth);
 
-        // 检查是否有 vacancy 影响任何一个边缘区域
+        // Check if any vacancy affects any edge region
         boolean vacancyAffectsEdge = vacancies.stream()
                 .filter(vacancy -> isAlignedWithFace(vacancy, face))
                 .anyMatch(vacancy -> edgeRegions.stream()
@@ -263,7 +264,7 @@ public final class VoxelShape {
             return false;
         }
 
-        // 检查是否有 solid 完全覆盖每个边缘区域
+        // Check if any solid fully covers each edge region
         for (float[] edge : edgeRegions) {
             boolean edgeCovered = solids.stream()
                     .filter(solid -> isAlignedWithFace(solid, face))
@@ -280,28 +281,26 @@ public final class VoxelShape {
     private List<float[]> getEdgeRegions(BlockFace face, float edgeWidth) {
         List<float[]> edgeRegions = new ArrayList<>();
 
-        // 定义四个边缘区域的模板
+        // Define templates for the four edge regions
         float[][] templateEdges = {
-                {0, edgeWidth, 0, 1},          // 第一条边
-                {1 - edgeWidth, 1, 0, 1},      // 对应的对边
-                {edgeWidth, 1 - edgeWidth, 0, edgeWidth},    // 第三条边
-                {edgeWidth, 1 - edgeWidth, 1 - edgeWidth, 1} // 对应的对边
+                {0, edgeWidth, 0, 1},                        // First edge
+                {1 - edgeWidth, 1, 0, 1},                    // Corresponding opposite edge
+                {edgeWidth, 1 - edgeWidth, 0, edgeWidth},    // Third edge
+                {edgeWidth, 1 - edgeWidth, 1 - edgeWidth, 1} // Corresponding opposite edge
         };
 
-        // 根据 BlockFace 所处的平面调整边缘坐标的顺序
+        // Adjust the edge coordinates based on the plane of the BlockFace
         switch (face) {
-            case UP, DOWN -> {
-                // X-Z plane
-                edgeRegions.addAll(Arrays.asList(templateEdges));
-            }
+            // X-Z plane
+            case UP, DOWN -> edgeRegions.addAll(Arrays.asList(templateEdges));
             case NORTH, SOUTH -> {
-                // X-Y plane, V和U之间交换
+                // X-Y plane, swap V and U
                 for (float[] edge : templateEdges) {
                     edgeRegions.add(new float[]{edge[0], edge[1], edge[2], edge[3]});
                 }
             }
             case WEST, EAST -> {
-                // Y-Z plane, U和V之间交换
+                // Y-Z plane, swap U and V
                 for (float[] edge : templateEdges) {
                     edgeRegions.add(new float[]{edge[2], edge[3], edge[0], edge[1]});
                 }
@@ -313,24 +312,24 @@ public final class VoxelShape {
 
     private boolean intersectsRegion(AABBfc aabb, BlockFace face, float minU, float maxU, float minV, float maxV) {
         float[] uvMinMax = getUVMinMax(aabb, face);
-        return uvMinMax[0] < maxU && uvMinMax[1] > minU
-               && uvMinMax[2] < maxV && uvMinMax[3] > minV;
+        return uvMinMax[0] < maxU && uvMinMax[1] > minU &&
+               uvMinMax[2] < maxV && uvMinMax[3] > minV;
     }
 
     private boolean isRegionFullyCovered(AABBfc aabb, BlockFace face, float minU, float maxU, float minV, float maxV) {
         float[] uvMinMax = getUVMinMax(aabb, face);
-        return uvMinMax[0] <= minU && uvMinMax[1] >= maxU
-               && uvMinMax[2] <= minV && uvMinMax[3] >= maxV;
+        return uvMinMax[0] <= minU && uvMinMax[1] >= maxU &&
+               uvMinMax[2] <= minV && uvMinMax[3] >= maxV;
     }
 
     private boolean isAlignedWithFace(AABBfc solid, BlockFace face) {
         return switch (face) {
-            case UP -> solid.maxY() == 1.0f;
-            case DOWN -> solid.minY() == 0.0f;
-            case NORTH -> solid.minZ() == 0.0f;
-            case SOUTH -> solid.maxZ() == 1.0f;
-            case WEST -> solid.minX() == 0.0f;
-            case EAST -> solid.maxX() == 1.0f;
+            case UP -> solid.maxY() == 1f;
+            case DOWN -> solid.minY() == 0f;
+            case NORTH -> solid.minZ() == 0f;
+            case SOUTH -> solid.maxZ() == 1f;
+            case WEST -> solid.minX() == 0f;
+            case EAST -> solid.maxX() == 1f;
         };
     }
 
@@ -350,6 +349,7 @@ public final class VoxelShape {
          * Add a solid area to the voxel shape.
          *
          * @param solid the solid area to add.
+         *
          * @return this builder.
          */
         public VoxelShapeBuilder solid(AABBfc solid) {
@@ -366,6 +366,7 @@ public final class VoxelShape {
          * @param maxX the maximum x coordinate of the solid area.
          * @param maxY the maximum y coordinate of the solid area.
          * @param maxZ the maximum z coordinate of the solid area.
+         *
          * @return this builder.
          */
         public VoxelShapeBuilder solid(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
@@ -376,6 +377,7 @@ public final class VoxelShape {
          * Add a vacancy area to the voxel shape.
          *
          * @param vacancy the vacancy area to add.
+         *
          * @return this builder.
          */
         public VoxelShapeBuilder vacancy(AABBfc vacancy) {
@@ -392,6 +394,7 @@ public final class VoxelShape {
          * @param maxX the maximum x coordinate of the vacancy area.
          * @param maxY the maximum y coordinate of the vacancy area.
          * @param maxZ the maximum z coordinate of the vacancy area.
+         *
          * @return this builder.
          */
         public VoxelShapeBuilder vacancy(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {

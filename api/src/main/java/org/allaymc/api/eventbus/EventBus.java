@@ -36,8 +36,9 @@ public interface EventBus {
      * Call an event.
      *
      * @param event the event to call.
+     * @param <E>   the type of the event.
+     *
      * @return the event.
-     * @param <E> the type of the event.
      */
     <E extends Event> E callEvent(E event);
 
