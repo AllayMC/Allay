@@ -141,8 +141,8 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("chunk-sending-strategy")
         private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.ASYNC;
 
-        @CustomKey("do-first-spawn-chunk-threshold")
-        private int doFirstSpawnChunkThreshold = 56;
+        @CustomKey("fully-joined-chunk-threshold")
+        private int fullyJoinedChunkThreshold = 56;
 
         @Comment("Determines how long a chunk without chunk loaders will remain loaded (gt)")
         @CustomKey("remove-unneeded-chunk-cycle")

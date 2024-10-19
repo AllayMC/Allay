@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.LoginData;
-import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
@@ -20,8 +19,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3i;
-import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
@@ -83,7 +80,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected boolean networkEncryptionEnabled = false;
     @Getter
     protected boolean initialized = false;
-    protected AtomicInteger doFirstSpawnChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().doFirstSpawnChunkThreshold());
+    protected AtomicInteger fullyJoinedChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinedChunkThreshold());
     @Manager
     protected ComponentManager manager;
     @ComponentedObject
@@ -172,8 +169,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void onChunkInRangeSent() {
-        if (doFirstSpawnChunkThreshold.get() > 0 && doFirstSpawnChunkThreshold.decrementAndGet() == 0) {
-            doFirstSpawn();
+        if (fullyJoinedChunkThreshold.get() > 0 && fullyJoinedChunkThreshold.decrementAndGet() == 0) {
+            onFullyJoined();
         }
     }
 
@@ -216,7 +213,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         return disconnected.get();
     }
 
-    protected void doFirstSpawn() {
+    protected void onFullyJoined() {
         var world = thisPlayer.getWorld();
         // Load EntityPlayer's NBT
         thisPlayer.loadNBT(server.getPlayerStorage().readPlayerData(thisPlayer).getNbt());
