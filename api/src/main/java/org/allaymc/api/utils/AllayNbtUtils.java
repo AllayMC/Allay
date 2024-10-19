@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
-import org.joml.Vector2f;
-import org.joml.Vector2fc;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -105,6 +102,40 @@ public final class AllayNbtUtils {
                 .putFloat(f1, vector3f.x())
                 .putFloat(f2, vector3f.y())
                 .putFloat(f3, vector3f.z())
+                .build();
+        nbt.putCompound(rootName, pos);
+    }
+
+    /**
+     * Read a vector3 from NBT.
+     *
+     * @param nbt the NBT map.
+     * @param rootName the root name.
+     * @param f1 the x field.
+     * @param f2 the y field.
+     * @param f3 the z field.
+     * @return the vector3.
+     */
+    public static Vector3i readVector3i(NbtMap nbt, String rootName, String f1, String f2, String f3) {
+        var pos = nbt.getCompound(rootName);
+        return new Vector3i(pos.getInt(f1), pos.getInt(f2), pos.getInt(f3));
+    }
+
+    /**
+     * Write a vector3 to NBT.
+     *
+     * @param nbt the NBT builder.
+     * @param rootName the root name.
+     * @param f1 the x field.
+     * @param f2 the y field.
+     * @param f3 the z field.
+     * @param vector3i the vector3.
+     */
+    public static void writeVector3i(NbtMapBuilder nbt, String rootName, String f1, String f2, String f3, Vector3ic vector3i) {
+        var pos = NbtMap.builder()
+                .putInt(f1, vector3i.x())
+                .putInt(f2, vector3i.y())
+                .putInt(f3, vector3i.z())
                 .build();
         nbt.putCompound(rootName, pos);
     }

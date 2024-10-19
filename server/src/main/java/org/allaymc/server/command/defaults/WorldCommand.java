@@ -43,7 +43,7 @@ public class WorldCommand extends SimpleCommand {
                 .root()
                 .key("tp")
                 .str("world")
-                .enums("dimension", "overworld", "nether", "the_end")
+                .enums("dimension", "overworld", new String[]{"overworld", "nether", "the_end"})
                 .optional()
                 .exec((context, entity) -> {
                     String worldName = context.getResult(1);

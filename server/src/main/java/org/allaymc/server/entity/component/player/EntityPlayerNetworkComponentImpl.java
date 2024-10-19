@@ -219,7 +219,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected void doFirstSpawn() {
         var world = thisPlayer.getWorld();
         // Load EntityPlayer's NBT
-        thisPlayer.loadNBT(server.getPlayerStorage().readPlayerData(thisPlayer).getPlayerNBT());
+        thisPlayer.loadNBT(server.getPlayerStorage().readPlayerData(thisPlayer).getNbt());
 
         var setEntityDataPacket = new SetEntityDataPacket();
         setEntityDataPacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
@@ -260,29 +260,30 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void initializePlayer() {
-        // initializePlayer() method will read all the data in PlayerData except playerNBT
-        // To be more exactly, we will validate and set player's current pos and spawn point in this method
-        // And playerNBT will be used in EntityPlayer::loadNBT() in doFirstSpawn() method
+        // initializePlayer() method will read all the data in PlayerData except nbt
+        // To be more exactly, we will validate and set player's current pos in this method
+        // And nbt will be used in EntityPlayer::loadNBT() in doFirstSpawn() method
         var playerData = server.getPlayerStorage().readPlayerData(thisPlayer);
         // Validate and set player pos
         Dimension dimension;
         Vector3fc currentPos;
-        var logOffWorld = server.getWorldPool().getWorld(playerData.getCurrentWorldName());
-        if (logOffWorld == null) {
-            // The world where player logged off doesn't exist
+        var logOffWorld = server.getWorldPool().getWorld(playerData.getWorld());
+        if (logOffWorld == null || logOffWorld.getDimension(playerData.getDimension()) == null) {
+            // The world or dimension where player logged off doesn't exist
+            // Fallback to global spawn point
             dimension = server.getWorldPool().getGlobalSpawnPoint().dimension();
             currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
             // The old pos stored in playerNBT is invalid, we should replace it with the new one!
-            var builder = playerData.getPlayerNBT().toBuilder();
+            var builder = playerData.getNbt().toBuilder();
             writeVector3f(builder, "Pos", "x", "y", "z", currentPos);
-            playerData.setPlayerNBT(builder.build());
+            playerData.setNbt(builder.build());
+            // Save new player data back to storage
+            server.getPlayerStorage().savePlayerData(thisPlayer.getUUID(), playerData);
         } else {
-            dimension = logOffWorld.getDimension(playerData.getCurrentDimensionId());
+            dimension = logOffWorld.getDimension(playerData.getDimension());
             // Read current pos from playerNBT
-            currentPos = readVector3f(playerData.getPlayerNBT(), "Pos", "x", "y", "z");
+            currentPos = readVector3f(playerData.getNbt(), "Pos", "x", "y", "z");
         }
-        // Validate and set spawn point
-        validateAndSetSpawnPoint(playerData);
         // Load the current point chunk firstly so that we can add player entity into the chunk
         dimension.getChunkService().getOrLoadChunkSync(
                 (int) currentPos.x() >> 4,
@@ -296,7 +297,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
         startGamePacket.setUniqueEntityId(thisPlayer.getRuntimeId());
         startGamePacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        startGamePacket.setPlayerGameType(thisPlayer.getGameType());
+        startGamePacket.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", Server.SETTINGS.genericSettings().defaultGameType().ordinal())));
         var loc = thisPlayer.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
@@ -362,20 +363,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         sendPacket(DeferredData.getBiomeDefinitionListPacket());
         sendPacket(DeferredData.getCreativeContentPacket());
         sendPacket(DeferredData.getCraftingDataPacket());
-    }
-
-    protected void validateAndSetSpawnPoint(PlayerData playerData) {
-        Location3ic spawnPoint;
-        var spawnWorld = server.getWorldPool().getWorld(playerData.getSpawnPointWorldName());
-        if (spawnWorld == null || spawnWorld.getDimension(playerData.getSpawnPointDimensionId()) == null) {
-            // The world where the spawn point is located does not exist
-            // Using global spawn point instead
-            spawnPoint = server.getWorldPool().getGlobalSpawnPoint();
-        } else {
-            var vec = playerData.getSpawnPoint();
-            spawnPoint = new Location3i(vec.x(), vec.y(), vec.z(), spawnWorld.getDimension(playerData.getSpawnPointDimensionId()));
-        }
-        thisPlayer.setSpawnPoint(spawnPoint);
     }
 
     public void completeLogin() {

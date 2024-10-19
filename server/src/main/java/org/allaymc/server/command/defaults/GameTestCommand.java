@@ -180,13 +180,6 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .key("food")
-                .exec((context, player) -> {
-                    player.setFoodLevel(Math.min(20, player.getFoodLevel() + 5)); // bread 5 food
-                    player.setFoodSaturationLevel(player.getFoodSaturationLevel() + 6); // bread 6 saturation
-                    return context.success();
-                }, SenderType.PLAYER)
-                .root()
                 .key("setperm")
                 .str("perm")
                 .bool("value")
