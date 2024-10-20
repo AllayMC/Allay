@@ -64,6 +64,10 @@ public final class AllayWorldPool implements WorldPool {
         var netherSettings = setting.nether();
         var theEndSettings = setting.theEnd();
         var storage = Registries.WORLD_STORAGE_FACTORIES.get(setting.storageType()).apply(WORLDS_FOLDER.resolve(name));
+        if (storage == null) {
+            log.error("Cannot find world storage type {}", setting.storageType());
+            storage = Registries.WORLD_STORAGE_FACTORIES.get("LEVELDB").apply(WORLDS_FOLDER.resolve(name));
+        }
         var world = new AllayWorld(storage);
         // Load overworld dimension
         var overworld = new AllayDimension(world, tryCreateWorldGenerator(overworldSettings), DimensionInfo.OVERWORLD);
@@ -99,6 +103,7 @@ public final class AllayWorldPool implements WorldPool {
         }
 
         world.shutdown();
+        worlds.remove(name);
     }
 
     private WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldSetting.DimensionSettings settings) {

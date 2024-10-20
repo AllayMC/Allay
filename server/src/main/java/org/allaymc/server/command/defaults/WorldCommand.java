@@ -3,13 +3,18 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.form.Forms;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldSettings;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -109,7 +114,63 @@ public class WorldCommand extends SimpleCommand {
                     Server.getInstance().getWorldPool().loadWorld(worldName, worldSetting);
                     context.addOutput(TrKeys.A_WORLD_LOADED, worldName);
                     return context.success();
-                });
+                })
+                .root()
+                .key("create")
+                .exec((context, player) -> {
+                    var storageTypes = new ArrayList<>(Registries.WORLD_STORAGE_FACTORIES.getContent().keySet());
+                    var generatorTypes = new ArrayList<>(Registries.WORLD_GENERATOR_FACTORIES.getContent().keySet());
+                    Forms.custom()
+                            .title("Create New World")
+                            .input("Name")
+                            .dropdown("Storage Type", storageTypes)
+                            .dropdown("Overworld Generator Type", generatorTypes)
+                            .input("Overworld Generator Preset")
+                            .toggle("Enable Nether")
+                            .dropdown("Nether Generator Type", generatorTypes)
+                            .input("Nether Generator Preset")
+                            .toggle("Enable The End")
+                            .dropdown("The End Generator Type", generatorTypes)
+                            .input("The End Generator Preset")
+                            .onResponse(response -> {
+                                var name = response.get(0);
+                                var storageType = storageTypes.get(Integer.parseInt(response.get(1)));
+                                var overworldGenerator = generatorTypes.get(Integer.parseInt(response.get(2)));
+                                var overworldPreset = response.get(3);
+                                var enableNether = Boolean.parseBoolean(response.get(4));
+                                var netherGenerator = generatorTypes.get(Integer.parseInt(response.get(5)));
+                                var netherPreset = response.get(6);
+                                var enableTheEnd = Boolean.parseBoolean(response.get(7));
+                                var theEndGenerator = generatorTypes.get(Integer.parseInt(response.get(8)));
+                                var theEndPreset = response.get(9);
+
+                                var worldSettingBuilder = WorldSettings.WorldSetting.builder()
+                                        .enable(true)
+                                        .storageType(storageType)
+                                        .overworld(WorldSettings.WorldSetting.DimensionSettings.builder()
+                                                .generatorType(overworldGenerator)
+                                                .generatorPreset(overworldPreset)
+                                                .build());
+                                if (enableNether) {
+                                    worldSettingBuilder.nether(WorldSettings.WorldSetting.DimensionSettings.builder()
+                                            .generatorType(netherGenerator)
+                                            .generatorPreset(netherPreset)
+                                            .build());
+                                }
+                                if (enableTheEnd) {
+                                    worldSettingBuilder.theEnd(WorldSettings.WorldSetting.DimensionSettings.builder()
+                                            .generatorType(theEndGenerator)
+                                            .generatorPreset(theEndPreset)
+                                            .build());
+                                }
+
+                                player.sendTr(TrKeys.A_WORLD_LOADING, name);
+                                Server.getInstance().getWorldPool().loadWorld(name, worldSettingBuilder.build());
+                                player.sendTr(TrKeys.A_WORLD_LOADED, name);
+                            })
+                            .sendTo(player);
+                    return context.success();
+                }, SenderType.PLAYER);
 
     }
 }

@@ -54,11 +54,14 @@ public class WorldSettings extends OkaeriConfig {
         @AllArgsConstructor
         @Getter
         @Accessors(fluent = true)
+        @Builder
         public static class DimensionSettings extends OkaeriConfig {
             @CustomKey("generator-type")
-            private String generatorType;
+            @Builder.Default
+            private String generatorType = "VOID";
             @CustomKey("generator-preset")
-            private String generatorPreset;
+            @Builder.Default
+            private String generatorPreset = "";
         }
     }
 }
