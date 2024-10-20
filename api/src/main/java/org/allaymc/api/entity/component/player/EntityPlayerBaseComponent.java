@@ -299,11 +299,18 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
     PlayerData savePlayerData();
 
     /**
-     * Get the spawn point of the player.
+     * Validate and get the spawn point of the player.
+     * <p>
+     * This method will check if the world of the spawn point is loaded,
+     * and if it is not loaded, the spawn point of the player will be set
+     * to the global spawn point.
+     * <p>
+     * Please note that this method won't do extra checks like checking if the
+     * bed is still exists, etc.
      *
      * @return The spawn point of the player.
      */
-    Location3ic getSpawnPoint();
+    Location3ic validateAndGetSpawnPoint();
 
     /**
      * Set the spawn point of the player.

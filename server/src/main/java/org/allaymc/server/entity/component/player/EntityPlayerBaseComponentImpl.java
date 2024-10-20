@@ -105,8 +105,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Setter
     protected int chunkTrySendCountPerTick = Server.SETTINGS.worldSettings().chunkTrySendCountPerTick();
     protected CommandOriginData commandOriginData;
-    @Getter
-    @Setter
     protected Location3ic spawnPoint;
     protected boolean awaitingDimensionChangeACK;
     @Getter
@@ -555,6 +553,23 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 .world(getWorld().getWorldData().getName())
                 .dimension(getDimension().getDimensionInfo().dimensionId())
                 .build();
+    }
+
+    @Override
+    public Location3ic validateAndGetSpawnPoint() {
+        if (!spawnPoint.dimension().getWorld().isRunning()) {
+            spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
+        }
+        return spawnPoint;
+    }
+
+    @Override
+    public void setSpawnPoint(Location3ic spawnPoint) {
+        if (!spawnPoint.dimension().getWorld().isRunning()) {
+            log.warn("Trying to set spawn point to a world which is not running");
+            return;
+        }
+        this.spawnPoint = spawnPoint;
     }
 
     public void sendLocationToSelf() {
