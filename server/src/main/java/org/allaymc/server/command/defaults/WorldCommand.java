@@ -4,17 +4,16 @@ import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.form.Forms;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldSettings;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -118,20 +117,21 @@ public class WorldCommand extends SimpleCommand {
                 .root()
                 .key("create")
                 .exec((context, player) -> {
+                    var langCode = player.getLangCode();
                     var storageTypes = new ArrayList<>(Registries.WORLD_STORAGE_FACTORIES.getContent().keySet());
                     var generatorTypes = new ArrayList<>(Registries.WORLD_GENERATOR_FACTORIES.getContent().keySet());
                     Forms.custom()
-                            .title("Create New World")
-                            .input("Name")
-                            .dropdown("Storage Type", storageTypes)
-                            .dropdown("Overworld Generator Type", generatorTypes)
-                            .input("Overworld Generator Preset")
-                            .toggle("Enable Nether")
-                            .dropdown("Nether Generator Type", generatorTypes)
-                            .input("Nether Generator Preset")
-                            .toggle("Enable The End")
-                            .dropdown("The End Generator Type", generatorTypes)
-                            .input("The End Generator Preset")
+                            .title(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_TITLE))
+                            .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_INPUT_NAME))
+                            .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_STORAGETYPE), storageTypes)
+                            .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_OVERWORLD), generatorTypes)
+                            .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_OVERWORLD))
+                            .toggle(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_NETHER))
+                            .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_NETHER), generatorTypes)
+                            .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_NETHER))
+                            .toggle(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_THEEND))
+                            .dropdown(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_THEEND), generatorTypes)
+                            .input(I18n.get().tr(langCode, TrKeys.A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_THEEND))
                             .onResponse(response -> {
                                 var name = response.get(0);
                                 var storageType = storageTypes.get(Integer.parseInt(response.get(1)));

@@ -34,6 +34,28 @@ public interface TrKeys {
 
     String A_COMMAND_VERSION_DESCRIPTION = "allay:command.version.description";
 
+    String A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_NETHER = "allay:command.world.create.dropdown.generatorpreset.nether";
+
+    String A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_OVERWORLD = "allay:command.world.create.dropdown.generatorpreset.overworld";
+
+    String A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORPRESET_THEEND = "allay:command.world.create.dropdown.generatorpreset.theend";
+
+    String A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_NETHER = "allay:command.world.create.dropdown.generatortype.nether";
+
+    String A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_OVERWORLD = "allay:command.world.create.dropdown.generatortype.overworld";
+
+    String A_COMMAND_WORLD_CREATE_DROPDOWN_GENERATORTYPE_THEEND = "allay:command.world.create.dropdown.generatortype.theend";
+
+    String A_COMMAND_WORLD_CREATE_DROPDOWN_STORAGETYPE = "allay:command.world.create.dropdown.storagetype";
+
+    String A_COMMAND_WORLD_CREATE_INPUT_NAME = "allay:command.world.create.input.name";
+
+    String A_COMMAND_WORLD_CREATE_TITLE = "allay:command.world.create.title";
+
+    String A_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_NETHER = "allay:command.world.create.toggle.enable.nether";
+
+    String A_COMMAND_WORLD_CREATE_TOGGLE_ENABLE_THEEND = "allay:command.world.create.toggle.enable.theend";
+
     String A_COMMAND_WORLD_DESCRIPTION = "allay:command.world.description";
 
     String A_COMMAND_WORLD_LIST = "allay:command.world.list";
