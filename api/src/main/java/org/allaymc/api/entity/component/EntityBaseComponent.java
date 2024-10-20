@@ -13,7 +13,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
@@ -182,6 +184,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param location the location to teleport the entity to.
      */
     void teleport(Location3fc location);
+
+    /**
+     * Teleport the entity to the specified location.
+     *
+     * @param location the location to teleport the entity to.
+     */
+    default void teleport(Location3ic location) {
+        teleport(new Location3f(location));
+    }
 
     /**
      * Get the runtime id of this entity.

@@ -9,6 +9,8 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
+import org.allaymc.api.i18n.I18n;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.position.Position3i;
@@ -76,6 +78,7 @@ public class AllayWorld implements World {
         this.gameLoop = GameLoop.builder().onTick(gameLoop -> {
             if (!isRunning.get()) {
                 gameLoop.stop();
+                log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getName()));
                 return;
             }
 
@@ -307,6 +310,8 @@ public class AllayWorld implements World {
     }
 
     public void shutdown() {
+        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADING, worldData.getName()));
+        getPlayers().forEach(EntityPlayer::disconnect);
         isRunning.set(false);
         scheduler.shutdown();
         dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());

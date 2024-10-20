@@ -38,11 +38,13 @@ public interface TrKeys {
 
     String A_COMMAND_WORLD_LIST = "allay:command.world.list";
 
-    String A_COMMAND_WORLD_SUCCESS = "allay:command.world.success";
+    String A_COMMAND_WORLD_TP_SUCCESS = "allay:command.world.tp.success";
 
     String A_COMMAND_WORLD_UNKNOWN = "allay:command.world.unknown";
 
     String A_COMMAND_WORLD_UNKNOWNDIM = "allay:command.world.unknowndim";
+
+    String A_COMMAND_WORLD_UNLOAD_FAILED_DEFAULT = "allay:command.world.unload.failed.default";
 
     String A_CREATIVEITEM_LOADED = "allay:creativeitem.loaded";
 
@@ -209,6 +211,10 @@ public interface TrKeys {
     String A_WORLD_LOADED = "allay:world.loaded";
 
     String A_WORLD_LOADING = "allay:world.loading";
+
+    String A_WORLD_UNLOADED = "allay:world.unloaded";
+
+    String A_WORLD_UNLOADING = "allay:world.unloading";
 
     String M_ACHIEVEMENT_ACQUIREIRON = "minecraft:achievement.acquireIron";
 

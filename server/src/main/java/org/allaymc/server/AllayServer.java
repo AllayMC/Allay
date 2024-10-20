@@ -216,7 +216,7 @@ public final class AllayServer implements Server {
         if (!isRunning.compareAndSet(true, false)) {
             return;
         }
-        disconnectAllPlayers();
+        disconnectAllPlayers(TrKeys.A_SERVER_STOPPED);
     }
 
     private void shutdownReally() {

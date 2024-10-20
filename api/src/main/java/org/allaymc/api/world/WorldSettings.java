@@ -23,13 +23,13 @@ public class WorldSettings extends OkaeriConfig {
     @Exclude
     public static final String DEFAULT_WORLD_NAME = "world";
     @Exclude
-    public static final WorldEntry DEFAULT = WorldEntry.builder()
+    public static final WorldSetting DEFAULT = WorldSetting.builder()
             .storageType("LEVELDB")
-            .overworld(new WorldEntry.DimensionSettings("FLAT", ""))
+            .overworld(new WorldSetting.DimensionSettings("FLAT", ""))
             .build();
 
     @CustomKey("worlds")
-    private Map<String, WorldEntry> worlds = Map.of(DEFAULT_WORLD_NAME, DEFAULT);
+    private Map<String, WorldSetting> worlds = Map.of(DEFAULT_WORLD_NAME, DEFAULT);
 
     @CustomKey("default-world")
     @Setter
@@ -38,7 +38,8 @@ public class WorldSettings extends OkaeriConfig {
     @Builder
     @Getter
     @Accessors(fluent = true)
-    public static class WorldEntry extends OkaeriConfig {
+    public static class WorldSetting extends OkaeriConfig {
+        @Setter
         @CustomKey("enable")
         @Builder.Default
         private boolean enable = true;

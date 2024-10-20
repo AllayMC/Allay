@@ -8,6 +8,7 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.WorldSettings;
 
 import java.util.stream.Collectors;
 
@@ -62,8 +63,53 @@ public class WorldCommand extends SimpleCommand {
                     var dim = world.getDimension(dimInfo.dimensionId());
 
                     entity.teleport(new Location3f(0, 64, 0, dim));
-                    context.addOutput(TrKeys.A_COMMAND_WORLD_SUCCESS, worldName, dimName);
+                    context.addOutput(TrKeys.A_COMMAND_WORLD_TP_SUCCESS, worldName, dimName);
                     return context.success();
-                }, SenderType.ENTITY);
+                }, SenderType.ENTITY)
+                .root()
+                .key("unload")
+                .str("world")
+                .exec(context -> {
+                    String worldName = context.getResult(1);
+                    var world = Server.getInstance().getWorldPool().getWorld(worldName);
+                    if (world == null) {
+                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWN, worldName);
+                        return context.fail();
+                    }
+                    if (world == Server.getInstance().getWorldPool().getDefaultWorld()) {
+                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNLOAD_FAILED_DEFAULT);
+                        return context.fail();
+                    }
+
+                    world.getPlayers().forEach(player -> player.teleport(Server.getInstance().getWorldPool().getGlobalSpawnPoint()));
+                    // Unload the world after 1 second, because teleport players to another world will take some time
+                    Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
+                        Server.getInstance().getWorldPool().unloadWorld(worldName);
+                        return true;
+                    }, 20);
+                    return context.success();
+                })
+                .root()
+                .key("load")
+                .str("world")
+                .exec(context -> {
+                    String worldName = context.getResult(1);
+                    var worldSetting = Server.getInstance().getWorldPool().getWorldConfig().worlds().get(worldName);
+                    if (worldSetting == null) {
+                        context.addError("%" + TrKeys.A_COMMAND_WORLD_UNKNOWN, worldName);
+                        return context.fail();
+                    }
+                    if (Server.getInstance().getWorldPool().getWorld(worldName) != null) {
+                        context.addError("%" + TrKeys.A_WORLD_LOADED, worldName);
+                        return context.fail();
+                    }
+
+                    worldSetting.enable(true);
+                    context.addOutput(TrKeys.A_WORLD_LOADING, worldName);
+                    Server.getInstance().getWorldPool().loadWorld(worldName, worldSetting);
+                    context.addOutput(TrKeys.A_WORLD_LOADED, worldName);
+                    return context.success();
+                });
+
     }
 }

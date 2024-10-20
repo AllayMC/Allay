@@ -44,22 +44,26 @@ public final class AllayWorldPool implements WorldPool {
 
     public void shutdown() {
         worlds.values().forEach(AllayWorld::shutdown);
+        worldConfig.save();
     }
 
     @Override
-    public void loadWorld(String name, WorldSettings.WorldEntry settings) {
-        if (!settings.enable()) return;
+    public void loadWorld(String name, WorldSettings.WorldSetting setting) {
+        if (!setting.enable()) {
+            return;
+        }
 
         log.info(I18n.get().tr(TrKeys.A_WORLD_LOADING, name));
-        if (worlds.containsKey(name))
-            throw new IllegalArgumentException("World " + name + " already exists");
+        if (worlds.containsKey(name)) {
+            throw new IllegalArgumentException("World " + name + " is already loaded");
+        }
 
-        var overworldSettings = settings.overworld();
+        var overworldSettings = setting.overworld();
         Preconditions.checkNotNull(overworldSettings, "World must has overworld dimension");
 
-        var netherSettings = settings.nether();
-        var theEndSettings = settings.theEnd();
-        var storage = Registries.WORLD_STORAGE_FACTORIES.get(settings.storageType()).apply(WORLDS_FOLDER.resolve(name));
+        var netherSettings = setting.nether();
+        var theEndSettings = setting.theEnd();
+        var storage = Registries.WORLD_STORAGE_FACTORIES.get(setting.storageType()).apply(WORLDS_FOLDER.resolve(name));
         var world = new AllayWorld(storage);
         // Load overworld dimension
         var overworld = new AllayDimension(world, tryCreateWorldGenerator(overworldSettings), DimensionInfo.OVERWORLD);
@@ -78,13 +82,26 @@ public final class AllayWorldPool implements WorldPool {
         if (addWorld(world)) {
             log.info(I18n.get().tr(TrKeys.A_WORLD_LOADED, name));
             if (!worldConfig.worlds().containsKey(name)) {
-                worldConfig.worlds().put(name, settings);
+                worldConfig.worlds().put(name, setting);
                 worldConfig.save();
             }
         }
     }
 
-    private WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldEntry.DimensionSettings settings) {
+    @Override
+    public void unloadWorld(String name) {
+        var world = worlds.get(name);
+        if (world == null) {
+            throw new IllegalArgumentException("World " + name + " not found");
+        }
+        if (world == getDefaultWorld()) {
+            throw new IllegalArgumentException("Cannot unload default world");
+        }
+
+        world.shutdown();
+    }
+
+    private WorldGenerator tryCreateWorldGenerator(WorldSettings.WorldSetting.DimensionSettings settings) {
         var factory = Registries.WORLD_GENERATOR_FACTORIES.get(settings.generatorType());
         if (factory == null) {
             log.error("Cannot find world generator {}", settings.generatorType());
@@ -99,9 +116,9 @@ public final class AllayWorldPool implements WorldPool {
         int changeNumber = 0;
         for (var file : Objects.requireNonNull(WORLDS_FOLDER.toFile().listFiles(File::isDirectory))) {
             if (!worldConfig.worlds().containsKey(file.getName())) {
-                var worldEntry = WorldSettings.WorldEntry.builder()
+                var worldEntry = WorldSettings.WorldSetting.builder()
                         .enable(true)
-                        .overworld(new WorldSettings.WorldEntry.DimensionSettings("VOID", ""))
+                        .overworld(new WorldSettings.WorldSetting.DimensionSettings("VOID", ""))
                         .nether(null)
                         .theEnd(null)
                         .storageType("LEVELDB")

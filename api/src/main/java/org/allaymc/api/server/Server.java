@@ -65,11 +65,17 @@ public interface Server extends TaskCreator, CommandSender {
      */
     long getStartTime();
 
+    default void disconnectAllPlayers() {
+        disconnectAllPlayers(TrKeys.M_DISCONNECT_CLOSED);
+    }
+
     /**
      * Disconnect all players.
+     *
+     * @param reason the reason of the disconnection.
      */
-    default void disconnectAllPlayers() {
-        getOnlinePlayers().values().forEach(player -> player.disconnect(TrKeys.M_DISCONNECT_CLOSED));
+    default void disconnectAllPlayers(@MayContainTrKey String reason) {
+        getOnlinePlayers().values().forEach(player -> player.disconnect(reason));
     }
 
     /**

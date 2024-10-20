@@ -55,9 +55,16 @@ public interface WorldPool {
      *
      * @throws IllegalArgumentException if the world with the specific name already exists.
      */
-    void loadWorld(String name, WorldSettings.WorldEntry worldSetting);
+    void loadWorld(String name, WorldSettings.WorldSetting worldSetting);
 
-    // TODO: unload world
+    /**
+     * Unload the world with the specific name.
+     *
+     * @param name the name of the world.
+     *
+     * @throws IllegalArgumentException if the world with the specific name is not exists, or the world is the default world.
+     */
+    void unloadWorld(String name);
 
     /**
      * Get the global spawn point of the server.

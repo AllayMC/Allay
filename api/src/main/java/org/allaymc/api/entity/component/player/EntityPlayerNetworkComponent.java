@@ -5,6 +5,7 @@ import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
+import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.PacketReceiver;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
@@ -79,6 +80,13 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      */
     default String getOriginName() {
         return getLoginData().getDisplayName();
+    }
+
+    /**
+     * Disconnect the player.
+     */
+    default void disconnect() {
+        disconnect(TrKeys.M_DISCONNECT_CLOSED);
     }
 
     /**
