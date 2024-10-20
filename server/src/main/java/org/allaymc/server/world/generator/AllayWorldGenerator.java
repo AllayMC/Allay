@@ -9,7 +9,7 @@ import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.chunk.ChunkAccessible;
+import org.allaymc.api.world.chunk.ChunkSource;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorType;
@@ -136,7 +136,11 @@ public final class AllayWorldGenerator implements WorldGenerator {
                     chunkFutures.remove(chunkHash);
                 });
                 chunkFuture.complete(chunk);
-            }, computeThreadPool);
+            }, computeThreadPool).exceptionally(e -> {
+                log.error("Error while processing population queue! Chunk {}, {}", chunk.getX(), chunk.getZ(), e);
+                chunkFuture.complete(AllayUnsafeChunk.builder().emptyChunk(chunk.getX(), chunk.getZ(), dimension.getDimensionInfo()).toSafeChunk());
+                return null;
+            });
         }
     }
 
@@ -234,10 +238,14 @@ public final class AllayWorldGenerator implements WorldGenerator {
 
     private void statusNoisedToPopulated(Chunk chunk) {
         // Decorate terrain
-        var populateContext = new PopulateContext(chunk.toUnsafeChunk(), new PopulationStageChunkAccessor(chunk));
+        var populateContext = new PopulateContext(chunk.toUnsafeChunk(), new PopulationStageChunkSource(chunk));
         for (var populator : populators) {
-            if (!populator.apply(populateContext)) {
-                log.error("Failed to populate chunk {} with populator {}", chunk, populator.getName());
+            try {
+                if (!populator.apply(populateContext)) {
+                    log.warn("Failed to populate chunk {} with populator {}", chunk, populator.getName());
+                }
+            } catch (Throwable t) {
+                log.error("Error while populating chunk {} with populator {}", chunk, populator.getName());
             }
         }
 
@@ -248,18 +256,26 @@ public final class AllayWorldGenerator implements WorldGenerator {
         // Bake lighting
         var lightContext = new LightContext(chunk.toUnsafeChunk());
         for (var lighter : lighters) {
-            if (!lighter.apply(lightContext)) {
-                log.error("Failed to light chunk {} with lighter {}", chunk, lighter.getName());
+            try {
+                if (!lighter.apply(lightContext)) {
+                    log.error("Failed to light chunk {} with lighter {}", chunk, lighter.getName());
+                }
+            } catch (Throwable t) {
+                log.error("Error while lighting chunk {} with lighter {}", chunk, lighter.getName());
             }
         }
 
         ((AllayChunk) chunk).setState(ChunkState.LIGHTED);
 
-        // Generate entities
+        // Spawn entities
         var entitySpawnContext = new EntitySpawnContext(chunk.toUnsafeChunk());
         for (var entitySpawner : entitySpawners) {
-            if (!entitySpawner.apply(entitySpawnContext)) {
-                log.error("Failed to spawn entity in chunk {} with entity spawner {}", chunk, entitySpawner.getName());
+            try {
+                if (!entitySpawner.apply(entitySpawnContext)) {
+                    log.error("Failed to spawn entity in chunk {} with entity spawner {}", chunk, entitySpawner.getName());
+                }
+            } catch (Throwable t) {
+                log.error("Error while spawning entity in chunk {} with entity spawner {}", chunk, entitySpawner.getName());
             }
         }
 
@@ -329,7 +345,7 @@ public final class AllayWorldGenerator implements WorldGenerator {
     protected record PopulationQueueEntry(CompletableFuture<Chunk> chunkFuture, CompletableFuture<Chunk> noiseFuture) {}
 
     @AllArgsConstructor
-    public final class PopulationStageChunkAccessor implements ChunkAccessible {
+    public final class PopulationStageChunkSource implements ChunkSource {
         private final Chunk currentChunk;
 
         @Override

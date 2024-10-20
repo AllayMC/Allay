@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.api.world.chunk.ChunkAccessible;
+import org.allaymc.api.world.chunk.ChunkSource;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 
 /**
@@ -14,11 +14,11 @@ public abstract class OtherChunkAccessibleContext extends Context {
     private static final BlockState AIR = BlockTypes.AIR.getDefaultState();
 
     @Getter
-    protected ChunkAccessible chunkAccessor;
+    protected ChunkSource chunkSource;
 
-    public OtherChunkAccessibleContext(UnsafeChunk currentChunk, ChunkAccessible chunkAccessor) {
+    public OtherChunkAccessibleContext(UnsafeChunk currentChunk, ChunkSource chunkSource) {
         super(currentChunk);
-        this.chunkAccessor = chunkAccessor;
+        this.chunkSource = chunkSource;
     }
 
     public void setBlockState(int x, int y, int z, BlockState blockState) {
@@ -35,7 +35,7 @@ public abstract class OtherChunkAccessibleContext extends Context {
     }
 
     private void setBlockStateInOtherChunk(int x, int y, int z, BlockState blockState, int layer) {
-        var chunk = chunkAccessor.getChunk(x >> 4, z >> 4);
+        var chunk = chunkSource.getChunk(x >> 4, z >> 4);
         if (chunk == null) return;
 
         chunk.setBlockState(x & 15, y, z & 15, blockState, layer);
@@ -56,7 +56,7 @@ public abstract class OtherChunkAccessibleContext extends Context {
     }
 
     private BlockState getBlockStateInOtherChunk(int x, int y, int z, int layer) {
-        var chunk = chunkAccessor.getChunk(x >> 4, z >> 4);
+        var chunk = chunkSource.getChunk(x >> 4, z >> 4);
         return chunk == null ? AIR : chunk.getBlockState(x & 15, y, z & 15, layer);
     }
 

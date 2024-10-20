@@ -3,11 +3,11 @@ package org.allaymc.api.world.chunk;
 import org.allaymc.api.utils.HashUtils;
 
 /**
- * ChunkAccessible represents an object that you can get chunks from.
+ * ChunkSource represents an object that you can get chunks from.
  *
  * @author daoge_cmd
  */
-public interface ChunkAccessible {
+public interface ChunkSource {
 
     /**
      * Get the chunk at the specified chunk pos.
