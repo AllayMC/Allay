@@ -52,7 +52,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected double stopBreakTime; // Ticks
 
     private static boolean isInvalidGameType(EntityPlayer player) {
-        return player.getGameType() == GameType.CREATIVE || player.getGameType() == GameType.SPECTATOR;
+        return player.getGameType() == GameType.CREATIVE ||
+               // TODO: implement canBreak & canPlace feature
+               player.getGameType() == GameType.ADVENTURE ||
+               player.getGameType() == GameType.SPECTATOR;
     }
 
     protected void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
