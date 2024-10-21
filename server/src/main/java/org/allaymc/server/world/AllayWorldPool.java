@@ -4,6 +4,7 @@ import eu.okaeri.configs.ConfigManager;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.world.WorldLoadEvent;
+import org.allaymc.api.eventbus.event.world.WorldUnloadEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.Registries;
@@ -100,6 +101,12 @@ public final class AllayWorldPool implements WorldPool {
         }
         if (world == getDefaultWorld()) {
             throw new IllegalArgumentException("Cannot unload default world");
+        }
+
+        var event = new WorldUnloadEvent(world);
+        event.call();
+        if (event.isCancelled()) {
+            return;
         }
 
         world.shutdown();
