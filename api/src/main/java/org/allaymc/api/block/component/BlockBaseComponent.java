@@ -212,6 +212,9 @@ public interface BlockBaseComponent extends BlockComponent {
         if (usedItem.canInstantBreak(blockState)) return 0;
 
         var blockHardness = blockState.getBlockStateData().hardness();
+        if (blockHardness == -1) {
+            return Integer.MAX_VALUE;
+        }
         var isCorrectTool = usedItem.isCorrectToolFor(blockState);
         var isAlwaysDestroyable = getBlockType().getMaterial().isAlwaysDestroyable();
         var hasAquaAffinity = false;

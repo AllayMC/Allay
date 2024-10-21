@@ -84,6 +84,7 @@ public class BlockStateData {
      * The hardness of the block state.
      * <p>
      * Hardness will affect the time it takes to break the block.
+     * If you set it to -1 then the block will be unbreakable.
      */
     @Builder.Default
     protected float hardness = 1;

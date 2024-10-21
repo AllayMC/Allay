@@ -122,12 +122,17 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return;
         }
 
+        breakBlock = player.getDimension().getBlockState(x, y, z);
+        if (breakBlock.getBlockStateData().hardness() == -1) {
+            log.warn("Player {} tried to break an unbreakable block", player.getOriginName());
+            return;
+        }
+
         breakBlockX = x;
         breakBlockY = y;
         breakBlockZ = z;
 
         breakFaceId = blockFaceId;
-        breakBlock = player.getDimension().getBlockState(x, y, z);
 
         needBreakTime = breakBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
         stopBreakTime = startBreakingTime + needBreakTime * 20.0d;
