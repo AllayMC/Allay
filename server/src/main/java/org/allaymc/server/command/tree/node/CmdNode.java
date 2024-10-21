@@ -22,9 +22,7 @@ public class CmdNode extends MessageNode {
     @Override
     public CommandParamData toNetworkData() {
         var data = super.toNetworkData();
-        // This is a mistake by protocol library
-        // TODO: change back to COMMAND when protocol library fixes it
-        data.setType(CommandParam.CODE_BUILDER_ARGS);
+        data.setType(CommandParam.COMMAND);
         return data;
     }
 
