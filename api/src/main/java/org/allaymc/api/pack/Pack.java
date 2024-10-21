@@ -126,7 +126,8 @@ public abstract class Pack implements AutoCloseable {
                 this.getId().toString(),
                 this.getType() == Pack.Type.SCRIPT,
                 this.manifest.getCapabilities().contains(PackManifest.Capability.RAYTRACED),
-                false //TODO
+                false,
+                ""
         );
     }
 
