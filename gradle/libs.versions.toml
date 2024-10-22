@@ -38,8 +38,8 @@ gson = { group = "com.google.code.gson", name = "gson", version = "2.11.0" }
 snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.3" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
-annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.0" }
-semver4j = { group = "org.semver4j", name = "semver4j", version = "5.4.0" }
+annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.1" }
+semver4j = { group = "org.semver4j", name = "semver4j", version = "5.4.1" }
 # Zlib
 # NOTICE: This lib seems won't be used in the future, need to have more checks
 libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0.0.2-PNX" }
@@ -48,7 +48,7 @@ disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.17.0" }
 # bytecode
-bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.15.4" }
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.15.5" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 # K-V DataBase
@@ -76,11 +76,11 @@ okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-ya
 # Native Operating System and Hardware Information
 oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.6.5" }
 # GUI
-flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.5.1" }
+flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.5.2" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 # JUnit
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.11.2" }
-mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.14.1" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.14.2" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.34" }
 # Random generator
