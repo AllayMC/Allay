@@ -110,9 +110,7 @@ public final class AllayServer implements Server {
     private final Scheduler scheduler = new AllayScheduler(virtualThreadPool);
     @Getter
     private final NetworkServer networkServer = new AllayNetworkServer(this);
-
-    private final Thread terminalConsoleThread = new AllayTerminalConsoleThread();
-    private final AllayTerminalConsole terminalConsole = new AllayTerminalConsole(this);
+    private final AllayTerminalConsole terminalConsole = new AllayTerminalConsole(AllayServer.this);
 
     @Getter
     private ScoreboardService scoreboardService;
@@ -164,7 +162,7 @@ public final class AllayServer implements Server {
         });
 
         if (System.console() != null) {
-            terminalConsoleThread.start();
+            Thread.ofVirtual().name("Console Thread").start(terminalConsole::start);
         }
 
         ((AllayPluginManager) pluginManager).loadPlugins();
@@ -511,16 +509,5 @@ public final class AllayServer implements Server {
     @Override
     public PermTree getPermTree() {
         return DefaultPermissions.OPERATOR;
-    }
-
-    private class AllayTerminalConsoleThread extends Thread {
-        public AllayTerminalConsoleThread() {
-            super("Console Thread");
-        }
-
-        @Override
-        public void run() {
-            terminalConsole.start();
-        }
     }
 }
