@@ -1,6 +1,6 @@
 package org.allaymc.codegen;
 
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;

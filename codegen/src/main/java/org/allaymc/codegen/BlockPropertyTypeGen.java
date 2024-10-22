@@ -1,6 +1,6 @@
 package org.allaymc.codegen;
 
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 import lombok.SneakyThrows;
 
 import javax.lang.model.element.Modifier;

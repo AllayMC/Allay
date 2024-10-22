@@ -1,7 +1,7 @@
 package org.allaymc.codegen;
 
 import com.google.gson.JsonParser;
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.StringUtils;
 
@@ -74,7 +74,7 @@ public class ItemIdEnumGen {
                 .addMethod(MethodSpec.methodBuilder("getItemType")
                         .addModifiers(Modifier.PUBLIC)
                         .addStatement("return $T.ITEMS.get(this.getIdentifier())", REGISTRIES)
-                        .returns(ParameterizedTypeName.get(ITEM_TYPE, WildcardTypeName.subtypeOf(TypeName.OBJECT)))
+                        .returns(ParameterizedTypeName.get(ITEM_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT)))
                         .build()
                 );
         addEnums(codeBuilder);

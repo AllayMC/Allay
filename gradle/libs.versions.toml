@@ -13,7 +13,6 @@ stateupdater = { group = "org.allaymc", name = "stateupdater", version = "1.21.3
 # Collections
 guava = { group = "com.google.guava", name = "guava", version = "33.3.1-jre" }
 # Fastutil
-#fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
 fastutil-object-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-int-maps", version.ref = "fastutil" }
 fastutil-object-reference-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-reference-maps", version.ref = "fastutil" }
 fastutil-object-object-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-object-maps", version.ref = "fastutil" }
@@ -60,7 +59,7 @@ log4j-core = { group = "org.apache.logging.log4j", name = "log4j-core", version.
 # CLI dependencie
 mcterminal = { group = "net.minecrell", name = "terminalconsoleappender", version = "1.3.0" }
 # Code generating
-javapoet = { group = "com.squareup", name = "javapoet", version = "1.13.0" }
+javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.5.0" }
 # Reflections
 reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
 fastreflect = { group = "com.github.AllayMC", name = "fast-reflection", version = "8733a599fa" }

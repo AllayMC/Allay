@@ -1,7 +1,7 @@
 package org.allaymc.codegen;
 
 import com.google.gson.JsonParser;
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.StringUtils;
 
@@ -11,8 +11,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.TreeMap;
-
-import static org.allaymc.codegen.ClassNames.MINECRAFT_VERSION_SENSITIVE;
 
 /**
  * @author daoge_cmd | Cool_Loong | IWareQ

@@ -1,6 +1,6 @@
 package org.allaymc.codegen;
 
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 import lombok.SneakyThrows;
 
 import javax.lang.model.element.Modifier;
@@ -57,10 +57,6 @@ public class BiomeIdEnumGen {
                                 .build()
                 )
                 .addField(FieldSpec
-                        .builder(ClassNames.BIOME_ARRAY, "VALUES", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                        .initializer("values()")
-                        .build())
-                .addField(FieldSpec
                         .builder(ClassNames.BIOME_ARRAY, "MAP1", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
@@ -85,8 +81,7 @@ public class BiomeIdEnumGen {
                         .build()
                 );
         for (var entry : BIOME_DATA.entrySet()) {
-            var identifier = """
-                    new Identifier("minecraft:%s")""".formatted(entry.getKey());
+            var identifier = "new Identifier(\"minecraft:%s\")".formatted(entry.getKey());
             var id = entry.getValue().id;
             var type = entry.getValue().type;
             codeBuilder.addEnumConstant(entry.getKey().toUpperCase(), TypeSpec.anonymousClassBuilder("$L, $L, $S", identifier, id, type).build());

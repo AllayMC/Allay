@@ -1,17 +1,15 @@
 package org.allaymc.codegen;
 
 import com.google.gson.JsonParser;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.JavaFile;
+import com.palantir.javapoet.TypeSpec;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.Identifier;
 
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import static org.allaymc.codegen.ClassNames.STRING;
 
 /**
  * @author daoge_cmd | IWareQ
@@ -36,7 +34,7 @@ public class TrKeysGen {
             var fieldName = namespace + "_" + path;
             codeBuilder.addField(
                     FieldSpec
-                            .builder(STRING, fieldName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            .builder(ClassNames.STRING, fieldName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("\"" + key + "\"")
                             .build()
             );

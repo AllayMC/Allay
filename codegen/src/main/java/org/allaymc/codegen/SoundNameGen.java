@@ -3,9 +3,9 @@ package org.allaymc.codegen;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.TypeSpec;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.JavaFile;
+import com.palantir.javapoet.TypeSpec;
 import lombok.SneakyThrows;
 
 import javax.lang.model.element.Modifier;
@@ -49,7 +49,7 @@ public class SoundNameGen {
 
     @SneakyThrows
     private static Set<String> getMusicNames() {
-        try(var reader = Files.newBufferedReader(Path.of("data/resources/unpacked/music_definitions.json"))) {
+        try (var reader = Files.newBufferedReader(Path.of("data/resources/unpacked/music_definitions.json"))) {
             var musicNames = new HashSet<String>();
             JsonParser.parseReader(reader).getAsJsonObject().asMap().values().forEach(v -> {
                 musicNames.add(v.getAsJsonObject().get("event_name").getAsString());
@@ -60,7 +60,7 @@ public class SoundNameGen {
 
     @SneakyThrows
     private static Set<String> getSoundNames() {
-        try(var reader = Files.newBufferedReader(Path.of("data/resources/unpacked/sound_definitions.json"))) {
+        try (var reader = Files.newBufferedReader(Path.of("data/resources/unpacked/sound_definitions.json"))) {
             return JsonParser.parseReader(reader)
                     .getAsJsonObject()
                     .getAsJsonObject("sound_definitions")

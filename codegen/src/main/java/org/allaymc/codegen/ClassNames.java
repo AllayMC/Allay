@@ -1,6 +1,6 @@
 package org.allaymc.codegen;
 
-import com.squareup.javapoet.ClassName;
+import com.palantir.javapoet.ClassName;
 
 /**
  * @author daoge_cmd

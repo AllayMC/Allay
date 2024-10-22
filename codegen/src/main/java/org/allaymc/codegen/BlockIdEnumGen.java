@@ -1,6 +1,6 @@
 package org.allaymc.codegen;
 
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 import lombok.SneakyThrows;
 import org.allaymc.dependence.Identifier;
 import org.cloudburstmc.nbt.NBTInputStream;
@@ -64,7 +64,7 @@ public class BlockIdEnumGen {
 
     @SneakyThrows
     public static void generateToAPIModule() {
-        var blockTypeClass = ParameterizedTypeName.get(BLOCK_TYPE, WildcardTypeName.subtypeOf(TypeName.OBJECT));
+        var blockTypeClass = ParameterizedTypeName.get(BLOCK_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT));
         TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER)
                 .addAnnotation(MINECRAFT_VERSION_SENSITIVE)
                 .addMethod(MethodSpec.methodBuilder("fromIdentifier")

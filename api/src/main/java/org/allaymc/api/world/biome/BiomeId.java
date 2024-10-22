@@ -184,8 +184,6 @@ public enum BiomeId implements BiomeType {
 
     CHERRY_GROVE(new Identifier("minecraft:cherry_grove"), 192, "DataDriven");
 
-    public static final BiomeId[] VALUES = values();
-
     private static final BiomeId[] MAP1;
 
     private static final HashMap<Identifier, BiomeType> MAP2;
