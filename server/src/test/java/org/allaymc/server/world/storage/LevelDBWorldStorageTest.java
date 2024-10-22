@@ -105,7 +105,7 @@ class LevelDBWorldStorageTest {
                     allayUnsafeChunk.setBlockState(i, k, j, OAK_WOOD.getDefaultState());
                     allayUnsafeChunk.setBiome(i, k, j, BiomeId.FOREST);
                 }
-                allayUnsafeChunk.setHeight(i, j, 319);
+                allayUnsafeChunk.setHeight(i, j, (short) 319);
             }
         }
         AllayChunk allayChunk = new AllayChunk(allayUnsafeChunk);

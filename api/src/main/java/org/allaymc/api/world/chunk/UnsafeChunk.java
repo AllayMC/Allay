@@ -182,7 +182,7 @@ public interface UnsafeChunk {
      * @param z      the z coordinate of the position.
      * @param height the height.
      */
-    void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, int height);
+    void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, short height);
 
     /**
      * Get height of the specified position.
@@ -192,7 +192,7 @@ public interface UnsafeChunk {
      *
      * @return the height.
      */
-    int getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
+    short getHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z);
 
     /**
      * Set biome of the specified position.

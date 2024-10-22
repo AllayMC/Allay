@@ -163,18 +163,18 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     // Bedrock Edition 3d-data saves the height map starting from index 0, so adjustments are made here to accommodate the world's minimum height. For details, see:
     // https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
     @Override
-    public int getHeight(int x, int z) {
+    public short getHeight(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
         return getHeightUnsafe(HeightMap.computeIndex(x, z));
     }
 
-    protected int getHeightUnsafe(int index) {
-        return this.heightMap.get(index) + dimensionInfo.minHeight();
+    protected short getHeightUnsafe(int index) {
+        return (short) (this.heightMap.get(index) + dimensionInfo.minHeight());
     }
 
     @Override
-    public void setHeight(int x, int z, int height) {
+    public void setHeight(int x, int z, short height) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
         Preconditions.checkArgument(height >= -512 && height <= 511);

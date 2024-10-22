@@ -161,7 +161,7 @@ public interface Chunk extends UnsafeChunk {
      * @param expectedValue the expected height.
      * @param newValue      the new height.
      */
-    void compareAndSetHeight(int x, int z, int expectedValue, int newValue);
+    void compareAndSetHeight(int x, int z, short expectedValue, short newValue);
 
     /**
      * Process the chunk with the specified operation.

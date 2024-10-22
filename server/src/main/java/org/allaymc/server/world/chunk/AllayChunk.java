@@ -82,7 +82,7 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public int getHeight(int x, int z) {
+    public short getHeight(int x, int z) {
         checkXZ(x, z);
         var stamp = heightAndBiomeLock.tryOptimisticRead();
         try {
@@ -98,7 +98,7 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void setHeight(int x, int z, int height) {
+    public void setHeight(int x, int z, short height) {
         checkXZ(x, z);
         Preconditions.checkArgument(height >= -512 && height <= 511);
         var stamp = heightAndBiomeLock.writeLock();
@@ -110,7 +110,7 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void compareAndSetHeight(int x, int z, int expectedValue, int newValue) {
+    public void compareAndSetHeight(int x, int z, short expectedValue, short newValue) {
         checkXZ(x, z);
         Preconditions.checkArgument(expectedValue >= -512 && expectedValue <= 511);
         Preconditions.checkArgument(newValue >= -512 && newValue <= 511);
