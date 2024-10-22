@@ -39,7 +39,7 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.3" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.1" }
-semver4j = { group = "org.semver4j", name = "semver4j", version = "5.4.0" }
+semver4j = { group = "org.semver4j", name = "semver4j", version = "5.4.1" }
 # Zlib
 # NOTICE: This lib seems won't be used in the future, need to have more checks
 libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0.0.2-PNX" }
