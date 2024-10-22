@@ -33,7 +33,6 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
 @Slf4j
 @Getter
 public class AllayDimension implements Dimension {
-    protected final WorldGenerator worldGenerator;
     protected final AllayChunkService chunkService;
     protected final AllayEntityPhysicsService entityPhysicsService;
     protected final AllayBlockUpdateService blockUpdateService;
@@ -47,9 +46,8 @@ public class AllayDimension implements Dimension {
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
         this.dimensionInfo = dimensionInfo;
-        this.worldGenerator = worldGenerator;
-        this.worldGenerator.setDimension(this);
-        this.chunkService = new AllayChunkService(this, world.getWorldStorage());
+        worldGenerator.setDimension(this);
+        this.chunkService = new AllayChunkService(this, worldGenerator, world.getWorldStorage());
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);

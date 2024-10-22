@@ -3,6 +3,7 @@ package org.allaymc.server.world.service;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
+import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
@@ -46,6 +48,8 @@ public final class AllayChunkService implements ChunkService {
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectOpenHashMap<>();
     private final Dimension dimension;
+    @Getter
+    private final WorldGenerator worldGenerator;
     private final WorldStorage worldStorage;
     private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
     private final Set<Long> keepLoadingChunks = Sets.newConcurrentHashSet();
@@ -53,14 +57,11 @@ public final class AllayChunkService implements ChunkService {
     private int removeUnneededChunkCycle = Server.SETTINGS.worldSettings().removeUnneededChunkCycle();
 
     public void tick(long currentTick) {
+        ((AllayWorldGenerator) worldGenerator).tick();
         sendChunkPackets();
         tickChunkLoaders();
         removeUnusedChunks();
         tickChunks(currentTick);
-    }
-
-    private WorldGenerator getWorldGenerator() {
-        return dimension.getWorldGenerator();
     }
 
     private void tickChunks(long currentTick) {

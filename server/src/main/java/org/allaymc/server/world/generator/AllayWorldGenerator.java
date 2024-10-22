@@ -35,7 +35,7 @@ import java.util.function.Consumer;
  * @author daoge_cmd
  */
 @Slf4j
-public final class AllayWorldGenerator implements WorldGenerator {
+public class AllayWorldGenerator implements WorldGenerator {
 
     @Getter
     private final String name;
@@ -76,10 +76,6 @@ public final class AllayWorldGenerator implements WorldGenerator {
         this.entitySpawners = entitySpawners;
         this.onDimensionSet = onDimensionSet;
         init();
-        GameLoop populationQueueLoop = GameLoop.builder()
-                .onTick(this::processPopulationQueue)
-                .build();
-        Thread.ofPlatform().start(populationQueueLoop::startLoop);
     }
 
     public static WorldGeneratorBuilder builder() {
@@ -100,10 +96,13 @@ public final class AllayWorldGenerator implements WorldGenerator {
         onDimensionSet.accept(dimension);
     }
 
-    private void processPopulationQueue(GameLoop loop) {
+    public void tick() {
+        processPopulationQueue();
+    }
+
+    private void processPopulationQueue() {
         // dimension may be null in a short term when initializing
         if (dimension != null && !dimension.getWorld().isRunning()) {
-            loop.stop();
             return;
         }
 

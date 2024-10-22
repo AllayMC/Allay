@@ -2,6 +2,7 @@ package org.allaymc.server.world.service;
 
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +24,7 @@ public class AllayChunkServiceTest {
     @BeforeAll
     static void init() {
         Mockito.when(mockDimension.getDimensionInfo()).thenReturn(DimensionInfo.OVERWORLD);
-        chunkService = new AllayChunkService(mockDimension, new TestWorldStorage());
+        chunkService = new AllayChunkService(mockDimension, AllayWorldGenerator.builder().name("TEST").build(), new TestWorldStorage());
     }
 
     static void tick() {

@@ -303,7 +303,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // We don't send world seed to client for security reason
         startGamePacket.setSeed(0L);
         startGamePacket.setDimensionId(dimension.getDimensionInfo().dimensionId());
-        startGamePacket.setGeneratorId(dimension.getWorldGenerator().getType().getId());
+        startGamePacket.setGeneratorId(dimension.getChunkService().getWorldGenerator().getType().getId());
         startGamePacket.setLevelGameType(spawnWorld.getWorldData().getGameType());
         startGamePacket.setDifficulty(spawnWorld.getWorldData().getDifficulty().ordinal());
         startGamePacket.setTrustingPlayers(true);

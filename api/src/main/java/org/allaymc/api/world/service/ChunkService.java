@@ -3,6 +3,7 @@ package org.allaymc.api.world.service;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkSource;
 import org.allaymc.api.world.chunk.ChunkLoader;
+import org.allaymc.api.world.generator.WorldGenerator;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
@@ -16,6 +17,14 @@ import java.util.function.Consumer;
  * @author daoge_cmd
  */
 public interface ChunkService extends ChunkSource {
+
+    /**
+     * Get the world generator of this dimension.
+     *
+     * @return the world generator.
+     */
+    WorldGenerator getWorldGenerator();
+
     /**
      * Get the chunk loading future of the specified chunk.
      *

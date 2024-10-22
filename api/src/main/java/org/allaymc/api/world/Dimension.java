@@ -71,13 +71,6 @@ public interface Dimension {
     }
 
     /**
-     * Get the world generator of this dimension.
-     *
-     * @return the world generator.
-     */
-    WorldGenerator getWorldGenerator();
-
-    /**
      * Get the chunk service of this dimension.
      *
      * @return the chunk service.
