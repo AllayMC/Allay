@@ -123,8 +123,8 @@ public class ServerSettings extends OkaeriConfig {
     @Accessors(fluent = true)
     public static class WorldConfig extends OkaeriConfig {
 
-        @CustomKey("ticking-radius")
-        private int tickingRadius = 8;
+        @CustomKey("tick-radius")
+        private int tickRadius = 8;
 
         @CustomKey("view-distance")
         private int viewDistance = 8;

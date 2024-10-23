@@ -19,6 +19,7 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.Recipe;
 import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
@@ -310,8 +311,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setLevelName(Server.SETTINGS.genericSettings().motd());
         startGamePacket.setLevelId("");
         startGamePacket.setDefaultPlayerPermission(Server.SETTINGS.genericSettings().defaultPermission());
-        startGamePacket.setServerChunkTickRange(spawnWorld.getWorldData().getServerChunkTickRange());
-        startGamePacket.setVanillaVersion(server.getNetworkServer().getCodec().getMinecraftVersion());
+        startGamePacket.setServerChunkTickRange(Server.SETTINGS.worldSettings().tickRadius());
+        startGamePacket.setVanillaVersion("*");
         startGamePacket.setPremiumWorldTemplateId("");
         startGamePacket.setInventoriesServerAuthoritative(true);
         startGamePacket.setItemDefinitions(DeferredData.getItemDefinitions());
@@ -324,7 +325,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setMultiplayerCorrelationId(UUID.randomUUID().toString());
         startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
         startGamePacket.setPlatformBroadcastMode(GamePublishSetting.PUBLIC);
-        startGamePacket.setServerEngine("Allay");
+        startGamePacket.setServerEngine(ProtocolInfo.getMinecraftVersionStr());
         startGamePacket.setBlockRegistryChecksum(0L);
         startGamePacket.setPlayerPropertyData(NbtMap.EMPTY);
         startGamePacket.setWorldTemplateId(new UUID(0, 0));
