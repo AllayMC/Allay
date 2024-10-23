@@ -94,7 +94,7 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
 
     @SneakyThrows
     private void init() {
-        if (Files.exists(PACKS_PATH) && Server.SETTINGS.resourcePackSettings().autoEncrypt()) {
+        if (Files.exists(PACKS_PATH) && Server.SETTINGS.resourcePackSettings().autoEncryptPacks()) {
             encryptPacks();
         } else {
             Files.createDirectories(PACKS_PATH);

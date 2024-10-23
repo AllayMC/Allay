@@ -362,7 +362,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void completeLogin() {
-        if (server.getOnlinePlayerCount() >= Server.SETTINGS.genericSettings().maxClientCount()) {
+        if (server.getOnlinePlayerCount() >= Server.SETTINGS.genericSettings().maxPlayerCount()) {
             disconnect(TrKeys.M_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
             return;
         }

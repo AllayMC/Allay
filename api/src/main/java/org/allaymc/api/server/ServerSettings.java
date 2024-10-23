@@ -49,8 +49,8 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Usually only visible on the LAN interface")
         private String subMotd = "https://github.com/AllayMC/Allay";
 
-        @CustomKey("max-client-count")
-        private int maxClientCount = 20;
+        @CustomKey("max-player-count")
+        private int maxPlayerCount = 20;
 
         @CustomKey("game-type")
         @Comment("Possible values: SURVIVAL, CREATIVE, SPECTATOR")
@@ -82,10 +82,8 @@ public class ServerSettings extends OkaeriConfig {
     @Getter
     @Accessors(fluent = true)
     public static class NetworkSettings extends OkaeriConfig {
-        @Comment("Server ip")
         private String ip = "127.0.0.1";
 
-        @Comment("Server port")
         private int port = 19132;
 
         @CustomKey("xbox-auth")
@@ -123,12 +121,15 @@ public class ServerSettings extends OkaeriConfig {
     @Accessors(fluent = true)
     public static class WorldConfig extends OkaeriConfig {
 
+        @Comment("Determines how far away from the chunk loader chunks will be ticked")
         @CustomKey("tick-radius")
         private int tickRadius = 8;
 
+        @Comment("Determines how far away from the chunk loader chunks will be loaded and sent")
         @CustomKey("view-distance")
         private int viewDistance = 8;
 
+        @Comment("Determines the maximum number of chunks that can be sent during a tick (per chunk loader)")
         @CustomKey("chunk-try-send-count-per-tick")
         private int chunkTrySendCountPerTick = 16;
 
@@ -141,6 +142,8 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("chunk-sending-strategy")
         private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.ASYNC;
 
+        @Comment("Determines the minimum number of chunks that must to be sent to the client which is joining the server")
+        @Comment("Decrease this value may reduce the time on joining server. However, client may see a lot of unloaded chunks if the value is too low")
         @CustomKey("fully-join-chunk-threshold")
         private int fullyJoinChunkThreshold = 56;
 
@@ -223,9 +226,9 @@ public class ServerSettings extends OkaeriConfig {
     @Accessors(fluent = true)
     public static class ResourcePackSettings extends OkaeriConfig {
 
-        @CustomKey("auto-encrypt")
+        @CustomKey("auto-encrypt-packs")
         @Comment("If set to true, packs will be automatically encrypted")
-        private boolean autoEncrypt = true;
+        private boolean autoEncryptPacks = true;
 
         @CustomKey("max-chunk-size")
         @Comment("The maximum size of a resource pack chunk (unit: KB)")

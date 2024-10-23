@@ -153,7 +153,7 @@ public class AllayNetworkServer implements NetworkServer {
                 .motd(settings.genericSettings().motd())
                 .subMotd(settings.genericSettings().subMotd())
                 .playerCount(0)
-                .maximumPlayerCount(settings.genericSettings().maxClientCount())
+                .maximumPlayerCount(settings.genericSettings().maxPlayerCount())
                 .gameType(settings.genericSettings().defaultGameType().name())
                 .version(ProtocolInfo.getMinecraftVersionStr())
                 .protocolVersion(ProtocolInfo.PACKET_CODEC.getProtocolVersion())
