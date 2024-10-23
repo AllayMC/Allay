@@ -145,18 +145,8 @@ public class HashUtils {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(y >= -8388608 && y <= 8388607);
         Preconditions.checkArgument(z >= 0 && z <= 15);
-        //Make sure x and z are in the range of 0-15
-        x &= 0xF;  //4 bits
-        z &= 0xF;  //4 bits
-        //Use the int type to store the result
-        int result = 0;
-        //Place x in the top 4 digits
-        result |= (x << 28);
-        //Place y in the middle 24 bits
-        result |= ((y + 8388608) & 0xFFFFFF) << 4;
-        //Place z in the lowest 4 digits
-        result |= z;
-        return result;
+        // Place x in the top 4 digits, y in the middle 24 bits, z in the lowest 4 digits
+        return (x << 28) | (((y + 8388608) & 0xFFFFFF) << 4) | z;
     }
 
     /**
