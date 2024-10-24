@@ -61,7 +61,7 @@ jobs:
           directory: .jacoco/test/
           token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Upload Allay-Server
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         if: success()
         with:
@@ -75,38 +75,38 @@ jobs:
           url: 'https://jitpack.io/#AllayMC/Allay/master-SNAPSHOT'
           method: 'GET'
 
-      - name: Get Short SHA
-        id: vars
-        if: success()
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Format ChangeLog
-        id: get-changelog
-        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        run: |
-          CHANGELOG=$(echo "${{ github.event.commits[0].message }}" | sed ':a;N;$!ba;s/\n/\\n/g')
-          echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
-
-      - name: Get Time
-        id: time
-        uses: nanzm/get-time-action@v2.0
-        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        with:
-          timeZone: 8
-          format: 'YYYY/MM/DD-HH:mm:ss'
-
-      - name: Publish to MineBBS
-        uses: fjogeleit/http-request-action@v1
-        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        with:
-          url: 'https://api.minebbs.com/api/openapi/v1/resources/8815/update'
-          method: 'POST'
-          customHeaders: '{"Authorization": "Bearer ${{ secrets.MINEBBS_API_KEY }}"}'
-          contentType: 'application/json'
-          data: '{"title": "${{ github.ref_name }}-${{ steps.vars.outputs.sha_short }}", "description": "${{ steps.get-changelog.outputs.changelog }}", "new_version": "${{ steps.time.outputs.time }}", "file_url": "https://github.com/AllayMC/Allay"}'
-          escapeData: 'true'
-          preventFailureOnNoResponse: 'true'
-          ignoreStatusCodes: '400,404,401,403,429,500,502,503,504'
+#      - name: Get Short SHA
+#        id: vars
+#        if: success()
+#        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+#
+#      - name: Format ChangeLog
+#        id: get-changelog
+#        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+#        run: |
+#          CHANGELOG=$(echo "${{ github.event.commits[0].message }}" | sed ':a;N;$!ba;s/\n/\\n/g')
+#          echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
+#
+#      - name: Get Time
+#        id: time
+#        uses: nanzm/get-time-action@v2.0
+#        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+#        with:
+#          timeZone: 8
+#          format: 'YYYY/MM/DD-HH:mm:ss'
+#
+#      - name: Publish to MineBBS
+#        uses: fjogeleit/http-request-action@v1
+#        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+#        with:
+#          url: 'https://api.minebbs.com/api/openapi/v1/resources/8815/update'
+#          method: 'POST'
+#          customHeaders: '{"Authorization": "Bearer ${{ secrets.MINEBBS_API_KEY }}"}'
+#          contentType: 'application/json'
+#          data: '{"title": "${{ github.ref_name }}-${{ steps.vars.outputs.sha_short }}", "description": "${{ steps.get-changelog.outputs.changelog }}", "new_version": "${{ steps.time.outputs.time }}", "file_url": "https://github.com/AllayMC/Allay"}'
+#          escapeData: 'true'
+#          preventFailureOnNoResponse: 'true'
+#          ignoreStatusCodes: '400,404,401,403,429,500,502,503,504'
 
       - name: Copy Jar to Test Server
         id: deploy-jar
