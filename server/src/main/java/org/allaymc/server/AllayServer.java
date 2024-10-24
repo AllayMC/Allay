@@ -78,7 +78,7 @@ public final class AllayServer implements Server {
     private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
     public static final String BAN_INFO_FILE_NAME = "ban-info.yml";
     public static final String WHITELIST_FILE_NAME = "whitelist.yml";
-    private static volatile AllayServer INSTANCE;
+    private static final AllayServer INSTANCE = new AllayServer();;
 
     private final boolean debug = Server.SETTINGS.genericSettings().debug();
     private final Map<UUID, EntityPlayer> players = new ConcurrentHashMap<>();
@@ -136,10 +136,6 @@ public final class AllayServer implements Server {
     private long startTime;
 
     public static AllayServer getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new AllayServer();
-        }
-
         return INSTANCE;
     }
 

@@ -132,28 +132,6 @@ public interface Chunk extends UnsafeChunk {
     void compareAndSetBiome(int x, int y, int z, BiomeType expectedValue, BiomeType newValue);
 
     /**
-     * Compare and set block light at the specified position.
-     *
-     * @param x             the x coordinate.
-     * @param y             the y coordinate.
-     * @param z             the z coordinate.
-     * @param expectedValue the expected block light level.
-     * @param newValue      the new block light level.
-     */
-    void compareAndSetBlockLight(int x, int y, int z, int expectedValue, int newValue);
-
-    /**
-     * Compare and set skylight at the specified position.
-     *
-     * @param x             the x coordinate.
-     * @param y             the y coordinate.
-     * @param z             the z coordinate.
-     * @param expectedValue the expected skylight level.
-     * @param newValue      the new skylight level.
-     */
-    void compareAndSetSkyLight(int x, int y, int z, int expectedValue, int newValue);
-
-    /**
      * Compare and set height at the specified position.
      *
      * @param x             the x coordinate.

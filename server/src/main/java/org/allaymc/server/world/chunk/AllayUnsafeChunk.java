@@ -218,31 +218,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public int getBlockLight(int x, int y, int z) {
-        checkXYZ(x, y, z);
-        var section = this.getSection(y >> 4);
-        return section == null ? 0 : section.getBlockLight(x, y & 0xf, z);
-    }
-
-    @Override
-    public int getSkyLight(int x, int y, int z) {
-        checkXYZ(x, y, z);
-        var section = this.getSection(y >> 4);
-        return section == null ? 0 : section.getSkyLight(x, y & 0xf, z);
-    }
-
-    @Override
-    public void setBlockLight(int x, int y, int z, int light) {
-        this.getOrCreateSection(y >> 4).setBlockLight(x, y & 0xf, z, (byte) light);
-    }
-
-    @Override
-    public void setSkyLight(int x, int y, int z, int light) {
-        checkXYZ(x, y, z);
-        this.getOrCreateSection(y >> 4).setSkyLight(x, y & 0xf, z, (byte) light);
-    }
-
-    @Override
     public void setBiome(int x, int y, int z, BiomeType biomeType) {
         this.getOrCreateSection(y >> 4).setBiomeType(x, y & 0xf, z, biomeType);
     }

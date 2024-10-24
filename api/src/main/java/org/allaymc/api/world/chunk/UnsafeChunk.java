@@ -216,48 +216,6 @@ public interface UnsafeChunk {
     BiomeType getBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
-     * Set skylight level of the specified position.
-     *
-     * @param x     the x coordinate of the position.
-     * @param y     the y coordinate of the position.
-     * @param z     the z coordinate of the position.
-     * @param light the light level.
-     */
-    void setSkyLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int light);
-
-    /**
-     * Get skylight level of the specified position.
-     *
-     * @param x the x coordinate of the position.
-     * @param y the y coordinate of the position.
-     * @param z the z coordinate of the position.
-     *
-     * @return the light level.
-     */
-    int getSkyLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
-
-    /**
-     * Set block light level of the specified position.
-     *
-     * @param x     the x coordinate of the position.
-     * @param y     the y coordinate of the position.
-     * @param z     the z coordinate of the position.
-     * @param light the light level.
-     */
-    void setBlockLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, @Range(from = 0, to = 15) int light);
-
-    /**
-     * Get block light level of the specified position.
-     *
-     * @param x the x coordinate of the position.
-     * @param y the y coordinate of the position.
-     * @param z the z coordinate of the position.
-     *
-     * @return the light level.
-     */
-    int getBlockLight(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
-
-    /**
      * Get the hash of the chunk.
      *
      * @return the hash of the chunk.
