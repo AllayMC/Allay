@@ -19,10 +19,7 @@ import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.api.world.service.BlockUpdateService;
-import org.allaymc.api.world.service.ChunkService;
-import org.allaymc.api.world.service.EntityPhysicsService;
-import org.allaymc.api.world.service.EntityService;
+import org.allaymc.api.world.service.*;
 import org.apache.commons.lang3.function.TriFunction;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -97,6 +94,13 @@ public interface Dimension {
      * @return the entity service.
      */
     EntityService getEntityService();
+
+    /**
+     * Get the light service of this dimension.
+     *
+     * @return the light service.
+     */
+    LightService getLightService();
 
     /**
      * Get the dimension info of this dimension.

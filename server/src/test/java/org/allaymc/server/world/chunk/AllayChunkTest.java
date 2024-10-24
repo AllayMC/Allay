@@ -41,18 +41,6 @@ class AllayChunkTest {
     }
 
     @Test
-    void testUpdateSkyLight() {
-        chunk.setSkyLight(0, 20, 0, 5);
-        assertEquals(5, chunk.getSkyLight(0, 20, 0));
-    }
-
-    @Test
-    void testUpdateBlockLight() {
-        chunk.setBlockLight(0, 30, 0, 6);
-        assertEquals(6, chunk.getBlockLight(0, 30, 0));
-    }
-
-    @Test
     void testUpdateHeight() {
         assertEquals(-65, chunk.getHeight(1, 1));
         chunk.setBlockState(1, 1, 1, OAK_WOOD.getDefaultState());

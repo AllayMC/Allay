@@ -12,10 +12,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.server.world.service.AllayBlockUpdateService;
-import org.allaymc.server.world.service.AllayChunkService;
-import org.allaymc.server.world.service.AllayEntityPhysicsService;
-import org.allaymc.server.world.service.AllayEntityService;
+import org.allaymc.server.world.service.*;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
@@ -37,6 +34,7 @@ public class AllayDimension implements Dimension {
     protected final AllayEntityPhysicsService entityPhysicsService;
     protected final AllayBlockUpdateService blockUpdateService;
     protected final AllayEntityService entityService;
+    protected final AllayLightService lightService;
     protected final DimensionInfo dimensionInfo;
     protected final AllayWorld world;
 
@@ -51,6 +49,7 @@ public class AllayDimension implements Dimension {
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
+        this.lightService = new AllayLightService();
     }
 
     public void tick(long currentTick) {
@@ -58,6 +57,7 @@ public class AllayDimension implements Dimension {
         entityService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);
+        lightService.tick(world.worldData.getTime());
     }
 
     public void shutdown() {
