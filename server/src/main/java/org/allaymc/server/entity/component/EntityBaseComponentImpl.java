@@ -20,8 +20,8 @@ import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
-import org.allaymc.api.perm.DefaultPermissions;
-import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.permission.DefaultPermissions;
+import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.MathUtils;
 import org.allaymc.api.world.Dimension;
@@ -291,7 +291,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public Dimension getDimension() {
-        return location.dimension;
+        return location.dimension();
     }
 
     @Override
@@ -846,7 +846,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public PermTree getPermTree() {
+    public PermissionTree getPermissionTree() {
         return DefaultPermissions.OPERATOR;
     }
 

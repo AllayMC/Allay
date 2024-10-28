@@ -19,7 +19,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.registry.DoubleKeyMappedRegistry;
 import org.allaymc.api.registry.IntMappedRegistry;
 import org.allaymc.api.registry.Registries;
@@ -37,7 +37,7 @@ import org.allaymc.server.extension.ExtensionManager;
 import org.allaymc.server.gui.Dashboard;
 import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
-import org.allaymc.server.perm.tree.AllayPermTree;
+import org.allaymc.server.permission.tree.AllayPermissionTree;
 import org.allaymc.server.registry.AllayCommandRegistry;
 import org.allaymc.server.registry.loader.*;
 import org.allaymc.server.registry.populator.*;
@@ -150,7 +150,7 @@ public final class Allay {
         api.bind(WorldGenerator.WorldGeneratorBuilderFactory.class, () -> AllayWorldGenerator::builder);
 
         // Perm
-        api.bind(PermTree.Factory.class, () -> AllayPermTree::create);
+        api.bind(PermissionTree.Factory.class, () -> AllayPermissionTree::create);
 
         // Command
         api.bind(EntitySelectorAPI.class, AllayEntitySelectorAPI::new);

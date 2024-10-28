@@ -1,4 +1,4 @@
-package org.allaymc.api.perm.tree;
+package org.allaymc.api.permission.tree;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import java.util.List;
  *
  * @author daoge_cmd
  */
-public interface PermNode {
+public interface PermissionNode {
 
     /**
      * Gets the name of this node.
@@ -37,7 +37,7 @@ public interface PermNode {
      *
      * @return the parent of this node.
      */
-    PermNode getParent();
+    PermissionNode getParent();
 
     /**
      * Adds a leaf to this node.
@@ -46,7 +46,7 @@ public interface PermNode {
      *
      * @return the leaf node.
      */
-    PermNode addLeaf(String nodeName);
+    PermissionNode addLeaf(String nodeName);
 
     /**
      * Checks if this node is a leaf.
@@ -69,5 +69,5 @@ public interface PermNode {
      *
      * @return the leaves of this node.
      */
-    List<PermNode> getLeaves();
+    List<PermissionNode> getLeaves();
 }

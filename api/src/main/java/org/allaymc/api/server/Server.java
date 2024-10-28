@@ -238,7 +238,7 @@ public interface Server extends TaskCreator, CommandSender {
     void savePlayerData();
 
     @Override
-    default boolean hasPerm(String perm) {
+    default boolean hasPermission(String permission) {
         return true;
     }
 

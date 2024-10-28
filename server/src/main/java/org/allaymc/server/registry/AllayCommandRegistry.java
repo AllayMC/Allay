@@ -8,7 +8,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.command.CommandExecuteEvent;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.perm.DefaultPermissions;
+import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
@@ -76,7 +76,7 @@ public class AllayCommandRegistry extends CommandRegistry {
     @Override
     public void register(Command command) {
         content.put(command.getName(), command);
-        command.getPermissions().forEach(DefaultPermissions.OPERATOR::addPerm);
+        command.getPermissions().forEach(DefaultPermissions.OPERATOR::addPermission);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class AllayCommandRegistry extends CommandRegistry {
     public Command unregister(String name) {
         var cmd = getContent().remove(name);
         if (cmd != null) {
-            cmd.getPermissions().forEach(DefaultPermissions.OPERATOR::removePerm);
+            cmd.getPermissions().forEach(DefaultPermissions.OPERATOR::removePermission);
         }
         return cmd;
     }
@@ -122,7 +122,7 @@ public class AllayCommandRegistry extends CommandRegistry {
             return CommandResult.fail();
         }
 
-        if (!sender.hasPerm(command.getPermissions())) {
+        if (!sender.hasPermission(command.getPermissions())) {
             sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, commandName);
             return CommandResult.fail();
         }
@@ -142,7 +142,7 @@ public class AllayCommandRegistry extends CommandRegistry {
     public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
         var pk = new AvailableCommandsPacket();
         for (var command : getContent().values()) {
-            if (player.hasPerm(command.getPermissions())) {
+            if (player.hasPermission(command.getPermissions())) {
                 pk.getCommands().add(command.buildNetworkDataFor(player));
             }
         }

@@ -10,6 +10,7 @@ import org.joml.*;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.text.NumberFormat;
@@ -919,8 +920,8 @@ public class Location3d extends Position3d implements Location3dc {
         out.writeDouble(pitch);
         out.writeDouble(yaw);
         out.writeDouble(headYaw);
-        out.writeUTF(this.dimension.getWorld().getWorldData().getName());
-        out.writeInt(this.dimension.getDimensionInfo().dimensionId());
+        out.writeUTF(this.dimension().getWorld().getWorldData().getName());
+        out.writeInt(this.dimension().getDimensionInfo().dimensionId());
     }
 
     @Override
@@ -931,7 +932,7 @@ public class Location3d extends Position3d implements Location3dc {
         pitch = in.readDouble();
         yaw = in.readDouble();
         headYaw = in.readDouble();
-        dimension = Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt());
+        dimension = new WeakReference<>(Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt()));
     }
 
     @Override
@@ -1126,6 +1127,6 @@ public class Location3d extends Position3d implements Location3dc {
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " dimension=" + this.dimension.getWorld().getWorldData().getName() + this.dimension.getDimensionInfo().dimensionId() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " dimension=" + this.dimension().getWorld().getWorldData().getName() + this.dimension().getDimensionInfo().dimensionId() + ")";
     }
 }

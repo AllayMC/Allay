@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3fc;
-import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.permission.tree.PermissionTree;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 
 /**
@@ -56,7 +56,7 @@ public class ProxyCommandSender implements CommandSender {
     }
 
     @Override
-    public PermTree getPermTree() {
-        return origin.getPermTree();
+    public PermissionTree getPermissionTree() {
+        return origin.getPermissionTree();
     }
 }

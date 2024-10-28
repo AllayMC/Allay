@@ -186,7 +186,7 @@ public class GameTestCommand extends SimpleCommand {
                 .exec((context) -> {
                     String perm = context.getResult(1);
                     boolean value = context.getResult(2);
-                    context.getSender().setPerm(perm, value);
+                    context.getSender().setPermission(perm, value);
                     context.addOutput("Perm " + perm + " was set to " + value);
                     return context.success();
                 })

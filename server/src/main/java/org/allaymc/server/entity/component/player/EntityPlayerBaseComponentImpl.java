@@ -33,7 +33,7 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
-import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.scoreboard.Scoreboard;
 import org.allaymc.api.scoreboard.ScoreboardLine;
 import org.allaymc.api.scoreboard.data.DisplaySlot;
@@ -98,7 +98,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     protected Abilities abilities;
     @Getter
-    protected PermTree permTree;
+    protected PermissionTree permissionTree;
     @Getter
     protected int chunkLoadingRadius = Server.SETTINGS.worldSettings().viewDistance();
     @Getter
@@ -143,12 +143,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @OnInitFinish
     public void onInitFinish(EntityInitInfo initInfo) {
         super.onInitFinish(initInfo);
-        permTree = PermTree.create();
-        permTree.setOp(true);
+        permissionTree = PermissionTree.create();
+        permissionTree.setOp(true);
         adventureSettings = new AdventureSettings(thisPlayer);
         abilities = new Abilities(thisPlayer);
         // Init adventure settings and abilities
-        permTree.notifyAllPermListeners();
+        permissionTree.notifyAllPermissionListeners();
     }
 
     @Override
@@ -240,7 +240,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected void tryPickUpItems() {
         if (dead || !spawned || willBeDespawnedNextTick) return;
 
-        var dimension = location.dimension;
+        var dimension = location.dimension();
         // pick up items
         var pickUpArea = new AABBf(
                 location.x - 1.425f,
@@ -433,7 +433,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT().toBuilder()
-                .putCompound("Perm", permTree.saveNBT())
+                .putCompound("Permission", permissionTree.saveNBT())
                 .putList(
                         "Offhand",
                         NbtType.COMPOUND,
@@ -463,7 +463,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound("Perm", permNbt -> permTree.loadNBT(permNbt, true));
+        nbt.listenForCompound("Permission", permNbt -> permissionTree.loadNBT(permNbt, true));
         nbt.listenForList("Offhand", NbtType.COMPOUND, offhandNbt ->
                 containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(offhandNbt)
         );
@@ -656,11 +656,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void onChunkOutOfRange(Set<Long> chunkHashes) {
         chunkHashes.stream()
-                .map(location.dimension.getChunkService()::getChunk)
+                .map(location.dimension().getChunkService()::getChunk)
                 .filter(Objects::nonNull)
-                .forEach(chunk -> {
-                    chunk.despawnEntitiesFrom(thisPlayer);
-                });
+                .forEach(chunk -> chunk.despawnEntitiesFrom(thisPlayer));
     }
 
     @Override

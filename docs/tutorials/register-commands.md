@@ -44,11 +44,10 @@ Since we are creating a simple command here, we might want to change its permiss
 
 Let's make the following changes to our code:
 
-
 ```java linenums="1" hl_lines="9"
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
-import org.allaymc.api.perm.DefaultPermissions;
+import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.server.Server;
 
 public class HelloCommand extends SimpleCommand {

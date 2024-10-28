@@ -9,6 +9,7 @@ import org.joml.*;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.text.NumberFormat;
@@ -17,100 +18,100 @@ import java.text.NumberFormat;
  * @author Cool_Loong
  */
 public class Position3i extends Vector3i implements Position3ic {
-    public Dimension dimension;
+    public WeakReference<Dimension> dimension;
 
     public Position3i(Position3ic p) {
         super(p);
-        this.dimension = p.dimension();
+        this.dimension = new WeakReference<>(p.dimension());
     }
 
     public Position3i(Dimension dimension) {
         super();
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(int d, Dimension dimension) {
         super(d);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(int x, int y, int z, Dimension dimension) {
         super(x, y, z);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(Vector3ic v, Dimension dimension) {
         super(v);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(Vector2ic v, int z, Dimension dimension) {
         super(v, z);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(float x, float y, float z, int mode, Dimension dimension) {
         super(x, y, z, mode);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(double x, double y, double z, int mode, Dimension dimension) {
         super(x, y, z, mode);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(Vector2fc v, float z, int mode, Dimension dimension) {
         super(v, z, mode);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(Vector3fc v, int mode, Dimension dimension) {
         super(v, mode);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(Vector2dc v, float z, int mode, Dimension dimension) {
         super(v, z, mode);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(Vector3dc v, int mode, Dimension dimension) {
         super(v, mode);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(int[] xyz, Dimension dimension) {
         super(xyz);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(ByteBuffer buffer, Dimension dimension) {
         super(buffer);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(int index, ByteBuffer buffer, Dimension dimension) {
         super(index, buffer);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(IntBuffer buffer, Dimension dimension) {
         super(buffer);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     public Position3i(int index, IntBuffer buffer, Dimension dimension) {
         super(index, buffer);
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     @Override
     public Dimension dimension() {
-        return dimension;
+        return dimension.get();
     }
 
     public void setDimension(Dimension dimension) {
-        this.dimension = dimension;
+        this.dimension = new WeakReference<>(dimension);
     }
 
     @Override
@@ -320,8 +321,8 @@ public class Position3i extends Vector3i implements Position3ic {
         out.writeInt(x);
         out.writeInt(y);
         out.writeInt(z);
-        out.writeUTF(this.dimension.getWorld().getWorldData().getName());
-        out.writeInt(this.dimension.getDimensionInfo().dimensionId());
+        out.writeUTF(this.dimension().getWorld().getWorldData().getName());
+        out.writeInt(this.dimension().getDimensionInfo().dimensionId());
     }
 
     @Override
@@ -329,7 +330,7 @@ public class Position3i extends Vector3i implements Position3ic {
         x = in.readInt();
         y = in.readInt();
         z = in.readInt();
-        dimension = Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt());
+        dimension = new WeakReference<>(Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt()));
     }
 
     @Override
@@ -405,6 +406,6 @@ public class Position3i extends Vector3i implements Position3ic {
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension.getWorld().getWorldData().getName() + this.dimension.getDimensionInfo().dimensionId() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension().getWorld().getWorldData().getName() + this.dimension().getDimensionInfo().dimensionId() + ")";
     }
 }
