@@ -254,7 +254,7 @@ public class AllayChunk implements Chunk {
         levelChunkPacket.setCachingEnabled(false);
         levelChunkPacket.setRequestSubChunks(true);
         // This value is used in the subchunk system to control the maximum value of sectionY requested by the client.
-        levelChunkPacket.setSubChunkLimit(getDimensionInfo().chunkSectionSize());
+        levelChunkPacket.setSubChunkLimit(getDimensionInfo().chunkSectionCount());
         levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
         return levelChunkPacket;
     }
@@ -266,7 +266,7 @@ public class AllayChunk implements Chunk {
         levelChunkPacket.setChunkZ(this.getZ());
         levelChunkPacket.setCachingEnabled(false);
         levelChunkPacket.setRequestSubChunks(false);
-        levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionSize());
+        levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionCount());
         try {
             levelChunkPacket.setData(writeToNetwork());
         } catch (Throwable t) {

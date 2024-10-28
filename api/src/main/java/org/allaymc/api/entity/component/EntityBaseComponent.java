@@ -17,7 +17,7 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;

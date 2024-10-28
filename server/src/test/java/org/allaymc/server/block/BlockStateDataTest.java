@@ -60,7 +60,7 @@ class BlockStateDataTest {
         assertEquals(1.25f, blockAttributes.explosionResistance());
         assertEquals(0, blockAttributes.flameOdds());
         assertEquals(0.6f, blockAttributes.friction());
-        assertEquals(15, blockAttributes.light());
+        assertEquals(15, blockAttributes.lightDampening());
         assertEquals(0, blockAttributes.lightEmission());
         assertEquals(Color.decode("#575c5c"), blockAttributes.mapColor());
         assertEquals(0, Float.compare(0.0f, blockAttributes.thickness()));

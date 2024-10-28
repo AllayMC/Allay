@@ -63,7 +63,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                 chunkX,
                 chunkZ,
                 dimensionInfo,
-                new ChunkSection[dimensionInfo.chunkSectionSize()],
+                new ChunkSection[dimensionInfo.chunkSectionCount()],
                 new HeightMap(),
                 new Long2ObjectOpenHashMap<>(),
                 new Int2ObjectNonBlockingMap<>(),
@@ -339,7 +339,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         public AllayUnsafeChunk build() {
             Preconditions.checkNotNull(dimensionInfo);
             if (state == null) state = ChunkState.EMPTY;
-            if (sections == null) sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
+            if (sections == null) sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
             if (heightMap == null) heightMap = new HeightMap();
             if (entities == null) entities = new Long2ObjectNonBlockingMap<>();
             if (blockEntities == null) blockEntities = new Int2ObjectNonBlockingMap<>();

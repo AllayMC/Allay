@@ -5,7 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;

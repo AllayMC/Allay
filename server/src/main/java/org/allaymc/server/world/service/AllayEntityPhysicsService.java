@@ -15,7 +15,7 @@ import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.AABBOverlapFilter;
 import org.allaymc.api.world.service.EntityPhysicsService;
@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static java.lang.Math.*;
 import static org.allaymc.api.block.component.data.BlockStateData.DEFAULT_FRICTION;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
-import static org.allaymc.api.utils.MathUtils.isInRange;
+import static org.allaymc.api.math.MathUtils.isInRange;
 
 /**
  * Special thanks to <a href="https://www.mcpk.wiki">MCPK Wiki</a>

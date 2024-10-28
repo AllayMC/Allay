@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-import static org.allaymc.api.utils.MathUtils.round;
+import static org.allaymc.api.math.MathUtils.round;
 
 /**
  * @author daoge_cmd

@@ -7,7 +7,7 @@ import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerBlockPickEvent;
 import org.allaymc.api.math.position.Position3i;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.BlockPickRequestPacket;

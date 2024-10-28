@@ -11,12 +11,13 @@ public record DimensionInfo(
         int dimensionId,
         int minHeight,
         int maxHeight,
-        int chunkSectionSize
+        int chunkSectionCount,
+        boolean hasSkyLight
 ) {
 
-    public static final DimensionInfo OVERWORLD = new DimensionInfo(0, -64, 319, 24);
-    public static final DimensionInfo NETHER = new DimensionInfo(1, 0, 127, 8);
-    public static final DimensionInfo THE_END = new DimensionInfo(2, 0, 255, 16);
+    public static final DimensionInfo OVERWORLD = new DimensionInfo(0, -64, 319, 24, true);
+    public static final DimensionInfo NETHER = new DimensionInfo(1, 0, 127, 8, false);
+    public static final DimensionInfo THE_END = new DimensionInfo(2, 0, 255, 16, false);
 
     public DimensionInfo(int dimensionId, int minHeight, int maxHeight) {
         this(dimensionId, minHeight, maxHeight, (maxHeight - minHeight + 1) / 16);

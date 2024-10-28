@@ -42,7 +42,7 @@ public class BlockStateDataProcessor {
         public float explosionResistance;
         public int flameOdds;
         public float friction;
-        public int light;
+        public int lightDampening;
         public int lightEmission;
         public String mapColor;
         public float thickness;
@@ -59,7 +59,7 @@ public class BlockStateDataProcessor {
         public float explosionResistance;
         public int flameOdds;
         public float friction;
-        public int light;
+        public int lightDampening;
         public int lightEmission;
         public String mapColor;
         public float thickness;
@@ -75,7 +75,7 @@ public class BlockStateDataProcessor {
             data.explosionResistance = raw.explosionResistance;
             data.flameOdds = raw.flameOdds;
             data.friction = raw.friction;
-            data.light = raw.light;
+            data.lightDampening = raw.lightDampening;
             data.lightEmission = raw.lightEmission;
             data.mapColor = raw.mapColor;
             data.thickness = raw.thickness;

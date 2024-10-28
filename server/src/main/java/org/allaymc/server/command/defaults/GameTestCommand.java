@@ -14,6 +14,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.*;
 import org.allaymc.server.block.type.BlockLootTable;

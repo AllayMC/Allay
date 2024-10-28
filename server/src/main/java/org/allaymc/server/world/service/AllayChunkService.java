@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.world.ChunkUnloadEvent;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;

@@ -49,7 +49,7 @@ public class AllayDimension implements Dimension {
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
-        this.lightService = new AllayLightService();
+        this.lightService = new AllayLightService(this);
     }
 
     public void tick(long currentTick) {
@@ -57,7 +57,7 @@ public class AllayDimension implements Dimension {
         entityService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);
-        lightService.tick(world.worldData.getTime());
+        lightService.tick();
     }
 
     public void shutdown() {

@@ -41,7 +41,7 @@ import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;

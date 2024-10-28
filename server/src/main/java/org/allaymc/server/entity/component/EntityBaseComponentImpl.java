@@ -23,7 +23,7 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.perm.DefaultPermissions;
 import org.allaymc.api.perm.tree.PermTree;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.component.annotation.*;

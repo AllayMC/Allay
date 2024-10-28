@@ -20,6 +20,11 @@ public final class HeightMap {
         Arrays.fill(this.heights, (short) -1);
     }
 
+    public HeightMap(short defaultValue) {
+        this.heights = new short[256];
+        Arrays.fill(this.heights, defaultValue);
+    }
+
     /**
      * Compute the index of the specified position.
      *
