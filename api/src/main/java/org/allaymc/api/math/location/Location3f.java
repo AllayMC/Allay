@@ -164,12 +164,12 @@ public class Location3f extends Position3f implements Location3fc {
         if (this == o) return true;
         if (!(o instanceof Location3fc that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equal(dimension, that.dimension()) && Objects.equal(pitch, that.pitch()) && Objects.equal(yaw, that.yaw()) && Objects.equal(headYaw, that.headYaw());
+        return Objects.equal(dimension.get(), that.dimension()) && Objects.equal(pitch, that.pitch()) && Objects.equal(yaw, that.yaw()) && Objects.equal(headYaw, that.headYaw());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), pitch, yaw, headYaw, dimension);
+        return Objects.hashCode(super.hashCode(), pitch, yaw, headYaw, dimension.get());
     }
 
     @Override

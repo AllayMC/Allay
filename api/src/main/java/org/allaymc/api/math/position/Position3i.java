@@ -391,12 +391,12 @@ public class Position3i extends Vector3i implements Position3ic {
         if (this == o) return true;
         if (!(o instanceof Position3ic that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equal(dimension, that.dimension());
+        return Objects.equal(dimension.get(), that.dimension());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), dimension);
+        return Objects.hashCode(super.hashCode(), dimension.get());
     }
 
     @Override

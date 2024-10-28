@@ -1055,12 +1055,12 @@ public class Position3d extends Vector3d implements Position3dc {
         if (this == o) return true;
         if (!(o instanceof Position3dc that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equal(dimension, that.dimension());
+        return Objects.equal(dimension.get(), that.dimension());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), dimension);
+        return Objects.hashCode(super.hashCode(), dimension.get());
     }
 
     @Override
