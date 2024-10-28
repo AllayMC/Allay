@@ -11,6 +11,7 @@ import org.joml.*;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.text.NumberFormat;
@@ -376,8 +377,8 @@ public class Location3i extends Position3i implements Location3ic {
         out.writeDouble(pitch);
         out.writeDouble(yaw);
         out.writeDouble(headYaw);
-        out.writeUTF(this.dimension.getWorld().getWorldData().getName());
-        out.writeInt(this.dimension.getDimensionInfo().dimensionId());
+        out.writeUTF(this.dimension().getWorld().getWorldData().getName());
+        out.writeInt(this.dimension().getDimensionInfo().dimensionId());
     }
 
     @Override
@@ -388,7 +389,7 @@ public class Location3i extends Position3i implements Location3ic {
         pitch = in.readDouble();
         yaw = in.readDouble();
         headYaw = in.readDouble();
-        dimension = Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt());
+        dimension = new WeakReference<>(Server.getInstance().getWorldPool().getWorld(in.readUTF()).getDimension(in.readInt()));
     }
 
     @Override
@@ -444,12 +445,12 @@ public class Location3i extends Position3i implements Location3ic {
         if (this == o) return true;
         if (!(o instanceof Location3ic that)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equal(dimension, that.dimension()) && Objects.equal(pitch, that.pitch()) && Objects.equal(yaw, that.yaw()) && Objects.equal(headYaw, that.headYaw());
+        return Objects.equal(dimension.get(), that.dimension()) && Objects.equal(pitch, that.pitch()) && Objects.equal(yaw, that.yaw()) && Objects.equal(headYaw, that.headYaw());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(super.hashCode(), pitch, yaw, headYaw, dimension);
+        return Objects.hashCode(super.hashCode(), pitch, yaw, headYaw, dimension.get());
     }
 
     @Override
@@ -459,6 +460,6 @@ public class Location3i extends Position3i implements Location3ic {
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " dimension=" + this.dimension.getWorld().getWorldData().getName() + this.dimension.getDimensionInfo().dimensionId() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " dimension=" + this.dimension().getWorld().getWorldData().getName() + this.dimension().getDimensionInfo().dimensionId() + ")";
     }
 }

@@ -2,8 +2,8 @@ package org.allaymc.api.client.data;
 
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.perm.PermKeys;
-import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.permission.PermissionKeys;
+import org.allaymc.api.permission.tree.PermissionTree;
 import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.AbilityLayer;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -16,7 +16,7 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static org.allaymc.api.perm.tree.PermTree.PermChangeType.ADD;
+import static org.allaymc.api.permission.tree.PermissionTree.PermissionChangeType.ADD;
 
 /**
  * @author daoge_cmd
@@ -38,28 +38,28 @@ public final class Abilities {
 
     public Abilities(EntityPlayer player) {
         this.player = player;
-        var tree = player.getPermTree();
-        tree.registerPermListener(PermKeys.BUILD, syncTo(Ability.BUILD));
-        tree.registerPermListener(PermKeys.MINE, syncTo(Ability.MINE));
-        tree.registerPermListener(PermKeys.DOORS_AND_SWITCHES, syncTo(Ability.DOORS_AND_SWITCHES));
-        tree.registerPermListener(PermKeys.OPEN_CONTAINERS, syncTo(Ability.OPEN_CONTAINERS));
-        tree.registerPermListener(PermKeys.ATTACK_PLAYERS, syncTo(Ability.ATTACK_PLAYERS));
-        tree.registerPermListener(PermKeys.ATTACK_MOBS, syncTo(Ability.ATTACK_MOBS));
-        tree.registerPermListener(PermKeys.MAY_FLY, syncTo(Ability.MAY_FLY));
-        tree.registerPermListener(PermKeys.SUMMON_LIGHTNING, syncTo(Ability.LIGHTNING));
-        tree.registerPermListener(PermKeys.MUTED, syncTo(Ability.MUTED));
+        var tree = player.getPermissionTree();
+        tree.registerPermissionListener(PermissionKeys.BUILD, syncTo(Ability.BUILD));
+        tree.registerPermissionListener(PermissionKeys.MINE, syncTo(Ability.MINE));
+        tree.registerPermissionListener(PermissionKeys.DOORS_AND_SWITCHES, syncTo(Ability.DOORS_AND_SWITCHES));
+        tree.registerPermissionListener(PermissionKeys.OPEN_CONTAINERS, syncTo(Ability.OPEN_CONTAINERS));
+        tree.registerPermissionListener(PermissionKeys.ATTACK_PLAYERS, syncTo(Ability.ATTACK_PLAYERS));
+        tree.registerPermissionListener(PermissionKeys.ATTACK_MOBS, syncTo(Ability.ATTACK_MOBS));
+        tree.registerPermissionListener(PermissionKeys.MAY_FLY, syncTo(Ability.MAY_FLY));
+        tree.registerPermissionListener(PermissionKeys.SUMMON_LIGHTNING, syncTo(Ability.LIGHTNING));
+        tree.registerPermissionListener(PermissionKeys.MUTED, syncTo(Ability.MUTED));
     }
 
     public void applyGameType(GameType gameType) {
-        var tree = player.getPermTree();
+        var tree = player.getPermissionTree();
         // Set only necessary permissions
-        tree.setPerm(PermKeys.BUILD, gameType != GameType.SPECTATOR);
-        tree.setPerm(PermKeys.MINE, gameType != GameType.SPECTATOR);
-        tree.setPerm(PermKeys.DOORS_AND_SWITCHES, gameType != GameType.SPECTATOR);
-        tree.setPerm(PermKeys.OPEN_CONTAINERS, gameType != GameType.SPECTATOR);
-        tree.setPerm(PermKeys.ATTACK_PLAYERS, gameType != GameType.SPECTATOR);
-        tree.setPerm(PermKeys.ATTACK_MOBS, gameType != GameType.SPECTATOR);
-        tree.setPerm(PermKeys.MAY_FLY, gameType != GameType.SURVIVAL && gameType != GameType.ADVENTURE);
+        tree.setPermission(PermissionKeys.BUILD, gameType != GameType.SPECTATOR);
+        tree.setPermission(PermissionKeys.MINE, gameType != GameType.SPECTATOR);
+        tree.setPermission(PermissionKeys.DOORS_AND_SWITCHES, gameType != GameType.SPECTATOR);
+        tree.setPermission(PermissionKeys.OPEN_CONTAINERS, gameType != GameType.SPECTATOR);
+        tree.setPermission(PermissionKeys.ATTACK_PLAYERS, gameType != GameType.SPECTATOR);
+        tree.setPermission(PermissionKeys.ATTACK_MOBS, gameType != GameType.SPECTATOR);
+        tree.setPermission(PermissionKeys.MAY_FLY, gameType != GameType.SURVIVAL && gameType != GameType.ADVENTURE);
         // Do not need to manage SUMMON_LIGHTNING and CHAT;
         // allow plugins to control without resetting after mode switch
         // The following abilities do not need to be integrated into the permission tree
@@ -113,11 +113,11 @@ public final class Abilities {
         dirty = false;
     }
 
-    private Consumer<PermTree.PermChangeType> syncTo(Ability ability) {
+    private Consumer<PermissionTree.PermissionChangeType> syncTo(Ability ability) {
         return syncTo(ability, false);
     }
 
-    private Consumer<PermTree.PermChangeType> syncTo(Ability ability, boolean reverse) {
+    private Consumer<PermissionTree.PermissionChangeType> syncTo(Ability ability, boolean reverse) {
         return type -> {
             if (type == ADD) {
                 if (reverse) abilities.remove(ability);

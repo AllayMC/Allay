@@ -26,8 +26,8 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.network.NetworkServer;
-import org.allaymc.api.perm.DefaultPermissions;
-import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.permission.DefaultPermissions;
+import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scoreboard.ScoreboardService;
@@ -503,7 +503,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public PermTree getPermTree() {
+    public PermissionTree getPermissionTree() {
         return DefaultPermissions.OPERATOR;
     }
 }

@@ -28,6 +28,6 @@ public class GCCommand extends SimpleCommand {
     }
 
     protected double getCurrentMemoryUsage() {
-        return round((double) (getRuntime().totalMemory() - getRuntime().freeMemory()) / 1024 / 1024, 2);
+        return round(((double) (getRuntime().totalMemory() - getRuntime().freeMemory())) / 1024 / 1024, 2);
     }
 }

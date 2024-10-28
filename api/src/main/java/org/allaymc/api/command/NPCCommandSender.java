@@ -6,8 +6,8 @@ import org.allaymc.api.entity.interfaces.EntityNpc;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3fc;
-import org.allaymc.api.perm.DefaultPermissions;
-import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.permission.DefaultPermissions;
+import org.allaymc.api.permission.tree.PermissionTree;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 
@@ -55,7 +55,7 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    public PermTree getPermTree() {
+    public PermissionTree getPermissionTree() {
         return DefaultPermissions.OPERATOR;
     }
 

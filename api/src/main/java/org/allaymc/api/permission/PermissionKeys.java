@@ -1,11 +1,11 @@
-package org.allaymc.api.perm;
+package org.allaymc.api.permission;
 
 /**
  * PermKeys contains all the permission keys that are used in allay.
  *
  * @author daoge_cmd
  */
-public interface PermKeys {
+public interface PermissionKeys {
     // Vanilla abilities
     String BUILD = "ability.build";
     String MINE = "ability.mine";

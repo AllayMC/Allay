@@ -5,7 +5,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TextReceiver;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.location.Location3fc;
-import org.allaymc.api.perm.Permissible;
+import org.allaymc.api.permission.Permissible;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;

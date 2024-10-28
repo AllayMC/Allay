@@ -3,11 +3,11 @@ package org.allaymc.api.client.data;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.perm.PermKeys;
+import org.allaymc.api.permission.PermissionKeys;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateAdventureSettingsPacket;
 
-import static org.allaymc.api.perm.tree.PermTree.PermChangeType.REMOVE;
+import static org.allaymc.api.permission.tree.PermissionTree.PermissionChangeType.REMOVE;
 import static org.cloudburstmc.protocol.bedrock.data.GameType.SPECTATOR;
 
 /**
@@ -29,14 +29,14 @@ public final class AdventureSettings {
 
     public AdventureSettings(EntityPlayer player) {
         this.player = player;
-        var tree = player.getPermTree();
-        tree.registerPermListener(PermKeys.PVM, type -> this.setNoPVM(type == REMOVE));
-        tree.registerPermListener(PermKeys.MVP, type -> this.setNoMVP(type == REMOVE));
+        var tree = player.getPermissionTree();
+        tree.registerPermissionListener(PermissionKeys.PVM, type -> this.setNoPVM(type == REMOVE));
+        tree.registerPermissionListener(PermissionKeys.MVP, type -> this.setNoMVP(type == REMOVE));
     }
 
     public void applyGameType(GameType gameType) {
-        player.getPermTree().setPerm(PermKeys.PVM, gameType != SPECTATOR);
-        player.getPermTree().setPerm(PermKeys.MVP, gameType != SPECTATOR);
+        player.getPermissionTree().setPermission(PermissionKeys.PVM, gameType != SPECTATOR);
+        player.getPermissionTree().setPermission(PermissionKeys.MVP, gameType != SPECTATOR);
         this.setImmutableWorld(gameType == SPECTATOR);
         this.setShowNameTags(gameType != SPECTATOR);
         dirty = true;

@@ -1,7 +1,7 @@
-package org.allaymc.server.perm.tree;
+package org.allaymc.server.permission.tree;
 
 import lombok.Getter;
-import org.allaymc.api.perm.tree.PermNode;
+import org.allaymc.api.permission.tree.PermissionNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,13 @@ import java.util.List;
  * @author daoge_cmd
  */
 @Getter
-public class AllayPermNode implements PermNode {
+public class AllayPermissionNode implements PermissionNode {
 
     protected String name;
-    protected List<PermNode> leaves = new ArrayList<>();
-    protected PermNode parent;
+    protected List<PermissionNode> leaves = new ArrayList<>();
+    protected PermissionNode parent;
 
-    public AllayPermNode(String name, PermNode parent) {
+    public AllayPermissionNode(String name, PermissionNode parent) {
         this.name = name;
         this.parent = parent;
     }
@@ -26,7 +26,7 @@ public class AllayPermNode implements PermNode {
         return getFullName0(this, "");
     }
 
-    protected String getFullName0(PermNode node, String str) {
+    protected String getFullName0(PermissionNode node, String str) {
         if (node.isRoot()) return str;
         if (!str.isEmpty()) str = "." + str;
         str = node.getName() + str;
@@ -39,8 +39,8 @@ public class AllayPermNode implements PermNode {
     }
 
     @Override
-    public PermNode addLeaf(String nodeName) {
-        var node = new AllayPermNode(nodeName, this);
+    public PermissionNode addLeaf(String nodeName) {
+        var node = new AllayPermissionNode(nodeName, this);
         leaves.add(node);
         return node;
     }

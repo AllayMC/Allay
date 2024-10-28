@@ -1,6 +1,6 @@
-package org.allaymc.api.perm;
+package org.allaymc.api.permission;
 
-import org.allaymc.api.perm.tree.PermTree;
+import org.allaymc.api.permission.tree.PermissionTree;
 
 import java.util.Collection;
 
@@ -16,7 +16,7 @@ public interface Permissible {
      * @return {@code true} if this object is an operator, {@code false} otherwise.
      */
     default boolean isOp() {
-        return getPermTree().isOp();
+        return getPermissionTree().isOp();
     }
 
     /**
@@ -25,66 +25,66 @@ public interface Permissible {
      * @param value {@code true} if this object is an operator, {@code false} otherwise.
      */
     default void setOp(boolean value) {
-        getPermTree().setOp(value);
+        getPermissionTree().setOp(value);
     }
 
     /**
      * Check if this object has the given permission.
      *
-     * @param perm the permission to check.
+     * @param permission the permission to check.
      *
      * @return {@code true} if this object has the given permission, {@code false} otherwise.
      */
-    default boolean hasPerm(String perm) {
-        return getPermTree().hasPerm(perm);
+    default boolean hasPermission(String permission) {
+        return getPermissionTree().hasPermission(permission);
     }
 
     /**
      * Check if this object has all the given permissions.
      *
-     * @param perms the permissions to check.
+     * @param permissions the permissions to check.
      *
      * @return {@code true} if this object has all the given permissions, {@code false} otherwise.
      */
-    default boolean hasPerm(Collection<String> perms) {
-        return perms.stream().allMatch(this::hasPerm);
+    default boolean hasPermission(Collection<String> permissions) {
+        return permissions.stream().allMatch(this::hasPermission);
     }
 
     /**
      * Add a permission to this object.
      *
-     * @param perm the permission to add.
+     * @param permission the permission to add.
      *
      * @return this object.
      */
-    default Permissible addPerm(String perm) {
-        getPermTree().addPerm(perm);
+    default Permissible addPermission(String permission) {
+        getPermissionTree().addPermission(permission);
         return this;
     }
 
     /**
      * Remove a permission from this object.
      *
-     * @param perm the permission to remove.
+     * @param permission the permission to remove.
      *
      * @return this object.
      */
-    default Permissible removePerm(String perm) {
-        getPermTree().removePerm(perm);
+    default Permissible removePermission(String permission) {
+        getPermissionTree().removePermission(permission);
         return this;
     }
 
     /**
      * Set the value of a permission.
      *
-     * @param perm  the permission to set.
+     * @param permission  the permission to set.
      * @param value {@code true} to add the permission, {@code false} to remove it.
      *
      * @return this object.
      */
-    default Permissible setPerm(String perm, boolean value) {
-        if (value) addPerm(perm);
-        else removePerm(perm);
+    default Permissible setPermission(String permission, boolean value) {
+        if (value) addPermission(permission);
+        else removePermission(permission);
         return this;
     }
 
@@ -93,5 +93,5 @@ public interface Permissible {
      *
      * @return the permission tree of this object.
      */
-    PermTree getPermTree();
+    PermissionTree getPermissionTree();
 }
