@@ -169,7 +169,7 @@ public class AllayWorld implements World {
         // Shouldn't block world tick poll here, otherwise there will be a deadlock because
         // Dimension#findSuitableGroundPosAround() -wait-> Dimension#getBlockState() -wait-> ChunkService#getOrLoadChunkSync()
         // -wait-> WorldGenerator#generateChunk(), and WorldGenerator should be ticked in order to generate chunk normally
-        Thread.ofVirtual().name("World " + worldData.getName() + " Spawn Point Finding Thread").start(() -> {
+        Thread.ofVirtual().name("World Spawn Point Finding Thread - " + worldData.getName()).start(() -> {
             if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), getOverWorld()))) {
                 var newSpawnPoint = getOverWorld().findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
                 if (newSpawnPoint == null) {
