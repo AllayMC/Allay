@@ -615,7 +615,7 @@ public interface CommandNode {
      *
      * @return This {@code CommandNode}.
      */
-    default CommandNode remain(String name, Object defaultValue) {
+    default CommandNode remain(String name, List<String> defaultValue) {
         return addLeaf(getFactory().remain(name, this, defaultValue));
     }
 
