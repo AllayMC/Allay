@@ -7,12 +7,13 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandParam;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandParamData;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author daoge_cmd
  */
 public class RemainArgNode extends BaseNode {
-    public RemainArgNode(String name, CommandNode parent, Object defaultValue) {
+    public RemainArgNode(String name, CommandNode parent, List<String> defaultValue) {
         super(name, parent, defaultValue);
     }
 

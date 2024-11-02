@@ -191,7 +191,7 @@ public interface CommandNodeFactory {
      *
      * @return a new {@code CommandNode} for the remaining arguments.
      */
-    CommandNode remain(String name, CommandNode parent, Object defaultValue);
+    CommandNode remain(String name, CommandNode parent, List<String> defaultValue);
 
     /**
      * Creates a command node for a target argument that allows selecting multiple entities.

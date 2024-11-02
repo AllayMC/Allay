@@ -87,7 +87,7 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     }
 
     @Override
-    public CommandNode remain(String name, CommandNode parent, Object defaultValue) {
+    public CommandNode remain(String name, CommandNode parent, List<String> defaultValue) {
         return new RemainArgNode(name, parent, defaultValue);
     }
 
