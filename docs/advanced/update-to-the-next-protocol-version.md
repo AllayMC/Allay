@@ -71,7 +71,7 @@ Allay completes most repetitive work through code generation. Next, we'll focus 
 
 **Check for changes in `entity_id_map.json`**. If changes exist, first run `EntityIdEnumGen`, then run `EntityInterfaceGen`. This file usually doesn't change much in minor updates.
 
-**Check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `ItemTagGen`or `BlockTagGen`.
+**Check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `TagGen`.
 
 **Check for changes in `block_property_types.json`**. If changes exist, run `BlockPropertyTypeGen`.
 
