@@ -98,6 +98,6 @@ fastutil = [
 ]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "8.3.3" }
+shadow = { id = "com.gradleup.shadow", version = "8.3.5" }
 gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.4.2" }
 jmh = { id = "me.champeau.jmh", version = "0.7.2" }
