@@ -479,7 +479,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             // Same to entity, we just read it from file currently
             if (BIOME_DEFINITION_LIST_PACKET == null) {
                 try (var stream = Utils.getResource("biome_definitions.nbt")) {
-                    var tag = (NbtMap) NbtUtils.createGZIPReader(stream).readTag();
+                    var tag = (NbtMap) NbtUtils.createNetworkReader(stream).readTag();
                     BIOME_DEFINITION_LIST_PACKET = new BiomeDefinitionListPacket();
                     BIOME_DEFINITION_LIST_PACKET.setDefinitions(tag);
                 } catch (Exception e) {

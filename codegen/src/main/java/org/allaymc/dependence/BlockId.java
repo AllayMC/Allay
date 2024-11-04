@@ -468,6 +468,8 @@ public enum BlockId {
 
     CRAFTING_TABLE("minecraft:crafting_table"),
 
+    CREEPER_HEAD("minecraft:creeper_head"),
+
     CRIMSON_BUTTON("minecraft:crimson_button"),
 
     CRIMSON_DOOR("minecraft:crimson_door"),
@@ -711,6 +713,8 @@ public enum BlockId {
     DOUBLE_CUT_COPPER_SLAB("minecraft:double_cut_copper_slab"),
 
     DRAGON_EGG("minecraft:dragon_egg"),
+
+    DRAGON_HEAD("minecraft:dragon_head"),
 
     DRIED_KELP_BLOCK("minecraft:dried_kelp_block"),
 
@@ -1538,6 +1542,8 @@ public enum BlockId {
 
     MUDDY_MANGROVE_ROOTS("minecraft:muddy_mangrove_roots"),
 
+    MUSHROOM_STEM("minecraft:mushroom_stem"),
+
     MYCELIUM("minecraft:mycelium"),
 
     NETHER_BRICK("minecraft:nether_brick"),
@@ -1658,6 +1664,8 @@ public enum BlockId {
 
     PETRIFIED_OAK_SLAB("minecraft:petrified_oak_slab"),
 
+    PIGLIN_HEAD("minecraft:piglin_head"),
+
     PINK_CANDLE("minecraft:pink_candle"),
 
     PINK_CANDLE_CAKE("minecraft:pink_candle_cake"),
@@ -1691,6 +1699,8 @@ public enum BlockId {
     PITCHER_CROP("minecraft:pitcher_crop"),
 
     PITCHER_PLANT("minecraft:pitcher_plant"),
+
+    PLAYER_HEAD("minecraft:player_head"),
 
     PODZOL("minecraft:podzol"),
 
@@ -1962,7 +1972,7 @@ public enum BlockId {
 
     SILVER_GLAZED_TERRACOTTA("minecraft:silver_glazed_terracotta"),
 
-    SKULL("minecraft:skull"),
+    SKELETON_SKULL("minecraft:skeleton_skull"),
 
     SLIME("minecraft:slime"),
 
@@ -2402,6 +2412,8 @@ public enum BlockId {
 
     WITHER_ROSE("minecraft:wither_rose"),
 
+    WITHER_SKELETON_SKULL("minecraft:wither_skeleton_skull"),
+
     WOODEN_BUTTON("minecraft:wooden_button"),
 
     WOODEN_DOOR("minecraft:wooden_door"),
@@ -2428,7 +2440,9 @@ public enum BlockId {
 
     YELLOW_TERRACOTTA("minecraft:yellow_terracotta"),
 
-    YELLOW_WOOL("minecraft:yellow_wool");
+    YELLOW_WOOL("minecraft:yellow_wool"),
+
+    ZOMBIE_HEAD("minecraft:zombie_head");
 
     @Getter
     private final Identifier identifier;
