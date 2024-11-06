@@ -130,7 +130,10 @@ public class AllayWorld implements World {
             PacketQueueEntry entry;
             int count = 0;
             while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
-                entry.player().getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).handleDataPacket(entry.packet(), entry.time());
+                if (entry.player.getWorld() != this) {
+                    log.warn("Trying to handle sync packet in world {} which the player {} is not in!", this.getWorldData().getName(), entry.player.getOriginName());
+                }
+                entry.player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).handleDataPacket(entry.packet(), entry.time());
                 count++;
             }
         } catch (Throwable throwable) {
