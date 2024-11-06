@@ -3,12 +3,11 @@ package org.allaymc.server.loottable.entry;
 import com.google.gson.JsonObject;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.loottable.LootTableType;
-import org.allaymc.api.loottable.condition.Conditions;
-import org.allaymc.api.loottable.context.Context;
-import org.allaymc.api.loottable.entry.EntryDeserializer;
-import org.allaymc.api.loottable.function.Function;
-import org.allaymc.api.loottable.function.Functions;
+import org.allaymc.server.loottable.LootTableType;
+import org.allaymc.server.loottable.condition.Conditions;
+import org.allaymc.server.loottable.context.Context;
+import org.allaymc.server.loottable.function.Function;
+import org.allaymc.server.loottable.function.Functions;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 

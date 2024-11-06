@@ -1,4 +1,4 @@
-package org.allaymc.api.loottable;
+package org.allaymc.server.loottable;
 
 /**
  * @author daoge_cmd

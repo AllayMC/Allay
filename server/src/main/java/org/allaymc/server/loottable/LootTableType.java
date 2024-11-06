@@ -1,16 +1,16 @@
-package org.allaymc.api.loottable;
+package org.allaymc.server.loottable;
 
 import com.google.gson.JsonObject;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.allaymc.api.loottable.condition.Condition;
-import org.allaymc.api.loottable.condition.ConditionDeserializer;
-import org.allaymc.api.loottable.context.Context;
-import org.allaymc.api.loottable.entry.Entry;
-import org.allaymc.api.loottable.entry.EntryDeserializer;
-import org.allaymc.api.loottable.function.Function;
-import org.allaymc.api.loottable.function.FunctionDeserializer;
+import org.allaymc.server.loottable.condition.Condition;
+import org.allaymc.server.loottable.condition.ConditionDeserializer;
+import org.allaymc.server.loottable.context.Context;
+import org.allaymc.server.loottable.entry.Entry;
+import org.allaymc.server.loottable.entry.EntryDeserializer;
+import org.allaymc.server.loottable.function.Function;
+import org.allaymc.server.loottable.function.FunctionDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;

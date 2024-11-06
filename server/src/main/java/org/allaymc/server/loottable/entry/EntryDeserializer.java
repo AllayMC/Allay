@@ -1,8 +1,8 @@
-package org.allaymc.api.loottable.entry;
+package org.allaymc.server.loottable.entry;
 
 import com.google.gson.JsonObject;
-import org.allaymc.api.loottable.LootTableType;
-import org.allaymc.api.loottable.context.Context;
+import org.allaymc.server.loottable.LootTableType;
+import org.allaymc.server.loottable.context.Context;
 
 /**
  * @author daoge_cmd

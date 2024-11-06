@@ -1,4 +1,4 @@
-package org.allaymc.api.loottable.function;
+package org.allaymc.server.loottable.function;
 
 import org.allaymc.api.item.ItemStack;
 

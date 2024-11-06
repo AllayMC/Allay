@@ -1,7 +1,7 @@
-package org.allaymc.api.loottable.condition;
+package org.allaymc.server.loottable.condition;
 
 import com.google.gson.JsonObject;
-import org.allaymc.api.loottable.context.Context;
+import org.allaymc.server.loottable.context.Context;
 
 /**
  * @author daoge_cmd

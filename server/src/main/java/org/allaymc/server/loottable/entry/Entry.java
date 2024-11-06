@@ -1,8 +1,8 @@
-package org.allaymc.api.loottable.entry;
+package org.allaymc.server.loottable.entry;
 
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.loottable.condition.Conditions;
-import org.allaymc.api.loottable.context.Context;
+import org.allaymc.server.loottable.condition.Conditions;
+import org.allaymc.server.loottable.context.Context;
 
 import java.util.Set;
 
