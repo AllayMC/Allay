@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.world.WeatherChangeEvent;
 import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
@@ -244,6 +245,17 @@ public class AllayWorld implements World {
             }
         }
 
+        var newEffectiveWeathers = new HashSet<>(effectiveWeathers);
+        newEffectiveWeathers.removeAll(weatherRemoved);
+        newEffectiveWeathers.addAll(weatherAdded);
+        var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
+        event.call();
+        if (event.isCancelled()) {
+            return;
+        }
+
+        effectiveWeathers.removeAll(weatherRemoved);
+        effectiveWeathers.addAll(weatherAdded);
         onWeatherUpdate(weatherRemoved, weatherAdded);
     }
 
@@ -346,6 +358,15 @@ public class AllayWorld implements World {
         if (effectiveWeathers.contains(weather)) {
             return;
         }
+
+        var newEffectiveWeathers = new HashSet<>(effectiveWeathers);
+        newEffectiveWeathers.add(weather);
+        var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
+        event.call();
+        if (event.isCancelled()) {
+            return;
+        }
+
         effectiveWeathers.add(weather);
         onWeatherUpdate(Set.of(), Set.of(weather));
     }
@@ -358,6 +379,15 @@ public class AllayWorld implements World {
         if (!effectiveWeathers.contains(weather)) {
             return;
         }
+
+        var newEffectiveWeathers = new HashSet<>(effectiveWeathers);
+        newEffectiveWeathers.remove(weather);
+        var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
+        event.call();
+        if (event.isCancelled()) {
+            return;
+        }
+
         effectiveWeathers.remove(weather);
         onWeatherUpdate(Set.of(weather), Set.of());
     }
@@ -400,7 +430,7 @@ public class AllayWorld implements World {
 
         @Override
         public int getChunkLoadingRadius() {
-            return Server.SETTINGS.worldSettings().viewDistance();
+            return Server.SETTINGS.worldSettings().spawnPointChunkRadius();
         }
 
         @Override
