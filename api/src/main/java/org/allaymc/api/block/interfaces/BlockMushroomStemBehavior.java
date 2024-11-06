@@ -2,5 +2,5 @@ package org.allaymc.api.block.interfaces;
 
 import org.allaymc.api.block.BlockBehavior;
 
-public interface BlockSkullBehavior extends BlockBehavior {
+public interface BlockMushroomStemBehavior extends BlockBehavior {
 }

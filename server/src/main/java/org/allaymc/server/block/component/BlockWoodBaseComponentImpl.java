@@ -1,11 +1,10 @@
-package org.allaymc.server.block.component.wood;
+package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockWoodBaseComponent;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.server.block.component.BlockBaseComponentImpl;
 
 /**
  * @author Dhaiven

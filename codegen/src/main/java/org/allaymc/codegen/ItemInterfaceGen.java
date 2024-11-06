@@ -23,7 +23,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
-        // NOTICE: Please run ItemIdEnumGen.generate() first before running this method
+        ItemIdEnumGen.generate();
         generate();
     }
 
@@ -68,7 +68,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
     private static void addDefaultItemTypeInitializer(ItemId id, ClassName itemClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", ClassNames.ITEM_TYPES, id.name(), ClassNames.ITEM_TYPE_BUILDER)
+                .add("$T.$N = $T\n", ClassNames.ITEM_TYPES, id.name(), ClassNames.ALLAY_ITEM_TYPE)
                 .add("        .builder($T.class)\n", itemClassName)
                 .add("        .vanillaItem($T.$N)\n", ClassNames.ITEM_ID, id.name())
                 .add("        .build();");
@@ -84,7 +84,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
 
     @SneakyThrows
     private static void generateDefaultItemTypeInitializer() {
-        var filePath = Path.of("api/src/main/java/org/allaymc/server/item/type/ItemTypeDefaultInitializer.java");
+        var filePath = Path.of("server/src/main/java/org/allaymc/server/item/type/ItemTypeDefaultInitializer.java");
         Files.deleteIfExists(filePath);
         var folderPath = filePath.getParent();
         if (!Files.exists(folderPath))
@@ -104,10 +104,10 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
     }
 
     private static String generateClassSimpleName(ItemId id) {
-        // Windows环境对大小写不敏感，所以需要特殊处理一部分物品id
-        // netherbrick和nether_brick需要特殊处理
+        // The Windows environment is not case-sensitive, so some item IDs need to be specially processed.
+        // netherbrick and nether_brick require special handling
         if (id == ItemId.NETHERBRICK) return "ItemNetherbrick0Stack";
-        // tallgrass和tall_grass需要特殊处理
+        // tallgrass and tall_grass require special handling
         if (id == ItemId.TALLGRASS) return "ItemTallgrass0Stack";
         return "Item" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_")) + "Stack";
     }
@@ -197,5 +197,7 @@ public class ItemInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile("ItemPurpur.*"), "purpur");
         registerSubPackage(Pattern.compile(".*SpongeStack"), "sponge");
         registerSubPackage(Pattern.compile(".*TntStack"), "tnt");
+        registerSubPackage(Pattern.compile(".*(Head|Skull)Stack"), "head");
+        registerSubPackage(Pattern.compile(".*BundleStack"), "bundle");
     }
 }

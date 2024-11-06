@@ -27,7 +27,7 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
     public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
-        // NOTICE: Please run BlockIdEnumGen.generate() first before running this method
+        BlockIdEnumGen.generate();
         BlockPropertyTypeGen.generate();
         generate();
     }
@@ -192,5 +192,6 @@ public class BlockInterfaceGen extends BaseInterfaceGen {
         registerSubPackage(Pattern.compile("BlockPurpur.*"), "purpur");
         registerSubPackage(Pattern.compile(".*SpongeBehavior"), "sponge");
         registerSubPackage(Pattern.compile(".*TntBehavior"), "tnt");
+        registerSubPackage(Pattern.compile(".*(Head|Skull)Behavior"), "head");
     }
 }

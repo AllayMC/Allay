@@ -54,7 +54,7 @@ public class EntityInterfaceGen extends BaseInterfaceGen {
     private static void addDefaultEntityTypeInitializer(EntityId id, ClassName entityClassName) {
         var initializer = CodeBlock.builder();
         initializer
-                .add("$T.$N = $T\n", ClassNames.ENTITY_TYPES, id.name(), ClassNames.ENTITY_TYPE_BUILDER)
+                .add("$T.$N = $T\n", ClassNames.ENTITY_TYPES, id.name(), ClassNames.ALLAY_ENTITY_TYPE)
                 .add("        .builder($T.class)\n", entityClassName)
                 .add("        .vanillaEntity($T.$N)\n", ClassNames.ENTITY_ID, id.name())
                 .add("        .build();");
