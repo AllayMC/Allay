@@ -23,14 +23,7 @@ public class TeleportCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .pos("pos")
-                .exec(context -> {
-
-                    if (!context.getSender().isEntity()) {
-                        context.addInvalidExecutorError(SenderType.ENTITY);
-                        return context.fail();
-                    }
-                    var sender = context.getSender().asEntity();
-
+                .exec((context,sender) -> {
                     Vector3f pos = context.getResult(0);
                     var loc = new Location3f(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
 
@@ -38,10 +31,10 @@ public class TeleportCommand extends SimpleCommand {
                     context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, sender.getDisplayName(), pos.x, pos.y, pos.z);
 
                     return context.success();
-                })
+                },SenderType.ENTITY)
                 .root()
                 .target("destination")
-                .exec(context -> {
+                .exec((context,sender) -> {
                     List<Entity> destination = context.getResult(0);
 
                     if (destination.isEmpty()) {
@@ -56,17 +49,11 @@ public class TeleportCommand extends SimpleCommand {
 
                     var destEntity = destination.getFirst();
 
-                    if (!context.getSender().isEntity()) {
-                        context.addInvalidExecutorError(SenderType.ENTITY);
-                        return context.fail();
-                    }
-                    var sender = context.getSender().asEntity();
-
                     sender.teleport(destEntity.getLocation());
                     context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS, sender.getDisplayName(), destEntity.getDisplayName());
 
                     return context.success();
-                })
+                },SenderType.ENTITY)
                 .root()
                 .target("victims")
                 .pos("pos")
