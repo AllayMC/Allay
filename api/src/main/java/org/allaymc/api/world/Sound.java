@@ -12,6 +12,8 @@ public interface Sound {
 
     String RANDOM_ENDERCHESTOPEN = "random.enderchestopen";
 
+    String BUNDLE_DROP_CONTENTS = "bundle.drop_contents";
+
     String RANDOM_TOAST_RECIPE_UNLOCKING_OUT = "random.toast_recipe_unlocking_out";
 
     String MOB_HORSE_DONKEY_HIT = "mob.horse.donkey.hit";
@@ -1842,6 +1844,8 @@ public interface Sound {
 
     String ARMOR_CRACK_WOLF = "armor.crack_wolf";
 
+    String BUNDLE_INSERT = "bundle.insert";
+
     String CLICK_OFF_CHERRY_WOOD_PRESSURE_PLATE = "click_off.cherry_wood_pressure_plate";
 
     String PLACE_BAMBOO_WOOD = "place.bamboo_wood";
@@ -2616,6 +2620,8 @@ public interface Sound {
 
     String CAULDRON_CLEANARMOR = "cauldron.cleanarmor";
 
+    String BUNDLE_REMOVE_ONE = "bundle.remove_one";
+
     String MOB_WOLF_GROWL = "mob.wolf.growl";
 
     String PLACE_SUSPICIOUS_SAND = "place.suspicious_sand";
@@ -2667,6 +2673,8 @@ public interface Sound {
     String STEP_ROOTS = "step.roots";
 
     String MOB_LLAMA_EAT = "mob.llama.eat";
+
+    String BUNDLE_INSERT_FAIL = "bundle.insert_fail";
 
     String MOB_EVOCATION_ILLAGER_CAST_SPELL = "mob.evocation_illager.cast_spell";
 

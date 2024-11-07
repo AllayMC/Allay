@@ -132,7 +132,7 @@ The contents of the following folders are open-sourced under the MIT license:
 
 [![YourKit-Logo](https://www.yourkit.com/images/yklogo.png)](https://www.yourkit.com/)
 
-YourKit has granted Polyhedral Development an open-source license to their
+YourKit has granted AllayMC team an open-source license to their
 outstanding Java profiler, allowing us to make our software as performant as it
 can be!
 

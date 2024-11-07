@@ -1072,14 +1072,6 @@
         true
       ]
     },
-    "stripped_bit": {
-      "serializationName": "stripped_bit",
-      "valueType": "BOOLEAN",
-      "values": [
-        false,
-        true
-      ]
-    },
     "structure_block_type": {
       "serializationName": "structure_block_type",
       "valueType": "ENUM",

@@ -145,7 +145,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Determines the minimum number of chunks that must to be sent to the client which is joining the server")
         @Comment("Decrease this value may reduce the time on joining server. However, client may see a lot of unloaded chunks if the value is too low")
         @CustomKey("fully-join-chunk-threshold")
-        private int fullyJoinChunkThreshold = 56;
+        private int fullyJoinChunkThreshold = 30;
 
         @Comment("Determines how long a chunk without chunk loaders will remain loaded (gt)")
         @CustomKey("remove-unneeded-chunk-cycle")
@@ -156,6 +156,10 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("However, this will increase the server's memory usage")
         @CustomKey("load-spawn-point-chunks")
         private boolean loadSpawnPointChunks = true;
+
+        @Comment("Determines how many chunks around the spawn point will be loaded")
+        @CustomKey("spawn-point-chunk-radius")
+        private int spawnPointChunkRadius = 3;
 
         public enum ChunkSendingStrategy {
             ASYNC,

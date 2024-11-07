@@ -1,7 +1,7 @@
 package org.allaymc.server.loottable.roll;
 
 import lombok.AllArgsConstructor;
-import org.allaymc.api.loottable.Rolls;
+import org.allaymc.server.loottable.Rolls;
 
 import java.util.concurrent.ThreadLocalRandom;
 

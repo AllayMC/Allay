@@ -133,7 +133,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
                 var processor = packetProcessorHolder.getProcessor(packet);
                 if (processor == null) {
-                    log.warn("Received a packet without packet handler: {}", packet);
+                    log.warn("Received a packet which doesn't have correspond packet handler: {}", packet);
                     return PacketSignal.HANDLED;
                 }
 
@@ -147,10 +147,14 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 }
 
                 if (processor.handleAsync(thisPlayer, packet, time) != PacketSignal.HANDLED) {
-                    // Packet processors should make sure that PacketProcessor.handleSync() won't be called
-                    // if player is not in any world
-                    Objects.requireNonNull(world, "Player that is not in any world cannot handle sync packet");
-                    ((AllayWorld) world).addSyncPacketToQueue(thisPlayer, packet, time);
+                    if (world == null) {
+                        // Packet processors should make sure that PacketProcessor.handleSync()
+                        // method won't be called if player is not in any world
+                        log.warn("Cannot handle sync packet {} for player {} which is not in any world!", packet.getPacketType().name(), thisPlayer);
+                        processor.handleSync(thisPlayer, packet, time);
+                    } else {
+                        ((AllayWorld) world).addSyncPacketToQueue(thisPlayer, packet, time);
+                    }
                 }
 
                 return PacketSignal.HANDLED;
@@ -479,7 +483,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             // Same to entity, we just read it from file currently
             if (BIOME_DEFINITION_LIST_PACKET == null) {
                 try (var stream = Utils.getResource("biome_definitions.nbt")) {
-                    var tag = (NbtMap) NbtUtils.createGZIPReader(stream).readTag();
+                    var tag = (NbtMap) NbtUtils.createNetworkReader(stream).readTag();
                     BIOME_DEFINITION_LIST_PACKET = new BiomeDefinitionListPacket();
                     BIOME_DEFINITION_LIST_PACKET.setDefinitions(tag);
                 } catch (Exception e) {

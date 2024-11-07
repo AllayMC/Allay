@@ -5,8 +5,6 @@ import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
-import org.allaymc.api.loottable.condition.Condition;
-import org.allaymc.api.loottable.condition.ConditionDeserializer;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.loottable.context.BreakBlockContext;

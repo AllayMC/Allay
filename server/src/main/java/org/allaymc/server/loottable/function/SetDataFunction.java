@@ -3,8 +3,6 @@ package org.allaymc.server.loottable.function;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.loottable.function.Function;
-import org.allaymc.api.loottable.function.FunctionDeserializer;
 
 /**
  * @author daoge_cmd

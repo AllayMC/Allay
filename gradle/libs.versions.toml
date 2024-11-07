@@ -9,7 +9,7 @@ nbt = { group = "org.allaymc", name = "NBT", version = "3.0.9" }
 # Network protocol
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta5-SNAPSHOT" }
 # State Updater
-stateupdater = { group = "org.allaymc", name = "stateupdater", version = "1.21.30" }
+stateupdater = { group = "org.allaymc", name = "stateupdater", version = "1.21.40" }
 # Collections
 guava = { group = "com.google.guava", name = "guava", version = "33.3.1-jre" }
 # Fastutil
@@ -47,7 +47,7 @@ disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.17.0" }
 # bytecode
-bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.15.7" }
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.15.10" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 # K-V DataBase
@@ -98,6 +98,6 @@ fastutil = [
 ]
 
 [plugins]
-shadow = { id = "com.gradleup.shadow", version = "8.3.3" }
+shadow = { id = "com.gradleup.shadow", version = "8.3.5" }
 gitproperties = { id = "com.gorylenko.gradle-git-properties", version = "2.4.2" }
 jmh = { id = "me.champeau.jmh", version = "0.7.2" }
