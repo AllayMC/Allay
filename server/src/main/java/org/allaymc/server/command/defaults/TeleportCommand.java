@@ -1,5 +1,6 @@
 package org.allaymc.server.command.defaults;
 
+import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
@@ -21,6 +22,52 @@ public class TeleportCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
+                .pos("pos")
+                .exec(context -> {
+
+                    if (!context.getSender().isEntity()) {
+                        context.addInvalidExecutorError(SenderType.ENTITY);
+                        return context.fail();
+                    }
+                    var sender = context.getSender().asEntity();
+
+                    Vector3f pos = context.getResult(0);
+                    var loc = new Location3f(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
+
+                    sender.teleport(loc);
+                    context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, sender.getDisplayName(), pos.x, pos.y, pos.z);
+
+                    return context.success();
+                })
+                .root()
+                .target("destination")
+                .exec(context -> {
+                    List<Entity> destination = context.getResult(0);
+
+                    if (destination.isEmpty()) {
+                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_NOTARGETMATCH);
+                        return context.fail();
+                    }
+
+                    if (destination.size() > 1) {
+                        context.addError("%" + TrKeys.M_COMMANDS_GENERIC_TOOMANYTARGETS);
+                        return context.fail();
+                    }
+
+                    var destEntity = destination.getFirst();
+
+                    if (!context.getSender().isEntity()) {
+                        context.addInvalidExecutorError(SenderType.ENTITY);
+                        return context.fail();
+                    }
+                    var sender = context.getSender().asEntity();
+
+                    sender.teleport(destEntity.getLocation());
+                    context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS, sender.getDisplayName(), destEntity.getDisplayName());
+
+                    return context.success();
+                })
+                .root()
                 .target("victims")
                 .pos("pos")
                 .exec(context -> {
