@@ -19,8 +19,8 @@ public record DimensionInfo(
     public static final DimensionInfo NETHER = new DimensionInfo(1, 0, 127, 8, false);
     public static final DimensionInfo THE_END = new DimensionInfo(2, 0, 255, 16, false);
 
-    public DimensionInfo(int dimensionId, int minHeight, int maxHeight) {
-        this(dimensionId, minHeight, maxHeight, (maxHeight - minHeight + 1) / 16);
+    public DimensionInfo(int dimensionId, int minHeight, int maxHeight, boolean hasSkyLight) {
+        this(dimensionId, minHeight, maxHeight, (maxHeight - minHeight + 1) / 16, hasSkyLight);
         Preconditions.checkArgument(minHeight >= -512 && minHeight <= 512);
         Preconditions.checkArgument(maxHeight >= -512 && maxHeight <= 512);
     }

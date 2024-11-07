@@ -19,4 +19,6 @@ public interface LightService {
     void onChunkLoad(Chunk chunk);
 
     void onChunkUnload(Chunk chunk);
+
+    int getQueuedUpdateCount();
 }

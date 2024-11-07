@@ -52,7 +52,7 @@ public class AllayChunk implements Chunk {
     protected boolean loaded = false;
     // The callback to be called when the chunk is loaded into the world
     @Setter
-    protected Runnable chunkSetCallback = () -> {};
+    protected Runnable chunkSetCallback;
     protected int autoSaveTimer = 0;
 
     private static void checkXZ(int x, int z) {
@@ -408,12 +408,19 @@ public class AllayChunk implements Chunk {
 
     public void beforeSetChunk(Dimension dimension) {
         unsafeChunk.beforeSetChunk(dimension);
+        unsafeChunk.setBlockChangeCallback((x, y, z, blockState, layer) -> {
+            if (layer != 0) return;
+            dimension.getLightService().onBlockChange(x, y, z, blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
+        });
     }
 
     public void afterSetChunk(Dimension dimension) {
-        chunkSetCallback.run();
+        if (chunkSetCallback != null) {
+            chunkSetCallback.run();
+        }
         loaded = true;
         unsafeChunk.afterSetChunk(dimension);
+        dimension.getLightService().onChunkLoad(this);
     }
 
     public ChunkSection getOrCreateSection(int sectionY) {

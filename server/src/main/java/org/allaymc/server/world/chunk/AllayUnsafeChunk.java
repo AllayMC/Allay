@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -57,6 +58,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     protected List<NbtMap> entityNbtList;
     protected List<NbtMap> blockEntityNbtList;
+    @Setter
+    protected BlockChangeCallback blockChangeCallback;
 
     private AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(
@@ -68,6 +71,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                 new Long2ObjectOpenHashMap<>(),
                 new Int2ObjectNonBlockingMap<>(),
                 ChunkState.EMPTY,
+                null,
                 null,
                 null
         );
@@ -215,6 +219,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         } else if (currentHeight < y) {
             setHeightUnsafe(index, y);
         }
+
+        if (blockChangeCallback != null) {
+            blockChangeCallback.onBlockChange(x, y, z, blockState, layer);
+        }
     }
 
     @Override
@@ -295,6 +303,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         private Map<Integer, BlockEntity> blockEntities;
         private List<NbtMap> entitiyList;
         private List<NbtMap> blockEntitiyList;
+        protected BlockChangeCallback blockChangeCallback;
 
         public Builder chunkX(int chunkX) {
             this.chunkX = chunkX;
@@ -353,7 +362,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     blockEntities,
                     state,
                     entitiyList,
-                    blockEntitiyList
+                    blockEntitiyList,
+                    blockChangeCallback
             );
         }
 

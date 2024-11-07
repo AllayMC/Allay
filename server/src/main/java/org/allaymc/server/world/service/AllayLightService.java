@@ -4,6 +4,7 @@ import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.longs.*;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.Weather;
@@ -21,8 +22,7 @@ import java.util.Set;
  */
 public class AllayLightService implements LightService {
 
-    // TODO: move skylight calculation logic to independent class
-    // TODO(perf): max update count per tick
+    protected static final int MAX_LIGHT_UPDATE_COUNT_PER_TICK = Server.SETTINGS.worldSettings().maxLightUpdateCountPerTick();
     protected static final BlockFace[] BLOCK_FACE_UPDATE_ORDER = BlockFace.values();
     protected Dimension dimension;
     protected final int minHeight;
@@ -31,13 +31,12 @@ public class AllayLightService implements LightService {
     protected final boolean hasSkyLight;
     protected final Long2ObjectMap<ChunkSectionNibbleArray[]> lightDampening;
     protected final Long2ObjectMap<ChunkSectionNibbleArray[]> blockLight;
-    protected final LongSet chunks = new LongOpenHashSet();
-    // TODO(perf): replace with long queue
     protected final Queue<Runnable> queue = PlatformDependent.newMpscQueue();
-    protected final Queue<LightUpdateEntry> lightIncreaseQueue = PlatformDependent.newMpscQueue();
-    protected final Queue<LightUpdateEntry> lightDecreaseQueue = PlatformDependent.newMpscQueue();
+    protected final Queue<LightUpdateEntry> lightIncreaseQueue = PlatformDependent.newSpscQueue();
+    protected final Queue<LightUpdateEntry> lightDecreaseQueue = PlatformDependent.newSpscQueue();
     protected Long2ObjectMap<HeightMap> lightHeightMap;
     protected Long2ObjectMap<ChunkSectionNibbleArray[]> skyLight;
+    protected final LongSet chunks;
 
     public AllayLightService(Dimension dimension) {
         this.dimension = dimension;
@@ -51,18 +50,26 @@ public class AllayLightService implements LightService {
             this.lightHeightMap = new Long2ObjectOpenHashMap<>();
             this.skyLight = new Long2ObjectOpenHashMap<>();
         }
+        this.chunks = new LongOpenHashSet();
     }
 
     public void tick() {
+        int processedCount = 0;
         Runnable runnable;
-        while ((runnable = queue.poll()) != null) {
+        while (processedCount < MAX_LIGHT_UPDATE_COUNT_PER_TICK && (runnable = queue.poll()) != null) {
             runnable.run();
+            processedCount++;
         }
     }
 
+    /**
+     * Add and calculate the light of a chunk.
+     *
+     * @param chunk the chunk.
+     */
     protected void addChunk(Chunk chunk) {
         ChunkSectionNibbleArray[] chunkLightDampening = createNibbleArrays();
-        var chunkLightHeightMap = new HeightMap((short) (dimension.getDimensionInfo().minHeight() - 1));
+        var chunkLightHeightMap = hasSkyLight ? new HeightMap((short) (dimension.getDimensionInfo().minHeight() - 1)) : null;
         AllayUnsafeChunk unsafeChunk = (AllayUnsafeChunk) chunk.toUnsafeChunk();
         for (int y = maxHeight; y >= minHeight; y--) {
             var sectionY = y >> 4;
@@ -79,20 +86,33 @@ public class AllayLightService implements LightService {
                         int finalX = x;
                         int finalY = y;
                         int finalZ = z;
-                        queue.add(() -> setBlockLightAndUpdateAround((chunk.getX() << 4) + finalX, finalY, (chunk.getZ() << 4) + finalZ, lightEmission));
+                        queue.add(() -> setBlockLightAndPropagate((chunk.getX() << 4) + finalX, finalY, (chunk.getZ() << 4) + finalZ, lightEmission));
                     }
                     var lightDampening = blockStateData.lightDampening();
-                    if (lightDampening != 0) {
-                        chunkLightDampening[sectionY].set(x, y & 0xf, z, lightDampening);
-                        if (chunkLightHeightMap.get(x, z) == minHeight - 1) {
-                            chunkLightHeightMap.set(x, z, (short) y);
-                        }
+                    if (lightDampening == 0) continue;
+
+                    chunkLightDampening[sectionY].set(x, y & 0xf, z, lightDampening);
+                    if (chunkLightHeightMap != null && chunkLightHeightMap.get(x, z) == minHeight - 1) {
+                        chunkLightHeightMap.set(x, z, (short) y);
                     }
                 }
             }
         }
+        var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
+        lightDampening.put(hash, chunkLightDampening);
+        blockLight.put(hash, createNibbleArrays());
+        if (hasSkyLight) {
+            lightHeightMap.put(hash, chunkLightHeightMap);
+            skyLight.put(hash, createNibbleArrays());
+        }
+        chunks.add(hash);
     }
 
+    /**
+     * Create nibble arrays based on section count.
+     *
+     * @return the nibble arrays.
+     */
     protected ChunkSectionNibbleArray[] createNibbleArrays() {
         ChunkSectionNibbleArray[] nibbleArrays = new ChunkSectionNibbleArray[sectionCount];
         for (int i = 0; i < sectionCount; i++) {
@@ -126,17 +146,16 @@ public class AllayLightService implements LightService {
         queue.add(() -> {
             setLightDampening(x, y, z, lightDampening);
             if (getBlockLight(x, y, z) != lightEmission || getLightDampening(x, y, z) != lightDampening) {
-                // Update only if lightEmission or lightDampening are changed
-                setBlockLightAndUpdateAround(x, y, z, lightEmission);
+                setBlockLightAndPropagate(x, y, z, lightEmission);
             }
         });
     }
 
-    protected void setBlockLightAndUpdateAround(int x, int y, int z, int lightValue) {
+    protected void setBlockLightAndPropagate(int x, int y, int z, int lightValue) {
         var oldLightValue = getBlockLight(x, y, z);
         // this is very important: we need to set the light value
         // for positions we add into the queue. the propagator WILL NOT
-        // do it for us! Remember, it only sets NEIGHBOUR light values
+        // do it for us! Remember, it only sets NEIGHBOR light values
         setBlockLight(x, y, z, lightValue);
         lightIncreaseQueue.add(new LightUpdateEntry(x, y, z, lightValue));
         if (lightValue > oldLightValue) {
@@ -158,6 +177,9 @@ public class AllayLightService implements LightService {
                 var ox = x + offset.x();
                 var oy = y + offset.y();
                 var oz = z + offset.z();
+                if (!isPosLoaded(ox, oy, oz)) {
+                    continue;
+                }
                 int neighborLightValue = getBlockLight(ox, oy, oz);
                 if (neighborLightValue >= (lightValue - 1)) {
                     // quick short circuit for when the light value is already greater-than where we could set it
@@ -185,6 +207,9 @@ public class AllayLightService implements LightService {
                 var ox = x + offset.x();
                 var oy = y + offset.y();
                 var oz = z + offset.z();
+                if (!isPosLoaded(ox, oy, oz)) {
+                    continue;
+                }
                 int currentNeighborLightValue = getBlockLight(ox, oy, oz);
                 if (currentNeighborLightValue != 0 && currentNeighborLightValue < lightValue) {
                     setBlockLight(ox, oy, oz, 0);
@@ -212,6 +237,11 @@ public class AllayLightService implements LightService {
                 skyLight.remove(hash);
             }
         });
+    }
+
+    @Override
+    public int getQueuedUpdateCount() {
+        return queue.size();
     }
 
     protected int getLightDampening(int x, int y, int z) {
@@ -242,6 +272,11 @@ public class AllayLightService implements LightService {
         }
         var array = target.get(HashUtils.hashXZ(x >> 4, z >> 4));
         array[(y - minHeight) >> 4].set(x & 15, y & 15, z & 15, value);
+    }
+
+    protected boolean isPosLoaded(int x, int y, int z) {
+        return chunks.contains(HashUtils.hashXZ(x >> 4, z >> 4)) &&
+                y >= minHeight && y <= maxHeight;
     }
 
     public static int calculateSkylightReduction(long time, Set<Weather> weathers) {

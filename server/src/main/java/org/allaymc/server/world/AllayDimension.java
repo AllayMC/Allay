@@ -9,6 +9,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
@@ -25,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
- * @author Cool_Loong
+ * @author daoge_cmd | Cool_Loong
  */
 @Slf4j
 @Getter
@@ -57,7 +58,13 @@ public class AllayDimension implements Dimension {
         entityService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);
-        lightService.tick();
+        if (Server.SETTINGS.worldSettings().asyncLightCalculating()) {
+            // TODO
+            lightService.tick();
+//            Server.getInstance().getComputeThreadPool().execute(lightService::tick);
+        } else {
+            lightService.tick();
+        }
     }
 
     public void shutdown() {

@@ -279,6 +279,21 @@ public class GameTestCommand extends SimpleCommand {
                     var floorLoc = player.getLocation().floor(new Vector3f());
                     player.sendText("Height is " + player.getDimension().getHeight((int) floorLoc.x, (int) floorLoc.z));
                     return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("getlightdata")
+                .exec((context, player) -> {
+                    var floorLoc = player.getLocation().floor(new Vector3f());
+                    int x = (int) floorLoc.x;
+                    int y = (int) floorLoc.y;
+                    int z = (int) floorLoc.z;
+                    var lightService = player.getDimension().getLightService();
+                    player.sendText("InternalLight: " + lightService.getInternalLight(x, y, z));
+                    player.sendText("BlockLight: " + lightService.getBlockLight(x, y, z));
+                    player.sendText("SkyLight: " + lightService.getSkyLight(x, y, z));
+                    player.sendText("InternalSkyLight: " + lightService.getInternalSkyLight(x, y, z));
+                    player.sendText("QueuedUpdateCount: " + lightService.getQueuedUpdateCount());
+                    return context.success();
                 }, SenderType.PLAYER);
     }
 }
