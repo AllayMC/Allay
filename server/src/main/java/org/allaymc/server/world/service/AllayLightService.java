@@ -254,6 +254,7 @@ public class AllayLightService implements LightService {
     protected void setLightDampening(int x, int y, int z, int value) {
         set(lightDampening, x, y, z, value);
         var currentLightHeight = getLightHeight(x, z);
+        // TODO: buggy
         if (value == 0) {
             if (currentLightHeight == y + 1) {
                 setLightHeight(x, z, (short) y);

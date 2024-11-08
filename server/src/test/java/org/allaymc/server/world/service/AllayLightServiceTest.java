@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AllayLightServiceTest {
 
     @Test
-    void test() {
+    void testBlockLight() {
         var dim = Server.getInstance().getWorldPool().getDefaultWorld().getOverWorld();
         var lightService = new AllayLightService(dim);
         for (int x = -3; x <= 3; x++) {
@@ -32,6 +32,7 @@ class AllayLightServiceTest {
             }
         }
         tickLightService(lightService);
+
         lightService.onBlockChange(0, 1, 0, 14, 0);
         tickLightService(lightService);
         assertEquals(14, lightService.getBlockLight(0, 1, 0));
@@ -45,9 +46,54 @@ class AllayLightServiceTest {
         tickLightService(lightService);
         assertEquals(0, lightService.getBlockLight(2, 1, 0));
         assertEquals(9, lightService.getBlockLight(3, 1, 0));
+
+
+        lightService.onBlockChange(0, 1, 0, 0, 0);
+        tickLightService(lightService);
+        assertEquals(0, lightService.getBlockLight(0, 1, 0));
+        assertEquals(0, lightService.getBlockLight(1, 1, 0));
+        assertEquals(0, lightService.getBlockLight(0, 1, 1));
+        assertEquals(0, lightService.getBlockLight(-1, 1, 0));
+        assertEquals(0, lightService.getBlockLight(0, 1, -1));
+        assertEquals(0, lightService.getBlockLight(0, 2, 0));
     }
 
-    protected static void tickLightService(AllayLightService lightService) {
+    @Test
+    void testSkyLight() {
+        var dim = Server.getInstance().getWorldPool().getDefaultWorld().getOverWorld();
+        var lightService = new AllayLightService(dim);
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                lightService.addChunk(
+                        AllayUnsafeChunk
+                                .builder()
+                                .emptyChunk(x, z, dim.getDimensionInfo())
+                                .toSafeChunk()
+                );
+            }
+        }
+        tickLightService(lightService);
+
+        lightService.onBlockChange(0, 0, 0, 0, 15);
+        tickLightService(lightService);
+        assertEquals(15, lightService.getSkyLight(0, 1, 0));
+        assertEquals(15, lightService.getSkyLight(0, 2, 0));
+        assertEquals(15, lightService.getSkyLight(0, 100, 0));
+        assertEquals(15, lightService.getSkyLight(0, 200, 0));
+
+        lightService.onBlockChange(0, 0, 0, 0, 0);
+        tickLightService(lightService);
+        assertEquals(15, lightService.getSkyLight(0, -1, 0));
+
+        lightService.onBlockChange(0, 0, 0, 0, 1);
+        tickLightService(lightService);
+        assertEquals(14, lightService.getSkyLight(0, 0, 0));
+        assertEquals(13, lightService.getSkyLight(0, -1, 0));
+        assertEquals(12, lightService.getSkyLight(0, -2, 0));
+        assertEquals(11, lightService.getSkyLight(0, -3, 0));
+    }
+
+    static void tickLightService(AllayLightService lightService) {
         while (lightService.getQueuedUpdateCount() > 0) {
             lightService.tick();
         }
