@@ -37,7 +37,7 @@ class BlockStateDataTest {
                     "explosionResistance": 1.25,
                     "flameOdds": 0,
                     "friction": 0.6,
-                    "light": 15,
+                    "lightDampening": 15,
                     "lightEmission": 0,
                     "mapColor": "#575c5cff",
                     "thickness": 0.0
