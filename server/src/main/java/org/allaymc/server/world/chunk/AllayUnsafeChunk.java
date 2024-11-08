@@ -212,8 +212,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         var index = HeightMap.computeIndex(x, z);
         var currentHeight = getHeightUnsafe(index);
         if (blockState.getBlockType() == BlockTypes.AIR) {
-            // Use >= here because some maps may be broken
-            if (currentHeight >= y) {
+            if (currentHeight == y) {
                 setHeightUnsafe(index, y - 1);
             }
         } else if (currentHeight < y) {
