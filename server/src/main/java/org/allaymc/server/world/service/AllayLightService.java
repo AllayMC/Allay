@@ -37,7 +37,6 @@ public class AllayLightService implements LightService {
     protected Long2ObjectMap<ChunkSectionNibbleArray[]> skyLight;
     protected LightPropagator skyLightPropagator;
 
-
     public AllayLightService(Dimension dimension) {
         this.dimension = dimension;
         this.minHeight = dimension.getDimensionInfo().minHeight();

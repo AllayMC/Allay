@@ -16,8 +16,7 @@ public final class HeightMap {
     private final short[] heights;
 
     public HeightMap() {
-        this.heights = new short[256];
-        Arrays.fill(this.heights, (short) -1);
+        this((short) -1);
     }
 
     public HeightMap(short defaultValue) {
