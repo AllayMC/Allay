@@ -37,7 +37,7 @@ class BlockStateDataTest {
                     "explosionResistance": 1.25,
                     "flameOdds": 0,
                     "friction": 0.6,
-                    "lightDampening": 15,
+                    "light": 15,
                     "lightEmission": 0,
                     "mapColor": "#575c5cff",
                     "thickness": 0.0
@@ -60,7 +60,7 @@ class BlockStateDataTest {
         assertEquals(1.25f, blockAttributes.explosionResistance());
         assertEquals(0, blockAttributes.flameOdds());
         assertEquals(0.6f, blockAttributes.friction());
-        assertEquals(15, blockAttributes.lightDampening());
+        assertEquals(15, blockAttributes.light());
         assertEquals(0, blockAttributes.lightEmission());
         assertEquals(Color.decode("#575c5c"), blockAttributes.mapColor());
         assertEquals(0, Float.compare(0.0f, blockAttributes.thickness()));
