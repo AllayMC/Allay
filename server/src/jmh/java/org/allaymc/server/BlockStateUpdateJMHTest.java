@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @author Cool_Loong
  */
 @State(Scope.Benchmark)
-@BenchmarkMode(Mode.Throughput)
+@BenchmarkMode(Mode.AverageTime)
 @Warmup(iterations = 3)
 @Threads(1)
 @Fork(1)
@@ -23,6 +23,7 @@ public class BlockStateUpdateJMHTest {
 
     @Setup
     public void init() throws MissingImplementationException {
+        Allay.initI18n();
         Allay.initAllay();
         observer = BlockTypes.OBSERVER.getDefaultState();
     }

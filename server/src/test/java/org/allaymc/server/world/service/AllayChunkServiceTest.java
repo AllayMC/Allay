@@ -24,6 +24,8 @@ public class AllayChunkServiceTest {
     @BeforeAll
     static void init() {
         Mockito.when(mockDimension.getDimensionInfo()).thenReturn(DimensionInfo.OVERWORLD);
+        var testLightService = new TestLightService();
+        Mockito.when(mockDimension.getLightService()).thenReturn(testLightService);
         chunkService = new AllayChunkService(mockDimension, AllayWorldGenerator.builder().name("TEST").build(), new TestWorldStorage());
     }
 

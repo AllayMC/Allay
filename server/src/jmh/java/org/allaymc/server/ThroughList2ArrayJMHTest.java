@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @author Cool_Loong
  */
 @State(Scope.Benchmark)
-@BenchmarkMode(Mode.Throughput)
+@BenchmarkMode(Mode.AverageTime)
 @Warmup(iterations = 3)
 @Threads(1)
 @Fork(1)
