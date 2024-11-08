@@ -161,11 +161,6 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("spawn-point-chunk-radius")
         private int spawnPointChunkRadius = 3;
 
-        @Comment("Determines whether to calculate light asynchronously")
-        @Comment("If set to true, light will be calculated in compute thread pool")
-        @CustomKey("async-light-calculating")
-        private boolean asyncLightCalculating = true;
-
         @Comment("Determines the maximum number of light updates that can be processed per tick")
         @CustomKey("max-light-update-count-per-tick")
         private int maxLightUpdateCountPerTick = 65536;

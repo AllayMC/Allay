@@ -58,13 +58,7 @@ public class AllayDimension implements Dimension {
         entityService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);
-        if (Server.SETTINGS.worldSettings().asyncLightCalculating()) {
-            // TODO
-            lightService.tick();
-//            Server.getInstance().getComputeThreadPool().execute(lightService::tick);
-        } else {
-            lightService.tick();
-        }
+        lightService.tick();
     }
 
     public void shutdown() {
