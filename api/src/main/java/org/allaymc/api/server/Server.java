@@ -118,6 +118,13 @@ public interface Server extends TaskCreator, CommandSender {
     boolean isRunning();
 
     /**
+     * Check if the server is starting.
+     *
+     * @return {@code true} if the server is starting, otherwise {@code false}.
+     */
+    boolean isStarting();
+
+    /**
      * Get the player storage.
      *
      * @return the player storage.

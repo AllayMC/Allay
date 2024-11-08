@@ -293,7 +293,6 @@ public class GameTestCommand extends SimpleCommand {
                     player.sendText("BlockLight: " + lightService.getBlockLight(x, y, z));
                     player.sendText("SkyLight: " + lightService.getSkyLight(x, y, z));
                     player.sendText("InternalSkyLight: " + lightService.getInternalSkyLight(x, y, z));
-                    player.sendText("LightDampening: " + lightService.getLightDampening(x, y, z));
                     player.sendText("QueuedUpdateCount: " + lightService.getQueuedUpdateCount());
                     return context.success();
                 }, SenderType.PLAYER);

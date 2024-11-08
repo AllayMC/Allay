@@ -85,6 +85,7 @@ public final class AllayServer implements Server {
     @Getter
     private final AllayWorldPool worldPool = new AllayWorldPool();
     private final AtomicBoolean isRunning = new AtomicBoolean(true);
+    private final AtomicBoolean isStarting = new AtomicBoolean(true);
     private boolean isFullyStopped = false;
     private final Object2ObjectMap<UUID, PlayerListPacket.Entry> playerListEntryMap = new Object2ObjectOpenHashMap<>();
     @Getter
@@ -125,7 +126,7 @@ public final class AllayServer implements Server {
         } catch (Throwable throwable) {
             log.error("Error while ticking the server", throwable);
         }
-    }).onStop(() -> {
+    }).onStart(() -> isStarting.set(false)).onStop(() -> {
         try {
             shutdownReally();
         } catch (Throwable throwable) {
@@ -485,6 +486,11 @@ public final class AllayServer implements Server {
     @Override
     public boolean isRunning() {
         return isRunning.get();
+    }
+
+    @Override
+    public boolean isStarting() {
+        return isStarting.get();
     }
 
     @Override

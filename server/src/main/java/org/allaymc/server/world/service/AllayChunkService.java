@@ -317,6 +317,7 @@ public final class AllayChunkService implements ChunkService {
             entity.despawnFromAll();
             ((AllayEntityPhysicsService) dimension.getEntityPhysicsService()).removeEntity(entity);
         });
+        ((AllayLightService) dimension.getLightService()).onChunkUnload(chunk);
 
         var future = new CompletableFuture<Boolean>();
         worldStorage

@@ -188,7 +188,6 @@ public class AllayLightService implements LightService {
         return hasSkyLight ? Math.max(0, getSkyLight(x, y, z) - calculateSkylightReduction(dimension.getWorld().getWorldData().getTime(), dimension.getWorld().getWeathers())) : 0;
     }
 
-    @Override
     public void onBlockChange(int x, int y, int z, int lightEmission, int lightDampening) {
         queue.add(() -> {
             int oldLightHeight = hasSkyLight ? getLightHeight(x, z) : 0;
@@ -213,12 +212,10 @@ public class AllayLightService implements LightService {
         });
     }
 
-    @Override
     public void onChunkLoad(Chunk chunk) {
         queue.add(() -> addChunk(chunk));
     }
 
-    @Override
     public void onChunkUnload(Chunk chunk) {
         queue.add(() -> {
             var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
@@ -237,8 +234,7 @@ public class AllayLightService implements LightService {
         return queue.size();
     }
 
-    @Override
-    public int getLightDampening(int x, int y, int z) {
+    protected int getLightDampening(int x, int y, int z) {
         return get(lightDampening, x, y, z, 0);
     }
 

@@ -20,6 +20,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
@@ -410,7 +411,7 @@ public class AllayChunk implements Chunk {
         unsafeChunk.beforeSetChunk(dimension);
         unsafeChunk.setBlockChangeCallback((x, y, z, blockState, layer) -> {
             if (layer != 0) return;
-            dimension.getLightService().onBlockChange(x + (unsafeChunk.x << 4), y, z + (unsafeChunk.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
+            ((AllayLightService) dimension.getLightService()).onBlockChange(x + (unsafeChunk.x << 4), y, z + (unsafeChunk.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
         });
     }
 
@@ -420,7 +421,7 @@ public class AllayChunk implements Chunk {
         }
         loaded = true;
         unsafeChunk.afterSetChunk(dimension);
-        dimension.getLightService().onChunkLoad(this);
+        ((AllayLightService) dimension.getLightService()).onChunkLoad(this);
     }
 
     public ChunkSection getOrCreateSection(int sectionY) {

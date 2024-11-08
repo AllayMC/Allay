@@ -1,7 +1,11 @@
 package org.allaymc.server.world.service;
 
+import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Weather;
+import org.allaymc.server.world.chunk.AllayUnsafeChunk;
+import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Set;
 
@@ -10,7 +14,44 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author daoge_cmd
  */
+@ExtendWith(AllayTestExtension.class)
 class AllayLightServiceTest {
+
+    @Test
+    void test() {
+        var dim = Server.getInstance().getWorldPool().getDefaultWorld().getOverWorld();
+        var lightService = new AllayLightService(dim);
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                lightService.addChunk(
+                        AllayUnsafeChunk
+                                .builder()
+                                .emptyChunk(x, z, dim.getDimensionInfo())
+                                .toSafeChunk()
+                );
+            }
+        }
+        tickLightService(lightService);
+        lightService.onBlockChange(0, 1, 0, 14, 0);
+        tickLightService(lightService);
+        assertEquals(14, lightService.getBlockLight(0, 1, 0));
+        assertEquals(13, lightService.getBlockLight(1, 1, 0));
+        assertEquals(13, lightService.getBlockLight(0, 1, 1));
+        assertEquals(13, lightService.getBlockLight(-1, 1, 0));
+        assertEquals(13, lightService.getBlockLight(0, 1, -1));
+        assertEquals(13, lightService.getBlockLight(0, 2, 0));
+
+        lightService.onBlockChange(2, 1, 0, 0, 15);
+        tickLightService(lightService);
+        assertEquals(0, lightService.getBlockLight(2, 1, 0));
+        assertEquals(9, lightService.getBlockLight(3, 1, 0));
+    }
+
+    protected static void tickLightService(AllayLightService lightService) {
+        while (lightService.getQueuedUpdateCount() > 0) {
+            lightService.tick();
+        }
+    }
 
     @Test
     void testCalculateSkylightReduction() {
