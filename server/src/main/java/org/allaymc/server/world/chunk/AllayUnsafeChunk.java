@@ -211,10 +211,15 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         // Update height map
         var index = HeightMap.computeIndex(x, z);
         var currentHeight = getHeightUnsafe(index);
-        if (blockState.getBlockType() == BlockTypes.AIR) {
-            if (currentHeight == y) {
-                setHeightUnsafe(index, y - 1);
+        if (blockState.getBlockType() == BlockTypes.AIR && currentHeight == y) {
+            int newHeight = dimensionInfo.minHeight() - 1;
+            for (int i = y - 1; i >= dimensionInfo.minHeight(); i--) {
+                if (getBlockState(x, i, z, 0).getBlockType() != BlockTypes.AIR) {
+                    newHeight = i;
+                    break;
+                }
             }
+            setHeightUnsafe(index, newHeight);
         } else if (currentHeight < y) {
             setHeightUnsafe(index, y);
         }

@@ -3,6 +3,7 @@ package org.allaymc.server.world.service;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.longs.*;
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
@@ -254,11 +255,15 @@ public class AllayLightService implements LightService {
     protected void setLightDampening(int x, int y, int z, int value) {
         set(lightDampening, x, y, z, value);
         var currentLightHeight = getLightHeight(x, z);
-        // TODO: buggy
-        if (value == 0) {
-            if (currentLightHeight == y + 1) {
-                setLightHeight(x, z, (short) y);
+        if (value == 0 && currentLightHeight == y + 1) {
+            short newLightHeight = (short) minHeight;
+            for (short i = (short) y; i >= minHeight; i--) {
+                if (getLightDampening(x, i, z) != 0) {
+                    newLightHeight = i;
+                    break;
+                }
             }
+            setLightHeight(x, z, newLightHeight);
         } else if (currentLightHeight <= y) {
             setLightHeight(x, z, (short) (y + 1));
         }
