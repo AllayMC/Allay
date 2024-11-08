@@ -1,8 +1,8 @@
 package org.allaymc.server.world.service;
 
-import io.netty.util.internal.PlatformDependent;
 import org.allaymc.api.block.data.BlockFace;
 
+import java.util.LinkedList;
 import java.util.Queue;
 
 /**
@@ -11,8 +11,8 @@ import java.util.Queue;
 public class LightPropagator {
     protected static final BlockFace[] BLOCK_FACE_UPDATE_ORDER = BlockFace.values();
 
-    protected final Queue<LightUpdateEntry> lightIncreaseQueue = PlatformDependent.newSpscQueue();
-    protected final Queue<LightUpdateEntry> lightDecreaseQueue = PlatformDependent.newSpscQueue();
+    protected final Queue<LightUpdateEntry> lightIncreaseQueue = new LinkedList<>();
+    protected final Queue<LightUpdateEntry> lightDecreaseQueue = new LinkedList<>();
     protected final LightAccessor lightAccessor;
 
     protected LightPropagator(LightAccessor lightAccessor) {
@@ -44,7 +44,7 @@ public class LightPropagator {
                 var ox = x + offset.x();
                 var oy = y + offset.y();
                 var oz = z + offset.z();
-                if (!lightAccessor.isPosLoaded(ox, oy, oz)) {
+                if (!lightAccessor.isYInRange(oy) || ((ox >> 4 != x >> 4 || oz >> 4 != z >> 4) && !lightAccessor.isChunkLoaded(ox >> 4, oz >> 4))) {
                     continue;
                 }
                 int neighborLightValue = lightAccessor.getLight(ox, oy, oz);
@@ -74,7 +74,7 @@ public class LightPropagator {
                 var ox = x + offset.x();
                 var oy = y + offset.y();
                 var oz = z + offset.z();
-                if (!lightAccessor.isPosLoaded(ox, oy, oz)) {
+                if (!lightAccessor.isYInRange(oy) || ((ox >> 4 != x >> 4 || oz >> 4 != z >> 4) && !lightAccessor.isChunkLoaded(ox >> 4, oz >> 4))) {
                     continue;
                 }
                 int currentNeighborLightValue = lightAccessor.getLight(ox, oy, oz);

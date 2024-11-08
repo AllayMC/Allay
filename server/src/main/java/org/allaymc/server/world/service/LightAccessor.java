@@ -10,5 +10,7 @@ public interface LightAccessor {
 
     void setLight(int x, int y, int z, int lightValue);
 
-    boolean isPosLoaded(int x, int y, int z);
+    boolean isChunkLoaded(int cx, int cz);
+
+    boolean isYInRange(int y);
 }

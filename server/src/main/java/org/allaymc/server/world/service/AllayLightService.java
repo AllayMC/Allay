@@ -310,10 +310,6 @@ public class AllayLightService implements LightService {
         array[(y - minHeight) >> 4].set(x & 15, y & 15, z & 15, value);
     }
 
-    protected boolean isPosLoaded(int x, int y, int z) {
-        return y >= minHeight && y <= maxHeight && chunks.contains(HashUtils.hashXZ(x >> 4, z >> 4));
-    }
-
     public static int calculateSkylightReduction(long time, Set<Weather> weathers) {
         double d = 1.0 - ((weathers.contains(Weather.RAIN) ? 1 : 0) * 5.0) / 16.0;
         double e = 1.0 - ((weathers.contains(Weather.THUNDER) ? 1 : 0) * 5.0) / 16.0;
@@ -353,8 +349,13 @@ public class AllayLightService implements LightService {
         }
 
         @Override
-        public boolean isPosLoaded(int x, int y, int z) {
-            return AllayLightService.this.isPosLoaded(x, y, z);
+        public boolean isChunkLoaded(int cx, int cz) {
+            return chunks.contains(HashUtils.hashXZ(cx, cz));
+        }
+
+        @Override
+        public boolean isYInRange(int y) {
+            return y >= minHeight && y <= maxHeight;
         }
     }
 
@@ -375,8 +376,13 @@ public class AllayLightService implements LightService {
         }
 
         @Override
-        public boolean isPosLoaded(int x, int y, int z) {
-            return AllayLightService.this.isPosLoaded(x, y, z);
+        public boolean isChunkLoaded(int cx, int cz) {
+            return chunks.contains(HashUtils.hashXZ(cx, cz));
+        }
+
+        @Override
+        public boolean isYInRange(int y) {
+            return y >= minHeight && y <= maxHeight;
         }
     }
 }
