@@ -21,4 +21,6 @@ public interface LightService {
     void onChunkUnload(Chunk chunk);
 
     int getQueuedUpdateCount();
+
+    int getLightDampening(int x, int y, int z);
 }

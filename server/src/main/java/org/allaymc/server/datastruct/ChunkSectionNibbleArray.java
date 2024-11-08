@@ -107,6 +107,9 @@ public final class ChunkSectionNibbleArray {
         int k = ~(15 << 4 * j);
         int l = (value & 15) << 4 * j;
         int oldValue = bytes[i] >> 4 * j & 15;
+        if (value == oldValue) {
+            return;
+        }
         checkSum = checkSum - oldValue + value;
         if (checkSum == 0 || checkSum == CHECK_SUM_MAX) {
             bytes = null;

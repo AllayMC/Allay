@@ -410,7 +410,7 @@ public class AllayChunk implements Chunk {
         unsafeChunk.beforeSetChunk(dimension);
         unsafeChunk.setBlockChangeCallback((x, y, z, blockState, layer) -> {
             if (layer != 0) return;
-            dimension.getLightService().onBlockChange(x, y, z, blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
+            dimension.getLightService().onBlockChange(x + (unsafeChunk.x << 4), y, z + (unsafeChunk.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
         });
     }
 

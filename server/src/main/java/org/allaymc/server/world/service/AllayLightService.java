@@ -72,8 +72,7 @@ public class AllayLightService implements LightService {
         var chunkLightHeightMap = hasSkyLight ? new HeightMap((short) (dimension.getDimensionInfo().minHeight() - 1)) : null;
         AllayUnsafeChunk unsafeChunk = (AllayUnsafeChunk) chunk.toUnsafeChunk();
         for (int y = maxHeight; y >= minHeight; y--) {
-            var sectionY = y >> 4;
-            var section = unsafeChunk.getSection(sectionY);
+            var section = unsafeChunk.getSection(y >> 4);
             if (section == null) {
                 y -= 15;
                 continue;
@@ -86,12 +85,12 @@ public class AllayLightService implements LightService {
                         int finalX = x;
                         int finalY = y;
                         int finalZ = z;
-                        queue.add(() -> setBlockLightAndPropagate((chunk.getX() << 4) + finalX, finalY, (chunk.getZ() << 4) + finalZ, lightEmission));
+                        queue.add(() -> setBlockLightAndPropagate((chunk.getX() << 4) + finalX, finalY, (chunk.getZ() << 4) + finalZ, 0, lightEmission));
                     }
                     var lightDampening = blockStateData.lightDampening();
                     if (lightDampening == 0) continue;
 
-                    chunkLightDampening[sectionY].set(x, y & 0xf, z, lightDampening);
+                    chunkLightDampening[(y - minHeight) >> 4].set(x, y & 0xf, z, lightDampening);
                     if (chunkLightHeightMap != null && chunkLightHeightMap.get(x, z) == minHeight - 1) {
                         chunkLightHeightMap.set(x, z, (short) y);
                     }
@@ -144,23 +143,23 @@ public class AllayLightService implements LightService {
     @Override
     public void onBlockChange(int x, int y, int z, int lightEmission, int lightDampening) {
         queue.add(() -> {
-            setLightDampening(x, y, z, lightDampening);
-            if (getBlockLight(x, y, z) != lightEmission || getLightDampening(x, y, z) != lightDampening) {
-                setBlockLightAndPropagate(x, y, z, lightEmission);
+            var oldBlockDampening = getLightDampening(x, y, z);
+            if (oldBlockDampening != lightDampening) {
+                setLightDampening(x, y, z, lightDampening);
             }
+
+            var oldBlockLight = getBlockLight(x, y, z);
+            setBlockLightAndPropagate(x, y, z, oldBlockLight, lightEmission);
         });
     }
 
-    protected void setBlockLightAndPropagate(int x, int y, int z, int lightValue) {
-        var oldLightValue = getBlockLight(x, y, z);
-        // this is very important: we need to set the light value
-        // for positions we add into the queue. the propagator WILL NOT
-        // do it for us! Remember, it only sets NEIGHBOR light values
-        setBlockLight(x, y, z, lightValue);
-        lightIncreaseQueue.add(new LightUpdateEntry(x, y, z, lightValue));
-        if (lightValue > oldLightValue) {
+    protected void setBlockLightAndPropagate(int x, int y, int z, int oldLightValue, int newLightValue) {
+        setBlockLight(x, y, z, newLightValue);
+        if (newLightValue > oldLightValue) {
+            lightIncreaseQueue.add(new LightUpdateEntry(x, y, z, newLightValue));
             propagateIncrease();
-        } else if (lightValue < oldLightValue) {
+        } else {
+            lightDecreaseQueue.add(new LightUpdateEntry(x, y, z, oldLightValue));
             propagateDecrease();
         }
     }
@@ -213,7 +212,7 @@ public class AllayLightService implements LightService {
                 int currentNeighborLightValue = getBlockLight(ox, oy, oz);
                 if (currentNeighborLightValue != 0 && currentNeighborLightValue < lightValue) {
                     setBlockLight(ox, oy, oz, 0);
-                    lightDecreaseQueue.add(new LightUpdateEntry(ox, oy, oz, 0));
+                    lightDecreaseQueue.add(new LightUpdateEntry(ox, oy, oz, currentNeighborLightValue));
                 } else if (currentNeighborLightValue >= lightValue) {
                     lightIncreaseQueue.add(new LightUpdateEntry(ox, oy, oz, currentNeighborLightValue));
                 }
@@ -234,8 +233,10 @@ public class AllayLightService implements LightService {
             lightDampening.remove(hash);
             blockLight.remove(hash);
             if (hasSkyLight) {
+                lightHeightMap.remove(hash);
                 skyLight.remove(hash);
             }
+            chunks.remove(hash);
         });
     }
 
@@ -244,7 +245,8 @@ public class AllayLightService implements LightService {
         return queue.size();
     }
 
-    protected int getLightDampening(int x, int y, int z) {
+    @Override
+    public int getLightDampening(int x, int y, int z) {
         return get(lightDampening, x, y, z, 0);
     }
 
@@ -270,13 +272,12 @@ public class AllayLightService implements LightService {
         if (!chunks.contains(hash)) {
             return;
         }
-        var array = target.get(HashUtils.hashXZ(x >> 4, z >> 4));
+        var array = target.get(hash);
         array[(y - minHeight) >> 4].set(x & 15, y & 15, z & 15, value);
     }
 
     protected boolean isPosLoaded(int x, int y, int z) {
-        return chunks.contains(HashUtils.hashXZ(x >> 4, z >> 4)) &&
-                y >= minHeight && y <= maxHeight;
+        return y >= minHeight && y <= maxHeight && chunks.contains(HashUtils.hashXZ(x >> 4, z >> 4));
     }
 
     public static int calculateSkylightReduction(long time, Set<Weather> weathers) {

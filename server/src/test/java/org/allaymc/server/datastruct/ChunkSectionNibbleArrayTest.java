@@ -13,6 +13,10 @@ class ChunkSectionNibbleArrayTest {
         var array = new ChunkSectionNibbleArray(new byte[2048]);
         array.set(1, 2, 3, 15);
         assertEquals(15, array.get(1, 2, 3));
+
+        array = new ChunkSectionNibbleArray();
+        array.set(1, 2, 7, 15);
+        assertEquals(15, array.get(1, 2, 7));
     }
 
     @Test
