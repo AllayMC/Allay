@@ -87,4 +87,40 @@ public abstract class BaseCommand implements Command {
         if (!networkDataPrepared) prepareNetworkData();
         return new CommandData(name, I18n.get().tr(player.getLangCode(), description), flags, CommandPermission.ANY, networkAliasesData, List.of(), networkOverloadsData);
     }
+
+    public List<String> getCommandFormatTips() {
+        return overloads.stream().map(commandParameters ->
+        {
+            var builder = new StringBuilder();
+            builder.append("- /").append(this.getName());
+            for (var commandParameter : commandParameters) {
+                    if (commandParameter.getEnumData() == null) {
+                        builder.append(!commandParameter.isOptional()?" <":" [")
+                                .append(commandParameter.getName())
+                                .append(": ")
+                                .append(commandParameter.getType().getParamType().name().toLowerCase(Locale.ENGLISH))
+                                .append(!commandParameter.isOptional()?">":"]");
+                    } else {
+                        var enums = commandParameter.getEnumData().getValues()
+                                .keySet().stream().toList();
+                        if (enums.size() == 1 && !commandParameter.isOptional()) {
+                            builder.append(" ").append(enums.getFirst());
+                        } else {
+                            builder.append(!commandParameter.isOptional() ? " <" : " [")
+                                    .append(
+                                            enums.isEmpty() ?
+                                                    commandParameter.getName() + ": " + commandParameter.getEnumData().getName() :
+                                                    String.join("|",
+                                                            enums
+                                                                    .subList(0, Math.min(commandParameter.getEnumData().getValues().size(), 10))
+                                                    )
+                                    )
+                                    .append(commandParameter.getEnumData().getValues().size() > 10 ? "|..." : "")
+                                    .append(!commandParameter.isOptional() ? ">" : "]");
+                        }
+                    }
+            }
+            return builder.toString();
+        }).toList();
+    }
 }
