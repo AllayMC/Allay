@@ -56,8 +56,11 @@ public final class AllayChunkService implements ChunkService {
     @Setter
     private int removeUnneededChunkCycle = Server.SETTINGS.worldSettings().removeUnneededChunkCycle();
 
+    public void startTick() {
+        ((AllayWorldGenerator) worldGenerator).startTick();
+    }
+
     public void tick(long currentTick) {
-        ((AllayWorldGenerator) worldGenerator).tick();
         sendChunkPackets();
         tickChunkLoaders();
         removeUnusedChunks();

@@ -186,12 +186,34 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void teleport(Location3fc location);
 
     /**
+     * Teleport the entity to the specified location asynchronously.
+     * <p>
+     * This method is safe to be used in world thread.
+     *
+     * @param location the location to teleport the entity to.
+     */
+    default void teleportAsync(Location3fc location) {
+        Thread.ofVirtual().start(() -> teleport(location));
+    }
+
+    /**
      * Teleport the entity to the specified location.
      *
      * @param location the location to teleport the entity to.
      */
     default void teleport(Location3ic location) {
         teleport(new Location3f(location));
+    }
+
+    /**
+     * Teleport the entity to the specified location asynchronously.
+     * <p>
+     * This method is safe to be used in world thread.
+     *
+     * @param location the location to teleport the entity to.
+     */
+    default void teleportAsync(Location3ic location) {
+        teleportAsync(new Location3f(location));
     }
 
     /**

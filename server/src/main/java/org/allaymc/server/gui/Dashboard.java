@@ -86,7 +86,7 @@ public final class Dashboard {
         pluginTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getButton() != MouseEvent.BUTTON1) return;
+                if (e.getButton() != MouseEvent.BUTTON3) return;
                 // Show the focused plugin's information
                 JPopupMenu popupMenu = new JPopupMenu();
                 JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_INFO));
@@ -113,7 +113,7 @@ public final class Dashboard {
         playerTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (e.getButton() != MouseEvent.BUTTON1) return;
+                if (e.getButton() != MouseEvent.BUTTON3) return;
                 JPopupMenu popupMenu = new JPopupMenu();
 
                 JMenuItem infoItem = new JMenuItem(I18n.get().tr(TrKeys.A_GUI_INFO));

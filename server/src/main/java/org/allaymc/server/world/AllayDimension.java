@@ -64,6 +64,7 @@ public class AllayDimension implements Dimension {
     }
 
     public void startTick() {
+        chunkService.startTick();
         if (Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
             lightThread.start();
         }

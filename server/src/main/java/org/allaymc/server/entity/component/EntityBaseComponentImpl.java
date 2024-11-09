@@ -372,7 +372,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return true;
     }
 
-
     @Override
     public void teleport(Location3fc target) {
         Objects.requireNonNull(target.dimension());

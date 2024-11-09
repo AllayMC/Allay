@@ -70,6 +70,7 @@ public interface ChunkService extends ChunkSource {
      * Get the specified chunk, or load the specified chunk in current thread.
      * <p>
      * This method will block the current thread until the chunk is loaded if it is not loaded.
+     * This method shouldn't be used in world thread, otherwise the world will be frozen!
      *
      * @param x the x coordinate of the chunk.
      * @param z the z coordinate of the chunk.

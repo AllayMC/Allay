@@ -151,19 +151,14 @@ public class AllayWorld implements World {
             getOverWorld().getChunkService().addChunkLoader(new SpawnPointChunkLoader());
         }
 
-        // Shouldn't block world tick poll here, otherwise there will be a deadlock because
-        // Dimension#findSuitableGroundPosAround() -wait-> Dimension#getBlockState() -wait-> ChunkService#getOrLoadChunkSync()
-        // -wait-> WorldGenerator#generateChunk(), and WorldGenerator should be ticked in order to generate chunk normally
-        Thread.ofVirtual().name("World Spawn Point Finding Thread - " + worldData.getName()).start(() -> {
-            if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), getOverWorld()))) {
-                var newSpawnPoint = getOverWorld().findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
-                if (newSpawnPoint == null) {
-                    log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
-                    newSpawnPoint = new Vector3i(0, getOverWorld().getHeight(0, 0) + 1, 0);
-                }
-                worldData.setSpawnPoint(newSpawnPoint);
+        if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), getOverWorld()))) {
+            var newSpawnPoint = getOverWorld().findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
+            if (newSpawnPoint == null) {
+                log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
+                newSpawnPoint = new Vector3i(0, getOverWorld().getHeight(0, 0) + 1, 0);
             }
-        });
+            worldData.setSpawnPoint(newSpawnPoint);
+        }
     }
 
     protected boolean isSafeStandingPos(Position3ic pos) {

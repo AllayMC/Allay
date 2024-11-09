@@ -27,7 +27,7 @@ public class TeleportCommand extends SimpleCommand {
                     Vector3f pos = context.getResult(0);
                     var loc = new Location3f(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
 
-                    sender.teleport(loc);
+                    sender.teleportAsync(loc);
                     context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, sender.getDisplayName(), pos.x, pos.y, pos.z);
 
                     return context.success();
@@ -49,7 +49,7 @@ public class TeleportCommand extends SimpleCommand {
 
                     var destEntity = destination.getFirst();
 
-                    sender.teleport(destEntity.getLocation());
+                    sender.teleportAsync(destEntity.getLocation());
                     context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS, sender.getDisplayName(), destEntity.getDisplayName());
 
                     return context.success();
@@ -62,7 +62,7 @@ public class TeleportCommand extends SimpleCommand {
                     Vector3f pos = context.getResult(1);
                     var loc = new Location3f(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
                     for (Entity victim : victims) {
-                        victim.teleport(loc);
+                        victim.teleportAsync(loc);
                         context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, victim.getDisplayName(), pos.x, pos.y, pos.z);
                     }
 
@@ -86,7 +86,7 @@ public class TeleportCommand extends SimpleCommand {
 
                     var destEntity = destination.getFirst();
                     for (Entity victim : victims) {
-                        victim.teleport(destEntity.getLocation());
+                        victim.teleportAsync(destEntity.getLocation());
                         context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS, victim.getDisplayName(), destEntity.getDisplayName());
                     }
 
