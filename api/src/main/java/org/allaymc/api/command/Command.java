@@ -39,6 +39,15 @@ public interface Command {
     CommandData buildNetworkDataFor(EntityPlayer player);
 
     /**
+     * Whether this command is only available on the server side
+     *
+     * @return Whether this command is only available on the server side
+     */
+    default boolean isServerSideOnly() {
+        return false;
+    }
+
+    /**
      * Get the name of this command.
      *
      * @return The name of this command.
@@ -83,4 +92,11 @@ public interface Command {
      * @return The permissions required to execute this command.
      */
     List<String> getPermissions();
+
+    /**
+     * Get this command's overloaded description string
+     *
+     * @return this command's overloaded description string
+     */
+    List<String> getCommandFormatTips();
 }

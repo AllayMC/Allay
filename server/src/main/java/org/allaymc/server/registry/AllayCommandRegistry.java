@@ -71,6 +71,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new SummonCommand());
         register(new SetMaxPlayersCommand());
         register(new ExecuteCommand());
+        register(new HelpCommand());
     }
 
     @Override
@@ -142,14 +143,14 @@ public class AllayCommandRegistry extends CommandRegistry {
     public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
         var pk = new AvailableCommandsPacket();
         for (var command : getContent().values()) {
-            if (player.hasPermission(command.getPermissions())) {
+            if (!command.isServerSideOnly() && player.hasPermission(command.getPermissions())) {
                 pk.getCommands().add(command.buildNetworkDataFor(player));
             }
         }
         return pk;
     }
 
-    protected Command findCommand(String nameOrAlias) {
+    public Command findCommand(String nameOrAlias) {
         var result = this.get(nameOrAlias);
         if (result != null) return result;
 
