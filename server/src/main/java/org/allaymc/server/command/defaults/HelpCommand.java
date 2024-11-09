@@ -30,7 +30,7 @@ public class HelpCommand extends SimpleCommand {
                     var page = (int) context.getResult(0);
                     if(page < 0 || page > pages) {
                         context.addSyntaxError(0);
-                        context.addError("Invalid page number. The pag number must be 0 or between 1 and " + pages);
+                        context.addError("Invalid page number. The page number must be 0 or between 1 and " + pages);
                         return context.fail();
                     }
                     if(page == 0){
@@ -55,8 +55,7 @@ public class HelpCommand extends SimpleCommand {
                 .exec((context, sender) -> {
                     var command = ((AllayCommandRegistry) Registries.COMMANDS).findCommand(context.getResult(0));
                     if (command == null) {
-                        context.addSyntaxError(0);
-                        context.addError("no such command");
+                        context.addError("No such command");
                         return context.fail();
                     }
                     printCommandHelp(sender, command);
