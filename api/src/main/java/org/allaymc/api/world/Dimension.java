@@ -463,12 +463,12 @@ public interface Dimension {
         chunk.sendChunkPacket(createUpdateBlockPacket(newBlockState, x, y, z, layer));
     }
 
-    default BlockState[][][] getCollidingBlocks(AABBfc aabb) {
-        return getCollidingBlocks(aabb, 0);
+    default BlockState[][][] getCollidingBlockStates(AABBfc aabb) {
+        return getCollidingBlockStates(aabb, 0);
     }
 
-    default BlockState[][][] getCollidingBlocks(AABBfc aabb, int layer) {
-        return getCollidingBlocks(aabb, layer, false);
+    default BlockState[][][] getCollidingBlockStates(AABBfc aabb, int layer) {
+        return getCollidingBlockStates(aabb, layer, false);
     }
 
     /**
@@ -480,7 +480,7 @@ public interface Dimension {
      *
      * @return the block states that collide with the specified AABB.
      */
-    default BlockState[][][] getCollidingBlocks(AABBfc aabb, int layer, boolean ignoreCollision) {
+    default BlockState[][][] getCollidingBlockStates(AABBfc aabb, int layer, boolean ignoreCollision) {
         var maxX = (int) Math.ceil(aabb.maxX());
         var maxY = (int) Math.ceil(aabb.maxY());
         var maxZ = (int) Math.ceil(aabb.maxZ());

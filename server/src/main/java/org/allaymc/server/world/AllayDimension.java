@@ -38,9 +38,8 @@ public class AllayDimension implements Dimension {
     protected final AllayLightService lightService;
     protected final DimensionInfo dimensionInfo;
     protected final AllayWorld world;
-
     protected final Set<EntityPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    protected final Set<EntityPlayer> unmodifiablePlayersView = Collections.unmodifiableSet(this.players);
+    protected final Thread lightThread;
 
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
@@ -51,6 +50,23 @@ public class AllayDimension implements Dimension {
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.lightService = new AllayLightService(this);
+        if (Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
+            lightThread = Thread.ofPlatform()
+                    .name("Light Thread - " + world.getWorldData().getName() + ":" + dimensionInfo.toString())
+                    .unstarted(() -> {
+                        while (world.isRunning()) {
+                            lightService.tickIgnoreLimit();
+                        }
+                    });
+        } else {
+            lightThread = null;
+        }
+    }
+
+    public void startTick() {
+        if (Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
+            lightThread.start();
+        }
     }
 
     public void tick(long currentTick) {
@@ -58,7 +74,9 @@ public class AllayDimension implements Dimension {
         entityService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);
-        lightService.tick();
+        if (!Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
+            lightService.tick();
+        }
     }
 
     public void shutdown() {
@@ -91,7 +109,7 @@ public class AllayDimension implements Dimension {
     @Override
     @UnmodifiableView
     public Set<EntityPlayer> getPlayers() {
-        return unmodifiablePlayersView;
+        return Collections.unmodifiableSet(this.players);
     }
 
     @Override

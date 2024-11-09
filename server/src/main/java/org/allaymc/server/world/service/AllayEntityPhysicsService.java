@@ -90,7 +90,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             if (!entity.isCurrentChunkLoaded()) return;
             if (entity.getLocation().y() < dimension.getDimensionInfo().minHeight()) return;
             // TODO: liquid motion etc...
-            var collidedBlocks = dimension.getCollidingBlocks(entity.getOffsetAABB());
+            var collidedBlocks = dimension.getCollidingBlockStates(entity.getOffsetAABB());
             if (collidedBlocks == null) {
                 // 1. The entity is not stuck in the block
                 if (entity.computeEntityCollisionMotion()) computeEntityCollisionMotion(entity);
@@ -379,7 +379,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var deltaAxis = motion;
         var collision = false;
 
-        var blocks = dimension.getCollidingBlocks(extendAxis);
+        var blocks = dimension.getCollidingBlockStates(extendAxis);
         if (blocks != null) {
             collision = axis != Y || shouldTowardsNegative;
 
@@ -423,7 +423,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var recorder = new Vector3f();
         moveAlongAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder, Y);
         moveAlongAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder, Y);
-        if (recorder.y == 0 || dimension.getCollidingBlocks(offsetAABB) != null) {
+        if (recorder.y == 0 || dimension.getCollidingBlockStates(offsetAABB) != null) {
             return false;
         } else {
             aabb.set(offsetAABB.translate(xAxis ? -offset : 0, 0, xAxis ? 0 : -offset));
@@ -483,7 +483,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
                 var aabb = clientMove.player.getOffsetAABB();
                 aabb.minY -= FAT_AABB_MARGIN;
-                player.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setOnGround(dimension.getCollidingBlocks(aabb) != null);
+                player.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setOnGround(dimension.getCollidingBlockStates(aabb) != null);
             }
         }
     }

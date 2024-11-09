@@ -44,85 +44,66 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AllayWorld implements World {
     // Send the time to client every 12 seconds
     protected static final long TIME_SENDING_INTERVAL = 12 * 20;
-
     protected static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
     protected static final boolean ENABLE_INDEPENDENT_NETWORK_THREAD = Server.SETTINGS.networkSettings().enableIndependentNetworkThread();
 
-    protected final Queue<PacketQueueEntry> packetQueue = PlatformDependent.newMpscQueue();
-    protected final AtomicBoolean networkLock = ENABLE_INDEPENDENT_NETWORK_THREAD ? new AtomicBoolean(false) : null;
-    protected final AtomicBoolean isRunning = new AtomicBoolean(true);
     @Getter
     protected final WorldStorage worldStorage;
     @Getter
     protected final WorldData worldData;
+    protected final Queue<PacketQueueEntry> packetQueue;
+    protected final AtomicBoolean networkLock;
+    protected final AtomicBoolean isRunning;
     @Getter
-    protected final Int2ObjectOpenHashMap<Dimension> dimensionMap = new Int2ObjectOpenHashMap<>(3);
+    protected final Int2ObjectOpenHashMap<Dimension> dimensionMap;
     @Getter
-    protected final Scheduler scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
+    protected final Scheduler scheduler;
     protected final GameLoop gameLoop;
     @Getter
     protected final Thread worldThread;
     protected final Thread networkThread;
+
     protected long nextTimeSendTick;
-    protected int rainTimer = Weather.CLEAR.generateRandomTimeLength();
-    protected int thunderTimer = Weather.CLEAR.generateRandomTimeLength();
+    protected int rainTimer;
+    protected int thunderTimer;
     protected boolean isRaining = false;
     protected boolean isThundering = false;
-    protected Set<Weather> effectiveWeathers = new HashSet<>();
+    protected final Set<Weather> effectiveWeathers;
     protected boolean isFirstTick = false;
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
         this.worldData = worldStorage.readWorldData();
         this.worldData.setWorld(this);
-
-        this.gameLoop = GameLoop.builder().onTick(gameLoop -> {
-            if (!isRunning.get()) {
-                gameLoop.stop();
-                log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getName()));
-                return;
-            }
-
-            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-                //noinspection StatementWithEmptyBody
-                while (!networkLock.compareAndSet(false, true)) {
-                    // Spin
-                    // We don't use Thread.yield() here, because we don't want to block the world main thread
-                }
-            }
-
-            try {
-                tick(gameLoop.getTick());
-            } catch (Throwable throwable) {
-                log.error("Error while ticking level {}", this.getWorldData().getName(), throwable);
-            } finally {
-                if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-                    networkLock.set(false);
-                }
-            }
-        }).build();
+        this.packetQueue = PlatformDependent.newMpscQueue();
+        this.networkLock = ENABLE_INDEPENDENT_NETWORK_THREAD ? new AtomicBoolean(false) : null;
+        this.isRunning = new AtomicBoolean(true);
+        this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
+        this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
+        this.gameLoop = GameLoop.builder().onTick(this::worldThreadMain).build();
         this.worldThread = Thread.ofPlatform()
                 .name("World Thread - " + this.getWorldData().getName())
                 .unstarted(gameLoop::startLoop);
-        if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-            this.networkThread = Thread.ofPlatform()
-                    .name("World Network Thread - " + this.getWorldData().getName())
-                    .unstarted(() -> {
-                        while (isRunning.get()) {
-                            if (!packetQueue.isEmpty()) {
-                                while (!networkLock.compareAndSet(false, true)) {
-                                    // Spin
-                                    Thread.yield();
-                                }
-                            } else {
-                                Thread.yield();
-                                continue;
-                            }
-                            handleSyncPackets();
-                        }
-                    });
-        } else {
-            this.networkThread = null;
+        this.networkThread = ENABLE_INDEPENDENT_NETWORK_THREAD ? Thread.ofPlatform()
+                .name("World Network Thread - " + this.getWorldData().getName())
+                .unstarted(this::networkThreadMain) : null;
+        this.rainTimer = Weather.CLEAR.generateRandomTimeLength();
+        this.thunderTimer = Weather.CLEAR.generateRandomTimeLength();
+        this.effectiveWeathers = new HashSet<>();
+    }
+
+    protected void networkThreadMain() {
+        while (isRunning.get()) {
+            if (!packetQueue.isEmpty()) {
+                while (!networkLock.compareAndSet(false, true)) {
+                    // Spin
+                    Thread.yield();
+                }
+            } else {
+                Thread.yield();
+                continue;
+            }
+            handleSyncPackets();
         }
     }
 
@@ -288,6 +269,7 @@ public class AllayWorld implements World {
             throw new IllegalStateException("World is already start ticking!");
         } else {
             worldThread.start();
+            dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).startTick());
             if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
                 networkThread.start();
             }
@@ -411,6 +393,32 @@ public class AllayWorld implements World {
             weatherRemoved.forEach(weather -> player.sendPacket(weather.createStopLevelEventPacket()));
             weatherAdded.forEach(weather -> player.sendPacket(weather.createStartLevelEventPacket()));
         });
+    }
+
+    private void worldThreadMain(GameLoop gameLoop) {
+        if (!isRunning.get()) {
+            gameLoop.stop();
+            log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getName()));
+            return;
+        }
+
+        if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
+            //noinspection StatementWithEmptyBody
+            while (!networkLock.compareAndSet(false, true)) {
+                // Spin
+                // We don't use Thread.yield() here, because we don't want to block the world main thread
+            }
+        }
+
+        try {
+            tick(gameLoop.getTick());
+        } catch (Throwable throwable) {
+            log.error("Error while ticking level {}", this.getWorldData().getName(), throwable);
+        } finally {
+            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
+                networkLock.set(false);
+            }
+        }
     }
 
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}

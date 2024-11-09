@@ -85,10 +85,6 @@ jacoco {
     reportsDirectory = layout.buildDirectory.dir("${rootProject.projectDir}/.jacoco")
 }
 
-jmh {
-    includes.add("LightServiceJMHTest")
-}
-
 tasks.create("cleanWorkingDir") {
     description = "Clean all files in `.run` directory except `Allay.run.xml` file"
     group = "application"
