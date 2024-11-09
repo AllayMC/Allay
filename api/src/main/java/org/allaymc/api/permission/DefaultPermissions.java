@@ -27,7 +27,6 @@ public final class DefaultPermissions {
                     .addPermission(DOORS_AND_SWITCHES).addPermission(OPEN_CONTAINERS)
                     .addPermission(ATTACK_PLAYERS).addPermission(ATTACK_MOBS)
                     .addPermission(SUMMON_LIGHTNING).addPermission(PVM).addPermission(MVP)
-                    // .addPerm(Command.COMMAND_PERM_PREFIX + "help") // TODO
                     .addPermission(Command.COMMAND_PERM_PREFIX + "me")
                     .addPermission(Command.COMMAND_PERM_PREFIX + "version");
 
