@@ -26,6 +26,7 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.type.BlockEntityTypes;
+import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.voxelshape.VoxelShapes;
@@ -257,13 +258,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockTallGrassBehavior.class)
                 .vanillaBlock(BlockId.TALL_GRASS)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockBaseComponentSupplier(BlockTallGrassBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(blockType -> new BlockTallGrassBaseComponentImpl(blockType, ItemId.SHORT_GRASS)
                 .build();
         BlockTypes.LARGE_FERN = AllayBlockType
                 .builder(BlockLargeFernBehavior.class)
                 .vanillaBlock(BlockId.LARGE_FERN)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockBaseComponentSupplier(BlockTallGrassBaseComponentImpl::new)
+                .setBlockBaseComponentSupplier(blockType -> new BlockTallGrassBaseComponentImpl(blockType, ItemId.FERN)
                 .build();
     }
 
