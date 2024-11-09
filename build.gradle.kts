@@ -91,11 +91,6 @@ subprojects {
             }
         }
 
-        withType<Test> {
-            useJUnitPlatform()
-            workingDir = file("${rootProject.projectDir}/.run/")
-        }
-
         withType<Copy> {
             duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         }

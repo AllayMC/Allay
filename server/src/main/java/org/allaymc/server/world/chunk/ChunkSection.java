@@ -4,8 +4,6 @@ import io.netty.buffer.ByteBuf;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.datastruct.NibbleArray;
 import org.allaymc.server.world.palette.Palette;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -20,9 +18,7 @@ import static org.allaymc.api.world.chunk.UnsafeChunk.index;
 public record ChunkSection(
         byte sectionY,
         Palette<BlockState>[] blockLayers,
-        Palette<BiomeType> biomes,
-        NibbleArray blockLights,
-        NibbleArray skyLights
+        Palette<BiomeType> biomes
 ) {
     public static final int LAYER_COUNT = 2;
     public static final int VERSION = 9;
@@ -32,18 +28,14 @@ public record ChunkSection(
         this(
                 sectionY,
                 new Palette[]{new Palette<>(AIR.getDefaultState()), new Palette<>(AIR.getDefaultState())},
-                new Palette<>(BiomeId.PLAINS),
-                new NibbleArray(Chunk.SECTION_SIZE),
-                new NibbleArray(Chunk.SECTION_SIZE)
+                new Palette<>(BiomeId.PLAINS)
         );
     }
 
     public ChunkSection(byte sectionY, Palette<BlockState>[] blockLayer) {
         this(
                 sectionY, blockLayer,
-                new Palette<>(BiomeId.PLAINS),
-                new NibbleArray(Chunk.SECTION_SIZE),
-                new NibbleArray(Chunk.SECTION_SIZE)
+                new Palette<>(BiomeId.PLAINS)
         );
     }
 
@@ -61,22 +53,6 @@ public record ChunkSection(
 
     public BiomeType getBiomeType(int x, int y, int z) {
         return biomes.get(index(x, y, z));
-    }
-
-    public byte getBlockLight(int x, int y, int z) {
-        return blockLights.get(index(x, y, z));
-    }
-
-    public byte getSkyLight(int x, int y, int z) {
-        return skyLights.get(index(x, y, z));
-    }
-
-    public void setBlockLight(int x, int y, int z, byte light) {
-        blockLights.set(index(x, y, z), light);
-    }
-
-    public void setSkyLight(int x, int y, int z, byte light) {
-        skyLights.set(index(x, y, z), light);
     }
 
     public boolean isEmpty() {

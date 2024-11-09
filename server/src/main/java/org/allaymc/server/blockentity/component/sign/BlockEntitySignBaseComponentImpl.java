@@ -12,7 +12,7 @@ import org.allaymc.api.eventbus.event.block.SignTextChangeEvent;
 import org.allaymc.api.eventbus.event.block.SignWaxEvent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;

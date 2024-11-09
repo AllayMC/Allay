@@ -67,15 +67,6 @@ tasks.shadowJar {
     archiveFileName = "allay-server-${version}-${getShortGitHash()}-shaded.jar"
 }
 
-fun getShortGitHash(): String {
-    val stdout = ByteArrayOutputStream()
-    exec {
-        commandLine = mutableListOf("git", "rev-parse", "--short", "HEAD")
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
-}
-
 tasks.jacocoTestReport {
     reports {
         xml.required = true
@@ -83,6 +74,11 @@ tasks.jacocoTestReport {
     }
     additionalClassDirs(file("${rootProject.projectDir}/api/build/classes/java/main"))
     additionalSourceDirs(file("${rootProject.projectDir}/api/src/main/java"))
+}
+
+tasks.test {
+    useJUnitPlatform()
+    workingDir = file("${rootProject.projectDir}/.run/")
 }
 
 jacoco {
@@ -107,4 +103,13 @@ tasks.create("cleanCachesInWorkingDir") {
             delete(it)
         }
     }
+}
+
+fun getShortGitHash(): String {
+    val stdout = ByteArrayOutputStream()
+    exec {
+        commandLine = mutableListOf("git", "rev-parse", "--short", "HEAD")
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
 }

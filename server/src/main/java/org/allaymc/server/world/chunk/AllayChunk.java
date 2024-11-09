@@ -20,6 +20,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
@@ -52,7 +53,7 @@ public class AllayChunk implements Chunk {
     protected boolean loaded = false;
     // The callback to be called when the chunk is loaded into the world
     @Setter
-    protected Runnable chunkSetCallback = () -> {};
+    protected Runnable chunkSetCallback;
     protected int autoSaveTimer = 0;
 
     private static void checkXZ(int x, int z) {
@@ -228,102 +229,6 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public int getBlockLight(int x, int y, int z) {
-        checkXYZ(x, y, z);
-        var stamp = lightLock.tryOptimisticRead();
-        try {
-            for (; ; stamp = lightLock.readLock()) {
-                if (stamp == 0L) continue;
-                var result = unsafeChunk.getBlockLight(x, y, z);
-                if (!lightLock.validate(stamp)) continue;
-                return result;
-            }
-        } finally {
-            if (StampedLock.isReadLockStamp(stamp)) lightLock.unlockRead(stamp);
-        }
-    }
-
-    @Override
-    public void setBlockLight(int x, int y, int z, int light) {
-        checkXYZ(x, y, z);
-        var stamp = lightLock.writeLock();
-        try {
-            unsafeChunk.setBlockLight(x, y, z, light);
-        } finally {
-            lightLock.unlockWrite(stamp);
-        }
-    }
-
-    @Override
-    public void compareAndSetBlockLight(int x, int y, int z, int expectedValue, int newValue) {
-        checkXYZ(x, y, z);
-        checkXZ(expectedValue, newValue);
-        var stamp = lightLock.tryOptimisticRead();
-        try {
-            for (; ; stamp = lightLock.writeLock()) {
-                if (stamp == 0L) continue;
-                var oldValue = unsafeChunk.getBlockLight(x, y, z);
-                if (!lightLock.validate(stamp)) continue;
-                if (oldValue != expectedValue) break;
-                stamp = lightLock.tryConvertToWriteLock(stamp);
-                if (stamp == 0L) continue;
-                unsafeChunk.setBlockLight(x, y, z, newValue);
-                return;
-            }
-        } finally {
-            if (StampedLock.isWriteLockStamp(stamp)) lightLock.unlockWrite(stamp);
-        }
-    }
-
-    @Override
-    public int getSkyLight(int x, int y, int z) {
-        checkXYZ(x, y, z);
-        var stamp = lightLock.tryOptimisticRead();
-        try {
-            for (; ; stamp = lightLock.readLock()) {
-                if (stamp == 0L) continue;
-                var result = unsafeChunk.getSkyLight(x, y, z);
-                if (!lightLock.validate(stamp)) continue;
-                return result;
-            }
-        } finally {
-            if (StampedLock.isReadLockStamp(stamp)) lightLock.unlockRead(stamp);
-        }
-    }
-
-    @Override
-    public void setSkyLight(int x, int y, int z, int light) {
-        checkXYZ(x, y, z);
-        var stamp = lightLock.writeLock();
-        try {
-            unsafeChunk.setSkyLight(x, y, z, light);
-        } finally {
-            lightLock.unlockWrite(stamp);
-        }
-    }
-
-    @Override
-    public void compareAndSetSkyLight(int x, int y, int z, int expectedValue, int newValue) {
-        checkXYZ(x, y, z);
-        checkXZ(expectedValue, newValue);
-        var stamp = lightLock.tryOptimisticRead();
-        try {
-            for (; ; stamp = lightLock.writeLock()) {
-                if (stamp == 0L) continue;
-                var oldValue = unsafeChunk.getSkyLight(x, y, z);
-                if (!lightLock.validate(stamp)) continue;
-                if (oldValue != expectedValue) break;
-                stamp = lightLock.tryConvertToWriteLock(stamp);
-                if (stamp == 0L) continue;
-                unsafeChunk.setSkyLight(x, y, z, newValue);
-                return;
-            }
-        } finally {
-            if (StampedLock.isWriteLockStamp(stamp)) lightLock.unlockWrite(stamp);
-        }
-    }
-
-    @Override
     public void batchProcess(UnsafeChunkOperate operate) {
         var stamp1 = blockLock.writeLock();
         var stamp2 = heightAndBiomeLock.writeLock();
@@ -350,7 +255,7 @@ public class AllayChunk implements Chunk {
         levelChunkPacket.setCachingEnabled(false);
         levelChunkPacket.setRequestSubChunks(true);
         // This value is used in the subchunk system to control the maximum value of sectionY requested by the client.
-        levelChunkPacket.setSubChunkLimit(getDimensionInfo().chunkSectionSize());
+        levelChunkPacket.setSubChunkLimit(getDimensionInfo().chunkSectionCount());
         levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
         return levelChunkPacket;
     }
@@ -362,7 +267,7 @@ public class AllayChunk implements Chunk {
         levelChunkPacket.setChunkZ(this.getZ());
         levelChunkPacket.setCachingEnabled(false);
         levelChunkPacket.setRequestSubChunks(false);
-        levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionSize());
+        levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionCount());
         try {
             levelChunkPacket.setData(writeToNetwork());
         } catch (Throwable t) {
@@ -504,12 +409,19 @@ public class AllayChunk implements Chunk {
 
     public void beforeSetChunk(Dimension dimension) {
         unsafeChunk.beforeSetChunk(dimension);
+        unsafeChunk.setBlockChangeCallback((x, y, z, blockState, layer) -> {
+            if (layer != 0) return;
+            ((AllayLightService) dimension.getLightService()).onBlockChange(x + (unsafeChunk.x << 4), y, z + (unsafeChunk.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
+        });
     }
 
     public void afterSetChunk(Dimension dimension) {
-        chunkSetCallback.run();
+        if (chunkSetCallback != null) {
+            chunkSetCallback.run();
+        }
         loaded = true;
         unsafeChunk.afterSetChunk(dimension);
+        ((AllayLightService) dimension.getLightService()).onChunkLoad(this);
     }
 
     public ChunkSection getOrCreateSection(int sectionY) {

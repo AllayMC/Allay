@@ -16,13 +16,9 @@ import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.api.world.service.BlockUpdateService;
-import org.allaymc.api.world.service.ChunkService;
-import org.allaymc.api.world.service.EntityPhysicsService;
-import org.allaymc.api.world.service.EntityService;
+import org.allaymc.api.world.service.*;
 import org.apache.commons.lang3.function.TriFunction;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -97,6 +93,13 @@ public interface Dimension {
      * @return the entity service.
      */
     EntityService getEntityService();
+
+    /**
+     * Get the light service of this dimension.
+     *
+     * @return the light service.
+     */
+    LightService getLightService();
 
     /**
      * Get the dimension info of this dimension.
@@ -460,12 +463,12 @@ public interface Dimension {
         chunk.sendChunkPacket(createUpdateBlockPacket(newBlockState, x, y, z, layer));
     }
 
-    default BlockState[][][] getCollidingBlocks(AABBfc aabb) {
-        return getCollidingBlocks(aabb, 0);
+    default BlockState[][][] getCollidingBlockStates(AABBfc aabb) {
+        return getCollidingBlockStates(aabb, 0);
     }
 
-    default BlockState[][][] getCollidingBlocks(AABBfc aabb, int layer) {
-        return getCollidingBlocks(aabb, layer, false);
+    default BlockState[][][] getCollidingBlockStates(AABBfc aabb, int layer) {
+        return getCollidingBlockStates(aabb, layer, false);
     }
 
     /**
@@ -477,7 +480,7 @@ public interface Dimension {
      *
      * @return the block states that collide with the specified AABB.
      */
-    default BlockState[][][] getCollidingBlocks(AABBfc aabb, int layer, boolean ignoreCollision) {
+    default BlockState[][][] getCollidingBlockStates(AABBfc aabb, int layer, boolean ignoreCollision) {
         var maxX = (int) Math.ceil(aabb.maxX());
         var maxY = (int) Math.ceil(aabb.maxY());
         var maxZ = (int) Math.ceil(aabb.maxZ());

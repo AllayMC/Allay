@@ -17,7 +17,7 @@ import static org.allaymc.api.block.type.BlockTypes.STONE;
  * @author Cool_Loong
  */
 @State(Scope.Benchmark)
-@BenchmarkMode(Mode.Throughput)
+@BenchmarkMode(Mode.AverageTime)
 @Warmup(iterations = 3)
 @Threads(1)
 @Fork(1)

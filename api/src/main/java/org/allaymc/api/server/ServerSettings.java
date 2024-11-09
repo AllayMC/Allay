@@ -142,7 +142,7 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("chunk-sending-strategy")
         private ChunkSendingStrategy chunkSendingStrategy = ChunkSendingStrategy.ASYNC;
 
-        @Comment("Determines the minimum number of chunks that must to be sent to the client which is joining the server")
+        @Comment("Determines the minimum number of chunks that must be sent to the client which is joining the server")
         @Comment("Decrease this value may reduce the time on joining server. However, client may see a lot of unloaded chunks if the value is too low")
         @CustomKey("fully-join-chunk-threshold")
         private int fullyJoinChunkThreshold = 30;
@@ -160,6 +160,17 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Determines how many chunks around the spawn point will be loaded")
         @CustomKey("spawn-point-chunk-radius")
         private int spawnPointChunkRadius = 3;
+
+        @Comment("Whether to use independent light thread for light calculation")
+        @Comment("If set to true, the light calculation will be done in a separate thread")
+        @Comment("And each dimension will have a light thread")
+        @CustomKey("enable-independent-light-thread")
+        private boolean enableIndependentLightThread = true;
+
+        @Comment("Determines the maximum number of light updates that can be processed per tick")
+        @Comment("This only be effective when independent light thread is disabled")
+        @CustomKey("max-light-update-count-per-tick")
+        private int maxLightUpdateCountPerTick = 128;
 
         public enum ChunkSendingStrategy {
             ASYNC,

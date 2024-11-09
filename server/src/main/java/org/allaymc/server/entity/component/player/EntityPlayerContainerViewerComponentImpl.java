@@ -12,7 +12,7 @@ import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.entity.component.EntityContainerViewerComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerBaseComponent;
 import org.allaymc.api.entity.component.player.EntityPlayerNetworkComponent;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Identifier;
 import org.cloudburstmc.math.vector.Vector3i;

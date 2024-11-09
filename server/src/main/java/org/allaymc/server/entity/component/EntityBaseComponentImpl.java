@@ -23,7 +23,7 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.component.annotation.*;
@@ -371,7 +371,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
         return true;
     }
-
 
     @Override
     public void teleport(Location3fc target) {

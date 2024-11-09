@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  * @author daoge_cmd
  */
 @State(Scope.Benchmark)
-@BenchmarkMode(Mode.Throughput)
+@BenchmarkMode(Mode.AverageTime)
 @Warmup(iterations = 3)
 @Threads(1)
 @Fork(1)
@@ -72,7 +72,7 @@ public class AABBTreeJMHTest {
         );
     }
 
-    // @Benchmark
+    @Benchmark
     public void testAABBTreeDetectOverlaps() {
         aabbTree.detectOverlaps(testAABBs[indexCounter], new ArrayList<>());
         indexCounter++;
@@ -81,7 +81,7 @@ public class AABBTreeJMHTest {
         }
     }
 
-    // @Benchmark
+    @Benchmark
     public void testForEach() {
         forEachDetect(testAABBs[indexCounter], new ArrayList<>());
         indexCounter++;

@@ -14,6 +14,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.*;
 import org.allaymc.server.block.type.BlockLootTable;
@@ -277,6 +278,22 @@ public class GameTestCommand extends SimpleCommand {
                 .exec((context, player) -> {
                     var floorLoc = player.getLocation().floor(new Vector3f());
                     player.sendText("Height is " + player.getDimension().getHeight((int) floorLoc.x, (int) floorLoc.z));
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("getlightdata")
+                .pos("pos")
+                .exec((context, player) -> {
+                    var floorLoc = ((Vector3f) context.getResult(1)).floor();
+                    int x = (int) floorLoc.x;
+                    int y = (int) floorLoc.y;
+                    int z = (int) floorLoc.z;
+                    var lightService = player.getDimension().getLightService();
+                    player.sendText("InternalLight: " + lightService.getInternalLight(x, y, z));
+                    player.sendText("BlockLight: " + lightService.getBlockLight(x, y, z));
+                    player.sendText("SkyLight: " + lightService.getSkyLight(x, y, z));
+                    player.sendText("InternalSkyLight: " + lightService.getInternalSkyLight(x, y, z));
+                    player.sendText("QueuedUpdateCount: " + lightService.getQueuedUpdateCount());
                     return context.success();
                 }, SenderType.PLAYER);
     }

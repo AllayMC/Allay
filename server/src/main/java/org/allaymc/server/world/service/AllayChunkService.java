@@ -13,7 +13,7 @@ import org.allaymc.api.eventbus.event.world.ChunkUnloadEvent;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
-import org.allaymc.api.utils.MathUtils;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
@@ -56,8 +56,11 @@ public final class AllayChunkService implements ChunkService {
     @Setter
     private int removeUnneededChunkCycle = Server.SETTINGS.worldSettings().removeUnneededChunkCycle();
 
+    public void startTick() {
+        ((AllayWorldGenerator) worldGenerator).startTick();
+    }
+
     public void tick(long currentTick) {
-        ((AllayWorldGenerator) worldGenerator).tick();
         sendChunkPackets();
         tickChunkLoaders();
         removeUnusedChunks();
@@ -317,6 +320,7 @@ public final class AllayChunkService implements ChunkService {
             entity.despawnFromAll();
             ((AllayEntityPhysicsService) dimension.getEntityPhysicsService()).removeEntity(entity);
         });
+        ((AllayLightService) dimension.getLightService()).onChunkUnload(chunk);
 
         var future = new CompletableFuture<Boolean>();
         worldStorage

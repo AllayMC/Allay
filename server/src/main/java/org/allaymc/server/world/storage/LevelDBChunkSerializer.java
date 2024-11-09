@@ -84,7 +84,7 @@ public class LevelDBChunkSerializer {
 
     private void deserializeBlock(DB db, AllayUnsafeChunk.Builder builder) {
         DimensionInfo dimensionInfo = builder.getDimensionInfo();
-        ChunkSection[] sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
+        ChunkSection[] sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
         var minSectionY = dimensionInfo.minSectionY();
         for (int ySection = minSectionY; ySection <= dimensionInfo.maxSectionY(); ySection++) {
             byte[] bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection, dimensionInfo));

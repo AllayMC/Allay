@@ -5,7 +5,6 @@ import io.netty.util.internal.PlatformDependent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
@@ -52,6 +51,7 @@ public class AllayWorldGenerator implements WorldGenerator {
     private final Map<Long, CompletableFuture<Chunk>> chunkFutures = new Long2ObjectNonBlockingMap<>();
     private final Queue<PopulationQueueEntry> populationQueue = PlatformDependent.newMpscQueue();
     private final Set<Long> populationLocks = Collections.newSetFromMap(new Long2ObjectNonBlockingMap<>());
+    private final Thread populationQueueThread;
     private final ExecutorService computeThreadPool = AllayServer.getInstance().getComputeThreadPool();
 
     @Getter
@@ -75,29 +75,35 @@ public class AllayWorldGenerator implements WorldGenerator {
         this.lighters = lighters;
         this.entitySpawners = entitySpawners;
         this.onDimensionSet = onDimensionSet;
-        init();
+        this.populationQueueThread = Thread.ofVirtual()
+                .name("Population Queue Thread")
+                .unstarted(() -> {
+                    while (dimension.getWorld().isRunning()) {
+                        processPopulationQueue();
+                    }
+                });
+
+        this.noisers.forEach(noiser -> noiser.init(this));
+        this.populators.forEach(populator -> populator.init(this));
+        this.lighters.forEach(lighter -> lighter.init(this));
+        this.entitySpawners.forEach(entitySpawner -> entitySpawner.init(this));
     }
 
     public static WorldGeneratorBuilder builder() {
         return new AllayWorldGeneratorBuilder();
     }
 
-    private void init() {
-        noisers.forEach(noiser -> noiser.init(this));
-        populators.forEach(populator -> populator.init(this));
-        lighters.forEach(lighter -> lighter.init(this));
-        entitySpawners.forEach(entitySpawner -> entitySpawner.init(this));
-    }
-
     @Override
     public void setDimension(Dimension dimension) {
-        if (this.dimension != null) throw new IllegalStateException("Dimension already set");
+        if (this.dimension != null) {
+            throw new IllegalStateException("Dimension already set");
+        }
         this.dimension = dimension;
         onDimensionSet.accept(dimension);
     }
 
-    public void tick() {
-        processPopulationQueue();
+    public void startTick() {
+        populationQueueThread.start();
     }
 
     private void processPopulationQueue() {

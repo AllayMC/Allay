@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
@@ -57,17 +58,20 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     protected List<NbtMap> entityNbtList;
     protected List<NbtMap> blockEntityNbtList;
+    @Setter
+    protected BlockChangeCallback blockChangeCallback;
 
     private AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         this(
                 chunkX,
                 chunkZ,
                 dimensionInfo,
-                new ChunkSection[dimensionInfo.chunkSectionSize()],
+                new ChunkSection[dimensionInfo.chunkSectionCount()],
                 new HeightMap(),
                 new Long2ObjectOpenHashMap<>(),
                 new Int2ObjectNonBlockingMap<>(),
                 ChunkState.EMPTY,
+                null,
                 null,
                 null
         );
@@ -207,39 +211,22 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         // Update height map
         var index = HeightMap.computeIndex(x, z);
         var currentHeight = getHeightUnsafe(index);
-        if (blockState.getBlockType() == BlockTypes.AIR) {
-            // Use >= here because some maps may be broken
-            if (currentHeight >= y) {
-                setHeightUnsafe(index, y - 1);
+        if (blockState.getBlockType() == BlockTypes.AIR && currentHeight == y) {
+            int newHeight = dimensionInfo.minHeight() - 1;
+            for (int i = y - 1; i >= dimensionInfo.minHeight(); i--) {
+                if (getBlockState(x, i, z, 0).getBlockType() != BlockTypes.AIR) {
+                    newHeight = i;
+                    break;
+                }
             }
+            setHeightUnsafe(index, newHeight);
         } else if (currentHeight < y) {
             setHeightUnsafe(index, y);
         }
-    }
 
-    @Override
-    public int getBlockLight(int x, int y, int z) {
-        checkXYZ(x, y, z);
-        var section = this.getSection(y >> 4);
-        return section == null ? 0 : section.getBlockLight(x, y & 0xf, z);
-    }
-
-    @Override
-    public int getSkyLight(int x, int y, int z) {
-        checkXYZ(x, y, z);
-        var section = this.getSection(y >> 4);
-        return section == null ? 0 : section.getSkyLight(x, y & 0xf, z);
-    }
-
-    @Override
-    public void setBlockLight(int x, int y, int z, int light) {
-        this.getOrCreateSection(y >> 4).setBlockLight(x, y & 0xf, z, (byte) light);
-    }
-
-    @Override
-    public void setSkyLight(int x, int y, int z, int light) {
-        checkXYZ(x, y, z);
-        this.getOrCreateSection(y >> 4).setSkyLight(x, y & 0xf, z, (byte) light);
+        if (blockChangeCallback != null) {
+            blockChangeCallback.onBlockChange(x, y, z, blockState, layer);
+        }
     }
 
     @Override
@@ -320,6 +307,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         private Map<Integer, BlockEntity> blockEntities;
         private List<NbtMap> entitiyList;
         private List<NbtMap> blockEntitiyList;
+        protected BlockChangeCallback blockChangeCallback;
 
         public Builder chunkX(int chunkX) {
             this.chunkX = chunkX;
@@ -364,7 +352,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         public AllayUnsafeChunk build() {
             Preconditions.checkNotNull(dimensionInfo);
             if (state == null) state = ChunkState.EMPTY;
-            if (sections == null) sections = new ChunkSection[dimensionInfo.chunkSectionSize()];
+            if (sections == null) sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
             if (heightMap == null) heightMap = new HeightMap();
             if (entities == null) entities = new Long2ObjectNonBlockingMap<>();
             if (blockEntities == null) blockEntities = new Int2ObjectNonBlockingMap<>();
@@ -378,7 +366,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     blockEntities,
                     state,
                     entitiyList,
-                    blockEntitiyList
+                    blockEntitiyList,
+                    blockChangeCallback
             );
         }
 

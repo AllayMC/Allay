@@ -5,7 +5,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 
 import static java.lang.Runtime.getRuntime;
-import static org.allaymc.api.utils.MathUtils.round;
+import static org.allaymc.api.math.MathUtils.round;
 
 /**
  * @author daoge_cmd

@@ -9,13 +9,11 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.generator.WorldGenerator;
-import org.allaymc.server.world.service.AllayBlockUpdateService;
-import org.allaymc.server.world.service.AllayChunkService;
-import org.allaymc.server.world.service.AllayEntityPhysicsService;
-import org.allaymc.server.world.service.AllayEntityService;
+import org.allaymc.server.world.service.*;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
@@ -28,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
- * @author Cool_Loong
+ * @author daoge_cmd | Cool_Loong
  */
 @Slf4j
 @Getter
@@ -37,11 +35,11 @@ public class AllayDimension implements Dimension {
     protected final AllayEntityPhysicsService entityPhysicsService;
     protected final AllayBlockUpdateService blockUpdateService;
     protected final AllayEntityService entityService;
+    protected final AllayLightService lightService;
     protected final DimensionInfo dimensionInfo;
     protected final AllayWorld world;
-
     protected final Set<EntityPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    protected final Set<EntityPlayer> unmodifiablePlayersView = Collections.unmodifiableSet(this.players);
+    protected final Thread lightThread;
 
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
@@ -51,6 +49,25 @@ public class AllayDimension implements Dimension {
         this.entityPhysicsService = new AllayEntityPhysicsService(this);
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
+        this.lightService = new AllayLightService(this);
+        if (Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
+            lightThread = Thread.ofPlatform()
+                    .name("Light Thread - " + world.getWorldData().getName() + ":" + dimensionInfo.toString())
+                    .unstarted(() -> {
+                        while (world.isRunning()) {
+                            lightService.tickIgnoreLimit();
+                        }
+                    });
+        } else {
+            lightThread = null;
+        }
+    }
+
+    public void startTick() {
+        chunkService.startTick();
+        if (Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
+            lightThread.start();
+        }
     }
 
     public void tick(long currentTick) {
@@ -58,6 +75,9 @@ public class AllayDimension implements Dimension {
         entityService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);
+        if (!Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
+            lightService.tick();
+        }
     }
 
     public void shutdown() {
@@ -90,7 +110,7 @@ public class AllayDimension implements Dimension {
     @Override
     @UnmodifiableView
     public Set<EntityPlayer> getPlayers() {
-        return unmodifiablePlayersView;
+        return Collections.unmodifiableSet(this.players);
     }
 
     @Override

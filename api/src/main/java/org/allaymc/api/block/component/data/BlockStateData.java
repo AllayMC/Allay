@@ -106,12 +106,14 @@ public class BlockStateData {
     @Builder.Default
     protected float friction = DEFAULT_FRICTION;
     /**
-     * The light level of the block state.
+     * 	The amount that light will be dampened when it passes through the block, in a range (0-15).
+     * 	Higher value means the light will be dampened more.
      */
     @Builder.Default
-    protected int light = 15;
+    protected int lightDampening = 15;
     /**
-     * The light emission of the block state.
+     * The amount of light this block will emit in a range (0-15).
+     * Higher value means more light will be emitted.
      */
     @Builder.Default
     protected int lightEmission = 0;
