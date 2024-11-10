@@ -5,6 +5,7 @@ import io.netty.util.internal.PlatformDependent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
@@ -20,12 +21,14 @@ import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
+import org.allaymc.server.datastruct.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -46,9 +49,8 @@ public class AllayWorldGenerator implements WorldGenerator {
     private final Consumer<Dimension> onDimensionSet;
     private final Map<Long, CompletableFuture<Chunk>> chunkNoiseFutures = new Long2ObjectNonBlockingMap<>();
     private final Map<Long, CompletableFuture<Chunk>> chunkFutures = new Long2ObjectNonBlockingMap<>();
-    private final Queue<PopulationQueueEntry> populationQueue = PlatformDependent.newMpscQueue();
+    private final BlockingQueueWrapper<PopulationQueueEntry> populationQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
     private final Set<Long> populationLocks = Collections.newSetFromMap(new Long2ObjectNonBlockingMap<>());
-    private final Thread populationQueueThread;
     private final ExecutorService computeThreadPool = AllayServer.getInstance().getComputeThreadPool();
 
     @Getter
@@ -70,14 +72,6 @@ public class AllayWorldGenerator implements WorldGenerator {
         this.populators = populators;
         this.entitySpawners = entitySpawners;
         this.onDimensionSet = onDimensionSet;
-        this.populationQueueThread = Thread.ofVirtual()
-                .name("Population Queue Thread")
-                .unstarted(() -> {
-                    while (dimension.getWorld().isRunning()) {
-                        processPopulationQueue();
-                    }
-                });
-
         this.noisers.forEach(noiser -> noiser.init(this));
         this.populators.forEach(populator -> populator.init(this));
         this.entitySpawners.forEach(entitySpawner -> entitySpawner.init(this));
@@ -97,7 +91,11 @@ public class AllayWorldGenerator implements WorldGenerator {
     }
 
     public void startTick() {
-        populationQueueThread.start();
+        Server.getInstance().getVirtualThreadPool().execute(() -> {
+            while (dimension.getWorld().isRunning()) {
+                processPopulationQueue();
+            }
+        });
     }
 
     private void processPopulationQueue() {
@@ -107,19 +105,19 @@ public class AllayWorldGenerator implements WorldGenerator {
         }
 
         PopulationQueueEntry entry;
-        while ((entry = populationQueue.poll()) != null) {
+        while ((entry = populationQueue.tryPoll(1, TimeUnit.SECONDS)) != null) {
             var noiseFuture = entry.noiseFuture();
             var chunk = noiseFuture.getNow(null);
             if (chunk == null) {
                 // Noise not generated, re-add to queue
-                populationQueue.add(entry);
+                populationQueue.offer(entry);
                 continue;
             }
 
             var canPopulate = tryEnterPopulationStage(chunk.getX(), chunk.getZ());
             if (!canPopulate) {
                 // This chunk or adjacent chunk is locked, re-add to queue
-                populationQueue.add(entry);
+                populationQueue.offer(entry);
                 continue;
             }
 
@@ -198,7 +196,7 @@ public class AllayWorldGenerator implements WorldGenerator {
         var noiseFuture = getOrCreateNoiseFuture(x, z);
         CompletableFuture<Chunk> chunkFuture = new CompletableFuture<>();
         // Add chunk to population queue
-        populationQueue.add(new PopulationQueueEntry(chunkFuture, noiseFuture));
+        populationQueue.offer(new PopulationQueueEntry(chunkFuture, noiseFuture));
         return chunkFuture;
     }
 

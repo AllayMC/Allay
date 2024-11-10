@@ -28,10 +28,10 @@ class AllayLightServiceTest {
                 );
             }
         }
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
 
         lightService.onBlockChange(0, 1, 0, 14, 0);
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
         assertEquals(14, lightService.getBlockLight(0, 1, 0));
         assertEquals(13, lightService.getBlockLight(1, 1, 0));
         assertEquals(13, lightService.getBlockLight(0, 1, 1));
@@ -40,12 +40,12 @@ class AllayLightServiceTest {
         assertEquals(13, lightService.getBlockLight(0, 2, 0));
 
         lightService.onBlockChange(2, 1, 0, 0, 15);
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
         assertEquals(0, lightService.getBlockLight(2, 1, 0));
         assertEquals(9, lightService.getBlockLight(3, 1, 0));
 
         lightService.onBlockChange(0, 1, 0, 0, 0);
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
         assertEquals(0, lightService.getBlockLight(0, 1, 0));
         assertEquals(0, lightService.getBlockLight(1, 1, 0));
         assertEquals(0, lightService.getBlockLight(0, 1, 1));
@@ -67,21 +67,21 @@ class AllayLightServiceTest {
                 );
             }
         }
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
 
         lightService.onBlockChange(0, 0, 0, 0, 15);
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
         assertEquals(15, lightService.getSkyLight(0, 1, 0));
         assertEquals(15, lightService.getSkyLight(0, 2, 0));
         assertEquals(15, lightService.getSkyLight(0, 100, 0));
         assertEquals(15, lightService.getSkyLight(0, 200, 0));
 
         lightService.onBlockChange(0, 0, 0, 0, 0);
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
         assertEquals(15, lightService.getSkyLight(0, -1, 0));
 
         lightService.onBlockChange(0, 0, 0, 0, 1);
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
         assertEquals(14, lightService.getSkyLight(0, 0, 0));
         assertEquals(13, lightService.getSkyLight(0, -1, 0));
         assertEquals(12, lightService.getSkyLight(0, -2, 0));

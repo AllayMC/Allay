@@ -109,7 +109,7 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("If set to true, the network thread will be independent of the main world thread")
         @Comment("Which will reduce packet processing delay significantly")
         @Comment("However, independent network threads will increase CPU usage to a certain extent")
-        private boolean enableIndependentNetworkThread = Runtime.getRuntime().availableProcessors() > 8;
+        private boolean enableIndependentNetworkThread = true;
 
         @Comment("Represents the level of resource leak detection.")
         @Comment("Possible values: DISABLED, SIMPLE, ADVANCED, PARANOID")
@@ -161,11 +161,10 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("spawn-point-chunk-radius")
         private int spawnPointChunkRadius = 3;
 
-        @Comment("Whether to use independent light thread for light calculation")
-        @Comment("If set to true, the light calculation will be done in a separate thread")
-        @Comment("And each dimension will have a light thread")
-        @CustomKey("enable-independent-light-thread")
-        private boolean enableIndependentLightThread = true;
+        @Comment("Whether to calculate light asynchronously")
+        @Comment("If set to true, the server will calculate light in compute thread pool")
+        @CustomKey("calculate-light-async")
+        private boolean calculateLightAsync = true;
 
         @Comment("Determines the maximum number of light updates that can be processed per tick")
         @Comment("This only be effective when independent light thread is disabled")

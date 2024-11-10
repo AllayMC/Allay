@@ -39,7 +39,6 @@ public class AllayDimension implements Dimension {
     protected final DimensionInfo dimensionInfo;
     protected final AllayWorld world;
     protected final Set<EntityPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    protected final Thread lightThread;
 
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
@@ -50,23 +49,16 @@ public class AllayDimension implements Dimension {
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.lightService = new AllayLightService(this);
-        if (Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
-            lightThread = Thread.ofPlatform()
-                    .name("Light Thread - " + world.getWorldData().getName() + ":" + dimensionInfo.toString())
-                    .unstarted(() -> {
-                        while (world.isRunning()) {
-                            lightService.tickIgnoreLimit();
-                        }
-                    });
-        } else {
-            lightThread = null;
-        }
     }
 
     public void startTick() {
         chunkService.startTick();
-        if (Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
-            lightThread.start();
+        if (Server.SETTINGS.worldSettings().calculateLightAsync()) {
+            Server.getInstance().getComputeThreadPool().execute(() -> {
+                while (world.isRunning()) {
+                    lightService.tickIgnoreLimit();
+                }
+            });
         }
     }
 
@@ -75,7 +67,7 @@ public class AllayDimension implements Dimension {
         entityService.tick();
         entityPhysicsService.tick();
         blockUpdateService.tick(currentTick);
-        if (!Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
+        if (!Server.SETTINGS.worldSettings().calculateLightAsync()) {
             lightService.tick();
         }
     }

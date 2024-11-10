@@ -13,10 +13,11 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.heightmap.HeightMap;
 import org.allaymc.api.world.service.LightService;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
+import org.allaymc.server.datastruct.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
-import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 /**
@@ -32,7 +33,7 @@ public class AllayLightService implements LightService {
     protected final int maxHeight;
     protected final int sectionCount;
     protected final boolean hasSkyLight;
-    protected final Queue<Runnable> queue;
+    protected final BlockingQueueWrapper<Runnable> queue;
     protected final LongSet chunks;
     protected final Long2ObjectMap<ChunkSectionNibbleArray[]> lightDampening;
     protected final Long2ObjectMap<ChunkSectionNibbleArray[]> blockLight;
@@ -53,7 +54,7 @@ public class AllayLightService implements LightService {
         this.maxHeight = dimensionInfo.maxHeight();
         this.sectionCount = dimensionInfo.chunkSectionCount();
         this.hasSkyLight = dimensionInfo.hasSkyLight();
-        this.queue = PlatformDependent.newMpscQueue();
+        this.queue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
         this.chunks = new LongOpenHashSet();
         this.lightDampening = new Long2ObjectOpenHashMap<>();
         this.blockLight = new Long2ObjectOpenHashMap<>();
@@ -68,7 +69,7 @@ public class AllayLightService implements LightService {
     public void tick() {
         int processedCount = 0;
         Runnable runnable;
-        while (processedCount < MAX_LIGHT_UPDATE_COUNT_PER_TICK && (runnable = queue.poll()) != null) {
+        while (processedCount < MAX_LIGHT_UPDATE_COUNT_PER_TICK && (runnable = queue.pollNow()) != null) {
             runnable.run();
             processedCount++;
         }
@@ -76,7 +77,14 @@ public class AllayLightService implements LightService {
 
     public void tickIgnoreLimit() {
         Runnable runnable;
-        while ((runnable = queue.poll()) != null) {
+        while ((runnable = queue.tryPoll(1, TimeUnit.SECONDS)) != null) {
+            runnable.run();
+        }
+    }
+
+    public void tickIgnoreLimitUnblocking() {
+        Runnable runnable;
+        while ((runnable = queue.pollNow()) != null) {
             runnable.run();
         }
     }
@@ -104,7 +112,7 @@ public class AllayLightService implements LightService {
                     final int finalY = y;
                     final int finalZ = (chunk.getZ() << 4) + z;
                     if (lightEmission != 0) {
-                        queue.add(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, 0, lightEmission));
+                        queue.offer(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, 0, lightEmission));
                     }
                     var lightDampening = blockStateData.lightDampening();
                     if (lightDampening == 0) continue;
@@ -112,7 +120,7 @@ public class AllayLightService implements LightService {
                     chunkLightDampening[(y - minHeight) >> 4].set(x, y & 0xf, z, lightDampening);
                     if (chunkLightHeightMap != null && chunkLightHeightMap.get(x, z) == minHeight) {
                         chunkLightHeightMap.set(x, z, (short) (y + 1));
-                        queue.add(() -> skyLightPropagator.setLightAndPropagate(finalX, finalY + 1, finalZ, 0, 15));
+                        queue.offer(() -> skyLightPropagator.setLightAndPropagate(finalX, finalY + 1, finalZ, 0, 15));
                     }
                 }
             }
@@ -142,13 +150,13 @@ public class AllayLightService implements LightService {
                     final var finalZ = (cz << 4) + oz != 0 ? 15 : i;
                     var blockLight = getBlockLight(finalX, finalY, finalZ);
                     if (blockLight != 0) {
-                        queue.add(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, blockLight, blockLight));
+                        queue.offer(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, blockLight, blockLight));
                     }
                     if (!hasSkyLight) continue;
 
                     var skyLightValue = get(skyLight, finalX, finalY, finalZ, 0);
                     if (skyLightValue != 0) {
-                        queue.add(() -> skyLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, skyLightValue, skyLightValue));
+                        queue.offer(() -> skyLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, skyLightValue, skyLightValue));
                     }
                 }
             }
@@ -208,7 +216,7 @@ public class AllayLightService implements LightService {
     }
 
     public void onBlockChange(int x, int y, int z, int lightEmission, int lightDampening) {
-        queue.add(() -> {
+        queue.offer(() -> {
             int oldLightHeight = hasSkyLight ? getLightHeight(x, z) : 0;
             var oldBlockDampening = getLightDampening(x, y, z);
             if (oldBlockDampening != lightDampening) {
@@ -232,11 +240,11 @@ public class AllayLightService implements LightService {
     }
 
     public void onChunkLoad(Chunk chunk) {
-        queue.add(() -> addChunk(chunk));
+        queue.offer(() -> addChunk(chunk));
     }
 
     public void onChunkUnload(Chunk chunk) {
-        queue.add(() -> {
+        queue.offer(() -> {
             var hash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
             lightDampening.remove(hash);
             blockLight.remove(hash);
