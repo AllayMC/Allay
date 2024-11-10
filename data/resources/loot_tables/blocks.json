@@ -31,7 +31,87 @@
       ]
     }
   ],
-  "minecraft:short_grass|minecraft:tall_grass|minecraft:fern|minecraft:large_fern": [
+  "minecraft:short_grass|minecraft:fern": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "empty",
+          "weight": 7
+        },
+        {
+          "type": "item",
+          "name": "minecraft:wheat_seeds",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "minecraft:tall_grass": [
+    {
+      "conditions": [
+        {
+          "condition": "match_tool",
+          "item": "minecraft:shears"
+        }
+      ],
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:short_grass",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 2,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "empty",
+          "weight": 7
+        },
+        {
+          "type": "item",
+          "name": "minecraft:wheat_seeds",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "minecraft:large_fern": [
+    {
+      "conditions": [
+        {
+          "condition": "match_tool",
+          "item": "minecraft:shears"
+        }
+      ],
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:fern",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 2,
+                "max": 2
+              }
+            }
+          ]
+        }
+      ]
+    },
     {
       "rolls": 1,
       "entries": [
