@@ -67,7 +67,8 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
 
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        if (blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT)) return false;
         // Don't drop if entity is null
-        return !blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT) || (entity != null && super.isDroppable(blockState, usedItem, entity));
+        return entity != null && super.isDroppable(blockState, usedItem, entity);
     }
 }
