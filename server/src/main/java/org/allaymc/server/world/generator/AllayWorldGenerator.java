@@ -13,11 +13,9 @@ import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorType;
 import org.allaymc.api.world.generator.context.EntitySpawnContext;
-import org.allaymc.api.world.generator.context.LightContext;
 import org.allaymc.api.world.generator.context.NoiseContext;
 import org.allaymc.api.world.generator.context.PopulateContext;
 import org.allaymc.api.world.generator.function.EntitySpawner;
-import org.allaymc.api.world.generator.function.Lighter;
 import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.server.AllayServer;
@@ -44,7 +42,6 @@ public class AllayWorldGenerator implements WorldGenerator {
     private final String preset;
     private final List<Noiser> noisers;
     private final List<Populator> populators;
-    private final List<Lighter> lighters;
     private final List<EntitySpawner> entitySpawners;
     private final Consumer<Dimension> onDimensionSet;
     private final Map<Long, CompletableFuture<Chunk>> chunkNoiseFutures = new Long2ObjectNonBlockingMap<>();
@@ -63,7 +60,6 @@ public class AllayWorldGenerator implements WorldGenerator {
             String preset,
             List<Noiser> noisers,
             List<Populator> populators,
-            List<Lighter> lighters,
             List<EntitySpawner> entitySpawners,
             Consumer<Dimension> onDimensionSet
     ) {
@@ -72,7 +68,6 @@ public class AllayWorldGenerator implements WorldGenerator {
         this.preset = preset;
         this.noisers = noisers;
         this.populators = populators;
-        this.lighters = lighters;
         this.entitySpawners = entitySpawners;
         this.onDimensionSet = onDimensionSet;
         this.populationQueueThread = Thread.ofVirtual()
@@ -85,7 +80,6 @@ public class AllayWorldGenerator implements WorldGenerator {
 
         this.noisers.forEach(noiser -> noiser.init(this));
         this.populators.forEach(populator -> populator.init(this));
-        this.lighters.forEach(lighter -> lighter.init(this));
         this.entitySpawners.forEach(entitySpawner -> entitySpawner.init(this));
     }
 
@@ -258,20 +252,6 @@ public class AllayWorldGenerator implements WorldGenerator {
     }
 
     private void statusPopulatedToFinished(Chunk chunk) {
-        // Bake lighting
-        var lightContext = new LightContext(chunk.toUnsafeChunk());
-        for (var lighter : lighters) {
-            try {
-                if (!lighter.apply(lightContext)) {
-                    log.error("Failed to light chunk {} with lighter {}", chunk, lighter.getName());
-                }
-            } catch (Throwable t) {
-                log.error("Error while lighting chunk {} with lighter {}", chunk, lighter.getName());
-            }
-        }
-
-        ((AllayChunk) chunk).setState(ChunkState.LIGHTED);
-
         // Spawn entities
         var entitySpawnContext = new EntitySpawnContext(chunk.toUnsafeChunk());
         for (var entitySpawner : entitySpawners) {
@@ -295,7 +275,6 @@ public class AllayWorldGenerator implements WorldGenerator {
         private String preset = "";
         private List<Noiser> noisers = List.of();
         private List<Populator> populators = List.of();
-        private List<Lighter> lighters = List.of();
         private List<EntitySpawner> entitySpawners = List.of();
         private Consumer<Dimension> onDimensionSet = dimension -> {};
 
@@ -324,11 +303,6 @@ public class AllayWorldGenerator implements WorldGenerator {
             return this;
         }
 
-        public AllayWorldGeneratorBuilder lighters(Lighter... lighters) {
-            this.lighters = List.of(lighters);
-            return this;
-        }
-
         public AllayWorldGeneratorBuilder entitySpawners(EntitySpawner... entitySpawners) {
             this.entitySpawners = List.of(entitySpawners);
             return this;
@@ -343,7 +317,7 @@ public class AllayWorldGenerator implements WorldGenerator {
             if (name == null || name.isBlank()) {
                 throw new IllegalStateException("Name cannot be null or blank");
             }
-            return new AllayWorldGenerator(name, type, preset, noisers, populators, lighters, entitySpawners, onDimensionSet);
+            return new AllayWorldGenerator(name, type, preset, noisers, populators, entitySpawners, onDimensionSet);
         }
     }
 
