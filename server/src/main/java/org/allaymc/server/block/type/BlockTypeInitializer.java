@@ -258,13 +258,13 @@ public final class BlockTypeInitializer {
                 .builder(BlockTallGrassBehavior.class)
                 .vanillaBlock(BlockId.TALL_GRASS)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockBaseComponentSupplier(blockType -> new BlockTallGrassBaseComponentImpl(blockType, ItemId.SHORT_GRASS)
+                .setBlockBaseComponentSupplier(blockType -> new BlockTallGrassBaseComponentImpl(blockType, ItemId.SHORT_GRASS))
                 .build();
         BlockTypes.LARGE_FERN = AllayBlockType
                 .builder(BlockLargeFernBehavior.class)
                 .vanillaBlock(BlockId.LARGE_FERN)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
-                .setBlockBaseComponentSupplier(blockType -> new BlockTallGrassBaseComponentImpl(blockType, ItemId.FERN)
+                .setBlockBaseComponentSupplier(blockType -> new BlockTallGrassBaseComponentImpl(blockType, ItemId.FERN))
                 .build();
     }
 
