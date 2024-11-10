@@ -8,12 +8,8 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.data.ItemId;
-import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
-
-import java.util.Set;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
 
@@ -23,11 +19,9 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK
  * @author daoge_cmd | Dhaiven
  */
 public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponentImpl {
-    protected final ItemId shearDrop;
 
-    public BlockTallGrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId shearDrop) {
+    public BlockTallGrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
-        this.shearDrop = shearDrop;
     }
 
     @Override
