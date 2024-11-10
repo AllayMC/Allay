@@ -28,7 +28,7 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
-import org.allaymc.server.datastruct.queue.BlockingQueueWrapper;
+import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;

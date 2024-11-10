@@ -21,7 +21,7 @@ import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
-import org.allaymc.server.datastruct.queue.BlockingQueueWrapper;
+import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 

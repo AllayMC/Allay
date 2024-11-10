@@ -1,4 +1,4 @@
-package org.allaymc.server.datastruct.queue;
+package org.allaymc.server.datastruct.collections.queue;
 
 import lombok.SneakyThrows;
 
@@ -12,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 public final class BlockingQueueWrapper<E> {
     private final Queue<E> queue;
     private final Semaphore availableItems;
-    private final Semaphore isEmpty;
 
     public static <E> BlockingQueueWrapper<E> wrap(Queue<E> queue) {
         return new BlockingQueueWrapper<>(queue);
@@ -22,7 +21,6 @@ public final class BlockingQueueWrapper<E> {
         this.queue = queue;
         // Start with 0 permits since queue is initially empty
         this.availableItems = new Semaphore(0);
-        this.isEmpty = new Semaphore(0);
     }
 
     public void offer(E e) {
