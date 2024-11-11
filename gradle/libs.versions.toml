@@ -1,7 +1,7 @@
 [versions]
 log4j = "2.24.1"
 commons-rng = "1.6"
-fastutil = "8.5.13"
+fastutil = "8.5.15"
 
 [libraries]
 # NBT
