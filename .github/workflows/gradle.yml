@@ -67,14 +67,14 @@ jobs:
         id: vars
         run: |
           SHADED_JAR=$(find server/build/libs -name "allay-server-*-shaded.jar" -print -quit)
-          echo "SHADED_JAR=$SHADED_JAR" >> $GITHUB_OUTPUT
+          echo "shaded_jar=$SHADED_JAR" >> $GITHUB_OUTPUT
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         if: success()
         with:
           name: allay-server
-          path: server/build/libs/${{ steps.vars.outputs.SHADED_JAR }}
+          path: ${{ steps.vars.outputs.shaded_jar }}
 
       - name: Publish to JitPack
         uses: fjogeleit/http-request-action@v1
@@ -96,7 +96,7 @@ jobs:
         with:
           upload_url: https://uploads.github.com/repos/AllayMC/Allay/releases/185111149/assets{?name,label}
           release_id: 185111149
-          asset_path: ./server/build/libs/${{ steps.vars.outputs.SHADED_JAR }}
+          asset_path: ./${{ steps.vars.outputs.shaded_jar }}
           asset_name: allay-nightly-$$.zip
           asset_content_type: application/zip
           max_releases: 1
@@ -114,7 +114,7 @@ jobs:
           port: ${{ secrets.TEST_SERVER_PORT }}
           key: ${{ secrets.TEST_SERVER_SSH_KEY }}
           passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
-          source: server/build/libs/${{ steps.vars.outputs.SHADED_JAR }}
+          source: ${{ steps.vars.outputs.shaded_jar }}
           strip_components: 3
           target: "/root/allaymc/tmp"
 
