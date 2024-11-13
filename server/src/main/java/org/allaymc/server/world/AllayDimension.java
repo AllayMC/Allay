@@ -52,23 +52,23 @@ public class AllayDimension implements Dimension {
     }
 
     public void startTick() {
-        chunkService.startTick();
+        this.chunkService.startTick();
         if (Server.SETTINGS.worldSettings().calculateLightAsync()) {
-            Server.getInstance().getComputeThreadPool().execute(() -> {
+            Thread.ofPlatform().name("Light Calculating Thread - " + this).start(() -> {
                 while (world.isRunning()) {
-                    lightService.tickIgnoreLimit();
+                    this.lightService.tickIgnoreLimit();
                 }
             });
         }
     }
 
     public void tick(long currentTick) {
-        chunkService.tick(currentTick);
-        entityService.tick();
-        entityPhysicsService.tick();
-        blockUpdateService.tick(currentTick);
+        this.chunkService.tick(currentTick);
+        this.entityService.tick();
+        this.entityPhysicsService.tick();
+        this.blockUpdateService.tick(currentTick);
         if (!Server.SETTINGS.worldSettings().calculateLightAsync()) {
-            lightService.tick();
+            this.lightService.tick();
         }
     }
 
@@ -78,9 +78,9 @@ public class AllayDimension implements Dimension {
 
     @Override
     public void addPlayer(EntityPlayer player, Runnable runnable) {
-        players.add(player);
-        chunkService.addChunkLoader(player);
-        entityService.addEntity(player, runnable);
+        this.players.add(player);
+        this.chunkService.addChunkLoader(player);
+        this.entityService.addEntity(player, runnable);
     }
 
     @Override
@@ -88,12 +88,12 @@ public class AllayDimension implements Dimension {
         if (player.isSpawned()) {
             // When the player respawns to another dimension after death, the player entity has already been unloaded
             // Therefore, when unloading the player entity, we need to check if the player entity has been spawned
-            entityService.removeEntity(player, runnable);
-            chunkService.removeChunkLoader(player);
-            players.remove(player);
+            this.entityService.removeEntity(player, runnable);
+            this.chunkService.removeChunkLoader(player);
+            this.players.remove(player);
         } else {
-            chunkService.removeChunkLoader(player);
-            players.remove(player);
+            this.chunkService.removeChunkLoader(player);
+            this.players.remove(player);
             // Run the callback directly
             runnable.run();
         }

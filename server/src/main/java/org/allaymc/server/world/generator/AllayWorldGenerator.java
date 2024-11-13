@@ -87,11 +87,11 @@ public class AllayWorldGenerator implements WorldGenerator {
             throw new IllegalStateException("Dimension already set");
         }
         this.dimension = dimension;
-        onDimensionSet.accept(dimension);
+        this.onDimensionSet.accept(dimension);
     }
 
     public void startTick() {
-        Server.getInstance().getVirtualThreadPool().execute(() -> {
+        Thread.ofPlatform().name("Population Queue Processing Thread").start(() -> {
             while (dimension.getWorld().isRunning()) {
                 processPopulationQueue();
             }

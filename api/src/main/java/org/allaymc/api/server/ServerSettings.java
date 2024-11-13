@@ -162,12 +162,12 @@ public class ServerSettings extends OkaeriConfig {
         private int spawnPointChunkRadius = 3;
 
         @Comment("Whether to calculate light asynchronously")
-        @Comment("If set to true, the server will calculate light in compute thread pool")
+        @Comment("If set to true, the server will calculate light in an independent thread")
         @CustomKey("calculate-light-async")
         private boolean calculateLightAsync = true;
 
         @Comment("Determines the maximum number of light updates that can be processed per tick")
-        @Comment("This only be effective when independent light thread is disabled")
+        @Comment("This only be effective when async light calculating is disabled")
         @CustomKey("max-light-update-count-per-tick")
         private int maxLightUpdateCountPerTick = 128;
 
