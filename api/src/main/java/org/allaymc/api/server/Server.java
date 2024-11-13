@@ -65,6 +65,9 @@ public interface Server extends TaskCreator, CommandSender {
      */
     long getStartTime();
 
+    /**
+     * Disconnect all players with the default reason.
+     */
     default void disconnectAllPlayers() {
         disconnectAllPlayers(TrKeys.M_DISCONNECT_CLOSED);
     }
