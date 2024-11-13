@@ -27,8 +27,8 @@ And if you have your java 21 installed correctly, the java version will be shown
 
 ## Download Allay
 
-Allay is currently in the development stage, so no release have been published yet.
-You can download the latest version of Allay from [GitHub Action](https://github.com/AllayMC/Allay/actions?query=branch%3Amaster).
+Allay is currently in the development stage, so no stable release have been published yet.
+You can download the latest version of Allay from [Nightly Build](https://github.com/AllayMC/Allay/releases/tag/nightly).
 
 ## Run Allay
 
