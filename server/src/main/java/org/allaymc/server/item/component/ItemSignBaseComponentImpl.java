@@ -16,6 +16,7 @@ import org.joml.Vector3ic;
 public class ItemSignBaseComponentImpl extends ItemBaseComponentImpl implements ItemSignBaseComponent {
 
     // NOTICE: We shouldn't use BlockType<?> here because item types are initialized earlier than block types.
+    // TODO: Replace with Identifier
     protected BlockId wallSignId;
     protected BlockId standingSignId;
 

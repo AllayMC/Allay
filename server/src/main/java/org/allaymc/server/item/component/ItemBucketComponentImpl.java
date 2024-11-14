@@ -25,6 +25,7 @@ import org.joml.Vector3ic;
 @Slf4j
 public class ItemBucketComponentImpl implements ItemBucketComponent {
 
+    // TODO: Replace with Identifier
     public final BlockId liquid;
     public final EntityId entity;
 
