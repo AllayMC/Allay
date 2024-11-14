@@ -162,6 +162,13 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
+    public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+        var event = new CItemUseOnBlockEvent(dimension, placeBlockPos, interactInfo, false);
+        manager.callEvent(event);
+        return event.isCanBeUsed();
+    }
+
+    @Override
     public boolean isFull() {
         return count == itemDataComponent.getItemData().maxStackSize();
     }
@@ -247,14 +254,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean canUseItemInAir(EntityPlayer player) {
-        var event = new CItemTryUseEvent(player, false);
+        var event = new CItemTryUseInAirEvent(player, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }
 
     @Override
     public boolean useItemInAir(EntityPlayer player, long usedTime) {
-        var event = new CItemUsedEvent(player, usedTime, false);
+        var event = new CItemUsedInAirEvent(player, usedTime, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }

@@ -7,8 +7,8 @@ import org.allaymc.api.eventbus.event.player.PlayerEatFoodEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemFoodComponent;
 import org.allaymc.server.component.annotation.ComponentedObject;
-import org.allaymc.server.item.component.event.CItemTryUseEvent;
-import org.allaymc.server.item.component.event.CItemUsedEvent;
+import org.allaymc.server.item.component.event.CItemTryUseInAirEvent;
+import org.allaymc.server.item.component.event.CItemUsedInAirEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 /**
@@ -49,12 +49,12 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
     }
 
     @EventHandler
-    protected void onTryUseItem(CItemTryUseEvent event) {
+    protected void onTryUseItem(CItemTryUseInAirEvent event) {
         event.setCanBeUsed(canBeAlwaysEaten() || event.getPlayer().canEat());
     }
 
     @EventHandler
-    protected void onItemUsed(CItemUsedEvent event) {
+    protected void onItemUsed(CItemUsedInAirEvent event) {
         if (event.getUsedTime() < eatingTime) {
             event.setCanBeUsed(false);
             return;

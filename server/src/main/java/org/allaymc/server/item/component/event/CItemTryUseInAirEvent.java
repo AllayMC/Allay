@@ -10,9 +10,9 @@ import org.allaymc.api.eventbus.event.Event;
  * @author daoge_cmd
  */
 @Getter
-@Setter
 @AllArgsConstructor
-public class CItemTryUseEvent extends Event {
+public class CItemTryUseInAirEvent extends Event {
     protected EntityPlayer player;
+    @Setter
     protected boolean canBeUsed;
 }

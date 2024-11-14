@@ -273,9 +273,7 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @return true if successfully used
      */
-    default boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        return false;
-    }
+    boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
 
     /**
      * Attempt to place a block using this item, regardless of whether this item is a block item.

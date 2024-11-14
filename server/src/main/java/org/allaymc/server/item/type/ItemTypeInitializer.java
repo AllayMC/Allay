@@ -2,6 +2,7 @@ package org.allaymc.server.item.type;
 
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.item.component.ItemArmorBaseComponent.ArmorType;
 import org.allaymc.api.item.component.tool.ItemAxeComponent;
 import org.allaymc.api.item.component.tool.ItemHoeComponent;
@@ -11,6 +12,7 @@ import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.interfaces.*;
 import org.allaymc.api.item.interfaces.axe.*;
 import org.allaymc.api.item.interfaces.boots.*;
+import org.allaymc.api.item.interfaces.bucket.*;
 import org.allaymc.api.item.interfaces.chestplate.*;
 import org.allaymc.api.item.interfaces.egg.*;
 import org.allaymc.api.item.interfaces.helmet.*;
@@ -1238,5 +1240,63 @@ public final class ItemTypeInitializer {
                 .vanillaItem(ItemId.WARPED_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.WARPED_WALL_SIGN, BlockId.WARPED_STANDING_SIGN), ItemSignBaseComponentImpl.class)
                 .build();
+    }
+
+    public static void initBuckets() {
+        ItemTypes.AXOLOTL_BUCKET = AllayItemType
+                .builder(ItemAxolotlBucketStack.class)
+                .vanillaItem(ItemId.AXOLOTL_BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.AXOLOTL), ItemBucketComponentImpl.class)
+                .build();
+        ItemTypes.BUCKET = AllayItemType
+                .builder(ItemBucketStack.class)
+                .vanillaItem(ItemId.BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.AIR, null), ItemBucketComponentImpl.class)
+                .build();
+        ItemTypes.COD_BUCKET = AllayItemType
+                .builder(ItemCodBucketStack.class)
+                .vanillaItem(ItemId.COD_BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.COD), ItemBucketComponentImpl.class)
+                .build();
+        ItemTypes.LAVA_BUCKET = AllayItemType
+                .builder(ItemLavaBucketStack.class)
+                .vanillaItem(ItemId.LAVA_BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.LAVA, null), ItemBucketComponentImpl.class)
+                .build();
+        ItemTypes.POWDER_SNOW_BUCKET = AllayItemType
+                .builder(ItemPowderSnowBucketStack.class)
+                .vanillaItem(ItemId.POWDER_SNOW_BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.POWDER_SNOW, null), ItemBucketComponentImpl.class)
+                .build();
+        ItemTypes.PUFFERFISH_BUCKET = AllayItemType
+                .builder(ItemPufferfishBucketStack.class)
+                .vanillaItem(ItemId.PUFFERFISH_BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.PUFFERFISH), ItemBucketComponentImpl.class)
+                .build();
+        ItemTypes.SALMON_BUCKET = AllayItemType
+                .builder(ItemSalmonBucketStack.class)
+                .vanillaItem(ItemId.SALMON_BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.SALMON), ItemBucketComponentImpl.class)
+                .build();
+        ItemTypes.TADPOLE_BUCKET = AllayItemType
+                .builder(ItemTadpoleBucketStack.class)
+                .vanillaItem(ItemId.TADPOLE_BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.TADPOLE), ItemBucketComponentImpl.class)
+                .build();
+        ItemTypes.TROPICAL_FISH_BUCKET = AllayItemType
+                .builder(ItemTropicalFishBucketStack.class)
+                .vanillaItem(ItemId.TROPICAL_FISH_BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.TROPICALFISH), ItemBucketComponentImpl.class)
+                .build();
+        ItemTypes.WATER_BUCKET = AllayItemType
+                .builder(ItemWaterBucketStack.class)
+                .vanillaItem(ItemId.WATER_BUCKET)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, null), ItemBucketComponentImpl.class)
+                .build();
+        // TODO: Milk bucket should be treated specially
+//        ItemTypes.MILK_BUCKET = AllayItemType
+//                .builder(ItemMilkBucketStack.class)
+//                .vanillaItem(ItemId.MILK_BUCKET)
+//                .build();
     }
 }
