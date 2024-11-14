@@ -204,6 +204,11 @@ public class AllayPluginManager implements PluginManager {
     }
 
     @Override
+    public PluginContainer getEnabledPlugin(String name) {
+        return enabledPlugins.get(name);
+    }
+
+    @Override
     public Map<String, PluginContainer> getEnabledPlugins() {
         return Collections.unmodifiableMap(enabledPlugins);
     }

@@ -20,9 +20,18 @@ public interface PluginManager {
      *
      * @param name the name of the plugin.
      *
-     * @return the plugin container.
+     * @return the plugin container, or {@code null} if not found.
      */
     PluginContainer getPlugin(String name);
+
+    /**
+     * Get an enabled plugin by name.
+     *
+     * @param name the name of the plugin.
+     *
+     * @return the plugin container, or {@code null} if not found.
+     */
+    PluginContainer getEnabledPlugin(String name);
 
     /**
      * Get all enabled plugins.
