@@ -15,6 +15,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 import org.joml.Vector3ic;
 
 import java.util.Map;
@@ -385,6 +386,17 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      */
     default boolean canReachBlock(Vector3ic pos) {
         return canReach(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f);
+    }
+
+    /**
+     * Check if the player can reach a point at the specified coordinates.
+     *
+     * @param pos The position of the point.
+     *
+     * @return Whether the player can reach the point.
+     */
+    default boolean canReach(Vector3fc pos) {
+        return canReach(pos.x(), pos.y(), pos.z());
     }
 
     /**

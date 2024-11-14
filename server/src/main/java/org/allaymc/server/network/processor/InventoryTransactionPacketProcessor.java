@@ -111,6 +111,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                     log.debug("Player {} try to attack a entity which doesn't exist! Entity id: {}", player.getOriginName(), packet.getRuntimeEntityId());
                     return;
                 }
+                if (!player.canReach(target.getLocation())) {
+                    return;
+                }
 
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
@@ -122,12 +125,13 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                         // Doesn't have damage component, can't attack
                         if (!(target instanceof EntityDamageComponent damageable)) return;
 
-                        // TODO: Check whether the player can touch the target entity or not (to prevent cheater)
                         var damage = itemInHand.calculateAttackDamage();
                         if (damage == 0) damage = 1;
 
                         var damageContainer = DamageContainer.entityAttack(player, damage);
-                        if (!damageable.attack(damageContainer)) return;
+                        if (!damageable.attack(damageContainer)) {
+                            return;
+                        }
 
                         itemInHand.onAttackEntity(player, target);
                     }
