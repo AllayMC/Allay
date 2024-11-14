@@ -114,8 +114,9 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
 
                 switch (packet.getActionType()) {
                     case ITEM_USE_ON_ENTITY_INTERACT -> {
-                        // TODO: add ItemStack#onInteractEntity()
-                        target.onInteract(player, itemInHand);
+                        if (!itemInHand.interactEntity(player, target)) {
+                            target.onInteract(player, itemInHand);
+                        }
                     }
                     case ITEM_USE_ON_ENTITY_ATTACK -> {
                         // Doesn't have damage component, can't attack
