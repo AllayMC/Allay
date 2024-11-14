@@ -2,19 +2,18 @@ package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockLiquidComponent;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
-import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.ItemBucketComponent;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3ic;
@@ -25,23 +24,22 @@ import org.joml.Vector3ic;
 @Slf4j
 public class ItemBucketComponentImpl implements ItemBucketComponent {
 
-    // TODO: Replace with Identifier
-    public final BlockId liquid;
-    public final EntityId entity;
+    public final Identifier liquidId;
+    public final Identifier entityId;
 
-    public ItemBucketComponentImpl(BlockId liquid, EntityId entity) {
-        this.liquid = liquid;
-        this.entity = entity;
+    public ItemBucketComponentImpl(Identifier liquidId, Identifier entityId) {
+        this.liquidId = liquidId;
+        this.entityId = entityId;
     }
 
     @Override
-    public BlockType<?> getLiquid() {
-        return liquid.getBlockType();
+    public BlockType<?> getLiquidType() {
+        return Registries.BLOCKS.get(liquidId);
     }
 
     @Override
-    public EntityType<?> getEntity() {
-        return entity == null ? null : Registries.ENTITIES.get(entity.getIdentifier());
+    public EntityType<?> getEntityType() {
+        return entityId == null ? null : Registries.ENTITIES.get(entityId);
     }
 
     @EventHandler
@@ -76,18 +74,18 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
 
         Vector3ic liquidPlacedPos = event.getPlaceBlockPos();
         if (blockState.getBlockStateData().canContainLiquid()) {
-            dimension.setBlockState(interactInfo.clickBlockPos(), getLiquid().getDefaultState(), 1);
+            dimension.setBlockState(interactInfo.clickBlockPos(), getLiquidType().getDefaultState(), 1);
             liquidPlacedPos = interactInfo.clickBlockPos();
         } else {
             var blockOnPlacePos = dimension.getBlockState(event.getPlaceBlockPos());
             if (blockOnPlacePos.getBlockType() == BlockTypes.AIR || blockOnPlacePos.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
-                dimension.setBlockState(event.getPlaceBlockPos(), getLiquid().getDefaultState(), 0);
+                dimension.setBlockState(event.getPlaceBlockPos(), getLiquidType().getDefaultState(), 0);
             } else if (blockOnPlacePos.getBlockStateData().canContainLiquid()) {
-                dimension.setBlockState(event.getPlaceBlockPos(), getLiquid().getDefaultState(), 1);
+                dimension.setBlockState(event.getPlaceBlockPos(), getLiquidType().getDefaultState(), 1);
             }
         }
 
-        var entity = getEntity();
+        var entity = getEntityType();
         if (entity != null) {
             var entityInstance = entity.createEntity(
                     EntityInitInfo.builder()

@@ -16,14 +16,14 @@ public interface ItemBucketComponent extends ItemComponent {
      *
      * @return the liquid inside the bucket, or air type if the bucket is empty.
      */
-    BlockType<?> getLiquid();
+    BlockType<?> getLiquidType();
 
     /**
      * Get the entity inside the bucket.
      *
      * @return the entity inside the bucket, or {@code null} if the bucket does not hold an entity.
      */
-    EntityType<?> getEntity();
+    EntityType<?> getEntityType();
 
     /**
      * Check if the bucket is empty.
@@ -31,6 +31,6 @@ public interface ItemBucketComponent extends ItemComponent {
      * @return {@code true} if the bucket is empty, {@code false} otherwise.
      */
     default boolean isEmpty() {
-        return getLiquid() == BlockTypes.AIR && getEntity() == null;
+        return getLiquidType() == BlockTypes.AIR && getEntityType() == null;
     }
 }

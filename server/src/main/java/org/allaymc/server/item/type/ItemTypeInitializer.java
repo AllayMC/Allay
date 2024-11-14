@@ -1188,57 +1188,57 @@ public final class ItemTypeInitializer {
         ItemTypes.ACACIA_SIGN = AllayItemType
                 .builder(ItemAcaciaSignStack.class)
                 .vanillaItem(ItemId.ACACIA_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.ACACIA_WALL_SIGN, BlockId.ACACIA_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.ACACIA_WALL_SIGN.getIdentifier(), BlockId.ACACIA_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.BAMBOO_SIGN = AllayItemType
                 .builder(ItemBambooSignStack.class)
                 .vanillaItem(ItemId.BAMBOO_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.BAMBOO_WALL_SIGN, BlockId.BAMBOO_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.BAMBOO_WALL_SIGN.getIdentifier(), BlockId.BAMBOO_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.BIRCH_SIGN = AllayItemType
                 .builder(ItemBirchSignStack.class)
                 .vanillaItem(ItemId.BIRCH_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.BIRCH_WALL_SIGN, BlockId.BIRCH_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.BIRCH_WALL_SIGN.getIdentifier(), BlockId.BIRCH_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.CHERRY_SIGN = AllayItemType
                 .builder(ItemCherrySignStack.class)
                 .vanillaItem(ItemId.CHERRY_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.CHERRY_WALL_SIGN, BlockId.CHERRY_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.CHERRY_WALL_SIGN.getIdentifier(), BlockId.CHERRY_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.CRIMSON_SIGN = AllayItemType
                 .builder(ItemCrimsonSignStack.class)
                 .vanillaItem(ItemId.CRIMSON_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.CRIMSON_WALL_SIGN, BlockId.CRIMSON_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.CRIMSON_WALL_SIGN.getIdentifier(), BlockId.CRIMSON_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.DARK_OAK_SIGN = AllayItemType
                 .builder(ItemDarkOakSignStack.class)
                 .vanillaItem(ItemId.DARK_OAK_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.DARKOAK_WALL_SIGN, BlockId.DARKOAK_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.DARKOAK_WALL_SIGN.getIdentifier(), BlockId.DARKOAK_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.JUNGLE_SIGN = AllayItemType
                 .builder(ItemJungleSignStack.class)
                 .vanillaItem(ItemId.JUNGLE_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.JUNGLE_WALL_SIGN, BlockId.JUNGLE_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.JUNGLE_WALL_SIGN.getIdentifier(), BlockId.JUNGLE_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.MANGROVE_SIGN = AllayItemType
                 .builder(ItemMangroveSignStack.class)
                 .vanillaItem(ItemId.MANGROVE_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.MANGROVE_WALL_SIGN, BlockId.MANGROVE_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.MANGROVE_WALL_SIGN.getIdentifier(), BlockId.MANGROVE_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.OAK_SIGN = AllayItemType
                 .builder(ItemOakSignStack.class)
                 .vanillaItem(ItemId.OAK_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.WALL_SIGN, BlockId.STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.WALL_SIGN.getIdentifier(), BlockId.STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.SPRUCE_SIGN = AllayItemType
                 .builder(ItemSpruceSignStack.class)
                 .vanillaItem(ItemId.SPRUCE_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.SPRUCE_WALL_SIGN, BlockId.SPRUCE_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.SPRUCE_WALL_SIGN.getIdentifier(), BlockId.SPRUCE_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.WARPED_SIGN = AllayItemType
                 .builder(ItemWarpedSignStack.class)
                 .vanillaItem(ItemId.WARPED_SIGN)
-                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.WARPED_WALL_SIGN, BlockId.WARPED_STANDING_SIGN), ItemSignBaseComponentImpl.class)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.WARPED_WALL_SIGN.getIdentifier(), BlockId.WARPED_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
     }
 
@@ -1246,52 +1246,52 @@ public final class ItemTypeInitializer {
         ItemTypes.AXOLOTL_BUCKET = AllayItemType
                 .builder(ItemAxolotlBucketStack.class)
                 .vanillaItem(ItemId.AXOLOTL_BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.AXOLOTL), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER.getIdentifier(), EntityId.AXOLOTL.getIdentifier()), ItemBucketComponentImpl.class)
                 .build();
         ItemTypes.BUCKET = AllayItemType
                 .builder(ItemBucketStack.class)
                 .vanillaItem(ItemId.BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.AIR, null), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.AIR.getIdentifier(), null), ItemBucketComponentImpl.class)
                 .build();
         ItemTypes.COD_BUCKET = AllayItemType
                 .builder(ItemCodBucketStack.class)
                 .vanillaItem(ItemId.COD_BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.COD), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER.getIdentifier(), EntityId.COD.getIdentifier()), ItemBucketComponentImpl.class)
                 .build();
         ItemTypes.LAVA_BUCKET = AllayItemType
                 .builder(ItemLavaBucketStack.class)
                 .vanillaItem(ItemId.LAVA_BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.LAVA, null), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.LAVA.getIdentifier(), null), ItemBucketComponentImpl.class)
                 .build();
         ItemTypes.POWDER_SNOW_BUCKET = AllayItemType
                 .builder(ItemPowderSnowBucketStack.class)
                 .vanillaItem(ItemId.POWDER_SNOW_BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.POWDER_SNOW, null), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.POWDER_SNOW.getIdentifier(), null), ItemBucketComponentImpl.class)
                 .build();
         ItemTypes.PUFFERFISH_BUCKET = AllayItemType
                 .builder(ItemPufferfishBucketStack.class)
                 .vanillaItem(ItemId.PUFFERFISH_BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.PUFFERFISH), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER.getIdentifier(), EntityId.PUFFERFISH.getIdentifier()), ItemBucketComponentImpl.class)
                 .build();
         ItemTypes.SALMON_BUCKET = AllayItemType
                 .builder(ItemSalmonBucketStack.class)
                 .vanillaItem(ItemId.SALMON_BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.SALMON), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER.getIdentifier(), EntityId.SALMON.getIdentifier()), ItemBucketComponentImpl.class)
                 .build();
         ItemTypes.TADPOLE_BUCKET = AllayItemType
                 .builder(ItemTadpoleBucketStack.class)
                 .vanillaItem(ItemId.TADPOLE_BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.TADPOLE), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER.getIdentifier(), EntityId.TADPOLE.getIdentifier()), ItemBucketComponentImpl.class)
                 .build();
         ItemTypes.TROPICAL_FISH_BUCKET = AllayItemType
                 .builder(ItemTropicalFishBucketStack.class)
                 .vanillaItem(ItemId.TROPICAL_FISH_BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, EntityId.TROPICALFISH), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER.getIdentifier(), EntityId.TROPICALFISH.getIdentifier()), ItemBucketComponentImpl.class)
                 .build();
         ItemTypes.WATER_BUCKET = AllayItemType
                 .builder(ItemWaterBucketStack.class)
                 .vanillaItem(ItemId.WATER_BUCKET)
-                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER, null), ItemBucketComponentImpl.class)
+                .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER.getIdentifier(), null), ItemBucketComponentImpl.class)
                 .build();
         // TODO: Milk bucket should be treated specially
 //        ItemTypes.MILK_BUCKET = AllayItemType
