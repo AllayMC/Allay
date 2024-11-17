@@ -2,7 +2,6 @@ package org.allaymc.server.item.component;
 
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.item.component.ItemSignBaseComponent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
