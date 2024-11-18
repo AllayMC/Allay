@@ -81,7 +81,7 @@ formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.11.3" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.14.2" }
 # Lombok
-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.34" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }
 # Random generator
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
