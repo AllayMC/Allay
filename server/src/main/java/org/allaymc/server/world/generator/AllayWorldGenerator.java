@@ -5,7 +5,6 @@ import io.netty.util.internal.PlatformDependent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
@@ -25,7 +24,10 @@ import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -146,7 +148,9 @@ public class AllayWorldGenerator implements WorldGenerator {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 var chunkHash = HashUtils.hashXZ(x + i, z + j);
-                if (populationLocks.contains(chunkHash)) return false;
+                if (populationLocks.contains(chunkHash)) {
+                    return false;
+                }
                 var noiseFuture = chunkNoiseFutures.get(chunkHash);
                 if (noiseFuture == null) {
                     // Chunk noise not generated
@@ -329,7 +333,7 @@ public class AllayWorldGenerator implements WorldGenerator {
         public Chunk getChunk(int x, int z) {
             if (x == currentChunk.getX() && z == currentChunk.getZ()) return currentChunk;
             if (!isInRange(x, z)) {
-//                log.warn("Attempted to access chunk out of range during chunk population stage! CurrentChunk: ({}. {}), RequestedChunk: ({}. {})", currentChunk.getX(), currentChunk.getZ(), x, z);
+                log.debug("Attempted to access chunk out of range during chunk population stage! CurrentChunk: ({}. {}), RequestedChunk: ({}. {})", currentChunk.getX(), currentChunk.getZ(), x, z);
                 return null;
             }
 
@@ -340,9 +344,9 @@ public class AllayWorldGenerator implements WorldGenerator {
                 return chunk;
             }
 
-            var loadedChunk = dimension.getChunkService().getChunk(x, z);
-            Preconditions.checkNotNull(loadedChunk);
-            return loadedChunk;
+            // The return chunk can also be null, because
+            // it may have been unloaded at this point
+            return dimension.getChunkService().getChunk(x, z);
         }
 
         private boolean isInRange(int x, int z) {
