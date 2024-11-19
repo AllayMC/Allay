@@ -93,6 +93,7 @@ jobs:
 
       - name: Update Nightly Build
         uses: WebFreak001/deploy-nightly@v3.1.0
+        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         with:
           upload_url: https://uploads.github.com/repos/AllayMC/Allay/releases/185111149/assets{?name,label}
           release_id: 185111149
