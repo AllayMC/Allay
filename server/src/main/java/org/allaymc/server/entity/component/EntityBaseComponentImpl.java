@@ -18,12 +18,12 @@ import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.i18n.TrContainer;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.component.annotation.*;
@@ -340,7 +340,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             if (newChunk == null) {
                 // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
                 // moving to an unloaded chunk will result in the loss of the entity
-                log.warn("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
+                log.debug("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
                 return false;
             }
 
