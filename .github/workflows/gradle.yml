@@ -102,35 +102,10 @@ jobs:
           asset_content_type: application/zip
           max_releases: 1
 
-      # TODO: Replace the following two tasks with a better method
-
-      - name: Copy Jar to Test Server
-        id: deploy-jar
-        uses: appleboy/scp-action@master
+      - name: Restart Test Server
+        uses: fjogeleit/http-request-action@v1
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         continue-on-error: true
         with:
-          host: ${{ secrets.TEST_SERVER_HOST }}
-          username: ${{ secrets.TEST_SERVER_USER_NAME }}
-          port: ${{ secrets.TEST_SERVER_PORT }}
-          key: ${{ secrets.TEST_SERVER_SSH_KEY }}
-          passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
-          source: ${{ steps.vars.outputs.shaded_jar }}
-          strip_components: 3
-          target: "/root/allaymc/tmp"
-
-      - name: Restart Test Server
-        uses: appleboy/ssh-action@master
-        if: steps.deploy-jar.outcome == 'success' && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        continue-on-error: true
-        with:
-          host: ${{ secrets.TEST_SERVER_HOST }}
-          username: ${{ secrets.TEST_SERVER_USER_NAME }}
-          key: ${{ secrets.TEST_SERVER_SSH_KEY }}
-          passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
-          port: ${{ secrets.TEST_SERVER_PORT }}
-          command_timeout: 60s
-          script: |
-            cd /root/allaymc
-            ./restart.sh
-            exit
+          url: 'http://${{ secrets.TEST_SERVER_HOST }}:${{ secrets.REMOTE_COMMAND_PORT }}/remotecommand?token=${{ secrets.REMOTE_COMMAND_TOKEN }}&command=stop'
+          method: 'POST'
