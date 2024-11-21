@@ -8,13 +8,13 @@ import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntityLoadNBTEvent;
 import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
-import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.nbt.NbtMap;
@@ -23,8 +23,8 @@ import org.cloudburstmc.nbt.NbtMap;
  * @author daoge_cmd
  */
 public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
-    @Identifier
-    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:block_entity_base_component");
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
 
     @Manager
     protected ComponentManager manager;

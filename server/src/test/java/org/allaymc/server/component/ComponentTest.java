@@ -3,7 +3,7 @@ package org.allaymc.server.component;
 import lombok.SneakyThrows;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentedObject;
-import org.allaymc.server.component.annotation.Identifier;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.impl.*;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.component.interfaces.*;
@@ -106,8 +106,8 @@ class ComponentTest {
 
     public static class SimpleNameComponentV2 extends SimpleNameComponent {
 
-        @Identifier
-        public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:name_component_2");
+        @Identifier.Component
+        public static final Identifier IDENTIFIER = new Identifier("minecraft:name_component_2");
 
         public SimpleNameComponentV2(String name) {
             super(name);

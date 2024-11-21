@@ -24,9 +24,13 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.component.annotation.*;
+import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -63,8 +67,8 @@ import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Fla
 @Slf4j
 public class EntityBaseComponentImpl implements EntityBaseComponent {
 
-    @Identifier
-    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:entity_base_component");
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
     public static final int DEFAULT_DEAD_TIMER = 20;
 

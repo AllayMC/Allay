@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
-import org.allaymc.server.component.annotation.Identifier;
+import org.allaymc.api.utils.Identifier;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,20 +31,22 @@ public interface ComponentProvider<T extends Component> {
         return of((info) -> singleton, singleton.getClass());
     }
 
-    static <P extends Component> Map<org.allaymc.api.utils.Identifier, ComponentProvider<? extends P>> toMap(List<ComponentProvider<? extends P>> componentProviders) {
-        var map = new HashMap<org.allaymc.api.utils.Identifier, ComponentProvider<? extends P>>();
+    static <P extends Component> Map<Identifier, ComponentProvider<? extends P>> toMap(List<ComponentProvider<? extends P>> componentProviders) {
+        var map = new HashMap<Identifier, ComponentProvider<? extends P>>();
         componentProviders.forEach(componentProvider -> {
             var id = componentProvider.findComponentIdentifier();
-            if (map.containsKey(id))
+            if (map.containsKey(id)) {
                 throw new IllegalArgumentException("Duplicate component: " + id);
+            }
+
             map.put(id, componentProvider);
         });
         return map;
     }
 
     @SneakyThrows
-    static org.allaymc.api.utils.Identifier findComponentIdentifier(Class<?> clazz) {
-        org.allaymc.api.utils.Identifier identifier = null;
+    static Identifier findComponentIdentifier(Class<?> clazz) {
+        Identifier identifier = null;
         while (identifier == null) {
             identifier = findComponentIdentifierInCertainClass(clazz);
             if (identifier == null) clazz = clazz.getSuperclass();
@@ -54,11 +56,11 @@ public interface ComponentProvider<T extends Component> {
     }
 
     @SneakyThrows
-    static org.allaymc.api.utils.Identifier findComponentIdentifierInCertainClass(Class<?> clazz) {
+    static Identifier findComponentIdentifierInCertainClass(Class<?> clazz) {
         for (var field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(Identifier.class) && org.allaymc.api.utils.Identifier.class == field.getType() && isStatic(field.getModifiers())) {
+            if (field.isAnnotationPresent(Identifier.Component.class) && Identifier.class == field.getType() && isStatic(field.getModifiers())) {
                 field.setAccessible(true);
-                return (org.allaymc.api.utils.Identifier) field.get(null);
+                return (Identifier) field.get(null);
             }
         }
         return null;
@@ -69,7 +71,7 @@ public interface ComponentProvider<T extends Component> {
     Class<?> getComponentClass();
 
     @SneakyThrows
-    default org.allaymc.api.utils.Identifier findComponentIdentifier() {
+    default Identifier findComponentIdentifier() {
         return findComponentIdentifier(getComponentClass());
     }
 

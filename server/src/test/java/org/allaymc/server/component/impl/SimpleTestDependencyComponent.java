@@ -1,16 +1,16 @@
 package org.allaymc.server.component.impl;
 
 import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.interfaces.TestDependencyComponent;
 
 /**
  * @author daoge_cmd
  */
 public class SimpleTestDependencyComponent implements TestDependencyComponent {
-    @Identifier
-    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:test_component");
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:test_component");
 
 
     @Dependency(identifier = "minecraft:name_component")

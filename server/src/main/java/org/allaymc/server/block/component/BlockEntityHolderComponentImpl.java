@@ -8,12 +8,12 @@ import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
-import org.allaymc.server.component.annotation.Identifier;
 
 /**
  * @author daoge_cmd
@@ -21,8 +21,8 @@ import org.allaymc.server.component.annotation.Identifier;
 @Slf4j
 @RequiredArgsConstructor
 public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements BlockEntityHolderComponent<T> {
-    @Identifier
-    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:block_entity_holder_component");
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_holder_component");
 
     @Getter
     protected final BlockEntityType<T> blockEntityType;
