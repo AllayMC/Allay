@@ -795,10 +795,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void syncVisibleEffects() {
-        long visibleEffects = 0L;
+        long visibleEffects = 0;
         for (var effect : this.effects.values()) {
-            if (!effect.isVisible()) continue;
-            visibleEffects |= 1L << effect.getType().getId();
+            if (!effect.isVisible()) {
+                continue;
+            }
+
+            visibleEffects = (visibleEffects << 7) | ((long) effect.getType().getId() << 1) | (effect.isAmbient() ? 1 : 0);
         }
 
         setAndSendEntityData(EntityDataTypes.VISIBLE_MOB_EFFECTS, visibleEffects);

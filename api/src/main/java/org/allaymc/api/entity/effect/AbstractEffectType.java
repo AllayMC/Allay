@@ -27,7 +27,7 @@ public abstract class AbstractEffectType implements EffectType {
     }
 
     @Override
-    public EffectInstance createInstance(int amplifier, int duration, boolean visible) {
-        return new EffectInstance(this, amplifier, duration, visible);
+    public EffectInstance createInstance(int amplifier, int duration, boolean ambient, boolean visible) {
+        return new EffectInstance(this, amplifier, duration, ambient, visible);
     }
 }
