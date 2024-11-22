@@ -30,6 +30,7 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
@@ -144,7 +145,7 @@ public class AllayWorld implements World {
                 if (entry.player.getWorld() != this) {
                     log.warn("Trying to handle sync packet in world {} which the player {} is not in!", this.getWorldData().getName(), entry.player.getOriginName());
                 }
-                entry.player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).handleDataPacket(entry.packet(), entry.time());
+                ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) entry.player).getPlayerNetworkComponent()).handleDataPacket(entry.packet(), entry.time());
                 count++;
 
             } while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.pollNow()) != null);

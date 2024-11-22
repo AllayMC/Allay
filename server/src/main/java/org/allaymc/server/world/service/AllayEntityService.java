@@ -8,6 +8,7 @@ import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
 import org.allaymc.api.world.service.EntityService;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.world.chunk.AllayChunk;
 
 import java.util.Queue;
@@ -46,8 +47,8 @@ public class AllayEntityService implements EntityService {
         entityPhysicsService.removeEntity(entity);
 
         entity.despawnFromAll();
-        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setWillBeDespawnedNextTick(false);
-        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setSpawned(false);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeDespawnedNextTick(false);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setSpawned(false);
     }
 
     private void addEntityImmediately(Entity entity) {
@@ -62,8 +63,8 @@ public class AllayEntityService implements EntityService {
         entity.spawnTo(chunk.getPlayerChunkLoaders());
 
         entityPhysicsService.addEntity(entity);
-        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setWillBeSpawnedNextTick(false);
-        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setSpawned(true);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeSpawnedNextTick(false);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setSpawned(true);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class AllayEntityService implements EntityService {
             return;
         }
 
-        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setWillBeSpawnedNextTick(true);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeSpawnedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
                 EntityUpdateType.ADD,
@@ -88,7 +89,7 @@ public class AllayEntityService implements EntityService {
             return;
         }
 
-        entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setWillBeDespawnedNextTick(true);
+        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeDespawnedNextTick(true);
         entityUpdateOperationQueue.add(new EntityUpdateOperation(
                 entity,
                 EntityUpdateType.REMOVE,

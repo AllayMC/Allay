@@ -4,6 +4,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.ResourcePackClientResponsePacket;
@@ -31,7 +32,7 @@ public class ResourcePackClientResponsePacketProcessor extends ILoginPacketProce
             case HAVE_ALL_PACKS ->
                     player.sendPacket(EntityPlayerNetworkComponentImpl.DeferredData.getResourcesPackStackPacket());
             case COMPLETED ->
-                    player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).initializePlayer();
+                    ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).initializePlayer();
             default -> player.disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
         }
     }

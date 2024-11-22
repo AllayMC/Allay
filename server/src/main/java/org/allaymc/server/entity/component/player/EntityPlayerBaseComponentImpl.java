@@ -54,6 +54,7 @@ import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.world.AllayWorld;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -630,7 +631,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             sendDimensionChangeSuccess();
         }
         chunk.spawnEntitiesTo(thisPlayer);
-        thisPlayer.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).onChunkInRangeSent();
+        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) thisPlayer).getPlayerNetworkComponent()).onChunkInRangeSent();
     }
 
     public void sendDimensionChangeSuccess() {

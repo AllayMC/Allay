@@ -20,7 +20,7 @@ public class BlockEntitySignImpl extends BlockEntityImpl implements BlockEntityS
 
     @Delegate
     @Override
-    protected BlockEntitySignBaseComponent getBaseComponent() {
+    public BlockEntitySignBaseComponent getBaseComponent() {
         return (BlockEntitySignBaseComponent) super.getBaseComponent();
     }
 }

@@ -1,6 +1,5 @@
 package org.allaymc.server.blockentity.impl;
 
-import lombok.Getter;
 import lombok.experimental.Delegate;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.component.BlockEntityFurnaceBaseComponent;
@@ -16,7 +15,6 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-@Getter
 public class BlockEntityFurnaceImpl extends BlockEntityImpl implements BlockEntityFurnace, BlockEntitySmoker, BlockEntityBlastFurnace {
     @Delegate
     protected BlockEntityContainerHolderComponent containerHolderComponent;
@@ -27,7 +25,7 @@ public class BlockEntityFurnaceImpl extends BlockEntityImpl implements BlockEnti
 
     @Delegate
     @Override
-    protected BlockEntityFurnaceBaseComponent getBaseComponent() {
+    public BlockEntityFurnaceBaseComponent getBaseComponent() {
         return (BlockEntityFurnaceBaseComponent) super.getBaseComponent();
     }
 }

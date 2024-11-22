@@ -27,6 +27,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
@@ -100,7 +101,7 @@ public class AllayNetworkServer implements NetworkServer {
 
                         var player = EntityTypes.PLAYER.createEntity(EntityInitInfo.builder().build());
                         log.info(I18n.get().tr(TrKeys.A_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
-                        player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).setClientSession(session);
+                        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).setClientSession(session);
                     }
                 })
                 .bind(bindAddress)

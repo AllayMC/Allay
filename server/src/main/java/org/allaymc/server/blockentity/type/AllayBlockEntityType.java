@@ -11,7 +11,6 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.component.interfaces.ComponentProvider;
-import org.allaymc.server.entity.type.EntityTypeBuildException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,8 +33,8 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
         this.name = name;
     }
 
-    public static <T extends BlockEntity> Builder builder(Class<T> interfaceClass) {
-        return new Builder(interfaceClass);
+    public static <T extends BlockEntity> Builder builder(Class<T> clazz) {
+        return new Builder(clazz);
     }
 
     @SneakyThrows
@@ -91,7 +90,7 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
             if (!componentProviders.containsKey(BlockEntityBaseComponentImpl.IDENTIFIER)) {
                 addComponent(BlockEntityBaseComponentImpl::new, BlockEntityBaseComponentImpl.class);
             }
-            if (name == null) throw new EntityTypeBuildException("name cannot be null!");
+            if (name == null) throw new BlockEntityTypeBuildException("name cannot be null!");
 
             Function<BlockEntityInitInfo, T> instanceCreator;
             try {
@@ -101,11 +100,11 @@ public class AllayBlockEntityType<T extends BlockEntity> implements BlockEntityT
                     try {
                         return (T) fastMemberConstructor.invoke(info, componentProviderList);
                     } catch (Throwable t) {
-                        throw new EntityTypeBuildException("Failed to create block entity instance!", t);
+                        throw new BlockEntityTypeBuildException("Failed to create block entity instance!", t);
                     }
                 };
             } catch (Exception e) {
-                throw new EntityTypeBuildException("Failed to create block entity type!", e);
+                throw new BlockEntityTypeBuildException("Failed to create block entity type!", e);
             }
 
             var type = new AllayBlockEntityType<>(instanceCreator, name);

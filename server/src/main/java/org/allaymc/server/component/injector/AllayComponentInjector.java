@@ -252,7 +252,6 @@ public class AllayComponentInjector<T> {
             return eventBus.callEvent(event);
         }
 
-        @Override
         public <T> T getComponent(Identifier componentIdentifier) {
             // noinspection unchecked
             return (T) components.get(componentIdentifier);

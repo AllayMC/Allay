@@ -1,6 +1,5 @@
 package org.allaymc.server.blockentity.impl;
 
-import lombok.Getter;
 import lombok.experimental.Delegate;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
@@ -13,7 +12,6 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-@Getter
 public class BlockEntityShulkerBoxImpl extends BlockEntityImpl implements BlockEntityShulkerBox {
     @Delegate
     protected BlockEntityContainerHolderComponent containerHolderComponent;

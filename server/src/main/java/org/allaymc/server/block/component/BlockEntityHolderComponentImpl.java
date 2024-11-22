@@ -14,6 +14,7 @@ import org.allaymc.server.block.component.event.CBlockOnNeighborUpdateEvent;
 import org.allaymc.server.block.component.event.CBlockOnPlaceEvent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
+import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 
 /**
  * @author daoge_cmd
@@ -33,7 +34,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
 
         createBlockEntity(pos, false);
         var blockEntity = getBlockEntity(pos);
-        blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onPlace(event);
+        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onPlace(event);
 
         // Send block entity to client after onPlace()
         // because onPlace() method may make some changes on this block entity
@@ -50,7 +51,7 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
             log.warn("Block entity not found at pos: {}", pos);
             return;
         }
-        blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onReplace(event);
+        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onReplace(event);
         removeBlockEntity(pos);
     }
 
@@ -58,13 +59,13 @@ public class BlockEntityHolderComponentImpl<T extends BlockEntity> implements Bl
     protected void onNeighborChanged(CBlockOnNeighborUpdateEvent event) {
         var pos = new Position3i(event.getCurrent().pos());
         var blockEntity = getBlockEntity(pos);
-        blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onNeighborUpdate(event);
+        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onNeighborUpdate(event);
     }
 
     @EventHandler
     protected void onInteract(CBlockOnInteractEvent event) {
         var pos = event.getInteractInfo().clickBlockPos();
         var blockEntity = getBlockEntity(pos.x(), pos.y(), pos.z(), event.getDimension());
-        blockEntity.getManager().<BlockEntityBaseComponentImpl>getComponent(BlockEntityBaseComponentImpl.IDENTIFIER).onInteract(event);
+        ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).onInteract(event);
     }
 }

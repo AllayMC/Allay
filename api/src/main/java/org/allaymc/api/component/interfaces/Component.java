@@ -1,8 +1,5 @@
 package org.allaymc.api.component.interfaces;
 
-import org.allaymc.api.component.annotation.DoNotInject;
-import org.jetbrains.annotations.ApiStatus;
-
 /**
  * Describe the implementation of a component.
  * <p>
@@ -16,10 +13,4 @@ import org.jetbrains.annotations.ApiStatus;
  * @author daoge_cmd
  */
 public interface Component {
-    // TODO: remove it
-    @DoNotInject
-    @ApiStatus.Internal
-    default ComponentManager getManager() {
-        throw new UnsupportedOperationException("You cannot call this method on component instance, please call it on componented object!");
-    }
 }

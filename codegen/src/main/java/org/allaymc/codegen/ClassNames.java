@@ -15,10 +15,14 @@ public interface ClassNames {
 
     // 3rd libs
     ClassName GETTER = ClassName.get("lombok", "Getter");
+    ClassName DELEGATE = ClassName.get("lombok.experimental", "Delegate");
 
     // allay
     ClassName API_IDENTIFIER = ClassName.get("org.allaymc.api.utils", "Identifier");
     ClassName DEP_IDENTIFIER = ClassName.get("org.allaymc.dependence", "Identifier");
+
+    ClassName COMPONENT = ClassName.get("org.allaymc.api.component.interfaces", "Component");
+    ClassName COMPONENT_PROVIDER = ClassName.get("org.allaymc.server.component.interfaces", "ComponentProvider");
 
     ClassName BLOCK_BEHAVIOR = ClassName.get("org.allaymc.api.block", "BlockBehavior");
     ClassName BLOCK_ID = ClassName.get("org.allaymc.api.block.data", "BlockId");
@@ -38,6 +42,8 @@ public interface ClassNames {
     ClassName BIOME_ARRAY = ClassName.get("org.allaymc.api.world.biome", "BiomeId[]");
 
     ClassName ENTITY = ClassName.get("org.allaymc.api.entity", "Entity");
+    ClassName ENTITY_IMPL = ClassName.get("org.allaymc.server.entity.impl", "EntityImpl");
+    ClassName ENTITY_INIT_INFO = ClassName.get("org.allaymc.api.entity.initinfo", "EntityInitInfo");
     ClassName ENTITY_ID = ClassName.get("org.allaymc.api.entity.data", "EntityId");
     ClassName ENTITY_TYPE = ClassName.get("org.allaymc.api.entity.type", "EntityType");
     ClassName ENTITY_TYPES = ClassName.get("org.allaymc.api.entity.type", "EntityTypes");
