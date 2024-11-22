@@ -48,7 +48,8 @@ public class MineBlockActionProcessor implements ContainerActionProcessor<MineBl
                                                 itemInHand.getCount(),
                                                 itemInHand.getStackNetworkId(),
                                                 itemInHand.getCustomName(),
-                                                itemInHand.getDurability()
+                                                itemInHand.getDurability(),
+                                                ""
                                         )
                                 ),
                                 new FullContainerName(container.getSlotType(handSlot), null)

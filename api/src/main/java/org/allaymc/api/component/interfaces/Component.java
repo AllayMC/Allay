@@ -16,6 +16,7 @@ import org.jetbrains.annotations.ApiStatus;
  * @author daoge_cmd
  */
 public interface Component {
+    // TODO: remove it
     @DoNotInject
     @ApiStatus.Internal
     default ComponentManager getManager() {

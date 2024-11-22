@@ -6,7 +6,7 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEatFoodEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemFoodComponent;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.item.component.event.CItemTryUseInAirEvent;
 import org.allaymc.server.item.component.event.CItemUsedInAirEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -23,7 +23,7 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
     private final float saturationPoints;
     private final int eatingTime;
 
-    @ComponentedObject
+    @ComponentObject
     protected ItemStack thisItemStack;
 
     public ItemFoodComponentImpl(int foodPoints, float saturationPoints) {

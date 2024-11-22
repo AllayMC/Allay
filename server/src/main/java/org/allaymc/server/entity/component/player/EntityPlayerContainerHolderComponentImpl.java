@@ -9,7 +9,7 @@ import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.EntityContainerHolderComponentImpl;
 import org.allaymc.server.item.enchantment.EnchantmentOptionGenerator;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
@@ -19,7 +19,7 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayerEnchantOptionsPacket;
  */
 public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHolderComponentImpl implements EntityPlayerContainerHolderComponent {
 
-    @ComponentedObject
+    @ComponentObject
     private EntityPlayer thisPlayer;
 
     public EntityPlayerContainerHolderComponentImpl() {

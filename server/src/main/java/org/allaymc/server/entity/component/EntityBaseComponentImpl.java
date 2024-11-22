@@ -27,7 +27,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
@@ -88,7 +88,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected long uniqueId = Long.MAX_VALUE;
     @Manager
     protected ComponentManager manager;
-    @ComponentedObject
+    @ComponentObject
     protected Entity thisEntity;
     @Dependency(soft = true)
     protected EntityAttributeComponent attributeComponent;

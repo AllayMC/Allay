@@ -333,7 +333,7 @@ public class AllayComponentInjector<T> {
         protected void injectComponentedObject(T instance, List<? extends Component> componentList) {
             for (var component : componentList) {
                 ReflectionUtils.getAllFields(component.getClass()).stream()
-                        .filter(field -> field.isAnnotationPresent(ComponentedObject.class))
+                        .filter(field -> field.isAnnotationPresent(ComponentObject.class))
                         .forEach(field -> {
                             try {
                                 field.setAccessible(true);
@@ -365,7 +365,6 @@ public class AllayComponentInjector<T> {
         protected void injectComponentInstances(Object instance, List<? extends Component> componentList) {
             try {
                 for (int index = 0; index < componentList.size(); index++) {
-                    var provider = componentProviders.get(index);
                     var component = componentList.get(index);
                     injectDependency(componentList, component);
                     var field = instance.getClass().getDeclaredField("f" + index);

@@ -10,7 +10,7 @@ import org.allaymc.api.eventbus.event.player.PlayerExperienceLevelChangeEvent;
 import org.allaymc.api.eventbus.event.player.PlayerExperienceProgressChangeEvent;
 import org.allaymc.api.eventbus.event.player.PlayerFoodLevelChangeEvent;
 import org.allaymc.api.world.Difficulty;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.entity.component.EntityAttributeComponentImpl;
 import org.allaymc.server.entity.component.event.*;
@@ -28,7 +28,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     protected float swimDistance = 0;
     protected float sprintDistance = 0;
 
-    @ComponentedObject
+    @ComponentObject
     private EntityPlayer thisPlayer;
 
     private int foodTickTimer;

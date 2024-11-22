@@ -124,7 +124,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                 resultDestItem.getCount(),
                                 resultDestItem.getStackNetworkId(),
                                 resultDestItem.getCustomName(),
-                                resultDestItem.getDurability()
+                                resultDestItem.getDurability(),
+                                ""
                         )
                 ),
                 new FullContainerName(destination.getSlotType(destinationSlot), null)
@@ -142,7 +143,8 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                                             resultSourItem.getCount(),
                                             resultSourItem.getStackNetworkId(),
                                             resultSourItem.getCustomName(),
-                                            resultSourItem.getDurability()
+                                            resultSourItem.getDurability(),
+                                            ""
                                     )
                             ),
                             new FullContainerName(source.getSlotType(sourceSlot), null)

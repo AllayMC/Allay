@@ -27,7 +27,7 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
@@ -87,7 +87,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected AtomicInteger fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
     @Manager
     protected ComponentManager manager;
-    @ComponentedObject
+    @ComponentObject
     protected EntityPlayer thisPlayer;
     @Getter
     @Setter

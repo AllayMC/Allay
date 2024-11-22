@@ -21,7 +21,7 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.nbt.NbtMap;
@@ -38,7 +38,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     @Dependency
     protected BlockEntityContainerHolderComponent containerHolderComponent;
-    @ComponentedObject
+    @ComponentObject
     protected BlockEntityFurnace thisBlockEntityFurnace;
 
     @Getter

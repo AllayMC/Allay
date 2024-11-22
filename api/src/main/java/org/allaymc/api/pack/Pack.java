@@ -118,7 +118,7 @@ public abstract class Pack implements AutoCloseable {
 
     public ResourcePacksInfoPacket.Entry toEntryInfo() {
         return new ResourcePacksInfoPacket.Entry(
-                this.getId().toString(),
+                this.getId(),
                 this.getStringVersion(),
                 this.getSize(),
                 this.getContentKey(),

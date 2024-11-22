@@ -8,5 +8,6 @@ package org.allaymc.api.component.interfaces;
  *
  * @author daoge_cmd
  */
+// TODO: remove it
 public interface ComponentedObject {
 }
