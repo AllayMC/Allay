@@ -7,7 +7,7 @@ fastutil = "8.5.15"
 # NBT
 nbt = { group = "org.allaymc", name = "NBT", version = "3.0.9" }
 # Network protocol
-network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta5" }
+network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta5-SNAPSHOT" }
 # State Updater
 stateupdater = { group = "org.allaymc", name = "stateupdater", version = "1.21.40" }
 # Collections

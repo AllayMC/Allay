@@ -49,7 +49,7 @@ public class EntityClassGen extends BaseClassGen {
             }
 
             var implSimpleName = generateClassSimpleName(id) + "Impl";
-            var implFullName = generateClassFullName("org.allaymc.server.entity.impl", implSimpleName);
+            var implFullName = ClassName.get("org.allaymc.server.entity.impl", implSimpleName);
             var implPath = implDir.resolve(implSimpleName + ".java");
             if (!Files.exists(implPath)) {
                 System.out.println("Generating " + implSimpleName + "...");
@@ -108,14 +108,7 @@ public class EntityClassGen extends BaseClassGen {
     }
 
     private static ClassName generateClassFullName(EntityId id) {
-        return generateClassFullName("org.allaymc.api.entity.interfaces", id);
+        return ClassName.get("org.allaymc.api.entity.interfaces", generateClassSimpleName(id));
     }
 
-    private static ClassName generateClassFullName(String packageName, String id) {
-        return ClassName.get(packageName, id);
-    }
-
-    private static ClassName generateClassFullName(String packageName, EntityId id) {
-        return ClassName.get(packageName, generateClassSimpleName(id));
-    }
 }

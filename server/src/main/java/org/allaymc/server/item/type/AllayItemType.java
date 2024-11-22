@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import me.sunlan.fastreflection.FastConstructor;
-import me.sunlan.fastreflection.FastMemberLoader;
 import org.allaymc.api.block.type.BlockType;
-import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemComponent;
 import org.allaymc.api.item.data.ItemId;
@@ -16,12 +14,9 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.BlockAndItemIdMapper;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.Allay;
-import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.item.component.ItemBaseComponentImpl;
 import org.allaymc.server.item.component.ItemDataComponentImpl;
-import org.allaymc.server.utils.ComponentClassCacheUtils;
 
 import java.util.*;
 import java.util.function.Function;
@@ -39,26 +34,26 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     private final int runtimeId;
     @Getter
     private final Set<ItemTag> itemTags;
-    private final FastConstructor<T> constructor;
+    private final Function<ItemStackInitInfo, T> instanceCreator;
 
     private BlockType<?> blockTypeCache;
     private boolean haveTriedInitBlockTypeCache;
 
     @SneakyThrows
     private AllayItemType(
-            FastConstructor<T> constructor,
+            Function<ItemStackInitInfo, T> instanceCreator,
             Identifier identifier,
             int runtimeId,
             Set<ItemTag> itemTags
     ) {
-        this.constructor = constructor;
+        this.instanceCreator = instanceCreator;
         this.identifier = identifier;
         this.runtimeId = runtimeId;
         this.itemTags = itemTags;
     }
 
-    public static <T extends ItemStack> Builder<T> builder(Class<T> interfaceClass) {
-        return new Builder<>(interfaceClass);
+    public static <T extends ItemStack> Builder builder(Class<T> interfaceClass) {
+        return new Builder(interfaceClass);
     }
 
     @SneakyThrows
@@ -66,7 +61,7 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     public T createItemStack(ItemStackInitInfo info) {
         // "info" for ItemAirType is useless and can be null
         if (info != null) info.setItemType(this);
-        return (T) constructor.invoke(info);
+        return instanceCreator.apply(info);
     }
 
     @Override
@@ -82,32 +77,32 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
     }
 
     @ToString
-    public static class Builder<T extends ItemStack> {
+    public static class Builder {
 
         protected static int CUSTOM_ITEM_RUNTIME_ID_COUNTER = 10000;
 
-        protected Class<T> interfaceClass;
+        protected Class<?> clazz;
         protected Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders = new HashMap<>();
         protected Identifier identifier;
         protected int runtimeId = Integer.MAX_VALUE;
         protected Set<ItemTag> itemTags = Set.of();
 
-        public Builder(Class<T> interfaceClass) {
-            if (interfaceClass == null)
+        public Builder(Class<?> clazz) {
+            if (clazz == null)
                 throw new ItemTypeBuildException("Interface class cannot be null!");
-            this.interfaceClass = interfaceClass;
+            this.clazz = clazz;
         }
 
-        public Builder<T> identifier(Identifier identifier) {
+        public Builder identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
-        public Builder<T> identifier(String identifier) {
+        public Builder identifier(String identifier) {
             return identifier(new Identifier(identifier));
         }
 
-        public Builder<T> vanillaItem(ItemId itemId) {
+        public Builder vanillaItem(ItemId itemId) {
             this.identifier = itemId.getIdentifier();
             this.runtimeId = itemId.getRuntimeId();
 
@@ -125,50 +120,50 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             return this;
         }
 
-        public Builder<T> runtimeId(int runtimeId) {
+        public Builder runtimeId(int runtimeId) {
             this.runtimeId = runtimeId;
             return this;
         }
 
-        public Builder<T> setComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
+        public Builder setComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
             return setComponents(toMap(componentProviders));
         }
 
-        public Builder<T> setComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
+        public Builder setComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
             this.componentProviders = new HashMap<>(componentProviders);
             return this;
         }
 
-        public Builder<T> addComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
+        public Builder addComponents(Map<Identifier, ComponentProvider<? extends ItemComponent>> componentProviders) {
             this.componentProviders.putAll(componentProviders);
             return this;
         }
 
-        public Builder<T> addComponent(Function<ItemStackInitInfo, ? extends ItemComponent> provider, Class<?> componentClass) {
+        public Builder addComponent(Function<ItemStackInitInfo, ? extends ItemComponent> provider, Class<?> componentClass) {
             var p = new ComponentProvider.SimpleComponentProvider<>(provider, componentClass);
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
-        public Builder<T> addComponent(ComponentProvider<? extends ItemComponent> p) {
+        public Builder addComponent(ComponentProvider<? extends ItemComponent> p) {
             this.componentProviders.put(p.findComponentIdentifier(), p);
             return this;
         }
 
-        public Builder<T> addComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
+        public Builder addComponents(List<ComponentProvider<? extends ItemComponent>> componentProviders) {
             return addComponents(toMap(componentProviders));
         }
 
-        public Builder<T> addComponent(Supplier<? extends ItemComponent> supplier, Class<?> componentClass) {
+        public Builder addComponent(Supplier<? extends ItemComponent> supplier, Class<?> componentClass) {
             return addComponent($ -> supplier.get(), componentClass);
         }
 
-        public Builder<T> setItemTags(ItemTag... itemTags) {
+        public Builder setItemTags(ItemTag... itemTags) {
             this.itemTags = Set.of(itemTags);
             return this;
         }
 
-        public ItemType<T> build() {
+        public <T extends ItemStack> ItemType<T> build() {
             if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER))
                 addComponent(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class);
             if (!componentProviders.containsKey(ItemDataComponentImpl.IDENTIFIER))
@@ -177,25 +172,22 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
             if (identifier == null) throw new ItemTypeBuildException("identifier cannot be null!");
             if (runtimeId == Integer.MAX_VALUE) runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
 
-            FastConstructor<T> constructor;
+            Function<ItemStackInitInfo, T> instanceCreator;
             try {
-                var injectedClass = new AllayComponentInjector<T>()
-                        .interfaceClass(interfaceClass)
-                        .component(new ArrayList<>(componentProviders.values()))
-                        .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
-                        .inject(false);
-
-                var fastMemberLoader = new FastMemberLoader(Allay.EXTRA_RESOURCE_CLASS_LOADER);
-                constructor = FastConstructor.create(
-                        injectedClass.getConstructor(ComponentInitInfo.class),
-                        fastMemberLoader,
-                        false
-                );
+                var fastMemberConstructor = FastConstructor.create(clazz.getConstructors()[0]);
+                var componentProviderList = new ArrayList<>(componentProviders.values());
+                instanceCreator = info -> {
+                    try {
+                        return (T) fastMemberConstructor.invoke(info, componentProviderList);
+                    } catch (Throwable t) {
+                        throw new ItemTypeBuildException("Failed to create item stack instance!", t);
+                    }
+                };
             } catch (Exception e) {
                 throw new ItemTypeBuildException("Failed to create item type!", e);
             }
 
-            var type = new AllayItemType<>(constructor, identifier, runtimeId, itemTags);
+            var type = new AllayItemType<>(instanceCreator, identifier, runtimeId, itemTags);
             Registries.ITEMS.register(identifier, type);
             return type;
         }

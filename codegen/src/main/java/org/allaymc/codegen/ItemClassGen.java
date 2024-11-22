@@ -31,7 +31,13 @@ public class ItemClassGen extends BaseClassGen {
     public static void generate() {
         registerSubPackages();
         var interfaceDir = Path.of("api/src/main/java/org/allaymc/api/item/interfaces");
-        if (!Files.exists(interfaceDir)) Files.createDirectories(interfaceDir);
+        if (!Files.exists(interfaceDir)) {
+            Files.createDirectories(interfaceDir);
+        }
+        var implDir = Path.of("server/src/main/java/org/allaymc/server/item/impl");
+        if (!Files.exists(implDir)) {
+            Files.createDirectories(implDir);
+        }
         var typesClass = TypeSpec
                 .classBuilder(ClassNames.ITEM_TYPES)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
@@ -43,18 +49,31 @@ public class ItemClassGen extends BaseClassGen {
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             .build()
             );
-            var itemClassSimpleName = generateClassSimpleName(id);
-            var itemClassFullName = generateClassFullName(id);
-            var folderName = tryFindSpecifiedFolderName(itemClassSimpleName);
-            var folderPath = folderName != null ? interfaceDir.resolve(folderName) : interfaceDir;
-            var path = folderPath.resolve(itemClassSimpleName + ".java");
-            if (!Files.exists(path)) {
-                System.out.println("Generating " + itemClassSimpleName + "...");
-                if (!Files.exists(folderPath))
-                    Files.createDirectories(folderPath);
-                generateInterface(ClassNames.ITEM_STACK, itemClassFullName, path);
+
+            var interfaceSimpleName = generateClassSimpleName(id);
+            var interfaceFullName = generateClassFullName(id);
+            var folderName = tryFindSpecifiedFolderName(interfaceSimpleName);
+            var interfacePath = (folderName != null ? interfaceDir.resolve(folderName) : interfaceDir).resolve(interfaceSimpleName + ".java");
+            if (!Files.exists(interfacePath)) {
+                System.out.println("Generating " + interfaceSimpleName + "...");
+                if (!Files.exists(folderName != null ? interfaceDir.resolve(folderName) : interfaceDir)) {
+                    Files.createDirectories(folderName != null ? interfaceDir.resolve(folderName) : interfaceDir);
+                }
+                generateInterface(ClassNames.ITEM_STACK, interfaceFullName, interfacePath);
             }
-            addDefaultItemTypeInitializer(id, itemClassFullName);
+
+            var implSimpleName = generateClassSimpleName(id) + "Impl";
+            var implFullName = ClassName.get("org.allaymc.server.item.impl" + (folderName != null ? "." + folderName : ""), implSimpleName);
+            var implPath = folderName != null ? implDir.resolve(folderName).resolve(implSimpleName + ".java") : implDir.resolve(implSimpleName + ".java");
+            if (!Files.exists(implPath)) {
+                System.out.println("Generating " + implSimpleName + "...");
+                if (!Files.exists(folderName != null ? implDir.resolve(folderName) : implDir)) {
+                    Files.createDirectories(folderName != null ? implDir.resolve(folderName) : implDir);
+                }
+                generateImpl(ClassNames.ITEM_STACK_IMPL, interfaceFullName, implFullName, ClassNames.ITEM_STACK_INIT_INFO, implPath);
+            }
+
+            addDefaultItemTypeInitializer(id, implFullName);
         }
         generateDefaultItemTypeInitializer();
         var javaFile = JavaFile.builder(ClassNames.ITEM_TYPES.packageName(), typesClass.build())
@@ -97,12 +116,6 @@ public class ItemClassGen extends BaseClassGen {
         Files.writeString(filePath, javaFile.toString());
     }
 
-    private static ClassName generateClassFullName(ItemId id) {
-        var simpleName = generateClassSimpleName(id);
-        var folderName = tryFindSpecifiedFolderName(simpleName);
-        return ClassName.get("org.allaymc.api.item.interfaces" + (folderName != null ? "." + folderName : ""), simpleName);
-    }
-
     private static String generateClassSimpleName(ItemId id) {
         // The Windows environment is not case-sensitive, so some item IDs need to be specially processed.
         // netherbrick and nether_brick require special handling
@@ -112,8 +125,14 @@ public class ItemClassGen extends BaseClassGen {
         return "Item" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_")) + "Stack";
     }
 
+    private static ClassName generateClassFullName(ItemId id) {
+        var simpleName = generateClassSimpleName(id);
+        var folderName = tryFindSpecifiedFolderName(simpleName);
+        return ClassName.get("org.allaymc.api.item.interfaces" + (folderName != null ? "." + folderName : ""), simpleName);
+    }
+
     private static String generateInitializerMethodName(ItemId id) {
-        // 同上
+        // Same to above
         if (id == ItemId.NETHERBRICK) return "initNetherbrick0";
         if (id == ItemId.TALLGRASS) return "initTallgrass0";
         return "init" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_"));

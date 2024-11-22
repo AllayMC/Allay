@@ -30,6 +30,7 @@ import org.allaymc.server.block.component.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.item.impl.ItemBlockImpl;
 import org.allaymc.server.item.type.AllayItemType;
 import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
@@ -504,7 +505,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             if (itemType == null) {
                 // If the corresponding block item is not explicitly registered, automatically register one
                 itemType = AllayItemType
-                        .builder(ItemStack.class)
+                        .builder(ItemBlockImpl.class)
                         .identifier(itemId)
                         .build();
                 hardItemType = itemType;
@@ -515,7 +516,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 hardItemType = Registries.ITEMS.get(hardItemId);
                 if (hardItemType == null) {
                     hardItemType = AllayItemType
-                            .builder(ItemStack.class)
+                            .builder(ItemBlockImpl.class)
                             .identifier(hardItemId)
                             .build();
                 }

@@ -1,0 +1,15 @@
+package org.allaymc.server.item.impl.concretepowder;
+
+import java.util.List;
+import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.item.interfaces.concretepowder.ItemMagentaConcretePowderStack;
+import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.item.impl.ItemStackImpl;
+
+public class ItemMagentaConcretePowderStackImpl extends ItemStackImpl implements ItemMagentaConcretePowderStack {
+    public ItemMagentaConcretePowderStackImpl(ItemStackInitInfo initInfo,
+            List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);;
+    }
+}
