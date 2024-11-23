@@ -164,10 +164,12 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         }
 
         public <T extends ItemStack> ItemType<T> build() {
-            if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER))
+            if (!componentProviders.containsKey(ItemBaseComponentImpl.IDENTIFIER)) {
                 addComponent(ItemBaseComponentImpl::new, ItemBaseComponentImpl.class);
-            if (!componentProviders.containsKey(ItemDataComponentImpl.IDENTIFIER))
+            }
+            if (!componentProviders.containsKey(ItemDataComponentImpl.IDENTIFIER)) {
                 addComponent($ -> ItemDataComponentImpl.ofDefault(), ItemDataComponentImpl.class);
+            }
 
             if (identifier == null) throw new ItemTypeBuildException("identifier cannot be null!");
             if (runtimeId == Integer.MAX_VALUE) runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
