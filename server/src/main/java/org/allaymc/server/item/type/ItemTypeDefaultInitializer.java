@@ -189,6 +189,7 @@ import org.allaymc.server.item.impl.ItemDiscFragment5StackImpl;
 import org.allaymc.server.item.impl.ItemDispenserStackImpl;
 import org.allaymc.server.item.impl.ItemDoublePlantStackImpl;
 import org.allaymc.server.item.impl.ItemDragonBreathStackImpl;
+import org.allaymc.server.item.impl.ItemDragonEggStackImpl;
 import org.allaymc.server.item.impl.ItemDriedKelpBlockStackImpl;
 import org.allaymc.server.item.impl.ItemDriedKelpStackImpl;
 import org.allaymc.server.item.impl.ItemDripstoneBlockStackImpl;
@@ -196,6 +197,7 @@ import org.allaymc.server.item.impl.ItemDropperStackImpl;
 import org.allaymc.server.item.impl.ItemDuneArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemDyeStackImpl;
 import org.allaymc.server.item.impl.ItemEchoShardStackImpl;
+import org.allaymc.server.item.impl.ItemEggStackImpl;
 import org.allaymc.server.item.impl.ItemElytraStackImpl;
 import org.allaymc.server.item.impl.ItemEmeraldBlockStackImpl;
 import org.allaymc.server.item.impl.ItemEmeraldOreStackImpl;
@@ -375,6 +377,7 @@ import org.allaymc.server.item.impl.ItemMelonStemStackImpl;
 import org.allaymc.server.item.impl.ItemMinerPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemMobSpawnerStackImpl;
 import org.allaymc.server.item.impl.ItemMojangBannerPatternStackImpl;
+import org.allaymc.server.item.impl.ItemMonsterEggStackImpl;
 import org.allaymc.server.item.impl.ItemMossBlockStackImpl;
 import org.allaymc.server.item.impl.ItemMossyCobblestoneStackImpl;
 import org.allaymc.server.item.impl.ItemMournerPotterySherdStackImpl;
@@ -526,6 +529,7 @@ import org.allaymc.server.item.impl.ItemSmokerStackImpl;
 import org.allaymc.server.item.impl.ItemSmoothBasaltStackImpl;
 import org.allaymc.server.item.impl.ItemSmoothQuartzStackImpl;
 import org.allaymc.server.item.impl.ItemSmoothStoneStackImpl;
+import org.allaymc.server.item.impl.ItemSnifferEggStackImpl;
 import org.allaymc.server.item.impl.ItemSnortPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemSnoutArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemSnowLayerStackImpl;
@@ -578,6 +582,7 @@ import org.allaymc.server.item.impl.ItemTripWireStackImpl;
 import org.allaymc.server.item.impl.ItemTripwireHookStackImpl;
 import org.allaymc.server.item.impl.ItemTropicalFishStackImpl;
 import org.allaymc.server.item.impl.ItemTuffStackImpl;
+import org.allaymc.server.item.impl.ItemTurtleEggStackImpl;
 import org.allaymc.server.item.impl.ItemTurtleScuteStackImpl;
 import org.allaymc.server.item.impl.ItemTwistingVinesStackImpl;
 import org.allaymc.server.item.impl.ItemUnknownStackImpl;
@@ -677,17 +682,6 @@ import org.allaymc.server.item.impl.bricks.ItemPrismarineBricksStackImpl;
 import org.allaymc.server.item.impl.bricks.ItemQuartzBricksStackImpl;
 import org.allaymc.server.item.impl.bricks.ItemStoneBricksStackImpl;
 import org.allaymc.server.item.impl.bricks.ItemTuffBricksStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemAxolotlBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemCodBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemLavaBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemMilkBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemPowderSnowBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemPufferfishBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemSalmonBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemTadpoleBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemTropicalFishBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemWaterBucketStackImpl;
 import org.allaymc.server.item.impl.bundle.ItemBlackBundleStackImpl;
 import org.allaymc.server.item.impl.bundle.ItemBlueBundleStackImpl;
 import org.allaymc.server.item.impl.bundle.ItemBrownBundleStackImpl;
@@ -910,94 +904,6 @@ import org.allaymc.server.item.impl.door.ItemWaxedOxidizedCopperDoorStackImpl;
 import org.allaymc.server.item.impl.door.ItemWaxedWeatheredCopperDoorStackImpl;
 import org.allaymc.server.item.impl.door.ItemWeatheredCopperDoorStackImpl;
 import org.allaymc.server.item.impl.door.ItemWoodenDoorStackImpl;
-import org.allaymc.server.item.impl.egg.ItemAgentSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemAllaySpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemArmadilloSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemAxolotlSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemBatSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemBeeSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemBlazeSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemBoggedSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemBreezeSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemCamelSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemCatSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemCaveSpiderSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemChickenSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemCodSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemCowSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemCreeperSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemDolphinSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemDonkeySpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemDragonEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemDrownedSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemElderGuardianSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemEnderDragonSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemEndermanSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemEndermiteSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemEvokerSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemFoxSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemFrogSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemGhastSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemGlowSquidSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemGoatSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemGuardianSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemHoglinSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemHorseSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemHuskSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemIronGolemSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemLlamaSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemMagmaCubeSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemMonsterEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemMooshroomSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemMuleSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemNpcSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemOcelotSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemPandaSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemParrotSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemPhantomSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemPigSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemPiglinBruteSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemPiglinSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemPillagerSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemPolarBearSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemPufferfishSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemRabbitSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemRavagerSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSalmonSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSheepSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemShulkerSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSilverfishSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSkeletonHorseSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSkeletonSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSlimeSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSnifferEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSnifferSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSnowGolemSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSpiderSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemSquidSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemStraySpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemStriderSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemTadpoleSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemTraderLlamaSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemTropicalFishSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemTurtleEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemTurtleSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemVexSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemVillagerSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemVindicatorSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemWanderingTraderSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemWardenSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemWitchSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemWitherSkeletonSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemWitherSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemWolfSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemZoglinSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemZombieHorseSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemZombiePigmanSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemZombieSpawnEggStackImpl;
-import org.allaymc.server.item.impl.egg.ItemZombieVillagerSpawnEggStackImpl;
 import org.allaymc.server.item.impl.element.ItemElement0StackImpl;
 import org.allaymc.server.item.impl.element.ItemElement100StackImpl;
 import org.allaymc.server.item.impl.element.ItemElement101StackImpl;
@@ -1923,27 +1829,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initAgentSpawnEgg() {
-        if (ItemTypes.AGENT_SPAWN_EGG != null) return;
-        ItemTypes.AGENT_SPAWN_EGG = AllayItemType
-                .builder(ItemAgentSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.AGENT_SPAWN_EGG)
-                .build();
-    }
-
     public static void initAir() {
         if (ItemTypes.AIR != null) return;
         ItemTypes.AIR = AllayItemType
                 .builder(ItemAirStackImpl.class)
                 .vanillaItem(ItemId.AIR)
-                .build();
-    }
-
-    public static void initAllaySpawnEgg() {
-        if (ItemTypes.ALLAY_SPAWN_EGG != null) return;
-        ItemTypes.ALLAY_SPAWN_EGG = AllayItemType
-                .builder(ItemAllaySpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ALLAY_SPAWN_EGG)
                 .build();
     }
 
@@ -2075,14 +1965,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initArmadilloSpawnEgg() {
-        if (ItemTypes.ARMADILLO_SPAWN_EGG != null) return;
-        ItemTypes.ARMADILLO_SPAWN_EGG = AllayItemType
-                .builder(ItemArmadilloSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ARMADILLO_SPAWN_EGG)
-                .build();
-    }
-
     public static void initArmorStand() {
         if (ItemTypes.ARMOR_STAND != null) return;
         ItemTypes.ARMOR_STAND = AllayItemType
@@ -2104,22 +1986,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.ARROW = AllayItemType
                 .builder(ItemArrowStackImpl.class)
                 .vanillaItem(ItemId.ARROW)
-                .build();
-    }
-
-    public static void initAxolotlBucket() {
-        if (ItemTypes.AXOLOTL_BUCKET != null) return;
-        ItemTypes.AXOLOTL_BUCKET = AllayItemType
-                .builder(ItemAxolotlBucketStackImpl.class)
-                .vanillaItem(ItemId.AXOLOTL_BUCKET)
-                .build();
-    }
-
-    public static void initAxolotlSpawnEgg() {
-        if (ItemTypes.AXOLOTL_SPAWN_EGG != null) return;
-        ItemTypes.AXOLOTL_SPAWN_EGG = AllayItemType
-                .builder(ItemAxolotlSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.AXOLOTL_SPAWN_EGG)
                 .build();
     }
 
@@ -2395,14 +2261,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initBatSpawnEgg() {
-        if (ItemTypes.BAT_SPAWN_EGG != null) return;
-        ItemTypes.BAT_SPAWN_EGG = AllayItemType
-                .builder(ItemBatSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BAT_SPAWN_EGG)
-                .build();
-    }
-
     public static void initBeacon() {
         if (ItemTypes.BEACON != null) return;
         ItemTypes.BEACON = AllayItemType
@@ -2432,14 +2290,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.BEE_NEST = AllayItemType
                 .builder(ItemBeeNestStackImpl.class)
                 .vanillaItem(ItemId.BEE_NEST)
-                .build();
-    }
-
-    public static void initBeeSpawnEgg() {
-        if (ItemTypes.BEE_SPAWN_EGG != null) return;
-        ItemTypes.BEE_SPAWN_EGG = AllayItemType
-                .builder(ItemBeeSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BEE_SPAWN_EGG)
                 .build();
     }
 
@@ -2835,14 +2685,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initBlazeSpawnEgg() {
-        if (ItemTypes.BLAZE_SPAWN_EGG != null) return;
-        ItemTypes.BLAZE_SPAWN_EGG = AllayItemType
-                .builder(ItemBlazeSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BLAZE_SPAWN_EGG)
-                .build();
-    }
-
     public static void initBleach() {
         if (ItemTypes.BLEACH != null) return;
         ItemTypes.BLEACH = AllayItemType
@@ -2979,14 +2821,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initBoggedSpawnEgg() {
-        if (ItemTypes.BOGGED_SPAWN_EGG != null) return;
-        ItemTypes.BOGGED_SPAWN_EGG = AllayItemType
-                .builder(ItemBoggedSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BOGGED_SPAWN_EGG)
-                .build();
-    }
-
     public static void initBoltArmorTrimSmithingTemplate() {
         if (ItemTypes.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE != null) return;
         ItemTypes.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = AllayItemType
@@ -3112,14 +2946,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.BREEZE_ROD = AllayItemType
                 .builder(ItemBreezeRodStackImpl.class)
                 .vanillaItem(ItemId.BREEZE_ROD)
-                .build();
-    }
-
-    public static void initBreezeSpawnEgg() {
-        if (ItemTypes.BREEZE_SPAWN_EGG != null) return;
-        ItemTypes.BREEZE_SPAWN_EGG = AllayItemType
-                .builder(ItemBreezeSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BREEZE_SPAWN_EGG)
                 .build();
     }
 
@@ -3355,14 +3181,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initBucket() {
-        if (ItemTypes.BUCKET != null) return;
-        ItemTypes.BUCKET = AllayItemType
-                .builder(ItemBucketStackImpl.class)
-                .vanillaItem(ItemId.BUCKET)
-                .build();
-    }
-
     public static void initBuddingAmethyst() {
         if (ItemTypes.BUDDING_AMETHYST != null) return;
         ItemTypes.BUDDING_AMETHYST = AllayItemType
@@ -3416,14 +3234,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.CALIBRATED_SCULK_SENSOR = AllayItemType
                 .builder(ItemCalibratedSculkSensorStackImpl.class)
                 .vanillaItem(ItemId.CALIBRATED_SCULK_SENSOR)
-                .build();
-    }
-
-    public static void initCamelSpawnEgg() {
-        if (ItemTypes.CAMEL_SPAWN_EGG != null) return;
-        ItemTypes.CAMEL_SPAWN_EGG = AllayItemType
-                .builder(ItemCamelSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CAMEL_SPAWN_EGG)
                 .build();
     }
 
@@ -3507,27 +3317,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initCatSpawnEgg() {
-        if (ItemTypes.CAT_SPAWN_EGG != null) return;
-        ItemTypes.CAT_SPAWN_EGG = AllayItemType
-                .builder(ItemCatSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CAT_SPAWN_EGG)
-                .build();
-    }
-
     public static void initCauldron() {
         if (ItemTypes.CAULDRON != null) return;
         ItemTypes.CAULDRON = AllayItemType
                 .builder(ItemCauldronStackImpl.class)
                 .vanillaItem(ItemId.CAULDRON)
-                .build();
-    }
-
-    public static void initCaveSpiderSpawnEgg() {
-        if (ItemTypes.CAVE_SPIDER_SPAWN_EGG != null) return;
-        ItemTypes.CAVE_SPIDER_SPAWN_EGG = AllayItemType
-                .builder(ItemCaveSpiderSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CAVE_SPIDER_SPAWN_EGG)
                 .build();
     }
 
@@ -3819,14 +3613,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initChickenSpawnEgg() {
-        if (ItemTypes.CHICKEN_SPAWN_EGG != null) return;
-        ItemTypes.CHICKEN_SPAWN_EGG = AllayItemType
-                .builder(ItemChickenSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CHICKEN_SPAWN_EGG)
-                .build();
-    }
-
     public static void initChippedAnvil() {
         if (ItemTypes.CHIPPED_ANVIL != null) return;
         ItemTypes.CHIPPED_ANVIL = AllayItemType
@@ -4112,22 +3898,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.COD = AllayItemType
                 .builder(ItemCodStackImpl.class)
                 .vanillaItem(ItemId.COD)
-                .build();
-    }
-
-    public static void initCodBucket() {
-        if (ItemTypes.COD_BUCKET != null) return;
-        ItemTypes.COD_BUCKET = AllayItemType
-                .builder(ItemCodBucketStackImpl.class)
-                .vanillaItem(ItemId.COD_BUCKET)
-                .build();
-    }
-
-    public static void initCodSpawnEgg() {
-        if (ItemTypes.COD_SPAWN_EGG != null) return;
-        ItemTypes.COD_SPAWN_EGG = AllayItemType
-                .builder(ItemCodSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.COD_SPAWN_EGG)
                 .build();
     }
 
@@ -4419,14 +4189,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initCowSpawnEgg() {
-        if (ItemTypes.COW_SPAWN_EGG != null) return;
-        ItemTypes.COW_SPAWN_EGG = AllayItemType
-                .builder(ItemCowSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.COW_SPAWN_EGG)
-                .build();
-    }
-
     public static void initCrackedDeepslateBricks() {
         if (ItemTypes.CRACKED_DEEPSLATE_BRICKS != null) return;
         ItemTypes.CRACKED_DEEPSLATE_BRICKS = AllayItemType
@@ -4496,14 +4258,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.CREEPER_HEAD = AllayItemType
                 .builder(ItemCreeperHeadStackImpl.class)
                 .vanillaItem(ItemId.CREEPER_HEAD)
-                .build();
-    }
-
-    public static void initCreeperSpawnEgg() {
-        if (ItemTypes.CREEPER_SPAWN_EGG != null) return;
-        ItemTypes.CREEPER_SPAWN_EGG = AllayItemType
-                .builder(ItemCreeperSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CREEPER_SPAWN_EGG)
                 .build();
     }
 
@@ -5627,22 +5381,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initDolphinSpawnEgg() {
-        if (ItemTypes.DOLPHIN_SPAWN_EGG != null) return;
-        ItemTypes.DOLPHIN_SPAWN_EGG = AllayItemType
-                .builder(ItemDolphinSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.DOLPHIN_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initDonkeySpawnEgg() {
-        if (ItemTypes.DONKEY_SPAWN_EGG != null) return;
-        ItemTypes.DONKEY_SPAWN_EGG = AllayItemType
-                .builder(ItemDonkeySpawnEggStackImpl.class)
-                .vanillaItem(ItemId.DONKEY_SPAWN_EGG)
-                .build();
-    }
-
     public static void initDoubleCutCopperSlab() {
         if (ItemTypes.DOUBLE_CUT_COPPER_SLAB != null) return;
         ItemTypes.DOUBLE_CUT_COPPER_SLAB = AllayItemType
@@ -5747,14 +5485,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initDrownedSpawnEgg() {
-        if (ItemTypes.DROWNED_SPAWN_EGG != null) return;
-        ItemTypes.DROWNED_SPAWN_EGG = AllayItemType
-                .builder(ItemDrownedSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.DROWNED_SPAWN_EGG)
-                .build();
-    }
-
     public static void initDuneArmorTrimSmithingTemplate() {
         if (ItemTypes.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE != null) return;
         ItemTypes.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = AllayItemType
@@ -5784,14 +5514,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.EGG = AllayItemType
                 .builder(ItemEggStackImpl.class)
                 .vanillaItem(ItemId.EGG)
-                .build();
-    }
-
-    public static void initElderGuardianSpawnEgg() {
-        if (ItemTypes.ELDER_GUARDIAN_SPAWN_EGG != null) return;
-        ItemTypes.ELDER_GUARDIAN_SPAWN_EGG = AllayItemType
-                .builder(ItemElderGuardianSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ELDER_GUARDIAN_SPAWN_EGG)
                 .build();
     }
 
@@ -6915,14 +6637,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initEnderDragonSpawnEgg() {
-        if (ItemTypes.ENDER_DRAGON_SPAWN_EGG != null) return;
-        ItemTypes.ENDER_DRAGON_SPAWN_EGG = AllayItemType
-                .builder(ItemEnderDragonSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ENDER_DRAGON_SPAWN_EGG)
-                .build();
-    }
-
     public static void initEnderEye() {
         if (ItemTypes.ENDER_EYE != null) return;
         ItemTypes.ENDER_EYE = AllayItemType
@@ -6936,30 +6650,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.ENDER_PEARL = AllayItemType
                 .builder(ItemEnderPearlStackImpl.class)
                 .vanillaItem(ItemId.ENDER_PEARL)
-                .build();
-    }
-
-    public static void initEndermanSpawnEgg() {
-        if (ItemTypes.ENDERMAN_SPAWN_EGG != null) return;
-        ItemTypes.ENDERMAN_SPAWN_EGG = AllayItemType
-                .builder(ItemEndermanSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ENDERMAN_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initEndermiteSpawnEgg() {
-        if (ItemTypes.ENDERMITE_SPAWN_EGG != null) return;
-        ItemTypes.ENDERMITE_SPAWN_EGG = AllayItemType
-                .builder(ItemEndermiteSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ENDERMITE_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initEvokerSpawnEgg() {
-        if (ItemTypes.EVOKER_SPAWN_EGG != null) return;
-        ItemTypes.EVOKER_SPAWN_EGG = AllayItemType
-                .builder(ItemEvokerSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.EVOKER_SPAWN_EGG)
                 .build();
     }
 
@@ -7291,14 +6981,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initFoxSpawnEgg() {
-        if (ItemTypes.FOX_SPAWN_EGG != null) return;
-        ItemTypes.FOX_SPAWN_EGG = AllayItemType
-                .builder(ItemFoxSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.FOX_SPAWN_EGG)
-                .build();
-    }
-
     public static void initFrame() {
         if (ItemTypes.FRAME != null) return;
         ItemTypes.FRAME = AllayItemType
@@ -7323,14 +7005,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initFrogSpawnEgg() {
-        if (ItemTypes.FROG_SPAWN_EGG != null) return;
-        ItemTypes.FROG_SPAWN_EGG = AllayItemType
-                .builder(ItemFrogSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.FROG_SPAWN_EGG)
-                .build();
-    }
-
     public static void initFrostedIce() {
         if (ItemTypes.FROSTED_ICE != null) return;
         ItemTypes.FROSTED_ICE = AllayItemType
@@ -7344,14 +7018,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.FURNACE = AllayItemType
                 .builder(ItemFurnaceStackImpl.class)
                 .vanillaItem(ItemId.FURNACE)
-                .build();
-    }
-
-    public static void initGhastSpawnEgg() {
-        if (ItemTypes.GHAST_SPAWN_EGG != null) return;
-        ItemTypes.GHAST_SPAWN_EGG = AllayItemType
-                .builder(ItemGhastSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.GHAST_SPAWN_EGG)
                 .build();
     }
 
@@ -7443,14 +7109,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initGlowSquidSpawnEgg() {
-        if (ItemTypes.GLOW_SQUID_SPAWN_EGG != null) return;
-        ItemTypes.GLOW_SQUID_SPAWN_EGG = AllayItemType
-                .builder(ItemGlowSquidSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.GLOW_SQUID_SPAWN_EGG)
-                .build();
-    }
-
     public static void initGlowStick() {
         if (ItemTypes.GLOW_STICK != null) return;
         ItemTypes.GLOW_STICK = AllayItemType
@@ -7488,14 +7146,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.GOAT_HORN = AllayItemType
                 .builder(ItemGoatHornStackImpl.class)
                 .vanillaItem(ItemId.GOAT_HORN)
-                .build();
-    }
-
-    public static void initGoatSpawnEgg() {
-        if (ItemTypes.GOAT_SPAWN_EGG != null) return;
-        ItemTypes.GOAT_SPAWN_EGG = AllayItemType
-                .builder(ItemGoatSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.GOAT_SPAWN_EGG)
                 .build();
     }
 
@@ -7915,14 +7565,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initGuardianSpawnEgg() {
-        if (ItemTypes.GUARDIAN_SPAWN_EGG != null) return;
-        ItemTypes.GUARDIAN_SPAWN_EGG = AllayItemType
-                .builder(ItemGuardianSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.GUARDIAN_SPAWN_EGG)
-                .build();
-    }
-
     public static void initGunpowder() {
         if (ItemTypes.GUNPOWDER != null) return;
         ItemTypes.GUNPOWDER = AllayItemType
@@ -8299,14 +7941,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initHoglinSpawnEgg() {
-        if (ItemTypes.HOGLIN_SPAWN_EGG != null) return;
-        ItemTypes.HOGLIN_SPAWN_EGG = AllayItemType
-                .builder(ItemHoglinSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.HOGLIN_SPAWN_EGG)
-                .build();
-    }
-
     public static void initHoneyBlock() {
         if (ItemTypes.HONEY_BLOCK != null) return;
         ItemTypes.HONEY_BLOCK = AllayItemType
@@ -8387,14 +8021,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initHorseSpawnEgg() {
-        if (ItemTypes.HORSE_SPAWN_EGG != null) return;
-        ItemTypes.HORSE_SPAWN_EGG = AllayItemType
-                .builder(ItemHorseSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.HORSE_SPAWN_EGG)
-                .build();
-    }
-
     public static void initHostArmorTrimSmithingTemplate() {
         if (ItemTypes.HOST_ARMOR_TRIM_SMITHING_TEMPLATE != null) return;
         ItemTypes.HOST_ARMOR_TRIM_SMITHING_TEMPLATE = AllayItemType
@@ -8408,14 +8034,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.HOWL_POTTERY_SHERD = AllayItemType
                 .builder(ItemHowlPotterySherdStackImpl.class)
                 .vanillaItem(ItemId.HOWL_POTTERY_SHERD)
-                .build();
-    }
-
-    public static void initHuskSpawnEgg() {
-        if (ItemTypes.HUSK_SPAWN_EGG != null) return;
-        ItemTypes.HUSK_SPAWN_EGG = AllayItemType
-                .builder(ItemHuskSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.HUSK_SPAWN_EGG)
                 .build();
     }
 
@@ -8568,14 +8186,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.IRON_DOOR = AllayItemType
                 .builder(ItemIronDoorStackImpl.class)
                 .vanillaItem(ItemId.IRON_DOOR)
-                .build();
-    }
-
-    public static void initIronGolemSpawnEgg() {
-        if (ItemTypes.IRON_GOLEM_SPAWN_EGG != null) return;
-        ItemTypes.IRON_GOLEM_SPAWN_EGG = AllayItemType
-                .builder(ItemIronGolemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.IRON_GOLEM_SPAWN_EGG)
                 .build();
     }
 
@@ -9144,14 +8754,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.LAVA = AllayItemType
                 .builder(ItemLavaStackImpl.class)
                 .vanillaItem(ItemId.LAVA)
-                .build();
-    }
-
-    public static void initLavaBucket() {
-        if (ItemTypes.LAVA_BUCKET != null) return;
-        ItemTypes.LAVA_BUCKET = AllayItemType
-                .builder(ItemLavaBucketStackImpl.class)
-                .vanillaItem(ItemId.LAVA_BUCKET)
                 .build();
     }
 
@@ -9779,14 +9381,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initLlamaSpawnEgg() {
-        if (ItemTypes.LLAMA_SPAWN_EGG != null) return;
-        ItemTypes.LLAMA_SPAWN_EGG = AllayItemType
-                .builder(ItemLlamaSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.LLAMA_SPAWN_EGG)
-                .build();
-    }
-
     public static void initLodestone() {
         if (ItemTypes.LODESTONE != null) return;
         ItemTypes.LODESTONE = AllayItemType
@@ -9952,14 +9546,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.MAGMA_CREAM = AllayItemType
                 .builder(ItemMagmaCreamStackImpl.class)
                 .vanillaItem(ItemId.MAGMA_CREAM)
-                .build();
-    }
-
-    public static void initMagmaCubeSpawnEgg() {
-        if (ItemTypes.MAGMA_CUBE_SPAWN_EGG != null) return;
-        ItemTypes.MAGMA_CUBE_SPAWN_EGG = AllayItemType
-                .builder(ItemMagmaCubeSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.MAGMA_CUBE_SPAWN_EGG)
                 .build();
     }
 
@@ -10187,14 +9773,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initMilkBucket() {
-        if (ItemTypes.MILK_BUCKET != null) return;
-        ItemTypes.MILK_BUCKET = AllayItemType
-                .builder(ItemMilkBucketStackImpl.class)
-                .vanillaItem(ItemId.MILK_BUCKET)
-                .build();
-    }
-
     public static void initMinecart() {
         if (ItemTypes.MINECART != null) return;
         ItemTypes.MINECART = AllayItemType
@@ -10232,14 +9810,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.MONSTER_EGG = AllayItemType
                 .builder(ItemMonsterEggStackImpl.class)
                 .vanillaItem(ItemId.MONSTER_EGG)
-                .build();
-    }
-
-    public static void initMooshroomSpawnEgg() {
-        if (ItemTypes.MOOSHROOM_SPAWN_EGG != null) return;
-        ItemTypes.MOOSHROOM_SPAWN_EGG = AllayItemType
-                .builder(ItemMooshroomSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.MOOSHROOM_SPAWN_EGG)
                 .build();
     }
 
@@ -10408,14 +9978,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.MUDDY_MANGROVE_ROOTS = AllayItemType
                 .builder(ItemMuddyMangroveRootsStackImpl.class)
                 .vanillaItem(ItemId.MUDDY_MANGROVE_ROOTS)
-                .build();
-    }
-
-    public static void initMuleSpawnEgg() {
-        if (ItemTypes.MULE_SPAWN_EGG != null) return;
-        ItemTypes.MULE_SPAWN_EGG = AllayItemType
-                .builder(ItemMuleSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.MULE_SPAWN_EGG)
                 .build();
     }
 
@@ -10867,14 +10429,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initNpcSpawnEgg() {
-        if (ItemTypes.NPC_SPAWN_EGG != null) return;
-        ItemTypes.NPC_SPAWN_EGG = AllayItemType
-                .builder(ItemNpcSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.NPC_SPAWN_EGG)
-                .build();
-    }
-
     public static void initOakBoat() {
         if (ItemTypes.OAK_BOAT != null) return;
         ItemTypes.OAK_BOAT = AllayItemType
@@ -10992,14 +10546,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.OBSIDIAN = AllayItemType
                 .builder(ItemObsidianStackImpl.class)
                 .vanillaItem(ItemId.OBSIDIAN)
-                .build();
-    }
-
-    public static void initOcelotSpawnEgg() {
-        if (ItemTypes.OCELOT_SPAWN_EGG != null) return;
-        ItemTypes.OCELOT_SPAWN_EGG = AllayItemType
-                .builder(ItemOcelotSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.OCELOT_SPAWN_EGG)
                 .build();
     }
 
@@ -11251,27 +10797,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initPandaSpawnEgg() {
-        if (ItemTypes.PANDA_SPAWN_EGG != null) return;
-        ItemTypes.PANDA_SPAWN_EGG = AllayItemType
-                .builder(ItemPandaSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PANDA_SPAWN_EGG)
-                .build();
-    }
-
     public static void initPaper() {
         if (ItemTypes.PAPER != null) return;
         ItemTypes.PAPER = AllayItemType
                 .builder(ItemPaperStackImpl.class)
                 .vanillaItem(ItemId.PAPER)
-                .build();
-    }
-
-    public static void initParrotSpawnEgg() {
-        if (ItemTypes.PARROT_SPAWN_EGG != null) return;
-        ItemTypes.PARROT_SPAWN_EGG = AllayItemType
-                .builder(ItemParrotSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PARROT_SPAWN_EGG)
                 .build();
     }
 
@@ -11315,22 +10845,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initPhantomSpawnEgg() {
-        if (ItemTypes.PHANTOM_SPAWN_EGG != null) return;
-        ItemTypes.PHANTOM_SPAWN_EGG = AllayItemType
-                .builder(ItemPhantomSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PHANTOM_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initPigSpawnEgg() {
-        if (ItemTypes.PIG_SPAWN_EGG != null) return;
-        ItemTypes.PIG_SPAWN_EGG = AllayItemType
-                .builder(ItemPigSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PIG_SPAWN_EGG)
-                .build();
-    }
-
     public static void initPiglinBannerPattern() {
         if (ItemTypes.PIGLIN_BANNER_PATTERN != null) return;
         ItemTypes.PIGLIN_BANNER_PATTERN = AllayItemType
@@ -11339,35 +10853,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initPiglinBruteSpawnEgg() {
-        if (ItemTypes.PIGLIN_BRUTE_SPAWN_EGG != null) return;
-        ItemTypes.PIGLIN_BRUTE_SPAWN_EGG = AllayItemType
-                .builder(ItemPiglinBruteSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PIGLIN_BRUTE_SPAWN_EGG)
-                .build();
-    }
-
     public static void initPiglinHead() {
         if (ItemTypes.PIGLIN_HEAD != null) return;
         ItemTypes.PIGLIN_HEAD = AllayItemType
                 .builder(ItemPiglinHeadStackImpl.class)
                 .vanillaItem(ItemId.PIGLIN_HEAD)
-                .build();
-    }
-
-    public static void initPiglinSpawnEgg() {
-        if (ItemTypes.PIGLIN_SPAWN_EGG != null) return;
-        ItemTypes.PIGLIN_SPAWN_EGG = AllayItemType
-                .builder(ItemPiglinSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PIGLIN_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initPillagerSpawnEgg() {
-        if (ItemTypes.PILLAGER_SPAWN_EGG != null) return;
-        ItemTypes.PILLAGER_SPAWN_EGG = AllayItemType
-                .builder(ItemPillagerSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PILLAGER_SPAWN_EGG)
                 .build();
     }
 
@@ -11576,14 +11066,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.POISONOUS_POTATO = AllayItemType
                 .builder(ItemPoisonousPotatoStackImpl.class)
                 .vanillaItem(ItemId.POISONOUS_POTATO)
-                .build();
-    }
-
-    public static void initPolarBearSpawnEgg() {
-        if (ItemTypes.POLAR_BEAR_SPAWN_EGG != null) return;
-        ItemTypes.POLAR_BEAR_SPAWN_EGG = AllayItemType
-                .builder(ItemPolarBearSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.POLAR_BEAR_SPAWN_EGG)
                 .build();
     }
 
@@ -11931,14 +11413,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initPowderSnowBucket() {
-        if (ItemTypes.POWDER_SNOW_BUCKET != null) return;
-        ItemTypes.POWDER_SNOW_BUCKET = AllayItemType
-                .builder(ItemPowderSnowBucketStackImpl.class)
-                .vanillaItem(ItemId.POWDER_SNOW_BUCKET)
-                .build();
-    }
-
     public static void initPoweredComparator() {
         if (ItemTypes.POWERED_COMPARATOR != null) return;
         ItemTypes.POWERED_COMPARATOR = AllayItemType
@@ -12056,22 +11530,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.PUFFERFISH = AllayItemType
                 .builder(ItemPufferfishStackImpl.class)
                 .vanillaItem(ItemId.PUFFERFISH)
-                .build();
-    }
-
-    public static void initPufferfishBucket() {
-        if (ItemTypes.PUFFERFISH_BUCKET != null) return;
-        ItemTypes.PUFFERFISH_BUCKET = AllayItemType
-                .builder(ItemPufferfishBucketStackImpl.class)
-                .vanillaItem(ItemId.PUFFERFISH_BUCKET)
-                .build();
-    }
-
-    public static void initPufferfishSpawnEgg() {
-        if (ItemTypes.PUFFERFISH_SPAWN_EGG != null) return;
-        ItemTypes.PUFFERFISH_SPAWN_EGG = AllayItemType
-                .builder(ItemPufferfishSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PUFFERFISH_SPAWN_EGG)
                 .build();
     }
 
@@ -12339,14 +11797,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initRabbitSpawnEgg() {
-        if (ItemTypes.RABBIT_SPAWN_EGG != null) return;
-        ItemTypes.RABBIT_SPAWN_EGG = AllayItemType
-                .builder(ItemRabbitSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.RABBIT_SPAWN_EGG)
-                .build();
-    }
-
     public static void initRabbitStew() {
         if (ItemTypes.RABBIT_STEW != null) return;
         ItemTypes.RABBIT_STEW = AllayItemType
@@ -12376,14 +11826,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.RAPID_FERTILIZER = AllayItemType
                 .builder(ItemRapidFertilizerStackImpl.class)
                 .vanillaItem(ItemId.RAPID_FERTILIZER)
-                .build();
-    }
-
-    public static void initRavagerSpawnEgg() {
-        if (ItemTypes.RAVAGER_SPAWN_EGG != null) return;
-        ItemTypes.RAVAGER_SPAWN_EGG = AllayItemType
-                .builder(ItemRavagerSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.RAVAGER_SPAWN_EGG)
                 .build();
     }
 
@@ -12795,22 +12237,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initSalmonBucket() {
-        if (ItemTypes.SALMON_BUCKET != null) return;
-        ItemTypes.SALMON_BUCKET = AllayItemType
-                .builder(ItemSalmonBucketStackImpl.class)
-                .vanillaItem(ItemId.SALMON_BUCKET)
-                .build();
-    }
-
-    public static void initSalmonSpawnEgg() {
-        if (ItemTypes.SALMON_SPAWN_EGG != null) return;
-        ItemTypes.SALMON_SPAWN_EGG = AllayItemType
-                .builder(ItemSalmonSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SALMON_SPAWN_EGG)
-                .build();
-    }
-
     public static void initSand() {
         if (ItemTypes.SAND != null) return;
         ItemTypes.SAND = AllayItemType
@@ -12979,14 +12405,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initSheepSpawnEgg() {
-        if (ItemTypes.SHEEP_SPAWN_EGG != null) return;
-        ItemTypes.SHEEP_SPAWN_EGG = AllayItemType
-                .builder(ItemSheepSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SHEEP_SPAWN_EGG)
-                .build();
-    }
-
     public static void initShelterPotterySherd() {
         if (ItemTypes.SHELTER_POTTERY_SHERD != null) return;
         ItemTypes.SHELTER_POTTERY_SHERD = AllayItemType
@@ -13035,14 +12453,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initShulkerSpawnEgg() {
-        if (ItemTypes.SHULKER_SPAWN_EGG != null) return;
-        ItemTypes.SHULKER_SPAWN_EGG = AllayItemType
-                .builder(ItemShulkerSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SHULKER_SPAWN_EGG)
-                .build();
-    }
-
     public static void initSilenceArmorTrimSmithingTemplate() {
         if (ItemTypes.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE != null) return;
         ItemTypes.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = AllayItemType
@@ -13059,35 +12469,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initSilverfishSpawnEgg() {
-        if (ItemTypes.SILVERFISH_SPAWN_EGG != null) return;
-        ItemTypes.SILVERFISH_SPAWN_EGG = AllayItemType
-                .builder(ItemSilverfishSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SILVERFISH_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initSkeletonHorseSpawnEgg() {
-        if (ItemTypes.SKELETON_HORSE_SPAWN_EGG != null) return;
-        ItemTypes.SKELETON_HORSE_SPAWN_EGG = AllayItemType
-                .builder(ItemSkeletonHorseSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SKELETON_HORSE_SPAWN_EGG)
-                .build();
-    }
-
     public static void initSkeletonSkull() {
         if (ItemTypes.SKELETON_SKULL != null) return;
         ItemTypes.SKELETON_SKULL = AllayItemType
                 .builder(ItemSkeletonSkullStackImpl.class)
                 .vanillaItem(ItemId.SKELETON_SKULL)
-                .build();
-    }
-
-    public static void initSkeletonSpawnEgg() {
-        if (ItemTypes.SKELETON_SPAWN_EGG != null) return;
-        ItemTypes.SKELETON_SPAWN_EGG = AllayItemType
-                .builder(ItemSkeletonSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SKELETON_SPAWN_EGG)
                 .build();
     }
 
@@ -13128,14 +12514,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.SLIME_BALL = AllayItemType
                 .builder(ItemSlimeBallStackImpl.class)
                 .vanillaItem(ItemId.SLIME_BALL)
-                .build();
-    }
-
-    public static void initSlimeSpawnEgg() {
-        if (ItemTypes.SLIME_SPAWN_EGG != null) return;
-        ItemTypes.SLIME_SPAWN_EGG = AllayItemType
-                .builder(ItemSlimeSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SLIME_SPAWN_EGG)
                 .build();
     }
 
@@ -13307,14 +12685,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initSnifferSpawnEgg() {
-        if (ItemTypes.SNIFFER_SPAWN_EGG != null) return;
-        ItemTypes.SNIFFER_SPAWN_EGG = AllayItemType
-                .builder(ItemSnifferSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SNIFFER_SPAWN_EGG)
-                .build();
-    }
-
     public static void initSnortPotterySherd() {
         if (ItemTypes.SNORT_POTTERY_SHERD != null) return;
         ItemTypes.SNORT_POTTERY_SHERD = AllayItemType
@@ -13336,14 +12706,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.SNOW = AllayItemType
                 .builder(ItemSnowStackImpl.class)
                 .vanillaItem(ItemId.SNOW)
-                .build();
-    }
-
-    public static void initSnowGolemSpawnEgg() {
-        if (ItemTypes.SNOW_GOLEM_SPAWN_EGG != null) return;
-        ItemTypes.SNOW_GOLEM_SPAWN_EGG = AllayItemType
-                .builder(ItemSnowGolemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SNOW_GOLEM_SPAWN_EGG)
                 .build();
     }
 
@@ -13419,27 +12781,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initSpawnEgg() {
-        if (ItemTypes.SPAWN_EGG != null) return;
-        ItemTypes.SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SPAWN_EGG)
-                .build();
-    }
-
     public static void initSpiderEye() {
         if (ItemTypes.SPIDER_EYE != null) return;
         ItemTypes.SPIDER_EYE = AllayItemType
                 .builder(ItemSpiderEyeStackImpl.class)
                 .vanillaItem(ItemId.SPIDER_EYE)
-                .build();
-    }
-
-    public static void initSpiderSpawnEgg() {
-        if (ItemTypes.SPIDER_SPAWN_EGG != null) return;
-        ItemTypes.SPIDER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpiderSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SPIDER_SPAWN_EGG)
                 .build();
     }
 
@@ -13640,14 +12986,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.SPYGLASS = AllayItemType
                 .builder(ItemSpyglassStackImpl.class)
                 .vanillaItem(ItemId.SPYGLASS)
-                .build();
-    }
-
-    public static void initSquidSpawnEgg() {
-        if (ItemTypes.SQUID_SPAWN_EGG != null) return;
-        ItemTypes.SQUID_SPAWN_EGG = AllayItemType
-                .builder(ItemSquidSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SQUID_SPAWN_EGG)
                 .build();
     }
 
@@ -13880,22 +13218,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.STONECUTTER_BLOCK = AllayItemType
                 .builder(ItemStonecutterBlockStackImpl.class)
                 .vanillaItem(ItemId.STONECUTTER_BLOCK)
-                .build();
-    }
-
-    public static void initStraySpawnEgg() {
-        if (ItemTypes.STRAY_SPAWN_EGG != null) return;
-        ItemTypes.STRAY_SPAWN_EGG = AllayItemType
-                .builder(ItemStraySpawnEggStackImpl.class)
-                .vanillaItem(ItemId.STRAY_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initStriderSpawnEgg() {
-        if (ItemTypes.STRIDER_SPAWN_EGG != null) return;
-        ItemTypes.STRIDER_SPAWN_EGG = AllayItemType
-                .builder(ItemStriderSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.STRIDER_SPAWN_EGG)
                 .build();
     }
 
@@ -14155,22 +13477,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initTadpoleBucket() {
-        if (ItemTypes.TADPOLE_BUCKET != null) return;
-        ItemTypes.TADPOLE_BUCKET = AllayItemType
-                .builder(ItemTadpoleBucketStackImpl.class)
-                .vanillaItem(ItemId.TADPOLE_BUCKET)
-                .build();
-    }
-
-    public static void initTadpoleSpawnEgg() {
-        if (ItemTypes.TADPOLE_SPAWN_EGG != null) return;
-        ItemTypes.TADPOLE_SPAWN_EGG = AllayItemType
-                .builder(ItemTadpoleSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.TADPOLE_SPAWN_EGG)
-                .build();
-    }
-
     public static void initTallGrass() {
         if (ItemTypes.TALL_GRASS != null) return;
         ItemTypes.TALL_GRASS = AllayItemType
@@ -14267,14 +13573,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initTraderLlamaSpawnEgg() {
-        if (ItemTypes.TRADER_LLAMA_SPAWN_EGG != null) return;
-        ItemTypes.TRADER_LLAMA_SPAWN_EGG = AllayItemType
-                .builder(ItemTraderLlamaSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.TRADER_LLAMA_SPAWN_EGG)
-                .build();
-    }
-
     public static void initTrapdoor() {
         if (ItemTypes.TRAPDOOR != null) return;
         ItemTypes.TRAPDOOR = AllayItemType
@@ -14336,22 +13634,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.TROPICAL_FISH = AllayItemType
                 .builder(ItemTropicalFishStackImpl.class)
                 .vanillaItem(ItemId.TROPICAL_FISH)
-                .build();
-    }
-
-    public static void initTropicalFishBucket() {
-        if (ItemTypes.TROPICAL_FISH_BUCKET != null) return;
-        ItemTypes.TROPICAL_FISH_BUCKET = AllayItemType
-                .builder(ItemTropicalFishBucketStackImpl.class)
-                .vanillaItem(ItemId.TROPICAL_FISH_BUCKET)
-                .build();
-    }
-
-    public static void initTropicalFishSpawnEgg() {
-        if (ItemTypes.TROPICAL_FISH_SPAWN_EGG != null) return;
-        ItemTypes.TROPICAL_FISH_SPAWN_EGG = AllayItemType
-                .builder(ItemTropicalFishSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.TROPICAL_FISH_SPAWN_EGG)
                 .build();
     }
 
@@ -14491,14 +13773,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initTurtleSpawnEgg() {
-        if (ItemTypes.TURTLE_SPAWN_EGG != null) return;
-        ItemTypes.TURTLE_SPAWN_EGG = AllayItemType
-                .builder(ItemTurtleSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.TURTLE_SPAWN_EGG)
-                .build();
-    }
-
     public static void initTwistingVines() {
         if (ItemTypes.TWISTING_VINES != null) return;
         ItemTypes.TWISTING_VINES = AllayItemType
@@ -14587,30 +13861,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initVexSpawnEgg() {
-        if (ItemTypes.VEX_SPAWN_EGG != null) return;
-        ItemTypes.VEX_SPAWN_EGG = AllayItemType
-                .builder(ItemVexSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.VEX_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initVillagerSpawnEgg() {
-        if (ItemTypes.VILLAGER_SPAWN_EGG != null) return;
-        ItemTypes.VILLAGER_SPAWN_EGG = AllayItemType
-                .builder(ItemVillagerSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.VILLAGER_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initVindicatorSpawnEgg() {
-        if (ItemTypes.VINDICATOR_SPAWN_EGG != null) return;
-        ItemTypes.VINDICATOR_SPAWN_EGG = AllayItemType
-                .builder(ItemVindicatorSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.VINDICATOR_SPAWN_EGG)
-                .build();
-    }
-
     public static void initVine() {
         if (ItemTypes.VINE != null) return;
         ItemTypes.VINE = AllayItemType
@@ -14635,27 +13885,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initWanderingTraderSpawnEgg() {
-        if (ItemTypes.WANDERING_TRADER_SPAWN_EGG != null) return;
-        ItemTypes.WANDERING_TRADER_SPAWN_EGG = AllayItemType
-                .builder(ItemWanderingTraderSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WANDERING_TRADER_SPAWN_EGG)
-                .build();
-    }
-
     public static void initWardArmorTrimSmithingTemplate() {
         if (ItemTypes.WARD_ARMOR_TRIM_SMITHING_TEMPLATE != null) return;
         ItemTypes.WARD_ARMOR_TRIM_SMITHING_TEMPLATE = AllayItemType
                 .builder(ItemWardArmorTrimSmithingTemplateStackImpl.class)
                 .vanillaItem(ItemId.WARD_ARMOR_TRIM_SMITHING_TEMPLATE)
-                .build();
-    }
-
-    public static void initWardenSpawnEgg() {
-        if (ItemTypes.WARDEN_SPAWN_EGG != null) return;
-        ItemTypes.WARDEN_SPAWN_EGG = AllayItemType
-                .builder(ItemWardenSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WARDEN_SPAWN_EGG)
                 .build();
     }
 
@@ -14832,14 +14066,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.WATER = AllayItemType
                 .builder(ItemWaterStackImpl.class)
                 .vanillaItem(ItemId.WATER)
-                .build();
-    }
-
-    public static void initWaterBucket() {
-        if (ItemTypes.WATER_BUCKET != null) return;
-        ItemTypes.WATER_BUCKET = AllayItemType
-                .builder(ItemWaterBucketStackImpl.class)
-                .vanillaItem(ItemId.WATER_BUCKET)
                 .build();
     }
 
@@ -15427,14 +14653,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initWitchSpawnEgg() {
-        if (ItemTypes.WITCH_SPAWN_EGG != null) return;
-        ItemTypes.WITCH_SPAWN_EGG = AllayItemType
-                .builder(ItemWitchSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WITCH_SPAWN_EGG)
-                .build();
-    }
-
     public static void initWitherRose() {
         if (ItemTypes.WITHER_ROSE != null) return;
         ItemTypes.WITHER_ROSE = AllayItemType
@@ -15451,35 +14669,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initWitherSkeletonSpawnEgg() {
-        if (ItemTypes.WITHER_SKELETON_SPAWN_EGG != null) return;
-        ItemTypes.WITHER_SKELETON_SPAWN_EGG = AllayItemType
-                .builder(ItemWitherSkeletonSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WITHER_SKELETON_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initWitherSpawnEgg() {
-        if (ItemTypes.WITHER_SPAWN_EGG != null) return;
-        ItemTypes.WITHER_SPAWN_EGG = AllayItemType
-                .builder(ItemWitherSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WITHER_SPAWN_EGG)
-                .build();
-    }
-
     public static void initWolfArmor() {
         if (ItemTypes.WOLF_ARMOR != null) return;
         ItemTypes.WOLF_ARMOR = AllayItemType
                 .builder(ItemWolfArmorStackImpl.class)
                 .vanillaItem(ItemId.WOLF_ARMOR)
-                .build();
-    }
-
-    public static void initWolfSpawnEgg() {
-        if (ItemTypes.WOLF_SPAWN_EGG != null) return;
-        ItemTypes.WOLF_SPAWN_EGG = AllayItemType
-                .builder(ItemWolfSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WOLF_SPAWN_EGG)
                 .build();
     }
 
@@ -15691,51 +14885,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initZoglinSpawnEgg() {
-        if (ItemTypes.ZOGLIN_SPAWN_EGG != null) return;
-        ItemTypes.ZOGLIN_SPAWN_EGG = AllayItemType
-                .builder(ItemZoglinSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOGLIN_SPAWN_EGG)
-                .build();
-    }
-
     public static void initZombieHead() {
         if (ItemTypes.ZOMBIE_HEAD != null) return;
         ItemTypes.ZOMBIE_HEAD = AllayItemType
                 .builder(ItemZombieHeadStackImpl.class)
                 .vanillaItem(ItemId.ZOMBIE_HEAD)
-                .build();
-    }
-
-    public static void initZombieHorseSpawnEgg() {
-        if (ItemTypes.ZOMBIE_HORSE_SPAWN_EGG != null) return;
-        ItemTypes.ZOMBIE_HORSE_SPAWN_EGG = AllayItemType
-                .builder(ItemZombieHorseSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOMBIE_HORSE_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initZombiePigmanSpawnEgg() {
-        if (ItemTypes.ZOMBIE_PIGMAN_SPAWN_EGG != null) return;
-        ItemTypes.ZOMBIE_PIGMAN_SPAWN_EGG = AllayItemType
-                .builder(ItemZombiePigmanSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOMBIE_PIGMAN_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initZombieSpawnEgg() {
-        if (ItemTypes.ZOMBIE_SPAWN_EGG != null) return;
-        ItemTypes.ZOMBIE_SPAWN_EGG = AllayItemType
-                .builder(ItemZombieSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOMBIE_SPAWN_EGG)
-                .build();
-    }
-
-    public static void initZombieVillagerSpawnEgg() {
-        if (ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG != null) return;
-        ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG = AllayItemType
-                .builder(ItemZombieVillagerSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOMBIE_VILLAGER_SPAWN_EGG)
                 .build();
     }
 }

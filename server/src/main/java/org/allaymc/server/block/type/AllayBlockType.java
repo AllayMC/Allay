@@ -1,5 +1,6 @@
 package org.allaymc.server.block.type;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -507,6 +508,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             if (!isCustomBlock) {
                 // This is a vanilla block
                 // The hard item type (when conflict) for vanilla block is pre-registered
+                Preconditions.checkNotNull(this.itemType);
                 this.hardItemType = Registries.ITEMS.get(hardItemIdWhenConflict);
                 if (this.hardItemType == null) {
                     // The actual item type and the hard item type
