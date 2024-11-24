@@ -953,6 +953,8 @@ import org.allaymc.server.block.impl.terracotta.BlockYellowGlazedTerracottaBehav
 import org.allaymc.server.block.impl.terracotta.BlockYellowTerracottaBehaviorImpl;
 import org.allaymc.server.block.impl.tnt.BlockTntBehaviorImpl;
 import org.allaymc.server.block.impl.tnt.BlockUnderwaterTntBehaviorImpl;
+import org.allaymc.server.block.impl.torchflower.BlockTorchflowerBehaviorImpl;
+import org.allaymc.server.block.impl.torchflower.BlockTorchflowerCropBehaviorImpl;
 import org.allaymc.server.block.impl.trapdoor.BlockAcaciaTrapdoorBehaviorImpl;
 import org.allaymc.server.block.impl.trapdoor.BlockBambooTrapdoorBehaviorImpl;
 import org.allaymc.server.block.impl.trapdoor.BlockBirchTrapdoorBehaviorImpl;
@@ -8617,6 +8619,23 @@ public final class BlockTypeDefaultInitializer {
                 .builder(BlockTntBehaviorImpl.class)
                 .vanillaBlock(BlockId.TNT)
                 .setProperties(BlockPropertyTypes.EXPLODE_BIT)
+                .build();
+    }
+
+    public static void initTorchflower() {
+        if (BlockTypes.TORCHFLOWER != null) return;
+        BlockTypes.TORCHFLOWER = AllayBlockType
+                .builder(BlockTorchflowerBehaviorImpl.class)
+                .vanillaBlock(BlockId.TORCHFLOWER)
+                .build();
+    }
+
+    public static void initTorchflowerCrop() {
+        if (BlockTypes.TORCHFLOWER_CROP != null) return;
+        BlockTypes.TORCHFLOWER_CROP = AllayBlockType
+                .builder(BlockTorchflowerCropBehaviorImpl.class)
+                .vanillaBlock(BlockId.TORCHFLOWER_CROP)
+                .setProperties(BlockPropertyTypes.GROWTH)
                 .build();
     }
 

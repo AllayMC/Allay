@@ -241,5 +241,16 @@ public class ItemClassGen extends BaseClassGen {
     private static void registerIgnoredItems() {
         registerIgnoredItem(Pattern.compile(".*SpawnEggStack"));
         registerIgnoredItem(Pattern.compile(".*BucketStack"));
+        registerIgnoredItem(Pattern.compile(".*SwordStack"));
+        registerIgnoredItem(Pattern.compile(".*PickaxeStack"));
+        registerIgnoredItem(Pattern.compile(".*AxeStack"));
+        registerIgnoredItem(Pattern.compile(".*ShovelStack"));
+        registerIgnoredItem(Pattern.compile(".*HoeStack"));
+        registerIgnoredItem(Pattern.compile(".*ShulkerBoxStack"));
+        registerIgnoredItem(Pattern.compile(".*HelmetStack"));
+        registerIgnoredItem(Pattern.compile(".*ChestplateStack"));
+        registerIgnoredItem(Pattern.compile(".*LeggingsStack"));
+        registerIgnoredItem(Pattern.compile(".*BootsStack"));
+        registerIgnoredItem(Pattern.compile("^(?!.*HangingSignStack$)(?!.*WallSignStack$)(?!.*StandingSignStack$).*SignStack$"));
     }
 }

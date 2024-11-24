@@ -17,20 +17,9 @@ import org.allaymc.server.item.component.spawnegg.ItemSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.spawnegg.ItemTropicalFishSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.tool.*;
 import org.allaymc.server.item.impl.*;
-import org.allaymc.server.item.impl.axe.*;
-import org.allaymc.server.item.impl.boots.*;
 import org.allaymc.server.item.impl.bucket.ItemBucketStackImpl;
 import org.allaymc.server.item.impl.bucket.ItemMilkBucketStackImpl;
-import org.allaymc.server.item.impl.chestplate.*;
-import org.allaymc.server.item.impl.helmet.*;
-import org.allaymc.server.item.impl.hoe.*;
-import org.allaymc.server.item.impl.leggings.*;
-import org.allaymc.server.item.impl.pickaxe.*;
-import org.allaymc.server.item.impl.shovel.*;
-import org.allaymc.server.item.impl.shulkerbox.*;
-import org.allaymc.server.item.impl.sign.*;
 import org.allaymc.server.item.impl.spawnegg.ItemSpawnEggStackImpl;
-import org.allaymc.server.item.impl.sword.*;
 
 /**
  * @author daoge_cmd
@@ -806,32 +795,32 @@ public final class ItemTypeInitializer {
 
     public static void initSword() {
         ItemTypes.DIAMOND_SWORD = AllayItemType
-                .builder(ItemDiamondSwordStackImpl.class)
+                .builder(ItemSwordStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_SWORD)
                 .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
                 .build();
         ItemTypes.GOLDEN_SWORD = AllayItemType
-                .builder(ItemGoldenSwordStackImpl.class)
+                .builder(ItemSwordStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_SWORD)
                 .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
                 .build();
         ItemTypes.IRON_SWORD = AllayItemType
-                .builder(ItemIronSwordStackImpl.class)
+                .builder(ItemSwordStackImpl.class)
                 .vanillaItem(ItemId.IRON_SWORD)
                 .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
                 .build();
         ItemTypes.NETHERITE_SWORD = AllayItemType
-                .builder(ItemNetheriteSwordStackImpl.class)
+                .builder(ItemSwordStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_SWORD)
                 .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
                 .build();
         ItemTypes.STONE_SWORD = AllayItemType
-                .builder(ItemStoneSwordStackImpl.class)
+                .builder(ItemSwordStackImpl.class)
                 .vanillaItem(ItemId.STONE_SWORD)
                 .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
                 .build();
         ItemTypes.WOODEN_SWORD = AllayItemType
-                .builder(ItemWoodenSwordStackImpl.class)
+                .builder(ItemSwordStackImpl.class)
                 .vanillaItem(ItemId.WOODEN_SWORD)
                 .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
                 .build();
@@ -839,32 +828,32 @@ public final class ItemTypeInitializer {
 
     public static void initPickaxe() {
         ItemTypes.DIAMOND_PICKAXE = AllayItemType
-                .builder(ItemDiamondPickaxeStackImpl.class)
+                .builder(ItemPickaxeStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_PICKAXE)
                 .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
                 .build();
         ItemTypes.GOLDEN_PICKAXE = AllayItemType
-                .builder(ItemGoldenPickaxeStackImpl.class)
+                .builder(ItemPickaxeStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_PICKAXE)
                 .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
                 .build();
         ItemTypes.IRON_PICKAXE = AllayItemType
-                .builder(ItemIronPickaxeStackImpl.class)
+                .builder(ItemPickaxeStackImpl.class)
                 .vanillaItem(ItemId.IRON_PICKAXE)
                 .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
                 .build();
         ItemTypes.NETHERITE_PICKAXE = AllayItemType
-                .builder(ItemNetheritePickaxeStackImpl.class)
+                .builder(ItemPickaxeStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_PICKAXE)
                 .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
                 .build();
         ItemTypes.STONE_PICKAXE = AllayItemType
-                .builder(ItemStonePickaxeStackImpl.class)
+                .builder(ItemPickaxeStackImpl.class)
                 .vanillaItem(ItemId.STONE_PICKAXE)
                 .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
                 .build();
         ItemTypes.WOODEN_PICKAXE = AllayItemType
-                .builder(ItemWoodenPickaxeStackImpl.class)
+                .builder(ItemPickaxeStackImpl.class)
                 .vanillaItem(ItemId.WOODEN_PICKAXE)
                 .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
                 .build();
@@ -872,32 +861,32 @@ public final class ItemTypeInitializer {
 
     public static void initAxe() {
         ItemTypes.DIAMOND_AXE = AllayItemType
-                .builder(ItemDiamondAxeStackImpl.class)
+                .builder(ItemAxeStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_AXE)
                 .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
                 .build();
         ItemTypes.GOLDEN_AXE = AllayItemType
-                .builder(ItemGoldenAxeStackImpl.class)
+                .builder(ItemAxeStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_AXE)
                 .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
                 .build();
         ItemTypes.IRON_AXE = AllayItemType
-                .builder(ItemIronAxeStackImpl.class)
+                .builder(ItemAxeStackImpl.class)
                 .vanillaItem(ItemId.IRON_AXE)
                 .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
                 .build();
         ItemTypes.NETHERITE_AXE = AllayItemType
-                .builder(ItemNetheriteAxeStackImpl.class)
+                .builder(ItemAxeStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_AXE)
                 .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
                 .build();
         ItemTypes.STONE_AXE = AllayItemType
-                .builder(ItemStoneAxeStackImpl.class)
+                .builder(ItemAxeStackImpl.class)
                 .vanillaItem(ItemId.STONE_AXE)
                 .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
                 .build();
         ItemTypes.WOODEN_AXE = AllayItemType
-                .builder(ItemWoodenAxeStackImpl.class)
+                .builder(ItemAxeStackImpl.class)
                 .vanillaItem(ItemId.WOODEN_AXE)
                 .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
                 .build();
@@ -905,32 +894,32 @@ public final class ItemTypeInitializer {
 
     public static void initShovel() {
         ItemTypes.DIAMOND_SHOVEL = AllayItemType
-                .builder(ItemDiamondShovelStackImpl.class)
+                .builder(ItemShovelStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_SHOVEL)
                 .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
                 .build();
         ItemTypes.GOLDEN_SHOVEL = AllayItemType
-                .builder(ItemGoldenShovelStackImpl.class)
+                .builder(ItemShovelStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_SHOVEL)
                 .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
                 .build();
         ItemTypes.IRON_SHOVEL = AllayItemType
-                .builder(ItemIronShovelStackImpl.class)
+                .builder(ItemShovelStackImpl.class)
                 .vanillaItem(ItemId.IRON_SHOVEL)
                 .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
                 .build();
         ItemTypes.NETHERITE_SHOVEL = AllayItemType
-                .builder(ItemNetheriteShovelStackImpl.class)
+                .builder(ItemShovelStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_SHOVEL)
                 .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
                 .build();
         ItemTypes.STONE_SHOVEL = AllayItemType
-                .builder(ItemStoneShovelStackImpl.class)
+                .builder(ItemShovelStackImpl.class)
                 .vanillaItem(ItemId.STONE_SHOVEL)
                 .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
                 .build();
         ItemTypes.WOODEN_SHOVEL = AllayItemType
-                .builder(ItemWoodenShovelStackImpl.class)
+                .builder(ItemShovelStackImpl.class)
                 .vanillaItem(ItemId.WOODEN_SHOVEL)
                 .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
                 .build();
@@ -938,32 +927,32 @@ public final class ItemTypeInitializer {
 
     public static void initHoe() {
         ItemTypes.DIAMOND_HOE = AllayItemType
-                .builder(ItemDiamondHoeStackImpl.class)
+                .builder(ItemHoeStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_HOE)
                 .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
                 .build();
         ItemTypes.GOLDEN_HOE = AllayItemType
-                .builder(ItemGoldenHoeStackImpl.class)
+                .builder(ItemHoeStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_HOE)
                 .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
                 .build();
         ItemTypes.IRON_HOE = AllayItemType
-                .builder(ItemIronHoeStackImpl.class)
+                .builder(ItemHoeStackImpl.class)
                 .vanillaItem(ItemId.IRON_HOE)
                 .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
                 .build();
         ItemTypes.NETHERITE_HOE = AllayItemType
-                .builder(ItemNetheriteHoeStackImpl.class)
+                .builder(ItemHoeStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_HOE)
                 .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
                 .build();
         ItemTypes.STONE_HOE = AllayItemType
-                .builder(ItemStoneHoeStackImpl.class)
+                .builder(ItemHoeStackImpl.class)
                 .vanillaItem(ItemId.STONE_HOE)
                 .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
                 .build();
         ItemTypes.WOODEN_HOE = AllayItemType
-                .builder(ItemWoodenHoeStackImpl.class)
+                .builder(ItemHoeStackImpl.class)
                 .vanillaItem(ItemId.WOODEN_HOE)
                 .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
                 .build();
@@ -971,72 +960,72 @@ public final class ItemTypeInitializer {
 
     public static void initShulkerBox() {
         ItemTypes.BLACK_SHULKER_BOX = AllayItemType
-                .builder(ItemBlackShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.BLACK_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.BLUE_SHULKER_BOX = AllayItemType
-                .builder(ItemBlueShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.BLUE_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.BROWN_SHULKER_BOX = AllayItemType
-                .builder(ItemBrownShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.BROWN_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.CYAN_SHULKER_BOX = AllayItemType
-                .builder(ItemCyanShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.CYAN_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.GRAY_SHULKER_BOX = AllayItemType
-                .builder(ItemGrayShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.GRAY_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.GREEN_SHULKER_BOX = AllayItemType
-                .builder(ItemGreenShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.GREEN_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.LIGHT_BLUE_SHULKER_BOX = AllayItemType
-                .builder(ItemLightBlueShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.LIGHT_BLUE_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.LIGHT_GRAY_SHULKER_BOX = AllayItemType
-                .builder(ItemLightGrayShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.LIGHT_GRAY_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.LIME_SHULKER_BOX = AllayItemType
-                .builder(ItemLimeShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.LIME_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.MAGENTA_SHULKER_BOX = AllayItemType
-                .builder(ItemMagentaShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.MAGENTA_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.ORANGE_SHULKER_BOX = AllayItemType
-                .builder(ItemOrangeShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.ORANGE_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.PINK_SHULKER_BOX = AllayItemType
-                .builder(ItemPinkShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.PINK_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.PURPLE_SHULKER_BOX = AllayItemType
-                .builder(ItemPurpleShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.PURPLE_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.RED_SHULKER_BOX = AllayItemType
-                .builder(ItemRedShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.RED_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
@@ -1046,17 +1035,17 @@ public final class ItemTypeInitializer {
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.UNDYED_SHULKER_BOX = AllayItemType
-                .builder(ItemUndyedShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.UNDYED_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.WHITE_SHULKER_BOX = AllayItemType
-                .builder(ItemWhiteShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.WHITE_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
         ItemTypes.YELLOW_SHULKER_BOX = AllayItemType
-                .builder(ItemYellowShulkerBoxStackImpl.class)
+                .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.YELLOW_SHULKER_BOX)
                 .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
                 .build();
@@ -1072,71 +1061,70 @@ public final class ItemTypeInitializer {
 
     public static void initHelmets() {
         ItemTypes.CHAINMAIL_HELMET = AllayItemType
-                .builder(ItemChainmailHelmetStackImpl.class)
+                .builder(ItemHelmetStackImpl.class)
                 .vanillaItem(ItemId.CHAINMAIL_HELMET)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.DIAMOND_HELMET = AllayItemType
-                .builder(ItemDiamondHelmetStackImpl.class)
+                .builder(ItemHelmetStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_HELMET)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.GOLDEN_HELMET = AllayItemType
-                .builder(ItemGoldenHelmetStackImpl.class)
+                .builder(ItemHelmetStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_HELMET)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.IRON_HELMET = AllayItemType
-                .builder(ItemIronHelmetStackImpl.class)
+                .builder(ItemHelmetStackImpl.class)
                 .vanillaItem(ItemId.IRON_HELMET)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.LEATHER_HELMET = AllayItemType
-                .builder(ItemLeatherHelmetStackImpl.class)
+                .builder(ItemHelmetStackImpl.class)
                 .vanillaItem(ItemId.LEATHER_HELMET)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.NETHERITE_HELMET = AllayItemType
-                .builder(ItemNetheriteHelmetStackImpl.class)
+                .builder(ItemHelmetStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_HELMET)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.TURTLE_HELMET = AllayItemType
-                .builder(ItemTurtleHelmetStackImpl.class)
+                .builder(ItemHelmetStackImpl.class)
                 .vanillaItem(ItemId.TURTLE_HELMET)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.HELMET), ItemArmorBaseComponentImpl.class)
                 .build();
     }
 
-
     public static void initChestplates() {
         ItemTypes.CHAINMAIL_CHESTPLATE = AllayItemType
-                .builder(ItemChainmailChestplateStackImpl.class)
+                .builder(ItemChestplateStackImpl.class)
                 .vanillaItem(ItemId.CHAINMAIL_CHESTPLATE)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.DIAMOND_CHESTPLATE = AllayItemType
-                .builder(ItemDiamondChestplateStackImpl.class)
+                .builder(ItemChestplateStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_CHESTPLATE)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.GOLDEN_CHESTPLATE = AllayItemType
-                .builder(ItemGoldenChestplateStackImpl.class)
+                .builder(ItemChestplateStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_CHESTPLATE)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.IRON_CHESTPLATE = AllayItemType
-                .builder(ItemIronChestplateStackImpl.class)
+                .builder(ItemChestplateStackImpl.class)
                 .vanillaItem(ItemId.IRON_CHESTPLATE)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.LEATHER_CHESTPLATE = AllayItemType
-                .builder(ItemLeatherChestplateStackImpl.class)
+                .builder(ItemChestplateStackImpl.class)
                 .vanillaItem(ItemId.LEATHER_CHESTPLATE)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.NETHERITE_CHESTPLATE = AllayItemType
-                .builder(ItemNetheriteChestplateStackImpl.class)
+                .builder(ItemChestplateStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_CHESTPLATE)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.CHESTPLATE), ItemArmorBaseComponentImpl.class)
                 .build();
@@ -1149,32 +1137,32 @@ public final class ItemTypeInitializer {
 
     public static void initLeggings() {
         ItemTypes.CHAINMAIL_LEGGINGS = AllayItemType
-                .builder(ItemChainmailLeggingsStackImpl.class)
+                .builder(ItemLeggingsStackImpl.class)
                 .vanillaItem(ItemId.CHAINMAIL_LEGGINGS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.DIAMOND_LEGGINGS = AllayItemType
-                .builder(ItemDiamondLeggingsStackImpl.class)
+                .builder(ItemLeggingsStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_LEGGINGS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.GOLDEN_LEGGINGS = AllayItemType
-                .builder(ItemGoldenLeggingsStackImpl.class)
+                .builder(ItemLeggingsStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_LEGGINGS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.IRON_LEGGINGS = AllayItemType
-                .builder(ItemIronLeggingsStackImpl.class)
+                .builder(ItemLeggingsStackImpl.class)
                 .vanillaItem(ItemId.IRON_LEGGINGS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.LEATHER_LEGGINGS = AllayItemType
-                .builder(ItemLeatherLeggingsStackImpl.class)
+                .builder(ItemLeggingsStackImpl.class)
                 .vanillaItem(ItemId.LEATHER_LEGGINGS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.NETHERITE_LEGGINGS = AllayItemType
-                .builder(ItemNetheriteLeggingsStackImpl.class)
+                .builder(ItemLeggingsStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_LEGGINGS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.LEGGINGS), ItemArmorBaseComponentImpl.class)
                 .build();
@@ -1182,32 +1170,32 @@ public final class ItemTypeInitializer {
 
     public static void initBoots() {
         ItemTypes.CHAINMAIL_BOOTS = AllayItemType
-                .builder(ItemChainmailBootsStackImpl.class)
+                .builder(ItemBootsStackImpl.class)
                 .vanillaItem(ItemId.CHAINMAIL_BOOTS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.DIAMOND_BOOTS = AllayItemType
-                .builder(ItemDiamondBootsStackImpl.class)
+                .builder(ItemBootsStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_BOOTS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.GOLDEN_BOOTS = AllayItemType
-                .builder(ItemGoldenBootsStackImpl.class)
+                .builder(ItemBootsStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_BOOTS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.IRON_BOOTS = AllayItemType
-                .builder(ItemIronBootsStackImpl.class)
+                .builder(ItemBootsStackImpl.class)
                 .vanillaItem(ItemId.IRON_BOOTS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.LEATHER_BOOTS = AllayItemType
-                .builder(ItemLeatherBootsStackImpl.class)
+                .builder(ItemBootsStackImpl.class)
                 .vanillaItem(ItemId.LEATHER_BOOTS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
         ItemTypes.NETHERITE_BOOTS = AllayItemType
-                .builder(ItemNetheriteBootsStackImpl.class)
+                .builder(ItemBootsStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_BOOTS)
                 .addComponent(initInfo -> new ItemArmorBaseComponentImpl(initInfo, ArmorType.BOOTS), ItemArmorBaseComponentImpl.class)
                 .build();
@@ -1223,57 +1211,57 @@ public final class ItemTypeInitializer {
 
     public static void initSigns() {
         ItemTypes.ACACIA_SIGN = AllayItemType
-                .builder(ItemAcaciaSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.ACACIA_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.ACACIA_WALL_SIGN.getIdentifier(), BlockId.ACACIA_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.BAMBOO_SIGN = AllayItemType
-                .builder(ItemBambooSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.BAMBOO_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.BAMBOO_WALL_SIGN.getIdentifier(), BlockId.BAMBOO_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.BIRCH_SIGN = AllayItemType
-                .builder(ItemBirchSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.BIRCH_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.BIRCH_WALL_SIGN.getIdentifier(), BlockId.BIRCH_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.CHERRY_SIGN = AllayItemType
-                .builder(ItemCherrySignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.CHERRY_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.CHERRY_WALL_SIGN.getIdentifier(), BlockId.CHERRY_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.CRIMSON_SIGN = AllayItemType
-                .builder(ItemCrimsonSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.CRIMSON_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.CRIMSON_WALL_SIGN.getIdentifier(), BlockId.CRIMSON_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.DARK_OAK_SIGN = AllayItemType
-                .builder(ItemDarkOakSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.DARK_OAK_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.DARKOAK_WALL_SIGN.getIdentifier(), BlockId.DARKOAK_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.JUNGLE_SIGN = AllayItemType
-                .builder(ItemJungleSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.JUNGLE_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.JUNGLE_WALL_SIGN.getIdentifier(), BlockId.JUNGLE_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.MANGROVE_SIGN = AllayItemType
-                .builder(ItemMangroveSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.MANGROVE_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.MANGROVE_WALL_SIGN.getIdentifier(), BlockId.MANGROVE_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.OAK_SIGN = AllayItemType
-                .builder(ItemOakSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.OAK_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.WALL_SIGN.getIdentifier(), BlockId.STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.SPRUCE_SIGN = AllayItemType
-                .builder(ItemSpruceSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.SPRUCE_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.SPRUCE_WALL_SIGN.getIdentifier(), BlockId.SPRUCE_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
         ItemTypes.WARPED_SIGN = AllayItemType
-                .builder(ItemWarpedSignStackImpl.class)
+                .builder(ItemSignStackImpl.class)
                 .vanillaItem(ItemId.WARPED_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.WARPED_WALL_SIGN.getIdentifier(), BlockId.WARPED_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();

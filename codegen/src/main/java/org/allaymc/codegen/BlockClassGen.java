@@ -258,7 +258,7 @@ public class BlockClassGen extends BaseClassGen {
         registerIgnoredBlock(Pattern.compile(".*(Leaves\\d?|LeavesFlowered)Behavior"));
         registerIgnoredBlock(Pattern.compile(".*ShulkerBoxBehavior"));
         registerIgnoredBlock(Pattern.compile(".*StairsBehavior"));
-        registerIgnoredBlock(Pattern.compile(".*Torch.*Behavior"));
+        registerIgnoredBlock(Pattern.compile("^(?!.*Torchflower.*Behavior$).*Torch.*Behavior$"));
         registerIgnoredBlock(Pattern.compile(".*FurnaceBehavior"));
         registerIgnoredBlock(Pattern.compile(".*SmokerBehavior"));
         registerIgnoredBlock(Pattern.compile(".*WoodBehavior"));

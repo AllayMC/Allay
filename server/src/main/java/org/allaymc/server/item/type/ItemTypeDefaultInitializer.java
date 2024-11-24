@@ -49,7 +49,6 @@ import org.allaymc.server.item.impl.ItemBirchPressurePlateStackImpl;
 import org.allaymc.server.item.impl.ItemBlackDyeStackImpl;
 import org.allaymc.server.item.impl.ItemBlackstoneStackImpl;
 import org.allaymc.server.item.impl.ItemBladePotterySherdStackImpl;
-import org.allaymc.server.item.impl.ItemBlastFurnaceStackImpl;
 import org.allaymc.server.item.impl.ItemBlazePowderStackImpl;
 import org.allaymc.server.item.impl.ItemBlazeRodStackImpl;
 import org.allaymc.server.item.impl.ItemBleachStackImpl;
@@ -244,7 +243,6 @@ import org.allaymc.server.item.impl.ItemFrameStackImpl;
 import org.allaymc.server.item.impl.ItemFriendPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemFrogSpawnStackImpl;
 import org.allaymc.server.item.impl.ItemFrostedIceStackImpl;
-import org.allaymc.server.item.impl.ItemFurnaceStackImpl;
 import org.allaymc.server.item.impl.ItemGhastTearStackImpl;
 import org.allaymc.server.item.impl.ItemGildedBlackstoneStackImpl;
 import org.allaymc.server.item.impl.ItemGlassBottleStackImpl;
@@ -350,13 +348,10 @@ import org.allaymc.server.item.impl.ItemLilacStackImpl;
 import org.allaymc.server.item.impl.ItemLilyOfTheValleyStackImpl;
 import org.allaymc.server.item.impl.ItemLimeDyeStackImpl;
 import org.allaymc.server.item.impl.ItemLingeringPotionStackImpl;
-import org.allaymc.server.item.impl.ItemLitBlastFurnaceStackImpl;
 import org.allaymc.server.item.impl.ItemLitDeepslateRedstoneOreStackImpl;
-import org.allaymc.server.item.impl.ItemLitFurnaceStackImpl;
 import org.allaymc.server.item.impl.ItemLitPumpkinStackImpl;
 import org.allaymc.server.item.impl.ItemLitRedstoneLampStackImpl;
 import org.allaymc.server.item.impl.ItemLitRedstoneOreStackImpl;
-import org.allaymc.server.item.impl.ItemLitSmokerStackImpl;
 import org.allaymc.server.item.impl.ItemLodestoneCompassStackImpl;
 import org.allaymc.server.item.impl.ItemLodestoneStackImpl;
 import org.allaymc.server.item.impl.ItemLoomStackImpl;
@@ -525,7 +520,6 @@ import org.allaymc.server.item.impl.ItemSlimeStackImpl;
 import org.allaymc.server.item.impl.ItemSmallAmethystBudStackImpl;
 import org.allaymc.server.item.impl.ItemSmallDripleafBlockStackImpl;
 import org.allaymc.server.item.impl.ItemSmithingTableStackImpl;
-import org.allaymc.server.item.impl.ItemSmokerStackImpl;
 import org.allaymc.server.item.impl.ItemSmoothBasaltStackImpl;
 import org.allaymc.server.item.impl.ItemSmoothQuartzStackImpl;
 import org.allaymc.server.item.impl.ItemSmoothStoneStackImpl;
@@ -632,12 +626,6 @@ import org.allaymc.server.item.impl.anvil.ItemAnvilStackImpl;
 import org.allaymc.server.item.impl.anvil.ItemChippedAnvilStackImpl;
 import org.allaymc.server.item.impl.anvil.ItemDamagedAnvilStackImpl;
 import org.allaymc.server.item.impl.anvil.ItemDeprecatedAnvilStackImpl;
-import org.allaymc.server.item.impl.axe.ItemDiamondAxeStackImpl;
-import org.allaymc.server.item.impl.axe.ItemGoldenAxeStackImpl;
-import org.allaymc.server.item.impl.axe.ItemIronAxeStackImpl;
-import org.allaymc.server.item.impl.axe.ItemNetheriteAxeStackImpl;
-import org.allaymc.server.item.impl.axe.ItemStoneAxeStackImpl;
-import org.allaymc.server.item.impl.axe.ItemWoodenAxeStackImpl;
 import org.allaymc.server.item.impl.boat.ItemAcaciaBoatStackImpl;
 import org.allaymc.server.item.impl.boat.ItemAcaciaChestBoatStackImpl;
 import org.allaymc.server.item.impl.boat.ItemBirchBoatStackImpl;
@@ -656,12 +644,6 @@ import org.allaymc.server.item.impl.boat.ItemOakBoatStackImpl;
 import org.allaymc.server.item.impl.boat.ItemOakChestBoatStackImpl;
 import org.allaymc.server.item.impl.boat.ItemSpruceBoatStackImpl;
 import org.allaymc.server.item.impl.boat.ItemSpruceChestBoatStackImpl;
-import org.allaymc.server.item.impl.boots.ItemChainmailBootsStackImpl;
-import org.allaymc.server.item.impl.boots.ItemDiamondBootsStackImpl;
-import org.allaymc.server.item.impl.boots.ItemGoldenBootsStackImpl;
-import org.allaymc.server.item.impl.boots.ItemIronBootsStackImpl;
-import org.allaymc.server.item.impl.boots.ItemLeatherBootsStackImpl;
-import org.allaymc.server.item.impl.boots.ItemNetheriteBootsStackImpl;
 import org.allaymc.server.item.impl.bricks.ItemChiseledNetherBricksStackImpl;
 import org.allaymc.server.item.impl.bricks.ItemChiseledStoneBricksStackImpl;
 import org.allaymc.server.item.impl.bricks.ItemChiseledTuffBricksStackImpl;
@@ -764,12 +746,6 @@ import org.allaymc.server.item.impl.carpet.ItemPurpleCarpetStackImpl;
 import org.allaymc.server.item.impl.carpet.ItemRedCarpetStackImpl;
 import org.allaymc.server.item.impl.carpet.ItemWhiteCarpetStackImpl;
 import org.allaymc.server.item.impl.carpet.ItemYellowCarpetStackImpl;
-import org.allaymc.server.item.impl.chestplate.ItemChainmailChestplateStackImpl;
-import org.allaymc.server.item.impl.chestplate.ItemDiamondChestplateStackImpl;
-import org.allaymc.server.item.impl.chestplate.ItemGoldenChestplateStackImpl;
-import org.allaymc.server.item.impl.chestplate.ItemIronChestplateStackImpl;
-import org.allaymc.server.item.impl.chestplate.ItemLeatherChestplateStackImpl;
-import org.allaymc.server.item.impl.chestplate.ItemNetheriteChestplateStackImpl;
 import org.allaymc.server.item.impl.concrete.ItemBlackConcreteStackImpl;
 import org.allaymc.server.item.impl.concrete.ItemBlueConcreteStackImpl;
 import org.allaymc.server.item.impl.concrete.ItemBrownConcreteStackImpl;
@@ -1048,6 +1024,12 @@ import org.allaymc.server.item.impl.fencegate.ItemJungleFenceGateStackImpl;
 import org.allaymc.server.item.impl.fencegate.ItemMangroveFenceGateStackImpl;
 import org.allaymc.server.item.impl.fencegate.ItemSpruceFenceGateStackImpl;
 import org.allaymc.server.item.impl.fencegate.ItemWarpedFenceGateStackImpl;
+import org.allaymc.server.item.impl.furnace.ItemBlastFurnaceStackImpl;
+import org.allaymc.server.item.impl.furnace.ItemFurnaceStackImpl;
+import org.allaymc.server.item.impl.furnace.ItemLitBlastFurnaceStackImpl;
+import org.allaymc.server.item.impl.furnace.ItemLitFurnaceStackImpl;
+import org.allaymc.server.item.impl.furnace.ItemLitSmokerStackImpl;
+import org.allaymc.server.item.impl.furnace.ItemSmokerStackImpl;
 import org.allaymc.server.item.impl.glass.ItemGlassStackImpl;
 import org.allaymc.server.item.impl.glass.ItemHardGlassStackImpl;
 import org.allaymc.server.item.impl.glass.ItemTintedGlassStackImpl;
@@ -1072,19 +1054,6 @@ import org.allaymc.server.item.impl.head.ItemSkeletonSkullStackImpl;
 import org.allaymc.server.item.impl.head.ItemSkullStackImpl;
 import org.allaymc.server.item.impl.head.ItemWitherSkeletonSkullStackImpl;
 import org.allaymc.server.item.impl.head.ItemZombieHeadStackImpl;
-import org.allaymc.server.item.impl.helmet.ItemChainmailHelmetStackImpl;
-import org.allaymc.server.item.impl.helmet.ItemDiamondHelmetStackImpl;
-import org.allaymc.server.item.impl.helmet.ItemGoldenHelmetStackImpl;
-import org.allaymc.server.item.impl.helmet.ItemIronHelmetStackImpl;
-import org.allaymc.server.item.impl.helmet.ItemLeatherHelmetStackImpl;
-import org.allaymc.server.item.impl.helmet.ItemNetheriteHelmetStackImpl;
-import org.allaymc.server.item.impl.helmet.ItemTurtleHelmetStackImpl;
-import org.allaymc.server.item.impl.hoe.ItemDiamondHoeStackImpl;
-import org.allaymc.server.item.impl.hoe.ItemGoldenHoeStackImpl;
-import org.allaymc.server.item.impl.hoe.ItemIronHoeStackImpl;
-import org.allaymc.server.item.impl.hoe.ItemNetheriteHoeStackImpl;
-import org.allaymc.server.item.impl.hoe.ItemStoneHoeStackImpl;
-import org.allaymc.server.item.impl.hoe.ItemWoodenHoeStackImpl;
 import org.allaymc.server.item.impl.leaves.ItemAcaciaLeavesStackImpl;
 import org.allaymc.server.item.impl.leaves.ItemAzaleaLeavesFloweredStackImpl;
 import org.allaymc.server.item.impl.leaves.ItemAzaleaLeavesStackImpl;
@@ -1097,12 +1066,6 @@ import org.allaymc.server.item.impl.leaves.ItemLeavesStackImpl;
 import org.allaymc.server.item.impl.leaves.ItemMangroveLeavesStackImpl;
 import org.allaymc.server.item.impl.leaves.ItemOakLeavesStackImpl;
 import org.allaymc.server.item.impl.leaves.ItemSpruceLeavesStackImpl;
-import org.allaymc.server.item.impl.leggings.ItemChainmailLeggingsStackImpl;
-import org.allaymc.server.item.impl.leggings.ItemDiamondLeggingsStackImpl;
-import org.allaymc.server.item.impl.leggings.ItemGoldenLeggingsStackImpl;
-import org.allaymc.server.item.impl.leggings.ItemIronLeggingsStackImpl;
-import org.allaymc.server.item.impl.leggings.ItemLeatherLeggingsStackImpl;
-import org.allaymc.server.item.impl.leggings.ItemNetheriteLeggingsStackImpl;
 import org.allaymc.server.item.impl.lightblock.ItemLightBlock0StackImpl;
 import org.allaymc.server.item.impl.lightblock.ItemLightBlock10StackImpl;
 import org.allaymc.server.item.impl.lightblock.ItemLightBlock11StackImpl;
@@ -1166,12 +1129,6 @@ import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscStalStackImpl;
 import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscStradStackImpl;
 import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscWaitStackImpl;
 import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscWardStackImpl;
-import org.allaymc.server.item.impl.pickaxe.ItemDiamondPickaxeStackImpl;
-import org.allaymc.server.item.impl.pickaxe.ItemGoldenPickaxeStackImpl;
-import org.allaymc.server.item.impl.pickaxe.ItemIronPickaxeStackImpl;
-import org.allaymc.server.item.impl.pickaxe.ItemNetheritePickaxeStackImpl;
-import org.allaymc.server.item.impl.pickaxe.ItemStonePickaxeStackImpl;
-import org.allaymc.server.item.impl.pickaxe.ItemWoodenPickaxeStackImpl;
 import org.allaymc.server.item.impl.piston.ItemPistonArmCollisionStackImpl;
 import org.allaymc.server.item.impl.piston.ItemPistonStackImpl;
 import org.allaymc.server.item.impl.piston.ItemStickyPistonArmCollisionStackImpl;
@@ -1211,41 +1168,6 @@ import org.allaymc.server.item.impl.sapling.ItemJungleSaplingStackImpl;
 import org.allaymc.server.item.impl.sapling.ItemOakSaplingStackImpl;
 import org.allaymc.server.item.impl.sapling.ItemSaplingStackImpl;
 import org.allaymc.server.item.impl.sapling.ItemSpruceSaplingStackImpl;
-import org.allaymc.server.item.impl.shovel.ItemDiamondShovelStackImpl;
-import org.allaymc.server.item.impl.shovel.ItemGoldenShovelStackImpl;
-import org.allaymc.server.item.impl.shovel.ItemIronShovelStackImpl;
-import org.allaymc.server.item.impl.shovel.ItemNetheriteShovelStackImpl;
-import org.allaymc.server.item.impl.shovel.ItemStoneShovelStackImpl;
-import org.allaymc.server.item.impl.shovel.ItemWoodenShovelStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemBlackShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemBlueShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemBrownShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemCyanShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemGrayShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemGreenShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemLightBlueShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemLightGrayShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemLimeShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemMagentaShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemOrangeShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemPinkShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemPurpleShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemRedShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemUndyedShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemWhiteShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.shulkerbox.ItemYellowShulkerBoxStackImpl;
-import org.allaymc.server.item.impl.sign.ItemAcaciaSignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemBambooSignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemBirchSignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemCherrySignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemCrimsonSignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemDarkOakSignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemJungleSignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemMangroveSignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemOakSignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemSpruceSignStackImpl;
-import org.allaymc.server.item.impl.sign.ItemWarpedSignStackImpl;
 import org.allaymc.server.item.impl.slab.ItemAcaciaDoubleSlabStackImpl;
 import org.allaymc.server.item.impl.slab.ItemAcaciaSlabStackImpl;
 import org.allaymc.server.item.impl.slab.ItemAndesiteDoubleSlabStackImpl;
@@ -1512,12 +1434,6 @@ import org.allaymc.server.item.impl.standingsign.ItemMangroveStandingSignStackIm
 import org.allaymc.server.item.impl.standingsign.ItemSpruceStandingSignStackImpl;
 import org.allaymc.server.item.impl.standingsign.ItemStandingSignStackImpl;
 import org.allaymc.server.item.impl.standingsign.ItemWarpedStandingSignStackImpl;
-import org.allaymc.server.item.impl.sword.ItemDiamondSwordStackImpl;
-import org.allaymc.server.item.impl.sword.ItemGoldenSwordStackImpl;
-import org.allaymc.server.item.impl.sword.ItemIronSwordStackImpl;
-import org.allaymc.server.item.impl.sword.ItemNetheriteSwordStackImpl;
-import org.allaymc.server.item.impl.sword.ItemStoneSwordStackImpl;
-import org.allaymc.server.item.impl.sword.ItemWoodenSwordStackImpl;
 import org.allaymc.server.item.impl.terracotta.ItemBlackGlazedTerracottaStackImpl;
 import org.allaymc.server.item.impl.terracotta.ItemBlackTerracottaStackImpl;
 import org.allaymc.server.item.impl.terracotta.ItemBlueGlazedTerracottaStackImpl;
@@ -1762,14 +1678,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.ACACIA_SAPLING = AllayItemType
                 .builder(ItemAcaciaSaplingStackImpl.class)
                 .vanillaItem(ItemId.ACACIA_SAPLING)
-                .build();
-    }
-
-    public static void initAcaciaSign() {
-        if (ItemTypes.ACACIA_SIGN != null) return;
-        ItemTypes.ACACIA_SIGN = AllayItemType
-                .builder(ItemAcaciaSignStackImpl.class)
-                .vanillaItem(ItemId.ACACIA_SIGN)
                 .build();
     }
 
@@ -2173,14 +2081,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initBambooSign() {
-        if (ItemTypes.BAMBOO_SIGN != null) return;
-        ItemTypes.BAMBOO_SIGN = AllayItemType
-                .builder(ItemBambooSignStackImpl.class)
-                .vanillaItem(ItemId.BAMBOO_SIGN)
-                .build();
-    }
-
     public static void initBambooSlab() {
         if (ItemTypes.BAMBOO_SLAB != null) return;
         ItemTypes.BAMBOO_SLAB = AllayItemType
@@ -2453,14 +2353,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initBirchSign() {
-        if (ItemTypes.BIRCH_SIGN != null) return;
-        ItemTypes.BIRCH_SIGN = AllayItemType
-                .builder(ItemBirchSignStackImpl.class)
-                .vanillaItem(ItemId.BIRCH_SIGN)
-                .build();
-    }
-
     public static void initBirchSlab() {
         if (ItemTypes.BIRCH_SLAB != null) return;
         ItemTypes.BIRCH_SLAB = AllayItemType
@@ -2570,14 +2462,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.BLACK_GLAZED_TERRACOTTA = AllayItemType
                 .builder(ItemBlackGlazedTerracottaStackImpl.class)
                 .vanillaItem(ItemId.BLACK_GLAZED_TERRACOTTA)
-                .build();
-    }
-
-    public static void initBlackShulkerBox() {
-        if (ItemTypes.BLACK_SHULKER_BOX != null) return;
-        ItemTypes.BLACK_SHULKER_BOX = AllayItemType
-                .builder(ItemBlackShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.BLACK_SHULKER_BOX)
                 .build();
     }
 
@@ -2770,14 +2654,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.BLUE_ORCHID = AllayItemType
                 .builder(ItemBlueOrchidStackImpl.class)
                 .vanillaItem(ItemId.BLUE_ORCHID)
-                .build();
-    }
-
-    public static void initBlueShulkerBox() {
-        if (ItemTypes.BLUE_SHULKER_BOX != null) return;
-        ItemTypes.BLUE_SHULKER_BOX = AllayItemType
-                .builder(ItemBlueShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.BLUE_SHULKER_BOX)
                 .build();
     }
 
@@ -3093,14 +2969,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initBrownShulkerBox() {
-        if (ItemTypes.BROWN_SHULKER_BOX != null) return;
-        ItemTypes.BROWN_SHULKER_BOX = AllayItemType
-                .builder(ItemBrownShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.BROWN_SHULKER_BOX)
-                .build();
-    }
-
     public static void initBrownStainedGlass() {
         if (ItemTypes.BROWN_STAINED_GLASS != null) return;
         ItemTypes.BROWN_STAINED_GLASS = AllayItemType
@@ -3365,38 +3233,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initChainmailBoots() {
-        if (ItemTypes.CHAINMAIL_BOOTS != null) return;
-        ItemTypes.CHAINMAIL_BOOTS = AllayItemType
-                .builder(ItemChainmailBootsStackImpl.class)
-                .vanillaItem(ItemId.CHAINMAIL_BOOTS)
-                .build();
-    }
-
-    public static void initChainmailChestplate() {
-        if (ItemTypes.CHAINMAIL_CHESTPLATE != null) return;
-        ItemTypes.CHAINMAIL_CHESTPLATE = AllayItemType
-                .builder(ItemChainmailChestplateStackImpl.class)
-                .vanillaItem(ItemId.CHAINMAIL_CHESTPLATE)
-                .build();
-    }
-
-    public static void initChainmailHelmet() {
-        if (ItemTypes.CHAINMAIL_HELMET != null) return;
-        ItemTypes.CHAINMAIL_HELMET = AllayItemType
-                .builder(ItemChainmailHelmetStackImpl.class)
-                .vanillaItem(ItemId.CHAINMAIL_HELMET)
-                .build();
-    }
-
-    public static void initChainmailLeggings() {
-        if (ItemTypes.CHAINMAIL_LEGGINGS != null) return;
-        ItemTypes.CHAINMAIL_LEGGINGS = AllayItemType
-                .builder(ItemChainmailLeggingsStackImpl.class)
-                .vanillaItem(ItemId.CHAINMAIL_LEGGINGS)
-                .build();
-    }
-
     public static void initCharcoal() {
         if (ItemTypes.CHARCOAL != null) return;
         ItemTypes.CHARCOAL = AllayItemType
@@ -3522,14 +3358,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.CHERRY_SAPLING = AllayItemType
                 .builder(ItemCherrySaplingStackImpl.class)
                 .vanillaItem(ItemId.CHERRY_SAPLING)
-                .build();
-    }
-
-    public static void initCherrySign() {
-        if (ItemTypes.CHERRY_SIGN != null) return;
-        ItemTypes.CHERRY_SIGN = AllayItemType
-                .builder(ItemCherrySignStackImpl.class)
-                .vanillaItem(ItemId.CHERRY_SIGN)
                 .build();
     }
 
@@ -4357,14 +4185,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initCrimsonSign() {
-        if (ItemTypes.CRIMSON_SIGN != null) return;
-        ItemTypes.CRIMSON_SIGN = AllayItemType
-                .builder(ItemCrimsonSignStackImpl.class)
-                .vanillaItem(ItemId.CRIMSON_SIGN)
-                .build();
-    }
-
     public static void initCrimsonSlab() {
         if (ItemTypes.CRIMSON_SLAB != null) return;
         ItemTypes.CRIMSON_SLAB = AllayItemType
@@ -4565,14 +4385,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initCyanShulkerBox() {
-        if (ItemTypes.CYAN_SHULKER_BOX != null) return;
-        ItemTypes.CYAN_SHULKER_BOX = AllayItemType
-                .builder(ItemCyanShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.CYAN_SHULKER_BOX)
-                .build();
-    }
-
     public static void initCyanStainedGlass() {
         if (ItemTypes.CYAN_STAINED_GLASS != null) return;
         ItemTypes.CYAN_STAINED_GLASS = AllayItemType
@@ -4730,14 +4542,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.DARK_OAK_SAPLING = AllayItemType
                 .builder(ItemDarkOakSaplingStackImpl.class)
                 .vanillaItem(ItemId.DARK_OAK_SAPLING)
-                .build();
-    }
-
-    public static void initDarkOakSign() {
-        if (ItemTypes.DARK_OAK_SIGN != null) return;
-        ItemTypes.DARK_OAK_SIGN = AllayItemType
-                .builder(ItemDarkOakSignStackImpl.class)
-                .vanillaItem(ItemId.DARK_OAK_SIGN)
                 .build();
     }
 
@@ -5213,51 +5017,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initDiamondAxe() {
-        if (ItemTypes.DIAMOND_AXE != null) return;
-        ItemTypes.DIAMOND_AXE = AllayItemType
-                .builder(ItemDiamondAxeStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_AXE)
-                .build();
-    }
-
     public static void initDiamondBlock() {
         if (ItemTypes.DIAMOND_BLOCK != null) return;
         ItemTypes.DIAMOND_BLOCK = AllayItemType
                 .builder(ItemDiamondBlockStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_BLOCK)
-                .build();
-    }
-
-    public static void initDiamondBoots() {
-        if (ItemTypes.DIAMOND_BOOTS != null) return;
-        ItemTypes.DIAMOND_BOOTS = AllayItemType
-                .builder(ItemDiamondBootsStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_BOOTS)
-                .build();
-    }
-
-    public static void initDiamondChestplate() {
-        if (ItemTypes.DIAMOND_CHESTPLATE != null) return;
-        ItemTypes.DIAMOND_CHESTPLATE = AllayItemType
-                .builder(ItemDiamondChestplateStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_CHESTPLATE)
-                .build();
-    }
-
-    public static void initDiamondHelmet() {
-        if (ItemTypes.DIAMOND_HELMET != null) return;
-        ItemTypes.DIAMOND_HELMET = AllayItemType
-                .builder(ItemDiamondHelmetStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_HELMET)
-                .build();
-    }
-
-    public static void initDiamondHoe() {
-        if (ItemTypes.DIAMOND_HOE != null) return;
-        ItemTypes.DIAMOND_HOE = AllayItemType
-                .builder(ItemDiamondHoeStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_HOE)
                 .build();
     }
 
@@ -5269,43 +5033,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initDiamondLeggings() {
-        if (ItemTypes.DIAMOND_LEGGINGS != null) return;
-        ItemTypes.DIAMOND_LEGGINGS = AllayItemType
-                .builder(ItemDiamondLeggingsStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_LEGGINGS)
-                .build();
-    }
-
     public static void initDiamondOre() {
         if (ItemTypes.DIAMOND_ORE != null) return;
         ItemTypes.DIAMOND_ORE = AllayItemType
                 .builder(ItemDiamondOreStackImpl.class)
                 .vanillaItem(ItemId.DIAMOND_ORE)
-                .build();
-    }
-
-    public static void initDiamondPickaxe() {
-        if (ItemTypes.DIAMOND_PICKAXE != null) return;
-        ItemTypes.DIAMOND_PICKAXE = AllayItemType
-                .builder(ItemDiamondPickaxeStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_PICKAXE)
-                .build();
-    }
-
-    public static void initDiamondShovel() {
-        if (ItemTypes.DIAMOND_SHOVEL != null) return;
-        ItemTypes.DIAMOND_SHOVEL = AllayItemType
-                .builder(ItemDiamondShovelStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_SHOVEL)
-                .build();
-    }
-
-    public static void initDiamondSword() {
-        if (ItemTypes.DIAMOND_SWORD != null) return;
-        ItemTypes.DIAMOND_SWORD = AllayItemType
-                .builder(ItemDiamondSwordStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_SWORD)
                 .build();
     }
 
@@ -7189,51 +6921,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initGoldenAxe() {
-        if (ItemTypes.GOLDEN_AXE != null) return;
-        ItemTypes.GOLDEN_AXE = AllayItemType
-                .builder(ItemGoldenAxeStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_AXE)
-                .build();
-    }
-
-    public static void initGoldenBoots() {
-        if (ItemTypes.GOLDEN_BOOTS != null) return;
-        ItemTypes.GOLDEN_BOOTS = AllayItemType
-                .builder(ItemGoldenBootsStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_BOOTS)
-                .build();
-    }
-
     public static void initGoldenCarrot() {
         if (ItemTypes.GOLDEN_CARROT != null) return;
         ItemTypes.GOLDEN_CARROT = AllayItemType
                 .builder(ItemGoldenCarrotStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_CARROT)
-                .build();
-    }
-
-    public static void initGoldenChestplate() {
-        if (ItemTypes.GOLDEN_CHESTPLATE != null) return;
-        ItemTypes.GOLDEN_CHESTPLATE = AllayItemType
-                .builder(ItemGoldenChestplateStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_CHESTPLATE)
-                .build();
-    }
-
-    public static void initGoldenHelmet() {
-        if (ItemTypes.GOLDEN_HELMET != null) return;
-        ItemTypes.GOLDEN_HELMET = AllayItemType
-                .builder(ItemGoldenHelmetStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_HELMET)
-                .build();
-    }
-
-    public static void initGoldenHoe() {
-        if (ItemTypes.GOLDEN_HOE != null) return;
-        ItemTypes.GOLDEN_HOE = AllayItemType
-                .builder(ItemGoldenHoeStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_HOE)
                 .build();
     }
 
@@ -7245,43 +6937,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initGoldenLeggings() {
-        if (ItemTypes.GOLDEN_LEGGINGS != null) return;
-        ItemTypes.GOLDEN_LEGGINGS = AllayItemType
-                .builder(ItemGoldenLeggingsStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_LEGGINGS)
-                .build();
-    }
-
-    public static void initGoldenPickaxe() {
-        if (ItemTypes.GOLDEN_PICKAXE != null) return;
-        ItemTypes.GOLDEN_PICKAXE = AllayItemType
-                .builder(ItemGoldenPickaxeStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_PICKAXE)
-                .build();
-    }
-
     public static void initGoldenRail() {
         if (ItemTypes.GOLDEN_RAIL != null) return;
         ItemTypes.GOLDEN_RAIL = AllayItemType
                 .builder(ItemGoldenRailStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_RAIL)
-                .build();
-    }
-
-    public static void initGoldenShovel() {
-        if (ItemTypes.GOLDEN_SHOVEL != null) return;
-        ItemTypes.GOLDEN_SHOVEL = AllayItemType
-                .builder(ItemGoldenShovelStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_SHOVEL)
-                .build();
-    }
-
-    public static void initGoldenSword() {
-        if (ItemTypes.GOLDEN_SWORD != null) return;
-        ItemTypes.GOLDEN_SWORD = AllayItemType
-                .builder(ItemGoldenSwordStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_SWORD)
                 .build();
     }
 
@@ -7413,14 +7073,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initGrayShulkerBox() {
-        if (ItemTypes.GRAY_SHULKER_BOX != null) return;
-        ItemTypes.GRAY_SHULKER_BOX = AllayItemType
-                .builder(ItemGrayShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.GRAY_SHULKER_BOX)
-                .build();
-    }
-
     public static void initGrayStainedGlass() {
         if (ItemTypes.GRAY_STAINED_GLASS != null) return;
         ItemTypes.GRAY_STAINED_GLASS = AllayItemType
@@ -7514,14 +7166,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.GREEN_GLAZED_TERRACOTTA = AllayItemType
                 .builder(ItemGreenGlazedTerracottaStackImpl.class)
                 .vanillaItem(ItemId.GREEN_GLAZED_TERRACOTTA)
-                .build();
-    }
-
-    public static void initGreenShulkerBox() {
-        if (ItemTypes.GREEN_SHULKER_BOX != null) return;
-        ItemTypes.GREEN_SHULKER_BOX = AllayItemType
-                .builder(ItemGreenShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.GREEN_SHULKER_BOX)
                 .build();
     }
 
@@ -8141,14 +7785,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initIronAxe() {
-        if (ItemTypes.IRON_AXE != null) return;
-        ItemTypes.IRON_AXE = AllayItemType
-                .builder(ItemIronAxeStackImpl.class)
-                .vanillaItem(ItemId.IRON_AXE)
-                .build();
-    }
-
     public static void initIronBars() {
         if (ItemTypes.IRON_BARS != null) return;
         ItemTypes.IRON_BARS = AllayItemType
@@ -8165,43 +7801,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initIronBoots() {
-        if (ItemTypes.IRON_BOOTS != null) return;
-        ItemTypes.IRON_BOOTS = AllayItemType
-                .builder(ItemIronBootsStackImpl.class)
-                .vanillaItem(ItemId.IRON_BOOTS)
-                .build();
-    }
-
-    public static void initIronChestplate() {
-        if (ItemTypes.IRON_CHESTPLATE != null) return;
-        ItemTypes.IRON_CHESTPLATE = AllayItemType
-                .builder(ItemIronChestplateStackImpl.class)
-                .vanillaItem(ItemId.IRON_CHESTPLATE)
-                .build();
-    }
-
     public static void initIronDoor() {
         if (ItemTypes.IRON_DOOR != null) return;
         ItemTypes.IRON_DOOR = AllayItemType
                 .builder(ItemIronDoorStackImpl.class)
                 .vanillaItem(ItemId.IRON_DOOR)
-                .build();
-    }
-
-    public static void initIronHelmet() {
-        if (ItemTypes.IRON_HELMET != null) return;
-        ItemTypes.IRON_HELMET = AllayItemType
-                .builder(ItemIronHelmetStackImpl.class)
-                .vanillaItem(ItemId.IRON_HELMET)
-                .build();
-    }
-
-    public static void initIronHoe() {
-        if (ItemTypes.IRON_HOE != null) return;
-        ItemTypes.IRON_HOE = AllayItemType
-                .builder(ItemIronHoeStackImpl.class)
-                .vanillaItem(ItemId.IRON_HOE)
                 .build();
     }
 
@@ -8221,14 +7825,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initIronLeggings() {
-        if (ItemTypes.IRON_LEGGINGS != null) return;
-        ItemTypes.IRON_LEGGINGS = AllayItemType
-                .builder(ItemIronLeggingsStackImpl.class)
-                .vanillaItem(ItemId.IRON_LEGGINGS)
-                .build();
-    }
-
     public static void initIronNugget() {
         if (ItemTypes.IRON_NUGGET != null) return;
         ItemTypes.IRON_NUGGET = AllayItemType
@@ -8242,30 +7838,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.IRON_ORE = AllayItemType
                 .builder(ItemIronOreStackImpl.class)
                 .vanillaItem(ItemId.IRON_ORE)
-                .build();
-    }
-
-    public static void initIronPickaxe() {
-        if (ItemTypes.IRON_PICKAXE != null) return;
-        ItemTypes.IRON_PICKAXE = AllayItemType
-                .builder(ItemIronPickaxeStackImpl.class)
-                .vanillaItem(ItemId.IRON_PICKAXE)
-                .build();
-    }
-
-    public static void initIronShovel() {
-        if (ItemTypes.IRON_SHOVEL != null) return;
-        ItemTypes.IRON_SHOVEL = AllayItemType
-                .builder(ItemIronShovelStackImpl.class)
-                .vanillaItem(ItemId.IRON_SHOVEL)
-                .build();
-    }
-
-    public static void initIronSword() {
-        if (ItemTypes.IRON_SWORD != null) return;
-        ItemTypes.IRON_SWORD = AllayItemType
-                .builder(ItemIronSwordStackImpl.class)
-                .vanillaItem(ItemId.IRON_SWORD)
                 .build();
     }
 
@@ -8621,14 +8193,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initJungleSign() {
-        if (ItemTypes.JUNGLE_SIGN != null) return;
-        ItemTypes.JUNGLE_SIGN = AllayItemType
-                .builder(ItemJungleSignStackImpl.class)
-                .vanillaItem(ItemId.JUNGLE_SIGN)
-                .build();
-    }
-
     public static void initJungleSlab() {
         if (ItemTypes.JUNGLE_SLAB != null) return;
         ItemTypes.JUNGLE_SLAB = AllayItemType
@@ -8773,43 +8337,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initLeatherBoots() {
-        if (ItemTypes.LEATHER_BOOTS != null) return;
-        ItemTypes.LEATHER_BOOTS = AllayItemType
-                .builder(ItemLeatherBootsStackImpl.class)
-                .vanillaItem(ItemId.LEATHER_BOOTS)
-                .build();
-    }
-
-    public static void initLeatherChestplate() {
-        if (ItemTypes.LEATHER_CHESTPLATE != null) return;
-        ItemTypes.LEATHER_CHESTPLATE = AllayItemType
-                .builder(ItemLeatherChestplateStackImpl.class)
-                .vanillaItem(ItemId.LEATHER_CHESTPLATE)
-                .build();
-    }
-
-    public static void initLeatherHelmet() {
-        if (ItemTypes.LEATHER_HELMET != null) return;
-        ItemTypes.LEATHER_HELMET = AllayItemType
-                .builder(ItemLeatherHelmetStackImpl.class)
-                .vanillaItem(ItemId.LEATHER_HELMET)
-                .build();
-    }
-
     public static void initLeatherHorseArmor() {
         if (ItemTypes.LEATHER_HORSE_ARMOR != null) return;
         ItemTypes.LEATHER_HORSE_ARMOR = AllayItemType
                 .builder(ItemLeatherHorseArmorStackImpl.class)
                 .vanillaItem(ItemId.LEATHER_HORSE_ARMOR)
-                .build();
-    }
-
-    public static void initLeatherLeggings() {
-        if (ItemTypes.LEATHER_LEGGINGS != null) return;
-        ItemTypes.LEATHER_LEGGINGS = AllayItemType
-                .builder(ItemLeatherLeggingsStackImpl.class)
-                .vanillaItem(ItemId.LEATHER_LEGGINGS)
                 .build();
     }
 
@@ -9045,14 +8577,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initLightBlueShulkerBox() {
-        if (ItemTypes.LIGHT_BLUE_SHULKER_BOX != null) return;
-        ItemTypes.LIGHT_BLUE_SHULKER_BOX = AllayItemType
-                .builder(ItemLightBlueShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.LIGHT_BLUE_SHULKER_BOX)
-                .build();
-    }
-
     public static void initLightBlueStainedGlass() {
         if (ItemTypes.LIGHT_BLUE_STAINED_GLASS != null) return;
         ItemTypes.LIGHT_BLUE_STAINED_GLASS = AllayItemType
@@ -9138,14 +8662,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.LIGHT_GRAY_DYE = AllayItemType
                 .builder(ItemLightGrayDyeStackImpl.class)
                 .vanillaItem(ItemId.LIGHT_GRAY_DYE)
-                .build();
-    }
-
-    public static void initLightGrayShulkerBox() {
-        if (ItemTypes.LIGHT_GRAY_SHULKER_BOX != null) return;
-        ItemTypes.LIGHT_GRAY_SHULKER_BOX = AllayItemType
-                .builder(ItemLightGrayShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.LIGHT_GRAY_SHULKER_BOX)
                 .build();
     }
 
@@ -9274,14 +8790,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.LIME_GLAZED_TERRACOTTA = AllayItemType
                 .builder(ItemLimeGlazedTerracottaStackImpl.class)
                 .vanillaItem(ItemId.LIME_GLAZED_TERRACOTTA)
-                .build();
-    }
-
-    public static void initLimeShulkerBox() {
-        if (ItemTypes.LIME_SHULKER_BOX != null) return;
-        ItemTypes.LIME_SHULKER_BOX = AllayItemType
-                .builder(ItemLimeShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.LIME_SHULKER_BOX)
                 .build();
     }
 
@@ -9493,14 +9001,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initMagentaShulkerBox() {
-        if (ItemTypes.MAGENTA_SHULKER_BOX != null) return;
-        ItemTypes.MAGENTA_SHULKER_BOX = AllayItemType
-                .builder(ItemMagentaShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.MAGENTA_SHULKER_BOX)
-                .build();
-    }
-
     public static void initMagentaStainedGlass() {
         if (ItemTypes.MAGENTA_STAINED_GLASS != null) return;
         ItemTypes.MAGENTA_STAINED_GLASS = AllayItemType
@@ -9658,14 +9158,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.MANGROVE_ROOTS = AllayItemType
                 .builder(ItemMangroveRootsStackImpl.class)
                 .vanillaItem(ItemId.MANGROVE_ROOTS)
-                .build();
-    }
-
-    public static void initMangroveSign() {
-        if (ItemTypes.MANGROVE_SIGN != null) return;
-        ItemTypes.MANGROVE_SIGN = AllayItemType
-                .builder(ItemMangroveSignStackImpl.class)
-                .vanillaItem(ItemId.MANGROVE_SIGN)
                 .build();
     }
 
@@ -10277,51 +9769,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initNetheriteAxe() {
-        if (ItemTypes.NETHERITE_AXE != null) return;
-        ItemTypes.NETHERITE_AXE = AllayItemType
-                .builder(ItemNetheriteAxeStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_AXE)
-                .build();
-    }
-
     public static void initNetheriteBlock() {
         if (ItemTypes.NETHERITE_BLOCK != null) return;
         ItemTypes.NETHERITE_BLOCK = AllayItemType
                 .builder(ItemNetheriteBlockStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_BLOCK)
-                .build();
-    }
-
-    public static void initNetheriteBoots() {
-        if (ItemTypes.NETHERITE_BOOTS != null) return;
-        ItemTypes.NETHERITE_BOOTS = AllayItemType
-                .builder(ItemNetheriteBootsStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_BOOTS)
-                .build();
-    }
-
-    public static void initNetheriteChestplate() {
-        if (ItemTypes.NETHERITE_CHESTPLATE != null) return;
-        ItemTypes.NETHERITE_CHESTPLATE = AllayItemType
-                .builder(ItemNetheriteChestplateStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_CHESTPLATE)
-                .build();
-    }
-
-    public static void initNetheriteHelmet() {
-        if (ItemTypes.NETHERITE_HELMET != null) return;
-        ItemTypes.NETHERITE_HELMET = AllayItemType
-                .builder(ItemNetheriteHelmetStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_HELMET)
-                .build();
-    }
-
-    public static void initNetheriteHoe() {
-        if (ItemTypes.NETHERITE_HOE != null) return;
-        ItemTypes.NETHERITE_HOE = AllayItemType
-                .builder(ItemNetheriteHoeStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_HOE)
                 .build();
     }
 
@@ -10333,43 +9785,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initNetheriteLeggings() {
-        if (ItemTypes.NETHERITE_LEGGINGS != null) return;
-        ItemTypes.NETHERITE_LEGGINGS = AllayItemType
-                .builder(ItemNetheriteLeggingsStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_LEGGINGS)
-                .build();
-    }
-
-    public static void initNetheritePickaxe() {
-        if (ItemTypes.NETHERITE_PICKAXE != null) return;
-        ItemTypes.NETHERITE_PICKAXE = AllayItemType
-                .builder(ItemNetheritePickaxeStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_PICKAXE)
-                .build();
-    }
-
     public static void initNetheriteScrap() {
         if (ItemTypes.NETHERITE_SCRAP != null) return;
         ItemTypes.NETHERITE_SCRAP = AllayItemType
                 .builder(ItemNetheriteScrapStackImpl.class)
                 .vanillaItem(ItemId.NETHERITE_SCRAP)
-                .build();
-    }
-
-    public static void initNetheriteShovel() {
-        if (ItemTypes.NETHERITE_SHOVEL != null) return;
-        ItemTypes.NETHERITE_SHOVEL = AllayItemType
-                .builder(ItemNetheriteShovelStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_SHOVEL)
-                .build();
-    }
-
-    public static void initNetheriteSword() {
-        if (ItemTypes.NETHERITE_SWORD != null) return;
-        ItemTypes.NETHERITE_SWORD = AllayItemType
-                .builder(ItemNetheriteSwordStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_SWORD)
                 .build();
     }
 
@@ -10501,14 +9921,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initOakSign() {
-        if (ItemTypes.OAK_SIGN != null) return;
-        ItemTypes.OAK_SIGN = AllayItemType
-                .builder(ItemOakSignStackImpl.class)
-                .vanillaItem(ItemId.OAK_SIGN)
-                .build();
-    }
-
     public static void initOakSlab() {
         if (ItemTypes.OAK_SLAB != null) return;
         ItemTypes.OAK_SLAB = AllayItemType
@@ -10634,14 +10046,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.ORANGE_GLAZED_TERRACOTTA = AllayItemType
                 .builder(ItemOrangeGlazedTerracottaStackImpl.class)
                 .vanillaItem(ItemId.ORANGE_GLAZED_TERRACOTTA)
-                .build();
-    }
-
-    public static void initOrangeShulkerBox() {
-        if (ItemTypes.ORANGE_SHULKER_BOX != null) return;
-        ItemTypes.ORANGE_SHULKER_BOX = AllayItemType
-                .builder(ItemOrangeShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.ORANGE_SHULKER_BOX)
                 .build();
     }
 
@@ -10930,14 +10334,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.PINK_PETALS = AllayItemType
                 .builder(ItemPinkPetalsStackImpl.class)
                 .vanillaItem(ItemId.PINK_PETALS)
-                .build();
-    }
-
-    public static void initPinkShulkerBox() {
-        if (ItemTypes.PINK_SHULKER_BOX != null) return;
-        ItemTypes.PINK_SHULKER_BOX = AllayItemType
-                .builder(ItemPinkShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.PINK_SHULKER_BOX)
                 .build();
     }
 
@@ -11629,14 +11025,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initPurpleShulkerBox() {
-        if (ItemTypes.PURPLE_SHULKER_BOX != null) return;
-        ItemTypes.PURPLE_SHULKER_BOX = AllayItemType
-                .builder(ItemPurpleShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.PURPLE_SHULKER_BOX)
-                .build();
-    }
-
     public static void initPurpleStainedGlass() {
         if (ItemTypes.PURPLE_STAINED_GLASS != null) return;
         ItemTypes.PURPLE_STAINED_GLASS = AllayItemType
@@ -12061,14 +11449,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initRedShulkerBox() {
-        if (ItemTypes.RED_SHULKER_BOX != null) return;
-        ItemTypes.RED_SHULKER_BOX = AllayItemType
-                .builder(ItemRedShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.RED_SHULKER_BOX)
-                .build();
-    }
-
     public static void initRedStainedGlass() {
         if (ItemTypes.RED_STAINED_GLASS != null) return;
         ItemTypes.RED_STAINED_GLASS = AllayItemType
@@ -12434,14 +11814,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.SHROOMLIGHT = AllayItemType
                 .builder(ItemShroomlightStackImpl.class)
                 .vanillaItem(ItemId.SHROOMLIGHT)
-                .build();
-    }
-
-    public static void initShulkerBox() {
-        if (ItemTypes.SHULKER_BOX != null) return;
-        ItemTypes.SHULKER_BOX = AllayItemType
-                .builder(ItemShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.SHULKER_BOX)
                 .build();
     }
 
@@ -12925,14 +12297,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initSpruceSign() {
-        if (ItemTypes.SPRUCE_SIGN != null) return;
-        ItemTypes.SPRUCE_SIGN = AllayItemType
-                .builder(ItemSpruceSignStackImpl.class)
-                .vanillaItem(ItemId.SPRUCE_SIGN)
-                .build();
-    }
-
     public static void initSpruceSlab() {
         if (ItemTypes.SPRUCE_SLAB != null) return;
         ItemTypes.SPRUCE_SLAB = AllayItemType
@@ -13061,14 +12425,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initStoneAxe() {
-        if (ItemTypes.STONE_AXE != null) return;
-        ItemTypes.STONE_AXE = AllayItemType
-                .builder(ItemStoneAxeStackImpl.class)
-                .vanillaItem(ItemId.STONE_AXE)
-                .build();
-    }
-
     public static void initStoneBlockSlab() {
         if (ItemTypes.STONE_BLOCK_SLAB != null) return;
         ItemTypes.STONE_BLOCK_SLAB = AllayItemType
@@ -13149,22 +12505,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initStoneHoe() {
-        if (ItemTypes.STONE_HOE != null) return;
-        ItemTypes.STONE_HOE = AllayItemType
-                .builder(ItemStoneHoeStackImpl.class)
-                .vanillaItem(ItemId.STONE_HOE)
-                .build();
-    }
-
-    public static void initStonePickaxe() {
-        if (ItemTypes.STONE_PICKAXE != null) return;
-        ItemTypes.STONE_PICKAXE = AllayItemType
-                .builder(ItemStonePickaxeStackImpl.class)
-                .vanillaItem(ItemId.STONE_PICKAXE)
-                .build();
-    }
-
     public static void initStonePressurePlate() {
         if (ItemTypes.STONE_PRESSURE_PLATE != null) return;
         ItemTypes.STONE_PRESSURE_PLATE = AllayItemType
@@ -13173,27 +12513,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initStoneShovel() {
-        if (ItemTypes.STONE_SHOVEL != null) return;
-        ItemTypes.STONE_SHOVEL = AllayItemType
-                .builder(ItemStoneShovelStackImpl.class)
-                .vanillaItem(ItemId.STONE_SHOVEL)
-                .build();
-    }
-
     public static void initStoneStairs() {
         if (ItemTypes.STONE_STAIRS != null) return;
         ItemTypes.STONE_STAIRS = AllayItemType
                 .builder(ItemStoneStairsStackImpl.class)
                 .vanillaItem(ItemId.STONE_STAIRS)
-                .build();
-    }
-
-    public static void initStoneSword() {
-        if (ItemTypes.STONE_SWORD != null) return;
-        ItemTypes.STONE_SWORD = AllayItemType
-                .builder(ItemStoneSwordStackImpl.class)
-                .vanillaItem(ItemId.STONE_SWORD)
                 .build();
     }
 
@@ -13757,14 +13081,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initTurtleHelmet() {
-        if (ItemTypes.TURTLE_HELMET != null) return;
-        ItemTypes.TURTLE_HELMET = AllayItemType
-                .builder(ItemTurtleHelmetStackImpl.class)
-                .vanillaItem(ItemId.TURTLE_HELMET)
-                .build();
-    }
-
     public static void initTurtleScute() {
         if (ItemTypes.TURTLE_SCUTE != null) return;
         ItemTypes.TURTLE_SCUTE = AllayItemType
@@ -13794,14 +13110,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.UNDERWATER_TORCH = AllayItemType
                 .builder(ItemUnderwaterTorchStackImpl.class)
                 .vanillaItem(ItemId.UNDERWATER_TORCH)
-                .build();
-    }
-
-    public static void initUndyedShulkerBox() {
-        if (ItemTypes.UNDYED_SHULKER_BOX != null) return;
-        ItemTypes.UNDYED_SHULKER_BOX = AllayItemType
-                .builder(ItemUndyedShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.UNDYED_SHULKER_BOX)
                 .build();
     }
 
@@ -13994,14 +13302,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.WARPED_ROOTS = AllayItemType
                 .builder(ItemWarpedRootsStackImpl.class)
                 .vanillaItem(ItemId.WARPED_ROOTS)
-                .build();
-    }
-
-    public static void initWarpedSign() {
-        if (ItemTypes.WARPED_SIGN != null) return;
-        ItemTypes.WARPED_SIGN = AllayItemType
-                .builder(ItemWarpedSignStackImpl.class)
-                .vanillaItem(ItemId.WARPED_SIGN)
                 .build();
     }
 
@@ -14589,14 +13889,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initWhiteShulkerBox() {
-        if (ItemTypes.WHITE_SHULKER_BOX != null) return;
-        ItemTypes.WHITE_SHULKER_BOX = AllayItemType
-                .builder(ItemWhiteShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.WHITE_SHULKER_BOX)
-                .build();
-    }
-
     public static void initWhiteStainedGlass() {
         if (ItemTypes.WHITE_STAINED_GLASS != null) return;
         ItemTypes.WHITE_STAINED_GLASS = AllayItemType
@@ -14685,14 +13977,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initWoodenAxe() {
-        if (ItemTypes.WOODEN_AXE != null) return;
-        ItemTypes.WOODEN_AXE = AllayItemType
-                .builder(ItemWoodenAxeStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_AXE)
-                .build();
-    }
-
     public static void initWoodenButton() {
         if (ItemTypes.WOODEN_BUTTON != null) return;
         ItemTypes.WOODEN_BUTTON = AllayItemType
@@ -14709,22 +13993,6 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initWoodenHoe() {
-        if (ItemTypes.WOODEN_HOE != null) return;
-        ItemTypes.WOODEN_HOE = AllayItemType
-                .builder(ItemWoodenHoeStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_HOE)
-                .build();
-    }
-
-    public static void initWoodenPickaxe() {
-        if (ItemTypes.WOODEN_PICKAXE != null) return;
-        ItemTypes.WOODEN_PICKAXE = AllayItemType
-                .builder(ItemWoodenPickaxeStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_PICKAXE)
-                .build();
-    }
-
     public static void initWoodenPressurePlate() {
         if (ItemTypes.WOODEN_PRESSURE_PLATE != null) return;
         ItemTypes.WOODEN_PRESSURE_PLATE = AllayItemType
@@ -14733,27 +14001,11 @@ public final class ItemTypeDefaultInitializer {
                 .build();
     }
 
-    public static void initWoodenShovel() {
-        if (ItemTypes.WOODEN_SHOVEL != null) return;
-        ItemTypes.WOODEN_SHOVEL = AllayItemType
-                .builder(ItemWoodenShovelStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_SHOVEL)
-                .build();
-    }
-
     public static void initWoodenSlab() {
         if (ItemTypes.WOODEN_SLAB != null) return;
         ItemTypes.WOODEN_SLAB = AllayItemType
                 .builder(ItemWoodenSlabStackImpl.class)
                 .vanillaItem(ItemId.WOODEN_SLAB)
-                .build();
-    }
-
-    public static void initWoodenSword() {
-        if (ItemTypes.WOODEN_SWORD != null) return;
-        ItemTypes.WOODEN_SWORD = AllayItemType
-                .builder(ItemWoodenSwordStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_SWORD)
                 .build();
     }
 
@@ -14842,14 +14094,6 @@ public final class ItemTypeDefaultInitializer {
         ItemTypes.YELLOW_GLAZED_TERRACOTTA = AllayItemType
                 .builder(ItemYellowGlazedTerracottaStackImpl.class)
                 .vanillaItem(ItemId.YELLOW_GLAZED_TERRACOTTA)
-                .build();
-    }
-
-    public static void initYellowShulkerBox() {
-        if (ItemTypes.YELLOW_SHULKER_BOX != null) return;
-        ItemTypes.YELLOW_SHULKER_BOX = AllayItemType
-                .builder(ItemYellowShulkerBoxStackImpl.class)
-                .vanillaItem(ItemId.YELLOW_SHULKER_BOX)
                 .build();
     }
 

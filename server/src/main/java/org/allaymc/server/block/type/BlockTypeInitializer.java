@@ -38,8 +38,6 @@ import org.allaymc.server.block.impl.sand.BlockSandBehaviorImpl;
 import org.allaymc.server.block.impl.shulkerbox.BlockShulkerBoxBehaviorImpl;
 import org.allaymc.server.block.impl.stairs.BlockStairsBehaviorImpl;
 import org.allaymc.server.block.impl.torch.*;
-import org.allaymc.server.block.impl.torchflower.BlockTorchflowerBehaviorImpl;
-import org.allaymc.server.block.impl.torchflower.BlockTorchflowerCropBehaviorImpl;
 import org.allaymc.server.block.impl.wood.BlockWoodBehaviorImpl;
 
 import java.time.Duration;
@@ -742,18 +740,6 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.UNDERWATER_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
-    }
-
-    public static void initTorchflower() {
-        BlockTypes.TORCHFLOWER = AllayBlockType
-                .builder(BlockTorchflowerBehaviorImpl.class)
-                .vanillaBlock(BlockId.TORCHFLOWER)
-                .build();
-        BlockTypes.TORCHFLOWER_CROP = AllayBlockType
-                .builder(BlockTorchflowerCropBehaviorImpl.class)
-                .vanillaBlock(BlockId.TORCHFLOWER_CROP)
-                .setProperties(BlockPropertyTypes.GROWTH)
                 .build();
     }
 
