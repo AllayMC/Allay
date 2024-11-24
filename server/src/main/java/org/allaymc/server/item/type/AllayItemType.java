@@ -52,8 +52,8 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
         this.itemTags = itemTags;
     }
 
-    public static <T extends ItemStack> Builder builder(Class<T> interfaceClass) {
-        return new Builder(interfaceClass);
+    public static <T extends ItemStack> Builder builder(Class<T> clazz) {
+        return new Builder(clazz);
     }
 
     @SneakyThrows
@@ -171,8 +171,12 @@ public final class AllayItemType<T extends ItemStack> implements ItemType<T> {
                 addComponent($ -> ItemDataComponentImpl.ofDefault(), ItemDataComponentImpl.class);
             }
 
-            if (identifier == null) throw new ItemTypeBuildException("identifier cannot be null!");
-            if (runtimeId == Integer.MAX_VALUE) runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
+            if (identifier == null) {
+                throw new ItemTypeBuildException("identifier cannot be null!");
+            }
+            if (runtimeId == Integer.MAX_VALUE) {
+                runtimeId = CUSTOM_ITEM_RUNTIME_ID_COUNTER++;
+            }
 
             Function<ItemStackInitInfo, T> instanceCreator;
             try {

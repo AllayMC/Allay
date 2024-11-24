@@ -75,7 +75,7 @@ public class ItemClassGen extends BaseClassGen {
 
             var implSimpleName = generateClassSimpleName(id) + "Impl";
             var implFullName = ClassName.get("org.allaymc.server.item.impl" + (folderName != null ? "." + folderName : ""), implSimpleName);
-            var implPath = folderName != null ? implDir.resolve(folderName).resolve(implSimpleName + ".java") : implDir.resolve(implSimpleName + ".java");
+            var implPath = (folderName != null ? implDir.resolve(folderName) : implDir).resolve(implSimpleName + ".java");
             if (!Files.exists(implPath)) {
                 System.out.println("Generating " + implSimpleName + "...");
                 if (!Files.exists(folderName != null ? implDir.resolve(folderName) : implDir)) {
@@ -235,6 +235,7 @@ public class ItemClassGen extends BaseClassGen {
         registerSubPackage(Pattern.compile(".*TntStack"), "tnt");
         registerSubPackage(Pattern.compile(".*(Head|Skull)Stack"), "head");
         registerSubPackage(Pattern.compile(".*BundleStack"), "bundle");
+        registerSubPackage(Pattern.compile(".*(Furnace|Smoker)Stack"), "furnace");
     }
 
     private static void registerIgnoredItems() {

@@ -4,24 +4,6 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.interfaces.*;
-import org.allaymc.api.block.interfaces.button.*;
-import org.allaymc.api.block.interfaces.door.*;
-import org.allaymc.api.block.interfaces.hangingsign.*;
-import org.allaymc.api.block.interfaces.leaves.*;
-import org.allaymc.api.block.interfaces.liquid.BlockFlowingLavaBehavior;
-import org.allaymc.api.block.interfaces.liquid.BlockFlowingWaterBehavior;
-import org.allaymc.api.block.interfaces.liquid.BlockLavaBehavior;
-import org.allaymc.api.block.interfaces.liquid.BlockWaterBehavior;
-import org.allaymc.api.block.interfaces.log.*;
-import org.allaymc.api.block.interfaces.sand.BlockRedSandBehavior;
-import org.allaymc.api.block.interfaces.sand.BlockSandBehavior;
-import org.allaymc.api.block.interfaces.shulkerbox.*;
-import org.allaymc.api.block.interfaces.stairs.*;
-import org.allaymc.api.block.interfaces.standingsign.*;
-import org.allaymc.api.block.interfaces.torch.*;
-import org.allaymc.api.block.interfaces.wallsign.*;
-import org.allaymc.api.block.interfaces.wood.*;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -40,7 +22,25 @@ import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImp
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
-import org.allaymc.server.block.component.BlockWoodBaseComponentImpl;
+import org.allaymc.server.block.impl.*;
+import org.allaymc.server.block.impl.button.BlockButtonBehaviorImpl;
+import org.allaymc.server.block.impl.door.BlockDoorBehaviorImpl;
+import org.allaymc.server.block.impl.furnace.BlockBlastFurnaceBehaviorImpl;
+import org.allaymc.server.block.impl.furnace.BlockFurnaceBehaviorImpl;
+import org.allaymc.server.block.impl.furnace.BlockSmokerBehaviorImpl;
+import org.allaymc.server.block.impl.leaves.BlockLeavesBehaviorImpl;
+import org.allaymc.server.block.impl.liquid.BlockFlowingLavaBehaviorImpl;
+import org.allaymc.server.block.impl.liquid.BlockFlowingWaterBehaviorImpl;
+import org.allaymc.server.block.impl.liquid.BlockLavaBehaviorImpl;
+import org.allaymc.server.block.impl.liquid.BlockWaterBehaviorImpl;
+import org.allaymc.server.block.impl.sand.BlockRedSandBehaviorImpl;
+import org.allaymc.server.block.impl.sand.BlockSandBehaviorImpl;
+import org.allaymc.server.block.impl.shulkerbox.BlockShulkerBoxBehaviorImpl;
+import org.allaymc.server.block.impl.stairs.BlockStairsBehaviorImpl;
+import org.allaymc.server.block.impl.torch.*;
+import org.allaymc.server.block.impl.torchflower.BlockTorchflowerBehaviorImpl;
+import org.allaymc.server.block.impl.torchflower.BlockTorchflowerCropBehaviorImpl;
+import org.allaymc.server.block.impl.wood.BlockWoodBehaviorImpl;
 
 import java.time.Duration;
 import java.util.function.Function;
@@ -53,55 +53,61 @@ import java.util.function.Function;
 public final class BlockTypeInitializer {
     public static void initLeaves() {
         BlockTypes.ACACIA_LEAVES = AllayBlockType
-                .builder(BlockAcaciaLeavesBehavior.class)
+                .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(BlockId.ACACIA_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
         BlockTypes.AZALEA_LEAVES = AllayBlockType
-                .builder(BlockAzaleaLeavesBehavior.class)
+                .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(BlockId.AZALEA_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
+        BlockTypes.AZALEA_LEAVES_FLOWERED = AllayBlockType
+                .builder(BlockLeavesBehaviorImpl.class)
+                .vanillaBlock(BlockId.AZALEA_LEAVES_FLOWERED)
+                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
+                .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .build();
         BlockTypes.BIRCH_LEAVES = AllayBlockType
-                .builder(BlockBirchLeavesBehavior.class)
+                .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
         BlockTypes.CHERRY_LEAVES = AllayBlockType
-                .builder(BlockCherryLeavesBehavior.class)
+                .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHERRY_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
         BlockTypes.DARK_OAK_LEAVES = AllayBlockType
-                .builder(BlockDarkOakLeavesBehavior.class)
+                .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
         BlockTypes.JUNGLE_LEAVES = AllayBlockType
-                .builder(BlockJungleLeavesBehavior.class)
+                .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
         BlockTypes.MANGROVE_LEAVES = AllayBlockType
-                .builder(BlockMangroveLeavesBehavior.class)
+                .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(BlockId.MANGROVE_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
         BlockTypes.OAK_LEAVES = AllayBlockType
-                .builder(BlockOakLeavesBehavior.class)
+                .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(BlockId.OAK_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
         BlockTypes.SPRUCE_LEAVES = AllayBlockType
-                .builder(BlockSpruceLeavesBehavior.class)
+                .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_LEAVES)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBlockBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
@@ -110,17 +116,17 @@ public final class BlockTypeInitializer {
 
     public static void initFallable() {
         BlockTypes.GRAVEL = AllayBlockType
-                .builder(BlockGravelBehavior.class)
+                .builder(BlockGravelBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAVEL)
                 .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
                 .build();
         BlockTypes.SAND = AllayBlockType
-                .builder(BlockSandBehavior.class)
+                .builder(BlockSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.SAND)
                 .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
                 .build();
         BlockTypes.RED_SAND = AllayBlockType
-                .builder(BlockRedSandBehavior.class)
+                .builder(BlockRedSandBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SAND)
                 .setBlockBaseComponentSupplier(BlockFallableBaseComponentImpl::new)
                 .build();
@@ -128,103 +134,103 @@ public final class BlockTypeInitializer {
 
     public static void initShulkerBox() {
         BlockTypes.YELLOW_SHULKER_BOX = AllayBlockType
-                .builder(BlockYellowShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.WHITE_SHULKER_BOX = AllayBlockType
-                .builder(BlockWhiteShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.UNDYED_SHULKER_BOX = AllayBlockType
-                .builder(BlockUndyedShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNDYED_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.RED_SHULKER_BOX = AllayBlockType
-                .builder(BlockRedShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.PURPLE_SHULKER_BOX = AllayBlockType
-                .builder(BlockPurpleShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.PINK_SHULKER_BOX = AllayBlockType
-                .builder(BlockPinkShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.ORANGE_SHULKER_BOX = AllayBlockType
-                .builder(BlockOrangeShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.MAGENTA_SHULKER_BOX = AllayBlockType
-                .builder(BlockMagentaShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.LIME_SHULKER_BOX = AllayBlockType
-                .builder(BlockLimeShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.LIGHT_GRAY_SHULKER_BOX = AllayBlockType
-                .builder(BlockLightGrayShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.LIGHT_BLUE_SHULKER_BOX = AllayBlockType
-                .builder(BlockLightBlueShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.GREEN_SHULKER_BOX = AllayBlockType
-                .builder(BlockGreenShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.GRAY_SHULKER_BOX = AllayBlockType
-                .builder(BlockGrayShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.CYAN_SHULKER_BOX = AllayBlockType
-                .builder(BlockCyanShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.BROWN_SHULKER_BOX = AllayBlockType
-                .builder(BlockBrownShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.BLUE_SHULKER_BOX = AllayBlockType
-                .builder(BlockBlueShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
                 .build();
         BlockTypes.BLACK_SHULKER_BOX = AllayBlockType
-                .builder(BlockBlackShulkerBoxBehavior.class)
+                .builder(BlockShulkerBoxBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_SHULKER_BOX)
                 .bindBlockEntity(BlockEntityTypes.SHULKER_BOX)
                 .setBlockBaseComponentSupplier(BlockShulkerBoxBaseComponentImpl::new)
@@ -233,7 +239,7 @@ public final class BlockTypeInitializer {
 
     public static void initGrassBlock() {
         BlockTypes.GRASS_BLOCK = AllayBlockType
-                .builder(BlockGrassBlockBehavior.class)
+                .builder(BlockGrassBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRASS_BLOCK)
                 .setBlockBaseComponentSupplier(BlockGrassBlockBaseComponentImpl::new)
                 .build();
@@ -241,12 +247,12 @@ public final class BlockTypeInitializer {
 
     public static void initShortGrass() {
         BlockTypes.SHORT_GRASS = AllayBlockType
-                .builder(BlockShortGrassBehavior.class)
+                .builder(BlockShortGrassBehaviorImpl.class)
                 .vanillaBlock(BlockId.SHORT_GRASS)
                 .setBlockBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
                 .build();
         BlockTypes.FERN = AllayBlockType
-                .builder(BlockFernBehavior.class)
+                .builder(BlockFernBehaviorImpl.class)
                 .vanillaBlock(BlockId.FERN)
                 .setBlockBaseComponentSupplier(BlockShortGrassBaseComponentImpl::new)
                 .build();
@@ -254,13 +260,13 @@ public final class BlockTypeInitializer {
 
     public static void initTallGrass() {
         BlockTypes.TALL_GRASS = AllayBlockType
-                .builder(BlockTallGrassBehavior.class)
+                .builder(BlockTallGrassBehaviorImpl.class)
                 .vanillaBlock(BlockId.TALL_GRASS)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBlockBaseComponentSupplier(BlockTallGrassBaseComponentImpl::new)
                 .build();
         BlockTypes.LARGE_FERN = AllayBlockType
-                .builder(BlockLargeFernBehavior.class)
+                .builder(BlockLargeFernBehaviorImpl.class)
                 .vanillaBlock(BlockId.LARGE_FERN)
                 .setProperties(BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBlockBaseComponentSupplier(BlockTallGrassBaseComponentImpl::new)
@@ -269,7 +275,7 @@ public final class BlockTypeInitializer {
 
     public static void initBarrel() {
         BlockTypes.BARREL = AllayBlockType
-                .builder(BlockBarrelBehavior.class)
+                .builder(BlockBarrelBehaviorImpl.class)
                 .vanillaBlock(BlockId.BARREL)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.OPEN_BIT)
                 .bindBlockEntity(BlockEntityTypes.BARREL)
@@ -278,7 +284,7 @@ public final class BlockTypeInitializer {
 
     public static void initChest() {
         BlockTypes.CHEST = AllayBlockType
-                .builder(BlockChestBehavior.class)
+                .builder(BlockChestBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHEST)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.CHEST)
@@ -287,7 +293,7 @@ public final class BlockTypeInitializer {
 
     public static void initCraftingTable() {
         BlockTypes.CRAFTING_TABLE = AllayBlockType
-                .builder(BlockCraftingTableBehavior.class)
+                .builder(BlockCraftingTableBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRAFTING_TABLE)
                 .setBlockBaseComponentSupplier(BlockCraftingTableBaseComponentImpl::new)
                 .build();
@@ -295,392 +301,392 @@ public final class BlockTypeInitializer {
 
     public static void initStairs() {
         BlockTypes.ACACIA_STAIRS = AllayBlockType
-                .builder(BlockAcaciaStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.ACACIA_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.ANDESITE_STAIRS = AllayBlockType
-                .builder(BlockAndesiteStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.ANDESITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BAMBOO_MOSAIC_STAIRS = AllayBlockType
-                .builder(BlockBambooMosaicStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_MOSAIC_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BAMBOO_STAIRS = AllayBlockType
-                .builder(BlockBambooStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BIRCH_STAIRS = AllayBlockType
-                .builder(BlockBirchStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BLACKSTONE_STAIRS = AllayBlockType
-                .builder(BlockBlackstoneStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACKSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.BRICK_STAIRS = AllayBlockType
-                .builder(BlockBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.CHERRY_STAIRS = AllayBlockType
-                .builder(BlockCherryStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHERRY_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.COBBLED_DEEPSLATE_STAIRS = AllayBlockType
-                .builder(BlockCobbledDeepslateStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.COBBLED_DEEPSLATE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.CRIMSON_STAIRS = AllayBlockType
-                .builder(BlockCrimsonStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRIMSON_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockCutCopperStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DARK_OAK_STAIRS = AllayBlockType
-                .builder(BlockDarkOakStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DARK_PRISMARINE_STAIRS = AllayBlockType
-                .builder(BlockDarkPrismarineStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_PRISMARINE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DEEPSLATE_BRICK_STAIRS = AllayBlockType
-                .builder(BlockDeepslateBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEEPSLATE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DEEPSLATE_TILE_STAIRS = AllayBlockType
-                .builder(BlockDeepslateTileStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEEPSLATE_TILE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.DIORITE_STAIRS = AllayBlockType
-                .builder(BlockDioriteStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.DIORITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.END_BRICK_STAIRS = AllayBlockType
-                .builder(BlockEndBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.END_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockExposedCutCopperStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.EXPOSED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.GRANITE_STAIRS = AllayBlockType
-                .builder(BlockGraniteStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRANITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.JUNGLE_STAIRS = AllayBlockType
-                .builder(BlockJungleStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.MANGROVE_STAIRS = AllayBlockType
-                .builder(BlockMangroveStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.MANGROVE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.MOSSY_COBBLESTONE_STAIRS = AllayBlockType
-                .builder(BlockMossyCobblestoneStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSSY_COBBLESTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.MOSSY_STONE_BRICK_STAIRS = AllayBlockType
-                .builder(BlockMossyStoneBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSSY_STONE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.MUD_BRICK_STAIRS = AllayBlockType
-                .builder(BlockMudBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.MUD_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.NETHER_BRICK_STAIRS = AllayBlockType
-                .builder(BlockNetherBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.NETHER_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.NORMAL_STONE_STAIRS = AllayBlockType
-                .builder(BlockNormalStoneStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.NORMAL_STONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.OAK_STAIRS = AllayBlockType
-                .builder(BlockOakStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.OAK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockOxidizedCutCopperStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.OXIDIZED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_ANDESITE_STAIRS = AllayBlockType
-                .builder(BlockPolishedAndesiteStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_ANDESITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = AllayBlockType
-                .builder(BlockPolishedBlackstoneBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_BLACKSTONE_STAIRS = AllayBlockType
-                .builder(BlockPolishedBlackstoneStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_DEEPSLATE_STAIRS = AllayBlockType
-                .builder(BlockPolishedDeepslateStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_DEEPSLATE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_DIORITE_STAIRS = AllayBlockType
-                .builder(BlockPolishedDioriteStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_DIORITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_GRANITE_STAIRS = AllayBlockType
-                .builder(BlockPolishedGraniteStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_GRANITE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.POLISHED_TUFF_STAIRS = AllayBlockType
-                .builder(BlockPolishedTuffStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_TUFF_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.PRISMARINE_BRICKS_STAIRS = AllayBlockType
-                .builder(BlockPrismarineBricksStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.PRISMARINE_BRICKS_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.PRISMARINE_STAIRS = AllayBlockType
-                .builder(BlockPrismarineStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.PRISMARINE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.PURPUR_STAIRS = AllayBlockType
-                .builder(BlockPurpurStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPUR_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.QUARTZ_STAIRS = AllayBlockType
-                .builder(BlockQuartzStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.QUARTZ_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.RED_NETHER_BRICK_STAIRS = AllayBlockType
-                .builder(BlockRedNetherBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_NETHER_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.RED_SANDSTONE_STAIRS = AllayBlockType
-                .builder(BlockRedSandstoneStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SANDSTONE_STAIRS = AllayBlockType
-                .builder(BlockSandstoneStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SMOOTH_QUARTZ_STAIRS = AllayBlockType
-                .builder(BlockSmoothQuartzStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_QUARTZ_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS = AllayBlockType
-                .builder(BlockSmoothRedSandstoneStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_RED_SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SMOOTH_SANDSTONE_STAIRS = AllayBlockType
-                .builder(BlockSmoothSandstoneStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_SANDSTONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.SPRUCE_STAIRS = AllayBlockType
-                .builder(BlockSpruceStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.STONE_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStoneBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.STONE_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.STONE_STAIRS = AllayBlockType
-                .builder(BlockStoneStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.STONE_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.TUFF_BRICK_STAIRS = AllayBlockType
-                .builder(BlockTuffBrickStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUFF_BRICK_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.TUFF_STAIRS = AllayBlockType
-                .builder(BlockTuffStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUFF_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WARPED_STAIRS = AllayBlockType
-                .builder(BlockWarpedStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.WARPED_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WAXED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockWaxedCutCopperStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockWaxedExposedCutCopperStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockWaxedOxidizedCutCopperStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockWaxedWeatheredCutCopperStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBlockBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
                 .build();
         BlockTypes.WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockWeatheredCutCopperStairsBehavior.class)
+                .builder(BlockStairsBehaviorImpl.class)
                 .vanillaBlock(BlockId.WEATHERED_CUT_COPPER_STAIRS)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
@@ -689,15 +695,15 @@ public final class BlockTypeInitializer {
     }
 
     public static void initColoredTorch() {
-        BlockTypes.COLORED_TORCH_RED = buildColoredTorch(BlockColoredTorchRedBehavior.class, BlockId.COLORED_TORCH_RED);
-        BlockTypes.COLORED_TORCH_BLUE = buildColoredTorch(BlockColoredTorchBlueBehavior.class, BlockId.COLORED_TORCH_BLUE);
-        BlockTypes.COLORED_TORCH_GREEN = buildColoredTorch(BlockColoredTorchGreenBehavior.class, BlockId.COLORED_TORCH_GREEN);
-        BlockTypes.COLORED_TORCH_PURPLE = buildColoredTorch(BlockColoredTorchPurpleBehavior.class, BlockId.COLORED_TORCH_PURPLE);
+        BlockTypes.COLORED_TORCH_RED = buildColoredTorch(BlockId.COLORED_TORCH_RED);
+        BlockTypes.COLORED_TORCH_BLUE = buildColoredTorch(BlockId.COLORED_TORCH_BLUE);
+        BlockTypes.COLORED_TORCH_GREEN = buildColoredTorch(BlockId.COLORED_TORCH_GREEN);
+        BlockTypes.COLORED_TORCH_PURPLE = buildColoredTorch(BlockId.COLORED_TORCH_PURPLE);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildColoredTorch(Class<T> clazz, BlockId blockId) {
+    private static <T extends BlockBehavior> BlockType<T> buildColoredTorch(BlockId blockId) {
         return AllayBlockType
-                .builder(clazz)
+                .builder((Class<? extends BlockBehaviorImpl>) BlockColoredTorchBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockColoredTorchBaseComponentImpl::new)
@@ -706,71 +712,84 @@ public final class BlockTypeInitializer {
 
     public static void initTorch() {
         BlockTypes.REDSTONE_TORCH = AllayBlockType
-                .builder(BlockRedstoneTorchBehavior.class)
+                .builder(BlockRedstoneTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.REDSTONE_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
+        BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
+                .builder(BlockUnlitRedstoneTorchBehaviorImpl.class)
+                .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
+                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
+                .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
+                .build();
+
         BlockTypes.SOUL_TORCH = AllayBlockType
-                .builder(BlockSoulTorchBehavior.class)
+                .builder(BlockSoulTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.SOUL_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
         BlockTypes.TORCH = AllayBlockType
-                .builder(BlockTorchBehavior.class)
+                .builder(BlockTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
 
         BlockTypes.UNDERWATER_TORCH = AllayBlockType
-                .builder(BlockUnderwaterTorchBehavior.class)
+                .builder(BlockUnderwaterTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNDERWATER_TORCH)
-                .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
-                .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
-                .build();
-        BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
-                .builder(BlockUnlitRedstoneTorchBehavior.class)
-                .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
     }
 
+    public static void initTorchflower() {
+        BlockTypes.TORCHFLOWER = AllayBlockType
+                .builder(BlockTorchflowerBehaviorImpl.class)
+                .vanillaBlock(BlockId.TORCHFLOWER)
+                .build();
+        BlockTypes.TORCHFLOWER_CROP = AllayBlockType
+                .builder(BlockTorchflowerCropBehaviorImpl.class)
+                .vanillaBlock(BlockId.TORCHFLOWER_CROP)
+                .setProperties(BlockPropertyTypes.GROWTH)
+                .build();
+    }
+
     public static void initFurnace() {
         BlockTypes.FURNACE = AllayBlockType
-                .builder(BlockFurnaceBehavior.class)
+                .builder(BlockFurnaceBehaviorImpl.class)
                 .vanillaBlock(BlockId.FURNACE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.FURNACE)
                 .build();
         BlockTypes.LIT_FURNACE = AllayBlockType
-                .builder(BlockLitFurnaceBehavior.class)
+                .builder(BlockFurnaceBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIT_FURNACE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.FURNACE)
                 .build();
         BlockTypes.BLAST_FURNACE = AllayBlockType
-                .builder(BlockBlastFurnaceBehavior.class)
+                .builder(BlockBlastFurnaceBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLAST_FURNACE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
                 .build();
         BlockTypes.LIT_BLAST_FURNACE = AllayBlockType
-                .builder(BlockLitBlastFurnaceBehavior.class)
+                .builder(BlockBlastFurnaceBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIT_BLAST_FURNACE)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.BLAST_FURNACE)
                 .build();
         BlockTypes.SMOKER = AllayBlockType
-                .builder(BlockSmokerBehavior.class)
+                .builder(BlockSmokerBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOKER)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.SMOKER)
                 .build();
         BlockTypes.LIT_SMOKER = AllayBlockType
-                .builder(BlockLitSmokerBehavior.class)
+                .builder(BlockSmokerBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIT_SMOKER)
                 .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
                 .bindBlockEntity(BlockEntityTypes.SMOKER)
@@ -779,138 +798,148 @@ public final class BlockTypeInitializer {
 
     public static void initWoods() {
         // Log
-        BlockTypes.ACACIA_LOG = buildWood(BlockAcaciaLogBehavior.class, BlockId.ACACIA_LOG, BlockId.STRIPPED_ACACIA_LOG);
-        BlockTypes.BAMBOO_BLOCK = buildWood(BlockBambooBlockBehavior.class, BlockId.BAMBOO_BLOCK, BlockId.STRIPPED_BAMBOO_BLOCK);
-        BlockTypes.BIRCH_LOG = buildWood(BlockBirchLogBehavior.class, BlockId.BIRCH_LOG, BlockId.STRIPPED_BIRCH_LOG);
-        BlockTypes.CHERRY_LOG = buildWood(BlockCherryLogBehavior.class, BlockId.CHERRY_LOG, BlockId.STRIPPED_CHERRY_LOG);
-        BlockTypes.CRIMSON_STEM = buildWood(BlockCrimsonStemBehavior.class, BlockId.CRIMSON_STEM, BlockId.STRIPPED_CRIMSON_STEM);
-        BlockTypes.DARK_OAK_LOG = buildWood(BlockDarkOakLogBehavior.class, BlockId.DARK_OAK_LOG, BlockId.STRIPPED_OAK_LOG);
-        BlockTypes.JUNGLE_LOG = buildWood(BlockJungleLogBehavior.class, BlockId.JUNGLE_LOG, BlockId.STRIPPED_JUNGLE_LOG);
-        BlockTypes.MANGROVE_LOG = buildWood(BlockMangroveLogBehavior.class, BlockId.MANGROVE_LOG, BlockId.STRIPPED_MANGROVE_LOG);
-        BlockTypes.OAK_LOG = buildWood(BlockOakLogBehavior.class, BlockId.OAK_LOG, BlockId.STRIPPED_OAK_LOG);
-        BlockTypes.SPRUCE_LOG = buildWood(BlockSpruceLogBehavior.class, BlockId.SPRUCE_LOG, BlockId.STRIPPED_SPRUCE_LOG);
-        BlockTypes.WARPED_STEM = buildWood(BlockWarpedStemBehavior.class, BlockId.WARPED_STEM, BlockId.STRIPPED_WARPED_STEM);
+        BlockTypes.ACACIA_LOG = buildWood(BlockId.ACACIA_LOG, BlockId.STRIPPED_ACACIA_LOG);
+        BlockTypes.BAMBOO_BLOCK = buildWood(BlockId.BAMBOO_BLOCK, BlockId.STRIPPED_BAMBOO_BLOCK);
+        BlockTypes.BIRCH_LOG = buildWood(BlockId.BIRCH_LOG, BlockId.STRIPPED_BIRCH_LOG);
+        BlockTypes.CHERRY_LOG = buildWood(BlockId.CHERRY_LOG, BlockId.STRIPPED_CHERRY_LOG);
+        BlockTypes.CRIMSON_STEM = buildWood(BlockId.CRIMSON_STEM, BlockId.STRIPPED_CRIMSON_STEM);
+        BlockTypes.DARK_OAK_LOG = buildWood(BlockId.DARK_OAK_LOG, BlockId.STRIPPED_OAK_LOG);
+        BlockTypes.JUNGLE_LOG = buildWood(BlockId.JUNGLE_LOG, BlockId.STRIPPED_JUNGLE_LOG);
+        BlockTypes.MANGROVE_LOG = buildWood(BlockId.MANGROVE_LOG, BlockId.STRIPPED_MANGROVE_LOG);
+        BlockTypes.OAK_LOG = buildWood(BlockId.OAK_LOG, BlockId.STRIPPED_OAK_LOG);
+        BlockTypes.SPRUCE_LOG = buildWood(BlockId.SPRUCE_LOG, BlockId.STRIPPED_SPRUCE_LOG);
+        BlockTypes.WARPED_STEM = buildWood(BlockId.WARPED_STEM, BlockId.STRIPPED_WARPED_STEM);
         // Stripped Log
-        BlockTypes.STRIPPED_ACACIA_LOG = buildStrippedWood(BlockStrippedAcaciaLogBehavior.class, BlockId.STRIPPED_ACACIA_LOG);
-        BlockTypes.STRIPPED_BAMBOO_BLOCK = buildStrippedWood(BlockStrippedBambooBlockBehavior.class, BlockId.STRIPPED_BAMBOO_BLOCK);
-        BlockTypes.STRIPPED_BIRCH_LOG = buildStrippedWood(BlockStrippedBirchLogBehavior.class, BlockId.STRIPPED_BIRCH_LOG);
-        BlockTypes.STRIPPED_CHERRY_LOG = buildStrippedWood(BlockStrippedCherryLogBehavior.class, BlockId.STRIPPED_CHERRY_LOG);
-        BlockTypes.STRIPPED_CRIMSON_STEM = buildStrippedWood(BlockStrippedCrimsonStemBehavior.class, BlockId.STRIPPED_CRIMSON_STEM);
-        BlockTypes.STRIPPED_DARK_OAK_LOG = buildStrippedWood(BlockStrippedDarkOakLogBehavior.class, BlockId.STRIPPED_DARK_OAK_LOG);
-        BlockTypes.STRIPPED_JUNGLE_LOG = buildStrippedWood(BlockStrippedJungleLogBehavior.class, BlockId.STRIPPED_JUNGLE_LOG);
-        BlockTypes.STRIPPED_MANGROVE_LOG = buildStrippedWood(BlockStrippedMangroveLogBehavior.class, BlockId.STRIPPED_MANGROVE_LOG);
-        BlockTypes.STRIPPED_OAK_LOG = buildStrippedWood(BlockStrippedOakLogBehavior.class, BlockId.STRIPPED_OAK_LOG);
-        BlockTypes.STRIPPED_SPRUCE_LOG = buildStrippedWood(BlockStrippedSpruceLogBehavior.class, BlockId.STRIPPED_SPRUCE_LOG);
-        BlockTypes.STRIPPED_WARPED_STEM = buildStrippedWood(BlockStrippedWarpedStemBehavior.class, BlockId.STRIPPED_WARPED_STEM);
+        BlockTypes.STRIPPED_ACACIA_LOG = buildStrippedWood(BlockId.STRIPPED_ACACIA_LOG);
+        BlockTypes.STRIPPED_BAMBOO_BLOCK = buildStrippedWood(BlockId.STRIPPED_BAMBOO_BLOCK);
+        BlockTypes.STRIPPED_BIRCH_LOG = buildStrippedWood(BlockId.STRIPPED_BIRCH_LOG);
+        BlockTypes.STRIPPED_CHERRY_LOG = buildStrippedWood(BlockId.STRIPPED_CHERRY_LOG);
+        BlockTypes.STRIPPED_CRIMSON_STEM = buildStrippedWood(BlockId.STRIPPED_CRIMSON_STEM);
+        BlockTypes.STRIPPED_DARK_OAK_LOG = buildStrippedWood(BlockId.STRIPPED_DARK_OAK_LOG);
+        BlockTypes.STRIPPED_JUNGLE_LOG = buildStrippedWood(BlockId.STRIPPED_JUNGLE_LOG);
+        BlockTypes.STRIPPED_MANGROVE_LOG = buildStrippedWood(BlockId.STRIPPED_MANGROVE_LOG);
+        BlockTypes.STRIPPED_OAK_LOG = buildStrippedWood(BlockId.STRIPPED_OAK_LOG);
+        BlockTypes.STRIPPED_SPRUCE_LOG = buildStrippedWood(BlockId.STRIPPED_SPRUCE_LOG);
+        BlockTypes.STRIPPED_WARPED_STEM = buildStrippedWood(BlockId.STRIPPED_WARPED_STEM);
 
         // Wood
-        BlockTypes.ACACIA_WOOD = buildWood(BlockAcaciaWoodBehavior.class, BlockId.ACACIA_WOOD, BlockId.STRIPPED_ACACIA_WOOD);
-        BlockTypes.BIRCH_WOOD = buildWood(BlockBirchWoodBehavior.class, BlockId.BIRCH_WOOD, BlockId.STRIPPED_BIRCH_WOOD);
-        BlockTypes.CRIMSON_HYPHAE = buildWood(BlockCrimsonHyphaeBehavior.class, BlockId.CRIMSON_HYPHAE, BlockId.STRIPPED_CRIMSON_HYPHAE);
-        BlockTypes.DARK_OAK_WOOD = buildWood(BlockDarkOakWoodBehavior.class, BlockId.DARK_OAK_WOOD, BlockId.STRIPPED_DARK_OAK_WOOD);
-        BlockTypes.JUNGLE_WOOD = buildWood(BlockJungleWoodBehavior.class, BlockId.JUNGLE_WOOD, BlockId.STRIPPED_JUNGLE_WOOD);
-        BlockTypes.OAK_WOOD = buildWood(BlockOakWoodBehavior.class, BlockId.OAK_WOOD, BlockId.STRIPPED_OAK_WOOD);
-        BlockTypes.SPRUCE_WOOD = buildWood(BlockSpruceWoodBehavior.class, BlockId.SPRUCE_WOOD, BlockId.STRIPPED_SPRUCE_WOOD);
-        BlockTypes.WARPED_HYPHAE = buildWood(BlockWarpedHyphaeBehavior.class, BlockId.WARPED_HYPHAE, BlockId.STRIPPED_WARPED_HYPHAE);
-        BlockTypes.CHERRY_WOOD = buildWood(BlockCherryWoodBehavior.class, BlockId.CHERRY_WOOD, BlockId.STRIPPED_CHERRY_WOOD);
-        BlockTypes.MANGROVE_WOOD = buildWood(BlockMangroveWoodBehavior.class, BlockId.MANGROVE_WOOD, BlockId.STRIPPED_MANGROVE_WOOD);
+        BlockTypes.ACACIA_WOOD = buildWood(BlockId.ACACIA_WOOD, BlockId.STRIPPED_ACACIA_WOOD);
+        BlockTypes.BIRCH_WOOD = buildWood(BlockId.BIRCH_WOOD, BlockId.STRIPPED_BIRCH_WOOD);
+        BlockTypes.CRIMSON_HYPHAE = buildWood(BlockId.CRIMSON_HYPHAE, BlockId.STRIPPED_CRIMSON_HYPHAE);
+        BlockTypes.DARK_OAK_WOOD = buildWood(BlockId.DARK_OAK_WOOD, BlockId.STRIPPED_DARK_OAK_WOOD);
+        BlockTypes.JUNGLE_WOOD = buildWood(BlockId.JUNGLE_WOOD, BlockId.STRIPPED_JUNGLE_WOOD);
+        BlockTypes.OAK_WOOD = buildWood(BlockId.OAK_WOOD, BlockId.STRIPPED_OAK_WOOD);
+        BlockTypes.SPRUCE_WOOD = buildWood(BlockId.SPRUCE_WOOD, BlockId.STRIPPED_SPRUCE_WOOD);
+        BlockTypes.WARPED_HYPHAE = buildWood(BlockId.WARPED_HYPHAE, BlockId.STRIPPED_WARPED_HYPHAE);
+        BlockTypes.CHERRY_WOOD = buildWood(BlockId.CHERRY_WOOD, BlockId.STRIPPED_CHERRY_WOOD);
+        BlockTypes.MANGROVE_WOOD = buildWood(BlockId.MANGROVE_WOOD, BlockId.STRIPPED_MANGROVE_WOOD);
         // Stripped Wood
-        BlockTypes.STRIPPED_ACACIA_WOOD = buildStrippedWood(BlockStrippedAcaciaWoodBehavior.class, BlockId.STRIPPED_ACACIA_WOOD);
-        BlockTypes.STRIPPED_BIRCH_WOOD = buildStrippedWood(BlockStrippedBirchWoodBehavior.class, BlockId.STRIPPED_BIRCH_WOOD);
-        BlockTypes.STRIPPED_CRIMSON_HYPHAE = buildStrippedWood(BlockStrippedCrimsonHyphaeBehavior.class, BlockId.STRIPPED_CRIMSON_HYPHAE);
-        BlockTypes.STRIPPED_DARK_OAK_WOOD = buildStrippedWood(BlockStrippedDarkOakWoodBehavior.class, BlockId.STRIPPED_DARK_OAK_WOOD);
-        BlockTypes.STRIPPED_JUNGLE_WOOD = buildStrippedWood(BlockStrippedJungleWoodBehavior.class, BlockId.STRIPPED_JUNGLE_WOOD);
-        BlockTypes.STRIPPED_OAK_WOOD = buildStrippedWood(BlockStrippedOakWoodBehavior.class, BlockId.STRIPPED_OAK_WOOD);
-        BlockTypes.STRIPPED_SPRUCE_WOOD = buildStrippedWood(BlockStrippedSpruceWoodBehavior.class, BlockId.STRIPPED_SPRUCE_WOOD);
-        BlockTypes.STRIPPED_WARPED_HYPHAE = buildStrippedWood(BlockStrippedWarpedHyphaeBehavior.class, BlockId.STRIPPED_WARPED_HYPHAE);
-        BlockTypes.STRIPPED_CHERRY_WOOD = buildStrippedWood(BlockStrippedCherryWoodBehavior.class, BlockId.STRIPPED_CHERRY_WOOD);
-        BlockTypes.STRIPPED_MANGROVE_WOOD = buildStrippedWood(BlockStrippedMangroveWoodBehavior.class, BlockId.STRIPPED_MANGROVE_WOOD);
+        BlockTypes.STRIPPED_ACACIA_WOOD = buildStrippedWood(BlockId.STRIPPED_ACACIA_WOOD);
+        BlockTypes.STRIPPED_BIRCH_WOOD = buildStrippedWood(BlockId.STRIPPED_BIRCH_WOOD);
+        BlockTypes.STRIPPED_CRIMSON_HYPHAE = buildStrippedWood(BlockId.STRIPPED_CRIMSON_HYPHAE);
+        BlockTypes.STRIPPED_DARK_OAK_WOOD = buildStrippedWood(BlockId.STRIPPED_DARK_OAK_WOOD);
+        BlockTypes.STRIPPED_JUNGLE_WOOD = buildStrippedWood(BlockId.STRIPPED_JUNGLE_WOOD);
+        BlockTypes.STRIPPED_OAK_WOOD = buildStrippedWood(BlockId.STRIPPED_OAK_WOOD);
+        BlockTypes.STRIPPED_SPRUCE_WOOD = buildStrippedWood(BlockId.STRIPPED_SPRUCE_WOOD);
+        BlockTypes.STRIPPED_WARPED_HYPHAE = buildStrippedWood(BlockId.STRIPPED_WARPED_HYPHAE);
+        BlockTypes.STRIPPED_CHERRY_WOOD = buildStrippedWood(BlockId.STRIPPED_CHERRY_WOOD);
+        BlockTypes.STRIPPED_MANGROVE_WOOD = buildStrippedWood(BlockId.STRIPPED_MANGROVE_WOOD);
     }
 
     public static void initButtons() {
-        BlockTypes.ACACIA_BUTTON = buildWoodenButton(BlockAcaciaButtonBehavior.class, BlockId.ACACIA_BUTTON);
-        BlockTypes.BAMBOO_BUTTON = buildWoodenButton(BlockBambooButtonBehavior.class, BlockId.BAMBOO_BUTTON);
-        BlockTypes.BIRCH_BUTTON = buildWoodenButton(BlockBirchButtonBehavior.class, BlockId.BIRCH_BUTTON);
-        BlockTypes.CHERRY_BUTTON = buildWoodenButton(BlockCherryButtonBehavior.class, BlockId.CHERRY_BUTTON);
-        BlockTypes.CRIMSON_BUTTON = buildWoodenButton(BlockCrimsonButtonBehavior.class, BlockId.CRIMSON_BUTTON);
-        BlockTypes.DARK_OAK_BUTTON = buildWoodenButton(BlockDarkOakButtonBehavior.class, BlockId.DARK_OAK_BUTTON);
-        BlockTypes.JUNGLE_BUTTON = buildWoodenButton(BlockJungleButtonBehavior.class, BlockId.JUNGLE_BUTTON);
-        BlockTypes.MANGROVE_BUTTON = buildWoodenButton(BlockMangroveButtonBehavior.class, BlockId.MANGROVE_BUTTON);
-        BlockTypes.SPRUCE_BUTTON = buildWoodenButton(BlockSpruceButtonBehavior.class, BlockId.SPRUCE_BUTTON);
-        BlockTypes.WARPED_BUTTON = buildWoodenButton(BlockWarpedButtonBehavior.class, BlockId.WARPED_BUTTON);
-        BlockTypes.WOODEN_BUTTON = buildWoodenButton(BlockWoodenButtonBehavior.class, BlockId.WOODEN_BUTTON);
+        BlockTypes.ACACIA_BUTTON = buildWoodenButton(BlockId.ACACIA_BUTTON);
+        BlockTypes.BAMBOO_BUTTON = buildWoodenButton(BlockId.BAMBOO_BUTTON);
+        BlockTypes.BIRCH_BUTTON = buildWoodenButton(BlockId.BIRCH_BUTTON);
+        BlockTypes.CHERRY_BUTTON = buildWoodenButton(BlockId.CHERRY_BUTTON);
+        BlockTypes.CRIMSON_BUTTON = buildWoodenButton(BlockId.CRIMSON_BUTTON);
+        BlockTypes.DARK_OAK_BUTTON = buildWoodenButton(BlockId.DARK_OAK_BUTTON);
+        BlockTypes.JUNGLE_BUTTON = buildWoodenButton(BlockId.JUNGLE_BUTTON);
+        BlockTypes.MANGROVE_BUTTON = buildWoodenButton(BlockId.MANGROVE_BUTTON);
+        BlockTypes.SPRUCE_BUTTON = buildWoodenButton(BlockId.SPRUCE_BUTTON);
+        BlockTypes.WARPED_BUTTON = buildWoodenButton(BlockId.WARPED_BUTTON);
+        BlockTypes.WOODEN_BUTTON = buildWoodenButton(BlockId.WOODEN_BUTTON);
 
-        BlockTypes.POLISHED_BLACKSTONE_BUTTON = buildButton(BlockPolishedBlackstoneButtonBehavior.class, BlockId.POLISHED_BLACKSTONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
-        BlockTypes.STONE_BUTTON = buildButton(BlockStoneButtonBehavior.class, BlockId.STONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
+        BlockTypes.POLISHED_BLACKSTONE_BUTTON = buildButton(BlockId.POLISHED_BLACKSTONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
+        BlockTypes.STONE_BUTTON = buildButton(BlockId.STONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
     }
 
     public static void initDoors() {
-        BlockTypes.ACACIA_DOOR = buildWoodenDoor(BlockAcaciaDoorBehavior.class, BlockId.ACACIA_DOOR);
-        BlockTypes.BAMBOO_DOOR = buildWoodenDoor(BlockBambooDoorBehavior.class, BlockId.BAMBOO_DOOR);
-        BlockTypes.BIRCH_DOOR = buildWoodenDoor(BlockBirchDoorBehavior.class, BlockId.BIRCH_DOOR);
-        BlockTypes.CHERRY_DOOR = buildWoodenDoor(BlockCherryDoorBehavior.class, BlockId.CHERRY_DOOR);
-        BlockTypes.CRIMSON_DOOR = buildWoodenDoor(BlockCrimsonDoorBehavior.class, BlockId.CRIMSON_DOOR);
-        BlockTypes.DARK_OAK_DOOR = buildWoodenDoor(BlockDarkOakDoorBehavior.class, BlockId.DARK_OAK_DOOR);
-        BlockTypes.JUNGLE_DOOR = buildWoodenDoor(BlockJungleDoorBehavior.class, BlockId.JUNGLE_DOOR);
-        BlockTypes.MANGROVE_DOOR = buildWoodenDoor(BlockMangroveDoorBehavior.class, BlockId.MANGROVE_DOOR);
-        BlockTypes.WOODEN_DOOR = buildWoodenDoor(BlockWoodenDoorBehavior.class, BlockId.WOODEN_DOOR);
-        BlockTypes.SPRUCE_DOOR = buildWoodenDoor(BlockSpruceDoorBehavior.class, BlockId.SPRUCE_DOOR);
-        BlockTypes.WARPED_DOOR = buildWoodenDoor(BlockWarpedDoorBehavior.class, BlockId.WARPED_DOOR);
+        BlockTypes.ACACIA_DOOR = buildWoodenDoor(BlockId.ACACIA_DOOR);
+        BlockTypes.BAMBOO_DOOR = buildWoodenDoor(BlockId.BAMBOO_DOOR);
+        BlockTypes.BIRCH_DOOR = buildWoodenDoor(BlockId.BIRCH_DOOR);
+        BlockTypes.CHERRY_DOOR = buildWoodenDoor(BlockId.CHERRY_DOOR);
+        BlockTypes.CRIMSON_DOOR = buildWoodenDoor(BlockId.CRIMSON_DOOR);
+        BlockTypes.DARK_OAK_DOOR = buildWoodenDoor(BlockId.DARK_OAK_DOOR);
+        BlockTypes.JUNGLE_DOOR = buildWoodenDoor(BlockId.JUNGLE_DOOR);
+        BlockTypes.MANGROVE_DOOR = buildWoodenDoor(BlockId.MANGROVE_DOOR);
+        BlockTypes.WOODEN_DOOR = buildWoodenDoor(BlockId.WOODEN_DOOR);
+        BlockTypes.SPRUCE_DOOR = buildWoodenDoor(BlockId.SPRUCE_DOOR);
+        BlockTypes.WARPED_DOOR = buildWoodenDoor(BlockId.WARPED_DOOR);
+        // TODO: Replace BlockDoorBaseComponentImpl::new
+        BlockTypes.IRON_DOOR = buildDoor(BlockId.IRON_DOOR, BlockDoorBaseComponentImpl::new);
+        BlockTypes.COPPER_DOOR = buildDoor(BlockId.COPPER_DOOR, BlockDoorBaseComponentImpl::new);
+        BlockTypes.EXPOSED_COPPER_DOOR = buildDoor(BlockId.EXPOSED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
+        BlockTypes.OXIDIZED_COPPER_DOOR = buildDoor(BlockId.OXIDIZED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
+        BlockTypes.WAXED_COPPER_DOOR = buildDoor(BlockId.WAXED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
+        BlockTypes.WAXED_EXPOSED_COPPER_DOOR = buildDoor(BlockId.WAXED_EXPOSED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
+        BlockTypes.WAXED_OXIDIZED_COPPER_DOOR = buildDoor(BlockId.WAXED_OXIDIZED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
+        BlockTypes.WAXED_WEATHERED_COPPER_DOOR = buildDoor(BlockId.WAXED_WEATHERED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
+        BlockTypes.WEATHERED_COPPER_DOOR = buildDoor(BlockId.WEATHERED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
     }
 
     public static void initRods() {
         BlockTypes.END_ROD = AllayBlockType
-                .builder(BlockEndRodBehavior.class)
+                .builder(BlockEndRodBehaviorImpl.class)
                 .vanillaBlock(BlockId.END_ROD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockRodBaseComponentImpl::new)
                 .build();
         BlockTypes.LIGHTNING_ROD = AllayBlockType
-                .builder(BlockLightningRodBehavior.class)
+                .builder(BlockLightningRodBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHTNING_ROD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockRodBaseComponentImpl::new)
                 .build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildWood(Class<T> clazz, BlockId blockId, BlockId strippedBlockId) {
+    private static <T extends BlockBehavior> BlockType<T> buildWood(BlockId blockId, BlockId strippedBlockId) {
         return AllayBlockType
-                .builder(clazz)
+                .builder(BlockWoodBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                 .setBlockBaseComponentSupplier(blockType -> new BlockWoodBaseComponentImpl(blockType, strippedBlockId))
                 .build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildStrippedWood(Class<T> clazz, BlockId blockId) {
+    private static <T extends BlockBehavior> BlockType<T> buildStrippedWood(BlockId blockId) {
         return AllayBlockType
-                .builder(clazz)
+                .builder(BlockWoodBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.PILLAR_AXIS)
                 .setBlockBaseComponentSupplier(blockType -> new BlockWoodBaseComponentImpl(blockType, blockId))
                 .build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildWoodenButton(Class<T> clazz, BlockId blockId) {
-        return buildButton(clazz, blockId, BlockWoodenButtonBaseComponentImpl::new);
+    private static <T extends BlockBehavior> BlockType<T> buildWoodenButton(BlockId blockId) {
+        return buildButton(blockId, BlockWoodenButtonBaseComponentImpl::new);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildButton(Class<T> clazz, BlockId blockId, Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
+    private static <T extends BlockBehavior> BlockType<T> buildButton(BlockId blockId, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
         return AllayBlockType
-                .builder(clazz)
+                .builder(BlockButtonBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.BUTTON_PRESSED_BIT, BlockPropertyTypes.FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(blockBaseComponentSupplier)
                 .build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildWoodenDoor(Class<T> clazz, BlockId blockId) {
-        return buildDoor(clazz, blockId, BlockDoorBaseComponentImpl::new);
+    private static <T extends BlockBehavior> BlockType<T> buildWoodenDoor(BlockId blockId) {
+        return buildDoor(blockId, BlockDoorBaseComponentImpl::new);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildDoor(Class<T> clazz, BlockId blockId, Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
+    private static <T extends BlockBehavior> BlockType<T> buildDoor(BlockId blockId, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
         return AllayBlockType
-                .builder(clazz)
+                .builder(BlockDoorBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBlockBaseComponentSupplier(blockBaseComponentSupplier)
@@ -918,22 +947,22 @@ public final class BlockTypeInitializer {
     }
 
     public static void initWallSigns() {
-        BlockTypes.WALL_SIGN = buildWallSign(BlockWallSignBehavior.class, BlockId.WALL_SIGN, ItemTypes.OAK_SIGN);
-        BlockTypes.ACACIA_WALL_SIGN = buildWallSign(BlockAcaciaWallSignBehavior.class, BlockId.ACACIA_WALL_SIGN, ItemTypes.ACACIA_SIGN);
-        BlockTypes.BAMBOO_WALL_SIGN = buildWallSign(BlockBambooWallSignBehavior.class, BlockId.BAMBOO_WALL_SIGN, ItemTypes.BAMBOO_SIGN);
-        BlockTypes.BIRCH_WALL_SIGN = buildWallSign(BlockBirchWallSignBehavior.class, BlockId.BIRCH_WALL_SIGN, ItemTypes.BIRCH_SIGN);
-        BlockTypes.CHERRY_WALL_SIGN = buildWallSign(BlockCherryWallSignBehavior.class, BlockId.CHERRY_WALL_SIGN, ItemTypes.CHERRY_SIGN);
-        BlockTypes.CRIMSON_WALL_SIGN = buildWallSign(BlockCrimsonWallSignBehavior.class, BlockId.CRIMSON_WALL_SIGN, ItemTypes.CRIMSON_SIGN);
-        BlockTypes.DARKOAK_WALL_SIGN = buildWallSign(BlockDarkoakWallSignBehavior.class, BlockId.DARKOAK_WALL_SIGN, ItemTypes.DARK_OAK_SIGN);
-        BlockTypes.JUNGLE_WALL_SIGN = buildWallSign(BlockJungleWallSignBehavior.class, BlockId.JUNGLE_WALL_SIGN, ItemTypes.JUNGLE_SIGN);
-        BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockMangroveWallSignBehavior.class, BlockId.MANGROVE_WALL_SIGN, ItemTypes.MANGROVE_SIGN);
-        BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockSpruceWallSignBehavior.class, BlockId.SPRUCE_WALL_SIGN, ItemTypes.SPRUCE_SIGN);
-        BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockWarpedWallSignBehavior.class, BlockId.WARPED_WALL_SIGN, ItemTypes.WARPED_SIGN);
+        BlockTypes.WALL_SIGN = buildWallSign(BlockId.WALL_SIGN, ItemTypes.OAK_SIGN);
+        BlockTypes.ACACIA_WALL_SIGN = buildWallSign(BlockId.ACACIA_WALL_SIGN, ItemTypes.ACACIA_SIGN);
+        BlockTypes.BAMBOO_WALL_SIGN = buildWallSign(BlockId.BAMBOO_WALL_SIGN, ItemTypes.BAMBOO_SIGN);
+        BlockTypes.BIRCH_WALL_SIGN = buildWallSign(BlockId.BIRCH_WALL_SIGN, ItemTypes.BIRCH_SIGN);
+        BlockTypes.CHERRY_WALL_SIGN = buildWallSign(BlockId.CHERRY_WALL_SIGN, ItemTypes.CHERRY_SIGN);
+        BlockTypes.CRIMSON_WALL_SIGN = buildWallSign(BlockId.CRIMSON_WALL_SIGN, ItemTypes.CRIMSON_SIGN);
+        BlockTypes.DARKOAK_WALL_SIGN = buildWallSign(BlockId.DARKOAK_WALL_SIGN, ItemTypes.DARK_OAK_SIGN);
+        BlockTypes.JUNGLE_WALL_SIGN = buildWallSign(BlockId.JUNGLE_WALL_SIGN, ItemTypes.JUNGLE_SIGN);
+        BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockId.MANGROVE_WALL_SIGN, ItemTypes.MANGROVE_SIGN);
+        BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockId.SPRUCE_WALL_SIGN, ItemTypes.SPRUCE_SIGN);
+        BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockId.WARPED_WALL_SIGN, ItemTypes.WARPED_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildWallSign(Class<T> clazz, BlockId blockId, ItemType<?> dropItemType) {
+    private static <T extends BlockBehavior> BlockType<T> buildWallSign(BlockId blockId, ItemType<?> dropItemType) {
         return AllayBlockType
-                .builder(clazz)
+                .builder(BlockSignBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(blockType -> new BlockWallSignBaseComponentImpl(blockType, dropItemType))
@@ -942,22 +971,22 @@ public final class BlockTypeInitializer {
     }
 
     public static void initStandingSigns() {
-        BlockTypes.STANDING_SIGN = buildStandingSign(BlockStandingSignBehavior.class, BlockId.STANDING_SIGN, ItemTypes.OAK_SIGN);
-        BlockTypes.ACACIA_STANDING_SIGN = buildStandingSign(BlockAcaciaStandingSignBehavior.class, BlockId.ACACIA_STANDING_SIGN, ItemTypes.ACACIA_SIGN);
-        BlockTypes.BAMBOO_STANDING_SIGN = buildStandingSign(BlockBambooStandingSignBehavior.class, BlockId.BAMBOO_STANDING_SIGN, ItemTypes.BAMBOO_SIGN);
-        BlockTypes.BIRCH_STANDING_SIGN = buildStandingSign(BlockBirchStandingSignBehavior.class, BlockId.BIRCH_STANDING_SIGN, ItemTypes.BIRCH_SIGN);
-        BlockTypes.CHERRY_STANDING_SIGN = buildStandingSign(BlockCherryStandingSignBehavior.class, BlockId.CHERRY_STANDING_SIGN, ItemTypes.CHERRY_SIGN);
-        BlockTypes.CRIMSON_STANDING_SIGN = buildStandingSign(BlockCrimsonStandingSignBehavior.class, BlockId.CRIMSON_STANDING_SIGN, ItemTypes.CRIMSON_SIGN);
-        BlockTypes.DARKOAK_STANDING_SIGN = buildStandingSign(BlockDarkoakStandingSignBehavior.class, BlockId.DARKOAK_STANDING_SIGN, ItemTypes.DARK_OAK_SIGN);
-        BlockTypes.JUNGLE_STANDING_SIGN = buildStandingSign(BlockJungleStandingSignBehavior.class, BlockId.JUNGLE_STANDING_SIGN, ItemTypes.JUNGLE_SIGN);
-        BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockMangroveStandingSignBehavior.class, BlockId.MANGROVE_STANDING_SIGN, ItemTypes.MANGROVE_SIGN);
-        BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockSpruceStandingSignBehavior.class, BlockId.SPRUCE_STANDING_SIGN, ItemTypes.SPRUCE_SIGN);
-        BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockWarpedStandingSignBehavior.class, BlockId.WARPED_STANDING_SIGN, ItemTypes.WARPED_SIGN);
+        BlockTypes.STANDING_SIGN = buildStandingSign(BlockId.STANDING_SIGN, ItemTypes.OAK_SIGN);
+        BlockTypes.ACACIA_STANDING_SIGN = buildStandingSign(BlockId.ACACIA_STANDING_SIGN, ItemTypes.ACACIA_SIGN);
+        BlockTypes.BAMBOO_STANDING_SIGN = buildStandingSign(BlockId.BAMBOO_STANDING_SIGN, ItemTypes.BAMBOO_SIGN);
+        BlockTypes.BIRCH_STANDING_SIGN = buildStandingSign(BlockId.BIRCH_STANDING_SIGN, ItemTypes.BIRCH_SIGN);
+        BlockTypes.CHERRY_STANDING_SIGN = buildStandingSign(BlockId.CHERRY_STANDING_SIGN, ItemTypes.CHERRY_SIGN);
+        BlockTypes.CRIMSON_STANDING_SIGN = buildStandingSign(BlockId.CRIMSON_STANDING_SIGN, ItemTypes.CRIMSON_SIGN);
+        BlockTypes.DARKOAK_STANDING_SIGN = buildStandingSign(BlockId.DARKOAK_STANDING_SIGN, ItemTypes.DARK_OAK_SIGN);
+        BlockTypes.JUNGLE_STANDING_SIGN = buildStandingSign(BlockId.JUNGLE_STANDING_SIGN, ItemTypes.JUNGLE_SIGN);
+        BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockId.MANGROVE_STANDING_SIGN, ItemTypes.MANGROVE_SIGN);
+        BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockId.SPRUCE_STANDING_SIGN, ItemTypes.SPRUCE_SIGN);
+        BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockId.WARPED_STANDING_SIGN, ItemTypes.WARPED_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildStandingSign(Class<T> clazz, BlockId blockId, ItemType<?> dropItemType) {
+    private static <T extends BlockBehavior> BlockType<T> buildStandingSign(BlockId blockId, ItemType<?> dropItemType) {
         return AllayBlockType
-                .builder(clazz)
+                .builder(BlockSignBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.GROUND_SIGN_DIRECTION)
                 .setBlockBaseComponentSupplier(blockType -> new BlockStandingSignBaseComponentImpl(blockType, dropItemType))
@@ -966,22 +995,22 @@ public final class BlockTypeInitializer {
     }
 
     public static void initHangingSigns() {
-        BlockTypes.ACACIA_HANGING_SIGN = buildHangingSign(BlockAcaciaHangingSignBehavior.class, BlockId.ACACIA_HANGING_SIGN);
-        BlockTypes.BAMBOO_HANGING_SIGN = buildHangingSign(BlockBambooHangingSignBehavior.class, BlockId.BAMBOO_HANGING_SIGN);
-        BlockTypes.BIRCH_HANGING_SIGN = buildHangingSign(BlockBirchHangingSignBehavior.class, BlockId.BIRCH_HANGING_SIGN);
-        BlockTypes.CHERRY_HANGING_SIGN = buildHangingSign(BlockCherryHangingSignBehavior.class, BlockId.CHERRY_HANGING_SIGN);
-        BlockTypes.CRIMSON_HANGING_SIGN = buildHangingSign(BlockCrimsonHangingSignBehavior.class, BlockId.CRIMSON_HANGING_SIGN);
-        BlockTypes.DARK_OAK_HANGING_SIGN = buildHangingSign(BlockDarkOakHangingSignBehavior.class, BlockId.DARK_OAK_HANGING_SIGN);
-        BlockTypes.JUNGLE_HANGING_SIGN = buildHangingSign(BlockJungleHangingSignBehavior.class, BlockId.JUNGLE_HANGING_SIGN);
-        BlockTypes.MANGROVE_HANGING_SIGN = buildHangingSign(BlockMangroveHangingSignBehavior.class, BlockId.MANGROVE_HANGING_SIGN);
-        BlockTypes.OAK_HANGING_SIGN = buildHangingSign(BlockOakHangingSignBehavior.class, BlockId.OAK_HANGING_SIGN);
-        BlockTypes.SPRUCE_HANGING_SIGN = buildHangingSign(BlockSpruceHangingSignBehavior.class, BlockId.SPRUCE_HANGING_SIGN);
-        BlockTypes.WARPED_HANGING_SIGN = buildHangingSign(BlockWarpedHangingSignBehavior.class, BlockId.WARPED_HANGING_SIGN);
+        BlockTypes.ACACIA_HANGING_SIGN = buildHangingSign(BlockId.ACACIA_HANGING_SIGN);
+        BlockTypes.BAMBOO_HANGING_SIGN = buildHangingSign(BlockId.BAMBOO_HANGING_SIGN);
+        BlockTypes.BIRCH_HANGING_SIGN = buildHangingSign(BlockId.BIRCH_HANGING_SIGN);
+        BlockTypes.CHERRY_HANGING_SIGN = buildHangingSign(BlockId.CHERRY_HANGING_SIGN);
+        BlockTypes.CRIMSON_HANGING_SIGN = buildHangingSign(BlockId.CRIMSON_HANGING_SIGN);
+        BlockTypes.DARK_OAK_HANGING_SIGN = buildHangingSign(BlockId.DARK_OAK_HANGING_SIGN);
+        BlockTypes.JUNGLE_HANGING_SIGN = buildHangingSign(BlockId.JUNGLE_HANGING_SIGN);
+        BlockTypes.MANGROVE_HANGING_SIGN = buildHangingSign(BlockId.MANGROVE_HANGING_SIGN);
+        BlockTypes.OAK_HANGING_SIGN = buildHangingSign(BlockId.OAK_HANGING_SIGN);
+        BlockTypes.SPRUCE_HANGING_SIGN = buildHangingSign(BlockId.SPRUCE_HANGING_SIGN);
+        BlockTypes.WARPED_HANGING_SIGN = buildHangingSign(BlockId.WARPED_HANGING_SIGN);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildHangingSign(Class<T> clazz, BlockId blockId) {
+    private static <T extends BlockBehavior> BlockType<T> buildHangingSign(BlockId blockId) {
         return AllayBlockType
-                .builder(clazz)
+                .builder(BlockHangingSignBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.ATTACHED_BIT, BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROUND_SIGN_DIRECTION, BlockPropertyTypes.HANGING)
                 .setBlockBaseComponentSupplier(BlockHangingSignBaseComponentImpl::new)
@@ -991,7 +1020,7 @@ public final class BlockTypeInitializer {
 
     public static void initSlimeBlock() {
         BlockTypes.SLIME = AllayBlockType
-                .builder(BlockSlimeBehavior.class)
+                .builder(BlockSlimeBehaviorImpl.class)
                 .vanillaBlock(BlockId.SLIME)
                 .setBlockBaseComponentSupplier(BlockSlimeBaseComponentImpl::new)
                 .build();
@@ -999,7 +1028,7 @@ public final class BlockTypeInitializer {
 
     public static void initHayBlock() {
         BlockTypes.HAY_BLOCK = AllayBlockType
-                .builder(BlockHayBlockBehavior.class)
+                .builder(BlockHayBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.HAY_BLOCK)
                 .setProperties(BlockPropertyTypes.DEPRECATED, BlockPropertyTypes.PILLAR_AXIS)
                 .setBlockBaseComponentSupplier(BlockHayBlockBaseComponentImpl::new)
@@ -1008,14 +1037,14 @@ public final class BlockTypeInitializer {
 
     public static void initWater() {
         BlockTypes.WATER = AllayBlockType
-                .builder(BlockWaterBehavior.class)
+                .builder(BlockWaterBehaviorImpl.class)
                 .vanillaBlock(BlockId.WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBlockBaseComponentSupplier(BlockWaterBaseComponentImpl::new)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_WATER = AllayBlockType
-                .builder(BlockFlowingWaterBehavior.class)
+                .builder(BlockFlowingWaterBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBlockBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)
@@ -1025,14 +1054,14 @@ public final class BlockTypeInitializer {
 
     public static void initLava() {
         BlockTypes.LAVA = AllayBlockType
-                .builder(BlockLavaBehavior.class)
+                .builder(BlockLavaBehaviorImpl.class)
                 .vanillaBlock(BlockId.LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBlockBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_LAVA = AllayBlockType
-                .builder(BlockFlowingLavaBehavior.class)
+                .builder(BlockFlowingLavaBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBlockBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)
@@ -1042,7 +1071,7 @@ public final class BlockTypeInitializer {
 
     public static void initEnchantingTable() {
         BlockTypes.ENCHANTING_TABLE = AllayBlockType
-                .builder(BlockEnchantingTableBehavior.class)
+                .builder(BlockEnchantingTableBehaviorImpl.class)
                 .vanillaBlock(BlockId.ENCHANTING_TABLE)
                 .bindBlockEntity(BlockEntityTypes.ENCHANT_TABLE)
                 .setBlockBaseComponentSupplier(BlockEnchantingTableBaseComponentImpl::new)

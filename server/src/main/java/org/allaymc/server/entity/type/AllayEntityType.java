@@ -40,8 +40,8 @@ public class AllayEntityType<T extends Entity> implements EntityType<T> {
         this.identifier = identifier;
     }
 
-    public static <T extends Entity> Builder builder(Class<T> interfaceClass) {
-        return new Builder(interfaceClass);
+    public static <T extends Entity> Builder builder(Class<T> clazz) {
+        return new Builder(clazz);
     }
 
     @SneakyThrows

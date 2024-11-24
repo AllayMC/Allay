@@ -23,7 +23,6 @@ dependencies {
     implementation(libs.mcterminal)
     implementation(libs.bundles.logging)
     implementation(libs.disruptor)
-    implementation(libs.bytebuddy)
     implementation(libs.libdeflate)
     implementation(libs.leveldbjni)
     implementation(libs.netty.epoll)

@@ -25,6 +25,7 @@ public interface ClassNames {
     ClassName COMPONENT_PROVIDER = ClassName.get("org.allaymc.server.component.interfaces", "ComponentProvider");
 
     ClassName BLOCK_BEHAVIOR = ClassName.get("org.allaymc.api.block", "BlockBehavior");
+    ClassName BLOCK_BEHAVIOR_IMPL = ClassName.get("org.allaymc.server.block.impl", "BlockBehaviorImpl");
     ClassName BLOCK_ID = ClassName.get("org.allaymc.api.block.data", "BlockId");
     ClassName BLOCK_PROPERTY_TYPE = ClassName.get("org.allaymc.api.block.property.type", "BlockPropertyType");
     ClassName BLOCK_PROPERTY_TYPES = ClassName.get("org.allaymc.api.block.property.type", "BlockPropertyTypes");

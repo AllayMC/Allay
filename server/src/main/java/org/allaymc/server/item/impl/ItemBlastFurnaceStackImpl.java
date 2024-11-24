@@ -1,14 +1,16 @@
 package org.allaymc.server.item.impl;
 
-import java.util.List;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.ItemBlastFurnaceStack;
+import org.allaymc.api.item.interfaces.furnace.ItemBlastFurnaceStack;
 import org.allaymc.server.component.interfaces.ComponentProvider;
+
+import java.util.List;
 
 public class ItemBlastFurnaceStackImpl extends ItemStackImpl implements ItemBlastFurnaceStack {
     public ItemBlastFurnaceStackImpl(ItemStackInitInfo initInfo,
-            List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+                                     List<ComponentProvider<? extends Component>> componentProviders) {
+        super(initInfo, componentProviders);
+        ;
     }
 }
