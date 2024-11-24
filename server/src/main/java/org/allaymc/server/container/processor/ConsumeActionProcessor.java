@@ -69,7 +69,8 @@ public class ConsumeActionProcessor implements ContainerActionProcessor<ConsumeA
                                                 item.getCount(),
                                                 item.getStackNetworkId(),
                                                 item.getCustomName(),
-                                                item.getDurability()
+                                                item.getDurability(),
+                                                ""
                                         )
                                 ),
                                 new FullContainerName(sourceContainer.getSlotType(slot), null)
