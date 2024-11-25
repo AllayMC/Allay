@@ -210,7 +210,6 @@ public class BlockClassGen extends BaseClassGen {
         registerSubPackage(Pattern.compile(".*Torch.*Behavior"), "torch");
         registerSubPackage(Pattern.compile(".*DirtBehavior"), "dirt");
         registerSubPackage(Pattern.compile(".*SandBehavior"), "sand");
-        registerSubPackage(Pattern.compile(".*SandstoneBehavior"), "sandstone");
         registerSubPackage(Pattern.compile("BlockPurpur.*"), "purpur");
         registerSubPackage(Pattern.compile(".*SpongeBehavior"), "sponge");
         registerSubPackage(Pattern.compile(".*TntBehavior"), "tnt");
@@ -271,5 +270,6 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*IronTrapdoorBehavior"), "BlockIronTrapdoorBehavior");
         registerMergedBlock(Pattern.compile(".*CopperTrapdoorBehavior"), "BlockCopperTrapdoorBehavior");
         registerMergedBlock(Pattern.compile(".*TrapdoorBehavior"), "BlockTrapdoorBehavior");
+        registerMergedBlock(Pattern.compile(".*SandstoneBehavior"), "BlockSandstoneBehavior");
     }
 }

@@ -295,6 +295,7 @@ import org.allaymc.server.block.impl.BlockRepeatingCommandBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockReserved6BehaviorImpl;
 import org.allaymc.server.block.impl.BlockRespawnAnchorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockRoseBushBehaviorImpl;
+import org.allaymc.server.block.impl.BlockSandstoneBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSaplingBehaviorImpl;
 import org.allaymc.server.block.impl.BlockScaffoldingBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSculkBehaviorImpl;
@@ -400,14 +401,6 @@ import org.allaymc.server.block.impl.sand.BlockRedSandBehaviorImpl;
 import org.allaymc.server.block.impl.sand.BlockSandBehaviorImpl;
 import org.allaymc.server.block.impl.sand.BlockSoulSandBehaviorImpl;
 import org.allaymc.server.block.impl.sand.BlockSuspiciousSandBehaviorImpl;
-import org.allaymc.server.block.impl.sandstone.BlockChiseledRedSandstoneBehaviorImpl;
-import org.allaymc.server.block.impl.sandstone.BlockChiseledSandstoneBehaviorImpl;
-import org.allaymc.server.block.impl.sandstone.BlockCutRedSandstoneBehaviorImpl;
-import org.allaymc.server.block.impl.sandstone.BlockCutSandstoneBehaviorImpl;
-import org.allaymc.server.block.impl.sandstone.BlockRedSandstoneBehaviorImpl;
-import org.allaymc.server.block.impl.sandstone.BlockSandstoneBehaviorImpl;
-import org.allaymc.server.block.impl.sandstone.BlockSmoothRedSandstoneBehaviorImpl;
-import org.allaymc.server.block.impl.sandstone.BlockSmoothSandstoneBehaviorImpl;
 import org.allaymc.server.block.impl.sign.BlockHangingSignBehaviorImpl;
 import org.allaymc.server.block.impl.sign.BlockSignBehaviorImpl;
 import org.allaymc.server.block.impl.sponge.BlockSpongeBehaviorImpl;
@@ -2050,7 +2043,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initChiseledRedSandstone() {
         if (BlockTypes.CHISELED_RED_SANDSTONE != null) return;
         BlockTypes.CHISELED_RED_SANDSTONE = AllayBlockType
-                .builder(BlockChiseledRedSandstoneBehaviorImpl.class)
+                .builder(BlockSandstoneBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHISELED_RED_SANDSTONE)
                 .build();
     }
@@ -2058,7 +2051,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initChiseledSandstone() {
         if (BlockTypes.CHISELED_SANDSTONE != null) return;
         BlockTypes.CHISELED_SANDSTONE = AllayBlockType
-                .builder(BlockChiseledSandstoneBehaviorImpl.class)
+                .builder(BlockSandstoneBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHISELED_SANDSTONE)
                 .build();
     }
@@ -2622,7 +2615,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCutRedSandstone() {
         if (BlockTypes.CUT_RED_SANDSTONE != null) return;
         BlockTypes.CUT_RED_SANDSTONE = AllayBlockType
-                .builder(BlockCutRedSandstoneBehaviorImpl.class)
+                .builder(BlockSandstoneBehaviorImpl.class)
                 .vanillaBlock(BlockId.CUT_RED_SANDSTONE)
                 .build();
     }
@@ -2648,7 +2641,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCutSandstone() {
         if (BlockTypes.CUT_SANDSTONE != null) return;
         BlockTypes.CUT_SANDSTONE = AllayBlockType
-                .builder(BlockCutSandstoneBehaviorImpl.class)
+                .builder(BlockSandstoneBehaviorImpl.class)
                 .vanillaBlock(BlockId.CUT_SANDSTONE)
                 .build();
     }
@@ -8422,7 +8415,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedSandstone() {
         if (BlockTypes.RED_SANDSTONE != null) return;
         BlockTypes.RED_SANDSTONE = AllayBlockType
-                .builder(BlockRedSandstoneBehaviorImpl.class)
+                .builder(BlockSandstoneBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SANDSTONE)
                 .build();
     }
@@ -8860,7 +8853,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothRedSandstone() {
         if (BlockTypes.SMOOTH_RED_SANDSTONE != null) return;
         BlockTypes.SMOOTH_RED_SANDSTONE = AllayBlockType
-                .builder(BlockSmoothRedSandstoneBehaviorImpl.class)
+                .builder(BlockSandstoneBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_RED_SANDSTONE)
                 .build();
     }
@@ -8895,7 +8888,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothSandstone() {
         if (BlockTypes.SMOOTH_SANDSTONE != null) return;
         BlockTypes.SMOOTH_SANDSTONE = AllayBlockType
-                .builder(BlockSmoothSandstoneBehaviorImpl.class)
+                .builder(BlockSandstoneBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_SANDSTONE)
                 .build();
     }

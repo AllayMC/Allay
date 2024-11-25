@@ -293,6 +293,7 @@ import org.allaymc.api.block.interfaces.BlockRepeatingCommandBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockReserved6Behavior;
 import org.allaymc.api.block.interfaces.BlockRespawnAnchorBehavior;
 import org.allaymc.api.block.interfaces.BlockRoseBushBehavior;
+import org.allaymc.api.block.interfaces.BlockSandstoneBehavior;
 import org.allaymc.api.block.interfaces.BlockSaplingBehavior;
 import org.allaymc.api.block.interfaces.BlockScaffoldingBehavior;
 import org.allaymc.api.block.interfaces.BlockSculkBehavior;
@@ -398,14 +399,6 @@ import org.allaymc.api.block.interfaces.sand.BlockRedSandBehavior;
 import org.allaymc.api.block.interfaces.sand.BlockSandBehavior;
 import org.allaymc.api.block.interfaces.sand.BlockSoulSandBehavior;
 import org.allaymc.api.block.interfaces.sand.BlockSuspiciousSandBehavior;
-import org.allaymc.api.block.interfaces.sandstone.BlockChiseledRedSandstoneBehavior;
-import org.allaymc.api.block.interfaces.sandstone.BlockChiseledSandstoneBehavior;
-import org.allaymc.api.block.interfaces.sandstone.BlockCutRedSandstoneBehavior;
-import org.allaymc.api.block.interfaces.sandstone.BlockCutSandstoneBehavior;
-import org.allaymc.api.block.interfaces.sandstone.BlockRedSandstoneBehavior;
-import org.allaymc.api.block.interfaces.sandstone.BlockSandstoneBehavior;
-import org.allaymc.api.block.interfaces.sandstone.BlockSmoothRedSandstoneBehavior;
-import org.allaymc.api.block.interfaces.sandstone.BlockSmoothSandstoneBehavior;
 import org.allaymc.api.block.interfaces.sign.BlockHangingSignBehavior;
 import org.allaymc.api.block.interfaces.sign.BlockSignBehavior;
 import org.allaymc.api.block.interfaces.sponge.BlockSpongeBehavior;
@@ -799,9 +792,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockChiseledQuartzBlockBehavior> CHISELED_QUARTZ_BLOCK;
 
-    public static BlockType<BlockChiseledRedSandstoneBehavior> CHISELED_RED_SANDSTONE;
+    public static BlockType<BlockSandstoneBehavior> CHISELED_RED_SANDSTONE;
 
-    public static BlockType<BlockChiseledSandstoneBehavior> CHISELED_SANDSTONE;
+    public static BlockType<BlockSandstoneBehavior> CHISELED_SANDSTONE;
 
     public static BlockType<BlockBricksBehavior> CHISELED_STONE_BRICKS;
 
@@ -933,13 +926,13 @@ public final class BlockTypes {
 
     public static BlockType<BlockStairsBehavior> CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockCutRedSandstoneBehavior> CUT_RED_SANDSTONE;
+    public static BlockType<BlockSandstoneBehavior> CUT_RED_SANDSTONE;
 
     public static BlockType<BlockSlabBehavior> CUT_RED_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> CUT_RED_SANDSTONE_SLAB;
 
-    public static BlockType<BlockCutSandstoneBehavior> CUT_SANDSTONE;
+    public static BlockType<BlockSandstoneBehavior> CUT_SANDSTONE;
 
     public static BlockType<BlockSlabBehavior> CUT_SANDSTONE_DOUBLE_SLAB;
 
@@ -2311,7 +2304,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockRedSandBehavior> RED_SAND;
 
-    public static BlockType<BlockRedSandstoneBehavior> RED_SANDSTONE;
+    public static BlockType<BlockSandstoneBehavior> RED_SANDSTONE;
 
     public static BlockType<BlockSlabBehavior> RED_SANDSTONE_DOUBLE_SLAB;
 
@@ -2413,7 +2406,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockStairsBehavior> SMOOTH_QUARTZ_STAIRS;
 
-    public static BlockType<BlockSmoothRedSandstoneBehavior> SMOOTH_RED_SANDSTONE;
+    public static BlockType<BlockSandstoneBehavior> SMOOTH_RED_SANDSTONE;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_RED_SANDSTONE_DOUBLE_SLAB;
 
@@ -2421,7 +2414,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockStairsBehavior> SMOOTH_RED_SANDSTONE_STAIRS;
 
-    public static BlockType<BlockSmoothSandstoneBehavior> SMOOTH_SANDSTONE;
+    public static BlockType<BlockSandstoneBehavior> SMOOTH_SANDSTONE;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_SANDSTONE_DOUBLE_SLAB;
 
