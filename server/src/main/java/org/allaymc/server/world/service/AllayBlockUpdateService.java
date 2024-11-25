@@ -1,9 +1,9 @@
 package org.allaymc.server.world.service;
 
 import lombok.RequiredArgsConstructor;
-import org.allaymc.api.block.component.BlockLiquidComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
@@ -45,7 +45,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
 
             layer0.getBehavior().onScheduledUpdate(block0);
 
-            if (layer1.getBehavior() instanceof BlockLiquidComponent) {
+            if (layer1.getBehavior() instanceof BlockLiquidBehavior) {
                 var block1 = new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1);
 
                 if (callScheduleUpdateEvent(block1)) {
@@ -79,7 +79,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
                     blockFace
             );
 
-            if (layer1.getBehavior() instanceof BlockLiquidComponent) {
+            if (layer1.getBehavior() instanceof BlockLiquidBehavior) {
                 var block1 = new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1);
 
                 if (callNeighborUpdateEvent(block1, neighborBlock0, blockFace)) {

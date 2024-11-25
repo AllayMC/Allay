@@ -29,10 +29,6 @@ import org.allaymc.server.block.impl.door.BlockIronDoorBehaviorImpl;
 import org.allaymc.server.block.impl.furnace.BlockBlastFurnaceBehaviorImpl;
 import org.allaymc.server.block.impl.furnace.BlockFurnaceBehaviorImpl;
 import org.allaymc.server.block.impl.furnace.BlockSmokerBehaviorImpl;
-import org.allaymc.server.block.impl.liquid.BlockFlowingLavaBehaviorImpl;
-import org.allaymc.server.block.impl.liquid.BlockFlowingWaterBehaviorImpl;
-import org.allaymc.server.block.impl.liquid.BlockLavaBehaviorImpl;
-import org.allaymc.server.block.impl.liquid.BlockWaterBehaviorImpl;
 import org.allaymc.server.block.impl.sand.BlockRedSandBehaviorImpl;
 import org.allaymc.server.block.impl.sand.BlockSandBehaviorImpl;
 import org.allaymc.server.block.impl.sign.BlockHangingSignBehaviorImpl;
@@ -1032,14 +1028,14 @@ public final class BlockTypeInitializer {
 
     public static void initWater() {
         BlockTypes.WATER = AllayBlockType
-                .builder(BlockWaterBehaviorImpl.class)
+                .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBlockBaseComponentSupplier(BlockWaterBaseComponentImpl::new)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_WATER = AllayBlockType
-                .builder(BlockFlowingWaterBehaviorImpl.class)
+                .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBlockBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)
@@ -1049,14 +1045,14 @@ public final class BlockTypeInitializer {
 
     public static void initLava() {
         BlockTypes.LAVA = AllayBlockType
-                .builder(BlockLavaBehaviorImpl.class)
+                .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBlockBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_LAVA = AllayBlockType
-                .builder(BlockFlowingLavaBehaviorImpl.class)
+                .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .setBlockBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)

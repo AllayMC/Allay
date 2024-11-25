@@ -79,6 +79,7 @@ import org.allaymc.server.block.impl.BlockCommandBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockComposterBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCompoundCreatorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockConduitBehaviorImpl;
+import org.allaymc.server.block.impl.BlockCopperBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperBulbBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperGrateBehaviorImpl;
@@ -122,6 +123,7 @@ import org.allaymc.server.block.impl.BlockDragonEggBehaviorImpl;
 import org.allaymc.server.block.impl.BlockDriedKelpBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockDripstoneBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockDropperBehaviorImpl;
+import org.allaymc.server.block.impl.BlockElementBehaviorImpl;
 import org.allaymc.server.block.impl.BlockEmeraldBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockEmeraldOreBehaviorImpl;
 import org.allaymc.server.block.impl.BlockEnchantingTableBehaviorImpl;
@@ -190,6 +192,7 @@ import org.allaymc.server.block.impl.BlockLightWeightedPressurePlateBehaviorImpl
 import org.allaymc.server.block.impl.BlockLightningRodBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLilacBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLilyOfTheValleyBehaviorImpl;
+import org.allaymc.server.block.impl.BlockLiquidBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLitDeepslateRedstoneOreBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLitPumpkinBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLitRedstoneLampBehaviorImpl;
@@ -315,6 +318,7 @@ import org.allaymc.server.block.impl.BlockSuspiciousGravelBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSweetBerryBushBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTallGrassBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTargetBehaviorImpl;
+import org.allaymc.server.block.impl.BlockTerracottaBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTrappedChestBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTrialSpawnerBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTripWireBehaviorImpl;
@@ -329,6 +333,7 @@ import org.allaymc.server.block.impl.BlockVaultBehaviorImpl;
 import org.allaymc.server.block.impl.BlockVerdantFroglightBehaviorImpl;
 import org.allaymc.server.block.impl.BlockVineBehaviorImpl;
 import org.allaymc.server.block.impl.BlockWallBannerBehaviorImpl;
+import org.allaymc.server.block.impl.BlockWallBehaviorImpl;
 import org.allaymc.server.block.impl.BlockWarpedFungusBehaviorImpl;
 import org.allaymc.server.block.impl.BlockWarpedNyliumBehaviorImpl;
 import org.allaymc.server.block.impl.BlockWarpedPressurePlateBehaviorImpl;
@@ -459,29 +464,6 @@ import org.allaymc.server.block.impl.concretepowder.BlockPurpleConcretePowderBeh
 import org.allaymc.server.block.impl.concretepowder.BlockRedConcretePowderBehaviorImpl;
 import org.allaymc.server.block.impl.concretepowder.BlockWhiteConcretePowderBehaviorImpl;
 import org.allaymc.server.block.impl.concretepowder.BlockYellowConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockChiseledCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockCutCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockExposedChiseledCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockExposedCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockExposedCutCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockOxidizedChiseledCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockOxidizedCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockOxidizedCutCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedChiseledCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedCutCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedExposedChiseledCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedExposedCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedExposedCutCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedOxidizedChiseledCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedOxidizedCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedOxidizedCutCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedWeatheredChiseledCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedWeatheredCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWaxedWeatheredCutCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWeatheredChiseledCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWeatheredCopperBehaviorImpl;
-import org.allaymc.server.block.impl.copper.BlockWeatheredCutCopperBehaviorImpl;
 import org.allaymc.server.block.impl.coral.BlockBrainCoralBehaviorImpl;
 import org.allaymc.server.block.impl.coral.BlockBubbleCoralBehaviorImpl;
 import org.allaymc.server.block.impl.coral.BlockDeadBrainCoralBehaviorImpl;
@@ -527,126 +509,6 @@ import org.allaymc.server.block.impl.dirt.BlockDirtBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockCopperDoorBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockDoorBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockIronDoorBehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement0BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement100BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement101BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement102BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement103BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement104BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement105BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement106BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement107BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement108BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement109BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement10BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement110BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement111BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement112BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement113BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement114BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement115BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement116BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement117BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement118BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement11BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement12BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement13BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement14BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement15BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement16BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement17BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement18BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement19BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement1BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement20BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement21BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement22BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement23BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement24BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement25BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement26BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement27BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement28BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement29BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement2BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement30BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement31BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement32BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement33BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement34BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement35BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement36BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement37BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement38BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement39BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement3BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement40BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement41BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement42BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement43BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement44BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement45BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement46BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement47BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement48BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement49BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement4BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement50BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement51BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement52BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement53BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement54BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement55BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement56BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement57BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement58BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement59BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement5BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement60BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement61BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement62BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement63BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement64BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement65BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement66BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement67BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement68BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement69BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement6BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement70BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement71BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement72BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement73BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement74BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement75BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement76BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement77BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement78BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement79BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement7BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement80BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement81BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement82BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement83BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement84BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement85BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement86BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement87BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement88BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement89BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement8BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement90BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement91BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement92BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement93BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement94BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement95BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement96BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement97BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement98BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement99BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElement9BehaviorImpl;
-import org.allaymc.server.block.impl.element.BlockElementConstructorBehaviorImpl;
 import org.allaymc.server.block.impl.fence.BlockAcaciaFenceBehaviorImpl;
 import org.allaymc.server.block.impl.fence.BlockBambooFenceBehaviorImpl;
 import org.allaymc.server.block.impl.fence.BlockBirchFenceBehaviorImpl;
@@ -701,10 +563,6 @@ import org.allaymc.server.block.impl.lightblock.BlockLightBlock6BehaviorImpl;
 import org.allaymc.server.block.impl.lightblock.BlockLightBlock7BehaviorImpl;
 import org.allaymc.server.block.impl.lightblock.BlockLightBlock8BehaviorImpl;
 import org.allaymc.server.block.impl.lightblock.BlockLightBlock9BehaviorImpl;
-import org.allaymc.server.block.impl.liquid.BlockFlowingLavaBehaviorImpl;
-import org.allaymc.server.block.impl.liquid.BlockFlowingWaterBehaviorImpl;
-import org.allaymc.server.block.impl.liquid.BlockLavaBehaviorImpl;
-import org.allaymc.server.block.impl.liquid.BlockWaterBehaviorImpl;
 import org.allaymc.server.block.impl.piston.BlockPistonArmCollisionBehaviorImpl;
 import org.allaymc.server.block.impl.piston.BlockPistonBehaviorImpl;
 import org.allaymc.server.block.impl.piston.BlockStickyPistonArmCollisionBehaviorImpl;
@@ -930,38 +788,6 @@ import org.allaymc.server.block.impl.stainedglasspane.BlockPurpleStainedGlassPan
 import org.allaymc.server.block.impl.stainedglasspane.BlockRedStainedGlassPaneBehaviorImpl;
 import org.allaymc.server.block.impl.stainedglasspane.BlockWhiteStainedGlassPaneBehaviorImpl;
 import org.allaymc.server.block.impl.stainedglasspane.BlockYellowStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockBlackGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockBlackTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockBlueGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockBlueTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockBrownGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockBrownTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockCyanGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockCyanTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockGrayGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockGrayTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockGreenGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockGreenTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockLightBlueGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockLightBlueTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockLightGrayTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockLimeGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockLimeTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockMagentaGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockMagentaTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockOrangeGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockOrangeTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockPinkGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockPinkTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockPurpleGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockPurpleTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockRedGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockRedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockSilverGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockWhiteGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockWhiteTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockYellowGlazedTerracottaBehaviorImpl;
-import org.allaymc.server.block.impl.terracotta.BlockYellowTerracottaBehaviorImpl;
 import org.allaymc.server.block.impl.tnt.BlockTntBehaviorImpl;
 import org.allaymc.server.block.impl.tnt.BlockUnderwaterTntBehaviorImpl;
 import org.allaymc.server.block.impl.torch.BlockColoredTorchBehaviorImpl;
@@ -991,31 +817,6 @@ import org.allaymc.server.block.impl.trapdoor.BlockWaxedExposedCopperTrapdoorBeh
 import org.allaymc.server.block.impl.trapdoor.BlockWaxedOxidizedCopperTrapdoorBehaviorImpl;
 import org.allaymc.server.block.impl.trapdoor.BlockWaxedWeatheredCopperTrapdoorBehaviorImpl;
 import org.allaymc.server.block.impl.trapdoor.BlockWeatheredCopperTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockAndesiteWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockBlackstoneWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockCobbledDeepslateWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockCobblestoneWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockDeepslateBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockDeepslateTileWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockDioriteWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockEndStoneBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockGraniteWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockMossyCobblestoneWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockMossyStoneBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockMudBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockNetherBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockPolishedBlackstoneBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockPolishedBlackstoneWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockPolishedDeepslateWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockPolishedTuffWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockPrismarineWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockRedNetherBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockRedSandstoneWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockSandstoneWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockStoneBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockTuffBrickWallBehaviorImpl;
-import org.allaymc.server.block.impl.wall.BlockTuffWallBehaviorImpl;
 
 /**
  * Automatically generated by {@code org.allaymc.codegen.BlockInterfaceGen}
@@ -1268,7 +1069,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAndesiteWall() {
         if (BlockTypes.ANDESITE_WALL != null) return;
         BlockTypes.ANDESITE_WALL = AllayBlockType
-                .builder(BlockAndesiteWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.ANDESITE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -1787,7 +1588,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackGlazedTerracotta() {
         if (BlockTypes.BLACK_GLAZED_TERRACOTTA != null) return;
         BlockTypes.BLACK_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockBlackGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -1820,7 +1621,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackTerracotta() {
         if (BlockTypes.BLACK_TERRACOTTA != null) return;
         BlockTypes.BLACK_TERRACOTTA = AllayBlockType
-                .builder(BlockBlackTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_TERRACOTTA)
                 .build();
     }
@@ -1871,7 +1672,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackstoneWall() {
         if (BlockTypes.BLACKSTONE_WALL != null) return;
         BlockTypes.BLACKSTONE_WALL = AllayBlockType
-                .builder(BlockBlackstoneWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACKSTONE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -1931,7 +1732,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlueGlazedTerracotta() {
         if (BlockTypes.BLUE_GLAZED_TERRACOTTA != null) return;
         BlockTypes.BLUE_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockBlueGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -1980,7 +1781,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlueTerracotta() {
         if (BlockTypes.BLUE_TERRACOTTA != null) return;
         BlockTypes.BLUE_TERRACOTTA = AllayBlockType
-                .builder(BlockBlueTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_TERRACOTTA)
                 .build();
     }
@@ -2100,7 +1901,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrickWall() {
         if (BlockTypes.BRICK_WALL != null) return;
         BlockTypes.BRICK_WALL = AllayBlockType
-                .builder(BlockBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -2151,7 +1952,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrownGlazedTerracotta() {
         if (BlockTypes.BROWN_GLAZED_TERRACOTTA != null) return;
         BlockTypes.BROWN_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockBrownGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -2201,7 +2002,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrownTerracotta() {
         if (BlockTypes.BROWN_TERRACOTTA != null) return;
         BlockTypes.BROWN_TERRACOTTA = AllayBlockType
-                .builder(BlockBrownTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_TERRACOTTA)
                 .build();
     }
@@ -2604,7 +2405,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initChiseledCopper() {
         if (BlockTypes.CHISELED_COPPER != null) return;
         BlockTypes.CHISELED_COPPER = AllayBlockType
-                .builder(BlockChiseledCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHISELED_COPPER)
                 .build();
     }
@@ -2777,7 +2578,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCobbledDeepslateWall() {
         if (BlockTypes.COBBLED_DEEPSLATE_WALL != null) return;
         BlockTypes.COBBLED_DEEPSLATE_WALL = AllayBlockType
-                .builder(BlockCobbledDeepslateWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.COBBLED_DEEPSLATE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -2812,7 +2613,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCobblestoneWall() {
         if (BlockTypes.COBBLESTONE_WALL != null) return;
         BlockTypes.COBBLESTONE_WALL = AllayBlockType
-                .builder(BlockCobblestoneWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.COBBLESTONE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -3191,7 +2992,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCutCopper() {
         if (BlockTypes.CUT_COPPER != null) return;
         BlockTypes.CUT_COPPER = AllayBlockType
-                .builder(BlockCutCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.CUT_COPPER)
                 .build();
     }
@@ -3311,7 +3112,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCyanGlazedTerracotta() {
         if (BlockTypes.CYAN_GLAZED_TERRACOTTA != null) return;
         BlockTypes.CYAN_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockCyanGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -3344,7 +3145,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCyanTerracotta() {
         if (BlockTypes.CYAN_TERRACOTTA != null) return;
         BlockTypes.CYAN_TERRACOTTA = AllayBlockType
-                .builder(BlockCyanTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_TERRACOTTA)
                 .build();
     }
@@ -3804,7 +3605,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeepslateBrickWall() {
         if (BlockTypes.DEEPSLATE_BRICK_WALL != null) return;
         BlockTypes.DEEPSLATE_BRICK_WALL = AllayBlockType
-                .builder(BlockDeepslateBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEEPSLATE_BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -3912,7 +3713,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeepslateTileWall() {
         if (BlockTypes.DEEPSLATE_TILE_WALL != null) return;
         BlockTypes.DEEPSLATE_TILE_WALL = AllayBlockType
-                .builder(BlockDeepslateTileWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEEPSLATE_TILE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -4024,7 +3825,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDioriteWall() {
         if (BlockTypes.DIORITE_WALL != null) return;
         BlockTypes.DIORITE_WALL = AllayBlockType
-                .builder(BlockDioriteWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.DIORITE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -4109,7 +3910,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement0() {
         if (BlockTypes.ELEMENT_0 != null) return;
         BlockTypes.ELEMENT_0 = AllayBlockType
-                .builder(BlockElement0BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_0)
                 .build();
     }
@@ -4117,7 +3918,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement1() {
         if (BlockTypes.ELEMENT_1 != null) return;
         BlockTypes.ELEMENT_1 = AllayBlockType
-                .builder(BlockElement1BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_1)
                 .build();
     }
@@ -4125,7 +3926,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement10() {
         if (BlockTypes.ELEMENT_10 != null) return;
         BlockTypes.ELEMENT_10 = AllayBlockType
-                .builder(BlockElement10BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_10)
                 .build();
     }
@@ -4133,7 +3934,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement100() {
         if (BlockTypes.ELEMENT_100 != null) return;
         BlockTypes.ELEMENT_100 = AllayBlockType
-                .builder(BlockElement100BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_100)
                 .build();
     }
@@ -4141,7 +3942,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement101() {
         if (BlockTypes.ELEMENT_101 != null) return;
         BlockTypes.ELEMENT_101 = AllayBlockType
-                .builder(BlockElement101BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_101)
                 .build();
     }
@@ -4149,7 +3950,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement102() {
         if (BlockTypes.ELEMENT_102 != null) return;
         BlockTypes.ELEMENT_102 = AllayBlockType
-                .builder(BlockElement102BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_102)
                 .build();
     }
@@ -4157,7 +3958,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement103() {
         if (BlockTypes.ELEMENT_103 != null) return;
         BlockTypes.ELEMENT_103 = AllayBlockType
-                .builder(BlockElement103BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_103)
                 .build();
     }
@@ -4165,7 +3966,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement104() {
         if (BlockTypes.ELEMENT_104 != null) return;
         BlockTypes.ELEMENT_104 = AllayBlockType
-                .builder(BlockElement104BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_104)
                 .build();
     }
@@ -4173,7 +3974,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement105() {
         if (BlockTypes.ELEMENT_105 != null) return;
         BlockTypes.ELEMENT_105 = AllayBlockType
-                .builder(BlockElement105BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_105)
                 .build();
     }
@@ -4181,7 +3982,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement106() {
         if (BlockTypes.ELEMENT_106 != null) return;
         BlockTypes.ELEMENT_106 = AllayBlockType
-                .builder(BlockElement106BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_106)
                 .build();
     }
@@ -4189,7 +3990,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement107() {
         if (BlockTypes.ELEMENT_107 != null) return;
         BlockTypes.ELEMENT_107 = AllayBlockType
-                .builder(BlockElement107BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_107)
                 .build();
     }
@@ -4197,7 +3998,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement108() {
         if (BlockTypes.ELEMENT_108 != null) return;
         BlockTypes.ELEMENT_108 = AllayBlockType
-                .builder(BlockElement108BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_108)
                 .build();
     }
@@ -4205,7 +4006,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement109() {
         if (BlockTypes.ELEMENT_109 != null) return;
         BlockTypes.ELEMENT_109 = AllayBlockType
-                .builder(BlockElement109BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_109)
                 .build();
     }
@@ -4213,7 +4014,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement11() {
         if (BlockTypes.ELEMENT_11 != null) return;
         BlockTypes.ELEMENT_11 = AllayBlockType
-                .builder(BlockElement11BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_11)
                 .build();
     }
@@ -4221,7 +4022,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement110() {
         if (BlockTypes.ELEMENT_110 != null) return;
         BlockTypes.ELEMENT_110 = AllayBlockType
-                .builder(BlockElement110BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_110)
                 .build();
     }
@@ -4229,7 +4030,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement111() {
         if (BlockTypes.ELEMENT_111 != null) return;
         BlockTypes.ELEMENT_111 = AllayBlockType
-                .builder(BlockElement111BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_111)
                 .build();
     }
@@ -4237,7 +4038,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement112() {
         if (BlockTypes.ELEMENT_112 != null) return;
         BlockTypes.ELEMENT_112 = AllayBlockType
-                .builder(BlockElement112BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_112)
                 .build();
     }
@@ -4245,7 +4046,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement113() {
         if (BlockTypes.ELEMENT_113 != null) return;
         BlockTypes.ELEMENT_113 = AllayBlockType
-                .builder(BlockElement113BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_113)
                 .build();
     }
@@ -4253,7 +4054,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement114() {
         if (BlockTypes.ELEMENT_114 != null) return;
         BlockTypes.ELEMENT_114 = AllayBlockType
-                .builder(BlockElement114BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_114)
                 .build();
     }
@@ -4261,7 +4062,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement115() {
         if (BlockTypes.ELEMENT_115 != null) return;
         BlockTypes.ELEMENT_115 = AllayBlockType
-                .builder(BlockElement115BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_115)
                 .build();
     }
@@ -4269,7 +4070,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement116() {
         if (BlockTypes.ELEMENT_116 != null) return;
         BlockTypes.ELEMENT_116 = AllayBlockType
-                .builder(BlockElement116BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_116)
                 .build();
     }
@@ -4277,7 +4078,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement117() {
         if (BlockTypes.ELEMENT_117 != null) return;
         BlockTypes.ELEMENT_117 = AllayBlockType
-                .builder(BlockElement117BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_117)
                 .build();
     }
@@ -4285,7 +4086,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement118() {
         if (BlockTypes.ELEMENT_118 != null) return;
         BlockTypes.ELEMENT_118 = AllayBlockType
-                .builder(BlockElement118BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_118)
                 .build();
     }
@@ -4293,7 +4094,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement12() {
         if (BlockTypes.ELEMENT_12 != null) return;
         BlockTypes.ELEMENT_12 = AllayBlockType
-                .builder(BlockElement12BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_12)
                 .build();
     }
@@ -4301,7 +4102,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement13() {
         if (BlockTypes.ELEMENT_13 != null) return;
         BlockTypes.ELEMENT_13 = AllayBlockType
-                .builder(BlockElement13BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_13)
                 .build();
     }
@@ -4309,7 +4110,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement14() {
         if (BlockTypes.ELEMENT_14 != null) return;
         BlockTypes.ELEMENT_14 = AllayBlockType
-                .builder(BlockElement14BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_14)
                 .build();
     }
@@ -4317,7 +4118,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement15() {
         if (BlockTypes.ELEMENT_15 != null) return;
         BlockTypes.ELEMENT_15 = AllayBlockType
-                .builder(BlockElement15BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_15)
                 .build();
     }
@@ -4325,7 +4126,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement16() {
         if (BlockTypes.ELEMENT_16 != null) return;
         BlockTypes.ELEMENT_16 = AllayBlockType
-                .builder(BlockElement16BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_16)
                 .build();
     }
@@ -4333,7 +4134,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement17() {
         if (BlockTypes.ELEMENT_17 != null) return;
         BlockTypes.ELEMENT_17 = AllayBlockType
-                .builder(BlockElement17BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_17)
                 .build();
     }
@@ -4341,7 +4142,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement18() {
         if (BlockTypes.ELEMENT_18 != null) return;
         BlockTypes.ELEMENT_18 = AllayBlockType
-                .builder(BlockElement18BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_18)
                 .build();
     }
@@ -4349,7 +4150,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement19() {
         if (BlockTypes.ELEMENT_19 != null) return;
         BlockTypes.ELEMENT_19 = AllayBlockType
-                .builder(BlockElement19BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_19)
                 .build();
     }
@@ -4357,7 +4158,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement2() {
         if (BlockTypes.ELEMENT_2 != null) return;
         BlockTypes.ELEMENT_2 = AllayBlockType
-                .builder(BlockElement2BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_2)
                 .build();
     }
@@ -4365,7 +4166,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement20() {
         if (BlockTypes.ELEMENT_20 != null) return;
         BlockTypes.ELEMENT_20 = AllayBlockType
-                .builder(BlockElement20BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_20)
                 .build();
     }
@@ -4373,7 +4174,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement21() {
         if (BlockTypes.ELEMENT_21 != null) return;
         BlockTypes.ELEMENT_21 = AllayBlockType
-                .builder(BlockElement21BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_21)
                 .build();
     }
@@ -4381,7 +4182,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement22() {
         if (BlockTypes.ELEMENT_22 != null) return;
         BlockTypes.ELEMENT_22 = AllayBlockType
-                .builder(BlockElement22BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_22)
                 .build();
     }
@@ -4389,7 +4190,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement23() {
         if (BlockTypes.ELEMENT_23 != null) return;
         BlockTypes.ELEMENT_23 = AllayBlockType
-                .builder(BlockElement23BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_23)
                 .build();
     }
@@ -4397,7 +4198,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement24() {
         if (BlockTypes.ELEMENT_24 != null) return;
         BlockTypes.ELEMENT_24 = AllayBlockType
-                .builder(BlockElement24BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_24)
                 .build();
     }
@@ -4405,7 +4206,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement25() {
         if (BlockTypes.ELEMENT_25 != null) return;
         BlockTypes.ELEMENT_25 = AllayBlockType
-                .builder(BlockElement25BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_25)
                 .build();
     }
@@ -4413,7 +4214,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement26() {
         if (BlockTypes.ELEMENT_26 != null) return;
         BlockTypes.ELEMENT_26 = AllayBlockType
-                .builder(BlockElement26BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_26)
                 .build();
     }
@@ -4421,7 +4222,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement27() {
         if (BlockTypes.ELEMENT_27 != null) return;
         BlockTypes.ELEMENT_27 = AllayBlockType
-                .builder(BlockElement27BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_27)
                 .build();
     }
@@ -4429,7 +4230,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement28() {
         if (BlockTypes.ELEMENT_28 != null) return;
         BlockTypes.ELEMENT_28 = AllayBlockType
-                .builder(BlockElement28BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_28)
                 .build();
     }
@@ -4437,7 +4238,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement29() {
         if (BlockTypes.ELEMENT_29 != null) return;
         BlockTypes.ELEMENT_29 = AllayBlockType
-                .builder(BlockElement29BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_29)
                 .build();
     }
@@ -4445,7 +4246,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement3() {
         if (BlockTypes.ELEMENT_3 != null) return;
         BlockTypes.ELEMENT_3 = AllayBlockType
-                .builder(BlockElement3BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_3)
                 .build();
     }
@@ -4453,7 +4254,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement30() {
         if (BlockTypes.ELEMENT_30 != null) return;
         BlockTypes.ELEMENT_30 = AllayBlockType
-                .builder(BlockElement30BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_30)
                 .build();
     }
@@ -4461,7 +4262,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement31() {
         if (BlockTypes.ELEMENT_31 != null) return;
         BlockTypes.ELEMENT_31 = AllayBlockType
-                .builder(BlockElement31BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_31)
                 .build();
     }
@@ -4469,7 +4270,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement32() {
         if (BlockTypes.ELEMENT_32 != null) return;
         BlockTypes.ELEMENT_32 = AllayBlockType
-                .builder(BlockElement32BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_32)
                 .build();
     }
@@ -4477,7 +4278,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement33() {
         if (BlockTypes.ELEMENT_33 != null) return;
         BlockTypes.ELEMENT_33 = AllayBlockType
-                .builder(BlockElement33BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_33)
                 .build();
     }
@@ -4485,7 +4286,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement34() {
         if (BlockTypes.ELEMENT_34 != null) return;
         BlockTypes.ELEMENT_34 = AllayBlockType
-                .builder(BlockElement34BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_34)
                 .build();
     }
@@ -4493,7 +4294,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement35() {
         if (BlockTypes.ELEMENT_35 != null) return;
         BlockTypes.ELEMENT_35 = AllayBlockType
-                .builder(BlockElement35BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_35)
                 .build();
     }
@@ -4501,7 +4302,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement36() {
         if (BlockTypes.ELEMENT_36 != null) return;
         BlockTypes.ELEMENT_36 = AllayBlockType
-                .builder(BlockElement36BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_36)
                 .build();
     }
@@ -4509,7 +4310,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement37() {
         if (BlockTypes.ELEMENT_37 != null) return;
         BlockTypes.ELEMENT_37 = AllayBlockType
-                .builder(BlockElement37BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_37)
                 .build();
     }
@@ -4517,7 +4318,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement38() {
         if (BlockTypes.ELEMENT_38 != null) return;
         BlockTypes.ELEMENT_38 = AllayBlockType
-                .builder(BlockElement38BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_38)
                 .build();
     }
@@ -4525,7 +4326,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement39() {
         if (BlockTypes.ELEMENT_39 != null) return;
         BlockTypes.ELEMENT_39 = AllayBlockType
-                .builder(BlockElement39BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_39)
                 .build();
     }
@@ -4533,7 +4334,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement4() {
         if (BlockTypes.ELEMENT_4 != null) return;
         BlockTypes.ELEMENT_4 = AllayBlockType
-                .builder(BlockElement4BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_4)
                 .build();
     }
@@ -4541,7 +4342,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement40() {
         if (BlockTypes.ELEMENT_40 != null) return;
         BlockTypes.ELEMENT_40 = AllayBlockType
-                .builder(BlockElement40BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_40)
                 .build();
     }
@@ -4549,7 +4350,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement41() {
         if (BlockTypes.ELEMENT_41 != null) return;
         BlockTypes.ELEMENT_41 = AllayBlockType
-                .builder(BlockElement41BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_41)
                 .build();
     }
@@ -4557,7 +4358,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement42() {
         if (BlockTypes.ELEMENT_42 != null) return;
         BlockTypes.ELEMENT_42 = AllayBlockType
-                .builder(BlockElement42BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_42)
                 .build();
     }
@@ -4565,7 +4366,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement43() {
         if (BlockTypes.ELEMENT_43 != null) return;
         BlockTypes.ELEMENT_43 = AllayBlockType
-                .builder(BlockElement43BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_43)
                 .build();
     }
@@ -4573,7 +4374,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement44() {
         if (BlockTypes.ELEMENT_44 != null) return;
         BlockTypes.ELEMENT_44 = AllayBlockType
-                .builder(BlockElement44BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_44)
                 .build();
     }
@@ -4581,7 +4382,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement45() {
         if (BlockTypes.ELEMENT_45 != null) return;
         BlockTypes.ELEMENT_45 = AllayBlockType
-                .builder(BlockElement45BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_45)
                 .build();
     }
@@ -4589,7 +4390,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement46() {
         if (BlockTypes.ELEMENT_46 != null) return;
         BlockTypes.ELEMENT_46 = AllayBlockType
-                .builder(BlockElement46BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_46)
                 .build();
     }
@@ -4597,7 +4398,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement47() {
         if (BlockTypes.ELEMENT_47 != null) return;
         BlockTypes.ELEMENT_47 = AllayBlockType
-                .builder(BlockElement47BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_47)
                 .build();
     }
@@ -4605,7 +4406,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement48() {
         if (BlockTypes.ELEMENT_48 != null) return;
         BlockTypes.ELEMENT_48 = AllayBlockType
-                .builder(BlockElement48BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_48)
                 .build();
     }
@@ -4613,7 +4414,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement49() {
         if (BlockTypes.ELEMENT_49 != null) return;
         BlockTypes.ELEMENT_49 = AllayBlockType
-                .builder(BlockElement49BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_49)
                 .build();
     }
@@ -4621,7 +4422,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement5() {
         if (BlockTypes.ELEMENT_5 != null) return;
         BlockTypes.ELEMENT_5 = AllayBlockType
-                .builder(BlockElement5BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_5)
                 .build();
     }
@@ -4629,7 +4430,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement50() {
         if (BlockTypes.ELEMENT_50 != null) return;
         BlockTypes.ELEMENT_50 = AllayBlockType
-                .builder(BlockElement50BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_50)
                 .build();
     }
@@ -4637,7 +4438,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement51() {
         if (BlockTypes.ELEMENT_51 != null) return;
         BlockTypes.ELEMENT_51 = AllayBlockType
-                .builder(BlockElement51BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_51)
                 .build();
     }
@@ -4645,7 +4446,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement52() {
         if (BlockTypes.ELEMENT_52 != null) return;
         BlockTypes.ELEMENT_52 = AllayBlockType
-                .builder(BlockElement52BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_52)
                 .build();
     }
@@ -4653,7 +4454,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement53() {
         if (BlockTypes.ELEMENT_53 != null) return;
         BlockTypes.ELEMENT_53 = AllayBlockType
-                .builder(BlockElement53BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_53)
                 .build();
     }
@@ -4661,7 +4462,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement54() {
         if (BlockTypes.ELEMENT_54 != null) return;
         BlockTypes.ELEMENT_54 = AllayBlockType
-                .builder(BlockElement54BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_54)
                 .build();
     }
@@ -4669,7 +4470,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement55() {
         if (BlockTypes.ELEMENT_55 != null) return;
         BlockTypes.ELEMENT_55 = AllayBlockType
-                .builder(BlockElement55BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_55)
                 .build();
     }
@@ -4677,7 +4478,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement56() {
         if (BlockTypes.ELEMENT_56 != null) return;
         BlockTypes.ELEMENT_56 = AllayBlockType
-                .builder(BlockElement56BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_56)
                 .build();
     }
@@ -4685,7 +4486,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement57() {
         if (BlockTypes.ELEMENT_57 != null) return;
         BlockTypes.ELEMENT_57 = AllayBlockType
-                .builder(BlockElement57BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_57)
                 .build();
     }
@@ -4693,7 +4494,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement58() {
         if (BlockTypes.ELEMENT_58 != null) return;
         BlockTypes.ELEMENT_58 = AllayBlockType
-                .builder(BlockElement58BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_58)
                 .build();
     }
@@ -4701,7 +4502,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement59() {
         if (BlockTypes.ELEMENT_59 != null) return;
         BlockTypes.ELEMENT_59 = AllayBlockType
-                .builder(BlockElement59BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_59)
                 .build();
     }
@@ -4709,7 +4510,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement6() {
         if (BlockTypes.ELEMENT_6 != null) return;
         BlockTypes.ELEMENT_6 = AllayBlockType
-                .builder(BlockElement6BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_6)
                 .build();
     }
@@ -4717,7 +4518,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement60() {
         if (BlockTypes.ELEMENT_60 != null) return;
         BlockTypes.ELEMENT_60 = AllayBlockType
-                .builder(BlockElement60BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_60)
                 .build();
     }
@@ -4725,7 +4526,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement61() {
         if (BlockTypes.ELEMENT_61 != null) return;
         BlockTypes.ELEMENT_61 = AllayBlockType
-                .builder(BlockElement61BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_61)
                 .build();
     }
@@ -4733,7 +4534,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement62() {
         if (BlockTypes.ELEMENT_62 != null) return;
         BlockTypes.ELEMENT_62 = AllayBlockType
-                .builder(BlockElement62BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_62)
                 .build();
     }
@@ -4741,7 +4542,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement63() {
         if (BlockTypes.ELEMENT_63 != null) return;
         BlockTypes.ELEMENT_63 = AllayBlockType
-                .builder(BlockElement63BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_63)
                 .build();
     }
@@ -4749,7 +4550,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement64() {
         if (BlockTypes.ELEMENT_64 != null) return;
         BlockTypes.ELEMENT_64 = AllayBlockType
-                .builder(BlockElement64BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_64)
                 .build();
     }
@@ -4757,7 +4558,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement65() {
         if (BlockTypes.ELEMENT_65 != null) return;
         BlockTypes.ELEMENT_65 = AllayBlockType
-                .builder(BlockElement65BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_65)
                 .build();
     }
@@ -4765,7 +4566,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement66() {
         if (BlockTypes.ELEMENT_66 != null) return;
         BlockTypes.ELEMENT_66 = AllayBlockType
-                .builder(BlockElement66BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_66)
                 .build();
     }
@@ -4773,7 +4574,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement67() {
         if (BlockTypes.ELEMENT_67 != null) return;
         BlockTypes.ELEMENT_67 = AllayBlockType
-                .builder(BlockElement67BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_67)
                 .build();
     }
@@ -4781,7 +4582,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement68() {
         if (BlockTypes.ELEMENT_68 != null) return;
         BlockTypes.ELEMENT_68 = AllayBlockType
-                .builder(BlockElement68BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_68)
                 .build();
     }
@@ -4789,7 +4590,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement69() {
         if (BlockTypes.ELEMENT_69 != null) return;
         BlockTypes.ELEMENT_69 = AllayBlockType
-                .builder(BlockElement69BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_69)
                 .build();
     }
@@ -4797,7 +4598,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement7() {
         if (BlockTypes.ELEMENT_7 != null) return;
         BlockTypes.ELEMENT_7 = AllayBlockType
-                .builder(BlockElement7BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_7)
                 .build();
     }
@@ -4805,7 +4606,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement70() {
         if (BlockTypes.ELEMENT_70 != null) return;
         BlockTypes.ELEMENT_70 = AllayBlockType
-                .builder(BlockElement70BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_70)
                 .build();
     }
@@ -4813,7 +4614,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement71() {
         if (BlockTypes.ELEMENT_71 != null) return;
         BlockTypes.ELEMENT_71 = AllayBlockType
-                .builder(BlockElement71BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_71)
                 .build();
     }
@@ -4821,7 +4622,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement72() {
         if (BlockTypes.ELEMENT_72 != null) return;
         BlockTypes.ELEMENT_72 = AllayBlockType
-                .builder(BlockElement72BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_72)
                 .build();
     }
@@ -4829,7 +4630,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement73() {
         if (BlockTypes.ELEMENT_73 != null) return;
         BlockTypes.ELEMENT_73 = AllayBlockType
-                .builder(BlockElement73BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_73)
                 .build();
     }
@@ -4837,7 +4638,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement74() {
         if (BlockTypes.ELEMENT_74 != null) return;
         BlockTypes.ELEMENT_74 = AllayBlockType
-                .builder(BlockElement74BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_74)
                 .build();
     }
@@ -4845,7 +4646,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement75() {
         if (BlockTypes.ELEMENT_75 != null) return;
         BlockTypes.ELEMENT_75 = AllayBlockType
-                .builder(BlockElement75BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_75)
                 .build();
     }
@@ -4853,7 +4654,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement76() {
         if (BlockTypes.ELEMENT_76 != null) return;
         BlockTypes.ELEMENT_76 = AllayBlockType
-                .builder(BlockElement76BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_76)
                 .build();
     }
@@ -4861,7 +4662,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement77() {
         if (BlockTypes.ELEMENT_77 != null) return;
         BlockTypes.ELEMENT_77 = AllayBlockType
-                .builder(BlockElement77BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_77)
                 .build();
     }
@@ -4869,7 +4670,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement78() {
         if (BlockTypes.ELEMENT_78 != null) return;
         BlockTypes.ELEMENT_78 = AllayBlockType
-                .builder(BlockElement78BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_78)
                 .build();
     }
@@ -4877,7 +4678,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement79() {
         if (BlockTypes.ELEMENT_79 != null) return;
         BlockTypes.ELEMENT_79 = AllayBlockType
-                .builder(BlockElement79BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_79)
                 .build();
     }
@@ -4885,7 +4686,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement8() {
         if (BlockTypes.ELEMENT_8 != null) return;
         BlockTypes.ELEMENT_8 = AllayBlockType
-                .builder(BlockElement8BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_8)
                 .build();
     }
@@ -4893,7 +4694,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement80() {
         if (BlockTypes.ELEMENT_80 != null) return;
         BlockTypes.ELEMENT_80 = AllayBlockType
-                .builder(BlockElement80BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_80)
                 .build();
     }
@@ -4901,7 +4702,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement81() {
         if (BlockTypes.ELEMENT_81 != null) return;
         BlockTypes.ELEMENT_81 = AllayBlockType
-                .builder(BlockElement81BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_81)
                 .build();
     }
@@ -4909,7 +4710,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement82() {
         if (BlockTypes.ELEMENT_82 != null) return;
         BlockTypes.ELEMENT_82 = AllayBlockType
-                .builder(BlockElement82BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_82)
                 .build();
     }
@@ -4917,7 +4718,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement83() {
         if (BlockTypes.ELEMENT_83 != null) return;
         BlockTypes.ELEMENT_83 = AllayBlockType
-                .builder(BlockElement83BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_83)
                 .build();
     }
@@ -4925,7 +4726,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement84() {
         if (BlockTypes.ELEMENT_84 != null) return;
         BlockTypes.ELEMENT_84 = AllayBlockType
-                .builder(BlockElement84BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_84)
                 .build();
     }
@@ -4933,7 +4734,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement85() {
         if (BlockTypes.ELEMENT_85 != null) return;
         BlockTypes.ELEMENT_85 = AllayBlockType
-                .builder(BlockElement85BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_85)
                 .build();
     }
@@ -4941,7 +4742,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement86() {
         if (BlockTypes.ELEMENT_86 != null) return;
         BlockTypes.ELEMENT_86 = AllayBlockType
-                .builder(BlockElement86BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_86)
                 .build();
     }
@@ -4949,7 +4750,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement87() {
         if (BlockTypes.ELEMENT_87 != null) return;
         BlockTypes.ELEMENT_87 = AllayBlockType
-                .builder(BlockElement87BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_87)
                 .build();
     }
@@ -4957,7 +4758,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement88() {
         if (BlockTypes.ELEMENT_88 != null) return;
         BlockTypes.ELEMENT_88 = AllayBlockType
-                .builder(BlockElement88BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_88)
                 .build();
     }
@@ -4965,7 +4766,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement89() {
         if (BlockTypes.ELEMENT_89 != null) return;
         BlockTypes.ELEMENT_89 = AllayBlockType
-                .builder(BlockElement89BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_89)
                 .build();
     }
@@ -4973,7 +4774,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement9() {
         if (BlockTypes.ELEMENT_9 != null) return;
         BlockTypes.ELEMENT_9 = AllayBlockType
-                .builder(BlockElement9BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_9)
                 .build();
     }
@@ -4981,7 +4782,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement90() {
         if (BlockTypes.ELEMENT_90 != null) return;
         BlockTypes.ELEMENT_90 = AllayBlockType
-                .builder(BlockElement90BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_90)
                 .build();
     }
@@ -4989,7 +4790,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement91() {
         if (BlockTypes.ELEMENT_91 != null) return;
         BlockTypes.ELEMENT_91 = AllayBlockType
-                .builder(BlockElement91BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_91)
                 .build();
     }
@@ -4997,7 +4798,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement92() {
         if (BlockTypes.ELEMENT_92 != null) return;
         BlockTypes.ELEMENT_92 = AllayBlockType
-                .builder(BlockElement92BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_92)
                 .build();
     }
@@ -5005,7 +4806,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement93() {
         if (BlockTypes.ELEMENT_93 != null) return;
         BlockTypes.ELEMENT_93 = AllayBlockType
-                .builder(BlockElement93BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_93)
                 .build();
     }
@@ -5013,7 +4814,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement94() {
         if (BlockTypes.ELEMENT_94 != null) return;
         BlockTypes.ELEMENT_94 = AllayBlockType
-                .builder(BlockElement94BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_94)
                 .build();
     }
@@ -5021,7 +4822,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement95() {
         if (BlockTypes.ELEMENT_95 != null) return;
         BlockTypes.ELEMENT_95 = AllayBlockType
-                .builder(BlockElement95BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_95)
                 .build();
     }
@@ -5029,7 +4830,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement96() {
         if (BlockTypes.ELEMENT_96 != null) return;
         BlockTypes.ELEMENT_96 = AllayBlockType
-                .builder(BlockElement96BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_96)
                 .build();
     }
@@ -5037,7 +4838,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement97() {
         if (BlockTypes.ELEMENT_97 != null) return;
         BlockTypes.ELEMENT_97 = AllayBlockType
-                .builder(BlockElement97BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_97)
                 .build();
     }
@@ -5045,7 +4846,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement98() {
         if (BlockTypes.ELEMENT_98 != null) return;
         BlockTypes.ELEMENT_98 = AllayBlockType
-                .builder(BlockElement98BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_98)
                 .build();
     }
@@ -5053,7 +4854,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElement99() {
         if (BlockTypes.ELEMENT_99 != null) return;
         BlockTypes.ELEMENT_99 = AllayBlockType
-                .builder(BlockElement99BehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_99)
                 .build();
     }
@@ -5061,7 +4862,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initElementConstructor() {
         if (BlockTypes.ELEMENT_CONSTRUCTOR != null) return;
         BlockTypes.ELEMENT_CONSTRUCTOR = AllayBlockType
-                .builder(BlockElementConstructorBehaviorImpl.class)
+                .builder(BlockElementBehaviorImpl.class)
                 .vanillaBlock(BlockId.ELEMENT_CONSTRUCTOR)
                 .setProperties(BlockPropertyTypes.DIRECTION)
                 .build();
@@ -5171,7 +4972,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initEndStoneBrickWall() {
         if (BlockTypes.END_STONE_BRICK_WALL != null) return;
         BlockTypes.END_STONE_BRICK_WALL = AllayBlockType
-                .builder(BlockEndStoneBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.END_STONE_BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -5189,7 +4990,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initExposedChiseledCopper() {
         if (BlockTypes.EXPOSED_CHISELED_COPPER != null) return;
         BlockTypes.EXPOSED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockExposedChiseledCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.EXPOSED_CHISELED_COPPER)
                 .build();
     }
@@ -5197,7 +4998,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initExposedCopper() {
         if (BlockTypes.EXPOSED_COPPER != null) return;
         BlockTypes.EXPOSED_COPPER = AllayBlockType
-                .builder(BlockExposedCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.EXPOSED_COPPER)
                 .build();
     }
@@ -5240,7 +5041,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initExposedCutCopper() {
         if (BlockTypes.EXPOSED_CUT_COPPER != null) return;
         BlockTypes.EXPOSED_CUT_COPPER = AllayBlockType
-                .builder(BlockExposedCutCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.EXPOSED_CUT_COPPER)
                 .build();
     }
@@ -5369,7 +5170,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initFlowingLava() {
         if (BlockTypes.FLOWING_LAVA != null) return;
         BlockTypes.FLOWING_LAVA = AllayBlockType
-                .builder(BlockFlowingLavaBehaviorImpl.class)
+                .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .build();
@@ -5378,7 +5179,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initFlowingWater() {
         if (BlockTypes.FLOWING_WATER != null) return;
         BlockTypes.FLOWING_WATER = AllayBlockType
-                .builder(BlockFlowingWaterBehaviorImpl.class)
+                .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .build();
@@ -5540,7 +5341,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGraniteWall() {
         if (BlockTypes.GRANITE_WALL != null) return;
         BlockTypes.GRANITE_WALL = AllayBlockType
-                .builder(BlockGraniteWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRANITE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -5615,7 +5416,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGrayGlazedTerracotta() {
         if (BlockTypes.GRAY_GLAZED_TERRACOTTA != null) return;
         BlockTypes.GRAY_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockGrayGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -5648,7 +5449,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGrayTerracotta() {
         if (BlockTypes.GRAY_TERRACOTTA != null) return;
         BlockTypes.GRAY_TERRACOTTA = AllayBlockType
-                .builder(BlockGrayTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_TERRACOTTA)
                 .build();
     }
@@ -5706,7 +5507,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGreenGlazedTerracotta() {
         if (BlockTypes.GREEN_GLAZED_TERRACOTTA != null) return;
         BlockTypes.GREEN_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockGreenGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -5739,7 +5540,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGreenTerracotta() {
         if (BlockTypes.GREEN_TERRACOTTA != null) return;
         BlockTypes.GREEN_TERRACOTTA = AllayBlockType
-                .builder(BlockGreenTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_TERRACOTTA)
                 .build();
     }
@@ -6506,7 +6307,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLava() {
         if (BlockTypes.LAVA != null) return;
         BlockTypes.LAVA = AllayBlockType
-                .builder(BlockLavaBehaviorImpl.class)
+                .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .build();
@@ -6703,7 +6504,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlueGlazedTerracotta() {
         if (BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA != null) return;
         BlockTypes.LIGHT_BLUE_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockLightBlueGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -6736,7 +6537,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlueTerracotta() {
         if (BlockTypes.LIGHT_BLUE_TERRACOTTA != null) return;
         BlockTypes.LIGHT_BLUE_TERRACOTTA = AllayBlockType
-                .builder(BlockLightBlueTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_TERRACOTTA)
                 .build();
     }
@@ -6818,7 +6619,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightGrayTerracotta() {
         if (BlockTypes.LIGHT_GRAY_TERRACOTTA != null) return;
         BlockTypes.LIGHT_GRAY_TERRACOTTA = AllayBlockType
-                .builder(BlockLightGrayTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_TERRACOTTA)
                 .build();
     }
@@ -6911,7 +6712,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLimeGlazedTerracotta() {
         if (BlockTypes.LIME_GLAZED_TERRACOTTA != null) return;
         BlockTypes.LIME_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockLimeGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -6944,7 +6745,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLimeTerracotta() {
         if (BlockTypes.LIME_TERRACOTTA != null) return;
         BlockTypes.LIME_TERRACOTTA = AllayBlockType
-                .builder(BlockLimeTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_TERRACOTTA)
                 .build();
     }
@@ -7079,7 +6880,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMagentaGlazedTerracotta() {
         if (BlockTypes.MAGENTA_GLAZED_TERRACOTTA != null) return;
         BlockTypes.MAGENTA_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockMagentaGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -7112,7 +6913,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMagentaTerracotta() {
         if (BlockTypes.MAGENTA_TERRACOTTA != null) return;
         BlockTypes.MAGENTA_TERRACOTTA = AllayBlockType
-                .builder(BlockMagentaTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_TERRACOTTA)
                 .build();
     }
@@ -7389,7 +7190,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMossyCobblestoneWall() {
         if (BlockTypes.MOSSY_COBBLESTONE_WALL != null) return;
         BlockTypes.MOSSY_COBBLESTONE_WALL = AllayBlockType
-                .builder(BlockMossyCobblestoneWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSSY_COBBLESTONE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -7425,7 +7226,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMossyStoneBrickWall() {
         if (BlockTypes.MOSSY_STONE_BRICK_WALL != null) return;
         BlockTypes.MOSSY_STONE_BRICK_WALL = AllayBlockType
-                .builder(BlockMossyStoneBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSSY_STONE_BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -7485,7 +7286,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMudBrickWall() {
         if (BlockTypes.MUD_BRICK_WALL != null) return;
         BlockTypes.MUD_BRICK_WALL = AllayBlockType
-                .builder(BlockMudBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.MUD_BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -7571,7 +7372,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initNetherBrickWall() {
         if (BlockTypes.NETHER_BRICK_WALL != null) return;
         BlockTypes.NETHER_BRICK_WALL = AllayBlockType
-                .builder(BlockNetherBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.NETHER_BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -7828,7 +7629,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOrangeGlazedTerracotta() {
         if (BlockTypes.ORANGE_GLAZED_TERRACOTTA != null) return;
         BlockTypes.ORANGE_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockOrangeGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -7861,7 +7662,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOrangeTerracotta() {
         if (BlockTypes.ORANGE_TERRACOTTA != null) return;
         BlockTypes.ORANGE_TERRACOTTA = AllayBlockType
-                .builder(BlockOrangeTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_TERRACOTTA)
                 .build();
     }
@@ -7893,7 +7694,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOxidizedChiseledCopper() {
         if (BlockTypes.OXIDIZED_CHISELED_COPPER != null) return;
         BlockTypes.OXIDIZED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockOxidizedChiseledCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.OXIDIZED_CHISELED_COPPER)
                 .build();
     }
@@ -7901,7 +7702,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOxidizedCopper() {
         if (BlockTypes.OXIDIZED_COPPER != null) return;
         BlockTypes.OXIDIZED_COPPER = AllayBlockType
-                .builder(BlockOxidizedCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.OXIDIZED_COPPER)
                 .build();
     }
@@ -7944,7 +7745,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOxidizedCutCopper() {
         if (BlockTypes.OXIDIZED_CUT_COPPER != null) return;
         BlockTypes.OXIDIZED_CUT_COPPER = AllayBlockType
-                .builder(BlockOxidizedCutCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.OXIDIZED_CUT_COPPER)
                 .build();
     }
@@ -8082,7 +7883,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPinkGlazedTerracotta() {
         if (BlockTypes.PINK_GLAZED_TERRACOTTA != null) return;
         BlockTypes.PINK_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockPinkGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -8124,7 +7925,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPinkTerracotta() {
         if (BlockTypes.PINK_TERRACOTTA != null) return;
         BlockTypes.PINK_TERRACOTTA = AllayBlockType
-                .builder(BlockPinkTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_TERRACOTTA)
                 .build();
     }
@@ -8289,7 +8090,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedBlackstoneBrickWall() {
         if (BlockTypes.POLISHED_BLACKSTONE_BRICK_WALL != null) return;
         BlockTypes.POLISHED_BLACKSTONE_BRICK_WALL = AllayBlockType
-                .builder(BlockPolishedBlackstoneBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -8351,7 +8152,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedBlackstoneWall() {
         if (BlockTypes.POLISHED_BLACKSTONE_WALL != null) return;
         BlockTypes.POLISHED_BLACKSTONE_WALL = AllayBlockType
-                .builder(BlockPolishedBlackstoneWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -8395,7 +8196,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedDeepslateWall() {
         if (BlockTypes.POLISHED_DEEPSLATE_WALL != null) return;
         BlockTypes.POLISHED_DEEPSLATE_WALL = AllayBlockType
-                .builder(BlockPolishedDeepslateWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_DEEPSLATE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -8509,7 +8310,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedTuffWall() {
         if (BlockTypes.POLISHED_TUFF_WALL != null) return;
         BlockTypes.POLISHED_TUFF_WALL = AllayBlockType
-                .builder(BlockPolishedTuffWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_TUFF_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -8640,7 +8441,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPrismarineWall() {
         if (BlockTypes.PRISMARINE_WALL != null) return;
         BlockTypes.PRISMARINE_WALL = AllayBlockType
-                .builder(BlockPrismarineWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.PRISMARINE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -8709,7 +8510,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpleGlazedTerracotta() {
         if (BlockTypes.PURPLE_GLAZED_TERRACOTTA != null) return;
         BlockTypes.PURPLE_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockPurpleGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -8742,7 +8543,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpleTerracotta() {
         if (BlockTypes.PURPLE_TERRACOTTA != null) return;
         BlockTypes.PURPLE_TERRACOTTA = AllayBlockType
-                .builder(BlockPurpleTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_TERRACOTTA)
                 .build();
     }
@@ -8939,7 +8740,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedGlazedTerracotta() {
         if (BlockTypes.RED_GLAZED_TERRACOTTA != null) return;
         BlockTypes.RED_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockRedGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -9000,7 +8801,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedNetherBrickWall() {
         if (BlockTypes.RED_NETHER_BRICK_WALL != null) return;
         BlockTypes.RED_NETHER_BRICK_WALL = AllayBlockType
-                .builder(BlockRedNetherBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_NETHER_BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -9052,7 +8853,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedSandstoneWall() {
         if (BlockTypes.RED_SANDSTONE_WALL != null) return;
         BlockTypes.RED_SANDSTONE_WALL = AllayBlockType
-                .builder(BlockRedSandstoneWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SANDSTONE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -9085,7 +8886,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedTerracotta() {
         if (BlockTypes.RED_TERRACOTTA != null) return;
         BlockTypes.RED_TERRACOTTA = AllayBlockType
-                .builder(BlockRedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_TERRACOTTA)
                 .build();
     }
@@ -9246,7 +9047,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSandstoneWall() {
         if (BlockTypes.SANDSTONE_WALL != null) return;
         BlockTypes.SANDSTONE_WALL = AllayBlockType
-                .builder(BlockSandstoneWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.SANDSTONE_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -9350,7 +9151,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSilverGlazedTerracotta() {
         if (BlockTypes.SILVER_GLAZED_TERRACOTTA != null) return;
         BlockTypes.SILVER_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockSilverGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.SILVER_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -9867,7 +9668,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initStoneBrickWall() {
         if (BlockTypes.STONE_BRICK_WALL != null) return;
         BlockTypes.STONE_BRICK_WALL = AllayBlockType
-                .builder(BlockStoneBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.STONE_BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -10344,7 +10145,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTuffBrickWall() {
         if (BlockTypes.TUFF_BRICK_WALL != null) return;
         BlockTypes.TUFF_BRICK_WALL = AllayBlockType
-                .builder(BlockTuffBrickWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUFF_BRICK_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -10388,7 +10189,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTuffWall() {
         if (BlockTypes.TUFF_WALL != null) return;
         BlockTypes.TUFF_WALL = AllayBlockType
-                .builder(BlockTuffWallBehaviorImpl.class)
+                .builder(BlockWallBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUFF_WALL)
                 .setProperties(BlockPropertyTypes.WALL_CONNECTION_TYPE_EAST, BlockPropertyTypes.WALL_CONNECTION_TYPE_NORTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_SOUTH, BlockPropertyTypes.WALL_CONNECTION_TYPE_WEST, BlockPropertyTypes.WALL_POST_BIT)
                 .build();
@@ -10686,7 +10487,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWater() {
         if (BlockTypes.WATER != null) return;
         BlockTypes.WATER = AllayBlockType
-                .builder(BlockWaterBehaviorImpl.class)
+                .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
                 .build();
@@ -10703,7 +10504,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedChiseledCopper() {
         if (BlockTypes.WAXED_CHISELED_COPPER != null) return;
         BlockTypes.WAXED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWaxedChiseledCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_CHISELED_COPPER)
                 .build();
     }
@@ -10711,7 +10512,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedCopper() {
         if (BlockTypes.WAXED_COPPER != null) return;
         BlockTypes.WAXED_COPPER = AllayBlockType
-                .builder(BlockWaxedCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_COPPER)
                 .build();
     }
@@ -10754,7 +10555,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedCutCopper() {
         if (BlockTypes.WAXED_CUT_COPPER != null) return;
         BlockTypes.WAXED_CUT_COPPER = AllayBlockType
-                .builder(BlockWaxedCutCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_CUT_COPPER)
                 .build();
     }
@@ -10789,7 +10590,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedExposedChiseledCopper() {
         if (BlockTypes.WAXED_EXPOSED_CHISELED_COPPER != null) return;
         BlockTypes.WAXED_EXPOSED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWaxedExposedChiseledCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_EXPOSED_CHISELED_COPPER)
                 .build();
     }
@@ -10797,7 +10598,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedExposedCopper() {
         if (BlockTypes.WAXED_EXPOSED_COPPER != null) return;
         BlockTypes.WAXED_EXPOSED_COPPER = AllayBlockType
-                .builder(BlockWaxedExposedCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER)
                 .build();
     }
@@ -10840,7 +10641,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedExposedCutCopper() {
         if (BlockTypes.WAXED_EXPOSED_CUT_COPPER != null) return;
         BlockTypes.WAXED_EXPOSED_CUT_COPPER = AllayBlockType
-                .builder(BlockWaxedExposedCutCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_EXPOSED_CUT_COPPER)
                 .build();
     }
@@ -10875,7 +10676,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedOxidizedChiseledCopper() {
         if (BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER != null) return;
         BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWaxedOxidizedChiseledCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_OXIDIZED_CHISELED_COPPER)
                 .build();
     }
@@ -10883,7 +10684,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedOxidizedCopper() {
         if (BlockTypes.WAXED_OXIDIZED_COPPER != null) return;
         BlockTypes.WAXED_OXIDIZED_COPPER = AllayBlockType
-                .builder(BlockWaxedOxidizedCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER)
                 .build();
     }
@@ -10926,7 +10727,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedOxidizedCutCopper() {
         if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER != null) return;
         BlockTypes.WAXED_OXIDIZED_CUT_COPPER = AllayBlockType
-                .builder(BlockWaxedOxidizedCutCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_OXIDIZED_CUT_COPPER)
                 .build();
     }
@@ -10961,7 +10762,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedWeatheredChiseledCopper() {
         if (BlockTypes.WAXED_WEATHERED_CHISELED_COPPER != null) return;
         BlockTypes.WAXED_WEATHERED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWaxedWeatheredChiseledCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_WEATHERED_CHISELED_COPPER)
                 .build();
     }
@@ -10969,7 +10770,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedWeatheredCopper() {
         if (BlockTypes.WAXED_WEATHERED_COPPER != null) return;
         BlockTypes.WAXED_WEATHERED_COPPER = AllayBlockType
-                .builder(BlockWaxedWeatheredCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER)
                 .build();
     }
@@ -11012,7 +10813,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedWeatheredCutCopper() {
         if (BlockTypes.WAXED_WEATHERED_CUT_COPPER != null) return;
         BlockTypes.WAXED_WEATHERED_CUT_COPPER = AllayBlockType
-                .builder(BlockWaxedWeatheredCutCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_WEATHERED_CUT_COPPER)
                 .build();
     }
@@ -11047,7 +10848,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWeatheredChiseledCopper() {
         if (BlockTypes.WEATHERED_CHISELED_COPPER != null) return;
         BlockTypes.WEATHERED_CHISELED_COPPER = AllayBlockType
-                .builder(BlockWeatheredChiseledCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WEATHERED_CHISELED_COPPER)
                 .build();
     }
@@ -11055,7 +10856,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWeatheredCopper() {
         if (BlockTypes.WEATHERED_COPPER != null) return;
         BlockTypes.WEATHERED_COPPER = AllayBlockType
-                .builder(BlockWeatheredCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WEATHERED_COPPER)
                 .build();
     }
@@ -11098,7 +10899,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWeatheredCutCopper() {
         if (BlockTypes.WEATHERED_CUT_COPPER != null) return;
         BlockTypes.WEATHERED_CUT_COPPER = AllayBlockType
-                .builder(BlockWeatheredCutCopperBehaviorImpl.class)
+                .builder(BlockCopperBehaviorImpl.class)
                 .vanillaBlock(BlockId.WEATHERED_CUT_COPPER)
                 .build();
     }
@@ -11209,7 +11010,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWhiteGlazedTerracotta() {
         if (BlockTypes.WHITE_GLAZED_TERRACOTTA != null) return;
         BlockTypes.WHITE_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockWhiteGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -11242,7 +11043,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWhiteTerracotta() {
         if (BlockTypes.WHITE_TERRACOTTA != null) return;
         BlockTypes.WHITE_TERRACOTTA = AllayBlockType
-                .builder(BlockWhiteTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_TERRACOTTA)
                 .build();
     }
@@ -11352,7 +11153,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initYellowGlazedTerracotta() {
         if (BlockTypes.YELLOW_GLAZED_TERRACOTTA != null) return;
         BlockTypes.YELLOW_GLAZED_TERRACOTTA = AllayBlockType
-                .builder(BlockYellowGlazedTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_GLAZED_TERRACOTTA)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -11385,7 +11186,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initYellowTerracotta() {
         if (BlockTypes.YELLOW_TERRACOTTA != null) return;
         BlockTypes.YELLOW_TERRACOTTA = AllayBlockType
-                .builder(BlockYellowTerracottaBehaviorImpl.class)
+                .builder(BlockTerracottaBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_TERRACOTTA)
                 .build();
     }
