@@ -36,6 +36,7 @@ import org.allaymc.api.block.interfaces.BlockBookshelfBehavior;
 import org.allaymc.api.block.interfaces.BlockBorderBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockBrewingStandBehavior;
 import org.allaymc.api.block.interfaces.BlockBrickBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockBricksBehavior;
 import org.allaymc.api.block.interfaces.BlockBrownMushroomBehavior;
 import org.allaymc.api.block.interfaces.BlockBrownMushroomBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockBubbleColumnBehavior;
@@ -47,6 +48,9 @@ import org.allaymc.api.block.interfaces.BlockCalciteBehavior;
 import org.allaymc.api.block.interfaces.BlockCalibratedSculkSensorBehavior;
 import org.allaymc.api.block.interfaces.BlockCameraBehavior;
 import org.allaymc.api.block.interfaces.BlockCampfireBehavior;
+import org.allaymc.api.block.interfaces.BlockCandleBehavior;
+import org.allaymc.api.block.interfaces.BlockCandleCakeBehavior;
+import org.allaymc.api.block.interfaces.BlockCarpetBehavior;
 import org.allaymc.api.block.interfaces.BlockCarrotsBehavior;
 import org.allaymc.api.block.interfaces.BlockCartographyTableBehavior;
 import org.allaymc.api.block.interfaces.BlockCarvedPumpkinBehavior;
@@ -76,12 +80,19 @@ import org.allaymc.api.block.interfaces.BlockCocoaBehavior;
 import org.allaymc.api.block.interfaces.BlockCommandBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockComposterBehavior;
 import org.allaymc.api.block.interfaces.BlockCompoundCreatorBehavior;
+import org.allaymc.api.block.interfaces.BlockConcreteBehavior;
+import org.allaymc.api.block.interfaces.BlockConcretePowderBehavior;
 import org.allaymc.api.block.interfaces.BlockConduitBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperBulbBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperOreBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperTrapdoorBehavior;
+import org.allaymc.api.block.interfaces.BlockCoralBehavior;
+import org.allaymc.api.block.interfaces.BlockCoralBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockCoralFanBehavior;
+import org.allaymc.api.block.interfaces.BlockCoralWallFanBehavior;
 import org.allaymc.api.block.interfaces.BlockCornflowerBehavior;
 import org.allaymc.api.block.interfaces.BlockCrackedDeepslateTilesBehavior;
 import org.allaymc.api.block.interfaces.BlockCrafterBehavior;
@@ -134,6 +145,8 @@ import org.allaymc.api.block.interfaces.BlockEnderChestBehavior;
 import org.allaymc.api.block.interfaces.BlockExposedCopperBulbBehavior;
 import org.allaymc.api.block.interfaces.BlockExposedCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockFarmlandBehavior;
+import org.allaymc.api.block.interfaces.BlockFenceBehavior;
+import org.allaymc.api.block.interfaces.BlockFenceGateBehavior;
 import org.allaymc.api.block.interfaces.BlockFernBehavior;
 import org.allaymc.api.block.interfaces.BlockFireBehavior;
 import org.allaymc.api.block.interfaces.BlockFletchingTableBehavior;
@@ -158,6 +171,7 @@ import org.allaymc.api.block.interfaces.BlockGrindstoneBehavior;
 import org.allaymc.api.block.interfaces.BlockHangingRootsBehavior;
 import org.allaymc.api.block.interfaces.BlockHardenedClayBehavior;
 import org.allaymc.api.block.interfaces.BlockHayBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockHeadBehavior;
 import org.allaymc.api.block.interfaces.BlockHeavyCoreBehavior;
 import org.allaymc.api.block.interfaces.BlockHeavyWeightedPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockHoneyBlockBehavior;
@@ -173,6 +187,7 @@ import org.allaymc.api.block.interfaces.BlockInvisibleBedrockBehavior;
 import org.allaymc.api.block.interfaces.BlockIronBarsBehavior;
 import org.allaymc.api.block.interfaces.BlockIronBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockIronOreBehavior;
+import org.allaymc.api.block.interfaces.BlockIronTrapdoorBehavior;
 import org.allaymc.api.block.interfaces.BlockJigsawBehavior;
 import org.allaymc.api.block.interfaces.BlockJukeboxBehavior;
 import org.allaymc.api.block.interfaces.BlockJunglePressurePlateBehavior;
@@ -186,6 +201,7 @@ import org.allaymc.api.block.interfaces.BlockLargeFernBehavior;
 import org.allaymc.api.block.interfaces.BlockLeavesBehavior;
 import org.allaymc.api.block.interfaces.BlockLecternBehavior;
 import org.allaymc.api.block.interfaces.BlockLeverBehavior;
+import org.allaymc.api.block.interfaces.BlockLightBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockLightWeightedPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockLightningRodBehavior;
 import org.allaymc.api.block.interfaces.BlockLilacBehavior;
@@ -236,6 +252,7 @@ import org.allaymc.api.block.interfaces.BlockPinkPetalsBehavior;
 import org.allaymc.api.block.interfaces.BlockPinkTulipBehavior;
 import org.allaymc.api.block.interfaces.BlockPitcherCropBehavior;
 import org.allaymc.api.block.interfaces.BlockPitcherPlantBehavior;
+import org.allaymc.api.block.interfaces.BlockPlanksBehavior;
 import org.allaymc.api.block.interfaces.BlockPodzolBehavior;
 import org.allaymc.api.block.interfaces.BlockPointedDripstoneBehavior;
 import org.allaymc.api.block.interfaces.BlockPolishedAndesiteBehavior;
@@ -276,6 +293,7 @@ import org.allaymc.api.block.interfaces.BlockRepeatingCommandBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockReserved6Behavior;
 import org.allaymc.api.block.interfaces.BlockRespawnAnchorBehavior;
 import org.allaymc.api.block.interfaces.BlockRoseBushBehavior;
+import org.allaymc.api.block.interfaces.BlockSaplingBehavior;
 import org.allaymc.api.block.interfaces.BlockScaffoldingBehavior;
 import org.allaymc.api.block.interfaces.BlockSculkBehavior;
 import org.allaymc.api.block.interfaces.BlockSculkCatalystBehavior;
@@ -288,6 +306,7 @@ import org.allaymc.api.block.interfaces.BlockSeagrassBehavior;
 import org.allaymc.api.block.interfaces.BlockShortGrassBehavior;
 import org.allaymc.api.block.interfaces.BlockShroomlightBehavior;
 import org.allaymc.api.block.interfaces.BlockShulkerBoxBehavior;
+import org.allaymc.api.block.interfaces.BlockSlabBehavior;
 import org.allaymc.api.block.interfaces.BlockSlimeBehavior;
 import org.allaymc.api.block.interfaces.BlockSmallDripleafBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockSmithingTableBehavior;
@@ -303,6 +322,7 @@ import org.allaymc.api.block.interfaces.BlockSoulLanternBehavior;
 import org.allaymc.api.block.interfaces.BlockSoulSoilBehavior;
 import org.allaymc.api.block.interfaces.BlockSporeBlossomBehavior;
 import org.allaymc.api.block.interfaces.BlockSprucePressurePlateBehavior;
+import org.allaymc.api.block.interfaces.BlockStainedGlassBehavior;
 import org.allaymc.api.block.interfaces.BlockStairsBehavior;
 import org.allaymc.api.block.interfaces.BlockStandingBannerBehavior;
 import org.allaymc.api.block.interfaces.BlockStoneBehavior;
@@ -317,6 +337,7 @@ import org.allaymc.api.block.interfaces.BlockSweetBerryBushBehavior;
 import org.allaymc.api.block.interfaces.BlockTallGrassBehavior;
 import org.allaymc.api.block.interfaces.BlockTargetBehavior;
 import org.allaymc.api.block.interfaces.BlockTerracottaBehavior;
+import org.allaymc.api.block.interfaces.BlockTrapdoorBehavior;
 import org.allaymc.api.block.interfaces.BlockTrappedChestBehavior;
 import org.allaymc.api.block.interfaces.BlockTrialSpawnerBehavior;
 import org.allaymc.api.block.interfaces.BlockTripWireBehavior;
@@ -359,223 +380,18 @@ import org.allaymc.api.block.interfaces.BlockWoolBehavior;
 import org.allaymc.api.block.interfaces.amethystbud.BlockLargeAmethystBudBehavior;
 import org.allaymc.api.block.interfaces.amethystbud.BlockMediumAmethystBudBehavior;
 import org.allaymc.api.block.interfaces.amethystbud.BlockSmallAmethystBudBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockChiseledNetherBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockChiseledStoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockChiseledTuffBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockCrackedDeepslateBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockCrackedNetherBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockCrackedPolishedBlackstoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockCrackedStoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockDeepslateBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockEndBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockInfestedChiseledStoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockInfestedCrackedStoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockInfestedMossyStoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockInfestedStoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockMossyStoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockMudBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockPolishedBlackstoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockPrismarineBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockQuartzBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockStoneBricksBehavior;
-import org.allaymc.api.block.interfaces.bricks.BlockTuffBricksBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockBlackCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockBlueCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockBrownCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockCyanCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockGrayCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockGreenCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockLightBlueCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockLightGrayCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockLimeCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockMagentaCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockOrangeCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockPinkCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockPurpleCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockRedCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockWhiteCandleBehavior;
-import org.allaymc.api.block.interfaces.candle.BlockYellowCandleBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockBlackCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockBlueCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockBrownCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockCyanCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockGrayCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockGreenCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockLightBlueCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockLightGrayCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockLimeCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockMagentaCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockOrangeCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockPinkCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockPurpleCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockRedCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockWhiteCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.candlecake.BlockYellowCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockBlackCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockBlueCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockBrownCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockCyanCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockGrayCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockGreenCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockLightBlueCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockLightGrayCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockLimeCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockMagentaCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockMossCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockOrangeCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockPinkCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockPurpleCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockRedCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockWhiteCarpetBehavior;
-import org.allaymc.api.block.interfaces.carpet.BlockYellowCarpetBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockBlackConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockBlueConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockBrownConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockCyanConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockGrayConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockGreenConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockLightBlueConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockLightGrayConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockLimeConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockMagentaConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockOrangeConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockPinkConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockPurpleConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockRedConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockWhiteConcreteBehavior;
-import org.allaymc.api.block.interfaces.concrete.BlockYellowConcreteBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockBlackConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockBlueConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockBrownConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockCyanConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockGrayConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockGreenConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockLightBlueConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockLightGrayConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockLimeConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockMagentaConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockOrangeConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockPinkConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockPurpleConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockRedConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockWhiteConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.concretepowder.BlockYellowConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockBrainCoralBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockBubbleCoralBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockDeadBrainCoralBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockDeadBubbleCoralBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockDeadFireCoralBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockDeadHornCoralBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockDeadTubeCoralBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockFireCoralBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockHornCoralBehavior;
-import org.allaymc.api.block.interfaces.coral.BlockTubeCoralBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockBrainCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockBubbleCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockDeadBrainCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockDeadBubbleCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockDeadFireCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockDeadHornCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockDeadTubeCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockFireCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockHornCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralblock.BlockTubeCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockBrainCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockBubbleCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockDeadBrainCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockDeadBubbleCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockDeadFireCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockDeadHornCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockDeadTubeCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockFireCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockHornCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralfan.BlockTubeCoralFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockBrainCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockBubbleCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadBrainCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadBubbleCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadFireCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadHornCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockDeadTubeCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockFireCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockHornCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.coralwallfan.BlockTubeCoralWallFanBehavior;
 import org.allaymc.api.block.interfaces.dirt.BlockCoarseDirtBehavior;
 import org.allaymc.api.block.interfaces.dirt.BlockDirtBehavior;
 import org.allaymc.api.block.interfaces.door.BlockCopperDoorBehavior;
 import org.allaymc.api.block.interfaces.door.BlockDoorBehavior;
 import org.allaymc.api.block.interfaces.door.BlockIronDoorBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockAcaciaFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockBambooFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockBirchFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockCherryFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockCrimsonFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockDarkOakFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockJungleFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockMangroveFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockNetherBrickFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockOakFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockSpruceFenceBehavior;
-import org.allaymc.api.block.interfaces.fence.BlockWarpedFenceBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockAcaciaFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockBambooFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockBirchFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockCherryFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockCrimsonFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockDarkOakFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockJungleFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockMangroveFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockSpruceFenceGateBehavior;
-import org.allaymc.api.block.interfaces.fencegate.BlockWarpedFenceGateBehavior;
 import org.allaymc.api.block.interfaces.furnace.BlockBlastFurnaceBehavior;
 import org.allaymc.api.block.interfaces.furnace.BlockFurnaceBehavior;
 import org.allaymc.api.block.interfaces.furnace.BlockSmokerBehavior;
-import org.allaymc.api.block.interfaces.glass.BlockGlassBehavior;
-import org.allaymc.api.block.interfaces.glass.BlockHardGlassBehavior;
-import org.allaymc.api.block.interfaces.glass.BlockTintedGlassBehavior;
-import org.allaymc.api.block.interfaces.glasspane.BlockGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.glasspane.BlockHardGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.head.BlockCreeperHeadBehavior;
-import org.allaymc.api.block.interfaces.head.BlockDragonHeadBehavior;
-import org.allaymc.api.block.interfaces.head.BlockPiglinHeadBehavior;
-import org.allaymc.api.block.interfaces.head.BlockPlayerHeadBehavior;
-import org.allaymc.api.block.interfaces.head.BlockSkeletonSkullBehavior;
-import org.allaymc.api.block.interfaces.head.BlockWitherSkeletonSkullBehavior;
-import org.allaymc.api.block.interfaces.head.BlockZombieHeadBehavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock0Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock10Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock11Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock12Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock13Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock14Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock15Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock1Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock2Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock3Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock4Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock5Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock6Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock7Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock8Behavior;
-import org.allaymc.api.block.interfaces.lightblock.BlockLightBlock9Behavior;
 import org.allaymc.api.block.interfaces.piston.BlockPistonArmCollisionBehavior;
 import org.allaymc.api.block.interfaces.piston.BlockPistonBehavior;
 import org.allaymc.api.block.interfaces.piston.BlockStickyPistonArmCollisionBehavior;
 import org.allaymc.api.block.interfaces.piston.BlockStickyPistonBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockAcaciaPlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockBambooPlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockBirchPlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockCherryPlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockCrimsonPlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockDarkOakPlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockJunglePlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockMangrovePlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockOakPlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockSprucePlanksBehavior;
-import org.allaymc.api.block.interfaces.planks.BlockWarpedPlanksBehavior;
 import org.allaymc.api.block.interfaces.purpur.BlockPurpurBlockBehavior;
 import org.allaymc.api.block.interfaces.purpur.BlockPurpurPillarBehavior;
 import org.allaymc.api.block.interfaces.sand.BlockRedSandBehavior;
@@ -590,202 +406,10 @@ import org.allaymc.api.block.interfaces.sandstone.BlockRedSandstoneBehavior;
 import org.allaymc.api.block.interfaces.sandstone.BlockSandstoneBehavior;
 import org.allaymc.api.block.interfaces.sandstone.BlockSmoothRedSandstoneBehavior;
 import org.allaymc.api.block.interfaces.sandstone.BlockSmoothSandstoneBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockAcaciaSaplingBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockBambooSaplingBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockBirchSaplingBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockCherrySaplingBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockDarkOakSaplingBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockJungleSaplingBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockOakSaplingBehavior;
-import org.allaymc.api.block.interfaces.sapling.BlockSpruceSaplingBehavior;
 import org.allaymc.api.block.interfaces.sign.BlockHangingSignBehavior;
 import org.allaymc.api.block.interfaces.sign.BlockSignBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockAcaciaDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockAcaciaSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockAndesiteDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockAndesiteSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBambooDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBambooMosaicDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBambooMosaicSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBambooSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBirchDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBirchSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBlackstoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBlackstoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCherryDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCherrySlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCobbledDeepslateDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCobbledDeepslateSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCobblestoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCobblestoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCrimsonDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCrimsonSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCutRedSandstoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCutRedSandstoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCutSandstoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockCutSandstoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDarkOakDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDarkOakSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDarkPrismarineDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDarkPrismarineSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDeepslateBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDeepslateBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDeepslateTileDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDeepslateTileSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDioriteDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDioriteSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockDoubleCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockEndStoneBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockEndStoneBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockExposedCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockExposedDoubleCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockGraniteDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockGraniteSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockJungleDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockJungleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockMangroveDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockMangroveSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockMossyCobblestoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockMossyCobblestoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockMossyStoneBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockMossyStoneBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockMudBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockMudBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockNetherBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockNetherBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockNormalStoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockNormalStoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockOakDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockOakSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockOxidizedCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockOxidizedDoubleCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPetrifiedOakDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPetrifiedOakSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedAndesiteDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedAndesiteSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedBlackstoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedDeepslateDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedDeepslateSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedDioriteDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedDioriteSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedGraniteDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedGraniteSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedTuffDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPolishedTuffSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPrismarineBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPrismarineBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPrismarineDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPrismarineSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPurpurDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockPurpurSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockQuartzDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockQuartzSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockRedNetherBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockRedNetherBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockRedSandstoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockRedSandstoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSandstoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSandstoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSmoothQuartzDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSmoothQuartzSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSmoothRedSandstoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSmoothRedSandstoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSmoothSandstoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSmoothSandstoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSmoothStoneDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSmoothStoneSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSpruceDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockSpruceSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockStoneBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockStoneBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockTuffBrickDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockTuffBrickSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockTuffDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockTuffSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWarpedDoubleSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWarpedSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWaxedCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWaxedDoubleCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWaxedExposedCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWaxedExposedDoubleCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWaxedOxidizedCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWaxedOxidizedDoubleCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWaxedWeatheredCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWaxedWeatheredDoubleCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWeatheredCutCopperSlabBehavior;
-import org.allaymc.api.block.interfaces.slab.BlockWeatheredDoubleCutCopperSlabBehavior;
 import org.allaymc.api.block.interfaces.sponge.BlockSpongeBehavior;
 import org.allaymc.api.block.interfaces.sponge.BlockWetSpongeBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockBlackStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockBlueStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockBrownStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockCyanStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockGrayStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockGreenStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardBlackStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardBlueStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardBrownStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardCyanStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardGrayStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardGreenStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardLightBlueStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardLightGrayStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardLimeStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardMagentaStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardOrangeStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardPinkStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardPurpleStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardRedStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardWhiteStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockHardYellowStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockLightBlueStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockLightGrayStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockLimeStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockMagentaStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockOrangeStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockPinkStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockPurpleStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockRedStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockWhiteStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglass.BlockYellowStainedGlassBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockBlackStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockBlueStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockBrownStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockCyanStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockGrayStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockGreenStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardBlackStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardBlueStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardBrownStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardCyanStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardGrayStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardGreenStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardLightBlueStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardLightGrayStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardLimeStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardMagentaStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardOrangeStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardPinkStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardPurpleStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardRedStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardWhiteStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockHardYellowStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockLightBlueStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockLightGrayStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockLimeStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockMagentaStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockOrangeStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockPinkStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockPurpleStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockRedStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockWhiteStainedGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.stainedglasspane.BlockYellowStainedGlassPaneBehavior;
 import org.allaymc.api.block.interfaces.tnt.BlockTntBehavior;
 import org.allaymc.api.block.interfaces.tnt.BlockUnderwaterTntBehavior;
 import org.allaymc.api.block.interfaces.torch.BlockColoredTorchBehavior;
@@ -795,26 +419,6 @@ import org.allaymc.api.block.interfaces.torch.BlockTorchBehavior;
 import org.allaymc.api.block.interfaces.torch.BlockUnderwaterTorchBehavior;
 import org.allaymc.api.block.interfaces.torchflower.BlockTorchflowerBehavior;
 import org.allaymc.api.block.interfaces.torchflower.BlockTorchflowerCropBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockAcaciaTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockBambooTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockBirchTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockCherryTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockCopperTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockCrimsonTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockDarkOakTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockExposedCopperTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockIronTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockJungleTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockMangroveTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockOxidizedCopperTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockSpruceTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockWarpedTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockWaxedCopperTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockWaxedExposedCopperTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockWaxedOxidizedCopperTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockWaxedWeatheredCopperTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.trapdoor.BlockWeatheredCopperTrapdoorBehavior;
 
 /**
  * Automatically generated by {@code org.allaymc.codegen.BlockInterfaceGen}
@@ -825,11 +429,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> ACACIA_DOOR;
 
-    public static BlockType<BlockAcaciaDoubleSlabBehavior> ACACIA_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> ACACIA_DOUBLE_SLAB;
 
-    public static BlockType<BlockAcaciaFenceBehavior> ACACIA_FENCE;
+    public static BlockType<BlockFenceBehavior> ACACIA_FENCE;
 
-    public static BlockType<BlockAcaciaFenceGateBehavior> ACACIA_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> ACACIA_FENCE_GATE;
 
     public static BlockType<BlockHangingSignBehavior> ACACIA_HANGING_SIGN;
 
@@ -837,19 +441,19 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> ACACIA_LOG;
 
-    public static BlockType<BlockAcaciaPlanksBehavior> ACACIA_PLANKS;
+    public static BlockType<BlockPlanksBehavior> ACACIA_PLANKS;
 
     public static BlockType<BlockAcaciaPressurePlateBehavior> ACACIA_PRESSURE_PLATE;
 
-    public static BlockType<BlockAcaciaSaplingBehavior> ACACIA_SAPLING;
+    public static BlockType<BlockSaplingBehavior> ACACIA_SAPLING;
 
-    public static BlockType<BlockAcaciaSlabBehavior> ACACIA_SLAB;
+    public static BlockType<BlockSlabBehavior> ACACIA_SLAB;
 
     public static BlockType<BlockStairsBehavior> ACACIA_STAIRS;
 
     public static BlockType<BlockSignBehavior> ACACIA_STANDING_SIGN;
 
-    public static BlockType<BlockAcaciaTrapdoorBehavior> ACACIA_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> ACACIA_TRAPDOOR;
 
     public static BlockType<BlockSignBehavior> ACACIA_WALL_SIGN;
 
@@ -871,9 +475,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockAndesiteBehavior> ANDESITE;
 
-    public static BlockType<BlockAndesiteDoubleSlabBehavior> ANDESITE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> ANDESITE_DOUBLE_SLAB;
 
-    public static BlockType<BlockAndesiteSlabBehavior> ANDESITE_SLAB;
+    public static BlockType<BlockSlabBehavior> ANDESITE_SLAB;
 
     public static BlockType<BlockStairsBehavior> ANDESITE_STAIRS;
 
@@ -897,35 +501,35 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> BAMBOO_DOOR;
 
-    public static BlockType<BlockBambooDoubleSlabBehavior> BAMBOO_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> BAMBOO_DOUBLE_SLAB;
 
-    public static BlockType<BlockBambooFenceBehavior> BAMBOO_FENCE;
+    public static BlockType<BlockFenceBehavior> BAMBOO_FENCE;
 
-    public static BlockType<BlockBambooFenceGateBehavior> BAMBOO_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> BAMBOO_FENCE_GATE;
 
     public static BlockType<BlockHangingSignBehavior> BAMBOO_HANGING_SIGN;
 
     public static BlockType<BlockBambooMosaicBehavior> BAMBOO_MOSAIC;
 
-    public static BlockType<BlockBambooMosaicDoubleSlabBehavior> BAMBOO_MOSAIC_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> BAMBOO_MOSAIC_DOUBLE_SLAB;
 
-    public static BlockType<BlockBambooMosaicSlabBehavior> BAMBOO_MOSAIC_SLAB;
+    public static BlockType<BlockSlabBehavior> BAMBOO_MOSAIC_SLAB;
 
     public static BlockType<BlockStairsBehavior> BAMBOO_MOSAIC_STAIRS;
 
-    public static BlockType<BlockBambooPlanksBehavior> BAMBOO_PLANKS;
+    public static BlockType<BlockPlanksBehavior> BAMBOO_PLANKS;
 
     public static BlockType<BlockBambooPressurePlateBehavior> BAMBOO_PRESSURE_PLATE;
 
-    public static BlockType<BlockBambooSaplingBehavior> BAMBOO_SAPLING;
+    public static BlockType<BlockSaplingBehavior> BAMBOO_SAPLING;
 
-    public static BlockType<BlockBambooSlabBehavior> BAMBOO_SLAB;
+    public static BlockType<BlockSlabBehavior> BAMBOO_SLAB;
 
     public static BlockType<BlockStairsBehavior> BAMBOO_STAIRS;
 
     public static BlockType<BlockSignBehavior> BAMBOO_STANDING_SIGN;
 
-    public static BlockType<BlockBambooTrapdoorBehavior> BAMBOO_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> BAMBOO_TRAPDOOR;
 
     public static BlockType<BlockSignBehavior> BAMBOO_WALL_SIGN;
 
@@ -955,11 +559,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> BIRCH_DOOR;
 
-    public static BlockType<BlockBirchDoubleSlabBehavior> BIRCH_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> BIRCH_DOUBLE_SLAB;
 
-    public static BlockType<BlockBirchFenceBehavior> BIRCH_FENCE;
+    public static BlockType<BlockFenceBehavior> BIRCH_FENCE;
 
-    public static BlockType<BlockBirchFenceGateBehavior> BIRCH_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> BIRCH_FENCE_GATE;
 
     public static BlockType<BlockHangingSignBehavior> BIRCH_HANGING_SIGN;
 
@@ -967,41 +571,41 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> BIRCH_LOG;
 
-    public static BlockType<BlockBirchPlanksBehavior> BIRCH_PLANKS;
+    public static BlockType<BlockPlanksBehavior> BIRCH_PLANKS;
 
     public static BlockType<BlockBirchPressurePlateBehavior> BIRCH_PRESSURE_PLATE;
 
-    public static BlockType<BlockBirchSaplingBehavior> BIRCH_SAPLING;
+    public static BlockType<BlockSaplingBehavior> BIRCH_SAPLING;
 
-    public static BlockType<BlockBirchSlabBehavior> BIRCH_SLAB;
+    public static BlockType<BlockSlabBehavior> BIRCH_SLAB;
 
     public static BlockType<BlockStairsBehavior> BIRCH_STAIRS;
 
     public static BlockType<BlockSignBehavior> BIRCH_STANDING_SIGN;
 
-    public static BlockType<BlockBirchTrapdoorBehavior> BIRCH_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> BIRCH_TRAPDOOR;
 
     public static BlockType<BlockSignBehavior> BIRCH_WALL_SIGN;
 
     public static BlockType<BlockWoodBehavior> BIRCH_WOOD;
 
-    public static BlockType<BlockBlackCandleBehavior> BLACK_CANDLE;
+    public static BlockType<BlockCandleBehavior> BLACK_CANDLE;
 
-    public static BlockType<BlockBlackCandleCakeBehavior> BLACK_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> BLACK_CANDLE_CAKE;
 
-    public static BlockType<BlockBlackCarpetBehavior> BLACK_CARPET;
+    public static BlockType<BlockCarpetBehavior> BLACK_CARPET;
 
-    public static BlockType<BlockBlackConcreteBehavior> BLACK_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> BLACK_CONCRETE;
 
-    public static BlockType<BlockBlackConcretePowderBehavior> BLACK_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> BLACK_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> BLACK_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> BLACK_SHULKER_BOX;
 
-    public static BlockType<BlockBlackStainedGlassBehavior> BLACK_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> BLACK_STAINED_GLASS;
 
-    public static BlockType<BlockBlackStainedGlassPaneBehavior> BLACK_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> BLACK_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> BLACK_TERRACOTTA;
 
@@ -1009,9 +613,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockBlackstoneBehavior> BLACKSTONE;
 
-    public static BlockType<BlockBlackstoneDoubleSlabBehavior> BLACKSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> BLACKSTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockBlackstoneSlabBehavior> BLACKSTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> BLACKSTONE_SLAB;
 
     public static BlockType<BlockStairsBehavior> BLACKSTONE_STAIRS;
 
@@ -1019,15 +623,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockBlastFurnaceBehavior> BLAST_FURNACE;
 
-    public static BlockType<BlockBlueCandleBehavior> BLUE_CANDLE;
+    public static BlockType<BlockCandleBehavior> BLUE_CANDLE;
 
-    public static BlockType<BlockBlueCandleCakeBehavior> BLUE_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> BLUE_CANDLE_CAKE;
 
-    public static BlockType<BlockBlueCarpetBehavior> BLUE_CARPET;
+    public static BlockType<BlockCarpetBehavior> BLUE_CARPET;
 
-    public static BlockType<BlockBlueConcreteBehavior> BLUE_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> BLUE_CONCRETE;
 
-    public static BlockType<BlockBlueConcretePowderBehavior> BLUE_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> BLUE_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> BLUE_GLAZED_TERRACOTTA;
 
@@ -1037,9 +641,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockShulkerBoxBehavior> BLUE_SHULKER_BOX;
 
-    public static BlockType<BlockBlueStainedGlassBehavior> BLUE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> BLUE_STAINED_GLASS;
 
-    public static BlockType<BlockBlueStainedGlassPaneBehavior> BLUE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> BLUE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> BLUE_TERRACOTTA;
 
@@ -1051,35 +655,35 @@ public final class BlockTypes {
 
     public static BlockType<BlockBorderBlockBehavior> BORDER_BLOCK;
 
-    public static BlockType<BlockBrainCoralBehavior> BRAIN_CORAL;
+    public static BlockType<BlockCoralBehavior> BRAIN_CORAL;
 
-    public static BlockType<BlockBrainCoralBlockBehavior> BRAIN_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> BRAIN_CORAL_BLOCK;
 
-    public static BlockType<BlockBrainCoralFanBehavior> BRAIN_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> BRAIN_CORAL_FAN;
 
-    public static BlockType<BlockBrainCoralWallFanBehavior> BRAIN_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> BRAIN_CORAL_WALL_FAN;
 
     public static BlockType<BlockBrewingStandBehavior> BREWING_STAND;
 
     public static BlockType<BlockBrickBlockBehavior> BRICK_BLOCK;
 
-    public static BlockType<BlockBrickDoubleSlabBehavior> BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockBrickSlabBehavior> BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> BRICK_SLAB;
 
     public static BlockType<BlockStairsBehavior> BRICK_STAIRS;
 
     public static BlockType<BlockWallBehavior> BRICK_WALL;
 
-    public static BlockType<BlockBrownCandleBehavior> BROWN_CANDLE;
+    public static BlockType<BlockCandleBehavior> BROWN_CANDLE;
 
-    public static BlockType<BlockBrownCandleCakeBehavior> BROWN_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> BROWN_CANDLE_CAKE;
 
-    public static BlockType<BlockBrownCarpetBehavior> BROWN_CARPET;
+    public static BlockType<BlockCarpetBehavior> BROWN_CARPET;
 
-    public static BlockType<BlockBrownConcreteBehavior> BROWN_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> BROWN_CONCRETE;
 
-    public static BlockType<BlockBrownConcretePowderBehavior> BROWN_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> BROWN_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> BROWN_GLAZED_TERRACOTTA;
 
@@ -1089,9 +693,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockShulkerBoxBehavior> BROWN_SHULKER_BOX;
 
-    public static BlockType<BlockBrownStainedGlassBehavior> BROWN_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> BROWN_STAINED_GLASS;
 
-    public static BlockType<BlockBrownStainedGlassPaneBehavior> BROWN_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> BROWN_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> BROWN_TERRACOTTA;
 
@@ -1099,13 +703,13 @@ public final class BlockTypes {
 
     public static BlockType<BlockBubbleColumnBehavior> BUBBLE_COLUMN;
 
-    public static BlockType<BlockBubbleCoralBehavior> BUBBLE_CORAL;
+    public static BlockType<BlockCoralBehavior> BUBBLE_CORAL;
 
-    public static BlockType<BlockBubbleCoralBlockBehavior> BUBBLE_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> BUBBLE_CORAL_BLOCK;
 
-    public static BlockType<BlockBubbleCoralFanBehavior> BUBBLE_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> BUBBLE_CORAL_FAN;
 
-    public static BlockType<BlockBubbleCoralWallFanBehavior> BUBBLE_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> BUBBLE_CORAL_WALL_FAN;
 
     public static BlockType<BlockBuddingAmethystBehavior> BUDDING_AMETHYST;
 
@@ -1149,11 +753,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> CHERRY_DOOR;
 
-    public static BlockType<BlockCherryDoubleSlabBehavior> CHERRY_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> CHERRY_DOUBLE_SLAB;
 
-    public static BlockType<BlockCherryFenceBehavior> CHERRY_FENCE;
+    public static BlockType<BlockFenceBehavior> CHERRY_FENCE;
 
-    public static BlockType<BlockCherryFenceGateBehavior> CHERRY_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> CHERRY_FENCE_GATE;
 
     public static BlockType<BlockHangingSignBehavior> CHERRY_HANGING_SIGN;
 
@@ -1161,19 +765,19 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> CHERRY_LOG;
 
-    public static BlockType<BlockCherryPlanksBehavior> CHERRY_PLANKS;
+    public static BlockType<BlockPlanksBehavior> CHERRY_PLANKS;
 
     public static BlockType<BlockCherryPressurePlateBehavior> CHERRY_PRESSURE_PLATE;
 
-    public static BlockType<BlockCherrySaplingBehavior> CHERRY_SAPLING;
+    public static BlockType<BlockSaplingBehavior> CHERRY_SAPLING;
 
-    public static BlockType<BlockCherrySlabBehavior> CHERRY_SLAB;
+    public static BlockType<BlockSlabBehavior> CHERRY_SLAB;
 
     public static BlockType<BlockStairsBehavior> CHERRY_STAIRS;
 
     public static BlockType<BlockSignBehavior> CHERRY_STANDING_SIGN;
 
-    public static BlockType<BlockCherryTrapdoorBehavior> CHERRY_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> CHERRY_TRAPDOOR;
 
     public static BlockType<BlockSignBehavior> CHERRY_WALL_SIGN;
 
@@ -1189,7 +793,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockChiseledDeepslateBehavior> CHISELED_DEEPSLATE;
 
-    public static BlockType<BlockChiseledNetherBricksBehavior> CHISELED_NETHER_BRICKS;
+    public static BlockType<BlockBricksBehavior> CHISELED_NETHER_BRICKS;
 
     public static BlockType<BlockChiseledPolishedBlackstoneBehavior> CHISELED_POLISHED_BLACKSTONE;
 
@@ -1199,11 +803,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockChiseledSandstoneBehavior> CHISELED_SANDSTONE;
 
-    public static BlockType<BlockChiseledStoneBricksBehavior> CHISELED_STONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> CHISELED_STONE_BRICKS;
 
     public static BlockType<BlockChiseledTuffBehavior> CHISELED_TUFF;
 
-    public static BlockType<BlockChiseledTuffBricksBehavior> CHISELED_TUFF_BRICKS;
+    public static BlockType<BlockBricksBehavior> CHISELED_TUFF_BRICKS;
 
     public static BlockType<BlockChorusFlowerBehavior> CHORUS_FLOWER;
 
@@ -1221,9 +825,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockCobbledDeepslateBehavior> COBBLED_DEEPSLATE;
 
-    public static BlockType<BlockCobbledDeepslateDoubleSlabBehavior> COBBLED_DEEPSLATE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> COBBLED_DEEPSLATE_DOUBLE_SLAB;
 
-    public static BlockType<BlockCobbledDeepslateSlabBehavior> COBBLED_DEEPSLATE_SLAB;
+    public static BlockType<BlockSlabBehavior> COBBLED_DEEPSLATE_SLAB;
 
     public static BlockType<BlockStairsBehavior> COBBLED_DEEPSLATE_STAIRS;
 
@@ -1231,9 +835,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockCobblestoneBehavior> COBBLESTONE;
 
-    public static BlockType<BlockCobblestoneDoubleSlabBehavior> COBBLESTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> COBBLESTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockCobblestoneSlabBehavior> COBBLESTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> COBBLESTONE_SLAB;
 
     public static BlockType<BlockWallBehavior> COBBLESTONE_WALL;
 
@@ -1269,31 +873,31 @@ public final class BlockTypes {
 
     public static BlockType<BlockCornflowerBehavior> CORNFLOWER;
 
-    public static BlockType<BlockCrackedDeepslateBricksBehavior> CRACKED_DEEPSLATE_BRICKS;
+    public static BlockType<BlockBricksBehavior> CRACKED_DEEPSLATE_BRICKS;
 
     public static BlockType<BlockCrackedDeepslateTilesBehavior> CRACKED_DEEPSLATE_TILES;
 
-    public static BlockType<BlockCrackedNetherBricksBehavior> CRACKED_NETHER_BRICKS;
+    public static BlockType<BlockBricksBehavior> CRACKED_NETHER_BRICKS;
 
-    public static BlockType<BlockCrackedPolishedBlackstoneBricksBehavior> CRACKED_POLISHED_BLACKSTONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> CRACKED_POLISHED_BLACKSTONE_BRICKS;
 
-    public static BlockType<BlockCrackedStoneBricksBehavior> CRACKED_STONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> CRACKED_STONE_BRICKS;
 
     public static BlockType<BlockCrafterBehavior> CRAFTER;
 
     public static BlockType<BlockCraftingTableBehavior> CRAFTING_TABLE;
 
-    public static BlockType<BlockCreeperHeadBehavior> CREEPER_HEAD;
+    public static BlockType<BlockHeadBehavior> CREEPER_HEAD;
 
     public static BlockType<BlockButtonBehavior> CRIMSON_BUTTON;
 
     public static BlockType<BlockDoorBehavior> CRIMSON_DOOR;
 
-    public static BlockType<BlockCrimsonDoubleSlabBehavior> CRIMSON_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> CRIMSON_DOUBLE_SLAB;
 
-    public static BlockType<BlockCrimsonFenceBehavior> CRIMSON_FENCE;
+    public static BlockType<BlockFenceBehavior> CRIMSON_FENCE;
 
-    public static BlockType<BlockCrimsonFenceGateBehavior> CRIMSON_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> CRIMSON_FENCE_GATE;
 
     public static BlockType<BlockCrimsonFungusBehavior> CRIMSON_FUNGUS;
 
@@ -1303,13 +907,13 @@ public final class BlockTypes {
 
     public static BlockType<BlockCrimsonNyliumBehavior> CRIMSON_NYLIUM;
 
-    public static BlockType<BlockCrimsonPlanksBehavior> CRIMSON_PLANKS;
+    public static BlockType<BlockPlanksBehavior> CRIMSON_PLANKS;
 
     public static BlockType<BlockCrimsonPressurePlateBehavior> CRIMSON_PRESSURE_PLATE;
 
     public static BlockType<BlockCrimsonRootsBehavior> CRIMSON_ROOTS;
 
-    public static BlockType<BlockCrimsonSlabBehavior> CRIMSON_SLAB;
+    public static BlockType<BlockSlabBehavior> CRIMSON_SLAB;
 
     public static BlockType<BlockStairsBehavior> CRIMSON_STAIRS;
 
@@ -1317,7 +921,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> CRIMSON_STEM;
 
-    public static BlockType<BlockCrimsonTrapdoorBehavior> CRIMSON_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> CRIMSON_TRAPDOOR;
 
     public static BlockType<BlockSignBehavior> CRIMSON_WALL_SIGN;
 
@@ -1325,39 +929,39 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> CUT_COPPER;
 
-    public static BlockType<BlockCutCopperSlabBehavior> CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> CUT_COPPER_SLAB;
 
     public static BlockType<BlockStairsBehavior> CUT_COPPER_STAIRS;
 
     public static BlockType<BlockCutRedSandstoneBehavior> CUT_RED_SANDSTONE;
 
-    public static BlockType<BlockCutRedSandstoneDoubleSlabBehavior> CUT_RED_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> CUT_RED_SANDSTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockCutRedSandstoneSlabBehavior> CUT_RED_SANDSTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> CUT_RED_SANDSTONE_SLAB;
 
     public static BlockType<BlockCutSandstoneBehavior> CUT_SANDSTONE;
 
-    public static BlockType<BlockCutSandstoneDoubleSlabBehavior> CUT_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> CUT_SANDSTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockCutSandstoneSlabBehavior> CUT_SANDSTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> CUT_SANDSTONE_SLAB;
 
-    public static BlockType<BlockCyanCandleBehavior> CYAN_CANDLE;
+    public static BlockType<BlockCandleBehavior> CYAN_CANDLE;
 
-    public static BlockType<BlockCyanCandleCakeBehavior> CYAN_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> CYAN_CANDLE_CAKE;
 
-    public static BlockType<BlockCyanCarpetBehavior> CYAN_CARPET;
+    public static BlockType<BlockCarpetBehavior> CYAN_CARPET;
 
-    public static BlockType<BlockCyanConcreteBehavior> CYAN_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> CYAN_CONCRETE;
 
-    public static BlockType<BlockCyanConcretePowderBehavior> CYAN_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> CYAN_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> CYAN_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> CYAN_SHULKER_BOX;
 
-    public static BlockType<BlockCyanStainedGlassBehavior> CYAN_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> CYAN_STAINED_GLASS;
 
-    public static BlockType<BlockCyanStainedGlassPaneBehavior> CYAN_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> CYAN_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> CYAN_TERRACOTTA;
 
@@ -1371,11 +975,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> DARK_OAK_DOOR;
 
-    public static BlockType<BlockDarkOakDoubleSlabBehavior> DARK_OAK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> DARK_OAK_DOUBLE_SLAB;
 
-    public static BlockType<BlockDarkOakFenceBehavior> DARK_OAK_FENCE;
+    public static BlockType<BlockFenceBehavior> DARK_OAK_FENCE;
 
-    public static BlockType<BlockDarkOakFenceGateBehavior> DARK_OAK_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> DARK_OAK_FENCE_GATE;
 
     public static BlockType<BlockHangingSignBehavior> DARK_OAK_HANGING_SIGN;
 
@@ -1383,25 +987,25 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> DARK_OAK_LOG;
 
-    public static BlockType<BlockDarkOakPlanksBehavior> DARK_OAK_PLANKS;
+    public static BlockType<BlockPlanksBehavior> DARK_OAK_PLANKS;
 
     public static BlockType<BlockDarkOakPressurePlateBehavior> DARK_OAK_PRESSURE_PLATE;
 
-    public static BlockType<BlockDarkOakSaplingBehavior> DARK_OAK_SAPLING;
+    public static BlockType<BlockSaplingBehavior> DARK_OAK_SAPLING;
 
-    public static BlockType<BlockDarkOakSlabBehavior> DARK_OAK_SLAB;
+    public static BlockType<BlockSlabBehavior> DARK_OAK_SLAB;
 
     public static BlockType<BlockStairsBehavior> DARK_OAK_STAIRS;
 
-    public static BlockType<BlockDarkOakTrapdoorBehavior> DARK_OAK_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> DARK_OAK_TRAPDOOR;
 
     public static BlockType<BlockWoodBehavior> DARK_OAK_WOOD;
 
     public static BlockType<BlockDarkPrismarineBehavior> DARK_PRISMARINE;
 
-    public static BlockType<BlockDarkPrismarineDoubleSlabBehavior> DARK_PRISMARINE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> DARK_PRISMARINE_DOUBLE_SLAB;
 
-    public static BlockType<BlockDarkPrismarineSlabBehavior> DARK_PRISMARINE_SLAB;
+    public static BlockType<BlockSlabBehavior> DARK_PRISMARINE_SLAB;
 
     public static BlockType<BlockStairsBehavior> DARK_PRISMARINE_STAIRS;
 
@@ -1413,45 +1017,45 @@ public final class BlockTypes {
 
     public static BlockType<BlockDaylightDetectorInvertedBehavior> DAYLIGHT_DETECTOR_INVERTED;
 
-    public static BlockType<BlockDeadBrainCoralBehavior> DEAD_BRAIN_CORAL;
+    public static BlockType<BlockCoralBehavior> DEAD_BRAIN_CORAL;
 
-    public static BlockType<BlockDeadBrainCoralBlockBehavior> DEAD_BRAIN_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> DEAD_BRAIN_CORAL_BLOCK;
 
-    public static BlockType<BlockDeadBrainCoralFanBehavior> DEAD_BRAIN_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> DEAD_BRAIN_CORAL_FAN;
 
-    public static BlockType<BlockDeadBrainCoralWallFanBehavior> DEAD_BRAIN_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> DEAD_BRAIN_CORAL_WALL_FAN;
 
-    public static BlockType<BlockDeadBubbleCoralBehavior> DEAD_BUBBLE_CORAL;
+    public static BlockType<BlockCoralBehavior> DEAD_BUBBLE_CORAL;
 
-    public static BlockType<BlockDeadBubbleCoralBlockBehavior> DEAD_BUBBLE_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> DEAD_BUBBLE_CORAL_BLOCK;
 
-    public static BlockType<BlockDeadBubbleCoralFanBehavior> DEAD_BUBBLE_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> DEAD_BUBBLE_CORAL_FAN;
 
-    public static BlockType<BlockDeadBubbleCoralWallFanBehavior> DEAD_BUBBLE_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> DEAD_BUBBLE_CORAL_WALL_FAN;
 
-    public static BlockType<BlockDeadFireCoralBehavior> DEAD_FIRE_CORAL;
+    public static BlockType<BlockCoralBehavior> DEAD_FIRE_CORAL;
 
-    public static BlockType<BlockDeadFireCoralBlockBehavior> DEAD_FIRE_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> DEAD_FIRE_CORAL_BLOCK;
 
-    public static BlockType<BlockDeadFireCoralFanBehavior> DEAD_FIRE_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> DEAD_FIRE_CORAL_FAN;
 
-    public static BlockType<BlockDeadFireCoralWallFanBehavior> DEAD_FIRE_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> DEAD_FIRE_CORAL_WALL_FAN;
 
-    public static BlockType<BlockDeadHornCoralBehavior> DEAD_HORN_CORAL;
+    public static BlockType<BlockCoralBehavior> DEAD_HORN_CORAL;
 
-    public static BlockType<BlockDeadHornCoralBlockBehavior> DEAD_HORN_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> DEAD_HORN_CORAL_BLOCK;
 
-    public static BlockType<BlockDeadHornCoralFanBehavior> DEAD_HORN_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> DEAD_HORN_CORAL_FAN;
 
-    public static BlockType<BlockDeadHornCoralWallFanBehavior> DEAD_HORN_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> DEAD_HORN_CORAL_WALL_FAN;
 
-    public static BlockType<BlockDeadTubeCoralBehavior> DEAD_TUBE_CORAL;
+    public static BlockType<BlockCoralBehavior> DEAD_TUBE_CORAL;
 
-    public static BlockType<BlockDeadTubeCoralBlockBehavior> DEAD_TUBE_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> DEAD_TUBE_CORAL_BLOCK;
 
-    public static BlockType<BlockDeadTubeCoralFanBehavior> DEAD_TUBE_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> DEAD_TUBE_CORAL_FAN;
 
-    public static BlockType<BlockDeadTubeCoralWallFanBehavior> DEAD_TUBE_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> DEAD_TUBE_CORAL_WALL_FAN;
 
     public static BlockType<BlockDeadbushBehavior> DEADBUSH;
 
@@ -1459,15 +1063,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockDeepslateBehavior> DEEPSLATE;
 
-    public static BlockType<BlockDeepslateBrickDoubleSlabBehavior> DEEPSLATE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> DEEPSLATE_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockDeepslateBrickSlabBehavior> DEEPSLATE_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> DEEPSLATE_BRICK_SLAB;
 
     public static BlockType<BlockStairsBehavior> DEEPSLATE_BRICK_STAIRS;
 
     public static BlockType<BlockWallBehavior> DEEPSLATE_BRICK_WALL;
 
-    public static BlockType<BlockDeepslateBricksBehavior> DEEPSLATE_BRICKS;
+    public static BlockType<BlockBricksBehavior> DEEPSLATE_BRICKS;
 
     public static BlockType<BlockDeepslateCoalOreBehavior> DEEPSLATE_COAL_ORE;
 
@@ -1485,9 +1089,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockDeepslateRedstoneOreBehavior> DEEPSLATE_REDSTONE_ORE;
 
-    public static BlockType<BlockDeepslateTileDoubleSlabBehavior> DEEPSLATE_TILE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> DEEPSLATE_TILE_DOUBLE_SLAB;
 
-    public static BlockType<BlockDeepslateTileSlabBehavior> DEEPSLATE_TILE_SLAB;
+    public static BlockType<BlockSlabBehavior> DEEPSLATE_TILE_SLAB;
 
     public static BlockType<BlockStairsBehavior> DEEPSLATE_TILE_STAIRS;
 
@@ -1511,9 +1115,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockDioriteBehavior> DIORITE;
 
-    public static BlockType<BlockDioriteDoubleSlabBehavior> DIORITE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> DIORITE_DOUBLE_SLAB;
 
-    public static BlockType<BlockDioriteSlabBehavior> DIORITE_SLAB;
+    public static BlockType<BlockSlabBehavior> DIORITE_SLAB;
 
     public static BlockType<BlockStairsBehavior> DIORITE_STAIRS;
 
@@ -1525,11 +1129,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockDispenserBehavior> DISPENSER;
 
-    public static BlockType<BlockDoubleCutCopperSlabBehavior> DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockDragonEggBehavior> DRAGON_EGG;
 
-    public static BlockType<BlockDragonHeadBehavior> DRAGON_HEAD;
+    public static BlockType<BlockHeadBehavior> DRAGON_HEAD;
 
     public static BlockType<BlockDriedKelpBlockBehavior> DRIED_KELP_BLOCK;
 
@@ -1785,7 +1389,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockStairsBehavior> END_BRICK_STAIRS;
 
-    public static BlockType<BlockEndBricksBehavior> END_BRICKS;
+    public static BlockType<BlockBricksBehavior> END_BRICKS;
 
     public static BlockType<BlockEndGatewayBehavior> END_GATEWAY;
 
@@ -1797,9 +1401,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockEndStoneBehavior> END_STONE;
 
-    public static BlockType<BlockEndStoneBrickDoubleSlabBehavior> END_STONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> END_STONE_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockEndStoneBrickSlabBehavior> END_STONE_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> END_STONE_BRICK_SLAB;
 
     public static BlockType<BlockWallBehavior> END_STONE_BRICK_WALL;
 
@@ -1815,15 +1419,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockExposedCopperGrateBehavior> EXPOSED_COPPER_GRATE;
 
-    public static BlockType<BlockExposedCopperTrapdoorBehavior> EXPOSED_COPPER_TRAPDOOR;
+    public static BlockType<BlockCopperTrapdoorBehavior> EXPOSED_COPPER_TRAPDOOR;
 
     public static BlockType<BlockCopperBehavior> EXPOSED_CUT_COPPER;
 
-    public static BlockType<BlockExposedCutCopperSlabBehavior> EXPOSED_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> EXPOSED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockStairsBehavior> EXPOSED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockExposedDoubleCutCopperSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockFarmlandBehavior> FARMLAND;
 
@@ -1833,13 +1437,13 @@ public final class BlockTypes {
 
     public static BlockType<BlockFireBehavior> FIRE;
 
-    public static BlockType<BlockFireCoralBehavior> FIRE_CORAL;
+    public static BlockType<BlockCoralBehavior> FIRE_CORAL;
 
-    public static BlockType<BlockFireCoralBlockBehavior> FIRE_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> FIRE_CORAL_BLOCK;
 
-    public static BlockType<BlockFireCoralFanBehavior> FIRE_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> FIRE_CORAL_FAN;
 
-    public static BlockType<BlockFireCoralWallFanBehavior> FIRE_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> FIRE_CORAL_WALL_FAN;
 
     public static BlockType<BlockFletchingTableBehavior> FLETCHING_TABLE;
 
@@ -1861,9 +1465,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockGildedBlackstoneBehavior> GILDED_BLACKSTONE;
 
-    public static BlockType<BlockGlassBehavior> GLASS;
+    public static BlockType<BlockStainedGlassBehavior> GLASS;
 
-    public static BlockType<BlockGlassPaneBehavior> GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> GLASS_PANE;
 
     public static BlockType<BlockGlowFrameBehavior> GLOW_FRAME;
 
@@ -1881,9 +1485,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockGraniteBehavior> GRANITE;
 
-    public static BlockType<BlockGraniteDoubleSlabBehavior> GRANITE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> GRANITE_DOUBLE_SLAB;
 
-    public static BlockType<BlockGraniteSlabBehavior> GRANITE_SLAB;
+    public static BlockType<BlockSlabBehavior> GRANITE_SLAB;
 
     public static BlockType<BlockStairsBehavior> GRANITE_STAIRS;
 
@@ -1895,45 +1499,45 @@ public final class BlockTypes {
 
     public static BlockType<BlockGravelBehavior> GRAVEL;
 
-    public static BlockType<BlockGrayCandleBehavior> GRAY_CANDLE;
+    public static BlockType<BlockCandleBehavior> GRAY_CANDLE;
 
-    public static BlockType<BlockGrayCandleCakeBehavior> GRAY_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> GRAY_CANDLE_CAKE;
 
-    public static BlockType<BlockGrayCarpetBehavior> GRAY_CARPET;
+    public static BlockType<BlockCarpetBehavior> GRAY_CARPET;
 
-    public static BlockType<BlockGrayConcreteBehavior> GRAY_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> GRAY_CONCRETE;
 
-    public static BlockType<BlockGrayConcretePowderBehavior> GRAY_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> GRAY_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> GRAY_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> GRAY_SHULKER_BOX;
 
-    public static BlockType<BlockGrayStainedGlassBehavior> GRAY_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> GRAY_STAINED_GLASS;
 
-    public static BlockType<BlockGrayStainedGlassPaneBehavior> GRAY_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> GRAY_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> GRAY_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> GRAY_WOOL;
 
-    public static BlockType<BlockGreenCandleBehavior> GREEN_CANDLE;
+    public static BlockType<BlockCandleBehavior> GREEN_CANDLE;
 
-    public static BlockType<BlockGreenCandleCakeBehavior> GREEN_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> GREEN_CANDLE_CAKE;
 
-    public static BlockType<BlockGreenCarpetBehavior> GREEN_CARPET;
+    public static BlockType<BlockCarpetBehavior> GREEN_CARPET;
 
-    public static BlockType<BlockGreenConcreteBehavior> GREEN_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> GREEN_CONCRETE;
 
-    public static BlockType<BlockGreenConcretePowderBehavior> GREEN_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> GREEN_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> GREEN_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> GREEN_SHULKER_BOX;
 
-    public static BlockType<BlockGreenStainedGlassBehavior> GREEN_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> GREEN_STAINED_GLASS;
 
-    public static BlockType<BlockGreenStainedGlassPaneBehavior> GREEN_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> GREEN_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> GREEN_TERRACOTTA;
 
@@ -1943,73 +1547,73 @@ public final class BlockTypes {
 
     public static BlockType<BlockHangingRootsBehavior> HANGING_ROOTS;
 
-    public static BlockType<BlockHardBlackStainedGlassBehavior> HARD_BLACK_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_BLACK_STAINED_GLASS;
 
-    public static BlockType<BlockHardBlackStainedGlassPaneBehavior> HARD_BLACK_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_BLACK_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardBlueStainedGlassBehavior> HARD_BLUE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_BLUE_STAINED_GLASS;
 
-    public static BlockType<BlockHardBlueStainedGlassPaneBehavior> HARD_BLUE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_BLUE_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardBrownStainedGlassBehavior> HARD_BROWN_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_BROWN_STAINED_GLASS;
 
-    public static BlockType<BlockHardBrownStainedGlassPaneBehavior> HARD_BROWN_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_BROWN_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardCyanStainedGlassBehavior> HARD_CYAN_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_CYAN_STAINED_GLASS;
 
-    public static BlockType<BlockHardCyanStainedGlassPaneBehavior> HARD_CYAN_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_CYAN_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardGlassBehavior> HARD_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_GLASS;
 
-    public static BlockType<BlockHardGlassPaneBehavior> HARD_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_GLASS_PANE;
 
-    public static BlockType<BlockHardGrayStainedGlassBehavior> HARD_GRAY_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_GRAY_STAINED_GLASS;
 
-    public static BlockType<BlockHardGrayStainedGlassPaneBehavior> HARD_GRAY_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_GRAY_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardGreenStainedGlassBehavior> HARD_GREEN_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_GREEN_STAINED_GLASS;
 
-    public static BlockType<BlockHardGreenStainedGlassPaneBehavior> HARD_GREEN_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_GREEN_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardLightBlueStainedGlassBehavior> HARD_LIGHT_BLUE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_LIGHT_BLUE_STAINED_GLASS;
 
-    public static BlockType<BlockHardLightBlueStainedGlassPaneBehavior> HARD_LIGHT_BLUE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_LIGHT_BLUE_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardLightGrayStainedGlassBehavior> HARD_LIGHT_GRAY_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_LIGHT_GRAY_STAINED_GLASS;
 
-    public static BlockType<BlockHardLightGrayStainedGlassPaneBehavior> HARD_LIGHT_GRAY_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_LIGHT_GRAY_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardLimeStainedGlassBehavior> HARD_LIME_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_LIME_STAINED_GLASS;
 
-    public static BlockType<BlockHardLimeStainedGlassPaneBehavior> HARD_LIME_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_LIME_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardMagentaStainedGlassBehavior> HARD_MAGENTA_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_MAGENTA_STAINED_GLASS;
 
-    public static BlockType<BlockHardMagentaStainedGlassPaneBehavior> HARD_MAGENTA_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_MAGENTA_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardOrangeStainedGlassBehavior> HARD_ORANGE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_ORANGE_STAINED_GLASS;
 
-    public static BlockType<BlockHardOrangeStainedGlassPaneBehavior> HARD_ORANGE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_ORANGE_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardPinkStainedGlassBehavior> HARD_PINK_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_PINK_STAINED_GLASS;
 
-    public static BlockType<BlockHardPinkStainedGlassPaneBehavior> HARD_PINK_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_PINK_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardPurpleStainedGlassBehavior> HARD_PURPLE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_PURPLE_STAINED_GLASS;
 
-    public static BlockType<BlockHardPurpleStainedGlassPaneBehavior> HARD_PURPLE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_PURPLE_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardRedStainedGlassBehavior> HARD_RED_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_RED_STAINED_GLASS;
 
-    public static BlockType<BlockHardRedStainedGlassPaneBehavior> HARD_RED_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_RED_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardWhiteStainedGlassBehavior> HARD_WHITE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_WHITE_STAINED_GLASS;
 
-    public static BlockType<BlockHardWhiteStainedGlassPaneBehavior> HARD_WHITE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_WHITE_STAINED_GLASS_PANE;
 
-    public static BlockType<BlockHardYellowStainedGlassBehavior> HARD_YELLOW_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> HARD_YELLOW_STAINED_GLASS;
 
-    public static BlockType<BlockHardYellowStainedGlassPaneBehavior> HARD_YELLOW_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> HARD_YELLOW_STAINED_GLASS_PANE;
 
     public static BlockType<BlockHardenedClayBehavior> HARDENED_CLAY;
 
@@ -2025,29 +1629,29 @@ public final class BlockTypes {
 
     public static BlockType<BlockHopperBehavior> HOPPER;
 
-    public static BlockType<BlockHornCoralBehavior> HORN_CORAL;
+    public static BlockType<BlockCoralBehavior> HORN_CORAL;
 
-    public static BlockType<BlockHornCoralBlockBehavior> HORN_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> HORN_CORAL_BLOCK;
 
-    public static BlockType<BlockHornCoralFanBehavior> HORN_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> HORN_CORAL_FAN;
 
-    public static BlockType<BlockHornCoralWallFanBehavior> HORN_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> HORN_CORAL_WALL_FAN;
 
     public static BlockType<BlockIceBehavior> ICE;
 
-    public static BlockType<BlockInfestedChiseledStoneBricksBehavior> INFESTED_CHISELED_STONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> INFESTED_CHISELED_STONE_BRICKS;
 
     public static BlockType<BlockInfestedCobblestoneBehavior> INFESTED_COBBLESTONE;
 
-    public static BlockType<BlockInfestedCrackedStoneBricksBehavior> INFESTED_CRACKED_STONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> INFESTED_CRACKED_STONE_BRICKS;
 
     public static BlockType<BlockInfestedDeepslateBehavior> INFESTED_DEEPSLATE;
 
-    public static BlockType<BlockInfestedMossyStoneBricksBehavior> INFESTED_MOSSY_STONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> INFESTED_MOSSY_STONE_BRICKS;
 
     public static BlockType<BlockInfestedStoneBehavior> INFESTED_STONE;
 
-    public static BlockType<BlockInfestedStoneBricksBehavior> INFESTED_STONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> INFESTED_STONE_BRICKS;
 
     public static BlockType<BlockInfoUpdateBehavior> INFO_UPDATE;
 
@@ -2073,11 +1677,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> JUNGLE_DOOR;
 
-    public static BlockType<BlockJungleDoubleSlabBehavior> JUNGLE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> JUNGLE_DOUBLE_SLAB;
 
-    public static BlockType<BlockJungleFenceBehavior> JUNGLE_FENCE;
+    public static BlockType<BlockFenceBehavior> JUNGLE_FENCE;
 
-    public static BlockType<BlockJungleFenceGateBehavior> JUNGLE_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> JUNGLE_FENCE_GATE;
 
     public static BlockType<BlockHangingSignBehavior> JUNGLE_HANGING_SIGN;
 
@@ -2085,19 +1689,19 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> JUNGLE_LOG;
 
-    public static BlockType<BlockJunglePlanksBehavior> JUNGLE_PLANKS;
+    public static BlockType<BlockPlanksBehavior> JUNGLE_PLANKS;
 
     public static BlockType<BlockJunglePressurePlateBehavior> JUNGLE_PRESSURE_PLATE;
 
-    public static BlockType<BlockJungleSaplingBehavior> JUNGLE_SAPLING;
+    public static BlockType<BlockSaplingBehavior> JUNGLE_SAPLING;
 
-    public static BlockType<BlockJungleSlabBehavior> JUNGLE_SLAB;
+    public static BlockType<BlockSlabBehavior> JUNGLE_SLAB;
 
     public static BlockType<BlockStairsBehavior> JUNGLE_STAIRS;
 
     public static BlockType<BlockSignBehavior> JUNGLE_STANDING_SIGN;
 
-    public static BlockType<BlockJungleTrapdoorBehavior> JUNGLE_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> JUNGLE_TRAPDOOR;
 
     public static BlockType<BlockSignBehavior> JUNGLE_WALL_SIGN;
 
@@ -2125,75 +1729,75 @@ public final class BlockTypes {
 
     public static BlockType<BlockLeverBehavior> LEVER;
 
-    public static BlockType<BlockLightBlock0Behavior> LIGHT_BLOCK_0;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_0;
 
-    public static BlockType<BlockLightBlock1Behavior> LIGHT_BLOCK_1;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_1;
 
-    public static BlockType<BlockLightBlock10Behavior> LIGHT_BLOCK_10;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_10;
 
-    public static BlockType<BlockLightBlock11Behavior> LIGHT_BLOCK_11;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_11;
 
-    public static BlockType<BlockLightBlock12Behavior> LIGHT_BLOCK_12;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_12;
 
-    public static BlockType<BlockLightBlock13Behavior> LIGHT_BLOCK_13;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_13;
 
-    public static BlockType<BlockLightBlock14Behavior> LIGHT_BLOCK_14;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_14;
 
-    public static BlockType<BlockLightBlock15Behavior> LIGHT_BLOCK_15;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_15;
 
-    public static BlockType<BlockLightBlock2Behavior> LIGHT_BLOCK_2;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_2;
 
-    public static BlockType<BlockLightBlock3Behavior> LIGHT_BLOCK_3;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_3;
 
-    public static BlockType<BlockLightBlock4Behavior> LIGHT_BLOCK_4;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_4;
 
-    public static BlockType<BlockLightBlock5Behavior> LIGHT_BLOCK_5;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_5;
 
-    public static BlockType<BlockLightBlock6Behavior> LIGHT_BLOCK_6;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_6;
 
-    public static BlockType<BlockLightBlock7Behavior> LIGHT_BLOCK_7;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_7;
 
-    public static BlockType<BlockLightBlock8Behavior> LIGHT_BLOCK_8;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_8;
 
-    public static BlockType<BlockLightBlock9Behavior> LIGHT_BLOCK_9;
+    public static BlockType<BlockLightBlockBehavior> LIGHT_BLOCK_9;
 
-    public static BlockType<BlockLightBlueCandleBehavior> LIGHT_BLUE_CANDLE;
+    public static BlockType<BlockCandleBehavior> LIGHT_BLUE_CANDLE;
 
-    public static BlockType<BlockLightBlueCandleCakeBehavior> LIGHT_BLUE_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> LIGHT_BLUE_CANDLE_CAKE;
 
-    public static BlockType<BlockLightBlueCarpetBehavior> LIGHT_BLUE_CARPET;
+    public static BlockType<BlockCarpetBehavior> LIGHT_BLUE_CARPET;
 
-    public static BlockType<BlockLightBlueConcreteBehavior> LIGHT_BLUE_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> LIGHT_BLUE_CONCRETE;
 
-    public static BlockType<BlockLightBlueConcretePowderBehavior> LIGHT_BLUE_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> LIGHT_BLUE_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> LIGHT_BLUE_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> LIGHT_BLUE_SHULKER_BOX;
 
-    public static BlockType<BlockLightBlueStainedGlassBehavior> LIGHT_BLUE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> LIGHT_BLUE_STAINED_GLASS;
 
-    public static BlockType<BlockLightBlueStainedGlassPaneBehavior> LIGHT_BLUE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> LIGHT_BLUE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> LIGHT_BLUE_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> LIGHT_BLUE_WOOL;
 
-    public static BlockType<BlockLightGrayCandleBehavior> LIGHT_GRAY_CANDLE;
+    public static BlockType<BlockCandleBehavior> LIGHT_GRAY_CANDLE;
 
-    public static BlockType<BlockLightGrayCandleCakeBehavior> LIGHT_GRAY_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> LIGHT_GRAY_CANDLE_CAKE;
 
-    public static BlockType<BlockLightGrayCarpetBehavior> LIGHT_GRAY_CARPET;
+    public static BlockType<BlockCarpetBehavior> LIGHT_GRAY_CARPET;
 
-    public static BlockType<BlockLightGrayConcreteBehavior> LIGHT_GRAY_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> LIGHT_GRAY_CONCRETE;
 
-    public static BlockType<BlockLightGrayConcretePowderBehavior> LIGHT_GRAY_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> LIGHT_GRAY_CONCRETE_POWDER;
 
     public static BlockType<BlockShulkerBoxBehavior> LIGHT_GRAY_SHULKER_BOX;
 
-    public static BlockType<BlockLightGrayStainedGlassBehavior> LIGHT_GRAY_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> LIGHT_GRAY_STAINED_GLASS;
 
-    public static BlockType<BlockLightGrayStainedGlassPaneBehavior> LIGHT_GRAY_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> LIGHT_GRAY_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> LIGHT_GRAY_TERRACOTTA;
 
@@ -2207,23 +1811,23 @@ public final class BlockTypes {
 
     public static BlockType<BlockLilyOfTheValleyBehavior> LILY_OF_THE_VALLEY;
 
-    public static BlockType<BlockLimeCandleBehavior> LIME_CANDLE;
+    public static BlockType<BlockCandleBehavior> LIME_CANDLE;
 
-    public static BlockType<BlockLimeCandleCakeBehavior> LIME_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> LIME_CANDLE_CAKE;
 
-    public static BlockType<BlockLimeCarpetBehavior> LIME_CARPET;
+    public static BlockType<BlockCarpetBehavior> LIME_CARPET;
 
-    public static BlockType<BlockLimeConcreteBehavior> LIME_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> LIME_CONCRETE;
 
-    public static BlockType<BlockLimeConcretePowderBehavior> LIME_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> LIME_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> LIME_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> LIME_SHULKER_BOX;
 
-    public static BlockType<BlockLimeStainedGlassBehavior> LIME_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> LIME_STAINED_GLASS;
 
-    public static BlockType<BlockLimeStainedGlassPaneBehavior> LIME_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> LIME_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> LIME_TERRACOTTA;
 
@@ -2247,23 +1851,23 @@ public final class BlockTypes {
 
     public static BlockType<BlockLoomBehavior> LOOM;
 
-    public static BlockType<BlockMagentaCandleBehavior> MAGENTA_CANDLE;
+    public static BlockType<BlockCandleBehavior> MAGENTA_CANDLE;
 
-    public static BlockType<BlockMagentaCandleCakeBehavior> MAGENTA_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> MAGENTA_CANDLE_CAKE;
 
-    public static BlockType<BlockMagentaCarpetBehavior> MAGENTA_CARPET;
+    public static BlockType<BlockCarpetBehavior> MAGENTA_CARPET;
 
-    public static BlockType<BlockMagentaConcreteBehavior> MAGENTA_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> MAGENTA_CONCRETE;
 
-    public static BlockType<BlockMagentaConcretePowderBehavior> MAGENTA_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> MAGENTA_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> MAGENTA_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> MAGENTA_SHULKER_BOX;
 
-    public static BlockType<BlockMagentaStainedGlassBehavior> MAGENTA_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> MAGENTA_STAINED_GLASS;
 
-    public static BlockType<BlockMagentaStainedGlassPaneBehavior> MAGENTA_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> MAGENTA_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> MAGENTA_TERRACOTTA;
 
@@ -2275,11 +1879,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> MANGROVE_DOOR;
 
-    public static BlockType<BlockMangroveDoubleSlabBehavior> MANGROVE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> MANGROVE_DOUBLE_SLAB;
 
-    public static BlockType<BlockMangroveFenceBehavior> MANGROVE_FENCE;
+    public static BlockType<BlockFenceBehavior> MANGROVE_FENCE;
 
-    public static BlockType<BlockMangroveFenceGateBehavior> MANGROVE_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> MANGROVE_FENCE_GATE;
 
     public static BlockType<BlockHangingSignBehavior> MANGROVE_HANGING_SIGN;
 
@@ -2287,7 +1891,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> MANGROVE_LOG;
 
-    public static BlockType<BlockMangrovePlanksBehavior> MANGROVE_PLANKS;
+    public static BlockType<BlockPlanksBehavior> MANGROVE_PLANKS;
 
     public static BlockType<BlockMangrovePressurePlateBehavior> MANGROVE_PRESSURE_PLATE;
 
@@ -2295,13 +1899,13 @@ public final class BlockTypes {
 
     public static BlockType<BlockMangroveRootsBehavior> MANGROVE_ROOTS;
 
-    public static BlockType<BlockMangroveSlabBehavior> MANGROVE_SLAB;
+    public static BlockType<BlockSlabBehavior> MANGROVE_SLAB;
 
     public static BlockType<BlockStairsBehavior> MANGROVE_STAIRS;
 
     public static BlockType<BlockSignBehavior> MANGROVE_STANDING_SIGN;
 
-    public static BlockType<BlockMangroveTrapdoorBehavior> MANGROVE_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> MANGROVE_TRAPDOOR;
 
     public static BlockType<BlockSignBehavior> MANGROVE_WALL_SIGN;
 
@@ -2319,41 +1923,41 @@ public final class BlockTypes {
 
     public static BlockType<BlockMossBlockBehavior> MOSS_BLOCK;
 
-    public static BlockType<BlockMossCarpetBehavior> MOSS_CARPET;
+    public static BlockType<BlockCarpetBehavior> MOSS_CARPET;
 
     public static BlockType<BlockMossyCobblestoneBehavior> MOSSY_COBBLESTONE;
 
-    public static BlockType<BlockMossyCobblestoneDoubleSlabBehavior> MOSSY_COBBLESTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> MOSSY_COBBLESTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockMossyCobblestoneSlabBehavior> MOSSY_COBBLESTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> MOSSY_COBBLESTONE_SLAB;
 
     public static BlockType<BlockStairsBehavior> MOSSY_COBBLESTONE_STAIRS;
 
     public static BlockType<BlockWallBehavior> MOSSY_COBBLESTONE_WALL;
 
-    public static BlockType<BlockMossyStoneBrickDoubleSlabBehavior> MOSSY_STONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> MOSSY_STONE_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockMossyStoneBrickSlabBehavior> MOSSY_STONE_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> MOSSY_STONE_BRICK_SLAB;
 
     public static BlockType<BlockStairsBehavior> MOSSY_STONE_BRICK_STAIRS;
 
     public static BlockType<BlockWallBehavior> MOSSY_STONE_BRICK_WALL;
 
-    public static BlockType<BlockMossyStoneBricksBehavior> MOSSY_STONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> MOSSY_STONE_BRICKS;
 
     public static BlockType<BlockMovingBlockBehavior> MOVING_BLOCK;
 
     public static BlockType<BlockMudBehavior> MUD;
 
-    public static BlockType<BlockMudBrickDoubleSlabBehavior> MUD_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> MUD_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockMudBrickSlabBehavior> MUD_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> MUD_BRICK_SLAB;
 
     public static BlockType<BlockStairsBehavior> MUD_BRICK_STAIRS;
 
     public static BlockType<BlockWallBehavior> MUD_BRICK_WALL;
 
-    public static BlockType<BlockMudBricksBehavior> MUD_BRICKS;
+    public static BlockType<BlockBricksBehavior> MUD_BRICKS;
 
     public static BlockType<BlockMuddyMangroveRootsBehavior> MUDDY_MANGROVE_ROOTS;
 
@@ -2363,11 +1967,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockNetherBrickBehavior> NETHER_BRICK;
 
-    public static BlockType<BlockNetherBrickDoubleSlabBehavior> NETHER_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> NETHER_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockNetherBrickFenceBehavior> NETHER_BRICK_FENCE;
+    public static BlockType<BlockFenceBehavior> NETHER_BRICK_FENCE;
 
-    public static BlockType<BlockNetherBrickSlabBehavior> NETHER_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> NETHER_BRICK_SLAB;
 
     public static BlockType<BlockStairsBehavior> NETHER_BRICK_STAIRS;
 
@@ -2387,17 +1991,17 @@ public final class BlockTypes {
 
     public static BlockType<BlockNetherreactorBehavior> NETHERREACTOR;
 
-    public static BlockType<BlockNormalStoneDoubleSlabBehavior> NORMAL_STONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> NORMAL_STONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockNormalStoneSlabBehavior> NORMAL_STONE_SLAB;
+    public static BlockType<BlockSlabBehavior> NORMAL_STONE_SLAB;
 
     public static BlockType<BlockStairsBehavior> NORMAL_STONE_STAIRS;
 
     public static BlockType<BlockNoteblockBehavior> NOTEBLOCK;
 
-    public static BlockType<BlockOakDoubleSlabBehavior> OAK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> OAK_DOUBLE_SLAB;
 
-    public static BlockType<BlockOakFenceBehavior> OAK_FENCE;
+    public static BlockType<BlockFenceBehavior> OAK_FENCE;
 
     public static BlockType<BlockHangingSignBehavior> OAK_HANGING_SIGN;
 
@@ -2405,11 +2009,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> OAK_LOG;
 
-    public static BlockType<BlockOakPlanksBehavior> OAK_PLANKS;
+    public static BlockType<BlockPlanksBehavior> OAK_PLANKS;
 
-    public static BlockType<BlockOakSaplingBehavior> OAK_SAPLING;
+    public static BlockType<BlockSaplingBehavior> OAK_SAPLING;
 
-    public static BlockType<BlockOakSlabBehavior> OAK_SLAB;
+    public static BlockType<BlockSlabBehavior> OAK_SLAB;
 
     public static BlockType<BlockStairsBehavior> OAK_STAIRS;
 
@@ -2421,23 +2025,23 @@ public final class BlockTypes {
 
     public static BlockType<BlockOchreFroglightBehavior> OCHRE_FROGLIGHT;
 
-    public static BlockType<BlockOrangeCandleBehavior> ORANGE_CANDLE;
+    public static BlockType<BlockCandleBehavior> ORANGE_CANDLE;
 
-    public static BlockType<BlockOrangeCandleCakeBehavior> ORANGE_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> ORANGE_CANDLE_CAKE;
 
-    public static BlockType<BlockOrangeCarpetBehavior> ORANGE_CARPET;
+    public static BlockType<BlockCarpetBehavior> ORANGE_CARPET;
 
-    public static BlockType<BlockOrangeConcreteBehavior> ORANGE_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> ORANGE_CONCRETE;
 
-    public static BlockType<BlockOrangeConcretePowderBehavior> ORANGE_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> ORANGE_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> ORANGE_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> ORANGE_SHULKER_BOX;
 
-    public static BlockType<BlockOrangeStainedGlassBehavior> ORANGE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> ORANGE_STAINED_GLASS;
 
-    public static BlockType<BlockOrangeStainedGlassPaneBehavior> ORANGE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> ORANGE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> ORANGE_TERRACOTTA;
 
@@ -2457,15 +2061,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockOxidizedCopperGrateBehavior> OXIDIZED_COPPER_GRATE;
 
-    public static BlockType<BlockOxidizedCopperTrapdoorBehavior> OXIDIZED_COPPER_TRAPDOOR;
+    public static BlockType<BlockCopperTrapdoorBehavior> OXIDIZED_COPPER_TRAPDOOR;
 
     public static BlockType<BlockCopperBehavior> OXIDIZED_CUT_COPPER;
 
-    public static BlockType<BlockOxidizedCutCopperSlabBehavior> OXIDIZED_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> OXIDIZED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockStairsBehavior> OXIDIZED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockOxidizedDoubleCutCopperSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockPackedIceBehavior> PACKED_ICE;
 
@@ -2475,21 +2079,21 @@ public final class BlockTypes {
 
     public static BlockType<BlockPeonyBehavior> PEONY;
 
-    public static BlockType<BlockPetrifiedOakDoubleSlabBehavior> PETRIFIED_OAK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> PETRIFIED_OAK_DOUBLE_SLAB;
 
-    public static BlockType<BlockPetrifiedOakSlabBehavior> PETRIFIED_OAK_SLAB;
+    public static BlockType<BlockSlabBehavior> PETRIFIED_OAK_SLAB;
 
-    public static BlockType<BlockPiglinHeadBehavior> PIGLIN_HEAD;
+    public static BlockType<BlockHeadBehavior> PIGLIN_HEAD;
 
-    public static BlockType<BlockPinkCandleBehavior> PINK_CANDLE;
+    public static BlockType<BlockCandleBehavior> PINK_CANDLE;
 
-    public static BlockType<BlockPinkCandleCakeBehavior> PINK_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> PINK_CANDLE_CAKE;
 
-    public static BlockType<BlockPinkCarpetBehavior> PINK_CARPET;
+    public static BlockType<BlockCarpetBehavior> PINK_CARPET;
 
-    public static BlockType<BlockPinkConcreteBehavior> PINK_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> PINK_CONCRETE;
 
-    public static BlockType<BlockPinkConcretePowderBehavior> PINK_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> PINK_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> PINK_GLAZED_TERRACOTTA;
 
@@ -2497,9 +2101,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockShulkerBoxBehavior> PINK_SHULKER_BOX;
 
-    public static BlockType<BlockPinkStainedGlassBehavior> PINK_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> PINK_STAINED_GLASS;
 
-    public static BlockType<BlockPinkStainedGlassPaneBehavior> PINK_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> PINK_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> PINK_TERRACOTTA;
 
@@ -2515,7 +2119,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPitcherPlantBehavior> PITCHER_PLANT;
 
-    public static BlockType<BlockPlayerHeadBehavior> PLAYER_HEAD;
+    public static BlockType<BlockHeadBehavior> PLAYER_HEAD;
 
     public static BlockType<BlockPodzolBehavior> PODZOL;
 
@@ -2523,9 +2127,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedAndesiteBehavior> POLISHED_ANDESITE;
 
-    public static BlockType<BlockPolishedAndesiteDoubleSlabBehavior> POLISHED_ANDESITE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_ANDESITE_DOUBLE_SLAB;
 
-    public static BlockType<BlockPolishedAndesiteSlabBehavior> POLISHED_ANDESITE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_ANDESITE_SLAB;
 
     public static BlockType<BlockStairsBehavior> POLISHED_ANDESITE_STAIRS;
 
@@ -2533,23 +2137,23 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedBlackstoneBehavior> POLISHED_BLACKSTONE;
 
-    public static BlockType<BlockPolishedBlackstoneBrickDoubleSlabBehavior> POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockPolishedBlackstoneBrickSlabBehavior> POLISHED_BLACKSTONE_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_BRICK_SLAB;
 
     public static BlockType<BlockStairsBehavior> POLISHED_BLACKSTONE_BRICK_STAIRS;
 
     public static BlockType<BlockWallBehavior> POLISHED_BLACKSTONE_BRICK_WALL;
 
-    public static BlockType<BlockPolishedBlackstoneBricksBehavior> POLISHED_BLACKSTONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> POLISHED_BLACKSTONE_BRICKS;
 
     public static BlockType<BlockButtonBehavior> POLISHED_BLACKSTONE_BUTTON;
 
-    public static BlockType<BlockPolishedBlackstoneDoubleSlabBehavior> POLISHED_BLACKSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockPolishedBlackstonePressurePlateBehavior> POLISHED_BLACKSTONE_PRESSURE_PLATE;
 
-    public static BlockType<BlockPolishedBlackstoneSlabBehavior> POLISHED_BLACKSTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_SLAB;
 
     public static BlockType<BlockStairsBehavior> POLISHED_BLACKSTONE_STAIRS;
 
@@ -2557,9 +2161,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedDeepslateBehavior> POLISHED_DEEPSLATE;
 
-    public static BlockType<BlockPolishedDeepslateDoubleSlabBehavior> POLISHED_DEEPSLATE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_DEEPSLATE_DOUBLE_SLAB;
 
-    public static BlockType<BlockPolishedDeepslateSlabBehavior> POLISHED_DEEPSLATE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_DEEPSLATE_SLAB;
 
     public static BlockType<BlockStairsBehavior> POLISHED_DEEPSLATE_STAIRS;
 
@@ -2567,25 +2171,25 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedDioriteBehavior> POLISHED_DIORITE;
 
-    public static BlockType<BlockPolishedDioriteDoubleSlabBehavior> POLISHED_DIORITE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_DIORITE_DOUBLE_SLAB;
 
-    public static BlockType<BlockPolishedDioriteSlabBehavior> POLISHED_DIORITE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_DIORITE_SLAB;
 
     public static BlockType<BlockStairsBehavior> POLISHED_DIORITE_STAIRS;
 
     public static BlockType<BlockPolishedGraniteBehavior> POLISHED_GRANITE;
 
-    public static BlockType<BlockPolishedGraniteDoubleSlabBehavior> POLISHED_GRANITE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_GRANITE_DOUBLE_SLAB;
 
-    public static BlockType<BlockPolishedGraniteSlabBehavior> POLISHED_GRANITE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_GRANITE_SLAB;
 
     public static BlockType<BlockStairsBehavior> POLISHED_GRANITE_STAIRS;
 
     public static BlockType<BlockPolishedTuffBehavior> POLISHED_TUFF;
 
-    public static BlockType<BlockPolishedTuffDoubleSlabBehavior> POLISHED_TUFF_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_TUFF_DOUBLE_SLAB;
 
-    public static BlockType<BlockPolishedTuffSlabBehavior> POLISHED_TUFF_SLAB;
+    public static BlockType<BlockSlabBehavior> POLISHED_TUFF_SLAB;
 
     public static BlockType<BlockStairsBehavior> POLISHED_TUFF_STAIRS;
 
@@ -2605,17 +2209,17 @@ public final class BlockTypes {
 
     public static BlockType<BlockPrismarineBehavior> PRISMARINE;
 
-    public static BlockType<BlockPrismarineBrickDoubleSlabBehavior> PRISMARINE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> PRISMARINE_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockPrismarineBrickSlabBehavior> PRISMARINE_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> PRISMARINE_BRICK_SLAB;
 
-    public static BlockType<BlockPrismarineBricksBehavior> PRISMARINE_BRICKS;
+    public static BlockType<BlockBricksBehavior> PRISMARINE_BRICKS;
 
     public static BlockType<BlockStairsBehavior> PRISMARINE_BRICKS_STAIRS;
 
-    public static BlockType<BlockPrismarineDoubleSlabBehavior> PRISMARINE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> PRISMARINE_DOUBLE_SLAB;
 
-    public static BlockType<BlockPrismarineSlabBehavior> PRISMARINE_SLAB;
+    public static BlockType<BlockSlabBehavior> PRISMARINE_SLAB;
 
     public static BlockType<BlockStairsBehavior> PRISMARINE_STAIRS;
 
@@ -2625,23 +2229,23 @@ public final class BlockTypes {
 
     public static BlockType<BlockPumpkinStemBehavior> PUMPKIN_STEM;
 
-    public static BlockType<BlockPurpleCandleBehavior> PURPLE_CANDLE;
+    public static BlockType<BlockCandleBehavior> PURPLE_CANDLE;
 
-    public static BlockType<BlockPurpleCandleCakeBehavior> PURPLE_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> PURPLE_CANDLE_CAKE;
 
-    public static BlockType<BlockPurpleCarpetBehavior> PURPLE_CARPET;
+    public static BlockType<BlockCarpetBehavior> PURPLE_CARPET;
 
-    public static BlockType<BlockPurpleConcreteBehavior> PURPLE_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> PURPLE_CONCRETE;
 
-    public static BlockType<BlockPurpleConcretePowderBehavior> PURPLE_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> PURPLE_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> PURPLE_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> PURPLE_SHULKER_BOX;
 
-    public static BlockType<BlockPurpleStainedGlassBehavior> PURPLE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> PURPLE_STAINED_GLASS;
 
-    public static BlockType<BlockPurpleStainedGlassPaneBehavior> PURPLE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> PURPLE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> PURPLE_TERRACOTTA;
 
@@ -2649,25 +2253,25 @@ public final class BlockTypes {
 
     public static BlockType<BlockPurpurBlockBehavior> PURPUR_BLOCK;
 
-    public static BlockType<BlockPurpurDoubleSlabBehavior> PURPUR_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> PURPUR_DOUBLE_SLAB;
 
     public static BlockType<BlockPurpurPillarBehavior> PURPUR_PILLAR;
 
-    public static BlockType<BlockPurpurSlabBehavior> PURPUR_SLAB;
+    public static BlockType<BlockSlabBehavior> PURPUR_SLAB;
 
     public static BlockType<BlockStairsBehavior> PURPUR_STAIRS;
 
     public static BlockType<BlockQuartzBlockBehavior> QUARTZ_BLOCK;
 
-    public static BlockType<BlockQuartzBricksBehavior> QUARTZ_BRICKS;
+    public static BlockType<BlockBricksBehavior> QUARTZ_BRICKS;
 
-    public static BlockType<BlockQuartzDoubleSlabBehavior> QUARTZ_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> QUARTZ_DOUBLE_SLAB;
 
     public static BlockType<BlockQuartzOreBehavior> QUARTZ_ORE;
 
     public static BlockType<BlockQuartzPillarBehavior> QUARTZ_PILLAR;
 
-    public static BlockType<BlockQuartzSlabBehavior> QUARTZ_SLAB;
+    public static BlockType<BlockSlabBehavior> QUARTZ_SLAB;
 
     public static BlockType<BlockStairsBehavior> QUARTZ_STAIRS;
 
@@ -2679,15 +2283,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockRawIronBlockBehavior> RAW_IRON_BLOCK;
 
-    public static BlockType<BlockRedCandleBehavior> RED_CANDLE;
+    public static BlockType<BlockCandleBehavior> RED_CANDLE;
 
-    public static BlockType<BlockRedCandleCakeBehavior> RED_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> RED_CANDLE_CAKE;
 
-    public static BlockType<BlockRedCarpetBehavior> RED_CARPET;
+    public static BlockType<BlockCarpetBehavior> RED_CARPET;
 
-    public static BlockType<BlockRedConcreteBehavior> RED_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> RED_CONCRETE;
 
-    public static BlockType<BlockRedConcretePowderBehavior> RED_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> RED_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> RED_GLAZED_TERRACOTTA;
 
@@ -2697,9 +2301,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockRedNetherBrickBehavior> RED_NETHER_BRICK;
 
-    public static BlockType<BlockRedNetherBrickDoubleSlabBehavior> RED_NETHER_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> RED_NETHER_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockRedNetherBrickSlabBehavior> RED_NETHER_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> RED_NETHER_BRICK_SLAB;
 
     public static BlockType<BlockStairsBehavior> RED_NETHER_BRICK_STAIRS;
 
@@ -2709,9 +2313,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockRedSandstoneBehavior> RED_SANDSTONE;
 
-    public static BlockType<BlockRedSandstoneDoubleSlabBehavior> RED_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> RED_SANDSTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockRedSandstoneSlabBehavior> RED_SANDSTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> RED_SANDSTONE_SLAB;
 
     public static BlockType<BlockStairsBehavior> RED_SANDSTONE_STAIRS;
 
@@ -2719,9 +2323,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockShulkerBoxBehavior> RED_SHULKER_BOX;
 
-    public static BlockType<BlockRedStainedGlassBehavior> RED_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> RED_STAINED_GLASS;
 
-    public static BlockType<BlockRedStainedGlassPaneBehavior> RED_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> RED_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> RED_TERRACOTTA;
 
@@ -2755,9 +2359,9 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> SANDSTONE;
 
-    public static BlockType<BlockSandstoneDoubleSlabBehavior> SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> SANDSTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockSandstoneSlabBehavior> SANDSTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> SANDSTONE_SLAB;
 
     public static BlockType<BlockStairsBehavior> SANDSTONE_STAIRS;
 
@@ -2787,7 +2391,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTerracottaBehavior> SILVER_GLAZED_TERRACOTTA;
 
-    public static BlockType<BlockSkeletonSkullBehavior> SKELETON_SKULL;
+    public static BlockType<BlockHeadBehavior> SKELETON_SKULL;
 
     public static BlockType<BlockSlimeBehavior> SLIME;
 
@@ -2803,33 +2407,33 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmoothQuartzBehavior> SMOOTH_QUARTZ;
 
-    public static BlockType<BlockSmoothQuartzDoubleSlabBehavior> SMOOTH_QUARTZ_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> SMOOTH_QUARTZ_DOUBLE_SLAB;
 
-    public static BlockType<BlockSmoothQuartzSlabBehavior> SMOOTH_QUARTZ_SLAB;
+    public static BlockType<BlockSlabBehavior> SMOOTH_QUARTZ_SLAB;
 
     public static BlockType<BlockStairsBehavior> SMOOTH_QUARTZ_STAIRS;
 
     public static BlockType<BlockSmoothRedSandstoneBehavior> SMOOTH_RED_SANDSTONE;
 
-    public static BlockType<BlockSmoothRedSandstoneDoubleSlabBehavior> SMOOTH_RED_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> SMOOTH_RED_SANDSTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockSmoothRedSandstoneSlabBehavior> SMOOTH_RED_SANDSTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> SMOOTH_RED_SANDSTONE_SLAB;
 
     public static BlockType<BlockStairsBehavior> SMOOTH_RED_SANDSTONE_STAIRS;
 
     public static BlockType<BlockSmoothSandstoneBehavior> SMOOTH_SANDSTONE;
 
-    public static BlockType<BlockSmoothSandstoneDoubleSlabBehavior> SMOOTH_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> SMOOTH_SANDSTONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockSmoothSandstoneSlabBehavior> SMOOTH_SANDSTONE_SLAB;
+    public static BlockType<BlockSlabBehavior> SMOOTH_SANDSTONE_SLAB;
 
     public static BlockType<BlockStairsBehavior> SMOOTH_SANDSTONE_STAIRS;
 
     public static BlockType<BlockSmoothStoneBehavior> SMOOTH_STONE;
 
-    public static BlockType<BlockSmoothStoneDoubleSlabBehavior> SMOOTH_STONE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> SMOOTH_STONE_DOUBLE_SLAB;
 
-    public static BlockType<BlockSmoothStoneSlabBehavior> SMOOTH_STONE_SLAB;
+    public static BlockType<BlockSlabBehavior> SMOOTH_STONE_SLAB;
 
     public static BlockType<BlockSnifferEggBehavior> SNIFFER_EGG;
 
@@ -2857,11 +2461,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> SPRUCE_DOOR;
 
-    public static BlockType<BlockSpruceDoubleSlabBehavior> SPRUCE_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> SPRUCE_DOUBLE_SLAB;
 
-    public static BlockType<BlockSpruceFenceBehavior> SPRUCE_FENCE;
+    public static BlockType<BlockFenceBehavior> SPRUCE_FENCE;
 
-    public static BlockType<BlockSpruceFenceGateBehavior> SPRUCE_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> SPRUCE_FENCE_GATE;
 
     public static BlockType<BlockHangingSignBehavior> SPRUCE_HANGING_SIGN;
 
@@ -2869,19 +2473,19 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> SPRUCE_LOG;
 
-    public static BlockType<BlockSprucePlanksBehavior> SPRUCE_PLANKS;
+    public static BlockType<BlockPlanksBehavior> SPRUCE_PLANKS;
 
     public static BlockType<BlockSprucePressurePlateBehavior> SPRUCE_PRESSURE_PLATE;
 
-    public static BlockType<BlockSpruceSaplingBehavior> SPRUCE_SAPLING;
+    public static BlockType<BlockSaplingBehavior> SPRUCE_SAPLING;
 
-    public static BlockType<BlockSpruceSlabBehavior> SPRUCE_SLAB;
+    public static BlockType<BlockSlabBehavior> SPRUCE_SLAB;
 
     public static BlockType<BlockStairsBehavior> SPRUCE_STAIRS;
 
     public static BlockType<BlockSignBehavior> SPRUCE_STANDING_SIGN;
 
-    public static BlockType<BlockSpruceTrapdoorBehavior> SPRUCE_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> SPRUCE_TRAPDOOR;
 
     public static BlockType<BlockSignBehavior> SPRUCE_WALL_SIGN;
 
@@ -2897,15 +2501,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockStoneBehavior> STONE;
 
-    public static BlockType<BlockStoneBrickDoubleSlabBehavior> STONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> STONE_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockStoneBrickSlabBehavior> STONE_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> STONE_BRICK_SLAB;
 
     public static BlockType<BlockStairsBehavior> STONE_BRICK_STAIRS;
 
     public static BlockType<BlockWallBehavior> STONE_BRICK_WALL;
 
-    public static BlockType<BlockStoneBricksBehavior> STONE_BRICKS;
+    public static BlockType<BlockBricksBehavior> STONE_BRICKS;
 
     public static BlockType<BlockButtonBehavior> STONE_BUTTON;
 
@@ -2975,7 +2579,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTargetBehavior> TARGET;
 
-    public static BlockType<BlockTintedGlassBehavior> TINTED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> TINTED_GLASS;
 
     public static BlockType<BlockTntBehavior> TNT;
 
@@ -2995,29 +2599,29 @@ public final class BlockTypes {
 
     public static BlockType<BlockTripwireHookBehavior> TRIPWIRE_HOOK;
 
-    public static BlockType<BlockTubeCoralBehavior> TUBE_CORAL;
+    public static BlockType<BlockCoralBehavior> TUBE_CORAL;
 
-    public static BlockType<BlockTubeCoralBlockBehavior> TUBE_CORAL_BLOCK;
+    public static BlockType<BlockCoralBlockBehavior> TUBE_CORAL_BLOCK;
 
-    public static BlockType<BlockTubeCoralFanBehavior> TUBE_CORAL_FAN;
+    public static BlockType<BlockCoralFanBehavior> TUBE_CORAL_FAN;
 
-    public static BlockType<BlockTubeCoralWallFanBehavior> TUBE_CORAL_WALL_FAN;
+    public static BlockType<BlockCoralWallFanBehavior> TUBE_CORAL_WALL_FAN;
 
     public static BlockType<BlockTuffBehavior> TUFF;
 
-    public static BlockType<BlockTuffBrickDoubleSlabBehavior> TUFF_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> TUFF_BRICK_DOUBLE_SLAB;
 
-    public static BlockType<BlockTuffBrickSlabBehavior> TUFF_BRICK_SLAB;
+    public static BlockType<BlockSlabBehavior> TUFF_BRICK_SLAB;
 
     public static BlockType<BlockStairsBehavior> TUFF_BRICK_STAIRS;
 
     public static BlockType<BlockWallBehavior> TUFF_BRICK_WALL;
 
-    public static BlockType<BlockTuffBricksBehavior> TUFF_BRICKS;
+    public static BlockType<BlockBricksBehavior> TUFF_BRICKS;
 
-    public static BlockType<BlockTuffDoubleSlabBehavior> TUFF_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> TUFF_DOUBLE_SLAB;
 
-    public static BlockType<BlockTuffSlabBehavior> TUFF_SLAB;
+    public static BlockType<BlockSlabBehavior> TUFF_SLAB;
 
     public static BlockType<BlockStairsBehavior> TUFF_STAIRS;
 
@@ -3055,11 +2659,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> WARPED_DOOR;
 
-    public static BlockType<BlockWarpedDoubleSlabBehavior> WARPED_DOUBLE_SLAB;
+    public static BlockType<BlockSlabBehavior> WARPED_DOUBLE_SLAB;
 
-    public static BlockType<BlockWarpedFenceBehavior> WARPED_FENCE;
+    public static BlockType<BlockFenceBehavior> WARPED_FENCE;
 
-    public static BlockType<BlockWarpedFenceGateBehavior> WARPED_FENCE_GATE;
+    public static BlockType<BlockFenceGateBehavior> WARPED_FENCE_GATE;
 
     public static BlockType<BlockWarpedFungusBehavior> WARPED_FUNGUS;
 
@@ -3069,13 +2673,13 @@ public final class BlockTypes {
 
     public static BlockType<BlockWarpedNyliumBehavior> WARPED_NYLIUM;
 
-    public static BlockType<BlockWarpedPlanksBehavior> WARPED_PLANKS;
+    public static BlockType<BlockPlanksBehavior> WARPED_PLANKS;
 
     public static BlockType<BlockWarpedPressurePlateBehavior> WARPED_PRESSURE_PLATE;
 
     public static BlockType<BlockWarpedRootsBehavior> WARPED_ROOTS;
 
-    public static BlockType<BlockWarpedSlabBehavior> WARPED_SLAB;
+    public static BlockType<BlockSlabBehavior> WARPED_SLAB;
 
     public static BlockType<BlockStairsBehavior> WARPED_STAIRS;
 
@@ -3083,7 +2687,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodBehavior> WARPED_STEM;
 
-    public static BlockType<BlockWarpedTrapdoorBehavior> WARPED_TRAPDOOR;
+    public static BlockType<BlockTrapdoorBehavior> WARPED_TRAPDOOR;
 
     public static BlockType<BlockSignBehavior> WARPED_WALL_SIGN;
 
@@ -3103,15 +2707,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockWaxedCopperGrateBehavior> WAXED_COPPER_GRATE;
 
-    public static BlockType<BlockWaxedCopperTrapdoorBehavior> WAXED_COPPER_TRAPDOOR;
+    public static BlockType<BlockCopperTrapdoorBehavior> WAXED_COPPER_TRAPDOOR;
 
     public static BlockType<BlockCopperBehavior> WAXED_CUT_COPPER;
 
-    public static BlockType<BlockWaxedCutCopperSlabBehavior> WAXED_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WAXED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockStairsBehavior> WAXED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockWaxedDoubleCutCopperSlabBehavior> WAXED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WAXED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WAXED_EXPOSED_CHISELED_COPPER;
 
@@ -3123,15 +2727,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockWaxedExposedCopperGrateBehavior> WAXED_EXPOSED_COPPER_GRATE;
 
-    public static BlockType<BlockWaxedExposedCopperTrapdoorBehavior> WAXED_EXPOSED_COPPER_TRAPDOOR;
+    public static BlockType<BlockCopperTrapdoorBehavior> WAXED_EXPOSED_COPPER_TRAPDOOR;
 
     public static BlockType<BlockCopperBehavior> WAXED_EXPOSED_CUT_COPPER;
 
-    public static BlockType<BlockWaxedExposedCutCopperSlabBehavior> WAXED_EXPOSED_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WAXED_EXPOSED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockStairsBehavior> WAXED_EXPOSED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockWaxedExposedDoubleCutCopperSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WAXED_OXIDIZED_CHISELED_COPPER;
 
@@ -3143,15 +2747,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockWaxedOxidizedCopperGrateBehavior> WAXED_OXIDIZED_COPPER_GRATE;
 
-    public static BlockType<BlockWaxedOxidizedCopperTrapdoorBehavior> WAXED_OXIDIZED_COPPER_TRAPDOOR;
+    public static BlockType<BlockCopperTrapdoorBehavior> WAXED_OXIDIZED_COPPER_TRAPDOOR;
 
     public static BlockType<BlockCopperBehavior> WAXED_OXIDIZED_CUT_COPPER;
 
-    public static BlockType<BlockWaxedOxidizedCutCopperSlabBehavior> WAXED_OXIDIZED_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WAXED_OXIDIZED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockStairsBehavior> WAXED_OXIDIZED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockWaxedOxidizedDoubleCutCopperSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WAXED_WEATHERED_CHISELED_COPPER;
 
@@ -3163,15 +2767,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockWaxedWeatheredCopperGrateBehavior> WAXED_WEATHERED_COPPER_GRATE;
 
-    public static BlockType<BlockWaxedWeatheredCopperTrapdoorBehavior> WAXED_WEATHERED_COPPER_TRAPDOOR;
+    public static BlockType<BlockCopperTrapdoorBehavior> WAXED_WEATHERED_COPPER_TRAPDOOR;
 
     public static BlockType<BlockCopperBehavior> WAXED_WEATHERED_CUT_COPPER;
 
-    public static BlockType<BlockWaxedWeatheredCutCopperSlabBehavior> WAXED_WEATHERED_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WAXED_WEATHERED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockStairsBehavior> WAXED_WEATHERED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockWaxedWeatheredDoubleCutCopperSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WEATHERED_CHISELED_COPPER;
 
@@ -3183,15 +2787,15 @@ public final class BlockTypes {
 
     public static BlockType<BlockWeatheredCopperGrateBehavior> WEATHERED_COPPER_GRATE;
 
-    public static BlockType<BlockWeatheredCopperTrapdoorBehavior> WEATHERED_COPPER_TRAPDOOR;
+    public static BlockType<BlockCopperTrapdoorBehavior> WEATHERED_COPPER_TRAPDOOR;
 
     public static BlockType<BlockCopperBehavior> WEATHERED_CUT_COPPER;
 
-    public static BlockType<BlockWeatheredCutCopperSlabBehavior> WEATHERED_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WEATHERED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockStairsBehavior> WEATHERED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockWeatheredDoubleCutCopperSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockWebBehavior> WEB;
 
@@ -3201,23 +2805,23 @@ public final class BlockTypes {
 
     public static BlockType<BlockWheatBehavior> WHEAT;
 
-    public static BlockType<BlockWhiteCandleBehavior> WHITE_CANDLE;
+    public static BlockType<BlockCandleBehavior> WHITE_CANDLE;
 
-    public static BlockType<BlockWhiteCandleCakeBehavior> WHITE_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> WHITE_CANDLE_CAKE;
 
-    public static BlockType<BlockWhiteCarpetBehavior> WHITE_CARPET;
+    public static BlockType<BlockCarpetBehavior> WHITE_CARPET;
 
-    public static BlockType<BlockWhiteConcreteBehavior> WHITE_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> WHITE_CONCRETE;
 
-    public static BlockType<BlockWhiteConcretePowderBehavior> WHITE_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> WHITE_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> WHITE_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> WHITE_SHULKER_BOX;
 
-    public static BlockType<BlockWhiteStainedGlassBehavior> WHITE_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> WHITE_STAINED_GLASS;
 
-    public static BlockType<BlockWhiteStainedGlassPaneBehavior> WHITE_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> WHITE_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> WHITE_TERRACOTTA;
 
@@ -3227,7 +2831,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockWitherRoseBehavior> WITHER_ROSE;
 
-    public static BlockType<BlockWitherSkeletonSkullBehavior> WITHER_SKELETON_SKULL;
+    public static BlockType<BlockHeadBehavior> WITHER_SKELETON_SKULL;
 
     public static BlockType<BlockButtonBehavior> WOODEN_BUTTON;
 
@@ -3235,27 +2839,27 @@ public final class BlockTypes {
 
     public static BlockType<BlockWoodenPressurePlateBehavior> WOODEN_PRESSURE_PLATE;
 
-    public static BlockType<BlockYellowCandleBehavior> YELLOW_CANDLE;
+    public static BlockType<BlockCandleBehavior> YELLOW_CANDLE;
 
-    public static BlockType<BlockYellowCandleCakeBehavior> YELLOW_CANDLE_CAKE;
+    public static BlockType<BlockCandleCakeBehavior> YELLOW_CANDLE_CAKE;
 
-    public static BlockType<BlockYellowCarpetBehavior> YELLOW_CARPET;
+    public static BlockType<BlockCarpetBehavior> YELLOW_CARPET;
 
-    public static BlockType<BlockYellowConcreteBehavior> YELLOW_CONCRETE;
+    public static BlockType<BlockConcreteBehavior> YELLOW_CONCRETE;
 
-    public static BlockType<BlockYellowConcretePowderBehavior> YELLOW_CONCRETE_POWDER;
+    public static BlockType<BlockConcretePowderBehavior> YELLOW_CONCRETE_POWDER;
 
     public static BlockType<BlockTerracottaBehavior> YELLOW_GLAZED_TERRACOTTA;
 
     public static BlockType<BlockShulkerBoxBehavior> YELLOW_SHULKER_BOX;
 
-    public static BlockType<BlockYellowStainedGlassBehavior> YELLOW_STAINED_GLASS;
+    public static BlockType<BlockStainedGlassBehavior> YELLOW_STAINED_GLASS;
 
-    public static BlockType<BlockYellowStainedGlassPaneBehavior> YELLOW_STAINED_GLASS_PANE;
+    public static BlockType<BlockStainedGlassBehavior> YELLOW_STAINED_GLASS_PANE;
 
     public static BlockType<BlockTerracottaBehavior> YELLOW_TERRACOTTA;
 
     public static BlockType<BlockWoolBehavior> YELLOW_WOOL;
 
-    public static BlockType<BlockZombieHeadBehavior> ZOMBIE_HEAD;
+    public static BlockType<BlockHeadBehavior> ZOMBIE_HEAD;
 }

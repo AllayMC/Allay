@@ -15,6 +15,5 @@ public class BlockChestBehaviorImpl extends BlockBehaviorImpl implements BlockCh
 
     public BlockChestBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);
-        ;
     }
 }

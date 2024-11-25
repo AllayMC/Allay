@@ -16,6 +16,5 @@ public class BlockBarrelBehaviorImpl extends BlockBehaviorImpl implements BlockB
     public BlockBarrelBehaviorImpl(
             List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);
-        ;
     }
 }

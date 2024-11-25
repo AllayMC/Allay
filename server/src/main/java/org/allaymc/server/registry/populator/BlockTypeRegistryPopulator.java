@@ -1,6 +1,7 @@
 package org.allaymc.server.registry.populator;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.server.block.type.BlockLootTable;
@@ -24,6 +25,6 @@ public class BlockTypeRegistryPopulator implements Runnable {
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockTypeInitializer.class);
         initializers.forEach(Utils::callInitializer);
         defaultInitializers.forEach(Utils::callInitializer);
-        log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADED, defaultInitializers.size()));
+        log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADED, BlockId.values().length));
     }
 }

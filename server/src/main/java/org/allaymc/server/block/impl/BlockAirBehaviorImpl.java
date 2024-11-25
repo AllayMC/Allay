@@ -9,6 +9,5 @@ import java.util.List;
 public class BlockAirBehaviorImpl extends BlockBehaviorImpl implements BlockAirBehavior {
     public BlockAirBehaviorImpl(List<ComponentProvider<? extends Component>> componentProviders) {
         super(componentProviders);
-        ;
     }
 }

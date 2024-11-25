@@ -38,6 +38,7 @@ import org.allaymc.server.block.impl.BlockBookshelfBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBorderBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBrewingStandBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBrickBlockBehaviorImpl;
+import org.allaymc.server.block.impl.BlockBricksBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBrownMushroomBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBrownMushroomBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockBubbleColumnBehaviorImpl;
@@ -49,6 +50,9 @@ import org.allaymc.server.block.impl.BlockCalciteBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCalibratedSculkSensorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCameraBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCampfireBehaviorImpl;
+import org.allaymc.server.block.impl.BlockCandleBehaviorImpl;
+import org.allaymc.server.block.impl.BlockCandleCakeBehaviorImpl;
+import org.allaymc.server.block.impl.BlockCarpetBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCarrotsBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCartographyTableBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCarvedPumpkinBehaviorImpl;
@@ -78,12 +82,19 @@ import org.allaymc.server.block.impl.BlockCocoaBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCommandBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockComposterBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCompoundCreatorBehaviorImpl;
+import org.allaymc.server.block.impl.BlockConcreteBehaviorImpl;
+import org.allaymc.server.block.impl.BlockConcretePowderBehaviorImpl;
 import org.allaymc.server.block.impl.BlockConduitBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperBulbBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperGrateBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCopperOreBehaviorImpl;
+import org.allaymc.server.block.impl.BlockCopperTrapdoorBehaviorImpl;
+import org.allaymc.server.block.impl.BlockCoralBehaviorImpl;
+import org.allaymc.server.block.impl.BlockCoralBlockBehaviorImpl;
+import org.allaymc.server.block.impl.BlockCoralFanBehaviorImpl;
+import org.allaymc.server.block.impl.BlockCoralWallFanBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCornflowerBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCrackedDeepslateTilesBehaviorImpl;
 import org.allaymc.server.block.impl.BlockCrafterBehaviorImpl;
@@ -136,6 +147,8 @@ import org.allaymc.server.block.impl.BlockEnderChestBehaviorImpl;
 import org.allaymc.server.block.impl.BlockExposedCopperBulbBehaviorImpl;
 import org.allaymc.server.block.impl.BlockExposedCopperGrateBehaviorImpl;
 import org.allaymc.server.block.impl.BlockFarmlandBehaviorImpl;
+import org.allaymc.server.block.impl.BlockFenceBehaviorImpl;
+import org.allaymc.server.block.impl.BlockFenceGateBehaviorImpl;
 import org.allaymc.server.block.impl.BlockFernBehaviorImpl;
 import org.allaymc.server.block.impl.BlockFireBehaviorImpl;
 import org.allaymc.server.block.impl.BlockFletchingTableBehaviorImpl;
@@ -160,6 +173,7 @@ import org.allaymc.server.block.impl.BlockGrindstoneBehaviorImpl;
 import org.allaymc.server.block.impl.BlockHangingRootsBehaviorImpl;
 import org.allaymc.server.block.impl.BlockHardenedClayBehaviorImpl;
 import org.allaymc.server.block.impl.BlockHayBlockBehaviorImpl;
+import org.allaymc.server.block.impl.BlockHeadBehaviorImpl;
 import org.allaymc.server.block.impl.BlockHeavyCoreBehaviorImpl;
 import org.allaymc.server.block.impl.BlockHeavyWeightedPressurePlateBehaviorImpl;
 import org.allaymc.server.block.impl.BlockHoneyBlockBehaviorImpl;
@@ -175,6 +189,7 @@ import org.allaymc.server.block.impl.BlockInvisibleBedrockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockIronBarsBehaviorImpl;
 import org.allaymc.server.block.impl.BlockIronBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockIronOreBehaviorImpl;
+import org.allaymc.server.block.impl.BlockIronTrapdoorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockJigsawBehaviorImpl;
 import org.allaymc.server.block.impl.BlockJukeboxBehaviorImpl;
 import org.allaymc.server.block.impl.BlockJunglePressurePlateBehaviorImpl;
@@ -188,6 +203,7 @@ import org.allaymc.server.block.impl.BlockLargeFernBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLeavesBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLecternBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLeverBehaviorImpl;
+import org.allaymc.server.block.impl.BlockLightBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLightWeightedPressurePlateBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLightningRodBehaviorImpl;
 import org.allaymc.server.block.impl.BlockLilacBehaviorImpl;
@@ -238,6 +254,7 @@ import org.allaymc.server.block.impl.BlockPinkPetalsBehaviorImpl;
 import org.allaymc.server.block.impl.BlockPinkTulipBehaviorImpl;
 import org.allaymc.server.block.impl.BlockPitcherCropBehaviorImpl;
 import org.allaymc.server.block.impl.BlockPitcherPlantBehaviorImpl;
+import org.allaymc.server.block.impl.BlockPlanksBehaviorImpl;
 import org.allaymc.server.block.impl.BlockPodzolBehaviorImpl;
 import org.allaymc.server.block.impl.BlockPointedDripstoneBehaviorImpl;
 import org.allaymc.server.block.impl.BlockPolishedAndesiteBehaviorImpl;
@@ -278,6 +295,7 @@ import org.allaymc.server.block.impl.BlockRepeatingCommandBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockReserved6BehaviorImpl;
 import org.allaymc.server.block.impl.BlockRespawnAnchorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockRoseBushBehaviorImpl;
+import org.allaymc.server.block.impl.BlockSaplingBehaviorImpl;
 import org.allaymc.server.block.impl.BlockScaffoldingBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSculkBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSculkCatalystBehaviorImpl;
@@ -290,6 +308,7 @@ import org.allaymc.server.block.impl.BlockSeagrassBehaviorImpl;
 import org.allaymc.server.block.impl.BlockShortGrassBehaviorImpl;
 import org.allaymc.server.block.impl.BlockShroomlightBehaviorImpl;
 import org.allaymc.server.block.impl.BlockShulkerBoxBehaviorImpl;
+import org.allaymc.server.block.impl.BlockSlabBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSlimeBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSmallDripleafBlockBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSmithingTableBehaviorImpl;
@@ -305,6 +324,7 @@ import org.allaymc.server.block.impl.BlockSoulLanternBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSoulSoilBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSporeBlossomBehaviorImpl;
 import org.allaymc.server.block.impl.BlockSprucePressurePlateBehaviorImpl;
+import org.allaymc.server.block.impl.BlockStainedGlassBehaviorImpl;
 import org.allaymc.server.block.impl.BlockStairsBehaviorImpl;
 import org.allaymc.server.block.impl.BlockStandingBannerBehaviorImpl;
 import org.allaymc.server.block.impl.BlockStoneBehaviorImpl;
@@ -319,6 +339,7 @@ import org.allaymc.server.block.impl.BlockSweetBerryBushBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTallGrassBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTargetBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTerracottaBehaviorImpl;
+import org.allaymc.server.block.impl.BlockTrapdoorBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTrappedChestBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTrialSpawnerBehaviorImpl;
 import org.allaymc.server.block.impl.BlockTripWireBehaviorImpl;
@@ -361,223 +382,18 @@ import org.allaymc.server.block.impl.BlockWoolBehaviorImpl;
 import org.allaymc.server.block.impl.amethystbud.BlockLargeAmethystBudBehaviorImpl;
 import org.allaymc.server.block.impl.amethystbud.BlockMediumAmethystBudBehaviorImpl;
 import org.allaymc.server.block.impl.amethystbud.BlockSmallAmethystBudBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockChiseledNetherBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockChiseledStoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockChiseledTuffBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockCrackedDeepslateBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockCrackedNetherBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockCrackedPolishedBlackstoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockCrackedStoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockDeepslateBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockEndBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockInfestedChiseledStoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockInfestedCrackedStoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockInfestedMossyStoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockInfestedStoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockMossyStoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockMudBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockPolishedBlackstoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockPrismarineBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockQuartzBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockStoneBricksBehaviorImpl;
-import org.allaymc.server.block.impl.bricks.BlockTuffBricksBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockBlackCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockBlueCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockBrownCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockCyanCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockGrayCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockGreenCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockLightBlueCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockLightGrayCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockLimeCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockMagentaCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockOrangeCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockPinkCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockPurpleCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockRedCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockWhiteCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candle.BlockYellowCandleBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockBlackCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockBlueCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockBrownCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockCyanCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockGrayCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockGreenCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockLightBlueCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockLightGrayCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockLimeCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockMagentaCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockOrangeCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockPinkCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockPurpleCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockRedCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockWhiteCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.candlecake.BlockYellowCandleCakeBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockBlackCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockBlueCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockBrownCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockCyanCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockGrayCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockGreenCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockLightBlueCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockLightGrayCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockLimeCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockMagentaCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockMossCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockOrangeCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockPinkCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockPurpleCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockRedCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockWhiteCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.carpet.BlockYellowCarpetBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockBlackConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockBlueConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockBrownConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockCyanConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockGrayConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockGreenConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockLightBlueConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockLightGrayConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockLimeConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockMagentaConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockOrangeConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockPinkConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockPurpleConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockRedConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockWhiteConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concrete.BlockYellowConcreteBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockBlackConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockBlueConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockBrownConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockCyanConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockGrayConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockGreenConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockLightBlueConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockLightGrayConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockLimeConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockMagentaConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockOrangeConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockPinkConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockPurpleConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockRedConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockWhiteConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.concretepowder.BlockYellowConcretePowderBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockBrainCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockBubbleCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockDeadBrainCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockDeadBubbleCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockDeadFireCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockDeadHornCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockDeadTubeCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockFireCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockHornCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coral.BlockTubeCoralBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockBrainCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockBubbleCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockDeadBrainCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockDeadBubbleCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockDeadFireCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockDeadHornCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockDeadTubeCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockFireCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockHornCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralblock.BlockTubeCoralBlockBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockBrainCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockBubbleCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockDeadBrainCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockDeadBubbleCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockDeadFireCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockDeadHornCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockDeadTubeCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockFireCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockHornCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralfan.BlockTubeCoralFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockBrainCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockBubbleCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockDeadBrainCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockDeadBubbleCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockDeadFireCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockDeadHornCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockDeadTubeCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockFireCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockHornCoralWallFanBehaviorImpl;
-import org.allaymc.server.block.impl.coralwallfan.BlockTubeCoralWallFanBehaviorImpl;
 import org.allaymc.server.block.impl.dirt.BlockCoarseDirtBehaviorImpl;
 import org.allaymc.server.block.impl.dirt.BlockDirtBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockCopperDoorBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockDoorBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockIronDoorBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockAcaciaFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockBambooFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockBirchFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockCherryFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockCrimsonFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockDarkOakFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockJungleFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockMangroveFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockNetherBrickFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockOakFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockSpruceFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fence.BlockWarpedFenceBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockAcaciaFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockBambooFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockBirchFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockCherryFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockCrimsonFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockDarkOakFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockJungleFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockMangroveFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockSpruceFenceGateBehaviorImpl;
-import org.allaymc.server.block.impl.fencegate.BlockWarpedFenceGateBehaviorImpl;
 import org.allaymc.server.block.impl.furnace.BlockBlastFurnaceBehaviorImpl;
 import org.allaymc.server.block.impl.furnace.BlockFurnaceBehaviorImpl;
 import org.allaymc.server.block.impl.furnace.BlockSmokerBehaviorImpl;
-import org.allaymc.server.block.impl.glass.BlockGlassBehaviorImpl;
-import org.allaymc.server.block.impl.glass.BlockHardGlassBehaviorImpl;
-import org.allaymc.server.block.impl.glass.BlockTintedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.glasspane.BlockGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.glasspane.BlockHardGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.head.BlockCreeperHeadBehaviorImpl;
-import org.allaymc.server.block.impl.head.BlockDragonHeadBehaviorImpl;
-import org.allaymc.server.block.impl.head.BlockPiglinHeadBehaviorImpl;
-import org.allaymc.server.block.impl.head.BlockPlayerHeadBehaviorImpl;
-import org.allaymc.server.block.impl.head.BlockSkeletonSkullBehaviorImpl;
-import org.allaymc.server.block.impl.head.BlockWitherSkeletonSkullBehaviorImpl;
-import org.allaymc.server.block.impl.head.BlockZombieHeadBehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock0BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock10BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock11BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock12BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock13BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock14BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock15BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock1BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock2BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock3BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock4BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock5BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock6BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock7BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock8BehaviorImpl;
-import org.allaymc.server.block.impl.lightblock.BlockLightBlock9BehaviorImpl;
 import org.allaymc.server.block.impl.piston.BlockPistonArmCollisionBehaviorImpl;
 import org.allaymc.server.block.impl.piston.BlockPistonBehaviorImpl;
 import org.allaymc.server.block.impl.piston.BlockStickyPistonArmCollisionBehaviorImpl;
 import org.allaymc.server.block.impl.piston.BlockStickyPistonBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockAcaciaPlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockBambooPlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockBirchPlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockCherryPlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockCrimsonPlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockDarkOakPlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockJunglePlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockMangrovePlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockOakPlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockSprucePlanksBehaviorImpl;
-import org.allaymc.server.block.impl.planks.BlockWarpedPlanksBehaviorImpl;
 import org.allaymc.server.block.impl.purpur.BlockPurpurBlockBehaviorImpl;
 import org.allaymc.server.block.impl.purpur.BlockPurpurPillarBehaviorImpl;
 import org.allaymc.server.block.impl.sand.BlockRedSandBehaviorImpl;
@@ -592,202 +408,10 @@ import org.allaymc.server.block.impl.sandstone.BlockRedSandstoneBehaviorImpl;
 import org.allaymc.server.block.impl.sandstone.BlockSandstoneBehaviorImpl;
 import org.allaymc.server.block.impl.sandstone.BlockSmoothRedSandstoneBehaviorImpl;
 import org.allaymc.server.block.impl.sandstone.BlockSmoothSandstoneBehaviorImpl;
-import org.allaymc.server.block.impl.sapling.BlockAcaciaSaplingBehaviorImpl;
-import org.allaymc.server.block.impl.sapling.BlockBambooSaplingBehaviorImpl;
-import org.allaymc.server.block.impl.sapling.BlockBirchSaplingBehaviorImpl;
-import org.allaymc.server.block.impl.sapling.BlockCherrySaplingBehaviorImpl;
-import org.allaymc.server.block.impl.sapling.BlockDarkOakSaplingBehaviorImpl;
-import org.allaymc.server.block.impl.sapling.BlockJungleSaplingBehaviorImpl;
-import org.allaymc.server.block.impl.sapling.BlockOakSaplingBehaviorImpl;
-import org.allaymc.server.block.impl.sapling.BlockSpruceSaplingBehaviorImpl;
 import org.allaymc.server.block.impl.sign.BlockHangingSignBehaviorImpl;
 import org.allaymc.server.block.impl.sign.BlockSignBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockAcaciaDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockAcaciaSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockAndesiteDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockAndesiteSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBambooDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBambooMosaicDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBambooMosaicSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBambooSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBirchDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBirchSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBlackstoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBlackstoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCherryDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCherrySlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCobbledDeepslateDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCobbledDeepslateSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCobblestoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCobblestoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCrimsonDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCrimsonSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCutRedSandstoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCutRedSandstoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCutSandstoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockCutSandstoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDarkOakDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDarkOakSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDarkPrismarineDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDarkPrismarineSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDeepslateBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDeepslateBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDeepslateTileDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDeepslateTileSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDioriteDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDioriteSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockDoubleCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockEndStoneBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockEndStoneBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockExposedCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockExposedDoubleCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockGraniteDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockGraniteSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockJungleDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockJungleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockMangroveDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockMangroveSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockMossyCobblestoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockMossyCobblestoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockMossyStoneBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockMossyStoneBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockMudBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockMudBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockNetherBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockNetherBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockNormalStoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockNormalStoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockOakDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockOakSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockOxidizedCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockOxidizedDoubleCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPetrifiedOakDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPetrifiedOakSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedAndesiteDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedAndesiteSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedBlackstoneBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedBlackstoneBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedBlackstoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedBlackstoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedDeepslateDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedDeepslateSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedDioriteDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedDioriteSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedGraniteDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedGraniteSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedTuffDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPolishedTuffSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPrismarineBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPrismarineBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPrismarineDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPrismarineSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPurpurDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockPurpurSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockQuartzDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockQuartzSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockRedNetherBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockRedNetherBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockRedSandstoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockRedSandstoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSandstoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSandstoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSmoothQuartzDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSmoothQuartzSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSmoothRedSandstoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSmoothRedSandstoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSmoothSandstoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSmoothSandstoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSmoothStoneDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSmoothStoneSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSpruceDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockSpruceSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockStoneBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockStoneBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockTuffBrickDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockTuffBrickSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockTuffDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockTuffSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWarpedDoubleSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWarpedSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWaxedCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWaxedDoubleCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWaxedExposedCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWaxedExposedDoubleCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWaxedOxidizedCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWaxedOxidizedDoubleCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWaxedWeatheredCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWaxedWeatheredDoubleCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWeatheredCutCopperSlabBehaviorImpl;
-import org.allaymc.server.block.impl.slab.BlockWeatheredDoubleCutCopperSlabBehaviorImpl;
 import org.allaymc.server.block.impl.sponge.BlockSpongeBehaviorImpl;
 import org.allaymc.server.block.impl.sponge.BlockWetSpongeBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockBlackStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockBlueStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockBrownStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockCyanStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockGrayStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockGreenStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardBlackStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardBlueStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardBrownStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardCyanStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardGrayStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardGreenStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardLightBlueStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardLightGrayStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardLimeStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardMagentaStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardOrangeStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardPinkStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardPurpleStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardRedStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardWhiteStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockHardYellowStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockLightBlueStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockLightGrayStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockLimeStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockMagentaStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockOrangeStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockPinkStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockPurpleStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockRedStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockWhiteStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglass.BlockYellowStainedGlassBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockBlackStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockBlueStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockBrownStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockCyanStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockGrayStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockGreenStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardBlackStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardBlueStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardBrownStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardCyanStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardGrayStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardGreenStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardLightBlueStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardLightGrayStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardLimeStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardMagentaStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardOrangeStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardPinkStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardPurpleStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardRedStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardWhiteStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockHardYellowStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockLightBlueStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockLightGrayStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockLimeStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockMagentaStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockOrangeStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockPinkStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockPurpleStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockRedStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockWhiteStainedGlassPaneBehaviorImpl;
-import org.allaymc.server.block.impl.stainedglasspane.BlockYellowStainedGlassPaneBehaviorImpl;
 import org.allaymc.server.block.impl.tnt.BlockTntBehaviorImpl;
 import org.allaymc.server.block.impl.tnt.BlockUnderwaterTntBehaviorImpl;
 import org.allaymc.server.block.impl.torch.BlockColoredTorchBehaviorImpl;
@@ -797,26 +421,6 @@ import org.allaymc.server.block.impl.torch.BlockTorchBehaviorImpl;
 import org.allaymc.server.block.impl.torch.BlockUnderwaterTorchBehaviorImpl;
 import org.allaymc.server.block.impl.torchflower.BlockTorchflowerBehaviorImpl;
 import org.allaymc.server.block.impl.torchflower.BlockTorchflowerCropBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockAcaciaTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockBambooTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockBirchTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockCherryTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockCopperTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockCrimsonTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockDarkOakTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockExposedCopperTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockIronTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockJungleTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockMangroveTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockOxidizedCopperTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockSpruceTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockWarpedTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockWaxedCopperTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockWaxedExposedCopperTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockWaxedOxidizedCopperTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockWaxedWeatheredCopperTrapdoorBehaviorImpl;
-import org.allaymc.server.block.impl.trapdoor.BlockWeatheredCopperTrapdoorBehaviorImpl;
 
 /**
  * Automatically generated by {@code org.allaymc.codegen.BlockInterfaceGen}
@@ -843,7 +447,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAcaciaDoubleSlab() {
         if (BlockTypes.ACACIA_DOUBLE_SLAB != null) return;
         BlockTypes.ACACIA_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockAcaciaDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.ACACIA_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -852,7 +456,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAcaciaFence() {
         if (BlockTypes.ACACIA_FENCE != null) return;
         BlockTypes.ACACIA_FENCE = AllayBlockType
-                .builder(BlockAcaciaFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.ACACIA_FENCE)
                 .build();
     }
@@ -860,7 +464,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAcaciaFenceGate() {
         if (BlockTypes.ACACIA_FENCE_GATE != null) return;
         BlockTypes.ACACIA_FENCE_GATE = AllayBlockType
-                .builder(BlockAcaciaFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.ACACIA_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -896,7 +500,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAcaciaPlanks() {
         if (BlockTypes.ACACIA_PLANKS != null) return;
         BlockTypes.ACACIA_PLANKS = AllayBlockType
-                .builder(BlockAcaciaPlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.ACACIA_PLANKS)
                 .build();
     }
@@ -913,7 +517,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAcaciaSapling() {
         if (BlockTypes.ACACIA_SAPLING != null) return;
         BlockTypes.ACACIA_SAPLING = AllayBlockType
-                .builder(BlockAcaciaSaplingBehaviorImpl.class)
+                .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.ACACIA_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .build();
@@ -922,7 +526,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAcaciaSlab() {
         if (BlockTypes.ACACIA_SLAB != null) return;
         BlockTypes.ACACIA_SLAB = AllayBlockType
-                .builder(BlockAcaciaSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.ACACIA_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -949,7 +553,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAcaciaTrapdoor() {
         if (BlockTypes.ACACIA_TRAPDOOR != null) return;
         BlockTypes.ACACIA_TRAPDOOR = AllayBlockType
-                .builder(BlockAcaciaTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.ACACIA_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -1042,7 +646,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAndesiteDoubleSlab() {
         if (BlockTypes.ANDESITE_DOUBLE_SLAB != null) return;
         BlockTypes.ANDESITE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockAndesiteDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.ANDESITE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1051,7 +655,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initAndesiteSlab() {
         if (BlockTypes.ANDESITE_SLAB != null) return;
         BlockTypes.ANDESITE_SLAB = AllayBlockType
-                .builder(BlockAndesiteSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.ANDESITE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1157,7 +761,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBambooDoubleSlab() {
         if (BlockTypes.BAMBOO_DOUBLE_SLAB != null) return;
         BlockTypes.BAMBOO_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockBambooDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1166,7 +770,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBambooFence() {
         if (BlockTypes.BAMBOO_FENCE != null) return;
         BlockTypes.BAMBOO_FENCE = AllayBlockType
-                .builder(BlockBambooFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_FENCE)
                 .build();
     }
@@ -1174,7 +778,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBambooFenceGate() {
         if (BlockTypes.BAMBOO_FENCE_GATE != null) return;
         BlockTypes.BAMBOO_FENCE_GATE = AllayBlockType
-                .builder(BlockBambooFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -1200,7 +804,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBambooMosaicDoubleSlab() {
         if (BlockTypes.BAMBOO_MOSAIC_DOUBLE_SLAB != null) return;
         BlockTypes.BAMBOO_MOSAIC_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockBambooMosaicDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_MOSAIC_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1209,7 +813,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBambooMosaicSlab() {
         if (BlockTypes.BAMBOO_MOSAIC_SLAB != null) return;
         BlockTypes.BAMBOO_MOSAIC_SLAB = AllayBlockType
-                .builder(BlockBambooMosaicSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_MOSAIC_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1227,7 +831,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBambooPlanks() {
         if (BlockTypes.BAMBOO_PLANKS != null) return;
         BlockTypes.BAMBOO_PLANKS = AllayBlockType
-                .builder(BlockBambooPlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_PLANKS)
                 .build();
     }
@@ -1244,7 +848,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBambooSapling() {
         if (BlockTypes.BAMBOO_SAPLING != null) return;
         BlockTypes.BAMBOO_SAPLING = AllayBlockType
-                .builder(BlockBambooSaplingBehaviorImpl.class)
+                .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .build();
@@ -1253,7 +857,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBambooSlab() {
         if (BlockTypes.BAMBOO_SLAB != null) return;
         BlockTypes.BAMBOO_SLAB = AllayBlockType
-                .builder(BlockBambooSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1280,7 +884,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBambooTrapdoor() {
         if (BlockTypes.BAMBOO_TRAPDOOR != null) return;
         BlockTypes.BAMBOO_TRAPDOOR = AllayBlockType
-                .builder(BlockBambooTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.BAMBOO_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -1413,7 +1017,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBirchDoubleSlab() {
         if (BlockTypes.BIRCH_DOUBLE_SLAB != null) return;
         BlockTypes.BIRCH_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockBirchDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1422,7 +1026,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBirchFence() {
         if (BlockTypes.BIRCH_FENCE != null) return;
         BlockTypes.BIRCH_FENCE = AllayBlockType
-                .builder(BlockBirchFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_FENCE)
                 .build();
     }
@@ -1430,7 +1034,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBirchFenceGate() {
         if (BlockTypes.BIRCH_FENCE_GATE != null) return;
         BlockTypes.BIRCH_FENCE_GATE = AllayBlockType
-                .builder(BlockBirchFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -1466,7 +1070,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBirchPlanks() {
         if (BlockTypes.BIRCH_PLANKS != null) return;
         BlockTypes.BIRCH_PLANKS = AllayBlockType
-                .builder(BlockBirchPlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_PLANKS)
                 .build();
     }
@@ -1483,7 +1087,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBirchSapling() {
         if (BlockTypes.BIRCH_SAPLING != null) return;
         BlockTypes.BIRCH_SAPLING = AllayBlockType
-                .builder(BlockBirchSaplingBehaviorImpl.class)
+                .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .build();
@@ -1492,7 +1096,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBirchSlab() {
         if (BlockTypes.BIRCH_SLAB != null) return;
         BlockTypes.BIRCH_SLAB = AllayBlockType
-                .builder(BlockBirchSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1519,7 +1123,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBirchTrapdoor() {
         if (BlockTypes.BIRCH_TRAPDOOR != null) return;
         BlockTypes.BIRCH_TRAPDOOR = AllayBlockType
-                .builder(BlockBirchTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.BIRCH_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -1546,7 +1150,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackCandle() {
         if (BlockTypes.BLACK_CANDLE != null) return;
         BlockTypes.BLACK_CANDLE = AllayBlockType
-                .builder(BlockBlackCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -1555,7 +1159,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackCandleCake() {
         if (BlockTypes.BLACK_CANDLE_CAKE != null) return;
         BlockTypes.BLACK_CANDLE_CAKE = AllayBlockType
-                .builder(BlockBlackCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -1564,7 +1168,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackCarpet() {
         if (BlockTypes.BLACK_CARPET != null) return;
         BlockTypes.BLACK_CARPET = AllayBlockType
-                .builder(BlockBlackCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_CARPET)
                 .build();
     }
@@ -1572,7 +1176,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackConcrete() {
         if (BlockTypes.BLACK_CONCRETE != null) return;
         BlockTypes.BLACK_CONCRETE = AllayBlockType
-                .builder(BlockBlackConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_CONCRETE)
                 .build();
     }
@@ -1580,7 +1184,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackConcretePowder() {
         if (BlockTypes.BLACK_CONCRETE_POWDER != null) return;
         BlockTypes.BLACK_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockBlackConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_CONCRETE_POWDER)
                 .build();
     }
@@ -1605,7 +1209,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackStainedGlass() {
         if (BlockTypes.BLACK_STAINED_GLASS != null) return;
         BlockTypes.BLACK_STAINED_GLASS = AllayBlockType
-                .builder(BlockBlackStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_STAINED_GLASS)
                 .build();
     }
@@ -1613,7 +1217,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackStainedGlassPane() {
         if (BlockTypes.BLACK_STAINED_GLASS_PANE != null) return;
         BlockTypes.BLACK_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockBlackStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACK_STAINED_GLASS_PANE)
                 .build();
     }
@@ -1645,7 +1249,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackstoneDoubleSlab() {
         if (BlockTypes.BLACKSTONE_DOUBLE_SLAB != null) return;
         BlockTypes.BLACKSTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockBlackstoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACKSTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1654,7 +1258,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlackstoneSlab() {
         if (BlockTypes.BLACKSTONE_SLAB != null) return;
         BlockTypes.BLACKSTONE_SLAB = AllayBlockType
-                .builder(BlockBlackstoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLACKSTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1690,7 +1294,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlueCandle() {
         if (BlockTypes.BLUE_CANDLE != null) return;
         BlockTypes.BLUE_CANDLE = AllayBlockType
-                .builder(BlockBlueCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -1699,7 +1303,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlueCandleCake() {
         if (BlockTypes.BLUE_CANDLE_CAKE != null) return;
         BlockTypes.BLUE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockBlueCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -1708,7 +1312,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlueCarpet() {
         if (BlockTypes.BLUE_CARPET != null) return;
         BlockTypes.BLUE_CARPET = AllayBlockType
-                .builder(BlockBlueCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_CARPET)
                 .build();
     }
@@ -1716,7 +1320,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlueConcrete() {
         if (BlockTypes.BLUE_CONCRETE != null) return;
         BlockTypes.BLUE_CONCRETE = AllayBlockType
-                .builder(BlockBlueConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_CONCRETE)
                 .build();
     }
@@ -1724,7 +1328,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlueConcretePowder() {
         if (BlockTypes.BLUE_CONCRETE_POWDER != null) return;
         BlockTypes.BLUE_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockBlueConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_CONCRETE_POWDER)
                 .build();
     }
@@ -1765,7 +1369,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlueStainedGlass() {
         if (BlockTypes.BLUE_STAINED_GLASS != null) return;
         BlockTypes.BLUE_STAINED_GLASS = AllayBlockType
-                .builder(BlockBlueStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_STAINED_GLASS)
                 .build();
     }
@@ -1773,7 +1377,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBlueStainedGlassPane() {
         if (BlockTypes.BLUE_STAINED_GLASS_PANE != null) return;
         BlockTypes.BLUE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockBlueStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.BLUE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -1823,7 +1427,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrainCoral() {
         if (BlockTypes.BRAIN_CORAL != null) return;
         BlockTypes.BRAIN_CORAL = AllayBlockType
-                .builder(BlockBrainCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.BRAIN_CORAL)
                 .build();
     }
@@ -1831,7 +1435,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrainCoralBlock() {
         if (BlockTypes.BRAIN_CORAL_BLOCK != null) return;
         BlockTypes.BRAIN_CORAL_BLOCK = AllayBlockType
-                .builder(BlockBrainCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.BRAIN_CORAL_BLOCK)
                 .build();
     }
@@ -1839,7 +1443,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrainCoralFan() {
         if (BlockTypes.BRAIN_CORAL_FAN != null) return;
         BlockTypes.BRAIN_CORAL_FAN = AllayBlockType
-                .builder(BlockBrainCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.BRAIN_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -1848,7 +1452,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrainCoralWallFan() {
         if (BlockTypes.BRAIN_CORAL_WALL_FAN != null) return;
         BlockTypes.BRAIN_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockBrainCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.BRAIN_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -1874,7 +1478,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrickDoubleSlab() {
         if (BlockTypes.BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1883,7 +1487,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrickSlab() {
         if (BlockTypes.BRICK_SLAB != null) return;
         BlockTypes.BRICK_SLAB = AllayBlockType
-                .builder(BlockBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -1910,7 +1514,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrownCandle() {
         if (BlockTypes.BROWN_CANDLE != null) return;
         BlockTypes.BROWN_CANDLE = AllayBlockType
-                .builder(BlockBrownCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -1919,7 +1523,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrownCandleCake() {
         if (BlockTypes.BROWN_CANDLE_CAKE != null) return;
         BlockTypes.BROWN_CANDLE_CAKE = AllayBlockType
-                .builder(BlockBrownCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -1928,7 +1532,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrownCarpet() {
         if (BlockTypes.BROWN_CARPET != null) return;
         BlockTypes.BROWN_CARPET = AllayBlockType
-                .builder(BlockBrownCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_CARPET)
                 .build();
     }
@@ -1936,7 +1540,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrownConcrete() {
         if (BlockTypes.BROWN_CONCRETE != null) return;
         BlockTypes.BROWN_CONCRETE = AllayBlockType
-                .builder(BlockBrownConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_CONCRETE)
                 .build();
     }
@@ -1944,7 +1548,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrownConcretePowder() {
         if (BlockTypes.BROWN_CONCRETE_POWDER != null) return;
         BlockTypes.BROWN_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockBrownConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_CONCRETE_POWDER)
                 .build();
     }
@@ -1986,7 +1590,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrownStainedGlass() {
         if (BlockTypes.BROWN_STAINED_GLASS != null) return;
         BlockTypes.BROWN_STAINED_GLASS = AllayBlockType
-                .builder(BlockBrownStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_STAINED_GLASS)
                 .build();
     }
@@ -1994,7 +1598,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBrownStainedGlassPane() {
         if (BlockTypes.BROWN_STAINED_GLASS_PANE != null) return;
         BlockTypes.BROWN_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockBrownStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.BROWN_STAINED_GLASS_PANE)
                 .build();
     }
@@ -2027,7 +1631,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBubbleCoral() {
         if (BlockTypes.BUBBLE_CORAL != null) return;
         BlockTypes.BUBBLE_CORAL = AllayBlockType
-                .builder(BlockBubbleCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.BUBBLE_CORAL)
                 .build();
     }
@@ -2035,7 +1639,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBubbleCoralBlock() {
         if (BlockTypes.BUBBLE_CORAL_BLOCK != null) return;
         BlockTypes.BUBBLE_CORAL_BLOCK = AllayBlockType
-                .builder(BlockBubbleCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.BUBBLE_CORAL_BLOCK)
                 .build();
     }
@@ -2043,7 +1647,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBubbleCoralFan() {
         if (BlockTypes.BUBBLE_CORAL_FAN != null) return;
         BlockTypes.BUBBLE_CORAL_FAN = AllayBlockType
-                .builder(BlockBubbleCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.BUBBLE_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -2052,7 +1656,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initBubbleCoralWallFan() {
         if (BlockTypes.BUBBLE_CORAL_WALL_FAN != null) return;
         BlockTypes.BUBBLE_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockBubbleCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.BUBBLE_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -2245,7 +1849,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCherryDoubleSlab() {
         if (BlockTypes.CHERRY_DOUBLE_SLAB != null) return;
         BlockTypes.CHERRY_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockCherryDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHERRY_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -2254,7 +1858,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCherryFence() {
         if (BlockTypes.CHERRY_FENCE != null) return;
         BlockTypes.CHERRY_FENCE = AllayBlockType
-                .builder(BlockCherryFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHERRY_FENCE)
                 .build();
     }
@@ -2262,7 +1866,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCherryFenceGate() {
         if (BlockTypes.CHERRY_FENCE_GATE != null) return;
         BlockTypes.CHERRY_FENCE_GATE = AllayBlockType
-                .builder(BlockCherryFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHERRY_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -2298,7 +1902,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCherryPlanks() {
         if (BlockTypes.CHERRY_PLANKS != null) return;
         BlockTypes.CHERRY_PLANKS = AllayBlockType
-                .builder(BlockCherryPlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHERRY_PLANKS)
                 .build();
     }
@@ -2315,7 +1919,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCherrySapling() {
         if (BlockTypes.CHERRY_SAPLING != null) return;
         BlockTypes.CHERRY_SAPLING = AllayBlockType
-                .builder(BlockCherrySaplingBehaviorImpl.class)
+                .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHERRY_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .build();
@@ -2324,7 +1928,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCherrySlab() {
         if (BlockTypes.CHERRY_SLAB != null) return;
         BlockTypes.CHERRY_SLAB = AllayBlockType
-                .builder(BlockCherrySlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHERRY_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -2351,7 +1955,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCherryTrapdoor() {
         if (BlockTypes.CHERRY_TRAPDOOR != null) return;
         BlockTypes.CHERRY_TRAPDOOR = AllayBlockType
-                .builder(BlockCherryTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHERRY_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -2421,7 +2025,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initChiseledNetherBricks() {
         if (BlockTypes.CHISELED_NETHER_BRICKS != null) return;
         BlockTypes.CHISELED_NETHER_BRICKS = AllayBlockType
-                .builder(BlockChiseledNetherBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHISELED_NETHER_BRICKS)
                 .build();
     }
@@ -2462,7 +2066,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initChiseledStoneBricks() {
         if (BlockTypes.CHISELED_STONE_BRICKS != null) return;
         BlockTypes.CHISELED_STONE_BRICKS = AllayBlockType
-                .builder(BlockChiseledStoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHISELED_STONE_BRICKS)
                 .build();
     }
@@ -2478,7 +2082,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initChiseledTuffBricks() {
         if (BlockTypes.CHISELED_TUFF_BRICKS != null) return;
         BlockTypes.CHISELED_TUFF_BRICKS = AllayBlockType
-                .builder(BlockChiseledTuffBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.CHISELED_TUFF_BRICKS)
                 .build();
     }
@@ -2551,7 +2155,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCobbledDeepslateDoubleSlab() {
         if (BlockTypes.COBBLED_DEEPSLATE_DOUBLE_SLAB != null) return;
         BlockTypes.COBBLED_DEEPSLATE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockCobbledDeepslateDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.COBBLED_DEEPSLATE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -2560,7 +2164,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCobbledDeepslateSlab() {
         if (BlockTypes.COBBLED_DEEPSLATE_SLAB != null) return;
         BlockTypes.COBBLED_DEEPSLATE_SLAB = AllayBlockType
-                .builder(BlockCobbledDeepslateSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.COBBLED_DEEPSLATE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -2595,7 +2199,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCobblestoneDoubleSlab() {
         if (BlockTypes.COBBLESTONE_DOUBLE_SLAB != null) return;
         BlockTypes.COBBLESTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockCobblestoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.COBBLESTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -2604,7 +2208,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCobblestoneSlab() {
         if (BlockTypes.COBBLESTONE_SLAB != null) return;
         BlockTypes.COBBLESTONE_SLAB = AllayBlockType
-                .builder(BlockCobblestoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.COBBLESTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -2761,7 +2365,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrackedDeepslateBricks() {
         if (BlockTypes.CRACKED_DEEPSLATE_BRICKS != null) return;
         BlockTypes.CRACKED_DEEPSLATE_BRICKS = AllayBlockType
-                .builder(BlockCrackedDeepslateBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRACKED_DEEPSLATE_BRICKS)
                 .build();
     }
@@ -2777,7 +2381,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrackedNetherBricks() {
         if (BlockTypes.CRACKED_NETHER_BRICKS != null) return;
         BlockTypes.CRACKED_NETHER_BRICKS = AllayBlockType
-                .builder(BlockCrackedNetherBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRACKED_NETHER_BRICKS)
                 .build();
     }
@@ -2785,7 +2389,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrackedPolishedBlackstoneBricks() {
         if (BlockTypes.CRACKED_POLISHED_BLACKSTONE_BRICKS != null) return;
         BlockTypes.CRACKED_POLISHED_BLACKSTONE_BRICKS = AllayBlockType
-                .builder(BlockCrackedPolishedBlackstoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRACKED_POLISHED_BLACKSTONE_BRICKS)
                 .build();
     }
@@ -2793,7 +2397,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrackedStoneBricks() {
         if (BlockTypes.CRACKED_STONE_BRICKS != null) return;
         BlockTypes.CRACKED_STONE_BRICKS = AllayBlockType
-                .builder(BlockCrackedStoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRACKED_STONE_BRICKS)
                 .build();
     }
@@ -2818,7 +2422,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCreeperHead() {
         if (BlockTypes.CREEPER_HEAD != null) return;
         BlockTypes.CREEPER_HEAD = AllayBlockType
-                .builder(BlockCreeperHeadBehaviorImpl.class)
+                .builder(BlockHeadBehaviorImpl.class)
                 .vanillaBlock(BlockId.CREEPER_HEAD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -2845,7 +2449,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrimsonDoubleSlab() {
         if (BlockTypes.CRIMSON_DOUBLE_SLAB != null) return;
         BlockTypes.CRIMSON_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockCrimsonDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRIMSON_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -2854,7 +2458,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrimsonFence() {
         if (BlockTypes.CRIMSON_FENCE != null) return;
         BlockTypes.CRIMSON_FENCE = AllayBlockType
-                .builder(BlockCrimsonFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRIMSON_FENCE)
                 .build();
     }
@@ -2862,7 +2466,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrimsonFenceGate() {
         if (BlockTypes.CRIMSON_FENCE_GATE != null) return;
         BlockTypes.CRIMSON_FENCE_GATE = AllayBlockType
-                .builder(BlockCrimsonFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRIMSON_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -2905,7 +2509,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrimsonPlanks() {
         if (BlockTypes.CRIMSON_PLANKS != null) return;
         BlockTypes.CRIMSON_PLANKS = AllayBlockType
-                .builder(BlockCrimsonPlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRIMSON_PLANKS)
                 .build();
     }
@@ -2930,7 +2534,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrimsonSlab() {
         if (BlockTypes.CRIMSON_SLAB != null) return;
         BlockTypes.CRIMSON_SLAB = AllayBlockType
-                .builder(BlockCrimsonSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRIMSON_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -2966,7 +2570,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCrimsonTrapdoor() {
         if (BlockTypes.CRIMSON_TRAPDOOR != null) return;
         BlockTypes.CRIMSON_TRAPDOOR = AllayBlockType
-                .builder(BlockCrimsonTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.CRIMSON_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -3000,7 +2604,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCutCopperSlab() {
         if (BlockTypes.CUT_COPPER_SLAB != null) return;
         BlockTypes.CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3026,7 +2630,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCutRedSandstoneDoubleSlab() {
         if (BlockTypes.CUT_RED_SANDSTONE_DOUBLE_SLAB != null) return;
         BlockTypes.CUT_RED_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockCutRedSandstoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.CUT_RED_SANDSTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3035,7 +2639,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCutRedSandstoneSlab() {
         if (BlockTypes.CUT_RED_SANDSTONE_SLAB != null) return;
         BlockTypes.CUT_RED_SANDSTONE_SLAB = AllayBlockType
-                .builder(BlockCutRedSandstoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.CUT_RED_SANDSTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3052,7 +2656,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCutSandstoneDoubleSlab() {
         if (BlockTypes.CUT_SANDSTONE_DOUBLE_SLAB != null) return;
         BlockTypes.CUT_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockCutSandstoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.CUT_SANDSTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3061,7 +2665,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCutSandstoneSlab() {
         if (BlockTypes.CUT_SANDSTONE_SLAB != null) return;
         BlockTypes.CUT_SANDSTONE_SLAB = AllayBlockType
-                .builder(BlockCutSandstoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.CUT_SANDSTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3070,7 +2674,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCyanCandle() {
         if (BlockTypes.CYAN_CANDLE != null) return;
         BlockTypes.CYAN_CANDLE = AllayBlockType
-                .builder(BlockCyanCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -3079,7 +2683,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCyanCandleCake() {
         if (BlockTypes.CYAN_CANDLE_CAKE != null) return;
         BlockTypes.CYAN_CANDLE_CAKE = AllayBlockType
-                .builder(BlockCyanCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -3088,7 +2692,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCyanCarpet() {
         if (BlockTypes.CYAN_CARPET != null) return;
         BlockTypes.CYAN_CARPET = AllayBlockType
-                .builder(BlockCyanCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_CARPET)
                 .build();
     }
@@ -3096,7 +2700,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCyanConcrete() {
         if (BlockTypes.CYAN_CONCRETE != null) return;
         BlockTypes.CYAN_CONCRETE = AllayBlockType
-                .builder(BlockCyanConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_CONCRETE)
                 .build();
     }
@@ -3104,7 +2708,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCyanConcretePowder() {
         if (BlockTypes.CYAN_CONCRETE_POWDER != null) return;
         BlockTypes.CYAN_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockCyanConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_CONCRETE_POWDER)
                 .build();
     }
@@ -3129,7 +2733,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCyanStainedGlass() {
         if (BlockTypes.CYAN_STAINED_GLASS != null) return;
         BlockTypes.CYAN_STAINED_GLASS = AllayBlockType
-                .builder(BlockCyanStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_STAINED_GLASS)
                 .build();
     }
@@ -3137,7 +2741,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initCyanStainedGlassPane() {
         if (BlockTypes.CYAN_STAINED_GLASS_PANE != null) return;
         BlockTypes.CYAN_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockCyanStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.CYAN_STAINED_GLASS_PANE)
                 .build();
     }
@@ -3196,7 +2800,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDarkOakDoubleSlab() {
         if (BlockTypes.DARK_OAK_DOUBLE_SLAB != null) return;
         BlockTypes.DARK_OAK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockDarkOakDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3205,7 +2809,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDarkOakFence() {
         if (BlockTypes.DARK_OAK_FENCE != null) return;
         BlockTypes.DARK_OAK_FENCE = AllayBlockType
-                .builder(BlockDarkOakFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_FENCE)
                 .build();
     }
@@ -3213,7 +2817,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDarkOakFenceGate() {
         if (BlockTypes.DARK_OAK_FENCE_GATE != null) return;
         BlockTypes.DARK_OAK_FENCE_GATE = AllayBlockType
-                .builder(BlockDarkOakFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -3249,7 +2853,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDarkOakPlanks() {
         if (BlockTypes.DARK_OAK_PLANKS != null) return;
         BlockTypes.DARK_OAK_PLANKS = AllayBlockType
-                .builder(BlockDarkOakPlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_PLANKS)
                 .build();
     }
@@ -3266,7 +2870,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDarkOakSapling() {
         if (BlockTypes.DARK_OAK_SAPLING != null) return;
         BlockTypes.DARK_OAK_SAPLING = AllayBlockType
-                .builder(BlockDarkOakSaplingBehaviorImpl.class)
+                .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .build();
@@ -3275,7 +2879,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDarkOakSlab() {
         if (BlockTypes.DARK_OAK_SLAB != null) return;
         BlockTypes.DARK_OAK_SLAB = AllayBlockType
-                .builder(BlockDarkOakSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3293,7 +2897,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDarkOakTrapdoor() {
         if (BlockTypes.DARK_OAK_TRAPDOOR != null) return;
         BlockTypes.DARK_OAK_TRAPDOOR = AllayBlockType
-                .builder(BlockDarkOakTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_OAK_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -3319,7 +2923,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDarkPrismarineDoubleSlab() {
         if (BlockTypes.DARK_PRISMARINE_DOUBLE_SLAB != null) return;
         BlockTypes.DARK_PRISMARINE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockDarkPrismarineDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_PRISMARINE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3328,7 +2932,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDarkPrismarineSlab() {
         if (BlockTypes.DARK_PRISMARINE_SLAB != null) return;
         BlockTypes.DARK_PRISMARINE_SLAB = AllayBlockType
-                .builder(BlockDarkPrismarineSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DARK_PRISMARINE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3382,7 +2986,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadBrainCoral() {
         if (BlockTypes.DEAD_BRAIN_CORAL != null) return;
         BlockTypes.DEAD_BRAIN_CORAL = AllayBlockType
-                .builder(BlockDeadBrainCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_BRAIN_CORAL)
                 .build();
     }
@@ -3390,7 +2994,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadBrainCoralBlock() {
         if (BlockTypes.DEAD_BRAIN_CORAL_BLOCK != null) return;
         BlockTypes.DEAD_BRAIN_CORAL_BLOCK = AllayBlockType
-                .builder(BlockDeadBrainCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_BRAIN_CORAL_BLOCK)
                 .build();
     }
@@ -3398,7 +3002,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadBrainCoralFan() {
         if (BlockTypes.DEAD_BRAIN_CORAL_FAN != null) return;
         BlockTypes.DEAD_BRAIN_CORAL_FAN = AllayBlockType
-                .builder(BlockDeadBrainCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_BRAIN_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -3407,7 +3011,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadBrainCoralWallFan() {
         if (BlockTypes.DEAD_BRAIN_CORAL_WALL_FAN != null) return;
         BlockTypes.DEAD_BRAIN_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockDeadBrainCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_BRAIN_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -3416,7 +3020,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadBubbleCoral() {
         if (BlockTypes.DEAD_BUBBLE_CORAL != null) return;
         BlockTypes.DEAD_BUBBLE_CORAL = AllayBlockType
-                .builder(BlockDeadBubbleCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_BUBBLE_CORAL)
                 .build();
     }
@@ -3424,7 +3028,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadBubbleCoralBlock() {
         if (BlockTypes.DEAD_BUBBLE_CORAL_BLOCK != null) return;
         BlockTypes.DEAD_BUBBLE_CORAL_BLOCK = AllayBlockType
-                .builder(BlockDeadBubbleCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_BUBBLE_CORAL_BLOCK)
                 .build();
     }
@@ -3432,7 +3036,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadBubbleCoralFan() {
         if (BlockTypes.DEAD_BUBBLE_CORAL_FAN != null) return;
         BlockTypes.DEAD_BUBBLE_CORAL_FAN = AllayBlockType
-                .builder(BlockDeadBubbleCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_BUBBLE_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -3441,7 +3045,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadBubbleCoralWallFan() {
         if (BlockTypes.DEAD_BUBBLE_CORAL_WALL_FAN != null) return;
         BlockTypes.DEAD_BUBBLE_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockDeadBubbleCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_BUBBLE_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -3450,7 +3054,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadFireCoral() {
         if (BlockTypes.DEAD_FIRE_CORAL != null) return;
         BlockTypes.DEAD_FIRE_CORAL = AllayBlockType
-                .builder(BlockDeadFireCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_FIRE_CORAL)
                 .build();
     }
@@ -3458,7 +3062,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadFireCoralBlock() {
         if (BlockTypes.DEAD_FIRE_CORAL_BLOCK != null) return;
         BlockTypes.DEAD_FIRE_CORAL_BLOCK = AllayBlockType
-                .builder(BlockDeadFireCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_FIRE_CORAL_BLOCK)
                 .build();
     }
@@ -3466,7 +3070,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadFireCoralFan() {
         if (BlockTypes.DEAD_FIRE_CORAL_FAN != null) return;
         BlockTypes.DEAD_FIRE_CORAL_FAN = AllayBlockType
-                .builder(BlockDeadFireCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_FIRE_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -3475,7 +3079,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadFireCoralWallFan() {
         if (BlockTypes.DEAD_FIRE_CORAL_WALL_FAN != null) return;
         BlockTypes.DEAD_FIRE_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockDeadFireCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_FIRE_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -3484,7 +3088,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadHornCoral() {
         if (BlockTypes.DEAD_HORN_CORAL != null) return;
         BlockTypes.DEAD_HORN_CORAL = AllayBlockType
-                .builder(BlockDeadHornCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_HORN_CORAL)
                 .build();
     }
@@ -3492,7 +3096,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadHornCoralBlock() {
         if (BlockTypes.DEAD_HORN_CORAL_BLOCK != null) return;
         BlockTypes.DEAD_HORN_CORAL_BLOCK = AllayBlockType
-                .builder(BlockDeadHornCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_HORN_CORAL_BLOCK)
                 .build();
     }
@@ -3500,7 +3104,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadHornCoralFan() {
         if (BlockTypes.DEAD_HORN_CORAL_FAN != null) return;
         BlockTypes.DEAD_HORN_CORAL_FAN = AllayBlockType
-                .builder(BlockDeadHornCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_HORN_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -3509,7 +3113,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadHornCoralWallFan() {
         if (BlockTypes.DEAD_HORN_CORAL_WALL_FAN != null) return;
         BlockTypes.DEAD_HORN_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockDeadHornCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_HORN_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -3518,7 +3122,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadTubeCoral() {
         if (BlockTypes.DEAD_TUBE_CORAL != null) return;
         BlockTypes.DEAD_TUBE_CORAL = AllayBlockType
-                .builder(BlockDeadTubeCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_TUBE_CORAL)
                 .build();
     }
@@ -3526,7 +3130,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadTubeCoralBlock() {
         if (BlockTypes.DEAD_TUBE_CORAL_BLOCK != null) return;
         BlockTypes.DEAD_TUBE_CORAL_BLOCK = AllayBlockType
-                .builder(BlockDeadTubeCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_TUBE_CORAL_BLOCK)
                 .build();
     }
@@ -3534,7 +3138,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadTubeCoralFan() {
         if (BlockTypes.DEAD_TUBE_CORAL_FAN != null) return;
         BlockTypes.DEAD_TUBE_CORAL_FAN = AllayBlockType
-                .builder(BlockDeadTubeCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_TUBE_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -3543,7 +3147,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeadTubeCoralWallFan() {
         if (BlockTypes.DEAD_TUBE_CORAL_WALL_FAN != null) return;
         BlockTypes.DEAD_TUBE_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockDeadTubeCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEAD_TUBE_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -3578,7 +3182,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeepslateBrickDoubleSlab() {
         if (BlockTypes.DEEPSLATE_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.DEEPSLATE_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockDeepslateBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEEPSLATE_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3587,7 +3191,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeepslateBrickSlab() {
         if (BlockTypes.DEEPSLATE_BRICK_SLAB != null) return;
         BlockTypes.DEEPSLATE_BRICK_SLAB = AllayBlockType
-                .builder(BlockDeepslateBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEEPSLATE_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3614,7 +3218,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeepslateBricks() {
         if (BlockTypes.DEEPSLATE_BRICKS != null) return;
         BlockTypes.DEEPSLATE_BRICKS = AllayBlockType
-                .builder(BlockDeepslateBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEEPSLATE_BRICKS)
                 .build();
     }
@@ -3686,7 +3290,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeepslateTileDoubleSlab() {
         if (BlockTypes.DEEPSLATE_TILE_DOUBLE_SLAB != null) return;
         BlockTypes.DEEPSLATE_TILE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockDeepslateTileDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEEPSLATE_TILE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3695,7 +3299,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDeepslateTileSlab() {
         if (BlockTypes.DEEPSLATE_TILE_SLAB != null) return;
         BlockTypes.DEEPSLATE_TILE_SLAB = AllayBlockType
-                .builder(BlockDeepslateTileSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DEEPSLATE_TILE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3798,7 +3402,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDioriteDoubleSlab() {
         if (BlockTypes.DIORITE_DOUBLE_SLAB != null) return;
         BlockTypes.DIORITE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockDioriteDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DIORITE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3807,7 +3411,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDioriteSlab() {
         if (BlockTypes.DIORITE_SLAB != null) return;
         BlockTypes.DIORITE_SLAB = AllayBlockType
-                .builder(BlockDioriteSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DIORITE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3859,7 +3463,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDoubleCutCopperSlab() {
         if (BlockTypes.DOUBLE_CUT_COPPER_SLAB != null) return;
         BlockTypes.DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockDoubleCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.DOUBLE_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -3876,7 +3480,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initDragonHead() {
         if (BlockTypes.DRAGON_HEAD != null) return;
         BlockTypes.DRAGON_HEAD = AllayBlockType
-                .builder(BlockDragonHeadBehaviorImpl.class)
+                .builder(BlockHeadBehaviorImpl.class)
                 .vanillaBlock(BlockId.DRAGON_HEAD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -4904,7 +4508,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initEndBricks() {
         if (BlockTypes.END_BRICKS != null) return;
         BlockTypes.END_BRICKS = AllayBlockType
-                .builder(BlockEndBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.END_BRICKS)
                 .build();
     }
@@ -4954,7 +4558,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initEndStoneBrickDoubleSlab() {
         if (BlockTypes.END_STONE_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.END_STONE_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockEndStoneBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.END_STONE_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -4963,7 +4567,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initEndStoneBrickSlab() {
         if (BlockTypes.END_STONE_BRICK_SLAB != null) return;
         BlockTypes.END_STONE_BRICK_SLAB = AllayBlockType
-                .builder(BlockEndStoneBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.END_STONE_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -5032,7 +4636,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initExposedCopperTrapdoor() {
         if (BlockTypes.EXPOSED_COPPER_TRAPDOOR != null) return;
         BlockTypes.EXPOSED_COPPER_TRAPDOOR = AllayBlockType
-                .builder(BlockExposedCopperTrapdoorBehaviorImpl.class)
+                .builder(BlockCopperTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.EXPOSED_COPPER_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -5049,7 +4653,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initExposedCutCopperSlab() {
         if (BlockTypes.EXPOSED_CUT_COPPER_SLAB != null) return;
         BlockTypes.EXPOSED_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockExposedCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.EXPOSED_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -5067,7 +4671,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initExposedDoubleCutCopperSlab() {
         if (BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB != null) return;
         BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockExposedDoubleCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -5111,7 +4715,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initFireCoral() {
         if (BlockTypes.FIRE_CORAL != null) return;
         BlockTypes.FIRE_CORAL = AllayBlockType
-                .builder(BlockFireCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.FIRE_CORAL)
                 .build();
     }
@@ -5119,7 +4723,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initFireCoralBlock() {
         if (BlockTypes.FIRE_CORAL_BLOCK != null) return;
         BlockTypes.FIRE_CORAL_BLOCK = AllayBlockType
-                .builder(BlockFireCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.FIRE_CORAL_BLOCK)
                 .build();
     }
@@ -5127,7 +4731,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initFireCoralFan() {
         if (BlockTypes.FIRE_CORAL_FAN != null) return;
         BlockTypes.FIRE_CORAL_FAN = AllayBlockType
-                .builder(BlockFireCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.FIRE_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -5136,7 +4740,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initFireCoralWallFan() {
         if (BlockTypes.FIRE_CORAL_WALL_FAN != null) return;
         BlockTypes.FIRE_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockFireCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.FIRE_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -5231,7 +4835,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGlass() {
         if (BlockTypes.GLASS != null) return;
         BlockTypes.GLASS = AllayBlockType
-                .builder(BlockGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.GLASS)
                 .build();
     }
@@ -5239,7 +4843,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGlassPane() {
         if (BlockTypes.GLASS_PANE != null) return;
         BlockTypes.GLASS_PANE = AllayBlockType
-                .builder(BlockGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.GLASS_PANE)
                 .build();
     }
@@ -5314,7 +4918,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGraniteDoubleSlab() {
         if (BlockTypes.GRANITE_DOUBLE_SLAB != null) return;
         BlockTypes.GRANITE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockGraniteDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRANITE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -5323,7 +4927,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGraniteSlab() {
         if (BlockTypes.GRANITE_SLAB != null) return;
         BlockTypes.GRANITE_SLAB = AllayBlockType
-                .builder(BlockGraniteSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRANITE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -5374,7 +4978,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGrayCandle() {
         if (BlockTypes.GRAY_CANDLE != null) return;
         BlockTypes.GRAY_CANDLE = AllayBlockType
-                .builder(BlockGrayCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -5383,7 +4987,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGrayCandleCake() {
         if (BlockTypes.GRAY_CANDLE_CAKE != null) return;
         BlockTypes.GRAY_CANDLE_CAKE = AllayBlockType
-                .builder(BlockGrayCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -5392,7 +4996,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGrayCarpet() {
         if (BlockTypes.GRAY_CARPET != null) return;
         BlockTypes.GRAY_CARPET = AllayBlockType
-                .builder(BlockGrayCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_CARPET)
                 .build();
     }
@@ -5400,7 +5004,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGrayConcrete() {
         if (BlockTypes.GRAY_CONCRETE != null) return;
         BlockTypes.GRAY_CONCRETE = AllayBlockType
-                .builder(BlockGrayConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_CONCRETE)
                 .build();
     }
@@ -5408,7 +5012,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGrayConcretePowder() {
         if (BlockTypes.GRAY_CONCRETE_POWDER != null) return;
         BlockTypes.GRAY_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockGrayConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_CONCRETE_POWDER)
                 .build();
     }
@@ -5433,7 +5037,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGrayStainedGlass() {
         if (BlockTypes.GRAY_STAINED_GLASS != null) return;
         BlockTypes.GRAY_STAINED_GLASS = AllayBlockType
-                .builder(BlockGrayStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_STAINED_GLASS)
                 .build();
     }
@@ -5441,7 +5045,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGrayStainedGlassPane() {
         if (BlockTypes.GRAY_STAINED_GLASS_PANE != null) return;
         BlockTypes.GRAY_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockGrayStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.GRAY_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5465,7 +5069,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGreenCandle() {
         if (BlockTypes.GREEN_CANDLE != null) return;
         BlockTypes.GREEN_CANDLE = AllayBlockType
-                .builder(BlockGreenCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -5474,7 +5078,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGreenCandleCake() {
         if (BlockTypes.GREEN_CANDLE_CAKE != null) return;
         BlockTypes.GREEN_CANDLE_CAKE = AllayBlockType
-                .builder(BlockGreenCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -5483,7 +5087,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGreenCarpet() {
         if (BlockTypes.GREEN_CARPET != null) return;
         BlockTypes.GREEN_CARPET = AllayBlockType
-                .builder(BlockGreenCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_CARPET)
                 .build();
     }
@@ -5491,7 +5095,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGreenConcrete() {
         if (BlockTypes.GREEN_CONCRETE != null) return;
         BlockTypes.GREEN_CONCRETE = AllayBlockType
-                .builder(BlockGreenConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_CONCRETE)
                 .build();
     }
@@ -5499,7 +5103,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGreenConcretePowder() {
         if (BlockTypes.GREEN_CONCRETE_POWDER != null) return;
         BlockTypes.GREEN_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockGreenConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_CONCRETE_POWDER)
                 .build();
     }
@@ -5524,7 +5128,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGreenStainedGlass() {
         if (BlockTypes.GREEN_STAINED_GLASS != null) return;
         BlockTypes.GREEN_STAINED_GLASS = AllayBlockType
-                .builder(BlockGreenStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_STAINED_GLASS)
                 .build();
     }
@@ -5532,7 +5136,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initGreenStainedGlassPane() {
         if (BlockTypes.GREEN_STAINED_GLASS_PANE != null) return;
         BlockTypes.GREEN_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockGreenStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.GREEN_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5573,7 +5177,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardBlackStainedGlass() {
         if (BlockTypes.HARD_BLACK_STAINED_GLASS != null) return;
         BlockTypes.HARD_BLACK_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardBlackStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_BLACK_STAINED_GLASS)
                 .build();
     }
@@ -5581,7 +5185,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardBlackStainedGlassPane() {
         if (BlockTypes.HARD_BLACK_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_BLACK_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardBlackStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_BLACK_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5589,7 +5193,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardBlueStainedGlass() {
         if (BlockTypes.HARD_BLUE_STAINED_GLASS != null) return;
         BlockTypes.HARD_BLUE_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardBlueStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_BLUE_STAINED_GLASS)
                 .build();
     }
@@ -5597,7 +5201,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardBlueStainedGlassPane() {
         if (BlockTypes.HARD_BLUE_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_BLUE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardBlueStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_BLUE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5605,7 +5209,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardBrownStainedGlass() {
         if (BlockTypes.HARD_BROWN_STAINED_GLASS != null) return;
         BlockTypes.HARD_BROWN_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardBrownStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_BROWN_STAINED_GLASS)
                 .build();
     }
@@ -5613,7 +5217,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardBrownStainedGlassPane() {
         if (BlockTypes.HARD_BROWN_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_BROWN_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardBrownStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_BROWN_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5621,7 +5225,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardCyanStainedGlass() {
         if (BlockTypes.HARD_CYAN_STAINED_GLASS != null) return;
         BlockTypes.HARD_CYAN_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardCyanStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_CYAN_STAINED_GLASS)
                 .build();
     }
@@ -5629,7 +5233,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardCyanStainedGlassPane() {
         if (BlockTypes.HARD_CYAN_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_CYAN_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardCyanStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_CYAN_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5637,7 +5241,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardGlass() {
         if (BlockTypes.HARD_GLASS != null) return;
         BlockTypes.HARD_GLASS = AllayBlockType
-                .builder(BlockHardGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_GLASS)
                 .build();
     }
@@ -5645,7 +5249,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardGlassPane() {
         if (BlockTypes.HARD_GLASS_PANE != null) return;
         BlockTypes.HARD_GLASS_PANE = AllayBlockType
-                .builder(BlockHardGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_GLASS_PANE)
                 .build();
     }
@@ -5653,7 +5257,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardGrayStainedGlass() {
         if (BlockTypes.HARD_GRAY_STAINED_GLASS != null) return;
         BlockTypes.HARD_GRAY_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardGrayStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_GRAY_STAINED_GLASS)
                 .build();
     }
@@ -5661,7 +5265,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardGrayStainedGlassPane() {
         if (BlockTypes.HARD_GRAY_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_GRAY_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardGrayStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_GRAY_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5669,7 +5273,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardGreenStainedGlass() {
         if (BlockTypes.HARD_GREEN_STAINED_GLASS != null) return;
         BlockTypes.HARD_GREEN_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardGreenStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_GREEN_STAINED_GLASS)
                 .build();
     }
@@ -5677,7 +5281,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardGreenStainedGlassPane() {
         if (BlockTypes.HARD_GREEN_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_GREEN_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardGreenStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_GREEN_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5685,7 +5289,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardLightBlueStainedGlass() {
         if (BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS != null) return;
         BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardLightBlueStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_LIGHT_BLUE_STAINED_GLASS)
                 .build();
     }
@@ -5693,7 +5297,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardLightBlueStainedGlassPane() {
         if (BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardLightBlueStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_LIGHT_BLUE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5701,7 +5305,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardLightGrayStainedGlass() {
         if (BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS != null) return;
         BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardLightGrayStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_LIGHT_GRAY_STAINED_GLASS)
                 .build();
     }
@@ -5709,7 +5313,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardLightGrayStainedGlassPane() {
         if (BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardLightGrayStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_LIGHT_GRAY_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5717,7 +5321,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardLimeStainedGlass() {
         if (BlockTypes.HARD_LIME_STAINED_GLASS != null) return;
         BlockTypes.HARD_LIME_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardLimeStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_LIME_STAINED_GLASS)
                 .build();
     }
@@ -5725,7 +5329,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardLimeStainedGlassPane() {
         if (BlockTypes.HARD_LIME_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_LIME_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardLimeStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_LIME_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5733,7 +5337,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardMagentaStainedGlass() {
         if (BlockTypes.HARD_MAGENTA_STAINED_GLASS != null) return;
         BlockTypes.HARD_MAGENTA_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardMagentaStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_MAGENTA_STAINED_GLASS)
                 .build();
     }
@@ -5741,7 +5345,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardMagentaStainedGlassPane() {
         if (BlockTypes.HARD_MAGENTA_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_MAGENTA_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardMagentaStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_MAGENTA_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5749,7 +5353,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardOrangeStainedGlass() {
         if (BlockTypes.HARD_ORANGE_STAINED_GLASS != null) return;
         BlockTypes.HARD_ORANGE_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardOrangeStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_ORANGE_STAINED_GLASS)
                 .build();
     }
@@ -5757,7 +5361,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardOrangeStainedGlassPane() {
         if (BlockTypes.HARD_ORANGE_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_ORANGE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardOrangeStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_ORANGE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5765,7 +5369,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardPinkStainedGlass() {
         if (BlockTypes.HARD_PINK_STAINED_GLASS != null) return;
         BlockTypes.HARD_PINK_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardPinkStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_PINK_STAINED_GLASS)
                 .build();
     }
@@ -5773,7 +5377,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardPinkStainedGlassPane() {
         if (BlockTypes.HARD_PINK_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_PINK_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardPinkStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_PINK_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5781,7 +5385,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardPurpleStainedGlass() {
         if (BlockTypes.HARD_PURPLE_STAINED_GLASS != null) return;
         BlockTypes.HARD_PURPLE_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardPurpleStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_PURPLE_STAINED_GLASS)
                 .build();
     }
@@ -5789,7 +5393,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardPurpleStainedGlassPane() {
         if (BlockTypes.HARD_PURPLE_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_PURPLE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardPurpleStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_PURPLE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5797,7 +5401,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardRedStainedGlass() {
         if (BlockTypes.HARD_RED_STAINED_GLASS != null) return;
         BlockTypes.HARD_RED_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardRedStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_RED_STAINED_GLASS)
                 .build();
     }
@@ -5805,7 +5409,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardRedStainedGlassPane() {
         if (BlockTypes.HARD_RED_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_RED_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardRedStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_RED_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5813,7 +5417,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardWhiteStainedGlass() {
         if (BlockTypes.HARD_WHITE_STAINED_GLASS != null) return;
         BlockTypes.HARD_WHITE_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardWhiteStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_WHITE_STAINED_GLASS)
                 .build();
     }
@@ -5821,7 +5425,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardWhiteStainedGlassPane() {
         if (BlockTypes.HARD_WHITE_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_WHITE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardWhiteStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_WHITE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5829,7 +5433,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardYellowStainedGlass() {
         if (BlockTypes.HARD_YELLOW_STAINED_GLASS != null) return;
         BlockTypes.HARD_YELLOW_STAINED_GLASS = AllayBlockType
-                .builder(BlockHardYellowStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_YELLOW_STAINED_GLASS)
                 .build();
     }
@@ -5837,7 +5441,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHardYellowStainedGlassPane() {
         if (BlockTypes.HARD_YELLOW_STAINED_GLASS_PANE != null) return;
         BlockTypes.HARD_YELLOW_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockHardYellowStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.HARD_YELLOW_STAINED_GLASS_PANE)
                 .build();
     }
@@ -5904,7 +5508,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHornCoral() {
         if (BlockTypes.HORN_CORAL != null) return;
         BlockTypes.HORN_CORAL = AllayBlockType
-                .builder(BlockHornCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.HORN_CORAL)
                 .build();
     }
@@ -5912,7 +5516,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHornCoralBlock() {
         if (BlockTypes.HORN_CORAL_BLOCK != null) return;
         BlockTypes.HORN_CORAL_BLOCK = AllayBlockType
-                .builder(BlockHornCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.HORN_CORAL_BLOCK)
                 .build();
     }
@@ -5920,7 +5524,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHornCoralFan() {
         if (BlockTypes.HORN_CORAL_FAN != null) return;
         BlockTypes.HORN_CORAL_FAN = AllayBlockType
-                .builder(BlockHornCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.HORN_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -5929,7 +5533,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initHornCoralWallFan() {
         if (BlockTypes.HORN_CORAL_WALL_FAN != null) return;
         BlockTypes.HORN_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockHornCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.HORN_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -5946,7 +5550,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initInfestedChiseledStoneBricks() {
         if (BlockTypes.INFESTED_CHISELED_STONE_BRICKS != null) return;
         BlockTypes.INFESTED_CHISELED_STONE_BRICKS = AllayBlockType
-                .builder(BlockInfestedChiseledStoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.INFESTED_CHISELED_STONE_BRICKS)
                 .build();
     }
@@ -5962,7 +5566,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initInfestedCrackedStoneBricks() {
         if (BlockTypes.INFESTED_CRACKED_STONE_BRICKS != null) return;
         BlockTypes.INFESTED_CRACKED_STONE_BRICKS = AllayBlockType
-                .builder(BlockInfestedCrackedStoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.INFESTED_CRACKED_STONE_BRICKS)
                 .build();
     }
@@ -5979,7 +5583,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initInfestedMossyStoneBricks() {
         if (BlockTypes.INFESTED_MOSSY_STONE_BRICKS != null) return;
         BlockTypes.INFESTED_MOSSY_STONE_BRICKS = AllayBlockType
-                .builder(BlockInfestedMossyStoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.INFESTED_MOSSY_STONE_BRICKS)
                 .build();
     }
@@ -5995,7 +5599,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initInfestedStoneBricks() {
         if (BlockTypes.INFESTED_STONE_BRICKS != null) return;
         BlockTypes.INFESTED_STONE_BRICKS = AllayBlockType
-                .builder(BlockInfestedStoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.INFESTED_STONE_BRICKS)
                 .build();
     }
@@ -6104,7 +5708,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initJungleDoubleSlab() {
         if (BlockTypes.JUNGLE_DOUBLE_SLAB != null) return;
         BlockTypes.JUNGLE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockJungleDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -6113,7 +5717,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initJungleFence() {
         if (BlockTypes.JUNGLE_FENCE != null) return;
         BlockTypes.JUNGLE_FENCE = AllayBlockType
-                .builder(BlockJungleFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_FENCE)
                 .build();
     }
@@ -6121,7 +5725,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initJungleFenceGate() {
         if (BlockTypes.JUNGLE_FENCE_GATE != null) return;
         BlockTypes.JUNGLE_FENCE_GATE = AllayBlockType
-                .builder(BlockJungleFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -6157,7 +5761,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initJunglePlanks() {
         if (BlockTypes.JUNGLE_PLANKS != null) return;
         BlockTypes.JUNGLE_PLANKS = AllayBlockType
-                .builder(BlockJunglePlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_PLANKS)
                 .build();
     }
@@ -6174,7 +5778,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initJungleSapling() {
         if (BlockTypes.JUNGLE_SAPLING != null) return;
         BlockTypes.JUNGLE_SAPLING = AllayBlockType
-                .builder(BlockJungleSaplingBehaviorImpl.class)
+                .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .build();
@@ -6183,7 +5787,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initJungleSlab() {
         if (BlockTypes.JUNGLE_SLAB != null) return;
         BlockTypes.JUNGLE_SLAB = AllayBlockType
-                .builder(BlockJungleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -6210,7 +5814,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initJungleTrapdoor() {
         if (BlockTypes.JUNGLE_TRAPDOOR != null) return;
         BlockTypes.JUNGLE_TRAPDOOR = AllayBlockType
-                .builder(BlockJungleTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.JUNGLE_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -6334,7 +5938,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock0() {
         if (BlockTypes.LIGHT_BLOCK_0 != null) return;
         BlockTypes.LIGHT_BLOCK_0 = AllayBlockType
-                .builder(BlockLightBlock0BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_0)
                 .build();
     }
@@ -6342,7 +5946,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock1() {
         if (BlockTypes.LIGHT_BLOCK_1 != null) return;
         BlockTypes.LIGHT_BLOCK_1 = AllayBlockType
-                .builder(BlockLightBlock1BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_1)
                 .build();
     }
@@ -6350,7 +5954,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock10() {
         if (BlockTypes.LIGHT_BLOCK_10 != null) return;
         BlockTypes.LIGHT_BLOCK_10 = AllayBlockType
-                .builder(BlockLightBlock10BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_10)
                 .build();
     }
@@ -6358,7 +5962,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock11() {
         if (BlockTypes.LIGHT_BLOCK_11 != null) return;
         BlockTypes.LIGHT_BLOCK_11 = AllayBlockType
-                .builder(BlockLightBlock11BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_11)
                 .build();
     }
@@ -6366,7 +5970,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock12() {
         if (BlockTypes.LIGHT_BLOCK_12 != null) return;
         BlockTypes.LIGHT_BLOCK_12 = AllayBlockType
-                .builder(BlockLightBlock12BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_12)
                 .build();
     }
@@ -6374,7 +5978,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock13() {
         if (BlockTypes.LIGHT_BLOCK_13 != null) return;
         BlockTypes.LIGHT_BLOCK_13 = AllayBlockType
-                .builder(BlockLightBlock13BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_13)
                 .build();
     }
@@ -6382,7 +5986,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock14() {
         if (BlockTypes.LIGHT_BLOCK_14 != null) return;
         BlockTypes.LIGHT_BLOCK_14 = AllayBlockType
-                .builder(BlockLightBlock14BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_14)
                 .build();
     }
@@ -6390,7 +5994,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock15() {
         if (BlockTypes.LIGHT_BLOCK_15 != null) return;
         BlockTypes.LIGHT_BLOCK_15 = AllayBlockType
-                .builder(BlockLightBlock15BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_15)
                 .build();
     }
@@ -6398,7 +6002,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock2() {
         if (BlockTypes.LIGHT_BLOCK_2 != null) return;
         BlockTypes.LIGHT_BLOCK_2 = AllayBlockType
-                .builder(BlockLightBlock2BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_2)
                 .build();
     }
@@ -6406,7 +6010,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock3() {
         if (BlockTypes.LIGHT_BLOCK_3 != null) return;
         BlockTypes.LIGHT_BLOCK_3 = AllayBlockType
-                .builder(BlockLightBlock3BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_3)
                 .build();
     }
@@ -6414,7 +6018,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock4() {
         if (BlockTypes.LIGHT_BLOCK_4 != null) return;
         BlockTypes.LIGHT_BLOCK_4 = AllayBlockType
-                .builder(BlockLightBlock4BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_4)
                 .build();
     }
@@ -6422,7 +6026,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock5() {
         if (BlockTypes.LIGHT_BLOCK_5 != null) return;
         BlockTypes.LIGHT_BLOCK_5 = AllayBlockType
-                .builder(BlockLightBlock5BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_5)
                 .build();
     }
@@ -6430,7 +6034,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock6() {
         if (BlockTypes.LIGHT_BLOCK_6 != null) return;
         BlockTypes.LIGHT_BLOCK_6 = AllayBlockType
-                .builder(BlockLightBlock6BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_6)
                 .build();
     }
@@ -6438,7 +6042,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock7() {
         if (BlockTypes.LIGHT_BLOCK_7 != null) return;
         BlockTypes.LIGHT_BLOCK_7 = AllayBlockType
-                .builder(BlockLightBlock7BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_7)
                 .build();
     }
@@ -6446,7 +6050,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock8() {
         if (BlockTypes.LIGHT_BLOCK_8 != null) return;
         BlockTypes.LIGHT_BLOCK_8 = AllayBlockType
-                .builder(BlockLightBlock8BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_8)
                 .build();
     }
@@ -6454,7 +6058,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlock9() {
         if (BlockTypes.LIGHT_BLOCK_9 != null) return;
         BlockTypes.LIGHT_BLOCK_9 = AllayBlockType
-                .builder(BlockLightBlock9BehaviorImpl.class)
+                .builder(BlockLightBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLOCK_9)
                 .build();
     }
@@ -6462,7 +6066,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlueCandle() {
         if (BlockTypes.LIGHT_BLUE_CANDLE != null) return;
         BlockTypes.LIGHT_BLUE_CANDLE = AllayBlockType
-                .builder(BlockLightBlueCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -6471,7 +6075,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlueCandleCake() {
         if (BlockTypes.LIGHT_BLUE_CANDLE_CAKE != null) return;
         BlockTypes.LIGHT_BLUE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockLightBlueCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -6480,7 +6084,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlueCarpet() {
         if (BlockTypes.LIGHT_BLUE_CARPET != null) return;
         BlockTypes.LIGHT_BLUE_CARPET = AllayBlockType
-                .builder(BlockLightBlueCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_CARPET)
                 .build();
     }
@@ -6488,7 +6092,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlueConcrete() {
         if (BlockTypes.LIGHT_BLUE_CONCRETE != null) return;
         BlockTypes.LIGHT_BLUE_CONCRETE = AllayBlockType
-                .builder(BlockLightBlueConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_CONCRETE)
                 .build();
     }
@@ -6496,7 +6100,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlueConcretePowder() {
         if (BlockTypes.LIGHT_BLUE_CONCRETE_POWDER != null) return;
         BlockTypes.LIGHT_BLUE_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockLightBlueConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_CONCRETE_POWDER)
                 .build();
     }
@@ -6521,7 +6125,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlueStainedGlass() {
         if (BlockTypes.LIGHT_BLUE_STAINED_GLASS != null) return;
         BlockTypes.LIGHT_BLUE_STAINED_GLASS = AllayBlockType
-                .builder(BlockLightBlueStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_STAINED_GLASS)
                 .build();
     }
@@ -6529,7 +6133,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightBlueStainedGlassPane() {
         if (BlockTypes.LIGHT_BLUE_STAINED_GLASS_PANE != null) return;
         BlockTypes.LIGHT_BLUE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockLightBlueStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_BLUE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -6553,7 +6157,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightGrayCandle() {
         if (BlockTypes.LIGHT_GRAY_CANDLE != null) return;
         BlockTypes.LIGHT_GRAY_CANDLE = AllayBlockType
-                .builder(BlockLightGrayCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -6562,7 +6166,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightGrayCandleCake() {
         if (BlockTypes.LIGHT_GRAY_CANDLE_CAKE != null) return;
         BlockTypes.LIGHT_GRAY_CANDLE_CAKE = AllayBlockType
-                .builder(BlockLightGrayCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -6571,7 +6175,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightGrayCarpet() {
         if (BlockTypes.LIGHT_GRAY_CARPET != null) return;
         BlockTypes.LIGHT_GRAY_CARPET = AllayBlockType
-                .builder(BlockLightGrayCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_CARPET)
                 .build();
     }
@@ -6579,7 +6183,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightGrayConcrete() {
         if (BlockTypes.LIGHT_GRAY_CONCRETE != null) return;
         BlockTypes.LIGHT_GRAY_CONCRETE = AllayBlockType
-                .builder(BlockLightGrayConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_CONCRETE)
                 .build();
     }
@@ -6587,7 +6191,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightGrayConcretePowder() {
         if (BlockTypes.LIGHT_GRAY_CONCRETE_POWDER != null) return;
         BlockTypes.LIGHT_GRAY_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockLightGrayConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_CONCRETE_POWDER)
                 .build();
     }
@@ -6603,7 +6207,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightGrayStainedGlass() {
         if (BlockTypes.LIGHT_GRAY_STAINED_GLASS != null) return;
         BlockTypes.LIGHT_GRAY_STAINED_GLASS = AllayBlockType
-                .builder(BlockLightGrayStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_STAINED_GLASS)
                 .build();
     }
@@ -6611,7 +6215,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLightGrayStainedGlassPane() {
         if (BlockTypes.LIGHT_GRAY_STAINED_GLASS_PANE != null) return;
         BlockTypes.LIGHT_GRAY_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockLightGrayStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIGHT_GRAY_STAINED_GLASS_PANE)
                 .build();
     }
@@ -6670,7 +6274,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLimeCandle() {
         if (BlockTypes.LIME_CANDLE != null) return;
         BlockTypes.LIME_CANDLE = AllayBlockType
-                .builder(BlockLimeCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -6679,7 +6283,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLimeCandleCake() {
         if (BlockTypes.LIME_CANDLE_CAKE != null) return;
         BlockTypes.LIME_CANDLE_CAKE = AllayBlockType
-                .builder(BlockLimeCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -6688,7 +6292,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLimeCarpet() {
         if (BlockTypes.LIME_CARPET != null) return;
         BlockTypes.LIME_CARPET = AllayBlockType
-                .builder(BlockLimeCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_CARPET)
                 .build();
     }
@@ -6696,7 +6300,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLimeConcrete() {
         if (BlockTypes.LIME_CONCRETE != null) return;
         BlockTypes.LIME_CONCRETE = AllayBlockType
-                .builder(BlockLimeConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_CONCRETE)
                 .build();
     }
@@ -6704,7 +6308,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLimeConcretePowder() {
         if (BlockTypes.LIME_CONCRETE_POWDER != null) return;
         BlockTypes.LIME_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockLimeConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_CONCRETE_POWDER)
                 .build();
     }
@@ -6729,7 +6333,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLimeStainedGlass() {
         if (BlockTypes.LIME_STAINED_GLASS != null) return;
         BlockTypes.LIME_STAINED_GLASS = AllayBlockType
-                .builder(BlockLimeStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_STAINED_GLASS)
                 .build();
     }
@@ -6737,7 +6341,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initLimeStainedGlassPane() {
         if (BlockTypes.LIME_STAINED_GLASS_PANE != null) return;
         BlockTypes.LIME_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockLimeStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.LIME_STAINED_GLASS_PANE)
                 .build();
     }
@@ -6838,7 +6442,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMagentaCandle() {
         if (BlockTypes.MAGENTA_CANDLE != null) return;
         BlockTypes.MAGENTA_CANDLE = AllayBlockType
-                .builder(BlockMagentaCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -6847,7 +6451,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMagentaCandleCake() {
         if (BlockTypes.MAGENTA_CANDLE_CAKE != null) return;
         BlockTypes.MAGENTA_CANDLE_CAKE = AllayBlockType
-                .builder(BlockMagentaCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -6856,7 +6460,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMagentaCarpet() {
         if (BlockTypes.MAGENTA_CARPET != null) return;
         BlockTypes.MAGENTA_CARPET = AllayBlockType
-                .builder(BlockMagentaCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_CARPET)
                 .build();
     }
@@ -6864,7 +6468,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMagentaConcrete() {
         if (BlockTypes.MAGENTA_CONCRETE != null) return;
         BlockTypes.MAGENTA_CONCRETE = AllayBlockType
-                .builder(BlockMagentaConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_CONCRETE)
                 .build();
     }
@@ -6872,7 +6476,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMagentaConcretePowder() {
         if (BlockTypes.MAGENTA_CONCRETE_POWDER != null) return;
         BlockTypes.MAGENTA_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockMagentaConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_CONCRETE_POWDER)
                 .build();
     }
@@ -6897,7 +6501,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMagentaStainedGlass() {
         if (BlockTypes.MAGENTA_STAINED_GLASS != null) return;
         BlockTypes.MAGENTA_STAINED_GLASS = AllayBlockType
-                .builder(BlockMagentaStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_STAINED_GLASS)
                 .build();
     }
@@ -6905,7 +6509,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMagentaStainedGlassPane() {
         if (BlockTypes.MAGENTA_STAINED_GLASS_PANE != null) return;
         BlockTypes.MAGENTA_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockMagentaStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.MAGENTA_STAINED_GLASS_PANE)
                 .build();
     }
@@ -6955,7 +6559,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMangroveDoubleSlab() {
         if (BlockTypes.MANGROVE_DOUBLE_SLAB != null) return;
         BlockTypes.MANGROVE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockMangroveDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.MANGROVE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -6964,7 +6568,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMangroveFence() {
         if (BlockTypes.MANGROVE_FENCE != null) return;
         BlockTypes.MANGROVE_FENCE = AllayBlockType
-                .builder(BlockMangroveFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.MANGROVE_FENCE)
                 .build();
     }
@@ -6972,7 +6576,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMangroveFenceGate() {
         if (BlockTypes.MANGROVE_FENCE_GATE != null) return;
         BlockTypes.MANGROVE_FENCE_GATE = AllayBlockType
-                .builder(BlockMangroveFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.MANGROVE_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -7008,7 +6612,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMangrovePlanks() {
         if (BlockTypes.MANGROVE_PLANKS != null) return;
         BlockTypes.MANGROVE_PLANKS = AllayBlockType
-                .builder(BlockMangrovePlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.MANGROVE_PLANKS)
                 .build();
     }
@@ -7042,7 +6646,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMangroveSlab() {
         if (BlockTypes.MANGROVE_SLAB != null) return;
         BlockTypes.MANGROVE_SLAB = AllayBlockType
-                .builder(BlockMangroveSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.MANGROVE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7069,7 +6673,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMangroveTrapdoor() {
         if (BlockTypes.MANGROVE_TRAPDOOR != null) return;
         BlockTypes.MANGROVE_TRAPDOOR = AllayBlockType
-                .builder(BlockMangroveTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.MANGROVE_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -7147,7 +6751,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMossCarpet() {
         if (BlockTypes.MOSS_CARPET != null) return;
         BlockTypes.MOSS_CARPET = AllayBlockType
-                .builder(BlockMossCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSS_CARPET)
                 .build();
     }
@@ -7163,7 +6767,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMossyCobblestoneDoubleSlab() {
         if (BlockTypes.MOSSY_COBBLESTONE_DOUBLE_SLAB != null) return;
         BlockTypes.MOSSY_COBBLESTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockMossyCobblestoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSSY_COBBLESTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7172,7 +6776,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMossyCobblestoneSlab() {
         if (BlockTypes.MOSSY_COBBLESTONE_SLAB != null) return;
         BlockTypes.MOSSY_COBBLESTONE_SLAB = AllayBlockType
-                .builder(BlockMossyCobblestoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSSY_COBBLESTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7199,7 +6803,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMossyStoneBrickDoubleSlab() {
         if (BlockTypes.MOSSY_STONE_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.MOSSY_STONE_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockMossyStoneBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSSY_STONE_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7208,7 +6812,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMossyStoneBrickSlab() {
         if (BlockTypes.MOSSY_STONE_BRICK_SLAB != null) return;
         BlockTypes.MOSSY_STONE_BRICK_SLAB = AllayBlockType
-                .builder(BlockMossyStoneBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSSY_STONE_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7235,7 +6839,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMossyStoneBricks() {
         if (BlockTypes.MOSSY_STONE_BRICKS != null) return;
         BlockTypes.MOSSY_STONE_BRICKS = AllayBlockType
-                .builder(BlockMossyStoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.MOSSY_STONE_BRICKS)
                 .build();
     }
@@ -7259,7 +6863,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMudBrickDoubleSlab() {
         if (BlockTypes.MUD_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.MUD_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockMudBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.MUD_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7268,7 +6872,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMudBrickSlab() {
         if (BlockTypes.MUD_BRICK_SLAB != null) return;
         BlockTypes.MUD_BRICK_SLAB = AllayBlockType
-                .builder(BlockMudBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.MUD_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7295,7 +6899,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initMudBricks() {
         if (BlockTypes.MUD_BRICKS != null) return;
         BlockTypes.MUD_BRICKS = AllayBlockType
-                .builder(BlockMudBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.MUD_BRICKS)
                 .build();
     }
@@ -7337,7 +6941,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initNetherBrickDoubleSlab() {
         if (BlockTypes.NETHER_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.NETHER_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockNetherBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.NETHER_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7346,7 +6950,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initNetherBrickFence() {
         if (BlockTypes.NETHER_BRICK_FENCE != null) return;
         BlockTypes.NETHER_BRICK_FENCE = AllayBlockType
-                .builder(BlockNetherBrickFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.NETHER_BRICK_FENCE)
                 .build();
     }
@@ -7354,7 +6958,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initNetherBrickSlab() {
         if (BlockTypes.NETHER_BRICK_SLAB != null) return;
         BlockTypes.NETHER_BRICK_SLAB = AllayBlockType
-                .builder(BlockNetherBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.NETHER_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7438,7 +7042,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initNormalStoneDoubleSlab() {
         if (BlockTypes.NORMAL_STONE_DOUBLE_SLAB != null) return;
         BlockTypes.NORMAL_STONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockNormalStoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.NORMAL_STONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7447,7 +7051,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initNormalStoneSlab() {
         if (BlockTypes.NORMAL_STONE_SLAB != null) return;
         BlockTypes.NORMAL_STONE_SLAB = AllayBlockType
-                .builder(BlockNormalStoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.NORMAL_STONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7473,7 +7077,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOakDoubleSlab() {
         if (BlockTypes.OAK_DOUBLE_SLAB != null) return;
         BlockTypes.OAK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockOakDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.OAK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7482,7 +7086,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOakFence() {
         if (BlockTypes.OAK_FENCE != null) return;
         BlockTypes.OAK_FENCE = AllayBlockType
-                .builder(BlockOakFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.OAK_FENCE)
                 .build();
     }
@@ -7517,7 +7121,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOakPlanks() {
         if (BlockTypes.OAK_PLANKS != null) return;
         BlockTypes.OAK_PLANKS = AllayBlockType
-                .builder(BlockOakPlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.OAK_PLANKS)
                 .build();
     }
@@ -7525,7 +7129,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOakSapling() {
         if (BlockTypes.OAK_SAPLING != null) return;
         BlockTypes.OAK_SAPLING = AllayBlockType
-                .builder(BlockOakSaplingBehaviorImpl.class)
+                .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.OAK_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .build();
@@ -7534,7 +7138,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOakSlab() {
         if (BlockTypes.OAK_SLAB != null) return;
         BlockTypes.OAK_SLAB = AllayBlockType
-                .builder(BlockOakSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.OAK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7587,7 +7191,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOrangeCandle() {
         if (BlockTypes.ORANGE_CANDLE != null) return;
         BlockTypes.ORANGE_CANDLE = AllayBlockType
-                .builder(BlockOrangeCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -7596,7 +7200,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOrangeCandleCake() {
         if (BlockTypes.ORANGE_CANDLE_CAKE != null) return;
         BlockTypes.ORANGE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockOrangeCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -7605,7 +7209,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOrangeCarpet() {
         if (BlockTypes.ORANGE_CARPET != null) return;
         BlockTypes.ORANGE_CARPET = AllayBlockType
-                .builder(BlockOrangeCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_CARPET)
                 .build();
     }
@@ -7613,7 +7217,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOrangeConcrete() {
         if (BlockTypes.ORANGE_CONCRETE != null) return;
         BlockTypes.ORANGE_CONCRETE = AllayBlockType
-                .builder(BlockOrangeConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_CONCRETE)
                 .build();
     }
@@ -7621,7 +7225,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOrangeConcretePowder() {
         if (BlockTypes.ORANGE_CONCRETE_POWDER != null) return;
         BlockTypes.ORANGE_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockOrangeConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_CONCRETE_POWDER)
                 .build();
     }
@@ -7646,7 +7250,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOrangeStainedGlass() {
         if (BlockTypes.ORANGE_STAINED_GLASS != null) return;
         BlockTypes.ORANGE_STAINED_GLASS = AllayBlockType
-                .builder(BlockOrangeStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_STAINED_GLASS)
                 .build();
     }
@@ -7654,7 +7258,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOrangeStainedGlassPane() {
         if (BlockTypes.ORANGE_STAINED_GLASS_PANE != null) return;
         BlockTypes.ORANGE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockOrangeStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.ORANGE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -7736,7 +7340,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOxidizedCopperTrapdoor() {
         if (BlockTypes.OXIDIZED_COPPER_TRAPDOOR != null) return;
         BlockTypes.OXIDIZED_COPPER_TRAPDOOR = AllayBlockType
-                .builder(BlockOxidizedCopperTrapdoorBehaviorImpl.class)
+                .builder(BlockCopperTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.OXIDIZED_COPPER_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -7753,7 +7357,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOxidizedCutCopperSlab() {
         if (BlockTypes.OXIDIZED_CUT_COPPER_SLAB != null) return;
         BlockTypes.OXIDIZED_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockOxidizedCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.OXIDIZED_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7771,7 +7375,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initOxidizedDoubleCutCopperSlab() {
         if (BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB != null) return;
         BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockOxidizedDoubleCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7814,7 +7418,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPetrifiedOakDoubleSlab() {
         if (BlockTypes.PETRIFIED_OAK_DOUBLE_SLAB != null) return;
         BlockTypes.PETRIFIED_OAK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPetrifiedOakDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.PETRIFIED_OAK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7823,7 +7427,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPetrifiedOakSlab() {
         if (BlockTypes.PETRIFIED_OAK_SLAB != null) return;
         BlockTypes.PETRIFIED_OAK_SLAB = AllayBlockType
-                .builder(BlockPetrifiedOakSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.PETRIFIED_OAK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -7832,7 +7436,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPiglinHead() {
         if (BlockTypes.PIGLIN_HEAD != null) return;
         BlockTypes.PIGLIN_HEAD = AllayBlockType
-                .builder(BlockPiglinHeadBehaviorImpl.class)
+                .builder(BlockHeadBehaviorImpl.class)
                 .vanillaBlock(BlockId.PIGLIN_HEAD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -7841,7 +7445,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPinkCandle() {
         if (BlockTypes.PINK_CANDLE != null) return;
         BlockTypes.PINK_CANDLE = AllayBlockType
-                .builder(BlockPinkCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -7850,7 +7454,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPinkCandleCake() {
         if (BlockTypes.PINK_CANDLE_CAKE != null) return;
         BlockTypes.PINK_CANDLE_CAKE = AllayBlockType
-                .builder(BlockPinkCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -7859,7 +7463,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPinkCarpet() {
         if (BlockTypes.PINK_CARPET != null) return;
         BlockTypes.PINK_CARPET = AllayBlockType
-                .builder(BlockPinkCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_CARPET)
                 .build();
     }
@@ -7867,7 +7471,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPinkConcrete() {
         if (BlockTypes.PINK_CONCRETE != null) return;
         BlockTypes.PINK_CONCRETE = AllayBlockType
-                .builder(BlockPinkConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_CONCRETE)
                 .build();
     }
@@ -7875,7 +7479,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPinkConcretePowder() {
         if (BlockTypes.PINK_CONCRETE_POWDER != null) return;
         BlockTypes.PINK_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockPinkConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_CONCRETE_POWDER)
                 .build();
     }
@@ -7909,7 +7513,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPinkStainedGlass() {
         if (BlockTypes.PINK_STAINED_GLASS != null) return;
         BlockTypes.PINK_STAINED_GLASS = AllayBlockType
-                .builder(BlockPinkStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_STAINED_GLASS)
                 .build();
     }
@@ -7917,7 +7521,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPinkStainedGlassPane() {
         if (BlockTypes.PINK_STAINED_GLASS_PANE != null) return;
         BlockTypes.PINK_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockPinkStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.PINK_STAINED_GLASS_PANE)
                 .build();
     }
@@ -7985,7 +7589,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPlayerHead() {
         if (BlockTypes.PLAYER_HEAD != null) return;
         BlockTypes.PLAYER_HEAD = AllayBlockType
-                .builder(BlockPlayerHeadBehaviorImpl.class)
+                .builder(BlockHeadBehaviorImpl.class)
                 .vanillaBlock(BlockId.PLAYER_HEAD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -8019,7 +7623,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedAndesiteDoubleSlab() {
         if (BlockTypes.POLISHED_ANDESITE_DOUBLE_SLAB != null) return;
         BlockTypes.POLISHED_ANDESITE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPolishedAndesiteDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_ANDESITE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8028,7 +7632,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedAndesiteSlab() {
         if (BlockTypes.POLISHED_ANDESITE_SLAB != null) return;
         BlockTypes.POLISHED_ANDESITE_SLAB = AllayBlockType
-                .builder(BlockPolishedAndesiteSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_ANDESITE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8063,7 +7667,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedBlackstoneBrickDoubleSlab() {
         if (BlockTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPolishedBlackstoneBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8072,7 +7676,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedBlackstoneBrickSlab() {
         if (BlockTypes.POLISHED_BLACKSTONE_BRICK_SLAB != null) return;
         BlockTypes.POLISHED_BLACKSTONE_BRICK_SLAB = AllayBlockType
-                .builder(BlockPolishedBlackstoneBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8099,7 +7703,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedBlackstoneBricks() {
         if (BlockTypes.POLISHED_BLACKSTONE_BRICKS != null) return;
         BlockTypes.POLISHED_BLACKSTONE_BRICKS = AllayBlockType
-                .builder(BlockPolishedBlackstoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BRICKS)
                 .build();
     }
@@ -8116,7 +7720,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedBlackstoneDoubleSlab() {
         if (BlockTypes.POLISHED_BLACKSTONE_DOUBLE_SLAB != null) return;
         BlockTypes.POLISHED_BLACKSTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPolishedBlackstoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8134,7 +7738,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedBlackstoneSlab() {
         if (BlockTypes.POLISHED_BLACKSTONE_SLAB != null) return;
         BlockTypes.POLISHED_BLACKSTONE_SLAB = AllayBlockType
-                .builder(BlockPolishedBlackstoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_BLACKSTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8169,7 +7773,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedDeepslateDoubleSlab() {
         if (BlockTypes.POLISHED_DEEPSLATE_DOUBLE_SLAB != null) return;
         BlockTypes.POLISHED_DEEPSLATE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPolishedDeepslateDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_DEEPSLATE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8178,7 +7782,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedDeepslateSlab() {
         if (BlockTypes.POLISHED_DEEPSLATE_SLAB != null) return;
         BlockTypes.POLISHED_DEEPSLATE_SLAB = AllayBlockType
-                .builder(BlockPolishedDeepslateSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_DEEPSLATE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8213,7 +7817,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedDioriteDoubleSlab() {
         if (BlockTypes.POLISHED_DIORITE_DOUBLE_SLAB != null) return;
         BlockTypes.POLISHED_DIORITE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPolishedDioriteDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_DIORITE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8222,7 +7826,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedDioriteSlab() {
         if (BlockTypes.POLISHED_DIORITE_SLAB != null) return;
         BlockTypes.POLISHED_DIORITE_SLAB = AllayBlockType
-                .builder(BlockPolishedDioriteSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_DIORITE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8248,7 +7852,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedGraniteDoubleSlab() {
         if (BlockTypes.POLISHED_GRANITE_DOUBLE_SLAB != null) return;
         BlockTypes.POLISHED_GRANITE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPolishedGraniteDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_GRANITE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8257,7 +7861,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedGraniteSlab() {
         if (BlockTypes.POLISHED_GRANITE_SLAB != null) return;
         BlockTypes.POLISHED_GRANITE_SLAB = AllayBlockType
-                .builder(BlockPolishedGraniteSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_GRANITE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8283,7 +7887,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedTuffDoubleSlab() {
         if (BlockTypes.POLISHED_TUFF_DOUBLE_SLAB != null) return;
         BlockTypes.POLISHED_TUFF_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPolishedTuffDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_TUFF_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8292,7 +7896,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPolishedTuffSlab() {
         if (BlockTypes.POLISHED_TUFF_SLAB != null) return;
         BlockTypes.POLISHED_TUFF_SLAB = AllayBlockType
-                .builder(BlockPolishedTuffSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.POLISHED_TUFF_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8379,7 +7983,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPrismarineBrickDoubleSlab() {
         if (BlockTypes.PRISMARINE_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.PRISMARINE_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPrismarineBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.PRISMARINE_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8388,7 +7992,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPrismarineBrickSlab() {
         if (BlockTypes.PRISMARINE_BRICK_SLAB != null) return;
         BlockTypes.PRISMARINE_BRICK_SLAB = AllayBlockType
-                .builder(BlockPrismarineBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.PRISMARINE_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8397,7 +8001,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPrismarineBricks() {
         if (BlockTypes.PRISMARINE_BRICKS != null) return;
         BlockTypes.PRISMARINE_BRICKS = AllayBlockType
-                .builder(BlockPrismarineBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.PRISMARINE_BRICKS)
                 .build();
     }
@@ -8414,7 +8018,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPrismarineDoubleSlab() {
         if (BlockTypes.PRISMARINE_DOUBLE_SLAB != null) return;
         BlockTypes.PRISMARINE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPrismarineDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.PRISMARINE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8423,7 +8027,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPrismarineSlab() {
         if (BlockTypes.PRISMARINE_SLAB != null) return;
         BlockTypes.PRISMARINE_SLAB = AllayBlockType
-                .builder(BlockPrismarineSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.PRISMARINE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8468,7 +8072,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpleCandle() {
         if (BlockTypes.PURPLE_CANDLE != null) return;
         BlockTypes.PURPLE_CANDLE = AllayBlockType
-                .builder(BlockPurpleCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -8477,7 +8081,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpleCandleCake() {
         if (BlockTypes.PURPLE_CANDLE_CAKE != null) return;
         BlockTypes.PURPLE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockPurpleCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -8486,7 +8090,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpleCarpet() {
         if (BlockTypes.PURPLE_CARPET != null) return;
         BlockTypes.PURPLE_CARPET = AllayBlockType
-                .builder(BlockPurpleCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_CARPET)
                 .build();
     }
@@ -8494,7 +8098,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpleConcrete() {
         if (BlockTypes.PURPLE_CONCRETE != null) return;
         BlockTypes.PURPLE_CONCRETE = AllayBlockType
-                .builder(BlockPurpleConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_CONCRETE)
                 .build();
     }
@@ -8502,7 +8106,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpleConcretePowder() {
         if (BlockTypes.PURPLE_CONCRETE_POWDER != null) return;
         BlockTypes.PURPLE_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockPurpleConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_CONCRETE_POWDER)
                 .build();
     }
@@ -8527,7 +8131,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpleStainedGlass() {
         if (BlockTypes.PURPLE_STAINED_GLASS != null) return;
         BlockTypes.PURPLE_STAINED_GLASS = AllayBlockType
-                .builder(BlockPurpleStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_STAINED_GLASS)
                 .build();
     }
@@ -8535,7 +8139,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpleStainedGlassPane() {
         if (BlockTypes.PURPLE_STAINED_GLASS_PANE != null) return;
         BlockTypes.PURPLE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockPurpleStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPLE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -8568,7 +8172,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpurDoubleSlab() {
         if (BlockTypes.PURPUR_DOUBLE_SLAB != null) return;
         BlockTypes.PURPUR_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockPurpurDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPUR_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8586,7 +8190,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initPurpurSlab() {
         if (BlockTypes.PURPUR_SLAB != null) return;
         BlockTypes.PURPUR_SLAB = AllayBlockType
-                .builder(BlockPurpurSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.PURPUR_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8613,7 +8217,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initQuartzBricks() {
         if (BlockTypes.QUARTZ_BRICKS != null) return;
         BlockTypes.QUARTZ_BRICKS = AllayBlockType
-                .builder(BlockQuartzBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.QUARTZ_BRICKS)
                 .build();
     }
@@ -8621,7 +8225,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initQuartzDoubleSlab() {
         if (BlockTypes.QUARTZ_DOUBLE_SLAB != null) return;
         BlockTypes.QUARTZ_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockQuartzDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.QUARTZ_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8647,7 +8251,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initQuartzSlab() {
         if (BlockTypes.QUARTZ_SLAB != null) return;
         BlockTypes.QUARTZ_SLAB = AllayBlockType
-                .builder(BlockQuartzSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.QUARTZ_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8698,7 +8302,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedCandle() {
         if (BlockTypes.RED_CANDLE != null) return;
         BlockTypes.RED_CANDLE = AllayBlockType
-                .builder(BlockRedCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -8707,7 +8311,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedCandleCake() {
         if (BlockTypes.RED_CANDLE_CAKE != null) return;
         BlockTypes.RED_CANDLE_CAKE = AllayBlockType
-                .builder(BlockRedCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -8716,7 +8320,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedCarpet() {
         if (BlockTypes.RED_CARPET != null) return;
         BlockTypes.RED_CARPET = AllayBlockType
-                .builder(BlockRedCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_CARPET)
                 .build();
     }
@@ -8724,7 +8328,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedConcrete() {
         if (BlockTypes.RED_CONCRETE != null) return;
         BlockTypes.RED_CONCRETE = AllayBlockType
-                .builder(BlockRedConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_CONCRETE)
                 .build();
     }
@@ -8732,7 +8336,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedConcretePowder() {
         if (BlockTypes.RED_CONCRETE_POWDER != null) return;
         BlockTypes.RED_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockRedConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_CONCRETE_POWDER)
                 .build();
     }
@@ -8774,7 +8378,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedNetherBrickDoubleSlab() {
         if (BlockTypes.RED_NETHER_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.RED_NETHER_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockRedNetherBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_NETHER_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8783,7 +8387,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedNetherBrickSlab() {
         if (BlockTypes.RED_NETHER_BRICK_SLAB != null) return;
         BlockTypes.RED_NETHER_BRICK_SLAB = AllayBlockType
-                .builder(BlockRedNetherBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_NETHER_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8826,7 +8430,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedSandstoneDoubleSlab() {
         if (BlockTypes.RED_SANDSTONE_DOUBLE_SLAB != null) return;
         BlockTypes.RED_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockRedSandstoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SANDSTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8835,7 +8439,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedSandstoneSlab() {
         if (BlockTypes.RED_SANDSTONE_SLAB != null) return;
         BlockTypes.RED_SANDSTONE_SLAB = AllayBlockType
-                .builder(BlockRedSandstoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_SANDSTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -8870,7 +8474,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedStainedGlass() {
         if (BlockTypes.RED_STAINED_GLASS != null) return;
         BlockTypes.RED_STAINED_GLASS = AllayBlockType
-                .builder(BlockRedStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_STAINED_GLASS)
                 .build();
     }
@@ -8878,7 +8482,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initRedStainedGlassPane() {
         if (BlockTypes.RED_STAINED_GLASS_PANE != null) return;
         BlockTypes.RED_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockRedStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.RED_STAINED_GLASS_PANE)
                 .build();
     }
@@ -9020,7 +8624,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSandstoneDoubleSlab() {
         if (BlockTypes.SANDSTONE_DOUBLE_SLAB != null) return;
         BlockTypes.SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockSandstoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SANDSTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9029,7 +8633,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSandstoneSlab() {
         if (BlockTypes.SANDSTONE_SLAB != null) return;
         BlockTypes.SANDSTONE_SLAB = AllayBlockType
-                .builder(BlockSandstoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SANDSTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9160,7 +8764,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSkeletonSkull() {
         if (BlockTypes.SKELETON_SKULL != null) return;
         BlockTypes.SKELETON_SKULL = AllayBlockType
-                .builder(BlockSkeletonSkullBehaviorImpl.class)
+                .builder(BlockHeadBehaviorImpl.class)
                 .vanillaBlock(BlockId.SKELETON_SKULL)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -9229,7 +8833,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothQuartzDoubleSlab() {
         if (BlockTypes.SMOOTH_QUARTZ_DOUBLE_SLAB != null) return;
         BlockTypes.SMOOTH_QUARTZ_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockSmoothQuartzDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_QUARTZ_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9238,7 +8842,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothQuartzSlab() {
         if (BlockTypes.SMOOTH_QUARTZ_SLAB != null) return;
         BlockTypes.SMOOTH_QUARTZ_SLAB = AllayBlockType
-                .builder(BlockSmoothQuartzSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_QUARTZ_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9264,7 +8868,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothRedSandstoneDoubleSlab() {
         if (BlockTypes.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB != null) return;
         BlockTypes.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockSmoothRedSandstoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9273,7 +8877,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothRedSandstoneSlab() {
         if (BlockTypes.SMOOTH_RED_SANDSTONE_SLAB != null) return;
         BlockTypes.SMOOTH_RED_SANDSTONE_SLAB = AllayBlockType
-                .builder(BlockSmoothRedSandstoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_RED_SANDSTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9299,7 +8903,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothSandstoneDoubleSlab() {
         if (BlockTypes.SMOOTH_SANDSTONE_DOUBLE_SLAB != null) return;
         BlockTypes.SMOOTH_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockSmoothSandstoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_SANDSTONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9308,7 +8912,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothSandstoneSlab() {
         if (BlockTypes.SMOOTH_SANDSTONE_SLAB != null) return;
         BlockTypes.SMOOTH_SANDSTONE_SLAB = AllayBlockType
-                .builder(BlockSmoothSandstoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_SANDSTONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9334,7 +8938,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothStoneDoubleSlab() {
         if (BlockTypes.SMOOTH_STONE_DOUBLE_SLAB != null) return;
         BlockTypes.SMOOTH_STONE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockSmoothStoneDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_STONE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9343,7 +8947,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSmoothStoneSlab() {
         if (BlockTypes.SMOOTH_STONE_SLAB != null) return;
         BlockTypes.SMOOTH_STONE_SLAB = AllayBlockType
-                .builder(BlockSmoothStoneSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SMOOTH_STONE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9464,7 +9068,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSpruceDoubleSlab() {
         if (BlockTypes.SPRUCE_DOUBLE_SLAB != null) return;
         BlockTypes.SPRUCE_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockSpruceDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9473,7 +9077,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSpruceFence() {
         if (BlockTypes.SPRUCE_FENCE != null) return;
         BlockTypes.SPRUCE_FENCE = AllayBlockType
-                .builder(BlockSpruceFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_FENCE)
                 .build();
     }
@@ -9481,7 +9085,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSpruceFenceGate() {
         if (BlockTypes.SPRUCE_FENCE_GATE != null) return;
         BlockTypes.SPRUCE_FENCE_GATE = AllayBlockType
-                .builder(BlockSpruceFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -9517,7 +9121,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSprucePlanks() {
         if (BlockTypes.SPRUCE_PLANKS != null) return;
         BlockTypes.SPRUCE_PLANKS = AllayBlockType
-                .builder(BlockSprucePlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_PLANKS)
                 .build();
     }
@@ -9534,7 +9138,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSpruceSapling() {
         if (BlockTypes.SPRUCE_SAPLING != null) return;
         BlockTypes.SPRUCE_SAPLING = AllayBlockType
-                .builder(BlockSpruceSaplingBehaviorImpl.class)
+                .builder(BlockSaplingBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_SAPLING)
                 .setProperties(BlockPropertyTypes.AGE_BIT)
                 .build();
@@ -9543,7 +9147,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSpruceSlab() {
         if (BlockTypes.SPRUCE_SLAB != null) return;
         BlockTypes.SPRUCE_SLAB = AllayBlockType
-                .builder(BlockSpruceSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9570,7 +9174,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initSpruceTrapdoor() {
         if (BlockTypes.SPRUCE_TRAPDOOR != null) return;
         BlockTypes.SPRUCE_TRAPDOOR = AllayBlockType
-                .builder(BlockSpruceTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.SPRUCE_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -9641,7 +9245,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initStoneBrickDoubleSlab() {
         if (BlockTypes.STONE_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.STONE_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockStoneBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.STONE_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9650,7 +9254,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initStoneBrickSlab() {
         if (BlockTypes.STONE_BRICK_SLAB != null) return;
         BlockTypes.STONE_BRICK_SLAB = AllayBlockType
-                .builder(BlockStoneBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.STONE_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -9677,7 +9281,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initStoneBricks() {
         if (BlockTypes.STONE_BRICKS != null) return;
         BlockTypes.STONE_BRICKS = AllayBlockType
-                .builder(BlockStoneBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.STONE_BRICKS)
                 .build();
     }
@@ -9988,7 +9592,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTintedGlass() {
         if (BlockTypes.TINTED_GLASS != null) return;
         BlockTypes.TINTED_GLASS = AllayBlockType
-                .builder(BlockTintedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.TINTED_GLASS)
                 .build();
     }
@@ -10076,7 +9680,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTubeCoral() {
         if (BlockTypes.TUBE_CORAL != null) return;
         BlockTypes.TUBE_CORAL = AllayBlockType
-                .builder(BlockTubeCoralBehaviorImpl.class)
+                .builder(BlockCoralBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUBE_CORAL)
                 .build();
     }
@@ -10084,7 +9688,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTubeCoralBlock() {
         if (BlockTypes.TUBE_CORAL_BLOCK != null) return;
         BlockTypes.TUBE_CORAL_BLOCK = AllayBlockType
-                .builder(BlockTubeCoralBlockBehaviorImpl.class)
+                .builder(BlockCoralBlockBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUBE_CORAL_BLOCK)
                 .build();
     }
@@ -10092,7 +9696,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTubeCoralFan() {
         if (BlockTypes.TUBE_CORAL_FAN != null) return;
         BlockTypes.TUBE_CORAL_FAN = AllayBlockType
-                .builder(BlockTubeCoralFanBehaviorImpl.class)
+                .builder(BlockCoralFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUBE_CORAL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_FAN_DIRECTION)
                 .build();
@@ -10101,7 +9705,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTubeCoralWallFan() {
         if (BlockTypes.TUBE_CORAL_WALL_FAN != null) return;
         BlockTypes.TUBE_CORAL_WALL_FAN = AllayBlockType
-                .builder(BlockTubeCoralWallFanBehaviorImpl.class)
+                .builder(BlockCoralWallFanBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUBE_CORAL_WALL_FAN)
                 .setProperties(BlockPropertyTypes.CORAL_DIRECTION)
                 .build();
@@ -10118,7 +9722,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTuffBrickDoubleSlab() {
         if (BlockTypes.TUFF_BRICK_DOUBLE_SLAB != null) return;
         BlockTypes.TUFF_BRICK_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockTuffBrickDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUFF_BRICK_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10127,7 +9731,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTuffBrickSlab() {
         if (BlockTypes.TUFF_BRICK_SLAB != null) return;
         BlockTypes.TUFF_BRICK_SLAB = AllayBlockType
-                .builder(BlockTuffBrickSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUFF_BRICK_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10154,7 +9758,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTuffBricks() {
         if (BlockTypes.TUFF_BRICKS != null) return;
         BlockTypes.TUFF_BRICKS = AllayBlockType
-                .builder(BlockTuffBricksBehaviorImpl.class)
+                .builder(BlockBricksBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUFF_BRICKS)
                 .build();
     }
@@ -10162,7 +9766,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTuffDoubleSlab() {
         if (BlockTypes.TUFF_DOUBLE_SLAB != null) return;
         BlockTypes.TUFF_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockTuffDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUFF_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10171,7 +9775,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initTuffSlab() {
         if (BlockTypes.TUFF_SLAB != null) return;
         BlockTypes.TUFF_SLAB = AllayBlockType
-                .builder(BlockTuffSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.TUFF_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10340,7 +9944,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWarpedDoubleSlab() {
         if (BlockTypes.WARPED_DOUBLE_SLAB != null) return;
         BlockTypes.WARPED_DOUBLE_SLAB = AllayBlockType
-                .builder(BlockWarpedDoubleSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WARPED_DOUBLE_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10349,7 +9953,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWarpedFence() {
         if (BlockTypes.WARPED_FENCE != null) return;
         BlockTypes.WARPED_FENCE = AllayBlockType
-                .builder(BlockWarpedFenceBehaviorImpl.class)
+                .builder(BlockFenceBehaviorImpl.class)
                 .vanillaBlock(BlockId.WARPED_FENCE)
                 .build();
     }
@@ -10357,7 +9961,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWarpedFenceGate() {
         if (BlockTypes.WARPED_FENCE_GATE != null) return;
         BlockTypes.WARPED_FENCE_GATE = AllayBlockType
-                .builder(BlockWarpedFenceGateBehaviorImpl.class)
+                .builder(BlockFenceGateBehaviorImpl.class)
                 .vanillaBlock(BlockId.WARPED_FENCE_GATE)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.IN_WALL_BIT, BlockPropertyTypes.OPEN_BIT)
                 .build();
@@ -10400,7 +10004,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWarpedPlanks() {
         if (BlockTypes.WARPED_PLANKS != null) return;
         BlockTypes.WARPED_PLANKS = AllayBlockType
-                .builder(BlockWarpedPlanksBehaviorImpl.class)
+                .builder(BlockPlanksBehaviorImpl.class)
                 .vanillaBlock(BlockId.WARPED_PLANKS)
                 .build();
     }
@@ -10425,7 +10029,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWarpedSlab() {
         if (BlockTypes.WARPED_SLAB != null) return;
         BlockTypes.WARPED_SLAB = AllayBlockType
-                .builder(BlockWarpedSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WARPED_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10461,7 +10065,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWarpedTrapdoor() {
         if (BlockTypes.WARPED_TRAPDOOR != null) return;
         BlockTypes.WARPED_TRAPDOOR = AllayBlockType
-                .builder(BlockWarpedTrapdoorBehaviorImpl.class)
+                .builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.WARPED_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -10546,7 +10150,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedCopperTrapdoor() {
         if (BlockTypes.WAXED_COPPER_TRAPDOOR != null) return;
         BlockTypes.WAXED_COPPER_TRAPDOOR = AllayBlockType
-                .builder(BlockWaxedCopperTrapdoorBehaviorImpl.class)
+                .builder(BlockCopperTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_COPPER_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -10563,7 +10167,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedCutCopperSlab() {
         if (BlockTypes.WAXED_CUT_COPPER_SLAB != null) return;
         BlockTypes.WAXED_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWaxedCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10581,7 +10185,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedDoubleCutCopperSlab() {
         if (BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB != null) return;
         BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWaxedDoubleCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_DOUBLE_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10632,7 +10236,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedExposedCopperTrapdoor() {
         if (BlockTypes.WAXED_EXPOSED_COPPER_TRAPDOOR != null) return;
         BlockTypes.WAXED_EXPOSED_COPPER_TRAPDOOR = AllayBlockType
-                .builder(BlockWaxedExposedCopperTrapdoorBehaviorImpl.class)
+                .builder(BlockCopperTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -10649,7 +10253,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedExposedCutCopperSlab() {
         if (BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB != null) return;
         BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWaxedExposedCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_EXPOSED_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10667,7 +10271,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedExposedDoubleCutCopperSlab() {
         if (BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB != null) return;
         BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWaxedExposedDoubleCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10718,7 +10322,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedOxidizedCopperTrapdoor() {
         if (BlockTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR != null) return;
         BlockTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR = AllayBlockType
-                .builder(BlockWaxedOxidizedCopperTrapdoorBehaviorImpl.class)
+                .builder(BlockCopperTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -10735,7 +10339,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedOxidizedCutCopperSlab() {
         if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB != null) return;
         BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWaxedOxidizedCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10753,7 +10357,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedOxidizedDoubleCutCopperSlab() {
         if (BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB != null) return;
         BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWaxedOxidizedDoubleCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10804,7 +10408,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedWeatheredCopperTrapdoor() {
         if (BlockTypes.WAXED_WEATHERED_COPPER_TRAPDOOR != null) return;
         BlockTypes.WAXED_WEATHERED_COPPER_TRAPDOOR = AllayBlockType
-                .builder(BlockWaxedWeatheredCopperTrapdoorBehaviorImpl.class)
+                .builder(BlockCopperTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -10821,7 +10425,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedWeatheredCutCopperSlab() {
         if (BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB != null) return;
         BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWaxedWeatheredCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_WEATHERED_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10839,7 +10443,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWaxedWeatheredDoubleCutCopperSlab() {
         if (BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB != null) return;
         BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWaxedWeatheredDoubleCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10890,7 +10494,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWeatheredCopperTrapdoor() {
         if (BlockTypes.WEATHERED_COPPER_TRAPDOOR != null) return;
         BlockTypes.WEATHERED_COPPER_TRAPDOOR = AllayBlockType
-                .builder(BlockWeatheredCopperTrapdoorBehaviorImpl.class)
+                .builder(BlockCopperTrapdoorBehaviorImpl.class)
                 .vanillaBlock(BlockId.WEATHERED_COPPER_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .build();
@@ -10907,7 +10511,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWeatheredCutCopperSlab() {
         if (BlockTypes.WEATHERED_CUT_COPPER_SLAB != null) return;
         BlockTypes.WEATHERED_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWeatheredCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WEATHERED_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10925,7 +10529,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWeatheredDoubleCutCopperSlab() {
         if (BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB != null) return;
         BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                .builder(BlockWeatheredDoubleCutCopperSlabBehaviorImpl.class)
+                .builder(BlockSlabBehaviorImpl.class)
                 .vanillaBlock(BlockId.WEATHERED_DOUBLE_CUT_COPPER_SLAB)
                 .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                 .build();
@@ -10968,7 +10572,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWhiteCandle() {
         if (BlockTypes.WHITE_CANDLE != null) return;
         BlockTypes.WHITE_CANDLE = AllayBlockType
-                .builder(BlockWhiteCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -10977,7 +10581,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWhiteCandleCake() {
         if (BlockTypes.WHITE_CANDLE_CAKE != null) return;
         BlockTypes.WHITE_CANDLE_CAKE = AllayBlockType
-                .builder(BlockWhiteCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -10986,7 +10590,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWhiteCarpet() {
         if (BlockTypes.WHITE_CARPET != null) return;
         BlockTypes.WHITE_CARPET = AllayBlockType
-                .builder(BlockWhiteCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_CARPET)
                 .build();
     }
@@ -10994,7 +10598,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWhiteConcrete() {
         if (BlockTypes.WHITE_CONCRETE != null) return;
         BlockTypes.WHITE_CONCRETE = AllayBlockType
-                .builder(BlockWhiteConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_CONCRETE)
                 .build();
     }
@@ -11002,7 +10606,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWhiteConcretePowder() {
         if (BlockTypes.WHITE_CONCRETE_POWDER != null) return;
         BlockTypes.WHITE_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockWhiteConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_CONCRETE_POWDER)
                 .build();
     }
@@ -11027,7 +10631,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWhiteStainedGlass() {
         if (BlockTypes.WHITE_STAINED_GLASS != null) return;
         BlockTypes.WHITE_STAINED_GLASS = AllayBlockType
-                .builder(BlockWhiteStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_STAINED_GLASS)
                 .build();
     }
@@ -11035,7 +10639,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWhiteStainedGlassPane() {
         if (BlockTypes.WHITE_STAINED_GLASS_PANE != null) return;
         BlockTypes.WHITE_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockWhiteStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.WHITE_STAINED_GLASS_PANE)
                 .build();
     }
@@ -11075,7 +10679,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initWitherSkeletonSkull() {
         if (BlockTypes.WITHER_SKELETON_SKULL != null) return;
         BlockTypes.WITHER_SKELETON_SKULL = AllayBlockType
-                .builder(BlockWitherSkeletonSkullBehaviorImpl.class)
+                .builder(BlockHeadBehaviorImpl.class)
                 .vanillaBlock(BlockId.WITHER_SKELETON_SKULL)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
@@ -11111,7 +10715,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initYellowCandle() {
         if (BlockTypes.YELLOW_CANDLE != null) return;
         BlockTypes.YELLOW_CANDLE = AllayBlockType
-                .builder(BlockYellowCandleBehaviorImpl.class)
+                .builder(BlockCandleBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_CANDLE)
                 .setProperties(BlockPropertyTypes.CANDLES, BlockPropertyTypes.LIT)
                 .build();
@@ -11120,7 +10724,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initYellowCandleCake() {
         if (BlockTypes.YELLOW_CANDLE_CAKE != null) return;
         BlockTypes.YELLOW_CANDLE_CAKE = AllayBlockType
-                .builder(BlockYellowCandleCakeBehaviorImpl.class)
+                .builder(BlockCandleCakeBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_CANDLE_CAKE)
                 .setProperties(BlockPropertyTypes.LIT)
                 .build();
@@ -11129,7 +10733,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initYellowCarpet() {
         if (BlockTypes.YELLOW_CARPET != null) return;
         BlockTypes.YELLOW_CARPET = AllayBlockType
-                .builder(BlockYellowCarpetBehaviorImpl.class)
+                .builder(BlockCarpetBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_CARPET)
                 .build();
     }
@@ -11137,7 +10741,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initYellowConcrete() {
         if (BlockTypes.YELLOW_CONCRETE != null) return;
         BlockTypes.YELLOW_CONCRETE = AllayBlockType
-                .builder(BlockYellowConcreteBehaviorImpl.class)
+                .builder(BlockConcreteBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_CONCRETE)
                 .build();
     }
@@ -11145,7 +10749,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initYellowConcretePowder() {
         if (BlockTypes.YELLOW_CONCRETE_POWDER != null) return;
         BlockTypes.YELLOW_CONCRETE_POWDER = AllayBlockType
-                .builder(BlockYellowConcretePowderBehaviorImpl.class)
+                .builder(BlockConcretePowderBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_CONCRETE_POWDER)
                 .build();
     }
@@ -11170,7 +10774,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initYellowStainedGlass() {
         if (BlockTypes.YELLOW_STAINED_GLASS != null) return;
         BlockTypes.YELLOW_STAINED_GLASS = AllayBlockType
-                .builder(BlockYellowStainedGlassBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_STAINED_GLASS)
                 .build();
     }
@@ -11178,7 +10782,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initYellowStainedGlassPane() {
         if (BlockTypes.YELLOW_STAINED_GLASS_PANE != null) return;
         BlockTypes.YELLOW_STAINED_GLASS_PANE = AllayBlockType
-                .builder(BlockYellowStainedGlassPaneBehaviorImpl.class)
+                .builder(BlockStainedGlassBehaviorImpl.class)
                 .vanillaBlock(BlockId.YELLOW_STAINED_GLASS_PANE)
                 .build();
     }
@@ -11202,7 +10806,7 @@ public final class BlockTypeDefaultInitializer {
     public static void initZombieHead() {
         if (BlockTypes.ZOMBIE_HEAD != null) return;
         BlockTypes.ZOMBIE_HEAD = AllayBlockType
-                .builder(BlockZombieHeadBehaviorImpl.class)
+                .builder(BlockHeadBehaviorImpl.class)
                 .vanillaBlock(BlockId.ZOMBIE_HEAD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .build();
