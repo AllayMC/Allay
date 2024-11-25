@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import me.sunlan.fastreflection.FastConstructor;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockComponent;
@@ -482,8 +481,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             List<ComponentProvider<? extends Component>> componentProviderList = listComponents.stream().map(singleton -> ComponentProvider.of($ -> singleton, singleton.getClass())).collect(Collectors.toList());
 
             try {
-                var fastMemberConstructor = FastConstructor.create(clazz.getConstructors()[0]);
-                type.blockBehavior = (T) fastMemberConstructor.invoke(componentProviderList);
+                type.blockBehavior = (T) clazz.getConstructors()[0].newInstance(componentProviderList);
             } catch (Throwable t) {
                 throw new BlockTypeBuildException("Failed to create block type!", t);
             }

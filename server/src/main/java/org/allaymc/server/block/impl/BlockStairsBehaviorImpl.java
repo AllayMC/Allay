@@ -1,0 +1,13 @@
+package org.allaymc.server.block.impl;
+
+import java.util.List;
+import org.allaymc.api.block.interfaces.BlockStairsBehavior;
+import org.allaymc.api.component.interfaces.Component;
+import org.allaymc.server.component.interfaces.ComponentProvider;
+
+public class BlockStairsBehaviorImpl extends BlockBehaviorImpl implements BlockStairsBehavior {
+    public BlockStairsBehaviorImpl(
+            List<ComponentProvider<? extends Component>> componentProviders) {
+        super(componentProviders);;
+    }
+}

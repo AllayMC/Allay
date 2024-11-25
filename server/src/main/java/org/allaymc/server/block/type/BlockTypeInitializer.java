@@ -24,21 +24,21 @@ import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentIm
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 import org.allaymc.server.block.impl.*;
 import org.allaymc.server.block.impl.button.BlockButtonBehaviorImpl;
+import org.allaymc.server.block.impl.door.BlockCopperDoorBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockDoorBehaviorImpl;
+import org.allaymc.server.block.impl.door.BlockIronDoorBehaviorImpl;
 import org.allaymc.server.block.impl.furnace.BlockBlastFurnaceBehaviorImpl;
 import org.allaymc.server.block.impl.furnace.BlockFurnaceBehaviorImpl;
 import org.allaymc.server.block.impl.furnace.BlockSmokerBehaviorImpl;
-import org.allaymc.server.block.impl.leaves.BlockLeavesBehaviorImpl;
 import org.allaymc.server.block.impl.liquid.BlockFlowingLavaBehaviorImpl;
 import org.allaymc.server.block.impl.liquid.BlockFlowingWaterBehaviorImpl;
 import org.allaymc.server.block.impl.liquid.BlockLavaBehaviorImpl;
 import org.allaymc.server.block.impl.liquid.BlockWaterBehaviorImpl;
 import org.allaymc.server.block.impl.sand.BlockRedSandBehaviorImpl;
 import org.allaymc.server.block.impl.sand.BlockSandBehaviorImpl;
-import org.allaymc.server.block.impl.shulkerbox.BlockShulkerBoxBehaviorImpl;
-import org.allaymc.server.block.impl.stairs.BlockStairsBehaviorImpl;
+import org.allaymc.server.block.impl.sign.BlockHangingSignBehaviorImpl;
+import org.allaymc.server.block.impl.sign.BlockSignBehaviorImpl;
 import org.allaymc.server.block.impl.torch.*;
-import org.allaymc.server.block.impl.wood.BlockWoodBehaviorImpl;
 
 import java.time.Duration;
 import java.util.function.Function;
@@ -716,7 +716,7 @@ public final class BlockTypeInitializer {
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
                 .build();
         BlockTypes.UNLIT_REDSTONE_TORCH = AllayBlockType
-                .builder(BlockUnlitRedstoneTorchBehaviorImpl.class)
+                .builder(BlockRedstoneTorchBehaviorImpl.class)
                 .vanillaBlock(BlockId.UNLIT_REDSTONE_TORCH)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockTorchBaseComponentImpl::new)
@@ -850,27 +850,27 @@ public final class BlockTypeInitializer {
     }
 
     public static void initDoors() {
-        BlockTypes.ACACIA_DOOR = buildWoodenDoor(BlockId.ACACIA_DOOR);
-        BlockTypes.BAMBOO_DOOR = buildWoodenDoor(BlockId.BAMBOO_DOOR);
-        BlockTypes.BIRCH_DOOR = buildWoodenDoor(BlockId.BIRCH_DOOR);
-        BlockTypes.CHERRY_DOOR = buildWoodenDoor(BlockId.CHERRY_DOOR);
-        BlockTypes.CRIMSON_DOOR = buildWoodenDoor(BlockId.CRIMSON_DOOR);
-        BlockTypes.DARK_OAK_DOOR = buildWoodenDoor(BlockId.DARK_OAK_DOOR);
-        BlockTypes.JUNGLE_DOOR = buildWoodenDoor(BlockId.JUNGLE_DOOR);
-        BlockTypes.MANGROVE_DOOR = buildWoodenDoor(BlockId.MANGROVE_DOOR);
-        BlockTypes.WOODEN_DOOR = buildWoodenDoor(BlockId.WOODEN_DOOR);
-        BlockTypes.SPRUCE_DOOR = buildWoodenDoor(BlockId.SPRUCE_DOOR);
-        BlockTypes.WARPED_DOOR = buildWoodenDoor(BlockId.WARPED_DOOR);
+        BlockTypes.ACACIA_DOOR = buildDoor(BlockId.ACACIA_DOOR);
+        BlockTypes.BAMBOO_DOOR = buildDoor(BlockId.BAMBOO_DOOR);
+        BlockTypes.BIRCH_DOOR = buildDoor(BlockId.BIRCH_DOOR);
+        BlockTypes.CHERRY_DOOR = buildDoor(BlockId.CHERRY_DOOR);
+        BlockTypes.CRIMSON_DOOR = buildDoor(BlockId.CRIMSON_DOOR);
+        BlockTypes.DARK_OAK_DOOR = buildDoor(BlockId.DARK_OAK_DOOR);
+        BlockTypes.JUNGLE_DOOR = buildDoor(BlockId.JUNGLE_DOOR);
+        BlockTypes.MANGROVE_DOOR = buildDoor(BlockId.MANGROVE_DOOR);
+        BlockTypes.WOODEN_DOOR = buildDoor(BlockId.WOODEN_DOOR);
+        BlockTypes.SPRUCE_DOOR = buildDoor(BlockId.SPRUCE_DOOR);
+        BlockTypes.WARPED_DOOR = buildDoor(BlockId.WARPED_DOOR);
         // TODO: Replace BlockDoorBaseComponentImpl::new
-        BlockTypes.IRON_DOOR = buildDoor(BlockId.IRON_DOOR, BlockDoorBaseComponentImpl::new);
-        BlockTypes.COPPER_DOOR = buildDoor(BlockId.COPPER_DOOR, BlockDoorBaseComponentImpl::new);
-        BlockTypes.EXPOSED_COPPER_DOOR = buildDoor(BlockId.EXPOSED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
-        BlockTypes.OXIDIZED_COPPER_DOOR = buildDoor(BlockId.OXIDIZED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
-        BlockTypes.WAXED_COPPER_DOOR = buildDoor(BlockId.WAXED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
-        BlockTypes.WAXED_EXPOSED_COPPER_DOOR = buildDoor(BlockId.WAXED_EXPOSED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
-        BlockTypes.WAXED_OXIDIZED_COPPER_DOOR = buildDoor(BlockId.WAXED_OXIDIZED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
-        BlockTypes.WAXED_WEATHERED_COPPER_DOOR = buildDoor(BlockId.WAXED_WEATHERED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
-        BlockTypes.WEATHERED_COPPER_DOOR = buildDoor(BlockId.WEATHERED_COPPER_DOOR, BlockDoorBaseComponentImpl::new);
+        BlockTypes.IRON_DOOR = buildIronDoor(BlockId.IRON_DOOR);
+        BlockTypes.COPPER_DOOR = buildCopperDoor(BlockId.COPPER_DOOR);
+        BlockTypes.EXPOSED_COPPER_DOOR = buildCopperDoor(BlockId.EXPOSED_COPPER_DOOR);
+        BlockTypes.OXIDIZED_COPPER_DOOR = buildCopperDoor(BlockId.OXIDIZED_COPPER_DOOR);
+        BlockTypes.WAXED_COPPER_DOOR = buildCopperDoor(BlockId.WAXED_COPPER_DOOR);
+        BlockTypes.WAXED_EXPOSED_COPPER_DOOR = buildCopperDoor(BlockId.WAXED_EXPOSED_COPPER_DOOR);
+        BlockTypes.WAXED_OXIDIZED_COPPER_DOOR = buildCopperDoor(BlockId.WAXED_OXIDIZED_COPPER_DOOR);
+        BlockTypes.WAXED_WEATHERED_COPPER_DOOR = buildCopperDoor(BlockId.WAXED_WEATHERED_COPPER_DOOR);
+        BlockTypes.WEATHERED_COPPER_DOOR = buildCopperDoor(BlockId.WEATHERED_COPPER_DOOR);
     }
 
     public static void initRods() {
@@ -919,13 +919,23 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildWoodenDoor(BlockId blockId) {
-        return buildDoor(blockId, BlockDoorBaseComponentImpl::new);
+    private static <T extends BlockBehavior> BlockType<T> buildDoor(BlockId blockId) {
+        return buildDoor0(blockId, BlockDoorBehaviorImpl.class, BlockDoorBaseComponentImpl::new);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildDoor(BlockId blockId, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
+    private static <T extends BlockBehavior> BlockType<T> buildIronDoor(BlockId blockId) {
+        // TODO: replace BlockDoorBaseComponentImpl::new
+        return buildDoor0(blockId, BlockIronDoorBehaviorImpl.class, BlockDoorBaseComponentImpl::new);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildCopperDoor(BlockId blockId) {
+        // TODO: replace BlockDoorBaseComponentImpl::new
+        return buildDoor0(blockId, BlockCopperDoorBehaviorImpl.class, BlockDoorBaseComponentImpl::new);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildDoor0(BlockId blockId, Class<? extends BlockBehavior> clazz, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
         return AllayBlockType
-                .builder(BlockDoorBehaviorImpl.class)
+                .builder(clazz)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBlockBaseComponentSupplier(blockBaseComponentSupplier)
