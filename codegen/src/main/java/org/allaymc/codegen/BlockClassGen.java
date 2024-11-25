@@ -211,8 +211,6 @@ public class BlockClassGen extends BaseClassGen {
         registerSubPackage(Pattern.compile(".*CoralFan.*"), "coralfan");
         registerSubPackage(Pattern.compile(".*BricksBehavior"), "bricks");
         registerSubPackage(Pattern.compile(".*WoolBehavior"), "wool");
-        // TODO
-        registerSubPackage(Pattern.compile(".*ButtonBehavior"), "button");
         registerSubPackage(Pattern.compile(".*PlanksBehavior"), "planks");
         registerSubPackage(Pattern.compile(".*TrapdoorBehavior"), "trapdoor");
         registerSubPackage(Pattern.compile(".*CandleBehavior"), "candle");
@@ -270,7 +268,6 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*HangingSignBehavior"), "BlockHangingSignBehavior");
         registerMergedBlock(Pattern.compile(".*StandingSignBehavior"), "BlockSignBehavior");
         registerMergedBlock(Pattern.compile(".*WallSignBehavior"), "BlockSignBehavior");
-        // TODO
         registerMergedBlock(Pattern.compile(".*ButtonBehavior"), "BlockButtonBehavior");
     }
 }

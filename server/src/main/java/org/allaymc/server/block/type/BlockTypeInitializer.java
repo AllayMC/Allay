@@ -23,7 +23,6 @@ import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 import org.allaymc.server.block.impl.*;
-import org.allaymc.server.block.impl.button.BlockButtonBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockCopperDoorBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockDoorBehaviorImpl;
 import org.allaymc.server.block.impl.door.BlockIronDoorBehaviorImpl;
