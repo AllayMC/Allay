@@ -21,10 +21,9 @@ public class BlockTypeRegistryPopulator implements Runnable {
         log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADING));
         InternalBlockTypeData.init();
         BlockLootTable.init();
-        var defaultInitializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockTypeDefaultInitializer.class);
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(BlockTypeInitializer.class);
         initializers.forEach(Utils::callInitializer);
-        defaultInitializers.forEach(Utils::callInitializer);
+        BlockTypeDefaultInitializer.init();
         log.info(I18n.get().tr(TrKeys.A_BLOCKTYPE_LOADED, BlockId.values().length));
     }
 }
