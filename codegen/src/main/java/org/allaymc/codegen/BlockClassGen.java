@@ -24,7 +24,6 @@ public class BlockClassGen extends BaseClassGen {
     public static final MethodSpec.Builder BLOCK_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER =
             MethodSpec.methodBuilder("init")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
-    public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
     public static Map<Pattern, String> MERGED_BLOCKS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
@@ -35,7 +34,6 @@ public class BlockClassGen extends BaseClassGen {
 
     @SneakyThrows
     public static void generate() {
-        registerSubPackages();
         registerMergedBlocks();
 
         var interfaceDir = Path.of("api/src/main/java/org/allaymc/api/block/interfaces");
@@ -62,23 +60,22 @@ public class BlockClassGen extends BaseClassGen {
 
             var interfaceSimpleName = generateClassSimpleName(id);
             var interfaceFullName = generateClassFullName(id);
-            var folderName = tryFindSpecifiedFolderName(interfaceSimpleName);
-            var path = (folderName != null ? interfaceDir.resolve(folderName) : interfaceDir).resolve(interfaceSimpleName + ".java");
+            var path = interfaceDir.resolve(interfaceSimpleName + ".java");
             if (!Files.exists(path)) {
                 System.out.println("Generating " + interfaceSimpleName + "...");
-                if (!Files.exists(folderName != null ? interfaceDir.resolve(folderName) : interfaceDir)) {
-                    Files.createDirectories(folderName != null ? interfaceDir.resolve(folderName) : interfaceDir);
+                if (!Files.exists(interfaceDir)) {
+                    Files.createDirectories(interfaceDir);
                 }
                 generateInterface(ClassNames.BLOCK_BEHAVIOR, interfaceFullName, path);
             }
 
             var implSimpleName = generateClassSimpleName(id) + "Impl";
-            var implFullName = ClassName.get("org.allaymc.server.block.impl" + (folderName != null ? "." + folderName : ""), implSimpleName);
-            var implPath = (folderName != null ? implDir.resolve(folderName) : implDir).resolve(implSimpleName + ".java");
+            var implFullName = ClassName.get("org.allaymc.server.block.impl", implSimpleName);
+            var implPath = implDir.resolve(implSimpleName + ".java");
             if (!Files.exists(implPath)) {
                 System.out.println("Generating " + implSimpleName + "...");
-                if (!Files.exists(folderName != null ? implDir.resolve(folderName) : implDir)) {
-                    Files.createDirectories(folderName != null ? implDir.resolve(folderName) : implDir);
+                if (!Files.exists(implDir)) {
+                    Files.createDirectories(implDir);
                 }
                 generateBlockImpl(interfaceFullName, implFullName, implPath);
             }
@@ -166,8 +163,7 @@ public class BlockClassGen extends BaseClassGen {
 
     private static ClassName generateClassFullName(BlockId id) {
         var simpleName = generateClassSimpleName(id);
-        var folderName = tryFindSpecifiedFolderName(simpleName);
-        return ClassName.get("org.allaymc.api.block.interfaces" + (folderName != null ? "." + folderName : ""), simpleName);
+        return ClassName.get("org.allaymc.api.block.interfaces", simpleName);
     }
 
     private static String generateClassSimpleName(BlockId id) {
@@ -180,42 +176,8 @@ public class BlockClassGen extends BaseClassGen {
         return origin;
     }
 
-    private static String generateInitializerMethodName(BlockId id) {
-        return "init" + Utils.convertToPascalCase(id.getIdentifier().path());
-    }
-
-    private static String tryFindSpecifiedFolderName(String blockClassSimpleName) {
-        for (var entry : SUB_PACKAGE_GROUPERS.entrySet()) {
-            var pattern = entry.getKey();
-            if (pattern.matcher(blockClassSimpleName).find()) {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
-    private static void registerSubPackage(Pattern regex, String packageName) {
-        SUB_PACKAGE_GROUPERS.put(regex, packageName);
-    }
-
     private static void registerMergedBlock(Pattern regex, String className) {
         MERGED_BLOCKS.put(regex, className);
-    }
-
-    private static void registerSubPackages() {
-        registerSubPackage(Pattern.compile(".*DoorBehavior"), "door");
-        registerSubPackage(Pattern.compile(".*SignBehavior"), "sign");
-        registerSubPackage(Pattern.compile("BlockPiston.*"), "piston");
-        registerSubPackage(Pattern.compile("BlockStickyPiston.*"), "piston");
-        registerSubPackage(Pattern.compile(".*AmethystBudBehavior"), "amethystbud");
-        registerSubPackage(Pattern.compile(".*Torchflower.*Behavior"), "torchflower");
-        registerSubPackage(Pattern.compile(".*Torch.*Behavior"), "torch");
-        registerSubPackage(Pattern.compile(".*DirtBehavior"), "dirt");
-        registerSubPackage(Pattern.compile(".*SandBehavior"), "sand");
-        registerSubPackage(Pattern.compile("BlockPurpur.*"), "purpur");
-        registerSubPackage(Pattern.compile(".*SpongeBehavior"), "sponge");
-        registerSubPackage(Pattern.compile(".*TntBehavior"), "tnt");
-        registerSubPackage(Pattern.compile(".*(Furnace|Smoker)Behavior"), "furnace");
     }
 
     private static void registerMergedBlocks() {

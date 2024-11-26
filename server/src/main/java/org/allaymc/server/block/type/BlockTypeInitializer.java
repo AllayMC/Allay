@@ -23,17 +23,6 @@ import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
 import org.allaymc.server.block.impl.*;
-import org.allaymc.server.block.impl.door.BlockCopperDoorBehaviorImpl;
-import org.allaymc.server.block.impl.door.BlockDoorBehaviorImpl;
-import org.allaymc.server.block.impl.door.BlockIronDoorBehaviorImpl;
-import org.allaymc.server.block.impl.furnace.BlockBlastFurnaceBehaviorImpl;
-import org.allaymc.server.block.impl.furnace.BlockFurnaceBehaviorImpl;
-import org.allaymc.server.block.impl.furnace.BlockSmokerBehaviorImpl;
-import org.allaymc.server.block.impl.sand.BlockRedSandBehaviorImpl;
-import org.allaymc.server.block.impl.sand.BlockSandBehaviorImpl;
-import org.allaymc.server.block.impl.sign.BlockHangingSignBehaviorImpl;
-import org.allaymc.server.block.impl.sign.BlockSignBehaviorImpl;
-import org.allaymc.server.block.impl.torch.*;
 
 import java.time.Duration;
 import java.util.function.Function;
