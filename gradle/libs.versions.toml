@@ -1,5 +1,5 @@
 [versions]
-log4j = "2.24.1"
+log4j = "2.24.2"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 
@@ -45,7 +45,9 @@ libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.17.0" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.18.0" }
+# bytecode
+bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.15.10" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 # K-V DataBase
