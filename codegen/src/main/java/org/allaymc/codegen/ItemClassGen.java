@@ -103,7 +103,7 @@ public class ItemClassGen extends BaseClassGen {
                 .add("$T.$N = $T\n", ClassNames.ITEM_TYPES, id.name(), ClassNames.ALLAY_ITEM_TYPE)
                 .add("        .builder($T.class)\n", itemClassName)
                 .add("        .vanillaItem($T.$N)\n", ClassNames.ITEM_ID, id.name())
-                .add("        .build();");
+                .add("        .build()");
         ITEM_TYPE_DEFAULT_INITIALIZER_CLASS_BUILDER
                 .addMethod(
                         MethodSpec.methodBuilder(generateInitializerMethodName(id))

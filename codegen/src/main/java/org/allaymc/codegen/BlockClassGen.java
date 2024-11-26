@@ -105,7 +105,7 @@ public class BlockClassGen extends BaseClassGen {
                         .constructorBuilder()
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(ParameterizedTypeName.get(ClassNames.LIST, ParameterizedTypeName.get(ClassNames.COMPONENT_PROVIDER, WildcardTypeName.subtypeOf(ClassNames.COMPONENT))), "componentProviders")
-                        .addStatement("super(componentProviders);")
+                        .addStatement("super(componentProviders)")
                         .build()
         );
         var javaFile = JavaFile.builder(className.packageName(), codeBuilder.build())
