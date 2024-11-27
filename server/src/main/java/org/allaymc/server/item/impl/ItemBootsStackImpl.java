@@ -4,12 +4,12 @@ import lombok.experimental.Delegate;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.boots.*;
+import org.allaymc.api.item.interfaces.ItemBootsStack;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 
 import java.util.List;
 
-public class ItemBootsStackImpl extends ItemStackImpl implements ItemChainmailBootsStack, ItemDiamondBootsStack, ItemGoldenBootsStack, ItemIronBootsStack, ItemLeatherBootsStack, ItemNetheriteBootsStack {
+public class ItemBootsStackImpl extends ItemStackImpl implements ItemBootsStack {
     @Delegate
     protected ItemArmorBaseComponent armorBaseComponent;
 

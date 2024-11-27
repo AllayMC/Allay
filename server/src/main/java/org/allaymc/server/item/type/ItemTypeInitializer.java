@@ -17,9 +17,6 @@ import org.allaymc.server.item.component.spawnegg.ItemSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.spawnegg.ItemTropicalFishSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.tool.*;
 import org.allaymc.server.item.impl.*;
-import org.allaymc.server.item.impl.bucket.ItemBucketStackImpl;
-import org.allaymc.server.item.impl.bucket.ItemMilkBucketStackImpl;
-import org.allaymc.server.item.impl.spawnegg.ItemSpawnEggStackImpl;
 
 /**
  * @author daoge_cmd
@@ -260,65 +257,6 @@ public final class ItemTypeInitializer {
                         ItemFoodComponentImpl.class
                 )
                 .build();
-        ItemTypes.APPLE = AllayItemType
-                .builder(ItemAppleStackImpl.class)
-                .vanillaItem(ItemId.APPLE)
-                .addComponent(
-                        $ -> new ItemFoodComponentImpl(4, 2.4f),
-                        ItemFoodComponentImpl.class
-                )
-                .build();
-    }
-
-    public static void initSpiderEye() {
-        ItemTypes.SPIDER_EYE = AllayItemType
-                .builder(ItemSpiderEyeStackImpl.class)
-                .vanillaItem(ItemId.SPIDER_EYE)
-                .addComponent(
-                        $ -> new ItemFoodComponentImpl(2, 3.2f),
-                        ItemFoodComponentImpl.class
-                )
-                .addComponent(ItemSpiderEyeBaseComponentImpl::new, ItemSpiderEyeBaseComponentImpl.class)
-                .build();
-    }
-
-    public static void initRottenFlesh() {
-        ItemTypes.ROTTEN_FLESH = AllayItemType
-                .builder(ItemRottenFleshStackImpl.class)
-                .vanillaItem(ItemId.ROTTEN_FLESH)
-                .addComponent(
-                        $ -> new ItemFoodComponentImpl(4, 0.8f),
-                        ItemFoodComponentImpl.class
-                )
-                .addComponent(ItemRottenFleshBaseComponentImpl::new, ItemRottenFleshBaseComponentImpl.class)
-                .build();
-    }
-
-    public static void initChicken() {
-        ItemTypes.CHICKEN = AllayItemType
-                .builder(ItemChickenStackImpl.class)
-                .vanillaItem(ItemId.CHICKEN)
-                .addComponent(
-                        $ -> new ItemFoodComponentImpl(2, 1.2f),
-                        ItemFoodComponentImpl.class
-                )
-                .addComponent(ItemChickenBaseComponentImpl::new, ItemChickenBaseComponentImpl.class)
-                .build();
-    }
-
-    public static void initPufferfish() {
-        ItemTypes.PUFFERFISH = AllayItemType
-                .builder(ItemPufferfishStackImpl.class)
-                .vanillaItem(ItemId.PUFFERFISH)
-                .addComponent(
-                        $ -> new ItemFoodComponentImpl(1, 0.2f),
-                        ItemFoodComponentImpl.class
-                )
-                .addComponent(ItemPufferfishBaseComponentImpl::new, ItemPufferfishBaseComponentImpl.class)
-                .build();
-    }
-
-    public static void initPoisonousPotato() {
         ItemTypes.POISONOUS_POTATO = AllayItemType
                 .builder(ItemPoisonousPotatoStackImpl.class)
                 .vanillaItem(ItemId.POISONOUS_POTATO)
@@ -328,9 +266,42 @@ public final class ItemTypeInitializer {
                 )
                 .addComponent(ItemPoisonousPotatoBaseComponentImpl::new, ItemPoisonousPotatoBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initHoneyBottle() {
+        ItemTypes.SPIDER_EYE = AllayItemType
+                .builder(ItemSpiderEyeStackImpl.class)
+                .vanillaItem(ItemId.SPIDER_EYE)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(2, 3.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .addComponent(ItemSpiderEyeBaseComponentImpl::new, ItemSpiderEyeBaseComponentImpl.class)
+                .build();
+        ItemTypes.ROTTEN_FLESH = AllayItemType
+                .builder(ItemRottenFleshStackImpl.class)
+                .vanillaItem(ItemId.ROTTEN_FLESH)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(4, 0.8f),
+                        ItemFoodComponentImpl.class
+                )
+                .addComponent(ItemRottenFleshBaseComponentImpl::new, ItemRottenFleshBaseComponentImpl.class)
+                .build();
+        ItemTypes.CHICKEN = AllayItemType
+                .builder(ItemChickenStackImpl.class)
+                .vanillaItem(ItemId.CHICKEN)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(2, 1.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .addComponent(ItemChickenBaseComponentImpl::new, ItemChickenBaseComponentImpl.class)
+                .build();
+        ItemTypes.PUFFERFISH = AllayItemType
+                .builder(ItemPufferfishStackImpl.class)
+                .vanillaItem(ItemId.PUFFERFISH)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(1, 0.2f),
+                        ItemFoodComponentImpl.class
+                )
+                .addComponent(ItemPufferfishBaseComponentImpl::new, ItemPufferfishBaseComponentImpl.class)
+                .build();
         ItemTypes.HONEY_BOTTLE = AllayItemType
                 .builder(ItemHoneyBottleStackImpl.class)
                 .vanillaItem(ItemId.HONEY_BOTTLE)
@@ -340,9 +311,14 @@ public final class ItemTypeInitializer {
                 )
                 .addComponent(ItemHoneyBottleBaseComponentImpl::new, ItemHoneyBottleBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initApples() {
+        ItemTypes.APPLE = AllayItemType
+                .builder(ItemAppleStackImpl.class)
+                .vanillaItem(ItemId.APPLE)
+                .addComponent(
+                        $ -> new ItemFoodComponentImpl(4, 2.4f),
+                        ItemFoodComponentImpl.class
+                )
+                .build();
         ItemTypes.GOLDEN_APPLE = AllayItemType
                 .builder(ItemGoldenAppleStackImpl.class)
                 .vanillaItem(ItemId.GOLDEN_APPLE)
@@ -361,9 +337,6 @@ public final class ItemTypeInitializer {
                 )
                 .addComponent(ItemEnchantedGoldenAppleBaseComponentImpl::new, ItemEnchantedGoldenAppleBaseComponentImpl.class)
                 .build();
-    }
-
-    public static void initChorusFruit() {
         ItemTypes.CHORUS_FRUIT = AllayItemType
                 .builder(ItemChorusFruitStackImpl.class)
                 .vanillaItem(ItemId.CHORUS_FRUIT)
@@ -1317,14 +1290,6 @@ public final class ItemTypeInitializer {
                 .builder(ItemBucketStackImpl.class)
                 .vanillaItem(ItemId.WATER_BUCKET)
                 .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER.getIdentifier(), null), ItemBucketComponentImpl.class)
-                .build();
-    }
-
-    public static void initMilkBucket() {
-        // TODO: Milk bucket should be treated specially, because it is food and cannot being placed
-        ItemTypes.MILK_BUCKET = AllayItemType
-                .builder(ItemMilkBucketStackImpl.class)
-                .vanillaItem(ItemId.MILK_BUCKET)
                 .build();
     }
 }

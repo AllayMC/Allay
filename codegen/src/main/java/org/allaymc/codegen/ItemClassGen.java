@@ -7,9 +7,7 @@ import org.allaymc.dependence.ItemId;
 import javax.lang.model.element.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -21,8 +19,6 @@ public class ItemClassGen extends BaseClassGen {
     public static final MethodSpec.Builder ITEM_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER =
             MethodSpec.methodBuilder("init")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
-    public static Map<Pattern, String> SUB_PACKAGE_GROUPERS = new LinkedHashMap<>();
-    public static List<Pattern> IGNORED_ITEM_IMPLS = new ArrayList<>();
     public static Map<Pattern, String> MERGED_ITEMS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
@@ -32,8 +28,6 @@ public class ItemClassGen extends BaseClassGen {
 
     @SneakyThrows
     public static void generate() {
-        registerSubPackages();
-        registerIgnoredItemImpls();
         registerMergedItems();
 
         var interfaceDir = Path.of("api/src/main/java/org/allaymc/api/item/interfaces");
@@ -60,27 +54,22 @@ public class ItemClassGen extends BaseClassGen {
 
             var interfaceSimpleName = generateClassSimpleName(id);
             var interfaceFullName = generateClassFullName(id);
-            var folderName = tryFindSpecifiedFolderName(interfaceSimpleName);
-            var interfacePath = (folderName != null ? interfaceDir.resolve(folderName) : interfaceDir).resolve(interfaceSimpleName + ".java");
+            var interfacePath = interfaceDir.resolve(interfaceSimpleName + ".java");
             if (!Files.exists(interfacePath)) {
                 System.out.println("Generating " + interfaceSimpleName + "...");
-                if (!Files.exists(folderName != null ? interfaceDir.resolve(folderName) : interfaceDir)) {
-                    Files.createDirectories(folderName != null ? interfaceDir.resolve(folderName) : interfaceDir);
+                if (!Files.exists(interfaceDir)) {
+                    Files.createDirectories(interfaceDir);
                 }
                 generateInterface(ClassNames.ITEM_STACK, interfaceFullName, interfacePath);
             }
 
-            if (IGNORED_ITEM_IMPLS.stream().anyMatch(pattern -> pattern.matcher(interfaceSimpleName).find())) {
-                continue;
-            }
-
             var implSimpleName = generateClassSimpleName(id) + "Impl";
-            var implFullName = ClassName.get("org.allaymc.server.item.impl" + (folderName != null ? "." + folderName : ""), implSimpleName);
-            var implPath = (folderName != null ? implDir.resolve(folderName) : implDir).resolve(implSimpleName + ".java");
+            var implFullName = ClassName.get("org.allaymc.server.item.impl", implSimpleName);
+            var implPath = implDir.resolve(implSimpleName + ".java");
             if (!Files.exists(implPath)) {
                 System.out.println("Generating " + implSimpleName + "...");
-                if (!Files.exists(folderName != null ? implDir.resolve(folderName) : implDir)) {
-                    Files.createDirectories(folderName != null ? implDir.resolve(folderName) : implDir);
+                if (!Files.exists(implDir)) {
+                    Files.createDirectories(implDir);
                 }
                 generateImpl(ClassNames.ITEM_STACK_IMPL, interfaceFullName, implFullName, ClassNames.ITEM_STACK_INIT_INFO, implPath);
             }
@@ -141,8 +130,7 @@ public class ItemClassGen extends BaseClassGen {
             case NETHERBRICK -> "ItemNetherbrick0Stack";
             // tallgrass and tall_grass require special handling
             case TALLGRASS -> "ItemTallgrass0Stack";
-            case null, default ->
-                    "Item" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_")) + "Stack";
+            default -> "Item" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_")) + "Stack";
         };
         for (var entry : MERGED_ITEMS.entrySet()) {
             if (entry.getKey().matcher(origin).find()) {
@@ -153,126 +141,79 @@ public class ItemClassGen extends BaseClassGen {
     }
 
     private static ClassName generateClassFullName(ItemId id) {
-        var simpleName = generateClassSimpleName(id);
-        var folderName = tryFindSpecifiedFolderName(simpleName);
-        return ClassName.get("org.allaymc.api.item.interfaces" + (folderName != null ? "." + folderName : ""), simpleName);
-    }
-
-    private static String generateInitializerMethodName(ItemId id) {
-        // Same to above
-        if (id == ItemId.NETHERBRICK) return "initNetherbrick0";
-        if (id == ItemId.TALLGRASS) return "initTallgrass0";
-        return "init" + Utils.convertToPascalCase(id.getIdentifier().path().replace(".", "_"));
-    }
-
-    private static String tryFindSpecifiedFolderName(String blockClassSimpleName) {
-        for (var entry : SUB_PACKAGE_GROUPERS.entrySet()) {
-            var pattern = entry.getKey();
-            if (pattern.matcher(blockClassSimpleName).find()) {
-                return entry.getValue();
-            }
-        }
-        return null;
-    }
-
-    private static void registerSubPackage(Pattern regex, String packageName) {
-        SUB_PACKAGE_GROUPERS.put(regex, packageName);
-    }
-
-    private static void registerIgnoredItemImpl(Pattern regex) {
-        IGNORED_ITEM_IMPLS.add(regex);
+        return ClassName.get("org.allaymc.api.item.interfaces", generateClassSimpleName(id));
     }
 
     private static void registerMergedItem(Pattern regex, String className) {
         MERGED_ITEMS.put(regex, className);
     }
 
-    private static void registerSubPackages() {
-        registerSubPackage(Pattern.compile(".*StairsStack"), "stairs");
-        registerSubPackage(Pattern.compile(".*DoorStack"), "door");
-        registerSubPackage(Pattern.compile(".*Slab\\d?Stack"), "slab");
-        registerSubPackage(Pattern.compile(".*StandingSignStack"), "standingsign");
-        registerSubPackage(Pattern.compile(".*HangingSignStack"), "hangingsign");
-        registerSubPackage(Pattern.compile(".*WallSignStack"), "wallsign");
-        registerSubPackage(Pattern.compile(".*SignStack"), "sign");
-        registerSubPackage(Pattern.compile(".*WallStack"), "wall");
-        registerSubPackage(Pattern.compile("ItemElement.*"), "element");
-        registerSubPackage(Pattern.compile(".*CoralStack"), "coral");
-        registerSubPackage(Pattern.compile(".*CoralBlockStack"), "coralblock");
-        registerSubPackage(Pattern.compile(".*CoralFan.*"), "coralfan");
-        registerSubPackage(Pattern.compile(".*BricksStack"), "bricks");
-        registerSubPackage(Pattern.compile(".*WoolStack"), "wool");
-        registerSubPackage(Pattern.compile(".*ButtonStack"), "button");
-        registerSubPackage(Pattern.compile(".*PlanksStack"), "planks");
-        registerSubPackage(Pattern.compile(".*TrapdoorStack"), "trapdoor");
-        registerSubPackage(Pattern.compile(".*CandleStack"), "candle");
-        registerSubPackage(Pattern.compile(".*CandleCakeStack"), "candlecake");
-        registerSubPackage(Pattern.compile(".*ConcreteStack"), "concrete");
-        registerSubPackage(Pattern.compile(".*ConcretePowderStack"), "concretepowder");
-        registerSubPackage(Pattern.compile(".*TerracottaStack"), "terracotta");
-        registerSubPackage(Pattern.compile(".*ShulkerBoxStack"), "shulkerbox");
-        registerSubPackage(Pattern.compile(".*CarpetStack"), "carpet");
-        registerSubPackage(Pattern.compile(".*WoodStack"), "wood");
-        registerSubPackage(Pattern.compile(".*(Leaves\\d?|LeavesFlowered)Stack"), "leaves");
-        registerSubPackage(Pattern.compile(".*FenceStack"), "fence");
-        registerSubPackage(Pattern.compile(".*FenceGateStack"), "fencegate");
-        registerSubPackage(Pattern.compile(".*Log\\d?Stack"), "log");
-        registerSubPackage(Pattern.compile(".*CopperStack"), "copper");
-        registerSubPackage(Pattern.compile(".*SaplingStack"), "sapling");
-        registerSubPackage(Pattern.compile(".*(?:Water|Lava)Stack"), "liquid");
-        registerSubPackage(Pattern.compile(".*BoatStack"), "boat");
-        registerSubPackage(Pattern.compile(".*MinecartStack"), "minecart");
-        registerSubPackage(Pattern.compile(".*BucketStack"), "bucket");
-        registerSubPackage(Pattern.compile(".*SpawnEggStack"), "spawnegg");
-        registerSubPackage(Pattern.compile("ItemMusicDisc.*"), "musicdisc");
-        registerSubPackage(Pattern.compile("ItemPiston.*"), "piston");
-        registerSubPackage(Pattern.compile("ItemStickyPiston.*"), "piston");
-        registerSubPackage(Pattern.compile(".*StainedGlassStack"), "stainedglass");
-        registerSubPackage(Pattern.compile(".*StainedGlassPaneStack"), "stainedglasspane");
-        registerSubPackage(Pattern.compile(".*GlassStack"), "glass");
-        registerSubPackage(Pattern.compile(".*GlassPaneStack"), "glasspane");
-        registerSubPackage(Pattern.compile(".*HelmetStack"), "helmet");
-        registerSubPackage(Pattern.compile(".*ChestplateStack"), "chestplate");
-        registerSubPackage(Pattern.compile(".*LeggingsStack"), "leggings");
-        registerSubPackage(Pattern.compile(".*BootsStack"), "boots");
-        registerSubPackage(Pattern.compile(".*SwordStack"), "sword");
-        registerSubPackage(Pattern.compile(".*PickaxeStack"), "pickaxe");
-        registerSubPackage(Pattern.compile(".*ShovelStack"), "shovel");
-        registerSubPackage(Pattern.compile(".*HoeStack"), "hoe");
-        registerSubPackage(Pattern.compile(".*AxeStack"), "axe");
-        registerSubPackage(Pattern.compile(".*SandstoneStack"), "sandstone");
-        registerSubPackage(Pattern.compile(".*SandStack"), "sand");
-        registerSubPackage(Pattern.compile(".*Torchflower.*Stack"), "torchflower");
-        registerSubPackage(Pattern.compile(".*Torch.*Stack"), "torch");
-        registerSubPackage(Pattern.compile(".*LightBlock.*Stack"), "lightblock");
-        registerSubPackage(Pattern.compile(".*DirtStack"), "dirt");
-        registerSubPackage(Pattern.compile(".*AnvilStack"), "anvil");
-        registerSubPackage(Pattern.compile(".*CoralWallFanStack"), "coralwallfan");
-        registerSubPackage(Pattern.compile("ItemPurpur.*"), "purpur");
-        registerSubPackage(Pattern.compile(".*SpongeStack"), "sponge");
-        registerSubPackage(Pattern.compile(".*TntStack"), "tnt");
-        registerSubPackage(Pattern.compile(".*(Head|Skull)Stack"), "head");
-        registerSubPackage(Pattern.compile(".*BundleStack"), "bundle");
-        registerSubPackage(Pattern.compile(".*(Furnace|Smoker)Stack"), "furnace");
-    }
-
-    private static void registerIgnoredItemImpls() {
-        registerIgnoredItemImpl(Pattern.compile(".*SpawnEggStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*BucketStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*SwordStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*PickaxeStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*AxeStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*ShovelStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*HoeStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*ShulkerBoxStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*HelmetStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*ChestplateStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*LeggingsStack"));
-        registerIgnoredItemImpl(Pattern.compile(".*BootsStack"));
-        registerIgnoredItemImpl(Pattern.compile("^(?!.*HangingSignStack$)(?!.*WallSignStack$)(?!.*StandingSignStack$).*SignStack$"));
-    }
-
     private static void registerMergedItems() {
-
+        registerMergedItem(Pattern.compile(".*SpawnEggStack"), "ItemSpawnEggStack");
+        registerMergedItem(Pattern.compile(".*SwordStack"), "ItemSwordStack");
+        registerMergedItem(Pattern.compile(".*PickaxeStack"), "ItemPickaxeStack");
+        registerMergedItem(Pattern.compile(".*ShovelStack"), "ItemShovelStack");
+        registerMergedItem(Pattern.compile(".*HoeStack"), "ItemHoeStack");
+        registerMergedItem(Pattern.compile(".*AxeStack"), "ItemAxeStack");
+        registerMergedItem(Pattern.compile(".*ShulkerBoxStack"), "ItemShulkerBoxStack");
+        registerMergedItem(Pattern.compile("^(?!.*MilkBucketStack$).*BucketStack$"), "ItemBucketStack");
+        registerMergedItem(Pattern.compile(".*HelmetStack"), "ItemHelmetStack");
+        registerMergedItem(Pattern.compile(".*ChestplateStack"), "ItemChestplateStack");
+        registerMergedItem(Pattern.compile(".*LeggingsStack"), "ItemLeggingsStack");
+        registerMergedItem(Pattern.compile(".*BootsStack"), "ItemBootsStack");
+        registerMergedItem(Pattern.compile(".*HangingSignStack"), "ItemHangingSignStack");
+        registerMergedItem(Pattern.compile(".*WallSignStack"), "ItemWallSignStack");
+        registerMergedItem(Pattern.compile(".*StandingSignStack"), "ItemStandingSignStack");
+        registerMergedItem(Pattern.compile(".*SignStack"), "ItemSignStack");
+        registerMergedItem(Pattern.compile(".*StairsStack"), "ItemStairsStack");
+        registerMergedItem(Pattern.compile(".*DoorStack"), "ItemDoorStack");
+        registerMergedItem(Pattern.compile(".*Slab\\d?Stack"), "ItemSlabStack");
+        registerMergedItem(Pattern.compile(".*WallStack"), "ItemWallStack");
+        registerMergedItem(Pattern.compile("ItemElement.*"), "ItemElementStack");
+        registerMergedItem(Pattern.compile(".*CoralStack"), "ItemCoralStack");
+        registerMergedItem(Pattern.compile(".*CoralBlockStack"), "ItemCoralBlockStack");
+        registerMergedItem(Pattern.compile(".*CoralFan.*"), "ItemCoralFanStack");
+        registerMergedItem(Pattern.compile(".*CoralWallFanStack"), "ItemCoralWallFanStack");
+        registerMergedItem(Pattern.compile(".*BricksStack"), "ItemBricksStack");
+        registerMergedItem(Pattern.compile(".*WoolStack"), "ItemWoolStack");
+        registerMergedItem(Pattern.compile(".*ButtonStack"), "ItemButtonStack");
+        registerMergedItem(Pattern.compile(".*PlanksStack"), "ItemPlanksStack");
+        registerMergedItem(Pattern.compile(".*TrapdoorStack"), "ItemTrapdoorStack");
+        registerMergedItem(Pattern.compile(".*CandleStack"), "ItemCandleStack");
+        registerMergedItem(Pattern.compile(".*CandleCakeStack"), "ItemCandleCakeStack");
+        registerMergedItem(Pattern.compile(".*ConcreteStack"), "ItemConcreteStack");
+        registerMergedItem(Pattern.compile(".*ConcretePowderStack"), "ItemConcretePowderStack");
+        registerMergedItem(Pattern.compile(".*TerracottaStack"), "ItemTerracottaStack");
+        registerMergedItem(Pattern.compile(".*CarpetStack"), "ItemCarpetStack");
+        registerMergedItem(Pattern.compile(".*WoodStack"), "ItemWoodStack");
+        registerMergedItem(Pattern.compile(".*FenceStack"), "ItemFenceStack");
+        registerMergedItem(Pattern.compile(".*FenceGateStack"), "ItemFenceGateStack");
+        registerMergedItem(Pattern.compile(".*(Leaves\\d?|LeavesFlowered)Stack"), "ItemLeavesStack");
+        registerMergedItem(Pattern.compile(".*Log\\d?Stack"), "ItemLogStack");
+        registerMergedItem(Pattern.compile(".*CopperStack"), "ItemCopperStack");
+        registerMergedItem(Pattern.compile(".*SaplingStack"), "ItemSaplingStack");
+        registerMergedItem(Pattern.compile(".*(?:Water|Lava)Stack"), "ItemLiquidStack");
+        registerMergedItem(Pattern.compile(".*BoatStack"), "ItemBoatStack");
+        registerMergedItem(Pattern.compile(".*MinecartStack"), "ItemMinecartStack");
+        registerMergedItem(Pattern.compile("ItemMusicDisc.*"), "ItemMusicDiscStack");
+        registerMergedItem(Pattern.compile("ItemPiston.*"), "ItemPistonStack");
+        registerMergedItem(Pattern.compile("ItemStickyPiston.*"), "ItemStickyPistonStack");
+        registerMergedItem(Pattern.compile(".*StainedGlassStack"), "ItemStainedGlassStack");
+        registerMergedItem(Pattern.compile(".*StainedGlassPaneStack"), "ItemStainedGlassPaneStack");
+        registerMergedItem(Pattern.compile(".*GlassStack"), "ItemGlassStack");
+        registerMergedItem(Pattern.compile(".*GlassPaneStack"), "ItemGlassPaneStack");
+        registerMergedItem(Pattern.compile(".*SandstoneStack"), "ItemSandstoneStack");
+        registerMergedItem(Pattern.compile(".*SandStack"), "ItemSandStack");
+        registerMergedItem(Pattern.compile(".*Torchflower.*Stack"), "ItemTorchflowerStack");
+        registerMergedItem(Pattern.compile(".*Torch.*Stack"), "ItemTorchStack");
+        registerMergedItem(Pattern.compile(".*LightBlock.*Stack"), "ItemLightBlockStack");
+        registerMergedItem(Pattern.compile(".*DirtStack"), "ItemDirtStack");
+        registerMergedItem(Pattern.compile(".*AnvilStack"), "ItemAnvilStack");
+        registerMergedItem(Pattern.compile("ItemPurpur.*"), "ItemPurpurStack");
+        registerMergedItem(Pattern.compile(".*SpongeStack"), "ItemSpongeStack");
+        registerMergedItem(Pattern.compile(".*TntStack"), "ItemTntStack");
+        registerMergedItem(Pattern.compile(".*(Head|Skull)Stack"), "ItemHeadStack");
+        registerMergedItem(Pattern.compile(".*BundleStack"), "ItemBundleStack");
+        registerMergedItem(Pattern.compile(".*(Furnace|Smoker)Stack"), "ItemFurnaceStack");
     }
 }

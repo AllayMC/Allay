@@ -4,12 +4,12 @@ import lombok.experimental.Delegate;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.item.component.ItemItemStorableComponent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
-import org.allaymc.api.item.interfaces.shulkerbox.*;
+import org.allaymc.api.item.interfaces.ItemShulkerBoxStack;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 
 import java.util.List;
 
-public class ItemShulkerBoxStackImpl extends ItemStackImpl implements ItemBlackShulkerBoxStack, ItemBlueShulkerBoxStack, ItemBrownShulkerBoxStack, ItemCyanShulkerBoxStack, ItemGrayShulkerBoxStack, ItemGreenShulkerBoxStack, ItemLightBlueShulkerBoxStack, ItemLightGrayShulkerBoxStack, ItemLimeShulkerBoxStack, ItemMagentaShulkerBoxStack, ItemOrangeShulkerBoxStack, ItemPinkShulkerBoxStack, ItemPurpleShulkerBoxStack, ItemRedShulkerBoxStack, ItemShulkerBoxStack, ItemUndyedShulkerBoxStack, ItemWhiteShulkerBoxStack, ItemYellowShulkerBoxStack {
+public class ItemShulkerBoxStackImpl extends ItemStackImpl implements ItemShulkerBoxStack {
     @Delegate
     protected ItemItemStorableComponent itemStorableComponent;
 

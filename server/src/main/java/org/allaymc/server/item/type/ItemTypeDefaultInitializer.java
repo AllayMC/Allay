@@ -13,12 +13,14 @@ import org.allaymc.server.item.impl.ItemAmethystShardStackImpl;
 import org.allaymc.server.item.impl.ItemAncientDebrisStackImpl;
 import org.allaymc.server.item.impl.ItemAndesiteStackImpl;
 import org.allaymc.server.item.impl.ItemAnglerPotterySherdStackImpl;
+import org.allaymc.server.item.impl.ItemAnvilStackImpl;
 import org.allaymc.server.item.impl.ItemAppleStackImpl;
 import org.allaymc.server.item.impl.ItemArcherPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemArmadilloScuteStackImpl;
 import org.allaymc.server.item.impl.ItemArmorStandStackImpl;
 import org.allaymc.server.item.impl.ItemArmsUpPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemArrowStackImpl;
+import org.allaymc.server.item.impl.ItemAxeStackImpl;
 import org.allaymc.server.item.impl.ItemAzaleaStackImpl;
 import org.allaymc.server.item.impl.ItemAzureBluetStackImpl;
 import org.allaymc.server.item.impl.ItemBakedPotatoStackImpl;
@@ -55,12 +57,14 @@ import org.allaymc.server.item.impl.ItemBleachStackImpl;
 import org.allaymc.server.item.impl.ItemBlueDyeStackImpl;
 import org.allaymc.server.item.impl.ItemBlueIceStackImpl;
 import org.allaymc.server.item.impl.ItemBlueOrchidStackImpl;
+import org.allaymc.server.item.impl.ItemBoatStackImpl;
 import org.allaymc.server.item.impl.ItemBoltArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemBoneBlockStackImpl;
 import org.allaymc.server.item.impl.ItemBoneMealStackImpl;
 import org.allaymc.server.item.impl.ItemBoneStackImpl;
 import org.allaymc.server.item.impl.ItemBookStackImpl;
 import org.allaymc.server.item.impl.ItemBookshelfStackImpl;
+import org.allaymc.server.item.impl.ItemBootsStackImpl;
 import org.allaymc.server.item.impl.ItemBorderBlockStackImpl;
 import org.allaymc.server.item.impl.ItemBordureIndentedBannerPatternStackImpl;
 import org.allaymc.server.item.impl.ItemBowStackImpl;
@@ -71,19 +75,26 @@ import org.allaymc.server.item.impl.ItemBrewerPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemBrewingStandStackImpl;
 import org.allaymc.server.item.impl.ItemBrickBlockStackImpl;
 import org.allaymc.server.item.impl.ItemBrickStackImpl;
+import org.allaymc.server.item.impl.ItemBricksStackImpl;
 import org.allaymc.server.item.impl.ItemBrownDyeStackImpl;
 import org.allaymc.server.item.impl.ItemBrownMushroomBlockStackImpl;
 import org.allaymc.server.item.impl.ItemBrownMushroomStackImpl;
 import org.allaymc.server.item.impl.ItemBrushStackImpl;
 import org.allaymc.server.item.impl.ItemBubbleColumnStackImpl;
+import org.allaymc.server.item.impl.ItemBucketStackImpl;
 import org.allaymc.server.item.impl.ItemBuddingAmethystStackImpl;
+import org.allaymc.server.item.impl.ItemBundleStackImpl;
 import org.allaymc.server.item.impl.ItemBurnPotterySherdStackImpl;
+import org.allaymc.server.item.impl.ItemButtonStackImpl;
 import org.allaymc.server.item.impl.ItemCactusStackImpl;
 import org.allaymc.server.item.impl.ItemCakeStackImpl;
 import org.allaymc.server.item.impl.ItemCalciteStackImpl;
 import org.allaymc.server.item.impl.ItemCalibratedSculkSensorStackImpl;
 import org.allaymc.server.item.impl.ItemCameraStackImpl;
 import org.allaymc.server.item.impl.ItemCampfireStackImpl;
+import org.allaymc.server.item.impl.ItemCandleCakeStackImpl;
+import org.allaymc.server.item.impl.ItemCandleStackImpl;
+import org.allaymc.server.item.impl.ItemCarpetStackImpl;
 import org.allaymc.server.item.impl.ItemCarrotOnAStickStackImpl;
 import org.allaymc.server.item.impl.ItemCarrotStackImpl;
 import org.allaymc.server.item.impl.ItemCarrotsStackImpl;
@@ -100,6 +111,7 @@ import org.allaymc.server.item.impl.ItemChemicalHeatStackImpl;
 import org.allaymc.server.item.impl.ItemChemistryTableStackImpl;
 import org.allaymc.server.item.impl.ItemCherryPressurePlateStackImpl;
 import org.allaymc.server.item.impl.ItemChestStackImpl;
+import org.allaymc.server.item.impl.ItemChestplateStackImpl;
 import org.allaymc.server.item.impl.ItemChickenStackImpl;
 import org.allaymc.server.item.impl.ItemChiseledBookshelfStackImpl;
 import org.allaymc.server.item.impl.ItemChiseledDeepslateStackImpl;
@@ -128,6 +140,8 @@ import org.allaymc.server.item.impl.ItemCompassStackImpl;
 import org.allaymc.server.item.impl.ItemComposterStackImpl;
 import org.allaymc.server.item.impl.ItemCompoundCreatorStackImpl;
 import org.allaymc.server.item.impl.ItemCompoundStackImpl;
+import org.allaymc.server.item.impl.ItemConcretePowderStackImpl;
+import org.allaymc.server.item.impl.ItemConcreteStackImpl;
 import org.allaymc.server.item.impl.ItemConduitStackImpl;
 import org.allaymc.server.item.impl.ItemCookedBeefStackImpl;
 import org.allaymc.server.item.impl.ItemCookedChickenStackImpl;
@@ -142,6 +156,11 @@ import org.allaymc.server.item.impl.ItemCopperBulbStackImpl;
 import org.allaymc.server.item.impl.ItemCopperGrateStackImpl;
 import org.allaymc.server.item.impl.ItemCopperIngotStackImpl;
 import org.allaymc.server.item.impl.ItemCopperOreStackImpl;
+import org.allaymc.server.item.impl.ItemCopperStackImpl;
+import org.allaymc.server.item.impl.ItemCoralBlockStackImpl;
+import org.allaymc.server.item.impl.ItemCoralFanStackImpl;
+import org.allaymc.server.item.impl.ItemCoralStackImpl;
+import org.allaymc.server.item.impl.ItemCoralWallFanStackImpl;
 import org.allaymc.server.item.impl.ItemCornflowerStackImpl;
 import org.allaymc.server.item.impl.ItemCrackedDeepslateTilesStackImpl;
 import org.allaymc.server.item.impl.ItemCrafterStackImpl;
@@ -183,9 +202,11 @@ import org.allaymc.server.item.impl.ItemDiamondHorseArmorStackImpl;
 import org.allaymc.server.item.impl.ItemDiamondOreStackImpl;
 import org.allaymc.server.item.impl.ItemDiamondStackImpl;
 import org.allaymc.server.item.impl.ItemDioriteStackImpl;
+import org.allaymc.server.item.impl.ItemDirtStackImpl;
 import org.allaymc.server.item.impl.ItemDirtWithRootsStackImpl;
 import org.allaymc.server.item.impl.ItemDiscFragment5StackImpl;
 import org.allaymc.server.item.impl.ItemDispenserStackImpl;
+import org.allaymc.server.item.impl.ItemDoorStackImpl;
 import org.allaymc.server.item.impl.ItemDoublePlantStackImpl;
 import org.allaymc.server.item.impl.ItemDragonBreathStackImpl;
 import org.allaymc.server.item.impl.ItemDragonEggStackImpl;
@@ -197,6 +218,7 @@ import org.allaymc.server.item.impl.ItemDuneArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemDyeStackImpl;
 import org.allaymc.server.item.impl.ItemEchoShardStackImpl;
 import org.allaymc.server.item.impl.ItemEggStackImpl;
+import org.allaymc.server.item.impl.ItemElementStackImpl;
 import org.allaymc.server.item.impl.ItemElytraStackImpl;
 import org.allaymc.server.item.impl.ItemEmeraldBlockStackImpl;
 import org.allaymc.server.item.impl.ItemEmeraldOreStackImpl;
@@ -221,6 +243,8 @@ import org.allaymc.server.item.impl.ItemExposedCopperGrateStackImpl;
 import org.allaymc.server.item.impl.ItemEyeArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemFarmlandStackImpl;
 import org.allaymc.server.item.impl.ItemFeatherStackImpl;
+import org.allaymc.server.item.impl.ItemFenceGateStackImpl;
+import org.allaymc.server.item.impl.ItemFenceStackImpl;
 import org.allaymc.server.item.impl.ItemFermentedSpiderEyeStackImpl;
 import org.allaymc.server.item.impl.ItemFernStackImpl;
 import org.allaymc.server.item.impl.ItemFieldMasonedBannerPatternStackImpl;
@@ -243,9 +267,12 @@ import org.allaymc.server.item.impl.ItemFrameStackImpl;
 import org.allaymc.server.item.impl.ItemFriendPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemFrogSpawnStackImpl;
 import org.allaymc.server.item.impl.ItemFrostedIceStackImpl;
+import org.allaymc.server.item.impl.ItemFurnaceStackImpl;
 import org.allaymc.server.item.impl.ItemGhastTearStackImpl;
 import org.allaymc.server.item.impl.ItemGildedBlackstoneStackImpl;
 import org.allaymc.server.item.impl.ItemGlassBottleStackImpl;
+import org.allaymc.server.item.impl.ItemGlassPaneStackImpl;
+import org.allaymc.server.item.impl.ItemGlassStackImpl;
 import org.allaymc.server.item.impl.ItemGlisteringMelonSliceStackImpl;
 import org.allaymc.server.item.impl.ItemGlobeBannerPatternStackImpl;
 import org.allaymc.server.item.impl.ItemGlowBerriesStackImpl;
@@ -276,13 +303,17 @@ import org.allaymc.server.item.impl.ItemGunpowderStackImpl;
 import org.allaymc.server.item.impl.ItemGusterBannerPatternStackImpl;
 import org.allaymc.server.item.impl.ItemGusterPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemHangingRootsStackImpl;
+import org.allaymc.server.item.impl.ItemHangingSignStackImpl;
 import org.allaymc.server.item.impl.ItemHardenedClayStackImpl;
 import org.allaymc.server.item.impl.ItemHayBlockStackImpl;
+import org.allaymc.server.item.impl.ItemHeadStackImpl;
 import org.allaymc.server.item.impl.ItemHeartOfTheSeaStackImpl;
 import org.allaymc.server.item.impl.ItemHeartPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemHeartbreakPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemHeavyCoreStackImpl;
 import org.allaymc.server.item.impl.ItemHeavyWeightedPressurePlateStackImpl;
+import org.allaymc.server.item.impl.ItemHelmetStackImpl;
+import org.allaymc.server.item.impl.ItemHoeStackImpl;
 import org.allaymc.server.item.impl.ItemHoneyBlockStackImpl;
 import org.allaymc.server.item.impl.ItemHoneyBottleStackImpl;
 import org.allaymc.server.item.impl.ItemHoneycombBlockStackImpl;
@@ -338,8 +369,11 @@ import org.allaymc.server.item.impl.ItemLargeFernStackImpl;
 import org.allaymc.server.item.impl.ItemLeadStackImpl;
 import org.allaymc.server.item.impl.ItemLeatherHorseArmorStackImpl;
 import org.allaymc.server.item.impl.ItemLeatherStackImpl;
+import org.allaymc.server.item.impl.ItemLeavesStackImpl;
 import org.allaymc.server.item.impl.ItemLecternStackImpl;
+import org.allaymc.server.item.impl.ItemLeggingsStackImpl;
 import org.allaymc.server.item.impl.ItemLeverStackImpl;
+import org.allaymc.server.item.impl.ItemLightBlockStackImpl;
 import org.allaymc.server.item.impl.ItemLightBlueDyeStackImpl;
 import org.allaymc.server.item.impl.ItemLightGrayDyeStackImpl;
 import org.allaymc.server.item.impl.ItemLightWeightedPressurePlateStackImpl;
@@ -348,12 +382,14 @@ import org.allaymc.server.item.impl.ItemLilacStackImpl;
 import org.allaymc.server.item.impl.ItemLilyOfTheValleyStackImpl;
 import org.allaymc.server.item.impl.ItemLimeDyeStackImpl;
 import org.allaymc.server.item.impl.ItemLingeringPotionStackImpl;
+import org.allaymc.server.item.impl.ItemLiquidStackImpl;
 import org.allaymc.server.item.impl.ItemLitDeepslateRedstoneOreStackImpl;
 import org.allaymc.server.item.impl.ItemLitPumpkinStackImpl;
 import org.allaymc.server.item.impl.ItemLitRedstoneLampStackImpl;
 import org.allaymc.server.item.impl.ItemLitRedstoneOreStackImpl;
 import org.allaymc.server.item.impl.ItemLodestoneCompassStackImpl;
 import org.allaymc.server.item.impl.ItemLodestoneStackImpl;
+import org.allaymc.server.item.impl.ItemLogStackImpl;
 import org.allaymc.server.item.impl.ItemLoomStackImpl;
 import org.allaymc.server.item.impl.ItemMaceStackImpl;
 import org.allaymc.server.item.impl.ItemMagentaDyeStackImpl;
@@ -369,6 +405,8 @@ import org.allaymc.server.item.impl.ItemMelonBlockStackImpl;
 import org.allaymc.server.item.impl.ItemMelonSeedsStackImpl;
 import org.allaymc.server.item.impl.ItemMelonSliceStackImpl;
 import org.allaymc.server.item.impl.ItemMelonStemStackImpl;
+import org.allaymc.server.item.impl.ItemMilkBucketStackImpl;
+import org.allaymc.server.item.impl.ItemMinecartStackImpl;
 import org.allaymc.server.item.impl.ItemMinerPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemMobSpawnerStackImpl;
 import org.allaymc.server.item.impl.ItemMojangBannerPatternStackImpl;
@@ -381,6 +419,7 @@ import org.allaymc.server.item.impl.ItemMudStackImpl;
 import org.allaymc.server.item.impl.ItemMuddyMangroveRootsStackImpl;
 import org.allaymc.server.item.impl.ItemMushroomStemStackImpl;
 import org.allaymc.server.item.impl.ItemMushroomStewStackImpl;
+import org.allaymc.server.item.impl.ItemMusicDiscStackImpl;
 import org.allaymc.server.item.impl.ItemMuttonStackImpl;
 import org.allaymc.server.item.impl.ItemMyceliumStackImpl;
 import org.allaymc.server.item.impl.ItemNameTagStackImpl;
@@ -416,13 +455,16 @@ import org.allaymc.server.item.impl.ItemPaperStackImpl;
 import org.allaymc.server.item.impl.ItemPearlescentFroglightStackImpl;
 import org.allaymc.server.item.impl.ItemPeonyStackImpl;
 import org.allaymc.server.item.impl.ItemPhantomMembraneStackImpl;
+import org.allaymc.server.item.impl.ItemPickaxeStackImpl;
 import org.allaymc.server.item.impl.ItemPiglinBannerPatternStackImpl;
 import org.allaymc.server.item.impl.ItemPinkDyeStackImpl;
 import org.allaymc.server.item.impl.ItemPinkPetalsStackImpl;
 import org.allaymc.server.item.impl.ItemPinkTulipStackImpl;
+import org.allaymc.server.item.impl.ItemPistonStackImpl;
 import org.allaymc.server.item.impl.ItemPitcherCropStackImpl;
 import org.allaymc.server.item.impl.ItemPitcherPlantStackImpl;
 import org.allaymc.server.item.impl.ItemPitcherPodStackImpl;
+import org.allaymc.server.item.impl.ItemPlanksStackImpl;
 import org.allaymc.server.item.impl.ItemPlentyPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemPodzolStackImpl;
 import org.allaymc.server.item.impl.ItemPointedDripstoneStackImpl;
@@ -455,6 +497,7 @@ import org.allaymc.server.item.impl.ItemPumpkinSeedsStackImpl;
 import org.allaymc.server.item.impl.ItemPumpkinStackImpl;
 import org.allaymc.server.item.impl.ItemPumpkinStemStackImpl;
 import org.allaymc.server.item.impl.ItemPurpleDyeStackImpl;
+import org.allaymc.server.item.impl.ItemPurpurStackImpl;
 import org.allaymc.server.item.impl.ItemQuartzBlockStackImpl;
 import org.allaymc.server.item.impl.ItemQuartzOreStackImpl;
 import org.allaymc.server.item.impl.ItemQuartzPillarStackImpl;
@@ -493,6 +536,9 @@ import org.allaymc.server.item.impl.ItemRoseBushStackImpl;
 import org.allaymc.server.item.impl.ItemRottenFleshStackImpl;
 import org.allaymc.server.item.impl.ItemSaddleStackImpl;
 import org.allaymc.server.item.impl.ItemSalmonStackImpl;
+import org.allaymc.server.item.impl.ItemSandStackImpl;
+import org.allaymc.server.item.impl.ItemSandstoneStackImpl;
+import org.allaymc.server.item.impl.ItemSaplingStackImpl;
 import org.allaymc.server.item.impl.ItemScaffoldingStackImpl;
 import org.allaymc.server.item.impl.ItemScrapePotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemSculkCatalystStackImpl;
@@ -510,11 +556,15 @@ import org.allaymc.server.item.impl.ItemShearsStackImpl;
 import org.allaymc.server.item.impl.ItemShelterPotterySherdStackImpl;
 import org.allaymc.server.item.impl.ItemShieldStackImpl;
 import org.allaymc.server.item.impl.ItemShortGrassStackImpl;
+import org.allaymc.server.item.impl.ItemShovelStackImpl;
 import org.allaymc.server.item.impl.ItemShroomlightStackImpl;
+import org.allaymc.server.item.impl.ItemShulkerBoxStackImpl;
 import org.allaymc.server.item.impl.ItemShulkerShellStackImpl;
+import org.allaymc.server.item.impl.ItemSignStackImpl;
 import org.allaymc.server.item.impl.ItemSilenceArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemSkullBannerPatternStackImpl;
 import org.allaymc.server.item.impl.ItemSkullPotterySherdStackImpl;
+import org.allaymc.server.item.impl.ItemSlabStackImpl;
 import org.allaymc.server.item.impl.ItemSlimeBallStackImpl;
 import org.allaymc.server.item.impl.ItemSlimeStackImpl;
 import org.allaymc.server.item.impl.ItemSmallAmethystBudStackImpl;
@@ -534,15 +584,22 @@ import org.allaymc.server.item.impl.ItemSoulFireStackImpl;
 import org.allaymc.server.item.impl.ItemSoulLanternStackImpl;
 import org.allaymc.server.item.impl.ItemSoulSoilStackImpl;
 import org.allaymc.server.item.impl.ItemSparklerStackImpl;
+import org.allaymc.server.item.impl.ItemSpawnEggStackImpl;
 import org.allaymc.server.item.impl.ItemSpiderEyeStackImpl;
 import org.allaymc.server.item.impl.ItemSpireArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemSplashPotionStackImpl;
+import org.allaymc.server.item.impl.ItemSpongeStackImpl;
 import org.allaymc.server.item.impl.ItemSporeBlossomStackImpl;
 import org.allaymc.server.item.impl.ItemSprucePressurePlateStackImpl;
 import org.allaymc.server.item.impl.ItemSpyglassStackImpl;
+import org.allaymc.server.item.impl.ItemStainedGlassPaneStackImpl;
+import org.allaymc.server.item.impl.ItemStainedGlassStackImpl;
 import org.allaymc.server.item.impl.ItemStainedHardenedClayStackImpl;
+import org.allaymc.server.item.impl.ItemStairsStackImpl;
 import org.allaymc.server.item.impl.ItemStandingBannerStackImpl;
+import org.allaymc.server.item.impl.ItemStandingSignStackImpl;
 import org.allaymc.server.item.impl.ItemStickStackImpl;
+import org.allaymc.server.item.impl.ItemStickyPistonStackImpl;
 import org.allaymc.server.item.impl.ItemStonePressurePlateStackImpl;
 import org.allaymc.server.item.impl.ItemStoneStackImpl;
 import org.allaymc.server.item.impl.ItemStonebrickStackImpl;
@@ -563,11 +620,17 @@ import org.allaymc.server.item.impl.ItemSuspiciousGravelStackImpl;
 import org.allaymc.server.item.impl.ItemSuspiciousStewStackImpl;
 import org.allaymc.server.item.impl.ItemSweetBerriesStackImpl;
 import org.allaymc.server.item.impl.ItemSweetBerryBushStackImpl;
+import org.allaymc.server.item.impl.ItemSwordStackImpl;
 import org.allaymc.server.item.impl.ItemTallGrassStackImpl;
 import org.allaymc.server.item.impl.ItemTallgrass0StackImpl;
 import org.allaymc.server.item.impl.ItemTargetStackImpl;
+import org.allaymc.server.item.impl.ItemTerracottaStackImpl;
 import org.allaymc.server.item.impl.ItemTideArmorTrimSmithingTemplateStackImpl;
+import org.allaymc.server.item.impl.ItemTntStackImpl;
+import org.allaymc.server.item.impl.ItemTorchStackImpl;
+import org.allaymc.server.item.impl.ItemTorchflowerStackImpl;
 import org.allaymc.server.item.impl.ItemTotemOfUndyingStackImpl;
+import org.allaymc.server.item.impl.ItemTrapdoorStackImpl;
 import org.allaymc.server.item.impl.ItemTrappedChestStackImpl;
 import org.allaymc.server.item.impl.ItemTrialKeyStackImpl;
 import org.allaymc.server.item.impl.ItemTrialSpawnerStackImpl;
@@ -587,6 +650,8 @@ import org.allaymc.server.item.impl.ItemVerdantFroglightStackImpl;
 import org.allaymc.server.item.impl.ItemVexArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemVineStackImpl;
 import org.allaymc.server.item.impl.ItemWallBannerStackImpl;
+import org.allaymc.server.item.impl.ItemWallSignStackImpl;
+import org.allaymc.server.item.impl.ItemWallStackImpl;
 import org.allaymc.server.item.impl.ItemWardArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemWarpedFungusOnAStickStackImpl;
 import org.allaymc.server.item.impl.ItemWarpedFungusStackImpl;
@@ -618,960 +683,12 @@ import org.allaymc.server.item.impl.ItemWildArmorTrimSmithingTemplateStackImpl;
 import org.allaymc.server.item.impl.ItemWindChargeStackImpl;
 import org.allaymc.server.item.impl.ItemWitherRoseStackImpl;
 import org.allaymc.server.item.impl.ItemWolfArmorStackImpl;
+import org.allaymc.server.item.impl.ItemWoodStackImpl;
 import org.allaymc.server.item.impl.ItemWoodenPressurePlateStackImpl;
+import org.allaymc.server.item.impl.ItemWoolStackImpl;
 import org.allaymc.server.item.impl.ItemWritableBookStackImpl;
 import org.allaymc.server.item.impl.ItemWrittenBookStackImpl;
 import org.allaymc.server.item.impl.ItemYellowDyeStackImpl;
-import org.allaymc.server.item.impl.anvil.ItemAnvilStackImpl;
-import org.allaymc.server.item.impl.anvil.ItemChippedAnvilStackImpl;
-import org.allaymc.server.item.impl.anvil.ItemDamagedAnvilStackImpl;
-import org.allaymc.server.item.impl.anvil.ItemDeprecatedAnvilStackImpl;
-import org.allaymc.server.item.impl.boat.ItemAcaciaBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemAcaciaChestBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemBirchBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemBirchChestBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemCherryBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemCherryChestBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemChestBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemDarkOakBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemDarkOakChestBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemJungleBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemJungleChestBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemMangroveBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemMangroveChestBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemOakBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemOakChestBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemSpruceBoatStackImpl;
-import org.allaymc.server.item.impl.boat.ItemSpruceChestBoatStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemChiseledNetherBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemChiseledStoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemChiseledTuffBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemCrackedDeepslateBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemCrackedNetherBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemCrackedPolishedBlackstoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemCrackedStoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemDeepslateBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemEndBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemInfestedChiseledStoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemInfestedCrackedStoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemInfestedMossyStoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemInfestedStoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemMossyStoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemMudBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemPolishedBlackstoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemPrismarineBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemQuartzBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemStoneBricksStackImpl;
-import org.allaymc.server.item.impl.bricks.ItemTuffBricksStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemBlackBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemBlueBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemBrownBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemCyanBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemGrayBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemGreenBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemLightBlueBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemLightGrayBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemLimeBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemMagentaBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemOrangeBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemPinkBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemPurpleBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemRedBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemWhiteBundleStackImpl;
-import org.allaymc.server.item.impl.bundle.ItemYellowBundleStackImpl;
-import org.allaymc.server.item.impl.button.ItemAcaciaButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemBambooButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemBirchButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemCherryButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemCrimsonButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemDarkOakButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemJungleButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemMangroveButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemPolishedBlackstoneButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemSpruceButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemStoneButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemWarpedButtonStackImpl;
-import org.allaymc.server.item.impl.button.ItemWoodenButtonStackImpl;
-import org.allaymc.server.item.impl.candle.ItemBlackCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemBlueCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemBrownCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemCyanCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemGrayCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemGreenCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemLightBlueCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemLightGrayCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemLimeCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemMagentaCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemOrangeCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemPinkCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemPurpleCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemRedCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemWhiteCandleStackImpl;
-import org.allaymc.server.item.impl.candle.ItemYellowCandleStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemBlackCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemBlueCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemBrownCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemCyanCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemGrayCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemGreenCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemLightBlueCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemLightGrayCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemLimeCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemMagentaCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemOrangeCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemPinkCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemPurpleCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemRedCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemWhiteCandleCakeStackImpl;
-import org.allaymc.server.item.impl.candlecake.ItemYellowCandleCakeStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemBlackCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemBlueCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemBrownCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemCyanCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemGrayCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemGreenCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemLightBlueCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemLightGrayCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemLimeCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemMagentaCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemMossCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemOrangeCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemPinkCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemPurpleCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemRedCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemWhiteCarpetStackImpl;
-import org.allaymc.server.item.impl.carpet.ItemYellowCarpetStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemBlackConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemBlueConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemBrownConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemCyanConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemGrayConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemGreenConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemLightBlueConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemLightGrayConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemLimeConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemMagentaConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemOrangeConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemPinkConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemPurpleConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemRedConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemWhiteConcreteStackImpl;
-import org.allaymc.server.item.impl.concrete.ItemYellowConcreteStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemBlackConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemBlueConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemBrownConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemCyanConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemGrayConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemGreenConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemLightBlueConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemLightGrayConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemLimeConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemMagentaConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemOrangeConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemPinkConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemPurpleConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemRedConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemWhiteConcretePowderStackImpl;
-import org.allaymc.server.item.impl.concretepowder.ItemYellowConcretePowderStackImpl;
-import org.allaymc.server.item.impl.copper.ItemChiseledCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemCutCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemExposedChiseledCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemExposedCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemExposedCutCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemOxidizedChiseledCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemOxidizedCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemOxidizedCutCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemRawCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedChiseledCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedCutCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedExposedChiseledCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedExposedCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedExposedCutCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedOxidizedChiseledCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedOxidizedCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedOxidizedCutCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedWeatheredChiseledCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedWeatheredCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWaxedWeatheredCutCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWeatheredChiseledCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWeatheredCopperStackImpl;
-import org.allaymc.server.item.impl.copper.ItemWeatheredCutCopperStackImpl;
-import org.allaymc.server.item.impl.coral.ItemBrainCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemBubbleCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemDeadBrainCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemDeadBubbleCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemDeadFireCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemDeadHornCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemDeadTubeCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemFireCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemHornCoralStackImpl;
-import org.allaymc.server.item.impl.coral.ItemTubeCoralStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemBrainCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemBubbleCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemDeadBrainCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemDeadBubbleCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemDeadFireCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemDeadHornCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemDeadTubeCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemFireCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemHornCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralblock.ItemTubeCoralBlockStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemBrainCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemBubbleCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemCoralFanDeadStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemDeadBrainCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemDeadBubbleCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemDeadFireCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemDeadHornCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemDeadTubeCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemFireCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemHornCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralfan.ItemTubeCoralFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemBrainCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemBubbleCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemDeadBrainCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemDeadBubbleCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemDeadFireCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemDeadHornCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemDeadTubeCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemFireCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemHornCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.coralwallfan.ItemTubeCoralWallFanStackImpl;
-import org.allaymc.server.item.impl.dirt.ItemCoarseDirtStackImpl;
-import org.allaymc.server.item.impl.dirt.ItemDirtStackImpl;
-import org.allaymc.server.item.impl.door.ItemAcaciaDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemBambooDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemBirchDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemCherryDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemCopperDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemCrimsonDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemDarkOakDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemExposedCopperDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemIronDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemAcaciaDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemBirchDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemCrimsonDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemDarkOakDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemIronDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemJungleDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemMangroveDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemSpruceDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemWarpedDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemItemWoodenDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemJungleDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemMangroveDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemOxidizedCopperDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemSpruceDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemWarpedDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemWaxedCopperDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemWaxedExposedCopperDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemWaxedOxidizedCopperDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemWaxedWeatheredCopperDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemWeatheredCopperDoorStackImpl;
-import org.allaymc.server.item.impl.door.ItemWoodenDoorStackImpl;
-import org.allaymc.server.item.impl.element.ItemElement0StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement100StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement101StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement102StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement103StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement104StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement105StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement106StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement107StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement108StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement109StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement10StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement110StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement111StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement112StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement113StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement114StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement115StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement116StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement117StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement118StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement11StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement12StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement13StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement14StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement15StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement16StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement17StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement18StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement19StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement1StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement20StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement21StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement22StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement23StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement24StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement25StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement26StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement27StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement28StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement29StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement2StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement30StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement31StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement32StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement33StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement34StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement35StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement36StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement37StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement38StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement39StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement3StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement40StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement41StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement42StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement43StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement44StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement45StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement46StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement47StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement48StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement49StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement4StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement50StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement51StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement52StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement53StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement54StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement55StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement56StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement57StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement58StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement59StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement5StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement60StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement61StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement62StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement63StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement64StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement65StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement66StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement67StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement68StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement69StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement6StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement70StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement71StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement72StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement73StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement74StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement75StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement76StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement77StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement78StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement79StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement7StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement80StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement81StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement82StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement83StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement84StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement85StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement86StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement87StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement88StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement89StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement8StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement90StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement91StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement92StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement93StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement94StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement95StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement96StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement97StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement98StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement99StackImpl;
-import org.allaymc.server.item.impl.element.ItemElement9StackImpl;
-import org.allaymc.server.item.impl.element.ItemElementConstructorStackImpl;
-import org.allaymc.server.item.impl.fence.ItemAcaciaFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemBambooFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemBirchFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemCherryFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemCrimsonFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemDarkOakFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemJungleFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemMangroveFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemNetherBrickFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemOakFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemSpruceFenceStackImpl;
-import org.allaymc.server.item.impl.fence.ItemWarpedFenceStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemAcaciaFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemBambooFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemBirchFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemCherryFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemCrimsonFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemDarkOakFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemJungleFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemMangroveFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemSpruceFenceGateStackImpl;
-import org.allaymc.server.item.impl.fencegate.ItemWarpedFenceGateStackImpl;
-import org.allaymc.server.item.impl.furnace.ItemBlastFurnaceStackImpl;
-import org.allaymc.server.item.impl.furnace.ItemFurnaceStackImpl;
-import org.allaymc.server.item.impl.furnace.ItemLitBlastFurnaceStackImpl;
-import org.allaymc.server.item.impl.furnace.ItemLitFurnaceStackImpl;
-import org.allaymc.server.item.impl.furnace.ItemLitSmokerStackImpl;
-import org.allaymc.server.item.impl.furnace.ItemSmokerStackImpl;
-import org.allaymc.server.item.impl.glass.ItemGlassStackImpl;
-import org.allaymc.server.item.impl.glass.ItemHardGlassStackImpl;
-import org.allaymc.server.item.impl.glass.ItemTintedGlassStackImpl;
-import org.allaymc.server.item.impl.glasspane.ItemGlassPaneStackImpl;
-import org.allaymc.server.item.impl.glasspane.ItemHardGlassPaneStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemAcaciaHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemBambooHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemBirchHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemCherryHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemCrimsonHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemDarkOakHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemJungleHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemMangroveHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemOakHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemSpruceHangingSignStackImpl;
-import org.allaymc.server.item.impl.hangingsign.ItemWarpedHangingSignStackImpl;
-import org.allaymc.server.item.impl.head.ItemCreeperHeadStackImpl;
-import org.allaymc.server.item.impl.head.ItemDragonHeadStackImpl;
-import org.allaymc.server.item.impl.head.ItemPiglinHeadStackImpl;
-import org.allaymc.server.item.impl.head.ItemPlayerHeadStackImpl;
-import org.allaymc.server.item.impl.head.ItemSkeletonSkullStackImpl;
-import org.allaymc.server.item.impl.head.ItemSkullStackImpl;
-import org.allaymc.server.item.impl.head.ItemWitherSkeletonSkullStackImpl;
-import org.allaymc.server.item.impl.head.ItemZombieHeadStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemAcaciaLeavesStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemAzaleaLeavesFloweredStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemAzaleaLeavesStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemBirchLeavesStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemCherryLeavesStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemDarkOakLeavesStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemJungleLeavesStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemLeaves2StackImpl;
-import org.allaymc.server.item.impl.leaves.ItemLeavesStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemMangroveLeavesStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemOakLeavesStackImpl;
-import org.allaymc.server.item.impl.leaves.ItemSpruceLeavesStackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock0StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock10StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock11StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock12StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock13StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock14StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock15StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock1StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock2StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock3StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock4StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock5StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock6StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock7StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock8StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlock9StackImpl;
-import org.allaymc.server.item.impl.lightblock.ItemLightBlockStackImpl;
-import org.allaymc.server.item.impl.liquid.ItemFlowingLavaStackImpl;
-import org.allaymc.server.item.impl.liquid.ItemFlowingWaterStackImpl;
-import org.allaymc.server.item.impl.liquid.ItemLavaStackImpl;
-import org.allaymc.server.item.impl.liquid.ItemWaterStackImpl;
-import org.allaymc.server.item.impl.log.ItemAcaciaLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemBirchLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemCherryLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemDarkOakLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemJungleLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemLog2StackImpl;
-import org.allaymc.server.item.impl.log.ItemLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemMangroveLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemOakLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemSpruceLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemStrippedAcaciaLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemStrippedBirchLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemStrippedCherryLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemStrippedDarkOakLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemStrippedJungleLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemStrippedMangroveLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemStrippedOakLogStackImpl;
-import org.allaymc.server.item.impl.log.ItemStrippedSpruceLogStackImpl;
-import org.allaymc.server.item.impl.minecart.ItemChestMinecartStackImpl;
-import org.allaymc.server.item.impl.minecart.ItemCommandBlockMinecartStackImpl;
-import org.allaymc.server.item.impl.minecart.ItemHopperMinecartStackImpl;
-import org.allaymc.server.item.impl.minecart.ItemMinecartStackImpl;
-import org.allaymc.server.item.impl.minecart.ItemTntMinecartStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDisc11StackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDisc13StackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDisc5StackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscBlocksStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscCatStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscChirpStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscCreatorMusicBoxStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscCreatorStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscFarStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscMallStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscMellohiStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscOthersideStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscPigstepStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscPrecipiceStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscRelicStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscStalStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscStradStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscWaitStackImpl;
-import org.allaymc.server.item.impl.musicdisc.ItemMusicDiscWardStackImpl;
-import org.allaymc.server.item.impl.piston.ItemPistonArmCollisionStackImpl;
-import org.allaymc.server.item.impl.piston.ItemPistonStackImpl;
-import org.allaymc.server.item.impl.piston.ItemStickyPistonArmCollisionStackImpl;
-import org.allaymc.server.item.impl.piston.ItemStickyPistonStackImpl;
-import org.allaymc.server.item.impl.planks.ItemAcaciaPlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemBambooPlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemBirchPlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemCherryPlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemCrimsonPlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemDarkOakPlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemJunglePlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemMangrovePlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemOakPlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemPlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemSprucePlanksStackImpl;
-import org.allaymc.server.item.impl.planks.ItemWarpedPlanksStackImpl;
-import org.allaymc.server.item.impl.purpur.ItemPurpurBlockStackImpl;
-import org.allaymc.server.item.impl.purpur.ItemPurpurPillarStackImpl;
-import org.allaymc.server.item.impl.sand.ItemRedSandStackImpl;
-import org.allaymc.server.item.impl.sand.ItemSandStackImpl;
-import org.allaymc.server.item.impl.sand.ItemSoulSandStackImpl;
-import org.allaymc.server.item.impl.sand.ItemSuspiciousSandStackImpl;
-import org.allaymc.server.item.impl.sandstone.ItemChiseledRedSandstoneStackImpl;
-import org.allaymc.server.item.impl.sandstone.ItemChiseledSandstoneStackImpl;
-import org.allaymc.server.item.impl.sandstone.ItemCutRedSandstoneStackImpl;
-import org.allaymc.server.item.impl.sandstone.ItemCutSandstoneStackImpl;
-import org.allaymc.server.item.impl.sandstone.ItemRedSandstoneStackImpl;
-import org.allaymc.server.item.impl.sandstone.ItemSandstoneStackImpl;
-import org.allaymc.server.item.impl.sandstone.ItemSmoothRedSandstoneStackImpl;
-import org.allaymc.server.item.impl.sandstone.ItemSmoothSandstoneStackImpl;
-import org.allaymc.server.item.impl.sapling.ItemAcaciaSaplingStackImpl;
-import org.allaymc.server.item.impl.sapling.ItemBambooSaplingStackImpl;
-import org.allaymc.server.item.impl.sapling.ItemBirchSaplingStackImpl;
-import org.allaymc.server.item.impl.sapling.ItemCherrySaplingStackImpl;
-import org.allaymc.server.item.impl.sapling.ItemDarkOakSaplingStackImpl;
-import org.allaymc.server.item.impl.sapling.ItemJungleSaplingStackImpl;
-import org.allaymc.server.item.impl.sapling.ItemOakSaplingStackImpl;
-import org.allaymc.server.item.impl.sapling.ItemSaplingStackImpl;
-import org.allaymc.server.item.impl.sapling.ItemSpruceSaplingStackImpl;
-import org.allaymc.server.item.impl.slab.ItemAcaciaDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemAcaciaSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemAndesiteDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemAndesiteSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBambooDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBambooMosaicDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBambooMosaicSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBambooSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBirchDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBirchSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBlackstoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBlackstoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCherryDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCherrySlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCobbledDeepslateDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCobbledDeepslateSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCobblestoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCobblestoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCrimsonDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCrimsonSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCutRedSandstoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCutRedSandstoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCutSandstoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemCutSandstoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDarkOakDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDarkOakSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDarkPrismarineDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDarkPrismarineSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDeepslateBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDeepslateBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDeepslateTileDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDeepslateTileSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDioriteDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDioriteSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDoubleCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemDoubleStoneBlockSlab2StackImpl;
-import org.allaymc.server.item.impl.slab.ItemDoubleStoneBlockSlab3StackImpl;
-import org.allaymc.server.item.impl.slab.ItemDoubleStoneBlockSlab4StackImpl;
-import org.allaymc.server.item.impl.slab.ItemDoubleStoneBlockSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemEndStoneBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemEndStoneBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemExposedCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemExposedDoubleCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemGraniteDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemGraniteSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemJungleDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemJungleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemMangroveDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemMangroveSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemMossyCobblestoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemMossyCobblestoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemMossyStoneBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemMossyStoneBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemMudBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemMudBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemNetherBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemNetherBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemNormalStoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemNormalStoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemOakDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemOakSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemOxidizedCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemOxidizedDoubleCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPetrifiedOakDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPetrifiedOakSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedAndesiteDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedAndesiteSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedBlackstoneBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedBlackstoneBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedBlackstoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedBlackstoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedDeepslateDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedDeepslateSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedDioriteDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedDioriteSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedGraniteDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedGraniteSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedTuffDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPolishedTuffSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPrismarineBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPrismarineBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPrismarineDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPrismarineSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPurpurDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemPurpurSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemQuartzDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemQuartzSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemRedNetherBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemRedNetherBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemRedSandstoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemRedSandstoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSandstoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSandstoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSmoothQuartzDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSmoothQuartzSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSmoothRedSandstoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSmoothRedSandstoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSmoothSandstoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSmoothSandstoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSmoothStoneDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSmoothStoneSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSpruceDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemSpruceSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemStoneBlockSlab2StackImpl;
-import org.allaymc.server.item.impl.slab.ItemStoneBlockSlab3StackImpl;
-import org.allaymc.server.item.impl.slab.ItemStoneBlockSlab4StackImpl;
-import org.allaymc.server.item.impl.slab.ItemStoneBlockSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemStoneBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemStoneBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemTuffBrickDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemTuffBrickSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemTuffDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemTuffSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWarpedDoubleSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWarpedSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWaxedCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWaxedDoubleCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWaxedExposedCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWaxedExposedDoubleCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWaxedOxidizedCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWaxedOxidizedDoubleCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWaxedWeatheredCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWaxedWeatheredDoubleCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWeatheredCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWeatheredDoubleCutCopperSlabStackImpl;
-import org.allaymc.server.item.impl.slab.ItemWoodenSlabStackImpl;
-import org.allaymc.server.item.impl.sponge.ItemSpongeStackImpl;
-import org.allaymc.server.item.impl.sponge.ItemWetSpongeStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemBlackStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemBlueStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemBrownStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemCyanStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemGrayStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemGreenStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardBlackStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardBlueStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardBrownStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardCyanStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardGrayStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardGreenStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardLightBlueStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardLightGrayStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardLimeStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardMagentaStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardOrangeStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardPinkStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardPurpleStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardRedStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardWhiteStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemHardYellowStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemLightBlueStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemLightGrayStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemLimeStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemMagentaStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemOrangeStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemPinkStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemPurpleStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemRedStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemWhiteStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglass.ItemYellowStainedGlassStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemBlackStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemBlueStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemBrownStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemCyanStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemGrayStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemGreenStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardBlackStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardBlueStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardBrownStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardCyanStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardGrayStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardGreenStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardLightBlueStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardLightGrayStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardLimeStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardMagentaStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardOrangeStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardPinkStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardPurpleStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardRedStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardWhiteStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemHardYellowStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemLightBlueStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemLightGrayStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemLimeStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemMagentaStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemOrangeStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemPinkStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemPurpleStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemRedStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemWhiteStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stainedglasspane.ItemYellowStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemAcaciaStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemAndesiteStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemBambooMosaicStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemBambooStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemBirchStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemBlackstoneStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemCherryStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemCobbledDeepslateStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemCrimsonStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemCutCopperStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemDarkOakStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemDarkPrismarineStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemDeepslateBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemDeepslateTileStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemDioriteStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemEndBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemExposedCutCopperStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemGraniteStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemJungleStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemMangroveStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemMossyCobblestoneStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemMossyStoneBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemMudBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemNetherBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemNormalStoneStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemOakStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemOxidizedCutCopperStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPolishedAndesiteStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPolishedBlackstoneBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPolishedBlackstoneStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPolishedDeepslateStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPolishedDioriteStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPolishedGraniteStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPolishedTuffStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPrismarineBricksStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPrismarineStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemPurpurStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemQuartzStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemRedNetherBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemRedSandstoneStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemSandstoneStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemSmoothQuartzStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemSmoothRedSandstoneStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemSmoothSandstoneStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemSpruceStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemStoneBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemStoneStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemTuffBrickStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemTuffStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemWarpedStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemWaxedCutCopperStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemWaxedExposedCutCopperStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemWaxedOxidizedCutCopperStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemWaxedWeatheredCutCopperStairsStackImpl;
-import org.allaymc.server.item.impl.stairs.ItemWeatheredCutCopperStairsStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemAcaciaStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemBambooStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemBirchStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemCherryStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemCrimsonStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemDarkoakStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemJungleStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemMangroveStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemSpruceStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemStandingSignStackImpl;
-import org.allaymc.server.item.impl.standingsign.ItemWarpedStandingSignStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemBlackGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemBlackTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemBlueGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemBlueTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemBrownGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemBrownTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemCyanGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemCyanTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemGrayGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemGrayTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemGreenGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemGreenTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemLightBlueGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemLightBlueTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemLightGrayTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemLimeGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemLimeTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemMagentaGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemMagentaTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemOrangeGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemOrangeTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemPinkGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemPinkTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemPurpleGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemPurpleTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemRedGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemRedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemSilverGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemWhiteGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemWhiteTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemYellowGlazedTerracottaStackImpl;
-import org.allaymc.server.item.impl.terracotta.ItemYellowTerracottaStackImpl;
-import org.allaymc.server.item.impl.tnt.ItemTntStackImpl;
-import org.allaymc.server.item.impl.tnt.ItemUnderwaterTntStackImpl;
-import org.allaymc.server.item.impl.torch.ItemColoredTorchBlueStackImpl;
-import org.allaymc.server.item.impl.torch.ItemColoredTorchBpStackImpl;
-import org.allaymc.server.item.impl.torch.ItemColoredTorchGreenStackImpl;
-import org.allaymc.server.item.impl.torch.ItemColoredTorchPurpleStackImpl;
-import org.allaymc.server.item.impl.torch.ItemColoredTorchRedStackImpl;
-import org.allaymc.server.item.impl.torch.ItemColoredTorchRgStackImpl;
-import org.allaymc.server.item.impl.torch.ItemRedstoneTorchStackImpl;
-import org.allaymc.server.item.impl.torch.ItemSoulTorchStackImpl;
-import org.allaymc.server.item.impl.torch.ItemTorchStackImpl;
-import org.allaymc.server.item.impl.torch.ItemUnderwaterTorchStackImpl;
-import org.allaymc.server.item.impl.torch.ItemUnlitRedstoneTorchStackImpl;
-import org.allaymc.server.item.impl.torchflower.ItemTorchflowerCropStackImpl;
-import org.allaymc.server.item.impl.torchflower.ItemTorchflowerSeedsStackImpl;
-import org.allaymc.server.item.impl.torchflower.ItemTorchflowerStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemAcaciaTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemBambooTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemBirchTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemCherryTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemCopperTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemCrimsonTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemDarkOakTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemExposedCopperTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemIronTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemJungleTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemMangroveTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemOxidizedCopperTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemSpruceTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemWarpedTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemWaxedCopperTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemWaxedExposedCopperTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemWaxedOxidizedCopperTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemWaxedWeatheredCopperTrapdoorStackImpl;
-import org.allaymc.server.item.impl.trapdoor.ItemWeatheredCopperTrapdoorStackImpl;
-import org.allaymc.server.item.impl.wall.ItemAndesiteWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemBlackstoneWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemCobbledDeepslateWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemCobblestoneWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemDeepslateBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemDeepslateTileWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemDioriteWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemEndStoneBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemGraniteWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemMossyCobblestoneWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemMossyStoneBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemMudBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemNetherBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemPolishedBlackstoneBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemPolishedBlackstoneWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemPolishedDeepslateWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemPolishedTuffWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemPrismarineWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemRedNetherBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemRedSandstoneWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemSandstoneWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemStoneBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemTuffBrickWallStackImpl;
-import org.allaymc.server.item.impl.wall.ItemTuffWallStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemAcaciaWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemBambooWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemBirchWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemCherryWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemCrimsonWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemDarkoakWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemJungleWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemMangroveWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemSpruceWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemWallSignStackImpl;
-import org.allaymc.server.item.impl.wallsign.ItemWarpedWallSignStackImpl;
-import org.allaymc.server.item.impl.wood.ItemAcaciaWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemBirchWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemCherryWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemDarkOakWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemJungleWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemMangroveWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemOakWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemSpruceWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemStrippedAcaciaWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemStrippedBirchWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemStrippedCherryWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemStrippedDarkOakWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemStrippedJungleWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemStrippedMangroveWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemStrippedOakWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemStrippedSpruceWoodStackImpl;
-import org.allaymc.server.item.impl.wood.ItemWoodStackImpl;
-import org.allaymc.server.item.impl.wool.ItemBlackWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemBlueWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemBrownWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemCyanWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemGrayWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemGreenWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemLightBlueWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemLightGrayWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemLimeWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemMagentaWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemOrangeWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemPinkWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemPurpleWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemRedWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemWhiteWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemWoolStackImpl;
-import org.allaymc.server.item.impl.wool.ItemYellowWoolStackImpl;
 
 /**
  * Automatically generated by {@code org.allaymc.codegen.ItemClassGen}
@@ -1580,67 +697,67 @@ public final class ItemTypeDefaultInitializer {
     public static void init() {
         if (ItemTypes.ACACIA_BOAT == null) {
             ItemTypes.ACACIA_BOAT = AllayItemType
-                            .builder(ItemAcaciaBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_BOAT)
                             .build();
         }
         if (ItemTypes.ACACIA_BUTTON == null) {
             ItemTypes.ACACIA_BUTTON = AllayItemType
-                            .builder(ItemAcaciaButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_BUTTON)
                             .build();
         }
         if (ItemTypes.ACACIA_CHEST_BOAT == null) {
             ItemTypes.ACACIA_CHEST_BOAT = AllayItemType
-                            .builder(ItemAcaciaChestBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_CHEST_BOAT)
                             .build();
         }
         if (ItemTypes.ACACIA_DOOR == null) {
             ItemTypes.ACACIA_DOOR = AllayItemType
-                            .builder(ItemAcaciaDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_DOOR)
                             .build();
         }
         if (ItemTypes.ACACIA_DOUBLE_SLAB == null) {
             ItemTypes.ACACIA_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemAcaciaDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.ACACIA_FENCE == null) {
             ItemTypes.ACACIA_FENCE = AllayItemType
-                            .builder(ItemAcaciaFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_FENCE)
                             .build();
         }
         if (ItemTypes.ACACIA_FENCE_GATE == null) {
             ItemTypes.ACACIA_FENCE_GATE = AllayItemType
-                            .builder(ItemAcaciaFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_FENCE_GATE)
                             .build();
         }
         if (ItemTypes.ACACIA_HANGING_SIGN == null) {
             ItemTypes.ACACIA_HANGING_SIGN = AllayItemType
-                            .builder(ItemAcaciaHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_HANGING_SIGN)
                             .build();
         }
         if (ItemTypes.ACACIA_LEAVES == null) {
             ItemTypes.ACACIA_LEAVES = AllayItemType
-                            .builder(ItemAcaciaLeavesStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_LEAVES)
                             .build();
         }
         if (ItemTypes.ACACIA_LOG == null) {
             ItemTypes.ACACIA_LOG = AllayItemType
-                            .builder(ItemAcaciaLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_LOG)
                             .build();
         }
         if (ItemTypes.ACACIA_PLANKS == null) {
             ItemTypes.ACACIA_PLANKS = AllayItemType
-                            .builder(ItemAcaciaPlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_PLANKS)
                             .build();
         }
@@ -1652,43 +769,49 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ACACIA_SAPLING == null) {
             ItemTypes.ACACIA_SAPLING = AllayItemType
-                            .builder(ItemAcaciaSaplingStackImpl.class)
+                            .builder(ItemSaplingStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_SAPLING)
+                            .build();
+        }
+        if (ItemTypes.ACACIA_SIGN == null) {
+            ItemTypes.ACACIA_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.ACACIA_SIGN)
                             .build();
         }
         if (ItemTypes.ACACIA_SLAB == null) {
             ItemTypes.ACACIA_SLAB = AllayItemType
-                            .builder(ItemAcaciaSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_SLAB)
                             .build();
         }
         if (ItemTypes.ACACIA_STAIRS == null) {
             ItemTypes.ACACIA_STAIRS = AllayItemType
-                            .builder(ItemAcaciaStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_STAIRS)
                             .build();
         }
         if (ItemTypes.ACACIA_STANDING_SIGN == null) {
             ItemTypes.ACACIA_STANDING_SIGN = AllayItemType
-                            .builder(ItemAcaciaStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_STANDING_SIGN)
                             .build();
         }
         if (ItemTypes.ACACIA_TRAPDOOR == null) {
             ItemTypes.ACACIA_TRAPDOOR = AllayItemType
-                            .builder(ItemAcaciaTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.ACACIA_WALL_SIGN == null) {
             ItemTypes.ACACIA_WALL_SIGN = AllayItemType
-                            .builder(ItemAcaciaWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_WALL_SIGN)
                             .build();
         }
         if (ItemTypes.ACACIA_WOOD == null) {
             ItemTypes.ACACIA_WOOD = AllayItemType
-                            .builder(ItemAcaciaWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.ACACIA_WOOD)
                             .build();
         }
@@ -1698,10 +821,22 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.ACTIVATOR_RAIL)
                             .build();
         }
+        if (ItemTypes.AGENT_SPAWN_EGG == null) {
+            ItemTypes.AGENT_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.AGENT_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.AIR == null) {
             ItemTypes.AIR = AllayItemType
                             .builder(ItemAirStackImpl.class)
                             .vanillaItem(ItemId.AIR)
+                            .build();
+        }
+        if (ItemTypes.ALLAY_SPAWN_EGG == null) {
+            ItemTypes.ALLAY_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ALLAY_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.ALLIUM == null) {
@@ -1748,25 +883,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ANDESITE_DOUBLE_SLAB == null) {
             ItemTypes.ANDESITE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemAndesiteDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.ANDESITE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.ANDESITE_SLAB == null) {
             ItemTypes.ANDESITE_SLAB = AllayItemType
-                            .builder(ItemAndesiteSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.ANDESITE_SLAB)
                             .build();
         }
         if (ItemTypes.ANDESITE_STAIRS == null) {
             ItemTypes.ANDESITE_STAIRS = AllayItemType
-                            .builder(ItemAndesiteStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.ANDESITE_STAIRS)
                             .build();
         }
         if (ItemTypes.ANDESITE_WALL == null) {
             ItemTypes.ANDESITE_WALL = AllayItemType
-                            .builder(ItemAndesiteWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.ANDESITE_WALL)
                             .build();
         }
@@ -1800,6 +935,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.ARMADILLO_SCUTE)
                             .build();
         }
+        if (ItemTypes.ARMADILLO_SPAWN_EGG == null) {
+            ItemTypes.ARMADILLO_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ARMADILLO_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.ARMOR_STAND == null) {
             ItemTypes.ARMOR_STAND = AllayItemType
                             .builder(ItemArmorStandStackImpl.class)
@@ -1818,6 +959,18 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.ARROW)
                             .build();
         }
+        if (ItemTypes.AXOLOTL_BUCKET == null) {
+            ItemTypes.AXOLOTL_BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.AXOLOTL_BUCKET)
+                            .build();
+        }
+        if (ItemTypes.AXOLOTL_SPAWN_EGG == null) {
+            ItemTypes.AXOLOTL_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.AXOLOTL_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.AZALEA == null) {
             ItemTypes.AZALEA = AllayItemType
                             .builder(ItemAzaleaStackImpl.class)
@@ -1826,13 +979,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.AZALEA_LEAVES == null) {
             ItemTypes.AZALEA_LEAVES = AllayItemType
-                            .builder(ItemAzaleaLeavesStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.AZALEA_LEAVES)
                             .build();
         }
         if (ItemTypes.AZALEA_LEAVES_FLOWERED == null) {
             ItemTypes.AZALEA_LEAVES_FLOWERED = AllayItemType
-                            .builder(ItemAzaleaLeavesFloweredStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.AZALEA_LEAVES_FLOWERED)
                             .build();
         }
@@ -1868,7 +1021,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BAMBOO_BUTTON == null) {
             ItemTypes.BAMBOO_BUTTON = AllayItemType
-                            .builder(ItemBambooButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_BUTTON)
                             .build();
         }
@@ -1880,31 +1033,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BAMBOO_DOOR == null) {
             ItemTypes.BAMBOO_DOOR = AllayItemType
-                            .builder(ItemBambooDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_DOOR)
                             .build();
         }
         if (ItemTypes.BAMBOO_DOUBLE_SLAB == null) {
             ItemTypes.BAMBOO_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemBambooDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.BAMBOO_FENCE == null) {
             ItemTypes.BAMBOO_FENCE = AllayItemType
-                            .builder(ItemBambooFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_FENCE)
                             .build();
         }
         if (ItemTypes.BAMBOO_FENCE_GATE == null) {
             ItemTypes.BAMBOO_FENCE_GATE = AllayItemType
-                            .builder(ItemBambooFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_FENCE_GATE)
                             .build();
         }
         if (ItemTypes.BAMBOO_HANGING_SIGN == null) {
             ItemTypes.BAMBOO_HANGING_SIGN = AllayItemType
-                            .builder(ItemBambooHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_HANGING_SIGN)
                             .build();
         }
@@ -1916,25 +1069,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BAMBOO_MOSAIC_DOUBLE_SLAB == null) {
             ItemTypes.BAMBOO_MOSAIC_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemBambooMosaicDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_MOSAIC_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.BAMBOO_MOSAIC_SLAB == null) {
             ItemTypes.BAMBOO_MOSAIC_SLAB = AllayItemType
-                            .builder(ItemBambooMosaicSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_MOSAIC_SLAB)
                             .build();
         }
         if (ItemTypes.BAMBOO_MOSAIC_STAIRS == null) {
             ItemTypes.BAMBOO_MOSAIC_STAIRS = AllayItemType
-                            .builder(ItemBambooMosaicStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_MOSAIC_STAIRS)
                             .build();
         }
         if (ItemTypes.BAMBOO_PLANKS == null) {
             ItemTypes.BAMBOO_PLANKS = AllayItemType
-                            .builder(ItemBambooPlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_PLANKS)
                             .build();
         }
@@ -1952,37 +1105,43 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BAMBOO_SAPLING == null) {
             ItemTypes.BAMBOO_SAPLING = AllayItemType
-                            .builder(ItemBambooSaplingStackImpl.class)
+                            .builder(ItemSaplingStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_SAPLING)
+                            .build();
+        }
+        if (ItemTypes.BAMBOO_SIGN == null) {
+            ItemTypes.BAMBOO_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.BAMBOO_SIGN)
                             .build();
         }
         if (ItemTypes.BAMBOO_SLAB == null) {
             ItemTypes.BAMBOO_SLAB = AllayItemType
-                            .builder(ItemBambooSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_SLAB)
                             .build();
         }
         if (ItemTypes.BAMBOO_STAIRS == null) {
             ItemTypes.BAMBOO_STAIRS = AllayItemType
-                            .builder(ItemBambooStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_STAIRS)
                             .build();
         }
         if (ItemTypes.BAMBOO_STANDING_SIGN == null) {
             ItemTypes.BAMBOO_STANDING_SIGN = AllayItemType
-                            .builder(ItemBambooStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_STANDING_SIGN)
                             .build();
         }
         if (ItemTypes.BAMBOO_TRAPDOOR == null) {
             ItemTypes.BAMBOO_TRAPDOOR = AllayItemType
-                            .builder(ItemBambooTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.BAMBOO_WALL_SIGN == null) {
             ItemTypes.BAMBOO_WALL_SIGN = AllayItemType
-                            .builder(ItemBambooWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.BAMBOO_WALL_SIGN)
                             .build();
         }
@@ -2016,6 +1175,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.BASALT)
                             .build();
         }
+        if (ItemTypes.BAT_SPAWN_EGG == null) {
+            ItemTypes.BAT_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.BAT_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.BEACON == null) {
             ItemTypes.BEACON = AllayItemType
                             .builder(ItemBeaconStackImpl.class)
@@ -2038,6 +1203,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.BEE_NEST = AllayItemType
                             .builder(ItemBeeNestStackImpl.class)
                             .vanillaItem(ItemId.BEE_NEST)
+                            .build();
+        }
+        if (ItemTypes.BEE_SPAWN_EGG == null) {
+            ItemTypes.BEE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.BEE_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.BEEF == null) {
@@ -2084,67 +1255,67 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BIRCH_BOAT == null) {
             ItemTypes.BIRCH_BOAT = AllayItemType
-                            .builder(ItemBirchBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_BOAT)
                             .build();
         }
         if (ItemTypes.BIRCH_BUTTON == null) {
             ItemTypes.BIRCH_BUTTON = AllayItemType
-                            .builder(ItemBirchButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_BUTTON)
                             .build();
         }
         if (ItemTypes.BIRCH_CHEST_BOAT == null) {
             ItemTypes.BIRCH_CHEST_BOAT = AllayItemType
-                            .builder(ItemBirchChestBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_CHEST_BOAT)
                             .build();
         }
         if (ItemTypes.BIRCH_DOOR == null) {
             ItemTypes.BIRCH_DOOR = AllayItemType
-                            .builder(ItemBirchDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_DOOR)
                             .build();
         }
         if (ItemTypes.BIRCH_DOUBLE_SLAB == null) {
             ItemTypes.BIRCH_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemBirchDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.BIRCH_FENCE == null) {
             ItemTypes.BIRCH_FENCE = AllayItemType
-                            .builder(ItemBirchFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_FENCE)
                             .build();
         }
         if (ItemTypes.BIRCH_FENCE_GATE == null) {
             ItemTypes.BIRCH_FENCE_GATE = AllayItemType
-                            .builder(ItemBirchFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_FENCE_GATE)
                             .build();
         }
         if (ItemTypes.BIRCH_HANGING_SIGN == null) {
             ItemTypes.BIRCH_HANGING_SIGN = AllayItemType
-                            .builder(ItemBirchHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_HANGING_SIGN)
                             .build();
         }
         if (ItemTypes.BIRCH_LEAVES == null) {
             ItemTypes.BIRCH_LEAVES = AllayItemType
-                            .builder(ItemBirchLeavesStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_LEAVES)
                             .build();
         }
         if (ItemTypes.BIRCH_LOG == null) {
             ItemTypes.BIRCH_LOG = AllayItemType
-                            .builder(ItemBirchLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_LOG)
                             .build();
         }
         if (ItemTypes.BIRCH_PLANKS == null) {
             ItemTypes.BIRCH_PLANKS = AllayItemType
-                            .builder(ItemBirchPlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_PLANKS)
                             .build();
         }
@@ -2156,79 +1327,85 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BIRCH_SAPLING == null) {
             ItemTypes.BIRCH_SAPLING = AllayItemType
-                            .builder(ItemBirchSaplingStackImpl.class)
+                            .builder(ItemSaplingStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_SAPLING)
+                            .build();
+        }
+        if (ItemTypes.BIRCH_SIGN == null) {
+            ItemTypes.BIRCH_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.BIRCH_SIGN)
                             .build();
         }
         if (ItemTypes.BIRCH_SLAB == null) {
             ItemTypes.BIRCH_SLAB = AllayItemType
-                            .builder(ItemBirchSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_SLAB)
                             .build();
         }
         if (ItemTypes.BIRCH_STAIRS == null) {
             ItemTypes.BIRCH_STAIRS = AllayItemType
-                            .builder(ItemBirchStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_STAIRS)
                             .build();
         }
         if (ItemTypes.BIRCH_STANDING_SIGN == null) {
             ItemTypes.BIRCH_STANDING_SIGN = AllayItemType
-                            .builder(ItemBirchStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_STANDING_SIGN)
                             .build();
         }
         if (ItemTypes.BIRCH_TRAPDOOR == null) {
             ItemTypes.BIRCH_TRAPDOOR = AllayItemType
-                            .builder(ItemBirchTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.BIRCH_WALL_SIGN == null) {
             ItemTypes.BIRCH_WALL_SIGN = AllayItemType
-                            .builder(ItemBirchWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_WALL_SIGN)
                             .build();
         }
         if (ItemTypes.BIRCH_WOOD == null) {
             ItemTypes.BIRCH_WOOD = AllayItemType
-                            .builder(ItemBirchWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.BIRCH_WOOD)
                             .build();
         }
         if (ItemTypes.BLACK_BUNDLE == null) {
             ItemTypes.BLACK_BUNDLE = AllayItemType
-                            .builder(ItemBlackBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.BLACK_BUNDLE)
                             .build();
         }
         if (ItemTypes.BLACK_CANDLE == null) {
             ItemTypes.BLACK_CANDLE = AllayItemType
-                            .builder(ItemBlackCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.BLACK_CANDLE)
                             .build();
         }
         if (ItemTypes.BLACK_CANDLE_CAKE == null) {
             ItemTypes.BLACK_CANDLE_CAKE = AllayItemType
-                            .builder(ItemBlackCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.BLACK_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.BLACK_CARPET == null) {
             ItemTypes.BLACK_CARPET = AllayItemType
-                            .builder(ItemBlackCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.BLACK_CARPET)
                             .build();
         }
         if (ItemTypes.BLACK_CONCRETE == null) {
             ItemTypes.BLACK_CONCRETE = AllayItemType
-                            .builder(ItemBlackConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.BLACK_CONCRETE)
                             .build();
         }
         if (ItemTypes.BLACK_CONCRETE_POWDER == null) {
             ItemTypes.BLACK_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemBlackConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.BLACK_CONCRETE_POWDER)
                             .build();
         }
@@ -2240,31 +1417,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLACK_GLAZED_TERRACOTTA == null) {
             ItemTypes.BLACK_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemBlackGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.BLACK_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.BLACK_SHULKER_BOX == null) {
+            ItemTypes.BLACK_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.BLACK_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.BLACK_STAINED_GLASS == null) {
             ItemTypes.BLACK_STAINED_GLASS = AllayItemType
-                            .builder(ItemBlackStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.BLACK_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.BLACK_STAINED_GLASS_PANE == null) {
             ItemTypes.BLACK_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemBlackStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.BLACK_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.BLACK_TERRACOTTA == null) {
             ItemTypes.BLACK_TERRACOTTA = AllayItemType
-                            .builder(ItemBlackTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.BLACK_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.BLACK_WOOL == null) {
             ItemTypes.BLACK_WOOL = AllayItemType
-                            .builder(ItemBlackWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.BLACK_WOOL)
                             .build();
         }
@@ -2276,25 +1459,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLACKSTONE_DOUBLE_SLAB == null) {
             ItemTypes.BLACKSTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemBlackstoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BLACKSTONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.BLACKSTONE_SLAB == null) {
             ItemTypes.BLACKSTONE_SLAB = AllayItemType
-                            .builder(ItemBlackstoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BLACKSTONE_SLAB)
                             .build();
         }
         if (ItemTypes.BLACKSTONE_STAIRS == null) {
             ItemTypes.BLACKSTONE_STAIRS = AllayItemType
-                            .builder(ItemBlackstoneStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.BLACKSTONE_STAIRS)
                             .build();
         }
         if (ItemTypes.BLACKSTONE_WALL == null) {
             ItemTypes.BLACKSTONE_WALL = AllayItemType
-                            .builder(ItemBlackstoneWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.BLACKSTONE_WALL)
                             .build();
         }
@@ -2306,7 +1489,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLAST_FURNACE == null) {
             ItemTypes.BLAST_FURNACE = AllayItemType
-                            .builder(ItemBlastFurnaceStackImpl.class)
+                            .builder(ItemFurnaceStackImpl.class)
                             .vanillaItem(ItemId.BLAST_FURNACE)
                             .build();
         }
@@ -2322,6 +1505,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.BLAZE_ROD)
                             .build();
         }
+        if (ItemTypes.BLAZE_SPAWN_EGG == null) {
+            ItemTypes.BLAZE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.BLAZE_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.BLEACH == null) {
             ItemTypes.BLEACH = AllayItemType
                             .builder(ItemBleachStackImpl.class)
@@ -2330,37 +1519,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLUE_BUNDLE == null) {
             ItemTypes.BLUE_BUNDLE = AllayItemType
-                            .builder(ItemBlueBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.BLUE_BUNDLE)
                             .build();
         }
         if (ItemTypes.BLUE_CANDLE == null) {
             ItemTypes.BLUE_CANDLE = AllayItemType
-                            .builder(ItemBlueCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.BLUE_CANDLE)
                             .build();
         }
         if (ItemTypes.BLUE_CANDLE_CAKE == null) {
             ItemTypes.BLUE_CANDLE_CAKE = AllayItemType
-                            .builder(ItemBlueCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.BLUE_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.BLUE_CARPET == null) {
             ItemTypes.BLUE_CARPET = AllayItemType
-                            .builder(ItemBlueCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.BLUE_CARPET)
                             .build();
         }
         if (ItemTypes.BLUE_CONCRETE == null) {
             ItemTypes.BLUE_CONCRETE = AllayItemType
-                            .builder(ItemBlueConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.BLUE_CONCRETE)
                             .build();
         }
         if (ItemTypes.BLUE_CONCRETE_POWDER == null) {
             ItemTypes.BLUE_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemBlueConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.BLUE_CONCRETE_POWDER)
                             .build();
         }
@@ -2372,7 +1561,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLUE_GLAZED_TERRACOTTA == null) {
             ItemTypes.BLUE_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemBlueGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.BLUE_GLAZED_TERRACOTTA)
                             .build();
         }
@@ -2388,27 +1577,33 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.BLUE_ORCHID)
                             .build();
         }
+        if (ItemTypes.BLUE_SHULKER_BOX == null) {
+            ItemTypes.BLUE_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.BLUE_SHULKER_BOX)
+                            .build();
+        }
         if (ItemTypes.BLUE_STAINED_GLASS == null) {
             ItemTypes.BLUE_STAINED_GLASS = AllayItemType
-                            .builder(ItemBlueStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.BLUE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.BLUE_STAINED_GLASS_PANE == null) {
             ItemTypes.BLUE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemBlueStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.BLUE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.BLUE_TERRACOTTA == null) {
             ItemTypes.BLUE_TERRACOTTA = AllayItemType
-                            .builder(ItemBlueTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.BLUE_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.BLUE_WOOL == null) {
             ItemTypes.BLUE_WOOL = AllayItemType
-                            .builder(ItemBlueWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.BLUE_WOOL)
                             .build();
         }
@@ -2416,6 +1611,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.BOAT = AllayItemType
                             .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.BOAT)
+                            .build();
+        }
+        if (ItemTypes.BOGGED_SPAWN_EGG == null) {
+            ItemTypes.BOGGED_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.BOGGED_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.BOLT_ARMOR_TRIM_SMITHING_TEMPLATE == null) {
@@ -2480,25 +1681,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BRAIN_CORAL == null) {
             ItemTypes.BRAIN_CORAL = AllayItemType
-                            .builder(ItemBrainCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.BRAIN_CORAL)
                             .build();
         }
         if (ItemTypes.BRAIN_CORAL_BLOCK == null) {
             ItemTypes.BRAIN_CORAL_BLOCK = AllayItemType
-                            .builder(ItemBrainCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.BRAIN_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.BRAIN_CORAL_FAN == null) {
             ItemTypes.BRAIN_CORAL_FAN = AllayItemType
-                            .builder(ItemBrainCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.BRAIN_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.BRAIN_CORAL_WALL_FAN == null) {
             ItemTypes.BRAIN_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemBrainCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.BRAIN_CORAL_WALL_FAN)
                             .build();
         }
@@ -2512,6 +1713,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.BREEZE_ROD = AllayItemType
                             .builder(ItemBreezeRodStackImpl.class)
                             .vanillaItem(ItemId.BREEZE_ROD)
+                            .build();
+        }
+        if (ItemTypes.BREEZE_SPAWN_EGG == null) {
+            ItemTypes.BREEZE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.BREEZE_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.BREWER_POTTERY_SHERD == null) {
@@ -2540,61 +1747,61 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BRICK_DOUBLE_SLAB == null) {
             ItemTypes.BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.BRICK_SLAB == null) {
             ItemTypes.BRICK_SLAB = AllayItemType
-                            .builder(ItemBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.BRICK_STAIRS == null) {
             ItemTypes.BRICK_STAIRS = AllayItemType
-                            .builder(ItemBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.BRICK_WALL == null) {
             ItemTypes.BRICK_WALL = AllayItemType
-                            .builder(ItemBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.BRICK_WALL)
                             .build();
         }
         if (ItemTypes.BROWN_BUNDLE == null) {
             ItemTypes.BROWN_BUNDLE = AllayItemType
-                            .builder(ItemBrownBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.BROWN_BUNDLE)
                             .build();
         }
         if (ItemTypes.BROWN_CANDLE == null) {
             ItemTypes.BROWN_CANDLE = AllayItemType
-                            .builder(ItemBrownCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.BROWN_CANDLE)
                             .build();
         }
         if (ItemTypes.BROWN_CANDLE_CAKE == null) {
             ItemTypes.BROWN_CANDLE_CAKE = AllayItemType
-                            .builder(ItemBrownCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.BROWN_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.BROWN_CARPET == null) {
             ItemTypes.BROWN_CARPET = AllayItemType
-                            .builder(ItemBrownCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.BROWN_CARPET)
                             .build();
         }
         if (ItemTypes.BROWN_CONCRETE == null) {
             ItemTypes.BROWN_CONCRETE = AllayItemType
-                            .builder(ItemBrownConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.BROWN_CONCRETE)
                             .build();
         }
         if (ItemTypes.BROWN_CONCRETE_POWDER == null) {
             ItemTypes.BROWN_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemBrownConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.BROWN_CONCRETE_POWDER)
                             .build();
         }
@@ -2606,7 +1813,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BROWN_GLAZED_TERRACOTTA == null) {
             ItemTypes.BROWN_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemBrownGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.BROWN_GLAZED_TERRACOTTA)
                             .build();
         }
@@ -2622,27 +1829,33 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.BROWN_MUSHROOM_BLOCK)
                             .build();
         }
+        if (ItemTypes.BROWN_SHULKER_BOX == null) {
+            ItemTypes.BROWN_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.BROWN_SHULKER_BOX)
+                            .build();
+        }
         if (ItemTypes.BROWN_STAINED_GLASS == null) {
             ItemTypes.BROWN_STAINED_GLASS = AllayItemType
-                            .builder(ItemBrownStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.BROWN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.BROWN_STAINED_GLASS_PANE == null) {
             ItemTypes.BROWN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemBrownStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.BROWN_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.BROWN_TERRACOTTA == null) {
             ItemTypes.BROWN_TERRACOTTA = AllayItemType
-                            .builder(ItemBrownTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.BROWN_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.BROWN_WOOL == null) {
             ItemTypes.BROWN_WOOL = AllayItemType
-                            .builder(ItemBrownWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.BROWN_WOOL)
                             .build();
         }
@@ -2660,26 +1873,32 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BUBBLE_CORAL == null) {
             ItemTypes.BUBBLE_CORAL = AllayItemType
-                            .builder(ItemBubbleCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.BUBBLE_CORAL)
                             .build();
         }
         if (ItemTypes.BUBBLE_CORAL_BLOCK == null) {
             ItemTypes.BUBBLE_CORAL_BLOCK = AllayItemType
-                            .builder(ItemBubbleCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.BUBBLE_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.BUBBLE_CORAL_FAN == null) {
             ItemTypes.BUBBLE_CORAL_FAN = AllayItemType
-                            .builder(ItemBubbleCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.BUBBLE_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.BUBBLE_CORAL_WALL_FAN == null) {
             ItemTypes.BUBBLE_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemBubbleCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.BUBBLE_CORAL_WALL_FAN)
+                            .build();
+        }
+        if (ItemTypes.BUCKET == null) {
+            ItemTypes.BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.BUCKET)
                             .build();
         }
         if (ItemTypes.BUDDING_AMETHYST == null) {
@@ -2722,6 +1941,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.CALIBRATED_SCULK_SENSOR = AllayItemType
                             .builder(ItemCalibratedSculkSensorStackImpl.class)
                             .vanillaItem(ItemId.CALIBRATED_SCULK_SENSOR)
+                            .build();
+        }
+        if (ItemTypes.CAMEL_SPAWN_EGG == null) {
+            ItemTypes.CAMEL_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.CAMEL_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.CAMERA == null) {
@@ -2784,10 +2009,22 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.CARVED_PUMPKIN)
                             .build();
         }
+        if (ItemTypes.CAT_SPAWN_EGG == null) {
+            ItemTypes.CAT_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.CAT_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.CAULDRON == null) {
             ItemTypes.CAULDRON = AllayItemType
                             .builder(ItemCauldronStackImpl.class)
                             .vanillaItem(ItemId.CAULDRON)
+                            .build();
+        }
+        if (ItemTypes.CAVE_SPIDER_SPAWN_EGG == null) {
+            ItemTypes.CAVE_SPIDER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.CAVE_SPIDER_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.CAVE_VINES == null) {
@@ -2820,6 +2057,30 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.CHAIN_COMMAND_BLOCK)
                             .build();
         }
+        if (ItemTypes.CHAINMAIL_BOOTS == null) {
+            ItemTypes.CHAINMAIL_BOOTS = AllayItemType
+                            .builder(ItemBootsStackImpl.class)
+                            .vanillaItem(ItemId.CHAINMAIL_BOOTS)
+                            .build();
+        }
+        if (ItemTypes.CHAINMAIL_CHESTPLATE == null) {
+            ItemTypes.CHAINMAIL_CHESTPLATE = AllayItemType
+                            .builder(ItemChestplateStackImpl.class)
+                            .vanillaItem(ItemId.CHAINMAIL_CHESTPLATE)
+                            .build();
+        }
+        if (ItemTypes.CHAINMAIL_HELMET == null) {
+            ItemTypes.CHAINMAIL_HELMET = AllayItemType
+                            .builder(ItemHelmetStackImpl.class)
+                            .vanillaItem(ItemId.CHAINMAIL_HELMET)
+                            .build();
+        }
+        if (ItemTypes.CHAINMAIL_LEGGINGS == null) {
+            ItemTypes.CHAINMAIL_LEGGINGS = AllayItemType
+                            .builder(ItemLeggingsStackImpl.class)
+                            .vanillaItem(ItemId.CHAINMAIL_LEGGINGS)
+                            .build();
+        }
         if (ItemTypes.CHARCOAL == null) {
             ItemTypes.CHARCOAL = AllayItemType
                             .builder(ItemCharcoalStackImpl.class)
@@ -2840,67 +2101,67 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CHERRY_BOAT == null) {
             ItemTypes.CHERRY_BOAT = AllayItemType
-                            .builder(ItemCherryBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_BOAT)
                             .build();
         }
         if (ItemTypes.CHERRY_BUTTON == null) {
             ItemTypes.CHERRY_BUTTON = AllayItemType
-                            .builder(ItemCherryButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_BUTTON)
                             .build();
         }
         if (ItemTypes.CHERRY_CHEST_BOAT == null) {
             ItemTypes.CHERRY_CHEST_BOAT = AllayItemType
-                            .builder(ItemCherryChestBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_CHEST_BOAT)
                             .build();
         }
         if (ItemTypes.CHERRY_DOOR == null) {
             ItemTypes.CHERRY_DOOR = AllayItemType
-                            .builder(ItemCherryDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_DOOR)
                             .build();
         }
         if (ItemTypes.CHERRY_DOUBLE_SLAB == null) {
             ItemTypes.CHERRY_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemCherryDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.CHERRY_FENCE == null) {
             ItemTypes.CHERRY_FENCE = AllayItemType
-                            .builder(ItemCherryFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_FENCE)
                             .build();
         }
         if (ItemTypes.CHERRY_FENCE_GATE == null) {
             ItemTypes.CHERRY_FENCE_GATE = AllayItemType
-                            .builder(ItemCherryFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_FENCE_GATE)
                             .build();
         }
         if (ItemTypes.CHERRY_HANGING_SIGN == null) {
             ItemTypes.CHERRY_HANGING_SIGN = AllayItemType
-                            .builder(ItemCherryHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_HANGING_SIGN)
                             .build();
         }
         if (ItemTypes.CHERRY_LEAVES == null) {
             ItemTypes.CHERRY_LEAVES = AllayItemType
-                            .builder(ItemCherryLeavesStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_LEAVES)
                             .build();
         }
         if (ItemTypes.CHERRY_LOG == null) {
             ItemTypes.CHERRY_LOG = AllayItemType
-                            .builder(ItemCherryLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_LOG)
                             .build();
         }
         if (ItemTypes.CHERRY_PLANKS == null) {
             ItemTypes.CHERRY_PLANKS = AllayItemType
-                            .builder(ItemCherryPlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_PLANKS)
                             .build();
         }
@@ -2912,43 +2173,49 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CHERRY_SAPLING == null) {
             ItemTypes.CHERRY_SAPLING = AllayItemType
-                            .builder(ItemCherrySaplingStackImpl.class)
+                            .builder(ItemSaplingStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_SAPLING)
+                            .build();
+        }
+        if (ItemTypes.CHERRY_SIGN == null) {
+            ItemTypes.CHERRY_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.CHERRY_SIGN)
                             .build();
         }
         if (ItemTypes.CHERRY_SLAB == null) {
             ItemTypes.CHERRY_SLAB = AllayItemType
-                            .builder(ItemCherrySlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_SLAB)
                             .build();
         }
         if (ItemTypes.CHERRY_STAIRS == null) {
             ItemTypes.CHERRY_STAIRS = AllayItemType
-                            .builder(ItemCherryStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_STAIRS)
                             .build();
         }
         if (ItemTypes.CHERRY_STANDING_SIGN == null) {
             ItemTypes.CHERRY_STANDING_SIGN = AllayItemType
-                            .builder(ItemCherryStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_STANDING_SIGN)
                             .build();
         }
         if (ItemTypes.CHERRY_TRAPDOOR == null) {
             ItemTypes.CHERRY_TRAPDOOR = AllayItemType
-                            .builder(ItemCherryTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.CHERRY_WALL_SIGN == null) {
             ItemTypes.CHERRY_WALL_SIGN = AllayItemType
-                            .builder(ItemCherryWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_WALL_SIGN)
                             .build();
         }
         if (ItemTypes.CHERRY_WOOD == null) {
             ItemTypes.CHERRY_WOOD = AllayItemType
-                            .builder(ItemCherryWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.CHERRY_WOOD)
                             .build();
         }
@@ -2960,13 +2227,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CHEST_BOAT == null) {
             ItemTypes.CHEST_BOAT = AllayItemType
-                            .builder(ItemChestBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.CHEST_BOAT)
                             .build();
         }
         if (ItemTypes.CHEST_MINECART == null) {
             ItemTypes.CHEST_MINECART = AllayItemType
-                            .builder(ItemChestMinecartStackImpl.class)
+                            .builder(ItemMinecartStackImpl.class)
                             .vanillaItem(ItemId.CHEST_MINECART)
                             .build();
         }
@@ -2976,9 +2243,15 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.CHICKEN)
                             .build();
         }
+        if (ItemTypes.CHICKEN_SPAWN_EGG == null) {
+            ItemTypes.CHICKEN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.CHICKEN_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.CHIPPED_ANVIL == null) {
             ItemTypes.CHIPPED_ANVIL = AllayItemType
-                            .builder(ItemChippedAnvilStackImpl.class)
+                            .builder(ItemAnvilStackImpl.class)
                             .vanillaItem(ItemId.CHIPPED_ANVIL)
                             .build();
         }
@@ -2990,7 +2263,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CHISELED_COPPER == null) {
             ItemTypes.CHISELED_COPPER = AllayItemType
-                            .builder(ItemChiseledCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.CHISELED_COPPER)
                             .build();
         }
@@ -3002,7 +2275,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CHISELED_NETHER_BRICKS == null) {
             ItemTypes.CHISELED_NETHER_BRICKS = AllayItemType
-                            .builder(ItemChiseledNetherBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.CHISELED_NETHER_BRICKS)
                             .build();
         }
@@ -3020,19 +2293,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CHISELED_RED_SANDSTONE == null) {
             ItemTypes.CHISELED_RED_SANDSTONE = AllayItemType
-                            .builder(ItemChiseledRedSandstoneStackImpl.class)
+                            .builder(ItemSandstoneStackImpl.class)
                             .vanillaItem(ItemId.CHISELED_RED_SANDSTONE)
                             .build();
         }
         if (ItemTypes.CHISELED_SANDSTONE == null) {
             ItemTypes.CHISELED_SANDSTONE = AllayItemType
-                            .builder(ItemChiseledSandstoneStackImpl.class)
+                            .builder(ItemSandstoneStackImpl.class)
                             .vanillaItem(ItemId.CHISELED_SANDSTONE)
                             .build();
         }
         if (ItemTypes.CHISELED_STONE_BRICKS == null) {
             ItemTypes.CHISELED_STONE_BRICKS = AllayItemType
-                            .builder(ItemChiseledStoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.CHISELED_STONE_BRICKS)
                             .build();
         }
@@ -3044,7 +2317,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CHISELED_TUFF_BRICKS == null) {
             ItemTypes.CHISELED_TUFF_BRICKS = AllayItemType
-                            .builder(ItemChiseledTuffBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.CHISELED_TUFF_BRICKS)
                             .build();
         }
@@ -3110,7 +2383,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.COARSE_DIRT == null) {
             ItemTypes.COARSE_DIRT = AllayItemType
-                            .builder(ItemCoarseDirtStackImpl.class)
+                            .builder(ItemDirtStackImpl.class)
                             .vanillaItem(ItemId.COARSE_DIRT)
                             .build();
         }
@@ -3128,25 +2401,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.COBBLED_DEEPSLATE_DOUBLE_SLAB == null) {
             ItemTypes.COBBLED_DEEPSLATE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemCobbledDeepslateDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.COBBLED_DEEPSLATE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.COBBLED_DEEPSLATE_SLAB == null) {
             ItemTypes.COBBLED_DEEPSLATE_SLAB = AllayItemType
-                            .builder(ItemCobbledDeepslateSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.COBBLED_DEEPSLATE_SLAB)
                             .build();
         }
         if (ItemTypes.COBBLED_DEEPSLATE_STAIRS == null) {
             ItemTypes.COBBLED_DEEPSLATE_STAIRS = AllayItemType
-                            .builder(ItemCobbledDeepslateStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.COBBLED_DEEPSLATE_STAIRS)
                             .build();
         }
         if (ItemTypes.COBBLED_DEEPSLATE_WALL == null) {
             ItemTypes.COBBLED_DEEPSLATE_WALL = AllayItemType
-                            .builder(ItemCobbledDeepslateWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.COBBLED_DEEPSLATE_WALL)
                             .build();
         }
@@ -3158,19 +2431,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.COBBLESTONE_DOUBLE_SLAB == null) {
             ItemTypes.COBBLESTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemCobblestoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.COBBLESTONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.COBBLESTONE_SLAB == null) {
             ItemTypes.COBBLESTONE_SLAB = AllayItemType
-                            .builder(ItemCobblestoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.COBBLESTONE_SLAB)
                             .build();
         }
         if (ItemTypes.COBBLESTONE_WALL == null) {
             ItemTypes.COBBLESTONE_WALL = AllayItemType
-                            .builder(ItemCobblestoneWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.COBBLESTONE_WALL)
                             .build();
         }
@@ -3192,39 +2465,51 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.COD)
                             .build();
         }
+        if (ItemTypes.COD_BUCKET == null) {
+            ItemTypes.COD_BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.COD_BUCKET)
+                            .build();
+        }
+        if (ItemTypes.COD_SPAWN_EGG == null) {
+            ItemTypes.COD_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.COD_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.COLORED_TORCH_BLUE == null) {
             ItemTypes.COLORED_TORCH_BLUE = AllayItemType
-                            .builder(ItemColoredTorchBlueStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.COLORED_TORCH_BLUE)
                             .build();
         }
         if (ItemTypes.COLORED_TORCH_BP == null) {
             ItemTypes.COLORED_TORCH_BP = AllayItemType
-                            .builder(ItemColoredTorchBpStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.COLORED_TORCH_BP)
                             .build();
         }
         if (ItemTypes.COLORED_TORCH_GREEN == null) {
             ItemTypes.COLORED_TORCH_GREEN = AllayItemType
-                            .builder(ItemColoredTorchGreenStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.COLORED_TORCH_GREEN)
                             .build();
         }
         if (ItemTypes.COLORED_TORCH_PURPLE == null) {
             ItemTypes.COLORED_TORCH_PURPLE = AllayItemType
-                            .builder(ItemColoredTorchPurpleStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.COLORED_TORCH_PURPLE)
                             .build();
         }
         if (ItemTypes.COLORED_TORCH_RED == null) {
             ItemTypes.COLORED_TORCH_RED = AllayItemType
-                            .builder(ItemColoredTorchRedStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.COLORED_TORCH_RED)
                             .build();
         }
         if (ItemTypes.COLORED_TORCH_RG == null) {
             ItemTypes.COLORED_TORCH_RG = AllayItemType
-                            .builder(ItemColoredTorchRgStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.COLORED_TORCH_RG)
                             .build();
         }
@@ -3236,7 +2521,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.COMMAND_BLOCK_MINECART == null) {
             ItemTypes.COMMAND_BLOCK_MINECART = AllayItemType
-                            .builder(ItemCommandBlockMinecartStackImpl.class)
+                            .builder(ItemMinecartStackImpl.class)
                             .vanillaItem(ItemId.COMMAND_BLOCK_MINECART)
                             .build();
         }
@@ -3350,7 +2635,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.COPPER_DOOR == null) {
             ItemTypes.COPPER_DOOR = AllayItemType
-                            .builder(ItemCopperDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.COPPER_DOOR)
                             .build();
         }
@@ -3374,7 +2659,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.COPPER_TRAPDOOR == null) {
             ItemTypes.COPPER_TRAPDOOR = AllayItemType
-                            .builder(ItemCopperTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.COPPER_TRAPDOOR)
                             .build();
         }
@@ -3398,7 +2683,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CORAL_FAN_DEAD == null) {
             ItemTypes.CORAL_FAN_DEAD = AllayItemType
-                            .builder(ItemCoralFanDeadStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.CORAL_FAN_DEAD)
                             .build();
         }
@@ -3408,9 +2693,15 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.CORNFLOWER)
                             .build();
         }
+        if (ItemTypes.COW_SPAWN_EGG == null) {
+            ItemTypes.COW_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.COW_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.CRACKED_DEEPSLATE_BRICKS == null) {
             ItemTypes.CRACKED_DEEPSLATE_BRICKS = AllayItemType
-                            .builder(ItemCrackedDeepslateBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.CRACKED_DEEPSLATE_BRICKS)
                             .build();
         }
@@ -3422,19 +2713,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CRACKED_NETHER_BRICKS == null) {
             ItemTypes.CRACKED_NETHER_BRICKS = AllayItemType
-                            .builder(ItemCrackedNetherBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.CRACKED_NETHER_BRICKS)
                             .build();
         }
         if (ItemTypes.CRACKED_POLISHED_BLACKSTONE_BRICKS == null) {
             ItemTypes.CRACKED_POLISHED_BLACKSTONE_BRICKS = AllayItemType
-                            .builder(ItemCrackedPolishedBlackstoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.CRACKED_POLISHED_BLACKSTONE_BRICKS)
                             .build();
         }
         if (ItemTypes.CRACKED_STONE_BRICKS == null) {
             ItemTypes.CRACKED_STONE_BRICKS = AllayItemType
-                            .builder(ItemCrackedStoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.CRACKED_STONE_BRICKS)
                             .build();
         }
@@ -3458,37 +2749,43 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CREEPER_HEAD == null) {
             ItemTypes.CREEPER_HEAD = AllayItemType
-                            .builder(ItemCreeperHeadStackImpl.class)
+                            .builder(ItemHeadStackImpl.class)
                             .vanillaItem(ItemId.CREEPER_HEAD)
+                            .build();
+        }
+        if (ItemTypes.CREEPER_SPAWN_EGG == null) {
+            ItemTypes.CREEPER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.CREEPER_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.CRIMSON_BUTTON == null) {
             ItemTypes.CRIMSON_BUTTON = AllayItemType
-                            .builder(ItemCrimsonButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_BUTTON)
                             .build();
         }
         if (ItemTypes.CRIMSON_DOOR == null) {
             ItemTypes.CRIMSON_DOOR = AllayItemType
-                            .builder(ItemCrimsonDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_DOOR)
                             .build();
         }
         if (ItemTypes.CRIMSON_DOUBLE_SLAB == null) {
             ItemTypes.CRIMSON_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemCrimsonDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.CRIMSON_FENCE == null) {
             ItemTypes.CRIMSON_FENCE = AllayItemType
-                            .builder(ItemCrimsonFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_FENCE)
                             .build();
         }
         if (ItemTypes.CRIMSON_FENCE_GATE == null) {
             ItemTypes.CRIMSON_FENCE_GATE = AllayItemType
-                            .builder(ItemCrimsonFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_FENCE_GATE)
                             .build();
         }
@@ -3500,7 +2797,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CRIMSON_HANGING_SIGN == null) {
             ItemTypes.CRIMSON_HANGING_SIGN = AllayItemType
-                            .builder(ItemCrimsonHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_HANGING_SIGN)
                             .build();
         }
@@ -3518,7 +2815,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CRIMSON_PLANKS == null) {
             ItemTypes.CRIMSON_PLANKS = AllayItemType
-                            .builder(ItemCrimsonPlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_PLANKS)
                             .build();
         }
@@ -3534,21 +2831,27 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.CRIMSON_ROOTS)
                             .build();
         }
+        if (ItemTypes.CRIMSON_SIGN == null) {
+            ItemTypes.CRIMSON_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.CRIMSON_SIGN)
+                            .build();
+        }
         if (ItemTypes.CRIMSON_SLAB == null) {
             ItemTypes.CRIMSON_SLAB = AllayItemType
-                            .builder(ItemCrimsonSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_SLAB)
                             .build();
         }
         if (ItemTypes.CRIMSON_STAIRS == null) {
             ItemTypes.CRIMSON_STAIRS = AllayItemType
-                            .builder(ItemCrimsonStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_STAIRS)
                             .build();
         }
         if (ItemTypes.CRIMSON_STANDING_SIGN == null) {
             ItemTypes.CRIMSON_STANDING_SIGN = AllayItemType
-                            .builder(ItemCrimsonStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_STANDING_SIGN)
                             .build();
         }
@@ -3560,13 +2863,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CRIMSON_TRAPDOOR == null) {
             ItemTypes.CRIMSON_TRAPDOOR = AllayItemType
-                            .builder(ItemCrimsonTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.CRIMSON_WALL_SIGN == null) {
             ItemTypes.CRIMSON_WALL_SIGN = AllayItemType
-                            .builder(ItemCrimsonWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.CRIMSON_WALL_SIGN)
                             .build();
         }
@@ -3584,91 +2887,91 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CUT_COPPER == null) {
             ItemTypes.CUT_COPPER = AllayItemType
-                            .builder(ItemCutCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.CUT_COPPER)
                             .build();
         }
         if (ItemTypes.CUT_COPPER_SLAB == null) {
             ItemTypes.CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.CUT_COPPER_STAIRS == null) {
             ItemTypes.CUT_COPPER_STAIRS = AllayItemType
-                            .builder(ItemCutCopperStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.CUT_COPPER_STAIRS)
                             .build();
         }
         if (ItemTypes.CUT_RED_SANDSTONE == null) {
             ItemTypes.CUT_RED_SANDSTONE = AllayItemType
-                            .builder(ItemCutRedSandstoneStackImpl.class)
+                            .builder(ItemSandstoneStackImpl.class)
                             .vanillaItem(ItemId.CUT_RED_SANDSTONE)
                             .build();
         }
         if (ItemTypes.CUT_RED_SANDSTONE_DOUBLE_SLAB == null) {
             ItemTypes.CUT_RED_SANDSTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemCutRedSandstoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.CUT_RED_SANDSTONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.CUT_RED_SANDSTONE_SLAB == null) {
             ItemTypes.CUT_RED_SANDSTONE_SLAB = AllayItemType
-                            .builder(ItemCutRedSandstoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.CUT_RED_SANDSTONE_SLAB)
                             .build();
         }
         if (ItemTypes.CUT_SANDSTONE == null) {
             ItemTypes.CUT_SANDSTONE = AllayItemType
-                            .builder(ItemCutSandstoneStackImpl.class)
+                            .builder(ItemSandstoneStackImpl.class)
                             .vanillaItem(ItemId.CUT_SANDSTONE)
                             .build();
         }
         if (ItemTypes.CUT_SANDSTONE_DOUBLE_SLAB == null) {
             ItemTypes.CUT_SANDSTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemCutSandstoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.CUT_SANDSTONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.CUT_SANDSTONE_SLAB == null) {
             ItemTypes.CUT_SANDSTONE_SLAB = AllayItemType
-                            .builder(ItemCutSandstoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.CUT_SANDSTONE_SLAB)
                             .build();
         }
         if (ItemTypes.CYAN_BUNDLE == null) {
             ItemTypes.CYAN_BUNDLE = AllayItemType
-                            .builder(ItemCyanBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.CYAN_BUNDLE)
                             .build();
         }
         if (ItemTypes.CYAN_CANDLE == null) {
             ItemTypes.CYAN_CANDLE = AllayItemType
-                            .builder(ItemCyanCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.CYAN_CANDLE)
                             .build();
         }
         if (ItemTypes.CYAN_CANDLE_CAKE == null) {
             ItemTypes.CYAN_CANDLE_CAKE = AllayItemType
-                            .builder(ItemCyanCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.CYAN_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.CYAN_CARPET == null) {
             ItemTypes.CYAN_CARPET = AllayItemType
-                            .builder(ItemCyanCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.CYAN_CARPET)
                             .build();
         }
         if (ItemTypes.CYAN_CONCRETE == null) {
             ItemTypes.CYAN_CONCRETE = AllayItemType
-                            .builder(ItemCyanConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.CYAN_CONCRETE)
                             .build();
         }
         if (ItemTypes.CYAN_CONCRETE_POWDER == null) {
             ItemTypes.CYAN_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemCyanConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.CYAN_CONCRETE_POWDER)
                             .build();
         }
@@ -3680,37 +2983,43 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CYAN_GLAZED_TERRACOTTA == null) {
             ItemTypes.CYAN_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemCyanGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.CYAN_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.CYAN_SHULKER_BOX == null) {
+            ItemTypes.CYAN_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.CYAN_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.CYAN_STAINED_GLASS == null) {
             ItemTypes.CYAN_STAINED_GLASS = AllayItemType
-                            .builder(ItemCyanStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.CYAN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.CYAN_STAINED_GLASS_PANE == null) {
             ItemTypes.CYAN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemCyanStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.CYAN_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.CYAN_TERRACOTTA == null) {
             ItemTypes.CYAN_TERRACOTTA = AllayItemType
-                            .builder(ItemCyanTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.CYAN_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.CYAN_WOOL == null) {
             ItemTypes.CYAN_WOOL = AllayItemType
-                            .builder(ItemCyanWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.CYAN_WOOL)
                             .build();
         }
         if (ItemTypes.DAMAGED_ANVIL == null) {
             ItemTypes.DAMAGED_ANVIL = AllayItemType
-                            .builder(ItemDamagedAnvilStackImpl.class)
+                            .builder(ItemAnvilStackImpl.class)
                             .vanillaItem(ItemId.DAMAGED_ANVIL)
                             .build();
         }
@@ -3728,67 +3037,67 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DARK_OAK_BOAT == null) {
             ItemTypes.DARK_OAK_BOAT = AllayItemType
-                            .builder(ItemDarkOakBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_BOAT)
                             .build();
         }
         if (ItemTypes.DARK_OAK_BUTTON == null) {
             ItemTypes.DARK_OAK_BUTTON = AllayItemType
-                            .builder(ItemDarkOakButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_BUTTON)
                             .build();
         }
         if (ItemTypes.DARK_OAK_CHEST_BOAT == null) {
             ItemTypes.DARK_OAK_CHEST_BOAT = AllayItemType
-                            .builder(ItemDarkOakChestBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_CHEST_BOAT)
                             .build();
         }
         if (ItemTypes.DARK_OAK_DOOR == null) {
             ItemTypes.DARK_OAK_DOOR = AllayItemType
-                            .builder(ItemDarkOakDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_DOOR)
                             .build();
         }
         if (ItemTypes.DARK_OAK_DOUBLE_SLAB == null) {
             ItemTypes.DARK_OAK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemDarkOakDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.DARK_OAK_FENCE == null) {
             ItemTypes.DARK_OAK_FENCE = AllayItemType
-                            .builder(ItemDarkOakFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_FENCE)
                             .build();
         }
         if (ItemTypes.DARK_OAK_FENCE_GATE == null) {
             ItemTypes.DARK_OAK_FENCE_GATE = AllayItemType
-                            .builder(ItemDarkOakFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_FENCE_GATE)
                             .build();
         }
         if (ItemTypes.DARK_OAK_HANGING_SIGN == null) {
             ItemTypes.DARK_OAK_HANGING_SIGN = AllayItemType
-                            .builder(ItemDarkOakHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_HANGING_SIGN)
                             .build();
         }
         if (ItemTypes.DARK_OAK_LEAVES == null) {
             ItemTypes.DARK_OAK_LEAVES = AllayItemType
-                            .builder(ItemDarkOakLeavesStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_LEAVES)
                             .build();
         }
         if (ItemTypes.DARK_OAK_LOG == null) {
             ItemTypes.DARK_OAK_LOG = AllayItemType
-                            .builder(ItemDarkOakLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_LOG)
                             .build();
         }
         if (ItemTypes.DARK_OAK_PLANKS == null) {
             ItemTypes.DARK_OAK_PLANKS = AllayItemType
-                            .builder(ItemDarkOakPlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_PLANKS)
                             .build();
         }
@@ -3800,31 +3109,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DARK_OAK_SAPLING == null) {
             ItemTypes.DARK_OAK_SAPLING = AllayItemType
-                            .builder(ItemDarkOakSaplingStackImpl.class)
+                            .builder(ItemSaplingStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_SAPLING)
+                            .build();
+        }
+        if (ItemTypes.DARK_OAK_SIGN == null) {
+            ItemTypes.DARK_OAK_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.DARK_OAK_SIGN)
                             .build();
         }
         if (ItemTypes.DARK_OAK_SLAB == null) {
             ItemTypes.DARK_OAK_SLAB = AllayItemType
-                            .builder(ItemDarkOakSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_SLAB)
                             .build();
         }
         if (ItemTypes.DARK_OAK_STAIRS == null) {
             ItemTypes.DARK_OAK_STAIRS = AllayItemType
-                            .builder(ItemDarkOakStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_STAIRS)
                             .build();
         }
         if (ItemTypes.DARK_OAK_TRAPDOOR == null) {
             ItemTypes.DARK_OAK_TRAPDOOR = AllayItemType
-                            .builder(ItemDarkOakTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.DARK_OAK_WOOD == null) {
             ItemTypes.DARK_OAK_WOOD = AllayItemType
-                            .builder(ItemDarkOakWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.DARK_OAK_WOOD)
                             .build();
         }
@@ -3836,31 +3151,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DARK_PRISMARINE_DOUBLE_SLAB == null) {
             ItemTypes.DARK_PRISMARINE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemDarkPrismarineDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DARK_PRISMARINE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.DARK_PRISMARINE_SLAB == null) {
             ItemTypes.DARK_PRISMARINE_SLAB = AllayItemType
-                            .builder(ItemDarkPrismarineSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DARK_PRISMARINE_SLAB)
                             .build();
         }
         if (ItemTypes.DARK_PRISMARINE_STAIRS == null) {
             ItemTypes.DARK_PRISMARINE_STAIRS = AllayItemType
-                            .builder(ItemDarkPrismarineStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.DARK_PRISMARINE_STAIRS)
                             .build();
         }
         if (ItemTypes.DARKOAK_STANDING_SIGN == null) {
             ItemTypes.DARKOAK_STANDING_SIGN = AllayItemType
-                            .builder(ItemDarkoakStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.DARKOAK_STANDING_SIGN)
                             .build();
         }
         if (ItemTypes.DARKOAK_WALL_SIGN == null) {
             ItemTypes.DARKOAK_WALL_SIGN = AllayItemType
-                            .builder(ItemDarkoakWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.DARKOAK_WALL_SIGN)
                             .build();
         }
@@ -3878,121 +3193,121 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DEAD_BRAIN_CORAL == null) {
             ItemTypes.DEAD_BRAIN_CORAL = AllayItemType
-                            .builder(ItemDeadBrainCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.DEAD_BRAIN_CORAL)
                             .build();
         }
         if (ItemTypes.DEAD_BRAIN_CORAL_BLOCK == null) {
             ItemTypes.DEAD_BRAIN_CORAL_BLOCK = AllayItemType
-                            .builder(ItemDeadBrainCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.DEAD_BRAIN_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.DEAD_BRAIN_CORAL_FAN == null) {
             ItemTypes.DEAD_BRAIN_CORAL_FAN = AllayItemType
-                            .builder(ItemDeadBrainCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_BRAIN_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.DEAD_BRAIN_CORAL_WALL_FAN == null) {
             ItemTypes.DEAD_BRAIN_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemDeadBrainCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_BRAIN_CORAL_WALL_FAN)
                             .build();
         }
         if (ItemTypes.DEAD_BUBBLE_CORAL == null) {
             ItemTypes.DEAD_BUBBLE_CORAL = AllayItemType
-                            .builder(ItemDeadBubbleCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.DEAD_BUBBLE_CORAL)
                             .build();
         }
         if (ItemTypes.DEAD_BUBBLE_CORAL_BLOCK == null) {
             ItemTypes.DEAD_BUBBLE_CORAL_BLOCK = AllayItemType
-                            .builder(ItemDeadBubbleCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.DEAD_BUBBLE_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.DEAD_BUBBLE_CORAL_FAN == null) {
             ItemTypes.DEAD_BUBBLE_CORAL_FAN = AllayItemType
-                            .builder(ItemDeadBubbleCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_BUBBLE_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.DEAD_BUBBLE_CORAL_WALL_FAN == null) {
             ItemTypes.DEAD_BUBBLE_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemDeadBubbleCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_BUBBLE_CORAL_WALL_FAN)
                             .build();
         }
         if (ItemTypes.DEAD_FIRE_CORAL == null) {
             ItemTypes.DEAD_FIRE_CORAL = AllayItemType
-                            .builder(ItemDeadFireCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.DEAD_FIRE_CORAL)
                             .build();
         }
         if (ItemTypes.DEAD_FIRE_CORAL_BLOCK == null) {
             ItemTypes.DEAD_FIRE_CORAL_BLOCK = AllayItemType
-                            .builder(ItemDeadFireCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.DEAD_FIRE_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.DEAD_FIRE_CORAL_FAN == null) {
             ItemTypes.DEAD_FIRE_CORAL_FAN = AllayItemType
-                            .builder(ItemDeadFireCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_FIRE_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.DEAD_FIRE_CORAL_WALL_FAN == null) {
             ItemTypes.DEAD_FIRE_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemDeadFireCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_FIRE_CORAL_WALL_FAN)
                             .build();
         }
         if (ItemTypes.DEAD_HORN_CORAL == null) {
             ItemTypes.DEAD_HORN_CORAL = AllayItemType
-                            .builder(ItemDeadHornCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.DEAD_HORN_CORAL)
                             .build();
         }
         if (ItemTypes.DEAD_HORN_CORAL_BLOCK == null) {
             ItemTypes.DEAD_HORN_CORAL_BLOCK = AllayItemType
-                            .builder(ItemDeadHornCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.DEAD_HORN_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.DEAD_HORN_CORAL_FAN == null) {
             ItemTypes.DEAD_HORN_CORAL_FAN = AllayItemType
-                            .builder(ItemDeadHornCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_HORN_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.DEAD_HORN_CORAL_WALL_FAN == null) {
             ItemTypes.DEAD_HORN_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemDeadHornCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_HORN_CORAL_WALL_FAN)
                             .build();
         }
         if (ItemTypes.DEAD_TUBE_CORAL == null) {
             ItemTypes.DEAD_TUBE_CORAL = AllayItemType
-                            .builder(ItemDeadTubeCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.DEAD_TUBE_CORAL)
                             .build();
         }
         if (ItemTypes.DEAD_TUBE_CORAL_BLOCK == null) {
             ItemTypes.DEAD_TUBE_CORAL_BLOCK = AllayItemType
-                            .builder(ItemDeadTubeCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.DEAD_TUBE_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.DEAD_TUBE_CORAL_FAN == null) {
             ItemTypes.DEAD_TUBE_CORAL_FAN = AllayItemType
-                            .builder(ItemDeadTubeCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_TUBE_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.DEAD_TUBE_CORAL_WALL_FAN == null) {
             ItemTypes.DEAD_TUBE_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemDeadTubeCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.DEAD_TUBE_CORAL_WALL_FAN)
                             .build();
         }
@@ -4016,31 +3331,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DEEPSLATE_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.DEEPSLATE_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemDeepslateBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DEEPSLATE_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.DEEPSLATE_BRICK_SLAB == null) {
             ItemTypes.DEEPSLATE_BRICK_SLAB = AllayItemType
-                            .builder(ItemDeepslateBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DEEPSLATE_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.DEEPSLATE_BRICK_STAIRS == null) {
             ItemTypes.DEEPSLATE_BRICK_STAIRS = AllayItemType
-                            .builder(ItemDeepslateBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.DEEPSLATE_BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.DEEPSLATE_BRICK_WALL == null) {
             ItemTypes.DEEPSLATE_BRICK_WALL = AllayItemType
-                            .builder(ItemDeepslateBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.DEEPSLATE_BRICK_WALL)
                             .build();
         }
         if (ItemTypes.DEEPSLATE_BRICKS == null) {
             ItemTypes.DEEPSLATE_BRICKS = AllayItemType
-                            .builder(ItemDeepslateBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.DEEPSLATE_BRICKS)
                             .build();
         }
@@ -4094,25 +3409,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DEEPSLATE_TILE_DOUBLE_SLAB == null) {
             ItemTypes.DEEPSLATE_TILE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemDeepslateTileDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DEEPSLATE_TILE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.DEEPSLATE_TILE_SLAB == null) {
             ItemTypes.DEEPSLATE_TILE_SLAB = AllayItemType
-                            .builder(ItemDeepslateTileSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DEEPSLATE_TILE_SLAB)
                             .build();
         }
         if (ItemTypes.DEEPSLATE_TILE_STAIRS == null) {
             ItemTypes.DEEPSLATE_TILE_STAIRS = AllayItemType
-                            .builder(ItemDeepslateTileStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.DEEPSLATE_TILE_STAIRS)
                             .build();
         }
         if (ItemTypes.DEEPSLATE_TILE_WALL == null) {
             ItemTypes.DEEPSLATE_TILE_WALL = AllayItemType
-                            .builder(ItemDeepslateTileWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.DEEPSLATE_TILE_WALL)
                             .build();
         }
@@ -4130,7 +3445,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DEPRECATED_ANVIL == null) {
             ItemTypes.DEPRECATED_ANVIL = AllayItemType
-                            .builder(ItemDeprecatedAnvilStackImpl.class)
+                            .builder(ItemAnvilStackImpl.class)
                             .vanillaItem(ItemId.DEPRECATED_ANVIL)
                             .build();
         }
@@ -4158,10 +3473,40 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.DIAMOND)
                             .build();
         }
+        if (ItemTypes.DIAMOND_AXE == null) {
+            ItemTypes.DIAMOND_AXE = AllayItemType
+                            .builder(ItemAxeStackImpl.class)
+                            .vanillaItem(ItemId.DIAMOND_AXE)
+                            .build();
+        }
         if (ItemTypes.DIAMOND_BLOCK == null) {
             ItemTypes.DIAMOND_BLOCK = AllayItemType
                             .builder(ItemDiamondBlockStackImpl.class)
                             .vanillaItem(ItemId.DIAMOND_BLOCK)
+                            .build();
+        }
+        if (ItemTypes.DIAMOND_BOOTS == null) {
+            ItemTypes.DIAMOND_BOOTS = AllayItemType
+                            .builder(ItemBootsStackImpl.class)
+                            .vanillaItem(ItemId.DIAMOND_BOOTS)
+                            .build();
+        }
+        if (ItemTypes.DIAMOND_CHESTPLATE == null) {
+            ItemTypes.DIAMOND_CHESTPLATE = AllayItemType
+                            .builder(ItemChestplateStackImpl.class)
+                            .vanillaItem(ItemId.DIAMOND_CHESTPLATE)
+                            .build();
+        }
+        if (ItemTypes.DIAMOND_HELMET == null) {
+            ItemTypes.DIAMOND_HELMET = AllayItemType
+                            .builder(ItemHelmetStackImpl.class)
+                            .vanillaItem(ItemId.DIAMOND_HELMET)
+                            .build();
+        }
+        if (ItemTypes.DIAMOND_HOE == null) {
+            ItemTypes.DIAMOND_HOE = AllayItemType
+                            .builder(ItemHoeStackImpl.class)
+                            .vanillaItem(ItemId.DIAMOND_HOE)
                             .build();
         }
         if (ItemTypes.DIAMOND_HORSE_ARMOR == null) {
@@ -4170,10 +3515,34 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.DIAMOND_HORSE_ARMOR)
                             .build();
         }
+        if (ItemTypes.DIAMOND_LEGGINGS == null) {
+            ItemTypes.DIAMOND_LEGGINGS = AllayItemType
+                            .builder(ItemLeggingsStackImpl.class)
+                            .vanillaItem(ItemId.DIAMOND_LEGGINGS)
+                            .build();
+        }
         if (ItemTypes.DIAMOND_ORE == null) {
             ItemTypes.DIAMOND_ORE = AllayItemType
                             .builder(ItemDiamondOreStackImpl.class)
                             .vanillaItem(ItemId.DIAMOND_ORE)
+                            .build();
+        }
+        if (ItemTypes.DIAMOND_PICKAXE == null) {
+            ItemTypes.DIAMOND_PICKAXE = AllayItemType
+                            .builder(ItemPickaxeStackImpl.class)
+                            .vanillaItem(ItemId.DIAMOND_PICKAXE)
+                            .build();
+        }
+        if (ItemTypes.DIAMOND_SHOVEL == null) {
+            ItemTypes.DIAMOND_SHOVEL = AllayItemType
+                            .builder(ItemShovelStackImpl.class)
+                            .vanillaItem(ItemId.DIAMOND_SHOVEL)
+                            .build();
+        }
+        if (ItemTypes.DIAMOND_SWORD == null) {
+            ItemTypes.DIAMOND_SWORD = AllayItemType
+                            .builder(ItemSwordStackImpl.class)
+                            .vanillaItem(ItemId.DIAMOND_SWORD)
                             .build();
         }
         if (ItemTypes.DIORITE == null) {
@@ -4184,25 +3553,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DIORITE_DOUBLE_SLAB == null) {
             ItemTypes.DIORITE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemDioriteDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DIORITE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.DIORITE_SLAB == null) {
             ItemTypes.DIORITE_SLAB = AllayItemType
-                            .builder(ItemDioriteSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DIORITE_SLAB)
                             .build();
         }
         if (ItemTypes.DIORITE_STAIRS == null) {
             ItemTypes.DIORITE_STAIRS = AllayItemType
-                            .builder(ItemDioriteStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.DIORITE_STAIRS)
                             .build();
         }
         if (ItemTypes.DIORITE_WALL == null) {
             ItemTypes.DIORITE_WALL = AllayItemType
-                            .builder(ItemDioriteWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.DIORITE_WALL)
                             .build();
         }
@@ -4230,9 +3599,21 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.DISPENSER)
                             .build();
         }
+        if (ItemTypes.DOLPHIN_SPAWN_EGG == null) {
+            ItemTypes.DOLPHIN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.DOLPHIN_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.DONKEY_SPAWN_EGG == null) {
+            ItemTypes.DONKEY_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.DONKEY_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.DOUBLE_CUT_COPPER_SLAB == null) {
             ItemTypes.DOUBLE_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemDoubleCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DOUBLE_CUT_COPPER_SLAB)
                             .build();
         }
@@ -4244,25 +3625,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DOUBLE_STONE_BLOCK_SLAB == null) {
             ItemTypes.DOUBLE_STONE_BLOCK_SLAB = AllayItemType
-                            .builder(ItemDoubleStoneBlockSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DOUBLE_STONE_BLOCK_SLAB)
                             .build();
         }
         if (ItemTypes.DOUBLE_STONE_BLOCK_SLAB2 == null) {
             ItemTypes.DOUBLE_STONE_BLOCK_SLAB2 = AllayItemType
-                            .builder(ItemDoubleStoneBlockSlab2StackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DOUBLE_STONE_BLOCK_SLAB2)
                             .build();
         }
         if (ItemTypes.DOUBLE_STONE_BLOCK_SLAB3 == null) {
             ItemTypes.DOUBLE_STONE_BLOCK_SLAB3 = AllayItemType
-                            .builder(ItemDoubleStoneBlockSlab3StackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DOUBLE_STONE_BLOCK_SLAB3)
                             .build();
         }
         if (ItemTypes.DOUBLE_STONE_BLOCK_SLAB4 == null) {
             ItemTypes.DOUBLE_STONE_BLOCK_SLAB4 = AllayItemType
-                            .builder(ItemDoubleStoneBlockSlab4StackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.DOUBLE_STONE_BLOCK_SLAB4)
                             .build();
         }
@@ -4280,7 +3661,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.DRAGON_HEAD == null) {
             ItemTypes.DRAGON_HEAD = AllayItemType
-                            .builder(ItemDragonHeadStackImpl.class)
+                            .builder(ItemHeadStackImpl.class)
                             .vanillaItem(ItemId.DRAGON_HEAD)
                             .build();
         }
@@ -4308,6 +3689,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.DROPPER)
                             .build();
         }
+        if (ItemTypes.DROWNED_SPAWN_EGG == null) {
+            ItemTypes.DROWNED_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.DROWNED_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE == null) {
             ItemTypes.DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = AllayItemType
                             .builder(ItemDuneArmorTrimSmithingTemplateStackImpl.class)
@@ -4332,723 +3719,729 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.EGG)
                             .build();
         }
+        if (ItemTypes.ELDER_GUARDIAN_SPAWN_EGG == null) {
+            ItemTypes.ELDER_GUARDIAN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ELDER_GUARDIAN_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.ELEMENT_0 == null) {
             ItemTypes.ELEMENT_0 = AllayItemType
-                            .builder(ItemElement0StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_0)
                             .build();
         }
         if (ItemTypes.ELEMENT_1 == null) {
             ItemTypes.ELEMENT_1 = AllayItemType
-                            .builder(ItemElement1StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_1)
                             .build();
         }
         if (ItemTypes.ELEMENT_10 == null) {
             ItemTypes.ELEMENT_10 = AllayItemType
-                            .builder(ItemElement10StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_10)
                             .build();
         }
         if (ItemTypes.ELEMENT_100 == null) {
             ItemTypes.ELEMENT_100 = AllayItemType
-                            .builder(ItemElement100StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_100)
                             .build();
         }
         if (ItemTypes.ELEMENT_101 == null) {
             ItemTypes.ELEMENT_101 = AllayItemType
-                            .builder(ItemElement101StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_101)
                             .build();
         }
         if (ItemTypes.ELEMENT_102 == null) {
             ItemTypes.ELEMENT_102 = AllayItemType
-                            .builder(ItemElement102StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_102)
                             .build();
         }
         if (ItemTypes.ELEMENT_103 == null) {
             ItemTypes.ELEMENT_103 = AllayItemType
-                            .builder(ItemElement103StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_103)
                             .build();
         }
         if (ItemTypes.ELEMENT_104 == null) {
             ItemTypes.ELEMENT_104 = AllayItemType
-                            .builder(ItemElement104StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_104)
                             .build();
         }
         if (ItemTypes.ELEMENT_105 == null) {
             ItemTypes.ELEMENT_105 = AllayItemType
-                            .builder(ItemElement105StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_105)
                             .build();
         }
         if (ItemTypes.ELEMENT_106 == null) {
             ItemTypes.ELEMENT_106 = AllayItemType
-                            .builder(ItemElement106StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_106)
                             .build();
         }
         if (ItemTypes.ELEMENT_107 == null) {
             ItemTypes.ELEMENT_107 = AllayItemType
-                            .builder(ItemElement107StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_107)
                             .build();
         }
         if (ItemTypes.ELEMENT_108 == null) {
             ItemTypes.ELEMENT_108 = AllayItemType
-                            .builder(ItemElement108StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_108)
                             .build();
         }
         if (ItemTypes.ELEMENT_109 == null) {
             ItemTypes.ELEMENT_109 = AllayItemType
-                            .builder(ItemElement109StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_109)
                             .build();
         }
         if (ItemTypes.ELEMENT_11 == null) {
             ItemTypes.ELEMENT_11 = AllayItemType
-                            .builder(ItemElement11StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_11)
                             .build();
         }
         if (ItemTypes.ELEMENT_110 == null) {
             ItemTypes.ELEMENT_110 = AllayItemType
-                            .builder(ItemElement110StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_110)
                             .build();
         }
         if (ItemTypes.ELEMENT_111 == null) {
             ItemTypes.ELEMENT_111 = AllayItemType
-                            .builder(ItemElement111StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_111)
                             .build();
         }
         if (ItemTypes.ELEMENT_112 == null) {
             ItemTypes.ELEMENT_112 = AllayItemType
-                            .builder(ItemElement112StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_112)
                             .build();
         }
         if (ItemTypes.ELEMENT_113 == null) {
             ItemTypes.ELEMENT_113 = AllayItemType
-                            .builder(ItemElement113StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_113)
                             .build();
         }
         if (ItemTypes.ELEMENT_114 == null) {
             ItemTypes.ELEMENT_114 = AllayItemType
-                            .builder(ItemElement114StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_114)
                             .build();
         }
         if (ItemTypes.ELEMENT_115 == null) {
             ItemTypes.ELEMENT_115 = AllayItemType
-                            .builder(ItemElement115StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_115)
                             .build();
         }
         if (ItemTypes.ELEMENT_116 == null) {
             ItemTypes.ELEMENT_116 = AllayItemType
-                            .builder(ItemElement116StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_116)
                             .build();
         }
         if (ItemTypes.ELEMENT_117 == null) {
             ItemTypes.ELEMENT_117 = AllayItemType
-                            .builder(ItemElement117StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_117)
                             .build();
         }
         if (ItemTypes.ELEMENT_118 == null) {
             ItemTypes.ELEMENT_118 = AllayItemType
-                            .builder(ItemElement118StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_118)
                             .build();
         }
         if (ItemTypes.ELEMENT_12 == null) {
             ItemTypes.ELEMENT_12 = AllayItemType
-                            .builder(ItemElement12StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_12)
                             .build();
         }
         if (ItemTypes.ELEMENT_13 == null) {
             ItemTypes.ELEMENT_13 = AllayItemType
-                            .builder(ItemElement13StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_13)
                             .build();
         }
         if (ItemTypes.ELEMENT_14 == null) {
             ItemTypes.ELEMENT_14 = AllayItemType
-                            .builder(ItemElement14StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_14)
                             .build();
         }
         if (ItemTypes.ELEMENT_15 == null) {
             ItemTypes.ELEMENT_15 = AllayItemType
-                            .builder(ItemElement15StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_15)
                             .build();
         }
         if (ItemTypes.ELEMENT_16 == null) {
             ItemTypes.ELEMENT_16 = AllayItemType
-                            .builder(ItemElement16StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_16)
                             .build();
         }
         if (ItemTypes.ELEMENT_17 == null) {
             ItemTypes.ELEMENT_17 = AllayItemType
-                            .builder(ItemElement17StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_17)
                             .build();
         }
         if (ItemTypes.ELEMENT_18 == null) {
             ItemTypes.ELEMENT_18 = AllayItemType
-                            .builder(ItemElement18StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_18)
                             .build();
         }
         if (ItemTypes.ELEMENT_19 == null) {
             ItemTypes.ELEMENT_19 = AllayItemType
-                            .builder(ItemElement19StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_19)
                             .build();
         }
         if (ItemTypes.ELEMENT_2 == null) {
             ItemTypes.ELEMENT_2 = AllayItemType
-                            .builder(ItemElement2StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_2)
                             .build();
         }
         if (ItemTypes.ELEMENT_20 == null) {
             ItemTypes.ELEMENT_20 = AllayItemType
-                            .builder(ItemElement20StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_20)
                             .build();
         }
         if (ItemTypes.ELEMENT_21 == null) {
             ItemTypes.ELEMENT_21 = AllayItemType
-                            .builder(ItemElement21StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_21)
                             .build();
         }
         if (ItemTypes.ELEMENT_22 == null) {
             ItemTypes.ELEMENT_22 = AllayItemType
-                            .builder(ItemElement22StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_22)
                             .build();
         }
         if (ItemTypes.ELEMENT_23 == null) {
             ItemTypes.ELEMENT_23 = AllayItemType
-                            .builder(ItemElement23StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_23)
                             .build();
         }
         if (ItemTypes.ELEMENT_24 == null) {
             ItemTypes.ELEMENT_24 = AllayItemType
-                            .builder(ItemElement24StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_24)
                             .build();
         }
         if (ItemTypes.ELEMENT_25 == null) {
             ItemTypes.ELEMENT_25 = AllayItemType
-                            .builder(ItemElement25StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_25)
                             .build();
         }
         if (ItemTypes.ELEMENT_26 == null) {
             ItemTypes.ELEMENT_26 = AllayItemType
-                            .builder(ItemElement26StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_26)
                             .build();
         }
         if (ItemTypes.ELEMENT_27 == null) {
             ItemTypes.ELEMENT_27 = AllayItemType
-                            .builder(ItemElement27StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_27)
                             .build();
         }
         if (ItemTypes.ELEMENT_28 == null) {
             ItemTypes.ELEMENT_28 = AllayItemType
-                            .builder(ItemElement28StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_28)
                             .build();
         }
         if (ItemTypes.ELEMENT_29 == null) {
             ItemTypes.ELEMENT_29 = AllayItemType
-                            .builder(ItemElement29StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_29)
                             .build();
         }
         if (ItemTypes.ELEMENT_3 == null) {
             ItemTypes.ELEMENT_3 = AllayItemType
-                            .builder(ItemElement3StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_3)
                             .build();
         }
         if (ItemTypes.ELEMENT_30 == null) {
             ItemTypes.ELEMENT_30 = AllayItemType
-                            .builder(ItemElement30StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_30)
                             .build();
         }
         if (ItemTypes.ELEMENT_31 == null) {
             ItemTypes.ELEMENT_31 = AllayItemType
-                            .builder(ItemElement31StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_31)
                             .build();
         }
         if (ItemTypes.ELEMENT_32 == null) {
             ItemTypes.ELEMENT_32 = AllayItemType
-                            .builder(ItemElement32StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_32)
                             .build();
         }
         if (ItemTypes.ELEMENT_33 == null) {
             ItemTypes.ELEMENT_33 = AllayItemType
-                            .builder(ItemElement33StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_33)
                             .build();
         }
         if (ItemTypes.ELEMENT_34 == null) {
             ItemTypes.ELEMENT_34 = AllayItemType
-                            .builder(ItemElement34StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_34)
                             .build();
         }
         if (ItemTypes.ELEMENT_35 == null) {
             ItemTypes.ELEMENT_35 = AllayItemType
-                            .builder(ItemElement35StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_35)
                             .build();
         }
         if (ItemTypes.ELEMENT_36 == null) {
             ItemTypes.ELEMENT_36 = AllayItemType
-                            .builder(ItemElement36StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_36)
                             .build();
         }
         if (ItemTypes.ELEMENT_37 == null) {
             ItemTypes.ELEMENT_37 = AllayItemType
-                            .builder(ItemElement37StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_37)
                             .build();
         }
         if (ItemTypes.ELEMENT_38 == null) {
             ItemTypes.ELEMENT_38 = AllayItemType
-                            .builder(ItemElement38StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_38)
                             .build();
         }
         if (ItemTypes.ELEMENT_39 == null) {
             ItemTypes.ELEMENT_39 = AllayItemType
-                            .builder(ItemElement39StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_39)
                             .build();
         }
         if (ItemTypes.ELEMENT_4 == null) {
             ItemTypes.ELEMENT_4 = AllayItemType
-                            .builder(ItemElement4StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_4)
                             .build();
         }
         if (ItemTypes.ELEMENT_40 == null) {
             ItemTypes.ELEMENT_40 = AllayItemType
-                            .builder(ItemElement40StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_40)
                             .build();
         }
         if (ItemTypes.ELEMENT_41 == null) {
             ItemTypes.ELEMENT_41 = AllayItemType
-                            .builder(ItemElement41StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_41)
                             .build();
         }
         if (ItemTypes.ELEMENT_42 == null) {
             ItemTypes.ELEMENT_42 = AllayItemType
-                            .builder(ItemElement42StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_42)
                             .build();
         }
         if (ItemTypes.ELEMENT_43 == null) {
             ItemTypes.ELEMENT_43 = AllayItemType
-                            .builder(ItemElement43StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_43)
                             .build();
         }
         if (ItemTypes.ELEMENT_44 == null) {
             ItemTypes.ELEMENT_44 = AllayItemType
-                            .builder(ItemElement44StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_44)
                             .build();
         }
         if (ItemTypes.ELEMENT_45 == null) {
             ItemTypes.ELEMENT_45 = AllayItemType
-                            .builder(ItemElement45StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_45)
                             .build();
         }
         if (ItemTypes.ELEMENT_46 == null) {
             ItemTypes.ELEMENT_46 = AllayItemType
-                            .builder(ItemElement46StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_46)
                             .build();
         }
         if (ItemTypes.ELEMENT_47 == null) {
             ItemTypes.ELEMENT_47 = AllayItemType
-                            .builder(ItemElement47StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_47)
                             .build();
         }
         if (ItemTypes.ELEMENT_48 == null) {
             ItemTypes.ELEMENT_48 = AllayItemType
-                            .builder(ItemElement48StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_48)
                             .build();
         }
         if (ItemTypes.ELEMENT_49 == null) {
             ItemTypes.ELEMENT_49 = AllayItemType
-                            .builder(ItemElement49StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_49)
                             .build();
         }
         if (ItemTypes.ELEMENT_5 == null) {
             ItemTypes.ELEMENT_5 = AllayItemType
-                            .builder(ItemElement5StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_5)
                             .build();
         }
         if (ItemTypes.ELEMENT_50 == null) {
             ItemTypes.ELEMENT_50 = AllayItemType
-                            .builder(ItemElement50StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_50)
                             .build();
         }
         if (ItemTypes.ELEMENT_51 == null) {
             ItemTypes.ELEMENT_51 = AllayItemType
-                            .builder(ItemElement51StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_51)
                             .build();
         }
         if (ItemTypes.ELEMENT_52 == null) {
             ItemTypes.ELEMENT_52 = AllayItemType
-                            .builder(ItemElement52StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_52)
                             .build();
         }
         if (ItemTypes.ELEMENT_53 == null) {
             ItemTypes.ELEMENT_53 = AllayItemType
-                            .builder(ItemElement53StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_53)
                             .build();
         }
         if (ItemTypes.ELEMENT_54 == null) {
             ItemTypes.ELEMENT_54 = AllayItemType
-                            .builder(ItemElement54StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_54)
                             .build();
         }
         if (ItemTypes.ELEMENT_55 == null) {
             ItemTypes.ELEMENT_55 = AllayItemType
-                            .builder(ItemElement55StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_55)
                             .build();
         }
         if (ItemTypes.ELEMENT_56 == null) {
             ItemTypes.ELEMENT_56 = AllayItemType
-                            .builder(ItemElement56StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_56)
                             .build();
         }
         if (ItemTypes.ELEMENT_57 == null) {
             ItemTypes.ELEMENT_57 = AllayItemType
-                            .builder(ItemElement57StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_57)
                             .build();
         }
         if (ItemTypes.ELEMENT_58 == null) {
             ItemTypes.ELEMENT_58 = AllayItemType
-                            .builder(ItemElement58StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_58)
                             .build();
         }
         if (ItemTypes.ELEMENT_59 == null) {
             ItemTypes.ELEMENT_59 = AllayItemType
-                            .builder(ItemElement59StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_59)
                             .build();
         }
         if (ItemTypes.ELEMENT_6 == null) {
             ItemTypes.ELEMENT_6 = AllayItemType
-                            .builder(ItemElement6StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_6)
                             .build();
         }
         if (ItemTypes.ELEMENT_60 == null) {
             ItemTypes.ELEMENT_60 = AllayItemType
-                            .builder(ItemElement60StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_60)
                             .build();
         }
         if (ItemTypes.ELEMENT_61 == null) {
             ItemTypes.ELEMENT_61 = AllayItemType
-                            .builder(ItemElement61StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_61)
                             .build();
         }
         if (ItemTypes.ELEMENT_62 == null) {
             ItemTypes.ELEMENT_62 = AllayItemType
-                            .builder(ItemElement62StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_62)
                             .build();
         }
         if (ItemTypes.ELEMENT_63 == null) {
             ItemTypes.ELEMENT_63 = AllayItemType
-                            .builder(ItemElement63StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_63)
                             .build();
         }
         if (ItemTypes.ELEMENT_64 == null) {
             ItemTypes.ELEMENT_64 = AllayItemType
-                            .builder(ItemElement64StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_64)
                             .build();
         }
         if (ItemTypes.ELEMENT_65 == null) {
             ItemTypes.ELEMENT_65 = AllayItemType
-                            .builder(ItemElement65StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_65)
                             .build();
         }
         if (ItemTypes.ELEMENT_66 == null) {
             ItemTypes.ELEMENT_66 = AllayItemType
-                            .builder(ItemElement66StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_66)
                             .build();
         }
         if (ItemTypes.ELEMENT_67 == null) {
             ItemTypes.ELEMENT_67 = AllayItemType
-                            .builder(ItemElement67StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_67)
                             .build();
         }
         if (ItemTypes.ELEMENT_68 == null) {
             ItemTypes.ELEMENT_68 = AllayItemType
-                            .builder(ItemElement68StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_68)
                             .build();
         }
         if (ItemTypes.ELEMENT_69 == null) {
             ItemTypes.ELEMENT_69 = AllayItemType
-                            .builder(ItemElement69StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_69)
                             .build();
         }
         if (ItemTypes.ELEMENT_7 == null) {
             ItemTypes.ELEMENT_7 = AllayItemType
-                            .builder(ItemElement7StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_7)
                             .build();
         }
         if (ItemTypes.ELEMENT_70 == null) {
             ItemTypes.ELEMENT_70 = AllayItemType
-                            .builder(ItemElement70StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_70)
                             .build();
         }
         if (ItemTypes.ELEMENT_71 == null) {
             ItemTypes.ELEMENT_71 = AllayItemType
-                            .builder(ItemElement71StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_71)
                             .build();
         }
         if (ItemTypes.ELEMENT_72 == null) {
             ItemTypes.ELEMENT_72 = AllayItemType
-                            .builder(ItemElement72StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_72)
                             .build();
         }
         if (ItemTypes.ELEMENT_73 == null) {
             ItemTypes.ELEMENT_73 = AllayItemType
-                            .builder(ItemElement73StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_73)
                             .build();
         }
         if (ItemTypes.ELEMENT_74 == null) {
             ItemTypes.ELEMENT_74 = AllayItemType
-                            .builder(ItemElement74StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_74)
                             .build();
         }
         if (ItemTypes.ELEMENT_75 == null) {
             ItemTypes.ELEMENT_75 = AllayItemType
-                            .builder(ItemElement75StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_75)
                             .build();
         }
         if (ItemTypes.ELEMENT_76 == null) {
             ItemTypes.ELEMENT_76 = AllayItemType
-                            .builder(ItemElement76StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_76)
                             .build();
         }
         if (ItemTypes.ELEMENT_77 == null) {
             ItemTypes.ELEMENT_77 = AllayItemType
-                            .builder(ItemElement77StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_77)
                             .build();
         }
         if (ItemTypes.ELEMENT_78 == null) {
             ItemTypes.ELEMENT_78 = AllayItemType
-                            .builder(ItemElement78StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_78)
                             .build();
         }
         if (ItemTypes.ELEMENT_79 == null) {
             ItemTypes.ELEMENT_79 = AllayItemType
-                            .builder(ItemElement79StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_79)
                             .build();
         }
         if (ItemTypes.ELEMENT_8 == null) {
             ItemTypes.ELEMENT_8 = AllayItemType
-                            .builder(ItemElement8StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_8)
                             .build();
         }
         if (ItemTypes.ELEMENT_80 == null) {
             ItemTypes.ELEMENT_80 = AllayItemType
-                            .builder(ItemElement80StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_80)
                             .build();
         }
         if (ItemTypes.ELEMENT_81 == null) {
             ItemTypes.ELEMENT_81 = AllayItemType
-                            .builder(ItemElement81StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_81)
                             .build();
         }
         if (ItemTypes.ELEMENT_82 == null) {
             ItemTypes.ELEMENT_82 = AllayItemType
-                            .builder(ItemElement82StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_82)
                             .build();
         }
         if (ItemTypes.ELEMENT_83 == null) {
             ItemTypes.ELEMENT_83 = AllayItemType
-                            .builder(ItemElement83StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_83)
                             .build();
         }
         if (ItemTypes.ELEMENT_84 == null) {
             ItemTypes.ELEMENT_84 = AllayItemType
-                            .builder(ItemElement84StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_84)
                             .build();
         }
         if (ItemTypes.ELEMENT_85 == null) {
             ItemTypes.ELEMENT_85 = AllayItemType
-                            .builder(ItemElement85StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_85)
                             .build();
         }
         if (ItemTypes.ELEMENT_86 == null) {
             ItemTypes.ELEMENT_86 = AllayItemType
-                            .builder(ItemElement86StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_86)
                             .build();
         }
         if (ItemTypes.ELEMENT_87 == null) {
             ItemTypes.ELEMENT_87 = AllayItemType
-                            .builder(ItemElement87StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_87)
                             .build();
         }
         if (ItemTypes.ELEMENT_88 == null) {
             ItemTypes.ELEMENT_88 = AllayItemType
-                            .builder(ItemElement88StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_88)
                             .build();
         }
         if (ItemTypes.ELEMENT_89 == null) {
             ItemTypes.ELEMENT_89 = AllayItemType
-                            .builder(ItemElement89StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_89)
                             .build();
         }
         if (ItemTypes.ELEMENT_9 == null) {
             ItemTypes.ELEMENT_9 = AllayItemType
-                            .builder(ItemElement9StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_9)
                             .build();
         }
         if (ItemTypes.ELEMENT_90 == null) {
             ItemTypes.ELEMENT_90 = AllayItemType
-                            .builder(ItemElement90StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_90)
                             .build();
         }
         if (ItemTypes.ELEMENT_91 == null) {
             ItemTypes.ELEMENT_91 = AllayItemType
-                            .builder(ItemElement91StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_91)
                             .build();
         }
         if (ItemTypes.ELEMENT_92 == null) {
             ItemTypes.ELEMENT_92 = AllayItemType
-                            .builder(ItemElement92StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_92)
                             .build();
         }
         if (ItemTypes.ELEMENT_93 == null) {
             ItemTypes.ELEMENT_93 = AllayItemType
-                            .builder(ItemElement93StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_93)
                             .build();
         }
         if (ItemTypes.ELEMENT_94 == null) {
             ItemTypes.ELEMENT_94 = AllayItemType
-                            .builder(ItemElement94StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_94)
                             .build();
         }
         if (ItemTypes.ELEMENT_95 == null) {
             ItemTypes.ELEMENT_95 = AllayItemType
-                            .builder(ItemElement95StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_95)
                             .build();
         }
         if (ItemTypes.ELEMENT_96 == null) {
             ItemTypes.ELEMENT_96 = AllayItemType
-                            .builder(ItemElement96StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_96)
                             .build();
         }
         if (ItemTypes.ELEMENT_97 == null) {
             ItemTypes.ELEMENT_97 = AllayItemType
-                            .builder(ItemElement97StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_97)
                             .build();
         }
         if (ItemTypes.ELEMENT_98 == null) {
             ItemTypes.ELEMENT_98 = AllayItemType
-                            .builder(ItemElement98StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_98)
                             .build();
         }
         if (ItemTypes.ELEMENT_99 == null) {
             ItemTypes.ELEMENT_99 = AllayItemType
-                            .builder(ItemElement99StackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_99)
                             .build();
         }
         if (ItemTypes.ELEMENT_CONSTRUCTOR == null) {
             ItemTypes.ELEMENT_CONSTRUCTOR = AllayItemType
-                            .builder(ItemElementConstructorStackImpl.class)
+                            .builder(ItemElementStackImpl.class)
                             .vanillaItem(ItemId.ELEMENT_CONSTRUCTOR)
                             .build();
         }
@@ -5102,13 +4495,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.END_BRICK_STAIRS == null) {
             ItemTypes.END_BRICK_STAIRS = AllayItemType
-                            .builder(ItemEndBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.END_BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.END_BRICKS == null) {
             ItemTypes.END_BRICKS = AllayItemType
-                            .builder(ItemEndBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.END_BRICKS)
                             .build();
         }
@@ -5150,19 +4543,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.END_STONE_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.END_STONE_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemEndStoneBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.END_STONE_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.END_STONE_BRICK_SLAB == null) {
             ItemTypes.END_STONE_BRICK_SLAB = AllayItemType
-                            .builder(ItemEndStoneBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.END_STONE_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.END_STONE_BRICK_WALL == null) {
             ItemTypes.END_STONE_BRICK_WALL = AllayItemType
-                            .builder(ItemEndStoneBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.END_STONE_BRICK_WALL)
                             .build();
         }
@@ -5170,6 +4563,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.ENDER_CHEST = AllayItemType
                             .builder(ItemEnderChestStackImpl.class)
                             .vanillaItem(ItemId.ENDER_CHEST)
+                            .build();
+        }
+        if (ItemTypes.ENDER_DRAGON_SPAWN_EGG == null) {
+            ItemTypes.ENDER_DRAGON_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ENDER_DRAGON_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.ENDER_EYE == null) {
@@ -5182,6 +4581,24 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.ENDER_PEARL = AllayItemType
                             .builder(ItemEnderPearlStackImpl.class)
                             .vanillaItem(ItemId.ENDER_PEARL)
+                            .build();
+        }
+        if (ItemTypes.ENDERMAN_SPAWN_EGG == null) {
+            ItemTypes.ENDERMAN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ENDERMAN_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.ENDERMITE_SPAWN_EGG == null) {
+            ItemTypes.ENDERMITE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ENDERMITE_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.EVOKER_SPAWN_EGG == null) {
+            ItemTypes.EVOKER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.EVOKER_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.EXPERIENCE_BOTTLE == null) {
@@ -5198,13 +4615,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.EXPOSED_CHISELED_COPPER == null) {
             ItemTypes.EXPOSED_CHISELED_COPPER = AllayItemType
-                            .builder(ItemExposedChiseledCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.EXPOSED_CHISELED_COPPER)
                             .build();
         }
         if (ItemTypes.EXPOSED_COPPER == null) {
             ItemTypes.EXPOSED_COPPER = AllayItemType
-                            .builder(ItemExposedCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.EXPOSED_COPPER)
                             .build();
         }
@@ -5216,7 +4633,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.EXPOSED_COPPER_DOOR == null) {
             ItemTypes.EXPOSED_COPPER_DOOR = AllayItemType
-                            .builder(ItemExposedCopperDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.EXPOSED_COPPER_DOOR)
                             .build();
         }
@@ -5228,31 +4645,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.EXPOSED_COPPER_TRAPDOOR == null) {
             ItemTypes.EXPOSED_COPPER_TRAPDOOR = AllayItemType
-                            .builder(ItemExposedCopperTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.EXPOSED_COPPER_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.EXPOSED_CUT_COPPER == null) {
             ItemTypes.EXPOSED_CUT_COPPER = AllayItemType
-                            .builder(ItemExposedCutCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.EXPOSED_CUT_COPPER)
                             .build();
         }
         if (ItemTypes.EXPOSED_CUT_COPPER_SLAB == null) {
             ItemTypes.EXPOSED_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemExposedCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.EXPOSED_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.EXPOSED_CUT_COPPER_STAIRS == null) {
             ItemTypes.EXPOSED_CUT_COPPER_STAIRS = AllayItemType
-                            .builder(ItemExposedCutCopperStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.EXPOSED_CUT_COPPER_STAIRS)
                             .build();
         }
         if (ItemTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB == null) {
             ItemTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemExposedDoubleCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.EXPOSED_DOUBLE_CUT_COPPER_SLAB)
                             .build();
         }
@@ -5324,25 +4741,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.FIRE_CORAL == null) {
             ItemTypes.FIRE_CORAL = AllayItemType
-                            .builder(ItemFireCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.FIRE_CORAL)
                             .build();
         }
         if (ItemTypes.FIRE_CORAL_BLOCK == null) {
             ItemTypes.FIRE_CORAL_BLOCK = AllayItemType
-                            .builder(ItemFireCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.FIRE_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.FIRE_CORAL_FAN == null) {
             ItemTypes.FIRE_CORAL_FAN = AllayItemType
-                            .builder(ItemFireCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.FIRE_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.FIRE_CORAL_WALL_FAN == null) {
             ItemTypes.FIRE_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemFireCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.FIRE_CORAL_WALL_FAN)
                             .build();
         }
@@ -5420,14 +4837,20 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.FLOWING_LAVA == null) {
             ItemTypes.FLOWING_LAVA = AllayItemType
-                            .builder(ItemFlowingLavaStackImpl.class)
+                            .builder(ItemLiquidStackImpl.class)
                             .vanillaItem(ItemId.FLOWING_LAVA)
                             .build();
         }
         if (ItemTypes.FLOWING_WATER == null) {
             ItemTypes.FLOWING_WATER = AllayItemType
-                            .builder(ItemFlowingWaterStackImpl.class)
+                            .builder(ItemLiquidStackImpl.class)
                             .vanillaItem(ItemId.FLOWING_WATER)
+                            .build();
+        }
+        if (ItemTypes.FOX_SPAWN_EGG == null) {
+            ItemTypes.FOX_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.FOX_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.FRAME == null) {
@@ -5448,6 +4871,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.FROG_SPAWN)
                             .build();
         }
+        if (ItemTypes.FROG_SPAWN_EGG == null) {
+            ItemTypes.FROG_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.FROG_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.FROSTED_ICE == null) {
             ItemTypes.FROSTED_ICE = AllayItemType
                             .builder(ItemFrostedIceStackImpl.class)
@@ -5458,6 +4887,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.FURNACE = AllayItemType
                             .builder(ItemFurnaceStackImpl.class)
                             .vanillaItem(ItemId.FURNACE)
+                            .build();
+        }
+        if (ItemTypes.GHAST_SPAWN_EGG == null) {
+            ItemTypes.GHAST_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.GHAST_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.GHAST_TEAR == null) {
@@ -5526,6 +4961,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.GLOW_LICHEN)
                             .build();
         }
+        if (ItemTypes.GLOW_SQUID_SPAWN_EGG == null) {
+            ItemTypes.GLOW_SQUID_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.GLOW_SQUID_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.GLOW_STICK == null) {
             ItemTypes.GLOW_STICK = AllayItemType
                             .builder(ItemGlowStickStackImpl.class)
@@ -5554,6 +4995,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.GOAT_HORN = AllayItemType
                             .builder(ItemGoatHornStackImpl.class)
                             .vanillaItem(ItemId.GOAT_HORN)
+                            .build();
+        }
+        if (ItemTypes.GOAT_SPAWN_EGG == null) {
+            ItemTypes.GOAT_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.GOAT_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.GOLD_BLOCK == null) {
@@ -5586,10 +5033,40 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.GOLDEN_APPLE)
                             .build();
         }
+        if (ItemTypes.GOLDEN_AXE == null) {
+            ItemTypes.GOLDEN_AXE = AllayItemType
+                            .builder(ItemAxeStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_AXE)
+                            .build();
+        }
+        if (ItemTypes.GOLDEN_BOOTS == null) {
+            ItemTypes.GOLDEN_BOOTS = AllayItemType
+                            .builder(ItemBootsStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_BOOTS)
+                            .build();
+        }
         if (ItemTypes.GOLDEN_CARROT == null) {
             ItemTypes.GOLDEN_CARROT = AllayItemType
                             .builder(ItemGoldenCarrotStackImpl.class)
                             .vanillaItem(ItemId.GOLDEN_CARROT)
+                            .build();
+        }
+        if (ItemTypes.GOLDEN_CHESTPLATE == null) {
+            ItemTypes.GOLDEN_CHESTPLATE = AllayItemType
+                            .builder(ItemChestplateStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_CHESTPLATE)
+                            .build();
+        }
+        if (ItemTypes.GOLDEN_HELMET == null) {
+            ItemTypes.GOLDEN_HELMET = AllayItemType
+                            .builder(ItemHelmetStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_HELMET)
+                            .build();
+        }
+        if (ItemTypes.GOLDEN_HOE == null) {
+            ItemTypes.GOLDEN_HOE = AllayItemType
+                            .builder(ItemHoeStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_HOE)
                             .build();
         }
         if (ItemTypes.GOLDEN_HORSE_ARMOR == null) {
@@ -5598,10 +5075,34 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.GOLDEN_HORSE_ARMOR)
                             .build();
         }
+        if (ItemTypes.GOLDEN_LEGGINGS == null) {
+            ItemTypes.GOLDEN_LEGGINGS = AllayItemType
+                            .builder(ItemLeggingsStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_LEGGINGS)
+                            .build();
+        }
+        if (ItemTypes.GOLDEN_PICKAXE == null) {
+            ItemTypes.GOLDEN_PICKAXE = AllayItemType
+                            .builder(ItemPickaxeStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_PICKAXE)
+                            .build();
+        }
         if (ItemTypes.GOLDEN_RAIL == null) {
             ItemTypes.GOLDEN_RAIL = AllayItemType
                             .builder(ItemGoldenRailStackImpl.class)
                             .vanillaItem(ItemId.GOLDEN_RAIL)
+                            .build();
+        }
+        if (ItemTypes.GOLDEN_SHOVEL == null) {
+            ItemTypes.GOLDEN_SHOVEL = AllayItemType
+                            .builder(ItemShovelStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_SHOVEL)
+                            .build();
+        }
+        if (ItemTypes.GOLDEN_SWORD == null) {
+            ItemTypes.GOLDEN_SWORD = AllayItemType
+                            .builder(ItemSwordStackImpl.class)
+                            .vanillaItem(ItemId.GOLDEN_SWORD)
                             .build();
         }
         if (ItemTypes.GRANITE == null) {
@@ -5612,25 +5113,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.GRANITE_DOUBLE_SLAB == null) {
             ItemTypes.GRANITE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemGraniteDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.GRANITE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.GRANITE_SLAB == null) {
             ItemTypes.GRANITE_SLAB = AllayItemType
-                            .builder(ItemGraniteSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.GRANITE_SLAB)
                             .build();
         }
         if (ItemTypes.GRANITE_STAIRS == null) {
             ItemTypes.GRANITE_STAIRS = AllayItemType
-                            .builder(ItemGraniteStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.GRANITE_STAIRS)
                             .build();
         }
         if (ItemTypes.GRANITE_WALL == null) {
             ItemTypes.GRANITE_WALL = AllayItemType
-                            .builder(ItemGraniteWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.GRANITE_WALL)
                             .build();
         }
@@ -5654,37 +5155,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.GRAY_BUNDLE == null) {
             ItemTypes.GRAY_BUNDLE = AllayItemType
-                            .builder(ItemGrayBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.GRAY_BUNDLE)
                             .build();
         }
         if (ItemTypes.GRAY_CANDLE == null) {
             ItemTypes.GRAY_CANDLE = AllayItemType
-                            .builder(ItemGrayCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.GRAY_CANDLE)
                             .build();
         }
         if (ItemTypes.GRAY_CANDLE_CAKE == null) {
             ItemTypes.GRAY_CANDLE_CAKE = AllayItemType
-                            .builder(ItemGrayCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.GRAY_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.GRAY_CARPET == null) {
             ItemTypes.GRAY_CARPET = AllayItemType
-                            .builder(ItemGrayCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.GRAY_CARPET)
                             .build();
         }
         if (ItemTypes.GRAY_CONCRETE == null) {
             ItemTypes.GRAY_CONCRETE = AllayItemType
-                            .builder(ItemGrayConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.GRAY_CONCRETE)
                             .build();
         }
         if (ItemTypes.GRAY_CONCRETE_POWDER == null) {
             ItemTypes.GRAY_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemGrayConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.GRAY_CONCRETE_POWDER)
                             .build();
         }
@@ -5696,67 +5197,73 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.GRAY_GLAZED_TERRACOTTA == null) {
             ItemTypes.GRAY_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemGrayGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.GRAY_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.GRAY_SHULKER_BOX == null) {
+            ItemTypes.GRAY_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.GRAY_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.GRAY_STAINED_GLASS == null) {
             ItemTypes.GRAY_STAINED_GLASS = AllayItemType
-                            .builder(ItemGrayStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.GRAY_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.GRAY_STAINED_GLASS_PANE == null) {
             ItemTypes.GRAY_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemGrayStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.GRAY_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.GRAY_TERRACOTTA == null) {
             ItemTypes.GRAY_TERRACOTTA = AllayItemType
-                            .builder(ItemGrayTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.GRAY_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.GRAY_WOOL == null) {
             ItemTypes.GRAY_WOOL = AllayItemType
-                            .builder(ItemGrayWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.GRAY_WOOL)
                             .build();
         }
         if (ItemTypes.GREEN_BUNDLE == null) {
             ItemTypes.GREEN_BUNDLE = AllayItemType
-                            .builder(ItemGreenBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.GREEN_BUNDLE)
                             .build();
         }
         if (ItemTypes.GREEN_CANDLE == null) {
             ItemTypes.GREEN_CANDLE = AllayItemType
-                            .builder(ItemGreenCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.GREEN_CANDLE)
                             .build();
         }
         if (ItemTypes.GREEN_CANDLE_CAKE == null) {
             ItemTypes.GREEN_CANDLE_CAKE = AllayItemType
-                            .builder(ItemGreenCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.GREEN_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.GREEN_CARPET == null) {
             ItemTypes.GREEN_CARPET = AllayItemType
-                            .builder(ItemGreenCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.GREEN_CARPET)
                             .build();
         }
         if (ItemTypes.GREEN_CONCRETE == null) {
             ItemTypes.GREEN_CONCRETE = AllayItemType
-                            .builder(ItemGreenConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.GREEN_CONCRETE)
                             .build();
         }
         if (ItemTypes.GREEN_CONCRETE_POWDER == null) {
             ItemTypes.GREEN_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemGreenConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.GREEN_CONCRETE_POWDER)
                             .build();
         }
@@ -5768,31 +5275,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.GREEN_GLAZED_TERRACOTTA == null) {
             ItemTypes.GREEN_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemGreenGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.GREEN_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.GREEN_SHULKER_BOX == null) {
+            ItemTypes.GREEN_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.GREEN_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.GREEN_STAINED_GLASS == null) {
             ItemTypes.GREEN_STAINED_GLASS = AllayItemType
-                            .builder(ItemGreenStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.GREEN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.GREEN_STAINED_GLASS_PANE == null) {
             ItemTypes.GREEN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemGreenStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.GREEN_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.GREEN_TERRACOTTA == null) {
             ItemTypes.GREEN_TERRACOTTA = AllayItemType
-                            .builder(ItemGreenTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.GREEN_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.GREEN_WOOL == null) {
             ItemTypes.GREEN_WOOL = AllayItemType
-                            .builder(ItemGreenWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.GREEN_WOOL)
                             .build();
         }
@@ -5800,6 +5313,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.GRINDSTONE = AllayItemType
                             .builder(ItemGrindstoneStackImpl.class)
                             .vanillaItem(ItemId.GRINDSTONE)
+                            .build();
+        }
+        if (ItemTypes.GUARDIAN_SPAWN_EGG == null) {
+            ItemTypes.GUARDIAN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.GUARDIAN_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.GUNPOWDER == null) {
@@ -5828,217 +5347,217 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.HARD_BLACK_STAINED_GLASS == null) {
             ItemTypes.HARD_BLACK_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardBlackStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_BLACK_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_BLACK_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_BLACK_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardBlackStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_BLACK_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_BLUE_STAINED_GLASS == null) {
             ItemTypes.HARD_BLUE_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardBlueStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_BLUE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_BLUE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_BLUE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardBlueStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_BLUE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_BROWN_STAINED_GLASS == null) {
             ItemTypes.HARD_BROWN_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardBrownStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_BROWN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_BROWN_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_BROWN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardBrownStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_BROWN_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_CYAN_STAINED_GLASS == null) {
             ItemTypes.HARD_CYAN_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardCyanStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_CYAN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_CYAN_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_CYAN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardCyanStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_CYAN_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_GLASS == null) {
             ItemTypes.HARD_GLASS = AllayItemType
-                            .builder(ItemHardGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_GLASS_PANE == null) {
             ItemTypes.HARD_GLASS_PANE = AllayItemType
-                            .builder(ItemHardGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_GRAY_STAINED_GLASS == null) {
             ItemTypes.HARD_GRAY_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardGrayStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_GRAY_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_GRAY_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_GRAY_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardGrayStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_GRAY_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_GREEN_STAINED_GLASS == null) {
             ItemTypes.HARD_GREEN_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardGreenStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_GREEN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_GREEN_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_GREEN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardGreenStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_GREEN_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_LIGHT_BLUE_STAINED_GLASS == null) {
             ItemTypes.HARD_LIGHT_BLUE_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardLightBlueStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIGHT_BLUE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardLightBlueStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIGHT_BLUE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_LIGHT_GRAY_STAINED_GLASS == null) {
             ItemTypes.HARD_LIGHT_GRAY_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardLightGrayStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIGHT_GRAY_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardLightGrayStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIGHT_GRAY_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_LIME_STAINED_GLASS == null) {
             ItemTypes.HARD_LIME_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardLimeStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIME_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_LIME_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_LIME_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardLimeStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIME_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_MAGENTA_STAINED_GLASS == null) {
             ItemTypes.HARD_MAGENTA_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardMagentaStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_MAGENTA_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_MAGENTA_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_MAGENTA_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardMagentaStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_MAGENTA_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_ORANGE_STAINED_GLASS == null) {
             ItemTypes.HARD_ORANGE_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardOrangeStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_ORANGE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_ORANGE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_ORANGE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardOrangeStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_ORANGE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_PINK_STAINED_GLASS == null) {
             ItemTypes.HARD_PINK_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardPinkStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_PINK_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_PINK_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_PINK_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardPinkStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_PINK_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_PURPLE_STAINED_GLASS == null) {
             ItemTypes.HARD_PURPLE_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardPurpleStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_PURPLE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_PURPLE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_PURPLE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardPurpleStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_PURPLE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_RED_STAINED_GLASS == null) {
             ItemTypes.HARD_RED_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardRedStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_RED_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_RED_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_RED_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardRedStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_RED_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_STAINED_GLASS == null) {
             ItemTypes.HARD_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_WHITE_STAINED_GLASS == null) {
             ItemTypes.HARD_WHITE_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardWhiteStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_WHITE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_WHITE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_WHITE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardWhiteStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_WHITE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_YELLOW_STAINED_GLASS == null) {
             ItemTypes.HARD_YELLOW_STAINED_GLASS = AllayItemType
-                            .builder(ItemHardYellowStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_YELLOW_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_YELLOW_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_YELLOW_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemHardYellowStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_YELLOW_STAINED_GLASS_PANE)
                             .build();
         }
@@ -6084,6 +5603,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.HEAVY_WEIGHTED_PRESSURE_PLATE)
                             .build();
         }
+        if (ItemTypes.HOGLIN_SPAWN_EGG == null) {
+            ItemTypes.HOGLIN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.HOGLIN_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.HONEY_BLOCK == null) {
             ItemTypes.HONEY_BLOCK = AllayItemType
                             .builder(ItemHoneyBlockStackImpl.class)
@@ -6116,32 +5641,38 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.HOPPER_MINECART == null) {
             ItemTypes.HOPPER_MINECART = AllayItemType
-                            .builder(ItemHopperMinecartStackImpl.class)
+                            .builder(ItemMinecartStackImpl.class)
                             .vanillaItem(ItemId.HOPPER_MINECART)
                             .build();
         }
         if (ItemTypes.HORN_CORAL == null) {
             ItemTypes.HORN_CORAL = AllayItemType
-                            .builder(ItemHornCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.HORN_CORAL)
                             .build();
         }
         if (ItemTypes.HORN_CORAL_BLOCK == null) {
             ItemTypes.HORN_CORAL_BLOCK = AllayItemType
-                            .builder(ItemHornCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.HORN_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.HORN_CORAL_FAN == null) {
             ItemTypes.HORN_CORAL_FAN = AllayItemType
-                            .builder(ItemHornCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.HORN_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.HORN_CORAL_WALL_FAN == null) {
             ItemTypes.HORN_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemHornCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.HORN_CORAL_WALL_FAN)
+                            .build();
+        }
+        if (ItemTypes.HORSE_SPAWN_EGG == null) {
+            ItemTypes.HORSE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.HORSE_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.HOST_ARMOR_TRIM_SMITHING_TEMPLATE == null) {
@@ -6154,6 +5685,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.HOWL_POTTERY_SHERD = AllayItemType
                             .builder(ItemHowlPotterySherdStackImpl.class)
                             .vanillaItem(ItemId.HOWL_POTTERY_SHERD)
+                            .build();
+        }
+        if (ItemTypes.HUSK_SPAWN_EGG == null) {
+            ItemTypes.HUSK_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.HUSK_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.ICE == null) {
@@ -6170,7 +5707,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.INFESTED_CHISELED_STONE_BRICKS == null) {
             ItemTypes.INFESTED_CHISELED_STONE_BRICKS = AllayItemType
-                            .builder(ItemInfestedChiseledStoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.INFESTED_CHISELED_STONE_BRICKS)
                             .build();
         }
@@ -6182,7 +5719,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.INFESTED_CRACKED_STONE_BRICKS == null) {
             ItemTypes.INFESTED_CRACKED_STONE_BRICKS = AllayItemType
-                            .builder(ItemInfestedCrackedStoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.INFESTED_CRACKED_STONE_BRICKS)
                             .build();
         }
@@ -6194,7 +5731,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.INFESTED_MOSSY_STONE_BRICKS == null) {
             ItemTypes.INFESTED_MOSSY_STONE_BRICKS = AllayItemType
-                            .builder(ItemInfestedMossyStoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.INFESTED_MOSSY_STONE_BRICKS)
                             .build();
         }
@@ -6206,7 +5743,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.INFESTED_STONE_BRICKS == null) {
             ItemTypes.INFESTED_STONE_BRICKS = AllayItemType
-                            .builder(ItemInfestedStoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.INFESTED_STONE_BRICKS)
                             .build();
         }
@@ -6234,6 +5771,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.INVISIBLE_BEDROCK)
                             .build();
         }
+        if (ItemTypes.IRON_AXE == null) {
+            ItemTypes.IRON_AXE = AllayItemType
+                            .builder(ItemAxeStackImpl.class)
+                            .vanillaItem(ItemId.IRON_AXE)
+                            .build();
+        }
         if (ItemTypes.IRON_BARS == null) {
             ItemTypes.IRON_BARS = AllayItemType
                             .builder(ItemIronBarsStackImpl.class)
@@ -6246,10 +5789,40 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.IRON_BLOCK)
                             .build();
         }
+        if (ItemTypes.IRON_BOOTS == null) {
+            ItemTypes.IRON_BOOTS = AllayItemType
+                            .builder(ItemBootsStackImpl.class)
+                            .vanillaItem(ItemId.IRON_BOOTS)
+                            .build();
+        }
+        if (ItemTypes.IRON_CHESTPLATE == null) {
+            ItemTypes.IRON_CHESTPLATE = AllayItemType
+                            .builder(ItemChestplateStackImpl.class)
+                            .vanillaItem(ItemId.IRON_CHESTPLATE)
+                            .build();
+        }
         if (ItemTypes.IRON_DOOR == null) {
             ItemTypes.IRON_DOOR = AllayItemType
-                            .builder(ItemIronDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.IRON_DOOR)
+                            .build();
+        }
+        if (ItemTypes.IRON_GOLEM_SPAWN_EGG == null) {
+            ItemTypes.IRON_GOLEM_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.IRON_GOLEM_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.IRON_HELMET == null) {
+            ItemTypes.IRON_HELMET = AllayItemType
+                            .builder(ItemHelmetStackImpl.class)
+                            .vanillaItem(ItemId.IRON_HELMET)
+                            .build();
+        }
+        if (ItemTypes.IRON_HOE == null) {
+            ItemTypes.IRON_HOE = AllayItemType
+                            .builder(ItemHoeStackImpl.class)
+                            .vanillaItem(ItemId.IRON_HOE)
                             .build();
         }
         if (ItemTypes.IRON_HORSE_ARMOR == null) {
@@ -6264,6 +5837,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.IRON_INGOT)
                             .build();
         }
+        if (ItemTypes.IRON_LEGGINGS == null) {
+            ItemTypes.IRON_LEGGINGS = AllayItemType
+                            .builder(ItemLeggingsStackImpl.class)
+                            .vanillaItem(ItemId.IRON_LEGGINGS)
+                            .build();
+        }
         if (ItemTypes.IRON_NUGGET == null) {
             ItemTypes.IRON_NUGGET = AllayItemType
                             .builder(ItemIronNuggetStackImpl.class)
@@ -6276,15 +5855,33 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.IRON_ORE)
                             .build();
         }
+        if (ItemTypes.IRON_PICKAXE == null) {
+            ItemTypes.IRON_PICKAXE = AllayItemType
+                            .builder(ItemPickaxeStackImpl.class)
+                            .vanillaItem(ItemId.IRON_PICKAXE)
+                            .build();
+        }
+        if (ItemTypes.IRON_SHOVEL == null) {
+            ItemTypes.IRON_SHOVEL = AllayItemType
+                            .builder(ItemShovelStackImpl.class)
+                            .vanillaItem(ItemId.IRON_SHOVEL)
+                            .build();
+        }
+        if (ItemTypes.IRON_SWORD == null) {
+            ItemTypes.IRON_SWORD = AllayItemType
+                            .builder(ItemSwordStackImpl.class)
+                            .vanillaItem(ItemId.IRON_SWORD)
+                            .build();
+        }
         if (ItemTypes.IRON_TRAPDOOR == null) {
             ItemTypes.IRON_TRAPDOOR = AllayItemType
-                            .builder(ItemIronTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.IRON_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.ITEM_ACACIA_DOOR == null) {
             ItemTypes.ITEM_ACACIA_DOOR = AllayItemType
-                            .builder(ItemItemAcaciaDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_ACACIA_DOOR)
                             .build();
         }
@@ -6302,7 +5899,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_BIRCH_DOOR == null) {
             ItemTypes.ITEM_BIRCH_DOOR = AllayItemType
-                            .builder(ItemItemBirchDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_BIRCH_DOOR)
                             .build();
         }
@@ -6344,13 +5941,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_CRIMSON_DOOR == null) {
             ItemTypes.ITEM_CRIMSON_DOOR = AllayItemType
-                            .builder(ItemItemCrimsonDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_CRIMSON_DOOR)
                             .build();
         }
         if (ItemTypes.ITEM_DARK_OAK_DOOR == null) {
             ItemTypes.ITEM_DARK_OAK_DOOR = AllayItemType
-                            .builder(ItemItemDarkOakDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_DARK_OAK_DOOR)
                             .build();
         }
@@ -6380,13 +5977,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_IRON_DOOR == null) {
             ItemTypes.ITEM_IRON_DOOR = AllayItemType
-                            .builder(ItemItemIronDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_IRON_DOOR)
                             .build();
         }
         if (ItemTypes.ITEM_JUNGLE_DOOR == null) {
             ItemTypes.ITEM_JUNGLE_DOOR = AllayItemType
-                            .builder(ItemItemJungleDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_JUNGLE_DOOR)
                             .build();
         }
@@ -6398,7 +5995,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_MANGROVE_DOOR == null) {
             ItemTypes.ITEM_MANGROVE_DOOR = AllayItemType
-                            .builder(ItemItemMangroveDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_MANGROVE_DOOR)
                             .build();
         }
@@ -6428,13 +6025,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_SPRUCE_DOOR == null) {
             ItemTypes.ITEM_SPRUCE_DOOR = AllayItemType
-                            .builder(ItemItemSpruceDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_SPRUCE_DOOR)
                             .build();
         }
         if (ItemTypes.ITEM_WARPED_DOOR == null) {
             ItemTypes.ITEM_WARPED_DOOR = AllayItemType
-                            .builder(ItemItemWarpedDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_WARPED_DOOR)
                             .build();
         }
@@ -6446,7 +6043,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ITEM_WOODEN_DOOR == null) {
             ItemTypes.ITEM_WOODEN_DOOR = AllayItemType
-                            .builder(ItemItemWoodenDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.ITEM_WOODEN_DOOR)
                             .build();
         }
@@ -6464,67 +6061,67 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.JUNGLE_BOAT == null) {
             ItemTypes.JUNGLE_BOAT = AllayItemType
-                            .builder(ItemJungleBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_BOAT)
                             .build();
         }
         if (ItemTypes.JUNGLE_BUTTON == null) {
             ItemTypes.JUNGLE_BUTTON = AllayItemType
-                            .builder(ItemJungleButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_BUTTON)
                             .build();
         }
         if (ItemTypes.JUNGLE_CHEST_BOAT == null) {
             ItemTypes.JUNGLE_CHEST_BOAT = AllayItemType
-                            .builder(ItemJungleChestBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_CHEST_BOAT)
                             .build();
         }
         if (ItemTypes.JUNGLE_DOOR == null) {
             ItemTypes.JUNGLE_DOOR = AllayItemType
-                            .builder(ItemJungleDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_DOOR)
                             .build();
         }
         if (ItemTypes.JUNGLE_DOUBLE_SLAB == null) {
             ItemTypes.JUNGLE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemJungleDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.JUNGLE_FENCE == null) {
             ItemTypes.JUNGLE_FENCE = AllayItemType
-                            .builder(ItemJungleFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_FENCE)
                             .build();
         }
         if (ItemTypes.JUNGLE_FENCE_GATE == null) {
             ItemTypes.JUNGLE_FENCE_GATE = AllayItemType
-                            .builder(ItemJungleFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_FENCE_GATE)
                             .build();
         }
         if (ItemTypes.JUNGLE_HANGING_SIGN == null) {
             ItemTypes.JUNGLE_HANGING_SIGN = AllayItemType
-                            .builder(ItemJungleHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_HANGING_SIGN)
                             .build();
         }
         if (ItemTypes.JUNGLE_LEAVES == null) {
             ItemTypes.JUNGLE_LEAVES = AllayItemType
-                            .builder(ItemJungleLeavesStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_LEAVES)
                             .build();
         }
         if (ItemTypes.JUNGLE_LOG == null) {
             ItemTypes.JUNGLE_LOG = AllayItemType
-                            .builder(ItemJungleLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_LOG)
                             .build();
         }
         if (ItemTypes.JUNGLE_PLANKS == null) {
             ItemTypes.JUNGLE_PLANKS = AllayItemType
-                            .builder(ItemJunglePlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_PLANKS)
                             .build();
         }
@@ -6536,43 +6133,49 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.JUNGLE_SAPLING == null) {
             ItemTypes.JUNGLE_SAPLING = AllayItemType
-                            .builder(ItemJungleSaplingStackImpl.class)
+                            .builder(ItemSaplingStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_SAPLING)
+                            .build();
+        }
+        if (ItemTypes.JUNGLE_SIGN == null) {
+            ItemTypes.JUNGLE_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.JUNGLE_SIGN)
                             .build();
         }
         if (ItemTypes.JUNGLE_SLAB == null) {
             ItemTypes.JUNGLE_SLAB = AllayItemType
-                            .builder(ItemJungleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_SLAB)
                             .build();
         }
         if (ItemTypes.JUNGLE_STAIRS == null) {
             ItemTypes.JUNGLE_STAIRS = AllayItemType
-                            .builder(ItemJungleStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_STAIRS)
                             .build();
         }
         if (ItemTypes.JUNGLE_STANDING_SIGN == null) {
             ItemTypes.JUNGLE_STANDING_SIGN = AllayItemType
-                            .builder(ItemJungleStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_STANDING_SIGN)
                             .build();
         }
         if (ItemTypes.JUNGLE_TRAPDOOR == null) {
             ItemTypes.JUNGLE_TRAPDOOR = AllayItemType
-                            .builder(ItemJungleTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.JUNGLE_WALL_SIGN == null) {
             ItemTypes.JUNGLE_WALL_SIGN = AllayItemType
-                            .builder(ItemJungleWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_WALL_SIGN)
                             .build();
         }
         if (ItemTypes.JUNGLE_WOOD == null) {
             ItemTypes.JUNGLE_WOOD = AllayItemType
-                            .builder(ItemJungleWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.JUNGLE_WOOD)
                             .build();
         }
@@ -6632,8 +6235,14 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LAVA == null) {
             ItemTypes.LAVA = AllayItemType
-                            .builder(ItemLavaStackImpl.class)
+                            .builder(ItemLiquidStackImpl.class)
                             .vanillaItem(ItemId.LAVA)
+                            .build();
+        }
+        if (ItemTypes.LAVA_BUCKET == null) {
+            ItemTypes.LAVA_BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.LAVA_BUCKET)
                             .build();
         }
         if (ItemTypes.LEAD == null) {
@@ -6648,10 +6257,34 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.LEATHER)
                             .build();
         }
+        if (ItemTypes.LEATHER_BOOTS == null) {
+            ItemTypes.LEATHER_BOOTS = AllayItemType
+                            .builder(ItemBootsStackImpl.class)
+                            .vanillaItem(ItemId.LEATHER_BOOTS)
+                            .build();
+        }
+        if (ItemTypes.LEATHER_CHESTPLATE == null) {
+            ItemTypes.LEATHER_CHESTPLATE = AllayItemType
+                            .builder(ItemChestplateStackImpl.class)
+                            .vanillaItem(ItemId.LEATHER_CHESTPLATE)
+                            .build();
+        }
+        if (ItemTypes.LEATHER_HELMET == null) {
+            ItemTypes.LEATHER_HELMET = AllayItemType
+                            .builder(ItemHelmetStackImpl.class)
+                            .vanillaItem(ItemId.LEATHER_HELMET)
+                            .build();
+        }
         if (ItemTypes.LEATHER_HORSE_ARMOR == null) {
             ItemTypes.LEATHER_HORSE_ARMOR = AllayItemType
                             .builder(ItemLeatherHorseArmorStackImpl.class)
                             .vanillaItem(ItemId.LEATHER_HORSE_ARMOR)
+                            .build();
+        }
+        if (ItemTypes.LEATHER_LEGGINGS == null) {
+            ItemTypes.LEATHER_LEGGINGS = AllayItemType
+                            .builder(ItemLeggingsStackImpl.class)
+                            .vanillaItem(ItemId.LEATHER_LEGGINGS)
                             .build();
         }
         if (ItemTypes.LEAVES == null) {
@@ -6662,7 +6295,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LEAVES2 == null) {
             ItemTypes.LEAVES2 = AllayItemType
-                            .builder(ItemLeaves2StackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.LEAVES2)
                             .build();
         }
@@ -6686,133 +6319,133 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIGHT_BLOCK_0 == null) {
             ItemTypes.LIGHT_BLOCK_0 = AllayItemType
-                            .builder(ItemLightBlock0StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_0)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_1 == null) {
             ItemTypes.LIGHT_BLOCK_1 = AllayItemType
-                            .builder(ItemLightBlock1StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_1)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_10 == null) {
             ItemTypes.LIGHT_BLOCK_10 = AllayItemType
-                            .builder(ItemLightBlock10StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_10)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_11 == null) {
             ItemTypes.LIGHT_BLOCK_11 = AllayItemType
-                            .builder(ItemLightBlock11StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_11)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_12 == null) {
             ItemTypes.LIGHT_BLOCK_12 = AllayItemType
-                            .builder(ItemLightBlock12StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_12)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_13 == null) {
             ItemTypes.LIGHT_BLOCK_13 = AllayItemType
-                            .builder(ItemLightBlock13StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_13)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_14 == null) {
             ItemTypes.LIGHT_BLOCK_14 = AllayItemType
-                            .builder(ItemLightBlock14StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_14)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_15 == null) {
             ItemTypes.LIGHT_BLOCK_15 = AllayItemType
-                            .builder(ItemLightBlock15StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_15)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_2 == null) {
             ItemTypes.LIGHT_BLOCK_2 = AllayItemType
-                            .builder(ItemLightBlock2StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_2)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_3 == null) {
             ItemTypes.LIGHT_BLOCK_3 = AllayItemType
-                            .builder(ItemLightBlock3StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_3)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_4 == null) {
             ItemTypes.LIGHT_BLOCK_4 = AllayItemType
-                            .builder(ItemLightBlock4StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_4)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_5 == null) {
             ItemTypes.LIGHT_BLOCK_5 = AllayItemType
-                            .builder(ItemLightBlock5StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_5)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_6 == null) {
             ItemTypes.LIGHT_BLOCK_6 = AllayItemType
-                            .builder(ItemLightBlock6StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_6)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_7 == null) {
             ItemTypes.LIGHT_BLOCK_7 = AllayItemType
-                            .builder(ItemLightBlock7StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_7)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_8 == null) {
             ItemTypes.LIGHT_BLOCK_8 = AllayItemType
-                            .builder(ItemLightBlock8StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_8)
                             .build();
         }
         if (ItemTypes.LIGHT_BLOCK_9 == null) {
             ItemTypes.LIGHT_BLOCK_9 = AllayItemType
-                            .builder(ItemLightBlock9StackImpl.class)
+                            .builder(ItemLightBlockStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLOCK_9)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_BUNDLE == null) {
             ItemTypes.LIGHT_BLUE_BUNDLE = AllayItemType
-                            .builder(ItemLightBlueBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_BUNDLE)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_CANDLE == null) {
             ItemTypes.LIGHT_BLUE_CANDLE = AllayItemType
-                            .builder(ItemLightBlueCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_CANDLE)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_CANDLE_CAKE == null) {
             ItemTypes.LIGHT_BLUE_CANDLE_CAKE = AllayItemType
-                            .builder(ItemLightBlueCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_CARPET == null) {
             ItemTypes.LIGHT_BLUE_CARPET = AllayItemType
-                            .builder(ItemLightBlueCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_CARPET)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_CONCRETE == null) {
             ItemTypes.LIGHT_BLUE_CONCRETE = AllayItemType
-                            .builder(ItemLightBlueConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_CONCRETE)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_CONCRETE_POWDER == null) {
             ItemTypes.LIGHT_BLUE_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemLightBlueConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_CONCRETE_POWDER)
                             .build();
         }
@@ -6824,67 +6457,73 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIGHT_BLUE_GLAZED_TERRACOTTA == null) {
             ItemTypes.LIGHT_BLUE_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemLightBlueGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.LIGHT_BLUE_SHULKER_BOX == null) {
+            ItemTypes.LIGHT_BLUE_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.LIGHT_BLUE_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_STAINED_GLASS == null) {
             ItemTypes.LIGHT_BLUE_STAINED_GLASS = AllayItemType
-                            .builder(ItemLightBlueStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_STAINED_GLASS_PANE == null) {
             ItemTypes.LIGHT_BLUE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemLightBlueStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_TERRACOTTA == null) {
             ItemTypes.LIGHT_BLUE_TERRACOTTA = AllayItemType
-                            .builder(ItemLightBlueTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_WOOL == null) {
             ItemTypes.LIGHT_BLUE_WOOL = AllayItemType
-                            .builder(ItemLightBlueWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_WOOL)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_BUNDLE == null) {
             ItemTypes.LIGHT_GRAY_BUNDLE = AllayItemType
-                            .builder(ItemLightGrayBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_BUNDLE)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_CANDLE == null) {
             ItemTypes.LIGHT_GRAY_CANDLE = AllayItemType
-                            .builder(ItemLightGrayCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_CANDLE)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_CANDLE_CAKE == null) {
             ItemTypes.LIGHT_GRAY_CANDLE_CAKE = AllayItemType
-                            .builder(ItemLightGrayCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_CARPET == null) {
             ItemTypes.LIGHT_GRAY_CARPET = AllayItemType
-                            .builder(ItemLightGrayCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_CARPET)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_CONCRETE == null) {
             ItemTypes.LIGHT_GRAY_CONCRETE = AllayItemType
-                            .builder(ItemLightGrayConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_CONCRETE)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_CONCRETE_POWDER == null) {
             ItemTypes.LIGHT_GRAY_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemLightGrayConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_CONCRETE_POWDER)
                             .build();
         }
@@ -6894,27 +6533,33 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.LIGHT_GRAY_DYE)
                             .build();
         }
+        if (ItemTypes.LIGHT_GRAY_SHULKER_BOX == null) {
+            ItemTypes.LIGHT_GRAY_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.LIGHT_GRAY_SHULKER_BOX)
+                            .build();
+        }
         if (ItemTypes.LIGHT_GRAY_STAINED_GLASS == null) {
             ItemTypes.LIGHT_GRAY_STAINED_GLASS = AllayItemType
-                            .builder(ItemLightGrayStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_STAINED_GLASS_PANE == null) {
             ItemTypes.LIGHT_GRAY_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemLightGrayStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_TERRACOTTA == null) {
             ItemTypes.LIGHT_GRAY_TERRACOTTA = AllayItemType
-                            .builder(ItemLightGrayTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_WOOL == null) {
             ItemTypes.LIGHT_GRAY_WOOL = AllayItemType
-                            .builder(ItemLightGrayWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_WOOL)
                             .build();
         }
@@ -6944,37 +6589,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIME_BUNDLE == null) {
             ItemTypes.LIME_BUNDLE = AllayItemType
-                            .builder(ItemLimeBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.LIME_BUNDLE)
                             .build();
         }
         if (ItemTypes.LIME_CANDLE == null) {
             ItemTypes.LIME_CANDLE = AllayItemType
-                            .builder(ItemLimeCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.LIME_CANDLE)
                             .build();
         }
         if (ItemTypes.LIME_CANDLE_CAKE == null) {
             ItemTypes.LIME_CANDLE_CAKE = AllayItemType
-                            .builder(ItemLimeCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.LIME_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.LIME_CARPET == null) {
             ItemTypes.LIME_CARPET = AllayItemType
-                            .builder(ItemLimeCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.LIME_CARPET)
                             .build();
         }
         if (ItemTypes.LIME_CONCRETE == null) {
             ItemTypes.LIME_CONCRETE = AllayItemType
-                            .builder(ItemLimeConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.LIME_CONCRETE)
                             .build();
         }
         if (ItemTypes.LIME_CONCRETE_POWDER == null) {
             ItemTypes.LIME_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemLimeConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.LIME_CONCRETE_POWDER)
                             .build();
         }
@@ -6986,31 +6631,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIME_GLAZED_TERRACOTTA == null) {
             ItemTypes.LIME_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemLimeGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.LIME_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.LIME_SHULKER_BOX == null) {
+            ItemTypes.LIME_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.LIME_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.LIME_STAINED_GLASS == null) {
             ItemTypes.LIME_STAINED_GLASS = AllayItemType
-                            .builder(ItemLimeStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.LIME_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.LIME_STAINED_GLASS_PANE == null) {
             ItemTypes.LIME_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemLimeStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.LIME_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.LIME_TERRACOTTA == null) {
             ItemTypes.LIME_TERRACOTTA = AllayItemType
-                            .builder(ItemLimeTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.LIME_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.LIME_WOOL == null) {
             ItemTypes.LIME_WOOL = AllayItemType
-                            .builder(ItemLimeWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.LIME_WOOL)
                             .build();
         }
@@ -7022,7 +6673,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIT_BLAST_FURNACE == null) {
             ItemTypes.LIT_BLAST_FURNACE = AllayItemType
-                            .builder(ItemLitBlastFurnaceStackImpl.class)
+                            .builder(ItemFurnaceStackImpl.class)
                             .vanillaItem(ItemId.LIT_BLAST_FURNACE)
                             .build();
         }
@@ -7034,7 +6685,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIT_FURNACE == null) {
             ItemTypes.LIT_FURNACE = AllayItemType
-                            .builder(ItemLitFurnaceStackImpl.class)
+                            .builder(ItemFurnaceStackImpl.class)
                             .vanillaItem(ItemId.LIT_FURNACE)
                             .build();
         }
@@ -7058,8 +6709,14 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIT_SMOKER == null) {
             ItemTypes.LIT_SMOKER = AllayItemType
-                            .builder(ItemLitSmokerStackImpl.class)
+                            .builder(ItemFurnaceStackImpl.class)
                             .vanillaItem(ItemId.LIT_SMOKER)
+                            .build();
+        }
+        if (ItemTypes.LLAMA_SPAWN_EGG == null) {
+            ItemTypes.LLAMA_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.LLAMA_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.LODESTONE == null) {
@@ -7082,7 +6739,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LOG2 == null) {
             ItemTypes.LOG2 = AllayItemType
-                            .builder(ItemLog2StackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.LOG2)
                             .build();
         }
@@ -7100,37 +6757,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.MAGENTA_BUNDLE == null) {
             ItemTypes.MAGENTA_BUNDLE = AllayItemType
-                            .builder(ItemMagentaBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_BUNDLE)
                             .build();
         }
         if (ItemTypes.MAGENTA_CANDLE == null) {
             ItemTypes.MAGENTA_CANDLE = AllayItemType
-                            .builder(ItemMagentaCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_CANDLE)
                             .build();
         }
         if (ItemTypes.MAGENTA_CANDLE_CAKE == null) {
             ItemTypes.MAGENTA_CANDLE_CAKE = AllayItemType
-                            .builder(ItemMagentaCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.MAGENTA_CARPET == null) {
             ItemTypes.MAGENTA_CARPET = AllayItemType
-                            .builder(ItemMagentaCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_CARPET)
                             .build();
         }
         if (ItemTypes.MAGENTA_CONCRETE == null) {
             ItemTypes.MAGENTA_CONCRETE = AllayItemType
-                            .builder(ItemMagentaConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_CONCRETE)
                             .build();
         }
         if (ItemTypes.MAGENTA_CONCRETE_POWDER == null) {
             ItemTypes.MAGENTA_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemMagentaConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_CONCRETE_POWDER)
                             .build();
         }
@@ -7142,31 +6799,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.MAGENTA_GLAZED_TERRACOTTA == null) {
             ItemTypes.MAGENTA_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemMagentaGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.MAGENTA_SHULKER_BOX == null) {
+            ItemTypes.MAGENTA_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.MAGENTA_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.MAGENTA_STAINED_GLASS == null) {
             ItemTypes.MAGENTA_STAINED_GLASS = AllayItemType
-                            .builder(ItemMagentaStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.MAGENTA_STAINED_GLASS_PANE == null) {
             ItemTypes.MAGENTA_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemMagentaStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.MAGENTA_TERRACOTTA == null) {
             ItemTypes.MAGENTA_TERRACOTTA = AllayItemType
-                            .builder(ItemMagentaTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.MAGENTA_WOOL == null) {
             ItemTypes.MAGENTA_WOOL = AllayItemType
-                            .builder(ItemMagentaWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_WOOL)
                             .build();
         }
@@ -7182,69 +6845,75 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.MAGMA_CREAM)
                             .build();
         }
+        if (ItemTypes.MAGMA_CUBE_SPAWN_EGG == null) {
+            ItemTypes.MAGMA_CUBE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.MAGMA_CUBE_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.MANGROVE_BOAT == null) {
             ItemTypes.MANGROVE_BOAT = AllayItemType
-                            .builder(ItemMangroveBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_BOAT)
                             .build();
         }
         if (ItemTypes.MANGROVE_BUTTON == null) {
             ItemTypes.MANGROVE_BUTTON = AllayItemType
-                            .builder(ItemMangroveButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_BUTTON)
                             .build();
         }
         if (ItemTypes.MANGROVE_CHEST_BOAT == null) {
             ItemTypes.MANGROVE_CHEST_BOAT = AllayItemType
-                            .builder(ItemMangroveChestBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_CHEST_BOAT)
                             .build();
         }
         if (ItemTypes.MANGROVE_DOOR == null) {
             ItemTypes.MANGROVE_DOOR = AllayItemType
-                            .builder(ItemMangroveDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_DOOR)
                             .build();
         }
         if (ItemTypes.MANGROVE_DOUBLE_SLAB == null) {
             ItemTypes.MANGROVE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemMangroveDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.MANGROVE_FENCE == null) {
             ItemTypes.MANGROVE_FENCE = AllayItemType
-                            .builder(ItemMangroveFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_FENCE)
                             .build();
         }
         if (ItemTypes.MANGROVE_FENCE_GATE == null) {
             ItemTypes.MANGROVE_FENCE_GATE = AllayItemType
-                            .builder(ItemMangroveFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_FENCE_GATE)
                             .build();
         }
         if (ItemTypes.MANGROVE_HANGING_SIGN == null) {
             ItemTypes.MANGROVE_HANGING_SIGN = AllayItemType
-                            .builder(ItemMangroveHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_HANGING_SIGN)
                             .build();
         }
         if (ItemTypes.MANGROVE_LEAVES == null) {
             ItemTypes.MANGROVE_LEAVES = AllayItemType
-                            .builder(ItemMangroveLeavesStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_LEAVES)
                             .build();
         }
         if (ItemTypes.MANGROVE_LOG == null) {
             ItemTypes.MANGROVE_LOG = AllayItemType
-                            .builder(ItemMangroveLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_LOG)
                             .build();
         }
         if (ItemTypes.MANGROVE_PLANKS == null) {
             ItemTypes.MANGROVE_PLANKS = AllayItemType
-                            .builder(ItemMangrovePlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_PLANKS)
                             .build();
         }
@@ -7266,39 +6935,45 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.MANGROVE_ROOTS)
                             .build();
         }
+        if (ItemTypes.MANGROVE_SIGN == null) {
+            ItemTypes.MANGROVE_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.MANGROVE_SIGN)
+                            .build();
+        }
         if (ItemTypes.MANGROVE_SLAB == null) {
             ItemTypes.MANGROVE_SLAB = AllayItemType
-                            .builder(ItemMangroveSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_SLAB)
                             .build();
         }
         if (ItemTypes.MANGROVE_STAIRS == null) {
             ItemTypes.MANGROVE_STAIRS = AllayItemType
-                            .builder(ItemMangroveStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_STAIRS)
                             .build();
         }
         if (ItemTypes.MANGROVE_STANDING_SIGN == null) {
             ItemTypes.MANGROVE_STANDING_SIGN = AllayItemType
-                            .builder(ItemMangroveStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_STANDING_SIGN)
                             .build();
         }
         if (ItemTypes.MANGROVE_TRAPDOOR == null) {
             ItemTypes.MANGROVE_TRAPDOOR = AllayItemType
-                            .builder(ItemMangroveTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.MANGROVE_WALL_SIGN == null) {
             ItemTypes.MANGROVE_WALL_SIGN = AllayItemType
-                            .builder(ItemMangroveWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_WALL_SIGN)
                             .build();
         }
         if (ItemTypes.MANGROVE_WOOD == null) {
             ItemTypes.MANGROVE_WOOD = AllayItemType
-                            .builder(ItemMangroveWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.MANGROVE_WOOD)
                             .build();
         }
@@ -7344,6 +7019,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.MELON_STEM)
                             .build();
         }
+        if (ItemTypes.MILK_BUCKET == null) {
+            ItemTypes.MILK_BUCKET = AllayItemType
+                            .builder(ItemMilkBucketStackImpl.class)
+                            .vanillaItem(ItemId.MILK_BUCKET)
+                            .build();
+        }
         if (ItemTypes.MINECART == null) {
             ItemTypes.MINECART = AllayItemType
                             .builder(ItemMinecartStackImpl.class)
@@ -7374,6 +7055,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.MONSTER_EGG)
                             .build();
         }
+        if (ItemTypes.MOOSHROOM_SPAWN_EGG == null) {
+            ItemTypes.MOOSHROOM_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.MOOSHROOM_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.MOSS_BLOCK == null) {
             ItemTypes.MOSS_BLOCK = AllayItemType
                             .builder(ItemMossBlockStackImpl.class)
@@ -7382,7 +7069,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.MOSS_CARPET == null) {
             ItemTypes.MOSS_CARPET = AllayItemType
-                            .builder(ItemMossCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.MOSS_CARPET)
                             .build();
         }
@@ -7394,55 +7081,55 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.MOSSY_COBBLESTONE_DOUBLE_SLAB == null) {
             ItemTypes.MOSSY_COBBLESTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemMossyCobblestoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.MOSSY_COBBLESTONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.MOSSY_COBBLESTONE_SLAB == null) {
             ItemTypes.MOSSY_COBBLESTONE_SLAB = AllayItemType
-                            .builder(ItemMossyCobblestoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.MOSSY_COBBLESTONE_SLAB)
                             .build();
         }
         if (ItemTypes.MOSSY_COBBLESTONE_STAIRS == null) {
             ItemTypes.MOSSY_COBBLESTONE_STAIRS = AllayItemType
-                            .builder(ItemMossyCobblestoneStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.MOSSY_COBBLESTONE_STAIRS)
                             .build();
         }
         if (ItemTypes.MOSSY_COBBLESTONE_WALL == null) {
             ItemTypes.MOSSY_COBBLESTONE_WALL = AllayItemType
-                            .builder(ItemMossyCobblestoneWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.MOSSY_COBBLESTONE_WALL)
                             .build();
         }
         if (ItemTypes.MOSSY_STONE_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.MOSSY_STONE_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemMossyStoneBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.MOSSY_STONE_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.MOSSY_STONE_BRICK_SLAB == null) {
             ItemTypes.MOSSY_STONE_BRICK_SLAB = AllayItemType
-                            .builder(ItemMossyStoneBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.MOSSY_STONE_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.MOSSY_STONE_BRICK_STAIRS == null) {
             ItemTypes.MOSSY_STONE_BRICK_STAIRS = AllayItemType
-                            .builder(ItemMossyStoneBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.MOSSY_STONE_BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.MOSSY_STONE_BRICK_WALL == null) {
             ItemTypes.MOSSY_STONE_BRICK_WALL = AllayItemType
-                            .builder(ItemMossyStoneBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.MOSSY_STONE_BRICK_WALL)
                             .build();
         }
         if (ItemTypes.MOSSY_STONE_BRICKS == null) {
             ItemTypes.MOSSY_STONE_BRICKS = AllayItemType
-                            .builder(ItemMossyStoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.MOSSY_STONE_BRICKS)
                             .build();
         }
@@ -7466,31 +7153,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.MUD_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.MUD_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemMudBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.MUD_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.MUD_BRICK_SLAB == null) {
             ItemTypes.MUD_BRICK_SLAB = AllayItemType
-                            .builder(ItemMudBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.MUD_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.MUD_BRICK_STAIRS == null) {
             ItemTypes.MUD_BRICK_STAIRS = AllayItemType
-                            .builder(ItemMudBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.MUD_BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.MUD_BRICK_WALL == null) {
             ItemTypes.MUD_BRICK_WALL = AllayItemType
-                            .builder(ItemMudBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.MUD_BRICK_WALL)
                             .build();
         }
         if (ItemTypes.MUD_BRICKS == null) {
             ItemTypes.MUD_BRICKS = AllayItemType
-                            .builder(ItemMudBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.MUD_BRICKS)
                             .build();
         }
@@ -7498,6 +7185,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.MUDDY_MANGROVE_ROOTS = AllayItemType
                             .builder(ItemMuddyMangroveRootsStackImpl.class)
                             .vanillaItem(ItemId.MUDDY_MANGROVE_ROOTS)
+                            .build();
+        }
+        if (ItemTypes.MULE_SPAWN_EGG == null) {
+            ItemTypes.MULE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.MULE_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.MUSHROOM_STEM == null) {
@@ -7514,115 +7207,115 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.MUSIC_DISC_11 == null) {
             ItemTypes.MUSIC_DISC_11 = AllayItemType
-                            .builder(ItemMusicDisc11StackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_11)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_13 == null) {
             ItemTypes.MUSIC_DISC_13 = AllayItemType
-                            .builder(ItemMusicDisc13StackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_13)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_5 == null) {
             ItemTypes.MUSIC_DISC_5 = AllayItemType
-                            .builder(ItemMusicDisc5StackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_5)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_BLOCKS == null) {
             ItemTypes.MUSIC_DISC_BLOCKS = AllayItemType
-                            .builder(ItemMusicDiscBlocksStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_BLOCKS)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_CAT == null) {
             ItemTypes.MUSIC_DISC_CAT = AllayItemType
-                            .builder(ItemMusicDiscCatStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_CAT)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_CHIRP == null) {
             ItemTypes.MUSIC_DISC_CHIRP = AllayItemType
-                            .builder(ItemMusicDiscChirpStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_CHIRP)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_CREATOR == null) {
             ItemTypes.MUSIC_DISC_CREATOR = AllayItemType
-                            .builder(ItemMusicDiscCreatorStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_CREATOR)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX == null) {
             ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX = AllayItemType
-                            .builder(ItemMusicDiscCreatorMusicBoxStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_CREATOR_MUSIC_BOX)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_FAR == null) {
             ItemTypes.MUSIC_DISC_FAR = AllayItemType
-                            .builder(ItemMusicDiscFarStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_FAR)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_MALL == null) {
             ItemTypes.MUSIC_DISC_MALL = AllayItemType
-                            .builder(ItemMusicDiscMallStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_MALL)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_MELLOHI == null) {
             ItemTypes.MUSIC_DISC_MELLOHI = AllayItemType
-                            .builder(ItemMusicDiscMellohiStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_MELLOHI)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_OTHERSIDE == null) {
             ItemTypes.MUSIC_DISC_OTHERSIDE = AllayItemType
-                            .builder(ItemMusicDiscOthersideStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_OTHERSIDE)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_PIGSTEP == null) {
             ItemTypes.MUSIC_DISC_PIGSTEP = AllayItemType
-                            .builder(ItemMusicDiscPigstepStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_PIGSTEP)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_PRECIPICE == null) {
             ItemTypes.MUSIC_DISC_PRECIPICE = AllayItemType
-                            .builder(ItemMusicDiscPrecipiceStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_PRECIPICE)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_RELIC == null) {
             ItemTypes.MUSIC_DISC_RELIC = AllayItemType
-                            .builder(ItemMusicDiscRelicStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_RELIC)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_STAL == null) {
             ItemTypes.MUSIC_DISC_STAL = AllayItemType
-                            .builder(ItemMusicDiscStalStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_STAL)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_STRAD == null) {
             ItemTypes.MUSIC_DISC_STRAD = AllayItemType
-                            .builder(ItemMusicDiscStradStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_STRAD)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_WAIT == null) {
             ItemTypes.MUSIC_DISC_WAIT = AllayItemType
-                            .builder(ItemMusicDiscWaitStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_WAIT)
                             .build();
         }
         if (ItemTypes.MUSIC_DISC_WARD == null) {
             ItemTypes.MUSIC_DISC_WARD = AllayItemType
-                            .builder(ItemMusicDiscWardStackImpl.class)
+                            .builder(ItemMusicDiscStackImpl.class)
                             .vanillaItem(ItemId.MUSIC_DISC_WARD)
                             .build();
         }
@@ -7658,31 +7351,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.NETHER_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.NETHER_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemNetherBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.NETHER_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.NETHER_BRICK_FENCE == null) {
             ItemTypes.NETHER_BRICK_FENCE = AllayItemType
-                            .builder(ItemNetherBrickFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.NETHER_BRICK_FENCE)
                             .build();
         }
         if (ItemTypes.NETHER_BRICK_SLAB == null) {
             ItemTypes.NETHER_BRICK_SLAB = AllayItemType
-                            .builder(ItemNetherBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.NETHER_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.NETHER_BRICK_STAIRS == null) {
             ItemTypes.NETHER_BRICK_STAIRS = AllayItemType
-                            .builder(ItemNetherBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.NETHER_BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.NETHER_BRICK_WALL == null) {
             ItemTypes.NETHER_BRICK_WALL = AllayItemType
-                            .builder(ItemNetherBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.NETHER_BRICK_WALL)
                             .build();
         }
@@ -7722,10 +7415,40 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.NETHERBRICK)
                             .build();
         }
+        if (ItemTypes.NETHERITE_AXE == null) {
+            ItemTypes.NETHERITE_AXE = AllayItemType
+                            .builder(ItemAxeStackImpl.class)
+                            .vanillaItem(ItemId.NETHERITE_AXE)
+                            .build();
+        }
         if (ItemTypes.NETHERITE_BLOCK == null) {
             ItemTypes.NETHERITE_BLOCK = AllayItemType
                             .builder(ItemNetheriteBlockStackImpl.class)
                             .vanillaItem(ItemId.NETHERITE_BLOCK)
+                            .build();
+        }
+        if (ItemTypes.NETHERITE_BOOTS == null) {
+            ItemTypes.NETHERITE_BOOTS = AllayItemType
+                            .builder(ItemBootsStackImpl.class)
+                            .vanillaItem(ItemId.NETHERITE_BOOTS)
+                            .build();
+        }
+        if (ItemTypes.NETHERITE_CHESTPLATE == null) {
+            ItemTypes.NETHERITE_CHESTPLATE = AllayItemType
+                            .builder(ItemChestplateStackImpl.class)
+                            .vanillaItem(ItemId.NETHERITE_CHESTPLATE)
+                            .build();
+        }
+        if (ItemTypes.NETHERITE_HELMET == null) {
+            ItemTypes.NETHERITE_HELMET = AllayItemType
+                            .builder(ItemHelmetStackImpl.class)
+                            .vanillaItem(ItemId.NETHERITE_HELMET)
+                            .build();
+        }
+        if (ItemTypes.NETHERITE_HOE == null) {
+            ItemTypes.NETHERITE_HOE = AllayItemType
+                            .builder(ItemHoeStackImpl.class)
+                            .vanillaItem(ItemId.NETHERITE_HOE)
                             .build();
         }
         if (ItemTypes.NETHERITE_INGOT == null) {
@@ -7734,10 +7457,34 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.NETHERITE_INGOT)
                             .build();
         }
+        if (ItemTypes.NETHERITE_LEGGINGS == null) {
+            ItemTypes.NETHERITE_LEGGINGS = AllayItemType
+                            .builder(ItemLeggingsStackImpl.class)
+                            .vanillaItem(ItemId.NETHERITE_LEGGINGS)
+                            .build();
+        }
+        if (ItemTypes.NETHERITE_PICKAXE == null) {
+            ItemTypes.NETHERITE_PICKAXE = AllayItemType
+                            .builder(ItemPickaxeStackImpl.class)
+                            .vanillaItem(ItemId.NETHERITE_PICKAXE)
+                            .build();
+        }
         if (ItemTypes.NETHERITE_SCRAP == null) {
             ItemTypes.NETHERITE_SCRAP = AllayItemType
                             .builder(ItemNetheriteScrapStackImpl.class)
                             .vanillaItem(ItemId.NETHERITE_SCRAP)
+                            .build();
+        }
+        if (ItemTypes.NETHERITE_SHOVEL == null) {
+            ItemTypes.NETHERITE_SHOVEL = AllayItemType
+                            .builder(ItemShovelStackImpl.class)
+                            .vanillaItem(ItemId.NETHERITE_SHOVEL)
+                            .build();
+        }
+        if (ItemTypes.NETHERITE_SWORD == null) {
+            ItemTypes.NETHERITE_SWORD = AllayItemType
+                            .builder(ItemSwordStackImpl.class)
+                            .vanillaItem(ItemId.NETHERITE_SWORD)
                             .build();
         }
         if (ItemTypes.NETHERITE_UPGRADE_SMITHING_TEMPLATE == null) {
@@ -7760,19 +7507,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.NORMAL_STONE_DOUBLE_SLAB == null) {
             ItemTypes.NORMAL_STONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemNormalStoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.NORMAL_STONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.NORMAL_STONE_SLAB == null) {
             ItemTypes.NORMAL_STONE_SLAB = AllayItemType
-                            .builder(ItemNormalStoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.NORMAL_STONE_SLAB)
                             .build();
         }
         if (ItemTypes.NORMAL_STONE_STAIRS == null) {
             ItemTypes.NORMAL_STONE_STAIRS = AllayItemType
-                            .builder(ItemNormalStoneStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.NORMAL_STONE_STAIRS)
                             .build();
         }
@@ -7782,75 +7529,87 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.NOTEBLOCK)
                             .build();
         }
+        if (ItemTypes.NPC_SPAWN_EGG == null) {
+            ItemTypes.NPC_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.NPC_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.OAK_BOAT == null) {
             ItemTypes.OAK_BOAT = AllayItemType
-                            .builder(ItemOakBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.OAK_BOAT)
                             .build();
         }
         if (ItemTypes.OAK_CHEST_BOAT == null) {
             ItemTypes.OAK_CHEST_BOAT = AllayItemType
-                            .builder(ItemOakChestBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.OAK_CHEST_BOAT)
                             .build();
         }
         if (ItemTypes.OAK_DOUBLE_SLAB == null) {
             ItemTypes.OAK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemOakDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.OAK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.OAK_FENCE == null) {
             ItemTypes.OAK_FENCE = AllayItemType
-                            .builder(ItemOakFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.OAK_FENCE)
                             .build();
         }
         if (ItemTypes.OAK_HANGING_SIGN == null) {
             ItemTypes.OAK_HANGING_SIGN = AllayItemType
-                            .builder(ItemOakHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.OAK_HANGING_SIGN)
                             .build();
         }
         if (ItemTypes.OAK_LEAVES == null) {
             ItemTypes.OAK_LEAVES = AllayItemType
-                            .builder(ItemOakLeavesStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.OAK_LEAVES)
                             .build();
         }
         if (ItemTypes.OAK_LOG == null) {
             ItemTypes.OAK_LOG = AllayItemType
-                            .builder(ItemOakLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.OAK_LOG)
                             .build();
         }
         if (ItemTypes.OAK_PLANKS == null) {
             ItemTypes.OAK_PLANKS = AllayItemType
-                            .builder(ItemOakPlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.OAK_PLANKS)
                             .build();
         }
         if (ItemTypes.OAK_SAPLING == null) {
             ItemTypes.OAK_SAPLING = AllayItemType
-                            .builder(ItemOakSaplingStackImpl.class)
+                            .builder(ItemSaplingStackImpl.class)
                             .vanillaItem(ItemId.OAK_SAPLING)
+                            .build();
+        }
+        if (ItemTypes.OAK_SIGN == null) {
+            ItemTypes.OAK_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.OAK_SIGN)
                             .build();
         }
         if (ItemTypes.OAK_SLAB == null) {
             ItemTypes.OAK_SLAB = AllayItemType
-                            .builder(ItemOakSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.OAK_SLAB)
                             .build();
         }
         if (ItemTypes.OAK_STAIRS == null) {
             ItemTypes.OAK_STAIRS = AllayItemType
-                            .builder(ItemOakStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.OAK_STAIRS)
                             .build();
         }
         if (ItemTypes.OAK_WOOD == null) {
             ItemTypes.OAK_WOOD = AllayItemType
-                            .builder(ItemOakWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.OAK_WOOD)
                             .build();
         }
@@ -7864,6 +7623,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.OBSIDIAN = AllayItemType
                             .builder(ItemObsidianStackImpl.class)
                             .vanillaItem(ItemId.OBSIDIAN)
+                            .build();
+        }
+        if (ItemTypes.OCELOT_SPAWN_EGG == null) {
+            ItemTypes.OCELOT_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.OCELOT_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.OCHRE_FROGLIGHT == null) {
@@ -7886,37 +7651,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ORANGE_BUNDLE == null) {
             ItemTypes.ORANGE_BUNDLE = AllayItemType
-                            .builder(ItemOrangeBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_BUNDLE)
                             .build();
         }
         if (ItemTypes.ORANGE_CANDLE == null) {
             ItemTypes.ORANGE_CANDLE = AllayItemType
-                            .builder(ItemOrangeCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_CANDLE)
                             .build();
         }
         if (ItemTypes.ORANGE_CANDLE_CAKE == null) {
             ItemTypes.ORANGE_CANDLE_CAKE = AllayItemType
-                            .builder(ItemOrangeCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.ORANGE_CARPET == null) {
             ItemTypes.ORANGE_CARPET = AllayItemType
-                            .builder(ItemOrangeCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_CARPET)
                             .build();
         }
         if (ItemTypes.ORANGE_CONCRETE == null) {
             ItemTypes.ORANGE_CONCRETE = AllayItemType
-                            .builder(ItemOrangeConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_CONCRETE)
                             .build();
         }
         if (ItemTypes.ORANGE_CONCRETE_POWDER == null) {
             ItemTypes.ORANGE_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemOrangeConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_CONCRETE_POWDER)
                             .build();
         }
@@ -7928,25 +7693,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ORANGE_GLAZED_TERRACOTTA == null) {
             ItemTypes.ORANGE_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemOrangeGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.ORANGE_SHULKER_BOX == null) {
+            ItemTypes.ORANGE_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.ORANGE_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.ORANGE_STAINED_GLASS == null) {
             ItemTypes.ORANGE_STAINED_GLASS = AllayItemType
-                            .builder(ItemOrangeStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.ORANGE_STAINED_GLASS_PANE == null) {
             ItemTypes.ORANGE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemOrangeStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.ORANGE_TERRACOTTA == null) {
             ItemTypes.ORANGE_TERRACOTTA = AllayItemType
-                            .builder(ItemOrangeTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_TERRACOTTA)
                             .build();
         }
@@ -7958,7 +7729,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ORANGE_WOOL == null) {
             ItemTypes.ORANGE_WOOL = AllayItemType
-                            .builder(ItemOrangeWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_WOOL)
                             .build();
         }
@@ -7970,13 +7741,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.OXIDIZED_CHISELED_COPPER == null) {
             ItemTypes.OXIDIZED_CHISELED_COPPER = AllayItemType
-                            .builder(ItemOxidizedChiseledCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.OXIDIZED_CHISELED_COPPER)
                             .build();
         }
         if (ItemTypes.OXIDIZED_COPPER == null) {
             ItemTypes.OXIDIZED_COPPER = AllayItemType
-                            .builder(ItemOxidizedCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.OXIDIZED_COPPER)
                             .build();
         }
@@ -7988,7 +7759,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.OXIDIZED_COPPER_DOOR == null) {
             ItemTypes.OXIDIZED_COPPER_DOOR = AllayItemType
-                            .builder(ItemOxidizedCopperDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.OXIDIZED_COPPER_DOOR)
                             .build();
         }
@@ -8000,31 +7771,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.OXIDIZED_COPPER_TRAPDOOR == null) {
             ItemTypes.OXIDIZED_COPPER_TRAPDOOR = AllayItemType
-                            .builder(ItemOxidizedCopperTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.OXIDIZED_COPPER_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.OXIDIZED_CUT_COPPER == null) {
             ItemTypes.OXIDIZED_CUT_COPPER = AllayItemType
-                            .builder(ItemOxidizedCutCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.OXIDIZED_CUT_COPPER)
                             .build();
         }
         if (ItemTypes.OXIDIZED_CUT_COPPER_SLAB == null) {
             ItemTypes.OXIDIZED_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemOxidizedCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.OXIDIZED_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.OXIDIZED_CUT_COPPER_STAIRS == null) {
             ItemTypes.OXIDIZED_CUT_COPPER_STAIRS = AllayItemType
-                            .builder(ItemOxidizedCutCopperStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.OXIDIZED_CUT_COPPER_STAIRS)
                             .build();
         }
         if (ItemTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB == null) {
             ItemTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemOxidizedDoubleCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
                             .build();
         }
@@ -8046,10 +7817,22 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.PAINTING)
                             .build();
         }
+        if (ItemTypes.PANDA_SPAWN_EGG == null) {
+            ItemTypes.PANDA_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.PANDA_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.PAPER == null) {
             ItemTypes.PAPER = AllayItemType
                             .builder(ItemPaperStackImpl.class)
                             .vanillaItem(ItemId.PAPER)
+                            .build();
+        }
+        if (ItemTypes.PARROT_SPAWN_EGG == null) {
+            ItemTypes.PARROT_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.PARROT_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.PEARLESCENT_FROGLIGHT == null) {
@@ -8066,13 +7849,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PETRIFIED_OAK_DOUBLE_SLAB == null) {
             ItemTypes.PETRIFIED_OAK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPetrifiedOakDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.PETRIFIED_OAK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.PETRIFIED_OAK_SLAB == null) {
             ItemTypes.PETRIFIED_OAK_SLAB = AllayItemType
-                            .builder(ItemPetrifiedOakSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.PETRIFIED_OAK_SLAB)
                             .build();
         }
@@ -8082,51 +7865,81 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.PHANTOM_MEMBRANE)
                             .build();
         }
+        if (ItemTypes.PHANTOM_SPAWN_EGG == null) {
+            ItemTypes.PHANTOM_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.PHANTOM_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.PIG_SPAWN_EGG == null) {
+            ItemTypes.PIG_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.PIG_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.PIGLIN_BANNER_PATTERN == null) {
             ItemTypes.PIGLIN_BANNER_PATTERN = AllayItemType
                             .builder(ItemPiglinBannerPatternStackImpl.class)
                             .vanillaItem(ItemId.PIGLIN_BANNER_PATTERN)
                             .build();
         }
+        if (ItemTypes.PIGLIN_BRUTE_SPAWN_EGG == null) {
+            ItemTypes.PIGLIN_BRUTE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.PIGLIN_BRUTE_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.PIGLIN_HEAD == null) {
             ItemTypes.PIGLIN_HEAD = AllayItemType
-                            .builder(ItemPiglinHeadStackImpl.class)
+                            .builder(ItemHeadStackImpl.class)
                             .vanillaItem(ItemId.PIGLIN_HEAD)
+                            .build();
+        }
+        if (ItemTypes.PIGLIN_SPAWN_EGG == null) {
+            ItemTypes.PIGLIN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.PIGLIN_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.PILLAGER_SPAWN_EGG == null) {
+            ItemTypes.PILLAGER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.PILLAGER_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.PINK_BUNDLE == null) {
             ItemTypes.PINK_BUNDLE = AllayItemType
-                            .builder(ItemPinkBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.PINK_BUNDLE)
                             .build();
         }
         if (ItemTypes.PINK_CANDLE == null) {
             ItemTypes.PINK_CANDLE = AllayItemType
-                            .builder(ItemPinkCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.PINK_CANDLE)
                             .build();
         }
         if (ItemTypes.PINK_CANDLE_CAKE == null) {
             ItemTypes.PINK_CANDLE_CAKE = AllayItemType
-                            .builder(ItemPinkCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.PINK_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.PINK_CARPET == null) {
             ItemTypes.PINK_CARPET = AllayItemType
-                            .builder(ItemPinkCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.PINK_CARPET)
                             .build();
         }
         if (ItemTypes.PINK_CONCRETE == null) {
             ItemTypes.PINK_CONCRETE = AllayItemType
-                            .builder(ItemPinkConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.PINK_CONCRETE)
                             .build();
         }
         if (ItemTypes.PINK_CONCRETE_POWDER == null) {
             ItemTypes.PINK_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemPinkConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.PINK_CONCRETE_POWDER)
                             .build();
         }
@@ -8138,7 +7951,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PINK_GLAZED_TERRACOTTA == null) {
             ItemTypes.PINK_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemPinkGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.PINK_GLAZED_TERRACOTTA)
                             .build();
         }
@@ -8148,21 +7961,27 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.PINK_PETALS)
                             .build();
         }
+        if (ItemTypes.PINK_SHULKER_BOX == null) {
+            ItemTypes.PINK_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.PINK_SHULKER_BOX)
+                            .build();
+        }
         if (ItemTypes.PINK_STAINED_GLASS == null) {
             ItemTypes.PINK_STAINED_GLASS = AllayItemType
-                            .builder(ItemPinkStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.PINK_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.PINK_STAINED_GLASS_PANE == null) {
             ItemTypes.PINK_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemPinkStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.PINK_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.PINK_TERRACOTTA == null) {
             ItemTypes.PINK_TERRACOTTA = AllayItemType
-                            .builder(ItemPinkTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.PINK_TERRACOTTA)
                             .build();
         }
@@ -8174,7 +7993,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PINK_WOOL == null) {
             ItemTypes.PINK_WOOL = AllayItemType
-                            .builder(ItemPinkWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.PINK_WOOL)
                             .build();
         }
@@ -8186,7 +8005,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PISTON_ARM_COLLISION == null) {
             ItemTypes.PISTON_ARM_COLLISION = AllayItemType
-                            .builder(ItemPistonArmCollisionStackImpl.class)
+                            .builder(ItemPistonStackImpl.class)
                             .vanillaItem(ItemId.PISTON_ARM_COLLISION)
                             .build();
         }
@@ -8216,7 +8035,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PLAYER_HEAD == null) {
             ItemTypes.PLAYER_HEAD = AllayItemType
-                            .builder(ItemPlayerHeadStackImpl.class)
+                            .builder(ItemHeadStackImpl.class)
                             .vanillaItem(ItemId.PLAYER_HEAD)
                             .build();
         }
@@ -8244,6 +8063,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.POISONOUS_POTATO)
                             .build();
         }
+        if (ItemTypes.POLAR_BEAR_SPAWN_EGG == null) {
+            ItemTypes.POLAR_BEAR_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.POLAR_BEAR_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.POLISHED_ANDESITE == null) {
             ItemTypes.POLISHED_ANDESITE = AllayItemType
                             .builder(ItemPolishedAndesiteStackImpl.class)
@@ -8252,19 +8077,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.POLISHED_ANDESITE_DOUBLE_SLAB == null) {
             ItemTypes.POLISHED_ANDESITE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPolishedAndesiteDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_ANDESITE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_ANDESITE_SLAB == null) {
             ItemTypes.POLISHED_ANDESITE_SLAB = AllayItemType
-                            .builder(ItemPolishedAndesiteSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_ANDESITE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_ANDESITE_STAIRS == null) {
             ItemTypes.POLISHED_ANDESITE_STAIRS = AllayItemType
-                            .builder(ItemPolishedAndesiteStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_ANDESITE_STAIRS)
                             .build();
         }
@@ -8282,43 +8107,43 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPolishedBlackstoneBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_BLACKSTONE_BRICK_SLAB == null) {
             ItemTypes.POLISHED_BLACKSTONE_BRICK_SLAB = AllayItemType
-                            .builder(ItemPolishedBlackstoneBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_BLACKSTONE_BRICK_STAIRS == null) {
             ItemTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = AllayItemType
-                            .builder(ItemPolishedBlackstoneBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.POLISHED_BLACKSTONE_BRICK_WALL == null) {
             ItemTypes.POLISHED_BLACKSTONE_BRICK_WALL = AllayItemType
-                            .builder(ItemPolishedBlackstoneBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_BRICK_WALL)
                             .build();
         }
         if (ItemTypes.POLISHED_BLACKSTONE_BRICKS == null) {
             ItemTypes.POLISHED_BLACKSTONE_BRICKS = AllayItemType
-                            .builder(ItemPolishedBlackstoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_BRICKS)
                             .build();
         }
         if (ItemTypes.POLISHED_BLACKSTONE_BUTTON == null) {
             ItemTypes.POLISHED_BLACKSTONE_BUTTON = AllayItemType
-                            .builder(ItemPolishedBlackstoneButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_BUTTON)
                             .build();
         }
         if (ItemTypes.POLISHED_BLACKSTONE_DOUBLE_SLAB == null) {
             ItemTypes.POLISHED_BLACKSTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPolishedBlackstoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_DOUBLE_SLAB)
                             .build();
         }
@@ -8330,19 +8155,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.POLISHED_BLACKSTONE_SLAB == null) {
             ItemTypes.POLISHED_BLACKSTONE_SLAB = AllayItemType
-                            .builder(ItemPolishedBlackstoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_BLACKSTONE_STAIRS == null) {
             ItemTypes.POLISHED_BLACKSTONE_STAIRS = AllayItemType
-                            .builder(ItemPolishedBlackstoneStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_STAIRS)
                             .build();
         }
         if (ItemTypes.POLISHED_BLACKSTONE_WALL == null) {
             ItemTypes.POLISHED_BLACKSTONE_WALL = AllayItemType
-                            .builder(ItemPolishedBlackstoneWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_BLACKSTONE_WALL)
                             .build();
         }
@@ -8354,25 +8179,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.POLISHED_DEEPSLATE_DOUBLE_SLAB == null) {
             ItemTypes.POLISHED_DEEPSLATE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPolishedDeepslateDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_DEEPSLATE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_DEEPSLATE_SLAB == null) {
             ItemTypes.POLISHED_DEEPSLATE_SLAB = AllayItemType
-                            .builder(ItemPolishedDeepslateSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_DEEPSLATE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_DEEPSLATE_STAIRS == null) {
             ItemTypes.POLISHED_DEEPSLATE_STAIRS = AllayItemType
-                            .builder(ItemPolishedDeepslateStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_DEEPSLATE_STAIRS)
                             .build();
         }
         if (ItemTypes.POLISHED_DEEPSLATE_WALL == null) {
             ItemTypes.POLISHED_DEEPSLATE_WALL = AllayItemType
-                            .builder(ItemPolishedDeepslateWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_DEEPSLATE_WALL)
                             .build();
         }
@@ -8384,19 +8209,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.POLISHED_DIORITE_DOUBLE_SLAB == null) {
             ItemTypes.POLISHED_DIORITE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPolishedDioriteDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_DIORITE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_DIORITE_SLAB == null) {
             ItemTypes.POLISHED_DIORITE_SLAB = AllayItemType
-                            .builder(ItemPolishedDioriteSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_DIORITE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_DIORITE_STAIRS == null) {
             ItemTypes.POLISHED_DIORITE_STAIRS = AllayItemType
-                            .builder(ItemPolishedDioriteStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_DIORITE_STAIRS)
                             .build();
         }
@@ -8408,19 +8233,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.POLISHED_GRANITE_DOUBLE_SLAB == null) {
             ItemTypes.POLISHED_GRANITE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPolishedGraniteDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_GRANITE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_GRANITE_SLAB == null) {
             ItemTypes.POLISHED_GRANITE_SLAB = AllayItemType
-                            .builder(ItemPolishedGraniteSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_GRANITE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_GRANITE_STAIRS == null) {
             ItemTypes.POLISHED_GRANITE_STAIRS = AllayItemType
-                            .builder(ItemPolishedGraniteStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_GRANITE_STAIRS)
                             .build();
         }
@@ -8432,25 +8257,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.POLISHED_TUFF_DOUBLE_SLAB == null) {
             ItemTypes.POLISHED_TUFF_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPolishedTuffDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_TUFF_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_TUFF_SLAB == null) {
             ItemTypes.POLISHED_TUFF_SLAB = AllayItemType
-                            .builder(ItemPolishedTuffSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_TUFF_SLAB)
                             .build();
         }
         if (ItemTypes.POLISHED_TUFF_STAIRS == null) {
             ItemTypes.POLISHED_TUFF_STAIRS = AllayItemType
-                            .builder(ItemPolishedTuffStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_TUFF_STAIRS)
                             .build();
         }
         if (ItemTypes.POLISHED_TUFF_WALL == null) {
             ItemTypes.POLISHED_TUFF_WALL = AllayItemType
-                            .builder(ItemPolishedTuffWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.POLISHED_TUFF_WALL)
                             .build();
         }
@@ -8502,6 +8327,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.POWDER_SNOW)
                             .build();
         }
+        if (ItemTypes.POWDER_SNOW_BUCKET == null) {
+            ItemTypes.POWDER_SNOW_BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.POWDER_SNOW_BUCKET)
+                            .build();
+        }
         if (ItemTypes.POWERED_COMPARATOR == null) {
             ItemTypes.POWERED_COMPARATOR = AllayItemType
                             .builder(ItemPoweredComparatorStackImpl.class)
@@ -8522,25 +8353,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PRISMARINE_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.PRISMARINE_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPrismarineBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.PRISMARINE_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.PRISMARINE_BRICK_SLAB == null) {
             ItemTypes.PRISMARINE_BRICK_SLAB = AllayItemType
-                            .builder(ItemPrismarineBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.PRISMARINE_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.PRISMARINE_BRICKS == null) {
             ItemTypes.PRISMARINE_BRICKS = AllayItemType
-                            .builder(ItemPrismarineBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.PRISMARINE_BRICKS)
                             .build();
         }
         if (ItemTypes.PRISMARINE_BRICKS_STAIRS == null) {
             ItemTypes.PRISMARINE_BRICKS_STAIRS = AllayItemType
-                            .builder(ItemPrismarineBricksStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.PRISMARINE_BRICKS_STAIRS)
                             .build();
         }
@@ -8552,7 +8383,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PRISMARINE_DOUBLE_SLAB == null) {
             ItemTypes.PRISMARINE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPrismarineDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.PRISMARINE_DOUBLE_SLAB)
                             .build();
         }
@@ -8564,19 +8395,19 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PRISMARINE_SLAB == null) {
             ItemTypes.PRISMARINE_SLAB = AllayItemType
-                            .builder(ItemPrismarineSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.PRISMARINE_SLAB)
                             .build();
         }
         if (ItemTypes.PRISMARINE_STAIRS == null) {
             ItemTypes.PRISMARINE_STAIRS = AllayItemType
-                            .builder(ItemPrismarineStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.PRISMARINE_STAIRS)
                             .build();
         }
         if (ItemTypes.PRISMARINE_WALL == null) {
             ItemTypes.PRISMARINE_WALL = AllayItemType
-                            .builder(ItemPrismarineWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.PRISMARINE_WALL)
                             .build();
         }
@@ -8590,6 +8421,18 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.PUFFERFISH = AllayItemType
                             .builder(ItemPufferfishStackImpl.class)
                             .vanillaItem(ItemId.PUFFERFISH)
+                            .build();
+        }
+        if (ItemTypes.PUFFERFISH_BUCKET == null) {
+            ItemTypes.PUFFERFISH_BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.PUFFERFISH_BUCKET)
+                            .build();
+        }
+        if (ItemTypes.PUFFERFISH_SPAWN_EGG == null) {
+            ItemTypes.PUFFERFISH_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.PUFFERFISH_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.PUMPKIN == null) {
@@ -8618,37 +8461,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PURPLE_BUNDLE == null) {
             ItemTypes.PURPLE_BUNDLE = AllayItemType
-                            .builder(ItemPurpleBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_BUNDLE)
                             .build();
         }
         if (ItemTypes.PURPLE_CANDLE == null) {
             ItemTypes.PURPLE_CANDLE = AllayItemType
-                            .builder(ItemPurpleCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_CANDLE)
                             .build();
         }
         if (ItemTypes.PURPLE_CANDLE_CAKE == null) {
             ItemTypes.PURPLE_CANDLE_CAKE = AllayItemType
-                            .builder(ItemPurpleCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.PURPLE_CARPET == null) {
             ItemTypes.PURPLE_CARPET = AllayItemType
-                            .builder(ItemPurpleCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_CARPET)
                             .build();
         }
         if (ItemTypes.PURPLE_CONCRETE == null) {
             ItemTypes.PURPLE_CONCRETE = AllayItemType
-                            .builder(ItemPurpleConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_CONCRETE)
                             .build();
         }
         if (ItemTypes.PURPLE_CONCRETE_POWDER == null) {
             ItemTypes.PURPLE_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemPurpleConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_CONCRETE_POWDER)
                             .build();
         }
@@ -8660,61 +8503,67 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PURPLE_GLAZED_TERRACOTTA == null) {
             ItemTypes.PURPLE_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemPurpleGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.PURPLE_SHULKER_BOX == null) {
+            ItemTypes.PURPLE_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.PURPLE_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.PURPLE_STAINED_GLASS == null) {
             ItemTypes.PURPLE_STAINED_GLASS = AllayItemType
-                            .builder(ItemPurpleStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.PURPLE_STAINED_GLASS_PANE == null) {
             ItemTypes.PURPLE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemPurpleStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.PURPLE_TERRACOTTA == null) {
             ItemTypes.PURPLE_TERRACOTTA = AllayItemType
-                            .builder(ItemPurpleTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.PURPLE_WOOL == null) {
             ItemTypes.PURPLE_WOOL = AllayItemType
-                            .builder(ItemPurpleWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_WOOL)
                             .build();
         }
         if (ItemTypes.PURPUR_BLOCK == null) {
             ItemTypes.PURPUR_BLOCK = AllayItemType
-                            .builder(ItemPurpurBlockStackImpl.class)
+                            .builder(ItemPurpurStackImpl.class)
                             .vanillaItem(ItemId.PURPUR_BLOCK)
                             .build();
         }
         if (ItemTypes.PURPUR_DOUBLE_SLAB == null) {
             ItemTypes.PURPUR_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemPurpurDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.PURPUR_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.PURPUR_PILLAR == null) {
             ItemTypes.PURPUR_PILLAR = AllayItemType
-                            .builder(ItemPurpurPillarStackImpl.class)
+                            .builder(ItemPurpurStackImpl.class)
                             .vanillaItem(ItemId.PURPUR_PILLAR)
                             .build();
         }
         if (ItemTypes.PURPUR_SLAB == null) {
             ItemTypes.PURPUR_SLAB = AllayItemType
-                            .builder(ItemPurpurSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.PURPUR_SLAB)
                             .build();
         }
         if (ItemTypes.PURPUR_STAIRS == null) {
             ItemTypes.PURPUR_STAIRS = AllayItemType
-                            .builder(ItemPurpurStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.PURPUR_STAIRS)
                             .build();
         }
@@ -8732,13 +8581,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.QUARTZ_BRICKS == null) {
             ItemTypes.QUARTZ_BRICKS = AllayItemType
-                            .builder(ItemQuartzBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.QUARTZ_BRICKS)
                             .build();
         }
         if (ItemTypes.QUARTZ_DOUBLE_SLAB == null) {
             ItemTypes.QUARTZ_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemQuartzDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.QUARTZ_DOUBLE_SLAB)
                             .build();
         }
@@ -8756,13 +8605,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.QUARTZ_SLAB == null) {
             ItemTypes.QUARTZ_SLAB = AllayItemType
-                            .builder(ItemQuartzSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.QUARTZ_SLAB)
                             .build();
         }
         if (ItemTypes.QUARTZ_STAIRS == null) {
             ItemTypes.QUARTZ_STAIRS = AllayItemType
-                            .builder(ItemQuartzStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.QUARTZ_STAIRS)
                             .build();
         }
@@ -8782,6 +8631,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.RABBIT_HIDE = AllayItemType
                             .builder(ItemRabbitHideStackImpl.class)
                             .vanillaItem(ItemId.RABBIT_HIDE)
+                            .build();
+        }
+        if (ItemTypes.RABBIT_SPAWN_EGG == null) {
+            ItemTypes.RABBIT_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.RABBIT_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.RABBIT_STEW == null) {
@@ -8808,9 +8663,15 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.RAPID_FERTILIZER)
                             .build();
         }
+        if (ItemTypes.RAVAGER_SPAWN_EGG == null) {
+            ItemTypes.RAVAGER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.RAVAGER_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.RAW_COPPER == null) {
             ItemTypes.RAW_COPPER = AllayItemType
-                            .builder(ItemRawCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.RAW_COPPER)
                             .build();
         }
@@ -8852,37 +8713,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.RED_BUNDLE == null) {
             ItemTypes.RED_BUNDLE = AllayItemType
-                            .builder(ItemRedBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.RED_BUNDLE)
                             .build();
         }
         if (ItemTypes.RED_CANDLE == null) {
             ItemTypes.RED_CANDLE = AllayItemType
-                            .builder(ItemRedCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.RED_CANDLE)
                             .build();
         }
         if (ItemTypes.RED_CANDLE_CAKE == null) {
             ItemTypes.RED_CANDLE_CAKE = AllayItemType
-                            .builder(ItemRedCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.RED_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.RED_CARPET == null) {
             ItemTypes.RED_CARPET = AllayItemType
-                            .builder(ItemRedCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.RED_CARPET)
                             .build();
         }
         if (ItemTypes.RED_CONCRETE == null) {
             ItemTypes.RED_CONCRETE = AllayItemType
-                            .builder(ItemRedConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.RED_CONCRETE)
                             .build();
         }
         if (ItemTypes.RED_CONCRETE_POWDER == null) {
             ItemTypes.RED_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemRedConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.RED_CONCRETE_POWDER)
                             .build();
         }
@@ -8900,7 +8761,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.RED_GLAZED_TERRACOTTA == null) {
             ItemTypes.RED_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemRedGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.RED_GLAZED_TERRACOTTA)
                             .build();
         }
@@ -8924,79 +8785,85 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.RED_NETHER_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.RED_NETHER_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemRedNetherBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.RED_NETHER_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.RED_NETHER_BRICK_SLAB == null) {
             ItemTypes.RED_NETHER_BRICK_SLAB = AllayItemType
-                            .builder(ItemRedNetherBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.RED_NETHER_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.RED_NETHER_BRICK_STAIRS == null) {
             ItemTypes.RED_NETHER_BRICK_STAIRS = AllayItemType
-                            .builder(ItemRedNetherBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.RED_NETHER_BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.RED_NETHER_BRICK_WALL == null) {
             ItemTypes.RED_NETHER_BRICK_WALL = AllayItemType
-                            .builder(ItemRedNetherBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.RED_NETHER_BRICK_WALL)
                             .build();
         }
         if (ItemTypes.RED_SAND == null) {
             ItemTypes.RED_SAND = AllayItemType
-                            .builder(ItemRedSandStackImpl.class)
+                            .builder(ItemSandStackImpl.class)
                             .vanillaItem(ItemId.RED_SAND)
                             .build();
         }
         if (ItemTypes.RED_SANDSTONE == null) {
             ItemTypes.RED_SANDSTONE = AllayItemType
-                            .builder(ItemRedSandstoneStackImpl.class)
+                            .builder(ItemSandstoneStackImpl.class)
                             .vanillaItem(ItemId.RED_SANDSTONE)
                             .build();
         }
         if (ItemTypes.RED_SANDSTONE_DOUBLE_SLAB == null) {
             ItemTypes.RED_SANDSTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemRedSandstoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.RED_SANDSTONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.RED_SANDSTONE_SLAB == null) {
             ItemTypes.RED_SANDSTONE_SLAB = AllayItemType
-                            .builder(ItemRedSandstoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.RED_SANDSTONE_SLAB)
                             .build();
         }
         if (ItemTypes.RED_SANDSTONE_STAIRS == null) {
             ItemTypes.RED_SANDSTONE_STAIRS = AllayItemType
-                            .builder(ItemRedSandstoneStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.RED_SANDSTONE_STAIRS)
                             .build();
         }
         if (ItemTypes.RED_SANDSTONE_WALL == null) {
             ItemTypes.RED_SANDSTONE_WALL = AllayItemType
-                            .builder(ItemRedSandstoneWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.RED_SANDSTONE_WALL)
+                            .build();
+        }
+        if (ItemTypes.RED_SHULKER_BOX == null) {
+            ItemTypes.RED_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.RED_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.RED_STAINED_GLASS == null) {
             ItemTypes.RED_STAINED_GLASS = AllayItemType
-                            .builder(ItemRedStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.RED_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.RED_STAINED_GLASS_PANE == null) {
             ItemTypes.RED_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemRedStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.RED_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.RED_TERRACOTTA == null) {
             ItemTypes.RED_TERRACOTTA = AllayItemType
-                            .builder(ItemRedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.RED_TERRACOTTA)
                             .build();
         }
@@ -9008,7 +8875,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.RED_WOOL == null) {
             ItemTypes.RED_WOOL = AllayItemType
-                            .builder(ItemRedWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.RED_WOOL)
                             .build();
         }
@@ -9038,7 +8905,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.REDSTONE_TORCH == null) {
             ItemTypes.REDSTONE_TORCH = AllayItemType
-                            .builder(ItemRedstoneTorchStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.REDSTONE_TORCH)
                             .build();
         }
@@ -9108,6 +8975,18 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.SALMON)
                             .build();
         }
+        if (ItemTypes.SALMON_BUCKET == null) {
+            ItemTypes.SALMON_BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.SALMON_BUCKET)
+                            .build();
+        }
+        if (ItemTypes.SALMON_SPAWN_EGG == null) {
+            ItemTypes.SALMON_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SALMON_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.SAND == null) {
             ItemTypes.SAND = AllayItemType
                             .builder(ItemSandStackImpl.class)
@@ -9122,25 +9001,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SANDSTONE_DOUBLE_SLAB == null) {
             ItemTypes.SANDSTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemSandstoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SANDSTONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.SANDSTONE_SLAB == null) {
             ItemTypes.SANDSTONE_SLAB = AllayItemType
-                            .builder(ItemSandstoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SANDSTONE_SLAB)
                             .build();
         }
         if (ItemTypes.SANDSTONE_STAIRS == null) {
             ItemTypes.SANDSTONE_STAIRS = AllayItemType
-                            .builder(ItemSandstoneStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.SANDSTONE_STAIRS)
                             .build();
         }
         if (ItemTypes.SANDSTONE_WALL == null) {
             ItemTypes.SANDSTONE_WALL = AllayItemType
-                            .builder(ItemSandstoneWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.SANDSTONE_WALL)
                             .build();
         }
@@ -9234,6 +9113,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.SHEARS)
                             .build();
         }
+        if (ItemTypes.SHEEP_SPAWN_EGG == null) {
+            ItemTypes.SHEEP_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SHEEP_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.SHELTER_POTTERY_SHERD == null) {
             ItemTypes.SHELTER_POTTERY_SHERD = AllayItemType
                             .builder(ItemShelterPotterySherdStackImpl.class)
@@ -9258,10 +9143,22 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.SHROOMLIGHT)
                             .build();
         }
+        if (ItemTypes.SHULKER_BOX == null) {
+            ItemTypes.SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.SHULKER_BOX)
+                            .build();
+        }
         if (ItemTypes.SHULKER_SHELL == null) {
             ItemTypes.SHULKER_SHELL = AllayItemType
                             .builder(ItemShulkerShellStackImpl.class)
                             .vanillaItem(ItemId.SHULKER_SHELL)
+                            .build();
+        }
+        if (ItemTypes.SHULKER_SPAWN_EGG == null) {
+            ItemTypes.SHULKER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SHULKER_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE == null) {
@@ -9272,19 +9169,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SILVER_GLAZED_TERRACOTTA == null) {
             ItemTypes.SILVER_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemSilverGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.SILVER_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.SILVERFISH_SPAWN_EGG == null) {
+            ItemTypes.SILVERFISH_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SILVERFISH_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.SKELETON_HORSE_SPAWN_EGG == null) {
+            ItemTypes.SKELETON_HORSE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SKELETON_HORSE_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.SKELETON_SKULL == null) {
             ItemTypes.SKELETON_SKULL = AllayItemType
-                            .builder(ItemSkeletonSkullStackImpl.class)
+                            .builder(ItemHeadStackImpl.class)
                             .vanillaItem(ItemId.SKELETON_SKULL)
+                            .build();
+        }
+        if (ItemTypes.SKELETON_SPAWN_EGG == null) {
+            ItemTypes.SKELETON_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SKELETON_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.SKULL == null) {
             ItemTypes.SKULL = AllayItemType
-                            .builder(ItemSkullStackImpl.class)
+                            .builder(ItemHeadStackImpl.class)
                             .vanillaItem(ItemId.SKULL)
                             .build();
         }
@@ -9312,6 +9227,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.SLIME_BALL)
                             .build();
         }
+        if (ItemTypes.SLIME_SPAWN_EGG == null) {
+            ItemTypes.SLIME_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SLIME_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.SMALL_AMETHYST_BUD == null) {
             ItemTypes.SMALL_AMETHYST_BUD = AllayItemType
                             .builder(ItemSmallAmethystBudStackImpl.class)
@@ -9332,7 +9253,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SMOKER == null) {
             ItemTypes.SMOKER = AllayItemType
-                            .builder(ItemSmokerStackImpl.class)
+                            .builder(ItemFurnaceStackImpl.class)
                             .vanillaItem(ItemId.SMOKER)
                             .build();
         }
@@ -9350,67 +9271,67 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SMOOTH_QUARTZ_DOUBLE_SLAB == null) {
             ItemTypes.SMOOTH_QUARTZ_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemSmoothQuartzDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_QUARTZ_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.SMOOTH_QUARTZ_SLAB == null) {
             ItemTypes.SMOOTH_QUARTZ_SLAB = AllayItemType
-                            .builder(ItemSmoothQuartzSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_QUARTZ_SLAB)
                             .build();
         }
         if (ItemTypes.SMOOTH_QUARTZ_STAIRS == null) {
             ItemTypes.SMOOTH_QUARTZ_STAIRS = AllayItemType
-                            .builder(ItemSmoothQuartzStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_QUARTZ_STAIRS)
                             .build();
         }
         if (ItemTypes.SMOOTH_RED_SANDSTONE == null) {
             ItemTypes.SMOOTH_RED_SANDSTONE = AllayItemType
-                            .builder(ItemSmoothRedSandstoneStackImpl.class)
+                            .builder(ItemSandstoneStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_RED_SANDSTONE)
                             .build();
         }
         if (ItemTypes.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB == null) {
             ItemTypes.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemSmoothRedSandstoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.SMOOTH_RED_SANDSTONE_SLAB == null) {
             ItemTypes.SMOOTH_RED_SANDSTONE_SLAB = AllayItemType
-                            .builder(ItemSmoothRedSandstoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_RED_SANDSTONE_SLAB)
                             .build();
         }
         if (ItemTypes.SMOOTH_RED_SANDSTONE_STAIRS == null) {
             ItemTypes.SMOOTH_RED_SANDSTONE_STAIRS = AllayItemType
-                            .builder(ItemSmoothRedSandstoneStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_RED_SANDSTONE_STAIRS)
                             .build();
         }
         if (ItemTypes.SMOOTH_SANDSTONE == null) {
             ItemTypes.SMOOTH_SANDSTONE = AllayItemType
-                            .builder(ItemSmoothSandstoneStackImpl.class)
+                            .builder(ItemSandstoneStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_SANDSTONE)
                             .build();
         }
         if (ItemTypes.SMOOTH_SANDSTONE_DOUBLE_SLAB == null) {
             ItemTypes.SMOOTH_SANDSTONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemSmoothSandstoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_SANDSTONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.SMOOTH_SANDSTONE_SLAB == null) {
             ItemTypes.SMOOTH_SANDSTONE_SLAB = AllayItemType
-                            .builder(ItemSmoothSandstoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_SANDSTONE_SLAB)
                             .build();
         }
         if (ItemTypes.SMOOTH_SANDSTONE_STAIRS == null) {
             ItemTypes.SMOOTH_SANDSTONE_STAIRS = AllayItemType
-                            .builder(ItemSmoothSandstoneStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_SANDSTONE_STAIRS)
                             .build();
         }
@@ -9422,13 +9343,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SMOOTH_STONE_DOUBLE_SLAB == null) {
             ItemTypes.SMOOTH_STONE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemSmoothStoneDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_STONE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.SMOOTH_STONE_SLAB == null) {
             ItemTypes.SMOOTH_STONE_SLAB = AllayItemType
-                            .builder(ItemSmoothStoneSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SMOOTH_STONE_SLAB)
                             .build();
         }
@@ -9436,6 +9357,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.SNIFFER_EGG = AllayItemType
                             .builder(ItemSnifferEggStackImpl.class)
                             .vanillaItem(ItemId.SNIFFER_EGG)
+                            .build();
+        }
+        if (ItemTypes.SNIFFER_SPAWN_EGG == null) {
+            ItemTypes.SNIFFER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SNIFFER_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.SNORT_POTTERY_SHERD == null) {
@@ -9454,6 +9381,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.SNOW = AllayItemType
                             .builder(ItemSnowStackImpl.class)
                             .vanillaItem(ItemId.SNOW)
+                            .build();
+        }
+        if (ItemTypes.SNOW_GOLEM_SPAWN_EGG == null) {
+            ItemTypes.SNOW_GOLEM_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SNOW_GOLEM_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.SNOW_LAYER == null) {
@@ -9488,7 +9421,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SOUL_SAND == null) {
             ItemTypes.SOUL_SAND = AllayItemType
-                            .builder(ItemSoulSandStackImpl.class)
+                            .builder(ItemSandStackImpl.class)
                             .vanillaItem(ItemId.SOUL_SAND)
                             .build();
         }
@@ -9500,7 +9433,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SOUL_TORCH == null) {
             ItemTypes.SOUL_TORCH = AllayItemType
-                            .builder(ItemSoulTorchStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.SOUL_TORCH)
                             .build();
         }
@@ -9510,10 +9443,22 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.SPARKLER)
                             .build();
         }
+        if (ItemTypes.SPAWN_EGG == null) {
+            ItemTypes.SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.SPIDER_EYE == null) {
             ItemTypes.SPIDER_EYE = AllayItemType
                             .builder(ItemSpiderEyeStackImpl.class)
                             .vanillaItem(ItemId.SPIDER_EYE)
+                            .build();
+        }
+        if (ItemTypes.SPIDER_SPAWN_EGG == null) {
+            ItemTypes.SPIDER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SPIDER_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE == null) {
@@ -9542,67 +9487,67 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SPRUCE_BOAT == null) {
             ItemTypes.SPRUCE_BOAT = AllayItemType
-                            .builder(ItemSpruceBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_BOAT)
                             .build();
         }
         if (ItemTypes.SPRUCE_BUTTON == null) {
             ItemTypes.SPRUCE_BUTTON = AllayItemType
-                            .builder(ItemSpruceButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_BUTTON)
                             .build();
         }
         if (ItemTypes.SPRUCE_CHEST_BOAT == null) {
             ItemTypes.SPRUCE_CHEST_BOAT = AllayItemType
-                            .builder(ItemSpruceChestBoatStackImpl.class)
+                            .builder(ItemBoatStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_CHEST_BOAT)
                             .build();
         }
         if (ItemTypes.SPRUCE_DOOR == null) {
             ItemTypes.SPRUCE_DOOR = AllayItemType
-                            .builder(ItemSpruceDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_DOOR)
                             .build();
         }
         if (ItemTypes.SPRUCE_DOUBLE_SLAB == null) {
             ItemTypes.SPRUCE_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemSpruceDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.SPRUCE_FENCE == null) {
             ItemTypes.SPRUCE_FENCE = AllayItemType
-                            .builder(ItemSpruceFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_FENCE)
                             .build();
         }
         if (ItemTypes.SPRUCE_FENCE_GATE == null) {
             ItemTypes.SPRUCE_FENCE_GATE = AllayItemType
-                            .builder(ItemSpruceFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_FENCE_GATE)
                             .build();
         }
         if (ItemTypes.SPRUCE_HANGING_SIGN == null) {
             ItemTypes.SPRUCE_HANGING_SIGN = AllayItemType
-                            .builder(ItemSpruceHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_HANGING_SIGN)
                             .build();
         }
         if (ItemTypes.SPRUCE_LEAVES == null) {
             ItemTypes.SPRUCE_LEAVES = AllayItemType
-                            .builder(ItemSpruceLeavesStackImpl.class)
+                            .builder(ItemLeavesStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_LEAVES)
                             .build();
         }
         if (ItemTypes.SPRUCE_LOG == null) {
             ItemTypes.SPRUCE_LOG = AllayItemType
-                            .builder(ItemSpruceLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_LOG)
                             .build();
         }
         if (ItemTypes.SPRUCE_PLANKS == null) {
             ItemTypes.SPRUCE_PLANKS = AllayItemType
-                            .builder(ItemSprucePlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_PLANKS)
                             .build();
         }
@@ -9614,43 +9559,49 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SPRUCE_SAPLING == null) {
             ItemTypes.SPRUCE_SAPLING = AllayItemType
-                            .builder(ItemSpruceSaplingStackImpl.class)
+                            .builder(ItemSaplingStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_SAPLING)
+                            .build();
+        }
+        if (ItemTypes.SPRUCE_SIGN == null) {
+            ItemTypes.SPRUCE_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.SPRUCE_SIGN)
                             .build();
         }
         if (ItemTypes.SPRUCE_SLAB == null) {
             ItemTypes.SPRUCE_SLAB = AllayItemType
-                            .builder(ItemSpruceSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_SLAB)
                             .build();
         }
         if (ItemTypes.SPRUCE_STAIRS == null) {
             ItemTypes.SPRUCE_STAIRS = AllayItemType
-                            .builder(ItemSpruceStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_STAIRS)
                             .build();
         }
         if (ItemTypes.SPRUCE_STANDING_SIGN == null) {
             ItemTypes.SPRUCE_STANDING_SIGN = AllayItemType
-                            .builder(ItemSpruceStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_STANDING_SIGN)
                             .build();
         }
         if (ItemTypes.SPRUCE_TRAPDOOR == null) {
             ItemTypes.SPRUCE_TRAPDOOR = AllayItemType
-                            .builder(ItemSpruceTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.SPRUCE_WALL_SIGN == null) {
             ItemTypes.SPRUCE_WALL_SIGN = AllayItemType
-                            .builder(ItemSpruceWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_WALL_SIGN)
                             .build();
         }
         if (ItemTypes.SPRUCE_WOOD == null) {
             ItemTypes.SPRUCE_WOOD = AllayItemType
-                            .builder(ItemSpruceWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.SPRUCE_WOOD)
                             .build();
         }
@@ -9658,6 +9609,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.SPYGLASS = AllayItemType
                             .builder(ItemSpyglassStackImpl.class)
                             .vanillaItem(ItemId.SPYGLASS)
+                            .build();
+        }
+        if (ItemTypes.SQUID_SPAWN_EGG == null) {
+            ItemTypes.SQUID_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.SQUID_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.STAINED_GLASS == null) {
@@ -9704,7 +9661,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.STICKY_PISTON_ARM_COLLISION == null) {
             ItemTypes.STICKY_PISTON_ARM_COLLISION = AllayItemType
-                            .builder(ItemStickyPistonArmCollisionStackImpl.class)
+                            .builder(ItemStickyPistonStackImpl.class)
                             .vanillaItem(ItemId.STICKY_PISTON_ARM_COLLISION)
                             .build();
         }
@@ -9714,64 +9671,82 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.STONE)
                             .build();
         }
+        if (ItemTypes.STONE_AXE == null) {
+            ItemTypes.STONE_AXE = AllayItemType
+                            .builder(ItemAxeStackImpl.class)
+                            .vanillaItem(ItemId.STONE_AXE)
+                            .build();
+        }
         if (ItemTypes.STONE_BLOCK_SLAB == null) {
             ItemTypes.STONE_BLOCK_SLAB = AllayItemType
-                            .builder(ItemStoneBlockSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.STONE_BLOCK_SLAB)
                             .build();
         }
         if (ItemTypes.STONE_BLOCK_SLAB2 == null) {
             ItemTypes.STONE_BLOCK_SLAB2 = AllayItemType
-                            .builder(ItemStoneBlockSlab2StackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.STONE_BLOCK_SLAB2)
                             .build();
         }
         if (ItemTypes.STONE_BLOCK_SLAB3 == null) {
             ItemTypes.STONE_BLOCK_SLAB3 = AllayItemType
-                            .builder(ItemStoneBlockSlab3StackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.STONE_BLOCK_SLAB3)
                             .build();
         }
         if (ItemTypes.STONE_BLOCK_SLAB4 == null) {
             ItemTypes.STONE_BLOCK_SLAB4 = AllayItemType
-                            .builder(ItemStoneBlockSlab4StackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.STONE_BLOCK_SLAB4)
                             .build();
         }
         if (ItemTypes.STONE_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.STONE_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemStoneBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.STONE_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.STONE_BRICK_SLAB == null) {
             ItemTypes.STONE_BRICK_SLAB = AllayItemType
-                            .builder(ItemStoneBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.STONE_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.STONE_BRICK_STAIRS == null) {
             ItemTypes.STONE_BRICK_STAIRS = AllayItemType
-                            .builder(ItemStoneBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.STONE_BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.STONE_BRICK_WALL == null) {
             ItemTypes.STONE_BRICK_WALL = AllayItemType
-                            .builder(ItemStoneBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.STONE_BRICK_WALL)
                             .build();
         }
         if (ItemTypes.STONE_BRICKS == null) {
             ItemTypes.STONE_BRICKS = AllayItemType
-                            .builder(ItemStoneBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.STONE_BRICKS)
                             .build();
         }
         if (ItemTypes.STONE_BUTTON == null) {
             ItemTypes.STONE_BUTTON = AllayItemType
-                            .builder(ItemStoneButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.STONE_BUTTON)
+                            .build();
+        }
+        if (ItemTypes.STONE_HOE == null) {
+            ItemTypes.STONE_HOE = AllayItemType
+                            .builder(ItemHoeStackImpl.class)
+                            .vanillaItem(ItemId.STONE_HOE)
+                            .build();
+        }
+        if (ItemTypes.STONE_PICKAXE == null) {
+            ItemTypes.STONE_PICKAXE = AllayItemType
+                            .builder(ItemPickaxeStackImpl.class)
+                            .vanillaItem(ItemId.STONE_PICKAXE)
                             .build();
         }
         if (ItemTypes.STONE_PRESSURE_PLATE == null) {
@@ -9780,10 +9755,22 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.STONE_PRESSURE_PLATE)
                             .build();
         }
+        if (ItemTypes.STONE_SHOVEL == null) {
+            ItemTypes.STONE_SHOVEL = AllayItemType
+                            .builder(ItemShovelStackImpl.class)
+                            .vanillaItem(ItemId.STONE_SHOVEL)
+                            .build();
+        }
         if (ItemTypes.STONE_STAIRS == null) {
             ItemTypes.STONE_STAIRS = AllayItemType
-                            .builder(ItemStoneStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.STONE_STAIRS)
+                            .build();
+        }
+        if (ItemTypes.STONE_SWORD == null) {
+            ItemTypes.STONE_SWORD = AllayItemType
+                            .builder(ItemSwordStackImpl.class)
+                            .vanillaItem(ItemId.STONE_SWORD)
                             .build();
         }
         if (ItemTypes.STONEBRICK == null) {
@@ -9804,6 +9791,18 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.STONECUTTER_BLOCK)
                             .build();
         }
+        if (ItemTypes.STRAY_SPAWN_EGG == null) {
+            ItemTypes.STRAY_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.STRAY_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.STRIDER_SPAWN_EGG == null) {
+            ItemTypes.STRIDER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.STRIDER_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.STRING == null) {
             ItemTypes.STRING = AllayItemType
                             .builder(ItemStringStackImpl.class)
@@ -9812,13 +9811,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.STRIPPED_ACACIA_LOG == null) {
             ItemTypes.STRIPPED_ACACIA_LOG = AllayItemType
-                            .builder(ItemStrippedAcaciaLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_ACACIA_LOG)
                             .build();
         }
         if (ItemTypes.STRIPPED_ACACIA_WOOD == null) {
             ItemTypes.STRIPPED_ACACIA_WOOD = AllayItemType
-                            .builder(ItemStrippedAcaciaWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_ACACIA_WOOD)
                             .build();
         }
@@ -9830,25 +9829,25 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.STRIPPED_BIRCH_LOG == null) {
             ItemTypes.STRIPPED_BIRCH_LOG = AllayItemType
-                            .builder(ItemStrippedBirchLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_BIRCH_LOG)
                             .build();
         }
         if (ItemTypes.STRIPPED_BIRCH_WOOD == null) {
             ItemTypes.STRIPPED_BIRCH_WOOD = AllayItemType
-                            .builder(ItemStrippedBirchWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_BIRCH_WOOD)
                             .build();
         }
         if (ItemTypes.STRIPPED_CHERRY_LOG == null) {
             ItemTypes.STRIPPED_CHERRY_LOG = AllayItemType
-                            .builder(ItemStrippedCherryLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_CHERRY_LOG)
                             .build();
         }
         if (ItemTypes.STRIPPED_CHERRY_WOOD == null) {
             ItemTypes.STRIPPED_CHERRY_WOOD = AllayItemType
-                            .builder(ItemStrippedCherryWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_CHERRY_WOOD)
                             .build();
         }
@@ -9866,61 +9865,61 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.STRIPPED_DARK_OAK_LOG == null) {
             ItemTypes.STRIPPED_DARK_OAK_LOG = AllayItemType
-                            .builder(ItemStrippedDarkOakLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_DARK_OAK_LOG)
                             .build();
         }
         if (ItemTypes.STRIPPED_DARK_OAK_WOOD == null) {
             ItemTypes.STRIPPED_DARK_OAK_WOOD = AllayItemType
-                            .builder(ItemStrippedDarkOakWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_DARK_OAK_WOOD)
                             .build();
         }
         if (ItemTypes.STRIPPED_JUNGLE_LOG == null) {
             ItemTypes.STRIPPED_JUNGLE_LOG = AllayItemType
-                            .builder(ItemStrippedJungleLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_JUNGLE_LOG)
                             .build();
         }
         if (ItemTypes.STRIPPED_JUNGLE_WOOD == null) {
             ItemTypes.STRIPPED_JUNGLE_WOOD = AllayItemType
-                            .builder(ItemStrippedJungleWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_JUNGLE_WOOD)
                             .build();
         }
         if (ItemTypes.STRIPPED_MANGROVE_LOG == null) {
             ItemTypes.STRIPPED_MANGROVE_LOG = AllayItemType
-                            .builder(ItemStrippedMangroveLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_MANGROVE_LOG)
                             .build();
         }
         if (ItemTypes.STRIPPED_MANGROVE_WOOD == null) {
             ItemTypes.STRIPPED_MANGROVE_WOOD = AllayItemType
-                            .builder(ItemStrippedMangroveWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_MANGROVE_WOOD)
                             .build();
         }
         if (ItemTypes.STRIPPED_OAK_LOG == null) {
             ItemTypes.STRIPPED_OAK_LOG = AllayItemType
-                            .builder(ItemStrippedOakLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_OAK_LOG)
                             .build();
         }
         if (ItemTypes.STRIPPED_OAK_WOOD == null) {
             ItemTypes.STRIPPED_OAK_WOOD = AllayItemType
-                            .builder(ItemStrippedOakWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_OAK_WOOD)
                             .build();
         }
         if (ItemTypes.STRIPPED_SPRUCE_LOG == null) {
             ItemTypes.STRIPPED_SPRUCE_LOG = AllayItemType
-                            .builder(ItemStrippedSpruceLogStackImpl.class)
+                            .builder(ItemLogStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_SPRUCE_LOG)
                             .build();
         }
         if (ItemTypes.STRIPPED_SPRUCE_WOOD == null) {
             ItemTypes.STRIPPED_SPRUCE_WOOD = AllayItemType
-                            .builder(ItemStrippedSpruceWoodStackImpl.class)
+                            .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.STRIPPED_SPRUCE_WOOD)
                             .build();
         }
@@ -9974,7 +9973,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.SUSPICIOUS_SAND == null) {
             ItemTypes.SUSPICIOUS_SAND = AllayItemType
-                            .builder(ItemSuspiciousSandStackImpl.class)
+                            .builder(ItemSandStackImpl.class)
                             .vanillaItem(ItemId.SUSPICIOUS_SAND)
                             .build();
         }
@@ -9994,6 +9993,18 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.SWEET_BERRY_BUSH = AllayItemType
                             .builder(ItemSweetBerryBushStackImpl.class)
                             .vanillaItem(ItemId.SWEET_BERRY_BUSH)
+                            .build();
+        }
+        if (ItemTypes.TADPOLE_BUCKET == null) {
+            ItemTypes.TADPOLE_BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.TADPOLE_BUCKET)
+                            .build();
+        }
+        if (ItemTypes.TADPOLE_SPAWN_EGG == null) {
+            ItemTypes.TADPOLE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.TADPOLE_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.TALL_GRASS == null) {
@@ -10022,7 +10033,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.TINTED_GLASS == null) {
             ItemTypes.TINTED_GLASS = AllayItemType
-                            .builder(ItemTintedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.TINTED_GLASS)
                             .build();
         }
@@ -10034,7 +10045,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.TNT_MINECART == null) {
             ItemTypes.TNT_MINECART = AllayItemType
-                            .builder(ItemTntMinecartStackImpl.class)
+                            .builder(ItemMinecartStackImpl.class)
                             .vanillaItem(ItemId.TNT_MINECART)
                             .build();
         }
@@ -10052,13 +10063,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.TORCHFLOWER_CROP == null) {
             ItemTypes.TORCHFLOWER_CROP = AllayItemType
-                            .builder(ItemTorchflowerCropStackImpl.class)
+                            .builder(ItemTorchflowerStackImpl.class)
                             .vanillaItem(ItemId.TORCHFLOWER_CROP)
                             .build();
         }
         if (ItemTypes.TORCHFLOWER_SEEDS == null) {
             ItemTypes.TORCHFLOWER_SEEDS = AllayItemType
-                            .builder(ItemTorchflowerSeedsStackImpl.class)
+                            .builder(ItemTorchflowerStackImpl.class)
                             .vanillaItem(ItemId.TORCHFLOWER_SEEDS)
                             .build();
         }
@@ -10066,6 +10077,12 @@ public final class ItemTypeDefaultInitializer {
             ItemTypes.TOTEM_OF_UNDYING = AllayItemType
                             .builder(ItemTotemOfUndyingStackImpl.class)
                             .vanillaItem(ItemId.TOTEM_OF_UNDYING)
+                            .build();
+        }
+        if (ItemTypes.TRADER_LLAMA_SPAWN_EGG == null) {
+            ItemTypes.TRADER_LLAMA_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.TRADER_LLAMA_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.TRAPDOOR == null) {
@@ -10116,27 +10133,39 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.TROPICAL_FISH)
                             .build();
         }
+        if (ItemTypes.TROPICAL_FISH_BUCKET == null) {
+            ItemTypes.TROPICAL_FISH_BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.TROPICAL_FISH_BUCKET)
+                            .build();
+        }
+        if (ItemTypes.TROPICAL_FISH_SPAWN_EGG == null) {
+            ItemTypes.TROPICAL_FISH_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.TROPICAL_FISH_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.TUBE_CORAL == null) {
             ItemTypes.TUBE_CORAL = AllayItemType
-                            .builder(ItemTubeCoralStackImpl.class)
+                            .builder(ItemCoralStackImpl.class)
                             .vanillaItem(ItemId.TUBE_CORAL)
                             .build();
         }
         if (ItemTypes.TUBE_CORAL_BLOCK == null) {
             ItemTypes.TUBE_CORAL_BLOCK = AllayItemType
-                            .builder(ItemTubeCoralBlockStackImpl.class)
+                            .builder(ItemCoralBlockStackImpl.class)
                             .vanillaItem(ItemId.TUBE_CORAL_BLOCK)
                             .build();
         }
         if (ItemTypes.TUBE_CORAL_FAN == null) {
             ItemTypes.TUBE_CORAL_FAN = AllayItemType
-                            .builder(ItemTubeCoralFanStackImpl.class)
+                            .builder(ItemCoralFanStackImpl.class)
                             .vanillaItem(ItemId.TUBE_CORAL_FAN)
                             .build();
         }
         if (ItemTypes.TUBE_CORAL_WALL_FAN == null) {
             ItemTypes.TUBE_CORAL_WALL_FAN = AllayItemType
-                            .builder(ItemTubeCoralWallFanStackImpl.class)
+                            .builder(ItemCoralWallFanStackImpl.class)
                             .vanillaItem(ItemId.TUBE_CORAL_WALL_FAN)
                             .build();
         }
@@ -10148,55 +10177,55 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.TUFF_BRICK_DOUBLE_SLAB == null) {
             ItemTypes.TUFF_BRICK_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemTuffBrickDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.TUFF_BRICK_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.TUFF_BRICK_SLAB == null) {
             ItemTypes.TUFF_BRICK_SLAB = AllayItemType
-                            .builder(ItemTuffBrickSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.TUFF_BRICK_SLAB)
                             .build();
         }
         if (ItemTypes.TUFF_BRICK_STAIRS == null) {
             ItemTypes.TUFF_BRICK_STAIRS = AllayItemType
-                            .builder(ItemTuffBrickStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.TUFF_BRICK_STAIRS)
                             .build();
         }
         if (ItemTypes.TUFF_BRICK_WALL == null) {
             ItemTypes.TUFF_BRICK_WALL = AllayItemType
-                            .builder(ItemTuffBrickWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.TUFF_BRICK_WALL)
                             .build();
         }
         if (ItemTypes.TUFF_BRICKS == null) {
             ItemTypes.TUFF_BRICKS = AllayItemType
-                            .builder(ItemTuffBricksStackImpl.class)
+                            .builder(ItemBricksStackImpl.class)
                             .vanillaItem(ItemId.TUFF_BRICKS)
                             .build();
         }
         if (ItemTypes.TUFF_DOUBLE_SLAB == null) {
             ItemTypes.TUFF_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemTuffDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.TUFF_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.TUFF_SLAB == null) {
             ItemTypes.TUFF_SLAB = AllayItemType
-                            .builder(ItemTuffSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.TUFF_SLAB)
                             .build();
         }
         if (ItemTypes.TUFF_STAIRS == null) {
             ItemTypes.TUFF_STAIRS = AllayItemType
-                            .builder(ItemTuffStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.TUFF_STAIRS)
                             .build();
         }
         if (ItemTypes.TUFF_WALL == null) {
             ItemTypes.TUFF_WALL = AllayItemType
-                            .builder(ItemTuffWallStackImpl.class)
+                            .builder(ItemWallStackImpl.class)
                             .vanillaItem(ItemId.TUFF_WALL)
                             .build();
         }
@@ -10206,10 +10235,22 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.TURTLE_EGG)
                             .build();
         }
+        if (ItemTypes.TURTLE_HELMET == null) {
+            ItemTypes.TURTLE_HELMET = AllayItemType
+                            .builder(ItemHelmetStackImpl.class)
+                            .vanillaItem(ItemId.TURTLE_HELMET)
+                            .build();
+        }
         if (ItemTypes.TURTLE_SCUTE == null) {
             ItemTypes.TURTLE_SCUTE = AllayItemType
                             .builder(ItemTurtleScuteStackImpl.class)
                             .vanillaItem(ItemId.TURTLE_SCUTE)
+                            .build();
+        }
+        if (ItemTypes.TURTLE_SPAWN_EGG == null) {
+            ItemTypes.TURTLE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.TURTLE_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.TWISTING_VINES == null) {
@@ -10220,14 +10261,20 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.UNDERWATER_TNT == null) {
             ItemTypes.UNDERWATER_TNT = AllayItemType
-                            .builder(ItemUnderwaterTntStackImpl.class)
+                            .builder(ItemTntStackImpl.class)
                             .vanillaItem(ItemId.UNDERWATER_TNT)
                             .build();
         }
         if (ItemTypes.UNDERWATER_TORCH == null) {
             ItemTypes.UNDERWATER_TORCH = AllayItemType
-                            .builder(ItemUnderwaterTorchStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.UNDERWATER_TORCH)
+                            .build();
+        }
+        if (ItemTypes.UNDYED_SHULKER_BOX == null) {
+            ItemTypes.UNDYED_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.UNDYED_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.UNKNOWN == null) {
@@ -10238,7 +10285,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.UNLIT_REDSTONE_TORCH == null) {
             ItemTypes.UNLIT_REDSTONE_TORCH = AllayItemType
-                            .builder(ItemUnlitRedstoneTorchStackImpl.class)
+                            .builder(ItemTorchStackImpl.class)
                             .vanillaItem(ItemId.UNLIT_REDSTONE_TORCH)
                             .build();
         }
@@ -10272,6 +10319,24 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.VEX_ARMOR_TRIM_SMITHING_TEMPLATE)
                             .build();
         }
+        if (ItemTypes.VEX_SPAWN_EGG == null) {
+            ItemTypes.VEX_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.VEX_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.VILLAGER_SPAWN_EGG == null) {
+            ItemTypes.VILLAGER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.VILLAGER_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.VINDICATOR_SPAWN_EGG == null) {
+            ItemTypes.VINDICATOR_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.VINDICATOR_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.VINE == null) {
             ItemTypes.VINE = AllayItemType
                             .builder(ItemVineStackImpl.class)
@@ -10290,39 +10355,51 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.WALL_SIGN)
                             .build();
         }
+        if (ItemTypes.WANDERING_TRADER_SPAWN_EGG == null) {
+            ItemTypes.WANDERING_TRADER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.WANDERING_TRADER_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.WARD_ARMOR_TRIM_SMITHING_TEMPLATE == null) {
             ItemTypes.WARD_ARMOR_TRIM_SMITHING_TEMPLATE = AllayItemType
                             .builder(ItemWardArmorTrimSmithingTemplateStackImpl.class)
                             .vanillaItem(ItemId.WARD_ARMOR_TRIM_SMITHING_TEMPLATE)
                             .build();
         }
+        if (ItemTypes.WARDEN_SPAWN_EGG == null) {
+            ItemTypes.WARDEN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.WARDEN_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.WARPED_BUTTON == null) {
             ItemTypes.WARPED_BUTTON = AllayItemType
-                            .builder(ItemWarpedButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.WARPED_BUTTON)
                             .build();
         }
         if (ItemTypes.WARPED_DOOR == null) {
             ItemTypes.WARPED_DOOR = AllayItemType
-                            .builder(ItemWarpedDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.WARPED_DOOR)
                             .build();
         }
         if (ItemTypes.WARPED_DOUBLE_SLAB == null) {
             ItemTypes.WARPED_DOUBLE_SLAB = AllayItemType
-                            .builder(ItemWarpedDoubleSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WARPED_DOUBLE_SLAB)
                             .build();
         }
         if (ItemTypes.WARPED_FENCE == null) {
             ItemTypes.WARPED_FENCE = AllayItemType
-                            .builder(ItemWarpedFenceStackImpl.class)
+                            .builder(ItemFenceStackImpl.class)
                             .vanillaItem(ItemId.WARPED_FENCE)
                             .build();
         }
         if (ItemTypes.WARPED_FENCE_GATE == null) {
             ItemTypes.WARPED_FENCE_GATE = AllayItemType
-                            .builder(ItemWarpedFenceGateStackImpl.class)
+                            .builder(ItemFenceGateStackImpl.class)
                             .vanillaItem(ItemId.WARPED_FENCE_GATE)
                             .build();
         }
@@ -10340,7 +10417,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WARPED_HANGING_SIGN == null) {
             ItemTypes.WARPED_HANGING_SIGN = AllayItemType
-                            .builder(ItemWarpedHangingSignStackImpl.class)
+                            .builder(ItemHangingSignStackImpl.class)
                             .vanillaItem(ItemId.WARPED_HANGING_SIGN)
                             .build();
         }
@@ -10358,7 +10435,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WARPED_PLANKS == null) {
             ItemTypes.WARPED_PLANKS = AllayItemType
-                            .builder(ItemWarpedPlanksStackImpl.class)
+                            .builder(ItemPlanksStackImpl.class)
                             .vanillaItem(ItemId.WARPED_PLANKS)
                             .build();
         }
@@ -10374,21 +10451,27 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.WARPED_ROOTS)
                             .build();
         }
+        if (ItemTypes.WARPED_SIGN == null) {
+            ItemTypes.WARPED_SIGN = AllayItemType
+                            .builder(ItemSignStackImpl.class)
+                            .vanillaItem(ItemId.WARPED_SIGN)
+                            .build();
+        }
         if (ItemTypes.WARPED_SLAB == null) {
             ItemTypes.WARPED_SLAB = AllayItemType
-                            .builder(ItemWarpedSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WARPED_SLAB)
                             .build();
         }
         if (ItemTypes.WARPED_STAIRS == null) {
             ItemTypes.WARPED_STAIRS = AllayItemType
-                            .builder(ItemWarpedStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.WARPED_STAIRS)
                             .build();
         }
         if (ItemTypes.WARPED_STANDING_SIGN == null) {
             ItemTypes.WARPED_STANDING_SIGN = AllayItemType
-                            .builder(ItemWarpedStandingSignStackImpl.class)
+                            .builder(ItemStandingSignStackImpl.class)
                             .vanillaItem(ItemId.WARPED_STANDING_SIGN)
                             .build();
         }
@@ -10400,13 +10483,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WARPED_TRAPDOOR == null) {
             ItemTypes.WARPED_TRAPDOOR = AllayItemType
-                            .builder(ItemWarpedTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.WARPED_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.WARPED_WALL_SIGN == null) {
             ItemTypes.WARPED_WALL_SIGN = AllayItemType
-                            .builder(ItemWarpedWallSignStackImpl.class)
+                            .builder(ItemWallSignStackImpl.class)
                             .vanillaItem(ItemId.WARPED_WALL_SIGN)
                             .build();
         }
@@ -10418,8 +10501,14 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WATER == null) {
             ItemTypes.WATER = AllayItemType
-                            .builder(ItemWaterStackImpl.class)
+                            .builder(ItemLiquidStackImpl.class)
                             .vanillaItem(ItemId.WATER)
+                            .build();
+        }
+        if (ItemTypes.WATER_BUCKET == null) {
+            ItemTypes.WATER_BUCKET = AllayItemType
+                            .builder(ItemBucketStackImpl.class)
+                            .vanillaItem(ItemId.WATER_BUCKET)
                             .build();
         }
         if (ItemTypes.WATERLILY == null) {
@@ -10430,13 +10519,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_CHISELED_COPPER == null) {
             ItemTypes.WAXED_CHISELED_COPPER = AllayItemType
-                            .builder(ItemWaxedChiseledCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_CHISELED_COPPER)
                             .build();
         }
         if (ItemTypes.WAXED_COPPER == null) {
             ItemTypes.WAXED_COPPER = AllayItemType
-                            .builder(ItemWaxedCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_COPPER)
                             .build();
         }
@@ -10448,7 +10537,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_COPPER_DOOR == null) {
             ItemTypes.WAXED_COPPER_DOOR = AllayItemType
-                            .builder(ItemWaxedCopperDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.WAXED_COPPER_DOOR)
                             .build();
         }
@@ -10460,43 +10549,43 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_COPPER_TRAPDOOR == null) {
             ItemTypes.WAXED_COPPER_TRAPDOOR = AllayItemType
-                            .builder(ItemWaxedCopperTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.WAXED_COPPER_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.WAXED_CUT_COPPER == null) {
             ItemTypes.WAXED_CUT_COPPER = AllayItemType
-                            .builder(ItemWaxedCutCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_CUT_COPPER)
                             .build();
         }
         if (ItemTypes.WAXED_CUT_COPPER_SLAB == null) {
             ItemTypes.WAXED_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWaxedCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WAXED_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.WAXED_CUT_COPPER_STAIRS == null) {
             ItemTypes.WAXED_CUT_COPPER_STAIRS = AllayItemType
-                            .builder(ItemWaxedCutCopperStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.WAXED_CUT_COPPER_STAIRS)
                             .build();
         }
         if (ItemTypes.WAXED_DOUBLE_CUT_COPPER_SLAB == null) {
             ItemTypes.WAXED_DOUBLE_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWaxedDoubleCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WAXED_DOUBLE_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.WAXED_EXPOSED_CHISELED_COPPER == null) {
             ItemTypes.WAXED_EXPOSED_CHISELED_COPPER = AllayItemType
-                            .builder(ItemWaxedExposedChiseledCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_EXPOSED_CHISELED_COPPER)
                             .build();
         }
         if (ItemTypes.WAXED_EXPOSED_COPPER == null) {
             ItemTypes.WAXED_EXPOSED_COPPER = AllayItemType
-                            .builder(ItemWaxedExposedCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_EXPOSED_COPPER)
                             .build();
         }
@@ -10508,7 +10597,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_EXPOSED_COPPER_DOOR == null) {
             ItemTypes.WAXED_EXPOSED_COPPER_DOOR = AllayItemType
-                            .builder(ItemWaxedExposedCopperDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.WAXED_EXPOSED_COPPER_DOOR)
                             .build();
         }
@@ -10520,43 +10609,43 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_EXPOSED_COPPER_TRAPDOOR == null) {
             ItemTypes.WAXED_EXPOSED_COPPER_TRAPDOOR = AllayItemType
-                            .builder(ItemWaxedExposedCopperTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.WAXED_EXPOSED_COPPER_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.WAXED_EXPOSED_CUT_COPPER == null) {
             ItemTypes.WAXED_EXPOSED_CUT_COPPER = AllayItemType
-                            .builder(ItemWaxedExposedCutCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_EXPOSED_CUT_COPPER)
                             .build();
         }
         if (ItemTypes.WAXED_EXPOSED_CUT_COPPER_SLAB == null) {
             ItemTypes.WAXED_EXPOSED_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWaxedExposedCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WAXED_EXPOSED_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS == null) {
             ItemTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = AllayItemType
-                            .builder(ItemWaxedExposedCutCopperStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.WAXED_EXPOSED_CUT_COPPER_STAIRS)
                             .build();
         }
         if (ItemTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB == null) {
             ItemTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWaxedExposedDoubleCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.WAXED_OXIDIZED_CHISELED_COPPER == null) {
             ItemTypes.WAXED_OXIDIZED_CHISELED_COPPER = AllayItemType
-                            .builder(ItemWaxedOxidizedChiseledCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_OXIDIZED_CHISELED_COPPER)
                             .build();
         }
         if (ItemTypes.WAXED_OXIDIZED_COPPER == null) {
             ItemTypes.WAXED_OXIDIZED_COPPER = AllayItemType
-                            .builder(ItemWaxedOxidizedCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_OXIDIZED_COPPER)
                             .build();
         }
@@ -10568,7 +10657,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_OXIDIZED_COPPER_DOOR == null) {
             ItemTypes.WAXED_OXIDIZED_COPPER_DOOR = AllayItemType
-                            .builder(ItemWaxedOxidizedCopperDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.WAXED_OXIDIZED_COPPER_DOOR)
                             .build();
         }
@@ -10580,43 +10669,43 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR == null) {
             ItemTypes.WAXED_OXIDIZED_COPPER_TRAPDOOR = AllayItemType
-                            .builder(ItemWaxedOxidizedCopperTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.WAXED_OXIDIZED_COPPER_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.WAXED_OXIDIZED_CUT_COPPER == null) {
             ItemTypes.WAXED_OXIDIZED_CUT_COPPER = AllayItemType
-                            .builder(ItemWaxedOxidizedCutCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_OXIDIZED_CUT_COPPER)
                             .build();
         }
         if (ItemTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB == null) {
             ItemTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWaxedOxidizedCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WAXED_OXIDIZED_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS == null) {
             ItemTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = AllayItemType
-                            .builder(ItemWaxedOxidizedCutCopperStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
                             .build();
         }
         if (ItemTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB == null) {
             ItemTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWaxedOxidizedDoubleCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.WAXED_WEATHERED_CHISELED_COPPER == null) {
             ItemTypes.WAXED_WEATHERED_CHISELED_COPPER = AllayItemType
-                            .builder(ItemWaxedWeatheredChiseledCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_WEATHERED_CHISELED_COPPER)
                             .build();
         }
         if (ItemTypes.WAXED_WEATHERED_COPPER == null) {
             ItemTypes.WAXED_WEATHERED_COPPER = AllayItemType
-                            .builder(ItemWaxedWeatheredCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_WEATHERED_COPPER)
                             .build();
         }
@@ -10628,7 +10717,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_WEATHERED_COPPER_DOOR == null) {
             ItemTypes.WAXED_WEATHERED_COPPER_DOOR = AllayItemType
-                            .builder(ItemWaxedWeatheredCopperDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.WAXED_WEATHERED_COPPER_DOOR)
                             .build();
         }
@@ -10640,31 +10729,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WAXED_WEATHERED_COPPER_TRAPDOOR == null) {
             ItemTypes.WAXED_WEATHERED_COPPER_TRAPDOOR = AllayItemType
-                            .builder(ItemWaxedWeatheredCopperTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.WAXED_WEATHERED_COPPER_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.WAXED_WEATHERED_CUT_COPPER == null) {
             ItemTypes.WAXED_WEATHERED_CUT_COPPER = AllayItemType
-                            .builder(ItemWaxedWeatheredCutCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WAXED_WEATHERED_CUT_COPPER)
                             .build();
         }
         if (ItemTypes.WAXED_WEATHERED_CUT_COPPER_SLAB == null) {
             ItemTypes.WAXED_WEATHERED_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWaxedWeatheredCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WAXED_WEATHERED_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS == null) {
             ItemTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = AllayItemType
-                            .builder(ItemWaxedWeatheredCutCopperStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.WAXED_WEATHERED_CUT_COPPER_STAIRS)
                             .build();
         }
         if (ItemTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB == null) {
             ItemTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWaxedWeatheredDoubleCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB)
                             .build();
         }
@@ -10676,13 +10765,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WEATHERED_CHISELED_COPPER == null) {
             ItemTypes.WEATHERED_CHISELED_COPPER = AllayItemType
-                            .builder(ItemWeatheredChiseledCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WEATHERED_CHISELED_COPPER)
                             .build();
         }
         if (ItemTypes.WEATHERED_COPPER == null) {
             ItemTypes.WEATHERED_COPPER = AllayItemType
-                            .builder(ItemWeatheredCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WEATHERED_COPPER)
                             .build();
         }
@@ -10694,7 +10783,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WEATHERED_COPPER_DOOR == null) {
             ItemTypes.WEATHERED_COPPER_DOOR = AllayItemType
-                            .builder(ItemWeatheredCopperDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.WEATHERED_COPPER_DOOR)
                             .build();
         }
@@ -10706,31 +10795,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WEATHERED_COPPER_TRAPDOOR == null) {
             ItemTypes.WEATHERED_COPPER_TRAPDOOR = AllayItemType
-                            .builder(ItemWeatheredCopperTrapdoorStackImpl.class)
+                            .builder(ItemTrapdoorStackImpl.class)
                             .vanillaItem(ItemId.WEATHERED_COPPER_TRAPDOOR)
                             .build();
         }
         if (ItemTypes.WEATHERED_CUT_COPPER == null) {
             ItemTypes.WEATHERED_CUT_COPPER = AllayItemType
-                            .builder(ItemWeatheredCutCopperStackImpl.class)
+                            .builder(ItemCopperStackImpl.class)
                             .vanillaItem(ItemId.WEATHERED_CUT_COPPER)
                             .build();
         }
         if (ItemTypes.WEATHERED_CUT_COPPER_SLAB == null) {
             ItemTypes.WEATHERED_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWeatheredCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WEATHERED_CUT_COPPER_SLAB)
                             .build();
         }
         if (ItemTypes.WEATHERED_CUT_COPPER_STAIRS == null) {
             ItemTypes.WEATHERED_CUT_COPPER_STAIRS = AllayItemType
-                            .builder(ItemWeatheredCutCopperStairsStackImpl.class)
+                            .builder(ItemStairsStackImpl.class)
                             .vanillaItem(ItemId.WEATHERED_CUT_COPPER_STAIRS)
                             .build();
         }
         if (ItemTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB == null) {
             ItemTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB = AllayItemType
-                            .builder(ItemWeatheredDoubleCutCopperSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WEATHERED_DOUBLE_CUT_COPPER_SLAB)
                             .build();
         }
@@ -10748,7 +10837,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WET_SPONGE == null) {
             ItemTypes.WET_SPONGE = AllayItemType
-                            .builder(ItemWetSpongeStackImpl.class)
+                            .builder(ItemSpongeStackImpl.class)
                             .vanillaItem(ItemId.WET_SPONGE)
                             .build();
         }
@@ -10766,37 +10855,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WHITE_BUNDLE == null) {
             ItemTypes.WHITE_BUNDLE = AllayItemType
-                            .builder(ItemWhiteBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.WHITE_BUNDLE)
                             .build();
         }
         if (ItemTypes.WHITE_CANDLE == null) {
             ItemTypes.WHITE_CANDLE = AllayItemType
-                            .builder(ItemWhiteCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.WHITE_CANDLE)
                             .build();
         }
         if (ItemTypes.WHITE_CANDLE_CAKE == null) {
             ItemTypes.WHITE_CANDLE_CAKE = AllayItemType
-                            .builder(ItemWhiteCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.WHITE_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.WHITE_CARPET == null) {
             ItemTypes.WHITE_CARPET = AllayItemType
-                            .builder(ItemWhiteCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.WHITE_CARPET)
                             .build();
         }
         if (ItemTypes.WHITE_CONCRETE == null) {
             ItemTypes.WHITE_CONCRETE = AllayItemType
-                            .builder(ItemWhiteConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.WHITE_CONCRETE)
                             .build();
         }
         if (ItemTypes.WHITE_CONCRETE_POWDER == null) {
             ItemTypes.WHITE_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemWhiteConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.WHITE_CONCRETE_POWDER)
                             .build();
         }
@@ -10808,25 +10897,31 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WHITE_GLAZED_TERRACOTTA == null) {
             ItemTypes.WHITE_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemWhiteGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.WHITE_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.WHITE_SHULKER_BOX == null) {
+            ItemTypes.WHITE_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.WHITE_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.WHITE_STAINED_GLASS == null) {
             ItemTypes.WHITE_STAINED_GLASS = AllayItemType
-                            .builder(ItemWhiteStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.WHITE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.WHITE_STAINED_GLASS_PANE == null) {
             ItemTypes.WHITE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemWhiteStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.WHITE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.WHITE_TERRACOTTA == null) {
             ItemTypes.WHITE_TERRACOTTA = AllayItemType
-                            .builder(ItemWhiteTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.WHITE_TERRACOTTA)
                             .build();
         }
@@ -10838,7 +10933,7 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WHITE_WOOL == null) {
             ItemTypes.WHITE_WOOL = AllayItemType
-                            .builder(ItemWhiteWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.WHITE_WOOL)
                             .build();
         }
@@ -10854,6 +10949,12 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.WIND_CHARGE)
                             .build();
         }
+        if (ItemTypes.WITCH_SPAWN_EGG == null) {
+            ItemTypes.WITCH_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.WITCH_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.WITHER_ROSE == null) {
             ItemTypes.WITHER_ROSE = AllayItemType
                             .builder(ItemWitherRoseStackImpl.class)
@@ -10862,8 +10963,20 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WITHER_SKELETON_SKULL == null) {
             ItemTypes.WITHER_SKELETON_SKULL = AllayItemType
-                            .builder(ItemWitherSkeletonSkullStackImpl.class)
+                            .builder(ItemHeadStackImpl.class)
                             .vanillaItem(ItemId.WITHER_SKELETON_SKULL)
+                            .build();
+        }
+        if (ItemTypes.WITHER_SKELETON_SPAWN_EGG == null) {
+            ItemTypes.WITHER_SKELETON_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.WITHER_SKELETON_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.WITHER_SPAWN_EGG == null) {
+            ItemTypes.WITHER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.WITHER_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.WOLF_ARMOR == null) {
@@ -10872,22 +10985,46 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.WOLF_ARMOR)
                             .build();
         }
+        if (ItemTypes.WOLF_SPAWN_EGG == null) {
+            ItemTypes.WOLF_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.WOLF_SPAWN_EGG)
+                            .build();
+        }
         if (ItemTypes.WOOD == null) {
             ItemTypes.WOOD = AllayItemType
                             .builder(ItemWoodStackImpl.class)
                             .vanillaItem(ItemId.WOOD)
                             .build();
         }
+        if (ItemTypes.WOODEN_AXE == null) {
+            ItemTypes.WOODEN_AXE = AllayItemType
+                            .builder(ItemAxeStackImpl.class)
+                            .vanillaItem(ItemId.WOODEN_AXE)
+                            .build();
+        }
         if (ItemTypes.WOODEN_BUTTON == null) {
             ItemTypes.WOODEN_BUTTON = AllayItemType
-                            .builder(ItemWoodenButtonStackImpl.class)
+                            .builder(ItemButtonStackImpl.class)
                             .vanillaItem(ItemId.WOODEN_BUTTON)
                             .build();
         }
         if (ItemTypes.WOODEN_DOOR == null) {
             ItemTypes.WOODEN_DOOR = AllayItemType
-                            .builder(ItemWoodenDoorStackImpl.class)
+                            .builder(ItemDoorStackImpl.class)
                             .vanillaItem(ItemId.WOODEN_DOOR)
+                            .build();
+        }
+        if (ItemTypes.WOODEN_HOE == null) {
+            ItemTypes.WOODEN_HOE = AllayItemType
+                            .builder(ItemHoeStackImpl.class)
+                            .vanillaItem(ItemId.WOODEN_HOE)
+                            .build();
+        }
+        if (ItemTypes.WOODEN_PICKAXE == null) {
+            ItemTypes.WOODEN_PICKAXE = AllayItemType
+                            .builder(ItemPickaxeStackImpl.class)
+                            .vanillaItem(ItemId.WOODEN_PICKAXE)
                             .build();
         }
         if (ItemTypes.WOODEN_PRESSURE_PLATE == null) {
@@ -10896,10 +11033,22 @@ public final class ItemTypeDefaultInitializer {
                             .vanillaItem(ItemId.WOODEN_PRESSURE_PLATE)
                             .build();
         }
+        if (ItemTypes.WOODEN_SHOVEL == null) {
+            ItemTypes.WOODEN_SHOVEL = AllayItemType
+                            .builder(ItemShovelStackImpl.class)
+                            .vanillaItem(ItemId.WOODEN_SHOVEL)
+                            .build();
+        }
         if (ItemTypes.WOODEN_SLAB == null) {
             ItemTypes.WOODEN_SLAB = AllayItemType
-                            .builder(ItemWoodenSlabStackImpl.class)
+                            .builder(ItemSlabStackImpl.class)
                             .vanillaItem(ItemId.WOODEN_SLAB)
+                            .build();
+        }
+        if (ItemTypes.WOODEN_SWORD == null) {
+            ItemTypes.WOODEN_SWORD = AllayItemType
+                            .builder(ItemSwordStackImpl.class)
+                            .vanillaItem(ItemId.WOODEN_SWORD)
                             .build();
         }
         if (ItemTypes.WOOL == null) {
@@ -10922,37 +11071,37 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.YELLOW_BUNDLE == null) {
             ItemTypes.YELLOW_BUNDLE = AllayItemType
-                            .builder(ItemYellowBundleStackImpl.class)
+                            .builder(ItemBundleStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_BUNDLE)
                             .build();
         }
         if (ItemTypes.YELLOW_CANDLE == null) {
             ItemTypes.YELLOW_CANDLE = AllayItemType
-                            .builder(ItemYellowCandleStackImpl.class)
+                            .builder(ItemCandleStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_CANDLE)
                             .build();
         }
         if (ItemTypes.YELLOW_CANDLE_CAKE == null) {
             ItemTypes.YELLOW_CANDLE_CAKE = AllayItemType
-                            .builder(ItemYellowCandleCakeStackImpl.class)
+                            .builder(ItemCandleCakeStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_CANDLE_CAKE)
                             .build();
         }
         if (ItemTypes.YELLOW_CARPET == null) {
             ItemTypes.YELLOW_CARPET = AllayItemType
-                            .builder(ItemYellowCarpetStackImpl.class)
+                            .builder(ItemCarpetStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_CARPET)
                             .build();
         }
         if (ItemTypes.YELLOW_CONCRETE == null) {
             ItemTypes.YELLOW_CONCRETE = AllayItemType
-                            .builder(ItemYellowConcreteStackImpl.class)
+                            .builder(ItemConcreteStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_CONCRETE)
                             .build();
         }
         if (ItemTypes.YELLOW_CONCRETE_POWDER == null) {
             ItemTypes.YELLOW_CONCRETE_POWDER = AllayItemType
-                            .builder(ItemYellowConcretePowderStackImpl.class)
+                            .builder(ItemConcretePowderStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_CONCRETE_POWDER)
                             .build();
         }
@@ -10964,38 +11113,74 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.YELLOW_GLAZED_TERRACOTTA == null) {
             ItemTypes.YELLOW_GLAZED_TERRACOTTA = AllayItemType
-                            .builder(ItemYellowGlazedTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_GLAZED_TERRACOTTA)
+                            .build();
+        }
+        if (ItemTypes.YELLOW_SHULKER_BOX == null) {
+            ItemTypes.YELLOW_SHULKER_BOX = AllayItemType
+                            .builder(ItemShulkerBoxStackImpl.class)
+                            .vanillaItem(ItemId.YELLOW_SHULKER_BOX)
                             .build();
         }
         if (ItemTypes.YELLOW_STAINED_GLASS == null) {
             ItemTypes.YELLOW_STAINED_GLASS = AllayItemType
-                            .builder(ItemYellowStainedGlassStackImpl.class)
+                            .builder(ItemStainedGlassStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.YELLOW_STAINED_GLASS_PANE == null) {
             ItemTypes.YELLOW_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemYellowStainedGlassPaneStackImpl.class)
+                            .builder(ItemStainedGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.YELLOW_TERRACOTTA == null) {
             ItemTypes.YELLOW_TERRACOTTA = AllayItemType
-                            .builder(ItemYellowTerracottaStackImpl.class)
+                            .builder(ItemTerracottaStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_TERRACOTTA)
                             .build();
         }
         if (ItemTypes.YELLOW_WOOL == null) {
             ItemTypes.YELLOW_WOOL = AllayItemType
-                            .builder(ItemYellowWoolStackImpl.class)
+                            .builder(ItemWoolStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_WOOL)
+                            .build();
+        }
+        if (ItemTypes.ZOGLIN_SPAWN_EGG == null) {
+            ItemTypes.ZOGLIN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ZOGLIN_SPAWN_EGG)
                             .build();
         }
         if (ItemTypes.ZOMBIE_HEAD == null) {
             ItemTypes.ZOMBIE_HEAD = AllayItemType
-                            .builder(ItemZombieHeadStackImpl.class)
+                            .builder(ItemHeadStackImpl.class)
                             .vanillaItem(ItemId.ZOMBIE_HEAD)
+                            .build();
+        }
+        if (ItemTypes.ZOMBIE_HORSE_SPAWN_EGG == null) {
+            ItemTypes.ZOMBIE_HORSE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ZOMBIE_HORSE_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.ZOMBIE_PIGMAN_SPAWN_EGG == null) {
+            ItemTypes.ZOMBIE_PIGMAN_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ZOMBIE_PIGMAN_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.ZOMBIE_SPAWN_EGG == null) {
+            ItemTypes.ZOMBIE_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ZOMBIE_SPAWN_EGG)
+                            .build();
+        }
+        if (ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG == null) {
+            ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG = AllayItemType
+                            .builder(ItemSpawnEggStackImpl.class)
+                            .vanillaItem(ItemId.ZOMBIE_VILLAGER_SPAWN_EGG)
                             .build();
         }
     }
