@@ -3,6 +3,7 @@ package org.allaymc.api.block.component.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonObject;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -106,8 +107,8 @@ public class BlockStateData {
     @Builder.Default
     protected float friction = DEFAULT_FRICTION;
     /**
-     * 	The amount that light will be dampened when it passes through the block, in a range (0-15).
-     * 	Higher value means the light will be dampened more.
+     * The amount that light will be dampened when it passes through the block, in a range (0-15).
+     * Higher value means the light will be dampened more.
      */
     @Builder.Default
     protected int lightDampening = 15;
@@ -129,6 +130,10 @@ public class BlockStateData {
     protected float thickness = 0;
 
     public static BlockStateData fromJson(String json) {
+        return SERIALIZER.fromJson(json, BlockStateData.class);
+    }
+
+    public static BlockStateData fromJson(JsonObject json) {
         return SERIALIZER.fromJson(json, BlockStateData.class);
     }
 
