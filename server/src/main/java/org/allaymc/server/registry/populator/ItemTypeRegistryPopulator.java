@@ -19,10 +19,9 @@ public class ItemTypeRegistryPopulator implements Runnable {
     public void run() {
         log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADING));
         InternalItemTypeData.init();
-        var defaultInitializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(ItemTypeDefaultInitializer.class);
         var initializers = ReflectionUtils.getAllStaticVoidParameterlessMethods(ItemTypeInitializer.class);
         initializers.forEach(Utils::callInitializer);
-        defaultInitializers.forEach(Utils::callInitializer);
+        ItemTypeDefaultInitializer.init();
         log.info(I18n.get().tr(TrKeys.A_ITEMTYPE_LOADED, ItemId.values().length));
     }
 }
