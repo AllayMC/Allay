@@ -2,10 +2,10 @@ package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockFallableBaseComponent;
-import org.allaymc.api.block.component.BlockLiquidComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -72,8 +72,8 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
     protected boolean invalidDownBlock(BlockType<?> down0, BlockType<?> down1) {
         return down0 == BlockTypes.AIR ||
                down0 == BlockTypes.FIRE ||
-               down0.getBlockBehavior() instanceof BlockLiquidComponent ||
-               (down0 == BlockTypes.BUBBLE_COLUMN && down1.getBlockBehavior() instanceof BlockLiquidComponent);
+               down0.getBlockBehavior() instanceof BlockLiquidBehavior ||
+               (down0 == BlockTypes.BUBBLE_COLUMN && down1.getBlockBehavior() instanceof BlockLiquidBehavior);
     }
 
     protected EntityFallingBlock createFallingBlock(Dimension dimension, Vector3ic pos, BlockState blockState) {

@@ -4,11 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.api.math.location.Location3f;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -241,7 +241,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 case START_CRAWLING -> player.setCrawling(true);
                 case STOP_CRAWLING -> player.setCrawling(false);
                 case START_JUMPING ->
-                        player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).onJump();
+                        ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).onJump();
             }
         }
     }
@@ -273,7 +273,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var pk = new ItemStackRequestPacket();
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor
-        player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).getPacketProcessorHolder().getProcessor(pk).handleSync(player, pk, receiveTime);
+        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).getPacketProcessorHolder().getProcessor(pk).handleSync(player, pk, receiveTime);
     }
 
     protected boolean notReadyForInput(EntityPlayer player) {

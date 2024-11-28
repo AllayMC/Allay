@@ -9,7 +9,7 @@ import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CEntityAttributeChangeEvent;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
@@ -35,7 +35,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     protected final Map<AttributeType, Attribute> attributes = new EnumMap<>(AttributeType.class);
 
-    @ComponentedObject
+    @ComponentObject
     protected Entity thisEntity;
     @Manager
     protected ComponentManager manager;

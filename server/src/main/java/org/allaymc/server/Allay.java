@@ -42,7 +42,6 @@ import org.allaymc.server.registry.AllayCommandRegistry;
 import org.allaymc.server.registry.loader.*;
 import org.allaymc.server.registry.populator.*;
 import org.allaymc.server.scheduler.AllayScheduler;
-import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.utils.DynamicURLClassLoader;
 import org.allaymc.server.utils.GitProperties;
 import org.allaymc.server.world.generator.AllayWorldGenerator;
@@ -89,9 +88,6 @@ public final class Allay {
         log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING));
         try {
             initAllay();
-            // Only save cache mapping when allay is running normally
-            // instead of running in test environment
-            ComponentClassCacheUtils.saveCacheMapping();
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
             System.exit(1);
@@ -135,11 +131,6 @@ public final class Allay {
     private static void initAllayAPI() throws MissingImplementationException {
         var api = AllayAPI.getInstance();
         if (api.isImplemented()) return;
-
-        // Check if the cache has expired
-        ComponentClassCacheUtils.checkCacheValid();
-        // Read component class cache
-        ComponentClassCacheUtils.readCacheMapping();
 
         // Common
         api.bind(Server.class, AllayServer::getInstance);

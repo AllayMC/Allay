@@ -38,7 +38,7 @@ class AllayBlockTypeTest {
         TEST_INT_PROPERTY_TYPE = IntPropertyType.of("test_int", 0, 10, 0);
         TEST_ENUM_PROPERTY_TYPE = EnumPropertyType.of("test_enum", TestEnum.class, TestEnum.A);
         testBlockType1 = AllayBlockType
-                .builder(TestBlock.class)
+                .builder(TestBlockImpl.class)
                 .identifier("minecraft:test_block")
                 .setProperties(
                         TEST_BOOLEAN_PROPERTY_TYPE,
@@ -49,7 +49,7 @@ class AllayBlockTypeTest {
                         BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.builder().burnOdds(2).build())))
                 .build();
         testBlockType2 = AllayBlockType
-                .builder(TestBlock.class)
+                .builder(TestBlockImpl.class)
                 .identifier("minecraft:test_block2")
                 .setProperties(
                         TEST_BOOLEAN_PROPERTY_TYPE,

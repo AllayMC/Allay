@@ -33,7 +33,7 @@ public class BlockStateDataLoader implements RegistryLoader<Void, Map<BlockId, M
                     return;
                 }
 
-                var blockStateData = BlockStateData.fromJson(obj.toString());
+                var blockStateData = BlockStateData.fromJson(obj);
                 if (!loaded.containsKey(type))
                     loaded.put(type, new Int2ObjectOpenHashMap<>());
 

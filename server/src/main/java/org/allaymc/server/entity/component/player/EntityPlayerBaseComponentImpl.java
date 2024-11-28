@@ -29,6 +29,7 @@ import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.location.Location3i;
@@ -41,12 +42,11 @@ import org.allaymc.api.scoreboard.data.SortOrder;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.AllayNbtUtils;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Ignore;
 import org.allaymc.server.component.annotation.OnInitFinish;
@@ -54,6 +54,7 @@ import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.event.CPlayerJumpEvent;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.world.AllayWorld;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -123,7 +124,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected int serverSettingFormId = -1;
     @Getter
     protected float movementSpeed = DEFAULT_MOVEMENT_SPEED;
-    @ComponentedObject
+    @ComponentObject
     protected EntityPlayer thisPlayer;
     protected long nextSavePlayerDataTime = Integer.MAX_VALUE;
 
@@ -630,7 +631,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             sendDimensionChangeSuccess();
         }
         chunk.spawnEntitiesTo(thisPlayer);
-        thisPlayer.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).onChunkInRangeSent();
+        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) thisPlayer).getPlayerNetworkComponent()).onChunkInRangeSent();
     }
 
     public void sendDimensionChangeSuccess() {

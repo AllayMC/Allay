@@ -1,7 +1,7 @@
 package org.allaymc.server.item.component;
 
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.component.BlockLiquidComponent;
+import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockType;
@@ -49,7 +49,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
         var dimension = player.getDimension();
         var blockState = dimension.getBlockState(interactInfo.clickBlockPos());
         if (isEmpty()) {
-            if (!(blockState.getBehavior() instanceof BlockLiquidComponent)) {
+            if (!(blockState.getBehavior() instanceof BlockLiquidBehavior)) {
                 return;
             }
             try {

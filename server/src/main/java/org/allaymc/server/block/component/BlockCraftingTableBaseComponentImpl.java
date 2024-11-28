@@ -20,6 +20,8 @@ public class BlockCraftingTableBaseComponentImpl extends BlockBaseComponentImpl 
         if (super.onInteract(itemStack, dimension, interactInfo)) return true;
 
         var player = interactInfo.player();
+        if (player.isSneaking()) return false;
+
         var craftingTableContainer = player.getContainer(FullContainerType.CRAFTING_TABLE);
         craftingTableContainer.setBlockPos(interactInfo.clickBlockPos());
         craftingTableContainer.addViewer(player);

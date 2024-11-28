@@ -6,6 +6,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 import org.cloudburstmc.protocol.bedrock.packet.LoginPacket;
@@ -25,7 +26,7 @@ public class LoginPacketProcessor extends ILoginPacketProcessor<LoginPacket> {
     @Override
     public void handle(EntityPlayer player, LoginPacket packet) {
         var loginData = LoginData.decode(packet);
-        var networkComponent = player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER);
+        var networkComponent = (EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent();
         networkComponent.setLoginData(loginData);
 
         var server = Server.getInstance();

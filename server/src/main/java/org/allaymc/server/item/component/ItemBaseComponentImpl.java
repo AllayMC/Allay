@@ -29,7 +29,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.type.InternalBlockTypeData;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
@@ -60,7 +60,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Dependency
     protected ItemDataComponent itemDataComponent;
 
-    @ComponentedObject
+    @ComponentObject
     protected ItemStack thisItemStack;
 
     @Manager

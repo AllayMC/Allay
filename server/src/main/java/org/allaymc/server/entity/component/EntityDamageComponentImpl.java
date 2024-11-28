@@ -14,7 +14,8 @@ import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.ComponentClass;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.*;
@@ -35,7 +36,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @Manager
     protected ComponentManager manager;
 
-    @ComponentedObject
+    @ComponentObject
     protected Entity thisEntity;
 
     @Getter
@@ -71,7 +72,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         Entity attacker = damage.getAttacker();
         if (attacker == null) return;
 
-        attacker.getManager().callEvent(CEntityAttackEvent.INSTANCE);
+        ((ComponentClass) attacker).getManager().callEvent(CEntityAttackEvent.INSTANCE);
 
         if (damage.hasCustomKnockback()) {
             baseComponent.knockback(attacker.getLocation(), damage.getCustomKnockback());
