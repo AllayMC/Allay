@@ -245,7 +245,7 @@ public class HashDirectedAcyclicGraphTest {
      * Test of toArray method, of class HashDirectedAcyclicGraph<Base>.
      */
     @Test
-    public void testToArray_0args() {
+    public void testToArrayZeroArgs() {
         HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<Base>(Base.A, Base.D, Base.H, Base.C);
         HashDirectedAcyclicGraph<Base> duplicate = new HashDirectedAcyclicGraph<Base>();
         Object[] result = instance.toArray();
@@ -261,7 +261,7 @@ public class HashDirectedAcyclicGraphTest {
      * Test of toArray method, of class HashDirectedAcyclicGraph<Base>.
      */
     @Test
-    public void testToArray_null() {
+    public void testToArrayNull() {
         Base[] prototype = new Base[0];
         HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<Base>(Base.A, Base.D, Base.H, Base.C);
         HashDirectedAcyclicGraph<Base> duplicate = new HashDirectedAcyclicGraph<Base>();
@@ -386,7 +386,7 @@ public class HashDirectedAcyclicGraphTest {
      */
     @Test
     @SneakyThrows
-    public void test_getSortedList() {
+    public void testGetSortedList() {
         HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<>(setABCDEFG);
         instance.setBefore(Base.A, Base.B);//A -> B
         instance.setBefore(Base.D, Base.B);//D -> B
