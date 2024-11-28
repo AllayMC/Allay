@@ -114,8 +114,8 @@ public class AllayPluginManager implements PluginManager {
             try {
                 pluginContainer = loader.loadPlugin();
                 pluginContainer.plugin().onLoad();
-            } catch (Exception e) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName(), e.getMessage()), e);
+            } catch (Throwable t) {
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName(), t.getMessage()), t);
                 continue;
             }
 
