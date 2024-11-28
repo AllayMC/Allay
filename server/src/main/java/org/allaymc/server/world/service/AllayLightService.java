@@ -225,6 +225,9 @@ public class AllayLightService implements LightService {
             if (oldBlockDampening != lightDampening) {
                 setLightDampening(x, y, z, lightDampening);
                 if (hasSkyLight) {
+                    if (lightDampening != 0) {
+                        skyLightPropagator.setLightAndPropagate(x, y, z, get(skyLight, x, y, z, 0), 0);
+                    }
                     var newLightHeight = getLightHeight(x, z);
                     if (oldLightHeight != newLightHeight) {
                         // Skylight source is changed
@@ -232,9 +235,6 @@ public class AllayLightService implements LightService {
                         skyLightPropagator.setLightAndPropagate(x, oldLightHeight, z, 15, 0);
                         // Set the new source
                         skyLightPropagator.setLightAndPropagate(x, newLightHeight, z, 0, 15);
-                    } else {
-                        var value = get(skyLight, x, y, z, 0);
-                        skyLightPropagator.setLightAndPropagate(x, y, z, value, value);
                     }
                 }
             }
