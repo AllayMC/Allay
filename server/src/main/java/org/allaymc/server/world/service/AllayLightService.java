@@ -1,7 +1,10 @@
 package org.allaymc.server.world.service;
 
 import io.netty.util.internal.PlatformDependent;
-import it.unimi.dsi.fastutil.longs.*;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.server.Server;
@@ -293,7 +296,7 @@ public class AllayLightService implements LightService {
             short newLightHeight = (short) minHeight;
             for (short i = (short) y; i >= minHeight; i--) {
                 if (getLightDampening(x, i, z) != 0) {
-                    newLightHeight = i;
+                    newLightHeight = (short) (i + 1);
                     break;
                 }
             }
@@ -332,12 +335,12 @@ public class AllayLightService implements LightService {
     }
 
     protected static double frac(double value) {
-        return value - (double)lfloor(value);
+        return value - (double) lfloor(value);
     }
 
     protected static long lfloor(double value) {
-        long l = (long)value;
-        return value < (double)l ? l - 1L : l;
+        long l = (long) value;
+        return value < (double) l ? l - 1L : l;
     }
 
     protected class BlockLightAccessor implements LightAccessor {
