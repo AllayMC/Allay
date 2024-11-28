@@ -1,9 +1,9 @@
 package org.allaymc.server.utils;
 
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.allaymc.server.Allay;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.Properties;
@@ -14,15 +14,15 @@ import java.util.Properties;
 @UtilityClass
 public final class GitProperties {
 
-    private static final Properties GIT_PROPERTIES;
+    private static final Properties GIT_PROPERTIES = init();
 
-    static {
-        GIT_PROPERTIES = new Properties();
+    @SneakyThrows
+    private static Properties init() {
+        var properties = new Properties();
         try (var inputStreamReader = new InputStreamReader(Objects.requireNonNull(Allay.EXTRA_RESOURCE_CLASS_LOADER.getResourceAsStream("git.properties")))) {
-            GIT_PROPERTIES.load(inputStreamReader);
-        } catch (IOException e) {
-            throw
+            properties.load(inputStreamReader);
         }
+        return properties;
     }
 
     public static String getBranch() {
