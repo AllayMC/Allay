@@ -673,9 +673,8 @@ public class ConfigSection extends LinkedHashMap<String, Object> {
         Set<String> keys = new LinkedHashSet<>();
         this.forEach((key, value) -> {
             keys.add(key);
-            if (value instanceof ConfigSection) {
-                if (child)
-                    ((ConfigSection) value).getKeys(true).forEach(childKey -> keys.add(key + "." + childKey));
+            if (value instanceof ConfigSection && child) {
+                ((ConfigSection) value).getKeys(true).forEach(childKey -> keys.add(key + "." + childKey));
             }
         });
         return keys;

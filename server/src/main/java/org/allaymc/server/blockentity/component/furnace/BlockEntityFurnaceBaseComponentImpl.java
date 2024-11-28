@@ -152,8 +152,8 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         var ingredient = container.getIngredient();
-        if (ingredient.getStackNetworkId() != currentIngredientStackNetworkId) {
-            if (!checkIngredient(ingredient)) return;
+        if (ingredient.getStackNetworkId() != currentIngredientStackNetworkId && !checkIngredient(ingredient)) {
+            return;
         }
 
         var output = currentFurnaceRecipe.getOutput();
