@@ -17,7 +17,7 @@ public class EventBusTest {
     private String str;
     private boolean bool;
 
-    {
+    public EventBusTest() {
         eventBus.registerListener(this);
     }
 
