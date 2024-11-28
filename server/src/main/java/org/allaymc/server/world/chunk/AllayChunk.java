@@ -123,9 +123,10 @@ public class AllayChunk implements Chunk {
                 if (!heightAndBiomeLock.validate(stamp)) continue;
                 if (oldValue != expectedValue) break;
                 stamp = heightAndBiomeLock.tryConvertToWriteLock(stamp);
-                if (stamp == 0L) continue;
-                unsafeChunk.setHeight(x, z, newValue);
-                return;
+                if (stamp != 0L) {
+                    unsafeChunk.setHeight(x, z, newValue);
+                    return;
+                }
             }
         } finally {
             if (StampedLock.isWriteLockStamp(stamp)) heightAndBiomeLock.unlockWrite(stamp);
@@ -142,8 +143,9 @@ public class AllayChunk implements Chunk {
             for (; ; stamp = blockLock.readLock()) {
                 if (stamp == 0L) continue;
                 var result = unsafeChunk.getBlockState(x, y, z, layer);
-                if (!blockLock.validate(stamp)) continue;
-                return result;
+                if (blockLock.validate(stamp)) {
+                    return result;
+                }
             }
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) blockLock.unlockRead(stamp);
@@ -189,8 +191,9 @@ public class AllayChunk implements Chunk {
             for (; ; stamp = heightAndBiomeLock.readLock()) {
                 if (stamp == 0L) continue;
                 var biomeType = unsafeChunk.getBiome(x, y, z);
-                if (!heightAndBiomeLock.validate(stamp)) continue;
-                return biomeType;
+                if (heightAndBiomeLock.validate(stamp)) {
+                    return biomeType;
+                }
             }
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) heightAndBiomeLock.unlockRead(stamp);
@@ -395,8 +398,9 @@ public class AllayChunk implements Chunk {
             for (; ; stamp = blockLock.readLock()) {
                 if (stamp == 0L) continue;
                 var section = unsafeChunk.getSection(sectionY);
-                if (!blockLock.validate(stamp)) continue;
-                return section;
+                if (blockLock.validate(stamp)) {
+                    return section;
+                }
             }
         } finally {
             if (StampedLock.isReadLockStamp(stamp)) blockLock.unlockRead(stamp);
