@@ -122,7 +122,7 @@ public final class AllayServer implements Server {
         this.playerStorage = Server.SETTINGS.storageSettings().savePlayerData() ? new AllayNBTFilePlayerStorage(Path.of("players")) : AllayEmptyPlayerStorage.INSTANCE;
         this.computeThreadPool = createComputeThreadPool();
         this.virtualThreadPool = Executors.newVirtualThreadPerTaskExecutor();
-        this.eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
+        this.eventBus = new AllayEventBus(virtualThreadPool);
         this.scoreboardService = new ScoreboardService(this, new JsonScoreboardStorage(Path.of("command_data/scoreboards.json")));
         this.banInfo = ConfigManager.create(BanInfo.class, Utils.createConfigInitializer(Path.of(BAN_INFO_FILE_NAME)));
         this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
