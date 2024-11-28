@@ -1101,7 +1101,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
                     reprobe_cnt >= REPROBE_LIMIT &&
                     (reprobe_cnt >= reprobe_limit(len) ||
                      // More expensive check: see if the table is > 1/2 full.
-                     _slots.estimate_get() >= (len >> 1));
+                     _slots.estimateGet() >= (len >> 1));
         }
 
         // --- resize ------------------------------------------------------------

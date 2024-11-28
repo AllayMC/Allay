@@ -45,21 +45,21 @@ public class ConcurrentAutoLongTable implements Serializable {
      * and has been tested with performance scaling linearly up to 768 CPUs.
      */
     public void add(long x) {
-        add_if(x);
+        addIf(x);
     }
 
     /**
      * {@link #add} with -1
      */
     public void decrement() {
-        add_if(-1L);
+        addIf(-1L);
     }
 
     /**
      * {@link #add} with +1
      */
     public void increment() {
-        add_if(1L);
+        addIf(1L);
     }
 
     /**
@@ -69,7 +69,7 @@ public class ConcurrentAutoLongTable implements Serializable {
     public void set(long x) {
         CAT newcat = new CAT(null, 4, x);
         // Spin until CAS works
-        while (!CAS_cat(_cat, newcat)) {/*empty*/}
+        while (!casCat(_cat, newcat)) {/*empty*/}
     }
 
     /**
@@ -99,8 +99,8 @@ public class ConcurrentAutoLongTable implements Serializable {
      * A cheaper {@link #get}.  Updated only once/millisecond, but as fast as a
      * simple load instruction when not updating.
      */
-    public long estimate_get() {
-        return _cat.estimate_sum();
+    public long estimateGet() {
+        return _cat.estimateSum();
     }
 
     /**
@@ -114,18 +114,18 @@ public class ConcurrentAutoLongTable implements Serializable {
      * Return the internal counter striping factor.  Useful for diagnosing
      * performance problems.
      */
-    public int internal_size() {
+    public int internalSize() {
         return _cat._t.length;
     }
 
     // Only add 'x' to some slot in table, hinted at by 'hash'.  The sum can
     // overflow.  Value is CAS'd so no counts are lost.  The CAS is retried until
     // it succeeds.  Returned value is the old value.
-    private long add_if(long x) {
-        return _cat.add_if(x, hash(), this);
+    private long addIf(long x) {
+        return _cat.addIf(x, hash(), this);
     }
 
-    private boolean CAS_cat(CAT oldcat, CAT newcat) {
+    private boolean casCat(CAT oldcat, CAT newcat) {
         return _catUpdater.compareAndSet(this, oldcat, newcat);
     }
 
@@ -155,7 +155,7 @@ public class ConcurrentAutoLongTable implements Serializable {
         // Only add 'x' to some slot in table, hinted at by 'hash'.  The sum can
         // overflow.  Value is CAS'd so no counts are lost.  The CAS is attempted
         // ONCE.
-        public long add_if(long x, int hash, ConcurrentAutoLongTable master) {
+        public long addIf(long x, int hash, ConcurrentAutoLongTable master) {
             final long[] t = _t;
             final int idx = hash & (t.length - 1);
             // Peel loop; try once fast
@@ -192,7 +192,7 @@ public class ConcurrentAutoLongTable implements Serializable {
             // Take 1 stab at updating the CAT with the new larger size.  If this
             // fails, we assume some other thread already expanded the CAT - so we
             // do not need to retry until it succeeds.
-            while (master._cat == this && !master.CAS_cat(this, newcat)) {/*empty*/}
+            while (master._cat == this && !master.casCat(this, newcat)) {/*empty*/}
             return old;
         }
 
@@ -208,7 +208,7 @@ public class ConcurrentAutoLongTable implements Serializable {
 
         // Fast fuzzy version.  Used a cached value until it gets old, then re-up
         // the cache.
-        public long estimate_sum() {
+        public long estimateSum() {
             // For short tables, just do the work
             if (_t.length <= 64) return sum();
             // For bigger tables, periodically freshen a cached value
