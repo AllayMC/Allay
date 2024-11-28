@@ -21,6 +21,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.iq80.leveldb.CompressionType;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
+import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.joml.Vector3i;
 
 import java.io.*;
@@ -71,7 +72,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             if (!dbFolder.exists() && !dbFolder.mkdirs()) {
                 throw new WorldStorageException("Failed to create world database directory!");
             }
-            db = net.daporkchop.ldbjni.LevelDB.PROVIDER.open(dbFolder, options);
+            db = new Iq80DBFactory().open(dbFolder, options);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
