@@ -1,7 +1,5 @@
 package org.allaymc.codegen;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.palantir.javapoet.FieldSpec;
 import com.palantir.javapoet.JavaFile;
@@ -18,8 +16,6 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public class SoundNameGen {
-
-    private static final Gson GSON = new GsonBuilder().create();
 
     @SneakyThrows
     public static void main(String[] args) {
