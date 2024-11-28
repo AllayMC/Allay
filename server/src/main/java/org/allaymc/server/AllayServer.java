@@ -24,7 +24,7 @@ import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
-import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.plugin.PluginManager;
@@ -41,7 +41,7 @@ import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.metrics.Metrics;
-import org.allaymc.server.network.AllayNetworkServer;
+import org.allaymc.server.network.AllayNetworkInterface;
 import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.scroreboard.storage.JsonScoreboardStorage;
@@ -73,7 +73,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class AllayServer implements Server {
 
     private static final AllayServer INSTANCE = new AllayServer();
-    ;
     private static final String BAN_INFO_FILE_NAME = "ban-info.yml";
     private static final String WHITELIST_FILE_NAME = "whitelist.yml";
     private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
@@ -102,7 +101,7 @@ public final class AllayServer implements Server {
     @Getter
     private final Scheduler scheduler;
     @Getter
-    private final NetworkServer networkServer;
+    private final NetworkInterface networkInterface;
     private final AllayTerminalConsole terminalConsole;
     private final GameLoop gameLoop;
 
@@ -129,7 +128,7 @@ public final class AllayServer implements Server {
         this.whitelist = ConfigManager.create(Whitelist.class, Utils.createConfigInitializer(Path.of(WHITELIST_FILE_NAME)));
         this.pluginManager = new AllayPluginManager();
         this.scheduler = new AllayScheduler(virtualThreadPool);
-        this.networkServer = new AllayNetworkServer(this);
+        this.networkInterface = new AllayNetworkInterface(this);
         this.terminalConsole = new AllayTerminalConsole(AllayServer.this);
         this.gameLoop = GameLoop.builder()
                 .loopCountPerSec(20)
@@ -202,11 +201,11 @@ public final class AllayServer implements Server {
         this.scoreboardService.read();
         ((AllayPluginManager) pluginManager).enablePlugins();
 
-        sendTr(TrKeys.A_NETWORK_SERVER_STARTING);
-        this.networkServer.start();
+        sendTr(TrKeys.A_NETWORK_INTERFACE_STARTING);
+        ((AllayNetworkInterface) this.networkInterface).start();
         this.startTime = System.currentTimeMillis();
         sendTr(
-                TrKeys.A_NETWORK_SERVER_STARTED,
+                TrKeys.A_NETWORK_INTERFACE_STARTED,
                 SETTINGS.networkSettings().ip(),
                 String.valueOf(SETTINGS.networkSettings().port()),
                 String.valueOf(startTime - initialTime)
@@ -242,7 +241,7 @@ public final class AllayServer implements Server {
 
     private void shutdownReally() {
         // Shutdown network server to prevent new client connecting to the server
-        this.networkServer.shutdown();
+        ((AllayNetworkInterface) this.networkInterface).shutdown();
         this.scheduler.shutdown();
 
         new ServerStopEvent().call();
@@ -280,7 +279,7 @@ public final class AllayServer implements Server {
 
     public void onLoggedIn(EntityPlayer player) {
         players.put(player.getUUID(), player);
-        networkServer.setPlayerCount(players.size());
+        ((AllayNetworkInterface) networkInterface).setPlayerCount(players.size());
         Server.getInstance().broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_JOINED, player.getOriginName());
     }
 
@@ -299,7 +298,7 @@ public final class AllayServer implements Server {
             removeFromPlayerList(player);
         }
 
-        networkServer.setPlayerCount(players.size());
+        ((AllayNetworkInterface) networkInterface).setPlayerCount(players.size());
     }
 
     public void addToPlayerList(EntityPlayer player) {

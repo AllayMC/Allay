@@ -10,7 +10,7 @@ import org.allaymc.api.eventbus.event.server.WhitelistChangeEvent;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
@@ -144,11 +144,11 @@ public interface Server extends TaskCreator, CommandSender {
     }
 
     /**
-     * Get the network server.
+     * Get the network interface.
      *
-     * @return the network server.
+     * @return the network interface.
      */
-    NetworkServer getNetworkServer();
+    NetworkInterface getNetworkInterface();
 
     /**
      * Get the online players.

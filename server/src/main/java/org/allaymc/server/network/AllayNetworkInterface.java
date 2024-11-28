@@ -14,14 +14,13 @@ import io.netty.channel.kqueue.KQueueEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.server.ServerSettings;
@@ -32,7 +31,6 @@ import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
-import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
@@ -41,19 +39,17 @@ import java.net.InetSocketAddress;
  * @author daoge_cmd
  */
 @Slf4j
-@Getter
-public class AllayNetworkServer implements NetworkServer {
+public class AllayNetworkInterface implements NetworkInterface {
 
     protected InetSocketAddress bindAddress;
     protected BedrockPong pong;
     protected Server server;
     protected Channel channel;
 
-    public AllayNetworkServer(Server server) {
+    public AllayNetworkInterface(Server server) {
         this.server = server;
     }
 
-    @Override
     public void start() {
         var settings = Server.SETTINGS;
         var nettyThreadNumber = settings.networkSettings().networkThreadNumber();
@@ -109,43 +105,46 @@ public class AllayNetworkServer implements NetworkServer {
                 .channel();
     }
 
-    @Override
     public void shutdown() {
         channel.close();
     }
 
     @Override
-    public BedrockCodec getCodec() {
-        return ProtocolInfo.PACKET_CODEC;
-    }
-
-    @Override
-    public void updatePong() {
-        this.channel.config().setOption(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf());
-    }
-
-    @Override
-    public void setMotd(String motd, boolean update) {
+    public void setMotd(String motd) {
         pong.motd(motd);
-        if (update) updatePong();
+        updatePong();
     }
 
     @Override
-    public void setSubMotd(String subMotd, boolean update) {
+    public String getMotd() {
+        return pong.motd();
+    }
+
+    @Override
+    public void setSubMotd(String subMotd) {
         pong.subMotd(subMotd);
-        if (update) updatePong();
+        updatePong();
     }
 
     @Override
-    public void setPlayerCount(int count, boolean update) {
-        pong.playerCount(count);
-        if (update) updatePong();
+    public String getSubMotd() {
+        return pong.subMotd();
     }
 
     @Override
-    public void setMaxPlayerCount(int maxPlayerCount, boolean update) {
+    public void setMaxPlayerCount(int maxPlayerCount) {
         pong.maximumPlayerCount(maxPlayerCount);
-        if (update) updatePong();
+        updatePong();
+    }
+
+    @Override
+    public int getMaxPlayerCount() {
+        return pong.maximumPlayerCount();
+    }
+
+    public void setPlayerCount(int count) {
+        pong.playerCount(count);
+        updatePong();
     }
 
     protected BedrockPong initPong(ServerSettings settings) {
@@ -160,5 +159,9 @@ public class AllayNetworkServer implements NetworkServer {
                 .protocolVersion(ProtocolInfo.PACKET_CODEC.getProtocolVersion())
                 .ipv4Port(settings.networkSettings().port())
                 .ipv6Port(settings.networkSettings().port()); // TODO: ipv6
+    }
+
+    protected void updatePong() {
+        this.channel.config().setOption(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf());
     }
 }

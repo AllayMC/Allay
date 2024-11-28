@@ -440,14 +440,14 @@ public interface TrKeys {
     String A_NETWORK_CLIENT_DISCONNECTED = "allay:network.client.disconnected";
 
     /**
-     * Network server started at %1:%2 (%3 ms)
+     * Network interface started at %1:%2 (%3 ms)
      */
-    String A_NETWORK_SERVER_STARTED = "allay:network.server.started";
+    String A_NETWORK_INTERFACE_STARTED = "allay:network.interface.started";
 
     /**
-     * Starting up network server...
+     * Starting up network interface...
      */
-    String A_NETWORK_SERVER_STARTING = "allay:network.server.starting";
+    String A_NETWORK_INTERFACE_STARTING = "allay:network.interface.starting";
 
     /**
      * Pack auto encrypting is enabled, encryption is starting...
