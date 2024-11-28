@@ -94,16 +94,6 @@ tasks.create("cleanWorkingDir") {
     }
 }
 
-tasks.create("cleanCachesInWorkingDir") {
-    description = "Clean caches dir in `.run` directory"
-    group = "application"
-    doLast {
-        rootProject.rootDir.resolve(".run").listFiles { f -> f.name.equals("caches") }?.forEach {
-            delete(it)
-        }
-    }
-}
-
 fun getShortGitHash(): String {
     val stdout = ByteArrayOutputStream()
     exec {

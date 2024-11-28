@@ -41,14 +41,14 @@ public class HashUtilsTest {
     }
 
     @Test
-    public void testFnv1a32Nbt() {
+    public void testFnv1A32Nbt() {
         NbtMap tag = NbtMap.builder()
                 .putString("name", "minecraft:oak_wood")
                 .putCompound("states", NbtMap.builder()
                         .putString("pillar_axis", "y")
                         .build())
                 .build();
-        Assertions.assertEquals(testBlockStateHash, HashUtils.fnv1a32Nbt(tag));
+        Assertions.assertEquals(testBlockStateHash, HashUtils.fnv1a_32_nbt(tag));
     }
 
     @Test

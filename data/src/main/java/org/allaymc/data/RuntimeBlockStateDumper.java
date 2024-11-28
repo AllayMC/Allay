@@ -34,7 +34,7 @@ public class RuntimeBlockStateDumper {
                 NbtMapBuilder builder = NbtMapBuilder.from(b);
                 builder.remove("version");
                 NbtMap build = builder.build();
-                int blockHash = HashUtils.fnv1a32Nbt(build);
+                int blockHash = HashUtils.fnv1a_32_nbt(build);
                 stringBuilder.append("blockHash=").append(blockHash).append('\n');
                 stringBuilder.append("runtimeId=").append(runtimeId).append("\n\n");
                 runtimeId++;

@@ -6,7 +6,6 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.TreeMap;
 
 /**
