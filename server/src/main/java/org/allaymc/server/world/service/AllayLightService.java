@@ -292,9 +292,9 @@ public class AllayLightService implements LightService {
         if (!hasSkyLight) return;
 
         var currentLightHeight = getLightHeight(x, z);
-        if (value == 0 && currentLightHeight == y + 1) {
+        if (value == 0 && currentLightHeight >= y + 1) {
             short newLightHeight = (short) minHeight;
-            for (short i = (short) y; i >= minHeight; i--) {
+            for (short i = currentLightHeight; i >= minHeight; i--) {
                 if (getLightDampening(x, i, z) != 0) {
                     newLightHeight = (short) (i + 1);
                     break;
