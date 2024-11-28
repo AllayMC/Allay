@@ -18,7 +18,7 @@ class IdentifierUtilsTest {
     void testSplitOn() {
         var id1 = IdentifierUtils.splitOn(idStr, ":");
         var id2 = IdentifierUtils.splitOn(idStr2, ";");
-        assert id1.equals(id2);
+        assertEquals(id1, id2);
     }
 
     @Test
@@ -39,8 +39,8 @@ class IdentifierUtilsTest {
 
     @Test
     void testIsValid() {
-        assert IdentifierUtils.isValid(idStr);
-        assert !IdentifierUtils.isValid(idStr2);
+        assertTrue(IdentifierUtils.isValid(idStr));
+        assertFalse(IdentifierUtils.isValid(idStr2));
     }
 
     @Test
