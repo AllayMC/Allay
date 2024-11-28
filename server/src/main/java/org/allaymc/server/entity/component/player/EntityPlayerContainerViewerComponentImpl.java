@@ -24,9 +24,6 @@ import org.jetbrains.annotations.UnmodifiableView;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.allaymc.api.container.FullContainerType.ARMOR;
-import static org.allaymc.api.container.FullContainerType.CRAFTING_GRID;
-
 /**
  * @author daoge_cmd
  */
@@ -159,9 +156,9 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         Container container = null;
         if (isPlayerInventoryOpened()) {
             if (
-                    type == ARMOR ||
+                    type == FullContainerType.ARMOR ||
                     type == FullContainerType.OFFHAND ||
-                    type == CRAFTING_GRID
+                    type == FullContainerType.CRAFTING_GRID
             ) {
                 container = containerHolderComponent.getContainer(type);
             }
@@ -179,7 +176,7 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
         FullContainerType<?> fullType = null;
         if (isPlayerInventoryOpened()) {
             fullType = switch (slotType) {
-                case ARMOR -> ARMOR;
+                case ARMOR -> FullContainerType.ARMOR;
                 case OFFHAND -> FullContainerType.OFFHAND;
                 case CRAFTING_INPUT -> FullContainerType.CRAFTING_GRID;
                 default -> null;

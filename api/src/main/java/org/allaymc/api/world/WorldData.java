@@ -40,11 +40,11 @@ public class WorldData {
     @Builder.Default
     boolean forceGameType = false;
     @Builder.Default
-    org.cloudburstmc.protocol.bedrock.data.GameType gameType = GameType.CREATIVE;
+    GameType gameType = GameType.CREATIVE;
     @Builder.Default
     String name = "Bedrock level";
     @Builder.Default
-    org.joml.Vector3ic spawnPoint = new Vector3i(0, 64, 0);
+    Vector3ic spawnPoint = new Vector3i(0, 64, 0);
     @Builder.Default
     long time = 0L;
     @Builder.Default
@@ -52,7 +52,7 @@ public class WorldData {
 
     // NOTICE: The following properties are unused, however we keep them for vanilla compatibility reason
     @Builder.Default
-    org.joml.Vector3ic limitedWorldOriginPoint = new Vector3i(0, 64, 0);
+    Vector3ic limitedWorldOriginPoint = new Vector3i(0, 64, 0);
     @Builder.Default
     SemVersion minimumCompatibleClientVersion = ProtocolInfo.MINECRAFT_VERSION;
     @Builder.Default

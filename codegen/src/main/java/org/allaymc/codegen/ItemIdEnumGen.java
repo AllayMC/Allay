@@ -14,8 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.allaymc.codegen.ClassNames.*;
-
 /**
  * @author daoge_cmd | Cool_Loong | IWareQ
  */
@@ -47,7 +45,7 @@ public class ItemIdEnumGen {
 
     @SneakyThrows
     public static void generateToDependenceModule() {
-        TypeSpec.Builder codeBuilder = commonBuilder(DEP_IDENTIFIER);
+        TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.DEP_IDENTIFIER);
         addEnums(codeBuilder);
         var javaFile = JavaFile.builder("org.allaymc.dependence", codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)
@@ -59,7 +57,7 @@ public class ItemIdEnumGen {
     @SneakyThrows
     public static void generateToAPIModule() {
         TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER)
-                .addAnnotation(MINECRAFT_VERSION_SENSITIVE)
+                .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE)
                 .addMethod(MethodSpec.methodBuilder("fromIdentifier")
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addParameter(ClassNames.API_IDENTIFIER, "identifier")
@@ -73,8 +71,8 @@ public class ItemIdEnumGen {
                 )
                 .addMethod(MethodSpec.methodBuilder("getItemType")
                         .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return $T.ITEMS.get(this.getIdentifier())", REGISTRIES)
-                        .returns(ParameterizedTypeName.get(ITEM_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT)))
+                        .addStatement("return $T.ITEMS.get(this.getIdentifier())", ClassNames.REGISTRIES)
+                        .returns(ParameterizedTypeName.get(ClassNames.ITEM_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT)))
                         .build()
                 );
         addEnums(codeBuilder);

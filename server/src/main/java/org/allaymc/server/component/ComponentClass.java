@@ -6,6 +6,7 @@ import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.eventbus.EventBus;
 import org.allaymc.api.eventbus.event.Event;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
@@ -81,7 +82,7 @@ public abstract class ComponentClass {
         protected static void injectComponentObject(ComponentClass instance, List<? extends Component> componentList) {
             for (var component : componentList) {
                 ReflectionUtils.getAllFields(component.getClass()).stream()
-                        .filter(field -> field.isAnnotationPresent(org.allaymc.server.component.annotation.ComponentObject.class))
+                        .filter(field -> field.isAnnotationPresent(ComponentObject.class))
                         .forEach(field -> {
                             try {
                                 field.setAccessible(true);

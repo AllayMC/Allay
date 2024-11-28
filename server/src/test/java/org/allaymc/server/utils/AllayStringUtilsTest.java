@@ -1,7 +1,6 @@
 package org.allaymc.server.utils;
 
 import org.allaymc.api.utils.AllayStringUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,7 +16,7 @@ class AllayStringUtilsTest {
 
     @Test
     void testFastSplit() {
-        Assertions.assertEquals(List.of("aaa:bbb", "ccc:ddd"), AllayStringUtils.fastSplit(testStr, ";"));
+        assertEquals(List.of("aaa:bbb", "ccc:ddd"), AllayStringUtils.fastSplit(testStr, ";"));
         assertEquals(List.of("aaa", "bbb;ccc", "ddd"), AllayStringUtils.fastSplit(testStr, ":"));
         assertEquals(List.of("aaa", "bbb;ccc:ddd"), AllayStringUtils.fastSplit(testStr, ":", 2));
         assertThrows(IllegalArgumentException.class, () -> AllayStringUtils.fastSplit(testStr, ":", 1));

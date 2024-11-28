@@ -1,7 +1,6 @@
 package org.allaymc.server.datastruct.dag;
 
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -49,11 +48,11 @@ public class HashDirectedAcyclicGraphTest {
         }
 
         // Test 2
-        Assertions.assertThrows(DAGCycleException.class, () -> {
+        assertThrows(DAGCycleException.class, () -> {
             instance.setBefore(Base.B, Base.B);
         });
         // Test 3
-        Assertions.assertThrows(DAGCycleException.class, () -> {
+        assertThrows(DAGCycleException.class, () -> {
             instance.setBefore(Base.C, Base.B);
         });
     }
@@ -73,35 +72,23 @@ public class HashDirectedAcyclicGraphTest {
         }
 
         // Test 1
-        boolean expResult = true;
-        boolean result = instance.isBefore(Base.A, Base.B);
-        assertEquals(expResult, result);
+        assertTrue(instance.isBefore(Base.A, Base.B));
         // Test 2
-        result = instance.isBefore(Base.B, Base.A);
-        assertFalse(result);
+        assertFalse(instance.isBefore(Base.B, Base.A));
         // Test 3
-        result = instance.isBefore(Base.A, Base.A);
-        assertFalse(result);
+        assertFalse(instance.isBefore(Base.A, Base.A));
         // Test 4
-        result = instance.isBefore(Base.A, Base.D);
-        assertFalse(result);
+        assertFalse(instance.isBefore(Base.A, Base.D));
         // Test 5
-        result = instance.isBefore(Base.D, Base.A);
-        assertFalse(result);
+        assertFalse(instance.isBefore(Base.D, Base.A));
         // Test 6
-        result = instance.isBefore(Base.D, Base.D);
-        assertFalse(result);
+        assertFalse(instance.isBefore(Base.D, Base.D));
         // Test 5
-        result = instance.isBefore(Base.A, Base.C);
-        assertTrue(result);
+        assertTrue(instance.isBefore(Base.A, Base.C));
         // Test 6
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            instance.isBefore(Base.A, Base.H);
-        });
+        assertThrows(IllegalArgumentException.class, () -> instance.isBefore(Base.A, Base.H));
         // Test 7
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            instance.isBefore(Base.H, Base.A);
-        });
+        assertThrows(IllegalArgumentException.class, () -> instance.isBefore(Base.H, Base.A));
     }
 
     /**
@@ -117,20 +104,20 @@ public class HashDirectedAcyclicGraphTest {
         } catch (Exception ignore) {
         }
         // Test 2
-        Assertions.assertThrows(DAGCycleException.class, () -> {
+        assertThrows(DAGCycleException.class, () -> {
             instance.setBefore(Base.A, Base.C);
         });
         // Test 3
-        Assertions.assertThrows(DAGCycleException.class, () -> {
+        assertThrows(DAGCycleException.class, () -> {
             instance.setBefore(Base.A, Base.D);
             instance.setBefore(Base.D, Base.C);
         });
         // Test 4
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             instance.setBefore(Base.A, Base.H);
         });
         // Test 5
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             instance.setBefore(Base.H, Base.A);
         });
     }
@@ -141,9 +128,7 @@ public class HashDirectedAcyclicGraphTest {
     @Test
     public void testSize() {
         HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<Base>(setABCDEFG);
-        int expResult = 7;
-        int result = instance.size();
-        assertEquals(expResult, result);
+        assertEquals(7, instance.size());
     }
 
     /**
@@ -153,14 +138,10 @@ public class HashDirectedAcyclicGraphTest {
     public void testIsEmpty() {
         // Test 1
         HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<Base>();
-        boolean expResult = true;
-        boolean result = instance.isEmpty();
-        assertEquals(expResult, result);
+        assertTrue(instance.isEmpty());
         // Test 2
         instance = new HashDirectedAcyclicGraph<Base>(setABCDEFG);
-        expResult = false;
-        result = instance.isEmpty();
-        assertEquals(expResult, result);
+        assertFalse(instance.isEmpty());
     }
 
     /**
@@ -168,30 +149,19 @@ public class HashDirectedAcyclicGraphTest {
      */
     @Test
     public void testContains() {
-        HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<Base>();
+        HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<>();
         // Test 1
-        boolean expResult = false;
-        Object o = null;
-        boolean result = instance.contains(o);
-        assertEquals(expResult, result);
+        assertFalse(instance.contains(null));
         // Test 2
-        expResult = false;
-        result = instance.contains(Base.C);
-        assertEquals(expResult, result);
+        assertFalse(instance.contains(Base.C));
 
-        instance = new HashDirectedAcyclicGraph<Base>(setABCDEFG);
+        instance = new HashDirectedAcyclicGraph<>(setABCDEFG);
         // Test 3
-        expResult = false;
-        result = instance.contains(o);
-        assertEquals(expResult, result);
+        assertFalse(instance.contains(null));
         // Test 4
-        expResult = true;
-        result = instance.contains(Base.C);
-        assertEquals(expResult, result);
+        assertTrue(instance.contains(Base.C));
         // Test 5
-        expResult = false;
-        result = instance.contains(Base.H);
-        assertEquals(expResult, result);
+        assertFalse(instance.contains(Base.H));
     }
 
     /**
@@ -293,7 +263,7 @@ public class HashDirectedAcyclicGraphTest {
         assertFalse(instance.contains(Base.E));
         assertFalse(instance.contains(Base.F));
         assertFalse(instance.contains(Base.G));
-        Assertions.assertThrows(NullPointerException.class, () -> instance.add(null));
+        assertThrows(NullPointerException.class, () -> instance.add(null));
     }
 
     /**
@@ -344,7 +314,7 @@ public class HashDirectedAcyclicGraphTest {
         HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<>(Base.A, Base.B, Base.C);
         assertTrue(instance.addAll(new HashDirectedAcyclicGraph<>(Base.G, Base.H)));
         assertFalse(instance.addAll(new HashDirectedAcyclicGraph<>(Base.A, Base.B)));
-        assertEquals(instance, new HashDirectedAcyclicGraph<>(Base.A, Base.B, Base.C, Base.G, Base.H));
+        assertEquals(new HashDirectedAcyclicGraph<>(Base.A, Base.B, Base.C, Base.G, Base.H), instance);
     }
 
     /**
@@ -355,7 +325,7 @@ public class HashDirectedAcyclicGraphTest {
         // Test 1
         HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<>(Base.A, Base.B, Base.C, Base.G);
         assertTrue(instance.removeAll(new HashDirectedAcyclicGraph<>(Base.G, Base.H)));
-        assertEquals(instance, new HashDirectedAcyclicGraph<>(Base.A, Base.B, Base.C));
+        assertEquals(new HashDirectedAcyclicGraph<>(Base.A, Base.B, Base.C), instance);
         // Test 2
         instance = new HashDirectedAcyclicGraph<>(Base.A, Base.B, Base.C, Base.G);
         assertFalse(instance.removeAll(new HashDirectedAcyclicGraph<>(Base.H)));
@@ -396,8 +366,8 @@ public class HashDirectedAcyclicGraphTest {
         instance.setBefore(Base.B, Base.C);//B -> C
         // ADEFG -> B -> C
         List<Base> sortedList = instance.getSortedList();
-        Assertions.assertEquals(sortedList.get(sortedList.size() - 1), Base.C);
-        Assertions.assertEquals(sortedList.get(sortedList.size() - 2), Base.B);
+        assertEquals(Base.C, sortedList.getLast());
+        assertEquals(Base.B, sortedList.get(sortedList.size() - 2));
     }
 
     enum Base {A, B, C, D, E, F, G, H}

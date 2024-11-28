@@ -37,7 +37,6 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
 import org.allaymc.server.eventbus.AllayEventBus;
@@ -57,7 +56,6 @@ import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerListPacket;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.nio.file.Path;
@@ -67,7 +65,6 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 /**
  * @author daoge_cmd
@@ -75,7 +72,8 @@ import java.util.function.Consumer;
 @Slf4j
 public final class AllayServer implements Server {
 
-    private static final AllayServer INSTANCE = new AllayServer();;
+    private static final AllayServer INSTANCE = new AllayServer();
+    ;
     private static final String BAN_INFO_FILE_NAME = "ban-info.yml";
     private static final String WHITELIST_FILE_NAME = "whitelist.yml";
     private static final CommandOriginData SERVER_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.DEDICATED_SERVER, UUID.randomUUID(), "", 0);
@@ -178,7 +176,7 @@ public final class AllayServer implements Server {
     public void start(long initialTime) {
         var ctx = (LoggerContext) LogManager.getContext(false);
         var log4jConfig = ctx.getConfiguration();
-        var loggerConfig = log4jConfig.getLoggerConfig(org.apache.logging.log4j.LogManager.ROOT_LOGGER_NAME);
+        var loggerConfig = log4jConfig.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
         if (Server.SETTINGS.genericSettings().debug() && Level.TRACE.isLessSpecificThan(loggerConfig.getLevel())) {
             loggerConfig.setLevel(Level.TRACE);
             ctx.updateLoggers();

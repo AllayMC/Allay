@@ -126,9 +126,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     protected void computeBlockCollisionMotion(Entity entity, BlockState[][][] collidedBlocks) {
         // 1. Find out the block state which entity collided most
         var aabb = entity.getOffsetAABB();
-        var minX = (int) Math.floor(aabb.minX());
-        var minY = (int) Math.floor(aabb.minY());
-        var minZ = (int) Math.floor(aabb.minZ());
+        var minX = (int) floor(aabb.minX());
+        var minY = (int) floor(aabb.minY());
+        var minZ = (int) floor(aabb.minZ());
         int targetX = 0, targetY = 0, targetZ = 0;
         float V = 0;
         for (int ox = 0, blocksLength = collidedBlocks.length; ox < blocksLength; ox++) {
@@ -238,13 +238,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var velocityFactor = entity.isOnGround() ? GROUND_VELOCITY_FACTOR : AIR_VELOCITY_FACTOR;
         var acceleration = velocityFactor * movementFactor;
         if (entity.isOnGround()) {
-            acceleration *= (float) (effectFactor * Math.pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
+            acceleration *= (float) (effectFactor * pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
         }
 
         var yaw = entity.getLocation().yaw();
 
-        var newMx = (float) (momentumMx + acceleration * Math.sin(yaw));
-        var newMz = (float) (momentumMz + acceleration * Math.cos(yaw));
+        var newMx = (float) (momentumMx + acceleration * sin(yaw));
+        var newMz = (float) (momentumMz + acceleration * cos(yaw));
 
         // Skip sprint jump boost because this service does not handle player
 

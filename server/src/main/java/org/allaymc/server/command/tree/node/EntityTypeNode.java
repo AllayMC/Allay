@@ -7,8 +7,6 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
-import static org.allaymc.api.utils.Identifier.DEFAULT_NAMESPACE;
-
 /**
  * @author daoge_cmd
  */
@@ -44,6 +42,6 @@ public class EntityTypeNode extends EnumNode {
 
     @Override
     protected Object argToResult(String arg) {
-        return Registries.ENTITIES.get(arg.contains(":") ? new Identifier(arg) : new Identifier(DEFAULT_NAMESPACE, arg));
+        return Registries.ENTITIES.get(arg.contains(":") ? new Identifier(arg) : new Identifier(Identifier.DEFAULT_NAMESPACE, arg));
     }
 }
