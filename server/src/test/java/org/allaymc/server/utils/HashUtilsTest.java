@@ -48,7 +48,7 @@ public class HashUtilsTest {
                         .putString("pillar_axis", "y")
                         .build())
                 .build();
-        Assertions.assertEquals(testBlockStateHash, HashUtils.fnv1a_32_nbt(tag));
+        Assertions.assertEquals(testBlockStateHash, HashUtils.fnv1a32Nbt(tag));
     }
 
     @Test

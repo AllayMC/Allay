@@ -60,7 +60,7 @@ public class PaletteUtils {
                         input.skipBytes(input.readUnsignedShort());// UTF
                         deserialize(input, byteBuf, nbtType, maxDepth - 1);// Value
                         input.skipBytes(1);// end tag
-                        int hash = HashUtils.fnv1a_32(result);
+                        int hash = HashUtils.fnv1a32(result);
                         if (hash == 147887818) hash = -2;// minecraft:unknown
                         return hash;
                     }

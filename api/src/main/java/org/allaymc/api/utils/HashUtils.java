@@ -48,7 +48,7 @@ public class HashUtils {
                 .putCompound("states", NbtMap.fromMap(states))
                 .build();
 
-        return fnv1a_32_nbt(tag);
+        return fnv1a32Nbt(tag);
     }
 
     /**
@@ -74,7 +74,7 @@ public class HashUtils {
                 .putCompound("states", NbtMap.fromMap(states))
                 .build();
 
-        return fnv1a_32_nbt(tag);
+        return fnv1a32Nbt(tag);
     }
 
     /**
@@ -84,7 +84,7 @@ public class HashUtils {
      *
      * @return the hash.
      */
-    public int fnv1a_32_nbt(NbtMap tag) {
+    public int fnv1a32Nbt(NbtMap tag) {
         byte[] bytes;
         try (var stream = new ByteArrayOutputStream();
              var outputStream = NbtUtils.createWriterLE(stream)) {
@@ -95,7 +95,7 @@ public class HashUtils {
             throw new HashException(e);
         }
 
-        return fnv1a_32(bytes);
+        return fnv1a32(bytes);
     }
 
     /**
@@ -105,7 +105,7 @@ public class HashUtils {
      *
      * @return the hash.
      */
-    public int fnv1a_32(byte[] data) {
+    public int fnv1a32(byte[] data) {
         int hash = FNV1_32_INIT;
         for (byte datum : data) {
             hash ^= (datum & 0xff);

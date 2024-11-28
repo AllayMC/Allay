@@ -179,7 +179,7 @@ public final class Palette<V> {
                     .putString("name", newNbtMap.getString("name"))
                     .putCompound("states", NbtMap.fromMap(states))
                     .build();
-            this.palette.add(deserializer.deserialize(HashUtils.fnv1a_32_nbt(tag)));
+            this.palette.add(deserializer.deserialize(HashUtils.fnv1a32Nbt(tag)));
         } else {
             this.palette.add(deserializer.deserialize(blockStateHash));
         }
