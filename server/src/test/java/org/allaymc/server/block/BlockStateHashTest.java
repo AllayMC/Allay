@@ -1,6 +1,7 @@
 package org.allaymc.server.block;
 
 import com.google.gson.JsonParser;
+import lombok.SneakyThrows;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.testutils.AllayTestExtension;
@@ -22,12 +23,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class BlockStateHashTest {
     static Map<Integer, Object> BLOCK_STATE_DATA = new HashMap<>();
 
+    @SneakyThrows
     @BeforeAll
     static void load() {
         try (var reader = new InputStreamReader(Utils.getResource("block_states.json"))) {
             JsonParser.parseReader(reader).getAsJsonArray().forEach(entry -> BLOCK_STATE_DATA.put(entry.getAsJsonObject().get("blockStateHash").getAsInt(), entry));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

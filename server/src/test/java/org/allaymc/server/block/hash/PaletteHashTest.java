@@ -1,5 +1,6 @@
 package org.allaymc.server.block.hash;
 
+import lombok.SneakyThrows;
 import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -71,6 +72,7 @@ public class PaletteHashTest {
         System.out.printf("b4 hash: %s%n", Integer.toUnsignedLong(createHash(b4)));
     }
 
+    @SneakyThrows
     public static int createHash(NbtMap block) {
         if (block.getString("name").equals("minecraft:unknown")) {
             return -2; // This is special case
@@ -88,8 +90,6 @@ public class PaletteHashTest {
              NBTOutputStream outputStream = NbtUtils.createWriterLE(stream)) {
             outputStream.writeTag(tag);
             bytes = stream.toByteArray();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
 
         return fnv1a_32(bytes);

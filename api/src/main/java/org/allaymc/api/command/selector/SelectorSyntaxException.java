@@ -1,23 +1,10 @@
 package org.allaymc.api.command.selector;
 
+import lombok.experimental.StandardException;
 import org.allaymc.api.utils.TextFormat;
 
+@StandardException
 public class SelectorSyntaxException extends Exception {
-    public SelectorSyntaxException(String message) {
-        super(message);
-    }
-
-    public SelectorSyntaxException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public SelectorSyntaxException(Throwable cause) {
-        super(cause);
-    }
-
-    protected SelectorSyntaxException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 
     @Override
     public String getMessage() {

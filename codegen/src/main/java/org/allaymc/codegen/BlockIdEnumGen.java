@@ -37,7 +37,7 @@ public class BlockIdEnumGen {
                 MAPPED_BLOCK_PALETTE_NBT.put(entry.getString("name"), entry);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CodeGenException(e);
         }
     }
 

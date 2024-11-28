@@ -37,6 +37,7 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
         init();
     }
 
+    @SneakyThrows
     @Override
     public Map<UUID, Pack> load(Void unused) {
         log.info(I18n.get().tr(TrKeys.A_PACK_LOADING));
@@ -56,8 +57,6 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
 
                 foundedLoaders.add(loader);
             }
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
         }
 
         // Load manifests

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.LangCode;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import static org.allaymc.api.utils.AllayStringUtils.fastTwoPartSplit;
 /**
  * @author daoge_cmd
  */
+@Slf4j
 public class LangBuilder {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
@@ -143,7 +145,8 @@ public class LangBuilder {
                 try {
                     Files.createDirectories(path.getParent());
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    log.error("Failed to create lang file directory for lang code {}", langCode.name(), e);
+                    return;
                 }
             }
             try {
@@ -152,7 +155,7 @@ public class LangBuilder {
                 Files.createFile(path);
                 Files.writeString(path, json, StandardCharsets.UTF_8);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                log.error("Failed to write lang file for lang code {}", langCode.name(), e);
             }
         });
     }

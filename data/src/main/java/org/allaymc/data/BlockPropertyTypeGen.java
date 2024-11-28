@@ -3,6 +3,7 @@ package org.allaymc.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -180,16 +181,13 @@ public class BlockPropertyTypeGen {
         log.info("Block property type data have been saved to data/resources/unpacked/block_property_types.json");
     }
 
+    @SneakyThrows
     private static void writeJSONObject(Object obj) {
         Gson gson = new GsonBuilder().setPrettyPrinting().setNumberToNumberStrategy(JsonReader::nextLong).setObjectToNumberStrategy(JsonReader::nextLong).create();
         String json = gson.toJson(obj);
-        try {
-            Path path = Path.of("data/resources/unpacked/block_property_types.json");
-            Files.deleteIfExists(path);
-            Files.writeString(path, json, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Path path = Path.of("data/resources/unpacked/block_property_types.json");
+        Files.deleteIfExists(path);
+        Files.writeString(path, json, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
     }
 
     static class PropertyType {

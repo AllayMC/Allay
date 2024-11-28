@@ -3,6 +3,7 @@ package org.allaymc.server.utils;
 import lombok.experimental.UtilityClass;
 import org.allaymc.server.Allay;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.Properties;
@@ -19,8 +20,8 @@ public final class GitProperties {
         GIT_PROPERTIES = new Properties();
         try (var inputStreamReader = new InputStreamReader(Objects.requireNonNull(Allay.EXTRA_RESOURCE_CLASS_LOADER.getResourceAsStream("git.properties")))) {
             GIT_PROPERTIES.load(inputStreamReader);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw
         }
     }
 

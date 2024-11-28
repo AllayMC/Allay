@@ -14,7 +14,7 @@ public class Utils {
         try {
             method.invoke(null);
         } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(e);
         }
     }
 

@@ -250,7 +250,8 @@ public class Config {
                 try {
                     Files.write(this.file.toPath(), content.toString().getBytes());
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    log.error("Failed to save the config file {}", file, e);
+                    throw new ConfigException(e);
                 }
             });
         } else {
@@ -258,6 +259,7 @@ public class Config {
                 Files.write(this.file.toPath(), content.toString().getBytes());
             } catch (IOException e) {
                 log.error("Failed to save the config file {}", file, e);
+                throw new ConfigException(e);
             }
         }
     }
@@ -512,9 +514,9 @@ public class Config {
         try {
             this.config = new ConfigSection(gson.fromJson(content, new TypeToken<LinkedHashMap<String, Object>>() {
             }.getType()));
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.warn("Failed to parse the config file {}", file, e);
-            throw e;
+            throw new ConfigException(e);
         }
     }
 
@@ -542,9 +544,9 @@ public class Config {
                 default:
                     this.correct = false;
             }
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.warn("Failed to parse the config file {}", file, e);
-            throw e;
+            throw new ConfigException(e);
         }
     }
 

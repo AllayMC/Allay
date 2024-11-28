@@ -96,7 +96,7 @@ public final class Palette<V> {
              var outputStream = NbtUtils.createWriterLE(bufOutputStream)) {
             for (V value : this.palette) outputStream.writeTag(serializer.serialize(value));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new PaletteException(e);
         }
     }
 
@@ -155,7 +155,7 @@ public final class Palette<V> {
                 addBlockPalette(byteBuf, deserializer, input, nbtInputStream);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new PaletteException(e);
         }
     }
 
@@ -165,7 +165,7 @@ public final class Palette<V> {
             LittleEndianDataInputStream input,
             NBTInputStream nbtInputStream
     ) throws IOException {
-        var blockStateHash = PaletteUtils.fastReadBlockHash(input, byteBuf);
+        var blockStateHash = PaletteUtils.fastReadBlockStateHash(input, byteBuf);
         if (blockStateHash == PaletteUtils.HASH_NOT_LATEST) {
             var oldNbtMap = (NbtMap) nbtInputStream.readTag();
             var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, BlockStateUpdaters.LATEST_VERSION);

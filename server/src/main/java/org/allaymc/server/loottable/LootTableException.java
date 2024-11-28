@@ -1,4 +1,4 @@
-package org.allaymc.api.form;
+package org.allaymc.server.loottable;
 
 import lombok.experimental.StandardException;
 
@@ -6,5 +6,5 @@ import lombok.experimental.StandardException;
  * @author daoge_cmd
  */
 @StandardException
-public class FormException extends RuntimeException {
+public class LootTableException extends RuntimeException {
 }

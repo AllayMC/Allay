@@ -1,6 +1,7 @@
 package org.allaymc.api.utils;
 
 import com.google.common.base.Preconditions;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ class GameLoopTest {
         assertEquals(100, counter.get());
     }
 
+    @SneakyThrows
     @Test
     void testSlowLoop() {
         GameLoop gameLoop = GameLoop.builder()
@@ -45,11 +47,7 @@ class GameLoopTest {
                 .build();
         Thread thread = new Thread(gameLoop::startLoop);
         thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        thread.join();
         Preconditions.checkArgument(gameLoop.getTPS() <= 20);
     }
 }

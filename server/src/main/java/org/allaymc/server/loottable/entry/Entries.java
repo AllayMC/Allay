@@ -1,6 +1,7 @@
 package org.allaymc.server.loottable.entry;
 
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.server.loottable.LootTableException;
 import org.allaymc.server.loottable.context.Context;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public record Entries<CONTEXT_TYPE extends Context>(List<Entry<CONTEXT_TYPE>> en
                 return entry.loot(context);
             }
         }
-        // Won't reach here
-        throw new RuntimeException();
+
+        throw new LootTableException("No entry selected!");
     }
 }

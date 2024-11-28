@@ -202,7 +202,7 @@ public enum BlockFace {
             case EAST -> SOUTH;
             case SOUTH -> WEST;
             case WEST -> NORTH;
-            default -> throw new RuntimeException("Unable to get Y-rotated face of " + this);
+            default -> throw new IllegalStateException("Unable to get Y-rotated face of " + this);
         };
     }
 
@@ -217,7 +217,7 @@ public enum BlockFace {
             case EAST -> NORTH;
             case SOUTH -> EAST;
             case WEST -> SOUTH;
-            default -> throw new RuntimeException("Unable to get counter-clockwise Y-rotated face of " + this);
+            default -> throw new IllegalStateException("Unable to get counter-clockwise Y-rotated face of " + this);
         };
     }
 

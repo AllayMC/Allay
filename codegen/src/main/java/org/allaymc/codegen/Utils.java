@@ -49,7 +49,7 @@ public class Utils {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> keys.add(entry.getKey()));
             return keys;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CodeGenException(e);
         }
     }
 }

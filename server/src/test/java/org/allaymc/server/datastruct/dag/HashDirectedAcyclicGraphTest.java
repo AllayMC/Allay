@@ -1,5 +1,6 @@
 package org.allaymc.server.datastruct.dag;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -384,18 +385,15 @@ public class HashDirectedAcyclicGraphTest {
      * Test for getSortedList,class HashDirectedAcyclicGraph<Base>.
      */
     @Test
+    @SneakyThrows
     public void test_getSortedList() {
         HashDirectedAcyclicGraph<Base> instance = new HashDirectedAcyclicGraph<>(setABCDEFG);
-        try {
-            instance.setBefore(Base.A, Base.B);//A -> B
-            instance.setBefore(Base.D, Base.B);//D -> B
-            instance.setBefore(Base.E, Base.B);//E -> B
-            instance.setBefore(Base.F, Base.B);//F -> B
-            instance.setBefore(Base.G, Base.B);//G -> B
-            instance.setBefore(Base.B, Base.C);//B -> C
-        } catch (DAGCycleException e) {
-            throw new RuntimeException(e);
-        }
+        instance.setBefore(Base.A, Base.B);//A -> B
+        instance.setBefore(Base.D, Base.B);//D -> B
+        instance.setBefore(Base.E, Base.B);//E -> B
+        instance.setBefore(Base.F, Base.B);//F -> B
+        instance.setBefore(Base.G, Base.B);//G -> B
+        instance.setBefore(Base.B, Base.C);//B -> C
         // ADEFG -> B -> C
         List<Base> sortedList = instance.getSortedList();
         Assertions.assertEquals(sortedList.get(sortedList.size() - 1), Base.C);

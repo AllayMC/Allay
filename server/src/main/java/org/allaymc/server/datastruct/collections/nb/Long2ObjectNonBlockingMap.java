@@ -130,7 +130,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
             _val_1_handler = MethodHandles.lookup().in(Long2ObjectNonBlockingMap.class)
                     .findVarHandle(Long2ObjectNonBlockingMap.class, "_val_1", Object.class);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e); // Should never happen
+            throw new AssertionError(e); // Should never happen
         }
     }
 
@@ -1159,7 +1159,7 @@ public class Long2ObjectNonBlockingMap<TypeV>
             if ((int) len != len) {
                 log2 = 30;
                 len = (1L << log2) + 2;
-                if (sz > ((len >> 2) + (len >> 1))) throw new RuntimeException("Table is full.");
+                if (sz > ((len >> 2) + (len >> 1))) throw new IllegalStateException("Table is full.");
             }
 
             // Now limit the number of threads actually allocating memory to a

@@ -31,7 +31,7 @@ public class BiomeIdEnumGen {
                     .sorted(Map.Entry.comparingByValue(Comparator.comparingInt(o -> o.id)))
                     .forEachOrdered(entry -> BIOME_DATA.put(entry.getKey(), entry.getValue()));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CodeGenException(e);
         }
     }
 

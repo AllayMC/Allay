@@ -1,6 +1,7 @@
 package org.allaymc.server.utils;
 
 import io.netty.buffer.ByteBuf;
+import lombok.SneakyThrows;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.SemVersion;
@@ -16,16 +17,13 @@ public class PaletteUtils {
 
     public static final int HASH_NOT_LATEST = Integer.MAX_VALUE;
 
-    public static int fastReadBlockHash(LittleEndianDataInputStream input, ByteBuf byteBuf) {
-        try {
-            byteBuf.markReaderIndex();
-            int typeId = input.readUnsignedByte();
-            NbtType<?> type = NbtType.byId(typeId);
-            input.skipBytes(input.readUnsignedShort()); // Root tag name
-            return deserialize(input, byteBuf, type, 16);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    @SneakyThrows
+    public static int fastReadBlockStateHash(LittleEndianDataInputStream input, ByteBuf byteBuf) {
+        byteBuf.markReaderIndex();
+        int typeId = input.readUnsignedByte();
+        NbtType<?> type = NbtType.byId(typeId);
+        input.skipBytes(input.readUnsignedShort()); // Root tag name
+        return deserialize(input, byteBuf, type, 16);
     }
 
     private static int deserialize(LittleEndianDataInputStream input, ByteBuf byteBuf, NbtType<?> type, int maxDepth) throws IOException {

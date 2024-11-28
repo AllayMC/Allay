@@ -74,7 +74,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             }
             db = new Iq80DBFactory().open(dbFolder, options);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         }
     }
 
@@ -96,7 +96,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             Files.writeString(path.resolve("levelname.txt"), worldName, StandardOpenOption.CREATE);
             return worldData;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         }
     }
 
@@ -157,7 +157,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, (AllayUnsafeChunk) c));
             this.db.write(writeBatch);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         }
     }
 
@@ -213,7 +213,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             log.error("level.dat file is broken!");
             return null;
         }
-        throw new RuntimeException("level.dat is null!");
+        throw new WorldStorageException("level.dat is null!");
     }
 
     private WorldData readWorldDataFromNBT(NbtMap nbt) {
@@ -331,7 +331,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         try {
             this.db.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         }
     }
 

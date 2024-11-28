@@ -31,7 +31,7 @@ public class ItemIdEnumGen {
                 ITEM_NAME_TO_ID.put(entry.getKey(), entry.getValue().getAsJsonObject().get("id").getAsInt());
             });
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CodeGenException(e);
         }
     }
 

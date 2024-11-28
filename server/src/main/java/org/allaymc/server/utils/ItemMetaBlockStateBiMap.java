@@ -2,6 +2,7 @@ package org.allaymc.server.utils;
 
 import it.unimi.dsi.fastutil.Function;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -27,6 +28,7 @@ public final class ItemMetaBlockStateBiMap {
     private static final Map<BlockType<?>, Map<Integer, Integer>> BLOCK_STATE_HASH_TO_META_MAP = new HashMap<>();
     private static boolean INITIALIZED = false;
 
+    @SneakyThrows
     public static void init() {
         try (var reader = NbtUtils.createGZIPReader(Utils.getResource("item_meta_block_state_bimap.nbt"))) {
             var nbt = (NbtMap) reader.readTag();
@@ -44,8 +46,6 @@ public final class ItemMetaBlockStateBiMap {
                 });
             });
             INITIALIZED = true;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 
