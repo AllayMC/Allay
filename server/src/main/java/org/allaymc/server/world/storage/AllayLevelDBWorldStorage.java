@@ -60,7 +60,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     public AllayLevelDBWorldStorage(Path path, Options options) {
-        worldName = path.getName(path.getNameCount() - 1).toString();
+        this.worldName = path.getName(path.getNameCount() - 1).toString();
         var file = path.toFile();
         if (!file.exists() && !file.mkdirs()) {
             throw new WorldStorageException("Failed to create world directory!");
