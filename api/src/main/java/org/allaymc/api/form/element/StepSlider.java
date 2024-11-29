@@ -2,10 +2,13 @@ package org.allaymc.api.form.element;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
 /**
+ * Represents a step slider element in a {@link org.allaymc.api.form.type.CustomForm}.
+ *
  * @author daoge_cmd
  */
 public final class StepSlider extends CustomFormElement {
@@ -21,6 +24,13 @@ public final class StepSlider extends CustomFormElement {
     @SerializedName("default")
     private int defaultStepIndex;
 
+    /**
+     * Create a new step slider.
+     *
+     * @param text        the text of the step slider.
+     * @param steps       the steps of the step slider.
+     * @param defaultStep the default step of the step slider.
+     */
     public StepSlider(String text, List<String> steps, int defaultStep) {
         this.text = text;
         this.steps = steps;
@@ -28,6 +38,7 @@ public final class StepSlider extends CustomFormElement {
     }
 
     @Override
+    @ApiStatus.Internal
     public void syncDefaultValueToResponse(String response) {
         this.defaultStepIndex = Integer.parseInt(response);
     }

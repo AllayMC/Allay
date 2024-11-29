@@ -2,8 +2,11 @@ package org.allaymc.api.form.element;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
+ * Represents a slider element in a {@link org.allaymc.api.form.type.CustomForm}.
+ *
  * @author daoge_cmd
  */
 public final class Slider extends CustomFormElement {
@@ -23,6 +26,15 @@ public final class Slider extends CustomFormElement {
     @SerializedName("default")
     private float defaultValue;
 
+    /**
+     * Create a new slider.
+     *
+     * @param text         the text of the slider.
+     * @param min          the minimum value of the slider.
+     * @param max          the maximum value of the slider.
+     * @param step         the step of the slider.
+     * @param defaultValue the default value of the slider.
+     */
     public Slider(String text, float min, float max, int step, float defaultValue) {
         this.text = text;
         this.min = Math.max(min, 0f);
@@ -32,6 +44,7 @@ public final class Slider extends CustomFormElement {
     }
 
     @Override
+    @ApiStatus.Internal
     public void syncDefaultValueToResponse(String response) {
         this.defaultValue = Float.parseFloat(response);
     }

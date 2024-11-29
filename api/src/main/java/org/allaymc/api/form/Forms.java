@@ -5,6 +5,8 @@ import org.allaymc.api.form.type.ModalForm;
 import org.allaymc.api.form.type.SimpleForm;
 
 /**
+ * Form factory.
+ *
  * @author daoge_cmd
  */
 public interface Forms {

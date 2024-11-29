@@ -1,27 +1,46 @@
 package org.allaymc.api.form.element;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import org.allaymc.api.form.FormException;
 
 /**
+ * Represents the data of an image in a form.
+ *
  * @author daoge_cmd
  */
-@Setter
-@Getter
 public final class ImageData {
 
-    public static final String PATH_TYPE = "path";
-    public static final String URL_TYPE = "url";
+    @SuppressWarnings("unused")
+    private final String type;
+    @SuppressWarnings("unused")
+    private final String data;
 
-    private String type;
-    private String data;
-
-    public ImageData(String type, String data) {
-        if (!type.equals(URL_TYPE) && !type.equals(PATH_TYPE)) {
-            throw new FormException("Invalid type of image data");
-        }
-        this.type = type;
+    /**
+     * Create a new image data.
+     *
+     * @param type the type of the image.
+     * @param data the data of the image.
+     */
+    public ImageData(ImageType type, String data) {
+        this.type = type.getType();
         this.data = data;
+    }
+
+    /**
+     * Represents the type of image data.
+     */
+    @Getter
+    @AllArgsConstructor
+    public enum ImageType {
+        /**
+         * Image is stored in the resources pack.
+         */
+        PATH("path"),
+        /**
+         * Image is stored in the URL.
+         */
+        URL("url");
+
+        private final String type;
     }
 }
