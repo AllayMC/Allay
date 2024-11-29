@@ -82,6 +82,16 @@ public class AllayCommandNodeFactory implements CommandNodeFactory {
     }
 
     @Override
+    public <T extends Enum<?>> CommandNode enumClass(String name, CommandNode parent, T defaultValue, Class<T> enumClass) {
+        return new EnumClassNode(name, parent, defaultValue, enumClass);
+    }
+
+    @Override
+    public <T extends Enum<?>> CommandNode enumClass(String name, CommandNode parent, T defaultValue, String enumName, Class<T> enumClass) {
+        return new EnumClassNode(name, parent, defaultValue, enumName, enumClass);
+    }
+
+    @Override
     public CommandNode msg(String name, CommandNode parent, String defaultValue) {
         return new MessageNode(name, parent, defaultValue);
     }

@@ -172,6 +172,36 @@ public interface CommandNodeFactory {
     CommandNode enumsIgnoreCase(String name, CommandNode parent, String enumName, String defaultValue, String[] enums);
 
     /**
+     * Creates a command node for an enum argument to this command node based on the specified enum class.
+     * Unlike {@link #enums}, the string result will then be mapped back to the type of
+     * the provided enum class, which means that you don't need to map string back to
+     * enum manually.
+     *
+     * @param name      the name of the parameter.
+     * @param parent    the parent node.
+     * @param enumClass the class of the enum type.
+     *
+     * @return a new {@code CommandNode} for the enum class argument.
+     */
+    <T extends Enum<?>> CommandNode enumClass(String name, CommandNode parent, T defaultValue, Class<T> enumClass);
+
+
+    /**
+     * Creates a command node for an enum argument to this command node based on the specified enum class.
+     * Unlike {@link #enums}, the string result will then be mapped back to the type of
+     * the provided enum class, which means that you don't need to map string back to
+     * enum manually.
+     *
+     * @param name      the name of the parameter.
+     * @param parent    the parent node.
+     * @param enumName  the custom name of the enum.
+     * @param enumClass the class of the enum type.
+     *
+     * @return a new {@code CommandNode} for the enum class argument.
+     */
+    <T extends Enum<?>> CommandNode enumClass(String name, CommandNode parent, T defaultValue, String enumName, Class<T> enumClass);
+
+    /**
      * Creates a command node for a message argument.
      *
      * @param name         the name of the argument.

@@ -279,4 +279,18 @@ public interface CommandContext {
      * @return the result at the specified index.
      */
     <T> T getResult(int index);
+
+    /**
+     * Retrieves a result value by its index, or returns a default value if the result is {@code null}.
+     *
+     * @param index        the index of the result.
+     * @param defaultValue the default value to return if the result is {@code null}.
+     * @param <T>          the type of the result.
+     *
+     * @return the result at the specified index, or the default value if the result is {@code null}.
+     */
+    default <T> T getResultOr(int index, T defaultValue) {
+        T result = getResult(index);
+        return result != null ? result : defaultValue;
+    }
 }
