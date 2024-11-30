@@ -46,7 +46,7 @@ import org.allaymc.server.plugin.AllayPluginManager;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.allaymc.server.scroreboard.storage.JsonScoreboardStorage;
 import org.allaymc.server.terminal.AllayTerminalConsole;
-import org.allaymc.server.utils.AllayComputeThread;
+import org.allaymc.server.utils.AllayForkJoinWorkerThreadFactory;
 import org.allaymc.server.utils.SignalUtils;
 import org.allaymc.server.world.AllayWorldPool;
 import org.apache.logging.log4j.Level;
@@ -63,7 +63,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -87,7 +90,7 @@ public final class AllayServer implements Server {
     @Getter
     private final PlayerStorage playerStorage;
     @Getter
-    private final ThreadPoolExecutor computeThreadPool;
+    private final ExecutorService computeThreadPool;
     @Getter
     private final ExecutorService virtualThreadPool;
     @Getter
@@ -163,12 +166,13 @@ public final class AllayServer implements Server {
         }
     }
 
-    private ThreadPoolExecutor createComputeThreadPool() {
-        return new ThreadPoolExecutor(
-                Server.SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ? Runtime.getRuntime().availableProcessors() : Server.SETTINGS.genericSettings().maxComputeThreadCount(),
-                // maximumPoolSize and keepAliveTime are both meaningless, because we are using LinkedBlockingQueue
-                Server.SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ? Runtime.getRuntime().availableProcessors() : Server.SETTINGS.genericSettings().maxComputeThreadCount(), 0, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<>(), AllayComputeThread::new);
+    private ExecutorService createComputeThreadPool() {
+        return new ForkJoinPool(
+                Server.SETTINGS.genericSettings().maxComputeThreadCount() <= 0 ?
+                        Runtime.getRuntime().availableProcessors() :
+                        Server.SETTINGS.genericSettings().maxComputeThreadCount(),
+                new AllayForkJoinWorkerThreadFactory(), null, true
+        );
     }
 
     @SneakyThrows

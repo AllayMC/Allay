@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Represents the server instance.
@@ -191,7 +190,7 @@ public interface Server extends TaskCreator, CommandSender {
      *
      * @return the compute thread pool.
      */
-    ThreadPoolExecutor getComputeThreadPool();
+    ExecutorService getComputeThreadPool();
 
     /**
      * Get the virtual thread pool.
