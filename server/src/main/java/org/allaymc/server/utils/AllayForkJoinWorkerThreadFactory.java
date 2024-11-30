@@ -1,5 +1,7 @@
 package org.allaymc.server.utils;
 
+import org.allaymc.api.utils.AllayStringUtils;
+
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.ForkJoinWorkerThread;
 
@@ -10,7 +12,9 @@ public class AllayForkJoinWorkerThreadFactory implements ForkJoinPool.ForkJoinWo
     @Override
     public ForkJoinWorkerThread newThread(ForkJoinPool pool) {
         var thread = ForkJoinPool.defaultForkJoinWorkerThreadFactory.newThread(pool);
-        thread.setName("AllayComputeThread-" + thread.getPoolIndex());
+        var tid = AllayStringUtils.fastSplit(thread.getName(), "-").getLast();
+        thread.setName("AllayComputeThread-" + tid);
         return thread;
     }
+    
 }
