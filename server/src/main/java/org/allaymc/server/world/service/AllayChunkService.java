@@ -33,8 +33,8 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.ASYNC;
-import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.SYNC;
+import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.ASYNC;
+import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.SYNC;
 import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
 
 /**

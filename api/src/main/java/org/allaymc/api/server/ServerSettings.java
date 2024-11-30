@@ -28,7 +28,7 @@ public class ServerSettings extends OkaeriConfig {
     @CustomKey("network-settings")
     private NetworkSettings networkSettings = new NetworkSettings();
     @CustomKey("world-settings")
-    private WorldConfig worldSettings = new WorldConfig();
+    private WorldSettings worldSettings = new WorldSettings();
     @CustomKey("entity-settings")
     private EntitySettings entitySettings = new EntitySettings();
     @CustomKey("storage-settings")
@@ -119,7 +119,7 @@ public class ServerSettings extends OkaeriConfig {
 
     @Getter
     @Accessors(fluent = true)
-    public static class WorldConfig extends OkaeriConfig {
+    public static class WorldSettings extends OkaeriConfig {
 
         @Comment("Determines how far away from the chunk loader chunks will be ticked")
         @CustomKey("tick-radius")
