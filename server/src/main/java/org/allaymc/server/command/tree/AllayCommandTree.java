@@ -54,7 +54,7 @@ public class AllayCommandTree implements CommandTree {
 
             if (executor != null) {
                 if (context.haveUnhandledArg()) {
-                    context.addSyntaxError();
+                    context.addSyntaxError(context.getCurrentArgIndex() + 1);
                     return context.fail();
                 }
 

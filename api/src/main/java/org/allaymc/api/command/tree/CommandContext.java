@@ -142,6 +142,13 @@ public interface CommandContext {
     }
 
     /**
+     * Adds a syntax error message at the current argument index.
+     */
+    default void addSyntaxError() {
+        addSyntaxError(getCurrentArgIndex());
+    }
+
+    /**
      * Adds a syntax error message to the output, indicating the argument position
      * where the error occurred.
      *
@@ -205,13 +212,6 @@ public interface CommandContext {
      */
     default boolean isValidArgIndex(int index) {
         return index >= 0 && index < getArgCount();
-    }
-
-    /**
-     * Adds a syntax error message at the current argument index.
-     */
-    default void addSyntaxError() {
-        addSyntaxError(getCurrentArgIndex());
     }
 
     /**
