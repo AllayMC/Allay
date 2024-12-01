@@ -77,7 +77,7 @@ tasks.jacocoTestReport {
 
 tasks.test {
     useJUnitPlatform()
-    workingDir = file("${rootProject.projectDir}/.run/")
+    workingDir = file("${rootProject.projectDir}/.test/")
 }
 
 jacoco {
