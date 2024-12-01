@@ -17,15 +17,17 @@ public final class EffectInstance {
     private final EffectType type;
     private int amplifier;
     private int duration;
+    private boolean ambient;
     private boolean visible;
 
     public static EffectInstance fromNBT(NbtMap nbt) {
         var effectType = Registries.EFFECTS.getByK1((int) nbt.getByte("Id"));
         Preconditions.checkNotNull(effectType, "Effect type not found for id: " + nbt.getByte("Id") + "!");
-        int amplifier = nbt.getByte("Amplifier");
-        int duration = nbt.getInt("Duration");
-        boolean visible = nbt.getBoolean("ShowParticles");
-        return new EffectInstance(effectType, amplifier, duration, visible);
+        var amplifier = nbt.getByte("Amplifier");
+        var duration = nbt.getInt("Duration");
+        var ambient = nbt.getBoolean("Ambient");
+        var visible = nbt.getBoolean("ShowParticles");
+        return new EffectInstance(effectType, amplifier, duration, ambient, visible);
     }
 
     public int getLevel() {
@@ -38,7 +40,7 @@ public final class EffectInstance {
                 .putByte("Amplifier", (byte) amplifier)
                 // TODO: DurationEasy, DurationNormal, DurationHard
                 .putInt("Duration", duration)
-                // TODO: Ambient
+                .putBoolean("Ambient", ambient)
                 // TODO: DisplayOnScreenTextureAnimation
                 .putBoolean("ShowParticles", visible)
                 .build();

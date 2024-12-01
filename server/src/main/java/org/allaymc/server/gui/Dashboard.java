@@ -321,7 +321,6 @@ public final class Dashboard {
 
         var server = Server.getInstance();
         server.getEventBus().registerListener(this);
-        // TODO: Update the table if any plugin disabled or enabled
         updatePluginTable();
 
         cmdInput.addActionListener(new CommandListener());

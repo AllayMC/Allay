@@ -43,16 +43,17 @@ public interface CommandSender extends TextReceiver, Permissible {
      */
     default void handleResult(CommandResult result) {
         if (result.context() == null) return;
-        if (!(boolean) getCmdExecuteLocation().dimension().getWorld().getWorldData().getGameRule(GameRule.SEND_COMMAND_FEEDBACK))
+        if (!(boolean) getCmdExecuteLocation().dimension().getWorld().getWorldData().getGameRule(GameRule.SEND_COMMAND_FEEDBACK)) {
             return;
+        }
 
         var status = result.status();
         var outputs = result.context().getOutputs().toArray(TrContainer[]::new);
         if (result.isSuccess()) {
-            Server.getInstance().broadcastCommandOutputs(this, status, outputs);
+            Server.getInstance().broadcastCommandOutputs(result.context().getSender(), status, outputs);
         } else {
             // If there is an error, only send message to oneself
-            sendCommandOutputs(this, status, outputs);
+            sendCommandOutputs(result.context().getSender(), status, outputs);
         }
     }
 

@@ -1,22 +1,10 @@
 package org.allaymc.server.block.type;
 
+import lombok.experimental.StandardException;
+
 /**
  * @author daoge_cmd
  */
+@StandardException
 public class BlockTypeBuildException extends RuntimeException {
-    public BlockTypeBuildException(String message) {
-        super(message);
-    }
-
-    public BlockTypeBuildException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public BlockTypeBuildException(Throwable cause) {
-        super(cause);
-    }
-
-    public BlockTypeBuildException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }

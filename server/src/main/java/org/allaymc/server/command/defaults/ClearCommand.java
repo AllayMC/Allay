@@ -90,6 +90,7 @@ public class ClearCommand extends SimpleCommand {
                                 context.addError("%" + TrKeys.M_COMMANDS_CLEAR_FAILURE_NO_ITEMS, target.getOriginName());
                                 success = false;
                             }
+                            status = maxCount - c;
                         }
                     }
                     return success ? context.success(status) : context.fail();

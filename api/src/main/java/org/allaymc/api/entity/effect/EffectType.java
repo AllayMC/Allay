@@ -40,7 +40,21 @@ public interface EffectType {
      *
      * @return A new instance of this effect.
      */
-    EffectInstance createInstance(int amplifier, int duration, boolean visible);
+    default EffectInstance createInstance(int amplifier, int duration, boolean visible) {
+        return createInstance(amplifier, duration, false, visible);
+    }
+
+    /**
+     * Creates a new instance of this effect with the given amplifier, duration, ambient and visibility.
+     *
+     * @param amplifier The amplifier of the effect.
+     * @param duration  The duration of the effect.
+     * @param ambient   Whether the effect is ambient.
+     * @param visible   Whether the effect is visible.
+     *
+     * @return A new instance of this effect.
+     */
+    EffectInstance createInstance(int amplifier, int duration, boolean ambient, boolean visible);
 
     /**
      * Called every tick while the effect is active.

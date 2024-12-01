@@ -2,8 +2,11 @@ package org.allaymc.api.form.element;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
+ * Represents an input element in a {@link org.allaymc.api.form.type.CustomForm}.
+ *
  * @author daoge_cmd
  */
 public final class Input extends CustomFormElement {
@@ -19,6 +22,13 @@ public final class Input extends CustomFormElement {
     @SerializedName("default")
     private String defaultText;
 
+    /**
+     * Create a new input.
+     *
+     * @param text        the text of the input.
+     * @param placeholder the placeholder of the input.
+     * @param defaultText the default text of the input.
+     */
     public Input(String text, String placeholder, String defaultText) {
         this.text = text;
         this.placeholder = placeholder;
@@ -26,6 +36,7 @@ public final class Input extends CustomFormElement {
     }
 
     @Override
+    @ApiStatus.Internal
     public void syncDefaultValueToResponse(String response) {
         this.defaultText = response;
     }

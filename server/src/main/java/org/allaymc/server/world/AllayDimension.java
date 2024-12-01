@@ -39,7 +39,6 @@ public class AllayDimension implements Dimension {
     protected final DimensionInfo dimensionInfo;
     protected final AllayWorld world;
     protected final Set<EntityPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    protected final Thread lightThread;
 
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
@@ -50,33 +49,26 @@ public class AllayDimension implements Dimension {
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.lightService = new AllayLightService(this);
-        if (Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
-            lightThread = Thread.ofPlatform()
-                    .name("Light Thread - " + world.getWorldData().getName() + ":" + dimensionInfo.toString())
-                    .unstarted(() -> {
-                        while (world.isRunning()) {
-                            lightService.tickIgnoreLimit();
-                        }
-                    });
-        } else {
-            lightThread = null;
-        }
     }
 
     public void startTick() {
-        chunkService.startTick();
-        if (Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
-            lightThread.start();
+        this.chunkService.startTick();
+        if (Server.SETTINGS.worldSettings().calculateLightAsync()) {
+            Thread.ofPlatform().name("Light Calculating Thread - " + this).start(() -> {
+                while (world.isRunning()) {
+                    this.lightService.tickIgnoreLimit();
+                }
+            });
         }
     }
 
     public void tick(long currentTick) {
-        chunkService.tick(currentTick);
-        entityService.tick();
-        entityPhysicsService.tick();
-        blockUpdateService.tick(currentTick);
-        if (!Server.SETTINGS.worldSettings().enableIndependentLightThread()) {
-            lightService.tick();
+        this.chunkService.tick(currentTick);
+        this.entityService.tick();
+        this.entityPhysicsService.tick();
+        this.blockUpdateService.tick(currentTick);
+        if (!Server.SETTINGS.worldSettings().calculateLightAsync()) {
+            this.lightService.tick();
         }
     }
 
@@ -86,9 +78,9 @@ public class AllayDimension implements Dimension {
 
     @Override
     public void addPlayer(EntityPlayer player, Runnable runnable) {
-        players.add(player);
-        chunkService.addChunkLoader(player);
-        entityService.addEntity(player, runnable);
+        this.players.add(player);
+        this.chunkService.addChunkLoader(player);
+        this.entityService.addEntity(player, runnable);
     }
 
     @Override
@@ -96,12 +88,12 @@ public class AllayDimension implements Dimension {
         if (player.isSpawned()) {
             // When the player respawns to another dimension after death, the player entity has already been unloaded
             // Therefore, when unloading the player entity, we need to check if the player entity has been spawned
-            entityService.removeEntity(player, runnable);
-            chunkService.removeChunkLoader(player);
-            players.remove(player);
+            this.entityService.removeEntity(player, runnable);
+            this.chunkService.removeChunkLoader(player);
+            this.players.remove(player);
         } else {
-            chunkService.removeChunkLoader(player);
-            players.remove(player);
+            this.chunkService.removeChunkLoader(player);
+            this.players.remove(player);
             // Run the callback directly
             runnable.run();
         }

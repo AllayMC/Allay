@@ -27,7 +27,7 @@ public class BlockPropertyTypeGen {
         try {
             BLOCK_PROPERTY_TYPE_INFO_FILE = CodeGenConstants.GSON.fromJson(Files.newBufferedReader(BLOCK_PROPERTY_TYPES_FILE), BlockPropertyTypeFile.class);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new CodeGenException(e);
         }
     }
 

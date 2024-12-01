@@ -26,9 +26,13 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.block.type.InternalBlockTypeData;
-import org.allaymc.server.component.annotation.*;
+import org.allaymc.server.component.annotation.ComponentObject;
+import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.item.component.event.*;
 import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
@@ -48,15 +52,15 @@ import static org.allaymc.api.item.ItemHelper.*;
 @Slf4j
 public class ItemBaseComponentImpl implements ItemBaseComponent {
 
-    @Identifier
-    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:item_base_component");
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
     private static int STACK_NETWORK_ID_COUNTER = 1;
 
     @Dependency
     protected ItemDataComponent itemDataComponent;
 
-    @ComponentedObject
+    @ComponentObject
     protected ItemStack thisItemStack;
 
     @Manager
@@ -144,7 +148,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             nbtBuilder.putList("ench", NbtType.COMPOUND, enchantmentNBT);
         }
 
-        //TODO: item lock type
+        // TODO: item lock type
 
         // Custom NBT content
         if (!customNBTContent.isEmpty()) nbtBuilder.put("CustomNBT", customNBTContent);
@@ -159,6 +163,13 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         var event = new CItemRightClickOnBlockEvent(dimension, placeBlockPos, interactInfo);
         manager.callEvent(event);
+    }
+
+    @Override
+    public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+        var event = new CItemUseOnBlockEvent(dimension, placeBlockPos, interactInfo, false);
+        manager.callEvent(event);
+        return event.isCanBeUsed();
     }
 
     @Override
@@ -247,14 +258,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean canUseItemInAir(EntityPlayer player) {
-        var event = new CItemTryUseEvent(player, false);
+        var event = new CItemTryUseInAirEvent(player, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }
 
     @Override
     public boolean useItemInAir(EntityPlayer player, long usedTime) {
-        var event = new CItemUsedEvent(player, usedTime, false);
+        var event = new CItemUsedInAirEvent(player, usedTime, false);
         manager.callEvent(event);
         return event.isCanBeUsed();
     }

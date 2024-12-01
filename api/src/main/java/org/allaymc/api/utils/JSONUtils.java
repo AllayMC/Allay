@@ -176,7 +176,7 @@ public class JSONUtils {
     public static <V> List<V> fromList(File file, Class<V> type) {
         try {
             JsonReader reader = new JsonReader(new FileReader(file));
-            TypeToken<List<V>> typeToken = (TypeToken<List<V>>) com.google.gson.reflect.TypeToken.getParameterized(ArrayList.class, type);
+            TypeToken<List<V>> typeToken = (TypeToken<List<V>>) TypeToken.getParameterized(ArrayList.class, type);
             return GSON.fromJson(reader, typeToken.getType());
         } catch (FileNotFoundException e) {
             throw new GsonException("gson from error, file path: {}, type: {}", file.getPath(), type, e);

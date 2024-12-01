@@ -20,8 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static org.allaymc.api.container.FullContainerType.CREATED_OUTPUT;
-
 /**
  * @author daoge_cmd
  */
@@ -132,7 +130,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
             // so we directly set the output in CREATED_OUTPUT in CraftRecipeAction
             var output = recipe.getOutputs()[0].copy(false);
             output.setCount(output.getCount() * numberOfRequestedCrafts);
-            player.getContainer(CREATED_OUTPUT).setItemStack(0, output);
+            player.getContainer(FullContainerType.CREATED_OUTPUT).setItemStack(0, output);
         } else {
             if (numberOfRequestedCrafts != 1) {
                 log.warn("Number of requested crafts for multi-outputs recipe should be one! Actual: {}", numberOfRequestedCrafts);

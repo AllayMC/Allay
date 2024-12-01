@@ -38,7 +38,7 @@ class AllayBlockTypeTest {
         TEST_INT_PROPERTY_TYPE = IntPropertyType.of("test_int", 0, 10, 0);
         TEST_ENUM_PROPERTY_TYPE = EnumPropertyType.of("test_enum", TestEnum.class, TestEnum.A);
         testBlockType1 = AllayBlockType
-                .builder(TestBlock.class)
+                .builder(TestBlockImpl.class)
                 .identifier("minecraft:test_block")
                 .setProperties(
                         TEST_BOOLEAN_PROPERTY_TYPE,
@@ -49,7 +49,7 @@ class AllayBlockTypeTest {
                         BlockStateDataComponentImpl.ofGlobalStatic(BlockStateData.builder().burnOdds(2).build())))
                 .build();
         testBlockType2 = AllayBlockType
-                .builder(TestBlock.class)
+                .builder(TestBlockImpl.class)
                 .identifier("minecraft:test_block2")
                 .setProperties(
                         TEST_BOOLEAN_PROPERTY_TYPE,
@@ -130,4 +130,20 @@ class AllayBlockTypeTest {
         values[1] = TEST_INT_PROPERTY_TYPE.createValue(0);
         assertEquals(0b1000000, computeSpecialValue(offset, values));
     }
+
+//    @Test
+//    void testNullDefaultStateNotAllowed() {
+//        assertThrows(BlockTypeBuildException.class, () -> {
+//            AllayBlockType
+//                    .builder(TestBlockImpl.class)
+//                    .identifier("minecraft:test_block3")
+//                    .setProperties(
+//                            TEST_BOOLEAN_PROPERTY_TYPE,
+//                            TEST_INT_PROPERTY_TYPE,
+//                            TEST_ENUM_PROPERTY_TYPE)
+//                    .addComponent(new TestComponentImpl())
+//                    .setDefaultStateSupplier($ -> null)
+//                    .build();
+//        });
+//    }
 }

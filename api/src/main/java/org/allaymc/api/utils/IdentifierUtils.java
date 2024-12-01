@@ -100,8 +100,9 @@ public final class IdentifierUtils {
      */
     public static boolean isPathValid(String path) {
         for (int i = 0; i < path.length(); ++i) {
-            if (isPathCharacterValid(path.charAt(i))) continue;
-            return false;
+            if (!isPathCharacterValid(path.charAt(i))) {
+                return false;
+            }
         }
         return true;
     }
@@ -126,8 +127,9 @@ public final class IdentifierUtils {
      */
     public static boolean isNamespaceValid(String namespace) {
         for (int i = 0; i < namespace.length(); ++i) {
-            if (isNamespaceCharacterValid(namespace.charAt(i))) continue;
-            return false;
+            if (!isNamespaceCharacterValid(namespace.charAt(i))) {
+                return false;
+            }
         }
         return true;
     }

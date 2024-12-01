@@ -28,7 +28,7 @@ public class EntityIdEnumGen {
                 ENTITY_ID_MAP.put(entry.getKey(), id);
             });
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CodeGenException(e);
         }
     }
 

@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -27,7 +28,9 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.scheduler.AllayScheduler;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
@@ -35,6 +38,8 @@ import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -51,8 +56,8 @@ public class AllayWorld implements World {
     protected final WorldStorage worldStorage;
     @Getter
     protected final WorldData worldData;
-    protected final Queue<PacketQueueEntry> packetQueue;
-    protected final AtomicBoolean networkLock;
+    protected final BlockingQueueWrapper<PacketQueueEntry> packetQueue;
+    protected final Semaphore networkSemaphore;
     protected final AtomicBoolean isRunning;
     @Getter
     protected final Int2ObjectOpenHashMap<Dimension> dimensionMap;
@@ -69,14 +74,14 @@ public class AllayWorld implements World {
     protected boolean isRaining = false;
     protected boolean isThundering = false;
     protected final Set<Weather> effectiveWeathers;
-    protected boolean isFirstTick = false;
+    protected boolean isFirstTick = true;
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
         this.worldData = worldStorage.readWorldData();
         this.worldData.setWorld(this);
-        this.packetQueue = PlatformDependent.newMpscQueue();
-        this.networkLock = ENABLE_INDEPENDENT_NETWORK_THREAD ? new AtomicBoolean(false) : null;
+        this.packetQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
+        this.networkSemaphore = ENABLE_INDEPENDENT_NETWORK_THREAD ? new Semaphore(1) : null;
         this.isRunning = new AtomicBoolean(true);
         this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
@@ -92,45 +97,67 @@ public class AllayWorld implements World {
         this.effectiveWeathers = new HashSet<>();
     }
 
+    @SneakyThrows
     protected void networkThreadMain() {
         while (isRunning.get()) {
-            if (!packetQueue.isEmpty()) {
-                while (!networkLock.compareAndSet(false, true)) {
-                    // Spin
-                    Thread.yield();
-                }
-            } else {
-                Thread.yield();
+            // Block until there are packets to handle (up to 1 second)
+            var firstEntry = packetQueue.tryPoll(1, TimeUnit.SECONDS);
+            if (firstEntry == null) {
                 continue;
             }
-            handleSyncPackets();
+            // Get the permit to handle packets
+            networkSemaphore.acquire();
+            handleSyncPackets(firstEntry);
+            // Return the permit, so that the world thread can run
+            networkSemaphore.release();
         }
     }
 
-    protected void handleSyncPackets() {
+    @SneakyThrows
+    private void worldThreadMain(GameLoop gameLoop) {
+        if (!isRunning.get()) {
+            gameLoop.stop();
+            log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getName()));
+            return;
+        }
+
+        if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
+            networkSemaphore.acquire();
+        }
+
         try {
-            PacketQueueEntry entry;
+            tick(gameLoop.getTick());
+        } catch (Throwable throwable) {
+            log.error("Error while ticking level {}", this.getWorldData().getName(), throwable);
+        } finally {
+            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
+                networkSemaphore.release();
+            }
+        }
+    }
+
+    protected void handleSyncPackets(PacketQueueEntry firstEntry) {
+        try {
+            PacketQueueEntry entry = firstEntry;
             int count = 0;
-            while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.poll()) != null) {
+            do {
+                if (entry == null) continue;
                 if (entry.player.getWorld() != this) {
                     log.warn("Trying to handle sync packet in world {} which the player {} is not in!", this.getWorldData().getName(), entry.player.getOriginName());
                 }
-                entry.player.getManager().<EntityPlayerNetworkComponentImpl>getComponent(EntityPlayerNetworkComponentImpl.IDENTIFIER).handleDataPacket(entry.packet(), entry.time());
+                ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) entry.player).getPlayerNetworkComponent()).handleDataPacket(entry.packet(), entry.time());
                 count++;
-            }
+
+            } while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.pollNow()) != null);
         } catch (Throwable throwable) {
             log.error("Error while handling sync packet in world {}", this.getWorldData().getName(), throwable);
-        } finally {
-            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-                networkLock.set(false);
-            }
         }
     }
 
     protected void tick(long currentTick) {
         checkFirstTick();
         if (!ENABLE_INDEPENDENT_NETWORK_THREAD) {
-            handleSyncPackets();
+            handleSyncPackets(null);
         }
         syncData();
         tickTime(currentTick);
@@ -141,23 +168,30 @@ public class AllayWorld implements World {
     }
 
     protected void checkFirstTick() {
-        if (isFirstTick) {
+        if (!isFirstTick) {
             return;
         }
-        isFirstTick = true;
+        isFirstTick = false;
 
+        var overworld = getOverWorld();
         if (Server.SETTINGS.worldSettings().loadSpawnPointChunks()) {
             // Add spawn point chunk loader
-            getOverWorld().getChunkService().addChunkLoader(new SpawnPointChunkLoader());
+            overworld.getChunkService().addChunkLoader(new SpawnPointChunkLoader());
         }
 
-        if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), getOverWorld()))) {
-            var newSpawnPoint = getOverWorld().findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
-            if (newSpawnPoint == null) {
-                log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
-                newSpawnPoint = new Vector3i(0, getOverWorld().getHeight(0, 0) + 1, 0);
-            }
-            worldData.setSpawnPoint(newSpawnPoint);
+        if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
+            Thread.ofVirtual().name("Spawn Point Finding Thread - " + worldData.getName()).start(() -> {
+                var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
+                if (newSpawnPoint == null) {
+                    log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
+                    newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
+                }
+                var finalNewSpawnPoint = newSpawnPoint;
+                overworld.getWorld().getScheduler().runLater(this, () -> {
+                    // Set new spawn point in world thread as world data object is not thread-safe
+                    worldData.setSpawnPoint(finalNewSpawnPoint);
+                });
+            });
         }
     }
 
@@ -172,7 +206,7 @@ public class AllayWorld implements World {
     }
 
     public void addSyncPacketToQueue(EntityPlayer player, BedrockPacket packet, long time) {
-        packetQueue.add(new PacketQueueEntry(player, packet, time));
+        packetQueue.offer(new PacketQueueEntry(player, packet, time));
     }
 
     protected void tickTime(long currentTick) {
@@ -388,32 +422,6 @@ public class AllayWorld implements World {
             weatherRemoved.forEach(weather -> player.sendPacket(weather.createStopLevelEventPacket()));
             weatherAdded.forEach(weather -> player.sendPacket(weather.createStartLevelEventPacket()));
         });
-    }
-
-    private void worldThreadMain(GameLoop gameLoop) {
-        if (!isRunning.get()) {
-            gameLoop.stop();
-            log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getName()));
-            return;
-        }
-
-        if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-            //noinspection StatementWithEmptyBody
-            while (!networkLock.compareAndSet(false, true)) {
-                // Spin
-                // We don't use Thread.yield() here, because we don't want to block the world main thread
-            }
-        }
-
-        try {
-            tick(gameLoop.getTick());
-        } catch (Throwable throwable) {
-            log.error("Error while ticking level {}", this.getWorldData().getName(), throwable);
-        } finally {
-            if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
-                networkLock.set(false);
-            }
-        }
     }
 
     protected record PacketQueueEntry(EntityPlayer player, BedrockPacket packet, long time) {}

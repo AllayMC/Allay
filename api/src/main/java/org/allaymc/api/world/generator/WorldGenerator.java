@@ -4,7 +4,6 @@ import org.allaymc.api.ApiInstanceHolder;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.generator.function.EntitySpawner;
-import org.allaymc.api.world.generator.function.Lighter;
 import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.jetbrains.annotations.ApiStatus;
@@ -133,15 +132,6 @@ public interface WorldGenerator {
          * @return the builder
          */
         WorldGeneratorBuilder populators(Populator... populators);
-
-        /**
-         * Set the lighters of the generator.
-         *
-         * @param lighters the lighters
-         *
-         * @return the builder
-         */
-        WorldGeneratorBuilder lighters(Lighter... lighters);
 
         /**
          * Set the entity spawners of the generator.

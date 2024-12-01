@@ -1,6 +1,7 @@
 package org.allaymc.server.item.type;
 
 import com.google.gson.JsonParser;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.tag.ItemTag;
@@ -25,6 +26,7 @@ public final class InternalItemTypeData {
     private static final EnumMap<ItemId, ItemTag[]> ITEM_TAGS = new EnumMap<>(ItemId.class);
     private static final EnumMap<ItemId, ItemTag[]> ITEM_TAGS_CUSTOM = new EnumMap<>(ItemId.class);
 
+    @SneakyThrows
     public static void init() {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("items.json")))) {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
@@ -47,8 +49,6 @@ public final class InternalItemTypeData {
                     ITEM_TAGS.put(id, Utils.EMPTY_ITEM_TAG_ARRAY);
                 }
             });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("item_tags_custom.json")))) {
             var map = new HashMap<ItemId, Set<ItemTag>>();
@@ -75,8 +75,6 @@ public final class InternalItemTypeData {
             for (var id : ItemId.values()) {
                 ITEM_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_ITEM_TAG_ARRAY);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

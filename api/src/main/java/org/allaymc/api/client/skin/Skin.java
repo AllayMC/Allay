@@ -146,7 +146,8 @@ public class Skin {
             image.flush();
             return new Image(image.getWidth(), image.getHeight(), outputStream.array);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Error while parsing buffered image", e);
+            throw new SkinException(e);
         }
     }
 

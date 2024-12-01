@@ -2,8 +2,11 @@ package org.allaymc.api.form.element;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
+ * Represents a toggle element in a {@link org.allaymc.api.form.type.CustomForm}.
+ *
  * @author daoge_cmd
  */
 public final class Toggle extends CustomFormElement {
@@ -17,12 +20,19 @@ public final class Toggle extends CustomFormElement {
     @SerializedName("default")
     private boolean defaultValue;
 
+    /**
+     * Create a new toggle.
+     *
+     * @param text         the text of the toggle.
+     * @param defaultValue the default value of the toggle.
+     */
     public Toggle(String text, boolean defaultValue) {
         this.text = text;
         this.defaultValue = defaultValue;
     }
 
     @Override
+    @ApiStatus.Internal
     public void syncDefaultValueToResponse(String response) {
         this.defaultValue = Boolean.parseBoolean(response);
     }

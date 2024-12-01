@@ -12,7 +12,7 @@ such as Java, JavaScript, Scala and Kotlin. In this section, we will guide you t
 To develop your first plugin, you will have to install the following prerequisites:
 
 - [JetBrains IDEA](https://www.jetbrains.com/idea/)
-- [JDK 21](../getting-started/installation.md#install-java-21)
+- [JDK 21](../getting-started/installation.md#install-java)
 - [Allay](../getting-started/installation.md#download-allay)
 
 ## Creating a New Project

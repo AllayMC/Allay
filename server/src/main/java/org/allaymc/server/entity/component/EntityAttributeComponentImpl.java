@@ -8,8 +8,8 @@ import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityHealthChangeEvent;
-import org.allaymc.server.component.annotation.ComponentedObject;
-import org.allaymc.server.component.annotation.Identifier;
+import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CEntityAttributeChangeEvent;
 import org.allaymc.server.entity.component.event.CEntityLoadNBTEvent;
@@ -30,12 +30,12 @@ import static java.lang.Math.min;
 @Slf4j
 public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
-    @Identifier
-    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:entity_attribute_component");
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_attribute_component");
 
     protected final Map<AttributeType, Attribute> attributes = new EnumMap<>(AttributeType.class);
 
-    @ComponentedObject
+    @ComponentObject
     protected Entity thisEntity;
     @Manager
     protected ComponentManager manager;
@@ -101,7 +101,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     public void setAttributeValue(AttributeType attributeType, float value) {
         var attribute = this.attributes.get(attributeType);
         if (attribute == null) {
-            throw unsupportAttributeTypeException(attributeType);
+            throw unsupportedAttributeTypeException(attributeType);
         }
         attribute.setCurrentValue(value);
         manager.callEvent(CEntityAttributeChangeEvent.INSTANCE);
@@ -111,7 +111,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     public void setAttribute(Attribute attribute) {
         var attributeType = AttributeType.byKey(attribute.getKey());
         if (!this.attributes.containsKey(attributeType)) {
-            throw unsupportAttributeTypeException(attributeType);
+            throw unsupportedAttributeTypeException(attributeType);
         }
         this.attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
         manager.callEvent(CEntityAttributeChangeEvent.INSTANCE);
@@ -121,7 +121,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     public float getAttributeValue(AttributeType attributeType) {
         var attribute = this.getAttribute(attributeType);
         if (attribute == null) {
-            throw unsupportAttributeTypeException(attributeType);
+            throw unsupportedAttributeTypeException(attributeType);
         }
         return attribute.getCurrentValue();
     }
@@ -131,7 +131,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         if (!supportHealth()) {
             // Check if health is supported by the entity here
             // To make sure that if health is not supported, event won't be called
-            throw unsupportAttributeTypeException(AttributeType.HEALTH);
+            throw unsupportedAttributeTypeException(AttributeType.HEALTH);
         }
         if (value > 0 && value < 1) {
             // Client will think he is dead if the health is less than 1
@@ -149,7 +149,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         setAttributeValue(AttributeType.HEALTH, event.getNewHealth());
     }
 
-    protected IllegalArgumentException unsupportAttributeTypeException(AttributeType attributeType) {
+    protected IllegalArgumentException unsupportedAttributeTypeException(AttributeType attributeType) {
         return new IllegalArgumentException("Attribute type " + attributeType + " is not found in entity " + thisEntity.getEntityType().getIdentifier());
     }
 }

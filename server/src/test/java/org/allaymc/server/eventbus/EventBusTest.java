@@ -15,9 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class EventBusTest {
     private final EventBus eventBus = new AllayEventBus(Executors.newVirtualThreadPerTaskExecutor());
     private String str;
-    private boolean bool;
 
-    {
+    public EventBusTest() {
         eventBus.registerListener(this);
     }
 

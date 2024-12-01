@@ -10,7 +10,7 @@ import org.allaymc.api.eventbus.event.server.WhitelistChangeEvent;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.network.NetworkServer;
+import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.plugin.PluginManager;
 import org.allaymc.api.scheduler.Scheduler;
 import org.allaymc.api.scheduler.TaskCreator;
@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * Represents the server instance.
@@ -65,6 +64,9 @@ public interface Server extends TaskCreator, CommandSender {
      */
     long getStartTime();
 
+    /**
+     * Disconnect all players with the default reason.
+     */
     default void disconnectAllPlayers() {
         disconnectAllPlayers(TrKeys.M_DISCONNECT_CLOSED);
     }
@@ -141,11 +143,11 @@ public interface Server extends TaskCreator, CommandSender {
     }
 
     /**
-     * Get the network server.
+     * Get the network interface.
      *
-     * @return the network server.
+     * @return the network interface.
      */
-    NetworkServer getNetworkServer();
+    NetworkInterface getNetworkInterface();
 
     /**
      * Get the online players.
@@ -188,7 +190,7 @@ public interface Server extends TaskCreator, CommandSender {
      *
      * @return the compute thread pool.
      */
-    ThreadPoolExecutor getComputeThreadPool();
+    ExecutorService getComputeThreadPool();
 
     /**
      * Get the virtual thread pool.

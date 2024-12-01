@@ -44,7 +44,7 @@ public final class AllayAPI {
     private String coreName;
 
     private AllayAPI() {
-        defaultAPIRequirements();
+        registerDefaultAPIRequirements();
     }
 
     /**
@@ -68,13 +68,15 @@ public final class AllayAPI {
     public void implement(String coreName) throws MissingImplementationException {
         if (!i18nSet) throw new MissingImplementationException("Missing i18n implementation!");
         for (var entry : bindings.entrySet()) {
-            if (entry.getValue() == null)
+            if (entry.getValue() == null) {
                 throw new MissingImplementationException("Missing binding for " + entry.getKey().getName());
+            }
 
             var apiInstance = entry.getValue().bindingAction.get();
             var consumer = (Consumer<Object>) consumers.get(entry.getKey());
-            if (consumer == null)
+            if (consumer == null) {
                 throw new MissingRequirementException("Missing requirement for " + entry.getKey().getName());
+            }
 
             consumer.accept(apiInstance);
             if (entry.getValue().afterBound != null) {
@@ -139,16 +141,17 @@ public final class AllayAPI {
      *
      * @return the implementation instance of the specific interface
      *
-     * @throws RuntimeException if the interface has not been implemented
+     * @throws APINotImplementedException if the interface has not been implemented
      */
     @ApiStatus.Internal
     public <T> T getAPIInstance(Class<T> api) {
-        if (!implemented)
-            throw new RuntimeException("AllayAPI::getAPIInstance cannot be called before it been implemented");
+        if (!implemented) {
+            throw new APINotImplementedException("AllayAPI::getAPIInstance cannot be called before it been implemented");
+        }
         return api.cast(bindings.get(api));
     }
 
-    private void defaultAPIRequirements() {
+    private void registerDefaultAPIRequirements() {
         // Common
         requireImpl(Server.class, Server.INSTANCE::set);
         requireImpl(Scheduler.Factory.class, Scheduler.FACTORY::set);

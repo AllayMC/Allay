@@ -1,7 +1,7 @@
 [versions]
-log4j = "2.24.1"
+log4j = "2.24.2"
 commons-rng = "1.6"
-fastutil = "8.5.13"
+fastutil = "8.5.15"
 
 [libraries]
 # NBT
@@ -45,13 +45,13 @@ libdeflate = { group = "cn.powernukkitx", name = "libdeflate-java", version = "0
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
-commonsio = { group = "commons-io", name = "commons-io", version = "2.17.0" }
-# bytecode
-bytebuddy = { group = "net.bytebuddy", name = "byte-buddy", version = "1.15.10" }
+commonsio = { group = "commons-io", name = "commons-io", version = "2.18.0" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
-# K-V DataBase
-leveldbjni = { group = "net.daporkchop", name = "leveldb-mcpe-jni", version = "0.0.10-SNAPSHOT" }
+# LevelDB
+# leveldbjni = { group = "net.daporkchop", name = "leveldb-mcpe-jni", version = "0.0.10-SNAPSHOT" }
+leveldb = { group = "com.hivemc.leveldb", name = "leveldb", version = "1.0.1" }
+leveldb-api = { group = "com.hivemc.leveldb", name = "leveldb-api", version = "1.0.1" }
 # Logging dependencies
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.16" }
 log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j" }
@@ -67,9 +67,9 @@ fastreflect = { group = "com.github.AllayMC", name = "fast-reflection", version 
 joml = { group = "org.joml", name = "joml", version = "1.10.8" }
 joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.10.0" }
 # Netty epoll
-netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.114.Final" }
+netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.115.Final" }
 # Netty kqueue
-netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version = "4.1.114.Final" }
+netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version = "4.1.115.Final" }
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.5" }
 # Native Operating System and Hardware Information
@@ -81,7 +81,7 @@ formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.11.3" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.14.2" }
 # Lombok
-lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.34" }
+lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }
 # Random generator
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
@@ -96,6 +96,7 @@ fastutil = [
     "fastutil-reference-int-maps", "fastutil-reference-object-maps", "fastutil-reference-reference-maps",
     "fastutil-short-sets", "fastutil-short-object-maps", "fastutil-byte-object-maps", "fastutil-io"
 ]
+leveldb = ["leveldb", "leveldb-api"]
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version = "8.3.5" }

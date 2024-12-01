@@ -17,9 +17,9 @@ public class WeatherCommand extends SimpleCommand {
     @Override
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
-                .enums("weather", Weather.class)
+                .enumClass("weather", Weather.class)
                 .exec(context -> {
-                    Weather weather = Weather.valueOf(((String) context.getResult(0)).toUpperCase());
+                    Weather weather = context.getResult(0);
                     if (weather == Weather.CLEAR) {
                         context.getSender().getCmdExecuteLocation().dimension().getWorld().clearWeather();
                     } else {

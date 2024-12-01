@@ -10,10 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.world.ChunkLoadEvent;
 import org.allaymc.api.eventbus.event.world.ChunkPreLoadEvent;
 import org.allaymc.api.eventbus.event.world.ChunkUnloadEvent;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.utils.HashUtils;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
@@ -33,8 +33,8 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.ASYNC;
-import static org.allaymc.api.server.ServerSettings.WorldConfig.ChunkSendingStrategy.SYNC;
+import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.ASYNC;
+import static org.allaymc.api.server.ServerSettings.WorldSettings.ChunkSendingStrategy.SYNC;
 import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
 
 /**
@@ -102,15 +102,13 @@ public final class AllayChunkService implements ChunkService {
         // Remove countdown ended unused chunks
         unusedChunkClearCountDown.entrySet().removeIf(entry -> {
             var shouldRemove = entry.getValue() == 0;
-            if (shouldRemove) {
-                if (!unloadChunk(entry.getKey()).getNow(true)) {
-                    // Chunk cannot be unloaded, may because ChunkUnloadEvent is cancelled
-                    // If chunk unloading is cancelled by a plugin, unloadChunk()
-                    // will return CompletableFuture.completedFuture(false) so we can
-                    // use getNow() method here
-                    shouldRemove = false;
-                    entry.setValue(removeUnneededChunkCycle);
-                }
+            if (shouldRemove && !unloadChunk(entry.getKey()).getNow(true)) {
+                // Chunk cannot be unloaded, may because ChunkUnloadEvent is cancelled
+                // If chunk unloading is cancelled by a plugin, unloadChunk()
+                // will return CompletableFuture.completedFuture(false) so we can
+                // use getNow() method here
+                shouldRemove = false;
+                entry.setValue(removeUnneededChunkCycle);
             }
             return shouldRemove;
         });

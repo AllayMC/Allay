@@ -1,5 +1,6 @@
 package org.allaymc.server.block.type;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -28,10 +29,9 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
 import org.allaymc.server.block.component.BlockEntityHolderComponentImpl;
 import org.allaymc.server.block.component.BlockStateDataComponentImpl;
-import org.allaymc.server.component.injector.AllayComponentInjector;
 import org.allaymc.server.component.interfaces.ComponentProvider;
+import org.allaymc.server.item.impl.ItemBlockImpl;
 import org.allaymc.server.item.type.AllayItemType;
-import org.allaymc.server.utils.ComponentClassCacheUtils;
 import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -109,8 +109,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         return specialValue;
     }
 
-    public static <T extends BlockBehavior> Builder<T> builder(Class<T> interfaceClass) {
-        return new Builder<>(interfaceClass);
+    public static <T extends BlockBehavior> Builder builder(Class<T> clazz) {
+        return new Builder(clazz);
     }
 
     @Override
@@ -343,16 +343,16 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     }
 
     @Slf4j
-    public static class Builder<T extends BlockBehavior> {
+    public static class Builder {
 
-        protected Class<T> interfaceClass;
+        protected Class<?> clazz;
         protected Map<Identifier, BlockComponent> components = new HashMap<>();
         protected Map<String, BlockPropertyType<?>> properties = new HashMap<>();
         protected Identifier identifier;
         protected ItemType<?> itemType;
         protected ItemType<?> hardItemType;
         protected boolean isCustomBlock = true;
-        protected Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
+        protected Function<BlockType<?>, BlockBaseComponent> baseComponentSupplier = BlockBaseComponentImpl::new;
         protected Set<BlockTag> blockTags = Set.of();
         protected Material material;
         protected Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier = blockStates ->
@@ -361,22 +361,22 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                         properties.values().stream().map(p -> p.tryCreateValue(p.getDefaultValue())).collect(Collectors.toList())
                 ));
 
-        public Builder(Class<T> interfaceClass) {
-            if (interfaceClass == null)
+        public Builder(Class<?> clazz) {
+            if (clazz == null)
                 throw new BlockTypeBuildException("Interface class cannot be null!");
-            this.interfaceClass = interfaceClass;
+            this.clazz = clazz;
         }
 
-        public Builder<T> identifier(Identifier identifier) {
+        public Builder identifier(Identifier identifier) {
             this.identifier = identifier;
             return this;
         }
 
-        public Builder<T> identifier(String identifier) {
+        public Builder identifier(String identifier) {
             return identifier(new Identifier(identifier));
         }
 
-        public Builder<T> vanillaBlock(BlockId blockId) {
+        public Builder vanillaBlock(BlockId blockId) {
             this.isCustomBlock = false;
             this.identifier = blockId.getIdentifier();
 
@@ -394,47 +394,47 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
-        public Builder<T> bindBlockEntity(BlockEntityType<?> blockEntityType) {
+        public Builder bindBlockEntity(BlockEntityType<?> blockEntityType) {
             return addComponent(new BlockEntityHolderComponentImpl<>(blockEntityType));
         }
 
-        public Builder<T> setDefaultStateSupplier(Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier) {
+        public Builder setDefaultStateSupplier(Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier) {
             this.defaultStateSupplier = defaultStateSupplier;
             return this;
         }
 
-        public Builder<T> setProperties(BlockPropertyType<?>... properties) {
+        public Builder setProperties(BlockPropertyType<?>... properties) {
             this.properties = Arrays.stream(properties).collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
             return this;
         }
 
-        public Builder<T> setProperties(List<BlockPropertyType<?>> properties) {
+        public Builder setProperties(List<BlockPropertyType<?>> properties) {
             this.properties = properties.stream().collect(Collectors.toMap(BlockPropertyType::getName, Function.identity()));
             return this;
         }
 
-        public Builder<T> setComponents(Map<Identifier, BlockComponent> components) {
+        public Builder setComponents(Map<Identifier, BlockComponent> components) {
             if (components == null)
                 throw new BlockTypeBuildException("Component providers cannot be null");
             this.components = new HashMap<>(components);
             return this;
         }
 
-        public Builder<T> addComponents(Map<Identifier, BlockComponent> components) {
+        public Builder addComponents(Map<Identifier, BlockComponent> components) {
             this.components.putAll(components);
             return this;
         }
 
-        public Builder<T> addComponent(BlockComponent component) {
+        public Builder addComponent(BlockComponent component) {
             this.components.put(findComponentIdentifierInCertainClass(component.getClass()), component);
             return this;
         }
 
-        public Builder<T> setComponents(List<BlockComponent> components) {
+        public Builder setComponents(List<BlockComponent> components) {
             return setComponents(listComponentToMap(components));
         }
 
-        public Builder<T> addComponents(List<BlockComponent> components) {
+        public Builder addComponents(List<BlockComponent> components) {
             return addComponents(listComponentToMap(components));
         }
 
@@ -449,49 +449,41 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return map;
         }
 
-        public Builder<T> setBlockBaseComponentSupplier(Function<BlockType<T>, BlockBaseComponent> blockBaseComponentSupplier) {
-            this.blockBaseComponentSupplier = blockBaseComponentSupplier;
+        public Builder setBaseComponentSupplier(Function<BlockType<?>, BlockBaseComponent> baseComponentSupplier) {
+            this.baseComponentSupplier = baseComponentSupplier;
             return this;
         }
 
-        public Builder<T> setBlockTags(BlockTag... blockTags) {
+        public Builder setBlockTags(BlockTag... blockTags) {
             // Unmodifiable set
             this.blockTags = Set.of(blockTags);
             return this;
         }
 
-        public Builder<T> setMaterial(Material material) {
+        public Builder setMaterial(Material material) {
             this.material = material;
             return this;
         }
 
-        public AllayBlockType<T> build() {
+        public <T extends BlockBehavior> AllayBlockType<T> build() {
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
             var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, material, defaultStateSupplier);
 
             var listComponents = new ArrayList<>(components.values());
-            if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER))
-                listComponents.add(blockBaseComponentSupplier.apply(type));
-            if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER))
+            if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER)) {
+                listComponents.add(baseComponentSupplier.apply(type));
+            }
+            if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER)) {
                 listComponents.add(BlockStateDataComponentImpl.ofDefault());
+            }
 
-            List<ComponentProvider<? extends Component>> componentProviders = listComponents.stream().map(singleton -> {
-                var currentClass = singleton.getClass();
-                //For anonymous class, we give it's super class to component provider
-                //So that injector can work with anonymous class
-                //Because anonymous class classes cannot be used directly as field types during the dynamic class generation phase
-                return ComponentProvider.of(initInfo -> singleton, currentClass.isAnonymousClass() ? currentClass.getSuperclass() : currentClass);
-            }).collect(Collectors.toList());
+            List<ComponentProvider<? extends Component>> componentProviderList = listComponents.stream().map(singleton -> ComponentProvider.of($ -> singleton, singleton.getClass())).collect(Collectors.toList());
+
             try {
-                var injectedClass = new AllayComponentInjector<T>()
-                        .interfaceClass(interfaceClass)
-                        .component(componentProviders)
-                        .useCachedClass(ComponentClassCacheUtils.getCacheClass(interfaceClass))
-                        .inject(isCustomBlock);
-                type.blockBehavior = injectedClass.getConstructor().newInstance();
-            } catch (Exception e) {
-                throw new BlockTypeBuildException("Failed to create block type!", e);
+                type.blockBehavior = (T) clazz.getConstructors()[0].newInstance(componentProviderList);
+            } catch (Throwable t) {
+                throw new BlockTypeBuildException("Failed to create block type!", t);
             }
             type.register(Registries.BLOCKS);
             type.register(Registries.BLOCK_STATE_PALETTE);
@@ -500,23 +492,37 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         private void prepareItemType() {
             var itemId = BlockAndItemIdMapper.blockIdToActualBlockItemId(identifier);
-            itemType = Registries.ITEMS.get(itemId);
-            if (itemType == null) {
+            var hardItemIdWhenConflict = new Identifier(itemId.namespace(), BlockAndItemIdMapper.NAMING_CONFLICT_PATH_PREFIX + itemId.path());
+            this.itemType = Registries.ITEMS.get(itemId);
+
+            if (!isCustomBlock) {
+                // This is a vanilla block
+                // The hard item type (when conflict) for vanilla block is pre-registered
+                Preconditions.checkNotNull(this.itemType);
+                this.hardItemType = Registries.ITEMS.get(hardItemIdWhenConflict);
+                if (this.hardItemType == null) {
+                    // The actual item type and the hard item type
+                    // are the same for this vanilla block
+                    this.hardItemType = itemType;
+                }
+                return;
+            }
+
+            if (this.itemType == null) {
                 // If the corresponding block item is not explicitly registered, automatically register one
-                itemType = AllayItemType
-                        .builder(ItemStack.class)
+                this.itemType = AllayItemType
+                        .builder(ItemBlockImpl.class)
                         .identifier(itemId)
                         .build();
-                hardItemType = itemType;
+                this.hardItemType = itemType;
             } else {
                 // If an additional block item has already been registered, add "item." prefix
-                var hardItemId = new Identifier(itemId.namespace(), BlockAndItemIdMapper.NAMING_CONFLICT_PATH_PREFIX + itemId.path());
                 // Allay will pre-register block items with the "item." prefix in the vanilla registry, so let's check again for this ID
-                hardItemType = Registries.ITEMS.get(hardItemId);
-                if (hardItemType == null) {
-                    hardItemType = AllayItemType
-                            .builder(ItemStack.class)
-                            .identifier(hardItemId)
+                this.hardItemType = Registries.ITEMS.get(hardItemIdWhenConflict);
+                if (this.hardItemType == null) {
+                    this.hardItemType = AllayItemType
+                            .builder(ItemBlockImpl.class)
+                            .identifier(hardItemIdWhenConflict)
                             .build();
                 }
             }

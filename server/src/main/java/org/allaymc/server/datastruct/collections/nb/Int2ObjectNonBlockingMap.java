@@ -131,7 +131,7 @@ public class Int2ObjectNonBlockingMap<TypeV>
             _val_1_handler = MethodHandles.lookup().in(Int2ObjectNonBlockingMap.class)
                     .findVarHandle(Int2ObjectNonBlockingMap.class, "_val_1", Object.class);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e); // Should never happen
+            throw new AssertionError(e); // Should never happen
         }
     }
 
@@ -1099,7 +1099,7 @@ public class Int2ObjectNonBlockingMap<TypeV>
                     reprobe_cnt >= REPROBE_LIMIT &&
                     (reprobe_cnt >= reprobe_limit(len) ||
                      // More expensive check: see if the table is > 1/2 full.
-                     _slots.estimate_get() >= (len >> 1));
+                     _slots.estimateGet() >= (len >> 1));
         }
 
         // --- resize ------------------------------------------------------------
@@ -1157,7 +1157,7 @@ public class Int2ObjectNonBlockingMap<TypeV>
             if ((int) len != len) {
                 log2 = 30;
                 len = (1L << log2) + 2;
-                if (sz > ((len >> 2) + (len >> 1))) throw new RuntimeException("Table is full.");
+                if (sz > ((len >> 2) + (len >> 1))) throw new IllegalStateException("Table is full.");
             }
 
             // Now limit the number of threads actually allocating memory to a

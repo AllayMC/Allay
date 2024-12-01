@@ -23,12 +23,12 @@ import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.component.annotation.ComponentedObject;
+import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
-import org.allaymc.server.component.annotation.Identifier;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.network.processor.AllayPacketProcessorHolder;
@@ -53,7 +53,10 @@ import org.cloudburstmc.protocol.common.util.OptionalBoolean;
 import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -66,8 +69,8 @@ import static org.allaymc.api.utils.AllayNbtUtils.writeVector3f;
 @Slf4j
 public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComponent {
 
-    @Identifier
-    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:player_network_component");
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
 
     protected final Server server = Server.getInstance();
 
@@ -84,7 +87,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected AtomicInteger fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
     @Manager
     protected ComponentManager manager;
-    @ComponentedObject
+    @ComponentObject
     protected EntityPlayer thisPlayer;
     @Getter
     @Setter

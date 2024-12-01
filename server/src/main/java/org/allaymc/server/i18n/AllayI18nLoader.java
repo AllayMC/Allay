@@ -21,7 +21,7 @@ public class AllayI18nLoader implements I18nLoader {
             var bytes = input.readAllBytes();
             return JSONUtils.fromLenient(new String(bytes, StandardCharsets.UTF_8), typeToken);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new I18nException(e);
         }
     }
 }

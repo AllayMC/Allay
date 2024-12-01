@@ -5,15 +5,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.server.loottable.LootTableType;
-import org.allaymc.server.loottable.Rolls;
+import org.allaymc.server.loottable.*;
 import org.allaymc.server.loottable.condition.Condition;
 import org.allaymc.server.loottable.condition.Conditions;
 import org.allaymc.server.loottable.entry.Entries;
 import org.allaymc.server.loottable.entry.Entry;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.server.loottable.LootTable;
-import org.allaymc.server.loottable.Pool;
 import org.allaymc.server.loottable.condition.MatchToolCondition;
 import org.allaymc.server.loottable.context.BreakBlockContext;
 import org.allaymc.server.loottable.entry.EmptyEntry;
@@ -77,7 +74,7 @@ public final class BlockLootTable {
                     }
                 }
             } catch (PatternSyntaxException exception) {
-                throw new RuntimeException("invalid block regex: ", exception);
+                throw new LootTableException("invalid block regex: ", exception);
             }
         });
     }

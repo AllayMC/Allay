@@ -21,18 +21,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Support for ipv6
       - name: Setup WARP
         uses: fscarmen/warp-on-actions@v1.3
         if: contains(github.ref_name, 'master')
         with:
           stack: dual
 
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - run: chmod +x gradlew
-
-      - uses: actions/setup-java@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'zulu'
@@ -47,26 +46,35 @@ jobs:
           build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-use-agree: "yes"
 
+      - name: Make Gradle Wrapper Script Executable
+        run: chmod +x gradlew
+
       - name: Build
         run: ./gradlew build
 
-      - name: Generate coverage reports
+      - name: Generate Coverage Reports
         if: success()
         run: ./gradlew jacocoTestReport
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4.6.0
+      - name: Upload Coverage Reports to Codecov
+        uses: codecov/codecov-action@v5.0.7
         if: success()
         with:
           directory: .jacoco/test/
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Find Shaded Jar
+        id: vars
+        run: |
+          SHADED_JAR=$(find server/build/libs -name "allay-server-*-shaded.jar" -print -quit)
+          echo "shaded_jar=$SHADED_JAR" >> $GITHUB_OUTPUT
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         if: success()
         with:
           name: allay-server
-          path: server/build/libs/allay-server-*-shaded.jar
+          path: ${{ steps.vars.outputs.shaded_jar }}
 
       - name: Publish to JitPack
         uses: fjogeleit/http-request-action@v1
@@ -75,66 +83,29 @@ jobs:
           url: 'https://jitpack.io/#AllayMC/Allay/master-SNAPSHOT'
           method: 'GET'
 
-#      - name: Get Short SHA
-#        id: vars
-#        if: success()
-#        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-#
-#      - name: Format ChangeLog
-#        id: get-changelog
-#        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-#        run: |
-#          CHANGELOG=$(echo "${{ github.event.commits[0].message }}" | sed ':a;N;$!ba;s/\n/\\n/g')
-#          echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
-#
-#      - name: Get Time
-#        id: time
-#        uses: nanzm/get-time-action@v2.0
-#        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-#        with:
-#          timeZone: 8
-#          format: 'YYYY/MM/DD-HH:mm:ss'
-#
-#      - name: Publish to MineBBS
-#        uses: fjogeleit/http-request-action@v1
-#        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-#        with:
-#          url: 'https://api.minebbs.com/api/openapi/v1/resources/8815/update'
-#          method: 'POST'
-#          customHeaders: '{"Authorization": "Bearer ${{ secrets.MINEBBS_API_KEY }}"}'
-#          contentType: 'application/json'
-#          data: '{"title": "${{ github.ref_name }}-${{ steps.vars.outputs.sha_short }}", "description": "${{ steps.get-changelog.outputs.changelog }}", "new_version": "${{ steps.time.outputs.time }}", "file_url": "https://github.com/AllayMC/Allay"}'
-#          escapeData: 'true'
-#          preventFailureOnNoResponse: 'true'
-#          ignoreStatusCodes: '400,404,401,403,429,500,502,503,504'
+      - name: Set Tag
+        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -f -a nightly -m "Nightly build"
+          git push origin -f --follow-tags nightly
 
-      - name: Copy Jar to Test Server
-        id: deploy-jar
-        uses: appleboy/scp-action@master
+      - name: Update Nightly Build
+        uses: WebFreak001/deploy-nightly@v3.2.0
+        if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
+        with:
+          upload_url: https://uploads.github.com/repos/AllayMC/Allay/releases/185111149/assets{?name,label}
+          release_id: 185111149
+          asset_path: ./${{ steps.vars.outputs.shaded_jar }}
+          asset_name: allay-nightly-build-$$.jar
+          asset_content_type: application/zip
+          max_releases: 1
+
+      - name: Restart Test Server
+        uses: fjogeleit/http-request-action@v1
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         continue-on-error: true
         with:
-          host: ${{ secrets.TEST_SERVER_HOST }}
-          username: ${{ secrets.TEST_SERVER_USER_NAME }}
-          port: ${{ secrets.TEST_SERVER_PORT }}
-          key: ${{ secrets.TEST_SERVER_SSH_KEY }}
-          passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
-          source: "server/build/libs/allay-server-*-shaded.jar"
-          strip_components: 3
-          target: "/root/allaymc/tmp"
-
-      - name: Restart Test Server
-        uses: appleboy/ssh-action@master
-        if: steps.deploy-jar.outcome == 'success' && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        continue-on-error: true
-        with:
-          host: ${{ secrets.TEST_SERVER_HOST }}
-          username: ${{ secrets.TEST_SERVER_USER_NAME }}
-          key: ${{ secrets.TEST_SERVER_SSH_KEY }}
-          passphrase: ${{ secrets.TEST_SERVER_SSH_KEY_PASSPHRASE }}
-          port: ${{ secrets.TEST_SERVER_PORT }}
-          command_timeout: 60s
-          script: |
-            cd /root/allaymc
-            ./restart.sh
-            exit
+          url: 'http://${{ secrets.TEST_SERVER_HOST }}:${{ secrets.REMOTE_COMMAND_PORT }}/remotecommand?token=${{ secrets.REMOTE_COMMAND_TOKEN }}&command=stop'
+          method: 'POST'

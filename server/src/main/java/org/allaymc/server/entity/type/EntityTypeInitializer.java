@@ -4,10 +4,10 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.player.EntityPlayerAttributeComponent;
 import org.allaymc.api.entity.data.EntityId;
-import org.allaymc.api.entity.interfaces.*;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.server.entity.component.*;
 import org.allaymc.server.entity.component.player.*;
+import org.allaymc.server.entity.impl.*;
 
 import static org.allaymc.api.entity.component.attribute.EntityAttributeComponent.basicEntityAttributes;
 
@@ -19,7 +19,7 @@ import static org.allaymc.api.entity.component.attribute.EntityAttributeComponen
 public final class EntityTypeInitializer {
     public static void initFallingBlock() {
         EntityTypes.FALLING_BLOCK = AllayEntityType
-                .builder(EntityFallingBlock.class)
+                .builder(EntityFallingBlockImpl.class)
                 .vanillaEntity(EntityId.FALLING_BLOCK)
                 .addComponent(EntityFallingBlockBaseComponentImpl::new, EntityFallingBlockBaseComponentImpl.class)
                 .build();
@@ -27,7 +27,7 @@ public final class EntityTypeInitializer {
 
     public static void initItem() {
         EntityTypes.ITEM = AllayEntityType
-                .builder(EntityItem.class)
+                .builder(EntityItemImpl.class)
                 .vanillaEntity(EntityId.ITEM)
                 .addComponent(EntityItemBaseComponentImpl::new, EntityItemBaseComponentImpl.class)
                 .addComponent(() -> new EntityDamageComponentImpl() {
@@ -48,7 +48,7 @@ public final class EntityTypeInitializer {
 
     public static void initPlayer() {
         EntityTypes.PLAYER = AllayEntityType
-                .builder(EntityPlayer.class)
+                .builder(EntityPlayerImpl.class)
                 .vanillaEntity(EntityId.PLAYER)
                 .addComponent(EntityPlayerBaseComponentImpl::new, EntityPlayerBaseComponentImpl.class)
                 .addComponent(EntityPlayerNetworkComponentImpl::new, EntityPlayerNetworkComponentImpl.class)
@@ -61,7 +61,7 @@ public final class EntityTypeInitializer {
 
     public static void initVillagerV2() {
         EntityTypes.VILLAGER_V2 = AllayEntityType
-                .builder(EntityVillagerV2.class)
+                .builder(EntityVillagerV2Impl.class)
                 .vanillaEntity(EntityId.VILLAGER_V2)
                 .addComponent(() -> new EntityAttributeComponentImpl(basicEntityAttributes()), EntityAttributeComponentImpl.class)
                 .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)
@@ -70,7 +70,7 @@ public final class EntityTypeInitializer {
 
     public static void initXBOrb() {
         EntityTypes.XP_ORB = AllayEntityType
-                .builder(EntityXpOrb.class)
+                .builder(EntityXpOrbImpl.class)
                 .vanillaEntity(EntityId.XP_ORB)
                 .addComponent(EntityXpOrbBaseComponentImpl::new, EntityXpOrbBaseComponentImpl.class)
                 .addComponent(EntityDamageComponentImpl::new, EntityDamageComponentImpl.class)

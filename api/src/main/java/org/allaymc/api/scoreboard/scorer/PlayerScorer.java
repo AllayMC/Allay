@@ -10,8 +10,6 @@ import org.cloudburstmc.protocol.bedrock.data.ScoreInfo;
 
 import java.util.UUID;
 
-import static org.cloudburstmc.protocol.bedrock.data.ScoreInfo.ScorerType.PLAYER;
-
 /**
  * PlayerScorer is a scorer that represents a player.
  *
@@ -75,7 +73,7 @@ public final class PlayerScorer implements Scorer {
                 line.getLineId(),
                 scoreboard.getObjectiveName(),
                 line.getScore(),
-                PLAYER,
+                ScoreInfo.ScorerType.PLAYER,
                 player.getRuntimeId()
         ) : null;
     }

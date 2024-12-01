@@ -2,6 +2,7 @@ package org.allaymc.api.utils;
 
 import com.google.common.base.Preconditions;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.cloudburstmc.nbt.NbtMap;
@@ -17,6 +18,7 @@ import java.util.TreeMap;
  *
  * @author Cool_Loong | daoge_cmd
  */
+@Slf4j
 @UtilityClass
 public class HashUtils {
     //https://gist.github.com/Alemiz112/504d0f79feac7ef57eda174b668dd345
@@ -89,7 +91,8 @@ public class HashUtils {
             outputStream.writeTag(tag);
             bytes = stream.toByteArray();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to covert NBT into bytes", e);
+            throw new HashException(e);
         }
 
         return fnv1a_32(bytes);

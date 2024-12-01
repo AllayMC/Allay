@@ -21,6 +21,7 @@ import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.iq80.leveldb.CompressionType;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
+import org.iq80.leveldb.impl.Iq80DBFactory;
 import org.joml.Vector3i;
 
 import java.io.*;
@@ -59,7 +60,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     public AllayLevelDBWorldStorage(Path path, Options options) {
-        worldName = path.getName(path.getNameCount() - 1).toString();
+        this.worldName = path.getName(path.getNameCount() - 1).toString();
         var file = path.toFile();
         if (!file.exists() && !file.mkdirs()) {
             throw new WorldStorageException("Failed to create world directory!");
@@ -71,9 +72,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             if (!dbFolder.exists() && !dbFolder.mkdirs()) {
                 throw new WorldStorageException("Failed to create world database directory!");
             }
-            db = net.daporkchop.ldbjni.LevelDB.PROVIDER.open(dbFolder, options);
+            db = new Iq80DBFactory().open(dbFolder, options);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         }
     }
 
@@ -95,7 +96,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             Files.writeString(path.resolve("levelname.txt"), worldName, StandardOpenOption.CREATE);
             return worldData;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         }
     }
 
@@ -156,7 +157,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, (AllayUnsafeChunk) c));
             this.db.write(writeBatch);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         }
     }
 
@@ -212,7 +213,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             log.error("level.dat file is broken!");
             return null;
         }
-        throw new RuntimeException("level.dat is null!");
+        throw new WorldStorageException("level.dat is null!");
     }
 
     private WorldData readWorldDataFromNBT(NbtMap nbt) {
@@ -330,7 +331,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         try {
             this.db.close();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         }
     }
 

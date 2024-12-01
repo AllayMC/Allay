@@ -1,6 +1,7 @@
 package org.allaymc.server.block.type;
 
 import com.google.gson.JsonParser;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.material.MaterialType;
@@ -33,6 +34,7 @@ public final class InternalBlockTypeData {
     private static final EnumMap<BlockId, ItemId[]> BLOCK_SPECIAL_TOOLS = new EnumMap<>(BlockId.class);
     private static final EnumMap<BlockId, Integer> BLOCK_DEFAULT_STATES = new EnumMap<>(BlockId.class);
 
+    @SneakyThrows
     public static void init() {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_types.json")))) {
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
@@ -71,8 +73,6 @@ public final class InternalBlockTypeData {
                 // Default state
                 BLOCK_DEFAULT_STATES.put(id, (int) obj.get("defaultBlockStateHash").getAsLong());
             });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_tags_custom.json")))) {
             var map = new HashMap<BlockId, Set<BlockTag>>();
@@ -99,8 +99,6 @@ public final class InternalBlockTypeData {
             for (var id : BlockId.values()) {
                 BLOCK_TAGS_CUSTOM.putIfAbsent(id, Utils.EMPTY_BLOCK_TAG_ARRAY);
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 

@@ -114,8 +114,8 @@ public class AllayPluginManager implements PluginManager {
             try {
                 pluginContainer = loader.loadPlugin();
                 pluginContainer.plugin().onLoad();
-            } catch (Exception e) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName(), e.getMessage()), e);
+            } catch (Throwable t) {
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName(), t.getMessage()), t);
                 continue;
             }
 
@@ -201,6 +201,11 @@ public class AllayPluginManager implements PluginManager {
     @Override
     public PluginContainer getPlugin(String name) {
         return plugins.get(name);
+    }
+
+    @Override
+    public PluginContainer getEnabledPlugin(String name) {
+        return enabledPlugins.get(name);
     }
 
     @Override

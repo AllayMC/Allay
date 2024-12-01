@@ -18,6 +18,7 @@ import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.heightmap.HeightMap;
+import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.utils.LevelDBKeyUtils;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkSection;
@@ -225,7 +226,7 @@ public class LevelDBChunkSerializer {
                 tags.add((NbtMap) NbtUtils.createReaderLE(stream).readTag());
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         }
         return tags;
     }
@@ -246,7 +247,7 @@ public class LevelDBChunkSerializer {
                 writeBatch.put(key, Utils.convertByteBuf2Array(tileBuffer));
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         } finally {
             tileBuffer.release();
         }
@@ -268,7 +269,7 @@ public class LevelDBChunkSerializer {
             }
             writeBatch.put(key, Utils.convertByteBuf2Array(entityBuffer));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new WorldStorageException(e);
         } finally {
             entityBuffer.release();
         }

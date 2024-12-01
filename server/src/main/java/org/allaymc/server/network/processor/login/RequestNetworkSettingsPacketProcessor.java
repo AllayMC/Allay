@@ -1,6 +1,7 @@
 package org.allaymc.server.network.processor.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
 import org.allaymc.server.network.processor.ILoginPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
@@ -15,7 +16,7 @@ public class RequestNetworkSettingsPacketProcessor extends ILoginPacketProcessor
     @Override
     public void handle(EntityPlayer player, RequestNetworkSettingsPacket packet) {
         var protocolVersion = packet.getProtocolVersion();
-        var supportedProtocolVersion = Server.getInstance().getNetworkServer().getCodec().getProtocolVersion();
+        var supportedProtocolVersion = ProtocolInfo.PACKET_CODEC.getProtocolVersion();
         if (protocolVersion != supportedProtocolVersion) {
             var loginFailedPacket = new PlayStatusPacket();
             if (protocolVersion > supportedProtocolVersion) {

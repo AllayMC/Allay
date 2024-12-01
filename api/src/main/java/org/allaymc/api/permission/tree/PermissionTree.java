@@ -1,7 +1,6 @@
 package org.allaymc.api.permission.tree;
 
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.permission.DefaultPermissions;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -52,7 +51,7 @@ public interface PermissionTree {
      * Registers a permission listener for the given permission.
      *
      * @param permission the permission to listen for.
-     * @param callback the callback to invoke when the permission changes.
+     * @param callback   the callback to invoke when the permission changes.
      *
      * @return this permission tree.
      */
@@ -107,7 +106,7 @@ public interface PermissionTree {
     /**
      * Add a permission to this permission tree.
      *
-     * @param permission         the permission to add.
+     * @param permission   the permission to add.
      * @param callListener whether to call the permission listener.
      *
      * @return this permission tree.
@@ -129,7 +128,7 @@ public interface PermissionTree {
      * Set the value of a permission.
      *
      * @param permission the permission to set.
-     * @param value the value to set.
+     * @param value      the value to set.
      *
      * @return this permission tree.
      */
@@ -151,7 +150,7 @@ public interface PermissionTree {
     /**
      * Remove a permission from this permission tree.
      *
-     * @param permission the permission to remove.
+     * @param permission   the permission to remove.
      * @param callListener whether to call the permission listener.
      *
      * @return this permission tree.
@@ -279,7 +278,7 @@ public interface PermissionTree {
      */
     default void loadNBT(NbtMap nbt, boolean callListener) {
         nbt.getList("Permissions", NbtType.STRING).forEach(permission -> addPermission(permission, callListener));
-        copyFrom(DefaultPermissions.byName(nbt.getString("PermissionLevel")));
+        copyFrom(byName(nbt.getString("PermissionLevel")));
     }
 
     /**

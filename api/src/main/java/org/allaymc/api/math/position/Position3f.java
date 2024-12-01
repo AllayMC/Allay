@@ -20,6 +20,11 @@ import java.text.NumberFormat;
 public class Position3f extends Vector3f implements Position3fc {
     public WeakReference<Dimension> dimension;
 
+    public Position3f(Position3ic p) {
+        super(p);
+        this.dimension = new WeakReference<>(p.dimension());
+    }
+
     public Position3f(Position3fc p) {
         super(p);
         this.dimension = new WeakReference<>(p.dimension());

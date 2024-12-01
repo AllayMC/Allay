@@ -38,23 +38,28 @@ Allay's resource files are stored in `data/resources` directory.
 Although these files will not be included in the final jar, they will be used during the code generation process:
 
 - `block_tags.json`
-- `block_states_raw.json`: rename `block_states.json` to `block_states_raw.json` and place it in the `unpacked` directory.
+- `block_states_raw.json`: rename `block_states.json` to `block_states_raw.json` and place it in the `unpacked`
+  directory.
 - `item_tags.json`
 - `block_palette.nbt`
 - `block_property_types.json`: run `BlockPropertyTypeGen` under `data` after updating `block_palette.nbt`
 - `biome_id_and_type.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `entity_id_map.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
-- `music_definitions.json`: obtained from [mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/music_definitions.json)
-- `sound_definitions.json`: obtained from [mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/sound_definitions.json)
+- `music_definitions.json`: obtained
+  from [mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/music_definitions.json)
+- `sound_definitions.json`: obtained
+  from [mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/sound_definitions.json)
 
 ### Generate `block_states.json`
 
-**Run `BlockStateDataProcessor` under `data`**. This script will generate `block_states.json` based on `block_states_raw.json`.
+**Run `BlockStateDataProcessor` under `data`**. This script will generate `block_states.json` based on
+`block_states_raw.json`.
 
 ### Update Lang Files
 
-Firstly, obtain the original language files from BDS and copy them to the `unpacked/lang_raw/vanilla` directory. 
-Then, run `LangBuilder` under `data`. Finally, run `TrKeysGen` under `codegen`. With this, the language file update is complete.
+Firstly, obtain the original language files from BDS and copy them to the `unpacked/lang_raw/vanilla` directory.
+Then, run `LangBuilder` under `data`. Finally, run `TrKeysGen` under `codegen`. With this, the language file update is
+complete.
 
 ### Generate `item_meta_block_state_bimap.nbt`
 
@@ -67,15 +72,17 @@ Allay completes most repetitive work through code generation. Next, we'll focus 
 
 **Check for changes in `music_definitions.json` and `sound_definitions.json`**. If changes exist, run `SoundNameGen`.
 
-**Check for changes in `biome_id_and_type.json`**. If changes exist, run `BiomeIdEnumGen`. This file usually doesn't change much in minor updates.
+**Check for changes in `biome_id_and_type.json`**. If changes exist, run `BiomeIdEnumGen`. This file usually doesn't
+change much in minor updates.
 
-**Check for changes in `entity_id_map.json`**. If changes exist, first run `EntityIdEnumGen`, then run `EntityInterfaceGen`. This file usually doesn't change much in minor updates.
+**Check for changes in `entity_id_map.json`**. If changes exist, first run `EntityIdEnumGen`, then run `EntityClassGen`.
+This file usually doesn't change much in minor updates.
 
 **Check for changes in `item_tags.json` and `block_tags.json`**. If changes exist, run `TagGen`.
 
 **Check for changes in `block_property_types.json`**. If changes exist, run `BlockPropertyTypeGen`.
 
-**Run BlockInterfaceGen**. This step requires more manual operation:
+**Run BlockClassGen**. This step requires more manual operation:
 
 - You need to manually delete old blocks. If there are changes in block properties, you need to manually modify them to
   adapt. You can refer to [StateUpdater](https://github.com/AllayMC/StateUpdater) to understand block
@@ -86,9 +93,10 @@ Allay completes most repetitive work through code generation. Next, we'll focus 
   **Adapting block properties is not just about modifying the parameters of `setProperties()`, you also need to adapt
   the block's code logic**, which is crucial!
 - If there is a batch of similar blocks, you need to register new sub-packages in the `registerSubPackages()` method
-  of `BlockInterfaceGen` to avoid overcrowding the block class group.
+  of `BlockClassGen` to avoid overcrowding the block class group.
 
-**Run `ItemInterfaceGen`**. Similar to blocks, this step also requires a certain amount of manual operation, but the workload is less than before:
+**Run `ItemClassGen`**. Similar to blocks, this step also requires a certain amount of manual operation, but the
+workload is less than before:
 
 - You need to manually delete old items. If an item has only changed its name, you need `to migrate code logic from the
   old item to the new one.`
@@ -96,7 +104,7 @@ Allay completes most repetitive work through code generation. Next, we'll focus 
   version. To respect the original version, Allay needs to synchronize changes. However, if we are only discussing
   protocol updates, this can be deferred.
 - If there is a batch of similar items, you need to register new sub-packages in the `registerSubPackages()` method
-  of `ItemInterfaceGen` to avoid overcrowding the item class group.
+  of `ItemClassGen` to avoid overcrowding the item class group.
 
 ## Update Dependencies
 
@@ -105,7 +113,8 @@ updater [AllayMC/StateUpdater](https://github.com/AllayMC/StateUpdater) to the l
 
 ## Update `ProtocolInfo.java`
 
-You need to update the `PACKET_CODEC` and `MINECRAFT_VERSION` in `ProtocolInfo`. If you can't figure out the new value of `MINECRAFT_VERSION`, you can refer
+You need to update the `PACKET_CODEC` and `MINECRAFT_VERSION` in `ProtocolInfo`. If you can't figure out the new value
+of `MINECRAFT_VERSION`, you can refer
 to [pmmp/PocketMine-MP](https://github.com/pmmp/PocketMine-MP).
 Make sure the dependency libraries are updated before this!
 

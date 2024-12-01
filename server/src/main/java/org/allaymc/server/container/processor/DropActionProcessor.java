@@ -55,7 +55,8 @@ public class DropActionProcessor implements ContainerActionProcessor<DropAction>
                                                 item.getCount(),
                                                 item.getStackNetworkId(),
                                                 item.getCustomName(),
-                                                item.getDurability()
+                                                item.getDurability(),
+                                                ""
                                         )
                                 ),
                                 new FullContainerName(container.getSlotType(slot), null)

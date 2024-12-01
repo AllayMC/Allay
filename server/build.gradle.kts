@@ -23,9 +23,8 @@ dependencies {
     implementation(libs.mcterminal)
     implementation(libs.bundles.logging)
     implementation(libs.disruptor)
-    implementation(libs.bytebuddy)
     implementation(libs.libdeflate)
-    implementation(libs.leveldbjni)
+    implementation(libs.bundles.leveldb)
     implementation(libs.netty.epoll)
     implementation(libs.netty.kqueue)
     implementation(libs.fastreflect)
@@ -78,7 +77,7 @@ tasks.jacocoTestReport {
 
 tasks.test {
     useJUnitPlatform()
-    workingDir = file("${rootProject.projectDir}/.run/")
+    workingDir = file("${rootProject.projectDir}/.test/")
 }
 
 jacoco {
@@ -90,16 +89,6 @@ tasks.create("cleanWorkingDir") {
     group = "application"
     doLast {
         rootProject.rootDir.resolve(".run").listFiles { f -> !f.name.equals("Allay.run.xml") }?.forEach {
-            delete(it)
-        }
-    }
-}
-
-tasks.create("cleanCachesInWorkingDir") {
-    description = "Clean caches dir in `.run` directory"
-    group = "application"
-    doLast {
-        rootProject.rootDir.resolve(".run").listFiles { f -> f.name.equals("caches") }?.forEach {
             delete(it)
         }
     }

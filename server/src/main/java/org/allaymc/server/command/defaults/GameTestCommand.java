@@ -16,7 +16,10 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.*;
+import org.allaymc.api.utils.AllayStringUtils;
+import org.allaymc.api.utils.Identifier;
+import org.allaymc.api.utils.JSONUtils;
+import org.allaymc.api.utils.TextFormat;
 import org.allaymc.server.block.type.BlockLootTable;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
@@ -71,18 +74,14 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("trs")
                 .str("key")
-                .enums("langCode", LangCode.class)
+                .enumClass("langCode", LangCode.class)
                 .optional()
                 .remain("args")
                 .optional()
                 .exec((context, player) -> {
                     String key = context.getResult(1);
-                    String lang = context.getResult(2);
+                    LangCode langCode = context.getResultOr(2, I18n.FALLBACK_LANG);
                     List<String> args = context.getResult(3);
-
-                    LangCode langCode;
-                    if (lang.isEmpty()) langCode = I18n.FALLBACK_LANG;
-                    else langCode = LangCode.byName(lang, true);
 
                     try {
                         player.sendText(I18n.get().tr(langCode, key, args));

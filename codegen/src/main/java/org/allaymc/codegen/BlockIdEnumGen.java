@@ -18,8 +18,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-import static org.allaymc.codegen.ClassNames.*;
-
 /**
  * @author daoge_cmd | Cool_Loong | IWareQ
  */
@@ -37,7 +35,7 @@ public class BlockIdEnumGen {
                 MAPPED_BLOCK_PALETTE_NBT.put(entry.getString("name"), entry);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CodeGenException(e);
         }
     }
 
@@ -53,7 +51,7 @@ public class BlockIdEnumGen {
 
     @SneakyThrows
     public static void generateToDependenceModule() {
-        TypeSpec.Builder codeBuilder = commonBuilder(DEP_IDENTIFIER);
+        TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.DEP_IDENTIFIER);
         addEnums(codeBuilder);
         var javaFile = JavaFile.builder("org.allaymc.dependence", codeBuilder.build())
                 .indent(CodeGenConstants.INDENT)
@@ -64,9 +62,9 @@ public class BlockIdEnumGen {
 
     @SneakyThrows
     public static void generateToAPIModule() {
-        var blockTypeClass = ParameterizedTypeName.get(BLOCK_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT));
+        var blockTypeClass = ParameterizedTypeName.get(ClassNames.BLOCK_TYPE, WildcardTypeName.subtypeOf(ClassName.OBJECT));
         TypeSpec.Builder codeBuilder = commonBuilder(ClassNames.API_IDENTIFIER)
-                .addAnnotation(MINECRAFT_VERSION_SENSITIVE)
+                .addAnnotation(ClassNames.MINECRAFT_VERSION_SENSITIVE)
                 .addMethod(MethodSpec.methodBuilder("fromIdentifier")
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .addParameter(ClassNames.API_IDENTIFIER, "identifier")
@@ -75,12 +73,12 @@ public class BlockIdEnumGen {
                         .nextControlFlow("catch ($T ignore)", IllegalArgumentException.class)
                         .addStatement("return null")
                         .endControlFlow()
-                        .returns(BLOCK_ID)
+                        .returns(ClassNames.BLOCK_ID)
                         .build()
                 )
                 .addMethod(MethodSpec.methodBuilder("getBlockType")
                         .addModifiers(Modifier.PUBLIC)
-                        .addStatement("return $T.BLOCKS.get(this.getIdentifier())", REGISTRIES)
+                        .addStatement("return $T.BLOCKS.get(this.getIdentifier())", ClassNames.REGISTRIES)
                         .returns(blockTypeClass)
                         .build()
                 );

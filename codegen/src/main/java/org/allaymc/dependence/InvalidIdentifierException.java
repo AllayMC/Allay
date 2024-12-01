@@ -3,16 +3,12 @@
  */
 package org.allaymc.dependence;
 
+import lombok.experimental.StandardException;
+
 /**
  * @author Cool_Loong
  */
+@StandardException
 public class InvalidIdentifierException extends RuntimeException {
-    public InvalidIdentifierException(String message) {
-        super(message);
-    }
-
-    public InvalidIdentifierException(String message, Throwable throwable) {
-        super(message, throwable);
-    }
 }
 

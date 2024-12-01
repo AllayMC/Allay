@@ -9,7 +9,6 @@ public enum ChunkState {
     EMPTY,
     NOISED,
     POPULATED,
-    LIGHTED,
     ENTITY_SPAWNED,
     FINISHED
 }

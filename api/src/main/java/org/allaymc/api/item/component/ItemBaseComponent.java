@@ -273,9 +273,7 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @return true if successfully used
      */
-    default boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        return false;
-    }
+    boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
 
     /**
      * Attempt to place a block using this item, regardless of whether this item is a block item.
@@ -474,12 +472,23 @@ public interface ItemBaseComponent extends ItemComponent {
     void onBreakBlock(BlockState block, Entity breaker);
 
     /**
-     * Called when the item is used to attack an entity.
+     * Called when the item is used to attack an entity successfully.
      *
      * @param attacker The entity attacking.
      * @param victim   The entity being attacked.
      */
     void onAttackEntity(Entity attacker, Entity victim);
+
+    /**
+     * Interact an entity with this item and given performer.
+     *
+     * @param performer the entity who interact the target entity.
+     * @param victim the target entity who will be interacted.
+     * @return {@code true} if the interaction is successful, {@code false} otherwise.
+     */
+    default boolean interactEntity(Entity performer, Entity victim) {
+        return false;
+    }
 
     /**
      * Get the break time bonus for breaking a block with this item.

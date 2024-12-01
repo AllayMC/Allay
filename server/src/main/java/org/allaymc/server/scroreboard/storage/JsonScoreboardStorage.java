@@ -29,6 +29,9 @@ public class JsonScoreboardStorage implements ScoreboardStorage {
     public JsonScoreboardStorage(Path path) {
         this.filePath = path;
         try {
+            if (!Files.exists(this.filePath.getParent())) {
+                Files.createDirectories(this.filePath.getParent());
+            }
             if (!Files.exists(this.filePath)) {
                 Files.createFile(this.filePath);
             }

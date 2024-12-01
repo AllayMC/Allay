@@ -43,12 +43,9 @@ class LevelDBWorldStorageTest {
     static AllayLevelDBWorldStorage levelDBWorldStorage;
 
     @BeforeAll
+    @SneakyThrows
     static void mockServerSettings() {
-        try {
-            Files.copy(levelDat.resolve("server/src/test/resources/beworld/level.dat"), levelDat.resolve("server/src/test/resources/beworld/copy/level.dat"), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Files.copy(levelDat.resolve("server/src/test/resources/beworld/level.dat"), levelDat.resolve("server/src/test/resources/beworld/copy/level.dat"), StandardCopyOption.REPLACE_EXISTING);
         levelDBWorldStorage = new AllayLevelDBWorldStorage(levelDat.resolve("server/src/test/resources/beworld"));
         @SuppressWarnings("resource") MockedStatic<Server> serverClass = Mockito.mockStatic(Server.class);
         serverClass.when(Server::getInstance).thenReturn(server);
@@ -57,16 +54,13 @@ class LevelDBWorldStorageTest {
         Mockito.when(mockWorld.getPlayers()).thenReturn(List.of());
     }
 
+    @SneakyThrows
     @AfterAll
     static void end() {
-        try {
-            levelDBWorldStorage.shutdown();
-            Files.copy(levelDat.resolve("server/src/test/resources/beworld/copy/level.dat"), levelDat.resolve("server/src/test/resources/beworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
-            FileUtils.deleteDirectory(levelDat.resolve("server/src/test/resources/beworld/db").toFile());
-            Server.getInstance().shutdown();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        levelDBWorldStorage.shutdown();
+        Files.copy(levelDat.resolve("server/src/test/resources/beworld/copy/level.dat"), levelDat.resolve("server/src/test/resources/beworld/level.dat"), StandardCopyOption.REPLACE_EXISTING);
+        FileUtils.deleteDirectory(levelDat.resolve("server/src/test/resources/beworld/db").toFile());
+        Server.getInstance().shutdown();
     }
 
     @SneakyThrows

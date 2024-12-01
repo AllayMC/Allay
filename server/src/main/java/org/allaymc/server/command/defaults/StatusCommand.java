@@ -190,14 +190,14 @@ public class StatusCommand extends SimpleCommand {
     protected static void printOnlinePlayerInfo(CommandSender sender) {
         var server = Server.getInstance();
         var playerColor = TextFormat.GREEN;
-        if (((float) server.getOnlinePlayerCount() / (float) server.getNetworkServer().getMaxPlayerCount()) > 0.90) {
+        if (((float) server.getOnlinePlayerCount() / (float) server.getNetworkInterface().getMaxPlayerCount()) > 0.90) {
             playerColor = TextFormat.GOLD;
         }
-        if (server.getOnlinePlayerCount() == server.getNetworkServer().getMaxPlayerCount()) {
+        if (server.getOnlinePlayerCount() == server.getNetworkInterface().getMaxPlayerCount()) {
             playerColor = TextFormat.RED;
         }
 
-        sender.sendText("Players: " + playerColor + server.getOnlinePlayers().size() + "/" + server.getNetworkServer().getMaxPlayerCount());
+        sender.sendText("Players: " + playerColor + server.getOnlinePlayers().size() + "/" + server.getNetworkInterface().getMaxPlayerCount());
     }
 
     protected static String toKB(long bytes) {

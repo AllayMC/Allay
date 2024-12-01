@@ -13,21 +13,24 @@ import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.generator.WorldGeneratorType;
 import org.allaymc.api.world.generator.context.EntitySpawnContext;
-import org.allaymc.api.world.generator.context.LightContext;
 import org.allaymc.api.world.generator.context.NoiseContext;
 import org.allaymc.api.world.generator.context.PopulateContext;
 import org.allaymc.api.world.generator.function.EntitySpawner;
-import org.allaymc.api.world.generator.function.Lighter;
 import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
+import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /**
@@ -44,14 +47,12 @@ public class AllayWorldGenerator implements WorldGenerator {
     private final String preset;
     private final List<Noiser> noisers;
     private final List<Populator> populators;
-    private final List<Lighter> lighters;
     private final List<EntitySpawner> entitySpawners;
     private final Consumer<Dimension> onDimensionSet;
     private final Map<Long, CompletableFuture<Chunk>> chunkNoiseFutures = new Long2ObjectNonBlockingMap<>();
     private final Map<Long, CompletableFuture<Chunk>> chunkFutures = new Long2ObjectNonBlockingMap<>();
-    private final Queue<PopulationQueueEntry> populationQueue = PlatformDependent.newMpscQueue();
+    private final BlockingQueueWrapper<PopulationQueueEntry> populationQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
     private final Set<Long> populationLocks = Collections.newSetFromMap(new Long2ObjectNonBlockingMap<>());
-    private final Thread populationQueueThread;
     private final ExecutorService computeThreadPool = AllayServer.getInstance().getComputeThreadPool();
 
     @Getter
@@ -63,7 +64,6 @@ public class AllayWorldGenerator implements WorldGenerator {
             String preset,
             List<Noiser> noisers,
             List<Populator> populators,
-            List<Lighter> lighters,
             List<EntitySpawner> entitySpawners,
             Consumer<Dimension> onDimensionSet
     ) {
@@ -72,20 +72,10 @@ public class AllayWorldGenerator implements WorldGenerator {
         this.preset = preset;
         this.noisers = noisers;
         this.populators = populators;
-        this.lighters = lighters;
         this.entitySpawners = entitySpawners;
         this.onDimensionSet = onDimensionSet;
-        this.populationQueueThread = Thread.ofVirtual()
-                .name("Population Queue Thread")
-                .unstarted(() -> {
-                    while (dimension.getWorld().isRunning()) {
-                        processPopulationQueue();
-                    }
-                });
-
         this.noisers.forEach(noiser -> noiser.init(this));
         this.populators.forEach(populator -> populator.init(this));
-        this.lighters.forEach(lighter -> lighter.init(this));
         this.entitySpawners.forEach(entitySpawner -> entitySpawner.init(this));
     }
 
@@ -99,11 +89,15 @@ public class AllayWorldGenerator implements WorldGenerator {
             throw new IllegalStateException("Dimension already set");
         }
         this.dimension = dimension;
-        onDimensionSet.accept(dimension);
+        this.onDimensionSet.accept(dimension);
     }
 
     public void startTick() {
-        populationQueueThread.start();
+        Thread.ofPlatform().name("Population Queue Processing Thread").start(() -> {
+            while (dimension.getWorld().isRunning()) {
+                processPopulationQueue();
+            }
+        });
     }
 
     private void processPopulationQueue() {
@@ -113,19 +107,19 @@ public class AllayWorldGenerator implements WorldGenerator {
         }
 
         PopulationQueueEntry entry;
-        while ((entry = populationQueue.poll()) != null) {
+        while ((entry = populationQueue.tryPoll(1, TimeUnit.SECONDS)) != null) {
             var noiseFuture = entry.noiseFuture();
             var chunk = noiseFuture.getNow(null);
             if (chunk == null) {
                 // Noise not generated, re-add to queue
-                populationQueue.add(entry);
+                populationQueue.offer(entry);
                 continue;
             }
 
             var canPopulate = tryEnterPopulationStage(chunk.getX(), chunk.getZ());
             if (!canPopulate) {
                 // This chunk or adjacent chunk is locked, re-add to queue
-                populationQueue.add(entry);
+                populationQueue.offer(entry);
                 continue;
             }
 
@@ -154,7 +148,9 @@ public class AllayWorldGenerator implements WorldGenerator {
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 var chunkHash = HashUtils.hashXZ(x + i, z + j);
-                if (populationLocks.contains(chunkHash)) return false;
+                if (populationLocks.contains(chunkHash)) {
+                    return false;
+                }
                 var noiseFuture = chunkNoiseFutures.get(chunkHash);
                 if (noiseFuture == null) {
                     // Chunk noise not generated
@@ -204,7 +200,7 @@ public class AllayWorldGenerator implements WorldGenerator {
         var noiseFuture = getOrCreateNoiseFuture(x, z);
         CompletableFuture<Chunk> chunkFuture = new CompletableFuture<>();
         // Add chunk to population queue
-        populationQueue.add(new PopulationQueueEntry(chunkFuture, noiseFuture));
+        populationQueue.offer(new PopulationQueueEntry(chunkFuture, noiseFuture));
         return chunkFuture;
     }
 
@@ -258,20 +254,6 @@ public class AllayWorldGenerator implements WorldGenerator {
     }
 
     private void statusPopulatedToFinished(Chunk chunk) {
-        // Bake lighting
-        var lightContext = new LightContext(chunk.toUnsafeChunk());
-        for (var lighter : lighters) {
-            try {
-                if (!lighter.apply(lightContext)) {
-                    log.error("Failed to light chunk {} with lighter {}", chunk, lighter.getName());
-                }
-            } catch (Throwable t) {
-                log.error("Error while lighting chunk {} with lighter {}", chunk, lighter.getName());
-            }
-        }
-
-        ((AllayChunk) chunk).setState(ChunkState.LIGHTED);
-
         // Spawn entities
         var entitySpawnContext = new EntitySpawnContext(chunk.toUnsafeChunk());
         for (var entitySpawner : entitySpawners) {
@@ -295,7 +277,6 @@ public class AllayWorldGenerator implements WorldGenerator {
         private String preset = "";
         private List<Noiser> noisers = List.of();
         private List<Populator> populators = List.of();
-        private List<Lighter> lighters = List.of();
         private List<EntitySpawner> entitySpawners = List.of();
         private Consumer<Dimension> onDimensionSet = dimension -> {};
 
@@ -324,11 +305,6 @@ public class AllayWorldGenerator implements WorldGenerator {
             return this;
         }
 
-        public AllayWorldGeneratorBuilder lighters(Lighter... lighters) {
-            this.lighters = List.of(lighters);
-            return this;
-        }
-
         public AllayWorldGeneratorBuilder entitySpawners(EntitySpawner... entitySpawners) {
             this.entitySpawners = List.of(entitySpawners);
             return this;
@@ -343,7 +319,7 @@ public class AllayWorldGenerator implements WorldGenerator {
             if (name == null || name.isBlank()) {
                 throw new IllegalStateException("Name cannot be null or blank");
             }
-            return new AllayWorldGenerator(name, type, preset, noisers, populators, lighters, entitySpawners, onDimensionSet);
+            return new AllayWorldGenerator(name, type, preset, noisers, populators, entitySpawners, onDimensionSet);
         }
     }
 
@@ -357,7 +333,7 @@ public class AllayWorldGenerator implements WorldGenerator {
         public Chunk getChunk(int x, int z) {
             if (x == currentChunk.getX() && z == currentChunk.getZ()) return currentChunk;
             if (!isInRange(x, z)) {
-//                log.warn("Attempted to access chunk out of range during chunk population stage! CurrentChunk: ({}. {}), RequestedChunk: ({}. {})", currentChunk.getX(), currentChunk.getZ(), x, z);
+                log.debug("Attempted to access chunk out of range during chunk population stage! CurrentChunk: ({}. {}), RequestedChunk: ({}. {})", currentChunk.getX(), currentChunk.getZ(), x, z);
                 return null;
             }
 
@@ -368,9 +344,9 @@ public class AllayWorldGenerator implements WorldGenerator {
                 return chunk;
             }
 
-            var loadedChunk = dimension.getChunkService().getChunk(x, z);
-            Preconditions.checkNotNull(loadedChunk);
-            return loadedChunk;
+            // The return chunk can also be null, because
+            // it may have been unloaded at this point
+            return dimension.getChunkService().getChunk(x, z);
         }
 
         private boolean isInRange(int x, int z) {

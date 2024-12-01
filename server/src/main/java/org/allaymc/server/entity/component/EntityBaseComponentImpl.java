@@ -18,15 +18,19 @@ import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.i18n.TrContainer;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.component.annotation.*;
+import org.allaymc.server.component.annotation.ComponentObject;
+import org.allaymc.server.component.annotation.Dependency;
+import org.allaymc.server.component.annotation.Manager;
+import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.cloudburstmc.math.vector.Vector2f;
@@ -63,8 +67,8 @@ import static org.cloudburstmc.protocol.bedrock.packet.MoveEntityDeltaPacket.Fla
 @Slf4j
 public class EntityBaseComponentImpl implements EntityBaseComponent {
 
-    @Identifier
-    public static final org.allaymc.api.utils.Identifier IDENTIFIER = new org.allaymc.api.utils.Identifier("minecraft:entity_base_component");
+    @Identifier.Component
+    public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
     public static final int DEFAULT_DEAD_TIMER = 20;
 
@@ -84,7 +88,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected long uniqueId = Long.MAX_VALUE;
     @Manager
     protected ComponentManager manager;
-    @ComponentedObject
+    @ComponentObject
     protected Entity thisEntity;
     @Dependency(soft = true)
     protected EntityAttributeComponent attributeComponent;
@@ -340,7 +344,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             if (newChunk == null) {
                 // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
                 // moving to an unloaded chunk will result in the loss of the entity
-                log.warn("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
+                log.debug("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
                 return false;
             }
 
@@ -795,10 +799,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void syncVisibleEffects() {
-        long visibleEffects = 0L;
+        long visibleEffects = 0;
         for (var effect : this.effects.values()) {
-            if (!effect.isVisible()) continue;
-            visibleEffects |= 1L << effect.getType().getId();
+            if (!effect.isVisible()) {
+                continue;
+            }
+
+            visibleEffects = (visibleEffects << 7) | ((long) effect.getType().getId() << 1) | (effect.isAmbient() ? 1 : 0);
         }
 
         setAndSendEntityData(EntityDataTypes.VISIBLE_MOB_EFFECTS, visibleEffects);

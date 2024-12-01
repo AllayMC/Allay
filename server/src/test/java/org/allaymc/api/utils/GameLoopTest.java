@@ -1,6 +1,6 @@
 package org.allaymc.api.utils;
 
-import com.google.common.base.Preconditions;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author daoge_cmd
@@ -28,6 +29,7 @@ class GameLoopTest {
         assertEquals(100, counter.get());
     }
 
+    @SneakyThrows
     @Test
     void testSlowLoop() {
         GameLoop gameLoop = GameLoop.builder()
@@ -45,11 +47,7 @@ class GameLoopTest {
                 .build();
         Thread thread = new Thread(gameLoop::startLoop);
         thread.start();
-        try {
-            thread.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        Preconditions.checkArgument(gameLoop.getTPS() <= 20);
+        thread.join();
+        assertTrue(gameLoop.getTPS() <= 20);
     }
 }

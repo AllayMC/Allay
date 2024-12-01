@@ -24,7 +24,7 @@ public class ListCommand extends SimpleCommand {
             var joiner = new StringJoiner(", ");
             players.forEach(player -> joiner.add(player.getDisplayName()));
 
-            context.getSender().sendTr(TrKeys.M_COMMANDS_PLAYERS_LIST, players.size(), server.getNetworkServer().getMaxPlayerCount());
+            context.getSender().sendTr(TrKeys.M_COMMANDS_PLAYERS_LIST, players.size(), server.getNetworkInterface().getMaxPlayerCount());
             context.getSender().sendText(joiner.toString());
             return context.success();
         });

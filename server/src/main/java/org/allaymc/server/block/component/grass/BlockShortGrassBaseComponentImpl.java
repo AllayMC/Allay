@@ -4,7 +4,14 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
+
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.allaymc.api.block.type.BlockTypes.*;
 
@@ -32,5 +39,14 @@ public class BlockShortGrassBaseComponentImpl extends BlockBaseComponentImpl {
                blockType == MUD ||
                blockType == MUDDY_MANGROVE_ROOTS ||
                blockType == MOSS_BLOCK;
+    }
+
+    @Override
+    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        var rand = ThreadLocalRandom.current();
+        if (rand.nextInt(8) == 0) {
+            return Set.of(ItemTypes.WHEAT_SEEDS.createItemStack(1));
+        }
+        return Set.of(ItemAirStack.AIR_STACK);
     }
 }

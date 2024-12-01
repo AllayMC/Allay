@@ -14,9 +14,9 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.service.*;
 import org.apache.commons.lang3.function.TriFunction;
@@ -538,6 +538,10 @@ public interface Dimension {
         levelEventPacket.setType(levelEventType);
         levelEventPacket.setData(data);
         chunk.sendChunkPacket(levelEventPacket);
+    }
+
+    default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent) {
+        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
     }
 
     default void addLevelSoundEvent(Vector3fc pos, SoundEvent soundEvent) {

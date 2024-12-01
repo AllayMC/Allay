@@ -44,12 +44,6 @@ public final class Scoreboard {
     @Setter
     private SortOrder sortOrder;
 
-    {
-        for (var slot : DisplaySlot.values()) {
-            viewers.put(slot, Sets.newConcurrentHashSet());
-        }
-    }
-
     public Scoreboard(String objectiveName) {
         this(objectiveName, objectiveName);
     }
@@ -67,6 +61,9 @@ public final class Scoreboard {
         this.displayName = displayName;
         this.criteriaName = criteriaName;
         this.sortOrder = sortOrder;
+        for (var slot : DisplaySlot.values()) {
+            viewers.put(slot, Sets.newConcurrentHashSet());
+        }
     }
 
     /**

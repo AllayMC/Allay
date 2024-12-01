@@ -1,6 +1,7 @@
 package org.allaymc.server.utils;
 
 import com.google.common.reflect.ClassPath;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
@@ -14,15 +15,12 @@ import java.util.*;
  */
 @UtilityClass
 public class ReflectionUtils {
+    @SneakyThrows
     public static List<String> getAllClasses(String packageName) {
-        try {
-            var classPath = ClassPath.from(ClassLoader.getSystemClassLoader());
-            return classPath.getTopLevelClassesRecursive(packageName).stream()
-                    .map(ClassPath.ClassInfo::getName)
-                    .toList();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        var classPath = ClassPath.from(ClassLoader.getSystemClassLoader());
+        return classPath.getTopLevelClassesRecursive(packageName).stream()
+                .map(ClassPath.ClassInfo::getName)
+                .toList();
     }
 
     public static List<Field> getAllFields(Class<?> clazz) {

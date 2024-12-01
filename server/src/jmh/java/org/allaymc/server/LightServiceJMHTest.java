@@ -2,7 +2,6 @@ package org.allaymc.server;
 
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.Weather;
-import org.allaymc.api.world.WorldData;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.service.AllayLightService;
 import org.openjdk.jmh.annotations.*;
@@ -37,19 +36,19 @@ public class LightServiceJMHTest {
                 );
             }
         }
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
         for (int x = -3 * 16; x <= 3 * 16; x++) {
             for (int z = -3 * 16; z <= 3 * 16; z++) {
                 lightService.onBlockChange(x, 0, z, 0, 15);
             }
         }
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
     }
 
     @Benchmark
     public void testPlaceAndRemoveLight() {
         lightService.onBlockChange(0, 1, 0, 15, 0);
         lightService.onBlockChange(0, 1, 0, 0, 0);
-        lightService.tickIgnoreLimit();
+        lightService.tickIgnoreLimitUnblocking();
     }
 }

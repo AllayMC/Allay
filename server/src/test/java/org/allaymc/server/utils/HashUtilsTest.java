@@ -41,7 +41,7 @@ public class HashUtilsTest {
     }
 
     @Test
-    public void testFnv1a32Nbt() {
+    public void testFnv1A32Nbt() {
         NbtMap tag = NbtMap.builder()
                 .putString("name", "minecraft:oak_wood")
                 .putCompound("states", NbtMap.builder()

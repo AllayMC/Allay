@@ -1,21 +1,29 @@
 .gradle
 .jacoco
 .idea/**
+
 # Code style files should be included
 !/.idea/codeStyles
 !/.idea/codeStyles/*
 !/.idea/codeStyles/codeStyleConfig.xml
 !/.idea/codeStyles/Project.xml
+
 # Inspection profiles should be included
 !/.idea/inspectionProfiles
 !/.idea/inspectionProfiles/Project_Default.xml
+
 # Files because of building the project
 **/build
 **/bin
 **/out
+
 # Working dir
 .run/**
 !.run/Allay.run.xml
+# Test working dir
+.test/**
+!.test/.keep
+
 # Files due to running `gradle run`
 /server/caches
 /server/command_data

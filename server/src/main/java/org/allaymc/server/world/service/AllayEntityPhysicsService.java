@@ -11,11 +11,11 @@ import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.player.PlayerMoveEvent;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.AABBOverlapFilter;
 import org.allaymc.api.world.service.EntityPhysicsService;
@@ -23,6 +23,8 @@ import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
+import org.allaymc.server.entity.impl.EntityImpl;
+import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
@@ -124,9 +126,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     protected void computeBlockCollisionMotion(Entity entity, BlockState[][][] collidedBlocks) {
         // 1. Find out the block state which entity collided most
         var aabb = entity.getOffsetAABB();
-        var minX = (int) Math.floor(aabb.minX());
-        var minY = (int) Math.floor(aabb.minY());
-        var minZ = (int) Math.floor(aabb.minZ());
+        var minX = (int) floor(aabb.minX());
+        var minY = (int) floor(aabb.minY());
+        var minZ = (int) floor(aabb.minZ());
         int targetX = 0, targetY = 0, targetZ = 0;
         float V = 0;
         for (int ox = 0, blocksLength = collidedBlocks.length; ox < blocksLength; ox++) {
@@ -236,13 +238,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var velocityFactor = entity.isOnGround() ? GROUND_VELOCITY_FACTOR : AIR_VELOCITY_FACTOR;
         var acceleration = velocityFactor * movementFactor;
         if (entity.isOnGround()) {
-            acceleration *= (float) (effectFactor * Math.pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
+            acceleration *= (float) (effectFactor * pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
         }
 
         var yaw = entity.getLocation().yaw();
 
-        var newMx = (float) (momentumMx + acceleration * Math.sin(yaw));
-        var newMz = (float) (momentumMz + acceleration * Math.cos(yaw));
+        var newMx = (float) (momentumMx + acceleration * sin(yaw));
+        var newMz = (float) (momentumMz + acceleration * cos(yaw));
 
         // Skip sprint jump boost because this service does not handle player
 
@@ -290,7 +292,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             // Update onGround status after updated entity location
             // to make sure that some block (for example: water) can reset
             // entity's fallDistance before onFall() called
-            entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setOnGround(isOnGround);
+            ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setOnGround(isOnGround);
             return true;
         }
         return false;
@@ -475,7 +477,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
                 // Calculate delta pos (motion)
                 var motion = event.getTo().sub(player.getLocation(), new Vector3f());
-                player.getManager().<EntityPlayerBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setMotionValueOnly(motion);
+                ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).setMotionValueOnly(motion);
                 if (updateEntityLocation(player, clientMove.newLoc())) {
                     entityAABBTree.update(player);
                 }
@@ -483,7 +485,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
                 var aabb = clientMove.player.getOffsetAABB();
                 aabb.minY -= FAT_AABB_MARGIN;
-                player.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER).setOnGround(dimension.getCollidingBlockStates(aabb) != null);
+                ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).setOnGround(dimension.getCollidingBlockStates(aabb) != null);
             }
         }
     }
@@ -496,7 +498,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
         newLoc = event.getTo();
 
-        var baseComponent = entity.getManager().<EntityBaseComponentImpl>getComponent(EntityBaseComponentImpl.IDENTIFIER);
+        var baseComponent = (EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent();
         if (baseComponent.setLocationAndCheckChunk(newLoc)) {
             baseComponent.broadcastMoveToViewers(newLoc, false);
             return true;
