@@ -173,18 +173,25 @@ public class AllayWorld implements World {
         }
         isFirstTick = false;
 
+        var overworld = getOverWorld();
         if (Server.SETTINGS.worldSettings().loadSpawnPointChunks()) {
             // Add spawn point chunk loader
-            getOverWorld().getChunkService().addChunkLoader(new SpawnPointChunkLoader());
+            overworld.getChunkService().addChunkLoader(new SpawnPointChunkLoader());
         }
 
-        if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), getOverWorld()))) {
-            var newSpawnPoint = getOverWorld().findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
-            if (newSpawnPoint == null) {
-                log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
-                newSpawnPoint = new Vector3i(0, getOverWorld().getHeight(0, 0) + 1, 0);
-            }
-            worldData.setSpawnPoint(newSpawnPoint);
+        if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
+            Thread.ofVirtual().name("Spawn Point Finding Thread - " + worldData.getName()).start(() -> {
+                var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
+                if (newSpawnPoint == null) {
+                    log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
+                    newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
+                }
+                var finalNewSpawnPoint = newSpawnPoint;
+                overworld.getWorld().getScheduler().runLater(this, () -> {
+                    // Set new spawn point in world thread as world data object is not thread-safe
+                    worldData.setSpawnPoint(finalNewSpawnPoint);
+                });
+            });
         }
     }
 

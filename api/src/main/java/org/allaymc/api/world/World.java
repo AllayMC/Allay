@@ -2,6 +2,7 @@ package org.allaymc.api.world;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.scheduler.Scheduler;
+import org.allaymc.api.scheduler.TaskCreator;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -14,7 +15,7 @@ import java.util.Set;
  *
  * @author daoge_cmd
  */
-public interface World {
+public interface World extends TaskCreator {
     /**
      * Get the thread which the world is running on.
      *
@@ -167,4 +168,9 @@ public interface World {
      * Set the weather to {@link Weather#CLEAR}.
      */
     void clearWeather();
+
+    @Override
+    default boolean isValid() {
+        return isRunning();
+    }
 }
