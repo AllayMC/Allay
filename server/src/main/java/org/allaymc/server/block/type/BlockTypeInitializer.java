@@ -4,6 +4,8 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.block.interfaces.BlockCarpetBehavior;
+import org.allaymc.api.block.interfaces.BlockColoredTorchBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -33,6 +35,33 @@ import java.util.function.Function;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
+    public static void initCarpets() {
+        BlockTypes.WHITE_CARPET = buildCarpet(BlockId.WHITE_CARPET);
+        BlockTypes.ORANGE_CARPET = buildCarpet(BlockId.ORANGE_CARPET);
+        BlockTypes.MAGENTA_CARPET = buildCarpet(BlockId.MAGENTA_CARPET);
+        BlockTypes.LIGHT_BLUE_CARPET = buildCarpet(BlockId.LIGHT_BLUE_CARPET);
+        BlockTypes.YELLOW_CARPET = buildCarpet(BlockId.YELLOW_CARPET);
+        BlockTypes.LIME_CARPET = buildCarpet(BlockId.LIME_CARPET);
+        BlockTypes.PINK_CARPET = buildCarpet(BlockId.PINK_CARPET);
+        BlockTypes.GRAY_CARPET = buildCarpet(BlockId.GRAY_CARPET);
+        BlockTypes.LIGHT_GRAY_CARPET = buildCarpet(BlockId.LIGHT_GRAY_CARPET);
+        BlockTypes.CYAN_CARPET = buildCarpet(BlockId.CYAN_CARPET);
+        BlockTypes.PURPLE_CARPET = buildCarpet(BlockId.PURPLE_CARPET);
+        BlockTypes.BLUE_CARPET = buildCarpet(BlockId.BLUE_CARPET);
+        BlockTypes.BROWN_CARPET = buildCarpet(BlockId.BROWN_CARPET);
+        BlockTypes.GREEN_CARPET = buildCarpet(BlockId.GREEN_CARPET);
+        BlockTypes.RED_CARPET = buildCarpet(BlockId.RED_CARPET);
+        BlockTypes.BLACK_CARPET = buildCarpet(BlockId.BLACK_CARPET);
+    }
+
+    private static BlockType<BlockCarpetBehavior> buildCarpet(BlockId blockId) {
+        return AllayBlockType
+                .builder(BlockCarpetBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setBlockBaseComponentSupplier(BlockCarpetBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initJukebox() {
         BlockTypes.JUKEBOX = AllayBlockType
                 .builder(BlockJukeboxBehaviorImpl.class)
@@ -692,9 +721,9 @@ public final class BlockTypeInitializer {
         BlockTypes.COLORED_TORCH_PURPLE = buildColoredTorch(BlockId.COLORED_TORCH_PURPLE);
     }
 
-    private static <T extends BlockBehavior> BlockType<T> buildColoredTorch(BlockId blockId) {
+    private static BlockType<BlockColoredTorchBehavior> buildColoredTorch(BlockId blockId) {
         return AllayBlockType
-                .builder((Class<? extends BlockBehaviorImpl>) BlockColoredTorchBehaviorImpl.class)
+                .builder(BlockColoredTorchBehaviorImpl.class)
                 .vanillaBlock(blockId)
                 .setProperties(BlockPropertyTypes.TORCH_FACING_DIRECTION)
                 .setBlockBaseComponentSupplier(BlockColoredTorchBaseComponentImpl::new)
