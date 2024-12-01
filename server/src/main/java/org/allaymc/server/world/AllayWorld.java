@@ -74,7 +74,7 @@ public class AllayWorld implements World {
     protected boolean isRaining = false;
     protected boolean isThundering = false;
     protected final Set<Weather> effectiveWeathers;
-    protected boolean isFirstTick = false;
+    protected boolean isFirstTick = true;
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
@@ -168,10 +168,10 @@ public class AllayWorld implements World {
     }
 
     protected void checkFirstTick() {
-        if (isFirstTick) {
+        if (!isFirstTick) {
             return;
         }
-        isFirstTick = true;
+        isFirstTick = false;
 
         if (Server.SETTINGS.worldSettings().loadSpawnPointChunks()) {
             // Add spawn point chunk loader
