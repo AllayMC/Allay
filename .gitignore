@@ -22,6 +22,7 @@
 !.run/Allay.run.xml
 # Test working dir
 .test/**
+!.test/.keep
 
 # Files due to running `gradle run`
 /server/caches
