@@ -52,17 +52,18 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
                 return false;
             }
 
-            if (player != null) {
-                // trySpawnFallingEntity() is called from place method, so we need to send block update to client
-                // to let client know that the block is failed to be placed because it will fall
-                dimension.sendBlockUpdateTo(BlockTypes.AIR.getDefaultState(), pos, 0, player);
-            } else {
-                dimension.setBlockState(
-                        pos.x(), pos.y(), pos.z(),
-                        BlockTypes.AIR.getDefaultState()
-                );
-            }
-            dimension.getEntityService().addEntity(createFallingBlock(dimension, pos, blockState));
+            dimension.getEntityService().addEntity(createFallingBlock(dimension, pos, blockState), () -> {
+                if (player != null) {
+                    // trySpawnFallingEntity() is called from place method, so we need to send block update to client
+                    // to let client know that the block is failed to be placed because it will fall
+                    dimension.sendBlockUpdateTo(BlockTypes.AIR.getDefaultState(), pos, 0, player);
+                } else {
+                    dimension.setBlockState(
+                            pos.x(), pos.y(), pos.z(),
+                            BlockTypes.AIR.getDefaultState()
+                    );
+                }
+            });
             return true;
         }
 
