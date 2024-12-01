@@ -33,6 +33,15 @@ import java.util.function.Function;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
+    public static void initJukebox() {
+        BlockTypes.JUKEBOX = AllayBlockType
+                .builder(BlockJukeboxBehaviorImpl.class)
+                .vanillaBlock(BlockId.JUKEBOX)
+                .bindBlockEntity(BlockEntityTypes.JUKEBOX)
+                .setBlockBaseComponentSupplier(BlockJukeboxBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initLeaves() {
         BlockTypes.ACACIA_LEAVES = AllayBlockType
                 .builder(BlockLeavesBehaviorImpl.class)

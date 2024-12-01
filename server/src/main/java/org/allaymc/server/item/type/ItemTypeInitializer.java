@@ -9,6 +9,8 @@ import org.allaymc.api.item.component.tool.ItemHoeComponent;
 import org.allaymc.api.item.component.tool.ItemPickaxeComponent;
 import org.allaymc.api.item.component.tool.ItemShovelComponent;
 import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.item.interfaces.ItemMusicDiscStack;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.food.*;
@@ -17,6 +19,7 @@ import org.allaymc.server.item.component.spawnegg.ItemSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.spawnegg.ItemTropicalFishSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.tool.*;
 import org.allaymc.server.item.impl.*;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 /**
  * @author daoge_cmd
@@ -24,6 +27,36 @@ import org.allaymc.server.item.impl.*;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class ItemTypeInitializer {
+    public static void initMusicDiscs() {
+        ItemTypes.MUSIC_DISC_13 = buildMusicDisc(ItemId.MUSIC_DISC_13, SoundEvent.RECORD_13);
+        ItemTypes.MUSIC_DISC_CAT = buildMusicDisc(ItemId.MUSIC_DISC_CAT, SoundEvent.RECORD_CAT);
+        ItemTypes.MUSIC_DISC_BLOCKS = buildMusicDisc(ItemId.MUSIC_DISC_BLOCKS, SoundEvent.RECORD_BLOCKS);
+        ItemTypes.MUSIC_DISC_CHIRP = buildMusicDisc(ItemId.MUSIC_DISC_CHIRP, SoundEvent.RECORD_CHIRP);
+        ItemTypes.MUSIC_DISC_FAR = buildMusicDisc(ItemId.MUSIC_DISC_FAR, SoundEvent.RECORD_FAR);
+        ItemTypes.MUSIC_DISC_MALL = buildMusicDisc(ItemId.MUSIC_DISC_MALL, SoundEvent.RECORD_MALL);
+        ItemTypes.MUSIC_DISC_MELLOHI = buildMusicDisc(ItemId.MUSIC_DISC_MELLOHI, SoundEvent.RECORD_MELLOHI);
+        ItemTypes.MUSIC_DISC_STAL = buildMusicDisc(ItemId.MUSIC_DISC_STAL, SoundEvent.RECORD_STAL);
+        ItemTypes.MUSIC_DISC_STRAD = buildMusicDisc(ItemId.MUSIC_DISC_STRAD, SoundEvent.RECORD_STRAD);
+        ItemTypes.MUSIC_DISC_WARD = buildMusicDisc(ItemId.MUSIC_DISC_WARD, SoundEvent.RECORD_WARD);
+        ItemTypes.MUSIC_DISC_11 = buildMusicDisc(ItemId.MUSIC_DISC_11, SoundEvent.RECORD_11);
+        ItemTypes.MUSIC_DISC_WAIT = buildMusicDisc(ItemId.MUSIC_DISC_WAIT, SoundEvent.RECORD_WAIT);
+        ItemTypes.MUSIC_DISC_OTHERSIDE = buildMusicDisc(ItemId.MUSIC_DISC_OTHERSIDE, SoundEvent.RECORD_OTHERSIDE);
+        ItemTypes.MUSIC_DISC_5 = buildMusicDisc(ItemId.MUSIC_DISC_5, SoundEvent.RECORD_5);
+        ItemTypes.MUSIC_DISC_PIGSTEP = buildMusicDisc(ItemId.MUSIC_DISC_PIGSTEP, SoundEvent.RECORD_PIGSTEP);
+        ItemTypes.MUSIC_DISC_RELIC = buildMusicDisc(ItemId.MUSIC_DISC_RELIC, SoundEvent.RECORD_RELIC);
+        ItemTypes.MUSIC_DISC_CREATOR = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR, SoundEvent.RECORD_CREATOR);
+        ItemTypes.MUSIC_DISC_CREATOR_MUSIC_BOX = buildMusicDisc(ItemId.MUSIC_DISC_CREATOR_MUSIC_BOX, SoundEvent.RECORD_CREATOR_MUSIC_BOX);
+        ItemTypes.MUSIC_DISC_PRECIPICE = buildMusicDisc(ItemId.MUSIC_DISC_PRECIPICE, SoundEvent.RECORD_PRECIPICE);
+    }
+
+    private static ItemType<ItemMusicDiscStack> buildMusicDisc(ItemId itemId, SoundEvent sound) {
+        return AllayItemType
+                .builder(ItemMusicDiscStackImpl.class)
+                .vanillaItem(itemId)
+                .addComponent($ -> new ItemMusicDiscComponentImpl(sound), ItemMusicDiscComponentImpl.class)
+                .build();
+    }
+
     public static void initFoods() {
         ItemTypes.TROPICAL_FISH = AllayItemType
                 .builder(ItemTropicalFishStackImpl.class)

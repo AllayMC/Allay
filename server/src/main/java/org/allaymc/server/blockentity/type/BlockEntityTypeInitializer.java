@@ -15,8 +15,17 @@ import org.allaymc.server.blockentity.impl.*;
 /**
  * @author daoge_cmd
  */
+@SuppressWarnings("unused")
 @UtilityClass
 public final class BlockEntityTypeInitializer {
+    public static void initJukebox() {
+        BlockEntityTypes.JUKEBOX = AllayBlockEntityType
+                .builder(BlockEntityJukeboxImpl.class)
+                .name(BlockEntityId.JUKEBOX)
+                .addComponent(BlockEntityJukeboxBaseComponentImpl::new, BlockEntityJukeboxBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initBarrel() {
         BlockEntityTypes.BARREL = AllayBlockEntityType
                 .builder(BlockEntityBarrelImpl.class)
