@@ -13,8 +13,7 @@ public class ItemChestplateStackImpl extends ItemStackImpl implements ItemChestp
     @Delegate
     protected ItemArmorBaseComponent armorBaseComponent;
 
-    public ItemChestplateStackImpl(ItemStackInitInfo initInfo,
-                                   List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemChestplateStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

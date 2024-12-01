@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemInfoUpdateStackImpl extends ItemStackImpl implements ItemInfoUpdateStack {
     public ItemInfoUpdateStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

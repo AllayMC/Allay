@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemStandingBannerStackImpl extends ItemStackImpl implements ItemStandingBannerStack {
     public ItemStandingBannerStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

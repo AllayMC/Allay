@@ -8,8 +8,7 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 import java.util.List;
 
 public class ItemSpawnEggStackImpl extends ItemStackImpl implements ItemSpawnEggStack {
-    public ItemSpawnEggStackImpl(ItemStackInitInfo initInfo,
-                                 List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemSpawnEggStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

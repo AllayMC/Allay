@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemWarpedStemStackImpl extends ItemStackImpl implements ItemWarpedStemStack {
     public ItemWarpedStemStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

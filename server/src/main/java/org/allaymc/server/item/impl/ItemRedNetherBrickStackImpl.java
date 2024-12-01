@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemRedNetherBrickStackImpl extends ItemStackImpl implements ItemRedNetherBrickStack {
     public ItemRedNetherBrickStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

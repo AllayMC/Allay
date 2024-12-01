@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemWaxedCopperBulbStackImpl extends ItemStackImpl implements ItemWaxedCopperBulbStack {
     public ItemWaxedCopperBulbStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

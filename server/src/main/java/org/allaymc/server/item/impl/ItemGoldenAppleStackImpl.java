@@ -13,9 +13,7 @@ public class ItemGoldenAppleStackImpl extends ItemStackImpl implements ItemGolde
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemGoldenAppleStackImpl(ItemStackInitInfo initInfo,
-                                    List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemGoldenAppleStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

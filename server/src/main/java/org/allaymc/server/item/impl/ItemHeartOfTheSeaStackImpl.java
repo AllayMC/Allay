@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemHeartOfTheSeaStackImpl extends ItemStackImpl implements ItemHeartOfTheSeaStack {
     public ItemHeartOfTheSeaStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

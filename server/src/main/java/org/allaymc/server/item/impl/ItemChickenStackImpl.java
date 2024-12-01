@@ -13,9 +13,7 @@ public class ItemChickenStackImpl extends ItemStackImpl implements ItemChickenSt
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemChickenStackImpl(ItemStackInitInfo initInfo,
-                                List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemChickenStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

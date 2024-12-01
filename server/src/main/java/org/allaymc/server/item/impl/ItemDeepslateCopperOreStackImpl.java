@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemDeepslateCopperOreStackImpl extends ItemStackImpl implements ItemDeepslateCopperOreStack {
     public ItemDeepslateCopperOreStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

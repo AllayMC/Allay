@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemPolishedBlackstoneStackImpl extends ItemStackImpl implements ItemPolishedBlackstoneStack {
     public ItemPolishedBlackstoneStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

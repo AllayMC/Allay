@@ -13,8 +13,7 @@ public class ItemBucketStackImpl extends ItemStackImpl implements ItemBucketStac
     @Delegate
     protected ItemBucketComponent bucketComponent;
 
-    public ItemBucketStackImpl(ItemStackInitInfo initInfo,
-                               List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemBucketStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

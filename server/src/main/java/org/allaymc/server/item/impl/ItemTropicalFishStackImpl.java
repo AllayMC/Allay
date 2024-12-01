@@ -13,8 +13,7 @@ public class ItemTropicalFishStackImpl extends ItemStackImpl implements ItemTrop
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemTropicalFishStackImpl(ItemStackInitInfo initInfo,
-                                     List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemTropicalFishStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
         ;
     }

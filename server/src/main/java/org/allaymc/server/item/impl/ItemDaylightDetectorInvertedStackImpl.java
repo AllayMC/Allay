@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemDaylightDetectorInvertedStackImpl extends ItemStackImpl implements ItemDaylightDetectorInvertedStack {
     public ItemDaylightDetectorInvertedStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

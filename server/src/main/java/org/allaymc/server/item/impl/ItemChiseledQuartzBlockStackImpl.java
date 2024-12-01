@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemChiseledQuartzBlockStackImpl extends ItemStackImpl implements ItemChiseledQuartzBlockStack {
     public ItemChiseledQuartzBlockStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

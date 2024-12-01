@@ -13,8 +13,7 @@ public class ItemShulkerBoxStackImpl extends ItemStackImpl implements ItemShulke
     @Delegate
     protected ItemItemStorableComponent itemStorableComponent;
 
-    public ItemShulkerBoxStackImpl(ItemStackInitInfo initInfo,
-                                   List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemShulkerBoxStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

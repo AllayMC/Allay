@@ -8,8 +8,7 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 import java.util.List;
 
 public class ItemMilkBucketStackImpl extends ItemStackImpl implements ItemMilkBucketStack {
-    public ItemMilkBucketStackImpl(ItemStackInitInfo initInfo,
-                                   List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemMilkBucketStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

@@ -13,9 +13,7 @@ public class ItemElytraStackImpl extends ItemStackImpl implements ItemElytraStac
     @Delegate
     protected ItemArmorBaseComponent armorBaseComponent;
 
-    public ItemElytraStackImpl(ItemStackInitInfo initInfo,
-                               List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemElytraStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -13,8 +13,7 @@ public class ItemHelmetStackImpl extends ItemStackImpl implements ItemHelmetStac
     @Delegate
     protected ItemArmorBaseComponent armorBaseComponent;
 
-    public ItemHelmetStackImpl(ItemStackInitInfo initInfo,
-                               List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemHelmetStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

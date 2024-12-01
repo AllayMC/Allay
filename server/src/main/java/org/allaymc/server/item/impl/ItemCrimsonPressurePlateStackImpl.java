@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemCrimsonPressurePlateStackImpl extends ItemStackImpl implements ItemCrimsonPressurePlateStack {
     public ItemCrimsonPressurePlateStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

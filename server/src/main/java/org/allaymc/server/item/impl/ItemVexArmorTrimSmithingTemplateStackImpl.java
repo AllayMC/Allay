@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemVexArmorTrimSmithingTemplateStackImpl extends ItemStackImpl implements ItemVexArmorTrimSmithingTemplateStack {
     public ItemVexArmorTrimSmithingTemplateStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

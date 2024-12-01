@@ -13,8 +13,7 @@ public class ItemBootsStackImpl extends ItemStackImpl implements ItemBootsStack 
     @Delegate
     protected ItemArmorBaseComponent armorBaseComponent;
 
-    public ItemBootsStackImpl(ItemStackInitInfo initInfo,
-                              List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemBootsStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

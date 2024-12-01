@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemArmsUpPotterySherdStackImpl extends ItemStackImpl implements ItemArmsUpPotterySherdStack {
     public ItemArmsUpPotterySherdStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

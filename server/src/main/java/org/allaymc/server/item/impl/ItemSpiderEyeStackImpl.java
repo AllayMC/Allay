@@ -13,8 +13,7 @@ public class ItemSpiderEyeStackImpl extends ItemStackImpl implements ItemSpiderE
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemSpiderEyeStackImpl(ItemStackInitInfo initInfo,
-                                  List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemSpiderEyeStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

@@ -13,9 +13,7 @@ public class ItemPoisonousPotatoStackImpl extends ItemStackImpl implements ItemP
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemPoisonousPotatoStackImpl(ItemStackInitInfo initInfo,
-                                        List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemPoisonousPotatoStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -13,9 +13,7 @@ public class ItemChorusFruitStackImpl extends ItemStackImpl implements ItemChoru
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemChorusFruitStackImpl(ItemStackInitInfo initInfo,
-                                    List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemChorusFruitStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

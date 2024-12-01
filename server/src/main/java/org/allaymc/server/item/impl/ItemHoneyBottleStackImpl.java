@@ -13,9 +13,7 @@ public class ItemHoneyBottleStackImpl extends ItemStackImpl implements ItemHoney
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemHoneyBottleStackImpl(ItemStackInitInfo initInfo,
-                                    List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemHoneyBottleStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -9,6 +9,6 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 public class ItemCaveVinesBodyWithBerriesStackImpl extends ItemStackImpl implements ItemCaveVinesBodyWithBerriesStack {
     public ItemCaveVinesBodyWithBerriesStackImpl(ItemStackInitInfo initInfo,
             List<ComponentProvider<? extends Component>> componentProviders) {
-        super(initInfo, componentProviders);;
+        super(initInfo, componentProviders);
     }
 }

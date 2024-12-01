@@ -8,8 +8,7 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 import java.util.List;
 
 public class ItemSwordStackImpl extends ItemStackImpl implements ItemSwordStack {
-    public ItemSwordStackImpl(ItemStackInitInfo initInfo,
-                              List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemSwordStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }

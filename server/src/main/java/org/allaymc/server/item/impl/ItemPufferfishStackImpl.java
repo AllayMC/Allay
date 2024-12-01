@@ -13,9 +13,7 @@ public class ItemPufferfishStackImpl extends ItemStackImpl implements ItemPuffer
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemPufferfishStackImpl(ItemStackInitInfo initInfo,
-                                   List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemPufferfishStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

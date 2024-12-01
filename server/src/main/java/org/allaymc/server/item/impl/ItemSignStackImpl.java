@@ -10,8 +10,7 @@ import org.allaymc.server.component.interfaces.ComponentProvider;
 import java.util.List;
 
 public class ItemSignStackImpl extends ItemStackImpl implements ItemSignStack {
-    public ItemSignStackImpl(ItemStackInitInfo initInfo,
-                             List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemSignStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 

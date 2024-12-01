@@ -13,9 +13,7 @@ public class ItemEnchantedGoldenAppleStackImpl extends ItemStackImpl implements 
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemEnchantedGoldenAppleStackImpl(ItemStackInitInfo initInfo,
-                                             List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemEnchantedGoldenAppleStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

@@ -13,9 +13,7 @@ public class ItemRottenFleshStackImpl extends ItemStackImpl implements ItemRotte
     @Delegate
     protected ItemFoodComponent foodComponent;
 
-    public ItemRottenFleshStackImpl(ItemStackInitInfo initInfo,
-                                    List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemRottenFleshStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 }

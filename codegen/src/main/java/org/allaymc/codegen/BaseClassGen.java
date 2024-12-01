@@ -34,7 +34,7 @@ public abstract class BaseClassGen {
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(initInfoClass, "initInfo")
                         .addParameter(ParameterizedTypeName.get(ClassNames.LIST, ParameterizedTypeName.get(ClassNames.COMPONENT_PROVIDER, WildcardTypeName.subtypeOf(ClassNames.COMPONENT))), "componentProviders")
-                        .addStatement("super(initInfo, componentProviders);")
+                        .addStatement("super(initInfo, componentProviders)")
                         .build()
         );
         var javaFile = JavaFile.builder(className.packageName(), codeBuilder.build())

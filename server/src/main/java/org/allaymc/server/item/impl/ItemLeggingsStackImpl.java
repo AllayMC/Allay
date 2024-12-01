@@ -13,8 +13,7 @@ public class ItemLeggingsStackImpl extends ItemStackImpl implements ItemLeggings
     @Delegate
     protected ItemArmorBaseComponent armorBaseComponent;
 
-    public ItemLeggingsStackImpl(ItemStackInitInfo initInfo,
-                                 List<ComponentProvider<? extends Component>> componentProviders) {
+    public ItemLeggingsStackImpl(ItemStackInitInfo initInfo, List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
     }
 }
