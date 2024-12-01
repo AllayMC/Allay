@@ -35,7 +35,7 @@ public class SetCountFunction implements Function {
             var count = json.get("count").getAsJsonObject();
             var min = count.get("min").getAsInt();
             var max = count.get("max").getAsInt();
-            Preconditions.checkState(min <= max, "max must be greater than min");
+            Preconditions.checkState(min < max, "max must be greater than min");
             return new SetCountFunction(min, max);
         }
     }

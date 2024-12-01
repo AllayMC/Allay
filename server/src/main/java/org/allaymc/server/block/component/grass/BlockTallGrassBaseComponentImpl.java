@@ -8,8 +8,12 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
+
+import java.util.Set;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK_BIT;
 
@@ -20,8 +24,11 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.UPPER_BLOCK
  */
 public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponentImpl {
 
-    public BlockTallGrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+    protected final ItemId shearDrop;
+
+    public BlockTallGrassBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, ItemId shearDrop) {
         super(blockType);
+        this.shearDrop = shearDrop;
     }
 
     @Override
@@ -64,5 +71,14 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
         if (blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT)) return false;
         // Don't drop if entity is null
         return entity != null && super.isDroppable(blockState, usedItem, entity);
+    }
+
+    @Override
+    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        if (usedItem.getItemType() == ItemTypes.SHEARS) {
+            return Set.of(shearDrop.getItemType().createItemStack(2));
+        }
+
+        return super.getDrops(blockState, usedItem, entity);
     }
 }
