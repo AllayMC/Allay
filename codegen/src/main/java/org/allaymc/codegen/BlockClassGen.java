@@ -211,10 +211,10 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*CopperBehavior"), "BlockCopperBehavior");
         registerMergedBlock(Pattern.compile(".*(?:Water|Lava)Behavior"), "BlockLiquidBehavior");
         registerMergedBlock(Pattern.compile(".*PlanksBehavior"), "BlockPlanksBehavior");
-        registerMergedBlock(Pattern.compile(".*GlassBehavior"), "BlockStainedGlassBehavior");
-        registerMergedBlock(Pattern.compile(".*StainedGlassBehavior"), "BlockStainedGlassBehavior");
-        registerMergedBlock(Pattern.compile(".*GlassPaneBehavior"), "BlockStainedGlassBehavior");
-        registerMergedBlock(Pattern.compile(".*StainedGlassPaneBehavior"), "BlockStainedGlassBehavior");
+        registerMergedBlock(Pattern.compile(".*GlassBehavior"), "BlockGlassBehavior");
+        registerMergedBlock(Pattern.compile(".*StainedGlassBehavior"), "BlockGlassBehavior");
+        registerMergedBlock(Pattern.compile(".*GlassPaneBehavior"), "BlockGlassPaneBehavior");
+        registerMergedBlock(Pattern.compile(".*StainedGlassPaneBehavior"), "BlockGlassPaneBehavior");
         registerMergedBlock(Pattern.compile(".*CandleBehavior"), "BlockCandleBehavior");
         registerMergedBlock(Pattern.compile(".*CandleCakeBehavior"), "BlockCandleCakeBehavior");
         registerMergedBlock(Pattern.compile(".*LightBlock.*Behavior"), "BlockLightBlockBehavior");

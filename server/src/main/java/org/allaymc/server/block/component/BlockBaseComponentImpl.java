@@ -70,8 +70,9 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
             }
         }
 
-        if (getBlockType().getItemType() != null)
+        if (getBlockType().getItemType() != null) {
             return Set.of(getSilkTouchDrop(blockState));
+        }
 
         return Utils.EMPTY_ITEM_STACK_SET;
     }

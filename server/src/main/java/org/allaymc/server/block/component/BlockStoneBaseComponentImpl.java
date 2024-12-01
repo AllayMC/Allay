@@ -12,13 +12,13 @@ import java.util.Set;
 /**
  * @author daoge_cmd
  */
-public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockGrassBlockBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockStoneBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockStoneBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return Set.of(ItemTypes.DIRT.createItemStack(1));
+        return Set.of(ItemTypes.COBBLESTONE.createItemStack(1));
     }
 }

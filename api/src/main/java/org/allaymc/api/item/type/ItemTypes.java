@@ -591,8 +591,6 @@ import org.allaymc.api.item.interfaces.ItemSpongeStack;
 import org.allaymc.api.item.interfaces.ItemSporeBlossomStack;
 import org.allaymc.api.item.interfaces.ItemSprucePressurePlateStack;
 import org.allaymc.api.item.interfaces.ItemSpyglassStack;
-import org.allaymc.api.item.interfaces.ItemStainedGlassPaneStack;
-import org.allaymc.api.item.interfaces.ItemStainedGlassStack;
 import org.allaymc.api.item.interfaces.ItemStainedHardenedClayStack;
 import org.allaymc.api.item.interfaces.ItemStairsStack;
 import org.allaymc.api.item.interfaces.ItemStandingBannerStack;
@@ -938,9 +936,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> BLACK_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> BLACK_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> BLACK_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> BLACK_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> BLACK_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> BLACK_TERRACOTTA;
 
@@ -990,9 +988,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> BLUE_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> BLUE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> BLUE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> BLUE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> BLUE_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> BLUE_TERRACOTTA;
 
@@ -1074,9 +1072,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> BROWN_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> BROWN_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> BROWN_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> BROWN_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> BROWN_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> BROWN_TERRACOTTA;
 
@@ -1460,9 +1458,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> CYAN_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> CYAN_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> CYAN_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> CYAN_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> CYAN_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> CYAN_TERRACOTTA;
 
@@ -2198,9 +2196,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> GRAY_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> GRAY_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> GRAY_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> GRAY_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> GRAY_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> GRAY_TERRACOTTA;
 
@@ -2224,9 +2222,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> GREEN_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> GREEN_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> GREEN_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> GREEN_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> GREEN_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> GREEN_TERRACOTTA;
 
@@ -2244,77 +2242,77 @@ public final class ItemTypes {
 
     public static ItemType<ItemHangingRootsStack> HANGING_ROOTS;
 
-    public static ItemType<ItemStainedGlassStack> HARD_BLACK_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_BLACK_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_BLACK_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_BLACK_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_BLUE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_BLUE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_BLUE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_BLUE_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_BROWN_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_BROWN_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_BROWN_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_BROWN_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_CYAN_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_CYAN_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_CYAN_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_CYAN_STAINED_GLASS_PANE;
 
     public static ItemType<ItemGlassStack> HARD_GLASS;
 
     public static ItemType<ItemGlassPaneStack> HARD_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_GRAY_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_GRAY_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_GRAY_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_GRAY_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_GREEN_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_GREEN_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_GREEN_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_GREEN_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_LIGHT_BLUE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_LIGHT_BLUE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_LIGHT_BLUE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_LIGHT_BLUE_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_LIGHT_GRAY_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_LIGHT_GRAY_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_LIGHT_GRAY_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_LIGHT_GRAY_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_LIME_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_LIME_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_LIME_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_LIME_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_MAGENTA_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_MAGENTA_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_MAGENTA_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_MAGENTA_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_ORANGE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_ORANGE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_ORANGE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_ORANGE_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_PINK_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_PINK_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_PINK_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_PINK_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_PURPLE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_PURPLE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_PURPLE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_PURPLE_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_RED_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_RED_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_RED_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_RED_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_WHITE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_WHITE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_WHITE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_WHITE_STAINED_GLASS_PANE;
 
-    public static ItemType<ItemStainedGlassStack> HARD_YELLOW_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> HARD_YELLOW_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> HARD_YELLOW_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> HARD_YELLOW_STAINED_GLASS_PANE;
 
     public static ItemType<ItemHardenedClayStack> HARDENED_CLAY;
 
@@ -2618,9 +2616,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> LIGHT_BLUE_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> LIGHT_BLUE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> LIGHT_BLUE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> LIGHT_BLUE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> LIGHT_BLUE_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> LIGHT_BLUE_TERRACOTTA;
 
@@ -2642,9 +2640,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> LIGHT_GRAY_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> LIGHT_GRAY_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> LIGHT_GRAY_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> LIGHT_GRAY_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> LIGHT_GRAY_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> LIGHT_GRAY_TERRACOTTA;
 
@@ -2676,9 +2674,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> LIME_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> LIME_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> LIME_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> LIME_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> LIME_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> LIME_TERRACOTTA;
 
@@ -2732,9 +2730,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> MAGENTA_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> MAGENTA_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> MAGENTA_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> MAGENTA_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> MAGENTA_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> MAGENTA_TERRACOTTA;
 
@@ -3030,9 +3028,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> ORANGE_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> ORANGE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> ORANGE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> ORANGE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> ORANGE_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> ORANGE_TERRACOTTA;
 
@@ -3118,9 +3116,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> PINK_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> PINK_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> PINK_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> PINK_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> PINK_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> PINK_TERRACOTTA;
 
@@ -3300,9 +3298,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> PURPLE_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> PURPLE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> PURPLE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> PURPLE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> PURPLE_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> PURPLE_TERRACOTTA;
 
@@ -3412,9 +3410,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> RED_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> RED_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> RED_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> RED_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> RED_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> RED_TERRACOTTA;
 
@@ -3668,9 +3666,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemSpawnEggStack> SQUID_SPAWN_EGG;
 
-    public static ItemType<ItemStainedGlassStack> STAINED_GLASS;
+    public static ItemType<ItemGlassStack> STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> STAINED_GLASS_PANE;
 
     public static ItemType<ItemStainedHardenedClayStack> STAINED_HARDENED_CLAY;
 
@@ -4098,9 +4096,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> WHITE_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> WHITE_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> WHITE_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> WHITE_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> WHITE_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> WHITE_TERRACOTTA;
 
@@ -4170,9 +4168,9 @@ public final class ItemTypes {
 
     public static ItemType<ItemShulkerBoxStack> YELLOW_SHULKER_BOX;
 
-    public static ItemType<ItemStainedGlassStack> YELLOW_STAINED_GLASS;
+    public static ItemType<ItemGlassStack> YELLOW_STAINED_GLASS;
 
-    public static ItemType<ItemStainedGlassPaneStack> YELLOW_STAINED_GLASS_PANE;
+    public static ItemType<ItemGlassPaneStack> YELLOW_STAINED_GLASS_PANE;
 
     public static ItemType<ItemTerracottaStack> YELLOW_TERRACOTTA;
 

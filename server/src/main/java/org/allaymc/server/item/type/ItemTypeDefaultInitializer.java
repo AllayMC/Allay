@@ -592,8 +592,6 @@ import org.allaymc.server.item.impl.ItemSpongeStackImpl;
 import org.allaymc.server.item.impl.ItemSporeBlossomStackImpl;
 import org.allaymc.server.item.impl.ItemSprucePressurePlateStackImpl;
 import org.allaymc.server.item.impl.ItemSpyglassStackImpl;
-import org.allaymc.server.item.impl.ItemStainedGlassPaneStackImpl;
-import org.allaymc.server.item.impl.ItemStainedGlassStackImpl;
 import org.allaymc.server.item.impl.ItemStainedHardenedClayStackImpl;
 import org.allaymc.server.item.impl.ItemStairsStackImpl;
 import org.allaymc.server.item.impl.ItemStandingBannerStackImpl;
@@ -1429,13 +1427,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLACK_STAINED_GLASS == null) {
             ItemTypes.BLACK_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.BLACK_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.BLACK_STAINED_GLASS_PANE == null) {
             ItemTypes.BLACK_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.BLACK_STAINED_GLASS_PANE)
                             .build();
         }
@@ -1585,13 +1583,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BLUE_STAINED_GLASS == null) {
             ItemTypes.BLUE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.BLUE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.BLUE_STAINED_GLASS_PANE == null) {
             ItemTypes.BLUE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.BLUE_STAINED_GLASS_PANE)
                             .build();
         }
@@ -1837,13 +1835,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.BROWN_STAINED_GLASS == null) {
             ItemTypes.BROWN_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.BROWN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.BROWN_STAINED_GLASS_PANE == null) {
             ItemTypes.BROWN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.BROWN_STAINED_GLASS_PANE)
                             .build();
         }
@@ -2995,13 +2993,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.CYAN_STAINED_GLASS == null) {
             ItemTypes.CYAN_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.CYAN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.CYAN_STAINED_GLASS_PANE == null) {
             ItemTypes.CYAN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.CYAN_STAINED_GLASS_PANE)
                             .build();
         }
@@ -5209,13 +5207,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.GRAY_STAINED_GLASS == null) {
             ItemTypes.GRAY_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.GRAY_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.GRAY_STAINED_GLASS_PANE == null) {
             ItemTypes.GRAY_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.GRAY_STAINED_GLASS_PANE)
                             .build();
         }
@@ -5287,13 +5285,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.GREEN_STAINED_GLASS == null) {
             ItemTypes.GREEN_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.GREEN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.GREEN_STAINED_GLASS_PANE == null) {
             ItemTypes.GREEN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.GREEN_STAINED_GLASS_PANE)
                             .build();
         }
@@ -5347,49 +5345,49 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.HARD_BLACK_STAINED_GLASS == null) {
             ItemTypes.HARD_BLACK_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_BLACK_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_BLACK_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_BLACK_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_BLACK_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_BLUE_STAINED_GLASS == null) {
             ItemTypes.HARD_BLUE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_BLUE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_BLUE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_BLUE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_BLUE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_BROWN_STAINED_GLASS == null) {
             ItemTypes.HARD_BROWN_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_BROWN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_BROWN_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_BROWN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_BROWN_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_CYAN_STAINED_GLASS == null) {
             ItemTypes.HARD_CYAN_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_CYAN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_CYAN_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_CYAN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_CYAN_STAINED_GLASS_PANE)
                             .build();
         }
@@ -5407,157 +5405,157 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.HARD_GRAY_STAINED_GLASS == null) {
             ItemTypes.HARD_GRAY_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_GRAY_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_GRAY_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_GRAY_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_GRAY_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_GREEN_STAINED_GLASS == null) {
             ItemTypes.HARD_GREEN_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_GREEN_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_GREEN_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_GREEN_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_GREEN_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_LIGHT_BLUE_STAINED_GLASS == null) {
             ItemTypes.HARD_LIGHT_BLUE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIGHT_BLUE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_LIGHT_BLUE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIGHT_BLUE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_LIGHT_GRAY_STAINED_GLASS == null) {
             ItemTypes.HARD_LIGHT_GRAY_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIGHT_GRAY_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_LIGHT_GRAY_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIGHT_GRAY_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_LIME_STAINED_GLASS == null) {
             ItemTypes.HARD_LIME_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIME_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_LIME_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_LIME_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_LIME_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_MAGENTA_STAINED_GLASS == null) {
             ItemTypes.HARD_MAGENTA_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_MAGENTA_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_MAGENTA_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_MAGENTA_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_MAGENTA_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_ORANGE_STAINED_GLASS == null) {
             ItemTypes.HARD_ORANGE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_ORANGE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_ORANGE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_ORANGE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_ORANGE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_PINK_STAINED_GLASS == null) {
             ItemTypes.HARD_PINK_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_PINK_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_PINK_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_PINK_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_PINK_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_PURPLE_STAINED_GLASS == null) {
             ItemTypes.HARD_PURPLE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_PURPLE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_PURPLE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_PURPLE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_PURPLE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_RED_STAINED_GLASS == null) {
             ItemTypes.HARD_RED_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_RED_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_RED_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_RED_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_RED_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_STAINED_GLASS == null) {
             ItemTypes.HARD_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_WHITE_STAINED_GLASS == null) {
             ItemTypes.HARD_WHITE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_WHITE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_WHITE_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_WHITE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_WHITE_STAINED_GLASS_PANE)
                             .build();
         }
         if (ItemTypes.HARD_YELLOW_STAINED_GLASS == null) {
             ItemTypes.HARD_YELLOW_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.HARD_YELLOW_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.HARD_YELLOW_STAINED_GLASS_PANE == null) {
             ItemTypes.HARD_YELLOW_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.HARD_YELLOW_STAINED_GLASS_PANE)
                             .build();
         }
@@ -6469,13 +6467,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIGHT_BLUE_STAINED_GLASS == null) {
             ItemTypes.LIGHT_BLUE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.LIGHT_BLUE_STAINED_GLASS_PANE == null) {
             ItemTypes.LIGHT_BLUE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_BLUE_STAINED_GLASS_PANE)
                             .build();
         }
@@ -6541,13 +6539,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIGHT_GRAY_STAINED_GLASS == null) {
             ItemTypes.LIGHT_GRAY_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.LIGHT_GRAY_STAINED_GLASS_PANE == null) {
             ItemTypes.LIGHT_GRAY_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.LIGHT_GRAY_STAINED_GLASS_PANE)
                             .build();
         }
@@ -6643,13 +6641,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.LIME_STAINED_GLASS == null) {
             ItemTypes.LIME_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.LIME_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.LIME_STAINED_GLASS_PANE == null) {
             ItemTypes.LIME_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.LIME_STAINED_GLASS_PANE)
                             .build();
         }
@@ -6811,13 +6809,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.MAGENTA_STAINED_GLASS == null) {
             ItemTypes.MAGENTA_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.MAGENTA_STAINED_GLASS_PANE == null) {
             ItemTypes.MAGENTA_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.MAGENTA_STAINED_GLASS_PANE)
                             .build();
         }
@@ -7705,13 +7703,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.ORANGE_STAINED_GLASS == null) {
             ItemTypes.ORANGE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.ORANGE_STAINED_GLASS_PANE == null) {
             ItemTypes.ORANGE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.ORANGE_STAINED_GLASS_PANE)
                             .build();
         }
@@ -7969,13 +7967,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PINK_STAINED_GLASS == null) {
             ItemTypes.PINK_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.PINK_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.PINK_STAINED_GLASS_PANE == null) {
             ItemTypes.PINK_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.PINK_STAINED_GLASS_PANE)
                             .build();
         }
@@ -8515,13 +8513,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.PURPLE_STAINED_GLASS == null) {
             ItemTypes.PURPLE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.PURPLE_STAINED_GLASS_PANE == null) {
             ItemTypes.PURPLE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.PURPLE_STAINED_GLASS_PANE)
                             .build();
         }
@@ -8851,13 +8849,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.RED_STAINED_GLASS == null) {
             ItemTypes.RED_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.RED_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.RED_STAINED_GLASS_PANE == null) {
             ItemTypes.RED_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.RED_STAINED_GLASS_PANE)
                             .build();
         }
@@ -9619,13 +9617,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.STAINED_GLASS == null) {
             ItemTypes.STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.STAINED_GLASS_PANE == null) {
             ItemTypes.STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.STAINED_GLASS_PANE)
                             .build();
         }
@@ -10909,13 +10907,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.WHITE_STAINED_GLASS == null) {
             ItemTypes.WHITE_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.WHITE_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.WHITE_STAINED_GLASS_PANE == null) {
             ItemTypes.WHITE_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.WHITE_STAINED_GLASS_PANE)
                             .build();
         }
@@ -11125,13 +11123,13 @@ public final class ItemTypeDefaultInitializer {
         }
         if (ItemTypes.YELLOW_STAINED_GLASS == null) {
             ItemTypes.YELLOW_STAINED_GLASS = AllayItemType
-                            .builder(ItemStainedGlassStackImpl.class)
+                            .builder(ItemGlassStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_STAINED_GLASS)
                             .build();
         }
         if (ItemTypes.YELLOW_STAINED_GLASS_PANE == null) {
             ItemTypes.YELLOW_STAINED_GLASS_PANE = AllayItemType
-                            .builder(ItemStainedGlassPaneStackImpl.class)
+                            .builder(ItemGlassPaneStackImpl.class)
                             .vanillaItem(ItemId.YELLOW_STAINED_GLASS_PANE)
                             .build();
         }

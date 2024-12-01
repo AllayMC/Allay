@@ -352,7 +352,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected ItemType<?> itemType;
         protected ItemType<?> hardItemType;
         protected boolean isCustomBlock = true;
-        protected Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier = BlockBaseComponentImpl::new;
+        protected Function<BlockType<?>, BlockBaseComponent> baseComponentSupplier = BlockBaseComponentImpl::new;
         protected Set<BlockTag> blockTags = Set.of();
         protected Material material;
         protected Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier = blockStates ->
@@ -449,8 +449,8 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return map;
         }
 
-        public Builder setBlockBaseComponentSupplier(Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
-            this.blockBaseComponentSupplier = blockBaseComponentSupplier;
+        public Builder setBaseComponentSupplier(Function<BlockType<?>, BlockBaseComponent> baseComponentSupplier) {
+            this.baseComponentSupplier = baseComponentSupplier;
             return this;
         }
 
@@ -472,7 +472,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
             var listComponents = new ArrayList<>(components.values());
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER)) {
-                listComponents.add(blockBaseComponentSupplier.apply(type));
+                listComponents.add(baseComponentSupplier.apply(type));
             }
             if (!components.containsKey(BlockStateDataComponentImpl.IDENTIFIER)) {
                 listComponents.add(BlockStateDataComponentImpl.ofDefault());
