@@ -1,11 +1,11 @@
-package org.allaymc.server.utils;
+package org.allaymc.server.world.storage;
 
 import org.allaymc.api.world.DimensionInfo;
 
 /**
  * @author Cool_Loong | Cloudburst Server
  */
-public enum LevelDBKeyUtils {
+public enum LevelDBKey {
     /**
      * Biome IDs are written as 8-bit integers. No longer written since v1.18.0.
      */
@@ -63,7 +63,7 @@ public enum LevelDBKeyUtils {
 
     private final byte encoded;
 
-    LevelDBKeyUtils(char encoded) {
+    LevelDBKey(char encoded) {
         this.encoded = (byte) encoded;
     }
 

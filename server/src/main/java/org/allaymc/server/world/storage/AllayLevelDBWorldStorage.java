@@ -12,7 +12,6 @@ import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
-import org.allaymc.server.utils.LevelDBKeyUtils;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NBTInputStream;
@@ -43,6 +42,8 @@ import java.util.concurrent.CompletableFuture;
 public class AllayLevelDBWorldStorage implements WorldStorage {
     private static final String FILE_LEVEL_DAT = "level.dat";
     private static final String FILE_LEVEL_DAT_OLD = "level.dat_old";
+
+    private static final String DIR_DB = "db";
 
     private static final int CURRENT_STORAGE_VERSION = 10;
 
@@ -96,7 +97,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
         this.path = path;
 
-        var dbFolder = path.resolve("db").toFile();
+        var dbFolder = path.resolve(DIR_DB).toFile();
         try {
             if (!dbFolder.exists() && !dbFolder.mkdirs()) {
                 throw new WorldStorageException("Failed to create world database directory!");
@@ -144,13 +145,13 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 .chunkX(x)
                 .chunkZ(z)
                 .dimensionInfo(dimensionInfo);
-        var versionValue = this.db.get(LevelDBKeyUtils.VERSION.getKey(x, z, dimensionInfo));
+        var versionValue = this.db.get(LevelDBKey.VERSION.getKey(x, z, dimensionInfo));
         if (versionValue == null) {
-            versionValue = this.db.get(LevelDBKeyUtils.LEGACY_VERSION.getKey(x, z, dimensionInfo));
+            versionValue = this.db.get(LevelDBKey.LEGACY_VERSION.getKey(x, z, dimensionInfo));
         }
         if (versionValue == null) return builder.build().toSafeChunk();
 
-        var chunkState = this.db.get(LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
+        var chunkState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
         if (chunkState == null) {
             builder.state(ChunkState.FINISHED);
         } else {
@@ -178,9 +179,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             return;
         }
         try (var writeBatch = this.db.createWriteBatch()) {
-            writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{LATEST_CHUNK_VERSION});
+            writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{LATEST_CHUNK_VERSION});
             writeBatch.put(
-                    LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
+                    LevelDBKey.CHUNK_FINALIZED_STATE.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
                     Unpooled.buffer(1)
                             .writeByte(VANILLA_CHUNK_STATE_DONE)
                             .array()
@@ -195,7 +196,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     @Override
     public boolean containChunk(int x, int z, DimensionInfo dimensionInfo) {
         for (int ySection = dimensionInfo.minSectionY(); ySection <= dimensionInfo.maxSectionY(); ySection++) {
-            var bytes = db.get(LevelDBKeyUtils.CHUNK_SECTION_PREFIX.getKey(x, z, ySection, dimensionInfo));
+            var bytes = db.get(LevelDBKey.CHUNK_SECTION_PREFIX.getKey(x, z, ySection, dimensionInfo));
             if (bytes != null) return true;
         }
         return false;

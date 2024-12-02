@@ -327,7 +327,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setServerAuthoritativeBlockBreaking(true);
         startGamePacket.setCommandsEnabled(true);
         startGamePacket.setMultiplayerGame(true);
-        // TODO: add it to server-settings.yml
         startGamePacket.setBroadcastingToLan(true);
         startGamePacket.setMultiplayerCorrelationId(UUID.randomUUID().toString());
         startGamePacket.setXblBroadcastMode(GamePublishSetting.PUBLIC);
