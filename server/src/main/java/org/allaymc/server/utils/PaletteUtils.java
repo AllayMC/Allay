@@ -31,22 +31,18 @@ public class PaletteUtils {
             throw new IllegalArgumentException("NBT compound is too deeply nested");
         }
         switch (type.getEnum()) {
-            case END -> {
-            }
+            case END -> {}
             case BYTE -> input.skipBytes(1);
             case SHORT -> input.skipBytes(2);
             case INT, FLOAT -> input.skipBytes(4);
             case LONG, DOUBLE -> input.skipBytes(8);
-            case BYTE_ARRAY -> {
-                input.skipBytes(input.readInt());
-            }
+            case BYTE_ARRAY -> input.skipBytes(input.readInt());
             case STRING -> input.skipBytes(input.readUnsignedShort());
             case COMPOUND -> {
                 NbtType<?> nbtType;
                 while ((nbtType = NbtType.byId(input.readUnsignedByte())) != NbtType.END) {
-                    String name;
                     int end = byteBuf.readerIndex();
-                    name = input.readUTF();
+                    String name = input.readUTF();
                     if (name.equals("version")) {
                         int version = input.readInt();
                         byteBuf.resetReaderIndex();
@@ -57,11 +53,17 @@ public class PaletteUtils {
                         input.readFully(result);
                         result[result.length - 1] = 0;// because an End Tag be put when at the end serialize tag
 
-                        input.skipBytes(input.readUnsignedShort());// UTF
-                        deserialize(input, byteBuf, nbtType, maxDepth - 1);// Value
-                        input.skipBytes(1);// end tag
+                        // UTF
+                        input.skipBytes(input.readUnsignedShort());
+                        // Value
+                        deserialize(input, byteBuf, nbtType, maxDepth - 1);
+                        // End tag
+                        input.skipBytes(1);
                         int hash = HashUtils.fnv1a_32(result);
-                        if (hash == 147887818) hash = -2;// minecraft:unknown
+                        if (hash == 147887818) {
+                            // minecraft:unknown
+                            hash = -2;
+                        }
                         return hash;
                     }
                     deserialize(input, byteBuf, nbtType, maxDepth - 1);
@@ -81,7 +83,7 @@ public class PaletteUtils {
         return HASH_NOT_LATEST;
     }
 
-    public static SemVersion toSemVersion(int version) {
+    private static SemVersion toSemVersion(int version) {
         int major = (version >> 24) & 0xFF;
         int minor = (version >> 16) & 0xFF;
         int patch = (version >> 8) & 0xFF;

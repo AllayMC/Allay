@@ -30,7 +30,7 @@ public class PlayerData {
         var globalSpawnPoint = server.getWorldPool().getGlobalSpawnPoint();
         var builder = NbtMap.builder();
         writeVector3f(builder, "Pos", "x", "y", "z", server.getWorldPool().getGlobalSpawnPointVec3f());
-        var worldName = globalSpawnPoint.dimension().getWorld().getWorldData().getName();
+        var worldName = globalSpawnPoint.dimension().getWorld().getWorldData().getDisplayName();
         var dimId = globalSpawnPoint.dimension().getDimensionInfo().dimensionId();
         return builder()
                 .nbt(builder.build())

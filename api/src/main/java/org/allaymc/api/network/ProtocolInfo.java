@@ -13,7 +13,7 @@ public final class ProtocolInfo {
 
     public static final BedrockCodec PACKET_CODEC = Bedrock_v748.CODEC;
 
-    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 40, 0, 0);
+    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 40, 1, 0);
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.

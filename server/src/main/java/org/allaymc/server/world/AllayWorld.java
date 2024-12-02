@@ -23,7 +23,6 @@ import org.allaymc.api.utils.GameLoop;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.World;
-import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -48,14 +47,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 public class AllayWorld implements World {
     // Send the time to client every 12 seconds
-    protected static final long TIME_SENDING_INTERVAL = 12 * 20;
+    protected static final int TIME_SENDING_INTERVAL = 12 * 20;
     protected static final int MAX_PACKETS_HANDLE_COUNT_AT_ONCE = Server.SETTINGS.networkSettings().maxSyncedPacketsHandleCountAtOnce();
     protected static final boolean ENABLE_INDEPENDENT_NETWORK_THREAD = Server.SETTINGS.networkSettings().enableIndependentNetworkThread();
 
     @Getter
     protected final WorldStorage worldStorage;
     @Getter
-    protected final WorldData worldData;
+    protected final AllayWorldData worldData;
     protected final BlockingQueueWrapper<PacketQueueEntry> packetQueue;
     protected final Semaphore networkSemaphore;
     protected final AtomicBoolean isRunning;
@@ -78,19 +77,22 @@ public class AllayWorld implements World {
 
     public AllayWorld(WorldStorage worldStorage) {
         this.worldStorage = worldStorage;
-        this.worldData = worldStorage.readWorldData();
+        this.worldData = (AllayWorldData) worldStorage.readWorldData();
         this.worldData.setWorld(this);
+        this.worldData.increaseWorldStartCount();
         this.packetQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
         this.networkSemaphore = ENABLE_INDEPENDENT_NETWORK_THREAD ? new Semaphore(1) : null;
         this.isRunning = new AtomicBoolean(true);
         this.dimensionMap = new Int2ObjectOpenHashMap<>(3);
         this.scheduler = new AllayScheduler(Server.getInstance().getVirtualThreadPool());
-        this.gameLoop = GameLoop.builder().onTick(this::worldThreadMain).build();
+        this.gameLoop = GameLoop.builder()
+                .currentTick(this.worldData.getTotalTime())
+                .onTick(this::worldThreadMain).build();
         this.worldThread = Thread.ofPlatform()
-                .name("World Thread - " + this.getWorldData().getName())
+                .name("World Thread - " + this.getWorldData().getDisplayName())
                 .unstarted(gameLoop::startLoop);
         this.networkThread = ENABLE_INDEPENDENT_NETWORK_THREAD ? Thread.ofPlatform()
-                .name("World Network Thread - " + this.getWorldData().getName())
+                .name("World Network Thread - " + this.getWorldData().getDisplayName())
                 .unstarted(this::networkThreadMain) : null;
         this.rainTimer = Weather.CLEAR.generateRandomTimeLength();
         this.thunderTimer = Weather.CLEAR.generateRandomTimeLength();
@@ -115,9 +117,10 @@ public class AllayWorld implements World {
 
     @SneakyThrows
     private void worldThreadMain(GameLoop gameLoop) {
+        this.worldData.setTotalTime(gameLoop.getTick());
         if (!isRunning.get()) {
             gameLoop.stop();
-            log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getName()));
+            log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getDisplayName()));
             return;
         }
 
@@ -128,7 +131,7 @@ public class AllayWorld implements World {
         try {
             tick(gameLoop.getTick());
         } catch (Throwable throwable) {
-            log.error("Error while ticking level {}", this.getWorldData().getName(), throwable);
+            log.error("Error while ticking level {}", this.getWorldData().getDisplayName(), throwable);
         } finally {
             if (ENABLE_INDEPENDENT_NETWORK_THREAD) {
                 networkSemaphore.release();
@@ -143,14 +146,14 @@ public class AllayWorld implements World {
             do {
                 if (entry == null) continue;
                 if (entry.player.getWorld() != this) {
-                    log.warn("Trying to handle sync packet in world {} which the player {} is not in!", this.getWorldData().getName(), entry.player.getOriginName());
+                    log.warn("Trying to handle sync packet in world {} which the player {} is not in!", this.getWorldData().getDisplayName(), entry.player.getOriginName());
                 }
                 ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) entry.player).getPlayerNetworkComponent()).handleDataPacket(entry.packet(), entry.time());
                 count++;
 
             } while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.pollNow()) != null);
         } catch (Throwable throwable) {
-            log.error("Error while handling sync packet in world {}", this.getWorldData().getName(), throwable);
+            log.error("Error while handling sync packet in world {}", this.getWorldData().getDisplayName(), throwable);
         }
     }
 
@@ -179,11 +182,12 @@ public class AllayWorld implements World {
             overworld.getChunkService().addChunkLoader(new SpawnPointChunkLoader());
         }
 
-        if (!isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
-            Thread.ofVirtual().name("Spawn Point Finding Thread - " + worldData.getName()).start(() -> {
+        // Find the spawn point only the first time the world is loaded
+        if (this.worldData.getWorldStartCount() == 1 && !isSafeStandingPos(new Position3i(worldData.getSpawnPoint(), overworld))) {
+            Thread.ofVirtual().name("Spawn Point Finding Thread - " + worldData.getDisplayName()).start(() -> {
                 var newSpawnPoint = overworld.findSuitableGroundPosAround(this::isSafeStandingPos, 0, 0, 32);
                 if (newSpawnPoint == null) {
-                    log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getName());
+                    log.warn("Cannot find a safe spawn point in the overworld dimension of world {}", worldData.getDisplayName());
                     newSpawnPoint = new Vector3i(0, overworld.getHeight(0, 0) + 1, 0);
                 }
                 var finalNewSpawnPoint = newSpawnPoint;
@@ -210,16 +214,16 @@ public class AllayWorld implements World {
     }
 
     protected void tickTime(long currentTick) {
-        if (!worldData.<Boolean>getGameRule(GameRule.DO_DAYLIGHT_CYCLE)) return;
+        if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) return;
 
         if (currentTick >= nextTimeSendTick) {
-            worldData.addTime(TIME_SENDING_INTERVAL);
+            worldData.addTimeOfDay(TIME_SENDING_INTERVAL);
             nextTimeSendTick = currentTick + TIME_SENDING_INTERVAL;
         }
     }
 
     protected void tickWeather() {
-        if (!worldData.<Boolean>getGameRule(GameRule.DO_WEATHER_CYCLE)) {
+        if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_WEATHER_CYCLE)) {
             return;
         }
 
@@ -340,7 +344,7 @@ public class AllayWorld implements World {
     }
 
     public void shutdown() {
-        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADING, worldData.getName()));
+        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADING, worldData.getDisplayName()));
         getPlayers().forEach(EntityPlayer::disconnect);
         isRunning.set(false);
         scheduler.shutdown();

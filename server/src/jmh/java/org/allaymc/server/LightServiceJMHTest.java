@@ -24,7 +24,7 @@ public class LightServiceJMHTest {
 
     @Setup
     public void setup() {
-        lightService = new AllayLightService(DimensionInfo.THE_END, () -> 0L, () -> Set.of(Weather.CLEAR));
+        lightService = new AllayLightService(DimensionInfo.THE_END, () -> 0, () -> Set.of(Weather.CLEAR));
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {
                 lightService.onChunkLoad(

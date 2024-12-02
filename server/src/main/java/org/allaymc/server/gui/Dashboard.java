@@ -128,7 +128,7 @@ public final class Dashboard {
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_ADDRESS) + ": " + player.getClientSession().getSocketAddress().toString() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_UUID) + ": " + player.getUUID().toString() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_POS) + ": (" + pos.x() + ", " + pos.y() + ", " + pos.z() + ")" + "\n" +
-                            I18n.get().tr(TrKeys.A_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getName() + "\n" +
+                            I18n.get().tr(TrKeys.A_GUI_PLAYER_WORLD) + ": " + pos.dimension().getWorld().getWorldData().getDisplayName() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_DIMENSION) + ": " + pos.dimension().getDimensionInfo().dimensionId(),
                             I18n.get().tr(TrKeys.A_GUI_PLAYER_INFO),
                             JOptionPane.INFORMATION_MESSAGE);

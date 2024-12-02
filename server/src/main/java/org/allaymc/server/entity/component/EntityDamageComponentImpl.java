@@ -171,7 +171,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
                (!baseComponent.hasEffect(EffectTypes.LEVITATION) && !baseComponent.hasEffect(EffectTypes.SLOW_FALLING)) ||
                (boolean) baseComponent.getWorld()
                        .getWorldData()
-                       .getGameRule(GameRule.FALL_DAMAGE);
+                       .getGameRuleValue(GameRule.FALL_DAMAGE);
     }
 
     @EventHandler

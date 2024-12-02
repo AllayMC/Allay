@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.allaymc.api.i18n.LangCode;
+import org.allaymc.api.world.Difficulty;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PacketCompressionAlgorithm;
 import org.cloudburstmc.protocol.bedrock.data.PlayerPermission;
@@ -52,9 +53,15 @@ public class ServerSettings extends OkaeriConfig {
         @CustomKey("max-player-count")
         private int maxPlayerCount = 20;
 
-        @CustomKey("game-type")
+        @CustomKey("default-game-type")
+        @Comment("Determines the default game type of a world when it is created")
         @Comment("Possible values: SURVIVAL, CREATIVE, SPECTATOR")
         private GameType defaultGameType = GameType.CREATIVE;
+
+        @CustomKey("default-difficulty")
+        @Comment("Determines the default difficulty of a world when it is created")
+        @Comment("Possible values: PEACEFUL, EASY, NORMAL, HARD")
+        private Difficulty defaultDifficulty = Difficulty.NORMAL;
 
         @CustomKey("default-permission")
         @Comment("Possible values: VISITOR, MEMBER, OPERATOR")

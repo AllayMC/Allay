@@ -251,7 +251,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         playStatusPacket.setStatus(PlayStatusPacket.Status.PLAYER_SPAWN);
         sendPacket(playStatusPacket);
 
-        world.getWorldData().sendTime(thisPlayer);
+        world.getWorldData().sendTimeOfDay(thisPlayer);
         ((AllayWorld) world).sendWeather(thisPlayer);
         // Save player data the first time
         server.getPlayerStorage().savePlayerData(thisPlayer);
@@ -302,7 +302,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
         startGamePacket.setUniqueEntityId(thisPlayer.getRuntimeId());
         startGamePacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
-        startGamePacket.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", Server.SETTINGS.genericSettings().defaultGameType().ordinal())));
+        startGamePacket.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", spawnWorld.getWorldData().getGameType().ordinal())));
         var loc = thisPlayer.getLocation();
         var worldSpawn = spawnWorld.getWorldData().getSpawnPoint();
         startGamePacket.setDefaultSpawn(Vector3i.from(worldSpawn.x(), worldSpawn.y(), worldSpawn.z()));
@@ -369,7 +369,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void completeLogin() {
-        if (server.getOnlinePlayerCount() >= Server.SETTINGS.genericSettings().maxPlayerCount()) {
+        if (server.getOnlinePlayerCount() >= Server.getInstance().getNetworkInterface().getMaxPlayerCount()) {
             disconnect(TrKeys.M_DISCONNECTIONSCREEN_SERVERFULL_TITLE);
             return;
         }

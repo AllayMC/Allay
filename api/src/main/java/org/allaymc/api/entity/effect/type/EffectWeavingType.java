@@ -26,7 +26,7 @@ public class EffectWeavingType extends AbstractEffectType {
     @Override
     public void onEntityDies(Entity entity, EffectInstance effectInstance) {
         if (
-                entity.getWorld().getWorldData().getGameRule(GameRule.MOB_GRIEFING).equals(true) ||
+                entity.getWorld().getWorldData().getGameRuleValue(GameRule.MOB_GRIEFING).equals(true) ||
                 entity.isPlayer()
         ) return;
 

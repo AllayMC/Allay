@@ -11,16 +11,16 @@ import org.allaymc.api.world.WorldData;
  */
 @Getter
 public class TimeChangeEvent extends WorldEvent implements CancellableEvent {
-    protected long oldTime;
-    protected long newTime;
+    protected int oldTime;
+    protected int newTime;
 
-    public TimeChangeEvent(World world, long oldTime, long newTime) {
+    public TimeChangeEvent(World world, int oldTime, int newTime) {
         super(world);
         this.oldTime = oldTime;
         setNewTime(newTime);
     }
 
-    public void setNewTime(long time) {
+    public void setNewTime(int time) {
         Preconditions.checkArgument(time >= WorldData.TIME_DAY && time <= WorldData.TIME_FULL, "Time must be between " + WorldData.TIME_DAY + " and " + WorldData.TIME_FULL);
         this.newTime = time;
     }

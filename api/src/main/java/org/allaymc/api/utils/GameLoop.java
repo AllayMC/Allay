@@ -27,13 +27,15 @@ public final class GameLoop {
     @Getter
     private long tick;
 
-    private GameLoop(Runnable onStart, Consumer<GameLoop> onTick, Runnable onStop, int loopCountPerSec) {
-        if (loopCountPerSec <= 0)
+    private GameLoop(Runnable onStart, Consumer<GameLoop> onTick, Runnable onStop, int loopCountPerSec, long currentTick) {
+        if (loopCountPerSec <= 0) {
             throw new IllegalArgumentException("Loop count per second must be greater than 0! (loopCountPerSec=" + loopCountPerSec + ")");
+        }
         this.onStart = onStart;
         this.onTick = onTick;
         this.onStop = onStop;
         this.loopCountPerSec = loopCountPerSec;
+        this.tick = currentTick;
         Arrays.fill(tickSummary, 20f);
         Arrays.fill(MSPTSummary, 0f);
     }
@@ -124,6 +126,7 @@ public final class GameLoop {
         private Consumer<GameLoop> onTick = gameLoop -> {};
         private Runnable onStop = () -> {};
         private int loopCountPerSec = 20;
+        private long currentTick = 0;
 
         public GameLoopBuilder onStart(Runnable onStart) {
             this.onStart = onStart;
@@ -146,8 +149,13 @@ public final class GameLoop {
             return this;
         }
 
+        public GameLoopBuilder currentTick(long currentTick) {
+            this.currentTick = currentTick;
+            return this;
+        }
+
         public GameLoop build() {
-            return new GameLoop(onStart, onTick, onStop, loopCountPerSec);
+            return new GameLoop(onStart, onTick, onStop, loopCountPerSec, currentTick);
         }
     }
 }

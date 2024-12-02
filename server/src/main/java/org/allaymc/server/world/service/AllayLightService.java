@@ -30,7 +30,7 @@ public class AllayLightService implements LightService {
 
     protected static final int MAX_LIGHT_UPDATE_COUNT_PER_TICK = Server.SETTINGS.worldSettings().maxLightUpdateCountPerTick();
     protected final DimensionInfo dimensionInfo;
-    protected final Supplier<Long> timeSupplier;
+    protected final Supplier<Integer> timeSupplier;
     protected final Supplier<Set<Weather>> weatherSupplier;
     protected final int minHeight;
     protected final int maxHeight;
@@ -46,10 +46,10 @@ public class AllayLightService implements LightService {
     protected LightPropagator skyLightPropagator;
 
     public AllayLightService(Dimension dimension) {
-        this(dimension.getDimensionInfo(), dimension.getWorld().getWorldData()::getTime, dimension.getWorld()::getWeathers);
+        this(dimension.getDimensionInfo(), dimension.getWorld().getWorldData()::getTimeOfDay, dimension.getWorld()::getWeathers);
     }
 
-    public AllayLightService(DimensionInfo dimensionInfo, Supplier<Long> timeSupplier, Supplier<Set<Weather>> weatherSupplier) {
+    public AllayLightService(DimensionInfo dimensionInfo, Supplier<Integer> timeSupplier, Supplier<Set<Weather>> weatherSupplier) {
         this.dimensionInfo = dimensionInfo;
         this.timeSupplier = timeSupplier;
         this.weatherSupplier = weatherSupplier;

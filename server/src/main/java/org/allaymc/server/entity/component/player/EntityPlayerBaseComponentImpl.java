@@ -294,7 +294,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
             // Send new world's time
-            targetDim.getWorld().getWorldData().sendTime(thisPlayer);
+            targetDim.getWorld().getWorldData().sendTimeOfDay(thisPlayer);
             // Send new world's game rules
             networkComponent.sendPacket(targetDim.getWorld().getWorldData().getGameRules().buildPacket());
             // Clear old world's weather
@@ -455,7 +455,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     protected NbtMap saveSpawnPoint() {
         var builder = NbtMap.builder()
-                .putString("World", spawnPoint.dimension().getWorld().getWorldData().getName())
+                .putString("World", spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
                 .putInt("Dimension", spawnPoint.dimension().getDimensionInfo().dimensionId());
         AllayNbtUtils.writeVector3i(builder, "Pos", "x", "y", "z", spawnPoint);
         return builder.build();
@@ -551,7 +551,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     public PlayerData savePlayerData() {
         return PlayerData.builder()
                 .nbt(saveNBT())
-                .world(getWorld().getWorldData().getName())
+                .world(getWorld().getWorldData().getDisplayName())
                 .dimension(getDimension().getDimensionInfo().dimensionId())
                 .build();
     }

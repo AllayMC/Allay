@@ -47,7 +47,7 @@ import static org.allaymc.api.block.type.BlockTypes.UNKNOWN;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LevelDBChunkSerializer {
     public static final LevelDBChunkSerializer INSTANCE = new LevelDBChunkSerializer();
-    public static final int CHUNK_VERSION = 40;
+    public static final int CHUNK_VERSION = 41;
 
     public void serialize(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         serializeBlock(writeBatch, chunk);
@@ -97,9 +97,11 @@ public class LevelDBChunkSerializer {
                 int layers = 2;
                 switch (subChunkVersion) {
                     case 9, 8:
-                        layers = byteBuf.readByte();//layers
+                        // Layers
+                        layers = byteBuf.readByte();
                         if (subChunkVersion == 9) {
-                            byteBuf.readByte();//sectionY not use
+                            // SectionY is not used
+                            byteBuf.readByte();
                         }
                     case 1:
                         ChunkSection section;

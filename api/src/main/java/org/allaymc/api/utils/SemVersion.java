@@ -32,6 +32,10 @@ public record SemVersion(int major, int minor, int patch, int revision, int buil
         return new int[]{major, minor, patch, revision, build};
     }
 
+    public Integer[] toBoxedArray() {
+        return new Integer[]{major, minor, patch, revision, build};
+    }
+
     public static class Serializer implements JsonSerializer<SemVersion> {
 
         @Override

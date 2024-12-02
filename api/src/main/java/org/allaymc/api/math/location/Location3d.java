@@ -920,7 +920,7 @@ public class Location3d extends Position3d implements Location3dc {
         out.writeDouble(pitch);
         out.writeDouble(yaw);
         out.writeDouble(headYaw);
-        out.writeUTF(this.dimension().getWorld().getWorldData().getName());
+        out.writeUTF(this.dimension().getWorld().getWorldData().getDisplayName());
         out.writeInt(this.dimension().getDimensionInfo().dimensionId());
     }
 
@@ -1127,6 +1127,6 @@ public class Location3d extends Position3d implements Location3dc {
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " dimension=" + this.dimension().getWorld().getWorldData().getName() + this.dimension().getDimensionInfo().dimensionId() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " pitch=" + this.pitch + " yaw=" + this.yaw + " headYaw=" + this.headYaw + " dimension=" + this.dimension().getWorld().getWorldData().getDisplayName() + this.dimension().getDimensionInfo().dimensionId() + ")";
     }
 }

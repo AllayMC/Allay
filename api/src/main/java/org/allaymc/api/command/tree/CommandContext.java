@@ -222,7 +222,7 @@ public interface CommandContext {
      * @param args    optional format arguments for the message.
      */
     default void sendWhisperTo(EntityPlayer player, @MayContainTrKey String message, Object... args) {
-        if (player.getDimension().getWorld().getWorldData().getGameRule(GameRule.SEND_COMMAND_FEEDBACK)) {
+        if (player.getDimension().getWorld().getWorldData().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK)) {
             player.sendTr(message, args);
         }
     }

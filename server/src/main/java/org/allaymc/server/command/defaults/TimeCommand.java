@@ -21,7 +21,7 @@ public class TimeCommand extends SimpleCommand {
                 .exec(context -> {
                     var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
                     String strTime = context.getResult(1);
-                    long time = switch (strTime) {
+                    int time = switch (strTime) {
                         case "day" -> WorldData.TIME_DAY;
                         case "night" -> WorldData.TIME_NIGHT;
                         case "midnight" -> WorldData.TIME_MIDNIGHT;
@@ -30,26 +30,26 @@ public class TimeCommand extends SimpleCommand {
                         case "sunset" -> WorldData.TIME_SUNSET;
                         default -> throw new IllegalStateException("Unexpected value: " + strTime);
                     };
-                    world.getWorldData().setTime(time);
+                    world.getWorldData().setTimeOfDay(time);
                     context.addOutput(TrKeys.M_COMMANDS_TIME_SET, time);
                     return context.success();
                 })
                 .up()
-                .longNum("amount")
+                .intNum("amount")
                 .exec(context -> {
                     var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
-                    long time = context.getResult(1);
-                    world.getWorldData().setTime(time);
+                    int time = context.getResult(1);
+                    world.getWorldData().setTimeOfDay(time);
                     context.addOutput(TrKeys.M_COMMANDS_TIME_SET, time);
                     return context.success();
                 })
                 .root()
                 .key("add")
-                .longNum("amount")
+                .intNum("amount")
                 .exec(context -> {
                     var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
-                    long amount = context.getResult(1);
-                    world.getWorldData().addTime(amount);
+                    int amount = context.getResult(1);
+                    world.getWorldData().addTimeOfDay(amount);
                     context.addOutput(TrKeys.M_COMMANDS_TIME_ADDED, amount);
                     return context.success();
                 });

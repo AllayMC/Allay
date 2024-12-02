@@ -866,7 +866,7 @@ public class Position3d extends Vector3d implements Position3dc {
         out.writeDouble(x);
         out.writeDouble(y);
         out.writeDouble(z);
-        out.writeUTF(this.dimension().getWorld().getWorldData().getName());
+        out.writeUTF(this.dimension().getWorld().getWorldData().getDisplayName());
         out.writeInt(this.dimension().getDimensionInfo().dimensionId());
     }
 
@@ -1070,6 +1070,6 @@ public class Position3d extends Vector3d implements Position3dc {
 
     @Override
     public String toString(NumberFormat formatter) {
-        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension().getWorld().getWorldData().getName() + this.dimension().getDimensionInfo().dimensionId() + ")";
+        return "(" + Runtime.format(x, formatter) + " " + Runtime.format(y, formatter) + " " + Runtime.format(z, formatter) + " dimension=" + this.dimension().getWorld().getWorldData().getDisplayName() + this.dimension().getDimensionInfo().dimensionId() + ")";
     }
 }

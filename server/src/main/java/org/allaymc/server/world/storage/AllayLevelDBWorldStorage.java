@@ -2,8 +2,8 @@ package org.allaymc.server.world.storage;
 
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
-import org.allaymc.api.utils.SemVersion;
 import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.WorldData;
@@ -13,9 +13,11 @@ import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.utils.LevelDBKeyUtils;
+import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.iq80.leveldb.CompressionType;
@@ -30,22 +32,49 @@ import java.nio.ByteOrder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * @author Cool_Loong
+ * Special thanks to PMMP team.
+ *
+ * @author Cool_Loong | daoge_cmd
  */
 @Slf4j
 public class AllayLevelDBWorldStorage implements WorldStorage {
-    private static final int CURRENT_LEVEL_DAT_VERSION = 10;
+    private static final String FILE_LEVEL_DAT = "level.dat";
+    private static final String FILE_LEVEL_DAT_OLD = "level.dat_old";
+
+    private static final int CURRENT_STORAGE_VERSION = 10;
 
     private static final int LATEST_CHUNK_VERSION = 40;
 
-    private static final int VANILLA_CHUNK_STATE_NEW = 0;
-    private static final int VANILLA_CHUNK_STATE_GENERATED = 1;
-    private static final int VANILLA_CHUNK_STATE_POPULATED = 2;
-    private static final int VANILLA_CHUNK_STATE_FINISHED = 3;
+    private static final int VANILLA_CHUNK_STATE_NEEDS_TICK = 0;
+    private static final int VANILLA_CHUNK_STATE_NEEDS_POPULATION = 1;
+    private static final int VANILLA_CHUNK_STATE_DONE = 2;
+
+    private static final String TAG_DIFFICULTY = "Difficulty";
+    private static final String TAG_GAME_TYPE = "GameType";
+    private static final String TAG_DISPLAY_NAME = "LevelName";
+    private static final String TAG_SPAWN_X = "SpawnX";
+    private static final String TAG_SPAWN_Y = "SpawnY";
+    private static final String TAG_SPAWN_Z = "SpawnZ";
+    private static final String TAG_TOTAL_TIME = "Time";
+    private static final String TAG_TIME_OF_DAY = "TimeOfDay";
+    private static final String TAG_WORLD_START_COUNT = "WorldStartCount";
+
+    // The following keys are only used in this class.
+    // Some of them are written to make the vanilla client
+    // load the world correctly, they are not used in other places
+    private static final String TAG_GENERATOR = "Generator";
+    private static final String TAG_STORAGE_VERSION = "StorageVersion";
+    private static final String TAG_NETWORK_VERSION = "NetworkVersion";
+    private static final String TAG_LAST_PLAYED = "LastPlayed";
+    private static final String TAG_ACHIEVEMENTS_DISABLED = "hasBeenLoadedInCreative";
+    private static final String TAG_COMMANDS_ENABLED = "commandsEnabled";
+    private static final String TAG_LAST_OPENED_WITH_VERSION = "lastOpenedWithVersion";
+    private static final String TAG_IS_EDU = "eduLevel";
+    private static final String TAG_RANDOM_SEED = "RandomSeed";
+    private static final String TAG_FORCE_GAME_TYPE = "ForceGameType";
 
     private final Path path;
     private final DB db;
@@ -83,17 +112,16 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     private WorldData createWorldData(String worldName) {
-        var levelDat = path.resolve("level.dat").toFile();
+        var levelDat = path.resolve(FILE_LEVEL_DAT).toFile();
         try {
             // noinspection ResultOfMethodCallIgnored
             levelDat.createNewFile();
-            var worldData = WorldData
+            var worldData = AllayWorldData
                     .builder()
-                    .name(worldName)
+                    .displayName(worldName)
                     .build();
             writeWorldData(worldData);
-            Files.copy(levelDat.toPath(), path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
-            Files.writeString(path.resolve("levelname.txt"), worldName, StandardOpenOption.CREATE);
+            Files.copy(levelDat.toPath(), path.resolve(FILE_LEVEL_DAT_OLD), StandardCopyOption.REPLACE_EXISTING);
             return worldData;
         } catch (IOException e) {
             throw new WorldStorageException(e);
@@ -117,17 +145,16 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 .chunkZ(z)
                 .dimensionInfo(dimensionInfo);
         var versionValue = this.db.get(LevelDBKeyUtils.VERSION.getKey(x, z, dimensionInfo));
-        if (versionValue == null)
+        if (versionValue == null) {
             versionValue = this.db.get(LevelDBKeyUtils.LEGACY_VERSION.getKey(x, z, dimensionInfo));
+        }
         if (versionValue == null) return builder.build().toSafeChunk();
 
         var chunkState = this.db.get(LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
         if (chunkState == null) {
             builder.state(ChunkState.FINISHED);
         } else {
-            // NOTICE: Chunk states used in allay are different from vanilla state
-            // We just regenerate the chunk unless the state value is FINISHED
-            builder.state((Unpooled.wrappedBuffer(chunkState).readIntLE() + 1) == VANILLA_CHUNK_STATE_FINISHED ? ChunkState.FINISHED : ChunkState.EMPTY);
+            builder.state(Unpooled.wrappedBuffer(chunkState).readByte() == VANILLA_CHUNK_STATE_DONE ? ChunkState.FINISHED : ChunkState.EMPTY);
         }
 
         LevelDBChunkSerializer.INSTANCE.deserialize(this.db, builder);
@@ -146,12 +173,16 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     @Override
     public void writeChunkSync(Chunk chunk) {
+        if (chunk.getState() != ChunkState.FINISHED) {
+            log.warn("Cannot save unfinished chunk at {}, {}", chunk.getX(), chunk.getZ());
+            return;
+        }
         try (var writeBatch = this.db.createWriteBatch()) {
             writeBatch.put(LevelDBKeyUtils.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{LATEST_CHUNK_VERSION});
             writeBatch.put(
                     LevelDBKeyUtils.CHUNK_FINALIZED_STATE.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
-                    Unpooled.buffer(4)
-                            .writeIntLE((chunk.getState() == ChunkState.FINISHED ? VANILLA_CHUNK_STATE_FINISHED : VANILLA_CHUNK_STATE_NEW) - 1)
+                    Unpooled.buffer(1)
+                            .writeByte(VANILLA_CHUNK_STATE_DONE)
                             .array()
             );
             chunk.batchProcess(c -> LevelDBChunkSerializer.INSTANCE.serialize(writeBatch, (AllayUnsafeChunk) c));
@@ -172,17 +203,22 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     @Override
     public void writeWorldData(WorldData worldData) {
-        var levelDat = path.resolve("level.dat").toFile();
+        if (!(worldData instanceof AllayWorldData allayWorldData)) {
+            log.error("");
+            return;
+        }
+        var levelDat = path.resolve(FILE_LEVEL_DAT).toFile();
         try (var output = new FileOutputStream(levelDat)) {
-            if (levelDat.exists())
-                Files.copy(path.resolve("level.dat"), path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
+            if (levelDat.exists()) {
+                Files.copy(path.resolve(FILE_LEVEL_DAT), path.resolve(FILE_LEVEL_DAT_OLD), StandardCopyOption.REPLACE_EXISTING);
+            }
 
             // 1.Current version
-            output.write(int2ByteArrayLE(CURRENT_LEVEL_DAT_VERSION));
+            output.write(int2ByteArrayLE(CURRENT_STORAGE_VERSION));
 
             var byteArrayOutputStream = new ByteArrayOutputStream();
             var nbtOutputStream = NbtUtils.createWriterLE(byteArrayOutputStream);
-            nbtOutputStream.writeTag(writeWorldDataToNBT(worldData));
+            nbtOutputStream.writeTag(writeWorldDataToNBT(allayWorldData));
 
             var data = byteArrayOutputStream.toByteArray();
             // 2.Data length
@@ -197,7 +233,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     @Override
     public WorldData readWorldData() {
-        var levelDat = path.resolve("level.dat").toFile();
+        var levelDat = path.resolve(FILE_LEVEL_DAT).toFile();
         if (!levelDat.exists()) return createWorldData(worldName);
         try (var input = new FileInputStream(levelDat)) {
             // current_version + data length
@@ -207,124 +243,77 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             NbtMap nbt = (NbtMap) readerLE.readTag();
             readerLE.close();
             return readWorldDataFromNBT(nbt);
-        } catch (FileNotFoundException e) {
-            log.error("level.dat file does not exist!");
         } catch (IOException e) {
-            log.error("level.dat file is broken!");
-            return null;
+            throw new WorldStorageException(e);
         }
-        throw new WorldStorageException("level.dat is null!");
     }
 
-    private WorldData readWorldDataFromNBT(NbtMap nbt) {
-        return WorldData.builder()
-                .biomeOverride(nbt.getString("BiomeOverride"))
-                .centerMapsToOrigin(nbt.getBoolean("CenterMapsToOrigin"))
-                .confirmedPlatformLockedContent(nbt.getBoolean("ConfirmedPlatformLockedContent"))
-                .difficulty(Difficulty.from(nbt.getInt("Difficulty")))
-                .flatWorldLayers(nbt.getString("FlatWorldLayers"))
-                .forceGameType(nbt.getBoolean("ForceGameType"))
-                .gameType(GameType.from(nbt.getInt("GameType")))
-                .generator(nbt.getInt("Generator"))
-                .inventoryVersion(nbt.getString("InventoryVersion"))
-                .LANBroadcast(nbt.getBoolean("LANBroadcast"))
-                .LANBroadcastIntent(nbt.getBoolean("LANBroadcastIntent"))
-                .lastPlayed(nbt.getLong("LastPlayed"))
-                .name(nbt.getString("LevelName"))
-                .limitedWorldOriginPoint(new Vector3i(nbt.getInt("LimitedWorldOriginX"), nbt.getInt("LimitedWorldOriginY"), nbt.getInt("LimitedWorldOriginZ")))
-                .minimumCompatibleClientVersion(SemVersion.from(nbt.getIntArray("MinimumCompatibleClientVersion")))
-                .multiplayerGame(nbt.getBoolean("MultiplayerGame"))
-                .multiplayerGameIntent(nbt.getBoolean("MultiplayerGameIntent"))
-                .netherScale(nbt.getInt("NetherScale"))
-                .networkVersion(nbt.getInt("NetworkVersion"))
-                .platform(nbt.getInt("Platform"))
-                .platformBroadcastIntent(nbt.getInt("PlatformBroadcastIntent"))
-                .randomSeed(nbt.getLong("RandomSeed"))
-                .spawnV1Villagers(nbt.getBoolean("SpawnV1Villagers"))
-                .spawnPoint(new Vector3i(nbt.getInt("SpawnX"), nbt.getInt("SpawnY"), nbt.getInt("SpawnZ")))
-                .storageVersion(nbt.getInt("StorageVersion"))
-                .time(nbt.getLong("Time"))
-                .worldVersion(nbt.getInt("WorldVersion"))
-                .XBLBroadcastIntent(nbt.getInt("XBLBroadcastIntent"))
-                .abilities(readAbilities(nbt.getCompound("abilities")))
-                .baseGameVersion(nbt.getString("baseGameVersion"))
-                .bonusChestEnabled(nbt.getBoolean("bonusChestEnabled"))
-                .bonusChestSpawned(nbt.getBoolean("bonusChestSpawned"))
-                .cheatsEnabled(nbt.getBoolean("cheatsEnabled"))
-                .commandsEnabled(nbt.getBoolean("commandsEnabled"))
+    private AllayWorldData readWorldDataFromNBT(NbtMap nbt) {
+        var storageVersion = nbt.getInt(TAG_STORAGE_VERSION, Integer.MAX_VALUE);
+        if (storageVersion == Integer.MAX_VALUE) {
+            throw new WorldStorageException("Missing " + TAG_STORAGE_VERSION + " field in " + FILE_LEVEL_DAT);
+        }
+        if (storageVersion > CURRENT_STORAGE_VERSION) {
+            throw new WorldStorageException("LevelDB world storage version " + storageVersion + " is currently unsupported");
+        }
+
+        var networkVersion = nbt.getInt(TAG_NETWORK_VERSION, Integer.MAX_VALUE);
+        if (networkVersion == Integer.MAX_VALUE) {
+            throw new WorldStorageException("Missing " + TAG_NETWORK_VERSION + " field in " + FILE_LEVEL_DAT);
+        }
+        if (networkVersion > ProtocolInfo.PACKET_CODEC.getProtocolVersion()) {
+            throw new WorldStorageException("LevelDB world storage network version " + networkVersion + " is currently unsupported");
+        }
+
+        return AllayWorldData.builder()
+                .difficulty(Difficulty.from(nbt.getInt(TAG_DIFFICULTY, Server.SETTINGS.genericSettings().defaultDifficulty().ordinal())))
+                .gameType(GameType.from(nbt.getInt(TAG_GAME_TYPE, Server.SETTINGS.genericSettings().defaultGameType().ordinal())))
+                .displayName(nbt.getString(TAG_DISPLAY_NAME, WorldData.DEFAULT_WORLD_DISPLAY_NAME))
+                .spawnPoint(new Vector3i(nbt.getInt(TAG_SPAWN_X, 0), nbt.getInt(TAG_SPAWN_Y, 64), nbt.getInt(TAG_SPAWN_Z, 0)))
+                .totalTime(nbt.getLong(TAG_TOTAL_TIME, 0))
+                .timeOfDay(nbt.getInt(TAG_TIME_OF_DAY, WorldData.TIME_SUNRISE))
+                .worldStartCount(nbt.getLong(TAG_WORLD_START_COUNT, 0))
                 .gameRules(GameRules.readFromNBT(nbt))
-                .currentTick(nbt.getLong("currentTick"))
-                .daylightCycle(nbt.getInt("daylightCycle"))
-                .editorWorldType(nbt.getInt("editorWorldType"))
-                .eduOffer(nbt.getInt("eduOffer"))
-                .educationFeaturesEnabled(nbt.getBoolean("educationFeaturesEnabled"))
-                .experiments(readExperiments(nbt.getCompound("experiments")))
-                .hasBeenLoadedInCreative(nbt.getBoolean("hasBeenLoadedInCreative"))
-                .hasLockedBehaviorPack(nbt.getBoolean("hasLockedBehaviorPack"))
-                .hasLockedResourcePack(nbt.getBoolean("hasLockedResourcePack"))
-                .immutableWorld(nbt.getBoolean("immutableWorld"))
-                .isCreatedInEditor(nbt.getBoolean("isCreatedInEditor"))
-                .isExportedFromEditor(nbt.getBoolean("isExportedFromEditor"))
-                .isFromLockedTemplate(nbt.getBoolean("isFromLockedTemplate"))
-                .isFromWorldTemplate(nbt.getBoolean("isFromWorldTemplate"))
-                .isRandomSeedAllowed(nbt.getBoolean("isRandomSeedAllowed"))
-                .isSingleUseWorld(nbt.getBoolean("isSingleUseWorld"))
-                .isWorldTemplateOptionLocked(nbt.getBoolean("isWorldTemplateOptionLocked"))
-                .lastOpenedWithVersion(SemVersion.from(nbt.getIntArray("lastOpenedWithVersion")))
-                .lightningLevel(nbt.getFloat("lightningLevel"))
-                .lightningTime(nbt.getInt("lightningTime"))
-                .limitedWorldDepth(nbt.getInt("limitedWorldDepth"))
-                .limitedWorldWidth(nbt.getInt("limitedWorldWidth"))
-                .permissionsLevel(nbt.getInt("permissionsLevel"))
-                .playerPermissionsLevel(nbt.getInt("playerPermissionsLevel"))
-                .playersSleepingPercentage(nbt.getInt("playerssleepingpercentage"))
-                .prid(nbt.getString("prid"))
-                .rainLevel(nbt.getFloat("rainLevel"))
-                .rainTime(nbt.getInt("rainTime"))
-                .randomTickSpeed(nbt.getInt("randomtickspeed"))
-                .recipesUnlock(nbt.getBoolean("recipesunlock"))
-                .requiresCopiedPackRemovalCheck(nbt.getBoolean("requiresCopiedPackRemovalCheck"))
-                .serverChunkTickRange(nbt.getInt("serverChunkTickRange"))
-                .spawnMobs(nbt.getBoolean("spawnMobs"))
-                .startWithMapEnabled(nbt.getBoolean("startWithMapEnabled"))
-                .texturePacksRequired(nbt.getBoolean("texturePacksRequired"))
-                .useMsaGamertagsOnly(nbt.getBoolean("useMsaGamertagsOnly"))
-                .worldStartCount(nbt.getLong("worldStartCount"))
-                .worldPolicies(WorldData.WorldPolicies.builder().build())
                 .build();
     }
 
-    private WorldData.Experiments readExperiments(NbtMap experiments) {
-        return WorldData.Experiments.builder()
-                .cameras(experiments.getBoolean("cameras"))
-                .dataDrivenBiomes(experiments.getBoolean("data_driven_biomes"))
-                .dataDrivenItems(experiments.getBoolean("data_driven_items"))
-                .experimentalMolangFeatures(experiments.getBoolean("experimental_molang_features"))
-                .experimentsEverUsed(experiments.getBoolean("experiments_ever_used"))
-                .savedWithToggledExperiments(experiments.getBoolean("saved_with_toggled_experiments"))
-                .upcomingCreatorFeatures(experiments.getBoolean("upcoming_creator_features"))
-                .villagerTradesRebalance(experiments.getBoolean("villager_trades_rebalance"))
-                .build();
-    }
+    private NbtMap writeWorldDataToNBT(AllayWorldData worldData) {
+        var builder = NbtMap.builder();
 
-    private WorldData.Abilities readAbilities(NbtMap abilities) {
-        return WorldData.Abilities.builder()
-                .attackMobs(abilities.getBoolean("attackmobs"))
-                .attackPlayers(abilities.getBoolean("attackplayers"))
-                .build(abilities.getBoolean("build"))
-                .doorsAndSwitches(abilities.getBoolean("doorsandswitches"))
-                .flySpeed(abilities.getFloat("flySpeed"))
-                .flying(abilities.getBoolean("flying"))
-                .instaBuild(abilities.getBoolean("instabuild"))
-                .invulnerable(abilities.getBoolean("invulnerable"))
-                .lightning(abilities.getBoolean("lightning"))
-                .mayFly(abilities.getBoolean("mayfly"))
-                .mine(abilities.getBoolean("mine"))
-                .op(abilities.getBoolean("op"))
-                .openContainers(abilities.getBoolean("opencontainers"))
-                .teleport(abilities.getBoolean("teleport"))
-                .walkSpeed(abilities.getFloat("walkSpeed"))
-                .build();
+        builder.putInt(TAG_DIFFICULTY, worldData.getDifficulty().ordinal());
+        builder.putInt(TAG_GAME_TYPE, worldData.getGameType().ordinal());
+        builder.putString(TAG_DISPLAY_NAME, worldData.getDisplayName());
+        builder.putInt(TAG_SPAWN_X, worldData.getSpawnPoint().x());
+        builder.putInt(TAG_SPAWN_Y, worldData.getSpawnPoint().y());
+        builder.putInt(TAG_SPAWN_Z, worldData.getSpawnPoint().z());
+        builder.putLong(TAG_TOTAL_TIME, worldData.getTotalTime());
+        builder.putInt(TAG_TIME_OF_DAY, worldData.getTimeOfDay());
+        builder.putLong(TAG_WORLD_START_COUNT, worldData.getWorldStartCount());
+
+        // NOTICE: the following values are written to let
+        // the vanilla client load the world more easily
+
+        // Set generator type to "void" so that the vanilla won't generate unexpected chunks
+        // 0 -     old, 1 - infinite
+        // 2 -    flat, 3 -   nether
+        // 4 - the_end, 5 -     void
+        builder.putInt(TAG_GENERATOR, 5);
+        // The client will crash if this field is not exist
+        builder.putInt(TAG_STORAGE_VERSION, CURRENT_STORAGE_VERSION);
+        // StorageVersion is rarely updated. Instead, the game relies on the NetworkVersion tag,
+        // which is synced with the network protocol version for that version
+        builder.putInt(TAG_NETWORK_VERSION, ProtocolInfo.PACKET_CODEC.getProtocolVersion());
+        builder.putLong(TAG_LAST_PLAYED, System.currentTimeMillis() / 1000);
+        // Badly named, this actually determines whether achievements can be earned in this world...
+        builder.putByte(TAG_ACHIEVEMENTS_DISABLED, (byte) 1);
+        builder.putByte(TAG_COMMANDS_ENABLED, (byte) 1);
+        builder.putList(TAG_LAST_OPENED_WITH_VERSION, NbtType.INT, ProtocolInfo.MINECRAFT_VERSION.toBoxedArray());
+        builder.putByte(TAG_IS_EDU, (byte) 0);
+        builder.putLong(TAG_RANDOM_SEED, 0);
+        builder.putByte(TAG_FORCE_GAME_TYPE, (byte) 0);
+
+        worldData.getGameRules().writeToNBT(builder);
+        return builder.build();
     }
 
     public void shutdown() {
@@ -333,90 +322,5 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         } catch (IOException e) {
             throw new WorldStorageException(e);
         }
-    }
-
-    private NbtMap writeWorldDataToNBT(WorldData worldData) {
-        var builder = NbtMap.builder();
-        builder.putString("BiomeOverride", worldData.getBiomeOverride());
-        builder.putBoolean("CenterMapsToOrigin", worldData.isCenterMapsToOrigin());
-        builder.putBoolean("ConfirmedPlatformLockedContent", worldData.isConfirmedPlatformLockedContent());
-        builder.putInt("Difficulty", worldData.getDifficulty().ordinal());
-        builder.putString("FlatWorldLayers", worldData.getFlatWorldLayers());
-        builder.putBoolean("ForceGameType", worldData.isForceGameType());
-        builder.putInt("GameType", worldData.getGameType().ordinal());
-        builder.putInt("Generator", worldData.getGenerator());
-        builder.putString("InventoryVersion", worldData.getInventoryVersion());
-        builder.putBoolean("LANBroadcast", worldData.isLANBroadcast());
-        builder.putBoolean("LANBroadcastIntent", worldData.isLANBroadcastIntent());
-        builder.putLong("LastPlayed", worldData.getLastPlayed());
-        builder.putString("LevelName", worldData.getName());
-        builder.putInt("LimitedWorldOriginX", worldData.getLimitedWorldOriginPoint().x());
-        builder.putInt("LimitedWorldOriginY", worldData.getLimitedWorldOriginPoint().y());
-        builder.putInt("LimitedWorldOriginZ", worldData.getLimitedWorldOriginPoint().z());
-        builder.putIntArray("MinimumCompatibleClientVersion", worldData.getMinimumCompatibleClientVersion().toArray());
-        builder.putBoolean("MultiplayerGame", worldData.isMultiplayerGame());
-        builder.putBoolean("MultiplayerGameIntent", worldData.isMultiplayerGameIntent());
-        builder.putInt("NetherScale", worldData.getNetherScale());
-        builder.putInt("NetworkVersion", worldData.getNetworkVersion());
-        builder.putInt("Platform", worldData.getPlatform());
-        builder.putInt("PlatformBroadcastIntent", worldData.getPlatformBroadcastIntent());
-        builder.putLong("RandomSeed", worldData.getRandomSeed());
-        builder.putBoolean("SpawnV1Villagers", worldData.isSpawnV1Villagers());
-        builder.putInt("SpawnX", worldData.getSpawnPoint().x());
-        builder.putInt("SpawnY", worldData.getSpawnPoint().y());
-        builder.putInt("SpawnZ", worldData.getSpawnPoint().z());
-        builder.putInt("StorageVersion", worldData.getStorageVersion());
-        builder.putLong("Time", worldData.getTime());
-        builder.putInt("WorldVersion", worldData.getWorldVersion());
-        builder.putInt("XBLBroadcastIntent", worldData.getXBLBroadcastIntent());
-        builder.put("abilities", writeAbilities(worldData));
-        builder.put("experiments", writeExperiments(worldData));
-
-        builder.putBoolean("bonusChestEnabled", worldData.isBonusChestEnabled());
-        builder.putBoolean("bonusChestSpawned", worldData.isBonusChestSpawned());
-        builder.putBoolean("cheatsEnabled", worldData.isCheatsEnabled());
-        builder.putBoolean("commandsEnabled", worldData.isCommandsEnabled());
-        builder.putLong("currentTick", worldData.getCurrentTick());
-        builder.putInt("daylightCycle", worldData.getDaylightCycle());
-        builder.putInt("editorWorldType", worldData.getEditorWorldType());
-        builder.putInt("eduOffer", worldData.getEduOffer());
-        builder.putBoolean("educationFeaturesEnabled", worldData.isEducationFeaturesEnabled());
-
-        worldData.getGameRules().writeToNBT(builder);
-        return builder.build();
-    }
-
-    private NbtMap writeExperiments(WorldData worldData) {
-        return NbtMap.builder()
-                .putBoolean("cameras", worldData.getExperiments().isCameras())
-                .putBoolean("data_driven_biomes", worldData.getExperiments().isDataDrivenBiomes())
-                .putBoolean("data_driven_items", worldData.getExperiments().isDataDrivenItems())
-                .putBoolean("experimental_molang_features", worldData.getExperiments().isExperimentalMolangFeatures())
-                .putBoolean("experiments_ever_used", worldData.getExperiments().isExperimentsEverUsed())
-                .putBoolean("gametest", worldData.getExperiments().isGametest())
-                .putBoolean("saved_with_toggled_experiments", worldData.getExperiments().isSavedWithToggledExperiments())
-                .putBoolean("upcoming_creator_features", worldData.getExperiments().isUpcomingCreatorFeatures())
-                .putBoolean("villager_trades_rebalance", worldData.getExperiments().isVillagerTradesRebalance())
-                .build();
-    }
-
-    private NbtMap writeAbilities(WorldData worldData) {
-        return NbtMap.builder()
-                .putBoolean("attackmobs", worldData.getAbilities().isAttackMobs())
-                .putBoolean("attackplayers", worldData.getAbilities().isAttackPlayers())
-                .putBoolean("build", worldData.getAbilities().isBuild())
-                .putBoolean("doorsandswitches", worldData.getAbilities().isDoorsAndSwitches())
-                .putBoolean("flying", worldData.getAbilities().isFlying())
-                .putBoolean("instabuild", worldData.getAbilities().isInstaBuild())
-                .putBoolean("invulnerable", worldData.getAbilities().isInvulnerable())
-                .putBoolean("lightning", worldData.getAbilities().isLightning())
-                .putBoolean("mayfly", worldData.getAbilities().isMayFly())
-                .putBoolean("mine", worldData.getAbilities().isMine())
-                .putBoolean("op", worldData.getAbilities().isOp())
-                .putBoolean("opencontainers", worldData.getAbilities().isOpenContainers())
-                .putBoolean("teleport", worldData.getAbilities().isTeleport())
-                .putFloat("flySpeed", worldData.getAbilities().getFlySpeed())
-                .putFloat("walkSpeed", worldData.getAbilities().getWalkSpeed())
-                .build();
     }
 }

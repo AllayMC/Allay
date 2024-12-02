@@ -33,7 +33,7 @@ public class WorldCommand extends SimpleCommand {
                     for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
                         context.addOutput(
                                 "- " +
-                                TextFormat.GREEN + world.getWorldData().getName() +
+                                TextFormat.GREEN + world.getWorldData().getDisplayName() +
                                 TextFormat.YELLOW + "[" +
                                 world.getDimensions()
                                         .values()

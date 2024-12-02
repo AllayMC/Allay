@@ -155,7 +155,7 @@ public class StatusCommand extends SimpleCommand {
     protected static void printWorldInfo(CommandSender sender) {
         sender.sendText("--- Worlds Status ---");
         for (var world : Server.getInstance().getWorldPool().getWorlds().values()) {
-            sender.sendText("- " + world.getWorldData().getName());
+            sender.sendText("- " + world.getWorldData().getDisplayName());
             sender.sendText("  TPS: " + TextFormat.GREEN + world.getTPS());
             sender.sendText("  MSPT: " + TextFormat.GREEN + world.getMSPT());
             sender.sendText("  TickUsage: " + TextFormat.GREEN + world.getTickUsage() * 100f + "%");

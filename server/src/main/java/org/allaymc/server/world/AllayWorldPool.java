@@ -69,7 +69,13 @@ public final class AllayWorldPool implements WorldPool {
             log.error("Cannot find world storage type {}", setting.storageType());
             storage = Registries.WORLD_STORAGE_FACTORIES.get("LEVELDB").apply(WORLDS_FOLDER.resolve(name));
         }
-        var world = new AllayWorld(storage);
+        AllayWorld world;
+        try {
+            world = new AllayWorld(storage);
+        } catch (Throwable t) {
+            log.error("Error while initializing world {}", name, t);
+            return;
+        }
         // Load overworld dimension
         var overworld = new AllayDimension(world, tryCreateWorldGenerator(overworldSettings), DimensionInfo.OVERWORLD);
         world.addDimension(overworld);
@@ -158,7 +164,7 @@ public final class AllayWorldPool implements WorldPool {
         event.call();
         if (event.isCancelled()) return false;
 
-        worlds.put(world.getWorldData().getName(), world);
+        worlds.put(world.getWorldData().getDisplayName(), world);
         world.startTick();
         return true;
     }
