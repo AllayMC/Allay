@@ -26,7 +26,7 @@ public class EffectWeavingType extends AbstractEffectType {
     @Override
     public void onEntityDies(Entity entity, EffectInstance effectInstance) {
         if (
-                entity.getWorld().getWorldData().getGameRuleValue(GameRule.MOB_GRIEFING).equals(true) ||
+                entity.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.MOB_GRIEFING) ||
                 entity.isPlayer()
         ) return;
 
@@ -50,12 +50,11 @@ public class EffectWeavingType extends AbstractEffectType {
         }
 
         var web = WEB.getBlockType().getDefaultState();
-        for (var pos : posToSpawnWeb) {
-            entity.getDimension().setBlockState(pos, web);
-        }
+        posToSpawnWeb.forEach(pos -> entity.getDimension().setBlockState(pos, web));
     }
 
     private Iterable<Position3ic> randomInCube(Position3ic around) {
+        var random = ThreadLocalRandom.current();
         var minX = around.x() - 1;
         var minY = around.y() - 1;
         var minZ = around.z() - 1;
@@ -69,9 +68,9 @@ public class EffectWeavingType extends AbstractEffectType {
                 }
                 counter--;
                 return new Position3i(
-                        minX + ThreadLocalRandom.current().nextInt(3),
-                        minY + ThreadLocalRandom.current().nextInt(3),
-                        minZ + ThreadLocalRandom.current().nextInt(3),
+                        minX + random.nextInt(3),
+                        minY + random.nextInt(3),
+                        minZ + random.nextInt(3),
                         around.dimension()
                 );
             }

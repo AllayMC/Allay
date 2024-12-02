@@ -43,7 +43,7 @@ public interface CommandSender extends TextReceiver, Permissible {
      */
     default void handleResult(CommandResult result) {
         if (result.context() == null) return;
-        if (!(boolean) getCmdExecuteLocation().dimension().getWorld().getWorldData().getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK)) {
+        if (!getCmdExecuteLocation().dimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK)) {
             return;
         }
 

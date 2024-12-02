@@ -67,12 +67,14 @@ public class AllayWorld implements World {
     protected final Thread worldThread;
     protected final Thread networkThread;
 
+    protected final Set<Weather> effectiveWeathers;
+
     protected long nextTimeSendTick;
     protected int rainTimer;
     protected int thunderTimer;
+
     protected boolean isRaining = false;
     protected boolean isThundering = false;
-    protected final Set<Weather> effectiveWeathers;
     protected boolean isFirstTick = true;
 
     public AllayWorld(WorldStorage worldStorage) {
@@ -148,7 +150,10 @@ public class AllayWorld implements World {
                 if (entry.player.getWorld() != this) {
                     log.warn("Trying to handle sync packet in world {} which the player {} is not in!", this.getWorldData().getDisplayName(), entry.player.getOriginName());
                 }
-                ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) entry.player).getPlayerNetworkComponent()).handleDataPacket(entry.packet(), entry.time());
+
+                var playerImpl = (EntityPlayerImpl) entry.player;
+                var networkComponent = (EntityPlayerNetworkComponentImpl) playerImpl.getPlayerNetworkComponent();
+                networkComponent.handleDataPacket(entry.packet(), entry.time());
                 count++;
 
             } while (count < MAX_PACKETS_HANDLE_COUNT_AT_ONCE && (entry = packetQueue.pollNow()) != null);
@@ -214,7 +219,9 @@ public class AllayWorld implements World {
     }
 
     protected void tickTime(long currentTick) {
-        if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) return;
+        if (!worldData.<Boolean>getGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE)) {
+            return;
+        }
 
         if (currentTick >= nextTimeSendTick) {
             worldData.addTimeOfDay(TIME_SENDING_INTERVAL);

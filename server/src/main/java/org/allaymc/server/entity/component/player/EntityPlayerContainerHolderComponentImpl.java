@@ -62,6 +62,6 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
 
     @Override
     protected boolean canDropItemInContainers() {
-        return !(boolean) thisPlayer.getWorld().getWorldData().getGameRuleValue(GameRule.KEEP_INVENTORY);
+        return !thisPlayer.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.KEEP_INVENTORY);
     }
 }
