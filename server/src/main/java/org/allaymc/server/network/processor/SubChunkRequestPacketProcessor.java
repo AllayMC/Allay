@@ -11,6 +11,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.ChunkSection;
+import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
 import org.cloudburstmc.protocol.bedrock.data.SubChunkData;
@@ -41,7 +42,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
     private static void createSubChunkData(
             List<SubChunkData> response,
             SubChunkRequestResult result,
-            org.cloudburstmc.math.vector.Vector3i offset,
+            Vector3i offset,
             HeightMapDataType type,
             ByteBuf heightMapData,
             ChunkSection subchunk,
@@ -119,9 +120,8 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
 //            }
 
             var hMap = new byte[256];
-            boolean
-                    higher = true,
-                    lower = true;
+            boolean higher = true;
+            boolean lower = true;
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     var y = chunk.getHeight(x, z);
@@ -153,9 +153,9 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                 heightMapData = Unpooled.wrappedBuffer(hMap);
             }
 
-            var subChunk = ((AllayChunk) chunk).getOrCreateSection(sectionY);
+            var subChunk = ((AllayChunk) chunk).getSection(sectionY);
             SubChunkRequestResult subChunkRequestResult;
-            if (subChunk.isEmpty()) subChunkRequestResult = SubChunkRequestResult.SUCCESS_ALL_AIR;
+            if (subChunk.isAirSection()) subChunkRequestResult = SubChunkRequestResult.SUCCESS_ALL_AIR;
             else subChunkRequestResult = SubChunkRequestResult.SUCCESS;
             createSubChunkData(
                     responseData, subChunkRequestResult, offset, hMapType,
@@ -176,19 +176,19 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
     }
 
     record SubChunkRequestIndex(
-            org.cloudburstmc.math.vector.Vector3i centerPosition,
-            org.cloudburstmc.math.vector.Vector3i offset
+            Vector3i centerPosition,
+            Vector3i offset
     ) {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (!(o instanceof SubChunkRequestIndex that)) return false;
-            return centerPosition.getX() == that.centerPosition.getX() &&
-                   centerPosition.getY() == that.centerPosition.getY() &&
-                   centerPosition.getZ() == that.centerPosition.getZ() &&
-                   offset.getX() == that.offset.getX() &&
-                   offset.getY() == that.offset.getY() &&
-                   offset.getZ() == that.offset.getZ();
+            if (!(o instanceof SubChunkRequestIndex(Vector3i position, Vector3i offset1))) return false;
+            return centerPosition.getX() == position.getX() &&
+                   centerPosition.getY() == position.getY() &&
+                   centerPosition.getZ() == position.getZ() &&
+                   offset.getX() == offset1.getX() &&
+                   offset.getY() == offset1.getY() &&
+                   offset.getZ() == offset1.getZ();
         }
 
         @Override

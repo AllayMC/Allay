@@ -103,7 +103,7 @@ public class AllayLightService implements LightService {
         AllayUnsafeChunk unsafeChunk = (AllayUnsafeChunk) chunk.toUnsafeChunk();
         for (int y = maxHeight; y >= minHeight; y--) {
             var section = unsafeChunk.getSection(y >> 4);
-            if (section == null) {
+            if (section.isAirSection()) {
                 y -= 15;
                 continue;
             }

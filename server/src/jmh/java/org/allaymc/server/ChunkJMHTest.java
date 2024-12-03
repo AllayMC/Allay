@@ -28,7 +28,7 @@ public class ChunkJMHTest {
     @Setup
     public void init() throws MissingImplementationException {
         Allay.initAllay();
-        chunk = new AllayChunk(AllayUnsafeChunk.builder().emptyChunk(0, 0, DimensionInfo.OVERWORLD));
+        chunk = new AllayChunk(AllayUnsafeChunk.builder().newChunk(0, 0, DimensionInfo.OVERWORLD));
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {

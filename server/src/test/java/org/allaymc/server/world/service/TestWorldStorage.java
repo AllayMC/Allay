@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public class TestWorldStorage implements WorldStorage {
     @Override
     public CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        var chunk = AllayUnsafeChunk.builder().emptyChunk(chunkX, chunkZ, dimensionInfo).toSafeChunk();
+        var chunk = AllayUnsafeChunk.builder().newChunk(chunkX, chunkZ, dimensionInfo).toSafeChunk();
         ((AllayChunk) chunk).setState(ChunkState.FINISHED);
         return CompletableFuture.completedFuture(chunk);
     }

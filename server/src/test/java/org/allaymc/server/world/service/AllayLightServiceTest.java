@@ -25,7 +25,7 @@ class AllayLightServiceTest {
                 lightService.onChunkLoad(
                         AllayUnsafeChunk
                                 .builder()
-                                .emptyChunk(x, z, DimensionInfo.OVERWORLD)
+                                .newChunk(x, z, DimensionInfo.OVERWORLD)
                                 .toSafeChunk()
                 );
             }
@@ -69,7 +69,7 @@ class AllayLightServiceTest {
                 lightService.onChunkLoad(
                         AllayUnsafeChunk
                                 .builder()
-                                .emptyChunk(x, z, DimensionInfo.OVERWORLD)
+                                .newChunk(x, z, DimensionInfo.OVERWORLD)
                                 .toSafeChunk()
                 );
             }

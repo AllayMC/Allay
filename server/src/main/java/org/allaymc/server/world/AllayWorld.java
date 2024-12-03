@@ -122,7 +122,6 @@ public class AllayWorld implements World {
         this.worldData.setTotalTime(gameLoop.getTick());
         if (!isRunning.get()) {
             gameLoop.stop();
-            log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getDisplayName()));
             return;
         }
 
@@ -358,6 +357,7 @@ public class AllayWorld implements World {
         dimensionMap.values().forEach(dimension -> ((AllayDimension) dimension).shutdown());
         saveWorldData();
         worldStorage.shutdown();
+        log.info(I18n.get().tr(TrKeys.A_WORLD_UNLOADED, this.getWorldData().getDisplayName()));
     }
 
     @Override

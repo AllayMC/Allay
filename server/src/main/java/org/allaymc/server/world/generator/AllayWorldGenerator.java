@@ -137,7 +137,7 @@ public class AllayWorldGenerator implements WorldGenerator {
                 chunkFuture.complete(chunk);
             }, computeThreadPool).exceptionally(e -> {
                 log.error("Error while processing population queue! Chunk {}, {}", chunk.getX(), chunk.getZ(), e);
-                chunkFuture.complete(AllayUnsafeChunk.builder().emptyChunk(chunk.getX(), chunk.getZ(), dimension.getDimensionInfo()).toSafeChunk());
+                chunkFuture.complete(AllayUnsafeChunk.builder().newChunk(chunk.getX(), chunk.getZ(), dimension.getDimensionInfo()).toSafeChunk());
                 return null;
             });
         }
@@ -220,7 +220,7 @@ public class AllayWorldGenerator implements WorldGenerator {
      * Noise generation is fully parallel as it does not require accessing adjacent chunks.
      */
     public CompletableFuture<Chunk> generateNoisedChunk(int x, int z) {
-        var chunk = AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+        var chunk = AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         return CompletableFuture.supplyAsync(() -> statusEmptyToNoised(chunk), computeThreadPool);
     }
 

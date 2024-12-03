@@ -1,5 +1,6 @@
 package org.allaymc.server.world.bitarray;
 
+import com.google.common.base.Preconditions;
 import org.cloudburstmc.math.GenericMath;
 
 /**
@@ -32,9 +33,11 @@ public enum BitArrayVersion {
     }
 
     public static BitArrayVersion get(int version, boolean read) {
-        for (BitArrayVersion ver : values())
-            if ((!read && ver.entriesPerWord <= version) || (read && ver.bits == version))
+        for (BitArrayVersion ver : values()) {
+            if ((!read && ver.entriesPerWord <= version) || (read && ver.bits == version)) {
                 return ver;
+            }
+        }
 
         if (version == 0x7F && read) return null;
         throw new IllegalArgumentException("Invalid palette version: " + version);
@@ -50,19 +53,25 @@ public enum BitArrayVersion {
     }
 
     public int getWordsForSize(int size) {
+        Preconditions.checkArgument(this != V0);
         return GenericMath.ceil((float) size / this.entriesPerWord);
     }
 
     public BitArray createArray(int size) {
-        return this.createArray(size, new int[GenericMath.ceil((float) size / this.entriesPerWord)]);
+        if (this == V0) {
+            return SingletonBitArray.INSTANCE;
+        }
+        return this.createArray(size, new int[getWordsForSize(size)]);
     }
 
     public BitArray createArray(int size, int[] words) {
-        if (this == V3 || this == V5 || this == V6)
+        if (this == V3 || this == V5 || this == V6) {
+            // Padded palettes aren't able to use bitwise operations due to their padding.
             return new PaddedBitArray(this, size, words);
-        else if (this == V0)
-            return new SingletonBitArray();
-        else
+        } else if (this == V0) {
+            return SingletonBitArray.INSTANCE;
+        } else {
             return new Pow2BitArray(this, size, words);
+        }
     }
 }

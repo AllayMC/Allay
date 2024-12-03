@@ -1,11 +1,10 @@
 package org.allaymc.server.world.bitarray;
 
-import io.netty.buffer.ByteBuf;
-
 /**
  * @author JukeboxMC | daoge_cmd
  */
 public record SingletonBitArray() implements BitArray {
+    public static SingletonBitArray INSTANCE = new SingletonBitArray();
     private static final int[] EMPTY_ARRAY = new int[0];
 
     @Override
@@ -16,11 +15,6 @@ public record SingletonBitArray() implements BitArray {
     @Override
     public int get(int index) {
         return 0;
-    }
-
-    @Override
-    public boolean writeSizeToNetwork(ByteBuf buffer, int size) {
-        return false;
     }
 
     @Override

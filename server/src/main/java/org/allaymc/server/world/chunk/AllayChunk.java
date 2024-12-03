@@ -27,7 +27,6 @@ import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.ThreadSafe;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Predicate;
@@ -279,20 +278,6 @@ public class AllayChunk implements Chunk {
         return levelChunkPacket;
     }
 
-    private void fillNullSections() {
-        var stamp = blockLock.writeLock();
-        try {
-            var dimensionInfo = getDimensionInfo();
-            for (int i = dimensionInfo.minSectionY(); i <= dimensionInfo.maxSectionY(); i++) {
-                if (unsafeChunk.getSection(i) == null) {
-                    unsafeChunk.getSections()[i - dimensionInfo.minSectionY()] = new ChunkSection((byte) i);
-                }
-            }
-        } finally {
-            blockLock.unlockWrite(stamp);
-        }
-    }
-
     private ByteBuf writeToNetwork() {
         var byteBuf = ByteBufAllocator.DEFAULT.buffer();
         try {
@@ -306,11 +291,9 @@ public class AllayChunk implements Chunk {
     }
 
     private void writeToNetwork0(ByteBuf byteBuf) {
-        // Prevent null section
-        fillNullSections();
         // Write blocks
         for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
-            Objects.requireNonNull(getSection(i)).writeToNetwork(byteBuf);
+            getSection(i).writeToNetwork(byteBuf);
         }
         // Write biomes
         Arrays.stream(getSections()).forEach(section -> section.biomes().writeToNetwork(byteBuf, BiomeType::getId));
@@ -322,8 +305,8 @@ public class AllayChunk implements Chunk {
                 for (var blockEntity : blockEntities) {
                     writer.writeTag(blockEntity.saveNBT());
                 }
-            } catch (IOException e) {
-                log.error("Error while encoding block entities in chunk(x={}, z={})!", getX(), getZ(), e);
+            } catch (Throwable t) {
+                log.error("Error while encoding block entities in chunk(x={}, z={})!", getX(), getZ(), t);
             }
         }
     }
@@ -426,16 +409,6 @@ public class AllayChunk implements Chunk {
         loaded = true;
         unsafeChunk.afterSetChunk(dimension);
         ((AllayLightService) dimension.getLightService()).onChunkLoad(this);
-    }
-
-    public ChunkSection getOrCreateSection(int sectionY) {
-        Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
-        var stamp = blockLock.writeLock();
-        try {
-            return unsafeChunk.getOrCreateSection(sectionY);
-        } finally {
-            blockLock.unlockWrite(stamp);
-        }
     }
 
     @Override

@@ -49,7 +49,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static final int LATEST_CHUNK_VERSION = 40;
 
-    private static final int VANILLA_CHUNK_STATE_NEEDS_TICK = 0;
+    private static final int VANILLA_CHUNK_STATE_NEEDS_INSTA_TICK = 0;
     private static final int VANILLA_CHUNK_STATE_NEEDS_POPULATION = 1;
     private static final int VANILLA_CHUNK_STATE_DONE = 2;
 
@@ -135,7 +135,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 .supplyAsync(() -> readChunkSync(x, z, dimensionInfo), Server.getInstance().getVirtualThreadPool())
                 .exceptionally(e -> {
                     log.error("Failed to read chunk {}, {}", x, z, e);
-                    return AllayUnsafeChunk.builder().emptyChunk(x, z, dimensionInfo).toSafeChunk();
+                    return AllayUnsafeChunk.builder().newChunk(x, z, dimensionInfo).toSafeChunk();
                 });
     }
 
@@ -144,20 +144,25 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         var builder = AllayUnsafeChunk.builder()
                 .chunkX(x)
                 .chunkZ(z)
-                .dimensionInfo(dimensionInfo);
+                .dimensionInfo(dimensionInfo)
+                .state(ChunkState.NEW);
         var versionValue = this.db.get(LevelDBKey.VERSION.getKey(x, z, dimensionInfo));
         if (versionValue == null) {
             versionValue = this.db.get(LevelDBKey.LEGACY_VERSION.getKey(x, z, dimensionInfo));
         }
-        if (versionValue == null) return builder.build().toSafeChunk();
-
-        var chunkState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
-        if (chunkState == null) {
-            builder.state(ChunkState.FINISHED);
-        } else {
-            builder.state(Unpooled.wrappedBuffer(chunkState).readByte() == VANILLA_CHUNK_STATE_DONE ? ChunkState.FINISHED : ChunkState.EMPTY);
+        if (versionValue == null) {
+            // This might be a slightly-corrupted chunk with a missing version field
+            return builder.build().toSafeChunk();
         }
 
+        var chunkState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
+        if (chunkState != null && Unpooled.wrappedBuffer(chunkState).readByte() != VANILLA_CHUNK_STATE_DONE) {
+            // Older versions didn't have CHUNK_FINALIZED_STATE data, so we still load this chunk
+            // TODO: check VANILLA_CHUNK_STATE_NEEDS_INSTA_TICK
+            return builder.build().toSafeChunk();
+        }
+
+        builder.state(ChunkState.FINISHED);
         LevelDBChunkSerializer.INSTANCE.deserialize(this.db, builder);
         return builder.build().toSafeChunk();
     }
@@ -252,15 +257,17 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private AllayWorldData readWorldDataFromNBT(NbtMap nbt) {
         var storageVersion = nbt.getInt(TAG_STORAGE_VERSION, Integer.MAX_VALUE);
         if (storageVersion == Integer.MAX_VALUE) {
-            throw new WorldStorageException("Missing " + TAG_STORAGE_VERSION + " field in " + FILE_LEVEL_DAT);
+            log.warn("Missing " + TAG_STORAGE_VERSION + " field in " + FILE_LEVEL_DAT);
+            storageVersion = CURRENT_STORAGE_VERSION;
         }
         if (storageVersion > CURRENT_STORAGE_VERSION) {
             throw new WorldStorageException("LevelDB world storage version " + storageVersion + " is currently unsupported");
         }
-
+        
         var networkVersion = nbt.getInt(TAG_NETWORK_VERSION, Integer.MAX_VALUE);
         if (networkVersion == Integer.MAX_VALUE) {
-            throw new WorldStorageException("Missing " + TAG_NETWORK_VERSION + " field in " + FILE_LEVEL_DAT);
+            log.warn("Missing " + TAG_NETWORK_VERSION + " field in " + FILE_LEVEL_DAT);
+            networkVersion = ProtocolInfo.PACKET_CODEC.getProtocolVersion();
         }
         if (networkVersion > ProtocolInfo.PACKET_CODEC.getProtocolVersion()) {
             throw new WorldStorageException("LevelDB world storage network version " + networkVersion + " is currently unsupported");

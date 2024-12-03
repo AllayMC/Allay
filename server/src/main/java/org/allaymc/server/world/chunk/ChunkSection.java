@@ -25,18 +25,11 @@ public record ChunkSection(
 
     @SuppressWarnings("unchecked")
     public ChunkSection(byte sectionY) {
-        this(
-                sectionY,
-                new Palette[]{new Palette<>(AIR.getDefaultState()), new Palette<>(AIR.getDefaultState())},
-                new Palette<>(BiomeId.PLAINS)
-        );
+        this(sectionY, new Palette[]{new Palette<>(AIR.getDefaultState()), new Palette<>(AIR.getDefaultState())}, new Palette<>(BiomeId.PLAINS));
     }
 
     public ChunkSection(byte sectionY, Palette<BlockState>[] blockLayer) {
-        this(
-                sectionY, blockLayer,
-                new Palette<>(BiomeId.PLAINS)
-        );
+        this(sectionY, blockLayer, new Palette<>(BiomeId.PLAINS));
     }
 
     public BlockState getBlockState(int x, int y, int z, int layer) {
@@ -55,14 +48,15 @@ public record ChunkSection(
         return biomes.get(index(x, y, z));
     }
 
-    public boolean isEmpty() {
+    public boolean isAirSection() {
         return blockLayers[0].isEmpty() && blockLayers[0].get(0) == AIR.getDefaultState();
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {
         byteBuf.writeByte(VERSION);
-        // block layer count
+        // Block layer count
         byteBuf.writeByte(LAYER_COUNT);
+        // Extra byte since version 9
         byteBuf.writeByte(sectionY & 0xFF);
 
         for (var blockLayer : blockLayers) blockLayer.writeToNetwork(byteBuf, BlockState::blockStateHash);

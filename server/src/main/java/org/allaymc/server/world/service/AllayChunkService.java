@@ -191,7 +191,7 @@ public final class AllayChunkService implements ChunkService {
 
         worldStorage.readChunk(x, z, dimension.getDimensionInfo()).exceptionally(t -> {
             log.error("Error while reading chunk ({},{}) !", x, z, t);
-            return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+            return AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         }).thenCompose(chunk -> {
             if (chunk.getState() != FINISHED) {
                 // Re-generate chunk if it's not fully loaded
@@ -200,7 +200,7 @@ public final class AllayChunkService implements ChunkService {
             return CompletableFuture.completedFuture(chunk);
         }).exceptionally(t -> {
             log.error("Error while generating chunk ({},{}) !", x, z, t);
-            return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+            return AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         }).thenApply(preparedChunk -> {
             ((AllayChunk) preparedChunk).beforeSetChunk(dimension);
             setChunk(x, z, preparedChunk);
@@ -214,7 +214,7 @@ public final class AllayChunkService implements ChunkService {
             return preparedChunk;
         }).exceptionally(t -> {
             log.error("Error while setting chunk ({},{}) !", x, z, t);
-            return AllayUnsafeChunk.builder().emptyChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+            return AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
         });
         return future;
     }

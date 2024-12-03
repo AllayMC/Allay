@@ -6,7 +6,7 @@ package org.allaymc.api.world.chunk;
  * @author daoge_cmd
  */
 public enum ChunkState {
-    EMPTY,
+    NEW,
     NOISED,
     POPULATED,
     ENTITY_SPAWNED,

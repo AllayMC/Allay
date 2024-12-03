@@ -1,43 +1,41 @@
 package org.allaymc.server.world.storage;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufOutputStream;
-import io.netty.buffer.Unpooled;
+import io.netty.buffer.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.storage.WorldStorageException;
+import org.allaymc.server.utils.PaletteUtils;
 import org.allaymc.server.world.HeightMap;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkSection;
 import org.allaymc.server.world.palette.Palette;
+import org.allaymc.server.world.palette.PaletteException;
+import org.allaymc.updater.block.BlockStateUpdaters;
+import org.cloudburstmc.nbt.NBTInputStream;
 import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
+import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.WriteBatch;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
-import static org.allaymc.api.block.type.BlockTypes.AIR;
-import static org.allaymc.api.block.type.BlockTypes.UNKNOWN;
+import java.util.*;
 
 /**
  * @author Cool_Loong
@@ -64,9 +62,6 @@ public class LevelDBChunkSerializer {
     private void serializeBlock(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         for (int ySection = chunk.getDimensionInfo().minSectionY(); ySection <= chunk.getDimensionInfo().maxSectionY(); ySection++) {
             ChunkSection section = chunk.getSection(ySection);
-            if (section == null) {
-                continue;
-            }
             ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
             try {
                 buffer.writeByte(ChunkSection.VERSION);
@@ -99,27 +94,26 @@ public class LevelDBChunkSerializer {
                         // Layers
                         layers = byteBuf.readByte();
                         if (subChunkVersion == 9) {
-                            // SectionY is not used
+                            // Extra section y value in version 9
                             byteBuf.readByte();
                         }
                     case 1:
                         ChunkSection section;
-                        if (layers <= 2) {
+                        if (layers <= ChunkSection.LAYER_COUNT) {
+                            // This is the normal situation where the chunk section is loaded correctly,
+                            // and we use the single-arg constructor of ChunkSection directly to avoid
+                            // using Arrays.fill(), which will be slower
                             section = new ChunkSection((byte) ySection);
                         } else {
+                            // Currently only two layers are used in minecraft, so that might mean this chunk is corrupted
+                            // However we can still load it c:
+                            log.warn("Loading chunk section ({}, {}, {}) with {} layers, which might mean that this chunk is corrupted!", builder.getChunkX(), ySection, builder.getChunkZ(), layers);
                             @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
-                            Arrays.fill(palettes, new Palette<>(AIR.getDefaultState()));
+                            Arrays.fill(palettes, new Palette<>(BlockTypes.AIR.getDefaultState()));
                             section = new ChunkSection((byte) ySection, palettes);
                         }
                         for (int layer = 0; layer < layers; layer++) {
-                            section.blockLayers()[layer].readFromStoragePersistent(byteBuf, hash -> {
-                                BlockState blockState = Registries.BLOCK_STATE_PALETTE.get(hash);
-                                if (blockState == null) {
-                                    log.error("Unknown block state hash: " + hash);
-                                    blockState = UNKNOWN.getDefaultState();
-                                }
-                                return blockState;
-                            });
+                            section.blockLayers()[layer].readFromStoragePersistent(byteBuf, LevelDBChunkSerializer::fastBlockStateDeserializer);
                         }
                         sections[ySection - minSectionY] = section;
                         break;
@@ -128,14 +122,62 @@ public class LevelDBChunkSerializer {
                 byteBuf.release();
             }
         }
-        builder.sections(sections);
+        builder.sections(fillNullSections(sections, dimensionInfo));
     }
+
+    private static BlockState fastBlockStateDeserializer(ByteBuf buffer) {
+        // Get block state hash
+        int blockStateHash;
+        try (var bufInputStream = new ByteBufInputStream(buffer);
+             var input = new LittleEndianDataInputStream(bufInputStream);
+             var nbtInputStream = new NBTInputStream(input)) {
+            blockStateHash = PaletteUtils.fastReadBlockStateHash(input, buffer);
+            if (blockStateHash == PaletteUtils.HASH_NOT_LATEST) {
+                var oldNbtMap = (NbtMap) nbtInputStream.readTag();
+                var newNbtMap = BlockStateUpdaters.updateBlockState(oldNbtMap, BlockStateUpdaters.LATEST_VERSION);
+                // Make sure that tree map is used
+                // If the map inside states nbt is not tree map
+                // the block state hash will be wrong!
+                var states = new TreeMap<>(newNbtMap.getCompound("states"));
+                // To calculate the hash of the block state
+                // "name" field must be in the first place
+                var tag = NbtMap.builder()
+                        .putString("name", newNbtMap.getString("name"))
+                        .putCompound("states", NbtMap.fromMap(states))
+                        .build();
+                blockStateHash = HashUtils.fnv1a_32_nbt(tag);
+            }
+        } catch (IOException e) {
+            throw new PaletteException(e);
+        }
+
+        // Get block state by hash
+        BlockState blockState = Registries.BLOCK_STATE_PALETTE.get(blockStateHash);
+        if (blockState != null) {
+            return blockState;
+        }
+
+        log.error("Find unknown block state hash {} while loading chunk section", blockStateHash);
+        return BlockTypes.UNKNOWN.getDefaultState();
+    }
+
+    private static ChunkSection[] fillNullSections(ChunkSection[] sections, DimensionInfo dimensionInfo) {
+        for (int i = 0; i < sections.length; i++) {
+            if (sections[i] == null) {
+                sections[i] = new ChunkSection((byte) (i + dimensionInfo.minSectionY()));
+            }
+        }
+        return sections;
+    }
+
+    /*
+     * Bedrock Edition 3d-data saves the height map starting from index 0, so adjustments are made here to accommodate the world's minimum height. For details, see:
+     * See https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
+     */
 
     private void serializeHeightAndBiome(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
-            // Bedrock Edition 3d-data saves the height map starting from index 0, so adjustments are made here to accommodate the world's minimum height. For details, see:
-            // https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
             // Serialize height map
             for (short height : chunk.getHeightMap().getHeights()) {
                 heightAndBiomesBuffer.writeShortLE(height - chunk.getDimensionInfo().minHeight());
@@ -144,7 +186,6 @@ public class LevelDBChunkSerializer {
             Palette<BiomeType> lastPalette = null;
             for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
                 ChunkSection section = chunk.getSection(y);
-                if (section == null) continue;
                 section.biomes().writeToStorageRuntime(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
                 lastPalette = section.biomes();
             }
@@ -160,12 +201,15 @@ public class LevelDBChunkSerializer {
             // Try load data_3d
             byte[] bytes = db.get(LevelDBKey.DATA_3D.getKey(builder.getChunkX(), builder.getChunkZ(), builder.getDimensionInfo()));
             if (bytes != null) {
+                // Height map
                 heightAndBiomesBuffer = Unpooled.wrappedBuffer(bytes);
                 short[] heights = new short[256];
                 for (int i = 0; i < 256; i++) {
                     heights[i] = (short) (heightAndBiomesBuffer.readUnsignedShortLE() + builder.getDimensionInfo().minHeight());
                 }
                 builder.heightMap(new HeightMap(heights));
+
+                // Biomes
                 Palette<BiomeType> lastPalette = null;
                 var minSectionY = builder.getDimensionInfo().minSectionY();
                 for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
@@ -174,6 +218,7 @@ public class LevelDBChunkSerializer {
                     section.biomes().readFromStorageRuntime(heightAndBiomesBuffer, this::getBiomeByIdNonNull, lastPalette);
                     lastPalette = section.biomes();
                 }
+
                 return;
             }
 
@@ -235,7 +280,7 @@ public class LevelDBChunkSerializer {
     }
 
     private void serializeEntityAndBlockEntity(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
-        //Write blockEntities
+        // Write blockEntities
         Collection<BlockEntity> blockEntities = chunk.getBlockEntities().values();
         ByteBuf tileBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try (var bufStream = new ByteBufOutputStream(tileBuffer)) {
@@ -255,6 +300,7 @@ public class LevelDBChunkSerializer {
             tileBuffer.release();
         }
 
+        // Write entities
         Collection<Entity> entities = chunk.getEntities().values();
         ByteBuf entityBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try (var bufStream = new ByteBufOutputStream(entityBuffer)) {

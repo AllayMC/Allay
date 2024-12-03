@@ -30,6 +30,8 @@ import java.util.concurrent.Executors;
 import static org.allaymc.api.block.type.BlockTypes.OAK_WOOD;
 
 /**
+ * TODO: Introduce a better method as the current test will modified the test resource files.
+ *
  * @author Cool_Loong
  */
 @ExtendWith({AllayTestExtension.class, MockitoExtension.class})
@@ -91,7 +93,7 @@ class LevelDBWorldStorageTest {
     @Test
     @Order(3)
     void testSaveChunk() {
-        AllayUnsafeChunk allayUnsafeChunk = AllayUnsafeChunk.builder().emptyChunk(0, 0, DimensionInfo.OVERWORLD);
+        AllayUnsafeChunk allayUnsafeChunk = AllayUnsafeChunk.builder().newChunk(0, 0, DimensionInfo.OVERWORLD);
         // So that the chunk can be written
         allayUnsafeChunk.setState(ChunkState.FINISHED);
         for (int i = 0; i < 16; i++) {
