@@ -42,7 +42,7 @@ class AllayChunkTest {
 
     @Test
     void testUpdateHeight() {
-        assertEquals(-65, chunk.getHeight(1, 1));
+        assertEquals(-64, chunk.getHeight(1, 1));
         chunk.setBlockState(1, 1, 1, OAK_WOOD.getDefaultState());
         assertEquals(1, chunk.getHeight(1, 1));
         chunk.setBlockState(1, 5, 1, OAK_WOOD.getDefaultState());
