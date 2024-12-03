@@ -82,7 +82,7 @@ public enum LevelDBKey {
     }
 
     public byte[] getKey(int chunkX, int chunkZ, DimensionInfo dimension) {
-        if (dimension.equals(DimensionInfo.OVERWORLD)) {
+        if (dimension == DimensionInfo.OVERWORLD) {
             return new byte[]{
                     (byte) (chunkX & 0xff),
                     (byte) ((chunkX >>> 8) & 0xff),
@@ -134,7 +134,7 @@ public enum LevelDBKey {
     public byte[] getKey(int chunkX, int chunkZ, int chunkSectionY, DimensionInfo dimension) {
         if (this.encoded != CHUNK_SECTION_PREFIX.encoded)
             throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
-        if (dimension.equals(DimensionInfo.OVERWORLD)) {
+        if (dimension == DimensionInfo.OVERWORLD) {
             return new byte[]{
                     (byte) (chunkX & 0xff),
                     (byte) ((chunkX >>> 8) & 0xff),

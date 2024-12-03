@@ -19,9 +19,9 @@ import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.UnsafeChunk;
-import org.allaymc.api.world.heightmap.HeightMap;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
+import org.allaymc.server.world.HeightMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -162,8 +162,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                 .collect(Collectors.toUnmodifiableSet());
     }
 
-    // Bedrock Edition 3d-data saves the height map starting from index 0, so adjustments are made here to accommodate the world's minimum height. For details, see:
-    // https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
     @Override
     public short getHeight(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
@@ -172,7 +170,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     protected short getHeightUnsafe(int index) {
-        return (short) (this.heightMap.get(index) + dimensionInfo.minHeight());
+        return this.heightMap.get(index);
     }
 
     @Override
@@ -184,7 +182,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     protected void setHeightUnsafe(int index, int height) {
-        this.heightMap.set(index, (short) (height - dimensionInfo.minHeight()));
+        this.heightMap.set(index, (short) height);
     }
 
     @Override
@@ -210,7 +208,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         var index = HeightMap.computeIndex(x, z);
         var currentHeight = getHeightUnsafe(index);
         if (blockState.getBlockType() == BlockTypes.AIR && currentHeight == y) {
-            int newHeight = dimensionInfo.minHeight() - 1;
+            // If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
+            int newHeight = dimensionInfo.minHeight();
             for (int i = y - 1; i >= dimensionInfo.minHeight(); i--) {
                 if (getBlockState(x, i, z, 0).getBlockType() != BlockTypes.AIR) {
                     newHeight = i;
@@ -351,7 +350,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             Preconditions.checkNotNull(dimensionInfo);
             if (state == null) state = ChunkState.EMPTY;
             if (sections == null) sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
-            if (heightMap == null) heightMap = new HeightMap();
+            if (heightMap == null) heightMap = new HeightMap((short) (dimensionInfo.minHeight() - 1));
             if (entities == null) entities = new Long2ObjectNonBlockingMap<>();
             if (blockEntities == null) blockEntities = new Int2ObjectNonBlockingMap<>();
             return new AllayUnsafeChunk(

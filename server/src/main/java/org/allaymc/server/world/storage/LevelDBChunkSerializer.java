@@ -17,8 +17,8 @@ import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.UnsafeChunk;
-import org.allaymc.api.world.heightmap.HeightMap;
 import org.allaymc.api.world.storage.WorldStorageException;
+import org.allaymc.server.world.HeightMap;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkSection;
 import org.allaymc.server.world.palette.Palette;
@@ -134,9 +134,11 @@ public class LevelDBChunkSerializer {
     private void serializeHeightAndBiome(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
+            // Bedrock Edition 3d-data saves the height map starting from index 0, so adjustments are made here to accommodate the world's minimum height. For details, see:
+            // https://github.com/bedrock-dev/bedrock-level/blob/main/src/include/data_3d.h#L115
             // Serialize height map
             for (short height : chunk.getHeightMap().getHeights()) {
-                heightAndBiomesBuffer.writeShortLE(height);
+                heightAndBiomesBuffer.writeShortLE(height - chunk.getDimensionInfo().minHeight());
             }
             // Serialize biome
             Palette<BiomeType> lastPalette = null;
@@ -161,7 +163,7 @@ public class LevelDBChunkSerializer {
                 heightAndBiomesBuffer = Unpooled.wrappedBuffer(bytes);
                 short[] heights = new short[256];
                 for (int i = 0; i < 256; i++) {
-                    heights[i] = heightAndBiomesBuffer.readShortLE();
+                    heights[i] = (short) (heightAndBiomesBuffer.readUnsignedShortLE() + builder.getDimensionInfo().minHeight());
                 }
                 builder.heightMap(new HeightMap(heights));
                 Palette<BiomeType> lastPalette = null;

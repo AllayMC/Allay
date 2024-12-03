@@ -1,4 +1,4 @@
-package org.allaymc.api.world.heightmap;
+package org.allaymc.server.world;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +16,7 @@ public final class HeightMap {
     private final short[] heights;
 
     public HeightMap() {
-        this((short) -1);
+        this((short) 0);
     }
 
     public HeightMap(short defaultValue) {

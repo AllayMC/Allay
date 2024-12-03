@@ -13,10 +13,10 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.heightmap.HeightMap;
 import org.allaymc.api.world.service.LightService;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
+import org.allaymc.server.world.HeightMap;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
 import java.util.Set;
