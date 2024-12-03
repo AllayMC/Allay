@@ -65,7 +65,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                 chunkZ,
                 dimensionInfo,
                 new ChunkSection[dimensionInfo.chunkSectionCount()],
-                new HeightMap(),
+                new HeightMap((short) dimensionInfo.minHeight()),
                 new Long2ObjectOpenHashMap<>(),
                 new Int2ObjectNonBlockingMap<>(),
                 ChunkState.EMPTY,
