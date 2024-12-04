@@ -560,6 +560,11 @@ public interface TrKeys {
     String A_RECIPE_LOADING = "allay:recipe.loading";
 
     /**
+     * You are running a development version. The development version may have unexpected bugs, please do not use it in a production environment!
+     */
+    String A_SERVER_IS_DEV_VERSION = "allay:server.is_dev_version";
+
+    /**
      * Starting up allay...
      */
     String A_SERVER_STARTING = "allay:server.starting";

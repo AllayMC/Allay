@@ -57,6 +57,14 @@ import java.util.HashMap;
 @Slf4j
 public final class Allay {
 
+    /**
+     * Indicates whether the current build is a development build.
+     * <p>
+     * This value should be changed to false before release the next stable version,
+     * and after releasing, change it back to true.
+     */
+    public static final boolean IS_DEVELOPMENT_BUILD = true;
+
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
     private static final ExtensionManager EXTENSION_MANAGER = new ExtensionManager(Path.of("extensions"));
 
@@ -86,6 +94,9 @@ public final class Allay {
         }
 
         log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING));
+        if (IS_DEVELOPMENT_BUILD) {
+            log.warn(I18n.get().tr(TrKeys.A_SERVER_IS_DEV_VERSION));
+        }
         try {
             initAllay();
         } catch (Exception e) {
