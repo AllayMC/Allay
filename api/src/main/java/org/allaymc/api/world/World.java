@@ -16,6 +16,16 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface World extends TaskCreator {
+
+    /**
+     * Get the name of the world.
+     * <p>
+     * Unlike the display name, this name is considered to be the id of the world.
+     *
+     * @return the name;
+     */
+    String getName();
+
     /**
      * Get the thread which the world is running on.
      *

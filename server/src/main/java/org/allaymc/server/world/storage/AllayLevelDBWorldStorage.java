@@ -152,7 +152,8 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
         if (versionValue == null) {
             // This might be a slightly-corrupted chunk with a missing version field
-            return builder.build().toSafeChunk();
+            // However we can still try to load it
+            log.warn("Chunk at {}, {} is missing version field", x, z);
         }
 
         var chunkState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
@@ -263,7 +264,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         if (storageVersion > CURRENT_STORAGE_VERSION) {
             throw new WorldStorageException("LevelDB world storage version " + storageVersion + " is currently unsupported");
         }
-        
+
         var networkVersion = nbt.getInt(TAG_NETWORK_VERSION, Integer.MAX_VALUE);
         if (networkVersion == Integer.MAX_VALUE) {
             log.warn("Missing " + TAG_NETWORK_VERSION + " field in " + FILE_LEVEL_DAT);

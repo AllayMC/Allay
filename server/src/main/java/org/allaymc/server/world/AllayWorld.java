@@ -52,6 +52,8 @@ public class AllayWorld implements World {
     protected static final boolean ENABLE_INDEPENDENT_NETWORK_THREAD = Server.SETTINGS.networkSettings().enableIndependentNetworkThread();
 
     @Getter
+    protected final String name;
+    @Getter
     protected final WorldStorage worldStorage;
     @Getter
     protected final AllayWorldData worldData;
@@ -77,7 +79,8 @@ public class AllayWorld implements World {
     protected boolean isThundering = false;
     protected boolean isFirstTick = true;
 
-    public AllayWorld(WorldStorage worldStorage) {
+    public AllayWorld(String name, WorldStorage worldStorage) {
+        this.name = name;
         this.worldStorage = worldStorage;
         this.worldData = (AllayWorldData) worldStorage.readWorldData();
         this.worldData.setWorld(this);

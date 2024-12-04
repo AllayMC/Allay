@@ -71,7 +71,7 @@ public final class AllayWorldPool implements WorldPool {
         }
         AllayWorld world;
         try {
-            world = new AllayWorld(storage);
+            world = new AllayWorld(name, storage);
         } catch (Throwable t) {
             log.error("Error while initializing world {}", name, t);
             return;
@@ -164,7 +164,7 @@ public final class AllayWorldPool implements WorldPool {
         event.call();
         if (event.isCancelled()) return false;
 
-        worlds.put(world.getWorldData().getDisplayName(), world);
+        worlds.put(world.getName(), world);
         world.startTick();
         return true;
     }
