@@ -31,7 +31,11 @@ public enum WorldGeneratorType {
     /**
      * World generator for end
      */
-    THE_END(4);
+    THE_END(4),
+    /**
+     * World generator for void
+     */
+    VOID(5);
 
     /**
      * The generator id
@@ -45,7 +49,7 @@ public enum WorldGeneratorType {
      *
      * @return the WorldGeneratorType
      */
-    public static WorldGeneratorType of(int id) {
+    public static WorldGeneratorType byId(int id) {
         Preconditions.checkArgument(id >= 0 && id <= 4);
         return values()[id];
     }

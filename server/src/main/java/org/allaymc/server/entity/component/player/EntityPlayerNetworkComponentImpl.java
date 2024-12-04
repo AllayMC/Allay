@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.client.data.LoginData;
+import org.allaymc.api.client.storage.PlayerData;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.container.UnopenedContainerId;
@@ -26,6 +27,7 @@ import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.World;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
@@ -50,6 +52,7 @@ import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.cloudburstmc.protocol.common.PacketSignal;
 import org.cloudburstmc.protocol.common.SimpleDefinitionRegistry;
 import org.cloudburstmc.protocol.common.util.OptionalBoolean;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector3fc;
 
 import javax.crypto.SecretKey;
@@ -298,6 +301,30 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         dimension.addPlayer(thisPlayer);
 
         var spawnWorld = dimension.getWorld();
+        var startGamePacket = encodeStartGamePacket(spawnWorld, playerData, dimension);
+        sendPacket(startGamePacket);
+
+        session.getPeer().getCodecHelper().setItemDefinitions(
+                SimpleDefinitionRegistry
+                        .<ItemDefinition>builder()
+                        .addAll(startGamePacket.getItemDefinitions())
+                        .build()
+        );
+
+        session.getPeer().getCodecHelper().setBlockDefinitions(
+                SimpleDefinitionRegistry
+                        .<BlockDefinition>builder()
+                        .addAll(DeferredData.getBlockDefinitions())
+                        .build()
+        );
+
+        sendPacket(DeferredData.getAvailableEntityIdentifiersPacket());
+        sendPacket(DeferredData.getBiomeDefinitionListPacket());
+        sendPacket(DeferredData.getCreativeContentPacket());
+        sendPacket(DeferredData.getCraftingDataPacket());
+    }
+
+    private @NotNull StartGamePacket encodeStartGamePacket(World spawnWorld, PlayerData playerData, Dimension dimension) {
         var startGamePacket = new StartGamePacket();
         startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
         startGamePacket.setUniqueEntityId(thisPlayer.getRuntimeId());
@@ -345,26 +372,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         startGamePacket.setServerId("");
         startGamePacket.setWorldId("");
         startGamePacket.setScenarioId("");
-        sendPacket(startGamePacket);
-
-        session.getPeer().getCodecHelper().setItemDefinitions(
-                SimpleDefinitionRegistry
-                        .<ItemDefinition>builder()
-                        .addAll(startGamePacket.getItemDefinitions())
-                        .build()
-        );
-
-        session.getPeer().getCodecHelper().setBlockDefinitions(
-                SimpleDefinitionRegistry
-                        .<BlockDefinition>builder()
-                        .addAll(DeferredData.getBlockDefinitions())
-                        .build()
-        );
-
-        sendPacket(DeferredData.getAvailableEntityIdentifiersPacket());
-        sendPacket(DeferredData.getBiomeDefinitionListPacket());
-        sendPacket(DeferredData.getCreativeContentPacket());
-        sendPacket(DeferredData.getCraftingDataPacket());
+        return startGamePacket;
     }
 
     public void completeLogin() {
