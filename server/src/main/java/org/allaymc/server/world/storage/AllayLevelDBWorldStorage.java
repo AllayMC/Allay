@@ -45,7 +45,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static final String DIR_DB = "db";
 
-    private static final int CURRENT_STORAGE_VERSION = 10;
+    private static final int STORAGE_VERSION = 10;
 
     private static final int CHUNK_VERSION = 41;
 
@@ -67,6 +67,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     // Some of them are written to make the vanilla client
     // load the world correctly, they are not used in other places
     private static final String TAG_GENERATOR = "Generator";
+    private static final String TAG_RANDOM_SEED = "RandomSeed";
     private static final String TAG_STORAGE_VERSION = "StorageVersion";
     private static final String TAG_NETWORK_VERSION = "NetworkVersion";
     private static final String TAG_LAST_PLAYED = "LastPlayed";
@@ -74,7 +75,6 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private static final String TAG_COMMANDS_ENABLED = "commandsEnabled";
     private static final String TAG_LAST_OPENED_WITH_VERSION = "lastOpenedWithVersion";
     private static final String TAG_IS_EDU = "eduLevel";
-    private static final String TAG_RANDOM_SEED = "RandomSeed";
     private static final String TAG_FORCE_GAME_TYPE = "ForceGameType";
 
     private final Path path;
@@ -221,7 +221,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             }
 
             // 1.Current version
-            output.write(int2ByteArrayLE(CURRENT_STORAGE_VERSION));
+            output.write(int2ByteArrayLE(STORAGE_VERSION));
 
             var byteArrayOutputStream = new ByteArrayOutputStream();
             var nbtOutputStream = NbtUtils.createWriterLE(byteArrayOutputStream);
@@ -259,9 +259,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         var storageVersion = nbt.getInt(TAG_STORAGE_VERSION, Integer.MAX_VALUE);
         if (storageVersion == Integer.MAX_VALUE) {
             log.warn("Missing " + TAG_STORAGE_VERSION + " field in " + FILE_LEVEL_DAT);
-            storageVersion = CURRENT_STORAGE_VERSION;
+            storageVersion = STORAGE_VERSION;
         }
-        if (storageVersion > CURRENT_STORAGE_VERSION) {
+        if (storageVersion > STORAGE_VERSION) {
             throw new WorldStorageException("LevelDB world storage version " + storageVersion + " is currently unsupported");
         }
 
@@ -307,8 +307,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         // 2 -    flat, 3 -   nether
         // 4 - the_end, 5 -     void
         builder.putInt(TAG_GENERATOR, 5);
+        builder.putLong(TAG_RANDOM_SEED, 0);
         // The client will crash if this field is not exist
-        builder.putInt(TAG_STORAGE_VERSION, CURRENT_STORAGE_VERSION);
+        builder.putInt(TAG_STORAGE_VERSION, STORAGE_VERSION);
         // StorageVersion is rarely updated. Instead, the game relies on the NetworkVersion tag,
         // which is synced with the network protocol version for that version
         builder.putInt(TAG_NETWORK_VERSION, ProtocolInfo.PACKET_CODEC.getProtocolVersion());
@@ -318,7 +319,6 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         builder.putByte(TAG_COMMANDS_ENABLED, (byte) 1);
         builder.putList(TAG_LAST_OPENED_WITH_VERSION, NbtType.INT, ProtocolInfo.MINECRAFT_VERSION.toBoxedArray());
         builder.putByte(TAG_IS_EDU, (byte) 0);
-        builder.putLong(TAG_RANDOM_SEED, 0);
         builder.putByte(TAG_FORCE_GAME_TYPE, (byte) 0);
 
         worldData.getGameRules().writeToNBT(builder);
