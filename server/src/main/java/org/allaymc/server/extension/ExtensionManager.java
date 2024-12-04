@@ -78,6 +78,9 @@ public final class ExtensionManager {
                 return null;
             }
             var entrance = (String) JSONUtils.fromMap(Files.readString(extensionDescriptorPath)).get("entrance");
+            if (entrance == null) {
+                throw new ExtensionException("Missing extrance field in extension.json!");
+            }
             return Allay.EXTRA_RESOURCE_CLASS_LOADER.loadClass(entrance);
         } catch (ClassNotFoundException e1) {
             throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_ENTRANCE_MISSING, extensionPath));
