@@ -21,7 +21,7 @@ public record ChunkSection(
         Palette<BiomeType> biomes
 ) {
     public static final int LAYER_COUNT = 2;
-    public static final int VERSION = 9;
+    public static final int CHUNK_SECTION_VERSION = 9;
 
     @SuppressWarnings("unchecked")
     public ChunkSection(byte sectionY) {
@@ -53,7 +53,7 @@ public record ChunkSection(
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {
-        byteBuf.writeByte(VERSION);
+        byteBuf.writeByte(CHUNK_SECTION_VERSION);
         // Block layer count
         byteBuf.writeByte(LAYER_COUNT);
         // Extra byte since version 9

@@ -47,7 +47,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static final int CURRENT_STORAGE_VERSION = 10;
 
-    private static final int LATEST_CHUNK_VERSION = 40;
+    private static final int CHUNK_VERSION = 41;
 
     private static final int VANILLA_CHUNK_STATE_NEEDS_INSTA_TICK = 0;
     private static final int VANILLA_CHUNK_STATE_NEEDS_POPULATION = 1;
@@ -185,7 +185,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             return;
         }
         try (var writeBatch = this.db.createWriteBatch()) {
-            writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{LATEST_CHUNK_VERSION});
+            writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{CHUNK_VERSION});
             writeBatch.put(
                     LevelDBKey.CHUNK_FINALIZED_STATE.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
                     Unpooled.buffer(1)

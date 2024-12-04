@@ -44,11 +44,9 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LevelDBChunkSerializer {
     public static final LevelDBChunkSerializer INSTANCE = new LevelDBChunkSerializer();
-    public static final int CHUNK_VERSION = 41;
 
     public void serialize(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         serializeBlock(writeBatch, chunk);
-        writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{CHUNK_VERSION});
         serializeHeightAndBiome(writeBatch, chunk);
         serializeEntityAndBlockEntity(writeBatch, chunk);
     }
@@ -64,7 +62,7 @@ public class LevelDBChunkSerializer {
             ChunkSection section = chunk.getSection(ySection);
             ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
             try {
-                buffer.writeByte(ChunkSection.VERSION);
+                buffer.writeByte(ChunkSection.CHUNK_SECTION_VERSION);
                 buffer.writeByte(ChunkSection.LAYER_COUNT);
                 buffer.writeByte(ySection);
                 for (int i = 0; i < ChunkSection.LAYER_COUNT; i++) {
@@ -254,31 +252,6 @@ public class LevelDBChunkSerializer {
         }
     }
 
-    private void deserializeEntityAndBlockEntity(DB db, AllayUnsafeChunk.Builder builder) {
-        DimensionInfo dimensionInfo = builder.getDimensionInfo();
-        byte[] tileBytes = db.get(LevelDBKey.BLOCK_ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo));
-        if (tileBytes != null) {
-            builder.blockEntities(deserializeNbtTagsFromBytes(tileBytes));
-        }
-        byte[] key = LevelDBKey.ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo);
-        byte[] entityBytes = db.get(key);
-        if (entityBytes != null) {
-            builder.entities(deserializeNbtTagsFromBytes(entityBytes));
-        }
-    }
-
-    private List<NbtMap> deserializeNbtTagsFromBytes(byte[] bytes) {
-        List<NbtMap> tags = new ArrayList<>();
-        try (BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(bytes))) {
-            while (stream.available() > 0) {
-                tags.add((NbtMap) NbtUtils.createReaderLE(stream).readTag());
-            }
-        } catch (IOException e) {
-            throw new WorldStorageException(e);
-        }
-        return tags;
-    }
-
     private void serializeEntityAndBlockEntity(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         // Write blockEntities
         Collection<BlockEntity> blockEntities = chunk.getBlockEntities().values();
@@ -322,6 +295,31 @@ public class LevelDBChunkSerializer {
         } finally {
             entityBuffer.release();
         }
+    }
+
+    private void deserializeEntityAndBlockEntity(DB db, AllayUnsafeChunk.Builder builder) {
+        DimensionInfo dimensionInfo = builder.getDimensionInfo();
+        byte[] tileBytes = db.get(LevelDBKey.BLOCK_ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo));
+        if (tileBytes != null) {
+            builder.blockEntities(deserializeNbtTagsFromBytes(tileBytes));
+        }
+        byte[] key = LevelDBKey.ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo);
+        byte[] entityBytes = db.get(key);
+        if (entityBytes != null) {
+            builder.entities(deserializeNbtTagsFromBytes(entityBytes));
+        }
+    }
+
+    private List<NbtMap> deserializeNbtTagsFromBytes(byte[] bytes) {
+        List<NbtMap> tags = new ArrayList<>();
+        try (BufferedInputStream stream = new BufferedInputStream(new ByteArrayInputStream(bytes))) {
+            while (stream.available() > 0) {
+                tags.add((NbtMap) NbtUtils.createReaderLE(stream).readTag());
+            }
+        } catch (IOException e) {
+            throw new WorldStorageException(e);
+        }
+        return tags;
     }
 
     private BiomeType getBiomeByIdNonNull(int id) {
