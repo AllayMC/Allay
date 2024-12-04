@@ -1,4 +1,4 @@
-package org.allaymc.server.utils;
+package org.allaymc.server.world.palette;
 
 import io.netty.buffer.ByteBuf;
 import lombok.SneakyThrows;
