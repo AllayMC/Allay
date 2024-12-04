@@ -96,24 +96,20 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private static final String TAG_FORCE_GAME_TYPE = "ForceGameType";
 
     private final Path path;
-    private final DB db;
     private final String worldName;
+    private final DB db;
 
     public AllayLevelDBWorldStorage(Path path) {
-        this(path, new Options()
-                .createIfMissing(true)
-                .compressionType(CompressionType.ZLIB_RAW)
-                .blockSize(64 * 1024)
-        );
+        this(path, new Options().createIfMissing(true).compressionType(CompressionType.ZLIB_RAW).blockSize(64 * 1024));
     }
 
     public AllayLevelDBWorldStorage(Path path, Options options) {
+        this.path = path;
         this.worldName = path.getName(path.getNameCount() - 1).toString();
         var file = path.toFile();
         if (!file.exists() && !file.mkdirs()) {
             throw new WorldStorageException("Failed to create world directory!");
         }
-        this.path = path;
 
         var dbFolder = path.resolve(DIR_DB).toFile();
         try {
