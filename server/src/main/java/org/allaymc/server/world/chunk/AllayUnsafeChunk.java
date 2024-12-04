@@ -132,7 +132,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         }
     }
 
-    public void afterSetChunk(Dimension dimension) {
+    public void afterSetChunk(Dimension dimension, boolean success) {
+        if (!success) {
+            return;
+        }
+
         if (entityNbtList != null && !entityNbtList.isEmpty()) {
             for (var nbt : entityNbtList) {
                 var entity = EntityHelper.fromNBT(dimension, nbt);

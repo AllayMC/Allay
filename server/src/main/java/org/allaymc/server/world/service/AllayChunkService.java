@@ -123,8 +123,9 @@ public final class AllayChunkService implements ChunkService {
 
     private void setChunk(int x, int z, Chunk chunk) {
         var chunkHash = HashUtils.hashXZ(x, z);
-        if (loadedChunks.putIfAbsent(chunkHash, chunk) != null)
+        if (loadedChunks.putIfAbsent(chunkHash, chunk) != null) {
             throw new IllegalStateException("Trying to set a chunk (" + x + "," + z + ") which is already loaded");
+        }
     }
 
     @Override
@@ -201,20 +202,24 @@ public final class AllayChunkService implements ChunkService {
         }).exceptionally(t -> {
             log.error("Error while generating chunk ({},{}) !", x, z, t);
             return AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
-        }).thenApply(preparedChunk -> {
-            ((AllayChunk) preparedChunk).beforeSetChunk(dimension);
-            setChunk(x, z, preparedChunk);
-            ((AllayChunk) preparedChunk).afterSetChunk(dimension);
-            future.complete(preparedChunk);
-            loadingChunks.remove(hashXZ);
-
-            var chunkLoadEvent = new ChunkLoadEvent(dimension, preparedChunk);
-            chunkLoadEvent.call();
-
-            return preparedChunk;
-        }).exceptionally(t -> {
-            log.error("Error while setting chunk ({},{}) !", x, z, t);
-            return AllayUnsafeChunk.builder().newChunk(x, z, dimension.getDimensionInfo()).toSafeChunk();
+        }).thenAccept(preparedChunk -> {
+            boolean success = true;
+            try {
+                ((AllayChunk) preparedChunk).beforeSetChunk(dimension);
+                setChunk(x, z, preparedChunk);
+            } catch (Throwable t) {
+                log.error("Error while setting chunk ({},{}) !", x, z, t);
+                success = false;
+            } finally {
+                loadingChunks.remove(hashXZ);
+                ((AllayChunk) preparedChunk).afterSetChunk(dimension, success);
+                if (success) {
+                    future.complete(preparedChunk);
+                    new ChunkLoadEvent(dimension, preparedChunk).call();
+                } else {
+                    future.complete(null);
+                }
+            }
         });
         return future;
     }

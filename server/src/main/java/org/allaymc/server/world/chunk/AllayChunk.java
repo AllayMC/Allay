@@ -29,6 +29,7 @@ import org.jetbrains.annotations.UnmodifiableView;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.*;
 import java.util.concurrent.locks.StampedLock;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 /**
@@ -51,8 +52,9 @@ public class AllayChunk implements Chunk {
     @Getter
     protected boolean loaded = false;
     // The callback to be called when the chunk is loaded into the world
+    // The provided boolean value indicated whether the chunk is set successfully
     @Setter
-    protected Runnable chunkSetCallback;
+    protected Consumer<Boolean> chunkSetCallback;
     protected int autoSaveTimer = 0;
 
     private static void checkXZ(int x, int z) {
@@ -396,19 +398,26 @@ public class AllayChunk implements Chunk {
 
     public void beforeSetChunk(Dimension dimension) {
         unsafeChunk.beforeSetChunk(dimension);
-        unsafeChunk.setBlockChangeCallback((x, y, z, blockState, layer) -> {
-            if (layer != 0) return;
-            ((AllayLightService) dimension.getLightService()).onBlockChange(x + (unsafeChunk.x << 4), y, z + (unsafeChunk.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
-        });
     }
 
-    public void afterSetChunk(Dimension dimension) {
+    public void afterSetChunk(Dimension dimension, boolean success) {
         if (chunkSetCallback != null) {
-            chunkSetCallback.run();
+            chunkSetCallback.accept(success);
         }
-        loaded = true;
-        unsafeChunk.afterSetChunk(dimension);
+        unsafeChunk.afterSetChunk(dimension, success);
+
+        if (!success) {
+            return;
+        }
+
+        unsafeChunk.setBlockChangeCallback((x, y, z, blockState, layer) -> {
+            if (layer != 0) {
+                return;
+            }
+            ((AllayLightService) dimension.getLightService()).onBlockChange(x + (unsafeChunk.x << 4), y, z + (unsafeChunk.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
+        });
         ((AllayLightService) dimension.getLightService()).onChunkLoad(this);
+        loaded = true;
     }
 
     @Override

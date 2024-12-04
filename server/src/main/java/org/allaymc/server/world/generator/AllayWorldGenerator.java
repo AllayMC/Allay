@@ -130,7 +130,8 @@ public class AllayWorldGenerator implements WorldGenerator {
                 statusPopulatedToFinished(chunk);
                 var chunkHash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
                 // Remove recorded futures
-                ((AllayChunk) chunk).setChunkSetCallback(() -> {
+                ((AllayChunk) chunk).setChunkSetCallback(success -> {
+                    // The stored futures should always being removed
                     chunkNoiseFutures.remove(chunkHash);
                     chunkFutures.remove(chunkHash);
                 });
