@@ -43,8 +43,14 @@ public final class PacketProcessorHolder {
     }
 
     public boolean setClientStatus(ClientStatus clientStatus) {
+        return setClientStatus(clientStatus, true);
+    }
+
+    public boolean setClientStatus(ClientStatus clientStatus, boolean warnIfFailed) {
         if (!this.clientStatus.compareAndSet(clientStatus.getPreviousStatus(), clientStatus)) {
-            log.warn("Failed to set client status to {}. Current is {}", clientStatus, this.clientStatus.get());
+            if (warnIfFailed) {
+                log.warn("Failed to set client status to {}. Current is {}", clientStatus, this.clientStatus.get());
+            }
             return false;
         }
         return true;

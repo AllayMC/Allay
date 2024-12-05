@@ -171,14 +171,13 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
             @Override
             public void onDisconnect(String reason) {
-                if (packetProcessorHolder.getClientStatus() == ClientStatus.DISCONNECTED) {
+                if (!packetProcessorHolder.setClientStatus(ClientStatus.DISCONNECTED, false)) {
                     // Failed to set disconnected field from false to true
                     // Which means the client may be disconnected by server
                     // by calling EntityPlayerNetworkComponentImpl::disconnect() method
                     // this shouldn't be an error
                     return;
                 }
-                packetProcessorHolder.setClientStatus(ClientStatus.DISCONNECTED);
                 EntityPlayerNetworkComponentImpl.this.onDisconnect(reason);
             }
         });
