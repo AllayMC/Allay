@@ -80,14 +80,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
 
-    //    @Getter
-//    protected boolean loggedIn = false;
     @Getter
     @Setter
     protected boolean networkEncryptionEnabled = false;
-    //    @Getter
-//    protected boolean initialized = false;
-//    protected AtomicBoolean disconnected;
     protected AtomicInteger fullyJoinChunkThreshold;
     @Getter
     protected final PacketProcessorHolder packetProcessorHolder;
@@ -102,7 +97,6 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     protected BedrockServerSession clientSession;
 
     public EntityPlayerNetworkComponentImpl() {
-//        this.disconnected = new AtomicBoolean(false);
         this.fullyJoinChunkThreshold = new AtomicInteger(Server.SETTINGS.worldSettings().fullyJoinChunkThreshold());
         this.packetProcessorHolder = new PacketProcessorHolder();
     }
@@ -115,6 +109,18 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     public void setClientSession(BedrockServerSession session) {
         this.clientSession = session;
         this.packetProcessorHolder.setClientStatus(ClientStatus.CONNECTED);
+
+        var maxLoginTime = Server.SETTINGS.networkSettings().maxLoginTime();
+        if (maxLoginTime > 0) {
+            Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
+                if (packetProcessorHolder.getClientStatus().ordinal() < ClientStatus.IN_GAME.ordinal()) {
+                    log.warn("Player {} didn't log in within {} seconds, disconnecting...", thisPlayer.getOriginName(), Server.SETTINGS.networkSettings().maxLoginTime() / 20d);
+                    disconnect(TrKeys.M_DISCONNECTIONSCREEN_TIMEOUT);
+                }
+                return true;
+            }, maxLoginTime);
+        }
+
         session.setPacketHandler(new BedrockPacketHandler() {
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {

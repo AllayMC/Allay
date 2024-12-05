@@ -122,6 +122,13 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Possible values: DISABLED, SIMPLE, ADVANCED, PARANOID")
         @CustomKey("resource-leak-detector-level")
         private ResourceLeakDetector.Level resourceLeakDetectorLevel = ResourceLeakDetector.Level.DISABLED;
+
+        @Comment("The max time (unit: gt) that a client can have in login stage")
+        @Comment("This would prevent the server from being stuck by a lot")
+        @Comment("of fake clients that are keep in login stage maliciously")
+        @Comment("To disable it, just make the value <= 0")
+        @CustomKey("max-login-time")
+        private int maxLoginTime = 1800; // 90 seconds
     }
 
     @Getter
