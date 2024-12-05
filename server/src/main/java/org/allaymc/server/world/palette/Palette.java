@@ -29,6 +29,7 @@ public final class Palette<V> {
     private BitArray bitArray;
 
     public Palette(V first) {
+        // TODO(memory): using v2 by default will waste a lot of memory when the palette is empty
         this(first, BitArrayVersion.V2);
     }
 

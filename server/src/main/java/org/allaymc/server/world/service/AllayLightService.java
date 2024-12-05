@@ -36,6 +36,7 @@ public class AllayLightService implements LightService {
     protected final int maxHeight;
     protected final int sectionCount;
     protected final boolean hasSkyLight;
+    // TODO(memory): use a more memory-efficient queue, for example a long queue
     protected final BlockingQueueWrapper<Runnable> queue;
     protected final LongSet chunks;
     protected final Long2ObjectMap<ChunkSectionNibbleArray[]> lightDampening;
