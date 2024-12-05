@@ -102,8 +102,12 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     public void handleDataPacket(BedrockPacket packet, long time) {
-        // processor won't be null as we have checked it the time it arrived (async stage)
-        packetProcessorHolder.getProcessor(packet).handleSync(thisPlayer, packet, time);
+        var processor = packetProcessorHolder.getProcessor(packet);
+        if (processor == null) {
+            log.warn("Received a packet which doesn't have correspond packet handler: {}, client status: {}", packet, packetProcessorHolder.getClientStatus().name());
+            return;
+        }
+        processor.handleSync(thisPlayer, packet, time);
     }
 
     public void setClientSession(BedrockServerSession session) {
@@ -124,9 +128,15 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         session.setPacketHandler(new BedrockPacketHandler() {
             @Override
             public PacketSignal handlePacket(BedrockPacket packet) {
+                if (!packetProcessorHolder.getClientStatus().canHandlePackets()) {
+                    return PacketSignal.HANDLED;
+                }
+
                 var event = new PacketReceiveEvent(thisPlayer, packet);
                 event.call();
-                if (event.isCancelled()) return PacketSignal.HANDLED;
+                if (event.isCancelled()) {
+                    return PacketSignal.HANDLED;
+                }
 
                 packet = event.getPacket();
 

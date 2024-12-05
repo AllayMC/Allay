@@ -21,4 +21,8 @@ public enum ClientStatus {
      */
     @Getter
     private final ClientStatus previousStatus;
+
+    public boolean canHandlePackets() {
+        return this != NEW && this != DISCONNECTED;
+    }
 }

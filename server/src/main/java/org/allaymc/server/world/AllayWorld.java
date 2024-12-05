@@ -148,9 +148,15 @@ public class AllayWorld implements World {
             PacketQueueEntry entry = firstEntry;
             int count = 0;
             do {
+                // The first entry can be null, for why we do that see the callers
                 if (entry == null) continue;
                 if (entry.player.getWorld() != this) {
                     log.warn("Trying to handle sync packet in world {} which the player {} is not in!", this.getWorldData().getDisplayName(), entry.player.getOriginName());
+                }
+                // The player may have been disconnected,
+                // which is possible because this is a synced packet
+                if (!entry.player.getClientStatus().canHandlePackets()) {
+                    continue;
                 }
 
                 var playerImpl = (EntityPlayerImpl) entry.player;
