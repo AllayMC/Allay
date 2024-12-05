@@ -25,6 +25,7 @@ import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
+import org.allaymc.server.network.processor.impl.ingame.PlayerAuthInputPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
@@ -532,7 +533,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     /**
      * Please note that this method usually been called asynchronously <p/>
-     * See {@link org.allaymc.server.network.processor.PlayerAuthInputPacketProcessor#handleAsync(EntityPlayer, PlayerAuthInputPacket, long)}
+     * See {@link PlayerAuthInputPacketProcessor#handleAsync(EntityPlayer, PlayerAuthInputPacket, long)}
      */
     public void offerClientMove(EntityPlayer player, Location3fc newLoc) {
         if (!entities.containsKey(player.getRuntimeId())) return;

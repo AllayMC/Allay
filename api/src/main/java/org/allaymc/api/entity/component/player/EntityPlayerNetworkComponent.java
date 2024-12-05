@@ -6,6 +6,7 @@ import org.allaymc.api.entity.component.EntityComponent;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
+import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.PacketReceiver;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
 
@@ -97,11 +98,49 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
     void disconnect(@MayContainTrKey String reason);
 
     /**
+     * Get the client status of this player.
+     *
+     * @return the client status of this player.
+     */
+    ClientStatus getClientStatus();
+
+    /**
+     * Check if the player is connected.
+     *
+     * @return {@code true} if the player is connected, {@code false} otherwise.
+     */
+    default boolean isConnected() {
+        return getClientStatus() == ClientStatus.CONNECTED;
+    }
+
+    /**
+     * Check if the player is logged in.
+     *
+     * @return {@code true} if the player is logged in, {@code false} otherwise.
+     */
+    default boolean isLoggedIn() {
+        return getClientStatus() == ClientStatus.LOGGED_IN;
+    }
+
+    /**
+     * Check if the player has been fully initialized.
+     * <p>
+     * This represents whether the player's client can see the world and proceed with gameplay.
+     *
+     * @return {@code true} if the player has been fully initialized, {@code false} otherwise.
+     */
+    default boolean isInitialized() {
+        return getClientStatus() == ClientStatus.IN_GAME;
+    }
+
+    /**
      * Check if the player is disconnected.
      *
      * @return {@code true} if the player is disconnected, {@code false} otherwise.
      */
-    boolean isDisconnected();
+    default boolean isDisconnected() {
+        return getClientStatus() == ClientStatus.DISCONNECTED;
+    }
 
     /**
      * Check if network encryption is enabled for the player.
@@ -116,22 +155,6 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return the encryption secret key for the player.
      */
     SecretKey getEncryptionSecretKey();
-
-    /**
-     * Check if the player has been fully initialized.
-     * <p>
-     * This represents whether the player's client can see the world and proceed with gameplay.
-     *
-     * @return {@code true} if the player has been fully initialized, {@code false} otherwise.
-     */
-    boolean isInitialized();
-
-    /**
-     * Check if the player is logged in.
-     *
-     * @return {@code true} if the player is logged in, {@code false} otherwise.
-     */
-    boolean isLoggedIn();
 
     /**
      * Get the client session for the player.
