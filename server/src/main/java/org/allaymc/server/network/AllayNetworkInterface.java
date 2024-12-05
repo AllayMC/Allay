@@ -31,6 +31,7 @@ import org.cloudburstmc.netty.channel.raknet.RakChannelFactory;
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption;
 import org.cloudburstmc.protocol.bedrock.BedrockPong;
 import org.cloudburstmc.protocol.bedrock.BedrockServerSession;
+import org.cloudburstmc.protocol.bedrock.data.EncodingSettings;
 import org.cloudburstmc.protocol.bedrock.netty.initializer.BedrockServerInitializer;
 
 import java.net.InetSocketAddress;
@@ -80,6 +81,9 @@ public class AllayNetworkInterface implements NetworkInterface {
                     @Override
                     protected void initSession(BedrockServerSession session) {
                         session.setCodec(ProtocolInfo.PACKET_CODEC);
+                        if (!Server.SETTINGS.networkSettings().enableEncodingProtection()) {
+                            session.getPeer().getCodecHelper().setEncodingSettings(EncodingSettings.UNLIMITED);
+                        }
 
                         var server = Server.getInstance();
                         if (server.isIPBanned(AllayStringUtils.fastTwoPartSplit(session.getSocketAddress().toString().substring(1), ":", "")[0])) {

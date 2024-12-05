@@ -129,6 +129,12 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("To disable it, just make the value <= 0")
         @CustomKey("max-login-time")
         private int maxLoginTime = 1800; // 90 seconds
+
+        @Comment("Encoding protection will prevent client from sending large garbage data")
+        @Comment("It is recommended to enable this feature, however if clients are kicked due")
+        @Comment("to misjudgment (usually when changing skin), disable this feature will help you")
+        @CustomKey("enable-encoding-protection")
+        private boolean enableEncodingProtection = true;
     }
 
     @Getter
