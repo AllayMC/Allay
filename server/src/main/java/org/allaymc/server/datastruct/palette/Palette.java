@@ -1,4 +1,4 @@
-package org.allaymc.server.world.palette;
+package org.allaymc.server.datastruct.palette;
 
 import com.google.common.base.Objects;
 import io.netty.buffer.ByteBuf;
@@ -6,8 +6,8 @@ import io.netty.buffer.ByteBufOutputStream;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.world.bitarray.BitArray;
-import org.allaymc.server.world.bitarray.BitArrayVersion;
+import org.allaymc.server.datastruct.bitarray.BitArray;
+import org.allaymc.server.datastruct.bitarray.BitArrayVersion;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.common.util.VarInts;
 

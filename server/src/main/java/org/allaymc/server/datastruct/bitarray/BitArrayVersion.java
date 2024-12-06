@@ -1,4 +1,4 @@
-package org.allaymc.server.world.bitarray;
+package org.allaymc.server.datastruct.bitarray;
 
 import com.google.common.base.Preconditions;
 import org.cloudburstmc.math.GenericMath;

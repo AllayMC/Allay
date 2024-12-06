@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.server.world.palette.Palette;
+import org.allaymc.server.datastruct.palette.Palette;
 
 import javax.annotation.concurrent.NotThreadSafe;
 

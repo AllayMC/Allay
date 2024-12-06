@@ -1,4 +1,4 @@
-package org.allaymc.server.world.bitarray;
+package org.allaymc.server.datastruct.bitarray;
 
 /**
  * @author JukeboxMC | daoge_cmd

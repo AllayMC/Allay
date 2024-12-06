@@ -1,4 +1,4 @@
-package org.allaymc.server.world.palette;
+package org.allaymc.server.datastruct.palette;
 
 /**
  * @author JukeboxMC | daoge_cmd
