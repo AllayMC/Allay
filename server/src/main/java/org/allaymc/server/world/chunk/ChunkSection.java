@@ -49,7 +49,7 @@ public record ChunkSection(
     }
 
     public boolean isAirSection() {
-        return blockLayers[0].isEmpty() && blockLayers[0].get(0) == AIR.getDefaultState();
+        return blockLayers[0].oneEntryOnly() && blockLayers[0].get(0) == AIR.getDefaultState();
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {

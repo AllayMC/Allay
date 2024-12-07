@@ -33,7 +33,7 @@ public enum BitArrayVersion {
     }
 
     public static BitArrayVersion get(int version, boolean read) {
-        for (BitArrayVersion ver : values()) {
+        for (BitArrayVersion ver : VALUES) {
             if ((!read && ver.entriesPerWord <= version) || (read && ver.bits == version)) {
                 return ver;
             }
@@ -52,11 +52,6 @@ public enum BitArrayVersion {
         return null;
     }
 
-    public int getWordsForSize(int size) {
-        Preconditions.checkArgument(this != V0);
-        return GenericMath.ceil((float) size / this.entriesPerWord);
-    }
-
     public BitArray createArray(int size) {
         if (this == V0) {
             return SingletonBitArray.INSTANCE;
@@ -64,12 +59,17 @@ public enum BitArrayVersion {
         return this.createArray(size, new int[getWordsForSize(size)]);
     }
 
+    public int getWordsForSize(int size) {
+        Preconditions.checkArgument(this != V0);
+        return GenericMath.ceil((float) size / this.entriesPerWord);
+    }
+
     public BitArray createArray(int size, int[] words) {
-        if (this == V3 || this == V5 || this == V6) {
+        if (this == V0) {
+            return SingletonBitArray.INSTANCE;
+        } else if (this == V3 || this == V5 || this == V6) {
             // Padded palettes aren't able to use bitwise operations due to their padding.
             return new PaddedBitArray(this, size, words);
-        } else if (this == V0) {
-            return SingletonBitArray.INSTANCE;
         } else {
             return new Pow2BitArray(this, size, words);
         }

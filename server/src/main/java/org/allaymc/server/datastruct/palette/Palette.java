@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * TODO: add tests
- *
  * @author JukeboxMC | daoge_cmd | CoolLoong
  */
 @Slf4j
@@ -69,7 +67,7 @@ public final class Palette<V> {
     }
 
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
-        var version = isEmpty() ? BitArrayVersion.V0 : this.bitArray.version();
+        var version = oneEntryOnly() ? BitArrayVersion.V0 : this.bitArray.version();
         byteBuf.writeByte(Palette.getPaletteHeader(version, false));
 
         if (version != BitArrayVersion.V0) {
@@ -118,12 +116,12 @@ public final class Palette<V> {
 
     public void writeToStorageRuntime(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer, Palette<V> last) {
         // FIXME: copy last flag
-//        if (last != null && last.palette.equals(this.palette)) {
+//        if (last != null && last.equals(this)) {
 //            byteBuf.writeByte(COPY_LAST_FLAG_HEADER);
 //            return;
 //        }
 
-        var version = this.isEmpty() ? BitArrayVersion.V0 : this.bitArray.version();
+        var version = this.oneEntryOnly() ? BitArrayVersion.V0 : this.bitArray.version();
         byteBuf.writeByte(Palette.getPaletteHeader(version, true));
         if (version != BitArrayVersion.V0) {
             for (int word : this.bitArray.words()) {
@@ -167,13 +165,18 @@ public final class Palette<V> {
         }
     }
 
-    public boolean isEmpty() {
+    public boolean oneEntryOnly() {
         if (this.palette.size() == 1) {
             return true;
         }
-        // Do not use stream, this will be quicker
+        // The palette list may contain more than one entry,
+        // but the words are all point to the first entry.
+        // In this case, the palette is still one entry only.
         for (int word : this.bitArray.words()) {
+            // Do not use stream, this will be quicker
             if (Integer.toUnsignedLong(word) != 0L) {
+                // The word is not point to the first entry,
+                // so this palette shouldn't be empty
                 return false;
             }
         }
@@ -217,6 +220,8 @@ public final class Palette<V> {
             var next = version.next;
             if (next != null) {
                 this.onResize(next);
+            } else {
+                throw new PaletteException("Palette have reached the max bit array version");
             }
         }
 
