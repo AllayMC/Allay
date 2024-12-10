@@ -378,44 +378,42 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         ChunkSection[] sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
         var minSectionY = dimensionInfo.minSectionY();
         for (int ySection = minSectionY; ySection <= dimensionInfo.maxSectionY(); ySection++) {
-            byte[] bytes = db.get(LevelDBKey.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection, dimensionInfo));
-            if (bytes == null) continue;
-            ByteBuf byteBuf = ByteBufAllocator.DEFAULT.ioBuffer(bytes.length);
-            try {
-                byteBuf.writeBytes(bytes);
-                byte subChunkVersion = byteBuf.readByte();
-                int layers = ChunkSection.LAYER_COUNT;
-                switch (subChunkVersion) {
-                    case 9, 8:
-                        // Layers
-                        layers = byteBuf.readByte();
-                        if (subChunkVersion == 9) {
-                            // Extra section y value in version 9
-                            byteBuf.readByte();
-                        }
-                    case 1:
-                        ChunkSection section;
-                        if (layers <= ChunkSection.LAYER_COUNT) {
-                            // This is the normal situation where the chunk section is loaded correctly,
-                            // and we use the single-arg constructor of ChunkSection directly to avoid
-                            // using Arrays.fill(), which will be slower
-                            section = new ChunkSection((byte) ySection);
-                        } else {
-                            // Currently only two layers are used in minecraft, so that might mean this chunk is corrupted
-                            // However we can still load it c:
-                            log.warn("Loading chunk section ({}, {}, {}) with {} layers, which might mean that this chunk is corrupted!", builder.getChunkX(), ySection, builder.getChunkZ(), layers);
-                            @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
-                            Arrays.fill(palettes, new Palette<>(BlockTypes.AIR.getDefaultState()));
-                            section = new ChunkSection((byte) ySection, palettes);
-                        }
-                        for (int layer = 0; layer < layers; layer++) {
-                            section.blockLayers()[layer].readFromStoragePersistent(byteBuf, AllayLevelDBWorldStorage::fastBlockStateDeserializer);
-                        }
-                        sections[ySection - minSectionY] = section;
-                        break;
-                }
-            } finally {
-                byteBuf.release();
+            byte[] sectionData = db.get(LevelDBKey.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection, dimensionInfo));
+            if (sectionData == null) {
+                continue;
+            }
+
+            var byteBuf = Unpooled.wrappedBuffer(sectionData);
+            byte subChunkVersion = byteBuf.readByte();
+            int layers = ChunkSection.LAYER_COUNT;
+            switch (subChunkVersion) {
+                case 9, 8:
+                    // Layers
+                    layers = byteBuf.readByte();
+                    if (subChunkVersion == 9) {
+                        // Extra section y value in version 9
+                        byteBuf.readByte();
+                    }
+                case 1:
+                    ChunkSection section;
+                    if (layers <= ChunkSection.LAYER_COUNT) {
+                        // This is the normal situation where the chunk section is loaded correctly,
+                        // and we use the single-arg constructor of ChunkSection directly to avoid
+                        // using Arrays.fill(), which will be slower
+                        section = new ChunkSection((byte) ySection);
+                    } else {
+                        // Currently only two layers are used in minecraft, so that might mean this chunk is corrupted
+                        // However we can still load it c:
+                        log.warn("Loading chunk section ({}, {}, {}) with {} layers, which might mean that this chunk is corrupted!", builder.getChunkX(), ySection, builder.getChunkZ(), layers);
+                        @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
+                        Arrays.fill(palettes, new Palette<>(BlockTypes.AIR.getDefaultState()));
+                        section = new ChunkSection((byte) ySection, palettes);
+                    }
+                    for (int layer = 0; layer < layers; layer++) {
+                        section.blockLayers()[layer].readFromStoragePersistent(byteBuf, AllayLevelDBWorldStorage::fastBlockStateDeserializer);
+                    }
+                    sections[ySection - minSectionY] = section;
+                    break;
             }
         }
         builder.sections(fillNullSections(sections, dimensionInfo));
