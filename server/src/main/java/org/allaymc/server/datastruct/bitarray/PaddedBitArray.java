@@ -26,14 +26,14 @@ public record PaddedBitArray(BitArrayVersion version, int size, int[] words) imp
     public void set(int index, int value) {
         var arrayIndex = index / this.version.entriesPerWord;
         var offset = (index % this.version.entriesPerWord) * this.version.bits;
-        this.words[arrayIndex] = this.words[arrayIndex] & ~(this.version.maxEntryValue << offset) | (value & this.version.maxEntryValue) << offset;
+        this.words[arrayIndex] = this.words[arrayIndex] & ~(this.version.maxEntryIndex << offset) | (value & this.version.maxEntryIndex) << offset;
     }
 
     @Override
     public int get(int index) {
         var arrayIndex = index / this.version.entriesPerWord;
         var offset = (index % this.version.entriesPerWord) * this.version.bits;
-        return (this.words[arrayIndex] >>> offset) & this.version.maxEntryValue;
+        return (this.words[arrayIndex] >>> offset) & this.version.maxEntryIndex;
     }
 
     @Override

@@ -22,17 +22,18 @@ import java.util.List;
 public final class Palette<V> {
 
     private static final byte COPY_LAST_FLAG_HEADER = (byte) (0x7F << 1) | 1;
+    private static final BitArrayVersion INITIAL_VERSION = BitArrayVersion.V2;
 
     private final List<V> palette;
     private BitArray bitArray;
 
     public Palette(V first) {
         // TODO(memory): using v2 by default will waste a lot of memory when the palette is empty
-        this(first, BitArrayVersion.V2);
+        this(first, INITIAL_VERSION);
     }
 
     public Palette(V first, BitArrayVersion version) {
-        this(first, new ReferenceArrayList<>(16), version);
+        this(first, new ReferenceArrayList<>(version.maxEntryIndex + 1), version);
     }
 
     public Palette(V first, List<V> palette, BitArrayVersion version) {
@@ -189,6 +190,10 @@ public final class Palette<V> {
         palette.palette.addAll(this.palette);
     }
 
+    public BitArrayVersion getVersion() {
+        return bitArray.version();
+    }
+
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
         var wordCount = version.getWordsForSize(Chunk.SECTION_SIZE);
         var words = new int[wordCount];
@@ -216,7 +221,7 @@ public final class Palette<V> {
         this.palette.add(value);
 
         var version = this.bitArray.version();
-        if (index > version.maxEntryValue) {
+        if (index > version.maxEntryIndex) {
             var next = version.next;
             if (next != null) {
                 this.onResize(next);
@@ -232,8 +237,8 @@ public final class Palette<V> {
         return (header >> 1) == 0x7F;
     }
 
-    private static int getPaletteHeader(BitArrayVersion version, boolean runtime) {
-        return (version.bits << 1) | (runtime ? 1 : 0);
+    private static short getPaletteHeader(BitArrayVersion version, boolean runtime) {
+        return (short) ((version.bits << 1) | (runtime ? 1 : 0));
     }
 
     private static BitArrayVersion getVersionFromPaletteHeader(short header) {
@@ -241,8 +246,8 @@ public final class Palette<V> {
     }
 
     private static void checkVersion(BitArrayVersion version, int paletteSize) {
-        if (version.maxEntryValue < paletteSize - 1) {
-            throw new PaletteException("Palette (version " + version.name() + ") is too large. Max size " + version.maxEntryValue + ". Actual size " + paletteSize);
+        if (version.maxEntryIndex < paletteSize - 1) {
+            throw new PaletteException("Palette (version " + version.name() + ") is too large. Max size " + version.maxEntryIndex + ". Actual size " + paletteSize);
         }
     }
 

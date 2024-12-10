@@ -26,14 +26,14 @@ public record Pow2BitArray(BitArrayVersion version, int size, int[] words) imple
         var bitIndex = index * this.version.bits;
         var arrayIndex = bitIndex >> 5;
         var offset = bitIndex & 31;
-        this.words[arrayIndex] = this.words[arrayIndex] & ~(this.version.maxEntryValue << offset) | (value & this.version.maxEntryValue) << offset;
+        this.words[arrayIndex] = this.words[arrayIndex] & ~(this.version.maxEntryIndex << offset) | (value & this.version.maxEntryIndex) << offset;
     }
 
     public int get(int index) {
         var bitIndex = index * this.version.bits;
         var arrayIndex = bitIndex >> 5;
         var wordOffset = bitIndex & 31;
-        return this.words[arrayIndex] >>> wordOffset & this.version.maxEntryValue;
+        return this.words[arrayIndex] >>> wordOffset & this.version.maxEntryIndex;
     }
 
     @Override

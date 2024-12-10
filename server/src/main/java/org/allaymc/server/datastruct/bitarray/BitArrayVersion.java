@@ -22,13 +22,13 @@ public enum BitArrayVersion {
 
     public final byte bits;
     public final byte entriesPerWord;
-    public final int maxEntryValue;
+    public final int maxEntryIndex;
     public final BitArrayVersion next;
 
     BitArrayVersion(int bits, int entriesPerWord, BitArrayVersion next) {
         this.bits = (byte) bits;
         this.entriesPerWord = (byte) entriesPerWord;
-        this.maxEntryValue = (1 << this.bits) - 1;
+        this.maxEntryIndex = (1 << this.bits) - 1;
         this.next = next;
     }
 
