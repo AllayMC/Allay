@@ -384,7 +384,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             try {
                 byteBuf.writeBytes(bytes);
                 byte subChunkVersion = byteBuf.readByte();
-                int layers = 2;
+                int layers = ChunkSection.LAYER_COUNT;
                 switch (subChunkVersion) {
                     case 9, 8:
                         // Layers
