@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author daoge_cmd
@@ -33,6 +34,19 @@ class PaletteTest {
         palette.set(2, e2);
         assertEquals(BitArrayVersion.V2, palette.getVersion());
         assertEquals(e2, palette.get(2));
+    }
+
+    @Test
+    void testOneEntryOnly() {
+        var e0 = new Entry(0);
+        var e1 = new Entry(1);
+        var palette = new Palette<>(e0, BitArrayVersion.V0);
+        palette.set(1, e1);
+        palette.set(1, e0);
+        // Bit array version won't downgrade
+        assertEquals(BitArrayVersion.V1, palette.getVersion());
+        // But the palette should be one entry only
+        assertTrue(palette.oneEntryOnly());
     }
 
     @Test
