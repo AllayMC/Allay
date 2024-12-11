@@ -1,6 +1,7 @@
 package org.allaymc.server.datastruct.bitarray;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import org.cloudburstmc.math.GenericMath;
 
 import java.util.Arrays;
@@ -23,6 +24,11 @@ public record Pow2BitArray(BitArrayVersion version, int size, int[] words) imple
     }
 
     public void set(int index, int value) {
+        Preconditions.checkElementIndex(index, this.size);
+        if (value < 0 || value > this.version.maxEntryIndex) {
+            throw new IllegalArgumentException(String.format("Max value: %s. Received value %s", this.version.maxEntryIndex, value));
+        }
+
         var bitIndex = index * this.version.bits;
         var arrayIndex = bitIndex >> 5;
         var offset = bitIndex & 31;
@@ -30,6 +36,7 @@ public record Pow2BitArray(BitArrayVersion version, int size, int[] words) imple
     }
 
     public int get(int index) {
+        Preconditions.checkElementIndex(index, this.size);
         var bitIndex = index * this.version.bits;
         var arrayIndex = bitIndex >> 5;
         var wordOffset = bitIndex & 31;

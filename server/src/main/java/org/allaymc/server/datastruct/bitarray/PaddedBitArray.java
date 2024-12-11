@@ -1,6 +1,7 @@
 package org.allaymc.server.datastruct.bitarray;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Preconditions;
 import org.cloudburstmc.math.GenericMath;
 
 import java.util.Arrays;
@@ -24,6 +25,11 @@ public record PaddedBitArray(BitArrayVersion version, int size, int[] words) imp
 
     @Override
     public void set(int index, int value) {
+        Preconditions.checkElementIndex(index, this.size);
+        if (value < 0 || value > this.version.maxEntryIndex) {
+            throw new IllegalArgumentException(String.format("Max value: %s. Received value %s", this.version.maxEntryIndex, value));
+        }
+
         var arrayIndex = index / this.version.entriesPerWord;
         var offset = (index % this.version.entriesPerWord) * this.version.bits;
         this.words[arrayIndex] = this.words[arrayIndex] & ~(this.version.maxEntryIndex << offset) | (value & this.version.maxEntryIndex) << offset;
@@ -31,6 +37,7 @@ public record PaddedBitArray(BitArrayVersion version, int size, int[] words) imp
 
     @Override
     public int get(int index) {
+        Preconditions.checkElementIndex(index, this.size);
         var arrayIndex = index / this.version.entriesPerWord;
         var offset = (index % this.version.entriesPerWord) * this.version.bits;
         return (this.words[arrayIndex] >>> offset) & this.version.maxEntryIndex;
