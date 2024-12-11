@@ -112,10 +112,11 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
                 if (!PackUtils.isZipPack(zipPack)) continue;
 
                 var keyPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".key");
-                if (Files.exists(keyPath)) continue;
+                boolean isKeyPathExists = Files.exists(keyPath);
+                var backupPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".bak");
+                if (isKeyPathExists && Files.exists(backupPath)) continue;
 
                 log.info(I18n.get().tr(TrKeys.A_PACK_ENCRYPTING, zipPack.getFileName()));
-                var backupPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".bak");
                 Files.copy(zipPack, backupPath, StandardCopyOption.REPLACE_EXISTING);
 
                 var tmpPath = PACKS_PATH.resolve(zipPack.getFileName().toString() + ".tmp");
@@ -124,12 +125,19 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
                 String key;
                 try {
                     Files.move(zipPack, tmpPath);
-                    key = PackEncryptor.encrypt(tmpPath, zipPack);
+                    if (isKeyPathExists){
+                        key = Files.readString(keyPath);
+                        PackEncryptor.encrypt(tmpPath, zipPack, key);
+                    }else{
+                        key = PackEncryptor.encrypt(tmpPath, zipPack);
+                    }
                 } finally {
                     Files.delete(tmpPath);
                 }
 
-                Files.writeString(keyPath, key);
+                if (!isKeyPathExists){
+                    Files.writeString(keyPath, key);
+                }
                 log.info(I18n.get().tr(TrKeys.A_PACK_ENCRYPTED, zipPack.getFileName(), key));
             }
         }
