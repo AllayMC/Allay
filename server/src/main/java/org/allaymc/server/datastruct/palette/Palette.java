@@ -68,6 +68,7 @@ public final class Palette<V> {
     }
 
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
+        // TODO: we can compact the palette before write it
         var version = oneEntryOnly() ? BitArrayVersion.V0 : this.bitArray.version();
         byteBuf.writeByte(Palette.getPaletteHeader(version, false));
 
@@ -122,6 +123,7 @@ public final class Palette<V> {
 //            return;
 //        }
 
+        // TODO: we can compact the palette before write it
         var version = this.oneEntryOnly() ? BitArrayVersion.V0 : this.bitArray.version();
         byteBuf.writeByte(Palette.getPaletteHeader(version, true));
         if (version != BitArrayVersion.V0) {
