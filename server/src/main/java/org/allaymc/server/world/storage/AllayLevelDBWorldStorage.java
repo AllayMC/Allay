@@ -63,13 +63,8 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static final String DIR_DB = "db";
 
-    private static final int STORAGE_VERSION = 10;
-
-    private static final int CHUNK_VERSION = 41;
-
-    private static final int VANILLA_CHUNK_STATE_NEEDS_INSTA_TICK = 0;
-    private static final int VANILLA_CHUNK_STATE_NEEDS_POPULATION = 1;
-    private static final int VANILLA_CHUNK_STATE_DONE = 2;
+    private static final int CURRENT_STORAGE_VERSION = StorageVersion.LEVEL_DATA_STRICT_SIZE.ordinal();
+    private static final int CURRENT_CHUNK_FORMAT_VERSION = ChunkFormatVersion.V1_21_40.ordinal();
 
     private static final String TAG_DIFFICULTY = "Difficulty";
     private static final String TAG_GAME_TYPE = "GameType";
@@ -154,7 +149,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
 
         var chunkState = this.db.get(LevelDBKey.CHUNK_FINALIZED_STATE.getKey(x, z, dimensionInfo));
-        if (chunkState != null && Unpooled.wrappedBuffer(chunkState).readByte() != VANILLA_CHUNK_STATE_DONE) {
+        if (chunkState != null && Unpooled.wrappedBuffer(chunkState).readByte() != VanillaChunkState.DONE.ordinal()) {
             // Older versions didn't have CHUNK_FINALIZED_STATE data, so we still load this chunk
             // TODO: check VANILLA_CHUNK_STATE_NEEDS_INSTA_TICK
             return builder.build().toSafeChunk();
@@ -184,11 +179,11 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             return;
         }
         try (var writeBatch = this.db.createWriteBatch()) {
-            writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{CHUNK_VERSION});
+            writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{(byte) CURRENT_CHUNK_FORMAT_VERSION});
             writeBatch.put(
                     LevelDBKey.CHUNK_FINALIZED_STATE.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
                     Unpooled.buffer(1)
-                            .writeByte(VANILLA_CHUNK_STATE_DONE)
+                            .writeByte(VanillaChunkState.DONE.ordinal())
                             .array()
             );
             chunk.batchProcess(c -> {
@@ -224,7 +219,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             }
 
             // 1.Current version
-            output.write(int2ByteArrayLE(STORAGE_VERSION));
+            output.write(int2ByteArrayLE(CURRENT_STORAGE_VERSION));
 
             var byteArrayOutputStream = new ByteArrayOutputStream();
             var nbtOutputStream = NbtUtils.createWriterLE(byteArrayOutputStream);
@@ -279,9 +274,9 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         var storageVersion = nbt.getInt(TAG_STORAGE_VERSION, Integer.MAX_VALUE);
         if (storageVersion == Integer.MAX_VALUE) {
             log.warn("Missing " + TAG_STORAGE_VERSION + " field in " + FILE_LEVEL_DAT);
-            storageVersion = STORAGE_VERSION;
+            storageVersion = CURRENT_STORAGE_VERSION;
         }
-        if (storageVersion > STORAGE_VERSION) {
+        if (storageVersion > CURRENT_STORAGE_VERSION) {
             throw new WorldStorageException("LevelDB world storage version " + storageVersion + " is currently unsupported");
         }
 
@@ -330,7 +325,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         builder.putInt(TAG_GENERATOR, 5);
         builder.putLong(TAG_RANDOM_SEED, 0);
         // The client will crash if this field is not exist
-        builder.putInt(TAG_STORAGE_VERSION, STORAGE_VERSION);
+        builder.putInt(TAG_STORAGE_VERSION, CURRENT_STORAGE_VERSION);
         // StorageVersion is rarely updated. Instead, the game relies on the NetworkVersion tag,
         // which is synced with the network protocol version for that version
         builder.putInt(TAG_NETWORK_VERSION, ProtocolInfo.PACKET_CODEC.getProtocolVersion());
