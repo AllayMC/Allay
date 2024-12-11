@@ -5,6 +5,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.datastruct.palette.Palette;
+import org.allaymc.server.world.storage.ChunkSectionVersion;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -15,13 +16,10 @@ import static org.allaymc.api.world.chunk.UnsafeChunk.index;
  * @author Cool_Loong | daoge_cmd
  */
 @NotThreadSafe
-public record ChunkSection(
-        byte sectionY,
-        Palette<BlockState>[] blockLayers,
-        Palette<BiomeType> biomes
-) {
+public record ChunkSection(byte sectionY, Palette<BlockState>[] blockLayers, Palette<BiomeType> biomes) {
+
     public static final int LAYER_COUNT = 2;
-    public static final int CHUNK_SECTION_VERSION = 9;
+    public static final int CURRENT_CHUNK_SECTION_VERSION = ChunkSectionVersion.PALETTED_MULTI_WITH_OFFSET.ordinal();
 
     @SuppressWarnings("unchecked")
     public ChunkSection(byte sectionY) {
@@ -53,7 +51,7 @@ public record ChunkSection(
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {
-        byteBuf.writeByte(CHUNK_SECTION_VERSION);
+        byteBuf.writeByte(CURRENT_CHUNK_SECTION_VERSION);
         // Block layer count
         byteBuf.writeByte(LAYER_COUNT);
         // Extra byte since version 9

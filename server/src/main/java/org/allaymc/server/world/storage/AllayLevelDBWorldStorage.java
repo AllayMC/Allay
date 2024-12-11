@@ -64,7 +64,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     private static final String DIR_DB = "db";
 
     private static final int CURRENT_STORAGE_VERSION = StorageVersion.LEVEL_DATA_STRICT_SIZE.ordinal();
-    private static final int CURRENT_CHUNK_FORMAT_VERSION = ChunkFormatVersion.V1_21_40.ordinal();
+    private static final int CURRENT_CHUNK_VERSION = ChunkVersion.V1_21_40.ordinal();
 
     private static final String TAG_DIFFICULTY = "Difficulty";
     private static final String TAG_GAME_TYPE = "GameType";
@@ -179,7 +179,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             return;
         }
         try (var writeBatch = this.db.createWriteBatch()) {
-            writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{(byte) CURRENT_CHUNK_FORMAT_VERSION});
+            writeBatch.put(LevelDBKey.VERSION.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()), new byte[]{(byte) CURRENT_CHUNK_VERSION});
             writeBatch.put(
                     LevelDBKey.CHUNK_FINALIZED_STATE.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo()),
                     Unpooled.buffer(1)
@@ -355,7 +355,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             ChunkSection section = chunk.getSection(ySection);
             ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
             try {
-                buffer.writeByte(ChunkSection.CHUNK_SECTION_VERSION);
+                buffer.writeByte(ChunkSection.CURRENT_CHUNK_SECTION_VERSION);
                 buffer.writeByte(ChunkSection.LAYER_COUNT);
                 buffer.writeByte(ySection);
                 for (int i = 0; i < ChunkSection.LAYER_COUNT; i++) {
