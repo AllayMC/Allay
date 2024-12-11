@@ -170,9 +170,14 @@ public final class Palette<V> {
         if (this.palette.size() == 1) {
             return true;
         }
+
         // The palette list may contain more than one entry,
         // but the words are all point to the first entry.
         // In this case, the palette is still one entry only.
+
+        // The reason why the bit array version is not V0 when
+        // the palette size is one is that the bit array version
+        // won't downgrade to V0 when the palette is cleared.
         for (int word : this.bitArray.words()) {
             // Do not use stream, this will be quicker
             if (Integer.toUnsignedLong(word) != 0L) {
@@ -181,6 +186,7 @@ public final class Palette<V> {
                 return false;
             }
         }
+
         return true;
     }
 

@@ -208,10 +208,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     @Override
     public void writeWorldData(WorldData worldData) {
-        if (!(worldData instanceof AllayWorldData allayWorldData)) {
-            log.error("");
-            return;
-        }
+        var allayWorldData = (AllayWorldData) worldData;
         var levelDat = path.resolve(FILE_LEVEL_DAT).toFile();
         try (var output = new FileOutputStream(levelDat)) {
             if (levelDat.exists()) {

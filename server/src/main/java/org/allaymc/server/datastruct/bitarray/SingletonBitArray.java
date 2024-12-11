@@ -1,14 +1,18 @@
 package org.allaymc.server.datastruct.bitarray;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * @author JukeboxMC | daoge_cmd
  */
+@Slf4j
 public record SingletonBitArray() implements BitArray {
     public static SingletonBitArray INSTANCE = new SingletonBitArray();
     private static final int[] EMPTY_ARRAY = new int[0];
 
     @Override
     public void set(int index, int value) {
+        log.error("Attempted to set value in singleton bit array");
         throw new UnsupportedOperationException();
     }
 
