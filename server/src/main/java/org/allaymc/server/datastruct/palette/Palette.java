@@ -218,8 +218,10 @@ public final class Palette<V> {
 
     public void trim() {
         var newPalette = new ReferenceArrayList<V>();
+        // Make sure the first entry won't be changed
+        newPalette.add(palette.getFirst());
         var indexMapping = new int[Chunk.SECTION_SIZE];
-        var paletteIndex = 0;
+        var paletteIndex = 1;
 
         for (int index = 0; index < Chunk.SECTION_SIZE; index++) {
             var entry = get(index);
