@@ -15,7 +15,13 @@ public interface BlockTags {
 
     BlockTag MOB_SPAWNER = create("minecraft:mob_spawner");
 
+    BlockTag DIAMOND_TIER_DESTRUCTIBLE = create("minecraft:diamond_tier_destructible");
+
+    BlockTag IS_SHEARS_ITEM_DESTRUCTIBLE = create("minecraft:is_shears_item_destructible");
+
     BlockTag DIRT = create("minecraft:dirt");
+
+    BlockTag IRON_TIER_DESTRUCTIBLE = create("minecraft:iron_tier_destructible");
 
     BlockTag DIAMOND_PICK_DIGGABLE = create("minecraft:diamond_pick_diggable");
 
@@ -37,9 +43,13 @@ public interface BlockTags {
 
     BlockTag LOG = create("minecraft:log");
 
+    BlockTag IS_SWORD_ITEM_DESTRUCTIBLE = create("minecraft:is_sword_item_destructible");
+
     BlockTag WOOD = create("minecraft:wood");
 
     BlockTag TEXT_SIGN = create("minecraft:text_sign");
+
+    BlockTag IS_AXE_ITEM_DESTRUCTIBLE = create("minecraft:is_axe_item_destructible");
 
     BlockTag PLANT = create("minecraft:plant");
 
@@ -51,9 +61,13 @@ public interface BlockTags {
 
     BlockTag OAK = create("minecraft:oak");
 
+    BlockTag IS_SHOVEL_ITEM_DESTRUCTIBLE = create("minecraft:is_shovel_item_destructible");
+
     BlockTag STONE = create("minecraft:stone");
 
     BlockTag SAND = create("minecraft:sand");
+
+    BlockTag STONE_TIER_DESTRUCTIBLE = create("minecraft:stone_tier_destructible");
 
     BlockTag SNOW = create("minecraft:snow");
 
@@ -61,11 +75,15 @@ public interface BlockTags {
 
     BlockTag REPLACEABLE = create("minecraft:replaceable");
 
+    BlockTag IS_PICKAXE_ITEM_DESTRUCTIBLE = create("minecraft:is_pickaxe_item_destructible");
+
     BlockTag NOT_FEATURE_REPLACEABLE = create("minecraft:not_feature_replaceable");
 
     BlockTag TRAPDOORS = create("minecraft:trapdoors");
 
     BlockTag STONE_PICK_DIGGABLE = create("minecraft:stone_pick_diggable");
+
+    BlockTag IS_HOE_ITEM_DESTRUCTIBLE = create("minecraft:is_hoe_item_destructible");
 
     BlockTag RAIL = create("minecraft:rail");
 

@@ -92,7 +92,7 @@ This file usually doesn't change much in minor updates.
   which block properties have changed.
   **Adapting block properties is not just about modifying the parameters of `setProperties()`, you also need to adapt
   the block's code logic**, which is crucial!
-- If there is a batch of similar blocks, you need to register new sub-packages in the `registerSubPackages()` method
+- If there is a batch of similar blocks, you need to register new merged block in the `registerMergedBlocks()` method
   of `BlockClassGen` to avoid overcrowding the block class group.
 
 **Run `ItemClassGen`**. Similar to blocks, this step also requires a certain amount of manual operation, but the
@@ -103,7 +103,7 @@ workload is less than before:
 - Even if there are no additions or deletions of items, the logic of implemented items may change in the original
   version. To respect the original version, Allay needs to synchronize changes. However, if we are only discussing
   protocol updates, this can be deferred.
-- If there is a batch of similar items, you need to register new sub-packages in the `registerSubPackages()` method
+- If there is a batch of similar items, you need to register new merged item in the `registerMergedItems()` method
   of `ItemClassGen` to avoid overcrowding the item class group.
 
 ## Update Dependencies

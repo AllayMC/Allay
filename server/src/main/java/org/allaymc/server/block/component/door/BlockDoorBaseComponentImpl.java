@@ -64,7 +64,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (placementInfo != null) {
             face = placementInfo.player().getHorizontalFace();
         }
-        blockState = blockState.setProperty(DIRECTION, DOOR_DIRECTION.get(face));
+        blockState = blockState.setProperty(DIRECTION_4, DOOR_DIRECTION.get(face));
 
         var leftBlock = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos)).getBlockType();
         var rightBlock = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos)).getBlockType();
