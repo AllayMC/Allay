@@ -43,7 +43,7 @@ Although these files will not be included in the final jar, they will be used du
 - `item_tags.json`
 - `block_palette.nbt`
 - `block_property_types.json`: run `BlockPropertyTypeGen` under `data` after updating `block_palette.nbt`
-- `biome_id_and_type.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
+- `biome_id_and_type.json`: update it manually as biomes are not updated frequently
 - `entity_id_map.json`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `music_definitions.json`: obtained
   from [mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/sounds/music_definitions.json)
