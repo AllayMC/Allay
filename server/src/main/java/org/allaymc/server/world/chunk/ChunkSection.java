@@ -47,7 +47,7 @@ public record ChunkSection(byte sectionY, Palette<BlockState>[] blockLayers, Pal
     }
 
     public boolean isAirSection() {
-        return blockLayers[0].oneEntryOnly() && blockLayers[0].get(0) == AIR.getDefaultState();
+        return blockLayers[0].oneEntryOnly();
     }
 
     public void writeToNetwork(ByteBuf byteBuf) {

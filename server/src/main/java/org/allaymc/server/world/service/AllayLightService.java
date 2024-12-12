@@ -1,5 +1,6 @@
 package org.allaymc.server.world.service;
 
+import com.google.common.base.Preconditions;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -18,6 +19,7 @@ import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.HeightMap;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
+import org.jetbrains.annotations.Range;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -111,7 +113,7 @@ public class AllayLightService implements LightService {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     var blockStateData = section.getBlockState(x, y & 0xf, z, 0).getBlockStateData();
-                    var lightEmission = blockStateData.lightEmission();
+                    byte lightEmission = (byte) blockStateData.lightEmission();
                     final int finalX = (chunk.getX() << 4) + x;
                     final int finalY = y;
                     final int finalZ = (chunk.getZ() << 4) + z;
@@ -152,13 +154,13 @@ public class AllayLightService implements LightService {
                     final var finalX = (cx << 4) + ox != 0 ? 15 : i;
                     final var finalY = y;
                     final var finalZ = (cz << 4) + oz != 0 ? 15 : i;
-                    var blockLight = getBlockLight(finalX, finalY, finalZ);
+                    byte blockLight = (byte) getBlockLight(finalX, finalY, finalZ);
                     if (blockLight != 0) {
                         queue.offer(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, blockLight, blockLight));
                     }
                     if (!hasSkyLight) continue;
 
-                    var skyLightValue = get(skyLight, finalX, finalY, finalZ, 0);
+                    byte skyLightValue = (byte) get(skyLight, finalX, finalY, finalZ, 0);
                     if (skyLightValue != 0) {
                         queue.offer(() -> skyLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, skyLightValue, skyLightValue));
                     }
@@ -219,8 +221,12 @@ public class AllayLightService implements LightService {
         return hasSkyLight ? Math.max(0, getSkyLight(x, y, z) - calculateSkylightReduction(timeSupplier.get(), weatherSupplier.get())) : 0;
     }
 
-    public void onBlockChange(int x, int y, int z, int lightEmission, int lightDampening) {
+    public void onBlockChange(int x, int y, int z, int le, int ld) {
+        // Reduce memory usage by packing light data into a single byte
+        var packedLightData = packLightData(le, ld);
         queue.offer(() -> {
+            var lightEmission = unpackLightEmission(packedLightData);
+            var lightDampening = unpackLightDampening(packedLightData);
             int oldLightHeight = hasSkyLight ? getLightHeight(x, z) : 0;
             var oldBlockDampening = getLightDampening(x, y, z);
             if (oldBlockDampening != lightDampening) {
@@ -342,6 +348,20 @@ public class AllayLightService implements LightService {
     protected static long lfloor(double value) {
         long l = (long) value;
         return value < (double) l ? l - 1L : l;
+    }
+
+    protected static byte packLightData(@Range(from = 0, to = 16) int lightEmission, @Range(from = 0, to = 16) int lightDampening) {
+        Preconditions.checkArgument(lightEmission < 16, "lightEmission must be less than 16");
+        Preconditions.checkArgument(lightDampening < 16, "lightDampening must be less than 16");
+        return (byte) (lightEmission | (lightDampening << 4));
+    }
+
+    protected static byte unpackLightEmission(byte data) {
+        return (byte) (data & 0x0F);
+    }
+
+    protected static byte unpackLightDampening(byte data) {
+        return (byte) ((data >> 4) & 0x0F);
     }
 
     protected class BlockLightAccessor implements LightAccessor {

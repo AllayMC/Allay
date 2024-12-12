@@ -38,6 +38,7 @@ public final class Palette<V> {
     public Palette(V first, List<V> palette, BitArrayVersion version) {
         this.bitArray = version.createArray(Chunk.SECTION_SIZE);
         this.palette = palette;
+        // Please note that the first entry shouldn't be changed
         this.palette.add(first);
     }
 

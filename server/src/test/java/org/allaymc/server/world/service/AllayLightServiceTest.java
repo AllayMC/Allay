@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * @author daoge_cmd
@@ -134,5 +135,22 @@ class AllayLightServiceTest {
         assertEquals(10, AllayLightService.calculateSkylightReduction(22671, Set.of(Weather.RAIN, Weather.THUNDER)));
         assertEquals(10, AllayLightService.calculateSkylightReduction(13330, Set.of(Weather.RAIN, Weather.THUNDER)));
         assertEquals(10, AllayLightService.calculateSkylightReduction(13669, Set.of(Weather.RAIN, Weather.THUNDER)));
+    }
+
+    @Test
+    void testLightDataPacking() {
+        for (int a = 0; a < 16; a++) {
+            for (int b = 0; b < 16; b++) {
+                testLightDataPacking(a, b);
+            }
+        }
+        assertThrows(IllegalArgumentException.class, () -> AllayLightService.packLightData(16, 0));
+        assertThrows(IllegalArgumentException.class, () -> AllayLightService.packLightData(0, 16));
+    }
+
+    void testLightDataPacking(int a, int b) {
+        var data = AllayLightService.packLightData(a, b);
+        assertEquals(a, AllayLightService.unpackLightEmission(data));
+        assertEquals(b, AllayLightService.unpackLightDampening(data));
     }
 }
