@@ -118,7 +118,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         if (maxLoginTime > 0) {
             Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
                 if (packetProcessorHolder.getClientStatus().ordinal() < ClientStatus.IN_GAME.ordinal()) {
-                    log.warn("Player {} didn't log in within {} seconds, disconnecting...", thisPlayer.getOriginName(), Server.SETTINGS.networkSettings().maxLoginTime() / 20d);
+                    log.warn("Session {} didn't log in within {} seconds, disconnecting...", clientSession.getSocketAddress().toString(), Server.SETTINGS.networkSettings().maxLoginTime() / 20d);
                     disconnect(TrKeys.M_DISCONNECTIONSCREEN_TIMEOUT);
                 }
                 return true;
