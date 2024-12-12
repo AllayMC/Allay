@@ -22,13 +22,12 @@ import java.util.List;
 public final class Palette<V> {
 
     private static final byte COPY_LAST_FLAG_HEADER = (byte) (0x7F << 1) | 1;
-    private static final BitArrayVersion INITIAL_VERSION = BitArrayVersion.V2;
+    private static final BitArrayVersion INITIAL_VERSION = BitArrayVersion.V0;
 
-    private final List<V> palette;
+    private List<V> palette;
     private BitArray bitArray;
 
     public Palette(V first) {
-        // TODO(memory): using v2 by default will waste a lot of memory when the palette is empty
         this(first, INITIAL_VERSION);
     }
 
@@ -56,33 +55,46 @@ public final class Palette<V> {
     }
 
     public void writeToNetwork(ByteBuf byteBuf, RuntimeDataSerializer<V> serializer) {
-        byteBuf.writeByte(getPaletteHeader(this.bitArray.version(), true));
-        if (bitArray.version() != BitArrayVersion.V0) {
-            for (int word : this.bitArray.words()) {
-                byteBuf.writeIntLE(word);
-            }
-            VarInts.writeInt(byteBuf, this.palette.size());
+        if (bitArray.version() == BitArrayVersion.V0) {
+            byteBuf.writeByte(getPaletteHeader(BitArrayVersion.V0, true));
+            VarInts.writeInt(byteBuf, serializer.serialize(palette.getFirst()));
+            return;
         }
+
+        byteBuf.writeByte(getPaletteHeader(this.bitArray.version(), true));
+
+        for (int word : this.bitArray.words()) {
+            byteBuf.writeIntLE(word);
+        }
+        VarInts.writeInt(byteBuf, this.palette.size());
 
         this.palette.forEach(value -> VarInts.writeInt(byteBuf, serializer.serialize(value)));
     }
 
+    // TODO: Maybe we can convert and cache the byte array of every block state tag, which will make chunk saving faster
     public void writeToStoragePersistent(ByteBuf byteBuf, PersistentDataSerializer<V> serializer) {
-        // TODO: we can compact the palette before write it
-        var version = oneEntryOnly() ? BitArrayVersion.V0 : this.bitArray.version();
-        byteBuf.writeByte(Palette.getPaletteHeader(version, false));
+        trim();
 
-        if (version != BitArrayVersion.V0) {
-            for (int word : this.bitArray.words()) {
-                byteBuf.writeIntLE(word);
+        if (oneEntryOnly()) {
+            byteBuf.writeByte(Palette.getPaletteHeader(BitArrayVersion.V0, false));
+            try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
+                outputStream.writeTag(serializer.serialize(palette.getFirst()));
+            } catch (IOException e) {
+                throw new PaletteException(e);
             }
-            byteBuf.writeIntLE(this.palette.size());
+            return;
         }
 
-        try (var bufOutputStream = new ByteBufOutputStream(byteBuf);
-             var outputStream = NbtUtils.createWriterLE(bufOutputStream)) {
+        var version = this.bitArray.version();
+        byteBuf.writeByte(Palette.getPaletteHeader(version, false));
+
+        for (int word : this.bitArray.words()) {
+            byteBuf.writeIntLE(word);
+        }
+        byteBuf.writeIntLE(this.palette.size());
+
+        try (var outputStream = NbtUtils.createWriterLE(new ByteBufOutputStream(byteBuf))) {
             for (V value : this.palette) {
-                // TODO: Maybe we can convert and cache the byte array of every block state tag, which will make chunk saving faster
                 outputStream.writeTag(serializer.serialize(value));
             }
         } catch (IOException e) {
@@ -98,21 +110,19 @@ public final class Palette<V> {
 
         var version = getVersionFromPaletteHeader(header);
         this.palette.clear();
-        int paletteSize = 1;
 
         if (version == BitArrayVersion.V0) {
             this.bitArray = version.createArray(Chunk.SECTION_SIZE, null);
-        } else {
-            readWords(byteBuf, version);
-            paletteSize = byteBuf.readIntLE();
+            this.palette.add(deserializer.deserialize(byteBuf));
+            return;
         }
+
+        readWords(byteBuf, version);
+        int paletteSize = byteBuf.readIntLE();
         checkVersion(version, paletteSize);
 
         for (int i = 0; i < paletteSize; i++) {
             this.palette.add(deserializer.deserialize(byteBuf));
-        }
-        if (version == BitArrayVersion.V0) {
-            this.onResize(BitArrayVersion.V2);
         }
     }
 
@@ -122,16 +132,21 @@ public final class Palette<V> {
 //            byteBuf.writeByte(COPY_LAST_FLAG_HEADER);
 //            return;
 //        }
+        trim();
 
-        // TODO: we can compact the palette before write it
-        var version = this.oneEntryOnly() ? BitArrayVersion.V0 : this.bitArray.version();
-        byteBuf.writeByte(Palette.getPaletteHeader(version, true));
-        if (version != BitArrayVersion.V0) {
-            for (int word : this.bitArray.words()) {
-                byteBuf.writeIntLE(word);
-            }
-            byteBuf.writeIntLE(this.palette.size());
+        if (this.oneEntryOnly()) {
+            byteBuf.writeByte(Palette.getPaletteHeader(BitArrayVersion.V0, true));
+            byteBuf.writeIntLE(serializer.serialize(this.palette.getFirst()));
+            return;
         }
+
+        var version = this.bitArray.version();
+        byteBuf.writeByte(Palette.getPaletteHeader(version, true));
+
+        for (int word : this.bitArray.words()) {
+            byteBuf.writeIntLE(word);
+        }
+        byteBuf.writeIntLE(this.palette.size());
 
         for (V value : this.palette) {
             byteBuf.writeIntLE(serializer.serialize(value));
@@ -154,17 +169,16 @@ public final class Palette<V> {
 
         if (version == BitArrayVersion.V0) {
             this.bitArray = version.createArray(Chunk.SECTION_SIZE, null);
-        } else {
-            readWords(byteBuf, version);
-            paletteSize = byteBuf.readIntLE();
+            this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
+            return;
         }
+
+        readWords(byteBuf, version);
+        paletteSize = byteBuf.readIntLE();
         checkVersion(version, paletteSize);
 
         for (int i = 0; i < paletteSize; i++) {
             this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
-        }
-        if (version == BitArrayVersion.V0) {
-            this.onResize(BitArrayVersion.V2);
         }
     }
 
@@ -200,6 +214,30 @@ public final class Palette<V> {
 
     public BitArrayVersion getVersion() {
         return bitArray.version();
+    }
+
+    public void trim() {
+        var newPalette = new ReferenceArrayList<V>();
+        var indexMapping = new int[Chunk.SECTION_SIZE];
+        var paletteIndex = 0;
+
+        for (int index = 0; index < Chunk.SECTION_SIZE; index++) {
+            var entry = get(index);
+            var newIndex = newPalette.indexOf(entry);
+            if (newIndex == -1) {
+                newIndex = paletteIndex++;
+                newPalette.add(entry);
+            }
+            indexMapping[index] = newIndex;
+        }
+
+        var newbitArray = BitArrayVersion.getMinimalVersion(paletteIndex).createArray(Chunk.SECTION_SIZE);
+        for (int index = 0; index < Chunk.SECTION_SIZE; index++) {
+            newbitArray.set(index, indexMapping[index]);
+        }
+
+        this.palette = newPalette;
+        this.bitArray = newbitArray;
     }
 
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {

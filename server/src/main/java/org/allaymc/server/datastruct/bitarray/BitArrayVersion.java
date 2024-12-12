@@ -32,6 +32,14 @@ public enum BitArrayVersion {
         this.next = next;
     }
 
+    public static BitArrayVersion getMinimalVersion(int maxEntryIndex) {
+        var version = V0;
+        while (version.maxEntryIndex < maxEntryIndex) {
+            version = version.next;
+        }
+        return version;
+    }
+
     public static BitArrayVersion get(int version, boolean read) {
         for (BitArrayVersion ver : VALUES) {
             if ((!read && ver.entriesPerWord <= version) || (read && ver.bits == version)) {

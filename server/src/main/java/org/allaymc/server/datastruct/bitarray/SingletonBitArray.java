@@ -12,7 +12,13 @@ public record SingletonBitArray() implements BitArray {
 
     @Override
     public void set(int index, int value) {
-        log.error("Attempted to set value in singleton bit array");
+        if (value == 0) {
+            // Set value to zero is acceptable because
+            // the get() method will always return zero
+            return;
+        }
+
+        log.error("Attempted to set non-zero value in singleton bit array");
         throw new UnsupportedOperationException();
     }
 
