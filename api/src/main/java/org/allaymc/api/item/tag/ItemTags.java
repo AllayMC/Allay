@@ -79,6 +79,8 @@ public interface ItemTags {
 
     ItemTag LEATHER_TIER = create("minecraft:leather_tier");
 
+    ItemTag IS_SHEARS = create("minecraft:is_shears");
+
     ItemTag BOATS = create("minecraft:boats");
 
     ItemTag MANGROVE_LOGS = create("minecraft:mangrove_logs");

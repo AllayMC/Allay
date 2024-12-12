@@ -3,7 +3,7 @@ package org.allaymc.api.network;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.utils.SemVersion;
 import org.cloudburstmc.protocol.bedrock.codec.BedrockCodec;
-import org.cloudburstmc.protocol.bedrock.codec.v748.Bedrock_v748;
+import org.cloudburstmc.protocol.bedrock.codec.v766.Bedrock_v766;
 
 /**
  * @author daoge_cmd
@@ -11,9 +11,9 @@ import org.cloudburstmc.protocol.bedrock.codec.v748.Bedrock_v748;
 @UtilityClass
 public final class ProtocolInfo {
 
-    public static final BedrockCodec PACKET_CODEC = Bedrock_v748.CODEC;
+    public static final BedrockCodec PACKET_CODEC = Bedrock_v766.CODEC;
 
-    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 40, 1, 0);
+    public static final SemVersion MINECRAFT_VERSION = new SemVersion(1, 21, 50, 0, 0);
 
     /**
      * Bedrock version of the most recent backwards-incompatible change to block states.

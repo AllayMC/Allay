@@ -4,10 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.interfaces.BlockCarpetBehavior;
-import org.allaymc.api.block.interfaces.BlockColoredTorchBehavior;
-import org.allaymc.api.block.interfaces.BlockGlassBehavior;
-import org.allaymc.api.block.interfaces.BlockGlassPaneBehavior;
+import org.allaymc.api.block.interfaces.*;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -75,63 +72,23 @@ public final class BlockTypeInitializer {
     }
 
     public static void initLeaves() {
-        BlockTypes.ACACIA_LEAVES = AllayBlockType
+        BlockTypes.ACACIA_LEAVES = buildLeaves(BlockId.ACACIA_LEAVES);
+        BlockTypes.AZALEA_LEAVES = buildLeaves(BlockId.AZALEA_LEAVES);
+        BlockTypes.AZALEA_LEAVES_FLOWERED = buildLeaves(BlockId.AZALEA_LEAVES_FLOWERED);
+        BlockTypes.BIRCH_LEAVES = buildLeaves(BlockId.BIRCH_LEAVES);
+        BlockTypes.CHERRY_LEAVES = buildLeaves(BlockId.CHERRY_LEAVES);
+        BlockTypes.DARK_OAK_LEAVES = buildLeaves(BlockId.DARK_OAK_LEAVES);
+        BlockTypes.JUNGLE_LEAVES = buildLeaves(BlockId.JUNGLE_LEAVES);
+        BlockTypes.MANGROVE_LEAVES = buildLeaves(BlockId.MANGROVE_LEAVES);
+        BlockTypes.OAK_LEAVES = buildLeaves(BlockId.OAK_LEAVES);
+        BlockTypes.SPRUCE_LEAVES = buildLeaves(BlockId.SPRUCE_LEAVES);
+        BlockTypes.PALE_OAK_LEAVES = buildLeaves(BlockId.PALE_OAK_LEAVES);
+    }
+
+    private static BlockType<BlockLeavesBehavior> buildLeaves(BlockId id) {
+        return AllayBlockType
                 .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.ACACIA_LEAVES)
-                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
-                .build();
-        BlockTypes.AZALEA_LEAVES = AllayBlockType
-                .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.AZALEA_LEAVES)
-                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
-                .build();
-        BlockTypes.AZALEA_LEAVES_FLOWERED = AllayBlockType
-                .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.AZALEA_LEAVES_FLOWERED)
-                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
-                .build();
-        BlockTypes.BIRCH_LEAVES = AllayBlockType
-                .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.BIRCH_LEAVES)
-                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
-                .build();
-        BlockTypes.CHERRY_LEAVES = AllayBlockType
-                .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.CHERRY_LEAVES)
-                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
-                .build();
-        BlockTypes.DARK_OAK_LEAVES = AllayBlockType
-                .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.DARK_OAK_LEAVES)
-                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
-                .build();
-        BlockTypes.JUNGLE_LEAVES = AllayBlockType
-                .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.JUNGLE_LEAVES)
-                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
-                .build();
-        BlockTypes.MANGROVE_LEAVES = AllayBlockType
-                .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.MANGROVE_LEAVES)
-                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
-                .build();
-        BlockTypes.OAK_LEAVES = AllayBlockType
-                .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.OAK_LEAVES)
-                .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
-                .build();
-        BlockTypes.SPRUCE_LEAVES = AllayBlockType
-                .builder(BlockLeavesBehaviorImpl.class)
-                .vanillaBlock(BlockId.SPRUCE_LEAVES)
+                .vanillaBlock(id)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
                 .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
                 .build();
@@ -323,394 +280,69 @@ public final class BlockTypeInitializer {
     }
 
     public static void initStairs() {
-        BlockTypes.ACACIA_STAIRS = AllayBlockType
+        BlockTypes.ACACIA_STAIRS = buildStairs(BlockId.ACACIA_STAIRS);
+        BlockTypes.ANDESITE_STAIRS = buildStairs(BlockId.ANDESITE_STAIRS);
+        BlockTypes.BAMBOO_MOSAIC_STAIRS = buildStairs(BlockId.BAMBOO_MOSAIC_STAIRS);
+        BlockTypes.BAMBOO_STAIRS = buildStairs(BlockId.BAMBOO_STAIRS);
+        BlockTypes.BIRCH_STAIRS = buildStairs(BlockId.BIRCH_STAIRS);
+        BlockTypes.BLACKSTONE_STAIRS = buildStairs(BlockId.BLACKSTONE_STAIRS);
+        BlockTypes.BRICK_STAIRS = buildStairs(BlockId.BRICK_STAIRS);
+        BlockTypes.CHERRY_STAIRS = buildStairs(BlockId.CHERRY_STAIRS);
+        BlockTypes.COBBLED_DEEPSLATE_STAIRS = buildStairs(BlockId.COBBLED_DEEPSLATE_STAIRS);
+        BlockTypes.CRIMSON_STAIRS = buildStairs(BlockId.CRIMSON_STAIRS);
+        BlockTypes.CUT_COPPER_STAIRS = buildStairs(BlockId.CUT_COPPER_STAIRS);
+        BlockTypes.DARK_OAK_STAIRS = buildStairs(BlockId.DARK_OAK_STAIRS);
+        BlockTypes.DARK_PRISMARINE_STAIRS = buildStairs(BlockId.DARK_PRISMARINE_STAIRS);
+        BlockTypes.DEEPSLATE_BRICK_STAIRS = buildStairs(BlockId.DEEPSLATE_BRICK_STAIRS);
+        BlockTypes.DEEPSLATE_TILE_STAIRS = buildStairs(BlockId.DEEPSLATE_TILE_STAIRS);
+        BlockTypes.DIORITE_STAIRS = buildStairs(BlockId.DIORITE_STAIRS);
+        BlockTypes.END_BRICK_STAIRS = buildStairs(BlockId.END_BRICK_STAIRS);
+        BlockTypes.EXPOSED_CUT_COPPER_STAIRS = buildStairs(BlockId.EXPOSED_CUT_COPPER_STAIRS);
+        BlockTypes.GRANITE_STAIRS = buildStairs(BlockId.GRANITE_STAIRS);
+        BlockTypes.JUNGLE_STAIRS = buildStairs(BlockId.JUNGLE_STAIRS);
+        BlockTypes.MANGROVE_STAIRS = buildStairs(BlockId.MANGROVE_STAIRS);
+        BlockTypes.MOSSY_COBBLESTONE_STAIRS = buildStairs(BlockId.MOSSY_COBBLESTONE_STAIRS);
+        BlockTypes.MOSSY_STONE_BRICK_STAIRS = buildStairs(BlockId.MOSSY_STONE_BRICK_STAIRS);
+        BlockTypes.MUD_BRICK_STAIRS = buildStairs(BlockId.MUD_BRICK_STAIRS);
+        BlockTypes.NETHER_BRICK_STAIRS = buildStairs(BlockId.NETHER_BRICK_STAIRS);
+        BlockTypes.NORMAL_STONE_STAIRS = buildStairs(BlockId.NORMAL_STONE_STAIRS);
+        BlockTypes.OAK_STAIRS = buildStairs(BlockId.OAK_STAIRS);
+        BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = buildStairs(BlockId.OXIDIZED_CUT_COPPER_STAIRS);
+        BlockTypes.POLISHED_ANDESITE_STAIRS = buildStairs(BlockId.POLISHED_ANDESITE_STAIRS);
+        BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = buildStairs(BlockId.POLISHED_BLACKSTONE_BRICK_STAIRS);
+        BlockTypes.POLISHED_BLACKSTONE_STAIRS = buildStairs(BlockId.POLISHED_BLACKSTONE_STAIRS);
+        BlockTypes.POLISHED_DEEPSLATE_STAIRS = buildStairs(BlockId.POLISHED_DEEPSLATE_STAIRS);
+        BlockTypes.POLISHED_DIORITE_STAIRS = buildStairs(BlockId.POLISHED_DIORITE_STAIRS);
+        BlockTypes.POLISHED_GRANITE_STAIRS = buildStairs(BlockId.POLISHED_GRANITE_STAIRS);
+        BlockTypes.POLISHED_TUFF_STAIRS = buildStairs(BlockId.POLISHED_TUFF_STAIRS);
+        BlockTypes.PRISMARINE_BRICKS_STAIRS = buildStairs(BlockId.PRISMARINE_BRICKS_STAIRS);
+        BlockTypes.PRISMARINE_STAIRS = buildStairs(BlockId.PRISMARINE_STAIRS);
+        BlockTypes.PURPUR_STAIRS = buildStairs(BlockId.PURPUR_STAIRS);
+        BlockTypes.QUARTZ_STAIRS = buildStairs(BlockId.QUARTZ_STAIRS);
+        BlockTypes.RED_NETHER_BRICK_STAIRS = buildStairs(BlockId.RED_NETHER_BRICK_STAIRS);
+        BlockTypes.RED_SANDSTONE_STAIRS = buildStairs(BlockId.RED_SANDSTONE_STAIRS);
+        BlockTypes.SANDSTONE_STAIRS = buildStairs(BlockId.SANDSTONE_STAIRS);
+        BlockTypes.SMOOTH_QUARTZ_STAIRS = buildStairs(BlockId.SMOOTH_QUARTZ_STAIRS);
+        BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS = buildStairs(BlockId.SMOOTH_RED_SANDSTONE_STAIRS);
+        BlockTypes.SMOOTH_SANDSTONE_STAIRS = buildStairs(BlockId.SMOOTH_SANDSTONE_STAIRS);
+        BlockTypes.SPRUCE_STAIRS = buildStairs(BlockId.SPRUCE_STAIRS);
+        BlockTypes.STONE_BRICK_STAIRS = buildStairs(BlockId.STONE_BRICK_STAIRS);
+        BlockTypes.STONE_STAIRS = buildStairs(BlockId.STONE_STAIRS);
+        BlockTypes.TUFF_BRICK_STAIRS = buildStairs(BlockId.TUFF_BRICK_STAIRS);
+        BlockTypes.TUFF_STAIRS = buildStairs(BlockId.TUFF_STAIRS);
+        BlockTypes.WARPED_STAIRS = buildStairs(BlockId.WARPED_STAIRS);
+        BlockTypes.WAXED_CUT_COPPER_STAIRS = buildStairs(BlockId.WAXED_CUT_COPPER_STAIRS);
+        BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = buildStairs(BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS);
+        BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = buildStairs(BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS);
+        BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = buildStairs(BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS);
+        BlockTypes.WEATHERED_CUT_COPPER_STAIRS = buildStairs(BlockId.WEATHERED_CUT_COPPER_STAIRS);
+        BlockTypes.PALE_OAK_STAIRS = buildStairs(BlockId.PALE_OAK_STAIRS);
+    }
+
+    private static BlockType<BlockStairsBehavior> buildStairs(BlockId id) {
+        return AllayBlockType
                 .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.ACACIA_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.ANDESITE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.ANDESITE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.BAMBOO_MOSAIC_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.BAMBOO_MOSAIC_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.BAMBOO_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.BAMBOO_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.BIRCH_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.BIRCH_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.BLACKSTONE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.BLACKSTONE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.CHERRY_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.CHERRY_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.COBBLED_DEEPSLATE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.COBBLED_DEEPSLATE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.CRIMSON_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.CRIMSON_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.CUT_COPPER_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.DARK_OAK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.DARK_OAK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.DARK_PRISMARINE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.DARK_PRISMARINE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.DEEPSLATE_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.DEEPSLATE_BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.DEEPSLATE_TILE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.DEEPSLATE_TILE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.DIORITE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.DIORITE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.END_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.END_BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.EXPOSED_CUT_COPPER_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.GRANITE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.GRANITE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.JUNGLE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.JUNGLE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.MANGROVE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.MANGROVE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.MOSSY_COBBLESTONE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.MOSSY_COBBLESTONE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.MOSSY_STONE_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.MOSSY_STONE_BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.MUD_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.MUD_BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.NETHER_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.NETHER_BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.NORMAL_STONE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.NORMAL_STONE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.OAK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.OAK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.OXIDIZED_CUT_COPPER_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.POLISHED_ANDESITE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.POLISHED_ANDESITE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.POLISHED_BLACKSTONE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.POLISHED_BLACKSTONE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.POLISHED_DEEPSLATE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.POLISHED_DEEPSLATE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.POLISHED_DIORITE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.POLISHED_DIORITE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.POLISHED_GRANITE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.POLISHED_GRANITE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.POLISHED_TUFF_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.POLISHED_TUFF_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.PRISMARINE_BRICKS_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.PRISMARINE_BRICKS_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.PRISMARINE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.PRISMARINE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.PURPUR_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.PURPUR_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.QUARTZ_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.QUARTZ_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.RED_NETHER_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.RED_NETHER_BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.RED_SANDSTONE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.RED_SANDSTONE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.SANDSTONE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.SANDSTONE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.SMOOTH_QUARTZ_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.SMOOTH_QUARTZ_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.SMOOTH_RED_SANDSTONE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.SMOOTH_RED_SANDSTONE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.SMOOTH_SANDSTONE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.SMOOTH_SANDSTONE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.SPRUCE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.SPRUCE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.STONE_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.STONE_BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.STONE_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.STONE_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.TUFF_BRICK_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.TUFF_BRICK_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.TUFF_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.TUFF_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.WARPED_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.WARPED_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.WAXED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.WAXED_CUT_COPPER_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS)
-                .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .build();
-        BlockTypes.WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
-                .vanillaBlock(BlockId.WEATHERED_CUT_COPPER_STAIRS)
+                .vanillaBlock(id)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
                 .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
@@ -820,6 +452,7 @@ public final class BlockTypeInitializer {
         BlockTypes.OAK_LOG = buildWood(BlockId.OAK_LOG, BlockId.STRIPPED_OAK_LOG);
         BlockTypes.SPRUCE_LOG = buildWood(BlockId.SPRUCE_LOG, BlockId.STRIPPED_SPRUCE_LOG);
         BlockTypes.WARPED_STEM = buildWood(BlockId.WARPED_STEM, BlockId.STRIPPED_WARPED_STEM);
+        BlockTypes.PALE_OAK_LOG = buildWood(BlockId.PALE_OAK_LOG, BlockId.STRIPPED_PALE_OAK_LOG);
         // Stripped Log
         BlockTypes.STRIPPED_ACACIA_LOG = buildStrippedWood(BlockId.STRIPPED_ACACIA_LOG);
         BlockTypes.STRIPPED_BAMBOO_BLOCK = buildStrippedWood(BlockId.STRIPPED_BAMBOO_BLOCK);
@@ -832,6 +465,7 @@ public final class BlockTypeInitializer {
         BlockTypes.STRIPPED_OAK_LOG = buildStrippedWood(BlockId.STRIPPED_OAK_LOG);
         BlockTypes.STRIPPED_SPRUCE_LOG = buildStrippedWood(BlockId.STRIPPED_SPRUCE_LOG);
         BlockTypes.STRIPPED_WARPED_STEM = buildStrippedWood(BlockId.STRIPPED_WARPED_STEM);
+        BlockTypes.STRIPPED_PALE_OAK_LOG = buildStrippedWood(BlockId.STRIPPED_PALE_OAK_LOG);
 
         // Wood
         BlockTypes.ACACIA_WOOD = buildWood(BlockId.ACACIA_WOOD, BlockId.STRIPPED_ACACIA_WOOD);
@@ -844,6 +478,7 @@ public final class BlockTypeInitializer {
         BlockTypes.WARPED_HYPHAE = buildWood(BlockId.WARPED_HYPHAE, BlockId.STRIPPED_WARPED_HYPHAE);
         BlockTypes.CHERRY_WOOD = buildWood(BlockId.CHERRY_WOOD, BlockId.STRIPPED_CHERRY_WOOD);
         BlockTypes.MANGROVE_WOOD = buildWood(BlockId.MANGROVE_WOOD, BlockId.STRIPPED_MANGROVE_WOOD);
+        BlockTypes.PALE_OAK_WOOD = buildWood(BlockId.PALE_OAK_WOOD, BlockId.STRIPPED_PALE_OAK_WOOD);
         // Stripped Wood
         BlockTypes.STRIPPED_ACACIA_WOOD = buildStrippedWood(BlockId.STRIPPED_ACACIA_WOOD);
         BlockTypes.STRIPPED_BIRCH_WOOD = buildStrippedWood(BlockId.STRIPPED_BIRCH_WOOD);
@@ -855,6 +490,7 @@ public final class BlockTypeInitializer {
         BlockTypes.STRIPPED_WARPED_HYPHAE = buildStrippedWood(BlockId.STRIPPED_WARPED_HYPHAE);
         BlockTypes.STRIPPED_CHERRY_WOOD = buildStrippedWood(BlockId.STRIPPED_CHERRY_WOOD);
         BlockTypes.STRIPPED_MANGROVE_WOOD = buildStrippedWood(BlockId.STRIPPED_MANGROVE_WOOD);
+        BlockTypes.STRIPPED_PALE_OAK_WOOD = buildStrippedWood(BlockId.STRIPPED_PALE_OAK_WOOD);
     }
 
     public static void initButtons() {
@@ -869,6 +505,7 @@ public final class BlockTypeInitializer {
         BlockTypes.SPRUCE_BUTTON = buildWoodenButton(BlockId.SPRUCE_BUTTON);
         BlockTypes.WARPED_BUTTON = buildWoodenButton(BlockId.WARPED_BUTTON);
         BlockTypes.WOODEN_BUTTON = buildWoodenButton(BlockId.WOODEN_BUTTON);
+        BlockTypes.PALE_OAK_BUTTON = buildWoodenButton(BlockId.PALE_OAK_BUTTON);
 
         BlockTypes.POLISHED_BLACKSTONE_BUTTON = buildButton(BlockId.POLISHED_BLACKSTONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
         BlockTypes.STONE_BUTTON = buildButton(BlockId.STONE_BUTTON, blockType -> new BlockButtonBaseComponentImpl(blockType, Duration.ofSeconds(1)));
@@ -886,6 +523,7 @@ public final class BlockTypeInitializer {
         BlockTypes.WOODEN_DOOR = buildDoor(BlockId.WOODEN_DOOR);
         BlockTypes.SPRUCE_DOOR = buildDoor(BlockId.SPRUCE_DOOR);
         BlockTypes.WARPED_DOOR = buildDoor(BlockId.WARPED_DOOR);
+        BlockTypes.PALE_OAK_DOOR = buildDoor(BlockId.PALE_OAK_DOOR);
         // TODO: Replace BlockDoorBaseComponentImpl::new
         BlockTypes.IRON_DOOR = buildIronDoor(BlockId.IRON_DOOR);
         BlockTypes.COPPER_DOOR = buildCopperDoor(BlockId.COPPER_DOOR);
@@ -962,7 +600,7 @@ public final class BlockTypeInitializer {
         return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)
-                .setProperties(BlockPropertyTypes.DIRECTION, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
+                .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.DOOR_HINGE_BIT, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPPER_BLOCK_BIT)
                 .setBaseComponentSupplier(blockBaseComponentSupplier)
                 .build();
     }
@@ -979,6 +617,7 @@ public final class BlockTypeInitializer {
         BlockTypes.MANGROVE_WALL_SIGN = buildWallSign(BlockId.MANGROVE_WALL_SIGN, ItemTypes.MANGROVE_SIGN);
         BlockTypes.SPRUCE_WALL_SIGN = buildWallSign(BlockId.SPRUCE_WALL_SIGN, ItemTypes.SPRUCE_SIGN);
         BlockTypes.WARPED_WALL_SIGN = buildWallSign(BlockId.WARPED_WALL_SIGN, ItemTypes.WARPED_SIGN);
+        BlockTypes.PALE_OAK_WALL_SIGN = buildWallSign(BlockId.PALE_OAK_WALL_SIGN, ItemTypes.PALE_OAK_SIGN);
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildWallSign(BlockId blockId, ItemType<?> dropItemType) {
@@ -1003,6 +642,7 @@ public final class BlockTypeInitializer {
         BlockTypes.MANGROVE_STANDING_SIGN = buildStandingSign(BlockId.MANGROVE_STANDING_SIGN, ItemTypes.MANGROVE_SIGN);
         BlockTypes.SPRUCE_STANDING_SIGN = buildStandingSign(BlockId.SPRUCE_STANDING_SIGN, ItemTypes.SPRUCE_SIGN);
         BlockTypes.WARPED_STANDING_SIGN = buildStandingSign(BlockId.WARPED_STANDING_SIGN, ItemTypes.WARPED_SIGN);
+        BlockTypes.PALE_OAK_STANDING_SIGN = buildStandingSign(BlockId.PALE_OAK_STANDING_SIGN, ItemTypes.PALE_OAK_SIGN);
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildStandingSign(BlockId blockId, ItemType<?> dropItemType) {
@@ -1027,6 +667,7 @@ public final class BlockTypeInitializer {
         BlockTypes.OAK_HANGING_SIGN = buildHangingSign(BlockId.OAK_HANGING_SIGN);
         BlockTypes.SPRUCE_HANGING_SIGN = buildHangingSign(BlockId.SPRUCE_HANGING_SIGN);
         BlockTypes.WARPED_HANGING_SIGN = buildHangingSign(BlockId.WARPED_HANGING_SIGN);
+        BlockTypes.PALE_OAK_HANGING_SIGN = buildHangingSign(BlockId.PALE_OAK_HANGING_SIGN);
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildHangingSign(BlockId blockId) {

@@ -1271,6 +1271,12 @@ public final class ItemTypeInitializer {
                 .vanillaItem(ItemId.WARPED_SIGN)
                 .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.WARPED_WALL_SIGN.getIdentifier(), BlockId.WARPED_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
                 .build();
+        ItemTypes.PALE_OAK_SIGN = AllayItemType
+                .builder(ItemSignStackImpl.class)
+                .vanillaItem(ItemId.PALE_OAK_SIGN)
+                .addComponent(initInfo -> new ItemSignBaseComponentImpl(initInfo, BlockId.PALE_OAK_WALL_SIGN.getIdentifier(), BlockId.PALE_OAK_STANDING_SIGN.getIdentifier()), ItemSignBaseComponentImpl.class)
+                .build();
+
     }
 
     public static void initBuckets() {

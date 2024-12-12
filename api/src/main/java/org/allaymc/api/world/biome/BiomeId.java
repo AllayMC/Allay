@@ -182,7 +182,9 @@ public enum BiomeId implements BiomeType {
 
     MANGROVE_SWAMP(new Identifier("minecraft:mangrove_swamp"), 191, "DataDriven"),
 
-    CHERRY_GROVE(new Identifier("minecraft:cherry_grove"), 192, "DataDriven");
+    CHERRY_GROVE(new Identifier("minecraft:cherry_grove"), 192, "DataDriven"),
+
+    PALE_GARDEN(new Identifier("minecraft:pale_garden"), 193, "Forest");
 
     private static final BiomeId[] MAP1;
 

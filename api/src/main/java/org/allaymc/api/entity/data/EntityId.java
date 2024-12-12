@@ -55,6 +55,8 @@ public enum EntityId {
 
     COW("minecraft:cow", 11),
 
+    CREAKING("minecraft:creaking", 146),
+
     CREEPER("minecraft:creeper", 33),
 
     DOLPHIN("minecraft:dolphin", 31),

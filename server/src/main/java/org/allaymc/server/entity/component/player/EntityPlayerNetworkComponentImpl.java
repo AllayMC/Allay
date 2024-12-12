@@ -540,6 +540,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             var forceResourcePacks = Server.SETTINGS.resourcePackSettings().forceResourcePacks();
             var allowClientResourcePacks = Server.SETTINGS.resourcePackSettings().allowClientResourcePacks();
             RESOURCE_PACKS_INFO_PACKET.setForcedToAccept(forceResourcePacks);
+            RESOURCE_PACKS_INFO_PACKET.setWorldTemplateId(new UUID(0, 0));
+            RESOURCE_PACKS_INFO_PACKET.setWorldTemplateVersion("");
 
             RESOURCES_PACK_STACK_PACKET.setForcedToAccept(forceResourcePacks && !allowClientResourcePacks);
             // Just left a '*' here, if we put in an exact game version,

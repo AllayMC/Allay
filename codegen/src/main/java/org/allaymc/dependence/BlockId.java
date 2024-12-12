@@ -328,6 +328,8 @@ public enum BlockId {
 
     CHAIN_COMMAND_BLOCK("minecraft:chain_command_block"),
 
+    CHALKBOARD("minecraft:chalkboard"),
+
     CHEMICAL_HEAT("minecraft:chemical_heat"),
 
     CHERRY_BUTTON("minecraft:cherry_button"),
@@ -382,6 +384,8 @@ public enum BlockId {
 
     CHISELED_RED_SANDSTONE("minecraft:chiseled_red_sandstone"),
 
+    CHISELED_RESIN_BRICKS("minecraft:chiseled_resin_bricks"),
+
     CHISELED_SANDSTONE("minecraft:chiseled_sandstone"),
 
     CHISELED_STONE_BRICKS("minecraft:chiseled_stone_bricks"),
@@ -397,6 +401,8 @@ public enum BlockId {
     CLAY("minecraft:clay"),
 
     CLIENT_REQUEST_PLACEHOLDER_BLOCK("minecraft:client_request_placeholder_block"),
+
+    CLOSED_EYEBLOSSOM("minecraft:closed_eyeblossom"),
 
     COAL_BLOCK("minecraft:coal_block"),
 
@@ -467,6 +473,8 @@ public enum BlockId {
     CRAFTER("minecraft:crafter"),
 
     CRAFTING_TABLE("minecraft:crafting_table"),
+
+    CREAKING_HEART("minecraft:creaking_heart"),
 
     CREEPER_HEAD("minecraft:creeper_head"),
 
@@ -1606,6 +1614,8 @@ public enum BlockId {
 
     OCHRE_FROGLIGHT("minecraft:ochre_froglight"),
 
+    OPEN_EYEBLOSSOM("minecraft:open_eyeblossom"),
+
     ORANGE_CANDLE("minecraft:orange_candle"),
 
     ORANGE_CANDLE_CAKE("minecraft:orange_candle_cake"),
@@ -1655,6 +1665,46 @@ public enum BlockId {
     PACKED_ICE("minecraft:packed_ice"),
 
     PACKED_MUD("minecraft:packed_mud"),
+
+    PALE_HANGING_MOSS("minecraft:pale_hanging_moss"),
+
+    PALE_MOSS_BLOCK("minecraft:pale_moss_block"),
+
+    PALE_MOSS_CARPET("minecraft:pale_moss_carpet"),
+
+    PALE_OAK_BUTTON("minecraft:pale_oak_button"),
+
+    PALE_OAK_DOOR("minecraft:pale_oak_door"),
+
+    PALE_OAK_DOUBLE_SLAB("minecraft:pale_oak_double_slab"),
+
+    PALE_OAK_FENCE("minecraft:pale_oak_fence"),
+
+    PALE_OAK_FENCE_GATE("minecraft:pale_oak_fence_gate"),
+
+    PALE_OAK_HANGING_SIGN("minecraft:pale_oak_hanging_sign"),
+
+    PALE_OAK_LEAVES("minecraft:pale_oak_leaves"),
+
+    PALE_OAK_LOG("minecraft:pale_oak_log"),
+
+    PALE_OAK_PLANKS("minecraft:pale_oak_planks"),
+
+    PALE_OAK_PRESSURE_PLATE("minecraft:pale_oak_pressure_plate"),
+
+    PALE_OAK_SAPLING("minecraft:pale_oak_sapling"),
+
+    PALE_OAK_SLAB("minecraft:pale_oak_slab"),
+
+    PALE_OAK_STAIRS("minecraft:pale_oak_stairs"),
+
+    PALE_OAK_STANDING_SIGN("minecraft:pale_oak_standing_sign"),
+
+    PALE_OAK_TRAPDOOR("minecraft:pale_oak_trapdoor"),
+
+    PALE_OAK_WALL_SIGN("minecraft:pale_oak_wall_sign"),
+
+    PALE_OAK_WOOD("minecraft:pale_oak_wood"),
 
     PEARLESCENT_FROGLIGHT("minecraft:pearlescent_froglight"),
 
@@ -1932,6 +1982,20 @@ public enum BlockId {
 
     RESERVED6("minecraft:reserved6"),
 
+    RESIN_BLOCK("minecraft:resin_block"),
+
+    RESIN_BRICK_DOUBLE_SLAB("minecraft:resin_brick_double_slab"),
+
+    RESIN_BRICK_SLAB("minecraft:resin_brick_slab"),
+
+    RESIN_BRICK_STAIRS("minecraft:resin_brick_stairs"),
+
+    RESIN_BRICK_WALL("minecraft:resin_brick_wall"),
+
+    RESIN_BRICKS("minecraft:resin_bricks"),
+
+    RESIN_CLUMP("minecraft:resin_clump"),
+
     RESPAWN_ANCHOR("minecraft:respawn_anchor"),
 
     ROSE_BUSH("minecraft:rose_bush"),
@@ -2135,6 +2199,10 @@ public enum BlockId {
     STRIPPED_OAK_LOG("minecraft:stripped_oak_log"),
 
     STRIPPED_OAK_WOOD("minecraft:stripped_oak_wood"),
+
+    STRIPPED_PALE_OAK_LOG("minecraft:stripped_pale_oak_log"),
+
+    STRIPPED_PALE_OAK_WOOD("minecraft:stripped_pale_oak_wood"),
 
     STRIPPED_SPRUCE_LOG("minecraft:stripped_spruce_log"),
 
