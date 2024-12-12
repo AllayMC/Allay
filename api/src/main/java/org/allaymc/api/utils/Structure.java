@@ -2,12 +2,10 @@ package org.allaymc.api.utils;
 
 import lombok.Getter;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockStateHelper;
 import org.allaymc.api.entity.EntityHelper;
-import org.allaymc.api.network.ProtocolInfo;
-import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.updater.block.BlockStateUpdaters;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -160,19 +158,7 @@ public record Structure(
         var palette = nbt.getCompound("structure").getCompound("palette").getCompound("default");
         var blockEntitiesNbt = palette.getCompound("block_position_data");
         var blockPalette = palette.getList("block_palette", NbtType.COMPOUND).stream().map(
-                value -> {
-                    if(value.getInt("version") > ProtocolInfo.BLOCK_STATE_VERSION_NUM){
-                        throw new StructureException("block version should equal to or less than " + ProtocolInfo.BLOCK_STATE_VERSION_NUM);
-                    }
-                    var blockStates = value;
-                    if(value.getInt("version") < ProtocolInfo.BLOCK_STATE_VERSION_NUM){
-                        blockStates = BlockStateUpdaters.updateBlockState(value, BlockStateUpdaters.LATEST_VERSION);
-                    }
-                    return Registries.BLOCK_STATE_PALETTE.get(HashUtils.fnv1a_32_nbt(
-                            NbtMap.builder().putString("name", blockStates.getString("name"))
-                                    .putCompound("states", blockStates.getCompound("states")).build()
-                    ));
-                }
+                BlockStateHelper::fromNbt
         ).toList();
         var structureVoid = STRUCTURE_VOID.getDefaultState();
 
