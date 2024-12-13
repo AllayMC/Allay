@@ -8,7 +8,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
@@ -26,7 +25,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import javax.annotation.concurrent.ThreadSafe;
 import java.util.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
@@ -35,25 +33,23 @@ import java.util.function.Predicate;
 /**
  * @author Cool_Loong | daoge_cmd
  */
-@ThreadSafe
 @Slf4j
-@RequiredArgsConstructor
 public class AllayChunk implements Chunk {
     protected final AllayUnsafeChunk unsafeChunk;
 
-    protected final StampedLock blockLock = new StampedLock();
-    protected final StampedLock heightAndBiomeLock = new StampedLock();
+    protected final StampedLock blockLock;
+    protected final StampedLock heightAndBiomeLock;
     // No need to use concurrent-safe set as addChunkLoader() & removeChunkLoader() are only used in AllayChunkService which is single-thread
-    protected final Set<ChunkLoader> chunkLoaders = new ObjectOpenHashSet<>();
-    protected final Queue<ChunkPacketEntry> chunkPacketQueue = PlatformDependent.newMpscQueue();
+    protected final Set<ChunkLoader> chunkLoaders;
+    protected final Queue<ChunkPacketEntry> chunkPacketQueue;
 
-    // Whether the chunk has been loaded into the world
-    @Getter
-    protected boolean loaded = false;
     // The callback to be called when the chunk is loaded into the world
     // The provided boolean value indicated whether the chunk is set successfully
     @Setter
     protected Consumer<Boolean> chunkSetCallback;
+    // Whether the chunk has been loaded into the world
+    @Getter
+    protected boolean loaded = false;
     protected int autoSaveTimer = 0;
 
     private static void checkXZ(int x, int z) {
@@ -65,6 +61,14 @@ public class AllayChunk implements Chunk {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(y >= -512 && y <= 511);
         Preconditions.checkArgument(z >= 0 && z <= 15);
+    }
+
+    AllayChunk(AllayUnsafeChunk unsafeChunk) {
+        this.unsafeChunk = unsafeChunk;
+        this.blockLock = new StampedLock();
+        this.heightAndBiomeLock = new StampedLock();
+        this.chunkLoaders = new ObjectOpenHashSet<>();
+        this.chunkPacketQueue = PlatformDependent.newMpscQueue();
     }
 
     public void tick(long currentTick, WorldStorage worldStorage) {

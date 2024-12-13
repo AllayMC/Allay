@@ -3,7 +3,6 @@ package org.allaymc.server;
 import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
@@ -28,7 +27,7 @@ public class ChunkJMHTest {
     @Setup
     public void init() throws MissingImplementationException {
         Allay.initAllay();
-        chunk = new AllayChunk(AllayUnsafeChunk.builder().newChunk(0, 0, DimensionInfo.OVERWORLD));
+        chunk = AllayUnsafeChunk.builder().newChunk(0, 0, DimensionInfo.OVERWORLD).toSafeChunk();
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 16; j++) {
                 for (int k = -64; k < 320; k++) {

@@ -10,7 +10,6 @@ import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.server.world.AllayWorldData;
-import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.testutils.AllayTestExtension;
 import org.apache.commons.io.FileUtils;
@@ -105,8 +104,7 @@ class LevelDBWorldStorageTest {
                 allayUnsafeChunk.setHeight(i, j, (short) 319);
             }
         }
-        AllayChunk allayChunk = new AllayChunk(allayUnsafeChunk);
-        levelDBWorldStorage.writeChunkSync(allayChunk);
+        levelDBWorldStorage.writeChunkSync(allayUnsafeChunk.toSafeChunk());
     }
 
     @SneakyThrows

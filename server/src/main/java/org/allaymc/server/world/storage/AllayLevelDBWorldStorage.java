@@ -28,6 +28,7 @@ import org.allaymc.server.datastruct.palette.PaletteException;
 import org.allaymc.server.datastruct.palette.PaletteUtils;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.HeightMap;
+import org.allaymc.server.world.chunk.AllayChunkBuilder;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkSection;
 import org.allaymc.updater.block.BlockStateUpdaters;
@@ -365,7 +366,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
     }
 
-    private static void deserializeBlock(DB db, AllayUnsafeChunk.Builder builder) {
+    private static void deserializeBlock(DB db, AllayChunkBuilder builder) {
         DimensionInfo dimensionInfo = builder.getDimensionInfo();
         ChunkSection[] sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
         var minSectionY = dimensionInfo.minSectionY();
@@ -481,7 +482,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
     }
 
-    private static void deserializeHeightAndBiome(DB db, AllayUnsafeChunk.Builder builder) {
+    private static void deserializeHeightAndBiome(DB db, AllayChunkBuilder builder) {
         ByteBuf heightAndBiomesBuffer = null;
         try {
             // Try load data_3d
@@ -585,7 +586,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         }
     }
 
-    private static void deserializeEntityAndBlockEntity(DB db, AllayUnsafeChunk.Builder builder) {
+    private static void deserializeEntityAndBlockEntity(DB db, AllayChunkBuilder builder) {
         DimensionInfo dimensionInfo = builder.getDimensionInfo();
         byte[] tileBytes = db.get(LevelDBKey.BLOCK_ENTITIES.getKey(builder.getChunkX(), builder.getChunkZ(), dimensionInfo));
         if (tileBytes != null) {
