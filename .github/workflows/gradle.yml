@@ -46,11 +46,10 @@ jobs:
           build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-use-agree: "yes"
 
-      - name: Make Gradle Wrapper Script Executable
-        run: chmod +x gradlew
-
       - name: Build
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
 
       - name: Generate Coverage Reports
         if: success()
@@ -77,11 +76,10 @@ jobs:
           path: ${{ steps.vars.outputs.shaded_jar }}
 
       - name: Publish to JitPack
-        uses: fjogeleit/http-request-action@v1
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        with:
-          url: 'https://jitpack.io/#AllayMC/Allay/master-SNAPSHOT'
-          method: 'GET'
+        run: |
+          chmod +x publish_to_jitpack
+          ./publish_to_jitpack
 
       - name: Set Tag
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
