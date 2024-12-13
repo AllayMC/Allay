@@ -43,7 +43,6 @@ public class AllayChunk implements Chunk {
 
     protected final StampedLock blockLock = new StampedLock();
     protected final StampedLock heightAndBiomeLock = new StampedLock();
-    protected final StampedLock lightLock = new StampedLock();
     // No need to use concurrent-safe set as addChunkLoader() & removeChunkLoader() are only used in AllayChunkService which is single-thread
     protected final Set<ChunkLoader> chunkLoaders = new ObjectOpenHashSet<>();
     protected final Queue<ChunkPacketEntry> chunkPacketQueue = PlatformDependent.newMpscQueue();
@@ -236,13 +235,11 @@ public class AllayChunk implements Chunk {
     public void batchProcess(UnsafeChunkOperate operate) {
         var stamp1 = blockLock.writeLock();
         var stamp2 = heightAndBiomeLock.writeLock();
-        var stamp3 = lightLock.writeLock();
         try {
             operate.run(this.unsafeChunk);
         } finally {
             blockLock.unlockWrite(stamp1);
             heightAndBiomeLock.unlockWrite(stamp2);
-            lightLock.unlockWrite(stamp3);
         }
     }
 
