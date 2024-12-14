@@ -19,13 +19,18 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @RequiredArgsConstructor
 public class AllayBlockUpdateService implements BlockUpdateService {
-    public static final int MAX_NU_PER_TICK = 65535;
+    public static final int MAX_NEIGHBOR_UPDATE_PER_TICK = 65535;
 
     protected final Dimension dimension;
     protected final Map<Vector3ic, Long> scheduledUpdates = new ConcurrentHashMap<>();
     protected final Queue<NeighborUpdate> neighborUpdates = new LinkedList<>();
 
     public void tick(long tick) {
+        tickScheduledUpdates(tick);
+        tickNeighborUpdates();
+    }
+
+    protected void tickScheduledUpdates(long tick) {
         List<Vector3ic> positions = new ArrayList<>(scheduledUpdates.size() / 4);
         for (var entry : scheduledUpdates.entrySet()) {
             if (entry.getValue() <= tick) {
@@ -39,25 +44,29 @@ public class AllayBlockUpdateService implements BlockUpdateService {
             var layer1 = dimension.getBlockState(pos, 1);
             var block0 = new BlockStateWithPos(layer0, new Position3i(pos, dimension), 0);
 
-            if (callScheduleUpdateEvent(block0)) {
+            if (!callScheduleUpdateEvent(block0)) {
                 return;
             }
 
             layer0.getBehavior().onScheduledUpdate(block0);
 
+            // Only update second layer block if it's a liquid block for better performance,
+            // because only liquid blocks need to be updated in the second layer.
             if (layer1.getBehavior() instanceof BlockLiquidBehavior) {
                 var block1 = new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1);
 
-                if (callScheduleUpdateEvent(block1)) {
+                if (!callScheduleUpdateEvent(block1)) {
                     return;
                 }
 
                 layer1.getBehavior().onScheduledUpdate(block1);
             }
         });
+    }
 
+    protected void tickNeighborUpdates() {
         int count = 0;
-        while (!neighborUpdates.isEmpty() && count < MAX_NU_PER_TICK) {
+        while (!neighborUpdates.isEmpty() && count < MAX_NEIGHBOR_UPDATE_PER_TICK) {
             var update = neighborUpdates.poll();
             var blockFace = update.blockFace();
             var pos = update.pos();
@@ -69,7 +78,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
             var block0 = new BlockStateWithPos(layer0, new Position3i(pos, dimension), 0);
             var neighborBlock0 = new BlockStateWithPos(dimension.getBlockState(neighborPos), new Position3i(neighborPos, dimension), 0);
 
-            if (callNeighborUpdateEvent(block0, neighborBlock0, blockFace)) {
+            if (!callNeighborUpdateEvent(block0, neighborBlock0, blockFace)) {
                 return;
             }
 
@@ -79,10 +88,12 @@ public class AllayBlockUpdateService implements BlockUpdateService {
                     blockFace
             );
 
+            // Only update second layer block if it's a liquid block for better performance,
+            // because only liquid blocks need to be updated in the second layer.
             if (layer1.getBehavior() instanceof BlockLiquidBehavior) {
                 var block1 = new BlockStateWithPos(layer1, new Position3i(pos, dimension), 1);
 
-                if (callNeighborUpdateEvent(block1, neighborBlock0, blockFace)) {
+                if (!callNeighborUpdateEvent(block1, neighborBlock0, blockFace)) {
                     return;
                 }
 
@@ -100,13 +111,13 @@ public class AllayBlockUpdateService implements BlockUpdateService {
     protected boolean callScheduleUpdateEvent(BlockStateWithPos block) {
         var event = new BlockScheduleUpdateEvent(block);
         event.call();
-        return event.isCancelled();
+        return !event.isCancelled();
     }
 
     protected boolean callNeighborUpdateEvent(BlockStateWithPos block, BlockStateWithPos neighborBlock, BlockFace blockFace) {
         var event = new BlockNeighborUpdateEvent(block, neighborBlock, blockFace);
         event.call();
-        return event.isCancelled();
+        return !event.isCancelled();
     }
 
     @Override
