@@ -78,8 +78,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         }
 
         var event = new SignTextChangeEvent(new BlockStateWithPos(getBlockState(), position, 0), newText, player);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
         newText = event.getText();
 
         if (isFrontSide) {
@@ -113,8 +112,7 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
 
         if (itemInHand.getItemType() == ItemTypes.HONEYCOMB && !waxed) {
             var signWaxEvent = new SignWaxEvent(new BlockStateWithPos(getBlockState(), position, 0), player);
-            signWaxEvent.call();
-            if (signWaxEvent.isCancelled()) return;
+            if (!signWaxEvent.call()) return;
 
             setWaxed(true);
             player.tryConsumeItemInHand();

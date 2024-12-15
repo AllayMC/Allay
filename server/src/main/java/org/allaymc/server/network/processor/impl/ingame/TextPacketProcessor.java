@@ -16,10 +16,9 @@ public class TextPacketProcessor extends PacketProcessor<TextPacket> {
         if (packet.getType() != TextPacket.Type.CHAT) return;
 
         var event = new PlayerChatEvent(player, "<" + player.getDisplayName() + "> ", packet.getMessage());
-        event.call();
-        if (event.isCancelled()) return;
-
-        Server.getInstance().broadcastText(event.buildChat());
+        if (event.call()) {
+            Server.getInstance().broadcastText(event.buildChat());
+        }
     }
 
     @Override

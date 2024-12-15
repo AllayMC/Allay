@@ -133,8 +133,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 }
 
                 var event = new PacketReceiveEvent(thisPlayer, packet);
-                event.call();
-                if (event.isCancelled()) {
+                if (!event.call()) {
                     return PacketSignal.HANDLED;
                 }
 
@@ -229,8 +228,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Override
     public void sendPacket(BedrockPacket packet) {
         var event = new PacketSendEvent(thisPlayer, packet);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         clientSession.sendPacket(event.getPacket());
     }
@@ -238,8 +236,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Override
     public void sendPacketImmediately(BedrockPacket packet) {
         var event = new PacketSendEvent(thisPlayer, packet);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         clientSession.sendPacketImmediately(event.getPacket());
     }
@@ -402,8 +399,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
 
         var event = new PlayerLoginEvent(thisPlayer);
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
             return;
         }

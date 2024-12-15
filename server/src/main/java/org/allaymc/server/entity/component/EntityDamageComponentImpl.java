@@ -46,26 +46,28 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean attack(DamageContainer damage) {
-
-        if (!canBeAttacked(damage) || !checkAndUpdateCoolDown(damage)) return false;
-
-        var event = new EntityDamageEvent(thisEntity, damage);
-        event.call();
-        if (event.isCancelled()) {
+        if (!canBeAttacked(damage) || !checkAndUpdateCoolDown(damage)) {
             return false;
         }
+
+        var event = new EntityDamageEvent(thisEntity, damage);
+        if (!event.call()) return false;
+
+        damage = event.getDamage();
 
         applyAttacker(damage);
         applyVictim(damage);
         applyDamage(damage);
-
         return true;
     }
 
     protected void applyDamage(DamageContainer damage) {
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
         baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
-        if (damage.isCritical()) baseComponent.applyAction(AnimatePacket.Action.CRITICAL_HIT);
+
+        if (damage.isCritical()) {
+            baseComponent.applyAction(AnimatePacket.Action.CRITICAL_HIT);
+        }
 
         manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
 
@@ -93,7 +95,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected boolean checkAndUpdateCoolDown(DamageContainer damage) {
         var currentTime = baseComponent.getWorld().getTick();
-        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return false;
+        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
+            return false;
+        }
 
         lastDamage = damage;
         lastDamageTime = currentTime;
@@ -169,9 +173,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     public boolean hasFallDamage() {
         return baseComponent.hasGravity() ||
                (!baseComponent.hasEffect(EffectTypes.LEVITATION) && !baseComponent.hasEffect(EffectTypes.SLOW_FALLING)) ||
-               (boolean) baseComponent.getWorld()
-                       .getWorldData()
-                       .getGameRuleValue(GameRule.FALL_DAMAGE);
+               baseComponent.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FALL_DAMAGE);
     }
 
     @EventHandler
@@ -181,7 +183,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         var blockStateStandingOn = thisEntity.getBlockStateStandingOn();
         float rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));
-        if (damage > 0) attack(DamageContainer.fall(damage));
+        if (damage > 0) {
+            attack(DamageContainer.fall(damage));
+        }
     }
 
     @EventHandler

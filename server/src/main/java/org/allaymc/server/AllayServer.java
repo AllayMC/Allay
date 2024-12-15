@@ -393,8 +393,7 @@ public final class AllayServer implements Server {
         if (isBanned(uuidOrName)) return false;
 
         var event = new PlayerBanEvent(uuidOrName);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         banInfo.bannedPlayers().add(uuidOrName);
         players.values().stream()
@@ -408,8 +407,7 @@ public final class AllayServer implements Server {
         if (!isBanned(uuidOrName)) return false;
 
         var event = new PlayerUnbanEvent(uuidOrName);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         banInfo.bannedPlayers().remove(uuidOrName);
         return true;
@@ -430,8 +428,7 @@ public final class AllayServer implements Server {
         if (isIPBanned(ip)) return false;
 
         var event = new IPBanEvent(ip);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         banInfo.bannedIps().add(ip);
         players.values().stream()
@@ -445,8 +442,7 @@ public final class AllayServer implements Server {
         if (!isIPBanned(ip)) return false;
 
         var event = new IPUnbanEvent(ip);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         banInfo.bannedIps().remove(ip);
         return true;
@@ -467,8 +463,7 @@ public final class AllayServer implements Server {
         if (isWhitelisted(uuidOrName)) return false;
 
         var event = new WhitelistAddPlayerEvent(uuidOrName);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         return whitelist.whitelist().add(uuidOrName);
     }
@@ -478,8 +473,7 @@ public final class AllayServer implements Server {
         if (!isWhitelisted(uuidOrName)) return false;
 
         var event = new WhitelistRemovePlayerEvent(uuidOrName);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         whitelist.whitelist().remove(uuidOrName);
         players.values().stream()

@@ -158,8 +158,7 @@ public final class Scoreboard {
     public boolean addLine(ScoreboardLine line) {
         if (wouldCallEvent()) {
             var event = new ScoreboardLineAddEvent(this, line);
-            event.call();
-            if (event.isCancelled()) {
+            if (!event.call()) {
                 return false;
             }
         }
@@ -208,8 +207,7 @@ public final class Scoreboard {
 
         if (wouldCallEvent()) {
             var event = new ScoreboardLineRemoveEvent(this, removed);
-            event.call();
-            if (event.isCancelled()) {
+            if (!event.call()) {
                 return false;
             }
         }
@@ -229,8 +227,7 @@ public final class Scoreboard {
         if (lines.isEmpty()) return false;
         if (wouldCallEvent()) {
             var event = new ScoreboardAllLinesRemoveEvent(this);
-            event.call();
-            if (event.isCancelled()) {
+            if (!event.call()) {
                 return false;
             }
         }

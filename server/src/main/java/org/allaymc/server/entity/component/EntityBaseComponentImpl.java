@@ -226,8 +226,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void onDie() {
-        var event = new EntityDieEvent(thisEntity);
-        event.call();
+        new EntityDieEvent(thisEntity).call();
 
         manager.callEvent(CEntityDieEvent.INSTANCE);
         dead = true;
@@ -339,40 +338,38 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         var oldChunkZ = (int) oldLoc.z() >> 4;
         var newChunkX = (int) newLoc.x() >> 4;
         var newChunkZ = (int) newLoc.z() >> 4;
-        if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
-            var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-            if (newChunk == null) {
-                // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
-                // moving to an unloaded chunk will result in the loss of the entity
-                log.debug("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
-                return false;
-            }
+        if (oldChunkX == newChunkX && oldChunkZ == newChunkZ) {
+            return true;
+        }
 
-            Chunk oldChunk = null;
-            if (this.location.dimension != null) {
-                oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
-                // It is possible that the oldChunk is null
-                // For example, when spawning an entity, the entity's old location is meaningless
-                if (oldChunk != null) {
-                    ((AllayChunk) oldChunk).removeEntity(runtimeId);
-                }
-            }
+        var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
+        if (newChunk == null) {
+            // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
+            // moving to an unloaded chunk will result in the loss of the entity
+            log.debug("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
+            return false;
+        }
 
-            ((AllayChunk) newChunk).addEntity(thisEntity);
-            Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
-            Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
-            samePlayers.retainAll(oldChunkPlayers);
-            for (var player : oldChunkPlayers) {
-                if (!samePlayers.contains(player) && player != thisEntity) {
-                    despawnFrom(player);
-                }
-            }
-            for (var player : newChunk.getPlayerChunkLoaders()) {
-                if (!samePlayers.contains(player) && player != thisEntity) {
-                    spawnTo(player);
-                }
+        Chunk oldChunk = null;
+        if (this.location.dimension != null) {
+            oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
+            // It is possible that the oldChunk is null
+            // For example, when spawning an entity, the entity's old location is meaningless
+            if (oldChunk != null) {
+                ((AllayChunk) oldChunk).removeEntity(runtimeId);
             }
         }
+
+        ((AllayChunk) newChunk).addEntity(thisEntity);
+        Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
+        Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
+        samePlayers.retainAll(oldChunkPlayers);
+        oldChunkPlayers.stream()
+                .filter(player -> !samePlayers.contains(player) && player != thisEntity)
+                .forEach(this::despawnFrom);
+        newChunk.getPlayerChunkLoaders().stream()
+                .filter(player -> !samePlayers.contains(player) && player != thisEntity)
+                .forEach(this::spawnTo);
         return true;
     }
 
@@ -390,8 +387,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target));
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         target = event.getTo();
         if (this.location.dimension == target.dimension()) {
@@ -707,8 +703,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void onFall() {
         var event = new EntityFallEvent(thisEntity, fallDistance);
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             this.fallDistance = 0;
             return;
         }
@@ -741,8 +736,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (!canApplyEffect(effectInstance.getType())) return false;
 
         var event = new EntityEffectAddEvent(thisEntity, effectInstance);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         effectInstance = event.getEffect();
 
@@ -770,8 +764,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (removed == null) return;
 
         var event = new EntityEffectRemoveEvent(thisEntity, removed);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         effects.remove(effectType);
 

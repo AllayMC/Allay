@@ -172,8 +172,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setGameType(GameType gameType) {
         var event = new PlayerGameTypeChangeEvent(thisPlayer, this.gameType, gameType);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         gameType = event.getNewGameType();
 

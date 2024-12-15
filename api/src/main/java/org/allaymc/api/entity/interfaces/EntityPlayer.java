@@ -60,8 +60,7 @@ public interface EntityPlayer extends
     default void forceDropItem(Container container, int slot, int count) {
         var item = container.getItemStack(slot);
         var event = new PlayerDropItemEvent(this, item);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         ItemStack droppedItemStack;
         if (item.getCount() > count) {

@@ -47,8 +47,7 @@ public final class ScoreboardLine {
     public boolean setScore(int score) {
         if (scoreboard.wouldCallEvent()) {
             var event = new ScoreboardLineValueChangeEvent(scoreboard, this, this.score, score);
-            event.call();
-            if (event.isCancelled()) {
+            if (!event.call()) {
                 return false;
             }
         }

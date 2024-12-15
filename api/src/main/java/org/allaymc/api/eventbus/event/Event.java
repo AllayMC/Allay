@@ -16,18 +16,23 @@ public abstract class Event {
 
     /**
      * Call the event with the default event bus.
+     *
+     * @return {@code true} if the event was not cancelled, {@code false} otherwise.
      */
-    public void call() {
-        call(Server.getInstance().getEventBus());
+    public boolean call() {
+        return call(Server.getInstance().getEventBus());
     }
 
     /**
      * Call the event with the specified event bus.
      *
      * @param eventBus the event bus to call the event.
+     *
+     * @return {@code true} if the event was not cancelled, {@code false} otherwise.
      */
-    public void call(EventBus eventBus) {
-        eventBus.callEvent(this);
+    public boolean call(EventBus eventBus) {
+        var event = eventBus.callEvent(this);
+        return !event.isCancelled();
     }
 
     /**

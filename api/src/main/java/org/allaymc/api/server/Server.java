@@ -328,8 +328,7 @@ public interface Server extends TaskCreator, CommandSender {
      */
     default void setWhitelistStatus(boolean enable) {
         var event = new WhitelistChangeEvent(enable);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         SETTINGS.genericSettings().isWhitelisted(enable);
         if (enable) {

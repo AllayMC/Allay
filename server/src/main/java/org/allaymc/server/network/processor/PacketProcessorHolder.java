@@ -15,8 +15,8 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 @Slf4j
 public final class PacketProcessorHolder {
-
     private final EnumMap<ClientStatus, EnumMap<BedrockPacketType, PacketProcessor<BedrockPacket>>> processors;
+
     private final AtomicReference<ClientStatus> clientStatus = new AtomicReference<>(ClientStatus.NEW);
 
     public PacketProcessorHolder() {
@@ -28,9 +28,9 @@ public final class PacketProcessorHolder {
             processors.put(status, new EnumMap<>(BedrockPacketType.class));
         }
 
-        registerConnectedPacketProcessors();
-        registerLoggedInPacketProcessors();
-        registerInGamePacketProcessors();
+        this.registerConnectedPacketProcessors();
+        this.registerLoggedInPacketProcessors();
+        this.registerInGamePacketProcessors();
     }
 
     public PacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
@@ -57,66 +57,58 @@ public final class PacketProcessorHolder {
     }
 
     private void registerConnectedPacketProcessors() {
-        registerConnectedProcessor(new RequestNetworkSettingsPacketProcessor());
-        registerConnectedProcessor(new LoginPacketProcessor());
-        registerConnectedProcessor(new ClientToServerHandshakePacketProcessor());
+        this.registerProcessor(ClientStatus.CONNECTED, new RequestNetworkSettingsPacketProcessor());
+        this.registerProcessor(ClientStatus.CONNECTED, new LoginPacketProcessor());
+        this.registerProcessor(ClientStatus.CONNECTED, new ClientToServerHandshakePacketProcessor());
     }
 
     private void registerLoggedInPacketProcessors() {
-        registerLoggedInProcessor(new ClientCacheStatusPacketProcessor());
-        registerLoggedInProcessor(new ResourcePackClientResponsePacketProcessor());
-        registerLoggedInProcessor(new ResourcePackChunkRequestPacketProcessor());
-        registerLoggedInProcessor(new RequestChunkRadiusPacketProcessor());
-        registerLoggedInProcessor(new EmoteListPacketProcessor());
-        registerLoggedInProcessor(new SetLocalPlayerAsInitializedPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new ClientCacheStatusPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new ResourcePackClientResponsePacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new ResourcePackChunkRequestPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new RequestChunkRadiusPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new EmoteListPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new SetLocalPlayerAsInitializedPacketProcessor());
 
         // Client will start sending auth input packet after logged in, however these packets will be ignored.
         // See PlayerAuthInputPacketProcessor#notReadyForInput()
-        registerLoggedInProcessor(new PlayerAuthInputPacketProcessor());
-        registerLoggedInProcessor(new ServerboundLoadingScreenPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new PlayerAuthInputPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new ServerboundLoadingScreenPacketProcessor());
         // These two packets seem are also sent during initialize chunk sending stage, so we also added them
-        registerLoggedInProcessor(new MobEquipmentPacketProcessor());
-        registerLoggedInProcessor(new InteractPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new MobEquipmentPacketProcessor());
+        this.registerProcessor(ClientStatus.LOGGED_IN, new InteractPacketProcessor());
     }
 
     private void registerInGamePacketProcessors() {
-        registerInGameProcessor(new AnimatePacketProcessor());
-        registerInGameProcessor(new BlockPickRequestPacketProcessor());
-        registerInGameProcessor(new CommandRequestPacketProcessor());
-        registerInGameProcessor(new ContainerClosePacketProcessor());
-        registerInGameProcessor(new InteractPacketProcessor());
-        registerInGameProcessor(new InventoryTransactionPacketProcessor());
-        registerInGameProcessor(new ItemStackRequestPacketProcessor());
-        registerInGameProcessor(new MobEquipmentPacketProcessor());
-        registerInGameProcessor(new PlayerActionPacketProcessor());
-        registerInGameProcessor(new PlayerAuthInputPacketProcessor());
-        registerInGameProcessor(new RequestChunkRadiusPacketProcessor());
-        registerInGameProcessor(new RespawnPacketProcessor());
-        registerInGameProcessor(new SetDefaultGameTypePacketProcessor());
-        registerInGameProcessor(new SetPlayerGameTypePacketProcessor());
-        registerInGameProcessor(new SubChunkRequestPacketProcessor());
-        registerInGameProcessor(new TextPacketProcessor());
-        registerInGameProcessor(new SettingsCommandPacketProcessor());
-        registerInGameProcessor(new ModalFormResponsePacketProcessor());
-        registerInGameProcessor(new ServerSettingsRequestProcessor());
-        registerInGameProcessor(new PlayerSkinPacketProcessor());
-        registerInGameProcessor(new LevelSoundEvent2PacketProcessor());
-        registerInGameProcessor(new EntityEventPacketProcessor());
-        registerInGameProcessor(new BlockEntityDataPacketProcessor());
-        registerInGameProcessor(new EmotePacketProcessor());
-        registerInGameProcessor(new SetPlayerInventoryOptionsPacketProcessor());
-        registerInGameProcessor(new BossEventPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new AnimatePacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new BlockPickRequestPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new CommandRequestPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new ContainerClosePacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new InteractPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new InventoryTransactionPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new ItemStackRequestPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new MobEquipmentPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new PlayerActionPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new PlayerAuthInputPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new RequestChunkRadiusPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new RespawnPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new SetDefaultGameTypePacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new SetPlayerGameTypePacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new SubChunkRequestPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new TextPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new SettingsCommandPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new ModalFormResponsePacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new ServerSettingsRequestProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new PlayerSkinPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new LevelSoundEvent2PacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new EntityEventPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new BlockEntityDataPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new EmotePacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new SetPlayerInventoryOptionsPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new BossEventPacketProcessor());
     }
 
-    private void registerConnectedProcessor(PacketProcessor<? extends BedrockPacket> processor) {
-        processors.get(ClientStatus.CONNECTED).put(processor.getPacketType(), (PacketProcessor<BedrockPacket>) processor);
-    }
-
-    private void registerLoggedInProcessor(PacketProcessor<? extends BedrockPacket> processor) {
-        processors.get(ClientStatus.LOGGED_IN).put(processor.getPacketType(), (PacketProcessor<BedrockPacket>) processor);
-    }
-
-    private void registerInGameProcessor(PacketProcessor<? extends BedrockPacket> processor) {
-        processors.get(ClientStatus.IN_GAME).put(processor.getPacketType(), (PacketProcessor<BedrockPacket>) processor);
+    public void registerProcessor(ClientStatus status, PacketProcessor<? extends BedrockPacket> processor) {
+        processors.get(status).put(processor.getPacketType(), (PacketProcessor<BedrockPacket>) processor);
     }
 }

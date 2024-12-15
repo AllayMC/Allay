@@ -71,7 +71,7 @@ public class ServerSettings extends OkaeriConfig {
         private LangCode language = LangCode.en_US;
 
         @Comment("Open debug mode")
-        @Comment("If debug mode is enabled, the console will outputs more detailed information")
+        @Comment("If debug mode is enabled, the console will output more detailed information")
         private boolean debug = false;
 
         @CustomKey("is-whitelisted")

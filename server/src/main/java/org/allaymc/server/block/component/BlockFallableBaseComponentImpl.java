@@ -47,8 +47,7 @@ public class BlockFallableBaseComponentImpl extends BlockBaseComponentImpl imple
         var down1 = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos), 1).getBlockType();
         if (invalidDownBlock(down0, down1)) {
             var event = new BlockFallEvent(new BlockStateWithPos(blockState, new Position3i(pos, dimension), 0));
-            event.call();
-            if (event.isCancelled()) {
+            if (!event.call()) {
                 return false;
             }
 

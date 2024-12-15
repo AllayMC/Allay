@@ -55,8 +55,7 @@ public class CraftRecipeActionProcessor implements ContainerActionProcessor<Craf
         int requiredLapisLazuliCount = data.requiredLapisLazuliCount();
         int requiredXpLevel = data.requiredXpLevel();
         var event = new PlayerEnchantItemEvent(player, inputItem, enchantments, requiredLapisLazuliCount);
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             return error();
         }
         enchantments = event.getEnchantments();

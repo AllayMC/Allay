@@ -16,7 +16,6 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
  */
 @Getter
 public class ItemFoodComponentImpl implements ItemFoodComponent {
-
     private static final int DEFAULT_EATING_TIME = 32; // GameTick
 
     private final int foodPoints;
@@ -62,8 +61,7 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
 
         var player = event.getPlayer();
         var playerEatFoodEvent = new PlayerEatFoodEvent(player, thisItemStack);
-        playerEatFoodEvent.call();
-        if (playerEatFoodEvent.isCancelled()) {
+        if (!playerEatFoodEvent.call()) {
             event.setCanBeUsed(false);
             return;
         }

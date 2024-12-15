@@ -76,6 +76,7 @@ public class AllayNetworkInterface implements NetworkInterface {
         this.channel = new ServerBootstrap()
                 .channelFactory(RakChannelFactory.server(datagramChannelClass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
+                .option(RakChannelOption.RAK_PACKET_LIMIT, 1000) // This option fixed localhost blocking address
                 .group(eventLoopGroup)
                 .childHandler(new BedrockServerInitializer() {
                     @Override
@@ -93,8 +94,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                         }
 
                         var event = new ClientConnectEvent(session);
-                        event.call();
-                        if (event.isCancelled()) {
+                        if (!event.call()) {
                             session.disconnect();
                             return;
                         }
@@ -114,19 +114,13 @@ public class AllayNetworkInterface implements NetworkInterface {
     }
 
     @Override
-    public void setMotd(String motd) {
-        pong.motd(motd);
-        updatePong();
-    }
-
-    @Override
     public String getMotd() {
         return pong.motd();
     }
 
     @Override
-    public void setSubMotd(String subMotd) {
-        pong.subMotd(subMotd);
+    public void setMotd(String motd) {
+        pong.motd(motd);
         updatePong();
     }
 
@@ -136,14 +130,20 @@ public class AllayNetworkInterface implements NetworkInterface {
     }
 
     @Override
-    public void setMaxPlayerCount(int maxPlayerCount) {
-        pong.maximumPlayerCount(maxPlayerCount);
+    public void setSubMotd(String subMotd) {
+        pong.subMotd(subMotd);
         updatePong();
     }
 
     @Override
     public int getMaxPlayerCount() {
         return pong.maximumPlayerCount();
+    }
+
+    @Override
+    public void setMaxPlayerCount(int maxPlayerCount) {
+        pong.maximumPlayerCount(maxPlayerCount);
+        updatePong();
     }
 
     public void setPlayerCount(int count) {

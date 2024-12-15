@@ -187,8 +187,7 @@ public final class AllayChunkService implements ChunkService {
         var presentValue = loadingChunks.putIfAbsent(hashXZ, future);
         if (presentValue != null) return presentValue;
 
-        var chunkPreLoadEvent = new ChunkPreLoadEvent(dimension, x, z);
-        chunkPreLoadEvent.call();
+        new ChunkPreLoadEvent(dimension, x, z).call();
 
         worldStorage.readChunk(x, z, dimension.getDimensionInfo()).exceptionally(t -> {
             log.error("Error while reading chunk ({},{}) !", x, z, t);
@@ -315,8 +314,7 @@ public final class AllayChunkService implements ChunkService {
         if (chunk == null) return CompletableFuture.completedFuture(false);
 
         var event = new ChunkUnloadEvent(dimension, chunk);
-        event.call();
-        if (event.isCancelled()) return CompletableFuture.completedFuture(false);
+        if (!event.call()) return CompletableFuture.completedFuture(false);
 
         loadedChunks.remove(chunkHash);
         chunk.getEntities().forEach((runtimeId, entity) -> {
@@ -326,8 +324,7 @@ public final class AllayChunkService implements ChunkService {
         ((AllayLightService) dimension.getLightService()).onChunkUnload(chunk);
 
         var future = new CompletableFuture<Boolean>();
-        worldStorage
-                .writeChunk(chunk)
+        worldStorage.writeChunk(chunk)
                 .exceptionally(t -> {
                     future.complete(false);
                     return null;

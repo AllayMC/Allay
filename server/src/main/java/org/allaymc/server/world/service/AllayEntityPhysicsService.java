@@ -469,8 +469,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 if (!entities.containsKey(player.getRuntimeId())) continue;
 
                 var event = new PlayerMoveEvent(player, player.getLocation(), clientMove.newLoc());
-                Server.getInstance().getEventBus().callEvent(event);
-                if (event.isCancelled()) {
+                if (!event.call()) {
                     // Let client back to the previous pos
                     player.teleport(event.getFrom());
                     continue;
@@ -493,10 +492,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
         var event = new EntityMoveEvent(entity, entity.getLocation(), newLoc);
-        event.call();
-        if (event.isCancelled()) {
-            return false;
-        }
+        if (!event.call()) return false;
+
         newLoc = event.getTo();
 
         var baseComponent = (EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent();
@@ -515,8 +512,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * Please call it before run tick()!
      */
     public void addEntity(Entity entity) {
-        if (entities.containsKey(entity.getRuntimeId()))
+        if (entities.containsKey(entity.getRuntimeId())) {
             throw new IllegalArgumentException("Entity " + entity.getRuntimeId() + " is already added!");
+        }
         entities.put(entity.getRuntimeId(), entity);
         entityAABBTree.add(entity);
     }

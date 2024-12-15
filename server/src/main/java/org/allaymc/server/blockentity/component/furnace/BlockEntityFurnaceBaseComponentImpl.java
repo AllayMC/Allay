@@ -183,8 +183,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         var event = new FurnaceSmeltEvent(thisBlockEntityFurnace, ingredient, output);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         var currentResult = container.getResult();
         if (currentResult == ItemAirStack.AIR_STACK) {
@@ -263,8 +262,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
         }
 
         var event = new FurnaceConsumeFuelEvent(thisBlockEntityFurnace, fuel);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         if (fuel.getItemType() == ItemTypes.LAVA_BUCKET) {
             container.setFuel(ItemTypes.BUCKET.createItemStack(1));

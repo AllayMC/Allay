@@ -13,7 +13,6 @@ import org.cloudburstmc.protocol.bedrock.packet.PlayerSkinPacket;
  */
 @Slf4j
 public class PlayerSkinPacketProcessor extends PacketProcessor<PlayerSkinPacket> {
-
     @Override
     public void handleSync(EntityPlayer player, PlayerSkinPacket packet, long receiveTime) {
         var newSkin = Skin.fromNetwork(packet.getSkin());
@@ -23,10 +22,9 @@ public class PlayerSkinPacketProcessor extends PacketProcessor<PlayerSkinPacket>
         }
 
         var event = new PlayerChangeSkinEvent(player, player.getSkin(), newSkin);
-        event.call();
-        if (event.isCancelled()) return;
-
-        player.setSkin(event.getNewSkin());
+        if (event.call()) {
+            player.setSkin(event.getNewSkin());
+        }
     }
 
     @Override

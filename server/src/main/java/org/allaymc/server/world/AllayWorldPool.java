@@ -110,10 +110,7 @@ public final class AllayWorldPool implements WorldPool {
         }
 
         var event = new WorldUnloadEvent(world);
-        event.call();
-        if (event.isCancelled()) {
-            return;
-        }
+        if (!event.call()) return;
 
         world.shutdown();
         worlds.remove(name);
@@ -161,8 +158,7 @@ public final class AllayWorldPool implements WorldPool {
 
     private boolean addWorld(AllayWorld world) {
         var event = new WorldLoadEvent(world);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         worlds.put(world.getName(), world);
         world.startTick();

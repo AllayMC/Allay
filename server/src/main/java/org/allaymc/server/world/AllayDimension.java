@@ -141,10 +141,7 @@ public class AllayDimension implements Dimension {
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
                 usedItem, player
         );
-        event.call();
-        if (event.isCancelled()) {
-            return false;
-        }
+        if (!event.call()) return false;
 
         var pk = new LevelEventPacket();
         pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);

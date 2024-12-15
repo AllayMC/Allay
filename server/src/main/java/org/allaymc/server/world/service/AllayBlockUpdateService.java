@@ -109,15 +109,11 @@ public class AllayBlockUpdateService implements BlockUpdateService {
     }
 
     protected boolean callScheduleUpdateEvent(BlockStateWithPos block) {
-        var event = new BlockScheduleUpdateEvent(block);
-        event.call();
-        return !event.isCancelled();
+        return new BlockScheduleUpdateEvent(block).call();
     }
 
     protected boolean callNeighborUpdateEvent(BlockStateWithPos block, BlockStateWithPos neighborBlock, BlockFace blockFace) {
-        var event = new BlockNeighborUpdateEvent(block, neighborBlock, blockFace);
-        event.call();
-        return !event.isCancelled();
+        return new BlockNeighborUpdateEvent(block, neighborBlock, blockFace).call();
     }
 
     @Override

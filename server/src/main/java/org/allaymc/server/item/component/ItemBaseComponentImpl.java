@@ -288,8 +288,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                 new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension), 0),
                 oldBlockState, thisItemStack, player, placementInfo
         );
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             return false;
         }
 

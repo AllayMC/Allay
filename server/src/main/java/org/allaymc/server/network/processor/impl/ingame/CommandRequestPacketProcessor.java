@@ -17,10 +17,9 @@ public class CommandRequestPacketProcessor extends PacketProcessor<CommandReques
         var command = packet.getCommand().substring(1);
 
         var event = new PlayerCommandEvent(player, command);
-        event.call();
-        if (event.isCancelled()) return;
-
-        Registries.COMMANDS.execute(player, command);
+        if (event.call()) {
+            Registries.COMMANDS.execute(player, event.getCommand());
+        }
     }
 
     @Override
