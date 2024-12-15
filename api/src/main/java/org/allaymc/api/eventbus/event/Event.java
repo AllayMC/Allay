@@ -31,8 +31,8 @@ public abstract class Event {
      * @return {@code true} if the event was not cancelled, {@code false} otherwise.
      */
     public boolean call(EventBus eventBus) {
-        var event = eventBus.callEvent(this);
-        return !event.isCancelled();
+        eventBus.callEvent(this);
+        return !this.cancelled;
     }
 
     /**
