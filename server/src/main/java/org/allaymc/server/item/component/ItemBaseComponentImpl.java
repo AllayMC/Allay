@@ -415,41 +415,31 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         var vanillaBlockId = BlockId.fromIdentifier(blockType.getIdentifier());
         if (vanillaItemId != null && vanillaBlockId != null) {
             var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
-            if (specialTools.length != 0)
+            if (specialTools.length != 0) {
                 return Arrays.stream(specialTools).anyMatch(tool -> tool == vanillaItemId);
+            }
         }
 
-        var materialType = blockState.getBlockType().getMaterial().materialType();
+        var materialType = blockType.getMaterial().materialType();
         if (itemType == ItemTypes.SHEARS) {
             if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) return true;
 
             return materialType == MaterialTypes.CLOTH ||
                    materialType == MaterialTypes.LEAVES ||
-                   materialType == MaterialTypes.PLANT ||
-                   materialType == MaterialTypes.WEB;
+                   blockType.hasBlockTag(BlockTags.PLANT) ||
+                   blockType.hasBlockTag(BlockTags.IS_SHEARS_ITEM_DESTRUCTIBLE);
         }
 
-        if (isAxe(itemType)) return materialType == MaterialTypes.WOOD;
+        if (isAxe(itemType)) {
+            return blockType.hasBlockTag(BlockTags.IS_AXE_ITEM_DESTRUCTIBLE);
+        }
 
-        if (isShovel(itemType))
-            return materialType == MaterialTypes.DIRT ||
-                   materialType == MaterialTypes.CLAY ||
-                   materialType == MaterialTypes.SAND ||
-                   materialType == MaterialTypes.SNOW ||
-                   materialType == MaterialTypes.TOP_SNOW;
+        if (isShovel(itemType)) {
+            return blockType.hasBlockTag(BlockTags.IS_SHOVEL_ITEM_DESTRUCTIBLE);
+        }
 
         if (isHoe(itemType)) {
-            if (
-                    blockType == BlockTypes.DRIED_KELP_BLOCK ||
-                    blockType == BlockTypes.HAY_BLOCK ||
-                    blockType == BlockTypes.TARGET ||
-                    blockType == BlockTypes.SPONGE ||
-                    blockType == BlockTypes.MOSS_BLOCK
-            ) return true;
-
-            return materialType == MaterialTypes.LEAVES ||
-                   materialType == MaterialTypes.NETHERWART ||
-                   materialType == MaterialTypes.SCULK;
+            return blockType.hasBlockTag(BlockTags.IS_HOE_ITEM_DESTRUCTIBLE);
         }
 
         if (isSword(itemType)) {
@@ -462,9 +452,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                     blockType == BlockTypes.GLOW_LICHEN
             ) return true;
 
-            return materialType == MaterialTypes.VEGETABLE ||
-                   materialType == MaterialTypes.LEAVES ||
-                   materialType == MaterialTypes.WEB;
+            return blockType.hasBlockTag(BlockTags.IS_SWORD_ITEM_DESTRUCTIBLE);
         }
 
         return false;

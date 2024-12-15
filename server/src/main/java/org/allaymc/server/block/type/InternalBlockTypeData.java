@@ -13,7 +13,6 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -30,6 +29,7 @@ public final class InternalBlockTypeData {
     private static final EnumMap<BlockId, BlockTag[]> BLOCK_TAGS = new EnumMap<>(BlockId.class);
     private static final EnumMap<BlockId, BlockTag[]> BLOCK_TAGS_CUSTOM = new EnumMap<>(BlockId.class);
     private static final EnumMap<BlockId, MaterialType> BLOCK_MATERIAL_TYPES = new EnumMap<>(BlockId.class);
+    // TODO: replace with the newly added xxx_tier_destructible block tag?
     // Stores the correct tool sets for blocks that require tool quality
     private static final EnumMap<BlockId, ItemId[]> BLOCK_SPECIAL_TOOLS = new EnumMap<>(BlockId.class);
     private static final EnumMap<BlockId, Integer> BLOCK_DEFAULT_STATES = new EnumMap<>(BlockId.class);
