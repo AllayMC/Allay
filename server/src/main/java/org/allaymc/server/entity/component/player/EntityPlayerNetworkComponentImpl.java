@@ -72,21 +72,18 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
-
+    @Getter
+    protected final PacketProcessorHolder packetProcessorHolder;
     @Manager
     protected ComponentManager manager;
     @ComponentObject
     protected EntityPlayer thisPlayer;
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
-
     @Getter
     @Setter
     protected boolean networkEncryptionEnabled = false;
     protected AtomicInteger fullyJoinChunkThreshold;
-    @Getter
-    protected final PacketProcessorHolder packetProcessorHolder;
-
     @Getter
     @Setter
     protected LoginData loginData;
@@ -263,9 +260,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     }
 
     protected void onDisconnect(String disconnectReason) {
-        new PlayerQuitEvent(thisPlayer, disconnectReason).call();
         thisPlayer.closeAllContainers();
         ((AllayServer) Server.getInstance()).onDisconnect(thisPlayer);
+        new PlayerQuitEvent(thisPlayer, disconnectReason).call();
     }
 
     @Override

@@ -111,10 +111,6 @@ public final class AllayServer implements Server {
     @Getter
     private long startTime;
 
-    public static AllayServer getInstance() {
-        return INSTANCE;
-    }
-
     private AllayServer() {
         this.isRunning = new AtomicBoolean(true);
         this.isStarting = new AtomicBoolean(true);
@@ -139,6 +135,10 @@ public final class AllayServer implements Server {
                 .onTick(this::serverThreadMain)
                 .onStop(this::onServerStop)
                 .build();
+    }
+
+    public static AllayServer getInstance() {
+        return INSTANCE;
     }
 
     private void serverThreadMain(GameLoop gameLoop) {
@@ -290,12 +290,10 @@ public final class AllayServer implements Server {
     public void onDisconnect(EntityPlayer player) {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
-        if (player.isLoggedIn()) {
+        if (player.isSpawned()) {
             broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
             players.remove(player.getUUID());
-        }
 
-        if (player.isSpawned()) {
             player.getDimension().removePlayer(player);
             playerStorage.savePlayerData(player);
 
