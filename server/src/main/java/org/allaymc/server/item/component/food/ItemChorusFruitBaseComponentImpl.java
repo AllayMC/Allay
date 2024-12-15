@@ -21,8 +21,9 @@ public class ItemChorusFruitBaseComponentImpl extends ItemFoodComponentImpl {
         var dimension = player.getDimension();
 
         var safePos = dimension.findSuitableGroundPosAround(this::isSafeStandingPos, (int) playerLoc.x(), (int) playerLoc.z(), 8, 16);
-        if (safePos == null) return;
-        player.teleport(new Location3f(safePos.x(), safePos.y(), safePos.z(), dimension));
+        if (safePos != null) {
+            player.teleport(new Location3f(safePos.x(), safePos.y(), safePos.z(), dimension));
+        }
     }
 
     protected boolean isSafeStandingPos(Position3ic pos) {
