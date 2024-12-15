@@ -114,7 +114,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var maxLoginTime = Server.SETTINGS.networkSettings().maxLoginTime();
         if (maxLoginTime > 0) {
             Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
-                if (packetProcessorHolder.getClientStatus().ordinal() < ClientStatus.IN_GAME.ordinal()) {
+                var status = packetProcessorHolder.getClientStatus();
+                if (status != ClientStatus.DISCONNECTED && status.ordinal() < ClientStatus.IN_GAME.ordinal()) {
                     log.warn("Session {} didn't log in within {} seconds, disconnecting...", clientSession.getSocketAddress().toString(), Server.SETTINGS.networkSettings().maxLoginTime() / 20d);
                     disconnect(TrKeys.M_DISCONNECTIONSCREEN_TIMEOUT);
                 }
@@ -257,6 +258,11 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Override
     public ClientStatus getClientStatus() {
         return packetProcessorHolder.getClientStatus();
+    }
+
+    @Override
+    public ClientStatus getLastClientStatus() {
+        return packetProcessorHolder.getLastClientStatus();
     }
 
     protected void onDisconnect(String disconnectReason) {

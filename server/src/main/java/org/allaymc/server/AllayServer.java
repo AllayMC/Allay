@@ -24,6 +24,7 @@ import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
@@ -290,10 +291,13 @@ public final class AllayServer implements Server {
     public void onDisconnect(EntityPlayer player) {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
-        if (player.isSpawned()) {
+        // At this time the client have disconnected
+        if (player.getLastClientStatus().ordinal() >= ClientStatus.LOGGED_IN.ordinal()) {
             broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
             players.remove(player.getUUID());
+        }
 
+        if (player.getLastClientStatus().ordinal() >= ClientStatus.IN_GAME.ordinal()) {
             player.getDimension().removePlayer(player);
             playerStorage.savePlayerData(player);
 

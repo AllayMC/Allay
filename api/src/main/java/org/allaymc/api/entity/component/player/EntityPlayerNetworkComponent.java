@@ -105,12 +105,19 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
     ClientStatus getClientStatus();
 
     /**
+     * Get the last client status of this player.
+     *
+     * @return the last client status of this player.
+     */
+    ClientStatus getLastClientStatus();
+
+    /**
      * Check if the player is connected.
      *
      * @return {@code true} if the player is connected, {@code false} otherwise.
      */
     default boolean isConnected() {
-        return getClientStatus() == ClientStatus.CONNECTED;
+        return getClientStatus().ordinal() >= ClientStatus.CONNECTED.ordinal();
     }
 
     /**
@@ -119,7 +126,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return {@code true} if the player is logged in, {@code false} otherwise.
      */
     default boolean isLoggedIn() {
-        return getClientStatus() == ClientStatus.LOGGED_IN;
+        return getClientStatus().ordinal() >= ClientStatus.LOGGED_IN.ordinal();
     }
 
     /**
@@ -130,7 +137,7 @@ public interface EntityPlayerNetworkComponent extends EntityComponent, PacketRec
      * @return {@code true} if the player has been fully initialized, {@code false} otherwise.
      */
     default boolean isInitialized() {
-        return getClientStatus() == ClientStatus.IN_GAME;
+        return getClientStatus().ordinal() >= ClientStatus.IN_GAME.ordinal();
     }
 
     /**

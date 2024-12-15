@@ -8,7 +8,6 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacketType;
 
 import java.util.EnumMap;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author Cool_Loong
@@ -17,14 +16,12 @@ import java.util.concurrent.atomic.AtomicReference;
 public final class PacketProcessorHolder {
     private final EnumMap<ClientStatus, EnumMap<BedrockPacketType, PacketProcessor<BedrockPacket>>> processors;
 
-    private final AtomicReference<ClientStatus> clientStatus = new AtomicReference<>(ClientStatus.NEW);
+    private ClientStatus clientStatus = ClientStatus.DISCONNECTED;
+    private ClientStatus lastClientStatus = null;
 
     public PacketProcessorHolder() {
         this.processors = new EnumMap<>(ClientStatus.class);
         for (ClientStatus status : ClientStatus.values()) {
-            if (status == ClientStatus.NEW) {
-                continue;
-            }
             processors.put(status, new EnumMap<>(BedrockPacketType.class));
         }
 
@@ -34,25 +31,34 @@ public final class PacketProcessorHolder {
     }
 
     public PacketProcessor<BedrockPacket> getProcessor(BedrockPacket packet) {
-        var map = processors.get(clientStatus.get());
+        var map = processors.get(clientStatus);
         return map != null ? map.get(packet.getPacketType()) : null;
     }
 
     public ClientStatus getClientStatus() {
-        return clientStatus.get();
+        return clientStatus;
+    }
+
+    public ClientStatus getLastClientStatus() {
+        return lastClientStatus;
     }
 
     public boolean setClientStatus(ClientStatus clientStatus) {
         return setClientStatus(clientStatus, true);
     }
 
-    public boolean setClientStatus(ClientStatus clientStatus, boolean warnIfFailed) {
-        if (!this.clientStatus.compareAndSet(clientStatus.getPreviousStatus(), clientStatus)) {
+    // We use lock here because this method won't be called frequently
+    // Instead, method getClientStatus() will be called frequently
+    public synchronized boolean setClientStatus(ClientStatus clientStatus, boolean warnIfFailed) {
+        // PreviousStatus != null means that we should check if the previous status is correct
+        if (clientStatus.getPreviousStatus() != null && this.clientStatus != clientStatus.getPreviousStatus()) {
             if (warnIfFailed) {
-                log.warn("Failed to set client status to {}. Current is {}", clientStatus, this.clientStatus.get());
+                log.warn("Failed to set client status to {}. Current is {}", clientStatus, this.clientStatus);
             }
             return false;
         }
+        this.lastClientStatus = this.clientStatus;
+        this.clientStatus = clientStatus;
         return true;
     }
 
