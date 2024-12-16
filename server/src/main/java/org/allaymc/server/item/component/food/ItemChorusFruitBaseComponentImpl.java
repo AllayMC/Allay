@@ -4,9 +4,10 @@ import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.position.Position3ic;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 /**
- * @author IWareQ, PowerNukkitX
+ * @author IWareQ
  */
 public class ItemChorusFruitBaseComponentImpl extends ItemFoodComponentImpl {
     public ItemChorusFruitBaseComponentImpl() {
@@ -22,7 +23,9 @@ public class ItemChorusFruitBaseComponentImpl extends ItemFoodComponentImpl {
 
         var safePos = dimension.findSuitableGroundPosAround(this::isSafeStandingPos, (int) playerLoc.x(), (int) playerLoc.z(), 8, 16);
         if (safePos != null) {
-            player.teleport(new Location3f(safePos.x(), safePos.y(), safePos.z(), dimension));
+            dimension.addLevelSoundEvent(playerLoc, SoundEvent.TELEPORT);
+            player.teleport(new Location3f(safePos.x() + 0.5f, safePos.y(), safePos.z() + 0.5f, dimension));
+            dimension.addLevelSoundEvent(playerLoc, SoundEvent.TELEPORT);
         }
     }
 
