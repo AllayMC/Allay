@@ -14,6 +14,7 @@ public record Material(
         MaterialType materialType,
         boolean blocksMotion,
         boolean blocksPrecipitation,
+        // TODO: replace with BlockLegacy::mRequiresCorrectToolForDrops (canDropWithAnyTool)
         // When isAlwaysDestroyable is true, it means the block can be destroyed by any item (even bare hands) without incurring a mining penalty.
         // Some blocks (such as stone and obsidian) cannot be mined by hand. If you try to mine them, the mining speed will be penalized (baseTime increased by 5 times, normally it's 1.5 times).
         boolean isAlwaysDestroyable,

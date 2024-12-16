@@ -68,7 +68,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         var leftBlock = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos)).getBlockType();
         var rightBlock = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos)).getBlockType();
-        if (leftBlock == getBlockType() || (!rightBlock.getMaterial().isTransparent() && leftBlock.getMaterial().isTransparent())) { //Door hinge
+        if (leftBlock == getBlockType() || (!rightBlock.getMaterial().isTransparent() && leftBlock.getMaterial().isTransparent())) { // Door hinge
             blockState = blockState.setProperty(DOOR_HINGE_BIT, true);
         }
 

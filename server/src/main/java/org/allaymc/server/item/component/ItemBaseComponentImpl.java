@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.material.MaterialTypes;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
@@ -420,12 +419,11 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             }
         }
 
-        var materialType = blockType.getMaterial().materialType();
         if (itemType == ItemTypes.SHEARS) {
             if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) return true;
 
-            return materialType == MaterialTypes.CLOTH ||
-                   materialType == MaterialTypes.LEAVES ||
+            return blockType.hasBlockTag(BlockTags.WOOL) ||
+                   blockType.hasBlockTag(BlockTags.LEAVES) ||
                    blockType.hasBlockTag(BlockTags.PLANT) ||
                    blockType.hasBlockTag(BlockTags.IS_SHEARS_ITEM_DESTRUCTIBLE);
         }

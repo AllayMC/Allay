@@ -1,6 +1,7 @@
 package org.allaymc.api.item.component;
 
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -21,8 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.block.material.MaterialTypes.CLOTH;
-import static org.allaymc.api.block.material.MaterialTypes.LEAVES;
 import static org.allaymc.api.item.tag.ItemTags.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
@@ -502,17 +501,15 @@ public interface ItemBaseComponent extends ItemComponent {
     default double getBreakTimeBonus(BlockState blockState) {
         var itemType = getItemType();
         var blockType = blockState.getBlockType();
-        var materialType = blockType.getMaterial().materialType();
         // Swords break cobwebs faster
         if (itemType.hasItemTag(IS_SWORD)) {
             if (blockType == BlockTypes.WEB) return 15d;
         }
         if (itemType == SHEARS) {
             // Shears break wool and leaves faster
-            // TODO: add custom wool block tag and replace CLOTH
-            if (materialType == CLOTH) {
+            if (blockType.hasBlockTag(BlockTags.WOOL)) {
                 return 5d;
-            } else if (blockType == BlockTypes.WEB || materialType == LEAVES) {
+            } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockTags.LEAVES)) {
                 return 15d;
             }
             return 1d;
