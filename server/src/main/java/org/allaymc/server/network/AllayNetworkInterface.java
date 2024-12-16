@@ -15,7 +15,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.i18n.I18n;
@@ -99,7 +98,7 @@ public class AllayNetworkInterface implements NetworkInterface {
                             return;
                         }
 
-                        var player = EntityTypes.PLAYER.createEntity(EntityInitInfo.builder().build());
+                        var player = EntityTypes.PLAYER.createEntity();
                         log.info(I18n.get().tr(TrKeys.A_NETWORK_CLIENT_CONNECTED, session.getSocketAddress().toString()));
                         ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).setClientSession(session);
                     }

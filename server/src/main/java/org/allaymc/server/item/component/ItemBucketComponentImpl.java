@@ -1,5 +1,6 @@
 package org.allaymc.server.item.component;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
@@ -22,15 +23,10 @@ import org.joml.Vector3ic;
  * @author daoge_cmd
  */
 @Slf4j
+@AllArgsConstructor
 public class ItemBucketComponentImpl implements ItemBucketComponent {
-
     public final Identifier liquidId;
     public final Identifier entityId;
-
-    public ItemBucketComponentImpl(Identifier liquidId, Identifier entityId) {
-        this.liquidId = liquidId;
-        this.entityId = entityId;
-    }
 
     @Override
     public BlockType<?> getLiquidType() {

@@ -1,5 +1,5 @@
 [versions]
-log4j = "2.24.2"
+log4j = "2.24.3"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.0.1"

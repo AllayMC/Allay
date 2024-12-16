@@ -10,13 +10,11 @@ import org.allaymc.api.item.component.tool.ItemPickaxeComponent;
 import org.allaymc.api.item.component.tool.ItemShovelComponent;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.interfaces.ItemMusicDiscStack;
+import org.allaymc.api.item.interfaces.ItemSpawnEggStack;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.food.*;
-import org.allaymc.server.item.component.spawnegg.ItemEvokerSpawnEggBaseComponentImpl;
-import org.allaymc.server.item.component.spawnegg.ItemSpawnEggBaseComponentImpl;
-import org.allaymc.server.item.component.spawnegg.ItemTropicalFishSpawnEggBaseComponentImpl;
 import org.allaymc.server.item.component.tool.*;
 import org.allaymc.server.item.impl.*;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -382,420 +380,102 @@ public final class ItemTypeInitializer {
     }
 
     public static void initSpawnEgg() {
-        ItemTypes.AGENT_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.AGENT_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ALLAY_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ALLAY_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ARMADILLO_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ARMADILLO_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.AXOLOTL_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.AXOLOTL_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.BAT_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BAT_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.BEE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BEE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.BLAZE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BLAZE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.BOGGED_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BOGGED_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.BREEZE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.BREEZE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.CAMEL_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CAMEL_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.CAT_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CAT_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.CAVE_SPIDER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CAVE_SPIDER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.CHICKEN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CHICKEN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.COD_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.COD_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.COW_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.COW_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.CREEPER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.CREEPER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.DOLPHIN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.DOLPHIN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.DONKEY_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.DONKEY_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.DROWNED_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.DROWNED_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ELDER_GUARDIAN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ELDER_GUARDIAN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ENDER_DRAGON_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ENDER_DRAGON_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ENDERMAN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ENDERMAN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ENDERMITE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ENDERMITE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.EVOKER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.EVOKER_SPAWN_EGG)
-                .addComponent(ItemEvokerSpawnEggBaseComponentImpl::new, ItemEvokerSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.FOX_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.FOX_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.FROG_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.FROG_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.GHAST_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.GHAST_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.GLOW_SQUID_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.GLOW_SQUID_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.GOAT_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.GOAT_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.GUARDIAN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.GUARDIAN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.HOGLIN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.HOGLIN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.HORSE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.HORSE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.HUSK_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.HUSK_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.IRON_GOLEM_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.IRON_GOLEM_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.LLAMA_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.LLAMA_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.MAGMA_CUBE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.MAGMA_CUBE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.MOOSHROOM_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.MOOSHROOM_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.MULE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.MULE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.NPC_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.NPC_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.OCELOT_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.OCELOT_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.PANDA_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PANDA_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.PARROT_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PARROT_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.PHANTOM_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PHANTOM_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.PIG_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PIG_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.PIGLIN_BRUTE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PIGLIN_BRUTE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.PIGLIN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PIGLIN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.PILLAGER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PILLAGER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.POLAR_BEAR_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.POLAR_BEAR_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.PUFFERFISH_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.PUFFERFISH_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.RABBIT_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.RABBIT_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.RAVAGER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.RAVAGER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SALMON_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SALMON_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SHEEP_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SHEEP_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SHULKER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SHULKER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SILVERFISH_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SILVERFISH_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SKELETON_HORSE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SKELETON_HORSE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SKELETON_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SKELETON_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SLIME_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SLIME_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SNIFFER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SNIFFER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SNOW_GOLEM_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SNOW_GOLEM_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SPIDER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SPIDER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.SQUID_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.SQUID_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.STRAY_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.STRAY_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.STRIDER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.STRIDER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.TADPOLE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.TADPOLE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.TRADER_LLAMA_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.TRADER_LLAMA_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.TROPICAL_FISH_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.TROPICAL_FISH_SPAWN_EGG)
-                .addComponent(ItemTropicalFishSpawnEggBaseComponentImpl::new, ItemTropicalFishSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.TURTLE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.TURTLE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.VEX_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.VEX_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.VILLAGER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.VILLAGER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.VINDICATOR_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.VINDICATOR_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.WANDERING_TRADER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WANDERING_TRADER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.WARDEN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WARDEN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.WITCH_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WITCH_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.WITHER_SKELETON_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WITHER_SKELETON_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.WITHER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WITHER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.WOLF_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.WOLF_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ZOGLIN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOGLIN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ZOMBIE_HORSE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOMBIE_HORSE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ZOMBIE_PIGMAN_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOMBIE_PIGMAN_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ZOMBIE_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOMBIE_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
-                .build();
-        ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG = AllayItemType
-                .builder(ItemSpawnEggStackImpl.class)
-                .vanillaItem(ItemId.ZOMBIE_VILLAGER_SPAWN_EGG)
-                .addComponent(ItemSpawnEggBaseComponentImpl::new, ItemSpawnEggBaseComponentImpl.class)
+        ItemTypes.AGENT_SPAWN_EGG = buildSpawnEgg(ItemId.AGENT_SPAWN_EGG);
+        ItemTypes.ALLAY_SPAWN_EGG = buildSpawnEgg(ItemId.ALLAY_SPAWN_EGG);
+        ItemTypes.ARMADILLO_SPAWN_EGG = buildSpawnEgg(ItemId.ARMADILLO_SPAWN_EGG);
+        ItemTypes.AXOLOTL_SPAWN_EGG = buildSpawnEgg(ItemId.AXOLOTL_SPAWN_EGG);
+        ItemTypes.BAT_SPAWN_EGG = buildSpawnEgg(ItemId.BAT_SPAWN_EGG);
+        ItemTypes.BEE_SPAWN_EGG = buildSpawnEgg(ItemId.BEE_SPAWN_EGG);
+        ItemTypes.BLAZE_SPAWN_EGG = buildSpawnEgg(ItemId.BLAZE_SPAWN_EGG);
+        ItemTypes.BOGGED_SPAWN_EGG = buildSpawnEgg(ItemId.BOGGED_SPAWN_EGG);
+        ItemTypes.BREEZE_SPAWN_EGG = buildSpawnEgg(ItemId.BREEZE_SPAWN_EGG);
+        ItemTypes.CAMEL_SPAWN_EGG = buildSpawnEgg(ItemId.CAMEL_SPAWN_EGG);
+        ItemTypes.CAT_SPAWN_EGG = buildSpawnEgg(ItemId.CAT_SPAWN_EGG);
+        ItemTypes.CAVE_SPIDER_SPAWN_EGG = buildSpawnEgg(ItemId.CAVE_SPIDER_SPAWN_EGG);
+        ItemTypes.CHICKEN_SPAWN_EGG = buildSpawnEgg(ItemId.CHICKEN_SPAWN_EGG);
+        ItemTypes.COD_SPAWN_EGG = buildSpawnEgg(ItemId.COD_SPAWN_EGG);
+        ItemTypes.COW_SPAWN_EGG = buildSpawnEgg(ItemId.COW_SPAWN_EGG);
+        ItemTypes.CREEPER_SPAWN_EGG = buildSpawnEgg(ItemId.CREEPER_SPAWN_EGG);
+        ItemTypes.DOLPHIN_SPAWN_EGG = buildSpawnEgg(ItemId.DOLPHIN_SPAWN_EGG);
+        ItemTypes.DONKEY_SPAWN_EGG = buildSpawnEgg(ItemId.DONKEY_SPAWN_EGG);
+        ItemTypes.DROWNED_SPAWN_EGG = buildSpawnEgg(ItemId.DROWNED_SPAWN_EGG);
+        ItemTypes.ELDER_GUARDIAN_SPAWN_EGG = buildSpawnEgg(ItemId.ELDER_GUARDIAN_SPAWN_EGG);
+        ItemTypes.ENDER_DRAGON_SPAWN_EGG = buildSpawnEgg(ItemId.ENDER_DRAGON_SPAWN_EGG);
+        ItemTypes.ENDERMAN_SPAWN_EGG = buildSpawnEgg(ItemId.ENDERMAN_SPAWN_EGG);
+        ItemTypes.ENDERMITE_SPAWN_EGG = buildSpawnEgg(ItemId.ENDERMITE_SPAWN_EGG);
+        ItemTypes.EVOKER_SPAWN_EGG = buildSpawnEgg(ItemId.EVOKER_SPAWN_EGG, EntityId.EVOCATION_ILLAGER);
+        ItemTypes.FOX_SPAWN_EGG = buildSpawnEgg(ItemId.FOX_SPAWN_EGG);
+        ItemTypes.FROG_SPAWN_EGG = buildSpawnEgg(ItemId.FROG_SPAWN_EGG);
+        ItemTypes.GHAST_SPAWN_EGG = buildSpawnEgg(ItemId.GHAST_SPAWN_EGG);
+        ItemTypes.GLOW_SQUID_SPAWN_EGG = buildSpawnEgg(ItemId.GLOW_SQUID_SPAWN_EGG);
+        ItemTypes.GOAT_SPAWN_EGG = buildSpawnEgg(ItemId.GOAT_SPAWN_EGG);
+        ItemTypes.GUARDIAN_SPAWN_EGG = buildSpawnEgg(ItemId.GUARDIAN_SPAWN_EGG);
+        ItemTypes.HOGLIN_SPAWN_EGG = buildSpawnEgg(ItemId.HOGLIN_SPAWN_EGG);
+        ItemTypes.HORSE_SPAWN_EGG = buildSpawnEgg(ItemId.HORSE_SPAWN_EGG);
+        ItemTypes.HUSK_SPAWN_EGG = buildSpawnEgg(ItemId.HUSK_SPAWN_EGG);
+        ItemTypes.IRON_GOLEM_SPAWN_EGG = buildSpawnEgg(ItemId.IRON_GOLEM_SPAWN_EGG);
+        ItemTypes.LLAMA_SPAWN_EGG = buildSpawnEgg(ItemId.LLAMA_SPAWN_EGG);
+        ItemTypes.MAGMA_CUBE_SPAWN_EGG = buildSpawnEgg(ItemId.MAGMA_CUBE_SPAWN_EGG);
+        ItemTypes.MOOSHROOM_SPAWN_EGG = buildSpawnEgg(ItemId.MOOSHROOM_SPAWN_EGG);
+        ItemTypes.MULE_SPAWN_EGG = buildSpawnEgg(ItemId.MULE_SPAWN_EGG);
+        ItemTypes.NPC_SPAWN_EGG = buildSpawnEgg(ItemId.NPC_SPAWN_EGG);
+        ItemTypes.OCELOT_SPAWN_EGG = buildSpawnEgg(ItemId.OCELOT_SPAWN_EGG);
+        ItemTypes.PANDA_SPAWN_EGG = buildSpawnEgg(ItemId.PANDA_SPAWN_EGG);
+        ItemTypes.PARROT_SPAWN_EGG = buildSpawnEgg(ItemId.PARROT_SPAWN_EGG);
+        ItemTypes.PHANTOM_SPAWN_EGG = buildSpawnEgg(ItemId.PHANTOM_SPAWN_EGG);
+        ItemTypes.PIG_SPAWN_EGG = buildSpawnEgg(ItemId.PIG_SPAWN_EGG);
+        ItemTypes.PIGLIN_BRUTE_SPAWN_EGG = buildSpawnEgg(ItemId.PIGLIN_BRUTE_SPAWN_EGG);
+        ItemTypes.PIGLIN_SPAWN_EGG = buildSpawnEgg(ItemId.PIGLIN_SPAWN_EGG);
+        ItemTypes.PILLAGER_SPAWN_EGG = buildSpawnEgg(ItemId.PILLAGER_SPAWN_EGG);
+        ItemTypes.POLAR_BEAR_SPAWN_EGG = buildSpawnEgg(ItemId.POLAR_BEAR_SPAWN_EGG);
+        ItemTypes.PUFFERFISH_SPAWN_EGG = buildSpawnEgg(ItemId.PUFFERFISH_SPAWN_EGG);
+        ItemTypes.RABBIT_SPAWN_EGG = buildSpawnEgg(ItemId.RABBIT_SPAWN_EGG);
+        ItemTypes.RAVAGER_SPAWN_EGG = buildSpawnEgg(ItemId.RAVAGER_SPAWN_EGG);
+        ItemTypes.SALMON_SPAWN_EGG = buildSpawnEgg(ItemId.SALMON_SPAWN_EGG);
+        ItemTypes.SHEEP_SPAWN_EGG = buildSpawnEgg(ItemId.SHEEP_SPAWN_EGG);
+        ItemTypes.SHULKER_SPAWN_EGG = buildSpawnEgg(ItemId.SHULKER_SPAWN_EGG);
+        ItemTypes.SILVERFISH_SPAWN_EGG = buildSpawnEgg(ItemId.SILVERFISH_SPAWN_EGG);
+        ItemTypes.SKELETON_SPAWN_EGG = buildSpawnEgg(ItemId.SKELETON_SPAWN_EGG);
+        ItemTypes.SLIME_SPAWN_EGG = buildSpawnEgg(ItemId.SLIME_SPAWN_EGG);
+        ItemTypes.SNIFFER_SPAWN_EGG = buildSpawnEgg(ItemId.SNIFFER_SPAWN_EGG);
+        ItemTypes.SNOW_GOLEM_SPAWN_EGG = buildSpawnEgg(ItemId.SNOW_GOLEM_SPAWN_EGG);
+        ItemTypes.SPAWN_EGG = buildSpawnEgg(ItemId.SPAWN_EGG);
+        ItemTypes.SPIDER_SPAWN_EGG = buildSpawnEgg(ItemId.SPIDER_SPAWN_EGG);
+        ItemTypes.SQUID_SPAWN_EGG = buildSpawnEgg(ItemId.SQUID_SPAWN_EGG);
+        ItemTypes.STRAY_SPAWN_EGG = buildSpawnEgg(ItemId.STRAY_SPAWN_EGG);
+        ItemTypes.STRIDER_SPAWN_EGG = buildSpawnEgg(ItemId.STRIDER_SPAWN_EGG);
+        ItemTypes.TADPOLE_SPAWN_EGG = buildSpawnEgg(ItemId.TADPOLE_SPAWN_EGG);
+        ItemTypes.TRADER_LLAMA_SPAWN_EGG = buildSpawnEgg(ItemId.TRADER_LLAMA_SPAWN_EGG);
+        ItemTypes.TROPICAL_FISH_SPAWN_EGG = buildSpawnEgg(ItemId.TROPICAL_FISH_SPAWN_EGG, EntityId.TROPICALFISH);
+        ItemTypes.TURTLE_SPAWN_EGG = buildSpawnEgg(ItemId.TURTLE_SPAWN_EGG);
+        ItemTypes.VEX_SPAWN_EGG = buildSpawnEgg(ItemId.VEX_SPAWN_EGG);
+        ItemTypes.VILLAGER_SPAWN_EGG = buildSpawnEgg(ItemId.VILLAGER_SPAWN_EGG, EntityId.VILLAGER_V2);
+        ItemTypes.VINDICATOR_SPAWN_EGG = buildSpawnEgg(ItemId.VINDICATOR_SPAWN_EGG);
+        ItemTypes.WANDERING_TRADER_SPAWN_EGG = buildSpawnEgg(ItemId.WANDERING_TRADER_SPAWN_EGG);
+        ItemTypes.WARDEN_SPAWN_EGG = buildSpawnEgg(ItemId.WARDEN_SPAWN_EGG);
+        ItemTypes.WITCH_SPAWN_EGG = buildSpawnEgg(ItemId.WITCH_SPAWN_EGG);
+        ItemTypes.WITHER_SKELETON_SPAWN_EGG = buildSpawnEgg(ItemId.WITHER_SKELETON_SPAWN_EGG);
+        ItemTypes.WITHER_SPAWN_EGG = buildSpawnEgg(ItemId.WITHER_SPAWN_EGG);
+        ItemTypes.WOLF_SPAWN_EGG = buildSpawnEgg(ItemId.WOLF_SPAWN_EGG);
+        ItemTypes.ZOGLIN_SPAWN_EGG = buildSpawnEgg(ItemId.ZOGLIN_SPAWN_EGG);
+        ItemTypes.ZOMBIE_HORSE_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_HORSE_SPAWN_EGG);
+        ItemTypes.ZOMBIE_PIGMAN_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_PIGMAN_SPAWN_EGG);
+        ItemTypes.ZOMBIE_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_SPAWN_EGG);
+        ItemTypes.ZOMBIE_VILLAGER_SPAWN_EGG = buildSpawnEgg(ItemId.ZOMBIE_VILLAGER_SPAWN_EGG);
+    }
+
+    private static ItemType<ItemSpawnEggStack> buildSpawnEgg(ItemId itemId) {
+        return buildSpawnEgg(itemId, null);
+    }
+
+    private static ItemType<ItemSpawnEggStack> buildSpawnEgg(ItemId itemId, EntityId entityId) {
+        return AllayItemType
+                .builder(ItemSpawnEggStackImpl.class)
+                .vanillaItem(itemId)
+                .addComponent(
+                        initInfo -> new ItemSpawnEggBaseComponentImpl(initInfo, entityId != null ? entityId.getIdentifier() : null),
+                        ItemSpawnEggBaseComponentImpl.class
+                )
                 .build();
     }
 

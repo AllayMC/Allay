@@ -249,7 +249,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         try {
             onDisconnect(disconnectReason);
             // Tell the client that it should disconnect
-            thisPlayer.getClientSession().disconnect(disconnectReason);
+            if (thisPlayer.getClientSession().isConnected()){
+                thisPlayer.getClientSession().disconnect(disconnectReason);
+            }
         } catch (Throwable t) {
             log.error("Error while disconnecting the session", t);
         }
