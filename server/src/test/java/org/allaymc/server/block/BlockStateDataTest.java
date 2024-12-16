@@ -42,7 +42,8 @@ class BlockStateDataTest {
                     "mapColor": "#575c5cff",
                     "thickness": 0.0,
                     "requiresCorrectToolForDrops": true,
-                    "isSolid": true
+                    "isSolid": true,
+                    "translucency": 0.5
             }
             """;
 
@@ -68,6 +69,7 @@ class BlockStateDataTest {
         assertEquals(0, Float.compare(0.0f, blockStateData.thickness()));
         assertTrue(blockStateData.requiresCorrectToolForDrops());
         assertTrue(blockStateData.isSolid());
+        assertEquals(0.5f, blockStateData.translucency());
     }
 
     @Test

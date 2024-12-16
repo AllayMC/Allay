@@ -3,7 +3,7 @@ package org.allaymc.server.item.component;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.block.BlockHelper;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockTags;
@@ -13,10 +13,10 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
+import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.data.ItemDataComponent;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
@@ -27,7 +27,6 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.type.InternalBlockTypeData;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
@@ -410,17 +409,17 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public boolean isCorrectToolFor(BlockState blockState) {
         var blockType = blockState.getBlockType();
 
-        var vanillaItemId = ItemId.fromIdentifier(itemType.getIdentifier());
-        var vanillaBlockId = BlockId.fromIdentifier(blockType.getIdentifier());
-        if (vanillaItemId != null && vanillaBlockId != null) {
-            var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
-            if (specialTools.length != 0) {
-                return Arrays.stream(specialTools).anyMatch(tool -> tool == vanillaItemId);
-            }
+        var requiredToolTier = BlockHelper.getRequiredToolTier(blockType);
+        // requiredToolTier != null means that this block has tool tier requirement
+        if (requiredToolTier != null && !ItemHelper.getToolTier(itemType).isBetterThan(requiredToolTier)) {
+            // The tool tier is not enough
+            return false;
         }
 
         if (itemType == ItemTypes.SHEARS) {
-            if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) return true;
+            if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) {
+                return true;
+            }
 
             return blockType.hasBlockTag(BlockTags.WOOL) ||
                    blockType.hasBlockTag(BlockTags.LEAVES) ||
