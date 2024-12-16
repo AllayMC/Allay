@@ -134,17 +134,17 @@ public class BlockStateData {
      * wrong tool won't have any drop.
      */
     @Builder.Default
-    protected boolean requiresCorrectToolForDrops = true; // TODO: require change in endstone
+    protected boolean requiresCorrectToolForDrops = true;
     /**
      * Whether this block is a solid block.
      */
     @Builder.Default
-    protected boolean isSolid = true; // TODO: require change in endstone
+    protected boolean isSolid = true;
     /**
      * The translucency of the block state.
      */
     @Builder.Default
-    protected float translucency = 0.0f; // TODO: require change in endstone
+    protected float translucency = 0.0f;
 
     public static BlockStateData fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockStateData.class);
