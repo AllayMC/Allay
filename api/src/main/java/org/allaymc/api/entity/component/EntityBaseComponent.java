@@ -13,11 +13,11 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
@@ -903,8 +903,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default boolean canStandSafely(int x, int y, int z, Dimension dimension) {
         var blockUnder = dimension.getBlockState(x, y - 1, z);
-        var blockTypeUnder = blockUnder.getBlockType();
-        if (!blockTypeUnder.getMaterial().isSolid()) {
+        if (!blockUnder.getBlockStateData().isSolid()) {
             return false;
         }
         return dimension.getBlockState(x, y, z).getBlockType() == BlockTypes.AIR &&

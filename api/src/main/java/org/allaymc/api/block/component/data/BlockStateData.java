@@ -128,6 +128,20 @@ public class BlockStateData {
      */
     @Builder.Default
     protected float thickness = 0;
+    /**
+     * Whether the block requires correct tool for drops.
+     * If set to {@code false}, breaking this block with
+     * wrong tool won't have any drop.
+     */
+    @Builder.Default
+    protected boolean requiresCorrectToolForDrops = true;
+    /**
+     * Whether this block is a solid block.
+     */
+    @Builder.Default
+    protected boolean isSolid = true;
+
+    // TODO: BlockLegacy::translucency_
 
     public static BlockStateData fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockStateData.class);

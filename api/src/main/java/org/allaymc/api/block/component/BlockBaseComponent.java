@@ -216,7 +216,7 @@ public interface BlockBaseComponent extends BlockComponent {
             return Integer.MAX_VALUE;
         }
         var isCorrectTool = usedItem.isCorrectToolFor(blockState);
-        var isAlwaysDestroyable = getBlockType().getMaterial().isAlwaysDestroyable();
+        var requiresCorrectToolForDrops = blockState.getBlockStateData().requiresCorrectToolForDrops();
         var hasAquaAffinity = false;
         var isEyesInWater = false;
         var isOnGround = true;
@@ -252,7 +252,7 @@ public interface BlockBaseComponent extends BlockComponent {
 
         // Calculate break time
         // TODO: Further validation of the algorithm is needed
-        var baseTime = ((isCorrectTool || isAlwaysDestroyable) ? 1.5 : 5d) * blockHardness;
+        var baseTime = ((isCorrectTool || requiresCorrectToolForDrops) ? 1.5 : 5d) * blockHardness;
         var speed = 1d / baseTime;
         if (isCorrectTool) {
             // Tool level (wooden, stone, iron, etc...) bonus

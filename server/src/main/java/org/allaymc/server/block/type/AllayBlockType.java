@@ -11,7 +11,6 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockComponent;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.material.Material;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.type.BlockState;
@@ -50,7 +49,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
     private final Map<String, BlockPropertyType<?>> properties;
     private final Identifier identifier;
     private final Set<BlockTag> blockTags;
-    private final Material material;
     private final ItemType<?> blockItemType;
     private final Map<Integer, BlockState> blockStateHashMap;
     private final byte specialValueBits;
@@ -64,13 +62,11 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             Identifier identifier,
             ItemType<?> blockItemType,
             Set<BlockTag> blockTags,
-            Material material,
             Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier
     ) {
         this.properties = Collections.unmodifiableMap(properties);
         this.identifier = identifier;
         this.blockTags = blockTags;
-        this.material = material;
         this.blockItemType = blockItemType;
         this.blockStateHashMap = initStates(defaultStateSupplier);
 
@@ -354,7 +350,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
         protected boolean isCustomBlock = true;
         protected Function<BlockType<?>, BlockBaseComponent> baseComponentSupplier = BlockBaseComponentImpl::new;
         protected Set<BlockTag> blockTags = Set.of();
-        protected Material material;
         protected Function<Map<Integer, BlockState>, BlockState> defaultStateSupplier = blockStates ->
                 blockStates.get(HashUtils.computeBlockStateHash(
                         this.identifier,
@@ -387,8 +382,6 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
             var tags = InternalBlockTypeData.getBlockTags(blockId);
             if (tags.length != 0) setBlockTags(tags);
-
-            setMaterial(Registries.MATERIALS.get(InternalBlockTypeData.getMaterialType(blockId)));
 
             defaultStateSupplier = blockStates -> blockStates.get(InternalBlockTypeData.getDefaultBlockStateHash(blockId));
             return this;
@@ -460,15 +453,10 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             return this;
         }
 
-        public Builder setMaterial(Material material) {
-            this.material = material;
-            return this;
-        }
-
         public <T extends BlockBehavior> AllayBlockType<T> build() {
             Objects.requireNonNull(identifier, "Identifier cannot be null!");
             prepareItemType();
-            var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, material, defaultStateSupplier);
+            var type = new AllayBlockType<T>(properties, identifier, itemType, blockTags, defaultStateSupplier);
 
             var listComponents = new ArrayList<>(components.values());
             if (!components.containsKey(BlockBaseComponentImpl.IDENTIFIER)) {

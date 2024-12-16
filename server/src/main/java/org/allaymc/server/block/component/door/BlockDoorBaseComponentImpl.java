@@ -50,8 +50,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var downBlockState = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
-        var blockType1 = downBlockState.getBlockType();
-        if (!blockType1.getMaterial().isSolid()) {
+        if (!downBlockState.getBlockStateData().isSolid()) {
             return false;
         }
 
@@ -68,6 +67,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         var leftBlock = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos)).getBlockType();
         var rightBlock = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos)).getBlockType();
+        // TODO: check here since the removal of material system
         if (leftBlock == getBlockType() || (!rightBlock.getMaterial().isTransparent() && leftBlock.getMaterial().isTransparent())) { // Door hinge
             blockState = blockState.setProperty(DOOR_HINGE_BIT, true);
         }
@@ -96,7 +96,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
                 return neighbor.blockState().getBlockType() == getBlockType();
             }
 
-            return neighbor.blockState().getBlockType().getMaterial().isSolid();
+            return neighbor.blockState().getBlockStateData().isSolid();
         }
 
         return true;

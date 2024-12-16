@@ -214,8 +214,7 @@ public class AllayWorld implements World {
 
     protected boolean isSafeStandingPos(Position3ic pos) {
         var blockUnder = pos.dimension().getBlockState(pos.x(), pos.y() - 1, pos.z());
-        var blockTypeUnder = blockUnder.getBlockType();
-        if (!blockTypeUnder.getMaterial().isSolid()) {
+        if (!blockUnder.getBlockStateData().isSolid()) {
             return false;
         }
         return pos.dimension().getBlockState(pos.x(), pos.y(), pos.z()).getBlockType() == BlockTypes.AIR &&
