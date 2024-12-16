@@ -35,6 +35,14 @@ import java.util.function.Function;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class BlockTypeInitializer {
+    public static void initClay() {
+        BlockTypes.CLAY = AllayBlockType
+                .builder(BlockClayBehaviorImpl.class)
+                .vanillaBlock(BlockId.CLAY)
+                .setBaseComponentSupplier(BlockClayBaseComponentImpl::new)
+                .build();
+    }
+
     public static void initCarpets() {
         BlockTypes.WHITE_CARPET = buildCarpet(BlockId.WHITE_CARPET);
         BlockTypes.ORANGE_CARPET = buildCarpet(BlockId.ORANGE_CARPET);

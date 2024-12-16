@@ -279,7 +279,9 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 if (blockPropertyValues[i].getPropertyType() == propertyValue.getPropertyType()) {
                     succeed = true;
                     newPropertyValues[i] = propertyValue;
-                } else newPropertyValues[i] = blockPropertyValues[i];
+                } else {
+                    newPropertyValues[i] = blockPropertyValues[i];
+                }
             }
 
             if (!succeed) {
