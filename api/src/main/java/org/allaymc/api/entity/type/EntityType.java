@@ -16,4 +16,13 @@ public interface EntityType<T extends Entity> extends Identified {
      * @return A new instance of this entity type.
      */
     T createEntity(EntityInitInfo info);
+
+    /**
+     * Creates a new instance of this entity type with default initialization information.
+     *
+     * @return A new instance of this entity type.
+     */
+    default T createEntity() {
+        return this.createEntity(EntityInitInfo.builder().build());
+    }
 }

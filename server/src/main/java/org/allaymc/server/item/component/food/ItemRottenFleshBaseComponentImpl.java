@@ -16,7 +16,8 @@ public class ItemRottenFleshBaseComponentImpl extends ItemFoodComponentImpl {
     @Override
     public void onEaten(EntityPlayer player) {
         super.onEaten(player);
-        if (0.8f >= ThreadLocalRandom.current().nextFloat())
+        if (0.8f >= ThreadLocalRandom.current().nextFloat()) {
             player.addEffect(EffectTypes.HUNGER.createInstance(0, 30 * 20)); // 1 lvl, 30 seconds
+        }
     }
 }

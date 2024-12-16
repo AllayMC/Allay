@@ -295,12 +295,13 @@ public final class AllayServer implements Server {
         if (player.getLastClientStatus().ordinal() >= ClientStatus.LOGGED_IN.ordinal()) {
             broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
             players.remove(player.getUUID());
-        }
 
-        if (player.getLastClientStatus().ordinal() >= ClientStatus.IN_GAME.ordinal()) {
+            // The player is added to the world and loaded data during the LOGGED_IN status, while he can log off
+            // the server without waiting for the status change to IN_GAME, which is why the session remains and the
+            // server thinks that the player is still on the server, but after such manipulations, the player client
+            // will crash every time he logs on to the server
             player.getDimension().removePlayer(player);
             playerStorage.savePlayerData(player);
-
             removeFromPlayerList(player);
         }
 
