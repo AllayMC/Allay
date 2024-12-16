@@ -65,7 +65,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param dimension     The dimension where the block is placed.
      * @param blockState    The block that is being placed.
      * @param placeBlockPos The pos that the player is trying to place the block on.
-     * @param placementInfo The player placement info, can be null.
+     * @param placementInfo The player placement info, can be {@code null}.
      *
      * @return {@code true} if the block is placed successfully, {@code false} if failed.
      */
@@ -76,7 +76,7 @@ public interface BlockBaseComponent extends BlockComponent {
      *
      * @param currentBlockState The block that is being replaced.
      * @param newBlockState     The block that is replacing the current block.
-     * @param placementInfo     The player placement info, can be null.
+     * @param placementInfo     The player placement info, can be {@code null}.
      */
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
@@ -216,7 +216,7 @@ public interface BlockBaseComponent extends BlockComponent {
             return Integer.MAX_VALUE;
         }
         var isCorrectTool = usedItem.isCorrectToolFor(blockState);
-        var isAlwaysDestroyable = getBlockType().getMaterial().isAlwaysDestroyable();
+        var requiresCorrectToolForDrops = blockState.getBlockStateData().requiresCorrectToolForDrops();
         var hasAquaAffinity = false;
         var isEyesInWater = false;
         var isOnGround = true;
@@ -252,7 +252,7 @@ public interface BlockBaseComponent extends BlockComponent {
 
         // Calculate break time
         // TODO: Further validation of the algorithm is needed
-        var baseTime = ((isCorrectTool || isAlwaysDestroyable) ? 1.5 : 5d) * blockHardness;
+        var baseTime = ((isCorrectTool || !requiresCorrectToolForDrops) ? 1.5 : 5d) * blockHardness;
         var speed = 1d / baseTime;
         if (isCorrectTool) {
             // Tool level (wooden, stone, iron, etc...) bonus

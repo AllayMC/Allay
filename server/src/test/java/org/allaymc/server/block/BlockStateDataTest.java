@@ -40,30 +40,36 @@ class BlockStateDataTest {
                     "lightDampening": 15,
                     "lightEmission": 0,
                     "mapColor": "#575c5cff",
-                    "thickness": 0.0
+                    "thickness": 0.0,
+                    "requiresCorrectToolForDrops": true,
+                    "isSolid": true,
+                    "translucency": 0.5
             }
             """;
 
     @Test
     void testDeserialization() {
-        var blockAttributes = BlockStateData.fromJson(json);
-        assertEquals(0, blockAttributes.burnOdds());
-        assertFalse(blockAttributes.canContainLiquid());
-        var unionAABB = blockAttributes.collisionShape().unionAABB();
+        var blockStateData = BlockStateData.fromJson(json);
+        assertEquals(0, blockStateData.burnOdds());
+        assertFalse(blockStateData.canContainLiquid());
+        var unionAABB = blockStateData.collisionShape().unionAABB();
         assertEquals(0.0005f, unionAABB.minX());
         assertEquals(0.0005f, unionAABB.minY());
         assertEquals(0.0005f, unionAABB.minZ());
         assertEquals(0.9995f, unionAABB.maxX());
         assertEquals(0.1825f, unionAABB.maxY());
         assertEquals(0.9995f, unionAABB.maxZ());
-        assertEquals(1.25f, blockAttributes.hardness());
-        assertEquals(1.25f, blockAttributes.explosionResistance());
-        assertEquals(0, blockAttributes.flameOdds());
-        assertEquals(0.6f, blockAttributes.friction());
-        assertEquals(15, blockAttributes.lightDampening());
-        assertEquals(0, blockAttributes.lightEmission());
-        assertEquals(Color.decode("#575c5c"), blockAttributes.mapColor());
-        assertEquals(0, Float.compare(0.0f, blockAttributes.thickness()));
+        assertEquals(1.25f, blockStateData.hardness());
+        assertEquals(1.25f, blockStateData.explosionResistance());
+        assertEquals(0, blockStateData.flameOdds());
+        assertEquals(0.6f, blockStateData.friction());
+        assertEquals(15, blockStateData.lightDampening());
+        assertEquals(0, blockStateData.lightEmission());
+        assertEquals(Color.decode("#575c5c"), blockStateData.mapColor());
+        assertEquals(0, Float.compare(0.0f, blockStateData.thickness()));
+        assertTrue(blockStateData.requiresCorrectToolForDrops());
+        assertTrue(blockStateData.isSolid());
+        assertEquals(0.5f, blockStateData.translucency());
     }
 
     @Test

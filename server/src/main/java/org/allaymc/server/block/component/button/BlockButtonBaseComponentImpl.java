@@ -43,7 +43,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         // Check if the neighbor is block below
         if (current.blockState().getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) return true;
-        return neighbor.blockState().getBlockType().getMaterial().isSolid();
+        return neighbor.blockState().getBlockStateData().isSolid();
     }
 
     @Override

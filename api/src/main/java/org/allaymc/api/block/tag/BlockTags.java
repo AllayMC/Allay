@@ -61,6 +61,8 @@ public interface BlockTags {
 
     BlockTag OAK = create("minecraft:oak");
 
+    BlockTag WOOL = create("minecraft:wool");
+
     BlockTag IS_SHOVEL_ITEM_DESTRUCTIBLE = create("minecraft:is_shovel_item_destructible");
 
     BlockTag STONE = create("minecraft:stone");
@@ -84,6 +86,8 @@ public interface BlockTags {
     BlockTag STONE_PICK_DIGGABLE = create("minecraft:stone_pick_diggable");
 
     BlockTag IS_HOE_ITEM_DESTRUCTIBLE = create("minecraft:is_hoe_item_destructible");
+
+    BlockTag LEAVES = create("minecraft:leaves");
 
     BlockTag RAIL = create("minecraft:rail");
 

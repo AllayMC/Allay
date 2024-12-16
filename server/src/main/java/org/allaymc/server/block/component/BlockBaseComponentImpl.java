@@ -133,7 +133,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) return false;
-        return blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
+        return !blockState.blockState().getBlockStateData().requiresCorrectToolForDrops() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
     }
 
     @Override

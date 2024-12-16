@@ -3,10 +3,9 @@ package org.allaymc.server.item.component;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.block.BlockHelper;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.material.MaterialTypes;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
@@ -14,10 +13,10 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
+import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.data.ItemDataComponent;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
@@ -28,7 +27,6 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.type.InternalBlockTypeData;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
@@ -411,45 +409,34 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public boolean isCorrectToolFor(BlockState blockState) {
         var blockType = blockState.getBlockType();
 
-        var vanillaItemId = ItemId.fromIdentifier(itemType.getIdentifier());
-        var vanillaBlockId = BlockId.fromIdentifier(blockType.getIdentifier());
-        if (vanillaItemId != null && vanillaBlockId != null) {
-            var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
-            if (specialTools.length != 0)
-                return Arrays.stream(specialTools).anyMatch(tool -> tool == vanillaItemId);
+        var requiredToolTier = BlockHelper.getRequiredToolTier(blockType);
+        // requiredToolTier != null means that this block has tool tier requirement
+        if (requiredToolTier != null && !ItemHelper.getToolTier(itemType).isBetterThan(requiredToolTier)) {
+            // The tool tier is not enough
+            return false;
         }
 
-        var materialType = blockState.getBlockType().getMaterial().materialType();
         if (itemType == ItemTypes.SHEARS) {
-            if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) return true;
+            if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) {
+                return true;
+            }
 
-            return materialType == MaterialTypes.CLOTH ||
-                   materialType == MaterialTypes.LEAVES ||
-                   materialType == MaterialTypes.PLANT ||
-                   materialType == MaterialTypes.WEB;
+            return blockType.hasBlockTag(BlockTags.WOOL) ||
+                   blockType.hasBlockTag(BlockTags.LEAVES) ||
+                   blockType.hasBlockTag(BlockTags.PLANT) ||
+                   blockType.hasBlockTag(BlockTags.IS_SHEARS_ITEM_DESTRUCTIBLE);
         }
 
-        if (isAxe(itemType)) return materialType == MaterialTypes.WOOD;
+        if (isAxe(itemType)) {
+            return blockType.hasBlockTag(BlockTags.IS_AXE_ITEM_DESTRUCTIBLE);
+        }
 
-        if (isShovel(itemType))
-            return materialType == MaterialTypes.DIRT ||
-                   materialType == MaterialTypes.CLAY ||
-                   materialType == MaterialTypes.SAND ||
-                   materialType == MaterialTypes.SNOW ||
-                   materialType == MaterialTypes.TOP_SNOW;
+        if (isShovel(itemType)) {
+            return blockType.hasBlockTag(BlockTags.IS_SHOVEL_ITEM_DESTRUCTIBLE);
+        }
 
         if (isHoe(itemType)) {
-            if (
-                    blockType == BlockTypes.DRIED_KELP_BLOCK ||
-                    blockType == BlockTypes.HAY_BLOCK ||
-                    blockType == BlockTypes.TARGET ||
-                    blockType == BlockTypes.SPONGE ||
-                    blockType == BlockTypes.MOSS_BLOCK
-            ) return true;
-
-            return materialType == MaterialTypes.LEAVES ||
-                   materialType == MaterialTypes.NETHERWART ||
-                   materialType == MaterialTypes.SCULK;
+            return blockType.hasBlockTag(BlockTags.IS_HOE_ITEM_DESTRUCTIBLE);
         }
 
         if (isSword(itemType)) {
@@ -462,9 +449,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                     blockType == BlockTypes.GLOW_LICHEN
             ) return true;
 
-            return materialType == MaterialTypes.VEGETABLE ||
-                   materialType == MaterialTypes.LEAVES ||
-                   materialType == MaterialTypes.WEB;
+            return blockType.hasBlockTag(BlockTags.IS_SWORD_ITEM_DESTRUCTIBLE);
         }
 
         return false;

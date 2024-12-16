@@ -28,7 +28,6 @@ Allay's resource files are stored in `data/resources` directory.
 - `creative_items.nbt`
 - `entity_identifiers.nbt`: obtained from [pmmp/BedrockData](https://github.com/pmmp/BedrockData)
 - `items.json`
-- `materials.json`
 - `block_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
 - `item_tags_custom.json`: this file is manually maintained, and you should check if any IDs need updating.
 - `recipes.json`

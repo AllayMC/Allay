@@ -1,6 +1,7 @@
 package org.allaymc.api.item.component;
 
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.block.material.MaterialTypes.*;
 import static org.allaymc.api.item.tag.ItemTags.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
@@ -483,7 +483,8 @@ public interface ItemBaseComponent extends ItemComponent {
      * Interact an entity with this item and given performer.
      *
      * @param performer the entity who interact the target entity.
-     * @param victim the target entity who will be interacted.
+     * @param victim    the target entity who will be interacted.
+     *
      * @return {@code true} if the interaction is successful, {@code false} otherwise.
      */
     default boolean interactEntity(Entity performer, Entity victim) {
@@ -499,16 +500,16 @@ public interface ItemBaseComponent extends ItemComponent {
      */
     default double getBreakTimeBonus(BlockState blockState) {
         var itemType = getItemType();
-        var materialType = blockState.getBlockType().getMaterial().materialType();
+        var blockType = blockState.getBlockType();
         // Swords break cobwebs faster
         if (itemType.hasItemTag(IS_SWORD)) {
-            if (materialType == WEB) return 15d;
+            if (blockType == BlockTypes.WEB) return 15d;
         }
         if (itemType == SHEARS) {
             // Shears break wool and leaves faster
-            if (materialType == CLOTH) {
+            if (blockType.hasBlockTag(BlockTags.WOOL)) {
                 return 5d;
-            } else if (materialType == WEB || materialType == LEAVES) {
+            } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockTags.LEAVES)) {
                 return 15d;
             }
             return 1d;

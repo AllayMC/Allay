@@ -29,7 +29,7 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
         if (face == BlockFace.DOWN) {
             blockState = blockState.setProperty(BlockPropertyTypes.HANGING, true);
             var upperBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z());
-            if (!upperBlock.getBlockType().getMaterial().isSolid()) return false;
+            if (!upperBlock.getBlockStateData().isSolid()) return false;
 
             var shape = upperBlock.getBlockStateData().collisionShape();
             var full = shape.isFull(BlockFace.DOWN);
@@ -53,7 +53,7 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
         if (!current.blockState().getPropertyValue(BlockPropertyTypes.HANGING)) return true;
         if (face != BlockFace.UP) return true;
         var upperBlock = neighbor.blockState();
-        if (!upperBlock.getBlockType().getMaterial().isSolid()) return false;
+        if (!upperBlock.getBlockStateData().isSolid()) return false;
         return upperBlock.getBlockStateData().collisionShape().isCenterFull(BlockFace.DOWN);
     }
 }

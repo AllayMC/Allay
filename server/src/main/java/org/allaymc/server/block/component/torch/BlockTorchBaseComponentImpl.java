@@ -48,14 +48,12 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
 
         var targetBlock = dimension.getBlockState(placementInfo.clickBlockPos());
-        BlockType<?> blockType2 = targetBlock.getBlockType();
-        if (blockType2.getMaterial().isSolid()) {
+        if (targetBlock.getBlockStateData().isSolid()) {
             blockState = blockState.setProperty(BlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
         } else {
             blockState = blockState.setProperty(BlockPropertyTypes.TORCH_FACING_DIRECTION, TorchFacingDirection.TOP);
             var downBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
-            BlockType<?> blockType1 = downBlock.getBlockType();
-            if (!blockType1.getMaterial().isSolid()) return false;
+            if (!downBlock.getBlockStateData().isSolid()) return false;
         }
 
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
@@ -68,6 +66,6 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var torchFacingDirection = current.blockState().getPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION);
         var blockFace = map.inverse().get(torchFacingDirection);
         var block = current.pos().dimension().getBlockState(blockFace.opposite().offsetPos(current.pos()));
-        return block.getBlockType().getMaterial().isSolid();
+        return block.getBlockStateData().isSolid();
     }
 }

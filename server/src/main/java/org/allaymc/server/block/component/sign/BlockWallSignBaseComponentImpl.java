@@ -28,7 +28,7 @@ public class BlockWallSignBaseComponentImpl extends BlockBaseComponentImpl {
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         var signFaceOpposite = BlockFace.fromId(current.blockState().getPropertyValue(BlockPropertyTypes.FACING_DIRECTION)).opposite();
         if (face != signFaceOpposite) return true;
-        return neighbor.blockState().getBlockType().getMaterial().isSolid();
+        return neighbor.blockState().getBlockStateData().isSolid();
     }
 
     @Override

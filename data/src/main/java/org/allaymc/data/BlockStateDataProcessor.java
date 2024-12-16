@@ -46,6 +46,10 @@ public class BlockStateDataProcessor {
         public int lightEmission;
         public String mapColor;
         public float thickness;
+        public boolean requiresCorrectToolForDrops;
+        public boolean isSolid;
+        public float translucency;
+
         public String name;
         public long blockStateHash;
     }
@@ -63,6 +67,10 @@ public class BlockStateDataProcessor {
         public int lightEmission;
         public String mapColor;
         public float thickness;
+        public boolean requiresCorrectToolForDrops;
+        public boolean isSolid;
+        public float translucency;
+
         public String name;
         public long blockStateHash;
 
@@ -79,6 +87,10 @@ public class BlockStateDataProcessor {
             data.lightEmission = raw.lightEmission;
             data.mapColor = raw.mapColor;
             data.thickness = raw.thickness;
+            data.requiresCorrectToolForDrops = raw.requiresCorrectToolForDrops;
+            data.isSolid = raw.isSolid;
+            data.translucency = raw.translucency;
+
             data.name = raw.name;
             data.blockStateHash = raw.blockStateHash;
 
