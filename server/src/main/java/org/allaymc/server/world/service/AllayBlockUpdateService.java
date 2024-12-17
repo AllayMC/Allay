@@ -1,5 +1,6 @@
 package org.allaymc.server.world.service;
 
+import io.netty.util.internal.PlatformDependent;
 import lombok.RequiredArgsConstructor;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
@@ -11,7 +12,10 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.service.BlockUpdateService;
 import org.joml.Vector3ic;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -23,7 +27,7 @@ public class AllayBlockUpdateService implements BlockUpdateService {
 
     protected final Dimension dimension;
     protected final Map<Vector3ic, Long> scheduledUpdates = new ConcurrentHashMap<>();
-    protected final Queue<NeighborUpdate> neighborUpdates = new LinkedList<>();
+    protected final Queue<NeighborUpdate> neighborUpdates = PlatformDependent.newMpscQueue();
 
     public void tick(long tick) {
         tickScheduledUpdates(tick);

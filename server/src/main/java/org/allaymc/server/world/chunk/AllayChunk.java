@@ -1,12 +1,12 @@
 package org.allaymc.server.world.chunk;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.util.internal.PlatformDependent;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,6 @@ public class AllayChunk implements Chunk {
 
     protected final StampedLock blockLock;
     protected final StampedLock heightAndBiomeLock;
-    // No need to use concurrent-safe set as addChunkLoader() & removeChunkLoader() are only used in AllayChunkService which is single-thread
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<ChunkPacketEntry> chunkPacketQueue;
 
@@ -67,7 +66,7 @@ public class AllayChunk implements Chunk {
         this.unsafeChunk = unsafeChunk;
         this.blockLock = new StampedLock();
         this.heightAndBiomeLock = new StampedLock();
-        this.chunkLoaders = new ObjectOpenHashSet<>();
+        this.chunkLoaders = Sets.newConcurrentHashSet();
         this.chunkPacketQueue = PlatformDependent.newMpscQueue();
     }
 
