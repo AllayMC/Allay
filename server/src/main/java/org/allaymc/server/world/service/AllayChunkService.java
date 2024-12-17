@@ -44,6 +44,8 @@ import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
 @RequiredArgsConstructor
 public final class AllayChunkService implements ChunkService {
 
+    private static final int TICK_RADIUS_SQUARED = (int) Math.pow(Server.SETTINGS.worldSettings().tickRadius(), 2);
+
     private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
     private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectOpenHashMap<>();
@@ -69,12 +71,31 @@ public final class AllayChunkService implements ChunkService {
 
     private void tickChunks(long currentTick) {
         for (Chunk chunk : loadedChunks.values()) {
+            if (!shouldTickChunk(chunk)) {
+                continue;
+            }
+
             try {
                 ((AllayChunk) chunk).tick(currentTick, dimension, worldStorage);
             } catch (Throwable t) {
                 log.error("Error while ticking chunk({}, {})!", chunk.getX(), chunk.getZ(), t);
             }
         }
+    }
+
+    private boolean shouldTickChunk(Chunk chunk) {
+        var cx = chunk.getX();
+        var cz = chunk.getZ();
+        var shouldTick = false;
+        for (var chunkLoader : chunk.getChunkLoaders()) {
+            var lcx = ((int) Math.floor(chunkLoader.getLocation().x())) >> 4;
+            var lcz = ((int) Math.floor(chunkLoader.getLocation().z())) >> 4;
+            if (Math.pow(lcx - cx, 2) + Math.pow(lcz - cz, 2) <= TICK_RADIUS_SQUARED) {
+                shouldTick = true;
+                break;
+            }
+        }
+        return shouldTick;
     }
 
     private void sendChunkPackets() {
