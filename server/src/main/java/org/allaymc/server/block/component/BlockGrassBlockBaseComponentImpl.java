@@ -6,6 +6,7 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
 
@@ -40,8 +41,10 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
         // but only if they cause the light level above the grass block to be four or below (like water does),
         // and the surrounding area is not otherwise sufficiently lit up.
         if (upperBlockState.getBlockStateData().lightDampening() > 1) {
-            // TODO: BlockFadeEvent
-            dimension.setBlockState(pos, BlockTypes.DIRT.getDefaultState());
+            var event = new BlockFadeEvent(blockStateWithPos, BlockTypes.DIRT.getDefaultState());
+            if (event.call()) {
+                dimension.setBlockState(pos, event.getNewBlockState());
+            }
             return;
         }
 
