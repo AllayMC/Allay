@@ -22,6 +22,7 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -31,6 +32,7 @@ import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -79,6 +81,7 @@ public class AllayChunk implements Chunk {
         unsafeChunk.getBlockEntitiesUnsafe().values().forEach(blockEntity -> blockEntity.tick(currentTick));
         unsafeChunk.getEntitiesUnsafe().values().forEach(entity -> entity.tick(currentTick));
         tickScheduledUpdates(dimension);
+        tickRandomUpdates(dimension);
 
         checkAutoSave(worldStorage);
     }
@@ -104,7 +107,7 @@ public class AllayChunk implements Chunk {
 
             var blockState = getBlockState(localX, y, localZ, layer);
             var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (unsafeChunk.x << 4), y, localZ + (unsafeChunk.z << 4), dimension), layer);
-            if (!callScheduleUpdateEvent(blockStateWithPos)) {
+            if (!new BlockScheduleUpdateEvent(blockStateWithPos).call()) {
                 return;
             }
 
@@ -112,8 +115,27 @@ public class AllayChunk implements Chunk {
         });
     }
 
-    protected boolean callScheduleUpdateEvent(BlockStateWithPos block) {
-        return new BlockScheduleUpdateEvent(block).call();
+    protected void tickRandomUpdates(Dimension dimension) {
+        int randomTickSpeed = dimension.getWorld().getWorldData().getGameRuleValue(GameRule.RANDOM_TICK_SPEED);
+        if (randomTickSpeed == 0) {
+            return;
+        }
+
+        for (var section : unsafeChunk.getSections()) {
+            int sectionY = section.sectionY();
+            for (int i = 0; i < randomTickSpeed; i++) {
+                int n = ThreadLocalRandom.current().nextInt();
+                int localX = n & 0xF;
+                int localZ = n >> 8 & 0xF;
+                int localY = n >> 16 & 0xF;
+
+                var blockState = section.getBlockState(localX, localY, localZ, 0);
+                if (blockState.getBehavior().canRandomUpdate()) {
+                    var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (unsafeChunk.x << 4), localY + (sectionY << 4), localZ + (unsafeChunk.z << 4), dimension), 0);
+                    blockState.getBehavior().onRandomUpdate(blockStateWithPos);
+                }
+            }
+        }
     }
 
     protected void checkAutoSave(WorldStorage worldStorage) {

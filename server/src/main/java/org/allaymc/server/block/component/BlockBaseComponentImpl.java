@@ -54,12 +54,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos blockState) {}
-
-    @Override
-    public void onScheduledUpdate(BlockStateWithPos blockState) {}
-
-    @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         var vanillaBlockId = BlockId.fromIdentifier(blockType.getIdentifier());
         if (vanillaBlockId != null) {

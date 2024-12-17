@@ -53,11 +53,20 @@ public interface BlockBaseComponent extends BlockComponent {
     void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face);
 
     /**
-     * Called when the block encounters random tick update.
+     * Called when the block encounters random update.
      *
-     * @param blockState the block.
+     * @param blockStateWithPos the block that encountered the random update.
      */
-    void onRandomUpdate(BlockStateWithPos blockState);
+    default void onRandomUpdate(BlockStateWithPos blockStateWithPos) {}
+
+    /**
+     * Check if the block can receive random updates.
+     *
+     * @return {@code true} if the block can receive random updates, {@code false} otherwise.
+     */
+    default boolean canRandomUpdate() {
+        return false;
+    }
 
     /**
      * Try to place a block.
@@ -116,22 +125,27 @@ public interface BlockBaseComponent extends BlockComponent {
      * For example, if a water block is in layer 1 and layer 0 is replaced with air,
      * then the water block's onNeighborLayerReplace() method will be called.
      *
-     * @param currentBlockState The block that is being replaced.
-     * @param newBlockState     The block that is replacing the current block.
-     * @param placementInfo     The player placement info, can be null.
+     * @param currentBlockState the block that is being replaced.
+     * @param newBlockState     the block that is replacing the current block.
+     * @param placementInfo     the player placement info, can be null.
      */
     void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Called when a block is broken by non-creative game mode player.
      *
-     * @param blockState The block that was broken.
-     * @param usedItem   The item that was used to break the block, can be {@code null}.
-     * @param entity     The player who broke the block, can be {@code null}.
+     * @param blockState the block that was broken.
+     * @param usedItem   the item that was used to break the block, can be {@code null}.
+     * @param entity     the player who broke the block, can be {@code null}.
      */
     void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
-    void onScheduledUpdate(BlockStateWithPos blockState);
+    /**
+     * Called when a block receives a scheduled update.
+     *
+     * @param blockStateWithPos the block that received the scheduled update.
+     */
+    default void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {}
 
     /**
      * Get the block's drops when it is broke by item normally.
