@@ -387,12 +387,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target));
-        if (!event.call()) {
-            return;
-        }
+        if (!event.call()) return;
 
         target = event.getTo();
-        this.fallDistance = 0;
         if (this.location.dimension == target.dimension()) {
             // Teleporting in the current same dimension,
             // and we just need to move the entity to the new coordination
