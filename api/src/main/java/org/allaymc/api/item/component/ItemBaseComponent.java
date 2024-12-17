@@ -423,7 +423,7 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @param enchantmentType The enchantment type.
      *
-     * @return The level of the enchantment.
+     * @return The level of the enchantment, or zero if the item doesn't have the enchantment.
      */
     int getEnchantmentLevel(EnchantmentType enchantmentType);
 

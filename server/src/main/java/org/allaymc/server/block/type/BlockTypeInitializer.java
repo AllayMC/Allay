@@ -80,25 +80,29 @@ public final class BlockTypeInitializer {
     }
 
     public static void initLeaves() {
-        BlockTypes.ACACIA_LEAVES = buildLeaves(BlockId.ACACIA_LEAVES);
-        BlockTypes.AZALEA_LEAVES = buildLeaves(BlockId.AZALEA_LEAVES);
-        BlockTypes.AZALEA_LEAVES_FLOWERED = buildLeaves(BlockId.AZALEA_LEAVES_FLOWERED);
-        BlockTypes.BIRCH_LEAVES = buildLeaves(BlockId.BIRCH_LEAVES);
-        BlockTypes.CHERRY_LEAVES = buildLeaves(BlockId.CHERRY_LEAVES);
-        BlockTypes.DARK_OAK_LEAVES = buildLeaves(BlockId.DARK_OAK_LEAVES);
-        BlockTypes.JUNGLE_LEAVES = buildLeaves(BlockId.JUNGLE_LEAVES);
-        BlockTypes.MANGROVE_LEAVES = buildLeaves(BlockId.MANGROVE_LEAVES);
-        BlockTypes.OAK_LEAVES = buildLeaves(BlockId.OAK_LEAVES);
-        BlockTypes.SPRUCE_LEAVES = buildLeaves(BlockId.SPRUCE_LEAVES);
-        BlockTypes.PALE_OAK_LEAVES = buildLeaves(BlockId.PALE_OAK_LEAVES);
+        BlockTypes.ACACIA_LEAVES = buildLeaves(BlockId.ACACIA_LEAVES, ItemTypes.ACACIA_SAPLING);
+        BlockTypes.AZALEA_LEAVES = buildLeaves(BlockId.AZALEA_LEAVES, null);
+        BlockTypes.AZALEA_LEAVES_FLOWERED = buildLeaves(BlockId.AZALEA_LEAVES_FLOWERED, null);
+        BlockTypes.BIRCH_LEAVES = buildLeaves(BlockId.BIRCH_LEAVES, ItemTypes.BIRCH_SAPLING);
+        BlockTypes.CHERRY_LEAVES = buildLeaves(BlockId.CHERRY_LEAVES, ItemTypes.CHERRY_SAPLING);
+        BlockTypes.DARK_OAK_LEAVES = buildLeaves(BlockId.DARK_OAK_LEAVES, ItemTypes.DARK_OAK_SAPLING);
+        BlockTypes.JUNGLE_LEAVES = buildLeaves(BlockId.JUNGLE_LEAVES, ItemTypes.JUNGLE_SAPLING, false, true);
+        BlockTypes.MANGROVE_LEAVES = buildLeaves(BlockId.MANGROVE_LEAVES, null);
+        BlockTypes.OAK_LEAVES = buildLeaves(BlockId.OAK_LEAVES, ItemTypes.OAK_SAPLING, true, false);
+        BlockTypes.SPRUCE_LEAVES = buildLeaves(BlockId.SPRUCE_LEAVES, ItemTypes.SPRUCE_SAPLING);
+        BlockTypes.PALE_OAK_LEAVES = buildLeaves(BlockId.PALE_OAK_LEAVES, ItemTypes.PALE_OAK_SAPLING);
     }
 
-    private static BlockType<BlockLeavesBehavior> buildLeaves(BlockId id) {
+    private static BlockType<BlockLeavesBehavior> buildLeaves(BlockId id, ItemType<?> saplingType) {
+        return buildLeaves(id, saplingType, false, false);
+    }
+
+    private static BlockType<BlockLeavesBehavior> buildLeaves(BlockId id, ItemType<?> saplingType, boolean canDropApple, boolean dropMoreSaplings) {
         return AllayBlockType
                 .builder(BlockLeavesBehaviorImpl.class)
                 .vanillaBlock(id)
                 .setProperties(BlockPropertyTypes.PERSISTENT_BIT, BlockPropertyTypes.UPDATE_BIT)
-                .setBaseComponentSupplier(BlockLeavesBaseComponentImpl::new)
+                .setBaseComponentSupplier(blockType -> new BlockLeavesBaseComponentImpl(blockType, saplingType, canDropApple, dropMoreSaplings))
                 .build();
     }
 
