@@ -9,7 +9,6 @@ import java.util.Objects;
 
 /**
  * The base class for block property type (boolean, enum, int)
- * <p>
  *
  * @author daoge_cmd
  */
@@ -20,6 +19,7 @@ public abstract sealed class BaseBlockPropertyType<DATATYPE> implements BlockPro
     protected final List<DATATYPE> validValues;
     protected final DATATYPE defaultValue;
     protected final byte bitSize;
+
     @Setter
     protected BlockPropertyProcessor processor;
 

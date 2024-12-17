@@ -448,7 +448,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConduitBehavior> CONDUIT;
 
-    public static BlockType<BlockCopperBlockBehavior> COPPER_BLOCK;
+    public static BlockType<BlockCopperBehavior> COPPER_BLOCK;
 
     public static BlockType<BlockCopperBulbBehavior> COPPER_BULB;
 

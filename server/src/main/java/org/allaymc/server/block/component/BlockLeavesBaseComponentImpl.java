@@ -75,6 +75,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onRandomUpdate(BlockStateWithPos blockStateWithPos) {
+        super.onRandomUpdate(blockStateWithPos);
         var blockState = blockStateWithPos.blockState();
         if (!blockState.getPropertyValue(BlockPropertyTypes.UPDATE_BIT)) {
             return;

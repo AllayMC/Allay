@@ -1474,7 +1474,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COPPER_BLOCK == null) {
             BlockTypes.COPPER_BLOCK = AllayBlockType
-                    .builder(BlockCopperBlockBehaviorImpl.class)
+                    .builder(BlockCopperBehaviorImpl.class)
                     .vanillaBlock(BlockId.COPPER_BLOCK)
                     .build();
         }

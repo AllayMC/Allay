@@ -55,9 +55,9 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when the block encounters random update.
      *
-     * @param blockStateWithPos the block that encountered the random update.
+     * @param current the block that encountered the random update.
      */
-    default void onRandomUpdate(BlockStateWithPos blockStateWithPos) {}
+    void onRandomUpdate(BlockStateWithPos current);
 
     /**
      * Check if the block can receive random updates.
