@@ -8,8 +8,9 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.eventbus.event.block.LeavesDecayEvent;
+import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.item.type.ItemType;
@@ -84,7 +85,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             blockState = blockState.setProperty(BlockPropertyTypes.UPDATE_BIT, false);
             pos.dimension().setBlockState(pos, blockState, 0, true, false, false);
         } else {
-            if (new LeavesDecayEvent(blockStateWithPos).call()) {
+            if (new BlockFadeEvent(blockStateWithPos, BlockTypes.AIR.getDefaultState()).call()) {
                 pos.dimension().breakBlock(pos, null, null);
             }
         }
