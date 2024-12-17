@@ -143,6 +143,9 @@ public class AllayChunk implements Chunk {
                 int localX = lcg & 0x0f;
                 int localZ = lcg >>> 8 & 0x0f;
                 int localY = lcg >>> 16 & 0x0f;
+                // TODO: instead of get the block state from palette and check if it supports random tick,
+                // we can add a bitset to every chunk section to mark whether a block pos contains a block
+                // that supports random tick, this would be much quicker
                 var blockState = section.getBlockState(localX, localY, localZ, 0);
                 if (blockState.getBehavior().canRandomUpdate()) {
                     var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (unsafeChunk.x << 4), localY + (sectionY << 4), localZ + (unsafeChunk.z << 4), dimension), 0);
