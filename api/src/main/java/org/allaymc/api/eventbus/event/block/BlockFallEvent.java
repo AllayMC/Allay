@@ -6,7 +6,7 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
  * @author daoge_cmd
  */
 public class BlockFallEvent extends BlockEvent {
-    public BlockFallEvent(BlockStateWithPos block) {
-        super(block);
+    public BlockFallEvent(BlockStateWithPos blockState) {
+        super(blockState);
     }
 }

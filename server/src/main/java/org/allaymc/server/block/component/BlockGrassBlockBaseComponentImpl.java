@@ -7,8 +7,10 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
+import org.allaymc.api.eventbus.event.block.BlockSpreadEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.math.position.Position3i;
 
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -61,13 +63,16 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
             int y = random.nextInt(pos.y() - 3, pos.y() + 1 + 1);
             int z = random.nextInt(pos.z() - 1, pos.z() + 1 + 1);
             var blockState = dimension.getBlockState(x, y, z);
-            if (blockState.getBlockType() == BlockTypes.DIRT
+            if (blockState.getBlockType() == BlockTypes.DIRT &&
                 // The dirt block must have a light level of at least 4 above it.
-                && dimension.getLightService().getInternalLight(x, y + 1, z) >= 4
+                dimension.getLightService().getInternalLight(x, y + 1, z) >= 4 &&
                 // Any block directly above the dirt block must not reduce light by 2 levels or more.
-                && dimension.getBlockState(x, y + 1, z).getBlockStateData().lightDampening() < 2) {
-                // TODO: BlockSpreadEvent
-                dimension.setBlockState(x, y, z, BlockTypes.GRASS_BLOCK.getDefaultState());
+                dimension.getBlockState(x, y + 1, z).getBlockStateData().lightDampening() < 2) {
+                var spreadBlockState = new BlockStateWithPos(BlockTypes.GRASS_BLOCK.getDefaultState(), new Position3i(x, y, z, dimension), 0);
+                var event = new BlockSpreadEvent(blockStateWithPos, spreadBlockState);
+                if (event.call()) {
+                    dimension.setBlockState(x, y, z, event.getSpreadBlockState().blockState());
+                }
             }
         }
     }

@@ -14,8 +14,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class BlockFadeEvent extends BlockEvent implements CancellableEvent {
     protected BlockState newBlockState;
 
-    public BlockFadeEvent(BlockStateWithPos block, BlockState newBlockState) {
-        super(block);
+    public BlockFadeEvent(BlockStateWithPos blockState, BlockState newBlockState) {
+        super(blockState);
         this.newBlockState = newBlockState;
     }
 }

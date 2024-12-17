@@ -24,8 +24,8 @@ public class BlockBreakEvent extends BlockEvent implements CancellableEvent {
      */
     protected EntityPlayer player;
 
-    public BlockBreakEvent(BlockStateWithPos block, ItemStack usedItem, EntityPlayer player) {
-        super(block);
+    public BlockBreakEvent(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
+        super(blockState);
         this.usedItem = usedItem;
         this.player = player;
     }

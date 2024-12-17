@@ -7,7 +7,7 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
  * @author daoge_cmd
  */
 public class BlockRandomUpdateEvent extends BlockEvent implements CancellableEvent {
-    public BlockRandomUpdateEvent(BlockStateWithPos block) {
-        super(block);
+    public BlockRandomUpdateEvent(BlockStateWithPos blockState) {
+        super(blockState);
     }
 }

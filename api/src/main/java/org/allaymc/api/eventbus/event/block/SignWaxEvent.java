@@ -12,8 +12,8 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 public class SignWaxEvent extends BlockEvent implements CancellableEvent {
     protected EntityPlayer player;
 
-    public SignWaxEvent(BlockStateWithPos block, EntityPlayer player) {
-        super(block);
+    public SignWaxEvent(BlockStateWithPos blockState, EntityPlayer player) {
+        super(blockState);
         this.player = player;
     }
 }

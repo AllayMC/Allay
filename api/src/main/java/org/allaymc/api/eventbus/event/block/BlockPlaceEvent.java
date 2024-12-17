@@ -14,7 +14,7 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 public class BlockPlaceEvent extends BlockEvent implements CancellableEvent {
 
-    protected BlockState blockReplaced;
+    protected BlockState blockStateReplaced;
     /**
      * can be null
      */
@@ -28,9 +28,9 @@ public class BlockPlaceEvent extends BlockEvent implements CancellableEvent {
      */
     protected PlayerInteractInfo interactInfo;
 
-    public BlockPlaceEvent(BlockStateWithPos blockPlaced, BlockState blockReplaced, ItemStack itemUsed, EntityPlayer player, PlayerInteractInfo interactInfo) {
-        super(blockPlaced);
-        this.blockReplaced = blockReplaced;
+    public BlockPlaceEvent(BlockStateWithPos blockStatePlaced, BlockState blockStateReplaced, ItemStack itemUsed, EntityPlayer player, PlayerInteractInfo interactInfo) {
+        super(blockStatePlaced);
+        this.blockStateReplaced = blockStateReplaced;
         this.itemUsed = itemUsed;
         this.player = player;
         this.interactInfo = interactInfo;
