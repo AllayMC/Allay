@@ -142,6 +142,17 @@ public interface UnsafeChunk {
     Collection<BlockEntity> getSectionBlockEntities(int sectionY);
 
     /**
+     * Add a scheduled update to a pos in the chunk.
+     *
+     * @param x     the x coordinate of the pos.
+     * @param y     the y coordinate of the pos.
+     * @param z     the z coordinate of the pos.
+     * @param delay the delay of the scheduled update.
+     * @param layer the layer of the scheduled update.
+     */
+    void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int delay, int layer);
+
+    /**
      * Set block state in this chunk.
      *
      * @param x          the x coordinate of the block.

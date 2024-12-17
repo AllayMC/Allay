@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.ChunkState;
+import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.server.world.HeightMap;
 import org.cloudburstmc.nbt.NbtMap;
 
@@ -23,6 +24,7 @@ public class AllayChunkBuilder {
     private HeightMap heightMap;
     private List<NbtMap> entitiyList;
     private List<NbtMap> blockEntitiyList;
+    private Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
 
     public AllayChunkBuilder chunkX(int chunkX) {
         this.chunkX = chunkX;
@@ -72,31 +74,33 @@ public class AllayChunkBuilder {
         return this;
     }
 
+    public AllayChunkBuilder scheduledUpdates(Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates) {
+        this.scheduledUpdates = scheduledUpdates;
+        return this;
+    }
+
     public AllayUnsafeChunk build() {
         Preconditions.checkNotNull(dimensionInfo);
 
         if (state == null) state = ChunkState.FINISHED;
         if (sections == null) sections = createEmptySections(dimensionInfo);
         if (heightMap == null) heightMap = new HeightMap((short) dimensionInfo.minHeight());
+        if (scheduledUpdates == null) scheduledUpdates = new Int2ObjectNonBlockingMap<>();
 
         return new AllayUnsafeChunk(
                 chunkX, chunkZ, dimensionInfo,
-                sections, heightMap, state,
-                entitiyList, blockEntitiyList
+                sections, heightMap, scheduledUpdates,
+                state, entitiyList, blockEntitiyList
         );
     }
 
     public AllayUnsafeChunk newChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         var chunk = new AllayUnsafeChunk(
-                chunkX,
-                chunkZ,
-                dimensionInfo,
+                chunkX, chunkZ, dimensionInfo,
                 createEmptySections(dimensionInfo),
                 new HeightMap((short) dimensionInfo.minHeight()),
-                ChunkState.NEW,
-                null,
-                null);
-        chunk.setState(ChunkState.NEW);
+                new Int2ObjectNonBlockingMap<>(),
+                ChunkState.NEW, null, null);
         return chunk;
     }
 

@@ -15,10 +15,21 @@ public interface BlockUpdateService {
     /**
      * Schedule a block update at the specified position.
      *
-     * @param pos   The position of the block to update
-     * @param delay The delay of the block update, in ticks
+     * @param pos   The position of the block to update.
+     * @param delay The delay of the block update, in ticks.
      */
-    void scheduleBlockUpdate(Vector3ic pos, long delay);
+    default void scheduleBlockUpdate(Vector3ic pos, int delay) {
+        scheduleBlockUpdate(pos, delay, 0);
+    }
+
+    /**
+     * Schedule a block update at the specified position.
+     *
+     * @param pos   The position of the block to update.
+     * @param delay The delay of the block update, in ticks.
+     * @param layer The layer of the block update.
+     */
+    void scheduleBlockUpdate(Vector3ic pos, int delay, int layer);
 
     /**
      * Schedule a block update at the specified position.
@@ -27,7 +38,18 @@ public interface BlockUpdateService {
      * @param delay The delay of the block update
      */
     default void scheduleBlockUpdate(Vector3ic pos, Duration delay) {
-        scheduleBlockUpdate(pos, delay.toNanos() / 50_000_000);
+        scheduleBlockUpdate(pos, delay, 0);
+    }
+
+    /**
+     * Schedule a block update at the specified position.
+     *
+     * @param pos   The position of the block to update
+     * @param delay The delay of the block update
+     * @param layer The layer of the block update.
+     */
+    default void scheduleBlockUpdate(Vector3ic pos, Duration delay, int layer) {
+        scheduleBlockUpdate(pos, (int) (delay.toNanos() / 50_000_000), layer);
     }
 
     /**

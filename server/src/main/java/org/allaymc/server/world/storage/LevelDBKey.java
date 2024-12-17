@@ -84,9 +84,9 @@ public enum LevelDBKey {
      */
 
     /**
-     * Used to store the pending tick list for a chunk
+     * Used to store the scheduled update list for a chunk
      */
-    ALLAY_PENDING_TICKS(-128);
+    ALLAY_SCHEDULED_UPDATES(-128);
 
     private final byte encoded;
 

@@ -70,7 +70,7 @@ public final class AllayChunkService implements ChunkService {
     private void tickChunks(long currentTick) {
         for (Chunk chunk : loadedChunks.values()) {
             try {
-                ((AllayChunk) chunk).tick(currentTick, worldStorage);
+                ((AllayChunk) chunk).tick(currentTick, dimension, worldStorage);
             } catch (Throwable t) {
                 log.error("Error while ticking chunk({}, {})!", chunk.getX(), chunk.getZ(), t);
             }

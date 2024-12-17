@@ -1,7 +1,6 @@
 package org.allaymc.server.world.chunk;
 
 import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.type.BlockState;
@@ -18,8 +17,10 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
+import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.world.HeightMap;
 import org.cloudburstmc.nbt.NbtMap;
+import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
@@ -43,8 +44,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final ChunkSection[] sections;
     @Getter
     protected final HeightMap heightMap;
-    protected final Map<Long, Entity> entities;
-    protected final Map<Integer, BlockEntity> blockEntities;
+    protected final Long2ObjectNonBlockingMap<Entity> entities;
+    protected final Int2ObjectNonBlockingMap<BlockEntity> blockEntities;
+    protected final Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
     @Getter
     protected volatile ChunkState state;
 
@@ -68,13 +70,16 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     AllayUnsafeChunk(
             int x, int z, DimensionInfo dimensionInfo,
             ChunkSection[] sections, HeightMap heightMap,
-            ChunkState state, List<NbtMap> entityNbtList, List<NbtMap> blockEntityNbtList) {
+            Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates,
+            ChunkState state, List<NbtMap> entityNbtList,
+            List<NbtMap> blockEntityNbtList) {
         this.x = x;
         this.z = z;
         this.dimensionInfo = dimensionInfo;
         this.sections = sections;
         this.heightMap = heightMap;
-        this.entities = new Long2ObjectOpenHashMap<>();
+        this.scheduledUpdates = scheduledUpdates;
+        this.entities = new Long2ObjectNonBlockingMap<>();
         this.blockEntities = new Int2ObjectNonBlockingMap<>();
         this.state = state;
         this.entityNbtList = entityNbtList;
@@ -149,6 +154,17 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
+    public void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int delay, int layer) {
+        checkXYZ(x, y, z);
+        var key = HashUtils.hashChunkXYZ(x, y, z);
+        scheduledUpdates.put(key, new ScheduledUpdateInfo(key, layer, delay));
+    }
+
+    public Int2ObjectNonBlockingMap<ScheduledUpdateInfo> getScheduledUpdatesUnsafe() {
+        return scheduledUpdates;
+    }
+
+    @Override
     public short getHeight(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
@@ -173,8 +189,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public BlockState getBlockState(int x, int y, int z, int layer) {
-        if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
+        if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight()) {
             return BlockTypes.AIR.getDefaultState();
+        }
 
         checkXZ(x, z);
         return this.getSection(y >> 4).getBlockState(x, y & 0xf, z, layer);
@@ -239,6 +256,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return Collections.unmodifiableMap(entities);
     }
 
+    public Long2ObjectNonBlockingMap<Entity> getEntitiesUnsafe() {
+        return entities;
+    }
+
     @Override
     public void addBlockEntity(BlockEntity blockEntity) {
         Preconditions.checkNotNull(blockEntity);
@@ -261,6 +282,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public @UnmodifiableView Map<Integer, BlockEntity> getBlockEntities() {
         return Collections.unmodifiableMap(blockEntities);
+    }
+
+    public Int2ObjectNonBlockingMap<BlockEntity> getBlockEntitiesUnsafe() {
+        return blockEntities;
     }
 
     public Chunk toSafeChunk() {

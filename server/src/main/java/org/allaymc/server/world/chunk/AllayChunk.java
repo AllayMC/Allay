@@ -10,10 +10,14 @@ import io.netty.util.internal.PlatformDependent;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
@@ -23,6 +27,7 @@ import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
+import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.*;
@@ -70,11 +75,45 @@ public class AllayChunk implements Chunk {
         this.chunkPacketQueue = PlatformDependent.newMpscQueue();
     }
 
-    public void tick(long currentTick, WorldStorage worldStorage) {
-        getBlockEntities().values().forEach(blockEntity -> blockEntity.tick(currentTick));
-        getEntities().values().forEach(entity -> entity.tick(currentTick));
+    public void tick(long currentTick, Dimension dimension, WorldStorage worldStorage) {
+        unsafeChunk.getBlockEntitiesUnsafe().values().forEach(blockEntity -> blockEntity.tick(currentTick));
+        unsafeChunk.getEntitiesUnsafe().values().forEach(entity -> entity.tick(currentTick));
+        tickScheduledUpdates(dimension);
 
         checkAutoSave(worldStorage);
+    }
+
+    protected void tickScheduledUpdates(Dimension dimension) {
+        var scheduledUpdates = unsafeChunk.getScheduledUpdatesUnsafe();
+        List<ScheduledUpdateInfo> positions = new ArrayList<>(scheduledUpdates.size() / 4);
+        for (var entry : scheduledUpdates.fastEntrySet()) {
+            if (entry.getValue().getDelay() <= 0) {
+                positions.add(entry.getValue());
+                scheduledUpdates.remove(entry.getIntKey());
+            } else {
+                entry.getValue().decreaseDelay();
+            }
+        }
+
+        positions.forEach(info -> {
+            var chunkXYZ = info.getChunkXYZ();
+            var localX = HashUtils.getXFromHashChunkXYZ(chunkXYZ);
+            var y = HashUtils.getYFromHashChunkXYZ(chunkXYZ);
+            var localZ = HashUtils.getZFromHashChunkXYZ(chunkXYZ);
+            var layer = info.getLayer();
+
+            var blockState = getBlockState(localX, y, localZ, layer);
+            var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (unsafeChunk.x << 4), y, localZ + (unsafeChunk.z << 4), dimension), layer);
+            if (!callScheduleUpdateEvent(blockStateWithPos)) {
+                return;
+            }
+
+            blockState.getBehavior().onScheduledUpdate(blockStateWithPos);
+        });
+    }
+
+    protected boolean callScheduleUpdateEvent(BlockStateWithPos block) {
+        return new BlockScheduleUpdateEvent(block).call();
     }
 
     protected void checkAutoSave(WorldStorage worldStorage) {
@@ -424,6 +463,11 @@ public class AllayChunk implements Chunk {
     public @UnmodifiableView Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
         return unsafeChunk.getSectionBlockEntities(sectionY);
+    }
+
+    @Override
+    public void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int delay, int layer) {
+        unsafeChunk.addScheduledUpdate(x, y, z, delay, layer);
     }
 
     @Override

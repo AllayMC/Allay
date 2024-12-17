@@ -66,7 +66,7 @@ public class AllayDimension implements Dimension {
         this.chunkService.tick(currentTick);
         this.entityService.tick();
         this.entityPhysicsService.tick();
-        this.blockUpdateService.tick(currentTick);
+        this.blockUpdateService.tick();
         if (!Server.SETTINGS.worldSettings().calculateLightAsync()) {
             this.lightService.tick();
         }
