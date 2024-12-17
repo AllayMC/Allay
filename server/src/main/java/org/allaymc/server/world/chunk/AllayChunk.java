@@ -14,6 +14,7 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.eventbus.event.block.BlockRandomUpdateEvent;
 import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.server.Server;
@@ -139,7 +140,9 @@ public class AllayChunk implements Chunk {
                 var blockState = section.getBlockState(localX, localY, localZ, 0);
                 if (blockState.getBehavior().canRandomUpdate()) {
                     var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (unsafeChunk.x << 4), localY + (sectionY << 4), localZ + (unsafeChunk.z << 4), dimension), 0);
-                    blockState.getBehavior().onRandomUpdate(blockStateWithPos);
+                    if (new BlockRandomUpdateEvent(blockStateWithPos).call()) {
+                        blockState.getBehavior().onRandomUpdate(blockStateWithPos);
+                    }
                 }
             }
         }
