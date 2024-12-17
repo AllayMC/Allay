@@ -51,6 +51,9 @@ public enum LevelDBKey {
      */
     BLOCK_EXTRA_DATA(52),
     BIOME_STATE(53),
+    /**
+     * The state of a chunk (byte)
+     */
     CHUNK_FINALIZED_STATE(54),
     CONVERSION_DATA(55),
     /**
@@ -64,14 +67,26 @@ public enum LevelDBKey {
     RANDOM_TICKS(58),
     CHECK_SUMS(59),
     GENERATION_SEED(60),
-    //GeneratedPreCavesAndCliffsBlending
     GENERATED_PRE_CAVES_AND_CLIFFS_BLENDING(61),
     BLENDING_BIOME_HEIGHT(62),
     META_DATA_HASH(63),
     BLENDING_DATA(64),
     ACTOR_DIGEST_VERSION(65),
     LEGACY_VERSION(118),
-    AABB_VOLUMES(119);
+    AABB_VOLUMES(119),
+
+    /*
+     * NOTICE: The following keys are only used in allay,
+     * which are not part of the vanilla levelDB format.
+     *
+     * The encoded values are incremented from -128 to
+     * avoid conflicts with original keys.
+     */
+
+    /**
+     * Used to store the pending tick list for a chunk
+     */
+    ALLAY_PENDING_TICKS(-128);
 
     private final byte encoded;
 
@@ -128,7 +143,7 @@ public enum LevelDBKey {
     }
 
     public byte[] getKey(int chunkX, int chunkZ, int chunkSectionY) {
-        if (this.encoded != CHUNK_SECTION_PREFIX.encoded)
+        if (this != CHUNK_SECTION_PREFIX)
             throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
         return new byte[]{
                 (byte) (chunkX & 0xff),
@@ -145,7 +160,7 @@ public enum LevelDBKey {
     }
 
     public byte[] getKey(int chunkX, int chunkZ, int chunkSectionY, DimensionInfo dimension) {
-        if (this.encoded != CHUNK_SECTION_PREFIX.encoded)
+        if (this != CHUNK_SECTION_PREFIX)
             throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
         if (dimension == DimensionInfo.OVERWORLD) {
             return new byte[]{
