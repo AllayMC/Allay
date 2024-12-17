@@ -53,6 +53,8 @@ public interface BlockTags {
 
     BlockTag PLANT = create("minecraft:plant");
 
+    BlockTag LEAVES_SUPPORTER = create("minecraft:leaves_supporter");
+
     BlockTag IRON_PICK_DIGGABLE = create("minecraft:iron_pick_diggable");
 
     BlockTag PUMPKIN = create("minecraft:pumpkin");
