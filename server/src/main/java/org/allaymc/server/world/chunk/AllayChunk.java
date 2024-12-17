@@ -130,9 +130,15 @@ public class AllayChunk implements Chunk {
             if (section.isAirSection()) {
                 continue;
             }
+            // Check the entry list of this section, and
+            // if there is no block that support random tick
+            // in this section, we can just skip this section
+            if (section.blockLayers()[0].allEntriesMatch(blockState -> !blockState.getBehavior().canRandomUpdate())) {
+                continue;
+            }
 
             int sectionY = section.sectionY();
-            for (int i = 0; i < randomTickSpeed; i++) {
+            for (int i = 0; i < randomTickSpeed * 3; i++) {
                 int lcg = nextUpdateLCG();
                 int localX = lcg & 0x0f;
                 int localZ = lcg >>> 8 & 0x0f;
