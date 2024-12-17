@@ -427,6 +427,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                    blockType.hasBlockTag(BlockTags.IS_SHEARS_ITEM_DESTRUCTIBLE);
         }
 
+        if (isPickaxe(itemType)) {
+            return blockType.hasBlockTag(BlockTags.IS_PICKAXE_ITEM_DESTRUCTIBLE);
+        }
+
         if (isAxe(itemType)) {
             return blockType.hasBlockTag(BlockTags.IS_AXE_ITEM_DESTRUCTIBLE);
         }
