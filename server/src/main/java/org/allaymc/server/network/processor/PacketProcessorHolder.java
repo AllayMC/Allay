@@ -75,6 +75,9 @@ public final class PacketProcessorHolder {
         this.registerProcessor(ClientStatus.LOGGED_IN, new RequestChunkRadiusPacketProcessor());
         this.registerProcessor(ClientStatus.LOGGED_IN, new EmoteListPacketProcessor());
         this.registerProcessor(ClientStatus.LOGGED_IN, new SetLocalPlayerAsInitializedPacketProcessor());
+        // Client will send sub chunk request packet during
+        // logged in stage if sub chunk sending system is enabled
+        this.registerProcessor(ClientStatus.LOGGED_IN, new SubChunkRequestPacketProcessor());
 
         // Client will start sending auth input packet after logged in, however these packets will be ignored.
         // See PlayerAuthInputPacketProcessor#notReadyForInput()

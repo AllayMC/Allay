@@ -56,6 +56,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
         if (result == SubChunkRequestResult.SUCCESS) {
             var buffer = ByteBufAllocator.DEFAULT.ioBuffer();
             subchunk.writeToNetwork(buffer);
+            // FIXME: biome data in sub chunk data is broken
             subchunk.biomes().writeToNetwork(buffer, BiomeType::getId);
             // edu - border blocks
             buffer.writeByte(0);
