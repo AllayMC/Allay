@@ -143,7 +143,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @Comment("Determines how far away from the chunk loader chunks will be ticked")
         @CustomKey("tick-radius")
-        private int tickRadius = 8;
+        private int tickRadius = 4;
 
         @Comment("Determines how far away from the chunk loader chunks will be loaded and sent")
         @CustomKey("view-distance")
