@@ -42,6 +42,9 @@ import java.util.function.Predicate;
  */
 @Slf4j
 public class AllayChunk implements Chunk {
+
+    protected static final int LCG_CONSTANT = 1013904223;
+
     protected final AllayUnsafeChunk unsafeChunk;
 
     protected final StampedLock blockLock;
@@ -57,6 +60,7 @@ public class AllayChunk implements Chunk {
     @Getter
     protected boolean loaded = false;
     protected int autoSaveTimer = 0;
+    protected int updateLCG = ThreadLocalRandom.current().nextInt();
 
     private static void checkXZ(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
@@ -117,18 +121,21 @@ public class AllayChunk implements Chunk {
 
     protected void tickRandomUpdates(Dimension dimension) {
         int randomTickSpeed = dimension.getWorld().getWorldData().getGameRuleValue(GameRule.RANDOM_TICK_SPEED);
-        if (randomTickSpeed == 0) {
+        if (randomTickSpeed <= 0) {
             return;
         }
 
         for (var section : unsafeChunk.getSections()) {
+            if (section.isAirSection()) {
+                continue;
+            }
+
             int sectionY = section.sectionY();
             for (int i = 0; i < randomTickSpeed; i++) {
-                int n = ThreadLocalRandom.current().nextInt();
-                int localX = n & 0xF;
-                int localZ = n >> 8 & 0xF;
-                int localY = n >> 16 & 0xF;
-
+                int lcg = nextUpdateLCG();
+                int localX = lcg & 0x0f;
+                int localZ = lcg >>> 8 & 0x0f;
+                int localY = lcg >>> 16 & 0x0f;
                 var blockState = section.getBlockState(localX, localY, localZ, 0);
                 if (blockState.getBehavior().canRandomUpdate()) {
                     var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (unsafeChunk.x << 4), localY + (sectionY << 4), localZ + (unsafeChunk.z << 4), dimension), 0);
@@ -136,6 +143,10 @@ public class AllayChunk implements Chunk {
                 }
             }
         }
+    }
+
+    public int nextUpdateLCG() {
+        return (this.updateLCG = (this.updateLCG * 3) ^ LCG_CONSTANT);
     }
 
     protected void checkAutoSave(WorldStorage worldStorage) {
