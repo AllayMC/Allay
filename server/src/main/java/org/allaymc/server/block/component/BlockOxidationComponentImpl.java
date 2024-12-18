@@ -87,7 +87,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
         chance *= chance;
         if (random.nextFloat() < chance) {
             var nextBlockType = getBlockWithOxidationLevel(OxidationLevel.values()[currentLevel + 1]);
-            var blockFadeEvent = new BlockFadeEvent(current, nextBlockType.getDefaultState());
+            var blockFadeEvent = new BlockFadeEvent(current, nextBlockType.copyPropertyValuesFrom(current.blockState()));
             if (blockFadeEvent.call()) {
                 dimension.setBlockState(position, blockFadeEvent.getNewBlockState());
             }
@@ -115,7 +115,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
                 new Position3i(interactInfo.clickBlockPos(), dimension),
                 0
         );
-        var blockFadeEvent = new BlockFadeEvent(oldBlockState, nextBlockType.getDefaultState());
+        var blockFadeEvent = new BlockFadeEvent(oldBlockState, nextBlockType.copyPropertyValuesFrom(oldBlockState.blockState()));
         if (blockFadeEvent.call()) {
             dimension.setBlockState(interactInfo.clickBlockPos(), blockFadeEvent.getNewBlockState());
             if (event.getInteractInfo().player().getGameType() != GameType.CREATIVE) {
@@ -148,7 +148,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
                 new Position3i(interactInfo.clickBlockPos(), dimension),
                 0
         );
-        var blockFadeEvent = new BlockFadeEvent(oldBlockState, nextBlockType.getDefaultState());
+        var blockFadeEvent = new BlockFadeEvent(oldBlockState, nextBlockType.copyPropertyValuesFrom(oldBlockState.blockState()));
         if (blockFadeEvent.call()) {
             dimension.setBlockState(interactInfo.clickBlockPos(), blockFadeEvent.getNewBlockState());
             if (event.getInteractInfo().player().getGameType() != GameType.CREATIVE) {

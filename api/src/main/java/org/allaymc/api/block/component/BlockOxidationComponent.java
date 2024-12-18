@@ -17,6 +17,15 @@ public interface BlockOxidationComponent extends BlockComponent {
     BlockType<?> getBlockWithOxidationLevel(OxidationLevel oxidationLevel);
 
     /**
+     * Checks if the block can be oxidated.
+     *
+     * @return {@code true} if the block can be oxidated, {@code false} otherwise
+     */
+    default boolean canOxidate() {
+        return this.getOxidationLevel() != OxidationLevel.OXIDIZED && !this.isWaxed();
+    }
+
+    /**
      * Retrieves the current oxidation level of the block.
      *
      * @return the current oxidation level of the block

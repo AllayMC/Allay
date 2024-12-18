@@ -17,6 +17,8 @@ import org.allaymc.api.math.voxelshape.VoxelShapes;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
+import org.allaymc.server.block.component.copper.BlockCopperBaseComponentImpl;
+import org.allaymc.server.block.component.copper.BlockCopperStairsBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
@@ -54,35 +56,35 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_WEATHERED_COPPER = buildCopper(BlockId.WAXED_WEATHERED_COPPER, OxidationLevel.WEATHERED, copper);
         BlockTypes.WAXED_OXIDIZED_COPPER = buildCopper(BlockId.WAXED_OXIDIZED_COPPER, OxidationLevel.OXIDIZED, copper);
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> chiseled_copper = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<?>> chiseledCopper = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_CHISELED_COPPER : BlockTypes.CHISELED_COPPER;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_CHISELED_COPPER : BlockTypes.EXPOSED_CHISELED_COPPER;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_CHISELED_COPPER : BlockTypes.WEATHERED_CHISELED_COPPER;
             case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER : BlockTypes.OXIDIZED_CHISELED_COPPER;
         };
-        BlockTypes.CHISELED_COPPER = buildCopper(BlockId.CHISELED_COPPER, OxidationLevel.UNAFFECTED, chiseled_copper);
-        BlockTypes.EXPOSED_CHISELED_COPPER = buildCopper(BlockId.EXPOSED_CHISELED_COPPER, OxidationLevel.EXPOSED, chiseled_copper);
-        BlockTypes.WEATHERED_CHISELED_COPPER = buildCopper(BlockId.WEATHERED_CHISELED_COPPER, OxidationLevel.WEATHERED, chiseled_copper);
-        BlockTypes.OXIDIZED_CHISELED_COPPER = buildCopper(BlockId.OXIDIZED_CHISELED_COPPER, OxidationLevel.OXIDIZED, chiseled_copper);
-        BlockTypes.WAXED_CHISELED_COPPER = buildCopper(BlockId.WAXED_CHISELED_COPPER, OxidationLevel.UNAFFECTED, chiseled_copper);
-        BlockTypes.WAXED_EXPOSED_CHISELED_COPPER = buildCopper(BlockId.WAXED_EXPOSED_CHISELED_COPPER, OxidationLevel.EXPOSED, chiseled_copper);
-        BlockTypes.WAXED_WEATHERED_CHISELED_COPPER = buildCopper(BlockId.WAXED_WEATHERED_CHISELED_COPPER, OxidationLevel.WEATHERED, chiseled_copper);
-        BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER = buildCopper(BlockId.WAXED_OXIDIZED_CHISELED_COPPER, OxidationLevel.OXIDIZED, chiseled_copper);
+        BlockTypes.CHISELED_COPPER = buildCopper(BlockId.CHISELED_COPPER, OxidationLevel.UNAFFECTED, chiseledCopper);
+        BlockTypes.EXPOSED_CHISELED_COPPER = buildCopper(BlockId.EXPOSED_CHISELED_COPPER, OxidationLevel.EXPOSED, chiseledCopper);
+        BlockTypes.WEATHERED_CHISELED_COPPER = buildCopper(BlockId.WEATHERED_CHISELED_COPPER, OxidationLevel.WEATHERED, chiseledCopper);
+        BlockTypes.OXIDIZED_CHISELED_COPPER = buildCopper(BlockId.OXIDIZED_CHISELED_COPPER, OxidationLevel.OXIDIZED, chiseledCopper);
+        BlockTypes.WAXED_CHISELED_COPPER = buildCopper(BlockId.WAXED_CHISELED_COPPER, OxidationLevel.UNAFFECTED, chiseledCopper);
+        BlockTypes.WAXED_EXPOSED_CHISELED_COPPER = buildCopper(BlockId.WAXED_EXPOSED_CHISELED_COPPER, OxidationLevel.EXPOSED, chiseledCopper);
+        BlockTypes.WAXED_WEATHERED_CHISELED_COPPER = buildCopper(BlockId.WAXED_WEATHERED_CHISELED_COPPER, OxidationLevel.WEATHERED, chiseledCopper);
+        BlockTypes.WAXED_OXIDIZED_CHISELED_COPPER = buildCopper(BlockId.WAXED_OXIDIZED_CHISELED_COPPER, OxidationLevel.OXIDIZED, chiseledCopper);
 
-        BiFunction<OxidationLevel, Boolean, BlockType<?>> cut_copper = (level, waxed) -> switch (level) {
+        BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopper = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_CUT_COPPER : BlockTypes.CUT_COPPER;
             case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_CUT_COPPER : BlockTypes.EXPOSED_CUT_COPPER;
             case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_CUT_COPPER : BlockTypes.WEATHERED_CUT_COPPER;
             case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_CUT_COPPER : BlockTypes.OXIDIZED_CUT_COPPER;
         };
-        BlockTypes.CUT_COPPER = buildCopper(BlockId.CUT_COPPER, OxidationLevel.UNAFFECTED, cut_copper);
-        BlockTypes.EXPOSED_CUT_COPPER = buildCopper(BlockId.EXPOSED_CUT_COPPER, OxidationLevel.EXPOSED, cut_copper);
-        BlockTypes.WEATHERED_CUT_COPPER = buildCopper(BlockId.WEATHERED_CUT_COPPER, OxidationLevel.WEATHERED, cut_copper);
-        BlockTypes.OXIDIZED_CUT_COPPER = buildCopper(BlockId.OXIDIZED_CUT_COPPER, OxidationLevel.OXIDIZED, cut_copper);
-        BlockTypes.WAXED_CUT_COPPER = buildCopper(BlockId.WAXED_CUT_COPPER, OxidationLevel.UNAFFECTED, cut_copper);
-        BlockTypes.WAXED_EXPOSED_CUT_COPPER = buildCopper(BlockId.WAXED_EXPOSED_CUT_COPPER, OxidationLevel.EXPOSED, cut_copper);
-        BlockTypes.WAXED_WEATHERED_CUT_COPPER = buildCopper(BlockId.WAXED_WEATHERED_CUT_COPPER, OxidationLevel.WEATHERED, cut_copper);
-        BlockTypes.WAXED_OXIDIZED_CUT_COPPER = buildCopper(BlockId.WAXED_OXIDIZED_CUT_COPPER, OxidationLevel.OXIDIZED, cut_copper);
+        BlockTypes.CUT_COPPER = buildCopper(BlockId.CUT_COPPER, OxidationLevel.UNAFFECTED, cutCopper);
+        BlockTypes.EXPOSED_CUT_COPPER = buildCopper(BlockId.EXPOSED_CUT_COPPER, OxidationLevel.EXPOSED, cutCopper);
+        BlockTypes.WEATHERED_CUT_COPPER = buildCopper(BlockId.WEATHERED_CUT_COPPER, OxidationLevel.WEATHERED, cutCopper);
+        BlockTypes.OXIDIZED_CUT_COPPER = buildCopper(BlockId.OXIDIZED_CUT_COPPER, OxidationLevel.OXIDIZED, cutCopper);
+        BlockTypes.WAXED_CUT_COPPER = buildCopper(BlockId.WAXED_CUT_COPPER, OxidationLevel.UNAFFECTED, cutCopper);
+        BlockTypes.WAXED_EXPOSED_CUT_COPPER = buildCopper(BlockId.WAXED_EXPOSED_CUT_COPPER, OxidationLevel.EXPOSED, cutCopper);
+        BlockTypes.WAXED_WEATHERED_CUT_COPPER = buildCopper(BlockId.WAXED_WEATHERED_CUT_COPPER, OxidationLevel.WEATHERED, cutCopper);
+        BlockTypes.WAXED_OXIDIZED_CUT_COPPER = buildCopper(BlockId.WAXED_OXIDIZED_CUT_COPPER, OxidationLevel.OXIDIZED, cutCopper);
     }
 
     private static BlockType<BlockCopperBehavior> buildCopper(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
@@ -361,14 +363,12 @@ public final class BlockTypeInitializer {
         BlockTypes.CHERRY_STAIRS = buildStairs(BlockId.CHERRY_STAIRS);
         BlockTypes.COBBLED_DEEPSLATE_STAIRS = buildStairs(BlockId.COBBLED_DEEPSLATE_STAIRS);
         BlockTypes.CRIMSON_STAIRS = buildStairs(BlockId.CRIMSON_STAIRS);
-        BlockTypes.CUT_COPPER_STAIRS = buildStairs(BlockId.CUT_COPPER_STAIRS);
         BlockTypes.DARK_OAK_STAIRS = buildStairs(BlockId.DARK_OAK_STAIRS);
         BlockTypes.DARK_PRISMARINE_STAIRS = buildStairs(BlockId.DARK_PRISMARINE_STAIRS);
         BlockTypes.DEEPSLATE_BRICK_STAIRS = buildStairs(BlockId.DEEPSLATE_BRICK_STAIRS);
         BlockTypes.DEEPSLATE_TILE_STAIRS = buildStairs(BlockId.DEEPSLATE_TILE_STAIRS);
         BlockTypes.DIORITE_STAIRS = buildStairs(BlockId.DIORITE_STAIRS);
         BlockTypes.END_BRICK_STAIRS = buildStairs(BlockId.END_BRICK_STAIRS);
-        BlockTypes.EXPOSED_CUT_COPPER_STAIRS = buildStairs(BlockId.EXPOSED_CUT_COPPER_STAIRS);
         BlockTypes.GRANITE_STAIRS = buildStairs(BlockId.GRANITE_STAIRS);
         BlockTypes.JUNGLE_STAIRS = buildStairs(BlockId.JUNGLE_STAIRS);
         BlockTypes.MANGROVE_STAIRS = buildStairs(BlockId.MANGROVE_STAIRS);
@@ -378,7 +378,6 @@ public final class BlockTypeInitializer {
         BlockTypes.NETHER_BRICK_STAIRS = buildStairs(BlockId.NETHER_BRICK_STAIRS);
         BlockTypes.NORMAL_STONE_STAIRS = buildStairs(BlockId.NORMAL_STONE_STAIRS);
         BlockTypes.OAK_STAIRS = buildStairs(BlockId.OAK_STAIRS);
-        BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = buildStairs(BlockId.OXIDIZED_CUT_COPPER_STAIRS);
         BlockTypes.POLISHED_ANDESITE_STAIRS = buildStairs(BlockId.POLISHED_ANDESITE_STAIRS);
         BlockTypes.POLISHED_BLACKSTONE_BRICK_STAIRS = buildStairs(BlockId.POLISHED_BLACKSTONE_BRICK_STAIRS);
         BlockTypes.POLISHED_BLACKSTONE_STAIRS = buildStairs(BlockId.POLISHED_BLACKSTONE_STAIRS);
@@ -402,22 +401,43 @@ public final class BlockTypeInitializer {
         BlockTypes.TUFF_BRICK_STAIRS = buildStairs(BlockId.TUFF_BRICK_STAIRS);
         BlockTypes.TUFF_STAIRS = buildStairs(BlockId.TUFF_STAIRS);
         BlockTypes.WARPED_STAIRS = buildStairs(BlockId.WARPED_STAIRS);
-        BlockTypes.WAXED_CUT_COPPER_STAIRS = buildStairs(BlockId.WAXED_CUT_COPPER_STAIRS);
-        BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = buildStairs(BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS);
-        BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = buildStairs(BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS);
-        BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = buildStairs(BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS);
-        BlockTypes.WEATHERED_CUT_COPPER_STAIRS = buildStairs(BlockId.WEATHERED_CUT_COPPER_STAIRS);
         BlockTypes.PALE_OAK_STAIRS = buildStairs(BlockId.PALE_OAK_STAIRS);
+
+        BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperStairs = (level, waxed) -> switch (level) {
+            case UNAFFECTED -> waxed ? BlockTypes.WAXED_CUT_COPPER_STAIRS : BlockTypes.CUT_COPPER_STAIRS;
+            case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS : BlockTypes.EXPOSED_CUT_COPPER_STAIRS;
+            case WEATHERED ->
+                    waxed ? BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS : BlockTypes.WEATHERED_CUT_COPPER_STAIRS;
+            case OXIDIZED ->
+                    waxed ? BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS : BlockTypes.OXIDIZED_CUT_COPPER_STAIRS;
+        };
+        BlockTypes.CUT_COPPER_STAIRS = buildCopperStairs(BlockId.CUT_COPPER_STAIRS, OxidationLevel.UNAFFECTED, cutCopperStairs);
+        BlockTypes.EXPOSED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.EXPOSED_CUT_COPPER_STAIRS, OxidationLevel.EXPOSED, cutCopperStairs);
+        BlockTypes.WEATHERED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.WEATHERED_CUT_COPPER_STAIRS, OxidationLevel.WEATHERED, cutCopperStairs);
+        BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.OXIDIZED_CUT_COPPER_STAIRS, OxidationLevel.OXIDIZED, cutCopperStairs);
+        BlockTypes.WAXED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.WAXED_CUT_COPPER_STAIRS, OxidationLevel.UNAFFECTED, cutCopperStairs);
+        BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS, OxidationLevel.EXPOSED, cutCopperStairs);
+        BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS, OxidationLevel.WEATHERED, cutCopperStairs);
+        BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = buildCopperStairs(BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS, OxidationLevel.OXIDIZED, cutCopperStairs);
     }
 
     private static BlockType<BlockStairsBehavior> buildStairs(BlockId id) {
+        return builderStairs(BlockStairsBehaviorImpl.class, id).setBaseComponentSupplier(BlockStairsBaseComponentImpl::new).build();
+    }
+
+    private static BlockType<BlockCopperStairsBehavior> buildCopperStairs(BlockId id, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+        return builderStairs(BlockCopperStairsBehaviorImpl.class, id)
+                .setBaseComponentSupplier(BlockCopperStairsBaseComponentImpl::new)
+                .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .build();
+    }
+
+    private static <T extends BlockBehavior> AllayBlockType.Builder builderStairs(Class<T> clazz, BlockId id) {
         return AllayBlockType
-                .builder(BlockStairsBehaviorImpl.class)
+                .builder(clazz)
                 .vanillaBlock(id)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
-                .setBaseComponentSupplier(BlockStairsBaseComponentImpl::new)
-                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape))
-                .build();
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape));
     }
 
     public static void initColoredTorch() {

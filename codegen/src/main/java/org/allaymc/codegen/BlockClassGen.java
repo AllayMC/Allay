@@ -184,7 +184,8 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*(Leaves\\d?|LeavesFlowered)Behavior"), "BlockLeavesBehavior");
         registerMergedBlock(Pattern.compile(".*AnvilBehavior"), "BlockAnvilBehavior");
         registerMergedBlock(Pattern.compile(".*ShulkerBoxBehavior"), "BlockShulkerBoxBehavior");
-        registerMergedBlock(Pattern.compile(".*StairsBehavior"), "BlockStairsBehavior");
+        registerMergedBlock(Pattern.compile("Block(?!.*Copper).*?StairsBehavior"), "BlockStairsBehavior");
+        registerMergedBlock(Pattern.compile("Block(?=.*Copper).*?StairsBehavior"), "BlockCopperStairsBehavior");
         registerMergedBlock(Pattern.compile(".*ColoredTorch.*Behavior"), "BlockColoredTorchBehavior");
         registerMergedBlock(Pattern.compile(".*RedstoneTorchBehavior"), "BlockRedstoneTorchBehavior");
         registerMergedBlock(Pattern.compile(".*BlastFurnaceBehavior"), "BlockBlastFurnaceBehavior");
