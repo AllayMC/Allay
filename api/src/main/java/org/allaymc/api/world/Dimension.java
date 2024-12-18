@@ -14,7 +14,6 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.Utils;
@@ -739,23 +738,56 @@ public interface Dimension {
         return getChunkService().getLoadedChunks().stream().mapToInt(chunk -> chunk.getBlockEntities().size()).sum();
     }
 
-    default void addParticle(ParticleType particleType, Vector3fc pos) {
-        addParticle(particleType, pos, 0);
+    /**
+     * @see #addParticle(float, float, float, ParticleType, int)
+     */
+    default void addParticle(Vector3ic pos, ParticleType particleType) {
+        addParticle(pos, particleType, 0);
     }
 
     /**
-     * Add particle at the specified pos.
-     *
-     * @param particleType the particle type.
-     * @param pos          the pos.
-     * @param data         the data of the particle.
+     * @see #addParticle(float, float, float, ParticleType, int)
      */
-    default void addParticle(ParticleType particleType, Vector3fc pos, int data) {
-        var pk = new LevelEventPacket();
-        pk.setType(particleType);
-        pk.setPosition(MathUtils.JOMLVecToCBVec(pos));
-        pk.setData(data);
-        getChunkService().getChunkByDimensionPos((int) pos.x(), (int) pos.z()).addChunkPacket(pk);
+    default void addParticle(Vector3ic pos, ParticleType particleType, int data) {
+        addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
+    }
+
+    /**
+     * @see #addParticle(float, float, float, ParticleType, int)
+     */
+    default void addParticle(Vector3fc pos, ParticleType particleType) {
+        addParticle(pos, particleType, 0);
+    }
+
+    /**
+     * @see #addParticle(float, float, float, ParticleType, int)
+     */
+    default void addParticle(Vector3fc pos, ParticleType particleType, int data) {
+        addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
+    }
+
+    /**
+     * @see #addParticle(float, float, float, ParticleType, int)
+     */
+    default void addParticle(float x, float y, float z, ParticleType particleType) {
+        this.addParticle(x, y, z, particleType, 0);
+    }
+
+    /**
+     * Adds a particle at the specified position.
+     *
+     * @param x            the x-coordinate of the position where the particle should be added.
+     * @param y            the y-coordinate of the position where the particle should be added.
+     * @param z            the z-coordinate of the position where the particle should be added.
+     * @param particleType the type of the particle to be added.
+     * @param data         the data associated with the particle.
+     */
+    default void addParticle(float x, float y, float z, ParticleType particleType, int data) {
+        var packet = new LevelEventPacket();
+        packet.setType(particleType);
+        packet.setPosition(Vector3f.from(x, y, z));
+        packet.setData(data);
+        getChunkService().getChunkByDimensionPos((int) x, (int) z).addChunkPacket(packet);
     }
 
     /**
