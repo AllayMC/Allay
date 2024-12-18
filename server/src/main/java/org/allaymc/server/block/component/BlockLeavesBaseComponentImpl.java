@@ -6,7 +6,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -44,6 +44,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
         onNeighborOrScheduledUpdate(current);
     }
 
@@ -65,7 +66,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
         for (var face : BlockFace.values()) {
             var offsetPos = face.offsetPos(pos);
             var sideBlockState = pos.dimension().getBlockState(offsetPos);
-            if (sideBlockState.getBlockType().hasBlockTag(BlockTags.LEAVES)) {
+            if (sideBlockState.getBlockType().hasBlockTag(BlockCustomTags.LEAVES)) {
                 if (!sideBlockState.getPropertyValue(BlockPropertyTypes.UPDATE_BIT)) {
                     pos.dimension().getBlockUpdateService().scheduleBlockUpdate(offsetPos, 2);
                 }
@@ -101,10 +102,10 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
             visited.defaultReturnValue(-1);
         }
 
-        if (blockState.getBlockType().hasBlockTag(BlockTags.LEAVES_SUPPORTER)) {
+        if (blockState.getBlockType().hasBlockTag(BlockCustomTags.LEAVES_SUPPORTER)) {
             return true;
         }
-        if (distance == 0 || !blockState.getBlockType().hasBlockTag(BlockTags.LEAVES)) {
+        if (distance == 0 || !blockState.getBlockType().hasBlockTag(BlockCustomTags.LEAVES)) {
             return false;
         }
 

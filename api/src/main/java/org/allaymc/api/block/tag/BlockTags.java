@@ -53,8 +53,6 @@ public interface BlockTags {
 
     BlockTag PLANT = create("minecraft:plant");
 
-    BlockTag LEAVES_SUPPORTER = create("minecraft:leaves_supporter");
-
     BlockTag IRON_PICK_DIGGABLE = create("minecraft:iron_pick_diggable");
 
     BlockTag PUMPKIN = create("minecraft:pumpkin");
@@ -62,8 +60,6 @@ public interface BlockTags {
     BlockTag SPRUCE = create("minecraft:spruce");
 
     BlockTag OAK = create("minecraft:oak");
-
-    BlockTag WOOL = create("minecraft:wool");
 
     BlockTag IS_SHOVEL_ITEM_DESTRUCTIBLE = create("minecraft:is_shovel_item_destructible");
 
@@ -77,8 +73,6 @@ public interface BlockTags {
 
     BlockTag METAL = create("minecraft:metal");
 
-    BlockTag REPLACEABLE = create("minecraft:replaceable");
-
     BlockTag IS_PICKAXE_ITEM_DESTRUCTIBLE = create("minecraft:is_pickaxe_item_destructible");
 
     BlockTag NOT_FEATURE_REPLACEABLE = create("minecraft:not_feature_replaceable");
@@ -88,8 +82,6 @@ public interface BlockTags {
     BlockTag STONE_PICK_DIGGABLE = create("minecraft:stone_pick_diggable");
 
     BlockTag IS_HOE_ITEM_DESTRUCTIBLE = create("minecraft:is_hoe_item_destructible");
-
-    BlockTag LEAVES = create("minecraft:leaves");
 
     BlockTag RAIL = create("minecraft:rail");
 

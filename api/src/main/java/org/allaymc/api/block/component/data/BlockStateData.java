@@ -60,7 +60,9 @@ public class BlockStateData {
                         Integer.parseInt(str.substring(7), 16));
             }).create();
     /**
-     * The probability that the block will be burned while on fire.
+     * The burnOdds of this block state.
+     * <p>
+     * The higher the burn odds, the more quickly a block on fire burns away
      */
     @Builder.Default
     protected int burnOdds = 0;
@@ -97,7 +99,7 @@ public class BlockStateData {
     /**
      * The flame odds of the block state.
      * <p>
-     * The chance that this block will be ignited when there is a fire nearby
+     * The higher the flame odds, the more quickly a block catches fire if the fire is available to spread there.
      */
     @Builder.Default
     protected int flameOdds = 0;

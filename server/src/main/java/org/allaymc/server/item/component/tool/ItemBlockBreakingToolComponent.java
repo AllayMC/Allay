@@ -29,14 +29,12 @@ public abstract class ItemBlockBreakingToolComponent implements ItemToolComponen
         if (hardness == 0) return;
 
         if (!event.getBlock().getBehavior().canDamageItem(itemStack)) return;
-        if (!baseComponent.canBeDamagedThisTime()) return;
 
-        baseComponent.reduceDurability(1);
+        baseComponent.tryReduceDurability(1);
     }
 
     @EventHandler
     protected void onAttackEntity(CItemAttackEntityEvent event) {
-        if (!baseComponent.canBeDamagedThisTime()) return;
-        baseComponent.reduceDurability(2);
+        baseComponent.tryReduceDurability(2);
     }
 }

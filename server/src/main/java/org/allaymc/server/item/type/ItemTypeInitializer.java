@@ -1011,4 +1011,12 @@ public final class ItemTypeInitializer {
                 .addComponent(() -> new ItemBucketComponentImpl(BlockId.WATER.getIdentifier(), null), ItemBucketComponentImpl.class)
                 .build();
     }
+
+    public static void initFlintAndSteel() {
+        ItemTypes.FLINT_AND_STEEL = AllayItemType
+                .builder(ItemFlintAndSteelStackImpl.class)
+                .vanillaItem(ItemId.FLINT_AND_STEEL)
+                .addComponent(ItemFlintAndSteelBaseComponentImpl::new, ItemFlintAndSteelBaseComponentImpl.class)
+                .build();
+    }
 }

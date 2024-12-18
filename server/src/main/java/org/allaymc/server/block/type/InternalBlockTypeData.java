@@ -4,6 +4,7 @@ import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.tag.BlockTag;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.utils.Identifier;
@@ -56,7 +57,7 @@ public final class InternalBlockTypeData {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("block_tags_custom.json")))) {
             var map = new HashMap<BlockId, Set<BlockTag>>();
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
-                var tag = BlockTags.getTagByName(entry.getKey());
+                var tag = BlockCustomTags.getTagByName(entry.getKey());
                 for (var obj : entry.getValue().getAsJsonArray()) {
                     var blockId = obj.getAsString();
                     var id = BlockId.fromIdentifier(new Identifier(blockId));

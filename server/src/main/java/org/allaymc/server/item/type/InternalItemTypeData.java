@@ -4,13 +4,13 @@ import com.google.gson.JsonParser;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.item.tag.ItemCustomTags;
 import org.allaymc.api.item.tag.ItemTag;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 
 import java.io.BufferedInputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -53,7 +53,7 @@ public final class InternalItemTypeData {
         try (var reader = new InputStreamReader(new BufferedInputStream(Utils.getResource("item_tags_custom.json")))) {
             var map = new HashMap<ItemId, Set<ItemTag>>();
             JsonParser.parseReader(reader).getAsJsonObject().entrySet().forEach(entry -> {
-                var tag = ItemTags.getTagByName(entry.getKey());
+                var tag = ItemCustomTags.getTagByName(entry.getKey());
                 for (var obj : entry.getValue().getAsJsonArray()) {
                     var itemId = obj.getAsString();
                     var id = ItemId.fromIdentifier(new Identifier(itemId));

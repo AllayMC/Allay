@@ -12,17 +12,15 @@ import java.util.concurrent.ExecutorService;
 /**
  * @author daoge_cmd
  */
-public class Handler {
+public class MethodEventHandler extends AbstractEventHandler {
+
     protected static final Map<ClassLoader, FastMemberLoader> FAST_MEMBER_LOADERS = new ConcurrentHashMap<>();
 
     protected final FastMethod method;
     protected final Object instance;
-    protected final boolean async;
-    protected final int priority;
-    protected final Class<?> eventClass;
-    protected final ExecutorService asyncExecutorService;
 
-    public Handler(Method method, Object instance, boolean async, int priority, Class<?> eventClass, ExecutorService asyncExecutorService) {
+    public MethodEventHandler(boolean async, int priority, Class<?> eventClass, ExecutorService asyncExecutorService, Method method, Object instance) {
+        super(async, priority, eventClass, asyncExecutorService);
         this.method = FastMethod.create(
                 method,
                 FAST_MEMBER_LOADERS.computeIfAbsent(
@@ -32,17 +30,9 @@ public class Handler {
                 true
         );
         this.instance = instance;
-        this.async = async;
-        this.priority = priority;
-        this.eventClass = eventClass;
-        this.asyncExecutorService = asyncExecutorService;
     }
 
-    public void invoke(Object event) {
-        if (!async) invoke0(event);
-        else asyncExecutorService.submit(() -> invoke0(event));
-    }
-
+    @Override
     protected void invoke0(Object event) {
         try {
             method.invoke(instance, event);

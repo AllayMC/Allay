@@ -2510,7 +2510,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSoulCampfireBehavior> SOUL_CAMPFIRE;
 
-    public static BlockType<BlockSoulFireBehavior> SOUL_FIRE;
+    public static BlockType<BlockFireBehavior> SOUL_FIRE;
 
     public static BlockType<BlockSoulLanternBehavior> SOUL_LANTERN;
 

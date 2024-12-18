@@ -53,6 +53,27 @@ public interface BlockUpdateService {
     }
 
     /**
+     * Check if a block update is scheduled at the specified position.
+     *
+     * @param pos The position of the block to check.
+     *
+     * @return Whether a block update is scheduled at the specified position.
+     */
+    default boolean hasScheduledBlockUpdate(Vector3ic pos) {
+        return hasScheduledBlockUpdate(pos, 0);
+    }
+
+    /**
+     * Check if a block update is scheduled at the specified position.
+     *
+     * @param pos   The position of the block to check.
+     * @param layer The layer of the block update.
+     *
+     * @return Whether a block update is scheduled at the specified position.
+     */
+    boolean hasScheduledBlockUpdate(Vector3ic pos, int layer);
+
+    /**
      * Add a neighbor block update at the specified position.
      *
      * @param pos              The position of the block which will be updated.
