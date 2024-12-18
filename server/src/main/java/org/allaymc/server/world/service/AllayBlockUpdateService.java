@@ -41,6 +41,16 @@ public class AllayBlockUpdateService implements BlockUpdateService {
     }
 
     @Override
+    public boolean hasScheduledBlockUpdate(Vector3ic pos, int layer) {
+        var chunk = dimension.getChunkService().getChunkByDimensionPos(pos.x(), pos.z());
+        if (chunk == null) {
+            return false;
+        }
+
+        return chunk.hasScheduledUpdate(pos.x() & 15, pos.y(), pos.z() & 15, layer);
+    }
+
+    @Override
     public void neighborBlockUpdate(Vector3ic pos, Vector3ic changedNeighbour, BlockFace blockFace) {
         neighborUpdates.add(new NeighborUpdate(pos, changedNeighbour, blockFace));
     }

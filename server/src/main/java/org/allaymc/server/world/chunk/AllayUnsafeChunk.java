@@ -160,6 +160,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         scheduledUpdates.put(key, new ScheduledUpdateInfo(key, layer, delay));
     }
 
+    @Override
+    public boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer) {
+        var scheduledUpdateInfo = scheduledUpdates.get(HashUtils.hashChunkXYZ(x, y, z));
+        return scheduledUpdateInfo != null && scheduledUpdateInfo.getLayer() == layer;
+    }
+
     public Int2ObjectNonBlockingMap<ScheduledUpdateInfo> getScheduledUpdatesUnsafe() {
         return scheduledUpdates;
     }

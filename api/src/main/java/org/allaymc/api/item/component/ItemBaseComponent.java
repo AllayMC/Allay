@@ -112,11 +112,15 @@ public interface ItemBaseComponent extends ItemComponent {
     void setDurability(int durability);
 
     /**
-     * Reduce the item durability.
+     * Try to reduce the item durability.
+     * <p>
+     * The reduction can be ignored based on the unbreaking enchantment level of the item.
      *
-     * @param reduction The reduction.
+     * @param reduction the reduction.
+     *
+     * @return {@code true} if the item durability is reduced, {@code false} if reduction is ignored.
      */
-    void reduceDurability(int reduction);
+    boolean tryReduceDurability(int reduction);
 
     /**
      * Check if the item is broken.
@@ -270,6 +274,10 @@ public interface ItemBaseComponent extends ItemComponent {
      * No need to send item updates separately as the caller will handle it.
      * <p>
      * Note: Placing blocks will not invoke this method.
+     *
+     * @param dimension     the dimension.
+     * @param placeBlockPos the position of the block being right-clicked.
+     * @param interactInfo  information about the interaction.
      *
      * @return true if successfully used
      */

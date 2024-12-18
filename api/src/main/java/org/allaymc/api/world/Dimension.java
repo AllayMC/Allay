@@ -967,4 +967,28 @@ public interface Dimension {
         }
         return null;
     }
+
+    /**
+     * Check if the specified pos can see the sky.
+     *
+     * @param pos the pos.
+     *
+     * @return {@code true} if the specified pos can see the sky, otherwise {@code false}.
+     */
+    default boolean canPosSeeSky(Vector3ic pos) {
+        return canPosSeeSky(pos.x(), pos.y(), pos.z());
+    }
+
+    /**
+     * Check if the specified pos can see the sky.
+     *
+     * @param x the x coordinate of the pos.
+     * @param y the y coordinate of the pos.
+     * @param z the z coordinate of the pos.
+     *
+     * @return {@code true} if the specified pos can see the sky, otherwise {@code false}.
+     */
+    default boolean canPosSeeSky(int x, int y, int z) {
+        return getHeight(x, z) <= y;
+    }
 }

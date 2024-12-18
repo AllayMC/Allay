@@ -114,5 +114,16 @@
     "minecraft:cherry_wood",
     "minecraft:cherry_log",
     "minecraft:stripped_mangrove_log"
+  ],
+  "allay:infinite_fire_supporter": [
+    "minecraft:netherrack",
+    "minecraft:magma",
+    "minecraft:bedrock",
+    "minecraft:soul_sand",
+    "minecraft:soul_soil"
+  ],
+  "allay:soul_fire_converter": [
+    "minecraft:soul_sand",
+    "minecraft:soul_soil"
   ]
 }

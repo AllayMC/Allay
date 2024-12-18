@@ -153,6 +153,18 @@ public interface UnsafeChunk {
     void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int delay, int layer);
 
     /**
+     * Check if a pos in the chunk has a scheduled update.
+     *
+     * @param x     the x coordinate of the pos.
+     * @param y     the y coordinate of the pos.
+     * @param z     the z coordinate of the pos.
+     * @param layer the layer of the pos.
+     *
+     * @return {@code true} if the pos has a scheduled update, otherwise {@code false}.
+     */
+    boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer);
+
+    /**
      * Set block state in this chunk.
      *
      * @param x          the x coordinate of the block.

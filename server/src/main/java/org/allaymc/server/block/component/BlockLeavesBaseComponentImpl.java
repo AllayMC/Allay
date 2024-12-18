@@ -44,6 +44,7 @@ public class BlockLeavesBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
         onNeighborOrScheduledUpdate(current);
     }
 

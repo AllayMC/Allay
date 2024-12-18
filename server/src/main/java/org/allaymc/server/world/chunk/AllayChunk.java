@@ -516,6 +516,11 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
+    public boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer) {
+        return unsafeChunk.hasScheduledUpdate(x, y, z, layer);
+    }
+
+    @Override
     public void sendChunkPackets() {
         if (chunkPacketQueue.isEmpty()) return;
         ChunkPacketEntry entry;

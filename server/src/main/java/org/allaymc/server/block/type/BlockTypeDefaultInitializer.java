@@ -6772,7 +6772,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SOUL_FIRE == null) {
             BlockTypes.SOUL_FIRE = AllayBlockType
-                    .builder(BlockSoulFireBehaviorImpl.class)
+                    .builder(BlockFireBehaviorImpl.class)
                     .vanillaBlock(BlockId.SOUL_FIRE)
                     .setProperties(BlockPropertyTypes.AGE_16)
                     .build();

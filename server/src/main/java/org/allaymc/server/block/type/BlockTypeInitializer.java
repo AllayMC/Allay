@@ -857,4 +857,19 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockGlassBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initFire() {
+        BlockTypes.FIRE = AllayBlockType
+                .builder(BlockFireBehaviorImpl.class)
+                .vanillaBlock(BlockId.FIRE)
+                .setProperties(BlockPropertyTypes.AGE_16)
+                .setBaseComponentSupplier(BlockFireBaseComponentImpl::new)
+                .build();
+        BlockTypes.SOUL_FIRE = AllayBlockType
+                .builder(BlockFireBehaviorImpl.class)
+                .vanillaBlock(BlockId.SOUL_FIRE)
+                .setProperties(BlockPropertyTypes.AGE_16)
+                .setBaseComponentSupplier(BlockSoulFireBaseComponentImpl::new)
+                .build();
+    }
 }

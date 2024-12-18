@@ -384,8 +384,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean isBroken() {
-        if (!itemDataComponent.getItemData().isDamageable())
+        if (!itemDataComponent.getItemData().isDamageable()) {
             return false;
+        }
         var maxDamage = itemDataComponent.getItemData().maxDamage();
         // This item does not support durability
         if (maxDamage == 0) return false;
@@ -393,17 +394,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     }
 
     @Override
-    public void reduceDurability(int reduction) {
-        if (!canIncreaseDurabilityThisTime()) return;
+    public boolean tryReduceDurability(int reduction) {
+        if (!canBeDamagedThisTime()) {
+            return false;
+        }
         setDurability(getDurability() + reduction);
-    }
-
-    protected boolean canIncreaseDurabilityThisTime() {
-        var unbreakingLevel = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
-        if (unbreakingLevel == 0) return true;
-
-        var possibility = 1f / (unbreakingLevel + 1f);
-        return ThreadLocalRandom.current().nextFloat() <= possibility;
+        return true;
     }
 
     @Override
