@@ -6,6 +6,7 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +25,6 @@ public class EventBusTest {
     public void highPriorityHandler(TestEvent event) {
         str = "highPriorityHandler";
     }
-
 
     @EventHandler(priority = -100)
     public void lowPriorityHandler(TestEvent event) {
@@ -62,5 +62,14 @@ public class EventBusTest {
     void testCannotCancelNormalEvent() {
         var event = new TestEvent();
         assertThrows(EventException.class, () -> event.setCancelled(true));
+    }
+
+    @Test
+    void testLambdaEventHandler() {
+        AtomicBoolean flag = new AtomicBoolean(false);
+        eventBus.registerListenerFor(TestEvent.class, event -> flag.set(true));
+        var event = new TestEvent();
+        eventBus.callEvent(event);
+        assertTrue(flag.get());
     }
 }
