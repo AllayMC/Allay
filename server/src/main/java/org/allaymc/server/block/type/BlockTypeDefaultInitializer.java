@@ -1474,7 +1474,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COPPER_BLOCK == null) {
             BlockTypes.COPPER_BLOCK = AllayBlockType
-                    .builder(BlockCopperBlockBehaviorImpl.class)
+                    .builder(BlockCopperBehaviorImpl.class)
                     .vanillaBlock(BlockId.COPPER_BLOCK)
                     .build();
         }
@@ -1716,7 +1716,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CUT_COPPER_STAIRS == null) {
             BlockTypes.CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -3271,7 +3271,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_CUT_COPPER_STAIRS == null) {
             BlockTypes.EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -5339,7 +5339,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_CUT_COPPER_STAIRS == null) {
             BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7701,7 +7701,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WAXED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7767,7 +7767,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7833,7 +7833,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7899,7 +7899,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7965,7 +7965,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();

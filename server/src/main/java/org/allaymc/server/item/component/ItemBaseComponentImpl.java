@@ -1,5 +1,6 @@
 package org.allaymc.server.item.component;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -94,8 +95,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         this.meta = initInfo.meta();
         var specifiedNetworkId = initInfo.stackNetworkId();
         if (specifiedNetworkId != EMPTY_STACK_NETWORK_ID) {
-            if (specifiedNetworkId < 0)
-                throw new IllegalArgumentException("stack network id cannot be negative");
+            Preconditions.checkArgument(specifiedNetworkId > 0, "Specified ItemStack network id must be greater than 0");
             this.stackNetworkId = specifiedNetworkId;
         } else if (initInfo.autoAssignStackNetworkId()) {
             this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
@@ -133,12 +133,20 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Override
     public NbtMap saveExtraTag() {
         var nbtBuilder = NbtMap.builder();
-        if (durability != 0) nbtBuilder.putInt("Damage", durability);
+        if (durability != 0) {
+            nbtBuilder.putInt("Damage", durability);
+        }
 
         var displayBuilder = NbtMap.builder();
-        if (!this.customName.isEmpty()) displayBuilder.put("Name", this.customName);
-        if (!this.lore.isEmpty()) displayBuilder.putList("Lore", NbtType.STRING, this.lore);
-        if (!displayBuilder.isEmpty()) nbtBuilder.putCompound("display", displayBuilder.build());
+        if (!this.customName.isEmpty()) {
+            displayBuilder.put("Name", this.customName);
+        }
+        if (!this.lore.isEmpty()) {
+            displayBuilder.putList("Lore", NbtType.STRING, this.lore);
+        }
+        if (!displayBuilder.isEmpty()) {
+            nbtBuilder.putCompound("display", displayBuilder.build());
+        }
 
         if (!enchantments.isEmpty()) {
             var enchantmentNBT = this.enchantments.values().stream()
@@ -150,7 +158,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         // TODO: item lock type
 
         // Custom NBT content
-        if (!customNBTContent.isEmpty()) nbtBuilder.put("CustomNBT", customNBTContent);
+        if (!customNBTContent.isEmpty()) {
+            nbtBuilder.put("CustomNBT", customNBTContent);
+        }
 
         var event = new CItemSaveExtraTagEvent(nbtBuilder);
         manager.callEvent(event);
@@ -178,14 +188,13 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void setCount(int count) {
-        if (count < 0) throw new IllegalArgumentException("count cannot be negative");
+        Preconditions.checkArgument(count > 0, "Count must be greater than 0");
         this.count = count;
     }
 
     @Override
     public void setMeta(int meta) {
-        if (meta < 0)
-            throw new IllegalArgumentException("Meta must bigger than zero!");
+        Preconditions.checkArgument(meta > 0, "Meta must be greater than 0");
         this.meta = meta;
     }
 
@@ -195,15 +204,16 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             log.warn("Item {} does not support durability!", itemType.getIdentifier());
             return;
         }
-        if (durability < 0)
-            throw new IllegalArgumentException("Durability must bigger than zero!");
+        Preconditions.checkArgument(durability > 0, "Durability must be greater than 0");
         this.durability = durability;
     }
 
     @Override
     public boolean canBeDamagedThisTime() {
         var level = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
-        if (level == 0) return true;
+        if (level == 0) {
+            return true;
+        }
 
         var possibility = 1f / (level + 1f);
         return ThreadLocalRandom.current().nextFloat() <= possibility;
@@ -218,7 +228,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public ItemData toNetworkItemData() {
-        if (itemType == ItemTypes.AIR) return ItemData.AIR;
+        if (itemType == ItemTypes.AIR) {
+            return ItemData.AIR;
+        }
 
         var blockState = toBlockState();
         return ItemData
@@ -250,7 +262,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        if (thisItemStack.getItemType().getBlockType() == null) return false;
+        if (thisItemStack.getItemType().getBlockType() == null) {
+            return false;
+        }
+
         var blockState = thisItemStack.toBlockState();
         return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo);
     }
@@ -279,9 +294,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }
 
         var oldBlockState = dimension.getBlockState(placeBlockPos);
-        if (!oldBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) return false;
-
-        var blockType = blockState.getBlockType();
+        if (!oldBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+            return false;
+        }
 
         var event = new BlockPlaceEvent(
                 new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension), 0),
@@ -291,6 +306,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             return false;
         }
 
+        var blockType = blockState.getBlockType();
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
         if (result && player != null) {
             tryConsumeItem(player);
@@ -302,7 +318,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     protected void tryConsumeItem(EntityPlayer player) {
         if (player == null || player.getGameType() != GameType.CREATIVE) {
-            thisItemStack.setCount(thisItemStack.getCount() - 1);
+            thisItemStack.reduceCount(1);
         }
     }
 
@@ -389,7 +405,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }
         var maxDamage = itemDataComponent.getItemData().maxDamage();
         // This item does not support durability
-        if (maxDamage == 0) return false;
+        if (maxDamage == 0) {
+            return false;
+        }
+
         return durability >= maxDamage;
     }
 

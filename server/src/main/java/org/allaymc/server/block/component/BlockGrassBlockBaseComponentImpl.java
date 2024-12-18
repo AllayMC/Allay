@@ -32,8 +32,9 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos blockStateWithPos) {
-        var pos = blockStateWithPos.pos();
+    public void onRandomUpdate(BlockStateWithPos current) {
+        super.onRandomUpdate(current);
+        var pos = current.pos();
         var dimension = pos.dimension();
 
         var upperBlockState = dimension.getBlockState(BlockFace.UP.offsetPos(pos));
@@ -43,7 +44,7 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
         // but only if they cause the light level above the grass block to be four or below (like water does),
         // and the surrounding area is not otherwise sufficiently lit up.
         if (upperBlockState.getBlockStateData().lightDampening() > 1) {
-            var event = new BlockFadeEvent(blockStateWithPos, BlockTypes.DIRT.getDefaultState());
+            var event = new BlockFadeEvent(current, BlockTypes.DIRT.getDefaultState());
             if (event.call()) {
                 dimension.setBlockState(pos, event.getNewBlockState());
             }
@@ -69,7 +70,7 @@ public class BlockGrassBlockBaseComponentImpl extends BlockBaseComponentImpl {
                 // Any block directly above the dirt block must not reduce light by 2 levels or more.
                 dimension.getBlockState(x, y + 1, z).getBlockStateData().lightDampening() < 2) {
                 var spreadBlockState = new BlockStateWithPos(BlockTypes.GRASS_BLOCK.getDefaultState(), new Position3i(x, y, z, dimension), 0);
-                var event = new BlockSpreadEvent(blockStateWithPos, spreadBlockState);
+                var event = new BlockSpreadEvent(current, spreadBlockState);
                 if (event.call()) {
                     dimension.setBlockState(x, y, z, event.getSpreadBlockState().blockState());
                 }

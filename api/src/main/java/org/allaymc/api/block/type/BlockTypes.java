@@ -448,7 +448,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConduitBehavior> CONDUIT;
 
-    public static BlockType<BlockCopperBlockBehavior> COPPER_BLOCK;
+    public static BlockType<BlockCopperBehavior> COPPER_BLOCK;
 
     public static BlockType<BlockCopperBulbBehavior> COPPER_BULB;
 
@@ -522,7 +522,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSandstoneBehavior> CUT_RED_SANDSTONE;
 
@@ -1016,7 +1016,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> EXPOSED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> EXPOSED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> EXPOSED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -1660,7 +1660,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> OXIDIZED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> OXIDIZED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> OXIDIZED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2364,7 +2364,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WAXED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WAXED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WAXED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WAXED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2384,7 +2384,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WAXED_EXPOSED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WAXED_EXPOSED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WAXED_EXPOSED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2404,7 +2404,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WAXED_OXIDIZED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WAXED_OXIDIZED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WAXED_OXIDIZED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2424,7 +2424,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WAXED_WEATHERED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WAXED_WEATHERED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WAXED_WEATHERED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2444,7 +2444,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WEATHERED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WEATHERED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WEATHERED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 

@@ -47,11 +47,16 @@ public interface EntityPlayer extends
 
     default boolean tryDropItem(FullContainerType<?> containerType, int slot, int count) {
         var container = getReachableContainer(containerType);
-        if (container == null) return false;
+        if (container == null) {
+            return false;
+        }
 
         var item = container.getItemStack(slot);
-        if (item.getItemType() == AIR) return false;
-        if (item.getCount() < count) return false;
+        if (item.getItemType() == AIR) {
+            return false;
+        } else if (item.getCount() < count) {
+            return false;
+        }
 
         forceDropItem(container, slot, count);
         return true;
@@ -60,11 +65,13 @@ public interface EntityPlayer extends
     default void forceDropItem(Container container, int slot, int count) {
         var item = container.getItemStack(slot);
         var event = new PlayerDropItemEvent(this, item);
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         ItemStack droppedItemStack;
         if (item.getCount() > count) {
-            item.setCount(item.getCount() - count);
+            item.reduceCount(count);
             container.notifySlotChange(slot);
             droppedItemStack = item.copy();
             droppedItemStack.setCount(count);
@@ -100,26 +107,35 @@ public interface EntityPlayer extends
     }
 
     default void tryConsumeItemInHand() {
-        if (getGameType() == GameType.CREATIVE) return;
+        if (getGameType() == GameType.CREATIVE) {
+            return;
+        }
+
         var itemInHand = getItemInHand();
-        if (itemInHand.getCount() == 1) clearItemInHand();
-        else itemInHand.setCount(itemInHand.getCount() - 1);
+        if (itemInHand.getCount() == 1) {
+            clearItemInHand();
+        } else {
+            itemInHand.reduceCount(1);
+        }
     }
 
     default void notifyItemInHandChange() {
         var inv = getContainer(FullContainerType.PLAYER_INVENTORY);
         var itemStack = inv.getItemInHand();
-        if (itemStack.getCount() != 0) inv.notifySlotChange(inv.getHandSlot());
-        else inv.setItemInHand(ItemAirStack.AIR_STACK);
+        if (itemStack.getCount() != 0) {
+            inv.notifySlotChange(inv.getHandSlot());
+        } else {
+            inv.setItemInHand(ItemAirStack.AIR_STACK);
+        }
     }
 
     default void swingArm() {
-        var pk = new AnimatePacket();
-        pk.setAction(AnimatePacket.Action.SWING_ARM);
-        pk.setRuntimeEntityId(getRuntimeId());
+        var packet = new AnimatePacket();
+        packet.setAction(AnimatePacket.Action.SWING_ARM);
+        packet.setRuntimeEntityId(getRuntimeId());
 
-        sendPacket(pk);
-        sendPacketToViewers(pk);
+        sendPacket(packet);
+        sendPacketToViewers(packet);
     }
 }
 

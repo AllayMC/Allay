@@ -26,7 +26,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  * @author Dhaiven
  */
 public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
-    protected final static BiMap<BlockFace, Integer> DOOR_DIRECTION = HashBiMap.create(4);
+    protected static final BiMap<BlockFace, Integer> DOOR_DIRECTION = HashBiMap.create(4);
 
     static {
         DOOR_DIRECTION.put(BlockFace.EAST, 0);
@@ -67,7 +67,10 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
         var leftBlockState = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos));
         var rightBlockState = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos));
-        if (leftBlockState.getBlockType() == getBlockType() || (!rightBlockState.getBlockStateData().isTransparent() && leftBlockState.getBlockStateData().isTransparent())) { // Door hinge
+
+        var hingeOnLeft = leftBlockState.getBlockType() == getBlockType() ||
+                          (!rightBlockState.getBlockStateData().isTransparent() && leftBlockState.getBlockStateData().isTransparent());
+        if (hingeOnLeft) { // Door hinge
             blockState = blockState.setProperty(DOOR_HINGE_BIT, true);
         }
 
@@ -91,11 +94,9 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (face == BlockFace.UP) {
             return current.blockState().getPropertyValue(UPPER_BLOCK_BIT) || neighbor.blockState().getBlockType() == getBlockType();
         } else if (face == BlockFace.DOWN) {
-            if (current.blockState().getPropertyValue(UPPER_BLOCK_BIT)) {
-                return neighbor.blockState().getBlockType() == getBlockType();
-            }
-
-            return neighbor.blockState().getBlockStateData().isSolid();
+            return current.blockState().getPropertyValue(UPPER_BLOCK_BIT)
+                    ? neighbor.blockState().getBlockType() == getBlockType()
+                    : neighbor.blockState().getBlockStateData().isSolid();
         }
 
         return true;
@@ -109,12 +110,9 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         Vector3i pos = (Vector3i) interactInfo.clickBlockPos();
         var blockState = dimension.getBlockState(pos);
 
-        Vector3ic otherPos;
-        if (blockState.getPropertyValue(UPPER_BLOCK_BIT)) {
-            otherPos = pos.sub(0, 1, 0);
-        } else {
-            otherPos = pos.add(0, 1, 0);
-        }
+        Vector3ic otherPos = blockState.getPropertyValue(UPPER_BLOCK_BIT)
+                ? pos.sub(0, 1, 0)
+                : pos.add(0, 1, 0);
 
         var isOpen = !blockState.getPropertyValue(OPEN_BIT);
 
