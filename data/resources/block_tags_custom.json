@@ -1,5 +1,5 @@
 {
-  "minecraft:replaceable": [
+  "allay:replaceable": [
     "minecraft:snow_layer",
     "minecraft:seagrass",
     "minecraft:soul_fire",
@@ -38,7 +38,7 @@
     "minecraft:light_block_14",
     "minecraft:light_block_15"
   ],
-  "minecraft:wool": [
+  "allay:wool": [
     "minecraft:green_wool",
     "minecraft:orange_wool",
     "minecraft:light_gray_wool",
@@ -56,7 +56,7 @@
     "minecraft:red_wool",
     "minecraft:black_wool"
   ],
-  "minecraft:leaves": [
+  "allay:leaves": [
     "minecraft:pale_oak_leaves",
     "minecraft:oak_leaves",
     "minecraft:acacia_leaves",
@@ -69,7 +69,7 @@
     "minecraft:mangrove_leaves",
     "minecraft:azalea_leaves"
   ],
-  "minecraft:leaves_supporter": [
+  "allay:leaves_supporter": [
     "minecraft:stripped_oak_log",
     "minecraft:mangrove_wood",
     "minecraft:spruce_wood",

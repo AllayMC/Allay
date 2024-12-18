@@ -6,7 +6,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
@@ -55,7 +55,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var upBlockState = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z());
-        if (!upBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
+        if (!upBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
             return false;
         }
 

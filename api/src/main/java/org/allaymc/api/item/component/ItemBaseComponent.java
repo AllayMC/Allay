@@ -1,7 +1,7 @@
 package org.allaymc.api.item.component;
 
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -507,9 +507,9 @@ public interface ItemBaseComponent extends ItemComponent {
         }
         if (itemType == SHEARS) {
             // Shears break wool and leaves faster
-            if (blockType.hasBlockTag(BlockTags.WOOL)) {
+            if (blockType.hasBlockTag(BlockCustomTags.WOOL)) {
                 return 5d;
-            } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockTags.LEAVES)) {
+            } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockCustomTags.LEAVES)) {
                 return 15d;
             }
             return 1d;

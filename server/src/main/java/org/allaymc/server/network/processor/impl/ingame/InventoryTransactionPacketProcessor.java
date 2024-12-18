@@ -3,7 +3,7 @@ package org.allaymc.server.network.processor.impl.ingame;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
@@ -46,7 +46,7 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                 switch (packet.getActionType()) {
                     case ITEM_USE_CLICK_BLOCK -> {
                         var dimension = player.getDimension();
-                        var clickedBlockStateReplaceable = dimension.getBlockState(clickBlockPos).getBlockType().hasBlockTag(BlockTags.REPLACEABLE);
+                        var clickedBlockStateReplaceable = dimension.getBlockState(clickBlockPos).getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE);
                         var placeBlockPos = clickedBlockStateReplaceable ? clickBlockPos : Objects.requireNonNull(blockFace).offsetPos(clickBlockPos);
                         var interactedBlock = world.getBlockState(clickBlockPos);
                         var interactInfo = new PlayerInteractInfo(

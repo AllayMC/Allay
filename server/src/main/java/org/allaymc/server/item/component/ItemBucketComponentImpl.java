@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.container.FullContainerType;
@@ -74,7 +74,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             liquidPlacedPos = interactInfo.clickBlockPos();
         } else {
             var blockOnPlacePos = dimension.getBlockState(event.getPlaceBlockPos());
-            if (blockOnPlacePos.getBlockType() == BlockTypes.AIR || blockOnPlacePos.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
+            if (blockOnPlacePos.getBlockType() == BlockTypes.AIR || blockOnPlacePos.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
                 dimension.setBlockState(event.getPlaceBlockPos(), getLiquidType().getDefaultState(), 0);
             } else if (blockOnPlacePos.getBlockStateData().canContainLiquid()) {
                 dimension.setBlockState(event.getPlaceBlockPos(), getLiquidType().getDefaultState(), 1);

@@ -8,7 +8,7 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
@@ -44,7 +44,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var oldBlock = dimension.getBlockState(placeBlockPos);
         var torchFace = map.get(placementInfo.blockFace());
 
-        if (!oldBlock.getBlockType().hasBlockTag(BlockTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN)
+        if (!oldBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN)
             return false;
 
         var targetBlock = dimension.getBlockState(placementInfo.clickBlockPos());
