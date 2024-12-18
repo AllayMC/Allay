@@ -16,6 +16,7 @@ import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockRandomUpdateEvent;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiFunction;
@@ -121,7 +122,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
             if (event.getInteractInfo().player().getGameType() != GameType.CREATIVE) {
                 itemStack.tryReduceDurability(1);
             }
-            // TODO: particle
+            dimension.addLevelEvent(interactInfo.clickBlockPos(), LevelEvent.PARTICLE_SCRAPE);
         }
     }
 

@@ -507,36 +507,59 @@ public interface Dimension {
         return notEmpty ? blockStates : null;
     }
 
-    default void addLevelEvent(Vector3fc pos, LevelEventType levelEventType) {
-        addLevelEvent(pos.x(), pos.y(), pos.z(), levelEventType, 0);
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(Vector3ic pos, LevelEventType eventType) {
+        addLevelEvent(pos, eventType, 0);
     }
 
-    default void addLevelEvent(Vector3fc pos, LevelEventType levelEventType, int data) {
-        addLevelEvent(pos.x(), pos.y(), pos.z(), levelEventType, data);
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(Vector3ic pos, LevelEventType eventType, int data) {
+        addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
     }
 
-    default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType) {
-        addLevelEvent(x, y, z, levelEventType, 0);
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(Vector3fc pos, LevelEventType eventType) {
+        addLevelEvent(pos, eventType, 0);
+    }
+
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(Vector3fc pos, LevelEventType eventType, int data) {
+        addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
+    }
+
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(float x, float y, float z, LevelEventType eventType) {
+        addLevelEvent(x, y, z, eventType, 0);
     }
 
     /**
      * Add a level event at the specified position.
      *
-     * @param x              the x coordinate of the position.
-     * @param y              the y coordinate of the position.
-     * @param z              the z coordinate of the position.
-     * @param levelEventType the level event type.
-     * @param data           the data of the level event.
+     * @param x         the x coordinate of the position.
+     * @param y         the y coordinate of the position.
+     * @param z         the z coordinate of the position.
+     * @param eventType the level event type.
+     * @param data      the data of the level event.
      */
-    default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType, int data) {
+    default void addLevelEvent(float x, float y, float z, LevelEventType eventType, int data) {
         var chunk = getChunkService().getChunkByDimensionPos((int) x, (int) z);
         if (chunk == null) return;
 
-        var levelEventPacket = new LevelEventPacket();
-        levelEventPacket.setPosition(Vector3f.from(x, y, z));
-        levelEventPacket.setType(levelEventType);
-        levelEventPacket.setData(data);
-        chunk.sendChunkPacket(levelEventPacket);
+        var packet = new LevelEventPacket();
+        packet.setPosition(Vector3f.from(x, y, z));
+        packet.setType(eventType);
+        packet.setData(data);
+        chunk.sendChunkPacket(packet);
     }
 
     default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent) {
@@ -571,14 +594,14 @@ public interface Dimension {
         var chunk = getChunkService().getChunk((int) x >> 4, (int) z >> 4);
         if (chunk == null) return;
 
-        var levelSoundEventPacket = new LevelSoundEventPacket();
-        levelSoundEventPacket.setSound(soundEvent);
-        levelSoundEventPacket.setPosition(Vector3f.from(x, y, z));
-        levelSoundEventPacket.setExtraData(extraData);
-        levelSoundEventPacket.setIdentifier(identifier);
-        levelSoundEventPacket.setBabySound(babySound);
-        levelSoundEventPacket.setRelativeVolumeDisabled(relativeVolumeDisabled);
-        chunk.sendChunkPacket(levelSoundEventPacket);
+        var packet = new LevelSoundEventPacket();
+        packet.setSound(soundEvent);
+        packet.setPosition(Vector3f.from(x, y, z));
+        packet.setExtraData(extraData);
+        packet.setIdentifier(identifier);
+        packet.setBabySound(babySound);
+        packet.setRelativeVolumeDisabled(relativeVolumeDisabled);
+        chunk.sendChunkPacket(packet);
     }
 
     default void updateAroundIgnoreFace(int x, int y, int z, BlockFace... ignoreFaces) {
@@ -783,11 +806,7 @@ public interface Dimension {
      * @param data         the data associated with the particle.
      */
     default void addParticle(float x, float y, float z, ParticleType particleType, int data) {
-        var packet = new LevelEventPacket();
-        packet.setType(particleType);
-        packet.setPosition(Vector3f.from(x, y, z));
-        packet.setData(data);
-        getChunkService().getChunkByDimensionPos((int) x, (int) z).addChunkPacket(packet);
+        addLevelEvent(x, y, z, particleType, data);
     }
 
     /**

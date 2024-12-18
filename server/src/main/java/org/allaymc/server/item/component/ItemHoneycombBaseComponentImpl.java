@@ -7,6 +7,7 @@ import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.joml.Vector3ic;
 
 /**
@@ -41,7 +42,7 @@ public class ItemHoneycombBaseComponentImpl extends ItemBaseComponentImpl {
         if (blockFadeEvent.call()) {
             dimension.setBlockState(interactInfo.clickBlockPos(), blockFadeEvent.getNewBlockState());
             interactInfo.player().tryConsumeItemInHand();
-            // TODO: particle
+            dimension.addLevelEvent(interactInfo.clickBlockPos(), LevelEvent.PARTICLE_WAX_ON);
             return true;
         }
 
