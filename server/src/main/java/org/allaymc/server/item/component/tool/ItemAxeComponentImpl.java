@@ -3,7 +3,7 @@ package org.allaymc.server.item.component.tool;
 import org.allaymc.api.block.component.BlockWoodBaseComponent;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.item.component.tool.ItemAxeComponent;
-import org.allaymc.server.item.component.event.CItemRightClickOnBlockEvent;
+import org.allaymc.server.item.component.event.CItemUseOnBlockEvent;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 /**
@@ -11,7 +11,7 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
  */
 public class ItemAxeComponentImpl extends ItemBlockBreakingToolComponent implements ItemAxeComponent {
     @EventHandler
-    protected void onRightClickOnBlock(CItemRightClickOnBlockEvent event) {
+    protected void onItemUseOnBlock(CItemUseOnBlockEvent event) {
         var clickedBlockPos = event.getInteractInfo().clickBlockPos();
         var dimension = event.getDimension();
         var blockState = dimension.getBlockState(clickedBlockPos);

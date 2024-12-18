@@ -10,7 +10,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.ItemHelper;
-import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
@@ -94,6 +93,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
         }
     }
 
+    // TODO: move to ItemAxeBaseComponent
     @EventHandler
     protected void onDeoxidation(CBlockOnInteractEvent event) {
         var dimension = event.getDimension();
@@ -119,44 +119,7 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
         if (blockFadeEvent.call()) {
             dimension.setBlockState(interactInfo.clickBlockPos(), blockFadeEvent.getNewBlockState());
             if (event.getInteractInfo().player().getGameType() != GameType.CREATIVE) {
-                itemStack.reduceDurability(1);
-            }
-            // TODO: particle
-        }
-    }
-
-    @EventHandler
-    protected void onWaxing(CBlockOnInteractEvent event) {
-        var dimension = event.getDimension();
-        var interactInfo = event.getInteractInfo();
-        var itemStack = event.getItemStack();
-
-        var waxed = this.isWaxed();
-        if (itemStack.getItemType() == ItemTypes.HONEYCOMB && waxed) {
-            return;
-        }
-
-        if (ItemHelper.isAxe(itemStack.getItemType()) && !waxed) {
-            return;
-        }
-
-        waxed = !waxed;
-
-        var nextBlockType = getBlockWithWaxed(waxed);
-        var oldBlockState = new BlockStateWithPos(
-                dimension.getBlockState(interactInfo.clickBlockPos()),
-                new Position3i(interactInfo.clickBlockPos(), dimension),
-                0
-        );
-        var blockFadeEvent = new BlockFadeEvent(oldBlockState, nextBlockType.copyPropertyValuesFrom(oldBlockState.blockState()));
-        if (blockFadeEvent.call()) {
-            dimension.setBlockState(interactInfo.clickBlockPos(), blockFadeEvent.getNewBlockState());
-            if (event.getInteractInfo().player().getGameType() != GameType.CREATIVE) {
-                if (waxed) {
-                    itemStack.reduceCount(1);
-                } else {
-                    itemStack.reduceDurability(1);
-                }
+                itemStack.tryReduceDurability(1);
             }
             // TODO: particle
         }
