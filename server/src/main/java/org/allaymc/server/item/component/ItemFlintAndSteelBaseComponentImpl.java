@@ -53,10 +53,10 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
         } else {
             // Check if the block that the player clicked on can be ignited
             // This branch will be executed when the player clicks on the side of a block
-            var clickedBlockState = dimension.getBlockState(interactInfo.clickBlockPos());
+            var clickedBlockState = dimension.getBlockState(interactInfo.clickedBlockPos());
             if (clickedBlockState.getBlockStateData().flameOdds() > 0) {
                 var event = new BlockIgniteEvent(
-                        new BlockStateWithPos(clickedBlockState, new Position3i(interactInfo.clickBlockPos(), dimension), 0),
+                        new BlockStateWithPos(clickedBlockState, new Position3i(interactInfo.clickedBlockPos(), dimension), 0),
                         null, player, BlockIgniteEvent.BlockIgniteCause.FLINT_AND_STEEL
                 );
                 if (event.call()) {

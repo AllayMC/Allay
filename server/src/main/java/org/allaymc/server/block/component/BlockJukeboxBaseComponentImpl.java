@@ -29,7 +29,7 @@ public class BlockJukeboxBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var player = interactInfo.player();
-        var blockEntity = blockEntityHolderComponent.getBlockEntity(new Position3i(interactInfo.clickBlockPos(), dimension));
+        var blockEntity = blockEntityHolderComponent.getBlockEntity(new Position3i(interactInfo.clickedBlockPos(), dimension));
         if (blockEntity instanceof BlockEntityJukebox jukebox) {
             var musicDisc = jukebox.getMusicDiscItem();
             if (musicDisc != null) {
