@@ -505,6 +505,19 @@ public final class BlockTypeInitializer {
         BlockTypes.STRIPPED_PALE_OAK_WOOD = buildStrippedWood(BlockId.STRIPPED_PALE_OAK_WOOD);
     }
 
+    private static <T extends BlockBehavior> BlockType<T> buildStrippedWood(BlockId blockId) {
+        return buildWood(blockId, blockId);
+    }
+
+    private static <T extends BlockBehavior> BlockType<T> buildWood(BlockId blockId, BlockId strippedBlockId) {
+        return AllayBlockType
+                .builder(BlockWoodBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
+                .addComponent(new BlockStrippableComponentImpl(strippedBlockId))
+                .build();
+    }
+
     public static void initButtons() {
         BlockTypes.ACACIA_BUTTON = buildWoodenButton(BlockId.ACACIA_BUTTON);
         BlockTypes.BAMBOO_BUTTON = buildWoodenButton(BlockId.BAMBOO_BUTTON);
@@ -560,24 +573,6 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.LIGHTNING_ROD)
                 .setProperties(BlockPropertyTypes.FACING_DIRECTION)
                 .setBaseComponentSupplier(BlockRodBaseComponentImpl::new)
-                .build();
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildWood(BlockId blockId, BlockId strippedBlockId) {
-        return AllayBlockType
-                .builder(BlockWoodBehaviorImpl.class)
-                .vanillaBlock(blockId)
-                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-                .setBaseComponentSupplier(blockType -> new BlockWoodBaseComponentImpl(blockType, strippedBlockId))
-                .build();
-    }
-
-    private static <T extends BlockBehavior> BlockType<T> buildStrippedWood(BlockId blockId) {
-        return AllayBlockType
-                .builder(BlockWoodBehaviorImpl.class)
-                .vanillaBlock(blockId)
-                .setProperties(BlockPropertyTypes.PILLAR_AXIS)
-                .setBaseComponentSupplier(blockType -> new BlockWoodBaseComponentImpl(blockType, blockId))
                 .build();
     }
 

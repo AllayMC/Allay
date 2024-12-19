@@ -12,9 +12,9 @@ import org.allaymc.server.item.component.event.CItemBreakBlockEvent;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 
 /**
- * @author daoge_cmd
+ * @author IWareQ, daoge_cmd
  */
-public abstract class ItemBlockBreakingToolComponent implements ItemToolComponent {
+public class ItemToolComponentImpl implements ItemToolComponent {
     @Dependency
     protected ItemBaseComponent baseComponent;
     @ComponentObject

@@ -1,21 +1,16 @@
 package org.allaymc.server.block.component;
 
-import org.allaymc.api.block.BlockBehavior;
-import org.allaymc.api.block.component.BlockWoodBaseComponent;
+import lombok.AllArgsConstructor;
+import org.allaymc.api.block.component.BlockStrippableComponent;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockType;
 
 /**
- * @author Dhaiven
+ * @author IWareQ
  */
-public class BlockWoodBaseComponentImpl extends BlockBaseComponentImpl implements BlockWoodBaseComponent {
+@AllArgsConstructor
+public class BlockStrippableComponentImpl implements BlockStrippableComponent {
     protected final BlockId strippedType;
-
-    public BlockWoodBaseComponentImpl(BlockType<? extends BlockBehavior> blockType, BlockId strippedType) {
-        super(blockType);
-        this.strippedType = strippedType;
-    }
 
     @Override
     public BlockState getStrippedBlockState(BlockState unstrippedBlockState) {

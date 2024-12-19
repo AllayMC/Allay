@@ -3,10 +3,9 @@ package org.allaymc.api.block.component;
 import org.allaymc.api.block.type.BlockState;
 
 /**
- * @author daoge_cmd
+ * @author IWareQ
  */
-public interface BlockWoodBaseComponent extends BlockBaseComponent {
-
+public interface BlockStrippableComponent extends BlockComponent {
     /**
      * Get the stripped block state of the given block state
      *

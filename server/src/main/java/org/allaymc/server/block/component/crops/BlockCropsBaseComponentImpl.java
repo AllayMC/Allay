@@ -35,10 +35,10 @@ public class BlockCropsBaseComponentImpl extends BlockBaseComponentImpl {
         if (super.onInteract(itemStack, dimension, interactInfo)) return true;
 
         if (itemStack instanceof ItemBoneMealStack) {
-            var blockState = dimension.getBlockState(interactInfo.clickBlockPos());
+            var blockState = dimension.getBlockState(interactInfo.clickedBlockPos());
             if (blockState.getPropertyValue(GROWTH) < GROWTH.getMax()) {
                 int newAge = ThreadLocalRandom.current().nextInt(3) + 2; //Between 2 and 5
-                grow(dimension, interactInfo.clickBlockPos(), newAge);
+                grow(dimension, interactInfo.clickedBlockPos(), newAge);
                 //TODO: BoneMeal particle
                 interactInfo.player().tryConsumeItemInHand();
             }

@@ -34,10 +34,10 @@ public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl {
         var entity = Registries.ENTITIES.get(this.entityId).createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
-                        .pos(interactInfo.clickPos().add(
-                                interactInfo.clickBlockPos().x(),
-                                interactInfo.clickBlockPos().y(),
-                                interactInfo.clickBlockPos().z(),
+                        .pos(interactInfo.clickedPos().add(
+                                interactInfo.clickedBlockPos().x(),
+                                interactInfo.clickedBlockPos().y(),
+                                interactInfo.clickedBlockPos().z(),
                                 new Vector3f()
                         ))
                         .build()

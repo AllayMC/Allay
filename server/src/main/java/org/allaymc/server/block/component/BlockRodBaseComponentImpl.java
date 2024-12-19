@@ -32,7 +32,7 @@ public class BlockRodBaseComponentImpl extends BlockBaseComponentImpl {
             face = face.opposite();
         }
 
-        var clickedBlock = dimension.getBlockState(placementInfo.clickBlockPos());
+        var clickedBlock = dimension.getBlockState(placementInfo.clickedBlockPos());
         if (clickedBlock.getBlockType() == getBlockType() && clickedBlock.getPropertyValue(FACING_DIRECTION) == face.ordinal()) {
             face = face.opposite();
         }
