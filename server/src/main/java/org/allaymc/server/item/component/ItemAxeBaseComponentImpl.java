@@ -1,9 +1,13 @@
 package org.allaymc.server.item.component;
 
-import org.allaymc.api.block.component.BlockWoodBaseComponent;
+import org.allaymc.api.block.component.BlockStrippableComponent;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3ic;
 
@@ -16,29 +20,35 @@ public class ItemAxeBaseComponentImpl extends ItemBaseComponentImpl {
     }
 
     @Override
-    public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
-        super.useItemOnBlock(dimension, placeBlockPos, interactInfo);
+    public void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
+        super.rightClickItemOn(dimension, placeBlockPos, interactInfo);
 
         var clickedBlockPos = interactInfo.clickedBlockPos();
         var clickedBlockState = dimension.getBlockState(clickedBlockPos);
-        if (!(clickedBlockState.getBehavior() instanceof BlockWoodBaseComponent woodBaseComponent)) {
-            return false;
+        if (!(clickedBlockState.getBehavior() instanceof BlockStrippableComponent strippableComponent)) {
+            return;
         }
 
-        if (woodBaseComponent.isStripped(clickedBlockState)) {
-            return false;
+        if (strippableComponent.isStripped(clickedBlockState)) {
+            return;
         }
 
-        var strippedBlockState = woodBaseComponent.getStrippedBlockState(clickedBlockState);
+        var strippedBlockState = strippableComponent.getStrippedBlockState(clickedBlockState);
         dimension.setBlockState(clickedBlockPos, strippedBlockState);
 
-        var player = interactInfo.player();
-        player.getItemInHand().tryReduceDurability(1);
-        player.swingArm();
-        dimension.addLevelSoundEvent(
-                clickedBlockPos.x() + 0.5f, clickedBlockPos.y() + 0.5f, clickedBlockPos.z() + 0.5f,
-                SoundEvent.ITEM_USE_ON, clickedBlockState.blockStateHash()
+        var oldBlockState = new BlockStateWithPos(
+                clickedBlockState,
+                new Position3i(interactInfo.clickedBlockPos(), dimension),
+                0
         );
-        return true;
+        var event = new BlockFadeEvent(oldBlockState, strippedBlockState);
+        if (event.call()) {
+            dimension.setBlockState(clickedBlockPos, event.getNewBlockState());
+            if (interactInfo.player().getGameType() != GameType.CREATIVE) {
+                tryReduceDurability(1);
+            }
+
+            dimension.addLevelSoundEvent(clickedBlockPos.x(), clickedBlockPos.y(), clickedBlockPos.z(), SoundEvent.ITEM_USE_ON, clickedBlockState.blockStateHash());
+        }
     }
 }
