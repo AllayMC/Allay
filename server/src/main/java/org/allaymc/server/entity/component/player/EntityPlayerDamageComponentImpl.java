@@ -105,6 +105,12 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
         damage.updateFinalDamage(d -> d * (1f - epf / 25f));
     }
 
+    @Override
+    public boolean hasFireDamage() {
+        // Player in creative/spectator game type can't be damaged by fire
+        return super.hasFireDamage() && (thisPlayer.getGameType() == GameType.SURVIVAL || thisPlayer.getGameType() == GameType.ADVENTURE);
+    }
+
     @EventHandler
     protected void onDie(CEntityDieEvent event) {
         var deathInfo = lastDamage != null ?

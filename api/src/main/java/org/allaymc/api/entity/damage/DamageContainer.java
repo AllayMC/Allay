@@ -127,6 +127,17 @@ public class DamageContainer {
     }
 
     /**
+     * Create a fire tick damage container.
+     *
+     * @param sourceDamage the source damage.
+     *
+     * @return the damage container.
+     */
+    public static DamageContainer fireTick(float sourceDamage) {
+        return new DamageContainer(null, FIRE_TICK, sourceDamage);
+    }
+
+    /**
      * Get the attacker.
      *
      * @param <T> the type of the attacker.

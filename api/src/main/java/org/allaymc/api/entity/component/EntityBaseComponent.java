@@ -246,18 +246,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     Metadata getMetadata();
 
     /**
-     * Send the entity data to the viewers.
-     *
-     * @param dataTypes the data types to send.
+     * Send the entity metadata to the viewers.
      */
-    void sendEntityData(EntityDataType<?>... dataTypes);
-
-    /**
-     * Send the entity flags to the viewers.
-     *
-     * @param flags the flags to send.
-     */
-    void sendEntityFlags(EntityFlag... flags);
+    void sendMetadata();
 
     /**
      * Set and send the entity data to the viewers.
@@ -268,7 +259,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default <T> void setAndSendEntityData(EntityDataType<T> dataType, T value) {
         getMetadata().set(dataType, value);
-        sendEntityData(dataType);
+        sendMetadata();
     }
 
     /**
@@ -280,7 +271,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     default void setAndSendEntityFlag(EntityFlag flag, boolean value) {
         if (value == getMetadata().get(flag)) return;
         getMetadata().set(flag, value);
-        sendEntityFlags(flag);
+        sendMetadata();
     }
 
     /**

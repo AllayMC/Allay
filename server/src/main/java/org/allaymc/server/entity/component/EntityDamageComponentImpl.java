@@ -20,6 +20,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
 /**
@@ -43,6 +44,8 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     protected DamageContainer lastDamage;
     @Getter
     protected long lastDamageTime = 0;
+    @Getter
+    protected int onFireTicks;
 
     @Override
     public boolean attack(DamageContainer damage) {
@@ -149,19 +152,18 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
         // TODO: Sharpness enchantment
 
-        if (damage.isCritical()) damage.updateFinalDamage(d -> d * 1.5f);
+        if (damage.isCritical()) {
+            damage.updateFinalDamage(d -> d * 1.5f);
+        }
     }
 
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
         // Fire resistance effect
-        if (
-                thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) &&
-                (
-                        damage.getDamageType() == DamageContainer.DamageType.FIRE ||
-                        damage.getDamageType() == DamageContainer.DamageType.LAVA ||
-                        damage.getDamageType() == DamageContainer.DamageType.FIRE_TICK
-                )
+        if (hasFireDamage() &&
+            (damage.getDamageType() == DamageContainer.DamageType.FIRE ||
+             damage.getDamageType() == DamageContainer.DamageType.LAVA ||
+             damage.getDamageType() == DamageContainer.DamageType.FIRE_TICK)
         ) return false;
 
         var event = new CEntityTryDamageEvent(damage, true);
@@ -176,9 +178,63 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
                baseComponent.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FALL_DAMAGE);
     }
 
+    @Override
+    public boolean hasFireDamage() {
+        return !thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) && !isFireproof();
+    }
+
+    @Override
+    public boolean setOnFireTicks(int newOnFireTicks) {
+        if (!hasFireDamage()) {
+            return false;
+        }
+
+        if (this.onFireTicks > 0 && newOnFireTicks <= 0) {
+            baseComponent.setAndSendEntityFlag(EntityFlag.ON_FIRE, false);
+        } else if (this.onFireTicks <= 0 && newOnFireTicks > 0) {
+            baseComponent.setAndSendEntityFlag(EntityFlag.ON_FIRE, true);
+            // The first tick of fire damage is applied immediately
+            attack(DamageContainer.fireTick(1));
+        }
+        this.onFireTicks = newOnFireTicks;
+
+        return true;
+    }
+
+    @EventHandler
+    protected void onTick(CEntityTickEvent event) {
+        tickFire();
+    }
+
+    protected void tickFire() {
+        if (this.onFireTicks <= 0) {
+            return;
+        }
+
+        // Do not do onFireTicks-- directly, because we also
+        // need to update the ON_FIRE flag of the entity, and
+        // this method will update the flag.
+        this.setOnFireTicks(onFireTicks - 1);
+        if (this.onFireTicks % 20 == 0) {
+            attack(DamageContainer.fireTick(1));
+        }
+    }
+
+    @EventHandler
+    protected void onSaveNBT(CEntitySaveNBTEvent event) {
+        event.getNbt().putShort("Fire", (short) onFireTicks);
+    }
+
+    @EventHandler
+    protected void onLoadNBT(CEntityLoadNBTEvent event) {
+        this.onFireTicks = event.getNbt().getShort("Fire");
+    }
+
     @EventHandler
     protected void onFall(CEntityFallEvent event) {
-        if (!hasFallDamage()) return;
+        if (!hasFallDamage()) {
+            return;
+        }
 
         var blockStateStandingOn = thisEntity.getBlockStateStandingOn();
         float rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
@@ -191,5 +247,10 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     @EventHandler
     protected void onDrown(CEntityDrownEvent event) {
         attack(DamageContainer.drown(2));
+    }
+
+    @EventHandler
+    protected void onDie(CEntityDieEvent event) {
+        setOnFireTicks(0);
     }
 }

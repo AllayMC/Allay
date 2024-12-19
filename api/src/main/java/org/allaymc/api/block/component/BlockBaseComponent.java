@@ -213,6 +213,28 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
+     * Check whether this block type can collide with entities.
+     * <p>
+     * If return {@code true}, {@link #onCollideWithEntity(BlockStateWithPos, Entity)}
+     * method will be called when collide with an entity.
+     *
+     * @return {@code true} if the block can collide with entities, {@code false} otherwise.
+     */
+    default boolean canCollideWithEntity() {
+        return false;
+    }
+
+    /**
+     * Called when the block collides with an entity.
+     * <p>
+     * This method is called only if {@link #canCollideWithEntity()} returns {@code true}.
+     *
+     * @param blockStateWithPos the block that collides with the entity.
+     * @param entity            the entity that collides with the block.
+     */
+    default void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {}
+
+    /**
      * Calculate how long can break a specific block state.
      *
      * @param blockState the specific block state, must belong to this block type.

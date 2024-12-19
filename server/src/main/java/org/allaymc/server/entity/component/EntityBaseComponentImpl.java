@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
@@ -21,6 +22,7 @@ import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.server.Server;
@@ -40,7 +42,6 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -174,7 +175,28 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         checkDead();
         tickEffects();
         tickBreathe();
-        if (attributeComponent != null) attributeComponent.tick();
+        computeAndNotifyCollidedBlocks();
+
+        manager.callEvent(new CEntityTickEvent(currentTick));
+    }
+
+    protected void computeAndNotifyCollidedBlocks() {
+        var aabb = getOffsetAABB();
+        var dimension = getDimension();
+        dimension.forEachBlockStates(aabb, 0, (x, y, z, blockState) -> {
+            var blockStateData = blockState.getBlockStateData();
+            // NOTICE: use shape here instead of collision shape!
+            // That's because entity colliding with block means that
+            // the entity get into the shape of the block. For example
+            // an entity can pass through a button block, which does not
+            // have collision shape but has shape.
+            if (blockState.getBehavior().canCollideWithEntity() && blockStateData.shape().translate(x, y, z).intersectsAABB(aabb)) {
+                blockState.getBehavior().onCollideWithEntity(
+                        new BlockStateWithPos(blockState, new Position3i(x, y, z, dimension), 0),
+                        thisEntity
+                );
+            }
+        });
     }
 
     protected void tickBreathe() {
@@ -196,7 +218,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void tickEffects() {
-        if (effects.isEmpty()) return;
+        if (effects.isEmpty()) {
+            return;
+        }
+
         for (var effect : effects.values().toArray(EffectInstance[]::new)) {
             effect.setDuration(effect.getDuration() - 1);
             effect.getType().onTick(thisEntity, effect);
@@ -417,29 +442,18 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void sendEntityData(EntityDataType<?>... dataTypes) {
-        if (viewers.isEmpty()) return;
-        sendPacketToViewers(createSetEntityDataPacket(dataTypes, new EntityFlag[0]));
+    public void sendMetadata() {
+        if (viewers.isEmpty()) {
+            return;
+        }
+
+        sendPacketToViewers(createSetEntityDataPacket());
     }
 
-    @Override
-    public void sendEntityFlags(EntityFlag... flags) {
-        if (viewers.isEmpty()) return;
-        sendPacketToViewers(createSetEntityDataPacket(new EntityDataType<?>[0], flags));
-    }
-
-    protected SetEntityDataPacket createSetEntityDataPacket(EntityDataType<?>[] dataTypes, EntityFlag[] flags) {
+    protected SetEntityDataPacket createSetEntityDataPacket() {
         var packet = new SetEntityDataPacket();
         packet.setRuntimeEntityId(runtimeId);
-
-        var metadata = packet.getMetadata();
-        for (var type : dataTypes) {
-            metadata.put(type, this.metadata.get(type));
-        }
-        for (var flag : flags) {
-            metadata.setFlag(flag, this.metadata.get(flag));
-        }
-
+        packet.setMetadata(this.metadata.getEntityDataMap());
         packet.setTick(this.getWorld().getTick());
         return packet;
     }
