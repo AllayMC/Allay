@@ -32,17 +32,18 @@ public class ItemHoneycombBaseComponentImpl extends ItemBaseComponentImpl {
             return false;
         }
 
+        var clickedBlockPos = interactInfo.clickedBlockPos();
         var nextBlockType = oxidationComponent.getBlockWithWaxed(true);
         var oldBlockState = new BlockStateWithPos(
-                dimension.getBlockState(interactInfo.clickBlockPos()),
-                new Position3i(interactInfo.clickBlockPos(), dimension),
+                dimension.getBlockState(clickedBlockPos),
+                new Position3i(clickedBlockPos, dimension),
                 0
         );
         var blockFadeEvent = new BlockFadeEvent(oldBlockState, nextBlockType.copyPropertyValuesFrom(oldBlockState.blockState()));
         if (blockFadeEvent.call()) {
-            dimension.setBlockState(interactInfo.clickBlockPos(), blockFadeEvent.getNewBlockState());
+            dimension.setBlockState(clickedBlockPos, blockFadeEvent.getNewBlockState());
             interactInfo.player().tryConsumeItemInHand();
-            dimension.addLevelEvent(interactInfo.clickBlockPos(), LevelEvent.PARTICLE_WAX_ON);
+            dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_WAX_ON);
             return true;
         }
 

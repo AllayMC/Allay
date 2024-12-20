@@ -43,18 +43,18 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
         var interactInfo = event.getInteractInfo();
         var player = interactInfo.player();
         var dimension = player.getDimension();
-        var blockState = dimension.getBlockState(interactInfo.clickedBlockPos());
+        var clickedBlockState = interactInfo.getClickedBlockState();
         if (isEmpty()) {
-            if (!(blockState.getBehavior() instanceof BlockLiquidBehavior)) {
+            if (!(clickedBlockState.getBehavior() instanceof BlockLiquidBehavior)) {
                 return;
             }
             try {
-                if (blockState.getPropertyValue(BlockPropertyTypes.LIQUID_DEPTH) != 0) {
+                if (clickedBlockState.getPropertyValue(BlockPropertyTypes.LIQUID_DEPTH) != 0) {
                     return;
                 }
             } catch (IllegalArgumentException ignore) {}
 
-            var blockType = blockState.getBlockType();
+            var blockType = clickedBlockState.getBlockType();
             if (blockType == BlockTypes.WATER || blockType == BlockTypes.FLOWING_WATER) {
                 player.tryConsumeItemInHand();
                 player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(ItemTypes.WATER_BUCKET.createItemStack(1));
@@ -69,7 +69,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
         }
 
         Vector3ic liquidPlacedPos = event.getPlaceBlockPos();
-        if (blockState.getBlockStateData().canContainLiquid()) {
+        if (clickedBlockState.getBlockStateData().canContainLiquid()) {
             dimension.setBlockState(interactInfo.clickedBlockPos(), getLiquidType().getDefaultState(), 1);
             liquidPlacedPos = interactInfo.clickedBlockPos();
         } else {

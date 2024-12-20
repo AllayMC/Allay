@@ -112,17 +112,17 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
         oxidationLevel = OxidationLevel.values()[oxidationLevel.ordinal() - 1];
         var nextBlockType = getBlockWithOxidationLevel(oxidationLevel);
         var oldBlockState = new BlockStateWithPos(
-                dimension.getBlockState(interactInfo.clickBlockPos()),
-                new Position3i(interactInfo.clickBlockPos(), dimension),
+                interactInfo.getClickedBlockState(),
+                new Position3i(interactInfo.clickedBlockPos(), dimension),
                 0
         );
         var blockFadeEvent = new BlockFadeEvent(oldBlockState, nextBlockType.copyPropertyValuesFrom(oldBlockState.blockState()));
         if (blockFadeEvent.call()) {
-            dimension.setBlockState(interactInfo.clickBlockPos(), blockFadeEvent.getNewBlockState());
+            dimension.setBlockState(interactInfo.clickedBlockPos(), blockFadeEvent.getNewBlockState());
             if (event.getInteractInfo().player().getGameType() != GameType.CREATIVE) {
                 itemStack.tryReduceDurability(1);
             }
-            dimension.addLevelEvent(interactInfo.clickBlockPos(), LevelEvent.PARTICLE_SCRAPE);
+            dimension.addLevelEvent(interactInfo.clickedBlockPos(), LevelEvent.PARTICLE_SCRAPE);
         }
     }
 
