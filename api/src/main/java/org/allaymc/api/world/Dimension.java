@@ -929,8 +929,8 @@ public interface Dimension {
         getEntityService().addEntity(entityXpOrb);
     }
 
-    default void breakBlock(Vector3ic pos, ItemStack usedItem, EntityPlayer player) {
-        breakBlock(pos.x(), pos.y(), pos.z(), usedItem, player);
+    default void breakBlock(Vector3ic pos, ItemStack usedItem, Entity entity) {
+        breakBlock(pos.x(), pos.y(), pos.z(), usedItem, entity);
     }
 
     /**
@@ -940,11 +940,11 @@ public interface Dimension {
      * @param y        The y coordinate of the block.
      * @param z        The z coordinate of the block.
      * @param usedItem The item used to break the block, can be {@code null}.
-     * @param player   The player who breaks the block, can be {@code null}.
+     * @param entity   The player who breaks the block, can be {@code null}.
      *
      * @return Whether the block is successfully broken.
      */
-    boolean breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player);
+    boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity);
 
     /**
      * Get the height of the highest non-air block at the specified x and z coordinates.
