@@ -6,8 +6,8 @@ import org.allaymc.api.entity.effect.AbstractEffectType;
 import org.allaymc.api.entity.effect.EffectInstance;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.utils.Identifier;
 
 import java.util.concurrent.ThreadLocalRandom;
 
