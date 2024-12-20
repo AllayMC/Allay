@@ -34,7 +34,6 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.item.component.event.*;
-import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
@@ -222,9 +221,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public BlockState toBlockState() {
-        return itemType.getBlockType() == null ?
-                null :
-                ItemMetaBlockStateBiMap.getMetaToBlockStateMapper(itemType).apply(meta);
+        return itemType.getBlockType() != null ? itemType.getBlockType().getDefaultState() : null;
     }
 
     @Override

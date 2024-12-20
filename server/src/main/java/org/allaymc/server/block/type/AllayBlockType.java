@@ -18,7 +18,6 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
 import org.allaymc.api.component.interfaces.Component;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.registry.Registries;
@@ -31,7 +30,6 @@ import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.item.impl.ItemBlockImpl;
 import org.allaymc.server.item.type.AllayItemType;
-import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -234,14 +232,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
 
         @Override
         public ItemStack toItemStack() {
-            var meta = ItemMetaBlockStateBiMap.getBlockStateHashToMetaMapper(blockType).apply(blockStateHash);
-            return blockType.getItemType().createItemStack(
-                    ItemStackInitInfo
-                            .builder()
-                            .meta(meta)
-                            .count(1)
-                            .build()
-            );
+            return blockType.getItemType().createItemStack(1);
         }
 
         @Override

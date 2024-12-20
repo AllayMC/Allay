@@ -66,15 +66,17 @@ jobs:
       - name: Find Shaded Jar
         id: vars
         run: |
-          SHADED_JAR=$(find server/build/libs -name "allay-server-*-shaded.jar" -print -quit)
-          echo "shaded_jar=$SHADED_JAR" >> $GITHUB_OUTPUT
+          SHADED_JAR_PATH=$(find server/build/libs -name "allay-server-*-shaded.jar" -print -quit)
+          SHADED_JAR_NAME=$(basename "$SHADED_JAR_PATH")
+          echo "shaded_jar_path=$SHADED_JAR_PATH" >> $GITHUB_OUTPUT
+          echo "shaded_jar_name=$SHADED_JAR_NAME" >> $GITHUB_OUTPUT
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         if: success()
         with:
           name: allay-server
-          path: ${{ steps.vars.outputs.shaded_jar }}
+          path: ${{ steps.vars.outputs.shaded_jar_path }}
 
       - name: Publish to JitPack
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
@@ -91,12 +93,14 @@ jobs:
           git push origin -f --follow-tags nightly
 
       - name: Update Nightly Build
-        uses: WebFreak001/deploy-nightly@v3.2.0
+        uses: AllayMC/deploy-nightly@v3.3.0
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         with:
           upload_url: https://uploads.github.com/repos/AllayMC/Allay/releases/185111149/assets{?name,label}
           release_id: 185111149
-          asset_path: ./${{ steps.vars.outputs.shaded_jar }}
+          asset_path: ./${{ steps.vars.outputs.shaded_jar_path }}
+          asset_name: ${{ steps.vars.outputs.shaded_jar_name }}
+          old_asset_name: allay-server-$$-shaded.jar
           asset_content_type: application/zip
           max_releases: 1
 
