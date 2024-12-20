@@ -12,7 +12,6 @@ import org.allaymc.api.registry.Registries;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
-import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -29,9 +28,6 @@ public class CreativeItemRegistryLoader implements RegistryLoader<Void, Int2Obje
     @Override
     public Int2ObjectMap<ItemStack> load(Void unused) {
         log.info(I18n.get().tr(TrKeys.A_CREATIVEITEM_LOADING));
-        // We should initialize this bimap before loading creative items
-        // Because loading creative item will use it
-        ItemMetaBlockStateBiMap.init();
         var map = new Int2ObjectOpenHashMap<ItemStack>();
         try (var reader = NbtUtils.createGZIPReader(new BufferedInputStream(Utils.getResource("creative_items.nbt")))) {
             var nbt = (NbtMap) reader.readTag();
