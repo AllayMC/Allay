@@ -130,35 +130,37 @@ public class AllayChunk implements Chunk {
             return;
         }
 
-        for (var section : unsafeChunk.getSections()) {
-            if (section.isAirSection()) {
-                continue;
-            }
-            // Check the entry list of this section, and
-            // if there is no block that support random tick
-            // in this section, we can just skip this section
-            if (section.blockLayers()[0].allEntriesMatch(blockState -> !blockState.getBehavior().canRandomUpdate())) {
-                continue;
-            }
+        this.batchProcess($ -> {
+            for (var section : unsafeChunk.getSections()) {
+                if (section.isAirSection()) {
+                    continue;
+                }
+                // Check the entry list of this section, and
+                // if there is no block that support random tick
+                // in this section, we can just skip this section
+                if (section.blockLayers()[0].allEntriesMatch(blockState -> !blockState.getBehavior().canRandomUpdate())) {
+                    continue;
+                }
 
-            int sectionY = section.sectionY();
-            for (int i = 0; i < randomTickSpeed * 3; i++) {
-                int lcg = nextUpdateLCG();
-                int localX = lcg & 0x0f;
-                int localZ = lcg >>> 8 & 0x0f;
-                int localY = lcg >>> 16 & 0x0f;
-                // TODO: instead of get the block state from palette and check if it supports random tick,
-                // we can add a bitset to every chunk section to mark whether a block pos contains a block
-                // that supports random tick, this would be much quicker
-                var blockState = section.getBlockState(localX, localY, localZ, 0);
-                if (blockState.getBehavior().canRandomUpdate()) {
-                    var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (unsafeChunk.x << 4), localY + (sectionY << 4), localZ + (unsafeChunk.z << 4), dimension), 0);
-                    if (new BlockRandomUpdateEvent(blockStateWithPos).call()) {
-                        blockState.getBehavior().onRandomUpdate(blockStateWithPos);
+                int sectionY = section.sectionY();
+                for (int i = 0; i < randomTickSpeed * 3; i++) {
+                    int lcg = nextUpdateLCG();
+                    int localX = lcg & 0x0f;
+                    int localZ = lcg >>> 8 & 0x0f;
+                    int localY = lcg >>> 16 & 0x0f;
+                    // TODO: instead of get the block state from palette and check if it supports random tick,
+                    // we can add a bitset to every chunk section to mark whether a block pos contains a block
+                    // that supports random tick, this would be much quicker
+                    var blockState = section.getBlockState(localX, localY, localZ, 0);
+                    if (blockState.getBehavior().canRandomUpdate()) {
+                        var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (unsafeChunk.x << 4), localY + (sectionY << 4), localZ + (unsafeChunk.z << 4), dimension), 0);
+                        if (new BlockRandomUpdateEvent(blockStateWithPos).call()) {
+                            blockState.getBehavior().onRandomUpdate(blockStateWithPos);
+                        }
                     }
                 }
             }
-        }
+        });
     }
 
     public int nextUpdateLCG() {
