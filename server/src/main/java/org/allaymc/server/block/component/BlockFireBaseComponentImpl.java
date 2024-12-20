@@ -250,7 +250,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
             return;
         }
 
-        var event = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, BlockTypes.FIRE, 20 * 8);
+        var event = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, blockStateWithPos.blockState(), 20 * 8);
         if (event.call()) {
             damageComponent.setOnFireTicks(event.getOnFireTicks());
         }

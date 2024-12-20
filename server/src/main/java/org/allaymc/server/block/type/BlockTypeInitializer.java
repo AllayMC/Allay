@@ -716,7 +716,7 @@ public final class BlockTypeInitializer {
                 .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_WATER)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
-                .setBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockWaterBaseComponentImpl::new)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
                 .build();
     }
@@ -726,14 +726,14 @@ public final class BlockTypeInitializer {
                 .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
-                .setBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockLavaBaseComponentImpl::new)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
                 .build();
         BlockTypes.FLOWING_LAVA = AllayBlockType
                 .builder(BlockLiquidBehaviorImpl.class)
                 .vanillaBlock(BlockId.FLOWING_LAVA)
                 .setProperties(BlockPropertyTypes.LIQUID_DEPTH)
-                .setBaseComponentSupplier(BlockLiquidBaseComponentImpl::new)
+                .setBaseComponentSupplier(BlockLavaBaseComponentImpl::new)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedShape(VoxelShapes::buildLiquidShape))
                 .build();
     }

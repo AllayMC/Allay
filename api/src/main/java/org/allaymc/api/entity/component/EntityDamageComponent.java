@@ -10,11 +10,19 @@ public interface EntityDamageComponent extends EntityComponent {
     /**
      * Attack this entity with the given damage container.
      *
-     * @param damage the damage container.
+     * @param damage         the damage container.
+     * @param ignoreCoolDown {@code true} to ignore the attack cool down, {@code false} otherwise.
      *
      * @return {@code true} if the entity was damaged, {@code false} otherwise.
      */
-    boolean attack(DamageContainer damage);
+    boolean attack(DamageContainer damage, boolean ignoreCoolDown);
+
+    /**
+     * @see #attack(DamageContainer, boolean)
+     */
+    default boolean attack(DamageContainer damage) {
+        return attack(damage, false);
+    }
 
     /**
      * Attack this entity with the given damage.

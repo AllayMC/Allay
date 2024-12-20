@@ -48,15 +48,15 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     protected int onFireTicks;
 
     @Override
-    public boolean attack(DamageContainer damage) {
-        if (!canBeAttacked(damage) || !checkAndUpdateCoolDown(damage)) {
+    public boolean attack(DamageContainer damage, boolean ignoreCoolDown) {
+        if (!canBeAttacked(damage) || !checkAndUpdateCoolDown(damage, ignoreCoolDown)) {
             return false;
         }
 
         var event = new EntityDamageEvent(thisEntity, damage);
         if (!event.call()) return false;
 
-        damage = event.getDamage();
+        damage = event.getDamageContainer();
 
         applyAttacker(damage);
         applyVictim(damage);
@@ -96,9 +96,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         }
     }
 
-    protected boolean checkAndUpdateCoolDown(DamageContainer damage) {
+    protected boolean checkAndUpdateCoolDown(DamageContainer damage, boolean forceToUpdate) {
         var currentTime = baseComponent.getWorld().getTick();
-        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
+        if (!forceToUpdate && lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
             return false;
         }
 

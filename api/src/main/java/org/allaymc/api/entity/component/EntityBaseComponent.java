@@ -545,14 +545,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     void removeAllEffects();
 
     /**
-     * Called when the entity ticks.
-     *
-     * @param currentTick the current tick.
-     */
-    @ApiStatus.OverrideOnly
-    default void tick(long currentTick) {}
-
-    /**
      * Check if the entity has head yaw.
      *
      * @return {@code true} if the entity has head yaw, otherwise {@code false}.

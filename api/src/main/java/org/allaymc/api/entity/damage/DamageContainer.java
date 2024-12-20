@@ -137,6 +137,10 @@ public class DamageContainer {
         return new DamageContainer(null, FIRE_TICK, sourceDamage);
     }
 
+    public static DamageContainer lava(float sourceDamage) {
+        return new DamageContainer(null, LAVA, sourceDamage);
+    }
+
     /**
      * Get the attacker.
      *

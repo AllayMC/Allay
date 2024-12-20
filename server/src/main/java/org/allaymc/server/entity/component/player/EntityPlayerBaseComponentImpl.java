@@ -59,6 +59,7 @@ import org.allaymc.server.world.AllayWorld;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
@@ -201,6 +202,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         tickPlayerDataAutoSave();
 
         syncData();
+    }
+
+    @Override
+    protected void computeAndNotifyCollidedBlocks() {
+        if (abilities.has(Ability.NO_CLIP)) {
+            return;
+        }
+
+        super.computeAndNotifyCollidedBlocks();
     }
 
     @Override
