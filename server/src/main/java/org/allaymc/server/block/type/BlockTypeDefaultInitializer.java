@@ -3245,7 +3245,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_COPPER_GRATE == null) {
             BlockTypes.EXPOSED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockExposedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_COPPER_GRATE)
                     .build();
         }
@@ -5313,7 +5313,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_COPPER_GRATE == null) {
             BlockTypes.OXIDIZED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockOxidizedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_COPPER_GRATE)
                     .build();
         }
@@ -7675,7 +7675,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_COPPER_GRATE == null) {
             BlockTypes.WAXED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWaxedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_COPPER_GRATE)
                     .build();
         }
@@ -7741,7 +7741,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_COPPER_GRATE == null) {
             BlockTypes.WAXED_EXPOSED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWaxedExposedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_GRATE)
                     .build();
         }
@@ -7807,7 +7807,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_GRATE == null) {
             BlockTypes.WAXED_OXIDIZED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWaxedOxidizedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_GRATE)
                     .build();
         }
@@ -7873,7 +7873,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_COPPER_GRATE == null) {
             BlockTypes.WAXED_WEATHERED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWaxedWeatheredCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_GRATE)
                     .build();
         }
@@ -7939,7 +7939,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_COPPER_GRATE == null) {
             BlockTypes.WEATHERED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWeatheredCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_COPPER_GRATE)
                     .build();
         }
