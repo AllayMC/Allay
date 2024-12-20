@@ -105,7 +105,7 @@ public class BiomeIdEnumGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(OUTPUT_PATH, javaFile.toString());
+        Utils.writeFileWithCRLF(OUTPUT_PATH, javaFile.toString());
     }
 
     private static class BiomeData {

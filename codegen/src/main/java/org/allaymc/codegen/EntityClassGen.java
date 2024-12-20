@@ -66,7 +66,7 @@ public class EntityClassGen extends BaseClassGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ENTITY_TYPES.simpleName() + ".java ...");
-        Files.writeString(Path.of("api/src/main/java/org/allaymc/api/entity/type/" + ClassNames.ENTITY_TYPES.simpleName() + ".java"), javaFile.toString());
+        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/entity/type/" + ClassNames.ENTITY_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
     private static void addDefaultEntityTypeInitializer(EntityId id, ClassName entityClassName) {
@@ -102,7 +102,7 @@ public class EntityClassGen extends BaseClassGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ENTITY_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
-        Files.writeString(filePath, javaFile.toString());
+        Utils.writeFileWithCRLF(filePath, javaFile.toString());
     }
 
     private static String generateClassSimpleName(EntityId id) {

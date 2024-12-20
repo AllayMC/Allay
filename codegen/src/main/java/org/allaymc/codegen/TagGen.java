@@ -4,7 +4,6 @@ import com.palantir.javapoet.*;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,6 +75,6 @@ public class TagGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(Path.of(writeTo), javaFile.toString());
+        Utils.writeFileWithCRLF(Path.of(writeTo), javaFile.toString());
     }
 }

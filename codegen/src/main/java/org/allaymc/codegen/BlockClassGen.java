@@ -8,8 +8,10 @@ import javax.lang.model.element.Modifier;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
@@ -24,6 +26,8 @@ public class BlockClassGen extends BaseClassGen {
     public static final MethodSpec.Builder BLOCK_TYPE_DEFAULT_INITIALIZER_METHOD_BUILDER =
             MethodSpec.methodBuilder("init")
                     .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
+    public static final Set<String> IGNORED_FILES = Set.of("BlockBehaviorImpl.java", "package-info.java");
+
     public static Map<Pattern, String> MERGED_BLOCKS = new LinkedHashMap<>();
 
     public static void main(String[] args) {
@@ -45,6 +49,8 @@ public class BlockClassGen extends BaseClassGen {
             Files.createDirectories(implDir);
         }
 
+        Set<String> generatedFiles = new HashSet<>();
+
         var typesClass = TypeSpec
                 .classBuilder(ClassNames.BLOCK_TYPES)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
@@ -61,6 +67,7 @@ public class BlockClassGen extends BaseClassGen {
             var interfaceSimpleName = generateClassSimpleName(id);
             var interfaceFullName = generateClassFullName(id);
             var path = interfaceDir.resolve(interfaceSimpleName + ".java");
+            generatedFiles.add(path.getFileName().toString());
             if (!Files.exists(path)) {
                 System.out.println("Generating " + interfaceSimpleName + "...");
                 if (!Files.exists(interfaceDir)) {
@@ -72,6 +79,7 @@ public class BlockClassGen extends BaseClassGen {
             var implSimpleName = generateClassSimpleName(id) + "Impl";
             var implFullName = ClassName.get("org.allaymc.server.block.impl", implSimpleName);
             var implPath = implDir.resolve(implSimpleName + ".java");
+            generatedFiles.add(implPath.getFileName().toString());
             if (!Files.exists(implPath)) {
                 System.out.println("Generating " + implSimpleName + "...");
                 if (!Files.exists(implDir)) {
@@ -82,6 +90,11 @@ public class BlockClassGen extends BaseClassGen {
 
             addDefaultBlockTypeInitializer(id, implFullName);
         }
+
+        deleteOldFiles(interfaceDir, generatedFiles);
+        deleteOldFiles(implDir, generatedFiles);
+
+
         generateDefaultBlockTypeInitializer();
 
         var javaFile = JavaFile.builder(ClassNames.BLOCK_TYPES.packageName(), typesClass.build())
@@ -89,7 +102,28 @@ public class BlockClassGen extends BaseClassGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.BLOCK_TYPES.simpleName() + ".java ...");
-        Files.writeString(Path.of("api/src/main/java/org/allaymc/api/block/type/" + ClassNames.BLOCK_TYPES.simpleName() + ".java"), javaFile.toString());
+        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/block/type/" + ClassNames.BLOCK_TYPES.simpleName() + ".java"), javaFile.toString());
+    }
+
+    private static void deleteOldFiles(Path dir, Set<String> generatedFiles) {
+        if (!Files.exists(dir)) {
+            return;
+        }
+
+        try (var files = Files.list(dir)) {
+            files.filter(path -> Files.isRegularFile(path) && !IGNORED_FILES.contains(path.getFileName().toString())).forEach(file -> {
+                try {
+                    if (!generatedFiles.contains(file.getFileName().toString())) {
+                        System.out.println("Deleting unused file: " + file.getFileName());
+                        Files.delete(file);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected static void generateBlockImpl(ClassName superInterfaceName, ClassName className, Path path) throws IOException {
@@ -110,7 +144,7 @@ public class BlockClassGen extends BaseClassGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + className + ".java ...");
-        Files.writeString(path, javaFile.toString());
+        Utils.writeFileWithCRLF(path, javaFile.toString());
     }
 
     private static void addDefaultBlockTypeInitializer(BlockId id, ClassName blockClassName) {
@@ -158,7 +192,7 @@ public class BlockClassGen extends BaseClassGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.BLOCK_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
-        Files.writeString(filePath, javaFile.toString());
+        Utils.writeFileWithCRLF(filePath, javaFile.toString());
     }
 
     private static ClassName generateClassFullName(BlockId id) {

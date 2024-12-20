@@ -51,7 +51,7 @@ public class ItemIdEnumGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(Path.of("codegen/src/main/java/org/allaymc/dependence/ItemId.java"), javaFile.toString());
+        Utils.writeFileWithCRLF(Path.of("codegen/src/main/java/org/allaymc/dependence/ItemId.java"), javaFile.toString());
     }
 
     @SneakyThrows
@@ -80,7 +80,7 @@ public class ItemIdEnumGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(Path.of("api/src/main/java/org/allaymc/api/item/data/ItemId.java"), javaFile.toString());
+        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/item/data/ItemId.java"), javaFile.toString());
     }
 
     private static void addEnums(TypeSpec.Builder codeBuilder) {
