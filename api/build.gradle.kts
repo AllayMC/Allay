@@ -1,3 +1,6 @@
+/**
+ * The current version of allay-api
+ */
 version = "0.1.0"
 
 dependencies {

@@ -3,8 +3,8 @@ package org.allaymc.server.command.defaults;
 import org.allaymc.api.AllayAPI;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.server.Allay;
 import org.allaymc.server.utils.GitProperties;
 
 /**
@@ -22,11 +22,14 @@ public class VersionCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot().exec(context -> {
             context.addOutput(
-                    TrKeys.A_API_IMPLEMENTED,
+                    TrKeys.A_COMMAND_VERSION_OUTPUT,
                     AllayAPI.getInstance().getCoreName(),
-                    GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev() + " " + GitProperties.getBuildVersion() + (Allay.IS_DEVELOPMENT_BUILD ? " DEV_BUILD" : ""),
-                    AllayAPI.API_VERSION
+                    GitProperties.getBuildVersion(),
+                    GitProperties.getBuildApiVersion()
             );
+            if (GitProperties.isDevBuild()) {
+                context.addOutput(I18n.get().tr(TrKeys.A_SERVER_IS_DEV_VERSION));
+            }
             return context.success();
         });
     }

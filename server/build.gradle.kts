@@ -1,9 +1,20 @@
 import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer
 import java.io.ByteArrayOutputStream
-import java.text.SimpleDateFormat
-import java.util.*
 
-version = SimpleDateFormat("yyyy.MM.dd.HHmmss").format(Date())
+/**
+ * The current version of allay-server
+ *
+ * This is not the same as the version of allay-api.
+ * Please note that they are two things.
+ */
+version = "0.1.0"
+/**
+ * Indicates whether the current build is a development build.
+ *
+ * This value should be changed to false before release the next stable version,
+ * and after releasing, change it back to true.
+ */
+val isDevBuild = true;
 
 plugins {
     id("jacoco")
@@ -42,6 +53,17 @@ dependencies {
 gitProperties {
     gitPropertiesName = "git.properties"
     gitPropertiesResourceDir.set(file("${rootProject.projectDir}/data/resources"))
+    gitProperties {
+        customProperty("git.build.is_dev_build", isDevBuild)
+        /**
+         * The version of allay-api.
+         *
+         * There are two versions in git.properties:
+         * - version: The version of allay-server
+         * - api_version: The version of allay-api
+         */
+        customProperty("git.build.api_version", project(":api").version)
+    }
 }
 
 tasks.processResources {
@@ -58,12 +80,14 @@ tasks.sourcesJar {
 
 tasks.runShadow {
     workingDir = file("${rootProject.projectDir}/.run/")
-    jarFile = file("build/libs/allay-server-${version}-${getShortGitHash()}-shaded.jar")
+    jarFile = file(
+        "build/libs/${getShadedJarName()}"
+    )
 }
 
 tasks.shadowJar {
     transform(Log4j2PluginsCacheFileTransformer())
-    archiveFileName = "allay-server-${version}-${getShortGitHash()}-shaded.jar"
+    archiveFileName = getShadedJarName()
 }
 
 tasks.jacocoTestReport {
@@ -92,6 +116,10 @@ tasks.create("cleanWorkingDir") {
             delete(it)
         }
     }
+}
+
+fun getShadedJarName(): String {
+    return "allay-server-${version}-${getShortGitHash()}${if (isDevBuild) "-dev" else ""}-shaded.jar"
 }
 
 fun getShortGitHash(): String {

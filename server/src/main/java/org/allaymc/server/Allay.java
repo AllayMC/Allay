@@ -19,6 +19,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.registry.DoubleKeyMappedRegistry;
 import org.allaymc.api.registry.IntMappedRegistry;
@@ -57,14 +58,6 @@ import java.util.HashMap;
 @Slf4j
 public final class Allay {
 
-    /**
-     * Indicates whether the current build is a development build.
-     * <p>
-     * This value should be changed to false before release the next stable version,
-     * and after releasing, change it back to true.
-     */
-    public static final boolean IS_DEVELOPMENT_BUILD = true;
-
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
     private static final ExtensionManager EXTENSION_MANAGER = new ExtensionManager(Path.of("extensions"));
 
@@ -82,8 +75,9 @@ public final class Allay {
         EXTENSION_MANAGER.loadExtensions(args);
 
         // Check if the environment is headless
-        if (isHeadless()) Server.SETTINGS.genericSettings().enableGui(false);
-
+        if (isHeadless()) {
+            Server.SETTINGS.genericSettings().enableGui(false);
+        }
         if (Server.SETTINGS.genericSettings().enableGui()) {
             try {
                 DASHBOARD = Dashboard.getInstance();
@@ -93,10 +87,8 @@ public final class Allay {
             }
         }
 
-        log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING));
-        if (IS_DEVELOPMENT_BUILD) {
-            log.warn(I18n.get().tr(TrKeys.A_SERVER_IS_DEV_VERSION));
-        }
+        log.info(I18n.get().tr(TrKeys.A_SERVER_STARTING, ProtocolInfo.getMinecraftVersionStr(), ProtocolInfo.PACKET_CODEC.getProtocolVersion()));
+
         try {
             initAllay();
         } catch (Exception e) {
@@ -163,7 +155,15 @@ public final class Allay {
         api.bind(BossBar.Factory.class, () -> AllayBossBar::new);
 
         api.implement("allay");
-        log.info(I18n.get().tr(TrKeys.A_API_IMPLEMENTED, AllayAPI.getInstance().getCoreName(), GitProperties.getBranch() + "-" + GitProperties.getCommitIdAbbrev() + " " + GitProperties.getBuildVersion(), AllayAPI.API_VERSION));
+        log.info(I18n.get().tr(
+                TrKeys.A_COMMAND_VERSION_OUTPUT,
+                AllayAPI.getInstance().getCoreName(),
+                GitProperties.getBuildVersion(),
+                GitProperties.getBuildApiVersion()
+        ));
+        if (GitProperties.isDevBuild()) {
+            log.warn(I18n.get().tr(TrKeys.A_SERVER_IS_DEV_VERSION));
+        }
     }
 
     private static void initRegistries() {
