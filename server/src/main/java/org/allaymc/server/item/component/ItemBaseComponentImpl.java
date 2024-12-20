@@ -38,6 +38,7 @@ import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.joml.Vector3ic;
 
@@ -298,6 +299,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             return false;
         }
 
+        var blockType = blockState.getBlockType();
+
         var event = new BlockPlaceEvent(
                 new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension), 0),
                 oldBlockState, thisItemStack, player, placementInfo
@@ -306,9 +309,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             return false;
         }
 
-        var blockType = blockState.getBlockType();
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
         if (result && player != null) {
+            dimension.addLevelSoundEvent(placeBlockPos.x() + 0.5f, placeBlockPos.y() + 0.5f, placeBlockPos.z() + 0.5f, SoundEvent.PLACE, blockState.blockStateHash());
             tryConsumeItem(player);
             var e = new CItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
             manager.callEvent(e);

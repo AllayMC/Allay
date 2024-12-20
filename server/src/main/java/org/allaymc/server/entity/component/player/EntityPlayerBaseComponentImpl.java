@@ -59,13 +59,13 @@ import org.allaymc.server.world.AllayWorld;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -202,6 +202,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         tickPlayerDataAutoSave();
 
         syncData();
+    }
+
+    @Override
+    protected void computeAndNotifyCollidedBlocks() {
+        if (abilities.has(Ability.NO_CLIP)) {
+            return;
+        }
+
+        super.computeAndNotifyCollidedBlocks();
     }
 
     @Override
@@ -895,9 +904,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendEntityData(EntityDataType<?>... dataTypes) {
-        super.sendEntityData(dataTypes);
-        networkComponent.sendPacket(createSetEntityDataPacket(dataTypes, new EntityFlag[0]));
+    public void sendMetadata() {
+        super.sendMetadata();
+        networkComponent.sendPacket(createSetEntityDataPacket());
     }
 
     public void onJump() {

@@ -107,7 +107,7 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (super.onInteract(itemStack, dimension, interactInfo)) return true;
         if (interactInfo == null) return false;
 
-        Vector3i pos = (Vector3i) interactInfo.clickBlockPos();
+        Vector3i pos = (Vector3i) interactInfo.clickedBlockPos();
         var blockState = dimension.getBlockState(pos);
 
         Vector3ic otherPos = blockState.getPropertyValue(UPPER_BLOCK_BIT)

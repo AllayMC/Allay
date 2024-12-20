@@ -25,6 +25,10 @@ import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.*;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
+import org.allaymc.server.blockentity.impl.BlockEntityImpl;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -83,8 +87,8 @@ public class AllayChunk implements Chunk {
     }
 
     public void tick(long currentTick, Dimension dimension, WorldStorage worldStorage) {
-        unsafeChunk.getBlockEntitiesUnsafe().values().forEach(blockEntity -> blockEntity.tick(currentTick));
-        unsafeChunk.getEntitiesUnsafe().values().forEach(entity -> entity.tick(currentTick));
+        unsafeChunk.getBlockEntitiesUnsafe().values().forEach(blockEntity -> ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).tick(currentTick));
+        unsafeChunk.getEntitiesUnsafe().values().forEach(entity -> ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).tick(currentTick));
         tickScheduledUpdates(dimension);
         tickRandomUpdates(dimension);
 
@@ -146,7 +150,7 @@ public class AllayChunk implements Chunk {
                 // TODO: instead of get the block state from palette and check if it supports random tick,
                 // we can add a bitset to every chunk section to mark whether a block pos contains a block
                 // that supports random tick, this would be much quicker
-                var blockState = section.getBlockState(localX, localY, localZ, 0);
+                var blockState = getBlockState(localX, sectionY * 16 + localY, localZ, 0);
                 if (blockState.getBehavior().canRandomUpdate()) {
                     var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (unsafeChunk.x << 4), localY + (sectionY << 4), localZ + (unsafeChunk.z << 4), dimension), 0);
                     if (new BlockRandomUpdateEvent(blockStateWithPos).call()) {

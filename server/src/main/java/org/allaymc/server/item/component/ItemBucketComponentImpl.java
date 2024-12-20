@@ -43,7 +43,7 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
         var interactInfo = event.getInteractInfo();
         var player = interactInfo.player();
         var dimension = player.getDimension();
-        var blockState = dimension.getBlockState(interactInfo.clickBlockPos());
+        var blockState = dimension.getBlockState(interactInfo.clickedBlockPos());
         if (isEmpty()) {
             if (!(blockState.getBehavior() instanceof BlockLiquidBehavior)) {
                 return;
@@ -58,11 +58,11 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
             if (blockType == BlockTypes.WATER || blockType == BlockTypes.FLOWING_WATER) {
                 player.tryConsumeItemInHand();
                 player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(ItemTypes.WATER_BUCKET.createItemStack(1));
-                dimension.setBlockState(interactInfo.clickBlockPos(), BlockTypes.AIR.getDefaultState());
+                dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
             } else if (blockType == BlockTypes.LAVA || blockType == BlockTypes.FLOWING_LAVA) {
                 player.tryConsumeItemInHand();
                 player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(ItemTypes.LAVA_BUCKET.createItemStack(1));
-                dimension.setBlockState(interactInfo.clickBlockPos(), BlockTypes.AIR.getDefaultState());
+                dimension.setBlockState(interactInfo.clickedBlockPos(), BlockTypes.AIR.getDefaultState());
             }
             event.setCanBeUsed(true);
             return;
@@ -70,8 +70,8 @@ public class ItemBucketComponentImpl implements ItemBucketComponent {
 
         Vector3ic liquidPlacedPos = event.getPlaceBlockPos();
         if (blockState.getBlockStateData().canContainLiquid()) {
-            dimension.setBlockState(interactInfo.clickBlockPos(), getLiquidType().getDefaultState(), 1);
-            liquidPlacedPos = interactInfo.clickBlockPos();
+            dimension.setBlockState(interactInfo.clickedBlockPos(), getLiquidType().getDefaultState(), 1);
+            liquidPlacedPos = interactInfo.clickedBlockPos();
         } else {
             var blockOnPlacePos = dimension.getBlockState(event.getPlaceBlockPos());
             if (blockOnPlacePos.getBlockType() == BlockTypes.AIR || blockOnPlacePos.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {

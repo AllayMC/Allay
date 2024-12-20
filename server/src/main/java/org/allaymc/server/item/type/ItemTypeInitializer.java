@@ -4,18 +4,14 @@ import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.entity.data.EntityId;
 import org.allaymc.api.item.component.ItemArmorBaseComponent.ArmorType;
-import org.allaymc.api.item.component.tool.ItemAxeComponent;
-import org.allaymc.api.item.component.tool.ItemHoeComponent;
-import org.allaymc.api.item.component.tool.ItemPickaxeComponent;
-import org.allaymc.api.item.component.tool.ItemShovelComponent;
 import org.allaymc.api.item.data.ItemId;
-import org.allaymc.api.item.interfaces.ItemMusicDiscStack;
-import org.allaymc.api.item.interfaces.ItemSpawnEggStack;
+import org.allaymc.api.item.interfaces.*;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.food.*;
-import org.allaymc.server.item.component.tool.*;
+import org.allaymc.server.item.component.tool.ItemSwordComponentImpl;
+import org.allaymc.server.item.component.tool.ItemToolComponentImpl;
 import org.allaymc.server.item.impl.*;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
@@ -488,167 +484,88 @@ public final class ItemTypeInitializer {
     }
 
     public static void initSword() {
-        ItemTypes.DIAMOND_SWORD = AllayItemType
+        ItemTypes.DIAMOND_SWORD = buildSword(ItemId.DIAMOND_SWORD);
+        ItemTypes.GOLDEN_SWORD = buildSword(ItemId.GOLDEN_SWORD);
+        ItemTypes.IRON_SWORD = buildSword(ItemId.IRON_SWORD);
+        ItemTypes.NETHERITE_SWORD = buildSword(ItemId.NETHERITE_SWORD);
+        ItemTypes.STONE_SWORD = buildSword(ItemId.STONE_SWORD);
+        ItemTypes.WOODEN_SWORD = buildSword(ItemId.WOODEN_SWORD);
+    }
+
+    private static ItemType<ItemSwordStack> buildSword(ItemId itemId) {
+        return AllayItemType
                 .builder(ItemSwordStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_SWORD)
-                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
-                .build();
-        ItemTypes.GOLDEN_SWORD = AllayItemType
-                .builder(ItemSwordStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_SWORD)
-                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
-                .build();
-        ItemTypes.IRON_SWORD = AllayItemType
-                .builder(ItemSwordStackImpl.class)
-                .vanillaItem(ItemId.IRON_SWORD)
-                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
-                .build();
-        ItemTypes.NETHERITE_SWORD = AllayItemType
-                .builder(ItemSwordStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_SWORD)
-                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
-                .build();
-        ItemTypes.STONE_SWORD = AllayItemType
-                .builder(ItemSwordStackImpl.class)
-                .vanillaItem(ItemId.STONE_SWORD)
-                .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
-                .build();
-        ItemTypes.WOODEN_SWORD = AllayItemType
-                .builder(ItemSwordStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_SWORD)
+                .vanillaItem(itemId)
                 .addComponent(ItemSwordComponentImpl::new, ItemSwordComponentImpl.class)
                 .build();
     }
 
     public static void initPickaxe() {
-        ItemTypes.DIAMOND_PICKAXE = AllayItemType
+        ItemTypes.DIAMOND_PICKAXE = buildPickaxe(ItemId.DIAMOND_PICKAXE);
+        ItemTypes.GOLDEN_PICKAXE = buildPickaxe(ItemId.GOLDEN_PICKAXE);
+        ItemTypes.IRON_PICKAXE = buildPickaxe(ItemId.IRON_PICKAXE);
+        ItemTypes.NETHERITE_PICKAXE = buildPickaxe(ItemId.NETHERITE_PICKAXE);
+        ItemTypes.STONE_PICKAXE = buildPickaxe(ItemId.STONE_PICKAXE);
+        ItemTypes.WOODEN_PICKAXE = buildPickaxe(ItemId.WOODEN_PICKAXE);
+    }
+
+    private static ItemType<ItemPickaxeStack> buildPickaxe(ItemId itemId) {
+        return AllayItemType
                 .builder(ItemPickaxeStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_PICKAXE)
-                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
-                .build();
-        ItemTypes.GOLDEN_PICKAXE = AllayItemType
-                .builder(ItemPickaxeStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_PICKAXE)
-                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
-                .build();
-        ItemTypes.IRON_PICKAXE = AllayItemType
-                .builder(ItemPickaxeStackImpl.class)
-                .vanillaItem(ItemId.IRON_PICKAXE)
-                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
-                .build();
-        ItemTypes.NETHERITE_PICKAXE = AllayItemType
-                .builder(ItemPickaxeStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_PICKAXE)
-                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
-                .build();
-        ItemTypes.STONE_PICKAXE = AllayItemType
-                .builder(ItemPickaxeStackImpl.class)
-                .vanillaItem(ItemId.STONE_PICKAXE)
-                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
-                .build();
-        ItemTypes.WOODEN_PICKAXE = AllayItemType
-                .builder(ItemPickaxeStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_PICKAXE)
-                .addComponent(ItemPickaxeComponentImpl::new, ItemPickaxeComponent.class)
+                .vanillaItem(itemId)
+                .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
                 .build();
     }
 
     public static void initAxe() {
-        ItemTypes.DIAMOND_AXE = AllayItemType
+        ItemTypes.DIAMOND_AXE = buildAxe(ItemId.DIAMOND_AXE);
+        ItemTypes.GOLDEN_AXE = buildAxe(ItemId.GOLDEN_AXE);
+        ItemTypes.IRON_AXE = buildAxe(ItemId.IRON_AXE);
+        ItemTypes.NETHERITE_AXE = buildAxe(ItemId.NETHERITE_AXE);
+        ItemTypes.STONE_AXE = buildAxe(ItemId.STONE_AXE);
+        ItemTypes.WOODEN_AXE = buildAxe(ItemId.WOODEN_AXE);
+    }
+
+    private static ItemType<ItemAxeStack> buildAxe(ItemId itemId) {
+        return AllayItemType
                 .builder(ItemAxeStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_AXE)
-                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
-                .build();
-        ItemTypes.GOLDEN_AXE = AllayItemType
-                .builder(ItemAxeStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_AXE)
-                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
-                .build();
-        ItemTypes.IRON_AXE = AllayItemType
-                .builder(ItemAxeStackImpl.class)
-                .vanillaItem(ItemId.IRON_AXE)
-                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
-                .build();
-        ItemTypes.NETHERITE_AXE = AllayItemType
-                .builder(ItemAxeStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_AXE)
-                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
-                .build();
-        ItemTypes.STONE_AXE = AllayItemType
-                .builder(ItemAxeStackImpl.class)
-                .vanillaItem(ItemId.STONE_AXE)
-                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
-                .build();
-        ItemTypes.WOODEN_AXE = AllayItemType
-                .builder(ItemAxeStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_AXE)
-                .addComponent(ItemAxeComponentImpl::new, ItemAxeComponent.class)
+                .vanillaItem(itemId)
+                .addComponent(ItemAxeBaseComponentImpl::new, ItemAxeBaseComponentImpl.class)
+                .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
                 .build();
     }
 
     public static void initShovel() {
-        ItemTypes.DIAMOND_SHOVEL = AllayItemType
+        ItemTypes.DIAMOND_SHOVEL = buildShovel(ItemId.DIAMOND_SHOVEL);
+        ItemTypes.GOLDEN_SHOVEL = buildShovel(ItemId.GOLDEN_SHOVEL);
+        ItemTypes.IRON_SHOVEL = buildShovel(ItemId.IRON_SHOVEL);
+        ItemTypes.NETHERITE_SHOVEL = buildShovel(ItemId.NETHERITE_SHOVEL);
+        ItemTypes.STONE_SHOVEL = buildShovel(ItemId.STONE_SHOVEL);
+        ItemTypes.WOODEN_SHOVEL = buildShovel(ItemId.WOODEN_SHOVEL);
+    }
+
+    private static ItemType<ItemShovelStack> buildShovel(ItemId itemId) {
+        return AllayItemType
                 .builder(ItemShovelStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_SHOVEL)
-                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
-                .build();
-        ItemTypes.GOLDEN_SHOVEL = AllayItemType
-                .builder(ItemShovelStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_SHOVEL)
-                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
-                .build();
-        ItemTypes.IRON_SHOVEL = AllayItemType
-                .builder(ItemShovelStackImpl.class)
-                .vanillaItem(ItemId.IRON_SHOVEL)
-                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
-                .build();
-        ItemTypes.NETHERITE_SHOVEL = AllayItemType
-                .builder(ItemShovelStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_SHOVEL)
-                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
-                .build();
-        ItemTypes.STONE_SHOVEL = AllayItemType
-                .builder(ItemShovelStackImpl.class)
-                .vanillaItem(ItemId.STONE_SHOVEL)
-                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
-                .build();
-        ItemTypes.WOODEN_SHOVEL = AllayItemType
-                .builder(ItemShovelStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_SHOVEL)
-                .addComponent(ItemShovelComponentImpl::new, ItemShovelComponent.class)
+                .vanillaItem(itemId)
+                .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
                 .build();
     }
 
     public static void initHoe() {
-        ItemTypes.DIAMOND_HOE = AllayItemType
+        ItemTypes.DIAMOND_HOE = buildHoe(ItemId.DIAMOND_HOE);
+        ItemTypes.GOLDEN_HOE = buildHoe(ItemId.GOLDEN_HOE);
+        ItemTypes.IRON_HOE = buildHoe(ItemId.IRON_HOE);
+        ItemTypes.NETHERITE_HOE = buildHoe(ItemId.NETHERITE_HOE);
+        ItemTypes.STONE_HOE = buildHoe(ItemId.STONE_HOE);
+        ItemTypes.WOODEN_HOE = buildHoe(ItemId.WOODEN_HOE);
+    }
+
+    private static ItemType<ItemHoeStack> buildHoe(ItemId itemId) {
+        return AllayItemType
                 .builder(ItemHoeStackImpl.class)
-                .vanillaItem(ItemId.DIAMOND_HOE)
-                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
-                .build();
-        ItemTypes.GOLDEN_HOE = AllayItemType
-                .builder(ItemHoeStackImpl.class)
-                .vanillaItem(ItemId.GOLDEN_HOE)
-                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
-                .build();
-        ItemTypes.IRON_HOE = AllayItemType
-                .builder(ItemHoeStackImpl.class)
-                .vanillaItem(ItemId.IRON_HOE)
-                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
-                .build();
-        ItemTypes.NETHERITE_HOE = AllayItemType
-                .builder(ItemHoeStackImpl.class)
-                .vanillaItem(ItemId.NETHERITE_HOE)
-                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
-                .build();
-        ItemTypes.STONE_HOE = AllayItemType
-                .builder(ItemHoeStackImpl.class)
-                .vanillaItem(ItemId.STONE_HOE)
-                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
-                .build();
-        ItemTypes.WOODEN_HOE = AllayItemType
-                .builder(ItemHoeStackImpl.class)
-                .vanillaItem(ItemId.WOODEN_HOE)
-                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponent.class)
+                .vanillaItem(itemId)
+                .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
                 .build();
     }
 

@@ -10,9 +10,11 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.eventbus.event.block.BlockBurnEvent;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
+import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Utils;
@@ -192,11 +194,6 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
-    @Override
-    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        return Utils.EMPTY_ITEM_STACK_SET;
-    }
-
     protected void trySpreadFireOn(BlockStateWithPos source, BlockStateWithPos target, int bound, int sourceFireAge) {
         var targetBlockState = target.blockState();
         var dimension = source.dimension();
@@ -235,6 +232,28 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         return false;
+    }
+
+    @Override
+    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        return Utils.EMPTY_ITEM_STACK_SET;
+    }
+
+    @Override
+    public boolean canCollideWithEntity() {
+        return true;
+    }
+
+    @Override
+    public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
+        if (!(entity instanceof EntityDamageComponent damageComponent)) {
+            return;
+        }
+
+        var event = new EntityCombustEvent(entity, EntityCombustEvent.CombusterType.BLOCK, blockStateWithPos.blockState(), 20 * 8);
+        if (event.call()) {
+            damageComponent.setOnFireTicks(event.getOnFireTicks());
+        }
     }
 
     protected static int getMaxFlameOddsOfNeighborsEncouragingFire(BlockStateWithPos blockStateWithPos) {

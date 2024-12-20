@@ -47,7 +47,7 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         if (!oldBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN)
             return false;
 
-        var targetBlock = dimension.getBlockState(placementInfo.clickBlockPos());
+        var targetBlock = dimension.getBlockState(placementInfo.clickedBlockPos());
         if (targetBlock.getBlockStateData().isSolid()) {
             blockState = blockState.setProperty(BlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
         } else {

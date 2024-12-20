@@ -37,10 +37,8 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         super(attributeTypes);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
+    @EventHandler
+    protected void onTick(CEntityTickEvent event) {
         if (thisPlayer.isDead() ||
             thisPlayer.getGameType() == GameType.CREATIVE ||
             thisPlayer.getGameType() == GameType.SPECTATOR) {

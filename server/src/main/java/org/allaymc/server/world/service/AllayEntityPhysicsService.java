@@ -138,7 +138,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 BlockState[] sub2 = sub1[oy];
                 for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
                     BlockState blockState = sub2[oz];
-                    if (blockState == null) continue;
+                    if (blockState == null) {
+                        continue;
+                    }
+
                     var currentX = minX + ox;
                     var currentY = minY + oy;
                     var currentZ = minZ + oz;
