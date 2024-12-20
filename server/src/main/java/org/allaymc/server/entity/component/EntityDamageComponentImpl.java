@@ -180,7 +180,9 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean hasFireDamage() {
-        return !thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) && !isFireproof();
+        return !thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) &&
+               !isFireproof() &&
+               baseComponent.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FIRE_DAMAGE);
     }
 
     @Override

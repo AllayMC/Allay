@@ -55,8 +55,10 @@ from [Nightly Build](https://github.com/AllayMC/Allay/releases/tag/nightly).
 
 ### Run Allay
 
-You should now have a file named `allay-server-<yyyy.MM.dd.HHmmss>-<githash>-shaded.jar`, and an example name is
-`allay-server-2024.09.21.205626-9315b80ca-shaded.jar`.
+You should now have a file named `allay-server-<version of allay server>-<git hash>[-dev]-shaded.jar`, and an example
+name is
+`allay-server-0.1.0-dev-shaded.jar`. If there is a `dev` flag in the file name, it means that this is a development
+version.
 If your platform has a graphical interface, you can just double-click the jar file to run it, then a window will pop up
 if you have installed java correctly:
 
@@ -66,7 +68,7 @@ If you are running on a server which does not have graphical interface, you can 
 server:
 
 ```shell
-java -jar allay-server-<yyyy.MM.dd.HHmmss>-<githash>-shaded.jar
+java -jar allay-server-*-shaded.jar
 ```
 
 And the same output will be shown in the console.

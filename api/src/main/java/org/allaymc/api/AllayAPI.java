@@ -31,12 +31,8 @@ import java.util.function.Supplier;
 @Getter
 public final class AllayAPI {
 
-    /**
-     * The version of allay api.
-     */
-    public static final String API_VERSION = "0.1.0";
-
     private static final AllayAPI INSTANCE = new AllayAPI();
+
     private final Map<Class<?>, ApiBindingAction<?>> bindings = new LinkedHashMap<>();
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean i18nSet = false;

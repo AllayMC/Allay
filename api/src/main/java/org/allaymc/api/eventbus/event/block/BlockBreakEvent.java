@@ -2,7 +2,7 @@ package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
 import org.allaymc.api.block.dto.BlockStateWithPos;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
@@ -22,11 +22,11 @@ public class BlockBreakEvent extends BlockEvent implements CancellableEvent {
     /**
      * Can be null
      */
-    protected EntityPlayer player;
+    protected Entity entity;
 
-    public BlockBreakEvent(BlockStateWithPos blockState, ItemStack usedItem, EntityPlayer player) {
+    public BlockBreakEvent(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         super(blockState);
         this.usedItem = usedItem;
-        this.player = player;
+        this.entity = entity;
     }
 }

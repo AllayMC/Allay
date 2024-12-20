@@ -3,13 +3,13 @@ package org.allaymc.server.metrics;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.AllayAPI;
 import org.allaymc.api.client.data.Device;
 import org.allaymc.api.client.data.DeviceInfo;
 import org.allaymc.api.client.data.LoginData;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.server.Server;
+import org.allaymc.server.utils.GitProperties;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.ByteArrayOutputStream;
@@ -587,7 +587,7 @@ public class Metrics {
 
             metrics.addCustomChart(new Metrics.SingleLineChart("players", server::getOnlinePlayerCount));
             metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", ProtocolInfo::getMinecraftVersionStr));
-            metrics.addCustomChart(new Metrics.SimplePie("allay_api_version", () -> AllayAPI.API_VERSION));
+            metrics.addCustomChart(new Metrics.SimplePie("allay_api_version", GitProperties::getBuildApiVersion));
             metrics.addCustomChart(new Metrics.SimplePie("max_memory", () -> String.format("%.2f", Runtime.getRuntime().maxMemory() / (1024d * 1024d * 1024d)) + "G"));
             metrics.addCustomChart(new Metrics.SimplePie("xbox_auth", () -> Server.SETTINGS.networkSettings().xboxAuth() ? "Required" : "Not required"));
 

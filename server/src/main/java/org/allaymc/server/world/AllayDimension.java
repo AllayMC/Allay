@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockBreakEvent;
 import org.allaymc.api.item.ItemStack;
@@ -31,6 +32,7 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
 @Slf4j
 @Getter
 public class AllayDimension implements Dimension {
+
     protected final AllayChunkService chunkService;
     protected final AllayEntityPhysicsService entityPhysicsService;
     protected final AllayBlockUpdateService blockUpdateService;
@@ -131,7 +133,7 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
-    public boolean breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player) {
+    public boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity) {
         var block = getBlockState(x, y, z);
         if (block.getBlockType() == AIR) {
             return false;
@@ -139,7 +141,7 @@ public class AllayDimension implements Dimension {
 
         var event = new BlockBreakEvent(
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
-                usedItem, player
+                usedItem, entity
         );
         if (!event.call()) return false;
 
@@ -151,12 +153,14 @@ public class AllayDimension implements Dimension {
 
         block.getBehavior().onBreak(
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
-                usedItem, player
+                usedItem, entity
         );
 
         setBlockState(x, y, z, AIR.getDefaultState());
 
-        if (player != null) player.exhaust(0.005f);
+        if (entity instanceof EntityPlayer player) {
+            player.exhaust(0.005f);
+        }
 
         return true;
     }
