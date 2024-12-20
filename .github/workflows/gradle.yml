@@ -19,14 +19,14 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - name: Setup WARP
-        uses: fscarmen/warp-on-actions@v1.3
-        if: contains(github.ref_name, 'master')
-        with:
-          stack: dual
+      # - name: Setup WARP
+      #   uses: fscarmen/warp-on-actions@v1.3
+      #   if: contains(github.ref_name, 'master')
+      #   with:
+      #     stack: dual
 
       - name: Checkout
         uses: actions/checkout@v4
