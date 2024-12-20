@@ -50,7 +50,7 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
         if (super.onInteract(itemStack, dimension, interactInfo)) return true;
 
-        var pos = interactInfo.clickBlockPos();
+        var pos = interactInfo.clickedBlockPos();
         var blockState = dimension.getBlockState(pos);
         if (!blockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
             dimension.updateBlockProperty(BUTTON_PRESSED_BIT, true, pos);
