@@ -84,7 +84,7 @@ public class ItemClassGen extends BaseClassGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ITEM_TYPES.simpleName() + ".java ...");
-        Files.writeString(Path.of("api/src/main/java/org/allaymc/api/item/type/" + ClassNames.ITEM_TYPES.simpleName() + ".java"), javaFile.toString());
+        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/item/type/" + ClassNames.ITEM_TYPES.simpleName() + ".java"), javaFile.toString());
     }
 
     private static void addDefaultItemTypeInitializer(ItemId id, ClassName itemClassName) {
@@ -120,7 +120,7 @@ public class ItemClassGen extends BaseClassGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + ClassNames.ITEM_TYPE_DEFAULT_INITIALIZER.simpleName() + ".java ...");
-        Files.writeString(filePath, javaFile.toString());
+        Utils.writeFileWithCRLF(filePath, javaFile.toString());
     }
 
     private static String generateClassSimpleName(ItemId id) {

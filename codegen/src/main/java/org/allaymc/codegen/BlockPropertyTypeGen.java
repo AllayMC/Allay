@@ -101,7 +101,7 @@ public class BlockPropertyTypeGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(TYPE_DATA_PATH.resolve("BlockPropertyTypes.java"), javaFile.toString());
+        Utils.writeFileWithCRLF(TYPE_DATA_PATH.resolve("BlockPropertyTypes.java"), javaFile.toString());
     }
 
     @SneakyThrows
@@ -122,7 +122,7 @@ public class BlockPropertyTypeGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(path, javaFile.toString());
+        Utils.writeFileWithCRLF(path, javaFile.toString());
     }
 
     public static class BlockPropertyTypeFile {

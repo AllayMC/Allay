@@ -4,7 +4,6 @@ import com.palantir.javapoet.*;
 
 import javax.lang.model.element.Modifier;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -20,7 +19,7 @@ public abstract class BaseClassGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + className + ".java ...");
-        Files.writeString(path, javaFile.toString());
+        Utils.writeFileWithCRLF(path, javaFile.toString());
     }
 
     protected static void generateImpl(ClassName superClassName, ClassName superInterfaceName, ClassName className, ClassName initInfoClass, Path path) throws IOException {
@@ -42,6 +41,6 @@ public abstract class BaseClassGen {
                 .skipJavaLangImports(true)
                 .build();
         System.out.println("Generating " + className + ".java ...");
-        Files.writeString(path, javaFile.toString());
+        Utils.writeFileWithCRLF(path, javaFile.toString());
     }
 }

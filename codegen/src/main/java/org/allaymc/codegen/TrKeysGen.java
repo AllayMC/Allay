@@ -1,7 +1,6 @@
 package org.allaymc.codegen;
 
 import com.google.gson.JsonParser;
-import com.palantir.javapoet.CodeBlock;
 import com.palantir.javapoet.FieldSpec;
 import com.palantir.javapoet.JavaFile;
 import com.palantir.javapoet.TypeSpec;
@@ -37,7 +36,7 @@ public class TrKeysGen {
                     FieldSpec
                             .builder(ClassNames.STRING, fieldName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("\"" + key + "\"")
-                            .addJavadoc(langJson.get(key).getAsString().replaceAll("\\$","#"))
+                            .addJavadoc(langJson.get(key).getAsString().replaceAll("\\$", "#"))
                             .build()
             );
         }
@@ -48,7 +47,7 @@ public class TrKeysGen {
         System.out.println("Generating " + ClassNames.TR_KEYS.simpleName() + ".java ...");
         Files.deleteIfExists(OUTPUT_PATH);
         Files.createFile(OUTPUT_PATH);
-        Files.writeString(OUTPUT_PATH, javaFile.toString());
+        Utils.writeFileWithCRLF(OUTPUT_PATH, javaFile.toString());
     }
 
     protected static String handleNamespace(String origin) {

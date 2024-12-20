@@ -73,6 +73,6 @@ public class EntityIdEnumGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(outPutPath, javaFile.toString());
+        Utils.writeFileWithCRLF(outPutPath, javaFile.toString());
     }
 }

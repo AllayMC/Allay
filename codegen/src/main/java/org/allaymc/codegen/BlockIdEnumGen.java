@@ -57,7 +57,7 @@ public class BlockIdEnumGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(Path.of("codegen/src/main/java/org/allaymc/dependence/BlockId.java"), javaFile.toString());
+        Utils.writeFileWithCRLF(Path.of("codegen/src/main/java/org/allaymc/dependence/BlockId.java"), javaFile.toString());
     }
 
     @SneakyThrows
@@ -87,7 +87,7 @@ public class BlockIdEnumGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(PACKAGE_PATH.resolve("BlockId.java"), javaFile.toString());
+        Utils.writeFileWithCRLF(PACKAGE_PATH.resolve("BlockId.java"), javaFile.toString());
     }
 
     private static void addEnums(TypeSpec.Builder codeBuilder) {
