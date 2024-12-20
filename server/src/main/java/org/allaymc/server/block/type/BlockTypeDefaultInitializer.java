@@ -3231,7 +3231,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_COPPER_BULB == null) {
             BlockTypes.EXPOSED_COPPER_BULB = AllayBlockType
-                    .builder(BlockExposedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -5299,7 +5299,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_COPPER_BULB == null) {
             BlockTypes.OXIDIZED_COPPER_BULB = AllayBlockType
-                    .builder(BlockOxidizedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7661,7 +7661,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_COPPER_BULB == null) {
             BlockTypes.WAXED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWaxedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7727,7 +7727,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_COPPER_BULB == null) {
             BlockTypes.WAXED_EXPOSED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWaxedExposedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7793,7 +7793,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_BULB == null) {
             BlockTypes.WAXED_OXIDIZED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWaxedOxidizedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7859,7 +7859,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_COPPER_BULB == null) {
             BlockTypes.WAXED_WEATHERED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWaxedWeatheredCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7925,7 +7925,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_COPPER_BULB == null) {
             BlockTypes.WEATHERED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWeatheredCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
