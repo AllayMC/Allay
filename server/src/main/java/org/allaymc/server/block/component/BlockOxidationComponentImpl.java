@@ -5,18 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.allaymc.api.block.component.BlockBaseComponent;
 import org.allaymc.api.block.component.BlockOxidationComponent;
 import org.allaymc.api.block.data.OxidationLevel;
-import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
-import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.block.component.event.CBlockOnInteractEvent;
 import org.allaymc.server.block.component.event.CBlockRandomUpdateEvent;
 import org.allaymc.server.component.annotation.ComponentObject;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiFunction;
@@ -91,38 +86,6 @@ public class BlockOxidationComponentImpl implements BlockOxidationComponent {
             if (blockFadeEvent.call()) {
                 dimension.setBlockState(position, blockFadeEvent.getNewBlockState());
             }
-        }
-    }
-
-    // TODO: move to ItemAxeBaseComponent
-    @EventHandler
-    protected void onDeoxidation(CBlockOnInteractEvent event) {
-        var dimension = event.getDimension();
-        var interactInfo = event.getInteractInfo();
-        var itemStack = event.getItemStack();
-        if (!ItemHelper.isAxe(itemStack.getItemType()) || this.isWaxed()) {
-            return;
-        }
-
-        var oxidationLevel = this.getOxidationLevel();
-        if (oxidationLevel == OxidationLevel.UNAFFECTED) {
-            return;
-        }
-
-        oxidationLevel = OxidationLevel.values()[oxidationLevel.ordinal() - 1];
-        var nextBlockType = getBlockWithOxidationLevel(oxidationLevel);
-        var oldBlockState = new BlockStateWithPos(
-                interactInfo.getClickedBlockState(),
-                new Position3i(interactInfo.clickedBlockPos(), dimension),
-                0
-        );
-        var blockFadeEvent = new BlockFadeEvent(oldBlockState, nextBlockType.copyPropertyValuesFrom(oldBlockState.blockState()));
-        if (blockFadeEvent.call()) {
-            dimension.setBlockState(interactInfo.clickedBlockPos(), blockFadeEvent.getNewBlockState());
-            if (event.getInteractInfo().player().getGameType() != GameType.CREATIVE) {
-                itemStack.tryReduceDurability(1);
-            }
-            dimension.addLevelEvent(interactInfo.clickedBlockPos(), LevelEvent.PARTICLE_SCRAPE);
         }
     }
 
