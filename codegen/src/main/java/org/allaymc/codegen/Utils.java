@@ -52,4 +52,9 @@ public class Utils {
             throw new CodeGenException(e);
         }
     }
+
+    public static void writeFileWithCRLF(Path path, String content) throws IOException {
+        String crlfContent = content.replace("\n", "\r\n");
+        Files.writeString(path, crlfContent);
+    }
 }
