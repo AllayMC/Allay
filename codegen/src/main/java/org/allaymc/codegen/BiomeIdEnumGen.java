@@ -55,7 +55,7 @@ public class BiomeIdEnumGen {
                                 .build()
                 )
                 .addField(FieldSpec
-                        .builder(ClassNames.BIOME_ARRAY, "MAP1", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                        .builder(ClassNames.BIOME_ID_ARRAY, "MAP1", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                         .build())
                 .addField(FieldSpec
                         .builder(ParameterizedTypeName.get(ClassNames.HASH_MAP, ClassNames.API_IDENTIFIER, ClassNames.BIOME_TYPE), "MAP2", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)

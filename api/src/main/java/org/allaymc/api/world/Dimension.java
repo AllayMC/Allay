@@ -18,6 +18,8 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.world.biome.BiomeId;
+import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.service.*;
 import org.apache.commons.lang3.function.TriFunction;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -1023,5 +1025,64 @@ public interface Dimension {
      */
     default boolean canPosSeeSky(int x, int y, int z) {
         return getHeight(x, z) <= y;
+    }
+
+    /**
+     * Get the biome at the specified pos.
+     *
+     * @param pos the pos.
+     *
+     * @return biome the biome.
+     */
+    default BiomeType getBiome(Vector3ic pos) {
+        return getBiome(pos.x(), pos.y(), pos.z());
+    }
+
+    /**
+     * Get the biome at the specified pos.
+     *
+     * @param x the x coordinate of the pos.
+     * @param y the y coordinate of the pos.
+     * @param z the z coordinate of the pos.
+     *
+     * @return the biome at the specified pos.
+     */
+    default BiomeType getBiome(int x, int y, int z) {
+        if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
+            return BiomeId.PLAINS;
+
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        if (chunk == null) {
+            chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+        }
+
+        return chunk.getBiome(x & 15, y, z & 15);
+    }
+
+    /**
+     * Set the biome at the specified pos.
+     *
+     * @param pos   the pos.
+     * @param biome the biome to set.
+     */
+    default void setBiome(Vector3ic pos, BiomeType biome) {
+        setBiome(pos.x(), pos.y(), pos.z(), biome);
+    }
+
+    /**
+     * Set the biome at the specified pos.
+     *
+     * @param x     the x coordinate of the pos.
+     * @param y     the y coordinate of the pos.
+     * @param z     the z coordinate of the pos.
+     * @param biome the biome to set.
+     */
+    default void setBiome(int x, int y, int z, BiomeType biome) {
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        if (chunk == null) {
+            chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+        }
+
+        chunk.setBiome(x & 15, y, z & 15, biome);
     }
 }

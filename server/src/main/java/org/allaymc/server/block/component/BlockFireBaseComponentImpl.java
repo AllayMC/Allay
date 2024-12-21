@@ -20,6 +20,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.server.world.biome.BiomeData;
 import org.joml.Vector3i;
 
 import java.util.Set;
@@ -124,16 +125,18 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
             }
         }
 
-        // TODO: decrease the value of base if the rainfall values are high
-        var base = 0;
-        trySpreadFireOn(blockStateWithPos, blockStateWithPos.offsetPos(BlockFace.EAST), 300 + base, age);
-        trySpreadFireOn(blockStateWithPos, blockStateWithPos.offsetPos(BlockFace.WEST), 300 + base, age);
-        trySpreadFireOn(blockStateWithPos, blockStateWithPos.offsetPos(BlockFace.DOWN), 250 + base, age);
-        trySpreadFireOn(blockStateWithPos, blockStateWithPos.offsetPos(BlockFace.UP), 250 + base, age);
-        trySpreadFireOn(blockStateWithPos, blockStateWithPos.offsetPos(BlockFace.SOUTH), 300 + base, age);
-        trySpreadFireOn(blockStateWithPos, blockStateWithPos.offsetPos(BlockFace.NORTH), 300 + base, age);
+        burnBlockAround(blockStateWithPos, age);
+        spreadFire(blockStateWithPos);
+    }
 
-        trySpreadFire(blockStateWithPos);
+    private void burnBlockAround(BlockStateWithPos blockStateWithPos, Integer age) {
+        // TODO: INCREASED_FIRE_BURNOUT
+        for (var face : BlockFace.getHorizontalBlockFaces()) {
+            burnBlock(blockStateWithPos, blockStateWithPos.offsetPos(face), 300, age);
+        }
+
+        burnBlock(blockStateWithPos, blockStateWithPos.offsetPos(BlockFace.UP), 250, age);
+        burnBlock(blockStateWithPos, blockStateWithPos.offsetPos(BlockFace.DOWN), 250, age);
     }
 
     protected boolean tryConvertToSoulFire(BlockStateWithPos blockStateWithPos) {
@@ -149,7 +152,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         return false;
     }
 
-    protected void trySpreadFire(BlockStateWithPos source) {
+    protected void spreadFire(BlockStateWithPos source) {
         var random = ThreadLocalRandom.current();
         var pos = source.pos();
         var x = pos.x();
@@ -176,10 +179,12 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
                     if (ly > y + 1) {
                         k += (ly - (y + 1)) * 100;
                     }
-                    // TODO: decrease the value of t if the rainfall values are high
-                    var t = (flameOdds + 40 + dimension.getWorld().getWorldData().getDifficulty().ordinal() * 7) / (age + 30);
+                    var maxChance = (flameOdds + 40 + dimension.getWorld().getWorldData().getDifficulty().ordinal() * 7) / (age + 30);
+                    if (BiomeData.getBiomeData(dimension.getBiome(lx, ly, lz)).isHumid()) {
+                        maxChance /= 2;
+                    }
 
-                    if (t > 0 && random.nextInt(k) <= t) {
+                    if (maxChance > 0 && random.nextInt(k) <= maxChance) {
                         var newAge = Math.min(age + (random.nextInt(5) >> 2), 15);
                         var localBlockStateWithPos = new BlockStateWithPos(localBlockState, new Position3i(lx, ly, lz, dimension), 0);
                         var event = new BlockIgniteEvent(localBlockStateWithPos, source, null, BlockIgniteEvent.BlockIgniteCause.SPREAD);
@@ -194,7 +199,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
         }
     }
 
-    protected void trySpreadFireOn(BlockStateWithPos source, BlockStateWithPos target, int bound, int sourceFireAge) {
+    protected void burnBlock(BlockStateWithPos source, BlockStateWithPos target, int bound, int sourceFireAge) {
         var targetBlockState = target.blockState();
         var dimension = source.dimension();
         var random = ThreadLocalRandom.current();
@@ -261,12 +266,9 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
             return 0;
         } else {
             int flameOdds = 0;
-            flameOdds = Math.max(flameOdds, blockStateWithPos.offsetPos(BlockFace.EAST).blockState().getBlockStateData().flameOdds());
-            flameOdds = Math.max(flameOdds, blockStateWithPos.offsetPos(BlockFace.WEST).blockState().getBlockStateData().flameOdds());
-            flameOdds = Math.max(flameOdds, blockStateWithPos.offsetPos(BlockFace.DOWN).blockState().getBlockStateData().flameOdds());
-            flameOdds = Math.max(flameOdds, blockStateWithPos.offsetPos(BlockFace.UP).blockState().getBlockStateData().flameOdds());
-            flameOdds = Math.max(flameOdds, blockStateWithPos.offsetPos(BlockFace.SOUTH).blockState().getBlockStateData().flameOdds());
-            flameOdds = Math.max(flameOdds, blockStateWithPos.offsetPos(BlockFace.NORTH).blockState().getBlockStateData().flameOdds());
+            for (var face : BlockFace.values()) {
+                flameOdds = Math.max(flameOdds, blockStateWithPos.offsetPos(face).blockState().getBlockStateData().flameOdds());
+            }
             return flameOdds;
         }
     }
