@@ -30,6 +30,10 @@ public record Structure(
     static int formatVersion = 1;
 
     public static Structure getStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
+        return getStructure(dimension, x, y, z, sizeX, sizeY, sizeZ,true);
+    }
+
+    public static Structure getStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ,boolean saveEntities) {
         var blockStates = new BlockState[2][sizeX][sizeY][sizeZ];
         var blockEntities = new HashMap<Vector3ic, NbtMap>();
         var entities = new ArrayList<NbtMap>();
@@ -66,12 +70,14 @@ public record Structure(
                                 blockEntities.put(new Vector3i(entityX - x, entityY - y, entityZ - z), value.saveNBT());
                             }
                         });
-                        c.getEntities().forEach((runtimeID, value) -> {
-                            var location = value.getLocation();
-                            if (x <= location.x() && x + sizeX > location.x() && y <= location.y() && y + sizeY > location.y() && z <= location.z() && z + sizeZ > location.z()) {
-                                entities.add(value.saveNBT());
-                            }
-                        });
+                        if(saveEntities){
+                            c.getEntities().forEach((runtimeID, value) -> {
+                                var location = value.getLocation();
+                                if (x <= location.x() && x + sizeX > location.x() && y <= location.y() && y + sizeY > location.y() && z <= location.z() && z + sizeZ > location.z()) {
+                                    entities.add(value.saveNBT());
+                                }
+                            });
+                        }
                     });
                 } else {
                     var structureVoid = STRUCTURE_VOID.getDefaultState();
@@ -123,6 +129,7 @@ public record Structure(
                     });
                 }
                 for (var i : blockEntities.entrySet()) {
+                    // ToDo: will it work? what is the right way do that?
                     dimension.getBlockEntity(i.getKey()).loadNBT(i.getValue());
                 }
                 for (var i : entities) {
