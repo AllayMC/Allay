@@ -7,14 +7,14 @@ import java.io.ByteArrayOutputStream
  * This is not the same as the version of allay-api.
  * Please note that they are two things.
  */
-version = "0.1.0"
+version = "0.1.1"
 /**
  * Indicates whether the current build is a development build.
  *
  * This value should be changed to false before release the next stable version,
  * and after releasing, change it back to true.
  */
-val isDevBuild = false;
+val isDevBuild = true;
 
 plugins {
     id("jacoco")
