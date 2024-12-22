@@ -63,7 +63,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
         if (entity instanceof EntityDamageComponent damageComponent && damageComponent.getOnFireTicks() > 0) {
             damageComponent.setOnFireTicks(0);
-            entity.getDimension().addParticle(ParticleType.WHITE_SMOKE, entity.getLocation());
+            entity.getDimension().addParticle(entity.getLocation(), ParticleType.WHITE_SMOKE);
             entity.getDimension().addLevelSoundEvent(entity.getLocation(), SoundEvent.EXTINGUISH_FIRE);
         }
     }

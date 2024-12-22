@@ -265,7 +265,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         for (float x = offsetAABB.minX(); x <= offsetAABB.maxX(); x += 0.5f) {
             for (float z = offsetAABB.minZ(); z <= offsetAABB.maxZ(); z += 0.5f) {
                 for (float y = offsetAABB.minY(); y <= offsetAABB.maxY(); y += 0.5f) {
-                    this.getDimension().addParticle(ParticleType.EXPLODE, new Vector3f(x, y, z));
+                    this.getDimension().addParticle(x, y, z, ParticleType.EXPLODE);
                 }
             }
         }

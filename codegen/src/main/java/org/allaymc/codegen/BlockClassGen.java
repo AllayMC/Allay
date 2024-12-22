@@ -218,7 +218,8 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*(Leaves\\d?|LeavesFlowered)Behavior"), "BlockLeavesBehavior");
         registerMergedBlock(Pattern.compile(".*AnvilBehavior"), "BlockAnvilBehavior");
         registerMergedBlock(Pattern.compile(".*ShulkerBoxBehavior"), "BlockShulkerBoxBehavior");
-        registerMergedBlock(Pattern.compile(".*StairsBehavior"), "BlockStairsBehavior");
+        registerMergedBlock(Pattern.compile("Block(?!.*Copper).*?StairsBehavior"), "BlockStairsBehavior");
+        registerMergedBlock(Pattern.compile("Block(?=.*Copper).*?StairsBehavior"), "BlockCopperStairsBehavior");
         registerMergedBlock(Pattern.compile(".*ColoredTorch.*Behavior"), "BlockColoredTorchBehavior");
         registerMergedBlock(Pattern.compile(".*RedstoneTorchBehavior"), "BlockRedstoneTorchBehavior");
         registerMergedBlock(Pattern.compile(".*BlastFurnaceBehavior"), "BlockBlastFurnaceBehavior");
@@ -242,7 +243,7 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile("BlockElement.*"), "BlockElementBehavior");
         registerMergedBlock(Pattern.compile(".*WallBehavior"), "BlockWallBehavior");
         registerMergedBlock(Pattern.compile(".*TerracottaBehavior"), "BlockTerracottaBehavior");
-        registerMergedBlock(Pattern.compile(".*CopperBehavior"), "BlockCopperBehavior");
+        registerMergedBlock(Pattern.compile("(?<!BlockRaw)(CopperBehavior|CopperBlockBehavior)"), "BlockCopperBehavior");
         registerMergedBlock(Pattern.compile(".*(?:Water|Lava)Behavior"), "BlockLiquidBehavior");
         registerMergedBlock(Pattern.compile(".*PlanksBehavior"), "BlockPlanksBehavior");
         registerMergedBlock(Pattern.compile(".*GlassBehavior"), "BlockGlassBehavior");
@@ -270,5 +271,7 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*TrapdoorBehavior"), "BlockTrapdoorBehavior");
         registerMergedBlock(Pattern.compile(".*SandstoneBehavior"), "BlockSandstoneBehavior");
         registerMergedBlock(Pattern.compile(".*FireBehavior"), "BlockFireBehavior");
+        registerMergedBlock(Pattern.compile(".*CopperBulbBehavior"), "BlockCopperBulbBehavior");
+        registerMergedBlock(Pattern.compile(".*CopperGrateBehavior"), "BlockCopperGrateBehavior");
     }
 }

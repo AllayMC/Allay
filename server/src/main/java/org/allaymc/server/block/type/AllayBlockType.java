@@ -350,8 +350,9 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
                 ));
 
         public Builder(Class<?> clazz) {
-            if (clazz == null)
+            if (clazz == null) {
                 throw new BlockTypeBuildException("Interface class cannot be null!");
+            }
             this.clazz = clazz;
         }
 
@@ -462,7 +463,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             List<ComponentProvider<? extends Component>> componentProviderList = listComponents.stream().map(singleton -> ComponentProvider.of($ -> singleton, singleton.getClass())).collect(Collectors.toList());
 
             try {
-                type.blockBehavior = (T) clazz.getConstructors()[0].newInstance(componentProviderList);
+                type.blockBehavior = (T) clazz.getDeclaredConstructor(List.class).newInstance(componentProviderList);
             } catch (Throwable t) {
                 throw new BlockTypeBuildException("Failed to create block type!", t);
             }

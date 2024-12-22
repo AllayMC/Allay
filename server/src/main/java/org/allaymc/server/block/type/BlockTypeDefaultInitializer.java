@@ -1474,7 +1474,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COPPER_BLOCK == null) {
             BlockTypes.COPPER_BLOCK = AllayBlockType
-                    .builder(BlockCopperBlockBehaviorImpl.class)
+                    .builder(BlockCopperBehaviorImpl.class)
                     .vanillaBlock(BlockId.COPPER_BLOCK)
                     .build();
         }
@@ -1716,7 +1716,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CUT_COPPER_STAIRS == null) {
             BlockTypes.CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -3231,7 +3231,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_COPPER_BULB == null) {
             BlockTypes.EXPOSED_COPPER_BULB = AllayBlockType
-                    .builder(BlockExposedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -3245,7 +3245,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_COPPER_GRATE == null) {
             BlockTypes.EXPOSED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockExposedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_COPPER_GRATE)
                     .build();
         }
@@ -3271,7 +3271,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_CUT_COPPER_STAIRS == null) {
             BlockTypes.EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -5299,7 +5299,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_COPPER_BULB == null) {
             BlockTypes.OXIDIZED_COPPER_BULB = AllayBlockType
-                    .builder(BlockOxidizedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -5313,7 +5313,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_COPPER_GRATE == null) {
             BlockTypes.OXIDIZED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockOxidizedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_COPPER_GRATE)
                     .build();
         }
@@ -5339,7 +5339,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_CUT_COPPER_STAIRS == null) {
             BlockTypes.OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7661,7 +7661,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_COPPER_BULB == null) {
             BlockTypes.WAXED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWaxedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7675,7 +7675,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_COPPER_GRATE == null) {
             BlockTypes.WAXED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWaxedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_COPPER_GRATE)
                     .build();
         }
@@ -7701,7 +7701,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WAXED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7727,7 +7727,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_COPPER_BULB == null) {
             BlockTypes.WAXED_EXPOSED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWaxedExposedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7741,7 +7741,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_COPPER_GRATE == null) {
             BlockTypes.WAXED_EXPOSED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWaxedExposedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_COPPER_GRATE)
                     .build();
         }
@@ -7767,7 +7767,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WAXED_EXPOSED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7793,7 +7793,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_BULB == null) {
             BlockTypes.WAXED_OXIDIZED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWaxedOxidizedCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7807,7 +7807,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_COPPER_GRATE == null) {
             BlockTypes.WAXED_OXIDIZED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWaxedOxidizedCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_COPPER_GRATE)
                     .build();
         }
@@ -7833,7 +7833,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WAXED_OXIDIZED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7859,7 +7859,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_COPPER_BULB == null) {
             BlockTypes.WAXED_WEATHERED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWaxedWeatheredCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7873,7 +7873,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_COPPER_GRATE == null) {
             BlockTypes.WAXED_WEATHERED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWaxedWeatheredCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_COPPER_GRATE)
                     .build();
         }
@@ -7899,7 +7899,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WAXED_WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();
@@ -7925,7 +7925,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_COPPER_BULB == null) {
             BlockTypes.WEATHERED_COPPER_BULB = AllayBlockType
-                    .builder(BlockWeatheredCopperBulbBehaviorImpl.class)
+                    .builder(BlockCopperBulbBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_COPPER_BULB)
                     .setProperties(BlockPropertyTypes.LIT, BlockPropertyTypes.POWERED_BIT)
                     .build();
@@ -7939,7 +7939,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_COPPER_GRATE == null) {
             BlockTypes.WEATHERED_COPPER_GRATE = AllayBlockType
-                    .builder(BlockWeatheredCopperGrateBehaviorImpl.class)
+                    .builder(BlockCopperGrateBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_COPPER_GRATE)
                     .build();
         }
@@ -7965,7 +7965,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_CUT_COPPER_STAIRS == null) {
             BlockTypes.WEATHERED_CUT_COPPER_STAIRS = AllayBlockType
-                    .builder(BlockStairsBehaviorImpl.class)
+                    .builder(BlockCopperStairsBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_CUT_COPPER_STAIRS)
                     .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                     .build();

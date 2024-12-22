@@ -21,6 +21,14 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 @SuppressWarnings("unused")
 @UtilityClass
 public final class ItemTypeInitializer {
+    public static void initHoneycomb() {
+        ItemTypes.HONEYCOMB = AllayItemType
+                .builder(ItemHoneycombStackImpl.class)
+                .vanillaItem(ItemId.HONEYCOMB)
+                .addComponent(ItemHoneycombBaseComponentImpl::new, ItemHoneycombBaseComponentImpl.class)
+                .build();
+    }
+
     public static void initMusicDiscs() {
         ItemTypes.MUSIC_DISC_13 = buildMusicDisc(ItemId.MUSIC_DISC_13, SoundEvent.RECORD_13);
         ItemTypes.MUSIC_DISC_CAT = buildMusicDisc(ItemId.MUSIC_DISC_CAT, SoundEvent.RECORD_CAT);
@@ -464,12 +472,12 @@ public final class ItemTypeInitializer {
         return buildSpawnEgg(itemId, null);
     }
 
-    private static ItemType<ItemSpawnEggStack> buildSpawnEgg(ItemId itemId, EntityId entityId) {
+    private static ItemType<ItemSpawnEggStack> buildSpawnEgg(ItemId itemId, EntityId customEntityId) {
         return AllayItemType
                 .builder(ItemSpawnEggStackImpl.class)
                 .vanillaItem(itemId)
                 .addComponent(
-                        initInfo -> new ItemSpawnEggBaseComponentImpl(initInfo, entityId != null ? entityId.getIdentifier() : null),
+                        initInfo -> new ItemSpawnEggBaseComponentImpl(initInfo, customEntityId != null ? customEntityId.getIdentifier() : null),
                         ItemSpawnEggBaseComponentImpl.class
                 )
                 .build();

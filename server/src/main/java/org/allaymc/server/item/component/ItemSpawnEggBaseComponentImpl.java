@@ -15,23 +15,23 @@ import org.joml.Vector3ic;
  */
 @Slf4j
 public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl {
-    protected Identifier entityId;
+    protected Identifier customEntityId;
 
-    public ItemSpawnEggBaseComponentImpl(ItemStackInitInfo initInfo, Identifier entityId) {
+    public ItemSpawnEggBaseComponentImpl(ItemStackInitInfo initInfo, Identifier customEntityId) {
         super(initInfo);
-        this.entityId = entityId;
+        this.customEntityId = customEntityId;
     }
 
     @Override
     public boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo) {
         if (interactInfo == null) return false;
 
-        if (this.entityId == null) {
+        if (this.customEntityId == null) {
             var identifier = thisItemStack.getItemType().getIdentifier();
-            this.entityId = new Identifier(identifier.toString().replace("_spawn_egg", ""));
+            this.customEntityId = new Identifier(identifier.toString().replace("_spawn_egg", ""));
         }
 
-        var entity = Registries.ENTITIES.get(this.entityId).createEntity(
+        var entity = Registries.ENTITIES.get(this.customEntityId).createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
                         .pos(interactInfo.clickedPos().add(
