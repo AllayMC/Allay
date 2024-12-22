@@ -136,3 +136,5 @@ nav:
   - Advanced:
       - Use Color Codes: advanced/use-color-codes.md
       - Update to The Next Protocol Version: advanced/update-to-the-next-protocol-version.md
+
+  - Changelog: changelog.md

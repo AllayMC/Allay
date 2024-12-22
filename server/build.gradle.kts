@@ -14,7 +14,7 @@ version = "0.1.0"
  * This value should be changed to false before release the next stable version,
  * and after releasing, change it back to true.
  */
-val isDevBuild = true;
+val isDevBuild = false;
 
 plugins {
     id("jacoco")
