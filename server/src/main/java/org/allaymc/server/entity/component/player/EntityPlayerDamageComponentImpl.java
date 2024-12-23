@@ -117,11 +117,11 @@ public class EntityPlayerDamageComponentImpl extends EntityDamageComponentImpl {
                 lastDamage.getDamageType().getDeathInfo(thisPlayer, lastDamage.getAttacker()) :
                 DamageContainer.DamageType.API.getDeathInfo(thisPlayer, null);
 
-        Server.getInstance().broadcastTr(deathInfo.first(), deathInfo.second());
+        Server.getInstance().broadcastTr(deathInfo.left(), (Object[]) deathInfo.right());
 
         var packet = new DeathInfoPacket();
         // Translate it server-side
-        packet.setCauseAttackName(I18n.get().tr(thisPlayer.getLangCode(), deathInfo.first(), deathInfo.second()));
+        packet.setCauseAttackName(I18n.get().tr(thisPlayer.getLangCode(), deathInfo.left(), (Object[]) deathInfo.right()));
         thisPlayer.sendPacket(packet);
     }
 }

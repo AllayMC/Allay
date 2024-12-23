@@ -718,16 +718,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
-        if (forceTranslatedByClient) {
-            var packet = new TextPacket();
-            packet.setType(TextPacket.Type.TRANSLATION);
-            packet.setXuid("");
-            packet.setNeedsTranslation(true);
-            packet.setMessage(key);
-            packet.setParameters(List.of(args));
-            networkComponent.sendPacket(packet);
-        } else sendText(I18n.get().tr(thisPlayer.getLangCode(), key, args));
+    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
+        if (!forceTranslatedByClient) {
+            sendText(I18n.get().tr(thisPlayer.getLangCode(), key, args));
+            return;
+        }
+
+        var packet = new TextPacket();
+        packet.setType(TextPacket.Type.TRANSLATION);
+        packet.setXuid("");
+        packet.setNeedsTranslation(true);
+        packet.setMessage(key);
+        packet.setParameters(List.of(Utils.objectArrayToStringArray(args)));
+        networkComponent.sendPacket(packet);
     }
 
     @Override

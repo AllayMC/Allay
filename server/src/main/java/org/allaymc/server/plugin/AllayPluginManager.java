@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class AllayPluginManager implements PluginManager {
 
     protected static Set<PluginSource> sources = new HashSet<>();
-    protected static Set<PluginLoader.PluginLoaderFactory> loaderFactories = new HashSet<>();
+    protected static Set<PluginLoader.Factory> loaderFactories = new HashSet<>();
 
     protected Map<String, PluginContainer> plugins = new HashMap<>();
     protected HashDirectedAcyclicGraph<String> dag = new HashDirectedAcyclicGraph<>();
@@ -32,10 +32,10 @@ public class AllayPluginManager implements PluginManager {
 
     public AllayPluginManager() {
         registerSource(new DefaultPluginSource());
-        registerLoaderFactory(new JarPluginLoader.JarPluginLoaderFactory());
+        registerLoaderFactory(new JarPluginLoader.Factory());
     }
 
-    public static void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory) {
+    public static void registerLoaderFactory(PluginLoader.Factory loaderFactory) {
         loaderFactories.add(loaderFactory);
     }
 

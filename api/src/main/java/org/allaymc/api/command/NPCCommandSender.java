@@ -45,7 +45,7 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
+    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
         // Do nothing
     }
 

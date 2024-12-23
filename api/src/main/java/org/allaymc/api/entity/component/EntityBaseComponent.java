@@ -280,7 +280,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param value the value to set.
      */
     default void setAndSendEntityFlag(EntityFlag flag, boolean value) {
-        if (value == getMetadata().get(flag)) return;
+        if (value == getMetadata().get(flag)) {
+            return;
+        }
         getMetadata().set(flag, value);
         sendMetadata();
     }

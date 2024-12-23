@@ -370,13 +370,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void broadcastTr(@MayContainTrKey String tr) {
-        getOnlinePlayers().values().forEach(player -> player.sendTr(tr));
-        sendTr(tr);
-    }
-
-    @Override
-    public void broadcastTr(@MayContainTrKey String tr, String... args) {
+    public void broadcastTr(@MayContainTrKey String tr, Object... args) {
         getOnlinePlayers().values().forEach(player -> player.sendTr(tr, args));
         sendTr(tr, args);
     }
@@ -496,7 +490,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
+    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
         // forceTranslatedByClient is unused
         log.info(I18n.get().tr(key, args));
     }

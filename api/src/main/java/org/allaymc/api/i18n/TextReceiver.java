@@ -1,7 +1,6 @@
 package org.allaymc.api.i18n;
 
 import org.allaymc.api.command.CommandSender;
-import org.allaymc.api.utils.Utils;
 
 /**
  * Represents a text receiver.
@@ -17,42 +16,27 @@ public interface TextReceiver {
     void sendText(String text);
 
     /**
-     * Send a text which may contains translation key to the receiver.
-     *
-     * @param key                     the text which may contains translation key.
-     * @param forceTranslatedByClient whether the text should be translated by the client.
-     * @param args                    the arguments used in the translation.
+     * @see #sendTr(String, boolean, Object...)
      */
-    void sendTr(@MayContainTrKey String key, boolean forceTranslatedByClient, String... args);
+    default void sendTr(@MayContainTrKey String key) {
+        sendTr(key, new Object[0]);
+    }
 
     /**
-     * Send a text which may contains translation key to the receiver.
-     *
-     * @param key  the text which may contains translation key.
-     * @param args the arguments used in the translation.
+     * @see #sendTr(String, boolean, Object...)
      */
-    default void sendTr(@MayContainTrKey String key, String... args) {
+    default void sendTr(@MayContainTrKey String key, Object... args) {
         sendTr(key, false, args);
     }
 
     /**
      * Send a text which may contains translation key to the receiver.
      *
-     * @param key  the text which may contains translation key.
-     * @param args the arguments used in the translation.
+     * @param key                     the text which may contains translation key.
+     * @param forceTranslatedByClient whether the text should be translated by the client.
+     * @param args                    the arguments used in the translation.
      */
-    default void sendTr(@MayContainTrKey String key, Object... args) {
-        sendTr(key, Utils.objectArrayToStringArray(args));
-    }
-
-    /**
-     * Send a text which may contains translation key to the receiver.
-     *
-     * @param key the text which may contains translation key.
-     */
-    default void sendTr(@MayContainTrKey String key) {
-        sendTr(key, false, Utils.EMPTY_STRING_ARRAY);
-    }
+    void sendTr(@MayContainTrKey String key, boolean forceTranslatedByClient, Object... args);
 
     /**
      * Send the command outputs to the receiver.

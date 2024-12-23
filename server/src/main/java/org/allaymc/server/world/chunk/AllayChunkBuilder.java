@@ -26,6 +26,14 @@ public class AllayChunkBuilder {
     private List<NbtMap> blockEntitiyList;
     private Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
 
+    private static ChunkSection[] createEmptySections(DimensionInfo dimensionInfo) {
+        var sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
+        for (int i = 0; i < sections.length; i++) {
+            sections[i] = new ChunkSection((byte) (i + dimensionInfo.minSectionY()));
+        }
+        return sections;
+    }
+
     public AllayChunkBuilder chunkX(int chunkX) {
         this.chunkX = chunkX;
         return this;
@@ -95,20 +103,12 @@ public class AllayChunkBuilder {
     }
 
     public AllayUnsafeChunk newChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        var chunk = new AllayUnsafeChunk(
+        return new AllayUnsafeChunk(
                 chunkX, chunkZ, dimensionInfo,
                 createEmptySections(dimensionInfo),
                 new HeightMap((short) dimensionInfo.minHeight()),
                 new Int2ObjectNonBlockingMap<>(),
-                ChunkState.NEW, null, null);
-        return chunk;
-    }
-
-    private static ChunkSection[] createEmptySections(DimensionInfo dimensionInfo) {
-        var sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
-        for (int i = 0; i < sections.length; i++) {
-            sections[i] = new ChunkSection((byte) (i + dimensionInfo.minSectionY()));
-        }
-        return sections;
+                ChunkState.NEW, null, null
+        );
     }
 }

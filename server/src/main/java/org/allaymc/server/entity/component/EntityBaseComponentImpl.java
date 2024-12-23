@@ -864,7 +864,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
+    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
         // Do nothing
     }
 
