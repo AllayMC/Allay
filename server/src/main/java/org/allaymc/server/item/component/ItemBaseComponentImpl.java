@@ -188,13 +188,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void setCount(int count) {
-        Preconditions.checkArgument(count > 0, "Count must be greater than 0");
+        // Setting count to zero is valid, because in some places we need to write like this
+        Preconditions.checkArgument(count >= 0, "Count must be greater or equal to 0");
         this.count = count;
     }
 
     @Override
     public void setMeta(int meta) {
-        Preconditions.checkArgument(meta > 0, "Meta must be greater than 0");
+        Preconditions.checkArgument(meta >= 0, "Meta must be greater or equal to 0");
         this.meta = meta;
     }
 
