@@ -24,6 +24,7 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
@@ -314,15 +315,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    protected void teleportInDimension(Location3fc target) {
-        super.teleportInDimension(target);
+    protected void teleportInDimension(Location3fc target, EntityTeleportEvent.Reason reason) {
+        super.teleportInDimension(target, reason);
         // For player, we also need to send move packet to client
         // However, there is no need to send motion packet as we are teleporting the player
-        sendLocationToSelf();
+        sendLocationToSelf(reason);
     }
 
     @Override
-    protected void teleportOverDimension(Location3fc target) {
+    protected void teleportOverDimension(Location3fc target, EntityTeleportEvent.Reason reason) {
         var currentDim = location.dimension();
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
@@ -338,7 +339,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         location.dimension().removePlayer(thisPlayer, () -> {
             targetDim.getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
             setLocationBeforeSpawn(target);
-            sendLocationToSelf();
+            sendLocationToSelf(EntityTeleportEvent.Reason.UNKNOWN);
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
                 var packet = new ChangeDimensionPacket();
                 packet.setDimension(targetDim.getDimensionInfo().dimensionId());
@@ -606,7 +607,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.spawnPoint = spawnPoint;
     }
 
-    public void sendLocationToSelf() {
+    public void sendLocationToSelf(EntityTeleportEvent.Reason reason) {
         // Use MovePlayerPacket so that client will send
         // back teleport ack in PlayerAuthInputPacket
         var pk = new MovePlayerPacket();
@@ -615,7 +616,12 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
         pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         pk.setMode(MovePlayerPacket.Mode.TELEPORT);
-        pk.setTeleportationCause(MovePlayerPacket.TeleportationCause.UNKNOWN);
+        pk.setTeleportationCause(switch (reason) {
+            case UNKNOWN -> MovePlayerPacket.TeleportationCause.UNKNOWN;
+            case PROJECTILE -> MovePlayerPacket.TeleportationCause.PROJECTILE;
+            case CHORUS_FRUIT -> MovePlayerPacket.TeleportationCause.CHORUS_FRUIT;
+            case COMMAND -> MovePlayerPacket.TeleportationCause.COMMAND;
+        });
         networkComponent.sendPacket(pk);
     }
 

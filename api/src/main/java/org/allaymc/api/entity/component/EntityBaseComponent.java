@@ -12,6 +12,7 @@ import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
@@ -183,7 +184,17 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param location the location to teleport the entity to.
      */
-    void teleport(Location3fc location);
+    default void teleport(Location3fc location) {
+        teleport(location, EntityTeleportEvent.Reason.UNKNOWN);
+    }
+
+    /**
+     * Teleport the entity to the specified location.
+     *
+     * @param location the location to teleport the entity to.
+     * @param reason   the reason of the teleport.
+     */
+    void teleport(Location3fc location, EntityTeleportEvent.Reason reason);
 
     /**
      * Teleport the entity to the specified location asynchronously.

@@ -15,14 +15,28 @@ public class EntityTeleportEvent extends EntityEvent implements CancellableEvent
     protected Location3fc from;
     @Setter
     protected Location3f to;
+    @Getter
+    protected Reason reason;
 
-    public EntityTeleportEvent(Entity entity, Location3fc from, Location3f to) {
+    public EntityTeleportEvent(Entity entity, Location3fc from, Location3f to, Reason reason) {
         super(entity);
         this.from = from;
         this.to = to;
+        this.reason = reason;
     }
 
     public boolean isTeleportBetweenWorlds() {
         return from.dimension().getWorld() != to.dimension().getWorld();
+    }
+
+    public enum Reason {
+        // Unknown reason, may be caused by plugin
+        UNKNOWN,
+        // Ender pearl
+        PROJECTILE,
+        // Chorus fruit
+        CHORUS_FRUIT,
+        // Command
+        COMMAND
     }
 }

@@ -1,6 +1,7 @@
 package org.allaymc.server.network.processor.impl.login;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.network.ClientStatus;
@@ -27,7 +28,7 @@ public class SetLocalPlayerAsInitializedPacketProcessor extends ILoginPacketProc
         // We only accept player's movement inputs, which are after SetLocalPlayerAsInitializedPacket,
         // So after player sent SetLocalPlayerAsInitializedPacket, we need to sync the pos with client
         // Otherwise the client will snap into the ground
-        ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).sendLocationToSelf();
+        ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).sendLocationToSelf(EntityTeleportEvent.Reason.UNKNOWN);
     }
 
     @Override
