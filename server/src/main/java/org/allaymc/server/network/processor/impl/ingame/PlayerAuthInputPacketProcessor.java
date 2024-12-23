@@ -220,7 +220,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected void updateBreakingTime(EntityPlayer player, long currentTime) {
         var newBreakingTime = breakBlock.getBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
-        if (needBreakTime == newBreakingTime) return;
+        if (needBreakTime == newBreakingTime) {
+            return;
+        }
+        
         // Breaking time has changed, make adjustments
         var timeLeft = stopBreakTime - currentTime;
         stopBreakTime = currentTime + timeLeft * (needBreakTime / newBreakingTime);
@@ -255,7 +258,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     @Override
     public PacketSignal handleAsync(EntityPlayer player, PlayerAuthInputPacket packet, long receiveTime) {
-        if (notReadyForInput(player)) return PacketSignal.HANDLED;
+        if (notReadyForInput(player)) {
+            return PacketSignal.HANDLED;
+        }
+
         // The pos which client sends to the server is higher than the actual coordinates (one base offset)
         handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
@@ -270,7 +276,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         // We had no idea why the client still use PlayerAuthInputPacket to hold ItemStackRequest
         // Instead of using ItemStackRequestPacket
         // This seems only happen when player break a block (MineBlockAction)
-        if (request == null) return;
+        if (request == null) {
+            return;
+        }
+
         var pk = new ItemStackRequestPacket();
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor

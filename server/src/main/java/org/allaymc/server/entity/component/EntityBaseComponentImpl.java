@@ -350,8 +350,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     public boolean setLocationAndCheckChunk(Location3fc newLoc) {
+        return setLocationAndCheckChunk(newLoc, true);
+    }
+
+    public boolean setLocationAndCheckChunk(Location3fc newLoc, boolean calculateFallDistance) {
         if (checkChunk(this.location, newLoc)) {
-            setLocation(newLoc, true);
+            setLocation(newLoc, calculateFallDistance);
             return true;
         }
         return false;
@@ -411,7 +415,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target));
-        if (!event.call()) return;
+        if (!event.call()) {
+            return;
+        }
 
         target = event.getTo();
         if (this.location.dimension == target.dimension()) {
@@ -427,7 +433,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         // Ensure that the new chunk is loaded
         target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
         // This method should always return true because we have loaded the chunk
-        setLocationAndCheckChunk(target);
+        setLocationAndCheckChunk(target, false);
         broadcastMoveToViewers(target, true);
     }
 
@@ -614,8 +620,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             pk.setHeadYaw((float) newLoc.headYaw());
             locLastSent.headYaw = newLoc.headYaw();
         }
-        if (onGround) pk.getFlags().add(ON_GROUND);
-        if (teleporting) pk.getFlags().add(TELEPORTING);
+        if (onGround) {
+            pk.getFlags().add(ON_GROUND);
+        }
+        if (teleporting) {
+            pk.getFlags().add(TELEPORTING);
+        }
         return pk;
     }
 

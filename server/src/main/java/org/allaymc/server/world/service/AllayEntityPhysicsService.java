@@ -495,7 +495,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
         var event = new EntityMoveEvent(entity, entity.getLocation(), newLoc);
-        if (!event.call()) return false;
+        if (!event.call()) {
+            return false;
+        }
 
         newLoc = event.getTo();
 
