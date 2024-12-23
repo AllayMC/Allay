@@ -8,6 +8,12 @@ import org.allaymc.api.entity.Entity;
  * @author Cool_Loong
  */
 public interface EntityService {
+
+    /**
+     * Add an entity to the world.
+     *
+     * @param entity the entity pending to be spawned.
+     */
     default void addEntity(Entity entity) {
         addEntity(entity, () -> {});
     }
@@ -24,6 +30,11 @@ public interface EntityService {
      */
     void addEntity(Entity entity, Runnable callback);
 
+    /**
+     * Remove an entity from the world.
+     *
+     * @param entity the entity pending to be despawned.
+     */
     default void removeEntity(Entity entity) {
         removeEntity(entity, () -> {});
     }

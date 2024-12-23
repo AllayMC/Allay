@@ -420,6 +420,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         target = event.getTo();
+        beforeTeleport();
+        this.fallDistance = 0;
         if (this.location.dimension == target.dimension()) {
             // Teleporting in the current same dimension,
             // and we just need to move the entity to the new coordination
@@ -427,6 +429,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         } else {
             teleportOverDimension(target);
         }
+    }
+
+    protected void beforeTeleport() {
+        // This method is used by EntityPlayer
     }
 
     protected void teleportInDimension(Location3fc target) {

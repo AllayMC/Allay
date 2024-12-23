@@ -469,7 +469,17 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 var clientMove = queue.poll();
                 var player = clientMove.player();
                 // The player may have been removed
-                if (!entities.containsKey(player.getRuntimeId())) continue;
+                if (!entities.containsKey(player.getRuntimeId())) {
+                    continue;
+                }
+
+                var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
+                if (baseComponent.isAwaitingTeleportACK()) {
+                    // It is possible that client move already get into the move queue
+                    // before we set awatingTeleportACK to true, so here we should ignore all
+                    // client move until awatingTeleportACK become false.
+                    continue;
+                }
 
                 var event = new PlayerMoveEvent(player, player.getLocation(), clientMove.newLoc());
                 if (!event.call()) {
@@ -480,7 +490,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
                 // Calculate delta pos (motion)
                 var motion = event.getTo().sub(player.getLocation(), new Vector3f());
-                ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).setMotionValueOnly(motion);
+                baseComponent.setMotionValueOnly(motion);
                 if (updateEntityLocation(player, clientMove.newLoc())) {
                     entityAABBTree.update(player);
                 }
@@ -539,8 +549,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * See {@link PlayerAuthInputPacketProcessor#handleAsync(EntityPlayer, PlayerAuthInputPacket, long)}
      */
     public void offerClientMove(EntityPlayer player, Location3fc newLoc) {
-        if (!entities.containsKey(player.getRuntimeId())) return;
-        if (player.getLocation().equals(newLoc)) return;
+        if (!entities.containsKey(player.getRuntimeId()) || player.getLocation().equals(newLoc)) {
+            return;
+        }
+
         clientMoveQueue.computeIfAbsent(player.getRuntimeId(), $ -> new ConcurrentLinkedQueue<>()).offer(new ClientMove(player, newLoc));
     }
 

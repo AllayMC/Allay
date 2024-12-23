@@ -24,6 +24,7 @@ and any changes to API will have a prefix `(API)`.
 
 - (API) Fixed exception when setting item count or meta to zero.
 - Passing non-positive amount or negative meta arguments to `/give` command now will result in a syntax error.
+- Entity#teleport method now will reset fall distance correctly.
 
 ## [0.1.0](https://github.com/AllayMC/Allay/releases/tag/0.1.0) (API 0.1.0) - 2024-12-22
 

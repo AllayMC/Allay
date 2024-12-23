@@ -111,6 +111,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     @Setter
     protected boolean usingItemOnBlock;
+    @Getter
+    @Setter
+    protected boolean awaitingTeleportACK;
     // Set enchantment seed to a random value
     // and if player has enchantment seed previously,
     // this random value will be covered
@@ -286,6 +289,28 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             // It's much easier to just resend the inventory.
             thisPlayer.sendContentsWithSpecificContainerId(inventory, UnopenedContainerId.PLAYER_INVENTORY, slot);
         }
+    }
+
+    /**
+     * awaitingTeleportACK is used to solve the desynchronization of data at both ends.
+     * Because PlayerAuthInputPacket will be sent from the client to the server at a rate of 20 per second.
+     * After teleporting, the server still receives the PlayerAuthInputPacket sent by the client before teleporting.
+     * The following is a simple simulation (initial player position is (0, 1000, 0)):
+     * <p>
+     * [C->S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                           <br>
+     * [S] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
+     * [S->C] Send new pos (0, 100, 0) `pk2`                                                  <br>
+     * [S] Receive `pk1`, set player pos to (0, 999 ,0)                                       <br>
+     * [C] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
+     * [C->S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                           <br>
+     * [S] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
+     * <p>
+     *
+     * @see <a href="https://github.com/AllayMC/Allay/issues/517">teleport method should reset fall distance</a>
+     */
+    @Override
+    protected void beforeTeleport() {
+        this.awaitingTeleportACK = true;
     }
 
     @Override
@@ -582,7 +607,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     public void sendLocationToSelf() {
-        networkComponent.sendPacket(createMovePacket(location, true));
+        // Use MovePlayerPacket so that client will send
+        // back teleport ack in PlayerAuthInputPacket
+        var pk = new MovePlayerPacket();
+        pk.setRuntimeEntityId(runtimeId);
+        var location = getLocation();
+        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
+        pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
+        pk.setMode(MovePlayerPacket.Mode.TELEPORT);
+        pk.setTeleportationCause(MovePlayerPacket.TeleportationCause.UNKNOWN);
+        networkComponent.sendPacket(pk);
     }
 
     @Override

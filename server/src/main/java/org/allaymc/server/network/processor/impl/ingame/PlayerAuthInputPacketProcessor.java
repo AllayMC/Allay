@@ -83,25 +83,39 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
             switch (action.getAction()) {
                 case START_BREAK -> {
-                    if (isInvalidGameType(player)) continue;
+                    if (isInvalidGameType(player)) {
+                        continue;
+                    }
+
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace(), time);
                 }
                 case BLOCK_CONTINUE_DESTROY -> {
                     // When a player switches to breaking another block halfway through breaking one
-                    if (isInvalidGameType(player)) continue;
+                    if (isInvalidGameType(player)) {
+                        continue;
+                    }
+
                     // HACK: The client for some reason sends a meaningless BLOCK_CONTINUE_DESTROY before BLOCK_PREDICT_DESTROY, presumably a bug, so ignore it here
-                    if (breakBlockX == pos.getX() && breakBlockY == pos.getY() && breakBlockZ == pos.getZ()) continue;
+                    if (breakBlockX == pos.getX() && breakBlockY == pos.getY() && breakBlockZ == pos.getZ()) {
+                        continue;
+                    }
 
                     stopBreak(player);
                     startBreak(player, pos.getX(), pos.getY(), pos.getZ(), action.getFace(), time);
                 }
                 case BLOCK_PREDICT_DESTROY -> {
-                    if (isInvalidGameType(player)) continue;
+                    if (isInvalidGameType(player)) {
+                        continue;
+                    }
+
                     completeBreak(player, pos.getX(), pos.getY(), pos.getZ());
                 }
                 case ABORT_BREAK -> {
                     // Digging interrupted
-                    if (isInvalidGameType(player)) continue;
+                    if (isInvalidGameType(player)) {
+                        continue;
+                    }
+
                     stopBreak(player);
                 }
             }
@@ -231,7 +245,10 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected void handleInputData(EntityPlayer player, Set<PlayerAuthInputData> inputData) {
-        if (player.isDead()) return;
+        if (player.isDead()) {
+            return;
+        }
+
         for (var input : inputData) {
             switch (input) {
                 case START_SPRINTING -> player.setSprinting(true);
@@ -262,6 +279,14 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return PacketSignal.HANDLED;
         }
 
+        var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
+        if (packet.getInputData().contains(PlayerAuthInputData.HANDLE_TELEPORT)) {
+            baseComponent.setAwaitingTeleportACK(false);
+        }
+        if (baseComponent.isAwaitingTeleportACK()) {
+            return PacketSignal.HANDLED;
+        }
+
         // The pos which client sends to the server is higher than the actual coordinates (one base offset)
         handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
@@ -283,7 +308,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         var pk = new ItemStackRequestPacket();
         pk.getRequests().add(request);
         // Forward it to ItemStackRequestPacketProcessor
-        ((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).getPacketProcessorHolder().getProcessor(pk).handleSync(player, pk, receiveTime);
+        Objects.requireNonNull(((EntityPlayerNetworkComponentImpl) ((EntityPlayerImpl) player).getPlayerNetworkComponent()).getPacketProcessorHolder().getProcessor(pk)).handleSync(player, pk, receiveTime);
     }
 
     protected boolean notReadyForInput(EntityPlayer player) {
