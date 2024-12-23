@@ -2,7 +2,6 @@ package org.allaymc.api.i18n;
 
 import it.unimi.dsi.fastutil.Pair;
 import org.allaymc.api.ApiInstanceHolder;
-import org.allaymc.api.utils.Utils;
 
 /**
  * I18n is used to translate the text which contains translation key in the game.
@@ -38,91 +37,44 @@ public interface I18n {
      * @return true if the character is a valid key character, otherwise false
      */
     static boolean isValidKeyCharacter(char character) {
-        return character == '_' || character == '-' || character >= 'a' && character <= 'z' || character >= 'A' && character <= 'Z' || character >= '0' && character <= '9' || character == '.' || character == ':';
+        return character == '_' || character == '-' ||
+               character >= 'a' && character <= 'z' ||
+               character >= 'A' && character <= 'Z' ||
+               character >= '0' && character <= '9' ||
+               character == '.' || character == ':';
     }
 
     /**
-     * Translate the text which may contain translation key.
-     *
-     * @param langCode the lang code used.
-     * @param tr       the text, which may contain translation key.
-     * @param args     the arguments used in the translation.
-     *
-     * @return the translated text.
-     */
-    String tr(LangCode langCode, @MayContainTrKey String tr, String... args);
-
-    /**
-     * Translate the text which may contain translation key.
-     *
-     * @param langCode the lang code used.
-     * @param tr       the text, which may contain translation key.
-     * @param args     the arguments used in the translation.
-     *
-     * @return the translated text.
-     */
-    default String tr(LangCode langCode, @MayContainTrKey String tr, Object... args) {
-        return tr(langCode, tr, Utils.objectArrayToStringArray(args));
-    }
-
-    /**
-     * Translate the text which may contain translation key, using the default lang code.
-     *
-     * @param tr   the text, which may contain translation key.
-     * @param args the arguments used in the translation.
-     *
-     * @return the translated text.
-     */
-    default String tr(@MayContainTrKey String tr, String... args) {
-        return tr(getDefaultLangCode(), tr, args);
-    }
-
-    /**
-     * Translate the text which may contain translation key, using the default lang code.
-     *
-     * @param tr   the text, which may contain translation key.
-     * @param args the arguments used in the translation.
-     *
-     * @return the translated text.
-     */
-    default String tr(@MayContainTrKey String tr, Object... args) {
-        return tr(getDefaultLangCode(), tr, args);
-    }
-
-    /**
-     * Translate the text which may contain translation key.
-     *
-     * @param langCode the lang code used.
-     * @param tr       the text, which may contain translation key.
-     *
-     * @return the translated text.
-     */
-    String tr(LangCode langCode, @MayContainTrKey String tr);
-
-    /**
-     * Translate the text which may contain translation key, using the default lang code.
-     *
-     * @param tr the text, which may contain translation key.
-     *
-     * @return the translated text.
+     * @see #tr(LangCode, String, Object...)
      */
     default String tr(@MayContainTrKey String tr) {
         return tr(getDefaultLangCode(), tr);
     }
 
     /**
-     * Get the default lang code.
-     *
-     * @return the default lang code.
+     * @see #tr(LangCode, String, Object...)
      */
-    LangCode getDefaultLangCode();
+    default String tr(@MayContainTrKey String tr, Object... args) {
+        return tr(getDefaultLangCode(), tr, args);
+    }
 
     /**
-     * Set the default lang code.
-     *
-     * @param langCode the lang code.
+     * @see #tr(LangCode, String, Object...)
      */
-    void setDefaultLangCode(LangCode langCode);
+    default String tr(LangCode langCode, @MayContainTrKey String tr) {
+        return tr(langCode, tr, new Object[0]);
+    }
+
+    /**
+     * Translate the text which may contain translation key.
+     *
+     * @param langCode the lang code used.
+     * @param tr       the text, which may contain translation key.
+     * @param args     the arguments used in the translation.
+     *
+     * @return the translated text.
+     */
+    String tr(LangCode langCode, @MayContainTrKey String tr, Object... args);
 
     /**
      * Find the I18n key info in the string.
@@ -133,19 +85,31 @@ public interface I18n {
      */
     KeyInfo findI18nKey(@MayContainTrKey String str);
 
+    /**
+     * @see #toClientFriendlyStyle0(LangCode, String, Object...)
+     */
     default String toClientFriendlyStyle(@MayContainTrKey String tr) {
         return toClientFriendlyStyle(getDefaultLangCode(), tr);
     }
 
-    default String toClientFriendlyStyle(LangCode langCode, @MayContainTrKey String tr) {
-        return toClientFriendlyStyle(langCode, tr, Utils.EMPTY_STRING_ARRAY);
-    }
-
-    default String toClientFriendlyStyle(@MayContainTrKey String tr, String... args) {
+    /**
+     * @see #toClientFriendlyStyle0(LangCode, String, Object...)
+     */
+    default String toClientFriendlyStyle(@MayContainTrKey String tr, Object... args) {
         return toClientFriendlyStyle(getDefaultLangCode(), tr, args);
     }
 
-    default String toClientFriendlyStyle(LangCode langCode, @MayContainTrKey String tr, String... args) {
+    /**
+     * @see #toClientFriendlyStyle0(LangCode, String, Object...)
+     */
+    default String toClientFriendlyStyle(LangCode langCode, @MayContainTrKey String tr) {
+        return toClientFriendlyStyle(langCode, tr, new Object[0]);
+    }
+
+    /**
+     * @see #toClientFriendlyStyle0(LangCode, String, Object...)
+     */
+    default String toClientFriendlyStyle(LangCode langCode, @MayContainTrKey String tr, Object... args) {
         return toClientFriendlyStyle0(langCode, tr, args).first();
     }
 
@@ -166,23 +130,31 @@ public interface I18n {
      *
      * @return the converted text and whether the translation key is vanilla.
      */
-    default Pair<String, Boolean> toClientFriendlyStyle0(LangCode langCode, @MayContainTrKey String tr, String... args) {
+    default Pair<String, Boolean> toClientFriendlyStyle0(LangCode langCode, @MayContainTrKey String tr, Object... args) {
         var keyInfo = findI18nKey(tr);
-        var namespace = tr.substring(keyInfo.hasStarter ? keyInfo.startIndex + 1 : keyInfo.startIndex, keyInfo.colonIndex);
+        var namespace = tr.substring(keyInfo.hasStarter() ? keyInfo.startIndex() + 1 : keyInfo.startIndex(), keyInfo.colonIndex());
         if (VANILLA_LANG_NAMESPACE.equals(namespace)) {
-            String left;
-            if (keyInfo.hasStarter) {
-                // Preserve '%'
-                left = tr.substring(0, keyInfo.startIndex + 1);
-            } else {
-                left = "";
-            }
-            return Pair.of(left + tr.substring(keyInfo.colonIndex + 1), true);
-        } else {
-            return Pair.of(tr(langCode, tr, args), false);
+            // Preserve '%'
+            var prefix = keyInfo.hasStarter() ? tr.substring(0, keyInfo.startIndex() + 1) : "";
+            return Pair.of(prefix + tr.substring(keyInfo.colonIndex() + 1), true);
         }
 
+        return Pair.of(tr(langCode, tr, args), false);
     }
+
+    /**
+     * Get the default lang code.
+     *
+     * @return the default lang code.
+     */
+    LangCode getDefaultLangCode();
+
+    /**
+     * Set the default lang code.
+     *
+     * @param langCode the lang code.
+     */
+    void setDefaultLangCode(LangCode langCode);
 
     /**
      * KeyInfo stores the information of the translation key in a string.
