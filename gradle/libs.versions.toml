@@ -3,7 +3,7 @@ log4j = "2.24.3"
 commons-rng = "1.6"
 fastutil = "8.5.15"
 leveldb = "1.0.1"
-netty = "4.1.115.Final"
+netty = "4.1.116.Final"
 
 [libraries]
 # NBT
