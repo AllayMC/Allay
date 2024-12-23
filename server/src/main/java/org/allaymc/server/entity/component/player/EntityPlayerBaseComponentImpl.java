@@ -616,12 +616,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
         pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         pk.setMode(MovePlayerPacket.Mode.TELEPORT);
-        pk.setTeleportationCause(switch (reason) {
-            case UNKNOWN -> MovePlayerPacket.TeleportationCause.UNKNOWN;
-            case PROJECTILE -> MovePlayerPacket.TeleportationCause.PROJECTILE;
-            case CHORUS_FRUIT -> MovePlayerPacket.TeleportationCause.CHORUS_FRUIT;
-            case COMMAND -> MovePlayerPacket.TeleportationCause.COMMAND;
-        });
+        pk.setTeleportationCause(reason.getNetworkValue());
         networkComponent.sendPacket(pk);
     }
 
