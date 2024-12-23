@@ -137,6 +137,7 @@ nav:
       - Use Color Codes: advanced/use-color-codes.md
 
   - Development:
-      - Update to The Next Protocol Version: advanced/update-to-the-next-protocol-version.md
+      - Update to The Next Protocol Version: development/update-to-the-next-protocol-version.md
+      - Version of Allay: development/version-of-allay.md
 
   - Changelog: changelog.md

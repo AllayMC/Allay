@@ -124,3 +124,7 @@ Make sure the dependency libraries are updated before this!
 
 Run `gradle test` to ensure nothing is broken, then update the client and test on the server (this is very important!).
 The update is now complete.
+
+## Update Changelog
+
+After the update is complete, you need to update the changelog. The changelog is stored in `CHANGELOG.md`.
