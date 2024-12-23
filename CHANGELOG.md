@@ -19,6 +19,7 @@ and any changes to API will have a prefix `(API)`.
 ### Changed
 
 - Breaking block related warnings are now moved to debug channel.
+- Improved code readability for I18n module.
 
 ### Fixed
 

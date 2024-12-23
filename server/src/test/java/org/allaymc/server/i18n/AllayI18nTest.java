@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class AllayI18nTest {
 
-    public static final String[] ARGS = {"1", "2", "3", "4", "5"};
+    public static final Object[] ARGS = {"1", "2", "3", "4", "5"};
     public static final String TEST_VANILLA_KEY_NO_NAMESPACE = "translation.test.complex";
     public static final String TEST_VANILLA_KEY = "minecraft:" + TEST_VANILLA_KEY_NO_NAMESPACE;
     public static final String TEST_ALLAY_KEY_NO_NAMESPACE = "server.stopped";

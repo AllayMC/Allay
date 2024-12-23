@@ -1,5 +1,6 @@
 package org.allaymc.server.i18n;
 
+import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,8 +48,9 @@ public class AllayI18n implements I18n {
         }
 
         var strArgs = Utils.objectArrayToStringArray(args);
-        translation = replaceUnorderedParams(translation, strArgs);
-        translation = replaceOrderedParams(translation, strArgs);
+
+        var result = replaceUnorderedParams(translation, strArgs);
+        translation = replaceOrderedParams(result.left(), result.right(), strArgs);
 
         return new StringBuilder(tr).replace(keyInfo.startIndex(), keyInfo.endIndex() + 1, translation).toString();
     }
@@ -98,7 +100,7 @@ public class AllayI18n implements I18n {
         return translation;
     }
 
-    private String replaceUnorderedParams(String text, String[] args) {
+    private Pair<String, Integer> replaceUnorderedParams(String text, String[] args) {
         int argIndex = 0;
         int paramIndex;
         while ((paramIndex = findUnorderedParamIndex(text)) != -1 && argIndex < args.length) {
@@ -110,13 +112,12 @@ public class AllayI18n implements I18n {
             text = text.replaceAll("%" + order + "\\$s", "%" + order);
             text = text.replaceAll("%" + order + "\\$d", "%" + order);
         }
-        return text;
+        return Pair.of(text, argIndex);
     }
 
-    private String replaceOrderedParams(String text, String[] args) {
+    private String replaceOrderedParams(String text, int startArgIndex, String[] args) {
         int order = 1;
-
-        for (int i = 0; i < args.length; i++, order++) {
+        for (int i = startArgIndex; i < args.length; i++, order++) {
             int paramIndex;
             while ((paramIndex = findOrderedParamIndex(text, order)) != -1) {
                 text = new StringBuilder(text).replace(paramIndex, paramIndex + 2, args[i]).toString();
