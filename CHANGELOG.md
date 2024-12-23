@@ -16,6 +16,10 @@ and any changes to API will have a prefix `(API)`.
 
 - (API) Added `TextFormat#MATERIAL_RESIN`.
 
+### Changed
+
+- Breaking block related warnings are now moved to debug channel.
+
 ### Fixed
 
 - (API) Fixed exception when setting item count or meta to zero.

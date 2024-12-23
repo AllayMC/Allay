@@ -75,7 +75,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             switch (action.getAction()) {
                 case START_BREAK, BLOCK_CONTINUE_DESTROY -> {
                     if (!player.canReachBlock(MathUtils.CBVecToJOMLVec(pos))) {
-                        log.warn("Player {} tried to break a block out of reach", player.getOriginName());
+                        log.debug("Player {} tried to break a block out of reach", player.getOriginName());
                         continue;
                     }
                 }
@@ -114,18 +114,18 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected void startBreak(EntityPlayer player, int x, int y, int z, int blockFaceId, long startBreakingTime) {
         if (breakBlock != null) {
-            log.warn("Player {} tried to start breaking a block while already breaking one", player.getOriginName());
+            log.debug("Player {} tried to start breaking a block while already breaking one", player.getOriginName());
             stopBreak(player);
         }
 
         if (breakBlockX == x && breakBlockY == y && breakBlockZ == z) {
-            log.warn("Player {} tried to start breaking the same block twice", player.getOriginName());
+            log.debug("Player {} tried to start breaking the same block twice", player.getOriginName());
             return;
         }
 
         breakBlock = player.getDimension().getBlockState(x, y, z);
         if (breakBlock.getBlockStateData().hardness() == -1) {
-            log.warn("Player {} tried to break an unbreakable block", player.getOriginName());
+            log.debug("Player {} tried to break an unbreakable block", player.getOriginName());
             return;
         }
 
@@ -171,7 +171,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected void completeBreak(EntityPlayer player, int x, int y, int z) {
         if (breakBlockX != x || breakBlockY != y || breakBlockZ != z) {
-            log.warn("Player {} tried to complete breaking a different block", player.getOriginName());
+            log.debug("Player {} tried to complete breaking a different block", player.getOriginName());
             return;
         }
 
@@ -187,7 +187,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                 player.notifyItemInHandChange();
             }
         } else {
-            log.warn("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakTime, currentTime);
+            log.debug("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakTime, currentTime);
         }
 
         stopBreak(player);
@@ -213,7 +213,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected void checkInteractDistance(EntityPlayer player) {
         if (!player.canReach(breakBlockX + 0.5f, breakBlockY + 0.5f, breakBlockZ + 0.5f)) {
-            log.warn("Player {} tried to interact with a block out of reach", player.getOriginName());
+            log.debug("Player {} tried to interact with a block out of reach", player.getOriginName());
             stopBreak(player);
         }
     }
@@ -223,7 +223,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         if (needBreakTime == newBreakingTime) {
             return;
         }
-        
+
         // Breaking time has changed, make adjustments
         var timeLeft = stopBreakTime - currentTime;
         stopBreakTime = currentTime + timeLeft * (needBreakTime / newBreakingTime);
