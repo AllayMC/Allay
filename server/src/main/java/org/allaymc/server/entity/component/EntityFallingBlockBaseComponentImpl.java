@@ -40,6 +40,11 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
 
     @Override
     public void onFall() {
+        if (this.willBeDespawnedNextTick()) {
+            // The falling block entity already became block
+            return;
+        }
+
         super.onFall();
         var dimension = getDimension();
 
@@ -49,7 +54,10 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
             dimension.breakBlock((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), null, null);
         }
 
-        dimension.getEntityService().removeEntity(thisEntity, () -> dimension.setBlockState(location, blockState));
+        // Set block state immediately when falling on ground to prevent
+        // the falling block entity above from getting into the ground.
+        dimension.setBlockState(location, blockState);
+        dimension.getEntityService().removeEntity(thisEntity);
     }
 
     @Override
