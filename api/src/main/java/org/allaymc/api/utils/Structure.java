@@ -6,6 +6,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockStateSafeGetter;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.EntityHelper;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
@@ -54,6 +55,10 @@ public record Structure(
 
         if (saveEntities) {
             dimension.getEntities().forEach((runtimeID, entity) -> {
+                if (entity.getEntityType() == EntityTypes.PLAYER) {
+                    // Skip player entity
+                    return;
+                }
                 var location = entity.getLocation();
                 if (x <= location.x() && x + sizeX > location.x() &&
                     y <= location.y() && y + sizeY > location.y() &&
