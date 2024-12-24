@@ -1,10 +1,11 @@
 package org.allaymc.api.utils;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockStateHelper;
+import org.allaymc.api.block.type.BlockStateSafeGetter;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.EntityHelper;
-import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
@@ -16,250 +17,220 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Future;
 
-import static org.allaymc.api.block.type.BlockTypes.STRUCTURE_VOID;
-
+/**
+ * @author harry-xi | daoge_cmd
+ */
+@Slf4j
 public record Structure(
-        BlockState[][][][] blocks,
+        // layer-x-y-z
+        BlockState[][][][] blockStates,
         Map<Vector3ic, NbtMap> blockEntities,
         List<NbtMap> entities,
         int sizeX, int sizeY, int sizeZ,
         int x, int y, int z
 ) {
-    static int formatVersion = 1;
+    private static final int FORMAT_VERSION = 1;
+    public static final BlockState STRUCTURE_VOID_DEFAULT_STATE = BlockTypes.STRUCTURE_VOID.getDefaultState();
 
-    public static Structure getStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
-        return getStructure(dimension, x, y, z, sizeX, sizeY, sizeZ,true);
+    public static Structure interceptStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
+        return interceptStructure(dimension, x, y, z, sizeX, sizeY, sizeZ, true);
     }
 
-    public static Structure getStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ,boolean saveEntities) {
+    public static Structure interceptStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ, boolean saveEntities) {
         var blockStates = new BlockState[2][sizeX][sizeY][sizeZ];
         var blockEntities = new HashMap<Vector3ic, NbtMap>();
         var entities = new ArrayList<NbtMap>();
-        var startX = x >> 4;
-        var endX = (x + sizeX - 1) >> 4;
-        var startZ = z >> 4;
-        var endZ = (z + sizeZ - 1) >> 4;
-        for (int chunkX = startX; chunkX <= endX; chunkX++) {
-            var cX = chunkX << 4;
-            var localStartX = Math.max(x - cX, 0);
-            var localEndX = Math.min(x + sizeX - cX, 16);
-            for (int chunkZ = startZ; chunkZ <= endZ; chunkZ++) {
-                var cZ = chunkZ << 4;
-                var localStartZ = Math.max(z - cZ, 0);
-                var localEndZ = Math.min(z + sizeZ - cZ, 16);
-                var chunk = dimension.getChunkService().getChunk(chunkX, chunkZ);
-                if (chunk != null) {
-                    chunk.batchProcess(c -> {
-                        for (int localX = localStartX; localX < localEndX; localX++) {
-                            for (int globalY = y; globalY < y + sizeY; globalY++) {
-                                for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
-                                    var globalX = cX + localX;
-                                    var globalZ = cZ + localZ;
-                                    blockStates[0][globalX - x][globalY - y][globalZ - z] = c.getBlockState(localX, globalY, localZ, 0);
-                                    blockStates[1][globalX - x][globalY - y][globalZ - z] = c.getBlockState(localX, globalY, localZ, 1);
-                                }
-                            }
-                        }
-                        c.getBlockEntities().forEach((hashedPos, value) -> {
-                            var entityX = HashUtils.getXFromHashChunkXYZ(hashedPos) + cX;
-                            var entityY = HashUtils.getYFromHashChunkXYZ(hashedPos);
-                            var entityZ = HashUtils.getZFromHashChunkXYZ(hashedPos) + cZ;
-                            if (startX <= entityX && endX > entityX && startZ <= entityZ && endZ > entityZ && y <= entityY && entityY < y + sizeY) {
-                                blockEntities.put(new Vector3i(entityX - x, entityY - y, entityZ - z), value.saveNBT());
-                            }
-                        });
-                        if(saveEntities){
-                            c.getEntities().forEach((runtimeID, value) -> {
-                                var location = value.getLocation();
-                                if (x <= location.x() && x + sizeX > location.x() && y <= location.y() && y + sizeY > location.y() && z <= location.z() && z + sizeZ > location.z()) {
-                                    entities.add(value.saveNBT());
-                                }
-                            });
-                        }
-                    });
-                } else {
-                    var structureVoid = STRUCTURE_VOID.getDefaultState();
-                    for (int localX = localStartX; localX < localEndX; localX++) {
-                        for (int globalY = y; globalY < y + sizeY; globalY++) {
-                            for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
-                                var globalX = cX + localX;
-                                var globalZ = cZ + localZ;
-                                blockStates[0][globalX - x][globalY - y][globalZ - z] = structureVoid;
-                                blockStates[1][globalX - x][globalY - y][globalZ - z] = structureVoid;
-                            }
-                        }
-                    }
+
+        for (int lx = 0; lx < sizeX; lx++) {
+            for (int ly = 0; ly < sizeY; ly++) {
+                for (int lz = 0; lz < sizeZ; lz++) {
+                    blockStates[0][lx][ly][lz] = dimension.getBlockState(x + lx, y + ly, z + lz, 0);
+                    blockStates[1][lx][ly][lz] = dimension.getBlockState(x + lx, y + ly, z + lz, 1);
+                    blockEntities.put(new Vector3i(lx, ly, lz), dimension.getBlockEntity(x + lx, y + ly, z + lz).saveNBT());
                 }
             }
+        }
+
+        if (saveEntities) {
+            dimension.getEntities().forEach((runtimeID, entity) -> {
+                var location = entity.getLocation();
+                if (x <= location.x() && x + sizeX > location.x() &&
+                    y <= location.y() && y + sizeY > location.y() &&
+                    z <= location.z() && z + sizeZ > location.z()) {
+                    entities.add(entity.saveNBT());
+                }
+            });
         }
         return new Structure(blockStates, blockEntities, entities, sizeX, sizeY, sizeZ, x, y, z);
     }
 
-    public Future<?> place(Dimension dimension, int x, int y, int z){
-         return Server.getInstance().getVirtualThreadPool().submit(()-> {
-            var startX = x >> 4;
-            var endX = (x + sizeX - 1) >> 4;
-            var startZ = z >> 4;
-            var endZ = (z + sizeZ - 1) >> 4;
-            for (int chunkX = startX; chunkX <= endX; chunkX++) {
-                var cX = chunkX << 4;
-                var localStartX = Math.max(x - cX, 0);
-                var localEndX = Math.min(x + sizeX - cX, 16);
-                for (int chunkZ = startZ; chunkZ <= endZ; chunkZ++) {
-                    var cZ = chunkZ << 4;
-                    var localStartZ = Math.max(z - cZ, 0);
-                    var localEndZ = Math.min(z + sizeZ - cZ, 16);
-                    dimension.getChunkService().getOrLoadChunkSync(chunkX, chunkZ).batchProcess(c -> {
-                        for (int localX = localStartX; localX < localEndX; localX++) {
-                            for (int globalY = y; globalY < y + sizeY; globalY++) {
-                                for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
-                                    var globalX = cX + localX;
-                                    var globalZ = cZ + localZ;
-                                    if(blocks[0][globalX - x][globalY - y][globalZ - z] != STRUCTURE_VOID.getDefaultState()) {
-                                        c.setBlockState(localX, globalY, localZ, blocks[0][globalX - x][globalY - y][globalZ - z], 0);
-                                    }
-                                    if(blocks[1][globalX - x][globalY - y][globalZ - z] != STRUCTURE_VOID.getDefaultState()) {
-                                        c.setBlockState(localX, globalY, localZ, blocks[1][globalX - x][globalY - y][globalZ - z], 0);
-                                    }
-                                }
-                            }
-                        }
-                    });
-                }
-                for (var i : blockEntities.entrySet()) {
-                    // ToDo: will it work? what is the right way do that?
-                    dimension.getBlockEntity(i.getKey()).loadNBT(i.getValue());
-                }
-                for (var i : entities) {
-                    dimension.getEntityService().addEntity(EntityHelper.fromNBT(dimension,i));
-                }
-            }
-        });
-    }
-
-    public static Structure formNbt(NbtMap nbt){
-        if(nbt.getInt("format_version")!=formatVersion){
-            throw new StructureException("format_version should be " + formatVersion);
+    public static Structure formNBT(NbtMap nbt) {
+        if (nbt.getInt("format_version") != FORMAT_VERSION) {
+            throw new StructureException("format_version should be " + FORMAT_VERSION);
         }
-        if(nbt.getList("size", NbtType.INT).size() != 3){
+
+        if (nbt.getList("size", NbtType.INT).size() != 3) {
             throw new StructureException("size of size list should be 3");
         }
-        var sizeX = nbt.getList("size", NbtType.INT).get(0);
-        var sizeY = nbt.getList("size", NbtType.INT).get(1);
-        var sizeZ = nbt.getList("size", NbtType.INT).get(2);
-        var blockIndices = nbt.getCompound("structure").getList("block_indices",NbtType.LIST);
-        if(blockIndices.size() != 2){
+
+        var size = nbt.getList("size", NbtType.INT);
+        var sizeX = size.get(0);
+        var sizeY = size.get(1);
+        var sizeZ = size.get(2);
+        var structureNBT = nbt.getCompound("structure");
+        var blockIndices = structureNBT.getList("block_indices", NbtType.LIST);
+
+        if (blockIndices.size() != 2) {
             throw new StructureException("block_indices should have 2 layer");
         }
-        if(blockIndices.get(0).size() != sizeX * sizeY * sizeZ){
+
+        if (blockIndices.get(0).size() != sizeX * sizeY * sizeZ) {
             throw new StructureException("size of layer0 incorrect, it should be" + sizeX * sizeY * sizeZ);
         }
-        if(blockIndices.get(1).size() != sizeX * sizeY * sizeZ){
+
+        if (blockIndices.get(1).size() != sizeX * sizeY * sizeZ) {
             throw new StructureException("size of layer1 incorrect, it should be" + sizeX * sizeY * sizeZ);
         }
+
         var layer0 = (List<Integer>) blockIndices.get(0);
         var layer1 = (List<Integer>) blockIndices.get(1);
-        var entities = nbt.getCompound("structure").getList("entities",NbtType.COMPOUND);
-        var palette = nbt.getCompound("structure").getCompound("palette").getCompound("default");
-        var blockEntitiesNbt = palette.getCompound("block_position_data");
-        var blockPalette = palette.getList("block_palette", NbtType.COMPOUND).stream().map(
-                BlockStateHelper::fromNbt
-        ).toList();
-        var structureVoid = STRUCTURE_VOID.getDefaultState();
-
+        var palette = structureNBT.getCompound("palette").getCompound("default");
+        var blockEntityNBT = palette.getCompound("block_position_data");
+        var blockPalette = palette.getList("block_palette", NbtType.COMPOUND).stream().map(BlockStateSafeGetter::fromNBT).toList();
 
         var blockStates = new BlockState[2][sizeX][sizeY][sizeZ];
-        for(int x = 0; x < sizeX; x++){
-            for(int y = 0; y < sizeY; y++){
-                for(int z = 0; z < sizeZ; z++){
-                    if(layer0.get(indexFormPos(sizeX,sizeY,sizeZ,x,y,z)) == -1){
-                        blockStates[0][x][y][z] = structureVoid;
-                    }else{
-                        blockStates[0][x][y][z] = blockPalette.get(layer0.get(indexFormPos(sizeX,sizeY,sizeZ,x,y,z)));
+        for (int lx = 0; lx < sizeX; lx++) {
+            for (int ly = 0; ly < sizeY; ly++) {
+                for (int lz = 0; lz < sizeZ; lz++) {
+                    if (layer0.get(indexFormPos(sizeX, sizeY, sizeZ, lx, ly, lz)) == -1) {
+                        blockStates[0][lx][ly][lz] = STRUCTURE_VOID_DEFAULT_STATE;
+                    } else {
+                        blockStates[0][lx][ly][lz] = blockPalette.get(layer0.get(indexFormPos(sizeX, sizeY, sizeZ, lx, ly, lz)));
                     }
-                    if(layer1.get(indexFormPos(sizeX,sizeY,sizeZ,x,y,z)) == -1){
-                        blockStates[1][x][y][z] = structureVoid;
-                    }else{
-                        blockStates[1][x][y][z] = blockPalette.get(layer0.get(indexFormPos(sizeX,sizeY,sizeZ,x,y,z)));
+                    if (layer1.get(indexFormPos(sizeX, sizeY, sizeZ, lx, ly, lz)) == -1) {
+                        blockStates[1][lx][ly][lz] = STRUCTURE_VOID_DEFAULT_STATE;
+                    } else {
+                        blockStates[1][lx][ly][lz] = blockPalette.get(layer0.get(indexFormPos(sizeX, sizeY, sizeZ, lx, ly, lz)));
                     }
                 }
             }
         }
+
         var blockEntities = new HashMap<Vector3ic, NbtMap>();
-        for (var i : blockEntitiesNbt.keySet()) {
-            var pos = posFromIndex(sizeX,sizeY,sizeZ,Integer.parseInt(i));
-            var entity = blockEntitiesNbt.getCompound(i);
-            blockEntities.put(pos, entity);
+        for (var index : blockEntityNBT.keySet()) {
+            blockEntities.put(
+                    posFromIndex(sizeX, sizeY, sizeZ, Integer.parseInt(index)),
+                    blockEntityNBT.getCompound(index)
+            );
         }
 
-        if(nbt.getList("structure_world_origin", NbtType.INT).size() != 3){
+        if (nbt.getList("structure_world_origin", NbtType.INT).size() != 3) {
             throw new StructureException("size of structure_world_origin list should be 3");
         }
-        var x = nbt.getList("structure_world_origin", NbtType.INT).get(0);
-        var y = nbt.getList("structure_world_origin", NbtType.INT).get(1);
-        var z = nbt.getList("structure_world_origin", NbtType.INT).get(2);
 
-        return new Structure(blockStates,blockEntities, entities, sizeX, sizeY, sizeZ, x,y,z);
+        var origin = nbt.getList("structure_world_origin", NbtType.INT);
+        return new Structure(
+                blockStates, blockEntities,
+                structureNBT.getList("entityNBT", NbtType.COMPOUND),
+                sizeX, sizeY, sizeZ,
+                origin.get(0), origin.get(1), origin.get(2)
+        );
     }
 
-    public NbtMap toNbt(){
+    public void place(Dimension dimension, int x, int y, int z) {
+        for (int lx = 0; lx < sizeX; lx++) {
+            for (int ly = 0; ly < sizeY; ly++) {
+                for (int lz = 0; lz < sizeZ; lz++) {
+                    if (blockStates[0][lx][ly][lz] != STRUCTURE_VOID_DEFAULT_STATE) {
+                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[0][lx][ly][lz], 0);
+                    }
+                    if (blockStates[1][lx][ly][lz] != STRUCTURE_VOID_DEFAULT_STATE) {
+                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[1][lx][ly][lz], 1);
+                    }
+                }
+            }
+        }
+
+        for (var entry : blockEntities.entrySet()) {
+            // Block entity should also being spawned when placing block
+            // if the block entity is implemented
+            var blockEntity = dimension.getBlockEntity(entry.getKey());
+            if (blockEntity == null) {
+                // Block entity not implemented maybe
+                continue;
+            }
+            blockEntity.loadNBT(entry.getValue());
+        }
+        for (var nbt : entities) {
+            dimension.getEntityService().addEntity(EntityHelper.fromNBT(dimension, nbt));
+        }
+    }
+
+    public NbtMap toNBT() {
         var layer0 = new ArrayList<Integer>();
         var layer1 = new ArrayList<Integer>();
         var palette = new BlockStatePalette();
-        for(int x = 0; x < sizeX; x++) {
+        for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int z = 0; z < sizeZ; z++) {
-                    layer0.set(indexFormPos(sizeX,sizeY,sizeZ,x,y,z),palette.getIndexOf(blocks[0][x][y][z]));
-                    layer1.set(indexFormPos(sizeX,sizeY,sizeZ,x,y,z),palette.getIndexOf(blocks[1][x][y][z]));
+                    layer0.set(indexFormPos(sizeX, sizeY, sizeZ, x, y, z), palette.getIndexOf(blockStates[0][x][y][z]));
+                    layer1.set(indexFormPos(sizeX, sizeY, sizeZ, x, y, z), palette.getIndexOf(blockStates[1][x][y][z]));
                 }
             }
         }
-        var blockEntitiesNbt = NbtMap.builder();
-        for(var i : blockEntities.entrySet()){
-            blockEntitiesNbt.putCompound(
-                    Integer.toString(indexFormPos(sizeX,sizeY,sizeZ, i.getKey().x(),i.getKey().y(),i.getKey().z())),
-                    i.getValue()
+        var blockEntityNBT = NbtMap.builder();
+        for (var index : blockEntities.entrySet()) {
+            var pos = index.getKey();
+            blockEntityNBT.putCompound(
+                    Integer.toString(indexFormPos(sizeX, sizeY, sizeZ, pos.x(), pos.y(), pos.z())),
+                    index.getValue()
             );
         }
 
         return NbtMap.builder()
-                .putInt("format_version", formatVersion)
+                .putInt("format_version", FORMAT_VERSION)
                 .putList("size", NbtType.INT, sizeX, sizeY, sizeZ)
                 .putCompound("structure",
                         NbtMap.builder()
-                                .putList("block_indices",NbtType.LIST,
-                                        new NbtList<>(NbtType.INT,layer0),
-                                        new NbtList<>(NbtType.INT,layer1)
-                                        )
-                                .putList("entities",NbtType.COMPOUND,entities)
-                                .putCompound("palette",NbtMap.builder().putCompound(
-                                        "default",NbtMap.builder()
-                                                .putList("block_palette",NbtType.COMPOUND,
-                                                        palette.getPalette().stream().map(BlockState::getBlockStateTag).toList())
-                                                .putCompound("block_position_data",blockEntitiesNbt.build())
+                                .putList(
+                                        "block_indices",
+                                        NbtType.LIST,
+                                        new NbtList<>(NbtType.INT, layer0),
+                                        new NbtList<>(NbtType.INT, layer1))
+                                .putList("entities", NbtType.COMPOUND, entities)
+                                .putCompound("palette", NbtMap.builder().putCompound(
+                                        "default", NbtMap.builder()
+                                                .putList(
+                                                        "block_palette",
+                                                        NbtType.COMPOUND,
+                                                        palette.getPalette()
+                                                                .stream()
+                                                                .map(BlockState::getBlockStateTag)
+                                                                .toList())
+                                                .putCompound("block_position_data", blockEntityNBT.build())
                                                 .build()
                                 ).build())
                                 .build()
                 )
-                .putList("structure_world_origin", NbtType.INT,x,y,z)
+                .putList("structure_world_origin", NbtType.INT, x, y, z)
                 .build();
     }
 
-    public static int indexFormPos(int sizeX,int sizeY,int sizeZ,int x,int y,int z) {
-        return x*sizeY*sizeZ+y*sizeZ+z;
+    private static int indexFormPos(int sizeX, int sizeY, int sizeZ, int x, int y, int z) {
+        return x * sizeY * sizeZ + y * sizeZ + z;
     }
 
-    public static Vector3i posFromIndex(int sizeX,int sizeY,int sizeZ,int index) {
-        return new Vector3i(index / (sizeY*sizeZ) , index % (sizeY*sizeZ) / sizeZ,index % (sizeY*sizeZ) % sizeZ);
+    private static Vector3i posFromIndex(int sizeX, int sizeY, int sizeZ, int index) {
+        return new Vector3i(index / (sizeY * sizeZ), index % (sizeY * sizeZ) / sizeZ, index % (sizeY * sizeZ) % sizeZ);
     }
 
     private static class BlockStatePalette {
         @Getter
         private final List<BlockState> palette = new ArrayList<>();
-        int getIndexOf(BlockState block) {
-            if(block == STRUCTURE_VOID.getDefaultState()){
+
+        public int getIndexOf(BlockState block) {
+            if (block == STRUCTURE_VOID_DEFAULT_STATE) {
                 return -1;
             }
             if (!palette.contains(block)) {
