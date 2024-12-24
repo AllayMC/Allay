@@ -49,9 +49,9 @@ To install it, you just need to run one command:
 
 ### Download Allay
 
-Allay is currently in the development stage, so no stable release have been published yet.
-You can download the latest version of Allay
-from [Nightly Build](https://github.com/AllayMC/Allay/releases/tag/nightly).
+You can download the latest release from [GitHub](https://github.com/AllayMC/Allay/releases/latest).
+If you want to take a look at the latest in-development features, you can also try
+[Nightly Build](https://github.com/AllayMC/Allay/releases/tag/nightly), which is the latest build of the master branch.
 
 ### Run Allay
 
