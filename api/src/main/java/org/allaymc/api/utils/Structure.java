@@ -31,7 +31,7 @@ public record Structure(
         int x, int y, int z
 ) {
     private static final int FORMAT_VERSION = 1;
-    public static final BlockState STRUCTURE_VOID_DEFAULT_STATE = BlockTypes.STRUCTURE_VOID.getDefaultState();
+    private static final BlockState STRUCTURE_VOID_DEFAULT_STATE = BlockTypes.STRUCTURE_VOID.getDefaultState();
 
     public static Structure interceptStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
         return interceptStructure(dimension, x, y, z, sizeX, sizeY, sizeZ, true);
