@@ -57,7 +57,10 @@ public class AllayBlockUpdateService implements BlockUpdateService {
 
     protected void tickNeighborUpdates() {
         int count = 0;
-        while (!neighborUpdates.isEmpty() && count < MAX_NEIGHBOR_UPDATE_PER_TICK) {
+        // There may be new neighbor updates being added into the queue during the
+        // loop, however these updates should be processed in the next tick.
+        int initialNeighborUpdateCount = neighborUpdates.size();
+        while (!neighborUpdates.isEmpty() && count < initialNeighborUpdateCount && count < MAX_NEIGHBOR_UPDATE_PER_TICK) {
             var update = neighborUpdates.poll();
             var blockFace = update.blockFace();
             var pos = update.pos();

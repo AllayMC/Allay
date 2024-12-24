@@ -16,6 +16,7 @@ and any changes to API will have a prefix `(API)`.
 
 - (API) Added `TextFormat#MATERIAL_RESIN`.
 - (API) Entity#teleport method now accepts an extra `Reason` argument.
+- (API) Added structure API by @harry-xi.
 
 ### Changed
 
@@ -30,6 +31,7 @@ and any changes to API will have a prefix `(API)`.
 - Entity#teleport method now will reset fall distance correctly.
 - Fixed visual flashes when eating chorus fruits.
 - Fixed incorrect comparison of `Position3x#dimension`.
+- Fixed a number of falling block related bugs.
 
 ## [0.1.0](https://github.com/AllayMC/Allay/releases/tag/0.1.0) (API 0.1.0) - 2024-12-22
 
