@@ -294,6 +294,9 @@ public class GameTestCommand extends SimpleCommand {
                     player.sendText("InternalSkyLight: " + lightService.getInternalSkyLight(x, y, z));
                     player.sendText("QueuedUpdateCount: " + lightService.getQueuedUpdateCount());
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.PLAYER)
+                .root()
+                .str("pickstruct")
+
     }
 }

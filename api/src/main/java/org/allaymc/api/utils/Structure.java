@@ -33,11 +33,11 @@ public record Structure(
     private static final int FORMAT_VERSION = 1;
     private static final BlockState STRUCTURE_VOID_DEFAULT_STATE = BlockTypes.STRUCTURE_VOID.getDefaultState();
 
-    public static Structure interceptStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
-        return interceptStructure(dimension, x, y, z, sizeX, sizeY, sizeZ, true);
+    public static Structure pickStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
+        return pickStructure(dimension, x, y, z, sizeX, sizeY, sizeZ, true);
     }
 
-    public static Structure interceptStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ, boolean saveEntities) {
+    public static Structure pickStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ, boolean saveEntities) {
         var blockStates = new BlockState[2][sizeX][sizeY][sizeZ];
         var blockEntities = new HashMap<Vector3ic, NbtMap>();
         var entities = new ArrayList<NbtMap>();
