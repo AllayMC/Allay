@@ -7,7 +7,7 @@ netty = "4.1.116.Final"
 
 [libraries]
 # NBT
-nbt = { group = "org.allaymc", name = "NBT", version = "3.0.9" }
+nbt = { group = "org.allaymc", name = "NBT", version = "3.0.10" }
 # Network protocol
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta5-SNAPSHOT" }
 # State Updater
