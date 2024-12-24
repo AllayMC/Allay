@@ -10,8 +10,7 @@ This document details the version system of Allay.
 
 Because Allay is a project that separates [API](https://github.com/AllayMC/Allay/tree/master/api)
 and [implementation](https://github.com/AllayMC/Allay/tree/master/server),
-there are two versions in Allay: API version and server version, and they are
-two things.
+there are two versions in Allay: API version and server version, and they are two things.
 
 The version of API adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Normally,
 unless the plugin developer needs to complete some special functions, it should only depend on the
