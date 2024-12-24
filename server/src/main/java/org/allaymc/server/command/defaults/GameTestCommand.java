@@ -16,12 +16,10 @@ import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.api.utils.AllayStringUtils;
-import org.allaymc.api.utils.Identifier;
-import org.allaymc.api.utils.JSONUtils;
-import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.utils.*;
 import org.allaymc.server.block.type.BlockLootTable;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
 import org.joml.Vector3f;
 import org.joml.Vector3fc;
@@ -296,7 +294,30 @@ public class GameTestCommand extends SimpleCommand {
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
-                .str("pickstruct")
+                .key("pickstruct")
+                .str("filename")
+                .pos("pos1")
+                .pos("pos2")
+                .exec((context, player) -> {
+                    String fileName = context.getResult(1);
+                    Vector3f pos1 = ((Vector3f) context.getResult(2)).floor();
+                    Vector3f pos2 = ((Vector3f) context.getResult(3)).floor();
+                    var structure = Structure.pickStructure(
+                            player.getDimension(),
+                            (int) pos1.x, (int) pos1.y, (int) pos1.z,
+                            (int) (pos2.x - pos1.x), (int) (pos2.y - pos1.y), (int) (pos2.z - pos1.z),
+                            true
+                    );
+                    var filePath = Path.of(fileName);
+                    try (var writer = NbtUtils.createWriter(Files.newOutputStream(filePath))) {
+                        Files.deleteIfExists(filePath);
+                        writer.writeTag(structure.toNBT());
+                    } catch (IOException e) {
+                        context.addOutput(TextFormat.RED + "" + e);
+                        return context.fail();
+                    }
+                    return context.success();
+                }, SenderType.PLAYER);
 
     }
 }

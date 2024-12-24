@@ -47,7 +47,10 @@ public record Structure(
                 for (int lz = 0; lz < sizeZ; lz++) {
                     blockStates[0][lx][ly][lz] = dimension.getBlockState(x + lx, y + ly, z + lz, 0);
                     blockStates[1][lx][ly][lz] = dimension.getBlockState(x + lx, y + ly, z + lz, 1);
-                    blockEntities.put(new Vector3i(lx, ly, lz), dimension.getBlockEntity(x + lx, y + ly, z + lz).saveNBT());
+                    var blockEntity = dimension.getBlockEntity(x + lx, y + ly, z + lz);
+                    if (blockEntity != null) {
+                        blockEntities.put(new Vector3i(lx, ly, lz), blockEntity.saveNBT());
+                    }
                 }
             }
         }
@@ -174,8 +177,13 @@ public record Structure(
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int z = 0; z < sizeZ; z++) {
-                    layer0.set(indexFormPos(sizeX, sizeY, sizeZ, x, y, z), palette.getIndexOf(blockStates[0][x][y][z]));
-                    layer1.set(indexFormPos(sizeX, sizeY, sizeZ, x, y, z), palette.getIndexOf(blockStates[1][x][y][z]));
+                    var index0 = indexFormPos(sizeX, sizeY, sizeZ, x, y, z);
+                    layer0.ensureCapacity(index0);
+                    layer0.set(index0, palette.getIndexOf(blockStates[0][x][y][z]));
+
+                    var index1 = indexFormPos(sizeX, sizeY, sizeZ, x, y, z);
+                    layer0.ensureCapacity(index1);
+                    layer1.set(index1, palette.getIndexOf(blockStates[1][x][y][z]));
                 }
             }
         }
