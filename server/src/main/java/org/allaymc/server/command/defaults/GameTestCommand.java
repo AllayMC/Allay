@@ -309,18 +309,43 @@ public class GameTestCommand extends SimpleCommand {
                             true
                     );
                     var filePath = Path.of(fileName + ".nbt");
+
                     try {
                         Files.deleteIfExists(filePath);
                     } catch (IOException e) {
                         context.addOutput(TextFormat.RED + "" + e);
                         return context.fail();
                     }
+
                     try (var writer = NbtUtils.createWriter(Files.newOutputStream(filePath))) {
                         writer.writeTag(structure.toNBT());
                     } catch (IOException e) {
                         context.addOutput(TextFormat.RED + "" + e);
                         return context.fail();
                     }
+
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("placestruct")
+                .str("filename")
+                .pos("pos")
+                .exec((context, player) -> {
+                    String fileName = context.getResult(1);
+                    Vector3f pos = ((Vector3f) context.getResult(2)).floor();
+                    NbtMap nbt;
+                    var filePath = Path.of(fileName + ".nbt");
+
+                    try (var reader = NbtUtils.createReader(Files.newInputStream(filePath))) {
+                        nbt = (NbtMap) reader.readTag();
+                    } catch (IOException e) {
+                        context.addOutput(TextFormat.RED + "" + e);
+                        return context.fail();
+                    }
+
+                    var structure = Structure.formNBT(nbt);
+                    structure.place(player.getDimension(), (int) pos.x, (int) pos.y, (int) pos.z);
+
                     return context.success();
                 }, SenderType.PLAYER);
 
