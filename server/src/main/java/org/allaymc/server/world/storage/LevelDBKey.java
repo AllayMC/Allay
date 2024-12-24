@@ -1,69 +1,97 @@
 package org.allaymc.server.world.storage;
 
 import org.allaymc.api.world.DimensionInfo;
+import org.jetbrains.annotations.Range;
 
 /**
  * @author Cool_Loong | Cloudburst Server
  */
 public enum LevelDBKey {
     /**
-     * Biome IDs are written as 8-bit integers. No longer written since v1.18.0.
-     */
-    DATA_2D('-'),
-    /**
      * Biomes are stored as palettes similar to blocks. Exactly 25 palettes are written. Biome IDs are written as integers.
      */
-    DATA_3D('+'),
+    DATA_3D(43),
     /**
      * Version levelDB key after v1.16.100
      */
-    VERSION(','),
+    VERSION(44),
+    /**
+     * Biome IDs are written as 8-bit integers. No longer written since v1.18.0.
+     */
+    DATA_2D(45),
     /**
      * Each entry of the biome array contains a biome ID in the first byte, and the final 3 bytes are red/green/blue respectively. No longer written since v1.0.0.
      */
-    DATA_2D_LEGACY('.'),
+    DATA_2D_LEGACY(46),
     /**
      * Block data for a 16×16×16 chunk section
      */
-    CHUNK_SECTION_PREFIX('/'),
+    CHUNK_SECTION_PREFIX(47),
     /**
      * Data ordered in XZY order, unlike Java.
      * No longer written since v1.0.0.
      * <p>
      * Biomes are IDs plus RGB colours similar to Data2DLegacy.
      */
-    LEGACY_TERRAIN('0'),
+    LEGACY_TERRAIN(48),
     /**
      * Block entity data (little-endian NBT)
      */
-    BLOCK_ENTITIES('1'),
+    BLOCK_ENTITIES(49),
     /**
      * Entity data (little-endian NBT)
      */
-    ENTITIES('2'),
+    ENTITIES(50),
     /**
      * Pending tick data (little-endian NBT)
      */
-    PENDING_TICKS('3'),
+    PENDING_TICKS(51),
     /**
      * Array of blocks that appear in the same place as other blocks. Used for grass appearing inside snow layers prior to v1.2.13. No longer written as of v1.2.13.
      */
-    BLOCK_EXTRA_DATA('4'),
-    BIOME_STATE('5'),
-    CHUNK_FINALIZED_STATE('6'),
+    BLOCK_EXTRA_DATA(52),
+    BIOME_STATE(53),
+    /**
+     * The state of a chunk (byte)
+     */
+    CHUNK_FINALIZED_STATE(54),
+    CONVERSION_DATA(55),
     /**
      * Education Edition Feature
      */
-    BORDER_BLOCKS('8'),
+    BORDER_BLOCKS(56),
     /**
      * Bounding boxes for structure spawns stored in binary format
      */
-    HARDCODED_SPAWNERS('9'),
-    LEGACY_VERSION('v');
+    HARDCODED_SPAWNERS(57),
+    RANDOM_TICKS(58),
+    CHECK_SUMS(59),
+    GENERATION_SEED(60),
+    GENERATED_PRE_CAVES_AND_CLIFFS_BLENDING(61),
+    BLENDING_BIOME_HEIGHT(62),
+    META_DATA_HASH(63),
+    BLENDING_DATA(64),
+    ACTOR_DIGEST_VERSION(65),
+    LEGACY_VERSION(118),
+    AABB_VOLUMES(119),
+
+    /*
+     * NOTICE: The following keys are only used in allay,
+     * which are not part of the vanilla levelDB format.
+     *
+     * The encoded values are incremented from -128 to
+     * avoid conflicts with original keys.
+     */
+
+    /**
+     * Used to store the scheduled update list for a chunk
+     */
+    ALLAY_SCHEDULED_UPDATES(-128);
 
     private final byte encoded;
 
-    LevelDBKey(char encoded) {
+    // Just a convenient constructor to avoid explicit casting
+    LevelDBKey(@Range(from = -128, to = 127) int encoded) {
         this.encoded = (byte) encoded;
     }
 
@@ -115,7 +143,7 @@ public enum LevelDBKey {
     }
 
     public byte[] getKey(int chunkX, int chunkZ, int chunkSectionY) {
-        if (this.encoded != CHUNK_SECTION_PREFIX.encoded)
+        if (this != CHUNK_SECTION_PREFIX)
             throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
         return new byte[]{
                 (byte) (chunkX & 0xff),
@@ -132,7 +160,7 @@ public enum LevelDBKey {
     }
 
     public byte[] getKey(int chunkX, int chunkZ, int chunkSectionY, DimensionInfo dimension) {
-        if (this.encoded != CHUNK_SECTION_PREFIX.encoded)
+        if (this != CHUNK_SECTION_PREFIX)
             throw new IllegalArgumentException("The method must be used with CHUNK_SECTION_PREFIX!");
         if (dimension == DimensionInfo.OVERWORLD) {
             return new byte[]{

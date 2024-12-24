@@ -20,6 +20,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.*;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
+import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
 
 /**
@@ -43,29 +44,33 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     protected DamageContainer lastDamage;
     @Getter
     protected long lastDamageTime = 0;
+    @Getter
+    protected int onFireTicks;
 
     @Override
-    public boolean attack(DamageContainer damage) {
-
-        if (!canBeAttacked(damage) || !checkAndUpdateCoolDown(damage)) return false;
-
-        var event = new EntityDamageEvent(thisEntity, damage);
-        event.call();
-        if (event.isCancelled()) {
+    public boolean attack(DamageContainer damage, boolean ignoreCoolDown) {
+        if (!canBeAttacked(damage) || !checkAndUpdateCoolDown(damage, ignoreCoolDown)) {
             return false;
         }
+
+        var event = new EntityDamageEvent(thisEntity, damage);
+        if (!event.call()) return false;
+
+        damage = event.getDamageContainer();
 
         applyAttacker(damage);
         applyVictim(damage);
         applyDamage(damage);
-
         return true;
     }
 
     protected void applyDamage(DamageContainer damage) {
         attributeComponent.setHealth(attributeComponent.getHealth() - damage.getFinalDamage());
         baseComponent.applyEntityEvent(EntityEventType.HURT, 2);
-        if (damage.isCritical()) baseComponent.applyAction(AnimatePacket.Action.CRITICAL_HIT);
+
+        if (damage.isCritical()) {
+            baseComponent.applyAction(AnimatePacket.Action.CRITICAL_HIT);
+        }
 
         manager.callEvent(CEntityAfterDamageEvent.INSTANCE);
 
@@ -91,9 +96,11 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
         }
     }
 
-    protected boolean checkAndUpdateCoolDown(DamageContainer damage) {
+    protected boolean checkAndUpdateCoolDown(DamageContainer damage, boolean forceToUpdate) {
         var currentTime = baseComponent.getWorld().getTick();
-        if (lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) return false;
+        if (!forceToUpdate && lastDamage != null && currentTime - lastDamageTime <= lastDamage.getCoolDown()) {
+            return false;
+        }
 
         lastDamage = damage;
         lastDamageTime = currentTime;
@@ -145,19 +152,18 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
         // TODO: Sharpness enchantment
 
-        if (damage.isCritical()) damage.updateFinalDamage(d -> d * 1.5f);
+        if (damage.isCritical()) {
+            damage.updateFinalDamage(d -> d * 1.5f);
+        }
     }
 
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
         // Fire resistance effect
-        if (
-                thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) &&
-                (
-                        damage.getDamageType() == DamageContainer.DamageType.FIRE ||
-                        damage.getDamageType() == DamageContainer.DamageType.LAVA ||
-                        damage.getDamageType() == DamageContainer.DamageType.FIRE_TICK
-                )
+        if (hasFireDamage() &&
+            (damage.getDamageType() == DamageContainer.DamageType.FIRE ||
+             damage.getDamageType() == DamageContainer.DamageType.LAVA ||
+             damage.getDamageType() == DamageContainer.DamageType.FIRE_TICK)
         ) return false;
 
         var event = new CEntityTryDamageEvent(damage, true);
@@ -169,23 +175,84 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     public boolean hasFallDamage() {
         return baseComponent.hasGravity() ||
                (!baseComponent.hasEffect(EffectTypes.LEVITATION) && !baseComponent.hasEffect(EffectTypes.SLOW_FALLING)) ||
-               (boolean) baseComponent.getWorld()
-                       .getWorldData()
-                       .getGameRuleValue(GameRule.FALL_DAMAGE);
+               baseComponent.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FALL_DAMAGE);
+    }
+
+    @Override
+    public boolean hasFireDamage() {
+        return !thisEntity.hasEffect(EffectTypes.FIRE_RESISTANCE) &&
+               !isFireproof() &&
+               baseComponent.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.FIRE_DAMAGE);
+    }
+
+    @Override
+    public boolean setOnFireTicks(int newOnFireTicks) {
+        if (!hasFireDamage()) {
+            return false;
+        }
+
+        if (this.onFireTicks > 0 && newOnFireTicks <= 0) {
+            baseComponent.setAndSendEntityFlag(EntityFlag.ON_FIRE, false);
+        } else if (this.onFireTicks <= 0 && newOnFireTicks > 0) {
+            baseComponent.setAndSendEntityFlag(EntityFlag.ON_FIRE, true);
+            // The first tick of fire damage is applied immediately
+            attack(DamageContainer.fireTick(1));
+        }
+        this.onFireTicks = newOnFireTicks;
+
+        return true;
+    }
+
+    @EventHandler
+    protected void onTick(CEntityTickEvent event) {
+        tickFire();
+    }
+
+    protected void tickFire() {
+        if (this.onFireTicks <= 0) {
+            return;
+        }
+
+        // Do not do onFireTicks-- directly, because we also
+        // need to update the ON_FIRE flag of the entity, and
+        // this method will update the flag.
+        this.setOnFireTicks(onFireTicks - 1);
+        if (this.onFireTicks % 20 == 0) {
+            attack(DamageContainer.fireTick(1));
+        }
+    }
+
+    @EventHandler
+    protected void onSaveNBT(CEntitySaveNBTEvent event) {
+        event.getNbt().putShort("Fire", (short) onFireTicks);
+    }
+
+    @EventHandler
+    protected void onLoadNBT(CEntityLoadNBTEvent event) {
+        this.onFireTicks = event.getNbt().getShort("Fire");
     }
 
     @EventHandler
     protected void onFall(CEntityFallEvent event) {
-        if (!hasFallDamage()) return;
+        if (!hasFallDamage()) {
+            return;
+        }
 
         var blockStateStandingOn = thisEntity.getBlockStateStandingOn();
         float rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));
-        if (damage > 0) attack(DamageContainer.fall(damage));
+        if (damage > 0) {
+            attack(DamageContainer.fall(damage));
+        }
     }
 
     @EventHandler
     protected void onDrown(CEntityDrownEvent event) {
         attack(DamageContainer.drown(2));
+    }
+
+    @EventHandler
+    protected void onDie(CEntityDieEvent event) {
+        setOnFireTicks(0);
     }
 }

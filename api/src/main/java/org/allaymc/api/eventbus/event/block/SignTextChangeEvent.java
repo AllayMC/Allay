@@ -13,8 +13,8 @@ public class SignTextChangeEvent extends BlockEvent implements CancellableEvent 
     protected String[] text;
     protected EntityPlayer editor;
 
-    public SignTextChangeEvent(BlockStateWithPos block, String[] text, EntityPlayer editor) {
-        super(block);
+    public SignTextChangeEvent(BlockStateWithPos blockState, String[] text, EntityPlayer editor) {
+        super(blockState);
         setText(text);
         this.editor = editor;
     }

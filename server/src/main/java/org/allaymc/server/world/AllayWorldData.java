@@ -52,10 +52,9 @@ public final class AllayWorldData implements WorldData {
     @Override
     public void setDifficulty(Difficulty difficulty) {
         var event = new DifficultyChangeEvent(this.world, this.difficulty, difficulty);
-        event.call();
-        if (event.isCancelled()) return;
-
-        this.difficulty = event.getNewDifficulty();
+        if (event.call()) {
+            this.difficulty = event.getNewDifficulty();
+        }
     }
 
     @Override
@@ -63,8 +62,7 @@ public final class AllayWorldData implements WorldData {
         timeOfDay = rollbackTimeOfDay(timeOfDay);
 
         var event = new TimeChangeEvent(this.world, this.timeOfDay, timeOfDay);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         this.timeOfDay = event.getNewTime();
         sendTimeOfDay(this.world.getPlayers());
@@ -80,10 +78,9 @@ public final class AllayWorldData implements WorldData {
     @Override
     public void setGameRuleValue(GameRule gameRule, Object value) {
         var event = new GameRuleChangeEvent(this.world, gameRule, getGameRuleValue(gameRule), value);
-        event.call();
-        if (event.isCancelled()) return;
-
-        this.gameRules.put(gameRule, event.getNewValue());
+        if (event.call()) {
+            this.gameRules.put(gameRule, event.getNewValue());
+        }
     }
 
     @Override
@@ -94,10 +91,9 @@ public final class AllayWorldData implements WorldData {
     @Override
     public void setSpawnPoint(Vector3ic spawnPoint) {
         var event = new SpawnPointChangeEvent(this.world, this.spawnPoint, spawnPoint);
-        event.call();
-        if (event.isCancelled()) return;
-
-        this.spawnPoint = event.getNewPos();
+        if (event.call()) {
+            this.spawnPoint = event.getNewPos();
+        }
     }
 
     public void increaseWorldStartCount() {

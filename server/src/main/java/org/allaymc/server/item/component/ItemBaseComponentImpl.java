@@ -1,12 +1,13 @@
 package org.allaymc.server.item.component;
 
+import com.google.common.base.Preconditions;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.data.BlockId;
+import org.allaymc.api.block.BlockHelper;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.material.MaterialTypes;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.tag.BlockTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
@@ -14,10 +15,10 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.block.BlockPlaceEvent;
+import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.data.ItemDataComponent;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
@@ -28,16 +29,15 @@ import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
-import org.allaymc.server.block.type.InternalBlockTypeData;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.item.component.event.*;
-import org.allaymc.server.utils.ItemMetaBlockStateBiMap;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.joml.Vector3ic;
 
@@ -95,8 +95,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         this.meta = initInfo.meta();
         var specifiedNetworkId = initInfo.stackNetworkId();
         if (specifiedNetworkId != EMPTY_STACK_NETWORK_ID) {
-            if (specifiedNetworkId < 0)
-                throw new IllegalArgumentException("stack network id cannot be negative");
+            Preconditions.checkArgument(specifiedNetworkId > 0, "Specified ItemStack network id must be greater than 0");
             this.stackNetworkId = specifiedNetworkId;
         } else if (initInfo.autoAssignStackNetworkId()) {
             this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
@@ -134,12 +133,20 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Override
     public NbtMap saveExtraTag() {
         var nbtBuilder = NbtMap.builder();
-        if (durability != 0) nbtBuilder.putInt("Damage", durability);
+        if (durability != 0) {
+            nbtBuilder.putInt("Damage", durability);
+        }
 
         var displayBuilder = NbtMap.builder();
-        if (!this.customName.isEmpty()) displayBuilder.put("Name", this.customName);
-        if (!this.lore.isEmpty()) displayBuilder.putList("Lore", NbtType.STRING, this.lore);
-        if (!displayBuilder.isEmpty()) nbtBuilder.putCompound("display", displayBuilder.build());
+        if (!this.customName.isEmpty()) {
+            displayBuilder.put("Name", this.customName);
+        }
+        if (!this.lore.isEmpty()) {
+            displayBuilder.putList("Lore", NbtType.STRING, this.lore);
+        }
+        if (!displayBuilder.isEmpty()) {
+            nbtBuilder.putCompound("display", displayBuilder.build());
+        }
 
         if (!enchantments.isEmpty()) {
             var enchantmentNBT = this.enchantments.values().stream()
@@ -151,7 +158,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         // TODO: item lock type
 
         // Custom NBT content
-        if (!customNBTContent.isEmpty()) nbtBuilder.put("CustomNBT", customNBTContent);
+        if (!customNBTContent.isEmpty()) {
+            nbtBuilder.put("CustomNBT", customNBTContent);
+        }
 
         var event = new CItemSaveExtraTagEvent(nbtBuilder);
         manager.callEvent(event);
@@ -179,14 +188,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void setCount(int count) {
-        if (count < 0) throw new IllegalArgumentException("count cannot be negative");
+        // Setting count to zero is valid, because in some places we need to write like this
+        Preconditions.checkArgument(count >= 0, "Count must be greater or equal to 0");
         this.count = count;
     }
 
     @Override
     public void setMeta(int meta) {
-        if (meta < 0)
-            throw new IllegalArgumentException("Meta must bigger than zero!");
+        Preconditions.checkArgument(meta >= 0, "Meta must be greater or equal to 0");
         this.meta = meta;
     }
 
@@ -196,15 +205,16 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             log.warn("Item {} does not support durability!", itemType.getIdentifier());
             return;
         }
-        if (durability < 0)
-            throw new IllegalArgumentException("Durability must bigger than zero!");
+        Preconditions.checkArgument(durability > 0, "Durability must be greater than 0");
         this.durability = durability;
     }
 
     @Override
     public boolean canBeDamagedThisTime() {
         var level = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
-        if (level == 0) return true;
+        if (level == 0) {
+            return true;
+        }
 
         var possibility = 1f / (level + 1f);
         return ThreadLocalRandom.current().nextFloat() <= possibility;
@@ -212,14 +222,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public BlockState toBlockState() {
-        return itemType.getBlockType() == null ?
-                null :
-                ItemMetaBlockStateBiMap.getMetaToBlockStateMapper(itemType).apply(meta);
+        return itemType.getBlockType() != null ? itemType.getBlockType().getDefaultState() : null;
     }
 
     @Override
     public ItemData toNetworkItemData() {
-        if (itemType == ItemTypes.AIR) return ItemData.AIR;
+        if (itemType == ItemTypes.AIR) {
+            return ItemData.AIR;
+        }
 
         var blockState = toBlockState();
         return ItemData
@@ -251,7 +261,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean placeBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
-        if (thisItemStack.getItemType().getBlockType() == null) return false;
+        if (thisItemStack.getItemType().getBlockType() == null) {
+            return false;
+        }
+
         var blockState = thisItemStack.toBlockState();
         return tryPlaceBlockState(dimension, blockState, placeBlockPos, placementInfo);
     }
@@ -280,7 +293,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }
 
         var oldBlockState = dimension.getBlockState(placeBlockPos);
-        if (!oldBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) return false;
+        if (!oldBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+            return false;
+        }
 
         var blockType = blockState.getBlockType();
 
@@ -288,13 +303,13 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                 new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension), 0),
                 oldBlockState, thisItemStack, player, placementInfo
         );
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             return false;
         }
 
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
         if (result && player != null) {
+            dimension.addLevelSoundEvent(placeBlockPos.x() + 0.5f, placeBlockPos.y() + 0.5f, placeBlockPos.z() + 0.5f, SoundEvent.PLACE, blockState.blockStateHash());
             tryConsumeItem(player);
             var e = new CItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
             manager.callEvent(e);
@@ -304,7 +319,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     protected void tryConsumeItem(EntityPlayer player) {
         if (player == null || player.getGameType() != GameType.CREATIVE) {
-            thisItemStack.setCount(thisItemStack.getCount() - 1);
+            thisItemStack.reduceCount(1);
         }
     }
 
@@ -386,71 +401,63 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public boolean isBroken() {
-        if (!itemDataComponent.getItemData().isDamageable())
+        if (!itemDataComponent.getItemData().isDamageable()) {
             return false;
+        }
         var maxDamage = itemDataComponent.getItemData().maxDamage();
         // This item does not support durability
-        if (maxDamage == 0) return false;
+        if (maxDamage == 0) {
+            return false;
+        }
+
         return durability >= maxDamage;
     }
 
     @Override
-    public void reduceDurability(int reduction) {
-        if (!canIncreaseDurabilityThisTime()) return;
+    public boolean tryReduceDurability(int reduction) {
+        if (!canBeDamagedThisTime()) {
+            return false;
+        }
         setDurability(getDurability() + reduction);
-    }
-
-    protected boolean canIncreaseDurabilityThisTime() {
-        var unbreakingLevel = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
-        if (unbreakingLevel == 0) return true;
-
-        var possibility = 1f / (unbreakingLevel + 1f);
-        return ThreadLocalRandom.current().nextFloat() <= possibility;
+        return true;
     }
 
     @Override
     public boolean isCorrectToolFor(BlockState blockState) {
         var blockType = blockState.getBlockType();
 
-        var vanillaItemId = ItemId.fromIdentifier(itemType.getIdentifier());
-        var vanillaBlockId = BlockId.fromIdentifier(blockType.getIdentifier());
-        if (vanillaItemId != null && vanillaBlockId != null) {
-            var specialTools = InternalBlockTypeData.getSpecialTools(vanillaBlockId);
-            if (specialTools.length != 0)
-                return Arrays.stream(specialTools).anyMatch(tool -> tool == vanillaItemId);
+        var requiredToolTier = BlockHelper.getRequiredToolTier(blockType);
+        // requiredToolTier != null means that this block has tool tier requirement
+        if (requiredToolTier != null && !ItemHelper.getToolTier(itemType).isBetterThan(requiredToolTier)) {
+            // The tool tier is not enough
+            return false;
         }
 
-        var materialType = blockState.getBlockType().getMaterial().materialType();
         if (itemType == ItemTypes.SHEARS) {
-            if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) return true;
+            if (blockType == BlockTypes.VINE || blockType == BlockTypes.GLOW_LICHEN) {
+                return true;
+            }
 
-            return materialType == MaterialTypes.CLOTH ||
-                   materialType == MaterialTypes.LEAVES ||
-                   materialType == MaterialTypes.PLANT ||
-                   materialType == MaterialTypes.WEB;
+            return blockType.hasBlockTag(BlockCustomTags.WOOL) ||
+                   blockType.hasBlockTag(BlockCustomTags.LEAVES) ||
+                   blockType.hasBlockTag(BlockTags.PLANT) ||
+                   blockType.hasBlockTag(BlockTags.IS_SHEARS_ITEM_DESTRUCTIBLE);
         }
 
-        if (isAxe(itemType)) return materialType == MaterialTypes.WOOD;
+        if (isPickaxe(itemType)) {
+            return blockType.hasBlockTag(BlockTags.IS_PICKAXE_ITEM_DESTRUCTIBLE);
+        }
 
-        if (isShovel(itemType))
-            return materialType == MaterialTypes.DIRT ||
-                   materialType == MaterialTypes.CLAY ||
-                   materialType == MaterialTypes.SAND ||
-                   materialType == MaterialTypes.SNOW ||
-                   materialType == MaterialTypes.TOP_SNOW;
+        if (isAxe(itemType)) {
+            return blockType.hasBlockTag(BlockTags.IS_AXE_ITEM_DESTRUCTIBLE);
+        }
+
+        if (isShovel(itemType)) {
+            return blockType.hasBlockTag(BlockTags.IS_SHOVEL_ITEM_DESTRUCTIBLE);
+        }
 
         if (isHoe(itemType)) {
-            if (
-                    blockType == BlockTypes.DRIED_KELP_BLOCK ||
-                    blockType == BlockTypes.HAY_BLOCK ||
-                    blockType == BlockTypes.TARGET ||
-                    blockType == BlockTypes.SPONGE ||
-                    blockType == BlockTypes.MOSS_BLOCK
-            ) return true;
-
-            return materialType == MaterialTypes.LEAVES ||
-                   materialType == MaterialTypes.NETHERWART ||
-                   materialType == MaterialTypes.SCULK;
+            return blockType.hasBlockTag(BlockTags.IS_HOE_ITEM_DESTRUCTIBLE);
         }
 
         if (isSword(itemType)) {
@@ -463,9 +470,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                     blockType == BlockTypes.GLOW_LICHEN
             ) return true;
 
-            return materialType == MaterialTypes.VEGETABLE ||
-                   materialType == MaterialTypes.LEAVES ||
-                   materialType == MaterialTypes.WEB;
+            return blockType.hasBlockTag(BlockTags.IS_SWORD_ITEM_DESTRUCTIBLE);
         }
 
         return false;

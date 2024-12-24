@@ -53,11 +53,20 @@ public interface BlockBaseComponent extends BlockComponent {
     void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face);
 
     /**
-     * Called when the block encounters random tick update.
+     * Called when the block encounters random update.
      *
-     * @param blockState the block.
+     * @param current the block that encountered the random update.
      */
-    void onRandomUpdate(BlockStateWithPos blockState);
+    void onRandomUpdate(BlockStateWithPos current);
+
+    /**
+     * Check if the block can receive random updates.
+     *
+     * @return {@code true} if the block can receive random updates, {@code false} otherwise.
+     */
+    default boolean canRandomUpdate() {
+        return false;
+    }
 
     /**
      * Try to place a block.
@@ -65,7 +74,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param dimension     The dimension where the block is placed.
      * @param blockState    The block that is being placed.
      * @param placeBlockPos The pos that the player is trying to place the block on.
-     * @param placementInfo The player placement info, can be null.
+     * @param placementInfo The player placement info, can be {@code null}.
      *
      * @return {@code true} if the block is placed successfully, {@code false} if failed.
      */
@@ -76,7 +85,7 @@ public interface BlockBaseComponent extends BlockComponent {
      *
      * @param currentBlockState The block that is being replaced.
      * @param newBlockState     The block that is replacing the current block.
-     * @param placementInfo     The player placement info, can be null.
+     * @param placementInfo     The player placement info, can be {@code null}.
      */
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
@@ -116,22 +125,27 @@ public interface BlockBaseComponent extends BlockComponent {
      * For example, if a water block is in layer 1 and layer 0 is replaced with air,
      * then the water block's onNeighborLayerReplace() method will be called.
      *
-     * @param currentBlockState The block that is being replaced.
-     * @param newBlockState     The block that is replacing the current block.
-     * @param placementInfo     The player placement info, can be null.
+     * @param currentBlockState the block that is being replaced.
+     * @param newBlockState     the block that is replacing the current block.
+     * @param placementInfo     the player placement info, can be null.
      */
     void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Called when a block is broken by non-creative game mode player.
      *
-     * @param blockState The block that was broken.
-     * @param usedItem   The item that was used to break the block, can be {@code null}.
-     * @param entity     The player who broke the block, can be {@code null}.
+     * @param blockState the block that was broken.
+     * @param usedItem   the item that was used to break the block, can be {@code null}.
+     * @param entity     the player who broke the block, can be {@code null}.
      */
     void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
-    void onScheduledUpdate(BlockStateWithPos blockState);
+    /**
+     * Called when a block receives a scheduled update.
+     *
+     * @param blockStateWithPos the block that received the scheduled update.
+     */
+    default void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {}
 
     /**
      * Get the block's drops when it is broke by item normally.
@@ -199,6 +213,28 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
+     * Check whether this block type can collide with entities.
+     * <p>
+     * If return {@code true}, {@link #onCollideWithEntity(BlockStateWithPos, Entity)}
+     * method will be called when collide with an entity.
+     *
+     * @return {@code true} if the block can collide with entities, {@code false} otherwise.
+     */
+    default boolean canCollideWithEntity() {
+        return false;
+    }
+
+    /**
+     * Called when the block collides with an entity.
+     * <p>
+     * This method is called only if {@link #canCollideWithEntity()} returns {@code true}.
+     *
+     * @param blockStateWithPos the block that collides with the entity.
+     * @param entity            the entity that collides with the block.
+     */
+    default void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {}
+
+    /**
      * Calculate how long can break a specific block state.
      *
      * @param blockState the specific block state, must belong to this block type.
@@ -216,7 +252,7 @@ public interface BlockBaseComponent extends BlockComponent {
             return Integer.MAX_VALUE;
         }
         var isCorrectTool = usedItem.isCorrectToolFor(blockState);
-        var isAlwaysDestroyable = getBlockType().getMaterial().isAlwaysDestroyable();
+        var requiresCorrectToolForDrops = blockState.getBlockStateData().requiresCorrectToolForDrops();
         var hasAquaAffinity = false;
         var isEyesInWater = false;
         var isOnGround = true;
@@ -252,7 +288,7 @@ public interface BlockBaseComponent extends BlockComponent {
 
         // Calculate break time
         // TODO: Further validation of the algorithm is needed
-        var baseTime = ((isCorrectTool || isAlwaysDestroyable) ? 1.5 : 5d) * blockHardness;
+        var baseTime = ((isCorrectTool || !requiresCorrectToolForDrops) ? 1.5 : 5d) * blockHardness;
         var speed = 1d / baseTime;
         if (isCorrectTool) {
             // Tool level (wooden, stone, iron, etc...) bonus

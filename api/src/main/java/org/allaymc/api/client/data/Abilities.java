@@ -79,6 +79,10 @@ public final class Abilities {
         dirty = true;
     }
 
+    public boolean has(Ability ability) {
+        return abilities.contains(ability);
+    }
+
     public void setWalkSpeed(float walkSpeed) {
         this.walkSpeed = walkSpeed;
         dirty = true;

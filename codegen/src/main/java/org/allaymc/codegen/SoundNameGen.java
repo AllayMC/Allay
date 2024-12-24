@@ -40,7 +40,7 @@ public class SoundNameGen {
                 .indent(CodeGenConstants.INDENT)
                 .skipJavaLangImports(true)
                 .build();
-        Files.writeString(Path.of("api/src/main/java/org/allaymc/api/world/Sound.java"), javaFile.toString());
+        Utils.writeFileWithCRLF(Path.of("api/src/main/java/org/allaymc/api/world/Sound.java"), javaFile.toString());
     }
 
     @SneakyThrows

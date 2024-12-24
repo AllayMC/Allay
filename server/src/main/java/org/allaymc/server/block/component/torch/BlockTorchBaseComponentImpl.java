@@ -8,7 +8,7 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.enums.TorchFacingDirection;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
-import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.Dimension;
@@ -44,18 +44,16 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var oldBlock = dimension.getBlockState(placeBlockPos);
         var torchFace = map.get(placementInfo.blockFace());
 
-        if (!oldBlock.getBlockType().hasBlockTag(BlockTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN)
+        if (!oldBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE) || torchFace == TorchFacingDirection.UNKNOWN)
             return false;
 
-        var targetBlock = dimension.getBlockState(placementInfo.clickBlockPos());
-        BlockType<?> blockType2 = targetBlock.getBlockType();
-        if (blockType2.getMaterial().isSolid()) {
+        var targetBlock = dimension.getBlockState(placementInfo.clickedBlockPos());
+        if (targetBlock.getBlockStateData().isSolid()) {
             blockState = blockState.setProperty(BlockPropertyTypes.TORCH_FACING_DIRECTION, torchFace);
         } else {
             blockState = blockState.setProperty(BlockPropertyTypes.TORCH_FACING_DIRECTION, TorchFacingDirection.TOP);
             var downBlock = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
-            BlockType<?> blockType1 = downBlock.getBlockType();
-            if (!blockType1.getMaterial().isSolid()) return false;
+            if (!downBlock.getBlockStateData().isSolid()) return false;
         }
 
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
@@ -68,6 +66,6 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
         var torchFacingDirection = current.blockState().getPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION);
         var blockFace = map.inverse().get(torchFacingDirection);
         var block = current.pos().dimension().getBlockState(blockFace.opposite().offsetPos(current.pos()));
-        return block.getBlockType().getMaterial().isSolid();
+        return block.getBlockStateData().isSolid();
     }
 }

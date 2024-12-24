@@ -247,7 +247,7 @@ public class AllayWorldGenerator implements WorldGenerator {
                     log.warn("Failed to populate chunk {} with populator {}", chunk, populator.getName());
                 }
             } catch (Throwable t) {
-                log.error("Error while populating chunk {} with populator {}", chunk, populator.getName());
+                log.error("Error while populating chunk {} with populator {}", chunk, populator.getName(), t);
             }
         }
 

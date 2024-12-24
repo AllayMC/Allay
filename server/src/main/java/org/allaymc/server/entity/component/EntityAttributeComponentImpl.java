@@ -143,8 +143,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         }
 
         var event = new EntityHealthChangeEvent(thisEntity, getHealth(), value);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         setAttributeValue(AttributeType.HEALTH, event.getNewHealth());
     }

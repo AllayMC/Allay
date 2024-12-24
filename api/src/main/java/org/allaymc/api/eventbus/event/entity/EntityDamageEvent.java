@@ -11,10 +11,10 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 public class EntityDamageEvent extends EntityEvent implements CancellableEvent {
 
-    protected DamageContainer damage;
+    protected DamageContainer damageContainer;
 
-    public EntityDamageEvent(Entity entity, DamageContainer damage) {
+    public EntityDamageEvent(Entity entity, DamageContainer damageContainer) {
         super(entity);
-        this.damage = damage;
+        this.damageContainer = damageContainer;
     }
 }

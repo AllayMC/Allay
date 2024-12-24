@@ -14,10 +14,11 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.interfaces.EntityXpOrb;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.Utils;
+import org.allaymc.api.world.biome.BiomeId;
+import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.service.*;
 import org.apache.commons.lang3.function.TriFunction;
 import org.cloudburstmc.math.vector.Vector3f;
@@ -35,6 +36,7 @@ import org.joml.primitives.AABBfc;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
@@ -337,9 +339,46 @@ public interface Dimension {
      * @return the block states at the specified region.
      */
     default BlockState[][][] getBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer) {
-        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) return Utils.EMPTY_BLOCK_STATE_ARRAY_3D;
+        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) {
+            return Utils.EMPTY_BLOCK_STATE_ARRAY_3D;
+        }
 
         var blockStates = new BlockState[sizeX][sizeY][sizeZ];
+        forEachBlockStates(x, y, z, sizeX, sizeY, sizeZ, layer, (globalX, globalY, globalZ, blockState) -> {
+            blockStates[globalX - x][globalY - y][globalZ - z] = blockState;
+        });
+        return blockStates;
+    }
+
+    /**
+     * @see #forEachBlockStates(int, int, int, int, int, int, int, PosAndBlockStateConsumer)
+     */
+    default void forEachBlockStates(AABBfc aabb, int layer, PosAndBlockStateConsumer blockStateConsumer) {
+        var maxX = (int) Math.ceil(aabb.maxX());
+        var maxY = (int) Math.ceil(aabb.maxY());
+        var maxZ = (int) Math.ceil(aabb.maxZ());
+        var minX = (int) Math.floor(aabb.minX());
+        var minY = (int) Math.floor(aabb.minY());
+        var minZ = (int) Math.floor(aabb.minZ());
+        forEachBlockStates(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ, layer, blockStateConsumer);
+    }
+
+    /**
+     * For-each the block states at the specified region.
+     *
+     * @param x                  the start x coordinate of the region.
+     * @param y                  the start y coordinate of the region.
+     * @param z                  the start z coordinate of the region.
+     * @param sizeX              the size of the region in the x-axis.
+     * @param sizeY              the size of the region in the y-axis.
+     * @param sizeZ              the size of the region in the z-axis.
+     * @param layer              the layer which contains the block.
+     * @param blockStateConsumer the block state consumer. The consumer will be called with the global x, y, z coordinates of the pos, and the block state.
+     */
+    default void forEachBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer, PosAndBlockStateConsumer blockStateConsumer) {
+        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) {
+            return;
+        }
 
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
@@ -362,7 +401,8 @@ public interface Dimension {
                                 for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
                                     var globalX = cX + localX;
                                     var globalZ = cZ + localZ;
-                                    blockStates[globalX - x][globalY - y][globalZ - z] = c.getBlockState(localX, globalY, localZ, layer);
+                                    var blockState = c.getBlockState(localX, globalY, localZ, layer);
+                                    blockStateConsumer.apply(globalX, globalY, globalZ, blockState);
                                 }
                             }
                         }
@@ -374,14 +414,13 @@ public interface Dimension {
                             for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
                                 var globalX = cX + localX;
                                 var globalZ = cZ + localZ;
-                                blockStates[globalX - x][globalY - y][globalZ - z] = air;
+                                blockStateConsumer.apply(globalX, globalY, globalZ, air);
                             }
                         }
                     }
                 }
             }
         }
-        return blockStates;
     }
 
     /**
@@ -397,7 +436,9 @@ public interface Dimension {
      * @param blockStateSupplier the block state supplier. The supplier will be called with the global x, y, z coordinates of the pos, and it should return the block state to set.
      */
     default void setBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer, TriFunction<Integer, Integer, Integer, BlockState> blockStateSupplier) {
-        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) return;
+        if (sizeX < 1 || sizeY < 1 || sizeZ < 1) {
+            return;
+        }
 
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
@@ -478,7 +519,7 @@ public interface Dimension {
      * @param layer           the layer which contains the block.
      * @param ignoreCollision include blocks that don't have collision.
      *
-     * @return the block states that collide with the specified AABB.
+     * @return the block states that collide with the specified AABB, or {@code null} if no block collides.
      */
     default BlockState[][][] getCollidingBlockStates(AABBfc aabb, int layer, boolean ignoreCollision) {
         var maxX = (int) Math.ceil(aabb.maxX());
@@ -487,57 +528,73 @@ public interface Dimension {
         var minX = (int) Math.floor(aabb.minX());
         var minY = (int) Math.floor(aabb.minY());
         var minZ = (int) Math.floor(aabb.minZ());
-        var blockStates = getBlockStates(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ, layer);
-        boolean notEmpty = false;
-        if (!ignoreCollision) {
-            // Filter out blocks without collision
-            for (int x = 0; x < blockStates.length; x++) {
-                for (int y = 0; y < blockStates[x].length; y++) {
-                    for (int z = 0; z < blockStates[x][y].length; z++) {
-                        var blockState = blockStates[x][y][z];
-                        var blockStateData = blockState.getBlockType().getBlockBehavior().getBlockStateData(blockState);
-                        if (!blockStateData.hasCollision() || !blockStateData.collisionShape().translate(minX + x, minY + y, minZ + z).intersectsAABB(aabb)) {
-                            blockStates[x][y][z] = null;
-                        } else {
-                            notEmpty = true;
-                        }
-                    }
-                }
+        var blockStates = new BlockState[maxX - minX][maxY - minY][maxZ - minZ];
+        AtomicBoolean notEmpty = new AtomicBoolean(false);
+        forEachBlockStates(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ, layer, (globalX, globalY, globalZ, blockState) -> {
+            var blockStateData = blockState.getBlockStateData();
+            if (ignoreCollision) {
+                blockStates[globalX - minX][globalY - minY][globalZ - minZ] = blockState;
+            } else if (blockStateData.hasCollision() && blockStateData.collisionShape().translate(globalX, globalY, globalZ).intersectsAABB(aabb)) {
+                blockStates[globalX - minX][globalY - minY][globalZ - minZ] = blockState;
+                notEmpty.set(true);
             }
-        }
-        return notEmpty ? blockStates : null;
+        });
+        return ignoreCollision || notEmpty.get() ? blockStates : null;
     }
 
-    default void addLevelEvent(Vector3fc pos, LevelEventType levelEventType) {
-        addLevelEvent(pos.x(), pos.y(), pos.z(), levelEventType, 0);
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(Vector3ic pos, LevelEventType eventType) {
+        addLevelEvent(pos, eventType, 0);
     }
 
-    default void addLevelEvent(Vector3fc pos, LevelEventType levelEventType, int data) {
-        addLevelEvent(pos.x(), pos.y(), pos.z(), levelEventType, data);
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(Vector3ic pos, LevelEventType eventType, int data) {
+        addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
     }
 
-    default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType) {
-        addLevelEvent(x, y, z, levelEventType, 0);
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(Vector3fc pos, LevelEventType eventType) {
+        addLevelEvent(pos, eventType, 0);
+    }
+
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(Vector3fc pos, LevelEventType eventType, int data) {
+        addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
+    }
+
+    /**
+     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     */
+    default void addLevelEvent(float x, float y, float z, LevelEventType eventType) {
+        addLevelEvent(x, y, z, eventType, 0);
     }
 
     /**
      * Add a level event at the specified position.
      *
-     * @param x              the x coordinate of the position.
-     * @param y              the y coordinate of the position.
-     * @param z              the z coordinate of the position.
-     * @param levelEventType the level event type.
-     * @param data           the data of the level event.
+     * @param x         the x coordinate of the position.
+     * @param y         the y coordinate of the position.
+     * @param z         the z coordinate of the position.
+     * @param eventType the level event type.
+     * @param data      the data of the level event.
      */
-    default void addLevelEvent(float x, float y, float z, LevelEventType levelEventType, int data) {
+    default void addLevelEvent(float x, float y, float z, LevelEventType eventType, int data) {
         var chunk = getChunkService().getChunkByDimensionPos((int) x, (int) z);
         if (chunk == null) return;
 
-        var levelEventPacket = new LevelEventPacket();
-        levelEventPacket.setPosition(Vector3f.from(x, y, z));
-        levelEventPacket.setType(levelEventType);
-        levelEventPacket.setData(data);
-        chunk.sendChunkPacket(levelEventPacket);
+        var packet = new LevelEventPacket();
+        packet.setPosition(Vector3f.from(x, y, z));
+        packet.setType(eventType);
+        packet.setData(data);
+        chunk.sendChunkPacket(packet);
     }
 
     default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent) {
@@ -572,14 +629,14 @@ public interface Dimension {
         var chunk = getChunkService().getChunk((int) x >> 4, (int) z >> 4);
         if (chunk == null) return;
 
-        var levelSoundEventPacket = new LevelSoundEventPacket();
-        levelSoundEventPacket.setSound(soundEvent);
-        levelSoundEventPacket.setPosition(Vector3f.from(x, y, z));
-        levelSoundEventPacket.setExtraData(extraData);
-        levelSoundEventPacket.setIdentifier(identifier);
-        levelSoundEventPacket.setBabySound(babySound);
-        levelSoundEventPacket.setRelativeVolumeDisabled(relativeVolumeDisabled);
-        chunk.sendChunkPacket(levelSoundEventPacket);
+        var packet = new LevelSoundEventPacket();
+        packet.setSound(soundEvent);
+        packet.setPosition(Vector3f.from(x, y, z));
+        packet.setExtraData(extraData);
+        packet.setIdentifier(identifier);
+        packet.setBabySound(babySound);
+        packet.setRelativeVolumeDisabled(relativeVolumeDisabled);
+        chunk.sendChunkPacket(packet);
     }
 
     default void updateAroundIgnoreFace(int x, int y, int z, BlockFace... ignoreFaces) {
@@ -739,23 +796,52 @@ public interface Dimension {
         return getChunkService().getLoadedChunks().stream().mapToInt(chunk -> chunk.getBlockEntities().size()).sum();
     }
 
-    default void addParticle(ParticleType particleType, Vector3fc pos) {
-        addParticle(particleType, pos, 0);
+    /**
+     * @see #addParticle(float, float, float, ParticleType, int)
+     */
+    default void addParticle(Vector3ic pos, ParticleType particleType) {
+        addParticle(pos, particleType, 0);
     }
 
     /**
-     * Add particle at the specified pos.
-     *
-     * @param particleType the particle type.
-     * @param pos          the pos.
-     * @param data         the data of the particle.
+     * @see #addParticle(float, float, float, ParticleType, int)
      */
-    default void addParticle(ParticleType particleType, Vector3fc pos, int data) {
-        var pk = new LevelEventPacket();
-        pk.setType(particleType);
-        pk.setPosition(MathUtils.JOMLVecToCBVec(pos));
-        pk.setData(data);
-        getChunkService().getChunkByDimensionPos((int) pos.x(), (int) pos.z()).addChunkPacket(pk);
+    default void addParticle(Vector3ic pos, ParticleType particleType, int data) {
+        addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
+    }
+
+    /**
+     * @see #addParticle(float, float, float, ParticleType, int)
+     */
+    default void addParticle(Vector3fc pos, ParticleType particleType) {
+        addParticle(pos, particleType, 0);
+    }
+
+    /**
+     * @see #addParticle(float, float, float, ParticleType, int)
+     */
+    default void addParticle(Vector3fc pos, ParticleType particleType, int data) {
+        addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
+    }
+
+    /**
+     * @see #addParticle(float, float, float, ParticleType, int)
+     */
+    default void addParticle(float x, float y, float z, ParticleType particleType) {
+        this.addParticle(x, y, z, particleType, 0);
+    }
+
+    /**
+     * Adds a particle at the specified position.
+     *
+     * @param x            the x-coordinate of the position where the particle should be added.
+     * @param y            the y-coordinate of the position where the particle should be added.
+     * @param z            the z-coordinate of the position where the particle should be added.
+     * @param particleType the type of the particle to be added.
+     * @param data         the data associated with the particle.
+     */
+    default void addParticle(float x, float y, float z, ParticleType particleType, int data) {
+        addLevelEvent(x, y, z, particleType, data);
     }
 
     /**
@@ -896,8 +982,8 @@ public interface Dimension {
         getEntityService().addEntity(entityXpOrb);
     }
 
-    default void breakBlock(Vector3ic pos, ItemStack usedItem, EntityPlayer player) {
-        breakBlock(pos.x(), pos.y(), pos.z(), usedItem, player);
+    default void breakBlock(Vector3ic pos, ItemStack usedItem, Entity entity) {
+        breakBlock(pos.x(), pos.y(), pos.z(), usedItem, entity);
     }
 
     /**
@@ -907,11 +993,11 @@ public interface Dimension {
      * @param y        The y coordinate of the block.
      * @param z        The z coordinate of the block.
      * @param usedItem The item used to break the block, can be {@code null}.
-     * @param player   The player who breaks the block, can be {@code null}.
+     * @param entity   The player who breaks the block, can be {@code null}.
      *
      * @return Whether the block is successfully broken.
      */
-    boolean breakBlock(int x, int y, int z, ItemStack usedItem, EntityPlayer player);
+    boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity);
 
     /**
      * Get the height of the highest non-air block at the specified x and z coordinates.
@@ -966,5 +1052,88 @@ public interface Dimension {
             }
         }
         return null;
+    }
+
+    /**
+     * Check if the specified pos can see the sky.
+     *
+     * @param pos the pos.
+     *
+     * @return {@code true} if the specified pos can see the sky, otherwise {@code false}.
+     */
+    default boolean canPosSeeSky(Vector3ic pos) {
+        return canPosSeeSky(pos.x(), pos.y(), pos.z());
+    }
+
+    /**
+     * Check if the specified pos can see the sky.
+     *
+     * @param x the x coordinate of the pos.
+     * @param y the y coordinate of the pos.
+     * @param z the z coordinate of the pos.
+     *
+     * @return {@code true} if the specified pos can see the sky, otherwise {@code false}.
+     */
+    default boolean canPosSeeSky(int x, int y, int z) {
+        return getHeight(x, z) <= y;
+    }
+
+    /**
+     * Get the biome at the specified pos.
+     *
+     * @param pos the pos.
+     *
+     * @return biome the biome.
+     */
+    default BiomeType getBiome(Vector3ic pos) {
+        return getBiome(pos.x(), pos.y(), pos.z());
+    }
+
+    /**
+     * Get the biome at the specified pos.
+     *
+     * @param x the x coordinate of the pos.
+     * @param y the y coordinate of the pos.
+     * @param z the z coordinate of the pos.
+     *
+     * @return the biome at the specified pos.
+     */
+    default BiomeType getBiome(int x, int y, int z) {
+        if (y < this.getDimensionInfo().minHeight() || y > getDimensionInfo().maxHeight())
+            return BiomeId.PLAINS;
+
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        if (chunk == null) {
+            chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+        }
+
+        return chunk.getBiome(x & 15, y, z & 15);
+    }
+
+    /**
+     * Set the biome at the specified pos.
+     *
+     * @param pos   the pos.
+     * @param biome the biome to set.
+     */
+    default void setBiome(Vector3ic pos, BiomeType biome) {
+        setBiome(pos.x(), pos.y(), pos.z(), biome);
+    }
+
+    /**
+     * Set the biome at the specified pos.
+     *
+     * @param x     the x coordinate of the pos.
+     * @param y     the y coordinate of the pos.
+     * @param z     the z coordinate of the pos.
+     * @param biome the biome to set.
+     */
+    default void setBiome(int x, int y, int z, BiomeType biome) {
+        var chunk = getChunkService().getChunkByDimensionPos(x, z);
+        if (chunk == null) {
+            chunk = getChunkService().getOrLoadChunkSync(x >> 4, z >> 4);
+        }
+
+        chunk.setBiome(x & 15, y, z & 15, biome);
     }
 }

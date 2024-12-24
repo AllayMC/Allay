@@ -36,7 +36,7 @@ public interface PluginLoader {
      * <p>
      * Each plugin loader factory will be responsible for loading a specific type of plugin.
      */
-    interface PluginLoaderFactory {
+    interface Factory {
 
         /**
          * Check if the plugin loader factory can load the plugin file.

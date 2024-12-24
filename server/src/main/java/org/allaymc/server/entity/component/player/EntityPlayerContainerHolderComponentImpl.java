@@ -49,10 +49,7 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
         if (item != ItemAirStack.AIR_STACK) {
             var enchantOptions = EnchantmentOptionGenerator.generateEnchantOptions(enchantTablePos, item, thisPlayer.getEnchantmentSeed());
             var event = new PlayerEnchantOptionsRequestEvent(thisPlayer, enchantOptions);
-            event.call();
-            if (event.isCancelled()) {
-                return;
-            }
+            if (!event.call()) return;
 
             pk.getOptions().addAll(event.getEnchantOptions());
         }

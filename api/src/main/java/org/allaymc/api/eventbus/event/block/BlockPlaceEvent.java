@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
 
@@ -14,7 +14,7 @@ import org.allaymc.api.item.ItemStack;
 @Getter
 public class BlockPlaceEvent extends BlockEvent implements CancellableEvent {
 
-    protected BlockState blockReplaced;
+    protected BlockState blockStateReplaced;
     /**
      * can be null
      */
@@ -22,17 +22,17 @@ public class BlockPlaceEvent extends BlockEvent implements CancellableEvent {
     /**
      * can be null
      */
-    protected EntityPlayer player;
+    protected Entity entity;
     /**
      * can be null
      */
     protected PlayerInteractInfo interactInfo;
 
-    public BlockPlaceEvent(BlockStateWithPos blockPlaced, BlockState blockReplaced, ItemStack itemUsed, EntityPlayer player, PlayerInteractInfo interactInfo) {
-        super(blockPlaced);
-        this.blockReplaced = blockReplaced;
+    public BlockPlaceEvent(BlockStateWithPos blockStatePlaced, BlockState blockStateReplaced, ItemStack itemUsed, Entity entity, PlayerInteractInfo interactInfo) {
+        super(blockStatePlaced);
+        this.blockStateReplaced = blockStateReplaced;
         this.itemUsed = itemUsed;
-        this.player = player;
+        this.entity = entity;
         this.interactInfo = interactInfo;
     }
 }

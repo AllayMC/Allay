@@ -83,13 +83,4 @@ public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements
     public ArmorType getArmorType() {
         return armorType;
     }
-
-    @Override
-    protected boolean canIncreaseDurabilityThisTime() {
-        var unbreakingLevel = getEnchantmentLevel(EnchantmentTypes.UNBREAKING);
-        if (unbreakingLevel == 0) return true;
-
-        var possibility = 0.6f + 0.4f / (unbreakingLevel + 1f);
-        return ThreadLocalRandom.current().nextFloat() <= possibility;
-    }
 }

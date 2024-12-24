@@ -15,6 +15,7 @@ import org.allaymc.api.item.tag.ItemTag;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
 
@@ -98,11 +99,7 @@ public class Utils {
      * @return the string array.
      */
     public String[] objectArrayToStringArray(Object[] objectArray) {
-        String[] stringArray = new String[objectArray.length];
-        for (int i = 0; i < objectArray.length; i++) {
-            stringArray[i] = objectArray[i].toString();
-        }
-        return stringArray;
+        return Arrays.stream(objectArray).map(Object::toString).toArray(String[]::new);
     }
 
     /**

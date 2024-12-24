@@ -34,9 +34,20 @@ public class GiveCommand extends SimpleCommand {
                         context.addNoTargetMatchError();
                         return context.fail();
                     }
+
                     ItemType<?> itemType = context.getResult(1);
                     int amount = context.getResult(2);
+                    if (amount <= 0) {
+                        context.addSyntaxError(2);
+                        return context.fail();
+                    }
+
                     int data = context.getResult(3);
+                    if (data < 0) {
+                        context.addSyntaxError(3);
+                        return context.fail();
+                    }
+
                     for (var player : players) {
                         var itemStack = itemType.createItemStack(amount, data);
                         player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);

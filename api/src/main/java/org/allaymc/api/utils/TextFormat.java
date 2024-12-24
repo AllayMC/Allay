@@ -39,6 +39,7 @@ public enum TextFormat {
     MATERIAL_DIAMOND('s', 0x24),
     MATERIAL_LAPIS('t', 0x25),
     MATERIAL_AMETHYST('u', 0x26),
+    MATERIAL_RESIN('v', 0x27),
     OBFUSCATED('k', 0x10, true),
     BOLD('l', 0x11, true),
     ITALIC('o', 0x14, true),

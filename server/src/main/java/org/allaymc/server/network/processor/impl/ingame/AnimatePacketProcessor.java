@@ -14,8 +14,7 @@ public class AnimatePacketProcessor extends PacketProcessor<AnimatePacket> {
     @Override
     public PacketSignal handleAsync(EntityPlayer player, AnimatePacket packet, long receiveTime) {
         var event = new PlayerAnimationEvent(player, packet.getAction(), packet.getRowingTime());
-        event.call();
-        if (event.isCancelled()) return PacketSignal.HANDLED;
+        if (!event.call()) return PacketSignal.HANDLED;
 
         if (packet.getAction() == AnimatePacket.Action.SWING_ARM) {
             player.getCurrentChunk().addChunkPacket(packet, chunkLoader -> chunkLoader != player);

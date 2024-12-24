@@ -10,7 +10,7 @@ public enum ItemId {
 
     ACACIA_BUTTON("minecraft:acacia_button", -140),
 
-    ACACIA_CHEST_BOAT("minecraft:acacia_chest_boat", 678),
+    ACACIA_CHEST_BOAT("minecraft:acacia_chest_boat", 679),
 
     ACACIA_DOOR("minecraft:acacia_door", 589),
 
@@ -52,7 +52,7 @@ public enum ItemId {
 
     AIR("minecraft:air", -158),
 
-    ALLAY_SPAWN_EGG("minecraft:allay_spawn_egg", 667),
+    ALLAY_SPAWN_EGG("minecraft:allay_spawn_egg", 668),
 
     ALLIUM("minecraft:allium", -831),
 
@@ -62,7 +62,7 @@ public enum ItemId {
 
     AMETHYST_CLUSTER("minecraft:amethyst_cluster", -329),
 
-    AMETHYST_SHARD("minecraft:amethyst_shard", 660),
+    AMETHYST_SHARD("minecraft:amethyst_shard", 661),
 
     ANCIENT_DEBRIS("minecraft:ancient_debris", -271),
 
@@ -76,21 +76,21 @@ public enum ItemId {
 
     ANDESITE_WALL("minecraft:andesite_wall", -974),
 
-    ANGLER_POTTERY_SHERD("minecraft:angler_pottery_sherd", 692),
+    ANGLER_POTTERY_SHERD("minecraft:angler_pottery_sherd", 693),
 
     ANVIL("minecraft:anvil", 145),
 
     APPLE("minecraft:apple", 278),
 
-    ARCHER_POTTERY_SHERD("minecraft:archer_pottery_sherd", 693),
+    ARCHER_POTTERY_SHERD("minecraft:archer_pottery_sherd", 694),
 
-    ARMADILLO_SCUTE("minecraft:armadillo_scute", 739),
+    ARMADILLO_SCUTE("minecraft:armadillo_scute", 740),
 
-    ARMADILLO_SPAWN_EGG("minecraft:armadillo_spawn_egg", 738),
+    ARMADILLO_SPAWN_EGG("minecraft:armadillo_spawn_egg", 739),
 
     ARMOR_STAND("minecraft:armor_stand", 585),
 
-    ARMS_UP_POTTERY_SHERD("minecraft:arms_up_pottery_sherd", 694),
+    ARMS_UP_POTTERY_SHERD("minecraft:arms_up_pottery_sherd", 695),
 
     ARROW("minecraft:arrow", 325),
 
@@ -108,7 +108,7 @@ public enum ItemId {
 
     BAKED_POTATO("minecraft:baked_potato", 303),
 
-    BALLOON("minecraft:balloon", 634),
+    BALLOON("minecraft:balloon", 635),
 
     BAMBOO("minecraft:bamboo", -163),
 
@@ -116,7 +116,7 @@ public enum ItemId {
 
     BAMBOO_BUTTON("minecraft:bamboo_button", -511),
 
-    BAMBOO_CHEST_RAFT("minecraft:bamboo_chest_raft", 690),
+    BAMBOO_CHEST_RAFT("minecraft:bamboo_chest_raft", 691),
 
     BAMBOO_DOOR("minecraft:bamboo_door", -517),
 
@@ -140,11 +140,11 @@ public enum ItemId {
 
     BAMBOO_PRESSURE_PLATE("minecraft:bamboo_pressure_plate", -514),
 
-    BAMBOO_RAFT("minecraft:bamboo_raft", 689),
+    BAMBOO_RAFT("minecraft:bamboo_raft", 690),
 
     BAMBOO_SAPLING("minecraft:bamboo_sapling", -164),
 
-    BAMBOO_SIGN("minecraft:bamboo_sign", 688),
+    BAMBOO_SIGN("minecraft:bamboo_sign", 689),
 
     BAMBOO_SLAB("minecraft:bamboo_slab", -513),
 
@@ -158,7 +158,7 @@ public enum ItemId {
 
     BANNER("minecraft:banner", 600),
 
-    BANNER_PATTERN("minecraft:banner_pattern", 787),
+    BANNER_PATTERN("minecraft:banner_pattern", 793),
 
     BARREL("minecraft:barrel", -203),
 
@@ -196,7 +196,7 @@ public enum ItemId {
 
     BIRCH_BUTTON("minecraft:birch_button", -141),
 
-    BIRCH_CHEST_BOAT("minecraft:birch_chest_boat", 675),
+    BIRCH_CHEST_BOAT("minecraft:birch_chest_boat", 676),
 
     BIRCH_DOOR("minecraft:birch_door", 587),
 
@@ -268,7 +268,7 @@ public enum ItemId {
 
     BLACKSTONE_WALL("minecraft:blackstone_wall", -277),
 
-    BLADE_POTTERY_SHERD("minecraft:blade_pottery_sherd", 695),
+    BLADE_POTTERY_SHERD("minecraft:blade_pottery_sherd", 696),
 
     BLAST_FURNACE("minecraft:blast_furnace", -196),
 
@@ -278,7 +278,7 @@ public enum ItemId {
 
     BLAZE_SPAWN_EGG("minecraft:blaze_spawn_egg", 483),
 
-    BLEACH("minecraft:bleach", 632),
+    BLEACH("minecraft:bleach", 633),
 
     BLUE_BUNDLE("minecraft:blue_bundle", 258),
 
@@ -310,11 +310,13 @@ public enum ItemId {
 
     BLUE_WOOL("minecraft:blue_wool", -563),
 
-    BOAT("minecraft:boat", 785),
+    BOARD("minecraft:board", 629),
+
+    BOAT("minecraft:boat", 791),
 
     BOGGED_SPAWN_EGG("minecraft:bogged_spawn_egg", 490),
 
-    BOLT_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:bolt_armor_trim_smithing_template", 734),
+    BOLT_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:bolt_armor_trim_smithing_template", 735),
 
     BONE("minecraft:bone", 441),
 
@@ -348,7 +350,7 @@ public enum ItemId {
 
     BREEZE_SPAWN_EGG("minecraft:breeze_spawn_egg", 529),
 
-    BREWER_POTTERY_SHERD("minecraft:brewer_pottery_sherd", 696),
+    BREWER_POTTERY_SHERD("minecraft:brewer_pottery_sherd", 697),
 
     BREWING_STAND("minecraft:brewing_stand", 458),
 
@@ -394,7 +396,7 @@ public enum ItemId {
 
     BROWN_WOOL("minecraft:brown_wool", -555),
 
-    BRUSH("minecraft:brush", 715),
+    BRUSH("minecraft:brush", 716),
 
     BUBBLE_COLUMN("minecraft:bubble_column", -160),
 
@@ -412,7 +414,7 @@ public enum ItemId {
 
     BUNDLE("minecraft:bundle", 260),
 
-    BURN_POTTERY_SHERD("minecraft:burn_pottery_sherd", 697),
+    BURN_POTTERY_SHERD("minecraft:burn_pottery_sherd", 698),
 
     CACTUS("minecraft:cactus", 81),
 
@@ -422,9 +424,9 @@ public enum ItemId {
 
     CALIBRATED_SCULK_SENSOR("minecraft:calibrated_sculk_sensor", -580),
 
-    CAMEL_SPAWN_EGG("minecraft:camel_spawn_egg", 691),
+    CAMEL_SPAWN_EGG("minecraft:camel_spawn_egg", 692),
 
-    CAMERA("minecraft:camera", 629),
+    CAMERA("minecraft:camera", 630),
 
     CAMPFIRE("minecraft:campfire", 624),
 
@@ -432,7 +434,7 @@ public enum ItemId {
 
     CANDLE_CAKE("minecraft:candle_cake", -429),
 
-    CARPET("minecraft:carpet", 744),
+    CARPET("minecraft:carpet", 750),
 
     CARROT("minecraft:carrot", 301),
 
@@ -456,7 +458,7 @@ public enum ItemId {
 
     CAVE_VINES_HEAD_WITH_BERRIES("minecraft:cave_vines_head_with_berries", -376),
 
-    CHAIN("minecraft:chain", 655),
+    CHAIN("minecraft:chain", 656),
 
     CHAIN_COMMAND_BLOCK("minecraft:chain_command_block", 189),
 
@@ -468,17 +470,19 @@ public enum ItemId {
 
     CHAINMAIL_LEGGINGS("minecraft:chainmail_leggings", 366),
 
+    CHALKBOARD("minecraft:chalkboard", 230),
+
     CHARCOAL("minecraft:charcoal", 327),
 
     CHEMICAL_HEAT("minecraft:chemical_heat", 192),
 
-    CHEMISTRY_TABLE("minecraft:chemistry_table", 779),
+    CHEMISTRY_TABLE("minecraft:chemistry_table", 785),
 
-    CHERRY_BOAT("minecraft:cherry_boat", 685),
+    CHERRY_BOAT("minecraft:cherry_boat", 686),
 
     CHERRY_BUTTON("minecraft:cherry_button", -530),
 
-    CHERRY_CHEST_BOAT("minecraft:cherry_chest_boat", 686),
+    CHERRY_CHEST_BOAT("minecraft:cherry_chest_boat", 687),
 
     CHERRY_DOOR("minecraft:cherry_door", -531),
 
@@ -500,7 +504,7 @@ public enum ItemId {
 
     CHERRY_SAPLING("minecraft:cherry_sapling", -547),
 
-    CHERRY_SIGN("minecraft:cherry_sign", 687),
+    CHERRY_SIGN("minecraft:cherry_sign", 688),
 
     CHERRY_SLAB("minecraft:cherry_slab", -539),
 
@@ -516,7 +520,7 @@ public enum ItemId {
 
     CHEST("minecraft:chest", 54),
 
-    CHEST_BOAT("minecraft:chest_boat", 681),
+    CHEST_BOAT("minecraft:chest_boat", 682),
 
     CHEST_MINECART("minecraft:chest_minecart", 415),
 
@@ -540,6 +544,8 @@ public enum ItemId {
 
     CHISELED_RED_SANDSTONE("minecraft:chiseled_red_sandstone", -956),
 
+    CHISELED_RESIN_BRICKS("minecraft:chiseled_resin_bricks", -1020),
+
     CHISELED_SANDSTONE("minecraft:chiseled_sandstone", -944),
 
     CHISELED_STONE_BRICKS("minecraft:chiseled_stone_bricks", -870),
@@ -562,6 +568,8 @@ public enum ItemId {
 
     CLOCK("minecraft:clock", 419),
 
+    CLOSED_EYEBLOSSOM("minecraft:closed_eyeblossom", -1019),
+
     COAL("minecraft:coal", 326),
 
     COAL_BLOCK("minecraft:coal_block", 173),
@@ -570,7 +578,7 @@ public enum ItemId {
 
     COARSE_DIRT("minecraft:coarse_dirt", -962),
 
-    COAST_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:coast_armor_trim_smithing_template", 719),
+    COAST_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:coast_armor_trim_smithing_template", 720),
 
     COBBLED_DEEPSLATE("minecraft:cobbled_deepslate", -379),
 
@@ -602,7 +610,7 @@ public enum ItemId {
 
     COLORED_TORCH_BLUE("minecraft:colored_torch_blue", 204),
 
-    COLORED_TORCH_BP("minecraft:colored_torch_bp", 783),
+    COLORED_TORCH_BP("minecraft:colored_torch_bp", 789),
 
     COLORED_TORCH_GREEN("minecraft:colored_torch_green", -963),
 
@@ -610,7 +618,7 @@ public enum ItemId {
 
     COLORED_TORCH_RED("minecraft:colored_torch_red", 202),
 
-    COLORED_TORCH_RG("minecraft:colored_torch_rg", 782),
+    COLORED_TORCH_RG("minecraft:colored_torch_rg", 788),
 
     COMMAND_BLOCK("minecraft:command_block", 137),
 
@@ -622,13 +630,13 @@ public enum ItemId {
 
     COMPOSTER("minecraft:composter", -213),
 
-    COMPOUND("minecraft:compound", 630),
+    COMPOUND("minecraft:compound", 631),
 
     COMPOUND_CREATOR("minecraft:compound_creator", 238),
 
-    CONCRETE("minecraft:concrete", 770),
+    CONCRETE("minecraft:concrete", 776),
 
-    CONCRETE_POWDER("minecraft:concrete_powder", 771),
+    CONCRETE_POWDER("minecraft:concrete_powder", 777),
 
     CONDUIT("minecraft:conduit", -157),
 
@@ -662,13 +670,13 @@ public enum ItemId {
 
     COPPER_TRAPDOOR("minecraft:copper_trapdoor", -792),
 
-    CORAL("minecraft:coral", 766),
+    CORAL("minecraft:coral", 772),
 
-    CORAL_BLOCK("minecraft:coral_block", 748),
+    CORAL_BLOCK("minecraft:coral_block", 754),
 
-    CORAL_FAN("minecraft:coral_fan", 757),
+    CORAL_FAN("minecraft:coral_fan", 763),
 
-    CORAL_FAN_DEAD("minecraft:coral_fan_dead", 758),
+    CORAL_FAN_DEAD("minecraft:coral_fan_dead", 764),
 
     CORNFLOWER("minecraft:cornflower", -838),
 
@@ -688,6 +696,10 @@ public enum ItemId {
 
     CRAFTING_TABLE("minecraft:crafting_table", 58),
 
+    CREAKING_HEART("minecraft:creaking_heart", -1012),
+
+    CREAKING_SPAWN_EGG("minecraft:creaking_spawn_egg", 747),
+
     CREEPER_BANNER_PATTERN("minecraft:creeper_banner_pattern", 615),
 
     CREEPER_HEAD("minecraft:creeper_head", -968),
@@ -696,7 +708,7 @@ public enum ItemId {
 
     CRIMSON_BUTTON("minecraft:crimson_button", -260),
 
-    CRIMSON_DOOR("minecraft:crimson_door", 652),
+    CRIMSON_DOOR("minecraft:crimson_door", 653),
 
     CRIMSON_DOUBLE_SLAB("minecraft:crimson_double_slab", -266),
 
@@ -718,7 +730,7 @@ public enum ItemId {
 
     CRIMSON_ROOTS("minecraft:crimson_roots", -223),
 
-    CRIMSON_SIGN("minecraft:crimson_sign", 650),
+    CRIMSON_SIGN("minecraft:crimson_sign", 651),
 
     CRIMSON_SLAB("minecraft:crimson_slab", -264),
 
@@ -784,13 +796,13 @@ public enum ItemId {
 
     DANDELION("minecraft:dandelion", 37),
 
-    DANGER_POTTERY_SHERD("minecraft:danger_pottery_sherd", 698),
+    DANGER_POTTERY_SHERD("minecraft:danger_pottery_sherd", 699),
 
     DARK_OAK_BOAT("minecraft:dark_oak_boat", 406),
 
     DARK_OAK_BUTTON("minecraft:dark_oak_button", -142),
 
-    DARK_OAK_CHEST_BOAT("minecraft:dark_oak_chest_boat", 679),
+    DARK_OAK_CHEST_BOAT("minecraft:dark_oak_chest_boat", 680),
 
     DARK_OAK_DOOR("minecraft:dark_oak_door", 590),
 
@@ -970,7 +982,7 @@ public enum ItemId {
 
     DIRT_WITH_ROOTS("minecraft:dirt_with_roots", -318),
 
-    DISC_FRAGMENT_5("minecraft:disc_fragment_5", 673),
+    DISC_FRAGMENT_5("minecraft:disc_fragment_5", 674),
 
     DISPENSER("minecraft:dispenser", 23),
 
@@ -980,15 +992,15 @@ public enum ItemId {
 
     DOUBLE_CUT_COPPER_SLAB("minecraft:double_cut_copper_slab", -368),
 
-    DOUBLE_PLANT("minecraft:double_plant", 764),
+    DOUBLE_PLANT("minecraft:double_plant", 770),
 
-    DOUBLE_STONE_BLOCK_SLAB("minecraft:double_stone_block_slab", 753),
+    DOUBLE_STONE_BLOCK_SLAB("minecraft:double_stone_block_slab", 759),
 
-    DOUBLE_STONE_BLOCK_SLAB2("minecraft:double_stone_block_slab2", 754),
+    DOUBLE_STONE_BLOCK_SLAB2("minecraft:double_stone_block_slab2", 760),
 
-    DOUBLE_STONE_BLOCK_SLAB3("minecraft:double_stone_block_slab3", 755),
+    DOUBLE_STONE_BLOCK_SLAB3("minecraft:double_stone_block_slab3", 761),
 
-    DOUBLE_STONE_BLOCK_SLAB4("minecraft:double_stone_block_slab4", 756),
+    DOUBLE_STONE_BLOCK_SLAB4("minecraft:double_stone_block_slab4", 762),
 
     DRAGON_BREATH("minecraft:dragon_breath", 593),
 
@@ -1006,11 +1018,11 @@ public enum ItemId {
 
     DROWNED_SPAWN_EGG("minecraft:drowned_spawn_egg", 511),
 
-    DUNE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:dune_armor_trim_smithing_template", 718),
+    DUNE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:dune_armor_trim_smithing_template", 719),
 
-    DYE("minecraft:dye", 786),
+    DYE("minecraft:dye", 792),
 
-    ECHO_SHARD("minecraft:echo_shard", 683),
+    ECHO_SHARD("minecraft:echo_shard", 684),
 
     EGG("minecraft:egg", 416),
 
@@ -1276,7 +1288,7 @@ public enum ItemId {
 
     END_BRICKS("minecraft:end_bricks", 206),
 
-    END_CRYSTAL("minecraft:end_crystal", 789),
+    END_CRYSTAL("minecraft:end_crystal", 795),
 
     END_GATEWAY("minecraft:end_gateway", 209),
 
@@ -1310,7 +1322,7 @@ public enum ItemId {
 
     EXPERIENCE_BOTTLE("minecraft:experience_bottle", 542),
 
-    EXPLORER_POTTERY_SHERD("minecraft:explorer_pottery_sherd", 699),
+    EXPLORER_POTTERY_SHERD("minecraft:explorer_pottery_sherd", 700),
 
     EXPOSED_CHISELED_COPPER("minecraft:exposed_chiseled_copper", -761),
 
@@ -1332,13 +1344,13 @@ public enum ItemId {
 
     EXPOSED_DOUBLE_CUT_COPPER_SLAB("minecraft:exposed_double_cut_copper_slab", -369),
 
-    EYE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:eye_armor_trim_smithing_template", 722),
+    EYE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:eye_armor_trim_smithing_template", 723),
 
     FARMLAND("minecraft:farmland", 60),
 
     FEATHER("minecraft:feather", 352),
 
-    FENCE("minecraft:fence", 746),
+    FENCE("minecraft:fence", 752),
 
     FENCE_GATE("minecraft:fence_gate", 107),
 
@@ -1374,11 +1386,11 @@ public enum ItemId {
 
     FLINT_AND_STEEL("minecraft:flint_and_steel", 323),
 
-    FLOW_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:flow_armor_trim_smithing_template", 733),
+    FLOW_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:flow_armor_trim_smithing_template", 734),
 
     FLOW_BANNER_PATTERN("minecraft:flow_banner_pattern", 622),
 
-    FLOW_POTTERY_SHERD("minecraft:flow_pottery_sherd", 700),
+    FLOW_POTTERY_SHERD("minecraft:flow_pottery_sherd", 701),
 
     FLOWER_BANNER_PATTERN("minecraft:flower_banner_pattern", 614),
 
@@ -1394,11 +1406,11 @@ public enum ItemId {
 
     FRAME("minecraft:frame", 547),
 
-    FRIEND_POTTERY_SHERD("minecraft:friend_pottery_sherd", 701),
+    FRIEND_POTTERY_SHERD("minecraft:friend_pottery_sherd", 702),
 
     FROG_SPAWN("minecraft:frog_spawn", -468),
 
-    FROG_SPAWN_EGG("minecraft:frog_spawn_egg", 664),
+    FROG_SPAWN_EGG("minecraft:frog_spawn_egg", 665),
 
     FROSTED_ICE("minecraft:frosted_ice", 207),
 
@@ -1420,9 +1432,9 @@ public enum ItemId {
 
     GLOBE_BANNER_PATTERN("minecraft:globe_banner_pattern", 621),
 
-    GLOW_BERRIES("minecraft:glow_berries", 790),
+    GLOW_BERRIES("minecraft:glow_berries", 796),
 
-    GLOW_FRAME("minecraft:glow_frame", 659),
+    GLOW_FRAME("minecraft:glow_frame", 660),
 
     GLOW_INK_SAC("minecraft:glow_ink_sac", 537),
 
@@ -1430,7 +1442,7 @@ public enum ItemId {
 
     GLOW_SQUID_SPAWN_EGG("minecraft:glow_squid_spawn_egg", 532),
 
-    GLOW_STICK("minecraft:glow_stick", 637),
+    GLOW_STICK("minecraft:glow_stick", 638),
 
     GLOWINGOBSIDIAN("minecraft:glowingobsidian", 246),
 
@@ -1438,7 +1450,7 @@ public enum ItemId {
 
     GLOWSTONE_DUST("minecraft:glowstone_dust", 420),
 
-    GOAT_HORN("minecraft:goat_horn", 663),
+    GOAT_HORN("minecraft:goat_horn", 664),
 
     GOAT_SPAWN_EGG("minecraft:goat_spawn_egg", 531),
 
@@ -1552,7 +1564,7 @@ public enum ItemId {
 
     GUSTER_BANNER_PATTERN("minecraft:guster_banner_pattern", 623),
 
-    GUSTER_POTTERY_SHERD("minecraft:guster_pottery_sherd", 702),
+    GUSTER_POTTERY_SHERD("minecraft:guster_pottery_sherd", 703),
 
     HANGING_ROOTS("minecraft:hanging_roots", -319),
 
@@ -1616,9 +1628,9 @@ public enum ItemId {
 
     HARD_RED_STAINED_GLASS_PANE("minecraft:hard_red_stained_glass_pane", -671),
 
-    HARD_STAINED_GLASS("minecraft:hard_stained_glass", 780),
+    HARD_STAINED_GLASS("minecraft:hard_stained_glass", 786),
 
-    HARD_STAINED_GLASS_PANE("minecraft:hard_stained_glass_pane", 781),
+    HARD_STAINED_GLASS_PANE("minecraft:hard_stained_glass_pane", 787),
 
     HARD_WHITE_STAINED_GLASS("minecraft:hard_white_stained_glass", 254),
 
@@ -1634,9 +1646,9 @@ public enum ItemId {
 
     HEART_OF_THE_SEA("minecraft:heart_of_the_sea", 604),
 
-    HEART_POTTERY_SHERD("minecraft:heart_pottery_sherd", 703),
+    HEART_POTTERY_SHERD("minecraft:heart_pottery_sherd", 704),
 
-    HEARTBREAK_POTTERY_SHERD("minecraft:heartbreak_pottery_sherd", 704),
+    HEARTBREAK_POTTERY_SHERD("minecraft:heartbreak_pottery_sherd", 705),
 
     HEAVY_CORE("minecraft:heavy_core", -316),
 
@@ -1666,15 +1678,15 @@ public enum ItemId {
 
     HORSE_SPAWN_EGG("minecraft:horse_spawn_egg", 485),
 
-    HOST_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:host_armor_trim_smithing_template", 732),
+    HOST_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:host_armor_trim_smithing_template", 733),
 
-    HOWL_POTTERY_SHERD("minecraft:howl_pottery_sherd", 705),
+    HOWL_POTTERY_SHERD("minecraft:howl_pottery_sherd", 706),
 
     HUSK_SPAWN_EGG("minecraft:husk_spawn_egg", 491),
 
     ICE("minecraft:ice", 79),
 
-    ICE_BOMB("minecraft:ice_bomb", 631),
+    ICE_BOMB("minecraft:ice_bomb", 632),
 
     INFESTED_CHISELED_STONE_BRICKS("minecraft:infested_chiseled_stone_bricks", -862),
 
@@ -1798,7 +1810,7 @@ public enum ItemId {
 
     JUNGLE_BUTTON("minecraft:jungle_button", -143),
 
-    JUNGLE_CHEST_BOAT("minecraft:jungle_chest_boat", 676),
+    JUNGLE_CHEST_BOAT("minecraft:jungle_chest_boat", 677),
 
     JUNGLE_DOOR("minecraft:jungle_door", 588),
 
@@ -1870,15 +1882,15 @@ public enum ItemId {
 
     LEATHER_LEGGINGS("minecraft:leather_leggings", 362),
 
-    LEAVES("minecraft:leaves", 760),
+    LEAVES("minecraft:leaves", 766),
 
-    LEAVES2("minecraft:leaves2", 761),
+    LEAVES2("minecraft:leaves2", 767),
 
     LECTERN("minecraft:lectern", -194),
 
     LEVER("minecraft:lever", 69),
 
-    LIGHT_BLOCK("minecraft:light_block", 784),
+    LIGHT_BLOCK("minecraft:light_block", 790),
 
     LIGHT_BLOCK_0("minecraft:light_block_0", -215),
 
@@ -2016,11 +2028,11 @@ public enum ItemId {
 
     LODESTONE("minecraft:lodestone", -222),
 
-    LODESTONE_COMPASS("minecraft:lodestone_compass", 638),
+    LODESTONE_COMPASS("minecraft:lodestone_compass", 639),
 
-    LOG("minecraft:log", 745),
+    LOG("minecraft:log", 751),
 
-    LOG2("minecraft:log2", 768),
+    LOG2("minecraft:log2", 774),
 
     LOOM("minecraft:loom", -204),
 
@@ -2058,13 +2070,13 @@ public enum ItemId {
 
     MAGMA_CUBE_SPAWN_EGG("minecraft:magma_cube_spawn_egg", 482),
 
-    MANGROVE_BOAT("minecraft:mangrove_boat", 671),
+    MANGROVE_BOAT("minecraft:mangrove_boat", 672),
 
     MANGROVE_BUTTON("minecraft:mangrove_button", -487),
 
-    MANGROVE_CHEST_BOAT("minecraft:mangrove_chest_boat", 680),
+    MANGROVE_CHEST_BOAT("minecraft:mangrove_chest_boat", 681),
 
-    MANGROVE_DOOR("minecraft:mangrove_door", 669),
+    MANGROVE_DOOR("minecraft:mangrove_door", 670),
 
     MANGROVE_DOUBLE_SLAB("minecraft:mangrove_double_slab", -499),
 
@@ -2086,7 +2098,7 @@ public enum ItemId {
 
     MANGROVE_ROOTS("minecraft:mangrove_roots", -482),
 
-    MANGROVE_SIGN("minecraft:mangrove_sign", 670),
+    MANGROVE_SIGN("minecraft:mangrove_sign", 671),
 
     MANGROVE_SLAB("minecraft:mangrove_slab", -489),
 
@@ -2102,7 +2114,7 @@ public enum ItemId {
 
     MATERIAL_REDUCER("minecraft:material_reducer", -986),
 
-    MEDICINE("minecraft:medicine", 635),
+    MEDICINE("minecraft:medicine", 636),
 
     MEDIUM_AMETHYST_BUD("minecraft:medium_amethyst_bud", -331),
 
@@ -2118,13 +2130,13 @@ public enum ItemId {
 
     MINECART("minecraft:minecart", 395),
 
-    MINER_POTTERY_SHERD("minecraft:miner_pottery_sherd", 706),
+    MINER_POTTERY_SHERD("minecraft:miner_pottery_sherd", 707),
 
     MOB_SPAWNER("minecraft:mob_spawner", 52),
 
     MOJANG_BANNER_PATTERN("minecraft:mojang_banner_pattern", 617),
 
-    MONSTER_EGG("minecraft:monster_egg", 769),
+    MONSTER_EGG("minecraft:monster_egg", 775),
 
     MOOSHROOM_SPAWN_EGG("minecraft:mooshroom_spawn_egg", 467),
 
@@ -2152,7 +2164,7 @@ public enum ItemId {
 
     MOSSY_STONE_BRICKS("minecraft:mossy_stone_bricks", -868),
 
-    MOURNER_POTTERY_SHERD("minecraft:mourner_pottery_sherd", 707),
+    MOURNER_POTTERY_SHERD("minecraft:mourner_pottery_sherd", 708),
 
     MOVING_BLOCK("minecraft:moving_block", 250),
 
@@ -2180,7 +2192,7 @@ public enum ItemId {
 
     MUSIC_DISC_13("minecraft:music_disc_13", 567),
 
-    MUSIC_DISC_5("minecraft:music_disc_5", 672),
+    MUSIC_DISC_5("minecraft:music_disc_5", 673),
 
     MUSIC_DISC_BLOCKS("minecraft:music_disc_blocks", 569),
 
@@ -2188,9 +2200,9 @@ public enum ItemId {
 
     MUSIC_DISC_CHIRP("minecraft:music_disc_chirp", 570),
 
-    MUSIC_DISC_CREATOR("minecraft:music_disc_creator", 776),
+    MUSIC_DISC_CREATOR("minecraft:music_disc_creator", 782),
 
-    MUSIC_DISC_CREATOR_MUSIC_BOX("minecraft:music_disc_creator_music_box", 777),
+    MUSIC_DISC_CREATOR_MUSIC_BOX("minecraft:music_disc_creator_music_box", 783),
 
     MUSIC_DISC_FAR("minecraft:music_disc_far", 571),
 
@@ -2198,13 +2210,13 @@ public enum ItemId {
 
     MUSIC_DISC_MELLOHI("minecraft:music_disc_mellohi", 573),
 
-    MUSIC_DISC_OTHERSIDE("minecraft:music_disc_otherside", 662),
+    MUSIC_DISC_OTHERSIDE("minecraft:music_disc_otherside", 663),
 
-    MUSIC_DISC_PIGSTEP("minecraft:music_disc_pigstep", 656),
+    MUSIC_DISC_PIGSTEP("minecraft:music_disc_pigstep", 657),
 
-    MUSIC_DISC_PRECIPICE("minecraft:music_disc_precipice", 778),
+    MUSIC_DISC_PRECIPICE("minecraft:music_disc_precipice", 784),
 
-    MUSIC_DISC_RELIC("minecraft:music_disc_relic", 735),
+    MUSIC_DISC_RELIC("minecraft:music_disc_relic", 736),
 
     MUSIC_DISC_STAL("minecraft:music_disc_stal", 574),
 
@@ -2236,7 +2248,7 @@ public enum ItemId {
 
     NETHER_GOLD_ORE("minecraft:nether_gold_ore", -288),
 
-    NETHER_SPROUTS("minecraft:nether_sprouts", 657),
+    NETHER_SPROUTS("minecraft:nether_sprouts", 658),
 
     NETHER_STAR("minecraft:nether_star", 551),
 
@@ -2246,31 +2258,31 @@ public enum ItemId {
 
     NETHERBRICK("minecraft:netherbrick", 556),
 
-    NETHERITE_AXE("minecraft:netherite_axe", 642),
+    NETHERITE_AXE("minecraft:netherite_axe", 643),
 
     NETHERITE_BLOCK("minecraft:netherite_block", -270),
 
-    NETHERITE_BOOTS("minecraft:netherite_boots", 648),
+    NETHERITE_BOOTS("minecraft:netherite_boots", 649),
 
-    NETHERITE_CHESTPLATE("minecraft:netherite_chestplate", 646),
+    NETHERITE_CHESTPLATE("minecraft:netherite_chestplate", 647),
 
-    NETHERITE_HELMET("minecraft:netherite_helmet", 645),
+    NETHERITE_HELMET("minecraft:netherite_helmet", 646),
 
-    NETHERITE_HOE("minecraft:netherite_hoe", 643),
+    NETHERITE_HOE("minecraft:netherite_hoe", 644),
 
-    NETHERITE_INGOT("minecraft:netherite_ingot", 644),
+    NETHERITE_INGOT("minecraft:netherite_ingot", 645),
 
-    NETHERITE_LEGGINGS("minecraft:netherite_leggings", 647),
+    NETHERITE_LEGGINGS("minecraft:netherite_leggings", 648),
 
-    NETHERITE_PICKAXE("minecraft:netherite_pickaxe", 641),
+    NETHERITE_PICKAXE("minecraft:netherite_pickaxe", 642),
 
-    NETHERITE_SCRAP("minecraft:netherite_scrap", 649),
+    NETHERITE_SCRAP("minecraft:netherite_scrap", 650),
 
-    NETHERITE_SHOVEL("minecraft:netherite_shovel", 640),
+    NETHERITE_SHOVEL("minecraft:netherite_shovel", 641),
 
-    NETHERITE_SWORD("minecraft:netherite_sword", 639),
+    NETHERITE_SWORD("minecraft:netherite_sword", 640),
 
-    NETHERITE_UPGRADE_SMITHING_TEMPLATE("minecraft:netherite_upgrade_smithing_template", 716),
+    NETHERITE_UPGRADE_SMITHING_TEMPLATE("minecraft:netherite_upgrade_smithing_template", 717),
 
     NETHERRACK("minecraft:netherrack", 87),
 
@@ -2288,7 +2300,7 @@ public enum ItemId {
 
     OAK_BOAT("minecraft:oak_boat", 401),
 
-    OAK_CHEST_BOAT("minecraft:oak_chest_boat", 674),
+    OAK_CHEST_BOAT("minecraft:oak_chest_boat", 675),
 
     OAK_DOUBLE_SLAB("minecraft:oak_double_slab", 157),
 
@@ -2323,6 +2335,8 @@ public enum ItemId {
     OMINOUS_BOTTLE("minecraft:ominous_bottle", 628),
 
     OMINOUS_TRIAL_KEY("minecraft:ominous_trial_key", 275),
+
+    OPEN_EYEBLOSSOM("minecraft:open_eyeblossom", -1018),
 
     ORANGE_BUNDLE("minecraft:orange_bundle", 268),
 
@@ -2379,6 +2393,52 @@ public enum ItemId {
     PACKED_MUD("minecraft:packed_mud", -477),
 
     PAINTING("minecraft:painting", 382),
+
+    PALE_HANGING_MOSS("minecraft:pale_hanging_moss", -1011),
+
+    PALE_MOSS_BLOCK("minecraft:pale_moss_block", -1009),
+
+    PALE_MOSS_CARPET("minecraft:pale_moss_carpet", -1010),
+
+    PALE_OAK_BOAT("minecraft:pale_oak_boat", 744),
+
+    PALE_OAK_BUTTON("minecraft:pale_oak_button", -989),
+
+    PALE_OAK_CHEST_BOAT("minecraft:pale_oak_chest_boat", 745),
+
+    PALE_OAK_DOOR("minecraft:pale_oak_door", -990),
+
+    PALE_OAK_DOUBLE_SLAB("minecraft:pale_oak_double_slab", -999),
+
+    PALE_OAK_FENCE("minecraft:pale_oak_fence", -991),
+
+    PALE_OAK_FENCE_GATE("minecraft:pale_oak_fence_gate", -992),
+
+    PALE_OAK_HANGING_SIGN("minecraft:pale_oak_hanging_sign", -993),
+
+    PALE_OAK_LEAVES("minecraft:pale_oak_leaves", -1007),
+
+    PALE_OAK_LOG("minecraft:pale_oak_log", -995),
+
+    PALE_OAK_PLANKS("minecraft:pale_oak_planks", -996),
+
+    PALE_OAK_PRESSURE_PLATE("minecraft:pale_oak_pressure_plate", -997),
+
+    PALE_OAK_SAPLING("minecraft:pale_oak_sapling", -1006),
+
+    PALE_OAK_SIGN("minecraft:pale_oak_sign", 746),
+
+    PALE_OAK_SLAB("minecraft:pale_oak_slab", -998),
+
+    PALE_OAK_STAIRS("minecraft:pale_oak_stairs", -1000),
+
+    PALE_OAK_STANDING_SIGN("minecraft:pale_oak_standing_sign", -1001),
+
+    PALE_OAK_TRAPDOOR("minecraft:pale_oak_trapdoor", -1002),
+
+    PALE_OAK_WALL_SIGN("minecraft:pale_oak_wall_sign", -1003),
+
+    PALE_OAK_WOOD("minecraft:pale_oak_wood", -1005),
 
     PANDA_SPAWN_EGG("minecraft:panda_spawn_egg", 517),
 
@@ -2450,11 +2510,11 @@ public enum ItemId {
 
     PITCHER_POD("minecraft:pitcher_pod", 319),
 
-    PLANKS("minecraft:planks", 765),
+    PLANKS("minecraft:planks", 771),
 
     PLAYER_HEAD("minecraft:player_head", -967),
 
-    PLENTY_POTTERY_SHERD("minecraft:plenty_pottery_sherd", 708),
+    PLENTY_POTTERY_SHERD("minecraft:plenty_pottery_sherd", 709),
 
     PODZOL("minecraft:podzol", 243),
 
@@ -2578,7 +2638,7 @@ public enum ItemId {
 
     PRISMARINE_WALL("minecraft:prismarine_wall", -981),
 
-    PRIZE_POTTERY_SHERD("minecraft:prize_pottery_sherd", 709),
+    PRIZE_POTTERY_SHERD("minecraft:prize_pottery_sherd", 710),
 
     PUFFERFISH("minecraft:pufferfish", 289),
 
@@ -2658,9 +2718,9 @@ public enum ItemId {
 
     RAIL("minecraft:rail", 66),
 
-    RAISER_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:raiser_armor_trim_smithing_template", 730),
+    RAISER_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:raiser_armor_trim_smithing_template", 731),
 
-    RAPID_FERTILIZER("minecraft:rapid_fertilizer", 633),
+    RAPID_FERTILIZER("minecraft:rapid_fertilizer", 634),
 
     RAVAGER_SPAWN_EGG("minecraft:ravager_spawn_egg", 521),
 
@@ -2676,7 +2736,7 @@ public enum ItemId {
 
     RAW_IRON_BLOCK("minecraft:raw_iron_block", -451),
 
-    RECOVERY_COMPASS("minecraft:recovery_compass", 682),
+    RECOVERY_COMPASS("minecraft:recovery_compass", 683),
 
     RED_BUNDLE("minecraft:red_bundle", 271),
 
@@ -2692,7 +2752,7 @@ public enum ItemId {
 
     RED_DYE("minecraft:red_dye", 422),
 
-    RED_FLOWER("minecraft:red_flower", 763),
+    RED_FLOWER("minecraft:red_flower", 769),
 
     RED_GLAZED_TERRACOTTA("minecraft:red_glazed_terracotta", 234),
 
@@ -2754,9 +2814,25 @@ public enum ItemId {
 
     RESERVED6("minecraft:reserved6", 255),
 
+    RESIN_BLOCK("minecraft:resin_block", -1021),
+
+    RESIN_BRICK("minecraft:resin_brick", 748),
+
+    RESIN_BRICK_DOUBLE_SLAB("minecraft:resin_brick_double_slab", -1015),
+
+    RESIN_BRICK_SLAB("minecraft:resin_brick_slab", -1014),
+
+    RESIN_BRICK_STAIRS("minecraft:resin_brick_stairs", -1016),
+
+    RESIN_BRICK_WALL("minecraft:resin_brick_wall", -1017),
+
+    RESIN_BRICKS("minecraft:resin_bricks", -1013),
+
+    RESIN_CLUMP("minecraft:resin_clump", -1022),
+
     RESPAWN_ANCHOR("minecraft:respawn_anchor", -272),
 
-    RIB_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:rib_armor_trim_smithing_template", 726),
+    RIB_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:rib_armor_trim_smithing_template", 727),
 
     ROSE_BUSH("minecraft:rose_bush", -866),
 
@@ -2782,11 +2858,11 @@ public enum ItemId {
 
     SANDSTONE_WALL("minecraft:sandstone_wall", -975),
 
-    SAPLING("minecraft:sapling", 759),
+    SAPLING("minecraft:sapling", 765),
 
     SCAFFOLDING("minecraft:scaffolding", -165),
 
-    SCRAPE_POTTERY_SHERD("minecraft:scrape_pottery_sherd", 710),
+    SCRAPE_POTTERY_SHERD("minecraft:scrape_pottery_sherd", 711),
 
     SCULK("minecraft:sculk", -458),
 
@@ -2804,17 +2880,17 @@ public enum ItemId {
 
     SEAGRASS("minecraft:seagrass", -130),
 
-    SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:sentry_armor_trim_smithing_template", 717),
+    SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:sentry_armor_trim_smithing_template", 718),
 
-    SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:shaper_armor_trim_smithing_template", 731),
+    SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:shaper_armor_trim_smithing_template", 732),
 
-    SHEAF_POTTERY_SHERD("minecraft:sheaf_pottery_sherd", 711),
+    SHEAF_POTTERY_SHERD("minecraft:sheaf_pottery_sherd", 712),
 
     SHEARS("minecraft:shears", 447),
 
     SHEEP_SPAWN_EGG("minecraft:sheep_spawn_egg", 465),
 
-    SHELTER_POTTERY_SHERD("minecraft:shelter_pottery_sherd", 712),
+    SHELTER_POTTERY_SHERD("minecraft:shelter_pottery_sherd", 713),
 
     SHIELD("minecraft:shield", 380),
 
@@ -2822,13 +2898,13 @@ public enum ItemId {
 
     SHROOMLIGHT("minecraft:shroomlight", -230),
 
-    SHULKER_BOX("minecraft:shulker_box", 774),
+    SHULKER_BOX("minecraft:shulker_box", 780),
 
     SHULKER_SHELL("minecraft:shulker_shell", 599),
 
     SHULKER_SPAWN_EGG("minecraft:shulker_spawn_egg", 497),
 
-    SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:silence_armor_trim_smithing_template", 728),
+    SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:silence_armor_trim_smithing_template", 729),
 
     SILVER_GLAZED_TERRACOTTA("minecraft:silver_glazed_terracotta", 228),
 
@@ -2840,11 +2916,11 @@ public enum ItemId {
 
     SKELETON_SPAWN_EGG("minecraft:skeleton_spawn_egg", 471),
 
-    SKULL("minecraft:skull", 736),
+    SKULL("minecraft:skull", 737),
 
     SKULL_BANNER_PATTERN("minecraft:skull_banner_pattern", 616),
 
-    SKULL_POTTERY_SHERD("minecraft:skull_pottery_sherd", 713),
+    SKULL_POTTERY_SHERD("minecraft:skull_pottery_sherd", 714),
 
     SLIME("minecraft:slime", 165),
 
@@ -2896,9 +2972,9 @@ public enum ItemId {
 
     SNIFFER_SPAWN_EGG("minecraft:sniffer_spawn_egg", 528),
 
-    SNORT_POTTERY_SHERD("minecraft:snort_pottery_sherd", 714),
+    SNORT_POTTERY_SHERD("minecraft:snort_pottery_sherd", 715),
 
-    SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:snout_armor_trim_smithing_template", 725),
+    SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:snout_armor_trim_smithing_template", 726),
 
     SNOW("minecraft:snow", 80),
 
@@ -2908,7 +2984,7 @@ public enum ItemId {
 
     SNOWBALL("minecraft:snowball", 399),
 
-    SOUL_CAMPFIRE("minecraft:soul_campfire", 658),
+    SOUL_CAMPFIRE("minecraft:soul_campfire", 659),
 
     SOUL_FIRE("minecraft:soul_fire", -237),
 
@@ -2920,15 +2996,15 @@ public enum ItemId {
 
     SOUL_TORCH("minecraft:soul_torch", -268),
 
-    SPARKLER("minecraft:sparkler", 636),
+    SPARKLER("minecraft:sparkler", 637),
 
-    SPAWN_EGG("minecraft:spawn_egg", 788),
+    SPAWN_EGG("minecraft:spawn_egg", 794),
 
     SPIDER_EYE("minecraft:spider_eye", 300),
 
     SPIDER_SPAWN_EGG("minecraft:spider_spawn_egg", 473),
 
-    SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:spire_armor_trim_smithing_template", 727),
+    SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:spire_armor_trim_smithing_template", 728),
 
     SPLASH_POTION("minecraft:splash_potion", 594),
 
@@ -2940,7 +3016,7 @@ public enum ItemId {
 
     SPRUCE_BUTTON("minecraft:spruce_button", -144),
 
-    SPRUCE_CHEST_BOAT("minecraft:spruce_chest_boat", 677),
+    SPRUCE_CHEST_BOAT("minecraft:spruce_chest_boat", 678),
 
     SPRUCE_DOOR("minecraft:spruce_door", 586),
 
@@ -2976,15 +3052,15 @@ public enum ItemId {
 
     SPRUCE_WOOD("minecraft:spruce_wood", -814),
 
-    SPYGLASS("minecraft:spyglass", 661),
+    SPYGLASS("minecraft:spyglass", 662),
 
     SQUID_SPAWN_EGG("minecraft:squid_spawn_egg", 477),
 
-    STAINED_GLASS("minecraft:stained_glass", 772),
+    STAINED_GLASS("minecraft:stained_glass", 778),
 
-    STAINED_GLASS_PANE("minecraft:stained_glass_pane", 773),
+    STAINED_GLASS_PANE("minecraft:stained_glass_pane", 779),
 
-    STAINED_HARDENED_CLAY("minecraft:stained_hardened_clay", 737),
+    STAINED_HARDENED_CLAY("minecraft:stained_hardened_clay", 738),
 
     STANDING_BANNER("minecraft:standing_banner", 176),
 
@@ -3000,13 +3076,13 @@ public enum ItemId {
 
     STONE_AXE("minecraft:stone_axe", 339),
 
-    STONE_BLOCK_SLAB("minecraft:stone_block_slab", 749),
+    STONE_BLOCK_SLAB("minecraft:stone_block_slab", 755),
 
-    STONE_BLOCK_SLAB2("minecraft:stone_block_slab2", 750),
+    STONE_BLOCK_SLAB2("minecraft:stone_block_slab2", 756),
 
-    STONE_BLOCK_SLAB3("minecraft:stone_block_slab3", 751),
+    STONE_BLOCK_SLAB3("minecraft:stone_block_slab3", 757),
 
-    STONE_BLOCK_SLAB4("minecraft:stone_block_slab4", 752),
+    STONE_BLOCK_SLAB4("minecraft:stone_block_slab4", 758),
 
     STONE_BRICK_DOUBLE_SLAB("minecraft:stone_brick_double_slab", -881),
 
@@ -3032,7 +3108,7 @@ public enum ItemId {
 
     STONE_SWORD("minecraft:stone_sword", 336),
 
-    STONEBRICK("minecraft:stonebrick", 747),
+    STONEBRICK("minecraft:stonebrick", 753),
 
     STONECUTTER("minecraft:stonecutter", 245),
 
@@ -3078,6 +3154,10 @@ public enum ItemId {
 
     STRIPPED_OAK_WOOD("minecraft:stripped_oak_wood", -819),
 
+    STRIPPED_PALE_OAK_LOG("minecraft:stripped_pale_oak_log", -994),
+
+    STRIPPED_PALE_OAK_WOOD("minecraft:stripped_pale_oak_wood", -1004),
+
     STRIPPED_SPRUCE_LOG("minecraft:stripped_spruce_log", -5),
 
     STRIPPED_SPRUCE_WOOD("minecraft:stripped_spruce_wood", -820),
@@ -3106,17 +3186,17 @@ public enum ItemId {
 
     SWEET_BERRY_BUSH("minecraft:sweet_berry_bush", -207),
 
-    TADPOLE_BUCKET("minecraft:tadpole_bucket", 666),
+    TADPOLE_BUCKET("minecraft:tadpole_bucket", 667),
 
-    TADPOLE_SPAWN_EGG("minecraft:tadpole_spawn_egg", 665),
+    TADPOLE_SPAWN_EGG("minecraft:tadpole_spawn_egg", 666),
 
     TALL_GRASS("minecraft:tall_grass", -864),
 
-    TALLGRASS("minecraft:tallgrass", 767),
+    TALLGRASS("minecraft:tallgrass", 773),
 
     TARGET("minecraft:target", -239),
 
-    TIDE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:tide_armor_trim_smithing_template", 724),
+    TIDE_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:tide_armor_trim_smithing_template", 725),
 
     TINTED_GLASS("minecraft:tinted_glass", -334),
 
@@ -3134,7 +3214,7 @@ public enum ItemId {
 
     TOTEM_OF_UNDYING("minecraft:totem_of_undying", 601),
 
-    TRADER_LLAMA_SPAWN_EGG("minecraft:trader_llama_spawn_egg", 684),
+    TRADER_LLAMA_SPAWN_EGG("minecraft:trader_llama_spawn_egg", 685),
 
     TRAPDOOR("minecraft:trapdoor", 96),
 
@@ -3212,7 +3292,7 @@ public enum ItemId {
 
     VERDANT_FROGLIGHT("minecraft:verdant_froglight", -470),
 
-    VEX_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:vex_armor_trim_smithing_template", 723),
+    VEX_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:vex_armor_trim_smithing_template", 724),
 
     VEX_SPAWN_EGG("minecraft:vex_spawn_egg", 504),
 
@@ -3228,13 +3308,13 @@ public enum ItemId {
 
     WANDERING_TRADER_SPAWN_EGG("minecraft:wandering_trader_spawn_egg", 520),
 
-    WARD_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:ward_armor_trim_smithing_template", 721),
+    WARD_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:ward_armor_trim_smithing_template", 722),
 
-    WARDEN_SPAWN_EGG("minecraft:warden_spawn_egg", 668),
+    WARDEN_SPAWN_EGG("minecraft:warden_spawn_egg", 669),
 
     WARPED_BUTTON("minecraft:warped_button", -261),
 
-    WARPED_DOOR("minecraft:warped_door", 653),
+    WARPED_DOOR("minecraft:warped_door", 654),
 
     WARPED_DOUBLE_SLAB("minecraft:warped_double_slab", -267),
 
@@ -3244,7 +3324,7 @@ public enum ItemId {
 
     WARPED_FUNGUS("minecraft:warped_fungus", -229),
 
-    WARPED_FUNGUS_ON_A_STICK("minecraft:warped_fungus_on_a_stick", 654),
+    WARPED_FUNGUS_ON_A_STICK("minecraft:warped_fungus_on_a_stick", 655),
 
     WARPED_HANGING_SIGN("minecraft:warped_hanging_sign", -507),
 
@@ -3258,7 +3338,7 @@ public enum ItemId {
 
     WARPED_ROOTS("minecraft:warped_roots", -224),
 
-    WARPED_SIGN("minecraft:warped_sign", 651),
+    WARPED_SIGN("minecraft:warped_sign", 652),
 
     WARPED_SLAB("minecraft:warped_slab", -265),
 
@@ -3360,7 +3440,7 @@ public enum ItemId {
 
     WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB("minecraft:waxed_weathered_double_cut_copper_slab", -374),
 
-    WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:wayfinder_armor_trim_smithing_template", 729),
+    WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:wayfinder_armor_trim_smithing_template", 730),
 
     WEATHERED_CHISELED_COPPER("minecraft:weathered_chiseled_copper", -762),
 
@@ -3420,7 +3500,7 @@ public enum ItemId {
 
     WHITE_WOOL("minecraft:white_wool", 35),
 
-    WILD_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:wild_armor_trim_smithing_template", 720),
+    WILD_ARMOR_TRIM_SMITHING_TEMPLATE("minecraft:wild_armor_trim_smithing_template", 721),
 
     WIND_CHARGE("minecraft:wind_charge", 277),
 
@@ -3434,11 +3514,11 @@ public enum ItemId {
 
     WITHER_SPAWN_EGG("minecraft:wither_spawn_egg", 536),
 
-    WOLF_ARMOR("minecraft:wolf_armor", 740),
+    WOLF_ARMOR("minecraft:wolf_armor", 741),
 
     WOLF_SPAWN_EGG("minecraft:wolf_spawn_egg", 466),
 
-    WOOD("minecraft:wood", 775),
+    WOOD("minecraft:wood", 781),
 
     WOODEN_AXE("minecraft:wooden_axe", 335),
 
@@ -3454,11 +3534,11 @@ public enum ItemId {
 
     WOODEN_SHOVEL("minecraft:wooden_shovel", 333),
 
-    WOODEN_SLAB("minecraft:wooden_slab", 762),
+    WOODEN_SLAB("minecraft:wooden_slab", 768),
 
     WOODEN_SWORD("minecraft:wooden_sword", 332),
 
-    WOOL("minecraft:wool", 743),
+    WOOL("minecraft:wool", 749),
 
     WRITABLE_BOOK("minecraft:writable_book", 544),
 

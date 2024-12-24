@@ -21,7 +21,7 @@ public class BlockEnchantingTableBaseComponentImpl extends BlockBaseComponentImp
 
         var player = interactInfo.player();
         var enchantTableContainer = player.getContainer(FullContainerType.ENCHANT_TABLE);
-        enchantTableContainer.setBlockPos(interactInfo.clickBlockPos());
+        enchantTableContainer.setBlockPos(interactInfo.clickedBlockPos());
         enchantTableContainer.addViewer(player);
         return true;
     }

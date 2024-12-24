@@ -54,10 +54,9 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
-    public void onRandomUpdate(BlockStateWithPos blockState) {}
-
-    @Override
-    public void onScheduledUpdate(BlockStateWithPos blockState) {}
+    public void onRandomUpdate(BlockStateWithPos current) {
+        manager.callEvent(new CBlockRandomUpdateEvent(current));
+    }
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
@@ -133,7 +132,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) return false;
-        return blockState.blockState().getBlockType().getMaterial().isAlwaysDestroyable() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
+        return !blockState.blockState().getBlockStateData().requiresCorrectToolForDrops() || (usedItem != null && usedItem.isCorrectToolFor(blockState.blockState()));
     }
 
     @Override

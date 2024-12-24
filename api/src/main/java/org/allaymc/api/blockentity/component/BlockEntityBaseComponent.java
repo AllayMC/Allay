@@ -108,13 +108,6 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
     }
 
     /**
-     * Ticks the block entity.
-     *
-     * @param currentTick The current game tick.
-     */
-    default void tick(long currentTick) {}
-
-    /**
      * Whether the block entity should be sent to the client.
      *
      * @return Whether the block entity should be sent to the client.

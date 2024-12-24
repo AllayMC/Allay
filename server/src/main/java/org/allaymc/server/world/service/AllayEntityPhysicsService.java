@@ -138,7 +138,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 BlockState[] sub2 = sub1[oy];
                 for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
                     BlockState blockState = sub2[oz];
-                    if (blockState == null) continue;
+                    if (blockState == null) {
+                        continue;
+                    }
+
                     var currentX = minX + ox;
                     var currentY = minY + oy;
                     var currentZ = minZ + oz;
@@ -466,11 +469,20 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 var clientMove = queue.poll();
                 var player = clientMove.player();
                 // The player may have been removed
-                if (!entities.containsKey(player.getRuntimeId())) continue;
+                if (!entities.containsKey(player.getRuntimeId())) {
+                    continue;
+                }
+
+                var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
+                if (baseComponent.isAwaitingTeleportACK()) {
+                    // It is possible that client move already get into the move queue
+                    // before we set awatingTeleportACK to true, so here we should ignore all
+                    // client move until awatingTeleportACK become false.
+                    continue;
+                }
 
                 var event = new PlayerMoveEvent(player, player.getLocation(), clientMove.newLoc());
-                Server.getInstance().getEventBus().callEvent(event);
-                if (event.isCancelled()) {
+                if (!event.call()) {
                     // Let client back to the previous pos
                     player.teleport(event.getFrom());
                     continue;
@@ -478,7 +490,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
                 // Calculate delta pos (motion)
                 var motion = event.getTo().sub(player.getLocation(), new Vector3f());
-                ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).setMotionValueOnly(motion);
+                baseComponent.setMotionValueOnly(motion);
                 if (updateEntityLocation(player, clientMove.newLoc())) {
                     entityAABBTree.update(player);
                 }
@@ -493,10 +505,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
         var event = new EntityMoveEvent(entity, entity.getLocation(), newLoc);
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             return false;
         }
+
         newLoc = event.getTo();
 
         var baseComponent = (EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent();
@@ -515,8 +527,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * Please call it before run tick()!
      */
     public void addEntity(Entity entity) {
-        if (entities.containsKey(entity.getRuntimeId()))
+        if (entities.containsKey(entity.getRuntimeId())) {
             throw new IllegalArgumentException("Entity " + entity.getRuntimeId() + " is already added!");
+        }
         entities.put(entity.getRuntimeId(), entity);
         entityAABBTree.add(entity);
     }
@@ -536,8 +549,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * See {@link PlayerAuthInputPacketProcessor#handleAsync(EntityPlayer, PlayerAuthInputPacket, long)}
      */
     public void offerClientMove(EntityPlayer player, Location3fc newLoc) {
-        if (!entities.containsKey(player.getRuntimeId())) return;
-        if (player.getLocation().equals(newLoc)) return;
+        if (!entities.containsKey(player.getRuntimeId()) || player.getLocation().equals(newLoc)) {
+            return;
+        }
+
         clientMoveQueue.computeIfAbsent(player.getRuntimeId(), $ -> new ConcurrentLinkedQueue<>()).offer(new ClientMove(player, newLoc));
     }
 

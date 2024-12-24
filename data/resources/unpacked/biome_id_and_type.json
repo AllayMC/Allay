@@ -342,5 +342,9 @@
   "warped_forest": {
     "id": 180,
     "type": "DataDriven"
+  },
+  "pale_garden": {
+    "id": 193,
+    "type": "Forest"
   }
 }

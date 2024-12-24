@@ -1,6 +1,7 @@
 package org.allaymc.server.item.component.food;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.player.PlayerEatFoodEvent;
@@ -15,8 +16,8 @@ import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
  * @author IWareQ
  */
 @Getter
+@RequiredArgsConstructor
 public class ItemFoodComponentImpl implements ItemFoodComponent {
-
     private static final int DEFAULT_EATING_TIME = 32; // GameTick
 
     private final int foodPoints;
@@ -28,12 +29,6 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
 
     public ItemFoodComponentImpl(int foodPoints, float saturationPoints) {
         this(foodPoints, saturationPoints, DEFAULT_EATING_TIME);
-    }
-
-    public ItemFoodComponentImpl(int foodPoints, float saturationPoints, int eatingTime) {
-        this.foodPoints = foodPoints;
-        this.saturationPoints = saturationPoints;
-        this.eatingTime = eatingTime;
     }
 
     @Override
@@ -62,8 +57,7 @@ public class ItemFoodComponentImpl implements ItemFoodComponent {
 
         var player = event.getPlayer();
         var playerEatFoodEvent = new PlayerEatFoodEvent(player, thisItemStack);
-        playerEatFoodEvent.call();
-        if (playerEatFoodEvent.isCancelled()) {
+        if (!playerEatFoodEvent.call()) {
             event.setCanBeUsed(false);
             return;
         }

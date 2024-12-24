@@ -71,7 +71,7 @@ public class ServerSettings extends OkaeriConfig {
         private LangCode language = LangCode.en_US;
 
         @Comment("Open debug mode")
-        @Comment("If debug mode is enabled, the console will outputs more detailed information")
+        @Comment("If debug mode is enabled, the console will output more detailed information")
         private boolean debug = false;
 
         @CustomKey("is-whitelisted")
@@ -143,7 +143,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @Comment("Determines how far away from the chunk loader chunks will be ticked")
         @CustomKey("tick-radius")
-        private int tickRadius = 8;
+        private int tickRadius = 4;
 
         @Comment("Determines how far away from the chunk loader chunks will be loaded and sent")
         @CustomKey("view-distance")

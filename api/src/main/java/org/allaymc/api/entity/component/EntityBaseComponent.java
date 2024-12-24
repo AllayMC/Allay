@@ -12,12 +12,13 @@ import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.entity.metadata.Metadata;
 import org.allaymc.api.entity.type.EntityType;
+import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.math.position.Position3ic;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.chunk.Chunk;
@@ -183,7 +184,17 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param location the location to teleport the entity to.
      */
-    void teleport(Location3fc location);
+    default void teleport(Location3fc location) {
+        teleport(location, EntityTeleportEvent.Reason.UNKNOWN);
+    }
+
+    /**
+     * Teleport the entity to the specified location.
+     *
+     * @param location the location to teleport the entity to.
+     * @param reason   the reason of the teleport.
+     */
+    void teleport(Location3fc location, EntityTeleportEvent.Reason reason);
 
     /**
      * Teleport the entity to the specified location asynchronously.
@@ -246,18 +257,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     Metadata getMetadata();
 
     /**
-     * Send the entity data to the viewers.
-     *
-     * @param dataTypes the data types to send.
+     * Send the entity metadata to the viewers.
      */
-    void sendEntityData(EntityDataType<?>... dataTypes);
-
-    /**
-     * Send the entity flags to the viewers.
-     *
-     * @param flags the flags to send.
-     */
-    void sendEntityFlags(EntityFlag... flags);
+    void sendMetadata();
 
     /**
      * Set and send the entity data to the viewers.
@@ -268,7 +270,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default <T> void setAndSendEntityData(EntityDataType<T> dataType, T value) {
         getMetadata().set(dataType, value);
-        sendEntityData(dataType);
+        sendMetadata();
     }
 
     /**
@@ -278,9 +280,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param value the value to set.
      */
     default void setAndSendEntityFlag(EntityFlag flag, boolean value) {
-        if (value == getMetadata().get(flag)) return;
+        if (value == getMetadata().get(flag)) {
+            return;
+        }
         getMetadata().set(flag, value);
-        sendEntityFlags(flag);
+        sendMetadata();
     }
 
     /**
@@ -552,14 +556,6 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * Remove all effects from the entity.
      */
     void removeAllEffects();
-
-    /**
-     * Called when the entity ticks.
-     *
-     * @param currentTick the current tick.
-     */
-    @ApiStatus.OverrideOnly
-    default void tick(long currentTick) {}
 
     /**
      * Check if the entity has head yaw.
@@ -903,8 +899,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default boolean canStandSafely(int x, int y, int z, Dimension dimension) {
         var blockUnder = dimension.getBlockState(x, y - 1, z);
-        var blockTypeUnder = blockUnder.getBlockType();
-        if (!blockTypeUnder.getMaterial().isSolid()) {
+        if (!blockUnder.getBlockStateData().isSolid()) {
             return false;
         }
         return dimension.getBlockState(x, y, z).getBlockType() == BlockTypes.AIR &&

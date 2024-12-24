@@ -16,6 +16,7 @@ import java.util.Map;
 /**
  * @author daoge_cmd
  */
+@Deprecated
 public class ItemMetaToBlockStateMappingsGenerator {
     @SneakyThrows
     public static void main(String[] args) {

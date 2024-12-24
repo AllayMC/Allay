@@ -85,8 +85,7 @@ public class BaseContainer implements Container {
     @Override
     public void addViewer(ContainerViewer viewer) {
         var event = new ContainerOpenEvent(viewer, this);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         if (viewers.containsValue(viewer)) {
             log.warn("Viewer already exists! Container: {}, Viewer: {}", this.containerType, viewer);
@@ -106,8 +105,7 @@ public class BaseContainer implements Container {
     @Override
     public void removeViewer(ContainerViewer viewer) {
         var event = new ContainerCloseEvent(viewer, this);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         viewer.onClose(viewers.inverse().remove(viewer), this);
         onClose(viewer);

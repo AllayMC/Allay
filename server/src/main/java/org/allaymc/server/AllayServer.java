@@ -24,6 +24,7 @@ import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
@@ -111,10 +112,6 @@ public final class AllayServer implements Server {
     @Getter
     private long startTime;
 
-    public static AllayServer getInstance() {
-        return INSTANCE;
-    }
-
     private AllayServer() {
         this.isRunning = new AtomicBoolean(true);
         this.isStarting = new AtomicBoolean(true);
@@ -139,6 +136,10 @@ public final class AllayServer implements Server {
                 .onTick(this::serverThreadMain)
                 .onStop(this::onServerStop)
                 .build();
+    }
+
+    public static AllayServer getInstance() {
+        return INSTANCE;
     }
 
     private void serverThreadMain(GameLoop gameLoop) {
@@ -290,15 +291,17 @@ public final class AllayServer implements Server {
     public void onDisconnect(EntityPlayer player) {
         sendTr(TrKeys.A_NETWORK_CLIENT_DISCONNECTED, player.getClientSession().getSocketAddress().toString());
 
-        if (player.isLoggedIn()) {
+        // At this time the client have disconnected
+        if (player.getLastClientStatus().ordinal() >= ClientStatus.LOGGED_IN.ordinal()) {
             broadcastTr(TextFormat.YELLOW + "%" + TrKeys.M_MULTIPLAYER_PLAYER_LEFT, player.getOriginName());
             players.remove(player.getUUID());
-        }
 
-        if (player.isSpawned()) {
+            // The player is added to the world and loaded data during the LOGGED_IN status, while he can log off
+            // the server without waiting for the status change to IN_GAME, which is why the session remains and the
+            // server thinks that the player is still on the server, but after such manipulations, the player client
+            // will crash every time he logs on to the server
             player.getDimension().removePlayer(player);
             playerStorage.savePlayerData(player);
-
             removeFromPlayerList(player);
         }
 
@@ -367,13 +370,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void broadcastTr(@MayContainTrKey String tr) {
-        getOnlinePlayers().values().forEach(player -> player.sendTr(tr));
-        sendTr(tr);
-    }
-
-    @Override
-    public void broadcastTr(@MayContainTrKey String tr, String... args) {
+    public void broadcastTr(@MayContainTrKey String tr, Object... args) {
         getOnlinePlayers().values().forEach(player -> player.sendTr(tr, args));
         sendTr(tr, args);
     }
@@ -393,8 +390,7 @@ public final class AllayServer implements Server {
         if (isBanned(uuidOrName)) return false;
 
         var event = new PlayerBanEvent(uuidOrName);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         banInfo.bannedPlayers().add(uuidOrName);
         players.values().stream()
@@ -408,8 +404,7 @@ public final class AllayServer implements Server {
         if (!isBanned(uuidOrName)) return false;
 
         var event = new PlayerUnbanEvent(uuidOrName);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         banInfo.bannedPlayers().remove(uuidOrName);
         return true;
@@ -430,8 +425,7 @@ public final class AllayServer implements Server {
         if (isIPBanned(ip)) return false;
 
         var event = new IPBanEvent(ip);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         banInfo.bannedIps().add(ip);
         players.values().stream()
@@ -445,8 +439,7 @@ public final class AllayServer implements Server {
         if (!isIPBanned(ip)) return false;
 
         var event = new IPUnbanEvent(ip);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         banInfo.bannedIps().remove(ip);
         return true;
@@ -467,8 +460,7 @@ public final class AllayServer implements Server {
         if (isWhitelisted(uuidOrName)) return false;
 
         var event = new WhitelistAddPlayerEvent(uuidOrName);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         return whitelist.whitelist().add(uuidOrName);
     }
@@ -478,8 +470,7 @@ public final class AllayServer implements Server {
         if (!isWhitelisted(uuidOrName)) return false;
 
         var event = new WhitelistRemovePlayerEvent(uuidOrName);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         whitelist.whitelist().remove(uuidOrName);
         players.values().stream()
@@ -499,7 +490,7 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
+    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
         // forceTranslatedByClient is unused
         log.info(I18n.get().tr(key, args));
     }

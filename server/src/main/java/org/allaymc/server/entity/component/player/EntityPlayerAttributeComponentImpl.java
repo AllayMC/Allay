@@ -37,10 +37,8 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         super(attributeTypes);
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
+    @EventHandler
+    protected void onTick(CEntityTickEvent event) {
         if (thisPlayer.isDead() ||
             thisPlayer.getGameType() == GameType.CREATIVE ||
             thisPlayer.getGameType() == GameType.SPECTATOR) {
@@ -105,8 +103,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     public void setExperienceLevel(int value) {
         var event = new PlayerExperienceLevelChangeEvent(thisPlayer, (int) getAttributeValue(AttributeType.PLAYER_EXPERIENCE_LEVEL), value);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         setAttributeValue(AttributeType.PLAYER_EXPERIENCE_LEVEL, event.getNewExperienceLevel());
     }
@@ -119,8 +116,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     public void setExperienceProgress(float value) {
         var event = new PlayerExperienceProgressChangeEvent(thisPlayer, getAttributeValue(AttributeType.PLAYER_EXPERIENCE_PROGRESS), value);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         setAttributeValue(AttributeType.PLAYER_EXPERIENCE_PROGRESS, event.getNewExperienceProgress());
     }
@@ -130,8 +126,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
         value = Math.max(0, Math.min(value, (int) AttributeType.PLAYER_HUNGER.getMaxValue()));
 
         var event = new PlayerFoodLevelChangeEvent(thisPlayer, getFoodLevel(), value);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         setAttributeValue(AttributeType.PLAYER_HUNGER, value);
     }
@@ -144,6 +139,7 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     public void exhaust(float level) {
         if (thisPlayer.getGameType() == GameType.CREATIVE) return;
+
         var currentFoodExhaustionLevel = getFoodExhaustionLevel();
         var currentFoodSaturationLevel = getFoodSaturationLevel();
         var currentFoodLevel = getFoodLevel();

@@ -2,8 +2,6 @@ package org.allaymc.api.registry;
 
 import org.allaymc.api.block.component.data.BlockStateData;
 import org.allaymc.api.block.data.BlockId;
-import org.allaymc.api.block.material.Material;
-import org.allaymc.api.block.material.MaterialType;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.type.BlockEntityType;
@@ -43,7 +41,6 @@ public final class Registries {
     public static SimpleMappedRegistry<String, BlockEntityType<?>> BLOCK_ENTITIES;
 
     // Block
-    public static SimpleMappedRegistry<MaterialType, Material> MATERIALS;
     public static IntMappedRegistry<BlockState> BLOCK_STATE_PALETTE;
     // NOTICE: Only vanilla block state data is stored in the block state data registry.
     public static SimpleMappedRegistry<BlockId, Map<Integer, BlockStateData>> BLOCK_STATE_DATA;

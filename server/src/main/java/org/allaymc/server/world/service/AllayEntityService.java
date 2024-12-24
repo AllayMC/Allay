@@ -36,12 +36,12 @@ public class AllayEntityService implements EntityService {
     }
 
     private void removeEntityImmediately(Entity entity) {
-        var event = new EntityDespawnEvent(entity);
-        event.call();
+        new EntityDespawnEvent(entity).call();
 
         var chunk = (AllayChunk) entity.getCurrentChunk();
-        if (chunk == null)
+        if (chunk == null) {
             throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
+        }
 
         chunk.removeEntity(entity.getRuntimeId());
         entityPhysicsService.removeEntity(entity);
@@ -52,12 +52,12 @@ public class AllayEntityService implements EntityService {
     }
 
     private void addEntityImmediately(Entity entity) {
-        var event = new EntitySpawnEvent(entity);
-        event.call();
+        new EntitySpawnEvent(entity).call();
 
         var chunk = (AllayChunk) entity.getCurrentChunk();
-        if (chunk == null)
+        if (chunk == null) {
             throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
+        }
 
         chunk.addEntity(entity);
         entity.spawnTo(chunk.getPlayerChunkLoaders());

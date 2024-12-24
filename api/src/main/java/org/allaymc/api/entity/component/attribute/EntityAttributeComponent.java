@@ -29,11 +29,6 @@ public interface EntityAttributeComponent extends EntityComponent {
     }
 
     /**
-     * Default tick method.
-     */
-    default void tick() {}
-
-    /**
      * Add attribute to entity.
      *
      * @param attributeType attribute type

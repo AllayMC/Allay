@@ -61,6 +61,7 @@ import org.allaymc.api.block.interfaces.BlockCaveVinesBodyWithBerriesBehavior;
 import org.allaymc.api.block.interfaces.BlockCaveVinesHeadWithBerriesBehavior;
 import org.allaymc.api.block.interfaces.BlockChainBehavior;
 import org.allaymc.api.block.interfaces.BlockChainCommandBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockChalkboardBehavior;
 import org.allaymc.api.block.interfaces.BlockChemicalHeatBehavior;
 import org.allaymc.api.block.interfaces.BlockCherryPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockChestBehavior;
@@ -73,6 +74,7 @@ import org.allaymc.api.block.interfaces.BlockChorusFlowerBehavior;
 import org.allaymc.api.block.interfaces.BlockChorusPlantBehavior;
 import org.allaymc.api.block.interfaces.BlockClayBehavior;
 import org.allaymc.api.block.interfaces.BlockClientRequestPlaceholderBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockClosedEyeblossomBehavior;
 import org.allaymc.api.block.interfaces.BlockCoalBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockCoalOreBehavior;
 import org.allaymc.api.block.interfaces.BlockCoarseDirtBehavior;
@@ -87,11 +89,11 @@ import org.allaymc.api.block.interfaces.BlockConcreteBehavior;
 import org.allaymc.api.block.interfaces.BlockConcretePowderBehavior;
 import org.allaymc.api.block.interfaces.BlockConduitBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperBehavior;
-import org.allaymc.api.block.interfaces.BlockCopperBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperBulbBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperDoorBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperOreBehavior;
+import org.allaymc.api.block.interfaces.BlockCopperStairsBehavior;
 import org.allaymc.api.block.interfaces.BlockCopperTrapdoorBehavior;
 import org.allaymc.api.block.interfaces.BlockCoralBehavior;
 import org.allaymc.api.block.interfaces.BlockCoralBlockBehavior;
@@ -101,6 +103,7 @@ import org.allaymc.api.block.interfaces.BlockCornflowerBehavior;
 import org.allaymc.api.block.interfaces.BlockCrackedDeepslateTilesBehavior;
 import org.allaymc.api.block.interfaces.BlockCrafterBehavior;
 import org.allaymc.api.block.interfaces.BlockCraftingTableBehavior;
+import org.allaymc.api.block.interfaces.BlockCreakingHeartBehavior;
 import org.allaymc.api.block.interfaces.BlockCrimsonFungusBehavior;
 import org.allaymc.api.block.interfaces.BlockCrimsonNyliumBehavior;
 import org.allaymc.api.block.interfaces.BlockCrimsonPressurePlateBehavior;
@@ -148,8 +151,6 @@ import org.allaymc.api.block.interfaces.BlockEndPortalFrameBehavior;
 import org.allaymc.api.block.interfaces.BlockEndRodBehavior;
 import org.allaymc.api.block.interfaces.BlockEndStoneBehavior;
 import org.allaymc.api.block.interfaces.BlockEnderChestBehavior;
-import org.allaymc.api.block.interfaces.BlockExposedCopperBulbBehavior;
-import org.allaymc.api.block.interfaces.BlockExposedCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockFarmlandBehavior;
 import org.allaymc.api.block.interfaces.BlockFenceBehavior;
 import org.allaymc.api.block.interfaces.BlockFenceGateBehavior;
@@ -253,12 +254,14 @@ import org.allaymc.api.block.interfaces.BlockNoteblockBehavior;
 import org.allaymc.api.block.interfaces.BlockObserverBehavior;
 import org.allaymc.api.block.interfaces.BlockObsidianBehavior;
 import org.allaymc.api.block.interfaces.BlockOchreFroglightBehavior;
+import org.allaymc.api.block.interfaces.BlockOpenEyeblossomBehavior;
 import org.allaymc.api.block.interfaces.BlockOrangeTulipBehavior;
 import org.allaymc.api.block.interfaces.BlockOxeyeDaisyBehavior;
-import org.allaymc.api.block.interfaces.BlockOxidizedCopperBulbBehavior;
-import org.allaymc.api.block.interfaces.BlockOxidizedCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockPackedIceBehavior;
 import org.allaymc.api.block.interfaces.BlockPackedMudBehavior;
+import org.allaymc.api.block.interfaces.BlockPaleHangingMossBehavior;
+import org.allaymc.api.block.interfaces.BlockPaleMossBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockPaleOakPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockPearlescentFroglightBehavior;
 import org.allaymc.api.block.interfaces.BlockPeonyBehavior;
 import org.allaymc.api.block.interfaces.BlockPinkPetalsBehavior;
@@ -310,6 +313,8 @@ import org.allaymc.api.block.interfaces.BlockReedsBehavior;
 import org.allaymc.api.block.interfaces.BlockReinforcedDeepslateBehavior;
 import org.allaymc.api.block.interfaces.BlockRepeatingCommandBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockReserved6Behavior;
+import org.allaymc.api.block.interfaces.BlockResinBlockBehavior;
+import org.allaymc.api.block.interfaces.BlockResinClumpBehavior;
 import org.allaymc.api.block.interfaces.BlockRespawnAnchorBehavior;
 import org.allaymc.api.block.interfaces.BlockRoseBushBehavior;
 import org.allaymc.api.block.interfaces.BlockSandBehavior;
@@ -341,7 +346,6 @@ import org.allaymc.api.block.interfaces.BlockSnifferEggBehavior;
 import org.allaymc.api.block.interfaces.BlockSnowBehavior;
 import org.allaymc.api.block.interfaces.BlockSnowLayerBehavior;
 import org.allaymc.api.block.interfaces.BlockSoulCampfireBehavior;
-import org.allaymc.api.block.interfaces.BlockSoulFireBehavior;
 import org.allaymc.api.block.interfaces.BlockSoulLanternBehavior;
 import org.allaymc.api.block.interfaces.BlockSoulSandBehavior;
 import org.allaymc.api.block.interfaces.BlockSoulSoilBehavior;
@@ -394,16 +398,6 @@ import org.allaymc.api.block.interfaces.BlockWarpedPressurePlateBehavior;
 import org.allaymc.api.block.interfaces.BlockWarpedRootsBehavior;
 import org.allaymc.api.block.interfaces.BlockWarpedWartBlockBehavior;
 import org.allaymc.api.block.interfaces.BlockWaterlilyBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedCopperBulbBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedCopperGrateBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedExposedCopperBulbBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedExposedCopperGrateBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedOxidizedCopperBulbBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedOxidizedCopperGrateBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedWeatheredCopperBulbBehavior;
-import org.allaymc.api.block.interfaces.BlockWaxedWeatheredCopperGrateBehavior;
-import org.allaymc.api.block.interfaces.BlockWeatheredCopperBulbBehavior;
-import org.allaymc.api.block.interfaces.BlockWeatheredCopperGrateBehavior;
 import org.allaymc.api.block.interfaces.BlockWebBehavior;
 import org.allaymc.api.block.interfaces.BlockWeepingVinesBehavior;
 import org.allaymc.api.block.interfaces.BlockWetSpongeBehavior;
@@ -741,6 +735,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockChainCommandBlockBehavior> CHAIN_COMMAND_BLOCK;
 
+    public static BlockType<BlockChalkboardBehavior> CHALKBOARD;
+
     public static BlockType<BlockChemicalHeatBehavior> CHEMICAL_HEAT;
 
     public static BlockType<BlockButtonBehavior> CHERRY_BUTTON;
@@ -795,6 +791,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> CHISELED_RED_SANDSTONE;
 
+    public static BlockType<BlockBricksBehavior> CHISELED_RESIN_BRICKS;
+
     public static BlockType<BlockSandstoneBehavior> CHISELED_SANDSTONE;
 
     public static BlockType<BlockBricksBehavior> CHISELED_STONE_BRICKS;
@@ -810,6 +808,8 @@ public final class BlockTypes {
     public static BlockType<BlockClayBehavior> CLAY;
 
     public static BlockType<BlockClientRequestPlaceholderBlockBehavior> CLIENT_REQUEST_PLACEHOLDER_BLOCK;
+
+    public static BlockType<BlockClosedEyeblossomBehavior> CLOSED_EYEBLOSSOM;
 
     public static BlockType<BlockCoalBlockBehavior> COAL_BLOCK;
 
@@ -853,7 +853,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockConduitBehavior> CONDUIT;
 
-    public static BlockType<BlockCopperBlockBehavior> COPPER_BLOCK;
+    public static BlockType<BlockCopperBehavior> COPPER_BLOCK;
 
     public static BlockType<BlockCopperBulbBehavior> COPPER_BULB;
 
@@ -880,6 +880,8 @@ public final class BlockTypes {
     public static BlockType<BlockCrafterBehavior> CRAFTER;
 
     public static BlockType<BlockCraftingTableBehavior> CRAFTING_TABLE;
+
+    public static BlockType<BlockCreakingHeartBehavior> CREAKING_HEART;
 
     public static BlockType<BlockHeadBehavior> CREEPER_HEAD;
 
@@ -925,7 +927,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSandstoneBehavior> CUT_RED_SANDSTONE;
 
@@ -1407,11 +1409,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> EXPOSED_COPPER;
 
-    public static BlockType<BlockExposedCopperBulbBehavior> EXPOSED_COPPER_BULB;
+    public static BlockType<BlockCopperBulbBehavior> EXPOSED_COPPER_BULB;
 
     public static BlockType<BlockCopperDoorBehavior> EXPOSED_COPPER_DOOR;
 
-    public static BlockType<BlockExposedCopperGrateBehavior> EXPOSED_COPPER_GRATE;
+    public static BlockType<BlockCopperGrateBehavior> EXPOSED_COPPER_GRATE;
 
     public static BlockType<BlockCopperTrapdoorBehavior> EXPOSED_COPPER_TRAPDOOR;
 
@@ -1419,7 +1421,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> EXPOSED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> EXPOSED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> EXPOSED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2019,6 +2021,8 @@ public final class BlockTypes {
 
     public static BlockType<BlockOchreFroglightBehavior> OCHRE_FROGLIGHT;
 
+    public static BlockType<BlockOpenEyeblossomBehavior> OPEN_EYEBLOSSOM;
+
     public static BlockType<BlockCandleBehavior> ORANGE_CANDLE;
 
     public static BlockType<BlockCandleCakeBehavior> ORANGE_CANDLE_CAKE;
@@ -2049,11 +2053,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> OXIDIZED_COPPER;
 
-    public static BlockType<BlockOxidizedCopperBulbBehavior> OXIDIZED_COPPER_BULB;
+    public static BlockType<BlockCopperBulbBehavior> OXIDIZED_COPPER_BULB;
 
     public static BlockType<BlockCopperDoorBehavior> OXIDIZED_COPPER_DOOR;
 
-    public static BlockType<BlockOxidizedCopperGrateBehavior> OXIDIZED_COPPER_GRATE;
+    public static BlockType<BlockCopperGrateBehavior> OXIDIZED_COPPER_GRATE;
 
     public static BlockType<BlockCopperTrapdoorBehavior> OXIDIZED_COPPER_TRAPDOOR;
 
@@ -2061,13 +2065,53 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> OXIDIZED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> OXIDIZED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> OXIDIZED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockPackedIceBehavior> PACKED_ICE;
 
     public static BlockType<BlockPackedMudBehavior> PACKED_MUD;
+
+    public static BlockType<BlockPaleHangingMossBehavior> PALE_HANGING_MOSS;
+
+    public static BlockType<BlockPaleMossBlockBehavior> PALE_MOSS_BLOCK;
+
+    public static BlockType<BlockCarpetBehavior> PALE_MOSS_CARPET;
+
+    public static BlockType<BlockButtonBehavior> PALE_OAK_BUTTON;
+
+    public static BlockType<BlockDoorBehavior> PALE_OAK_DOOR;
+
+    public static BlockType<BlockSlabBehavior> PALE_OAK_DOUBLE_SLAB;
+
+    public static BlockType<BlockFenceBehavior> PALE_OAK_FENCE;
+
+    public static BlockType<BlockFenceGateBehavior> PALE_OAK_FENCE_GATE;
+
+    public static BlockType<BlockHangingSignBehavior> PALE_OAK_HANGING_SIGN;
+
+    public static BlockType<BlockLeavesBehavior> PALE_OAK_LEAVES;
+
+    public static BlockType<BlockWoodBehavior> PALE_OAK_LOG;
+
+    public static BlockType<BlockPlanksBehavior> PALE_OAK_PLANKS;
+
+    public static BlockType<BlockPaleOakPressurePlateBehavior> PALE_OAK_PRESSURE_PLATE;
+
+    public static BlockType<BlockSaplingBehavior> PALE_OAK_SAPLING;
+
+    public static BlockType<BlockSlabBehavior> PALE_OAK_SLAB;
+
+    public static BlockType<BlockStairsBehavior> PALE_OAK_STAIRS;
+
+    public static BlockType<BlockSignBehavior> PALE_OAK_STANDING_SIGN;
+
+    public static BlockType<BlockTrapdoorBehavior> PALE_OAK_TRAPDOOR;
+
+    public static BlockType<BlockSignBehavior> PALE_OAK_WALL_SIGN;
+
+    public static BlockType<BlockWoodBehavior> PALE_OAK_WOOD;
 
     public static BlockType<BlockPearlescentFroglightBehavior> PEARLESCENT_FROGLIGHT;
 
@@ -2345,6 +2389,20 @@ public final class BlockTypes {
 
     public static BlockType<BlockReserved6Behavior> RESERVED6;
 
+    public static BlockType<BlockResinBlockBehavior> RESIN_BLOCK;
+
+    public static BlockType<BlockSlabBehavior> RESIN_BRICK_DOUBLE_SLAB;
+
+    public static BlockType<BlockSlabBehavior> RESIN_BRICK_SLAB;
+
+    public static BlockType<BlockStairsBehavior> RESIN_BRICK_STAIRS;
+
+    public static BlockType<BlockWallBehavior> RESIN_BRICK_WALL;
+
+    public static BlockType<BlockBricksBehavior> RESIN_BRICKS;
+
+    public static BlockType<BlockResinClumpBehavior> RESIN_CLUMP;
+
     public static BlockType<BlockRespawnAnchorBehavior> RESPAWN_ANCHOR;
 
     public static BlockType<BlockRoseBushBehavior> ROSE_BUSH;
@@ -2437,7 +2495,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSoulCampfireBehavior> SOUL_CAMPFIRE;
 
-    public static BlockType<BlockSoulFireBehavior> SOUL_FIRE;
+    public static BlockType<BlockFireBehavior> SOUL_FIRE;
 
     public static BlockType<BlockSoulLanternBehavior> SOUL_LANTERN;
 
@@ -2548,6 +2606,10 @@ public final class BlockTypes {
     public static BlockType<BlockWoodBehavior> STRIPPED_OAK_LOG;
 
     public static BlockType<BlockWoodBehavior> STRIPPED_OAK_WOOD;
+
+    public static BlockType<BlockWoodBehavior> STRIPPED_PALE_OAK_LOG;
+
+    public static BlockType<BlockWoodBehavior> STRIPPED_PALE_OAK_WOOD;
 
     public static BlockType<BlockWoodBehavior> STRIPPED_SPRUCE_LOG;
 
@@ -2695,11 +2757,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_COPPER;
 
-    public static BlockType<BlockWaxedCopperBulbBehavior> WAXED_COPPER_BULB;
+    public static BlockType<BlockCopperBulbBehavior> WAXED_COPPER_BULB;
 
     public static BlockType<BlockCopperDoorBehavior> WAXED_COPPER_DOOR;
 
-    public static BlockType<BlockWaxedCopperGrateBehavior> WAXED_COPPER_GRATE;
+    public static BlockType<BlockCopperGrateBehavior> WAXED_COPPER_GRATE;
 
     public static BlockType<BlockCopperTrapdoorBehavior> WAXED_COPPER_TRAPDOOR;
 
@@ -2707,7 +2769,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WAXED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WAXED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WAXED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WAXED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2715,11 +2777,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_EXPOSED_COPPER;
 
-    public static BlockType<BlockWaxedExposedCopperBulbBehavior> WAXED_EXPOSED_COPPER_BULB;
+    public static BlockType<BlockCopperBulbBehavior> WAXED_EXPOSED_COPPER_BULB;
 
     public static BlockType<BlockCopperDoorBehavior> WAXED_EXPOSED_COPPER_DOOR;
 
-    public static BlockType<BlockWaxedExposedCopperGrateBehavior> WAXED_EXPOSED_COPPER_GRATE;
+    public static BlockType<BlockCopperGrateBehavior> WAXED_EXPOSED_COPPER_GRATE;
 
     public static BlockType<BlockCopperTrapdoorBehavior> WAXED_EXPOSED_COPPER_TRAPDOOR;
 
@@ -2727,7 +2789,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WAXED_EXPOSED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WAXED_EXPOSED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WAXED_EXPOSED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2735,11 +2797,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_OXIDIZED_COPPER;
 
-    public static BlockType<BlockWaxedOxidizedCopperBulbBehavior> WAXED_OXIDIZED_COPPER_BULB;
+    public static BlockType<BlockCopperBulbBehavior> WAXED_OXIDIZED_COPPER_BULB;
 
     public static BlockType<BlockCopperDoorBehavior> WAXED_OXIDIZED_COPPER_DOOR;
 
-    public static BlockType<BlockWaxedOxidizedCopperGrateBehavior> WAXED_OXIDIZED_COPPER_GRATE;
+    public static BlockType<BlockCopperGrateBehavior> WAXED_OXIDIZED_COPPER_GRATE;
 
     public static BlockType<BlockCopperTrapdoorBehavior> WAXED_OXIDIZED_COPPER_TRAPDOOR;
 
@@ -2747,7 +2809,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WAXED_OXIDIZED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WAXED_OXIDIZED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WAXED_OXIDIZED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2755,11 +2817,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_WEATHERED_COPPER;
 
-    public static BlockType<BlockWaxedWeatheredCopperBulbBehavior> WAXED_WEATHERED_COPPER_BULB;
+    public static BlockType<BlockCopperBulbBehavior> WAXED_WEATHERED_COPPER_BULB;
 
     public static BlockType<BlockCopperDoorBehavior> WAXED_WEATHERED_COPPER_DOOR;
 
-    public static BlockType<BlockWaxedWeatheredCopperGrateBehavior> WAXED_WEATHERED_COPPER_GRATE;
+    public static BlockType<BlockCopperGrateBehavior> WAXED_WEATHERED_COPPER_GRATE;
 
     public static BlockType<BlockCopperTrapdoorBehavior> WAXED_WEATHERED_COPPER_TRAPDOOR;
 
@@ -2767,7 +2829,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WAXED_WEATHERED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WAXED_WEATHERED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WAXED_WEATHERED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
@@ -2775,11 +2837,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WEATHERED_COPPER;
 
-    public static BlockType<BlockWeatheredCopperBulbBehavior> WEATHERED_COPPER_BULB;
+    public static BlockType<BlockCopperBulbBehavior> WEATHERED_COPPER_BULB;
 
     public static BlockType<BlockCopperDoorBehavior> WEATHERED_COPPER_DOOR;
 
-    public static BlockType<BlockWeatheredCopperGrateBehavior> WEATHERED_COPPER_GRATE;
+    public static BlockType<BlockCopperGrateBehavior> WEATHERED_COPPER_GRATE;
 
     public static BlockType<BlockCopperTrapdoorBehavior> WEATHERED_COPPER_TRAPDOOR;
 
@@ -2787,7 +2849,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSlabBehavior> WEATHERED_CUT_COPPER_SLAB;
 
-    public static BlockType<BlockStairsBehavior> WEATHERED_CUT_COPPER_STAIRS;
+    public static BlockType<BlockCopperStairsBehavior> WEATHERED_CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 

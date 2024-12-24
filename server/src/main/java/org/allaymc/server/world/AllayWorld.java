@@ -214,8 +214,7 @@ public class AllayWorld implements World {
 
     protected boolean isSafeStandingPos(Position3ic pos) {
         var blockUnder = pos.dimension().getBlockState(pos.x(), pos.y() - 1, pos.z());
-        var blockTypeUnder = blockUnder.getBlockType();
-        if (!blockTypeUnder.getMaterial().isSolid()) {
+        if (!blockUnder.getBlockStateData().isSolid()) {
             return false;
         }
         return pos.dimension().getBlockState(pos.x(), pos.y(), pos.z()).getBlockType() == BlockTypes.AIR &&
@@ -278,10 +277,7 @@ public class AllayWorld implements World {
         newEffectiveWeathers.removeAll(weatherRemoved);
         newEffectiveWeathers.addAll(weatherAdded);
         var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
-        event.call();
-        if (event.isCancelled()) {
-            return;
-        }
+        if (!event.call()) return;
 
         effectiveWeathers.removeAll(weatherRemoved);
         effectiveWeathers.addAll(weatherAdded);
@@ -353,8 +349,7 @@ public class AllayWorld implements World {
 
     @Override
     public void saveWorldData() {
-        var event = new WorldDataSaveEvent(this);
-        event.call();
+        new WorldDataSaveEvent(this).call();
         getWorldStorage().writeWorldData(worldData);
     }
 
@@ -393,10 +388,7 @@ public class AllayWorld implements World {
         var newEffectiveWeathers = new HashSet<>(effectiveWeathers);
         newEffectiveWeathers.add(weather);
         var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
-        event.call();
-        if (event.isCancelled()) {
-            return;
-        }
+        if (!event.call()) return;
 
         effectiveWeathers.add(weather);
         onWeatherUpdate(Set.of(), Set.of(weather));
@@ -414,10 +406,7 @@ public class AllayWorld implements World {
         var newEffectiveWeathers = new HashSet<>(effectiveWeathers);
         newEffectiveWeathers.remove(weather);
         var event = new WeatherChangeEvent(this, Collections.unmodifiableSet(effectiveWeathers), Collections.unmodifiableSet(newEffectiveWeathers));
-        event.call();
-        if (event.isCancelled()) {
-            return;
-        }
+        if (!event.call()) return;
 
         effectiveWeathers.remove(weather);
         onWeatherUpdate(Set.of(weather), Set.of());

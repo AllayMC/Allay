@@ -40,8 +40,7 @@ public class BlockPickRequestPacketProcessor extends PacketProcessor<BlockPickRe
                 addUserData,
                 item
         );
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         item = event.getItemBlock();
         addUserData = event.isAddUserData();

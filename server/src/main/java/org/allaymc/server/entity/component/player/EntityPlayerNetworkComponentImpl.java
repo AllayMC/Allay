@@ -72,21 +72,18 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:player_network_component");
-
+    @Getter
+    protected final PacketProcessorHolder packetProcessorHolder;
     @Manager
     protected ComponentManager manager;
     @ComponentObject
     protected EntityPlayer thisPlayer;
     @Dependency
     protected EntityPlayerBaseComponentImpl baseComponent;
-
     @Getter
     @Setter
     protected boolean networkEncryptionEnabled = false;
     protected AtomicInteger fullyJoinChunkThreshold;
-    @Getter
-    protected final PacketProcessorHolder packetProcessorHolder;
-
     @Getter
     @Setter
     protected LoginData loginData;
@@ -117,8 +114,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         var maxLoginTime = Server.SETTINGS.networkSettings().maxLoginTime();
         if (maxLoginTime > 0) {
             Server.getInstance().getScheduler().scheduleDelayed(Server.getInstance(), () -> {
-                if (packetProcessorHolder.getClientStatus().ordinal() < ClientStatus.IN_GAME.ordinal()) {
-                    log.warn("Player {} didn't log in within {} seconds, disconnecting...", thisPlayer.getOriginName(), Server.SETTINGS.networkSettings().maxLoginTime() / 20d);
+                var status = packetProcessorHolder.getClientStatus();
+                if (status != ClientStatus.DISCONNECTED && status.ordinal() < ClientStatus.IN_GAME.ordinal()) {
+                    log.warn("Session {} didn't log in within {} seconds, disconnecting...", clientSession.getSocketAddress().toString(), Server.SETTINGS.networkSettings().maxLoginTime() / 20d);
                     disconnect(TrKeys.M_DISCONNECTIONSCREEN_TIMEOUT);
                 }
                 return true;
@@ -133,8 +131,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
                 }
 
                 var event = new PacketReceiveEvent(thisPlayer, packet);
-                event.call();
-                if (event.isCancelled()) {
+                if (!event.call()) {
                     return PacketSignal.HANDLED;
                 }
 
@@ -229,8 +226,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Override
     public void sendPacket(BedrockPacket packet) {
         var event = new PacketSendEvent(thisPlayer, packet);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         clientSession.sendPacket(event.getPacket());
     }
@@ -238,8 +234,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
     @Override
     public void sendPacketImmediately(BedrockPacket packet) {
         var event = new PacketSendEvent(thisPlayer, packet);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         clientSession.sendPacketImmediately(event.getPacket());
     }
@@ -254,7 +249,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         try {
             onDisconnect(disconnectReason);
             // Tell the client that it should disconnect
-            thisPlayer.getClientSession().disconnect(disconnectReason);
+            if (thisPlayer.getClientSession().isConnected()){
+                thisPlayer.getClientSession().disconnect(disconnectReason);
+            }
         } catch (Throwable t) {
             log.error("Error while disconnecting the session", t);
         }
@@ -265,10 +262,15 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         return packetProcessorHolder.getClientStatus();
     }
 
+    @Override
+    public ClientStatus getLastClientStatus() {
+        return packetProcessorHolder.getLastClientStatus();
+    }
+
     protected void onDisconnect(String disconnectReason) {
-        new PlayerQuitEvent(thisPlayer, disconnectReason).call();
         thisPlayer.closeAllContainers();
         ((AllayServer) Server.getInstance()).onDisconnect(thisPlayer);
+        new PlayerQuitEvent(thisPlayer, disconnectReason).call();
     }
 
     @Override
@@ -402,8 +404,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         }
 
         var event = new PlayerLoginEvent(thisPlayer);
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
             return;
         }
@@ -540,6 +541,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             var forceResourcePacks = Server.SETTINGS.resourcePackSettings().forceResourcePacks();
             var allowClientResourcePacks = Server.SETTINGS.resourcePackSettings().allowClientResourcePacks();
             RESOURCE_PACKS_INFO_PACKET.setForcedToAccept(forceResourcePacks);
+            RESOURCE_PACKS_INFO_PACKET.setWorldTemplateId(new UUID(0, 0));
+            RESOURCE_PACKS_INFO_PACKET.setWorldTemplateVersion("");
 
             RESOURCES_PACK_STACK_PACKET.setForcedToAccept(forceResourcePacks && !allowClientResourcePacks);
             // Just left a '*' here, if we put in an exact game version,

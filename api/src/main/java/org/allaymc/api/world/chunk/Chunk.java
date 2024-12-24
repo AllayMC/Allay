@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
  * All methods in this class are thread-safe. However, Frequent calls to methods in this class
  * result in huge lock overhead. If you are sure that the instance won't be accessed by multiple threads,
  * you can operate on unsafe chunk directly. To get the unsafe chunk, use {@link #toUnsafeChunk()}.
+ * <p>
+ * Compared to {@link UnsafeChunk}, this class contains more methods, which are also guaranteed to be thread-safe.
  *
  * @author Cool_Loong | daoge_cmd
  */

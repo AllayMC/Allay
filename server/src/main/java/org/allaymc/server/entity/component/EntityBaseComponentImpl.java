@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
@@ -21,6 +22,7 @@ import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.server.Server;
@@ -40,7 +42,6 @@ import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -169,12 +170,32 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         );
     }
 
-    @Override
     public void tick(long currentTick) {
         checkDead();
         tickEffects();
         tickBreathe();
-        if (attributeComponent != null) attributeComponent.tick();
+        computeAndNotifyCollidedBlocks();
+
+        manager.callEvent(new CEntityTickEvent(currentTick));
+    }
+
+    protected void computeAndNotifyCollidedBlocks() {
+        var aabb = getOffsetAABB();
+        var dimension = getDimension();
+        dimension.forEachBlockStates(aabb, 0, (x, y, z, blockState) -> {
+            var blockStateData = blockState.getBlockStateData();
+            // NOTICE: use shape here instead of collision shape!
+            // That's because entity colliding with block means that
+            // the entity get into the shape of the block. For example
+            // an entity can pass through a button block, which does not
+            // have collision shape but has shape.
+            if (blockState.getBehavior().canCollideWithEntity() && blockStateData.shape().translate(x, y, z).intersectsAABB(aabb)) {
+                blockState.getBehavior().onCollideWithEntity(
+                        new BlockStateWithPos(blockState, new Position3i(x, y, z, dimension), 0),
+                        thisEntity
+                );
+            }
+        });
     }
 
     protected void tickBreathe() {
@@ -196,7 +217,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void tickEffects() {
-        if (effects.isEmpty()) return;
+        if (effects.isEmpty()) {
+            return;
+        }
+
         for (var effect : effects.values().toArray(EffectInstance[]::new)) {
             effect.setDuration(effect.getDuration() - 1);
             effect.getType().onTick(thisEntity, effect);
@@ -226,8 +250,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void onDie() {
-        var event = new EntityDieEvent(thisEntity);
-        event.call();
+        new EntityDieEvent(thisEntity).call();
 
         manager.callEvent(CEntityDieEvent.INSTANCE);
         dead = true;
@@ -242,7 +265,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         for (float x = offsetAABB.minX(); x <= offsetAABB.maxX(); x += 0.5f) {
             for (float z = offsetAABB.minZ(); z <= offsetAABB.maxZ(); z += 0.5f) {
                 for (float y = offsetAABB.minY(); y <= offsetAABB.maxY(); y += 0.5f) {
-                    this.getDimension().addParticle(ParticleType.EXPLODE, new Vector3f(x, y, z));
+                    this.getDimension().addParticle(x, y, z, ParticleType.EXPLODE);
                 }
             }
         }
@@ -313,7 +336,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return location.x != Integer.MAX_VALUE &&
                location.y != Integer.MAX_VALUE &&
                location.z != Integer.MAX_VALUE &&
-               location.dimension != null &&
+               location.dimension() != null &&
                canBeSpawnedIgnoreLocation();
     }
 
@@ -327,8 +350,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     public boolean setLocationAndCheckChunk(Location3fc newLoc) {
+        return setLocationAndCheckChunk(newLoc, true);
+    }
+
+    public boolean setLocationAndCheckChunk(Location3fc newLoc, boolean calculateFallDistance) {
         if (checkChunk(this.location, newLoc)) {
-            setLocation(newLoc, true);
+            setLocation(newLoc, calculateFallDistance);
             return true;
         }
         return false;
@@ -339,47 +366,45 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         var oldChunkZ = (int) oldLoc.z() >> 4;
         var newChunkX = (int) newLoc.x() >> 4;
         var newChunkZ = (int) newLoc.z() >> 4;
-        if (oldChunkX != newChunkX || oldChunkZ != newChunkZ) {
-            var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
-            if (newChunk == null) {
-                // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
-                // moving to an unloaded chunk will result in the loss of the entity
-                log.debug("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
-                return false;
-            }
+        if (oldChunkX == newChunkX && oldChunkZ == newChunkZ) {
+            return true;
+        }
 
-            Chunk oldChunk = null;
-            if (this.location.dimension != null) {
-                oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
-                // It is possible that the oldChunk is null
-                // For example, when spawning an entity, the entity's old location is meaningless
-                if (oldChunk != null) {
-                    ((AllayChunk) oldChunk).removeEntity(runtimeId);
-                }
-            }
+        var newChunk = newLoc.dimension().getChunkService().getChunk(newChunkX, newChunkZ);
+        if (newChunk == null) {
+            // Moving into an unloaded chunk is not allowed. Because the chunk holds the entity,
+            // moving to an unloaded chunk will result in the loss of the entity
+            log.debug("Entity {} is trying to move into unloaded chunk {} {}", runtimeId, newChunkX, newChunkZ);
+            return false;
+        }
 
-            ((AllayChunk) newChunk).addEntity(thisEntity);
-            Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
-            Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
-            samePlayers.retainAll(oldChunkPlayers);
-            for (var player : oldChunkPlayers) {
-                if (!samePlayers.contains(player) && player != thisEntity) {
-                    despawnFrom(player);
-                }
-            }
-            for (var player : newChunk.getPlayerChunkLoaders()) {
-                if (!samePlayers.contains(player) && player != thisEntity) {
-                    spawnTo(player);
-                }
+        Chunk oldChunk = null;
+        if (this.location.dimension() != null) {
+            oldChunk = this.location.dimension().getChunkService().getChunk(oldChunkX, oldChunkZ);
+            // It is possible that the oldChunk is null
+            // For example, when spawning an entity, the entity's old location is meaningless
+            if (oldChunk != null) {
+                ((AllayChunk) oldChunk).removeEntity(runtimeId);
             }
         }
+
+        ((AllayChunk) newChunk).addEntity(thisEntity);
+        Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
+        Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
+        samePlayers.retainAll(oldChunkPlayers);
+        oldChunkPlayers.stream()
+                .filter(player -> !samePlayers.contains(player) && player != thisEntity)
+                .forEach(this::despawnFrom);
+        newChunk.getPlayerChunkLoaders().stream()
+                .filter(player -> !samePlayers.contains(player) && player != thisEntity)
+                .forEach(this::spawnTo);
         return true;
     }
 
     @Override
-    public void teleport(Location3fc target) {
+    public void teleport(Location3fc target, EntityTeleportEvent.Reason reason) {
         Objects.requireNonNull(target.dimension());
-        if (this.location.dimension == null) {
+        if (this.location.dimension() == null) {
             log.warn("Trying to teleport an entity whose dimension is null! Entity: {}", thisEntity);
             return;
         }
@@ -389,29 +414,36 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             return;
         }
 
-        var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target));
-        event.call();
-        if (event.isCancelled()) return;
+        var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target), reason);
+        if (!event.call()) {
+            return;
+        }
 
         target = event.getTo();
-        if (this.location.dimension == target.dimension()) {
+        beforeTeleport();
+        this.fallDistance = 0;
+        if (this.location.dimension() == target.dimension()) {
             // Teleporting in the current same dimension,
             // and we just need to move the entity to the new coordination
-            teleportInDimension(target);
+            teleportInDimension(target, reason);
         } else {
-            teleportOverDimension(target);
+            teleportOverDimension(target, reason);
         }
     }
 
-    protected void teleportInDimension(Location3fc target) {
+    protected void beforeTeleport() {
+        // This method is used by EntityPlayer
+    }
+
+    protected void teleportInDimension(Location3fc target, EntityTeleportEvent.Reason reason) {
         // Ensure that the new chunk is loaded
         target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
         // This method should always return true because we have loaded the chunk
-        setLocationAndCheckChunk(target);
+        setLocationAndCheckChunk(target, false);
         broadcastMoveToViewers(target, true);
     }
 
-    protected void teleportOverDimension(Location3fc target) {
+    protected void teleportOverDimension(Location3fc target, EntityTeleportEvent.Reason reason) {
         // Teleporting to another dimension, there will be more works to be done
         this.location.dimension().getEntityService().removeEntity(thisEntity, () -> {
             target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
@@ -421,29 +453,18 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void sendEntityData(EntityDataType<?>... dataTypes) {
-        if (viewers.isEmpty()) return;
-        sendPacketToViewers(createSetEntityDataPacket(dataTypes, new EntityFlag[0]));
+    public void sendMetadata() {
+        if (viewers.isEmpty()) {
+            return;
+        }
+
+        sendPacketToViewers(createSetEntityDataPacket());
     }
 
-    @Override
-    public void sendEntityFlags(EntityFlag... flags) {
-        if (viewers.isEmpty()) return;
-        sendPacketToViewers(createSetEntityDataPacket(new EntityDataType<?>[0], flags));
-    }
-
-    protected SetEntityDataPacket createSetEntityDataPacket(EntityDataType<?>[] dataTypes, EntityFlag[] flags) {
+    protected SetEntityDataPacket createSetEntityDataPacket() {
         var packet = new SetEntityDataPacket();
         packet.setRuntimeEntityId(runtimeId);
-
-        var metadata = packet.getMetadata();
-        for (var type : dataTypes) {
-            metadata.put(type, this.metadata.get(type));
-        }
-        for (var flag : flags) {
-            metadata.setFlag(flag, this.metadata.get(flag));
-        }
-
+        packet.setMetadata(this.metadata.getEntityDataMap());
         packet.setTick(this.getWorld().getTick());
         return packet;
     }
@@ -605,8 +626,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             pk.setHeadYaw((float) newLoc.headYaw());
             locLastSent.headYaw = newLoc.headYaw();
         }
-        if (onGround) pk.getFlags().add(ON_GROUND);
-        if (teleporting) pk.getFlags().add(TELEPORTING);
+        if (onGround) {
+            pk.getFlags().add(ON_GROUND);
+        }
+        if (teleporting) {
+            pk.getFlags().add(TELEPORTING);
+        }
         return pk;
     }
 
@@ -707,8 +732,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void onFall() {
         var event = new EntityFallEvent(thisEntity, fallDistance);
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             this.fallDistance = 0;
             return;
         }
@@ -741,8 +765,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (!canApplyEffect(effectInstance.getType())) return false;
 
         var event = new EntityEffectAddEvent(thisEntity, effectInstance);
-        event.call();
-        if (event.isCancelled()) return false;
+        if (!event.call()) return false;
 
         effectInstance = event.getEffect();
 
@@ -770,8 +793,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (removed == null) return;
 
         var event = new EntityEffectRemoveEvent(thisEntity, removed);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         effects.remove(effectType);
 
@@ -842,7 +864,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
+    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
         // Do nothing
     }
 

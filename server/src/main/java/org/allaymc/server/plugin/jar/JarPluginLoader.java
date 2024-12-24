@@ -88,7 +88,7 @@ public class JarPluginLoader implements PluginLoader {
         }
     }
 
-    public static class JarPluginLoaderFactory implements PluginLoaderFactory {
+    public static class Factory implements PluginLoader.Factory {
 
         protected static final PathMatcher PATH_MATCHER = FileSystems.getDefault().getPathMatcher("glob:**.jar");
 

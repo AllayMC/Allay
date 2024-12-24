@@ -60,7 +60,9 @@ public class BlockStateData {
                         Integer.parseInt(str.substring(7), 16));
             }).create();
     /**
-     * The probability that the block will be burned while on fire.
+     * The burnOdds of this block state.
+     * <p>
+     * The higher the burn odds, the more quickly a block on fire burns away
      */
     @Builder.Default
     protected int burnOdds = 0;
@@ -97,7 +99,7 @@ public class BlockStateData {
     /**
      * The flame odds of the block state.
      * <p>
-     * The chance that this block will be ignited when there is a fire nearby
+     * The higher the flame odds, the more quickly a block catches fire if the fire is available to spread there.
      */
     @Builder.Default
     protected int flameOdds = 0;
@@ -128,6 +130,23 @@ public class BlockStateData {
      */
     @Builder.Default
     protected float thickness = 0;
+    /**
+     * Whether the block requires correct tool for drops.
+     * If set to {@code false}, breaking this block with
+     * wrong tool won't have any drop.
+     */
+    @Builder.Default
+    protected boolean requiresCorrectToolForDrops = true;
+    /**
+     * Whether this block is a solid block.
+     */
+    @Builder.Default
+    protected boolean isSolid = true;
+    /**
+     * The translucency of the block state.
+     */
+    @Builder.Default
+    protected float translucency = 0.0f;
 
     public static BlockStateData fromJson(String json) {
         return SERIALIZER.fromJson(json, BlockStateData.class);
@@ -163,5 +182,9 @@ public class BlockStateData {
 
     public VoxelShape computeOffsetShape(Vector3ic vector) {
         return computeOffsetShape(vector.x(), vector.y(), vector.z());
+    }
+
+    public boolean isTransparent() {
+        return translucency() != 1.0f;
     }
 }

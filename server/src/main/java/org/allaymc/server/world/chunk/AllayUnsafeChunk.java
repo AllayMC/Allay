@@ -1,7 +1,6 @@
 package org.allaymc.server.world.chunk;
 
 import com.google.common.base.Preconditions;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.type.BlockState;
@@ -18,11 +17,12 @@ import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
+import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.world.HeightMap;
 import org.cloudburstmc.nbt.NbtMap;
+import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 /**
  * @author Cool_Loong | daoge_cmd
  */
-@NotThreadSafe
 public class AllayUnsafeChunk implements UnsafeChunk {
     private static final AtomicReferenceFieldUpdater<AllayUnsafeChunk, ChunkState> STATE_FIELD = AtomicReferenceFieldUpdater.newUpdater(AllayUnsafeChunk.class, ChunkState.class, "state");
 
@@ -45,8 +44,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final ChunkSection[] sections;
     @Getter
     protected final HeightMap heightMap;
-    protected final Map<Long, Entity> entities;
-    protected final Map<Integer, BlockEntity> blockEntities;
+    protected final Long2ObjectNonBlockingMap<Entity> entities;
+    protected final Int2ObjectNonBlockingMap<BlockEntity> blockEntities;
+    protected final Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
     @Getter
     protected volatile ChunkState state;
 
@@ -55,61 +55,39 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Setter
     protected BlockChangeCallback blockChangeCallback;
 
-    private AllayUnsafeChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-        this(
-                chunkX,
-                chunkZ,
-                dimensionInfo,
-                createEmptySections(dimensionInfo),
-                new HeightMap((short) dimensionInfo.minHeight()),
-                ChunkState.NEW,
-                null,
-                null,
-                null
-        );
-    }
-
     /**
      * Create a new {@link AllayUnsafeChunk}.
      *
-     * @param x                   the x.
-     * @param z                   the z.
-     * @param dimensionInfo       the dimension info.
-     * @param sections            the sections.
-     * @param heightMap           the height map.
-     * @param state               the state.
-     * @param entityNbtList       the entity nbt list, can be {@code null}.
-     * @param blockEntityNbtList  the block entity nbt list, can be {@code null}.
-     * @param blockChangeCallback the block change callback, can be {@code null}.
+     * @param x                  the x.
+     * @param z                  the z.
+     * @param dimensionInfo      the dimension info.
+     * @param sections           the sections.
+     * @param heightMap          the height map.
+     * @param state              the state.
+     * @param entityNbtList      the entity nbt list, can be {@code null}.
+     * @param blockEntityNbtList the block entity nbt list, can be {@code null}
      */
-    private AllayUnsafeChunk(
+    AllayUnsafeChunk(
             int x, int z, DimensionInfo dimensionInfo,
             ChunkSection[] sections, HeightMap heightMap,
-            ChunkState state, List<NbtMap> entityNbtList, List<NbtMap> blockEntityNbtList,
-            BlockChangeCallback blockChangeCallback) {
+            Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates,
+            ChunkState state, List<NbtMap> entityNbtList,
+            List<NbtMap> blockEntityNbtList) {
         this.x = x;
         this.z = z;
         this.dimensionInfo = dimensionInfo;
         this.sections = sections;
         this.heightMap = heightMap;
-        this.entities = new Long2ObjectOpenHashMap<>();
+        this.scheduledUpdates = scheduledUpdates;
+        this.entities = new Long2ObjectNonBlockingMap<>();
         this.blockEntities = new Int2ObjectNonBlockingMap<>();
         this.state = state;
         this.entityNbtList = entityNbtList;
         this.blockEntityNbtList = blockEntityNbtList;
-        this.blockChangeCallback = blockChangeCallback;
     }
 
-    private static ChunkSection[] createEmptySections(DimensionInfo dimensionInfo) {
-        var sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
-        for (int i = 0; i < sections.length; i++) {
-            sections[i] = new ChunkSection((byte) (i + dimensionInfo.minSectionY()));
-        }
-        return sections;
-    }
-
-    public static Builder builder() {
-        return new Builder();
+    public static AllayChunkBuilder builder() {
+        return new AllayChunkBuilder();
     }
 
     private static void checkXZ(int x, int z) {
@@ -176,6 +154,23 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
+    public void addScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int delay, int layer) {
+        checkXYZ(x, y, z);
+        var key = HashUtils.hashChunkXYZ(x, y, z);
+        scheduledUpdates.put(key, new ScheduledUpdateInfo(key, layer, delay));
+    }
+
+    @Override
+    public boolean hasScheduledUpdate(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, int layer) {
+        var scheduledUpdateInfo = scheduledUpdates.get(HashUtils.hashChunkXYZ(x, y, z));
+        return scheduledUpdateInfo != null && scheduledUpdateInfo.getLayer() == layer;
+    }
+
+    public Int2ObjectNonBlockingMap<ScheduledUpdateInfo> getScheduledUpdatesUnsafe() {
+        return scheduledUpdates;
+    }
+
+    @Override
     public short getHeight(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
@@ -200,8 +195,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public BlockState getBlockState(int x, int y, int z, int layer) {
-        if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight())
+        if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight()) {
             return BlockTypes.AIR.getDefaultState();
+        }
 
         checkXZ(x, z);
         return this.getSection(y >> 4).getBlockState(x, y & 0xf, z, layer);
@@ -266,6 +262,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return Collections.unmodifiableMap(entities);
     }
 
+    public Long2ObjectNonBlockingMap<Entity> getEntitiesUnsafe() {
+        return entities;
+    }
+
     @Override
     public void addBlockEntity(BlockEntity blockEntity) {
         Preconditions.checkNotNull(blockEntity);
@@ -290,6 +290,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return Collections.unmodifiableMap(blockEntities);
     }
 
+    public Int2ObjectNonBlockingMap<BlockEntity> getBlockEntitiesUnsafe() {
+        return blockEntities;
+    }
+
     public Chunk toSafeChunk() {
         return new AllayChunk(this);
     }
@@ -300,85 +304,5 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             curr = STATE_FIELD.get(this);
             Preconditions.checkState(curr.ordinal() <= next.ordinal(), "invalid state transition: %s => %s", curr, next);
         } while (!STATE_FIELD.compareAndSet(this, curr, next));
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    @Getter
-    public static class Builder {
-        private ChunkState state;
-        private int chunkX, chunkZ;
-        private DimensionInfo dimensionInfo;
-        private ChunkSection[] sections;
-        private HeightMap heightMap;
-        private List<NbtMap> entitiyList;
-        private List<NbtMap> blockEntitiyList;
-        protected BlockChangeCallback blockChangeCallback;
-
-        public Builder chunkX(int chunkX) {
-            this.chunkX = chunkX;
-            return this;
-        }
-
-        public Builder chunkZ(int chunkZ) {
-            this.chunkZ = chunkZ;
-            return this;
-        }
-
-        public Builder state(ChunkState state) {
-            this.state = state;
-            return this;
-        }
-
-        public Builder dimensionInfo(DimensionInfo dimensionInfo) {
-            Preconditions.checkArgument(this.dimensionInfo == null);
-            this.dimensionInfo = dimensionInfo;
-            return this;
-        }
-
-        public Builder sections(ChunkSection[] sections) {
-            Preconditions.checkNotNull(dimensionInfo);
-            Preconditions.checkArgument(sections.length == dimensionInfo.chunkSectionCount());
-            for (int index = 0; index < sections.length; index++) {
-                var section = sections[index];
-                Preconditions.checkNotNull(section);
-                Preconditions.checkArgument((section.sectionY() - dimensionInfo.minSectionY()) == index);
-            }
-            this.sections = sections;
-            return this;
-        }
-
-        public Builder heightMap(HeightMap heightMap) {
-            this.heightMap = heightMap;
-            return this;
-        }
-
-        public Builder entities(List<NbtMap> entities) {
-            this.entitiyList = entities;
-            return this;
-        }
-
-        public Builder blockEntities(List<NbtMap> blockEntities) {
-            this.blockEntitiyList = blockEntities;
-            return this;
-        }
-
-        public AllayUnsafeChunk build() {
-            Preconditions.checkNotNull(dimensionInfo);
-            if (state == null) state = ChunkState.FINISHED;
-            if (sections == null) sections = createEmptySections(dimensionInfo);
-            if (heightMap == null) heightMap = new HeightMap((short) dimensionInfo.minHeight());
-            return new AllayUnsafeChunk(
-                    chunkX, chunkZ, dimensionInfo,
-                    sections, heightMap, state,
-                    entitiyList, blockEntitiyList,
-                    blockChangeCallback
-            );
-        }
-
-        public AllayUnsafeChunk newChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
-            var chunk = new AllayUnsafeChunk(chunkX, chunkZ, dimensionInfo);
-            chunk.setState(ChunkState.NEW);
-            return chunk;
-        }
     }
 }

@@ -10,11 +10,11 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 public enum ClientStatus {
-    NEW(null),
-    CONNECTED(NEW),
+    // The previous status of DISCONNECTED can be CONNECTED, LOGGED_IN or IN_GAME
+    DISCONNECTED(null),
+    CONNECTED(DISCONNECTED),
     LOGGED_IN(CONNECTED),
-    IN_GAME(LOGGED_IN),
-    DISCONNECTED(IN_GAME);
+    IN_GAME(LOGGED_IN);
 
     /**
      * The previous status of the client.
@@ -23,6 +23,6 @@ public enum ClientStatus {
     private final ClientStatus previousStatus;
 
     public boolean canHandlePackets() {
-        return this != NEW && this != DISCONNECTED;
+        return this != DISCONNECTED;
     }
 }

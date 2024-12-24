@@ -1,6 +1,7 @@
 package org.allaymc.server.datastruct.palette;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Predicate;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
@@ -204,6 +205,15 @@ public final class Palette<V> {
             }
         }
 
+        return true;
+    }
+
+    public boolean allEntriesMatch(Predicate<V> predicate) {
+        for (var entry : palette) {
+            if (!predicate.test(entry)) {
+                return false;
+            }
+        }
         return true;
     }
 

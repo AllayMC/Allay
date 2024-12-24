@@ -20,12 +20,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - name: Setup WARP
-        uses: fscarmen/warp-on-actions@v1.3
-        if: contains(github.ref_name, 'master')
-        with:
-          stack: dual
+      # - name: Setup WARP
+      #   uses: fscarmen/warp-on-actions@v1.3
+      #   if: contains(github.ref_name, 'master')
+      #   with:
+      #     stack: dual
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,18 +47,17 @@ jobs:
           build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
           build-scan-terms-of-use-agree: "yes"
 
-      - name: Make Gradle Wrapper Script Executable
-        run: chmod +x gradlew
-
       - name: Build
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
 
       - name: Generate Coverage Reports
         if: success()
         run: ./gradlew jacocoTestReport
 
       - name: Upload Coverage Reports to Codecov
-        uses: codecov/codecov-action@v5.1.1
+        uses: codecov/codecov-action@v5.1.2
         if: success()
         with:
           directory: .jacoco/test/
@@ -66,22 +66,23 @@ jobs:
       - name: Find Shaded Jar
         id: vars
         run: |
-          SHADED_JAR=$(find server/build/libs -name "allay-server-*-shaded.jar" -print -quit)
-          echo "shaded_jar=$SHADED_JAR" >> $GITHUB_OUTPUT
+          SHADED_JAR_PATH=$(find server/build/libs -name "allay-server-*-shaded.jar" -print -quit)
+          SHADED_JAR_NAME=$(basename "$SHADED_JAR_PATH")
+          echo "shaded_jar_path=$SHADED_JAR_PATH" >> $GITHUB_OUTPUT
+          echo "shaded_jar_name=$SHADED_JAR_NAME" >> $GITHUB_OUTPUT
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         if: success()
         with:
           name: allay-server
-          path: ${{ steps.vars.outputs.shaded_jar }}
+          path: ${{ steps.vars.outputs.shaded_jar_path }}
 
       - name: Publish to JitPack
-        uses: fjogeleit/http-request-action@v1
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
-        with:
-          url: 'https://jitpack.io/#AllayMC/Allay/master-SNAPSHOT'
-          method: 'GET'
+        run: |
+          chmod +x publish_to_jitpack
+          ./publish_to_jitpack
 
       - name: Set Tag
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
@@ -92,13 +93,14 @@ jobs:
           git push origin -f --follow-tags nightly
 
       - name: Update Nightly Build
-        uses: WebFreak001/deploy-nightly@v3.2.0
+        uses: AllayMC/deploy-nightly@v3.3.0
         if: success() && github.event_name == 'push' && github.repository == 'AllayMC/Allay' && contains(github.ref_name, 'master')
         with:
           upload_url: https://uploads.github.com/repos/AllayMC/Allay/releases/185111149/assets{?name,label}
           release_id: 185111149
-          asset_path: ./${{ steps.vars.outputs.shaded_jar }}
-          asset_name: allay-nightly-build-$$.jar
+          asset_path: ./${{ steps.vars.outputs.shaded_jar_path }}
+          asset_name: ${{ steps.vars.outputs.shaded_jar_name }}
+          old_asset_name: allay-server-$$-shaded.jar
           asset_content_type: application/zip
           max_releases: 1
 

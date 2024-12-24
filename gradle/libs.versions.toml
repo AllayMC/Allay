@@ -1,17 +1,19 @@
 [versions]
-log4j = "2.24.2"
+log4j = "2.24.3"
 commons-rng = "1.6"
 fastutil = "8.5.15"
+leveldb = "1.0.1"
+netty = "4.1.116.Final"
 
 [libraries]
 # NBT
-nbt = { group = "org.allaymc", name = "NBT", version = "3.0.9" }
+nbt = { group = "org.allaymc", name = "NBT", version = "3.0.10" }
 # Network protocol
 network = { group = "org.cloudburstmc.protocol", name = "bedrock-connection", version = "3.0.0.Beta5-SNAPSHOT" }
 # State Updater
-stateupdater = { group = "org.allaymc", name = "stateupdater", version = "1.21.40" }
+stateupdater = { group = "org.allaymc", name = "stateupdater", version = "1.21.50" }
 # Collections
-guava = { group = "com.google.guava", name = "guava", version = "33.3.1-jre" }
+guava = { group = "com.google.guava", name = "guava", version = "33.4.0-jre" }
 # Fastutil
 fastutil-object-int-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-int-maps", version.ref = "fastutil" }
 fastutil-object-reference-maps = { group = "org.cloudburstmc.fastutil.maps", name = "object-reference-maps", version.ref = "fastutil" }
@@ -49,9 +51,8 @@ commonsio = { group = "commons-io", name = "commons-io", version = "2.18.0" }
 # Cache
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
 # LevelDB
-# leveldbjni = { group = "net.daporkchop", name = "leveldb-mcpe-jni", version = "0.0.10-SNAPSHOT" }
-leveldb = { group = "com.hivemc.leveldb", name = "leveldb", version = "1.0.1" }
-leveldb-api = { group = "com.hivemc.leveldb", name = "leveldb-api", version = "1.0.1" }
+leveldb = { group = "com.hivemc.leveldb", name = "leveldb", version.ref = "leveldb" }
+leveldb-api = { group = "com.hivemc.leveldb", name = "leveldb-api", version.ref = "leveldb" }
 # Logging dependencies
 slf4j-api = { group = "org.slf4j", name = "slf4j-api", version = "2.0.16" }
 log4j-slf4j2-impl = { group = "org.apache.logging.log4j", name = "log4j-slf4j2-impl", version.ref = "log4j" }
@@ -66,10 +67,9 @@ fastreflect = { group = "com.github.AllayMC", name = "fast-reflection", version 
 # Math computing
 joml = { group = "org.joml", name = "joml", version = "1.10.8" }
 joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.10.0" }
-# Netty epoll
-netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version = "4.1.115.Final" }
-# Netty kqueue
-netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version = "4.1.115.Final" }
+# Netty
+netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version.ref = "netty" }
+netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version.ref = "netty" }
 # Configulation lib
 okaeri-configs-yaml-snakeyaml = { group = "eu.okaeri", name = "okaeri-configs-yaml-snakeyaml", version = "5.0.5" }
 # Native Operating System and Hardware Information
@@ -78,7 +78,7 @@ oshi = { group = "com.github.oshi", name = "oshi-core", version = "6.6.5" }
 flatlaf = { group = "com.formdev", name = "flatlaf", version = "3.5.4" }
 formsrt = { group = "com.intellij", name = "forms_rt", version = "7.0.3" }
 # JUnit
-junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.11.3" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version = "5.11.4" }
 mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter", version = "5.14.2" }
 # Lombok
 lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }

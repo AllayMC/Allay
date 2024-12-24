@@ -6,7 +6,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockTags;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
@@ -26,7 +26,7 @@ import static org.allaymc.api.block.property.type.BlockPropertyTypes.*;
  * @author Dhaiven
  */
 public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
-    protected final static BiMap<BlockFace, Integer> DOOR_DIRECTION = HashBiMap.create(4);
+    protected static final BiMap<BlockFace, Integer> DOOR_DIRECTION = HashBiMap.create(4);
 
     static {
         DOOR_DIRECTION.put(BlockFace.EAST, 0);
@@ -50,13 +50,12 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         }
 
         var downBlockState = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() - 1, placeBlockPos.z());
-        var blockType1 = downBlockState.getBlockType();
-        if (!blockType1.getMaterial().isSolid()) {
+        if (!downBlockState.getBlockStateData().isSolid()) {
             return false;
         }
 
         var upBlockState = dimension.getBlockState(placeBlockPos.x(), placeBlockPos.y() + 1, placeBlockPos.z());
-        if (!upBlockState.getBlockType().hasBlockTag(BlockTags.REPLACEABLE)) {
+        if (!upBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
             return false;
         }
 
@@ -64,11 +63,14 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (placementInfo != null) {
             face = placementInfo.player().getHorizontalFace();
         }
-        blockState = blockState.setProperty(DIRECTION, DOOR_DIRECTION.get(face));
+        blockState = blockState.setProperty(DIRECTION_4, DOOR_DIRECTION.get(face));
 
-        var leftBlock = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos)).getBlockType();
-        var rightBlock = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos)).getBlockType();
-        if (leftBlock == getBlockType() || (!rightBlock.getMaterial().isTransparent() && leftBlock.getMaterial().isTransparent())) { //Door hinge
+        var leftBlockState = dimension.getBlockState(face.rotateYCCW().offsetPos(placeBlockPos));
+        var rightBlockState = dimension.getBlockState(face.rotateY().offsetPos(placeBlockPos));
+
+        var hingeOnLeft = leftBlockState.getBlockType() == getBlockType() ||
+                          (!rightBlockState.getBlockStateData().isTransparent() && leftBlockState.getBlockStateData().isTransparent());
+        if (hingeOnLeft) { // Door hinge
             blockState = blockState.setProperty(DOOR_HINGE_BIT, true);
         }
 
@@ -92,11 +94,9 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (face == BlockFace.UP) {
             return current.blockState().getPropertyValue(UPPER_BLOCK_BIT) || neighbor.blockState().getBlockType() == getBlockType();
         } else if (face == BlockFace.DOWN) {
-            if (current.blockState().getPropertyValue(UPPER_BLOCK_BIT)) {
-                return neighbor.blockState().getBlockType() == getBlockType();
-            }
-
-            return neighbor.blockState().getBlockType().getMaterial().isSolid();
+            return current.blockState().getPropertyValue(UPPER_BLOCK_BIT)
+                    ? neighbor.blockState().getBlockType() == getBlockType()
+                    : neighbor.blockState().getBlockStateData().isSolid();
         }
 
         return true;
@@ -107,15 +107,12 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         if (super.onInteract(itemStack, dimension, interactInfo)) return true;
         if (interactInfo == null) return false;
 
-        Vector3i pos = (Vector3i) interactInfo.clickBlockPos();
+        Vector3i pos = (Vector3i) interactInfo.clickedBlockPos();
         var blockState = dimension.getBlockState(pos);
 
-        Vector3ic otherPos;
-        if (blockState.getPropertyValue(UPPER_BLOCK_BIT)) {
-            otherPos = pos.sub(0, 1, 0);
-        } else {
-            otherPos = pos.add(0, 1, 0);
-        }
+        Vector3ic otherPos = blockState.getPropertyValue(UPPER_BLOCK_BIT)
+                ? pos.sub(0, 1, 0)
+                : pos.add(0, 1, 0);
 
         var isOpen = !blockState.getPropertyValue(OPEN_BIT);
 

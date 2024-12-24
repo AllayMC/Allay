@@ -24,6 +24,7 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
+import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
@@ -59,13 +60,13 @@ import org.allaymc.server.world.AllayWorld;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
+import org.cloudburstmc.protocol.bedrock.data.Ability;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.PlayerActionType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginType;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputMessage;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOutputType;
-import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
@@ -111,6 +112,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     @Setter
     protected boolean usingItemOnBlock;
+    @Getter
+    @Setter
+    protected boolean awaitingTeleportACK;
     // Set enchantment seed to a random value
     // and if player has enchantment seed previously,
     // this random value will be covered
@@ -172,8 +176,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public void setGameType(GameType gameType) {
         var event = new PlayerGameTypeChangeEvent(thisPlayer, this.gameType, gameType);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         gameType = event.getNewGameType();
 
@@ -203,6 +206,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         tickPlayerDataAutoSave();
 
         syncData();
+    }
+
+    @Override
+    protected void computeAndNotifyCollidedBlocks() {
+        if (abilities.has(Ability.NO_CLIP)) {
+            return;
+        }
+
+        super.computeAndNotifyCollidedBlocks();
     }
 
     @Override
@@ -280,16 +292,38 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
     }
 
+    /**
+     * awaitingTeleportACK is used to solve the desynchronization of data at both ends.
+     * Because PlayerAuthInputPacket will be sent from the client to the server at a rate of 20 per second.
+     * After teleporting, the server still receives the PlayerAuthInputPacket sent by the client before teleporting.
+     * The following is a simple simulation (initial player position is (0, 1000, 0)):
+     * <p>
+     * [C->S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                           <br>
+     * [S] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
+     * [S->C] Send new pos (0, 100, 0) `pk2`                                                  <br>
+     * [S] Receive `pk1`, set player pos to (0, 999 ,0)                                       <br>
+     * [C] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
+     * [C->S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                           <br>
+     * [S] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
+     * <p>
+     *
+     * @see <a href="https://github.com/AllayMC/Allay/issues/517">teleport method should reset fall distance</a>
+     */
     @Override
-    protected void teleportInDimension(Location3fc target) {
-        super.teleportInDimension(target);
-        // For player, we also need to send move packet to client
-        // However, there is no need to send motion packet as we are teleporting the player
-        sendLocationToSelf();
+    protected void beforeTeleport() {
+        this.awaitingTeleportACK = true;
     }
 
     @Override
-    protected void teleportOverDimension(Location3fc target) {
+    protected void teleportInDimension(Location3fc target, EntityTeleportEvent.Reason reason) {
+        super.teleportInDimension(target, reason);
+        // For player, we also need to send move packet to client
+        // However, there is no need to send motion packet as we are teleporting the player
+        sendLocationToSelf(reason);
+    }
+
+    @Override
+    protected void teleportOverDimension(Location3fc target, EntityTeleportEvent.Reason reason) {
         var currentDim = location.dimension();
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
@@ -305,7 +339,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         location.dimension().removePlayer(thisPlayer, () -> {
             targetDim.getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
             setLocationBeforeSpawn(target);
-            sendLocationToSelf();
+            sendLocationToSelf(EntityTeleportEvent.Reason.UNKNOWN);
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
                 var packet = new ChangeDimensionPacket();
                 packet.setDimension(targetDim.getDimensionInfo().dimensionId());
@@ -573,8 +607,17 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.spawnPoint = spawnPoint;
     }
 
-    public void sendLocationToSelf() {
-        networkComponent.sendPacket(createMovePacket(location, true));
+    public void sendLocationToSelf(EntityTeleportEvent.Reason reason) {
+        // Use MovePlayerPacket so that client will send
+        // back teleport ack in PlayerAuthInputPacket
+        var pk = new MovePlayerPacket();
+        pk.setRuntimeEntityId(runtimeId);
+        var location = getLocation();
+        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
+        pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
+        pk.setMode(MovePlayerPacket.Mode.TELEPORT);
+        pk.setTeleportationCause(reason.getNetworkValue());
+        networkComponent.sendPacket(pk);
     }
 
     @Override
@@ -675,16 +718,19 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendTr(String key, boolean forceTranslatedByClient, String... args) {
-        if (forceTranslatedByClient) {
-            var packet = new TextPacket();
-            packet.setType(TextPacket.Type.TRANSLATION);
-            packet.setXuid("");
-            packet.setNeedsTranslation(true);
-            packet.setMessage(key);
-            packet.setParameters(List.of(args));
-            networkComponent.sendPacket(packet);
-        } else sendText(I18n.get().tr(thisPlayer.getLangCode(), key, args));
+    public void sendTr(String key, boolean forceTranslatedByClient, Object... args) {
+        if (!forceTranslatedByClient) {
+            sendText(I18n.get().tr(thisPlayer.getLangCode(), key, args));
+            return;
+        }
+
+        var packet = new TextPacket();
+        packet.setType(TextPacket.Type.TRANSLATION);
+        packet.setXuid("");
+        packet.setNeedsTranslation(true);
+        packet.setMessage(key);
+        packet.setParameters(List.of(Utils.objectArrayToStringArray(args)));
+        networkComponent.sendPacket(packet);
     }
 
     @Override
@@ -896,9 +942,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void sendEntityData(EntityDataType<?>... dataTypes) {
-        super.sendEntityData(dataTypes);
-        networkComponent.sendPacket(createSetEntityDataPacket(dataTypes, new EntityFlag[0]));
+    public void sendMetadata() {
+        super.sendMetadata();
+        networkComponent.sendPacket(createSetEntityDataPacket());
     }
 
     public void onJump() {

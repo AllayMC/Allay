@@ -45,8 +45,7 @@ public final class ScoreboardService {
 
     public boolean add(Scoreboard scoreboard) {
         var event = new ScoreboardAddEvent(scoreboard);
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             return false;
         }
 
@@ -65,8 +64,7 @@ public final class ScoreboardService {
         if (removed == null) return false;
 
         var event = new ScoreboardRemoveEvent(removed);
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             return false;
         }
 

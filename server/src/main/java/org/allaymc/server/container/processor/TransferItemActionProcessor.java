@@ -72,8 +72,7 @@ public abstract class TransferItemActionProcessor<T extends TransferItemStackReq
                 destination, destinationSlot,
                 sourItem.getItemType(), count
         );
-        event.call();
-        if (event.isCancelled()) {
+        if (!event.call()) {
             return error();
         }
 

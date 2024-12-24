@@ -6,6 +6,10 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.cloudburstmc.protocol.bedrock.data.ParticleType;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
@@ -52,6 +56,15 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         if (!newBlockState.getBlockStateData().canContainLiquid()) {
             // New layer 0 block cannot contain liquid, remove layer 1 water
             dim.setBlockState(currentBlockState.pos(), BlockTypes.AIR.getDefaultState(), 1);
+        }
+    }
+
+    @Override
+    public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
+        if (entity instanceof EntityDamageComponent damageComponent && damageComponent.getOnFireTicks() > 0) {
+            damageComponent.setOnFireTicks(0);
+            entity.getDimension().addParticle(entity.getLocation(), ParticleType.WHITE_SMOKE);
+            entity.getDimension().addLevelSoundEvent(entity.getLocation(), SoundEvent.EXTINGUISH_FIRE);
         }
     }
 }

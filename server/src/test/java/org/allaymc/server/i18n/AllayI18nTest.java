@@ -11,10 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class AllayI18nTest {
 
-    public static final String[] ARGS = {"1", "2", "3", "4", "5"};
+    public static final Object[] ARGS = {"1", "2", "3", "4", "5"};
     public static final String TEST_VANILLA_KEY_NO_NAMESPACE = "translation.test.complex";
     public static final String TEST_VANILLA_KEY = "minecraft:" + TEST_VANILLA_KEY_NO_NAMESPACE;
-    public static final String TEST_ALLAY_KEY_NO_NAMESPACE = "server.starting";
+    public static final String TEST_ALLAY_KEY_NO_NAMESPACE = "server.stopped";
     public static final String TEST_ALLAY_KEY = "allay:" + TEST_ALLAY_KEY_NO_NAMESPACE;
     static I18n translator = new AllayI18n(new AllayI18nLoader(), LangCode.en_US);
 
@@ -36,9 +36,9 @@ public class AllayI18nTest {
         assertEquals(TEST_VANILLA_KEY_NO_NAMESPACE, translator.toClientFriendlyStyle(TEST_VANILLA_KEY, ARGS));
         assertEquals("aaa%" + TEST_VANILLA_KEY_NO_NAMESPACE + " eee", translator.toClientFriendlyStyle("aaa%" + TEST_VANILLA_KEY + " eee", ARGS));
 
-        assertEquals("aaaStarting up allay...", translator.toClientFriendlyStyle("aaa%" + TEST_ALLAY_KEY));
-        assertEquals("Starting up allay...", translator.toClientFriendlyStyle("%" + TEST_ALLAY_KEY));
-        assertEquals("Starting up allay...", translator.toClientFriendlyStyle(TEST_ALLAY_KEY));
-        assertEquals("aaaStarting up allay... eee", translator.toClientFriendlyStyle("aaa%" + TEST_ALLAY_KEY + " eee"));
+        assertEquals("aaaServer stopped", translator.toClientFriendlyStyle("aaa%" + TEST_ALLAY_KEY));
+        assertEquals("Server stopped", translator.toClientFriendlyStyle("%" + TEST_ALLAY_KEY));
+        assertEquals("Server stopped", translator.toClientFriendlyStyle(TEST_ALLAY_KEY));
+        assertEquals("aaaServer stopped eee", translator.toClientFriendlyStyle("aaa%" + TEST_ALLAY_KEY + " eee"));
     }
 }

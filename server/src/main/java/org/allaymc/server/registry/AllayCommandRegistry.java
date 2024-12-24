@@ -104,8 +104,7 @@ public class AllayCommandRegistry extends CommandRegistry {
     @Override
     public CommandResult execute(CommandSender sender, String cmd) {
         var event = new CommandExecuteEvent(sender, cmd);
-        event.call();
-        if (event.isCancelled()) return CommandResult.fail();
+        if (!event.call()) return CommandResult.fail();
 
         sender = event.getCommandSender();
         cmd = event.getCommand();
@@ -115,8 +114,8 @@ public class AllayCommandRegistry extends CommandRegistry {
             sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, "");
             return CommandResult.fail();
         }
-        var commandName = spilt.pop();
 
+        var commandName = spilt.pop();
         var command = this.findCommand(commandName);
         if (command == null) {
             sender.sendTr(TextFormat.RED + "%" + TrKeys.M_COMMANDS_GENERIC_UNKNOWN, commandName);
@@ -142,18 +141,15 @@ public class AllayCommandRegistry extends CommandRegistry {
     @Override
     public AvailableCommandsPacket encodeAvailableCommandsPacketFor(EntityPlayer player) {
         var pk = new AvailableCommandsPacket();
-        for (var command : getContent().values()) {
-            if (!command.isServerSideOnly() && player.hasPermission(command.getPermissions())) {
-                pk.getCommands().add(command.buildNetworkDataFor(player));
-            }
-        }
+        getContent().values().stream()
+                .filter(command -> !command.isServerSideOnly() && player.hasPermission(command.getPermissions()))
+                .forEach(command -> pk.getCommands().add(command.buildNetworkDataFor(player)));
         return pk;
     }
 
     public Command findCommand(String nameOrAlias) {
         var result = this.get(nameOrAlias);
         if (result != null) return result;
-
         return this.getContent().values().stream()
                 .filter(command -> command.getAliases().contains(nameOrAlias))
                 .findFirst().orElse(null);

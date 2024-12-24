@@ -214,7 +214,9 @@ public interface Server extends TaskCreator, CommandSender {
      *
      * @param tr the translatable text to broadcast.
      */
-    void broadcastTr(@MayContainTrKey String tr);
+    default void broadcastTr(@MayContainTrKey String tr) {
+        broadcastTr(tr, new Object[0]);
+    }
 
     /**
      * Broadcast a translatable text.
@@ -222,7 +224,7 @@ public interface Server extends TaskCreator, CommandSender {
      * @param tr   the translatable text to broadcast.
      * @param args the arguments of the translatable text.
      */
-    void broadcastTr(@MayContainTrKey String tr, String... args);
+    void broadcastTr(@MayContainTrKey String tr, Object... args);
 
     @Override
     default void setOp(boolean value) {
@@ -328,8 +330,7 @@ public interface Server extends TaskCreator, CommandSender {
      */
     default void setWhitelistStatus(boolean enable) {
         var event = new WhitelistChangeEvent(enable);
-        event.call();
-        if (event.isCancelled()) return;
+        if (!event.call()) return;
 
         SETTINGS.genericSettings().isWhitelisted(enable);
         if (enable) {

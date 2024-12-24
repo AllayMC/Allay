@@ -1,6 +1,7 @@
 package org.allaymc.api.item.component;
 
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.allaymc.api.block.material.MaterialTypes.*;
 import static org.allaymc.api.item.tag.ItemTags.*;
 import static org.allaymc.api.item.type.ItemTypes.SHEARS;
 
@@ -112,11 +112,15 @@ public interface ItemBaseComponent extends ItemComponent {
     void setDurability(int durability);
 
     /**
-     * Reduce the item durability.
+     * Try to reduce the item durability.
+     * <p>
+     * The reduction can be ignored based on the unbreaking enchantment level of the item.
      *
-     * @param reduction The reduction.
+     * @param reduction the reduction.
+     *
+     * @return {@code true} if the item durability is reduced, {@code false} if reduction is ignored.
      */
-    void reduceDurability(int reduction);
+    boolean tryReduceDurability(int reduction);
 
     /**
      * Check if the item is broken.
@@ -271,16 +275,16 @@ public interface ItemBaseComponent extends ItemComponent {
      * <p>
      * Note: Placing blocks will not invoke this method.
      *
+     * @param dimension     the dimension.
+     * @param placeBlockPos the position of the block being right-clicked.
+     * @param interactInfo  information about the interaction.
+     *
      * @return true if successfully used
      */
     boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
 
     /**
      * Attempt to place a block using this item, regardless of whether this item is a block item.
-     * <p>
-     * This method won't decide complex block property value based on the placement info.
-     * However, it will decide the base block variant using the information from item_meta_block_state_bimap.nbt.
-     * Use which block state really will be decided in BlockBaseComponent::place() method.
      *
      * @param dimension     The dimension.
      * @param placeBlockPos The position where the block will be placed.
@@ -423,7 +427,7 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @param enchantmentType The enchantment type.
      *
-     * @return The level of the enchantment.
+     * @return The level of the enchantment, or zero if the item doesn't have the enchantment.
      */
     int getEnchantmentLevel(EnchantmentType enchantmentType);
 
@@ -483,7 +487,8 @@ public interface ItemBaseComponent extends ItemComponent {
      * Interact an entity with this item and given performer.
      *
      * @param performer the entity who interact the target entity.
-     * @param victim the target entity who will be interacted.
+     * @param victim    the target entity who will be interacted.
+     *
      * @return {@code true} if the interaction is successful, {@code false} otherwise.
      */
     default boolean interactEntity(Entity performer, Entity victim) {
@@ -499,16 +504,16 @@ public interface ItemBaseComponent extends ItemComponent {
      */
     default double getBreakTimeBonus(BlockState blockState) {
         var itemType = getItemType();
-        var materialType = blockState.getBlockType().getMaterial().materialType();
+        var blockType = blockState.getBlockType();
         // Swords break cobwebs faster
         if (itemType.hasItemTag(IS_SWORD)) {
-            if (materialType == WEB) return 15d;
+            if (blockType == BlockTypes.WEB) return 15d;
         }
         if (itemType == SHEARS) {
             // Shears break wool and leaves faster
-            if (materialType == CLOTH) {
+            if (blockType.hasBlockTag(BlockCustomTags.WOOL)) {
                 return 5d;
-            } else if (materialType == WEB || materialType == LEAVES) {
+            } else if (blockType == BlockTypes.WEB || blockType.hasBlockTag(BlockCustomTags.LEAVES)) {
                 return 15d;
             }
             return 1d;

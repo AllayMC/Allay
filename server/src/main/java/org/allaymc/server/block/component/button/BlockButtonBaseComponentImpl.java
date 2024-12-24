@@ -42,17 +42,21 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         // Check if the neighbor is block below
-        if (current.blockState().getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) return true;
-        return neighbor.blockState().getBlockType().getMaterial().isSolid();
+        if (current.blockState().getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) {
+            return true;
+        }
+        return neighbor.blockState().getBlockStateData().isSolid();
     }
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        if (super.onInteract(itemStack, dimension, interactInfo)) return true;
+        if (super.onInteract(itemStack, dimension, interactInfo)) {
+            return true;
+        }
 
-        var pos = interactInfo.clickBlockPos();
-        var blockState = dimension.getBlockState(pos);
-        if (!blockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
+        var pos = interactInfo.clickedBlockPos();
+        var clickedBlockState = interactInfo.getClickedBlockState();
+        if (!clickedBlockState.getPropertyValue(BUTTON_PRESSED_BIT)) {
             dimension.updateBlockProperty(BUTTON_PRESSED_BIT, true, pos);
             dimension.getBlockUpdateService().scheduleBlockUpdate(pos, getActivationTime());
             dimension.addLevelSoundEvent(pos.x() + 0.5f, pos.y() + 0.5f, pos.z() + 0.5f, SoundEvent.BUTTON_CLICK_ON);

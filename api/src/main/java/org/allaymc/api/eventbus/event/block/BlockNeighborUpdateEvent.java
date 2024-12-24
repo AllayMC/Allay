@@ -13,9 +13,9 @@ public class BlockNeighborUpdateEvent extends BlockEvent implements CancellableE
     protected BlockStateWithPos neighborBlock;
     protected BlockFace blockFace;
 
-    public BlockNeighborUpdateEvent(BlockStateWithPos block, BlockStateWithPos neighborBlock, BlockFace blockFace) {
-        super(block);
-        this.neighborBlock = neighborBlock;
+    public BlockNeighborUpdateEvent(BlockStateWithPos blockState, BlockStateWithPos neighborBlockState, BlockFace blockFace) {
+        super(blockState);
+        this.neighborBlock = neighborBlockState;
         this.blockFace = blockFace;
     }
 }

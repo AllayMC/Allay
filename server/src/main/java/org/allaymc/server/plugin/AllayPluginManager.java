@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class AllayPluginManager implements PluginManager {
 
     protected static Set<PluginSource> sources = new HashSet<>();
-    protected static Set<PluginLoader.PluginLoaderFactory> loaderFactories = new HashSet<>();
+    protected static Set<PluginLoader.Factory> loaderFactories = new HashSet<>();
 
     protected Map<String, PluginContainer> plugins = new HashMap<>();
     protected HashDirectedAcyclicGraph<String> dag = new HashDirectedAcyclicGraph<>();
@@ -32,10 +32,10 @@ public class AllayPluginManager implements PluginManager {
 
     public AllayPluginManager() {
         registerSource(new DefaultPluginSource());
-        registerLoaderFactory(new JarPluginLoader.JarPluginLoaderFactory());
+        registerLoaderFactory(new JarPluginLoader.Factory());
     }
 
-    public static void registerLoaderFactory(PluginLoader.PluginLoaderFactory loaderFactory) {
+    public static void registerLoaderFactory(PluginLoader.Factory loaderFactory) {
         loaderFactories.add(loaderFactory);
     }
 
@@ -115,7 +115,7 @@ public class AllayPluginManager implements PluginManager {
                 pluginContainer = loader.loadPlugin();
                 pluginContainer.plugin().onLoad();
             } catch (Throwable t) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName(), t.getMessage()), t);
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_LOAD_ERROR, descriptor.getName(), t.getMessage() != null ? t.getMessage() : ""), t);
                 continue;
             }
 
@@ -134,7 +134,7 @@ public class AllayPluginManager implements PluginManager {
                 try {
                     dag.setBefore(name, descriptor.getName());//set ref
                 } catch (DAGCycleException e) {
-                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_CIRCULAR, descriptor.getName(), e.getMessage()));
+                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_CIRCULAR, descriptor.getName(), e.getMessage() != null ? e.getMessage() : ""));
                     dag.remove(descriptor.getName());
                 }
             }
@@ -170,7 +170,7 @@ public class AllayPluginManager implements PluginManager {
                 var plugin = pluginContainer.plugin();
                 plugin.onEnable();
             } catch (Throwable t) {
-                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName(), t.getMessage()), t);
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_ENABLE_ERROR, pluginContainer.descriptor().getName(), t.getMessage() != null ? t.getMessage() : ""), t);
                 continue;
             }
 

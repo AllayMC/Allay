@@ -41,8 +41,14 @@ public final class GitProperties {
         return GIT_PROPERTIES.getProperty("git.build.user.name");
     }
 
+    // Version of allay-server
     public static String getBuildVersion() {
         return GIT_PROPERTIES.getProperty("git.build.version");
+    }
+
+    // Version of allay-api
+    public static String getBuildApiVersion() {
+        return GIT_PROPERTIES.getProperty("git.build.api_version");
     }
 
     public static String getClosestTagCommitCount() {
@@ -99,5 +105,9 @@ public final class GitProperties {
 
     public static String getTotalCommitCount() {
         return GIT_PROPERTIES.getProperty("git.total.commit.count");
+    }
+
+    public static boolean isDevBuild() {
+        return GIT_PROPERTIES.getProperty("git.build.is_dev_build").equals("true");
     }
 }
