@@ -324,6 +324,7 @@ public class GameTestCommand extends SimpleCommand {
                         return context.fail();
                     }
 
+                    context.addOutput("Done");
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -346,6 +347,7 @@ public class GameTestCommand extends SimpleCommand {
                     var structure = Structure.formNBT(nbt);
                     structure.place(player.getDimension(), (int) pos.x, (int) pos.y, (int) pos.z);
 
+                    context.addOutput("Done");
                     return context.success();
                 }, SenderType.PLAYER);
 

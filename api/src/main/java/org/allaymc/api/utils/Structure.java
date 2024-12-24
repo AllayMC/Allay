@@ -47,6 +47,10 @@ public record Structure(
                     blockStates[1][lx][ly][lz] = dimension.getBlockState(x + lx, y + ly, z + lz, 1);
                     var blockEntity = dimension.getBlockEntity(x + lx, y + ly, z + lz);
                     if (blockEntity != null) {
+                        // Vanilla save the original position data for block entity (and entity),
+                        // which is useless as when we place the structure in different position,
+                        // the old position data is not useful anymore. However, we still save it
+                        // to follow the vanilla behavior for best compatibility.
                         blockEntities.put(new Vector3i(lx, ly, lz), blockEntity.saveNBT());
                     }
                 }
@@ -63,10 +67,12 @@ public record Structure(
                 if (x <= location.x() && x + sizeX > location.x() &&
                     y <= location.y() && y + sizeY > location.y() &&
                     z <= location.z() && z + sizeZ > location.z()) {
+                    // Position data for entity is also saved, see the comment above
                     entities.add(entity.saveNBT());
                 }
             });
         }
+
         return new Structure(blockStates, blockEntities, entities, sizeX, sizeY, sizeZ, x, y, z);
     }
 
@@ -148,10 +154,10 @@ public record Structure(
             for (int ly = 0; ly < sizeY; ly++) {
                 for (int lz = 0; lz < sizeZ; lz++) {
                     if (blockStates[0][lx][ly][lz] != STRUCTURE_VOID_DEFAULT_STATE) {
-                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[0][lx][ly][lz], 0,true,false);
+                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[0][lx][ly][lz], 0, true, false);
                     }
                     if (blockStates[1][lx][ly][lz] != STRUCTURE_VOID_DEFAULT_STATE) {
-                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[1][lx][ly][lz], 1,true,false);
+                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[1][lx][ly][lz], 1, true, false);
                     }
                 }
             }
@@ -160,25 +166,27 @@ public record Structure(
         for (var entry : blockEntities.entrySet()) {
             // Block entity should also being spawned when placing block
             // if the block entity is implemented
-            var blockEntity = dimension.getBlockEntity(entry.getKey().x()+x, entry.getKey().y()+y, entry.getKey().z()+z);
+            var blockEntity = dimension.getBlockEntity(entry.getKey().x() + x, entry.getKey().y() + y, entry.getKey().z() + z);
             if (blockEntity == null) {
                 // Block entity not implemented maybe
                 continue;
             }
-            blockEntity.loadNBT(entry.getValue().toBuilder()
-                    .putInt("x", entry.getValue().getInt("x") - this.x + x)
-                    .putInt("y", entry.getValue().getInt("y") - this.y + y)
-                    .putInt("z", entry.getValue().getInt("z") - this.z + z)
-                    .build());
+            // No need to put the new position data into the nbt, as
+            // the block entity have spawned and already have the new
+            // position data, so just remove the old position data.
+            blockEntity.loadNBT(AllayNbtUtils.removePosTag(entry.getValue()));
         }
         for (var nbt : entities) {
-            dimension.getEntityService().addEntity(EntityHelper.fromNBT(dimension,
-                    nbt.toBuilder()
-                            .putInt("x", nbt.getInt("x") - this.x + x)
-                            .putInt("y", nbt.getInt("y") - this.y + y)
-                            .putInt("z", nbt.getInt("z") - this.z + z)
-                            .build()
-            ));
+            var builder = nbt.toBuilder();
+            // Calculate the new position for this entity
+            AllayNbtUtils.writeVector3f(
+                    builder, "Pos",
+                    "x", "y", "z",
+                    nbt.getInt("x") - this.x + x,
+                    nbt.getInt("y") - this.y + y,
+                    nbt.getInt("z") - this.z + z
+            );
+            dimension.getEntityService().addEntity(EntityHelper.fromNBT(dimension, builder.build()));
         }
     }
 
@@ -234,10 +242,12 @@ public record Structure(
     }
 
     private static int indexFormPos(int sizeX, int sizeY, int sizeZ, int x, int y, int z) {
+        // sizeX is kept for better looking
         return x * sizeY * sizeZ + y * sizeZ + z;
     }
 
     private static Vector3i posFromIndex(int sizeX, int sizeY, int sizeZ, int index) {
+        // sizeX is kept for better looking
         return new Vector3i(index / (sizeY * sizeZ), index % (sizeY * sizeZ) / sizeZ, index % (sizeY * sizeZ) % sizeZ);
     }
 

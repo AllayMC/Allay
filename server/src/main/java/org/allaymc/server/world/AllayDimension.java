@@ -124,8 +124,12 @@ public class AllayDimension implements Dimension {
         }
         chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
 
-        if (update) updateAround(x, y, z);
-        if (send) chunk.sendChunkPacket(Dimension.createUpdateBlockPacket(blockState, x, y, z, layer));
+        if (update) {
+            updateAround(x, y, z);
+        }
+        if (send) {
+            chunk.sendChunkPacket(Dimension.createUpdateBlockPacket(blockState, x, y, z, layer));
+        }
 
         if (callBlockBehavior) {
             chunk.getBlockState(xIndex, y, zIndex, layer == 0 ? 1 : 0).getBehavior().afterNeighborLayerReplace(oldBlockStateWithPos, blockState, placementInfo);

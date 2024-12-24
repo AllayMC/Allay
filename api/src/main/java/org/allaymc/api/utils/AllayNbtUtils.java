@@ -103,10 +103,26 @@ public final class AllayNbtUtils {
      * @param vector3f the vector3.
      */
     public static void writeVector3f(NbtMapBuilder nbt, String rootName, String f1, String f2, String f3, Vector3fc vector3f) {
+        writeVector3f(nbt, rootName, f1, f2, f3, vector3f.x(), vector3f.y(), vector3f.z());
+    }
+
+    /**
+     * Write a vector3 to NBT.
+     *
+     * @param nbt      the NBT builder.
+     * @param rootName the root name.
+     * @param f1       the x field.
+     * @param f2       the y field.
+     * @param f3       the z field.
+     * @param x        the x value.
+     * @param y        the y value.
+     * @param z        the z value.
+     */
+    public static void writeVector3f(NbtMapBuilder nbt, String rootName, String f1, String f2, String f3, float x, float y, float z) {
         var pos = NbtMap.builder()
-                .putFloat(f1, vector3f.x())
-                .putFloat(f2, vector3f.y())
-                .putFloat(f3, vector3f.z())
+                .putFloat(f1, x)
+                .putFloat(f2, y)
+                .putFloat(f3, z)
                 .build();
         nbt.putCompound(rootName, pos);
     }
@@ -176,5 +192,18 @@ public final class AllayNbtUtils {
                 .putFloat(f2, vector2f.y())
                 .build();
         nbt.putCompound(rootName, pos);
+    }
+
+    /**
+     * Remove the position tag from NBT.
+     *
+     * @param nbt the NBT map.
+     *
+     * @return the NBT map without the position tag.
+     */
+    public static NbtMap removePosTag(NbtMap nbt) {
+        var builder = nbt.toBuilder();
+        builder.remove("Pos");
+        return builder.build();
     }
 }
