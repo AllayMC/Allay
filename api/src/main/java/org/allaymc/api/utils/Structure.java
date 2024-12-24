@@ -116,7 +116,7 @@ public record Structure(
                     if (layer1.get(indexFormPos(sizeX, sizeY, sizeZ, lx, ly, lz)) == -1) {
                         blockStates[1][lx][ly][lz] = STRUCTURE_VOID_DEFAULT_STATE;
                     } else {
-                        blockStates[1][lx][ly][lz] = blockPalette.get(layer0.get(indexFormPos(sizeX, sizeY, sizeZ, lx, ly, lz)));
+                        blockStates[1][lx][ly][lz] = blockPalette.get(layer1.get(indexFormPos(sizeX, sizeY, sizeZ, lx, ly, lz)));
                     }
                 }
             }
@@ -148,10 +148,10 @@ public record Structure(
             for (int ly = 0; ly < sizeY; ly++) {
                 for (int lz = 0; lz < sizeZ; lz++) {
                     if (blockStates[0][lx][ly][lz] != STRUCTURE_VOID_DEFAULT_STATE) {
-                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[0][lx][ly][lz], 0);
+                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[0][lx][ly][lz], 0,true,false);
                     }
                     if (blockStates[1][lx][ly][lz] != STRUCTURE_VOID_DEFAULT_STATE) {
-                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[1][lx][ly][lz], 1);
+                        dimension.setBlockState(x + lx, y + ly, z + lz, blockStates[1][lx][ly][lz], 1,true,false);
                     }
                 }
             }
@@ -160,20 +160,30 @@ public record Structure(
         for (var entry : blockEntities.entrySet()) {
             // Block entity should also being spawned when placing block
             // if the block entity is implemented
-            var blockEntity = dimension.getBlockEntity(entry.getKey());
+            var blockEntity = dimension.getBlockEntity(entry.getKey().x()+x, entry.getKey().y()+y, entry.getKey().z()+z);
             if (blockEntity == null) {
                 // Block entity not implemented maybe
                 continue;
             }
-            blockEntity.loadNBT(entry.getValue());
+            blockEntity.loadNBT(entry.getValue().toBuilder()
+                    .putInt("x", entry.getValue().getInt("x") - this.x + x)
+                    .putInt("y", entry.getValue().getInt("y") - this.y + y)
+                    .putInt("z", entry.getValue().getInt("z") - this.z + z)
+                    .build());
         }
         for (var nbt : entities) {
-            dimension.getEntityService().addEntity(EntityHelper.fromNBT(dimension, nbt));
+            dimension.getEntityService().addEntity(EntityHelper.fromNBT(dimension,
+                    nbt.toBuilder()
+                            .putInt("x", nbt.getInt("x") - this.x + x)
+                            .putInt("y", nbt.getInt("y") - this.y + y)
+                            .putInt("z", nbt.getInt("z") - this.z + z)
+                            .build()
+            ));
         }
     }
 
     public NbtMap toNBT() {
-        var capacity = (sizeX - 1) * sizeY * sizeZ + (sizeY - 1) * sizeZ + (sizeZ - 1) + 1;
+        var capacity = sizeX * sizeY * sizeZ;
         var layer0 = new Integer[capacity];
         var layer1 = new Integer[capacity];
         var palette = new BlockStatePalette();
@@ -239,7 +249,7 @@ public record Structure(
             if (block == STRUCTURE_VOID_DEFAULT_STATE) {
                 return -1;
             }
-            if (!palette.contains(block)) {
+            if (palette.contains(block)) {
                 return palette.indexOf(block);
             } else {
                 var index = palette.size();
