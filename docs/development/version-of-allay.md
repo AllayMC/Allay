@@ -13,17 +13,24 @@ and [implementation](https://github.com/AllayMC/Allay/tree/master/server),
 there are two versions in Allay: API version and server version, and they are
 two things.
 
-Normally, unless the plugin developer needs to complete some special
-functions, it should only depend on the API version. If there is no
-changes to API module except changes to classes, packages and methods that
-are annotated with `@MinecraftVersionSensitive` annotation, there should
-be no change to the API version. In addition, changes in external libraries are
-not protected by API versions, they are not considered as changes to the API.
+The version of API adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Normally,
+unless the plugin developer needs to complete some special functions, it should only depend on the
+API version. If there is no changes to API module except changes to classes, packages and methods
+that are annotated with `@MinecraftVersionSensitive` annotation, there should be no change to the
+API version. In addition, changes in external libraries are not protected by API versions, they are
+not considered as changes to the API.
 
 The server version is the version of the server implementation. It is similar
-to API version but has nothing to do with the API version.
+to API version but has nothing to do with the API version. One thing to note
+is that although plugin can also use interfaces in server implementation by adding
+`allay-server` to dependencies, all interfaces in server implementation are considered
+as internal interfaces, which will changed, moved or being deleted without notification.
 
-Both the two versions adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The iteration rules of the server version are also different from API:
+
+- The major version is synchronized with the major version of the api.
+- The minor version only bumps when the protocol version of Minecraft is updated.
+- The patch version is increased for each release, and will be reset when major/minor version is updated.
 
 ## When Minecraft Version is Updated
 
