@@ -174,17 +174,23 @@ public record Structure(
             // No need to put the new position data into the nbt, as
             // the block entity have spawned and already have the new
             // position data, so just remove the old position data.
-            blockEntity.loadNBT(AllayNbtUtils.removePosTag(entry.getValue()));
+            var oldNbt = entry.getValue();
+            var builder = oldNbt.toBuilder();
+            builder.remove("x");
+            builder.remove("y");
+            builder.remove("z");
+            blockEntity.loadNBT(builder.build());
         }
         for (var nbt : entities) {
             var builder = nbt.toBuilder();
+            var oldPos = AllayNbtUtils.readVector3f(nbt, "Pos", "x", "y", "z");
             // Calculate the new position for this entity
             AllayNbtUtils.writeVector3f(
                     builder, "Pos",
                     "x", "y", "z",
-                    nbt.getInt("x") - this.x + x,
-                    nbt.getInt("y") - this.y + y,
-                    nbt.getInt("z") - this.z + z
+                    oldPos.x - this.x + x,
+                    oldPos.y - this.y + y,
+                    oldPos.z - this.z + z
             );
             dimension.getEntityService().addEntity(EntityHelper.fromNBT(dimension, builder.build()));
         }

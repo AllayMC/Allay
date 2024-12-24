@@ -193,17 +193,4 @@ public final class AllayNbtUtils {
                 .build();
         nbt.putCompound(rootName, pos);
     }
-
-    /**
-     * Remove the position tag from NBT.
-     *
-     * @param nbt the NBT map.
-     *
-     * @return the NBT map without the position tag.
-     */
-    public static NbtMap removePosTag(NbtMap nbt) {
-        var builder = nbt.toBuilder();
-        builder.remove("Pos");
-        return builder.build();
-    }
 }
