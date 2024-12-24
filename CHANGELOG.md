@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 Each release is associated with a specific API version,
 and any changes to API will have a prefix `(API)`.
 
+Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
+
 ## 0.1.1 (API 0.2.0) - Unreleased
 
 <small>[Compare with 0.1.0](https://github.com/AllayMC/Allay/compare/0.1.0...HEAD)</small>
