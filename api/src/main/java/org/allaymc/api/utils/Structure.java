@@ -13,10 +13,7 @@ import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author harry-xi | daoge_cmd
@@ -171,19 +168,15 @@ public record Structure(
     }
 
     public NbtMap toNBT() {
-        var layer0 = new ArrayList<Integer>();
-        var layer1 = new ArrayList<Integer>();
+        var capacity = (sizeX - 1) * sizeY * sizeZ + (sizeY - 1) * sizeZ + (sizeZ - 1) + 1;
+        var layer0 = new Integer[capacity];
+        var layer1 = new Integer[capacity];
         var palette = new BlockStatePalette();
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 for (int z = 0; z < sizeZ; z++) {
-                    var index0 = indexFormPos(sizeX, sizeY, sizeZ, x, y, z);
-                    layer0.ensureCapacity(index0);
-                    layer0.set(index0, palette.getIndexOf(blockStates[0][x][y][z]));
-
-                    var index1 = indexFormPos(sizeX, sizeY, sizeZ, x, y, z);
-                    layer0.ensureCapacity(index1);
-                    layer1.set(index1, palette.getIndexOf(blockStates[1][x][y][z]));
+                    layer0[indexFormPos(sizeX, sizeY, sizeZ, x, y, z)] = palette.getIndexOf(blockStates[0][x][y][z]);
+                    layer1[indexFormPos(sizeX, sizeY, sizeZ, x, y, z)] = palette.getIndexOf(blockStates[1][x][y][z]);
                 }
             }
         }
@@ -204,8 +197,8 @@ public record Structure(
                                 .putList(
                                         "block_indices",
                                         NbtType.LIST,
-                                        new NbtList<>(NbtType.INT, layer0),
-                                        new NbtList<>(NbtType.INT, layer1))
+                                        new NbtList<>(NbtType.INT, Arrays.asList(layer0)),
+                                        new NbtList<>(NbtType.INT, Arrays.asList(layer1)))
                                 .putList("entities", NbtType.COMPOUND, entities)
                                 .putCompound("palette", NbtMap.builder().putCompound(
                                         "default", NbtMap.builder()

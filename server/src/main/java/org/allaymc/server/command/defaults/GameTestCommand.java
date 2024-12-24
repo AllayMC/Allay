@@ -308,9 +308,14 @@ public class GameTestCommand extends SimpleCommand {
                             (int) (pos2.x - pos1.x), (int) (pos2.y - pos1.y), (int) (pos2.z - pos1.z),
                             true
                     );
-                    var filePath = Path.of(fileName);
-                    try (var writer = NbtUtils.createWriter(Files.newOutputStream(filePath))) {
+                    var filePath = Path.of(fileName + ".nbt");
+                    try {
                         Files.deleteIfExists(filePath);
+                    } catch (IOException e) {
+                        context.addOutput(TextFormat.RED + "" + e);
+                        return context.fail();
+                    }
+                    try (var writer = NbtUtils.createWriter(Files.newOutputStream(filePath))) {
                         writer.writeTag(structure.toNBT());
                     } catch (IOException e) {
                         context.addOutput(TextFormat.RED + "" + e);
