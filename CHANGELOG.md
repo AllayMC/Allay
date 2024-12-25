@@ -19,6 +19,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `TextFormat#MATERIAL_RESIN`.
 - (API) Entity#teleport method now accepts an extra `Reason` argument.
 - (API) Added structure API by @harry-xi.
+- Added `/structure` command to manage structures.
 
 ### Changed
 
