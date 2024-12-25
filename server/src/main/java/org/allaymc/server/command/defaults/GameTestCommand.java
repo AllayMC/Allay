@@ -308,7 +308,7 @@ public class GameTestCommand extends SimpleCommand {
                             (int) (pos2.x - pos1.x), (int) (pos2.y - pos1.y), (int) (pos2.z - pos1.z),
                             true
                     );
-                    var filePath = Path.of(fileName + ".nbt");
+                    var filePath = Path.of(fileName + ".mcstructure");
 
                     try {
                         Files.deleteIfExists(filePath);
@@ -317,7 +317,7 @@ public class GameTestCommand extends SimpleCommand {
                         return context.fail();
                     }
 
-                    try (var writer = NbtUtils.createWriter(Files.newOutputStream(filePath))) {
+                    try (var writer = NbtUtils.createWriterLE(Files.newOutputStream(filePath))) {
                         writer.writeTag(structure.toNBT());
                     } catch (IOException e) {
                         context.addOutput(TextFormat.RED + "" + e);
@@ -335,9 +335,9 @@ public class GameTestCommand extends SimpleCommand {
                     String fileName = context.getResult(1);
                     Vector3f pos = ((Vector3f) context.getResult(2)).floor();
                     NbtMap nbt;
-                    var filePath = Path.of(fileName + ".nbt");
+                    var filePath = Path.of(fileName + ".mcstructure");
 
-                    try (var reader = NbtUtils.createReader(Files.newInputStream(filePath))) {
+                    try (var reader = NbtUtils.createReaderLE(Files.newInputStream(filePath))) {
                         nbt = (NbtMap) reader.readTag();
                     } catch (IOException e) {
                         context.addOutput(TextFormat.RED + "" + e);
