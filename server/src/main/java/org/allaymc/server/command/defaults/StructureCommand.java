@@ -38,10 +38,18 @@ public class StructureCommand extends SimpleCommand {
                     String fileName = context.getResult(1);
                     Vector3f start = ((Vector3f) context.getResult(2)).floor();
                     Vector3f end = ((Vector3f) context.getResult(3)).floor();
+                    var sizeX = (int) (end.x - start.x + 1);
+                    var sizeY = (int) (end.y - start.y + 1);
+                    var sizeZ = (int) (end.z - start.z + 1);
+                    // SizeX|Y|Z should bigger than 0
+                    if (sizeX <= 0 || sizeY <= 0 || sizeZ <= 0) {
+                        context.addError("Invalid size");
+                        return context.fail();
+                    }
                     var structure = Structure.pickStructure(
                             player.getDimension(),
                             (int) start.x, (int) start.y, (int) start.z,
-                            (int) (end.x - start.x), (int) (end.y - start.y), (int) (end.z - start.z),
+                            sizeX, sizeY, sizeZ,
                             true
                     );
                     var filePath = STRUCTURE_DIR.resolve(fileName + STRUCTURE_FILE_EXT);
