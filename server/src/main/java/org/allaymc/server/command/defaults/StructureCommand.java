@@ -1,0 +1,121 @@
+package org.allaymc.server.command.defaults;
+
+import org.allaymc.api.command.SenderType;
+import org.allaymc.api.command.SimpleCommand;
+import org.allaymc.api.command.tree.CommandTree;
+import org.allaymc.api.utils.Structure;
+import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
+import org.joml.Vector3f;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+/**
+ * TODO: i18n
+ *
+ * @author daoge_cmd
+ */
+public class StructureCommand extends SimpleCommand {
+
+    private static final Path STRUCTURE_DIR = Path.of("structures");
+    private static final String STRUCTURE_FILE_EXT = ".mcstructure";
+
+    public StructureCommand() {
+        super("structure", "Manage structure");
+        aliases.add("struct");
+    }
+
+    @Override
+    public void prepareCommandTree(CommandTree tree) {
+        tree.getRoot()
+                .key("pick")
+                .str("filename")
+                .pos("start")
+                .pos("end")
+                .exec((context, player) -> {
+                    String fileName = context.getResult(1);
+                    Vector3f start = ((Vector3f) context.getResult(2)).floor();
+                    Vector3f end = ((Vector3f) context.getResult(3)).floor();
+                    var structure = Structure.pickStructure(
+                            player.getDimension(),
+                            (int) start.x, (int) start.y, (int) start.z,
+                            (int) (end.x - start.x), (int) (end.y - start.y), (int) (end.z - start.z),
+                            true
+                    );
+                    var filePath = STRUCTURE_DIR.resolve(fileName + STRUCTURE_FILE_EXT);
+
+                    checkStructureDirectory();
+                    try {
+                        Files.deleteIfExists(filePath);
+                    } catch (IOException e) {
+                        context.addError(e.toString());
+                        return context.fail();
+                    }
+
+                    try (var writer = NbtUtils.createWriterLE(Files.newOutputStream(filePath))) {
+                        writer.writeTag(structure.toNBT());
+                    } catch (IOException e) {
+                        context.addError(e.toString());
+                        return context.fail();
+                    }
+
+                    context.addOutput("Structure file is saved to " + filePath);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("place")
+                .str("filename")
+                .pos("pos")
+                .exec((context, player) -> {
+                    String fileName = context.getResult(1);
+                    Vector3f pos = ((Vector3f) context.getResult(2)).floor();
+                    NbtMap nbt;
+                    var filePath = STRUCTURE_DIR.resolve(fileName + STRUCTURE_FILE_EXT);
+
+                    checkStructureDirectory();
+                    if (!Files.exists(filePath)) {
+                        context.addError("Structure file " + filePath + " not found");
+                        return context.fail();
+                    }
+                    try (var reader = NbtUtils.createReaderLE(Files.newInputStream(filePath))) {
+                        nbt = (NbtMap) reader.readTag();
+                    } catch (IOException e) {
+                        context.addError(e.toString());
+                        return context.fail();
+                    }
+
+                    var structure = Structure.formNBT(nbt);
+                    structure.place(player.getDimension(), (int) pos.x, (int) pos.y, (int) pos.z);
+
+                    context.addOutput("Structure " + filePath + " is placed");
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("list")
+                .exec(context -> {
+                    checkStructureDirectory();
+                    context.addOutput("Available structure files:");
+                    try {
+                        Files.list(STRUCTURE_DIR)
+                                .filter(path -> path.toString().endsWith(STRUCTURE_FILE_EXT))
+                                .forEach(path -> context.addOutput("- " + path.getFileName().toString()));
+                    } catch (IOException e) {
+                        context.addError(e.toString());
+                        return context.fail();
+                    }
+                    return context.success();
+                });
+    }
+
+    private static void checkStructureDirectory() {
+        if (!Files.exists(STRUCTURE_DIR)) {
+            try {
+                Files.createDirectory(STRUCTURE_DIR);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to create structure directory", e);
+            }
+        }
+    }
+}
