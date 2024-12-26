@@ -1,6 +1,7 @@
 package org.allaymc.api.math.voxelshape;
 
 import lombok.experimental.UtilityClass;
+import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
@@ -45,9 +46,11 @@ public final class VoxelShapes {
     }
 
     public static VoxelShape buildLiquidShape(BlockState liquidBlockState) {
-        var liquidDepth = liquidBlockState.getPropertyValue(BlockPropertyTypes.LIQUID_DEPTH);
+        if (!(liquidBlockState.getBehavior() instanceof BlockLiquidBaseComponent liquidBaseComponent)) {
+            throw new IllegalArgumentException("The liquidBlockState must implement BlockLiquidBaseComponent!");
+        }
         return VoxelShape.builder()
-                .solid(0, 0, 0, 1, liquidDepth == 0 || liquidDepth >= 8 ? 1 : 0.125f * (liquidDepth + 1), 1)
+                .solid(0, 0, 0, 1, 0.125f * liquidBaseComponent.getLevel(liquidBlockState), 1)
                 .build();
     }
 }

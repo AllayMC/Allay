@@ -129,4 +129,9 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public int getFlowSpeed(DimensionInfo dimensionInfo) {
         return dimensionInfo == DimensionInfo.NETHER ? 10 : 30;
     }
+
+    @Override
+    public boolean canFormSource() {
+        return false;
+    }
 }

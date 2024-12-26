@@ -1,5 +1,6 @@
 package org.allaymc.server.block.impl;
 
+import lombok.experimental.Delegate;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.component.interfaces.Component;
@@ -14,6 +15,7 @@ public class BlockLiquidBehaviorImpl extends BlockBehaviorImpl implements BlockL
         super(componentProviders);
     }
 
+    @Delegate
     @Override
     protected BlockLiquidBaseComponent getBaseComponent() {
         return (BlockLiquidBaseComponent) super.getBaseComponent();

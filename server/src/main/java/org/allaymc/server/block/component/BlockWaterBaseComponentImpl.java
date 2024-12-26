@@ -26,6 +26,11 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.onReplace(currentBlockState, newBlockState, placementInfo);
 
+        if (!isSource(currentBlockState.blockState())) {
+            // Only source block can be moved to layer 1
+            return;
+        }
+
         if (currentBlockState.layer() != 0) {
             return;
         }
@@ -77,5 +82,10 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     @Override
     public int getFlowSpeed(DimensionInfo dimensionInfo) {
         return 5;
+    }
+
+    @Override
+    public boolean canFormSource() {
+        return true;
     }
 }
