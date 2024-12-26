@@ -12,7 +12,7 @@ import org.allaymc.api.world.Difficulty;
 import org.allaymc.api.world.World;
 import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.gamerule.GameRule;
-import org.allaymc.api.world.gamerule.GameRules;
+import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -21,7 +21,6 @@ import org.joml.Vector3ic;
 @Builder
 public final class AllayWorldData implements WorldData {
 
-    @Setter
     private World world;
 
     @Builder.Default
@@ -39,10 +38,15 @@ public final class AllayWorldData implements WorldData {
     @Builder.Default
     private int timeOfDay = TIME_SUNRISE;
     @Builder.Default
-    private GameRules gameRules = new GameRules();
+    private AllayGameRules gameRules = new AllayGameRules();
     @Getter
     @Builder.Default
     private long worldStartCount = 0;
+
+    public void setWorld(World world) {
+        this.world = world;
+        this.gameRules.setWorld(world);
+    }
 
     @Override
     public void setGameType(GameType gameType) {
@@ -79,7 +83,7 @@ public final class AllayWorldData implements WorldData {
     public void setGameRuleValue(GameRule gameRule, Object value) {
         var event = new GameRuleChangeEvent(this.world, gameRule, getGameRuleValue(gameRule), value);
         if (event.call()) {
-            this.gameRules.put(gameRule, event.getNewValue());
+            this.gameRules.set(gameRule, event.getNewValue());
         }
     }
 

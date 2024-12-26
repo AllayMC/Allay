@@ -175,7 +175,6 @@ public class AllayWorld implements World {
         if (!ENABLE_INDEPENDENT_NETWORK_THREAD) {
             handleSyncPackets(null);
         }
-        syncData();
         tickTime(currentTick);
         tickWeather();
         scheduler.tick();
@@ -302,10 +301,6 @@ public class AllayWorld implements World {
     @Override
     public float getTickUsage() {
         return gameLoop.getTickUsage();
-    }
-
-    protected void syncData() {
-        worldData.getGameRules().sync(this);
     }
 
     public void startTick() {

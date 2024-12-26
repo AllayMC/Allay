@@ -20,7 +20,6 @@ import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.UnsafeChunk;
-import org.allaymc.api.world.gamerule.GameRules;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
@@ -33,6 +32,7 @@ import org.allaymc.server.world.chunk.AllayChunkBuilder;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.chunk.ChunkSection;
 import org.allaymc.server.world.chunk.ScheduledUpdateInfo;
+import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.allaymc.updater.block.BlockStateUpdaters;
 import org.cloudburstmc.nbt.*;
 import org.cloudburstmc.nbt.util.stream.LittleEndianDataInputStream;
@@ -299,7 +299,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 .totalTime(nbt.getLong(TAG_TOTAL_TIME, 0))
                 .timeOfDay(nbt.getInt(TAG_TIME_OF_DAY, WorldData.TIME_SUNRISE))
                 .worldStartCount(nbt.getLong(TAG_WORLD_START_COUNT, 0))
-                .gameRules(GameRules.readFromNBT(nbt))
+                .gameRules(AllayGameRules.readFromNBT(nbt))
                 .build();
     }
 
