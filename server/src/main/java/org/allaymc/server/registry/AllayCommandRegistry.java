@@ -12,6 +12,7 @@ import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
+import org.allaymc.server.utils.GitProperties;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
 import java.util.HashMap;
@@ -32,7 +33,6 @@ public class AllayCommandRegistry extends CommandRegistry {
 
     private void registerDefaultCommands() {
         register(new MeCommand());
-        register(new GameTestCommand());
         register(new StopCommand());
         register(new GameModeCommand());
         register(new GameRuleCommand());
@@ -73,6 +73,9 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new ExecuteCommand());
         register(new HelpCommand());
         register(new StructureCommand());
+        if (GitProperties.isDevBuild()) {
+            register(new GameTestCommand());
+        }
     }
 
     @Override
