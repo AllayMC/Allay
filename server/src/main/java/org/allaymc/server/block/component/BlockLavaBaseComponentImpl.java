@@ -15,6 +15,7 @@ import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -117,5 +118,15 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     @Override
     public boolean canRandomUpdate() {
         return true;
+    }
+
+    @Override
+    public int getFlowDecay(DimensionInfo dimensionInfo) {
+        return dimensionInfo == DimensionInfo.NETHER ? 1 : 2;
+    }
+
+    @Override
+    public int getFlowSpeed(DimensionInfo dimensionInfo) {
+        return dimensionInfo == DimensionInfo.NETHER ? 10 : 30;
     }
 }

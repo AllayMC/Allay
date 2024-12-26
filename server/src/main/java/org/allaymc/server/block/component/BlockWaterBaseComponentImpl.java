@@ -8,6 +8,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.world.DimensionInfo;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
@@ -66,5 +67,15 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             entity.getDimension().addParticle(entity.getLocation(), ParticleType.WHITE_SMOKE);
             entity.getDimension().addLevelSoundEvent(entity.getLocation(), SoundEvent.EXTINGUISH_FIRE);
         }
+    }
+
+    @Override
+    public int getFlowDecay(DimensionInfo dimensionInfo) {
+        return 1;
+    }
+
+    @Override
+    public int getFlowSpeed(DimensionInfo dimensionInfo) {
+        return 5;
     }
 }
