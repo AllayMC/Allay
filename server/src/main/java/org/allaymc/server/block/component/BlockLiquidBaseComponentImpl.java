@@ -1,12 +1,14 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.type.BlockType;
 
 /**
  * @author daoge_cmd
  */
-public class BlockLiquidBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockLiquidBaseComponentImpl extends BlockBaseComponentImpl implements BlockLiquidBaseComponent {
+
     public BlockLiquidBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
@@ -20,4 +22,6 @@ public class BlockLiquidBaseComponentImpl extends BlockBaseComponentImpl {
     public boolean canCollideWithEntity() {
         return true;
     }
+
+    
 }
