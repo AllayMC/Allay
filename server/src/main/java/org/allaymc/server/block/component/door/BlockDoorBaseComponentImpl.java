@@ -125,8 +125,8 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if(blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT)){
-            blockState.pos().dimension().breakBlock(((Vector3i) blockState.pos()).sub(0,1,0),null, entity);
+        if (blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT)) {
+            blockState.pos().dimension().breakBlock(((Vector3i) blockState.pos()).sub(0, 1, 0), null, entity);
         }
         super.onBreak(blockState, usedItem, entity);
     }
