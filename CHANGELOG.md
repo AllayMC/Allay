@@ -37,6 +37,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed visual flashes when eating chorus fruits.
 - Fixed incorrect comparison of `Position3x#dimension`.
 - Fixed a number of falling block related bugs.
+- Fixed incorrectly dropping drops when destroying the upper part of a door in creation mode.
 
 ## [0.1.0](https://github.com/AllayMC/Allay/releases/tag/0.1.0) (API 0.1.0) - 2024-12-22
 
