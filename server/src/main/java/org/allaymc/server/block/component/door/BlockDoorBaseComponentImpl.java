@@ -124,6 +124,14 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
+    public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        if(blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT)){
+            blockState.pos().dimension().breakBlock(((Vector3i) blockState.pos()).sub(0,1,0),null, entity);
+        }
+        super.onBreak(blockState, usedItem, entity);
+    }
+
+    @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         return blockState.blockState().getPropertyValue(UPPER_BLOCK_BIT) ? Utils.EMPTY_ITEM_STACK_SET : super.getDrops(blockState, usedItem, entity);
     }
