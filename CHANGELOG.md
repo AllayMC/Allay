@@ -26,6 +26,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Breaking block related warnings are now moved to debug channel.
 - Improved code readability for I18n module.
 - NBT library is now updated to 3.0.10.
+- `/gametest` command is now only available in dev build.
 
 ### Fixed
 
