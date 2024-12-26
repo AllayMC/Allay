@@ -58,7 +58,9 @@ public class BlockStateData {
                         color.getGreen(),
                         color.getBlue(),
                         Integer.parseInt(str.substring(7), 16));
-            }).create();
+            })
+            .registerTypeAdapter(LiquidReactionOnTouch.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> LiquidReactionOnTouch.valueOf(json.getAsString()))
+            .create();
     /**
      * The burnOdds of this block state.
      * <p>
@@ -71,6 +73,11 @@ public class BlockStateData {
      */
     @Builder.Default
     protected boolean canContainLiquid = false;
+    /**
+     * The reaction of this block state when liquid flow into.
+     */
+    @Builder.Default
+    protected LiquidReactionOnTouch liquidReactionOnTouch = LiquidReactionOnTouch.BLOCKING;
     /**
      * The collision shape of the block state.
      * <p>
