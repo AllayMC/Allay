@@ -36,6 +36,7 @@ import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.entity.component.event.CPlayerLoggedInEvent;
 import org.allaymc.server.network.processor.PacketProcessorHolder;
 import org.allaymc.server.world.AllayWorld;
+import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.math.vector.Vector3i;
@@ -249,7 +250,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         try {
             onDisconnect(disconnectReason);
             // Tell the client that it should disconnect
-            if (thisPlayer.getClientSession().isConnected()){
+            if (thisPlayer.getClientSession().isConnected()) {
                 thisPlayer.getClientSession().disconnect(disconnectReason);
             }
         } catch (Throwable t) {
@@ -348,7 +349,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
     protected StartGamePacket encodeStartGamePacket(World spawnWorld, PlayerData playerData, Dimension dimension) {
         var startGamePacket = new StartGamePacket();
-        startGamePacket.getGamerules().addAll(spawnWorld.getWorldData().getGameRules().toNetworkGameRuleData());
+        startGamePacket.getGamerules().addAll(((AllayGameRules) spawnWorld.getWorldData().getGameRules()).toNetworkGameRuleData());
         startGamePacket.setUniqueEntityId(thisPlayer.getRuntimeId());
         startGamePacket.setRuntimeEntityId(thisPlayer.getRuntimeId());
         startGamePacket.setPlayerGameType(GameType.from(playerData.getNbt().getInt("GameType", spawnWorld.getWorldData().getGameType().ordinal())));
