@@ -34,7 +34,6 @@ dependencies {
     implementation(libs.mcterminal)
     implementation(libs.bundles.logging)
     implementation(libs.disruptor)
-    implementation(libs.libdeflate)
     implementation(libs.bundles.leveldb)
     implementation(libs.netty.epoll)
     implementation(libs.netty.kqueue)
