@@ -24,7 +24,7 @@ class BlockStateDataTest {
     private static final String json = """
             {
                     "burnOdds": 0,
-                    "canContainLiquid": false,
+                    "canContainLiquidSource": false,
                     "collisionShape": [
                         0.0005,
                         0.0005,
@@ -51,7 +51,7 @@ class BlockStateDataTest {
     void testDeserialization() {
         var blockStateData = BlockStateData.fromJson(json);
         assertEquals(0, blockStateData.burnOdds());
-        assertFalse(blockStateData.canContainLiquid());
+        assertFalse(blockStateData.canContainLiquidSource());
         var unionAABB = blockStateData.collisionShape().unionAABB();
         assertEquals(0.0005f, unionAABB.minX());
         assertEquals(0.0005f, unionAABB.minY());

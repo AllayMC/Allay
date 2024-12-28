@@ -9,8 +9,6 @@ import org.allaymc.api.block.type.BlockState;
 import java.util.EnumMap;
 import java.util.Map;
 
-import static org.allaymc.api.block.data.BlockFace.getBlockFaceByStairDirectionValue;
-
 /**
  * VoxelShapes contains some useful voxel shapes.
  *
@@ -41,7 +39,7 @@ public final class VoxelShapes {
 
     public static VoxelShape buildStairShape(BlockState stairBlockState) {
         var isDownwards = stairBlockState.getPropertyValue(BlockPropertyTypes.UPSIDE_DOWN_BIT);
-        var face = getBlockFaceByStairDirectionValue(stairBlockState.getPropertyValue(BlockPropertyTypes.WEIRDO_DIRECTION));
+        var face = BlockFace.getBlockFaceByStairDirectionValue(stairBlockState.getPropertyValue(BlockPropertyTypes.WEIRDO_DIRECTION));
         return isDownwards ? DOWNWARDS_STAIR_SHAPES.get(face) : UPWARDS_STAIR_SHAPES.get(face);
     }
 
@@ -50,7 +48,7 @@ public final class VoxelShapes {
             throw new IllegalArgumentException("The liquidBlockState must implement BlockLiquidBaseComponent!");
         }
         return VoxelShape.builder()
-                .solid(0, 0, 0, 1, 0.125f * liquidBaseComponent.getLevel(liquidBlockState), 1)
+                .solid(0, 0, 0, 1, 0.125f * BlockLiquidBaseComponent.getDepth(liquidBlockState), 1)
                 .build();
     }
 }

@@ -16,6 +16,8 @@ import org.joml.primitives.AABBf;
 
 import java.awt.*;
 
+import static org.allaymc.api.block.component.data.LiquidReactionOnTouch.NOREACTION;
+
 /**
  * @author daoge_cmd | CoolLoong
  */
@@ -69,10 +71,10 @@ public class BlockStateData {
     @Builder.Default
     protected int burnOdds = 0;
     /**
-     * Whether the block state can contain liquid.
+     * Whether the block state can contain liquid source.
      */
     @Builder.Default
-    protected boolean canContainLiquid = false;
+    protected boolean canContainLiquidSource = false;
     /**
      * The reaction of this block state when liquid flow into.
      */
@@ -193,5 +195,14 @@ public class BlockStateData {
 
     public boolean isTransparent() {
         return translucency() != 1.0f;
+    }
+
+    /**
+     * Check if the block state can contain liquid, no matter it is liquid source or not.
+     *
+     * @return {@code true} if the block state can contain liquid, otherwise {@code false}.
+     */
+    public boolean canContainLiquid() {
+        return canContainLiquidSource || liquidReactionOnTouch == NOREACTION;
     }
 }

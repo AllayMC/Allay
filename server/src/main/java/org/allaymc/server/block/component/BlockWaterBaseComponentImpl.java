@@ -1,6 +1,7 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
@@ -12,6 +13,7 @@ import org.allaymc.api.world.DimensionInfo;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 
+import static org.allaymc.api.block.component.BlockLiquidBaseComponent.isSource;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
@@ -20,6 +22,21 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
 public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public BlockWaterBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
+    }
+
+    @Override
+    public boolean isSameLiquidType(BlockType<?> blockType) {
+        return blockType == BlockTypes.WATER || blockType == BlockTypes.FLOWING_WATER;
+    }
+
+    @Override
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        if (current.dimension().getDimensionInfo() == DimensionInfo.NETHER) {
+            setLiquidInWorld(current.dimension(), current.pos(), null);
+            return;
+        }
+
+        super.onNeighborUpdate(current, neighbor, face);
     }
 
     @Override
@@ -36,7 +53,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
 
         var dim = currentBlockState.pos().dimension();
-        if (newBlockState.getBlockType() != AIR && newBlockState.getBlockStateData().canContainLiquid()) {
+        if (newBlockState.getBlockType() != AIR && newBlockState.getBlockStateData().canContainLiquidSource()) {
             // If the old block is water and the new block can contain liquid,
             // we need to move water to layer 1
             dim.setBlockState(currentBlockState.pos(), BlockTypes.WATER.getDefaultState(), 1);
@@ -47,7 +64,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.afterNeighborLayerReplace(currentBlockState, newBlockState, placementInfo);
 
-        if (currentBlockState.layer() != 0 || newBlockState.getBlockType() == BlockTypes.WATER) {
+        if (currentBlockState.layer() != 0 || isSameLiquidType(newBlockState.getBlockType())) {
             return;
         }
 
@@ -59,7 +76,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             return;
         }
 
-        if (!newBlockState.getBlockStateData().canContainLiquid()) {
+        if (!newBlockState.getBlockStateData().canContainLiquidSource()) {
             // New layer 0 block cannot contain liquid, remove layer 1 water
             dim.setBlockState(currentBlockState.pos(), BlockTypes.AIR.getDefaultState(), 1);
         }

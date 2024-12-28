@@ -311,6 +311,20 @@ public interface BlockBaseComponent extends BlockComponent {
         return 1d / speed;
     }
 
+    /**
+     * Check if a position on the side of the block placed in the world at a specific position is
+     * closed. When this returns true (for example, when the side is below the position and the block is a
+     * slab), liquid inside the block won't flow from pos into side.
+     *
+     * @param blockState the block to check.
+     * @param blockFace  the side of the block to check.
+     *
+     * @return {@code true} if the side is closed, {@code false} otherwise.
+     */
+    default boolean canLiquidFlowIntoSide(BlockState blockState, BlockFace blockFace) {
+        return true;
+    }
+
     private double speedBonusByEfficiency(int efficiencyLevel) {
         if (efficiencyLevel == 0) return 0;
         return efficiencyLevel * efficiencyLevel + 1;
