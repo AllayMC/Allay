@@ -13,6 +13,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.eventbus.event.block.LiquidFlowEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3i;
@@ -81,12 +82,15 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                     // Only form a new source block if there either is no water below this block,
                     // or if the water below this is not falling (full source block).
                     var newLiquid = getSourceBlockState();
-                    // TODO: liquid flow event
+                    var event = new LiquidFlowEvent(blockStateWithPos, pos, newLiquid, true);
+                    if (!event.call()) {
+                        return;
+                    }
                     setLiquidInWorld(dimension, pos, newLiquid);
                 }
             }
         }
-        updateLiquid(dimension, pos, liquid, blockStateWithPos.layer() == 1);
+        updateLiquid(dimension, pos, liquid, blockStateWithPos.layer());
     }
 
     @Override
@@ -98,12 +102,12 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * Update the liquid block passed at a specific position in the world. Depending on the surroundings
      * and the liquid block, the liquid will either spread or decrease in depth.
      *
-     * @param dimension   The dimension the block is in.
-     * @param pos         The position of the liquid block.
-     * @param liquid      The block state of the liquid.
-     * @param isContained Whether the liquid is contained in a block.
+     * @param dimension The dimension the block is in.
+     * @param pos       The position of the liquid block.
+     * @param liquid    The block state of the liquid.
+     * @param layer     The layer the liquid is in.
      */
-    protected void updateLiquid(Dimension dimension, Vector3ic pos, BlockState liquid, boolean isContained) {
+    protected void updateLiquid(Dimension dimension, Vector3ic pos, BlockState liquid, int layer) {
         if (!isSource(liquid) && !hasSupplyLiquidAround(dimension, pos, liquid)) {
             BlockState newLiquid = null;
             if (getDepth(liquid) - 4 > 0) {
@@ -114,14 +118,14 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             return;
         }
 
-        var liquidContainer = isContained ? dimension.getBlockState(pos) : null;
+        var liquidContainer = layer == 1 ? dimension.getBlockState(pos) : null;
         var canFlowBelow = canFlowInto(dimension, BlockFace.DOWN.offsetPos(pos), false);
         if (isFalling(liquid) && !canFlowBelow) {
             liquid = getFallingBlockState();
         } else if (canFlowBelow) {
             var below = BlockFace.DOWN.offsetPos(pos);
             if (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.DOWN)) {
-                flowInto(dimension, pos, getFallingBlockState(), below, true);
+                flowInto(dimension, pos, layer, getFallingBlockState(), below, true);
             }
         }
 
@@ -140,7 +144,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             var smallestLength = paths.getFirst().length;
             for (var path : paths) {
                 if (path.length <= smallestLength) {
-                    flowInto(dimension, pos, liquid, path[0], false);
+                    flowInto(dimension, pos, layer, liquid, path[0], false);
                 }
             }
         }
@@ -157,7 +161,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     protected void spreadOutwards(Dimension dimension, Vector3ic src, BlockState liquid, BlockState liquidContainer) {
         for (var face : BlockFace.getHorizontalBlockFaces()) {
             if (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, face)) {
-                flowInto(dimension, src, liquid, face.offsetPos(src), false);
+                flowInto(dimension, src, liquidContainer == null ? 0 : 1, liquid, face.offsetPos(src), false);
             }
         }
     }
@@ -210,13 +214,14 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      *
      * @param dimension The dimension the block is in.
      * @param src       The position the liquid is flowing from.
+     * @param srcLayer  The layer the liquid is flowing from.
      * @param liquid    The block state of the liquid.
      * @param pos       The position to flow into.
      * @param falling   Whether the liquid is falling or not.
      *
      * @return Whether the liquid successfully flowed into the position.
      */
-    protected boolean flowInto(Dimension dimension, Vector3ic src, BlockState liquid, Vector3ic pos, boolean falling) {
+    protected boolean flowInto(Dimension dimension, Vector3ic src, int srcLayer, BlockState liquid, Vector3ic pos, boolean falling) {
         var newDepth = getDepth(liquid);
         if (!falling) {
             newDepth -= getFlowDecay(dimension.getDimensionInfo());
@@ -230,7 +235,14 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                 if (getDepth(existing) >= newDepth || isFalling(existing)) {
                     return true;
                 }
-                // TODO: liquid flow event
+                var event = new LiquidFlowEvent(
+                        new BlockStateWithPos(liquid, new Position3i(src, dimension), srcLayer),
+                        pos, existing
+                );
+                if (!event.call()) {
+                    return false;
+                }
+
                 setLiquidInWorld(dimension, pos, getLiquidBlockState(newDepth, falling));
                 return true;
             }
@@ -261,7 +273,15 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             // Can't flow into this block.
             return false;
         }
-        // TODO: liquid flow event
+
+        var event = new LiquidFlowEvent(
+                new BlockStateWithPos(getLiquidBlockState(newDepth, falling), new Position3i(src, dimension), srcLayer),
+                pos, existing
+        );
+        if (!event.call()) {
+            return false;
+        }
+
         if (removedOnTouch) {
             switch (liquidReactionOnTouch) {
                 case BROKEN -> dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());

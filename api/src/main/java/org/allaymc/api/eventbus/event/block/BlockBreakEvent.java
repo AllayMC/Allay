@@ -5,7 +5,6 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.world.Dimension;
 import org.joml.Vector3ic;
 
 /**
@@ -13,7 +12,6 @@ import org.joml.Vector3ic;
  */
 @Getter
 public class BlockBreakEvent extends BlockEvent implements CancellableEvent {
-    protected Dimension dimension;
     protected Vector3ic blockPos;
     /**
      * Can be null
