@@ -16,8 +16,6 @@ import org.joml.primitives.AABBf;
 
 import java.awt.*;
 
-import static org.allaymc.api.block.component.data.LiquidReactionOnTouch.NOREACTION;
-
 /**
  * @author daoge_cmd | CoolLoong
  */
@@ -203,6 +201,6 @@ public class BlockStateData {
      * @return {@code true} if the block state can contain liquid, otherwise {@code false}.
      */
     public boolean canContainLiquid() {
-        return canContainLiquidSource || liquidReactionOnTouch == NOREACTION;
+        return canContainLiquidSource || liquidReactionOnTouch.canLiquidFlowInto();
     }
 }

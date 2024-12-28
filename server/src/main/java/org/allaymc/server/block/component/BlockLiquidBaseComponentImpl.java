@@ -2,9 +2,9 @@ package org.allaymc.server.block.component;
 
 import it.unimi.dsi.fastutil.ints.IntObjectImmutablePair;
 import it.unimi.dsi.fastutil.ints.IntObjectPair;
+import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
-import org.allaymc.api.block.component.data.BlockStateData;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -26,6 +26,7 @@ import static org.allaymc.api.block.component.BlockLiquidBaseComponent.*;
 /**
  * @author daoge_cmd
  */
+@Slf4j
 public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImpl implements BlockLiquidBaseComponent {
 
     public BlockLiquidBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
@@ -76,7 +77,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                 }
             }
             if (count >= 2) {
-                if (!canFlowInto(dimension, liquid, BlockFace.DOWN.offsetPos(pos), true)) {
+                if (!canFlowInto(dimension, BlockFace.DOWN.offsetPos(pos), true)) {
                     // Only form a new source block if there either is no water below this block,
                     // or if the water below this is not falling (full source block).
                     var newLiquid = getSourceBlockState();
@@ -92,8 +93,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
         // TODO
     }
-
-    // TODO: implement getFlowVector
 
     /**
      * Update the liquid block passed at a specific position in the world. Depending on the surroundings
@@ -116,7 +115,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
 
         var liquidContainer = isContained ? dimension.getBlockState(pos) : null;
-        var canFlowBelow = canFlowInto(dimension, liquid, BlockFace.DOWN.offsetPos(pos), false);
+        var canFlowBelow = canFlowInto(dimension, BlockFace.DOWN.offsetPos(pos), false);
         if (isFalling(liquid) && !canFlowBelow) {
             liquid = getFallingBlockState();
         } else if (canFlowBelow) {
@@ -189,7 +188,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             if (neighborLiquidLayer == 1) {
                 // The liquid is contained in a block, so we need to check if it can flow into this block.
                 var layer0 = dimension.getBlockState(neighborPos);
-                if (layer0.getBlockStateData().canContainLiquid() && !layer0.getBehavior().canLiquidFlowIntoSide(layer0, face)) {
+                if (!layer0.getBehavior().canLiquidFlowIntoSide(layer0, face)) {
                     // The side towards this liquid was closed, so this
                     // cannot function as a source for this liquid.
                     continue;
@@ -244,11 +243,12 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             return false;
         }
 
+        var liquidReactionOnTouch = existing.getBlockStateData().liquidReactionOnTouch();
         var canContainLiquid =
                 // We can't flow into if the liquid cannot be contained (e.g. lava)
                 canBeContained() &&
                 // We can't flow into if the existing block can't contain liquid
-                existing.getBlockStateData().canContainLiquid();
+                liquidReactionOnTouch.canLiquidFlowInto();
         if (canContainLiquid) {
             if (getLiquidInWorld(dimension, pos).right() != null) {
                 // We've got a liquid displacer, and it's got a liquid within it, so we can't flow into this.
@@ -256,9 +256,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             }
         }
 
-        var liquidReactionOnTouch = existing.getBlockStateData().liquidReactionOnTouch();
         var removedOnTouch = liquidReactionOnTouch.removedOnTouch();
-        if (!(existing.getBlockType() == BlockTypes.AIR || removedOnTouch) && (!canContainLiquid || !canContainSpecificLiquid(existing.getBlockStateData(), getLiquidBlockState(newDepth, falling)))) {
+        if (!(existing.getBlockType() == BlockTypes.AIR || removedOnTouch) && (!canContainLiquid || !liquidReactionOnTouch.canLiquidFlowInto()/*canContainSpecificLiquid(existing.getBlockStateData(), getLiquidBlockState(newDepth, falling))*/)) {
             // Can't flow into this block.
             return false;
         }
@@ -302,25 +301,25 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             var neighborD = neighbors[3]; // SOUTH
 
             if (!first || (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.WEST))) {
-                if (spreadNeighbor(dimension, liquid, src, neighborA, queue)) {
+                if (spreadNeighbor(dimension, src, neighborA, queue)) {
                     queue.shortestPath = neighborA.length();
                     paths.add(neighborA.path(src));
                 }
             }
             if (!first || (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.EAST))) {
-                if (spreadNeighbor(dimension, liquid, src, neighborB, queue)) {
+                if (spreadNeighbor(dimension, src, neighborB, queue)) {
                     queue.shortestPath = neighborB.length();
                     paths.add(neighborB.path(src));
                 }
             }
             if (!first || (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.NORTH))) {
-                if (spreadNeighbor(dimension, liquid, src, neighborC, queue)) {
+                if (spreadNeighbor(dimension, src, neighborC, queue)) {
                     queue.shortestPath = neighborC.length();
                     paths.add(neighborC.path(src));
                 }
             }
             if (!first || (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.SOUTH))) {
-                if (spreadNeighbor(dimension, liquid, src, neighborD, queue)) {
+                if (spreadNeighbor(dimension, src, neighborD, queue)) {
                     queue.shortestPath = neighborD.length();
                     paths.add(neighborD.path(src));
                 }
@@ -335,14 +334,13 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * does not spread the liquid, it only spreads the node used to calculate flow paths.
      *
      * @param dimension The dimension the block is in.
-     * @param liquid    The block state of the liquid.
      * @param source    The source position of the liquid.
      * @param node      The node to spread.
      * @param queue     The queue to push the node into if it can spread.
      *
      * @return Whether the node could spread into the neighbour.
      */
-    protected boolean spreadNeighbor(Dimension dimension, BlockState liquid, Vector3ic source, LiquidNode node, LiquidQueue queue) {
+    protected boolean spreadNeighbor(Dimension dimension, Vector3ic source, LiquidNode node, LiquidQueue queue) {
         if (
             // Depth has reached zero or below, can't spread any further.
                 node.depth() + 3 <= 0 ||
@@ -353,14 +351,14 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
 
         var pos = new Vector3i(node.x(), source.y(), node.z());
-        if (!canFlowInto(dimension, liquid, pos, true)) {
+        if (!canFlowInto(dimension, pos, true)) {
             // Can't flow into this block, can't spread any further.
             return false;
         }
 
         // Try flow down
         pos.y--;
-        if (canFlowInto(dimension, liquid, pos, false)) {
+        if (canFlowInto(dimension, pos, false)) {
             return true;
         }
 
@@ -372,13 +370,12 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      * Checks if a liquid can flow into the block present in the world at a specific block position.
      *
      * @param dimension The dimension the block is in.
-     * @param liquid    The block state of the liquid.
      * @param pos       The position of the block to flow into.
      * @param sideways  Whether the flow is sideways or downwards.
      *
      * @return Whether the liquid can flow into the block.
      */
-    protected boolean canFlowInto(Dimension dimension, BlockState liquid, Vector3ic pos, boolean sideways) {
+    protected boolean canFlowInto(Dimension dimension, Vector3ic pos, boolean sideways) {
         var existing = dimension.getBlockState(pos);
         if (existing.getBlockType() == BlockTypes.AIR ||
             existing.getBlockStateData().liquidReactionOnTouch().removedOnTouch()) {
@@ -393,12 +390,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             return !isSource(existing) && isSameLiquidType(existing.getBlockType());
         }
 
-        if (canBeContained() && existing.getBlockStateData().canContainLiquid()) {
-            var newLiquid = getLiquidBlockState(getDepth(liquid) - getFlowDecay(dimension.getDimensionInfo()), !sideways);
-            return canContainSpecificLiquid(existing.getBlockStateData(), newLiquid);
-        }
-
-        return false;
+        return canBeContained() && existing.getBlockStateData().liquidReactionOnTouch().canLiquidFlowInto();
     }
 
     protected static final IntObjectPair<BlockState> PAIR_LIQUID_NOT_FOUND = new IntObjectImmutablePair<>(-1, null);
@@ -455,7 +447,8 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
         var existingBlockState = dimension.getBlockState(pos);
         if (!existingBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
-            if (!canContainSpecificLiquid(existingBlockState.getBlockStateData(), liquid)) {
+            var blockStateData = existingBlockState.getBlockStateData();
+            if (!(isSource(liquid) ? blockStateData.canContainLiquidSource() : blockStateData.canContainLiquid())) {
                 return;
             }
         }
@@ -497,19 +490,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
 
         return false;
-    }
-
-    /**
-     * Check if the block with specific block state data
-     * can contain the specific liquid block state.
-     *
-     * @param blockStateData   The block state data of the block.
-     * @param liquidBlockState The liquid block state to check if it can be contained.
-     *
-     * @return Whether the block can contain the liquid.
-     */
-    protected static boolean canContainSpecificLiquid(BlockStateData blockStateData, BlockState liquidBlockState) {
-        return isSource(liquidBlockState) ? blockStateData.canContainLiquidSource() : blockStateData.canContainLiquid();
     }
 
     /**
