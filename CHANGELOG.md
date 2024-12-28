@@ -19,7 +19,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `TextFormat#MATERIAL_RESIN`.
 - (API) Entity#teleport method now accepts an extra `Reason` argument.
 - (API) Added structure API by @harry-xi.
+- (API) Added a number of new methods to `BlockLiquidBaseComponent`.
+- (API) Added `LiquidFlowEvent`, `LiquidDecayEvent` and `LiquidHardenEvent`.
+- (API) Added `BlockBehavior#afterPlaced` and `BlockBehavior#afterReplaced` that are correspond to
+  `BlockBehavior#onPlace` and `BlockBehavior#onReplace`.
+- (API) Added `BlockStateData#liquidReactionOnTouch`, there are also a number of new methods in `BlockStateData`.
 - Added `/structure` command to manage structures.
+- Implemented liquid features including water, lava and related features.
 
 ### Changed
 
@@ -28,10 +34,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Improved code readability for I18n module.
 - NBT library is now updated to 3.0.10.
 - `/gametest` command is now only available in dev build.
+- Removed the `dimension` field in `BlockBreakEvent`, which is duplicated with `blockStateWithPos#dimension`.
 
 ### Fixed
 
 - (API) Fixed exception when setting item count or meta to zero.
+- (API) `VoxelShapes#buildLiquidShape` now works correctly.
+- (API) Correct `BlockStateData#canContainLiquid` to `BlockStateData#canContainLiquidSource`.
 - Passing non-positive amount or negative meta arguments to `/give` command now will result in a syntax error.
 - Entity#teleport method now will reset fall distance correctly.
 - Fixed visual flashes when eating chorus fruits.

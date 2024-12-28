@@ -20,6 +20,17 @@ public record BlockStateWithPos(
         Position3ic pos,
         int layer
 ) {
+
+    /**
+     * Construct a new block state with the given block state and position. The layer is default to 0.
+     *
+     * @param blockState the block state.
+     * @param pos        the position.
+     */
+    public BlockStateWithPos(BlockState blockState, Position3ic pos) {
+        this(blockState, pos, 0);
+    }
+
     /**
      * Offset the pos with the given {@link BlockFace}, and the other properties remain the same.
      *

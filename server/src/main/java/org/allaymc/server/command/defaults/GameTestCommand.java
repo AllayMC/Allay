@@ -227,7 +227,8 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("printblockunder")
                 .exec((context, player) -> {
-                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3f())).toString());
+                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3f()), 0).toString());
+                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3f()), 1).toString());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()

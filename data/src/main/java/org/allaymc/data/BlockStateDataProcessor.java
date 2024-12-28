@@ -32,7 +32,8 @@ public class BlockStateDataProcessor {
 
     public static class RawBlockStateData {
         public int burnOdds = 0;
-        public boolean canContainLiquid = false;
+        public boolean canContainLiquidSource;
+        public String liquidReactionOnTouch;
         public float[] collisionShape;
         public float[] liquidClipShape;
         public float[] outlineShape;
@@ -56,7 +57,8 @@ public class BlockStateDataProcessor {
 
     public static class NewBlockStateData {
         public int burnOdds = 0;
-        public boolean canContainLiquid = false;
+        public boolean canContainLiquidSource;
+        public String liquidReactionOnTouch;
         public float[] collisionShape;
         public float[] shape;
         public float hardness;
@@ -77,7 +79,8 @@ public class BlockStateDataProcessor {
         public static NewBlockStateData fromRaw(RawBlockStateData raw) {
             var data = new NewBlockStateData();
             data.burnOdds = raw.burnOdds;
-            data.canContainLiquid = raw.canContainLiquid;
+            data.canContainLiquidSource = raw.canContainLiquidSource;
+            data.liquidReactionOnTouch = raw.liquidReactionOnTouch;
             data.collisionShape = clampShape(raw.collisionShape);
             data.hardness = raw.hardness;
             data.explosionResistance = raw.explosionResistance;

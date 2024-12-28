@@ -102,8 +102,18 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     }
 
     @Override
+    public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new CBlockAfterPlacedEvent(oldBlockState, newBlockState, placementInfo));
+    }
+
+    @Override
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         manager.callEvent(new CBlockOnReplaceEvent(currentBlockState, newBlockState, placementInfo));
+    }
+
+    @Override
+    public void afterReplaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        manager.callEvent(new CBlockAfterReplacedEvent(oldBlockState, newBlockState, placementInfo));
     }
 
     @Override

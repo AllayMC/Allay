@@ -58,7 +58,9 @@ public class BlockStateData {
                         color.getGreen(),
                         color.getBlue(),
                         Integer.parseInt(str.substring(7), 16));
-            }).create();
+            })
+            .registerTypeAdapter(LiquidReactionOnTouch.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> LiquidReactionOnTouch.valueOf(json.getAsString()))
+            .create();
     /**
      * The burnOdds of this block state.
      * <p>
@@ -67,10 +69,15 @@ public class BlockStateData {
     @Builder.Default
     protected int burnOdds = 0;
     /**
-     * Whether the block state can contain liquid.
+     * Whether the block state can contain liquid source.
      */
     @Builder.Default
-    protected boolean canContainLiquid = false;
+    protected boolean canContainLiquidSource = false;
+    /**
+     * The reaction of this block state when liquid flow into.
+     */
+    @Builder.Default
+    protected LiquidReactionOnTouch liquidReactionOnTouch = LiquidReactionOnTouch.BLOCKING;
     /**
      * The collision shape of the block state.
      * <p>
@@ -186,5 +193,14 @@ public class BlockStateData {
 
     public boolean isTransparent() {
         return translucency() != 1.0f;
+    }
+
+    /**
+     * Check if the block state can contain liquid, no matter it is liquid source or not.
+     *
+     * @return {@code true} if the block state can contain liquid, otherwise {@code false}.
+     */
+    public boolean canContainLiquid() {
+        return canContainLiquidSource || liquidReactionOnTouch.canLiquidFlowInto();
     }
 }

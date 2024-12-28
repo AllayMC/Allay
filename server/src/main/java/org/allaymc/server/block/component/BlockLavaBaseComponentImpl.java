@@ -3,6 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -11,15 +12,21 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
+import org.allaymc.api.eventbus.event.block.LiquidHardenEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
+
+import static org.allaymc.api.block.component.BlockLiquidBaseComponent.isSource;
 
 /**
  * @author daoge_cmd
@@ -27,6 +34,11 @@ import java.util.concurrent.ThreadLocalRandom;
 public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public BlockLavaBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
+    }
+
+    @Override
+    public boolean isSameLiquidType(BlockType<?> blockType) {
+        return blockType == BlockTypes.LAVA || blockType == BlockTypes.FLOWING_LAVA;
     }
 
     @Override
@@ -48,6 +60,93 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                 damageComponent.attack(event2.getDamageContainer(), true);
             }
         }
+    }
+
+    @Override
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        if (!tryHarden(current, null)) {
+            super.onNeighborUpdate(current, neighbor, face);
+        }
+    }
+
+    @Override
+    public void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {
+        if (!tryHarden(blockStateWithPos, null)) {
+            super.onScheduledUpdate(blockStateWithPos);
+        }
+    }
+
+    @Override
+    public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlockState, newBlockState, placementInfo);
+        tryHarden(new BlockStateWithPos(newBlockState, oldBlockState.pos(), oldBlockState.layer()), null);
+    }
+
+    @Override
+    public boolean tryHarden(BlockStateWithPos current, BlockStateWithPos flownIntoBy) {
+        var dimension = current.dimension();
+        var pos = current.pos();
+        BlockState hardenedBlockState = null;
+        if (flownIntoBy == null) {
+            BlockState waterBlockState = null;
+            var down = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos));
+            var soulSoilUnder = down.getBlockType() == BlockTypes.SOUL_SOIL;
+            for (var face : BlockFace.values()) {
+                if (face == BlockFace.DOWN) {
+                    continue;
+                }
+
+                var neighborBlockState = dimension.getBlockState(face.offsetPos(pos));
+                var neighborBlockType = neighborBlockState.getBlockType();
+                if (neighborBlockType == BlockTypes.BLUE_ICE && soulSoilUnder) {
+                    hardenedBlockState = BlockTypes.BASALT.getDefaultState();
+                    continue;
+                }
+
+                // This method also considered BlockTypes.FLOWING_WATER as the same liquid type
+                if (BlockTypes.WATER.getBlockBehavior().isSameLiquidType(neighborBlockType)) {
+                    waterBlockState = neighborBlockState;
+                    if (isSource(current.blockState())) {
+                        hardenedBlockState = BlockTypes.OBSIDIAN.getDefaultState();
+                    } else {
+                        hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
+                    }
+                }
+            }
+
+            if (hardenedBlockState != null) {
+                var event = new LiquidHardenEvent(current, waterBlockState, hardenedBlockState);
+                if (!event.call()) {
+                    return false;
+                }
+
+                dimension.setBlockState(pos, hardenedBlockState);
+                dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
+                return true;
+            }
+
+            return false;
+        }
+
+        var isWaterFlownInto = BlockTypes.WATER.getBlockBehavior().isSameLiquidType(flownIntoBy.blockState().getBlockType());
+        if (!isWaterFlownInto) {
+            return false;
+        }
+
+        if (isSource(current.blockState())) {
+            hardenedBlockState = BlockTypes.OBSIDIAN.getDefaultState();
+        } else {
+            hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
+        }
+
+        var event = new LiquidHardenEvent(current, flownIntoBy.blockState(), hardenedBlockState);
+        if (!event.call()) {
+            return false;
+        }
+
+        dimension.setBlockState(pos, hardenedBlockState);
+        dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
+        return true;
     }
 
     // See https://minecraft.wiki/w/Lava#Fire_spread
@@ -117,5 +216,25 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     @Override
     public boolean canRandomUpdate() {
         return true;
+    }
+
+    @Override
+    public int getFlowDecay(DimensionInfo dimensionInfo) {
+        return dimensionInfo == DimensionInfo.NETHER ? 1 : 2;
+    }
+
+    @Override
+    public int getFlowSpeed(DimensionInfo dimensionInfo) {
+        return dimensionInfo == DimensionInfo.NETHER ? 10 : 30;
+    }
+
+    @Override
+    public boolean canFormSource() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeContained() {
+        return false;
     }
 }
