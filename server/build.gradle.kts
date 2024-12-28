@@ -7,14 +7,14 @@ import java.io.ByteArrayOutputStream
  * This value should be changed to false before release the next stable version,
  * and after releasing, change it back to true.
  */
-val isDevBuild = false
+val isDevBuild = true
 /**
  * The current version of allay-server
  *
  * This is not the same as the version of allay-api.
  * Please note that they are two things.
  */
-version = "0.1.1" + if (isDevBuild) "-dev" else ""
+version = "0.1.2" + if (isDevBuild) "-dev" else ""
 
 plugins {
     id("jacoco")
