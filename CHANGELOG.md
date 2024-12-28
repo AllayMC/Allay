@@ -35,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - NBT library is now updated to 3.0.10.
 - `/gametest` command is now only available in dev build.
 - Removed the `dimension` field in `BlockBreakEvent`, which is duplicated with `blockStateWithPos#dimension`.
+- Removed unused `cn.powernukkitx:libdeflate-java` library, related classes are also removed.
 
 ### Fixed
 
@@ -46,7 +47,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed visual flashes when eating chorus fruits.
 - Fixed incorrect comparison of `Position3x#dimension`.
 - Fixed a number of falling block related bugs.
-- Fixed incorrectly dropping drops when destroying the upper part of a door in creation mode.
+- Fixed incorrectly drops when destroying the upper part of a door in creation mode.
 
 ## [0.1.0](https://github.com/AllayMC/Allay/releases/tag/0.1.0) (API 0.1.0) - 2024-12-22
 
