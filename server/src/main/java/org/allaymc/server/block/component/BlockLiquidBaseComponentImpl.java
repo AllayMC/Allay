@@ -12,6 +12,7 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3i;
@@ -86,6 +87,13 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
         updateLiquid(dimension, pos, liquid, blockStateWithPos.layer() == 1);
     }
+
+    @Override
+    public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
+        // TODO
+    }
+
+    // TODO: implement getFlowVector
 
     /**
      * Update the liquid block passed at a specific position in the world. Depending on the surroundings
