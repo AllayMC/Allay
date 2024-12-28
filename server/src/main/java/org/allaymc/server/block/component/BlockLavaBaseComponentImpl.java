@@ -12,6 +12,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
+import org.allaymc.api.eventbus.event.block.LiquidHardenEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
 import org.allaymc.api.math.MathUtils;
@@ -85,8 +86,9 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public boolean tryHarden(BlockStateWithPos current, BlockStateWithPos flownIntoBy) {
         var dimension = current.dimension();
         var pos = current.pos();
-        BlockState hardenBlock = null;
+        BlockState hardenedBlockState = null;
         if (flownIntoBy == null) {
+            BlockState waterBlockState = null;
             var down = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos));
             var soulSoilUnder = down.getBlockType() == BlockTypes.SOUL_SOIL;
             for (var face : BlockFace.values()) {
@@ -94,25 +96,31 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                     continue;
                 }
 
-                var neighborBlockType = dimension.getBlockState(face.offsetPos(pos)).getBlockType();
+                var neighborBlockState = dimension.getBlockState(face.offsetPos(pos));
+                var neighborBlockType = neighborBlockState.getBlockType();
                 if (neighborBlockType == BlockTypes.BLUE_ICE && soulSoilUnder) {
-                    hardenBlock = BlockTypes.BASALT.getDefaultState();
+                    hardenedBlockState = BlockTypes.BASALT.getDefaultState();
                     continue;
                 }
 
                 // This method also considered BlockTypes.FLOWING_WATER as the same liquid type
                 if (BlockTypes.WATER.getBlockBehavior().isSameLiquidType(neighborBlockType)) {
+                    waterBlockState = neighborBlockState;
                     if (isSource(current.blockState())) {
-                        hardenBlock = BlockTypes.OBSIDIAN.getDefaultState();
+                        hardenedBlockState = BlockTypes.OBSIDIAN.getDefaultState();
                     } else {
-                        hardenBlock = BlockTypes.COBBLESTONE.getDefaultState();
+                        hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
                     }
                 }
             }
 
-            if (hardenBlock != null) {
-                // TODO: liquid harden event
-                dimension.setBlockState(pos, hardenBlock);
+            if (hardenedBlockState != null) {
+                var event = new LiquidHardenEvent(current, waterBlockState, hardenedBlockState);
+                if (!event.call()) {
+                    return false;
+                }
+
+                dimension.setBlockState(pos, hardenedBlockState);
                 dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
                 return true;
             }
@@ -126,13 +134,17 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         }
 
         if (isSource(current.blockState())) {
-            hardenBlock = BlockTypes.OBSIDIAN.getDefaultState();
+            hardenedBlockState = BlockTypes.OBSIDIAN.getDefaultState();
         } else {
-            hardenBlock = BlockTypes.COBBLESTONE.getDefaultState();
+            hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
         }
 
-        // TODO: liquid harden event
-        dimension.setBlockState(pos, hardenBlock);
+        var event = new LiquidHardenEvent(current, flownIntoBy.blockState(), hardenedBlockState);
+        if (!event.call()) {
+            return false;
+        }
+
+        dimension.setBlockState(pos, hardenedBlockState);
         dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
         return true;
     }

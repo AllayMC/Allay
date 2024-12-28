@@ -9,6 +9,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.eventbus.event.block.LiquidHardenEvent;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.DimensionInfo;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
@@ -106,14 +107,18 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             return false;
         }
 
+        BlockState hardenedBlockState = null;
         if (flownIntoBy.pos().y() == current.pos().y() + 1) {
-            // TODO: liquid harden event
-            dimension.setBlockState(flownIntoBy.pos(), BlockTypes.STONE.getDefaultState());
+            hardenedBlockState = BlockTypes.STONE.getDefaultState();
         } else {
-            // TODO: liquid harden event
-            dimension.setBlockState(flownIntoBy.pos(), BlockTypes.COBBLESTONE.getDefaultState());
+            hardenedBlockState = BlockTypes.COBBLESTONE.getDefaultState();
+        }
+        var event = new LiquidHardenEvent(flownIntoBy, current.blockState(), hardenedBlockState);
+        if (!event.call()) {
+            return false;
         }
 
+        dimension.setBlockState(flownIntoBy.pos(), hardenedBlockState);
         dimension.addLevelSoundEvent(MathUtils.center(flownIntoBy.pos()), SoundEvent.FIZZ);
         return true;
     }
