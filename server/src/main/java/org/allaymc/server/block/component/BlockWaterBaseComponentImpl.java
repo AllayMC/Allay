@@ -107,7 +107,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             return false;
         }
 
-        BlockState hardenedBlockState = null;
+        BlockState hardenedBlockState;
         if (flownIntoBy.pos().y() == current.pos().y() + 1) {
             hardenedBlockState = BlockTypes.STONE.getDefaultState();
         } else {
