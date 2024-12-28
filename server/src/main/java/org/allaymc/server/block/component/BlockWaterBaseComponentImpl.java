@@ -56,7 +56,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
         if (newBlockState.getBlockType() != AIR && newBlockState.getBlockStateData().canContainLiquidSource()) {
             // If the old block is water and the new block can contain liquid,
             // we need to move water to layer 1
-            dim.setBlockState(currentBlockState.pos(), BlockTypes.WATER.getDefaultState(), 1);
+            dim.setBlockState(currentBlockState.pos(), currentBlockState.blockState(), 1);
         }
     }
 
@@ -70,8 +70,10 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
         var dim = currentBlockState.pos().dimension();
         if (newBlockState.getBlockType() == AIR) {
-            // Move layer 1 water back to layer 0
-            dim.setBlockState(currentBlockState.pos(), BlockTypes.WATER.getDefaultState(), 0);
+            if (isSource(dim.getBlockState(currentBlockState.pos(), 1))) {
+                // Move layer 1 water back to layer 0 only when the liquid is a source liquid
+                dim.setBlockState(currentBlockState.pos(), BlockTypes.WATER.getDefaultState(), 0);
+            }
             dim.setBlockState(currentBlockState.pos(), BlockTypes.AIR.getDefaultState(), 1);
             return;
         }
