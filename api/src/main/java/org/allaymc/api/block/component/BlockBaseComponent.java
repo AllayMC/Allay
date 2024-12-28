@@ -81,13 +81,29 @@ public interface BlockBaseComponent extends BlockComponent {
     boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
 
     /**
-     * Called when a block is placed.
+     * Called when place a block.
+     * <p>
+     * Please note that at this moment the block has not been placed yet, so
+     * you can't set a new block state using {@link Dimension#setBlockState}
+     * at this time, as the block state will be placed later and will override
+     * the block state you set here.
+     * <p>
+     * If you want to do the thing said above, consider using {@link BlockBehavior#afterPlaced}.
      *
      * @param currentBlockState The block that is being replaced.
      * @param newBlockState     The block that is replacing the current block.
      * @param placementInfo     The player placement info, can be {@code null}.
      */
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
+
+    /**
+     * Called after a block is placed.
+     *
+     * @param oldBlockState The block that is being replaced.
+     * @param newBlockState The block that is replacing the current block.
+     * @param placementInfo The player placement info, can be {@code null}.
+     */
+    void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Check if the block will drop as item when it is broke by the specified entity using the specified item.
@@ -118,6 +134,15 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param placementInfo     The player placement info, can be null.
      */
     void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
+
+    /**
+     * Called after a block is replaced.
+     *
+     * @param oldBlockState the block that is being replaced.
+     * @param newBlockState the block that is replacing the current block.
+     * @param placementInfo the player placement info, can be null.
+     */
+    void afterReplaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
      * Called when a neighbor layer block is replaced.

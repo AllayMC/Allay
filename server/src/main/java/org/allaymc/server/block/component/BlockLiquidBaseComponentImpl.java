@@ -12,6 +12,7 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -52,7 +53,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         tryScheduleLiquidUpdate(current);
     }
 
-    private void tryScheduleLiquidUpdate(BlockStateWithPos current) {
+    protected void tryScheduleLiquidUpdate(BlockStateWithPos current) {
         var blockUpdateService = current.dimension().getBlockUpdateService();
         if (!blockUpdateService.hasScheduledBlockUpdate(current.pos(), current.layer())) {
             blockUpdateService.scheduleBlockUpdate(current.pos(), getFlowSpeed(current.dimension().getDimensionInfo()), current.layer());
@@ -217,13 +218,22 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             return false;
         }
         var existing = dimension.getBlockState(pos);
-        if (isSameLiquidType(existing.getBlockType())) {
-            if (getDepth(existing) >= newDepth || isFalling(existing)) {
+        if (existing.getBehavior() instanceof BlockLiquidBaseComponent existingLiquidBaseComponent) {
+            if (isSameLiquidType(existing.getBlockType())) {
+                if (getDepth(existing) >= newDepth || isFalling(existing)) {
+                    return true;
+                }
+                // TODO: liquid flow event
+                setLiquidInWorld(dimension, pos, getLiquidBlockState(newDepth, falling));
                 return true;
             }
-            // TODO: liquid flow event
-            setLiquidInWorld(dimension, pos, getLiquidBlockState(newDepth, falling));
-            return true;
+
+            // Not the same liquid type, try to harden the existing liquid.
+            existingLiquidBaseComponent.tryHarden(
+                    new BlockStateWithPos(existing, new Position3i(pos, dimension), 0),
+                    new BlockStateWithPos(liquid, new Position3i(src, dimension), 0)
+            );
+            return false;
         }
 
         var canContainLiquid =

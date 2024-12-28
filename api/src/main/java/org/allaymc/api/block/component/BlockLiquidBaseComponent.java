@@ -1,5 +1,6 @@
 package org.allaymc.api.block.component;
 
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -88,6 +89,19 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      */
     default boolean canBeContained() {
         return true;
+    }
+
+    /**
+     * Check if the block should harden when looking at the surrounding blocks and sets the position
+     * to the hardened block when adequate. If the block was hardened, the method returns true.
+     *
+     * @param current     the current block.
+     * @param flownIntoBy the block flown into by, can be {@code null}.
+     *
+     * @return {@code true} if the block was hardened, {@code false} otherwise.
+     */
+    default boolean tryHarden(BlockStateWithPos current, BlockStateWithPos flownIntoBy) {
+        return false;
     }
 
     /**

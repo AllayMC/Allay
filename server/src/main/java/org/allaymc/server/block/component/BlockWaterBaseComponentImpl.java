@@ -9,6 +9,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.DimensionInfo;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -91,6 +92,30 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             entity.getDimension().addParticle(entity.getLocation(), ParticleType.WHITE_SMOKE);
             entity.getDimension().addLevelSoundEvent(entity.getLocation(), SoundEvent.EXTINGUISH_FIRE);
         }
+    }
+
+    @Override
+    public boolean tryHarden(BlockStateWithPos current, BlockStateWithPos flownIntoBy) {
+        if (flownIntoBy == null) {
+            return false;
+        }
+
+        var dimension = current.dimension();
+        // This method also considered BlockTypes.FLOWING_LAVA as the same liquid type
+        if (!BlockTypes.LAVA.getBlockBehavior().isSameLiquidType(flownIntoBy.blockState().getBlockType())) {
+            return false;
+        }
+
+        if (flownIntoBy.pos().y() == current.pos().y() + 1) {
+            // TODO: liquid harden event
+            dimension.setBlockState(flownIntoBy.pos(), BlockTypes.STONE.getDefaultState());
+        } else {
+            // TODO: liquid harden event
+            dimension.setBlockState(flownIntoBy.pos(), BlockTypes.COBBLESTONE.getDefaultState());
+        }
+
+        dimension.addLevelSoundEvent(MathUtils.center(flownIntoBy.pos()), SoundEvent.FIZZ);
+        return true;
     }
 
     @Override

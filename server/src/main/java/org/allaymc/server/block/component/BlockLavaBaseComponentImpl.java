@@ -3,6 +3,7 @@ package org.allaymc.server.block.component;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
+import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
@@ -13,14 +14,18 @@ import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.eventbus.event.block.BlockIgniteEvent;
 import org.allaymc.api.eventbus.event.entity.EntityCombustEvent;
 import org.allaymc.api.eventbus.event.entity.EntityDamageEvent;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.gamerule.GameRule;
+import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import java.util.concurrent.ThreadLocalRandom;
+
+import static org.allaymc.api.block.component.BlockLiquidBaseComponent.isSource;
 
 /**
  * @author daoge_cmd
@@ -54,6 +59,82 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                 damageComponent.attack(event2.getDamageContainer(), true);
             }
         }
+    }
+
+    @Override
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        if (!tryHarden(current, null)) {
+            super.onNeighborUpdate(current, neighbor, face);
+        }
+    }
+
+    @Override
+    public void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {
+        if (!tryHarden(blockStateWithPos, null)) {
+            super.onScheduledUpdate(blockStateWithPos);
+        }
+    }
+
+    @Override
+    public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        super.afterPlaced(oldBlockState, newBlockState, placementInfo);
+        tryHarden(new BlockStateWithPos(newBlockState, oldBlockState.pos(), oldBlockState.layer()), null);
+    }
+
+    @Override
+    public boolean tryHarden(BlockStateWithPos current, BlockStateWithPos flownIntoBy) {
+        var dimension = current.dimension();
+        var pos = current.pos();
+        BlockState hardenBlock = null;
+        if (flownIntoBy == null) {
+            var down = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos));
+            var soulSoilUnder = down.getBlockType() == BlockTypes.SOUL_SOIL;
+            for (var face : BlockFace.values()) {
+                if (face == BlockFace.DOWN) {
+                    continue;
+                }
+
+                var neighborBlockType = dimension.getBlockState(face.offsetPos(pos)).getBlockType();
+                if (neighborBlockType == BlockTypes.BLUE_ICE && soulSoilUnder) {
+                    hardenBlock = BlockTypes.BASALT.getDefaultState();
+                    continue;
+                }
+
+                // This method also considered BlockTypes.FLOWING_WATER as the same liquid type
+                if (BlockTypes.WATER.getBlockBehavior().isSameLiquidType(neighborBlockType)) {
+                    if (isSource(current.blockState())) {
+                        hardenBlock = BlockTypes.OBSIDIAN.getDefaultState();
+                    } else {
+                        hardenBlock = BlockTypes.COBBLESTONE.getDefaultState();
+                    }
+                }
+            }
+
+            if (hardenBlock != null) {
+                // TODO: liquid harden event
+                dimension.setBlockState(pos, hardenBlock);
+                dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
+                return true;
+            }
+
+            return false;
+        }
+
+        var isWaterFlownInto = BlockTypes.WATER.getBlockBehavior().isSameLiquidType(flownIntoBy.blockState().getBlockType());
+        if (!isWaterFlownInto) {
+            return false;
+        }
+
+        if (isSource(current.blockState())) {
+            hardenBlock = BlockTypes.OBSIDIAN.getDefaultState();
+        } else {
+            hardenBlock = BlockTypes.COBBLESTONE.getDefaultState();
+        }
+
+        // TODO: liquid harden event
+        dimension.setBlockState(pos, hardenBlock);
+        dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
+        return true;
     }
 
     // See https://minecraft.wiki/w/Lava#Fire_spread

@@ -133,6 +133,8 @@ public class AllayDimension implements Dimension {
 
         if (callBlockBehavior) {
             chunk.getBlockState(xIndex, y, zIndex, layer == 0 ? 1 : 0).getBehavior().afterNeighborLayerReplace(oldBlockStateWithPos, blockState, placementInfo);
+            blockState.getBehavior().afterPlaced(oldBlockStateWithPos, blockState, placementInfo);
+            oldBlockState.getBehavior().afterReplaced(oldBlockStateWithPos, blockState, placementInfo);
         }
     }
 
