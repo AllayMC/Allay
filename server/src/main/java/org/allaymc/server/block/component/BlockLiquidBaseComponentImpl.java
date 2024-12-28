@@ -226,7 +226,11 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             return true;
         }
 
-        var canContainLiquid = existing.getBlockStateData().canContainLiquid();
+        var canContainLiquid =
+                // We can't flow into if the liquid cannot be contained (e.g. lava)
+                canBeContained() &&
+                // We can't flow into if the existing block can't contain liquid
+                existing.getBlockStateData().canContainLiquid();
         if (canContainLiquid) {
             if (getLiquidInWorld(dimension, pos).right() != null) {
                 // We've got a liquid displacer, and it's got a liquid within it, so we can't flow into this.
@@ -236,7 +240,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
 
         var liquidReactionOnTouch = existing.getBlockStateData().liquidReactionOnTouch();
         var removedOnTouch = liquidReactionOnTouch.removedOnTouch();
-        if (!removedOnTouch && (!canContainLiquid || !canContainSpecificLiquid(existing.getBlockStateData(), getLiquidBlockState(newDepth, falling)))) {
+        if (!(existing.getBlockType() == BlockTypes.AIR || removedOnTouch) && (!canContainLiquid || !canContainSpecificLiquid(existing.getBlockStateData(), getLiquidBlockState(newDepth, falling)))) {
             // Can't flow into this block.
             return false;
         }
