@@ -139,4 +139,9 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     public boolean canFormSource() {
         return false;
     }
+
+    @Override
+    public boolean canBeContained() {
+        return false;
+    }
 }

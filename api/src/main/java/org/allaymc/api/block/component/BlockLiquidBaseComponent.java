@@ -82,6 +82,15 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
     }
 
     /**
+     * Check if the liquid can be contained in a block.
+     *
+     * @return {@code true} if the liquid can be contained in a block, {@code false} otherwise.
+     */
+    default boolean canBeContained() {
+        return true;
+    }
+
+    /**
      * Get the flow decay of the liquid.
      * <p>
      * Flow decay represents how many liquid levels are lost per block flowed horizontally.

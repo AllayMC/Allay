@@ -112,7 +112,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             liquid = getFallingBlockState();
         } else if (canFlowBelow) {
             var below = BlockFace.DOWN.offsetPos(pos);
-            if (liquidContainer == null || !liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.DOWN)) {
+            if (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.DOWN)) {
                 flowInto(dimension, pos, getFallingBlockState(), below, true);
             }
         }
@@ -148,7 +148,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
      */
     protected void spreadOutwards(Dimension dimension, Vector3ic src, BlockState liquid, BlockState liquidContainer) {
         for (var face : BlockFace.getHorizontalBlockFaces()) {
-            if (liquidContainer == null || !liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, face)) {
+            if (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, face)) {
                 flowInto(dimension, src, liquid, face.offsetPos(src), false);
             }
         }
@@ -279,25 +279,25 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             var neighborC = neighbors[2]; // NORTH
             var neighborD = neighbors[3]; // SOUTH
 
-            if (!first || (liquidContainer == null || !liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.WEST))) {
+            if (!first || (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.WEST))) {
                 if (spreadNeighbor(dimension, liquid, src, neighborA, queue)) {
                     queue.shortestPath = neighborA.length();
                     paths.add(neighborA.path(src));
                 }
             }
-            if (!first || (liquidContainer == null || !liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.EAST))) {
+            if (!first || (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.EAST))) {
                 if (spreadNeighbor(dimension, liquid, src, neighborB, queue)) {
                     queue.shortestPath = neighborB.length();
                     paths.add(neighborB.path(src));
                 }
             }
-            if (!first || (liquidContainer == null || !liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.NORTH))) {
+            if (!first || (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.NORTH))) {
                 if (spreadNeighbor(dimension, liquid, src, neighborC, queue)) {
                     queue.shortestPath = neighborC.length();
                     paths.add(neighborC.path(src));
                 }
             }
-            if (!first || (liquidContainer == null || !liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.SOUTH))) {
+            if (!first || (liquidContainer == null || liquidContainer.getBehavior().canLiquidFlowIntoSide(liquidContainer, BlockFace.SOUTH))) {
                 if (spreadNeighbor(dimension, liquid, src, neighborD, queue)) {
                     queue.shortestPath = neighborD.length();
                     paths.add(neighborD.path(src));
@@ -371,7 +371,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             return !isSource(existing) && isSameLiquidType(existing.getBlockType());
         }
 
-        if (existing.getBlockStateData().canContainLiquid()) {
+        if (canBeContained() && existing.getBlockStateData().canContainLiquid()) {
             var newLiquid = getLiquidBlockState(getDepth(liquid) - getFlowDecay(dimension.getDimensionInfo()), !sideways);
             return canContainSpecificLiquid(existing.getBlockStateData(), newLiquid);
         }
