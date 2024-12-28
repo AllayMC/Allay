@@ -13,6 +13,7 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.eventbus.event.block.LiquidDecayEvent;
 import org.allaymc.api.eventbus.event.block.LiquidFlowEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
@@ -113,7 +114,10 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             if (getDepth(liquid) - 4 > 0) {
                 newLiquid = getLiquidBlockState(getDepth(liquid) - 2 * getFlowDecay(dimension.getDimensionInfo()), false);
             }
-            // TODO: liquid decay event
+            var event = new LiquidDecayEvent(new BlockStateWithPos(liquid, new Position3i(pos, dimension), layer), newLiquid);
+            if (!event.call()) {
+                return;
+            }
             setLiquidInWorld(dimension, pos, newLiquid);
             return;
         }

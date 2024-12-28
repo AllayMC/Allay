@@ -1,5 +1,6 @@
 package org.allaymc.api.eventbus.event.block;
 
+import lombok.Getter;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
@@ -12,6 +13,7 @@ import org.joml.Vector3ic;
  *
  * @author daoge_cmd
  */
+@Getter
 public class LiquidFlowEvent extends BlockEvent implements CancellableEvent {
     /**
      * The block position the liquid is flowing into.
