@@ -982,22 +982,40 @@ public interface Dimension {
         getEntityService().addEntity(entityXpOrb);
     }
 
-    default void breakBlock(Vector3ic pos, ItemStack usedItem, Entity entity) {
-        breakBlock(pos.x(), pos.y(), pos.z(), usedItem, entity);
+    /**
+     * @see #breakBlock(int, int, int, ItemStack, Entity, boolean)
+     */
+    default boolean breakBlock(Vector3ic pos, ItemStack usedItem, Entity entity) {
+        return breakBlock(pos.x(), pos.y(), pos.z(), usedItem, entity);
+    }
+
+    /**
+     * @see #breakBlock(int, int, int, ItemStack, Entity, boolean)
+     */
+    default boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity) {
+        return breakBlock(x, y, z, usedItem, entity, true);
+    }
+
+    /**
+     * @see #breakBlock(int, int, int, ItemStack, Entity, boolean)
+     */
+    default boolean breakBlock(Vector3ic pos, ItemStack usedItem, Entity entity, boolean hasParticle) {
+        return breakBlock(pos.x(), pos.y(), pos.z(), usedItem, entity, hasParticle);
     }
 
     /**
      * Break a block at the specified position.
      *
-     * @param x        The x coordinate of the block.
-     * @param y        The y coordinate of the block.
-     * @param z        The z coordinate of the block.
-     * @param usedItem The item used to break the block, can be {@code null}.
-     * @param entity   The player who breaks the block, can be {@code null}.
+     * @param x            The x coordinate of the block.
+     * @param y            The y coordinate of the block.
+     * @param z            The z coordinate of the block.
+     * @param usedItem     The item used to break the block, can be {@code null}.
+     * @param entity       The player who breaks the block, can be {@code null}.
+     * @param sendParticle Whether to send the break particle.
      *
      * @return Whether the block is successfully broken.
      */
-    boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity);
+    boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity, boolean sendParticle);
 
     /**
      * Get the height of the highest non-air block at the specified x and z coordinates.

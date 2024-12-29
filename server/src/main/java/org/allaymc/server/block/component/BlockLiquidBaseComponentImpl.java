@@ -289,7 +289,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         if (removedOnTouch) {
             switch (liquidReactionOnTouch) {
                 case BROKEN -> dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
-                case POPPED -> dimension.breakBlock(pos, null, null);
+                case POPPED -> dimension.breakBlock(pos, null, null, false);
             }
         }
         setLiquidInWorld(dimension, pos, getLiquidBlockState(newDepth, falling));

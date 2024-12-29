@@ -139,7 +139,7 @@ public class AllayDimension implements Dimension {
     }
 
     @Override
-    public boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity) {
+    public boolean breakBlock(int x, int y, int z, ItemStack usedItem, Entity entity, boolean sendParticle) {
         var block = getBlockState(x, y, z);
         if (block.getBlockType() == AIR) {
             return false;
@@ -149,13 +149,17 @@ public class AllayDimension implements Dimension {
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),
                 usedItem, entity
         );
-        if (!event.call()) return false;
+        if (!event.call()) {
+            return false;
+        }
 
-        var pk = new LevelEventPacket();
-        pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
-        pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));
-        pk.setData(block.blockStateHash());
-        getChunkService().getChunkByDimensionPos(x, z).addChunkPacket(pk);
+        if (sendParticle) {
+            var pk = new LevelEventPacket();
+            pk.setType(LevelEvent.PARTICLE_DESTROY_BLOCK);
+            pk.setPosition(Vector3f.from(x + 0.5f, y + 0.5f, z + 0.5f));
+            pk.setData(block.blockStateHash());
+            getChunkService().getChunkByDimensionPos(x, z).addChunkPacket(pk);
+        }
 
         block.getBehavior().onBreak(
                 new BlockStateWithPos(block, new Position3i(x, y, z, this), 0),

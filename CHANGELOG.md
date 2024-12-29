@@ -14,6 +14,17 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.1.1](https://github.com/AllayMC/Allay/compare/0.1.1...HEAD)</small>
 
+### Added
+
+- (API) Added an extra argument to `Dimension#breakBlock` method to control if the block breaking particle should be
+  played.
+
+### Fixed
+
+- (API) Corrected the return type of `Dimension#breakBlock(Vector3ic, ItemStack, Entity)` from `void` to `boolean`. Some
+  overloads for this method are also added.
+- Block breaking particle won't be sent if block is broken by flowing liquid.
+
 ## 0.1.1 (API 0.2.0)
 
 <small>[Compare with 0.1.0](https://github.com/AllayMC/Allay/compare/0.1.0...0.1.1)</small>
