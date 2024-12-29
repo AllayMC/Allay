@@ -42,7 +42,7 @@ class AllayNbtUtilsTest {
     @Test
     void testWriteVector3f() {
         var nbt = NbtMap.builder();
-        AllayNbtUtils.writeVector3f(nbt, "test", "x", "y", "z", new org.joml.Vector3f(1, 2, 3));
+        AllayNbtUtils.writeVector3f(nbt, "test", new org.joml.Vector3f(1, 2, 3));
         var nbtMap = nbt.build();
         assertEquals(1, nbtMap.getCompound("test").getFloat("x"));
         assertEquals(2, nbtMap.getCompound("test").getFloat("y"));
@@ -53,7 +53,7 @@ class AllayNbtUtilsTest {
     void testReadVector3f() {
         var nbt = NbtMap.builder();
         nbt.putCompound("test", NbtMap.builder().putFloat("x", 1).putFloat("y", 2).putFloat("z", 3).build());
-        var vector3f = AllayNbtUtils.readVector3f(nbt.build(), "test", "x", "y", "z");
+        var vector3f = AllayNbtUtils.readVector3f(nbt.build(), "test");
         assertEquals(1, vector3f.x);
         assertEquals(2, vector3f.y);
         assertEquals(3, vector3f.z);

@@ -143,7 +143,7 @@ public record Structure(
         var origin = nbt.getList("structure_world_origin", NbtType.INT);
         return new Structure(
                 blockStates, blockEntities,
-                structureNBT.getList("entityNBT", NbtType.COMPOUND),
+                structureNBT.getList("entities", NbtType.COMPOUND),
                 sizeX, sizeY, sizeZ,
                 origin.get(0), origin.get(1), origin.get(2)
         );
@@ -183,11 +183,10 @@ public record Structure(
         }
         for (var nbt : entities) {
             var builder = nbt.toBuilder();
-            var oldPos = AllayNbtUtils.readVector3f(nbt, "Pos", "x", "y", "z");
+            var oldPos = AllayNbtUtils.readVector3f(nbt, "Pos");
             // Calculate the new position for this entity
             AllayNbtUtils.writeVector3f(
                     builder, "Pos",
-                    "x", "y", "z",
                     oldPos.x - this.x + x,
                     oldPos.y - this.y + y,
                     oldPos.z - this.z + z

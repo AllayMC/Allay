@@ -306,14 +306,14 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
             // The old pos stored in playerNBT is invalid, we should replace it with the new one!
             var builder = playerData.getNbt().toBuilder();
-            writeVector3f(builder, "Pos", "x", "y", "z", currentPos);
+            writeVector3f(builder, "Pos", currentPos);
             playerData.setNbt(builder.build());
             // Save new player data back to storage
             server.getPlayerStorage().savePlayerData(thisPlayer.getUUID(), playerData);
         } else {
             dimension = logOffWorld.getDimension(playerData.getDimension());
             // Read current pos from playerNBT
-            currentPos = readVector3f(playerData.getNbt(), "Pos", "x", "y", "z");
+            currentPos = readVector3f(playerData.getNbt(), "Pos");
         }
         // Load the current point chunk firstly so that we can add player entity into the chunk
         dimension.getChunkService().getOrLoadChunkSync(

@@ -26,6 +26,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
@@ -654,24 +655,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
         builder.putString("identifier", entityType.getIdentifier().toString())
-                .putCompound("Pos",
-                        NbtMap.builder()
-                                .putFloat("x", location.x())
-                                .putFloat("y", location.y())
-                                .putFloat("z", location.z())
-                                .build())
-                .putCompound("Rotation",
-                        NbtMap.builder()
-                                .putFloat("yaw", (float) location.yaw())
-                                .putFloat("pitch", (float) location.pitch())
-                                .build())
-                .putCompound("Motion",
-                        NbtMap.builder()
-                                .putFloat("dx", motion.x())
-                                .putFloat("dy", motion.y())
-                                .putFloat("dz", motion.z())
-                                .build())
                 .putBoolean("OnGround", onGround);
+        AllayNbtUtils.writeVector3f(builder, "Pos", location);
+        AllayNbtUtils.writeVector3f(builder, "Motion", motion);
+        AllayNbtUtils.writeVector2f(builder, "Rotation", (float) location.yaw(), (float) location.pitch());
         if (!tags.isEmpty()) {
             builder.putList("Tags", NbtType.STRING, new ArrayList<>(tags));
         }
@@ -691,19 +678,19 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void loadNBT(NbtMap nbt) {
         if (nbt.containsKey("Pos")) {
-            var pos = readVector3f(nbt, "Pos", "x", "y", "z");
+            var pos = readVector3f(nbt, "Pos");
             location.set(pos.x, pos.y, pos.z);
         }
 
-        if (nbt.containsKey("Rotation")) {
-            var rot = readVector2f(nbt, "Rotation", "yaw", "pitch");
-            location.setYaw(rot.x);
-            location.setPitch(rot.y);
+        if (nbt.containsKey("Motion")) {
+            var motion = readVector3f(nbt, "Motion");
+            this.motion.set(motion);
         }
 
-        if (nbt.containsKey("Motion")) {
-            var motion = readVector3f(nbt, "Motion", "dx", "dy", "dz");
-            this.motion.set(motion);
+        if (nbt.containsKey("Rotation")) {
+            var rot = readVector2f(nbt, "Rotation");
+            location.setYaw(rot.x);
+            location.setPitch(rot.y);
         }
 
         nbt.listenForBoolean("OnGround", onGround -> this.onGround = onGround);
