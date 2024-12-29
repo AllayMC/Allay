@@ -21,7 +21,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Changed
 
-- Introduced tag name constants where a large number of nbt saves and reads are involved. This improved the
+- Introduced tag name constants for where a large number of NBT saving and reading are involved. This improved the
   maintainability of the project.
 
 ### Fixed
@@ -30,8 +30,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   overloads for this method are also added.
 - Block breaking particle won't be sent if block is broken by flowing liquid.
 - Water placed in nether dimension will disappear immediately now.
-- `Pos`, `Motion` and `Rotation` in entity nbt are now saved as list tag instead of compound tag to match vanilla,
-  this also fixed the bug that entities being spawned in the right position when placing structure using `/structure`
+- `Pos`, `Motion` and `Rotation` in entity nbt are now saved as list tag instead of compound tag to match vanilla.
+  This also fixed the bug that entities being spawned in incorrect position when placing structure using `/structure`
   command. Please note that this change is not backward compatible and will break the old world and player data.
 
 ## 0.1.1 (API 0.2.0)
