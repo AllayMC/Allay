@@ -24,6 +24,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Corrected the return type of `Dimension#breakBlock(Vector3ic, ItemStack, Entity)` from `void` to `boolean`. Some
   overloads for this method are also added.
 - Block breaking particle won't be sent if block is broken by flowing liquid.
+- Water placed in nether dimension will disappear immediately now.
 
 ## 0.1.1 (API 0.2.0)
 
