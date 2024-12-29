@@ -19,6 +19,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added an extra argument to `Dimension#breakBlock` method to control if the block breaking particle should be
   played.
 
+### Changed
+
+- Introduced tag name constants where a large number of nbt saves and reads are involved. This improved the
+  maintainability of the project.
+
 ### Fixed
 
 - (API) Corrected the return type of `Dimension#breakBlock(Vector3ic, ItemStack, Entity)` from `void` to `boolean`. Some

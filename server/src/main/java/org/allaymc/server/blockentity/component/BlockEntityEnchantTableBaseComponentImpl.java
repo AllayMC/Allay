@@ -8,6 +8,8 @@ import org.cloudburstmc.nbt.NbtMap;
  */
 public class BlockEntityEnchantTableBaseComponentImpl extends BlockEntityBaseComponentImpl {
 
+    protected static final String TAG_ROTT = "rott";
+
     /**
      * The clockwise rotation of the book in radians. Top of the book points West when 0
      *
@@ -21,7 +23,7 @@ public class BlockEntityEnchantTableBaseComponentImpl extends BlockEntityBaseCom
 
     @Override
     public NbtMap saveNBT() {
-        return super.saveNBT().toBuilder().putFloat("rott", bookRot).build();
+        return super.saveNBT().toBuilder().putFloat(TAG_ROTT, bookRot).build();
     }
 
     @Override

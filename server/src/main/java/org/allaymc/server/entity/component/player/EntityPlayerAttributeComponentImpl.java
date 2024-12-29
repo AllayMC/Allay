@@ -22,6 +22,8 @@ import org.cloudburstmc.protocol.bedrock.packet.UpdateAttributesPacket;
  */
 public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponentImpl implements EntityPlayerAttributeComponent {
 
+    protected static final String TAG_FOOD_TICK_TIMER = "foodTickTimer";
+
     @Dependency(soft = true)
     protected EntityPlayerNetworkComponent networkComponent;
 
@@ -191,14 +193,14 @@ public class EntityPlayerAttributeComponentImpl extends EntityAttributeComponent
     @Override
     protected void onSaveNBT(CEntitySaveNBTEvent event) {
         super.onSaveNBT(event);
-        event.getNbt().putInt("foodTickTimer", foodTickTimer);
+        event.getNbt().putInt(TAG_FOOD_TICK_TIMER, foodTickTimer);
     }
 
     @EventHandler
     @Override
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
         super.onLoadNBT(event);
-        event.getNbt().listenForInt("foodTickTimer", value -> foodTickTimer = value);
+        event.getNbt().listenForInt(TAG_FOOD_TICK_TIMER, value -> foodTickTimer = value);
     }
 
     @EventHandler

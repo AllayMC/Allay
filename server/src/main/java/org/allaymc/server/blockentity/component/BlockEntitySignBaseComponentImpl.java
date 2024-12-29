@@ -25,6 +25,17 @@ import org.cloudburstmc.protocol.bedrock.packet.OpenSignPacket;
 @Getter
 public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntitySignBaseComponent {
 
+    protected static final String TAG_IS_WAXED = "IsWaxed";
+    protected static final String TAG_FRONT_TEXT = "FrontText";
+    protected static final String TAG_BACK_TEXT = "BackText";
+    protected static final String TAG_LOCKED_FOR_EDITING_BY = "LockedForEditingBy";
+    protected static final String TAG_TEXT = "Text";
+    protected static final String TAG_IGNORE_LIGHTING = "IgnoreLighting";
+    protected static final String TAG_SIGN_TEXT_COLOR = "SignTextColor";
+    protected static final String TAG_HIDE_GLOW_OUTLINE = "HideGlowOutline";
+    protected static final String TAG_PERSIST_FORMATTING = "PersistFormatting";
+    protected static final String TAG_TEXT_OWNER = "TextOwner";
+
     protected SignText frontText = new SignTextImpl();
     protected SignText backText = new SignTextImpl();
     protected boolean waxed = false;
@@ -37,20 +48,20 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
 
-        nbt.listenForBoolean("IsWaxed", value -> waxed = value);
-        nbt.listenForCompound("FrontText", value -> frontText = readSignTextFromNBT(value));
-        nbt.listenForCompound("BackText", value -> backText = readSignTextFromNBT(value));
+        nbt.listenForBoolean(TAG_IS_WAXED, value -> waxed = value);
+        nbt.listenForCompound(TAG_FRONT_TEXT, value -> frontText = readSignTextFromNBT(value));
+        nbt.listenForCompound(TAG_BACK_TEXT, value -> backText = readSignTextFromNBT(value));
     }
 
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT()
                 .toBuilder()
-                .putBoolean("IsWaxed", waxed)
-                .putCompound("FrontText", frontText.saveNBT())
-                .putCompound("BackText", backText.saveNBT())
+                .putBoolean(TAG_IS_WAXED, waxed)
+                .putCompound(TAG_FRONT_TEXT, frontText.saveNBT())
+                .putCompound(TAG_BACK_TEXT, backText.saveNBT())
                 // Unused
-                .putLong("LockedForEditingBy", -1L)
+                .putLong(TAG_LOCKED_FOR_EDITING_BY, -1L)
                 .build();
     }
 
@@ -67,11 +78,11 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     public void applyClientChange(EntityPlayer player, NbtMap nbt) {
         String[] newText;
         boolean isFrontSide = true;
-        if (!frontText.flattenText().equals(nbt.getCompound("FrontText").getString("Text"))) {
-            newText = AllayStringUtils.fastSplit(nbt.getCompound("FrontText").getString("Text"), "\n").toArray(String[]::new);
-        } else if (!backText.flattenText().equals(nbt.getCompound("BackText").getString("Text"))) {
+        if (!frontText.flattenText().equals(nbt.getCompound(TAG_FRONT_TEXT).getString(TAG_TEXT))) {
+            newText = AllayStringUtils.fastSplit(nbt.getCompound(TAG_FRONT_TEXT).getString(TAG_TEXT), "\n").toArray(String[]::new);
+        } else if (!backText.flattenText().equals(nbt.getCompound(TAG_BACK_TEXT).getString(TAG_TEXT))) {
             isFrontSide = false;
-            newText = AllayStringUtils.fastSplit(nbt.getCompound("BackText").getString("Text"), "\n").toArray(String[]::new);
+            newText = AllayStringUtils.fastSplit(nbt.getCompound(TAG_BACK_TEXT).getString(TAG_TEXT), "\n").toArray(String[]::new);
         } else {
             // No changes
             return;
@@ -182,10 +193,10 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
     protected SignText readSignTextFromNBT(NbtMap nbt) {
         var signText = new SignTextImpl();
 
-        nbt.listenForString("Text", value -> {
+        nbt.listenForString(TAG_TEXT, value -> {
             signText.text = AllayStringUtils.fastSplit(value, "\n", 4).toArray(String[]::new);
         });
-        nbt.listenForBoolean("IgnoreLighting", value -> signText.glowing = value);
+        nbt.listenForBoolean(TAG_IGNORE_LIGHTING, value -> signText.glowing = value);
 
         return signText;
     }
@@ -236,16 +247,16 @@ public class BlockEntitySignBaseComponentImpl extends BlockEntityBaseComponentIm
         @Override
         public NbtMap saveNBT() {
             return NbtMap.builder()
-                    .putString("Text", flattenText())
-                    .putBoolean("IgnoreLighting", glowing)
+                    .putString(TAG_TEXT, flattenText())
+                    .putBoolean(TAG_IGNORE_LIGHTING, glowing)
                     // Not implemented
-                    .putInt("SignTextColor", -16777216)
+                    .putInt(TAG_SIGN_TEXT_COLOR, -16777216)
                     // true if the outer glow of a sign with glowing text does not show.
-                    .putBoolean("HideGlowOutline", false)
+                    .putBoolean(TAG_HIDE_GLOW_OUTLINE, false)
                     // Unknown. Maybe save formatting character like §?
-                    .putBoolean("PersistFormatting", true)
+                    .putBoolean(TAG_PERSIST_FORMATTING, true)
                     // Unknown. The player who placed the sign?
-                    .putString("TextOwner", "")
+                    .putString(TAG_TEXT_OWNER, "")
                     .build();
         }
     }

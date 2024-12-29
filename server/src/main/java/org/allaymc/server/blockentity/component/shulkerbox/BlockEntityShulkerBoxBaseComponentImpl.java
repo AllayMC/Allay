@@ -13,9 +13,12 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEventPacket;
 
 /**
- * @author IWareQ
+ * @author IWareQ | daoge_cmd
  */
 public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseComponentImpl {
+
+    protected static final String TAG_FACING = "facing";
+
     @Dependency
     private BlockEntityContainerHolderComponent containerHolderComponent;
 
@@ -67,13 +70,13 @@ public class BlockEntityShulkerBoxBaseComponentImpl extends BlockEntityBaseCompo
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForByte("facing", facing -> this.facing = BlockFace.fromId(facing));
+        nbt.listenForByte(TAG_FACING, facing -> this.facing = BlockFace.fromId(facing));
     }
 
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT().toBuilder()
-                .putByte("facing", (byte) facing.ordinal())
+                .putByte(TAG_FACING, (byte) facing.ordinal())
                 .build();
     }
 

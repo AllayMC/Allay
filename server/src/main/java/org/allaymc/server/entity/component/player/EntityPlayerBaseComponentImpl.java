@@ -88,6 +88,16 @@ import static org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes.SCOR
 @Slf4j
 public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl implements EntityPlayerBaseComponent {
 
+    protected static final String TAG_PERMISSION = "Permission";
+    protected static final String TAG_OFFHAND = "Offhand";
+    protected static final String TAG_INVENTORY = "Inventory";
+    protected static final String TAG_ARMOR = "Armor";
+    protected static final String TAG_ENCHANTMENT_SEED = "EnchantmentSeed";
+    protected static final String TAG_GAME_TYPE = "GameType";
+    protected static final String TAG_SPAWN_POINT = "SpawnPoint";
+    protected static final String TAG_WORLD = "World";
+    protected static final String TAG_DIMENSION = "Dimension";
+
     @Dependency
     protected EntityPlayerContainerHolderComponent containerHolderComponent;
     @Dependency
@@ -469,72 +479,68 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT().toBuilder()
-                .putCompound("Permission", permissionTree.saveNBT())
+                .putCompound(TAG_PERMISSION, permissionTree.saveNBT())
                 .putList(
-                        "Offhand",
+                        TAG_OFFHAND,
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(FullContainerType.OFFHAND).saveNBT())
                 .putList(
-                        "Inventory",
+                        TAG_INVENTORY,
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).saveNBT())
                 .putList(
-                        "Armor",
+                        TAG_ARMOR,
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(FullContainerType.ARMOR).saveNBT())
-                .putInt("EnchantmentSeed", enchantmentSeed)
-                .putInt("GameType", gameType.ordinal())
-                .putCompound("SpawnPoint", saveSpawnPoint())
+                .putInt(TAG_ENCHANTMENT_SEED, enchantmentSeed)
+                .putInt(TAG_GAME_TYPE, gameType.ordinal())
+                .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
                 .build();
     }
 
     protected NbtMap saveSpawnPoint() {
         var builder = NbtMap.builder()
-                .putString("World", spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
-                .putInt("Dimension", spawnPoint.dimension().getDimensionInfo().dimensionId());
-        AllayNbtUtils.writeVector3i(builder, "Pos", spawnPoint);
+                .putString(TAG_WORLD, spawnPoint.dimension().getWorld().getWorldData().getDisplayName())
+                .putInt(TAG_DIMENSION, spawnPoint.dimension().getDimensionInfo().dimensionId());
+        AllayNbtUtils.writeVector3i(builder, TAG_POS, spawnPoint);
         return builder.build();
     }
 
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound("Permission", permNbt -> permissionTree.loadNBT(permNbt, true));
-        nbt.listenForList("Offhand", NbtType.COMPOUND, offhandNbt ->
+        nbt.listenForCompound(TAG_PERMISSION, permNbt -> permissionTree.loadNBT(permNbt, true));
+        nbt.listenForList(TAG_OFFHAND, NbtType.COMPOUND, offhandNbt ->
                 containerHolderComponent.getContainer(FullContainerType.OFFHAND).loadNBT(offhandNbt)
         );
-        nbt.listenForList("Inventory", NbtType.COMPOUND, inventoryNbt ->
+        nbt.listenForList(TAG_INVENTORY, NbtType.COMPOUND, inventoryNbt ->
                 containerHolderComponent.getContainer(FullContainerType.PLAYER_INVENTORY).loadNBT(inventoryNbt)
         );
-        nbt.listenForList("Armor", NbtType.COMPOUND, armorNbt ->
+        nbt.listenForList(TAG_ARMOR, NbtType.COMPOUND, armorNbt ->
                 containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(armorNbt)
         );
-        nbt.listenForInt("EnchantmentSeed", this::setEnchantmentSeed);
-        nbt.listenForInt("GameType", id -> setGameType(GameType.from(id)));
-        if (nbt.containsKey("SpawnPoint")) {
-            loadSpawnPoint(nbt.getCompound("SpawnPoint"));
+        nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
+        nbt.listenForInt(TAG_GAME_TYPE, id -> setGameType(GameType.from(id)));
+        if (nbt.containsKey(TAG_SPAWN_POINT)) {
+            loadSpawnPoint(nbt.getCompound(TAG_SPAWN_POINT));
         } else {
             spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
         }
     }
 
     protected void loadSpawnPoint(NbtMap nbt) {
-        var world = Server.getInstance().getWorldPool().getWorld(nbt.getString("World"));
+        var world = Server.getInstance().getWorldPool().getWorld(nbt.getString(TAG_WORLD));
         if (world == null) {
             spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
             return;
         }
-        var dimension = world.getDimension(nbt.getInt("Dimension"));
+        var dimension = world.getDimension(nbt.getInt(TAG_DIMENSION));
         if (dimension == null) {
             spawnPoint = Server.getInstance().getWorldPool().getGlobalSpawnPoint();
             return;
         }
-        var pos = AllayNbtUtils.readVector3i(nbt, "Pos");
-        spawnPoint = new Location3i(
-                pos,
-                0, 0, 0,
-                dimension
-        );
+        var pos = AllayNbtUtils.readVector3i(nbt, TAG_POS);
+        spawnPoint = new Location3i(pos, 0, 0, 0, dimension);
     }
 
     @Override

@@ -33,6 +33,8 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_attribute_component");
 
+    protected static final String TAG_ATTRIBUTES = "Attributes";
+
     protected final Map<AttributeType, Attribute> attributes = new EnumMap<>(AttributeType.class);
 
     @ComponentObject
@@ -64,7 +66,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     @EventHandler
     protected void onLoadNBT(CEntityLoadNBTEvent event) {
         var nbt = event.getNbt();
-        nbt.listenForList("Attributes", NbtType.COMPOUND, attributesNbt -> {
+        nbt.listenForList(TAG_ATTRIBUTES, NbtType.COMPOUND, attributesNbt -> {
             attributesNbt.forEach(attributeNbt -> {
                 var attribute = Attribute.fromNBT(attributeNbt);
                 attributes.put(AttributeType.byKey(attribute.getKey()), attribute);
@@ -76,7 +78,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
     @EventHandler
     protected void onSaveNBT(CEntitySaveNBTEvent event) {
         event.getNbt().putList(
-                "Attributes",
+                TAG_ATTRIBUTES,
                 NbtType.COMPOUND,
                 saveAttributes()
         );

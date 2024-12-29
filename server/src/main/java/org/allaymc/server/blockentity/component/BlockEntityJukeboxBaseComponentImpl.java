@@ -18,6 +18,9 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author IWareQ
  */
 public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityJukeboxBaseComponent {
+
+    protected static final String TAG_RECORD_ITEM = "RecordItem";
+
     @Getter
     @Setter
     private ItemStack musicDiscItem;
@@ -60,7 +63,7 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
         var savedNbt = super.saveNBT();
         if (musicDiscItem != null) {
             savedNbt = savedNbt.toBuilder()
-                    .putCompound("RecordItem", this.musicDiscItem.saveNBT())
+                    .putCompound(TAG_RECORD_ITEM, this.musicDiscItem.saveNBT())
                     .build();
         }
         return savedNbt;
@@ -69,6 +72,6 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForCompound("RecordItem", value -> this.musicDiscItem = ItemHelper.fromNBT(value));
+        nbt.listenForCompound(TAG_RECORD_ITEM, value -> this.musicDiscItem = ItemHelper.fromNBT(value));
     }
 }

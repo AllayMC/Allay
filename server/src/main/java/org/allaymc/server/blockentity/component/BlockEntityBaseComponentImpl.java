@@ -23,8 +23,16 @@ import org.cloudburstmc.nbt.NbtMap;
  * @author daoge_cmd
  */
 public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
+
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:block_entity_base_component");
+
+    protected static final String TAG_ID = "id";
+    protected static final String TAG_X = "x";
+    protected static final String TAG_Y = "y";
+    protected static final String TAG_Z = "z";
+    protected static final String TAG_IS_MOVABLE = "isMovable";
+    protected static final String TAG_CUSTOM_NAME = "CustomName";
 
     @Manager
     protected ComponentManager manager;
@@ -52,13 +60,13 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
     @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder()
-                .putString("id", blockEntityType.getName())
-                .putInt("x", position.x())
-                .putInt("y", position.y())
-                .putInt("z", position.z())
-                .putBoolean("isMovable", true);
+                .putString(TAG_ID, blockEntityType.getName())
+                .putInt(TAG_X, position.x())
+                .putInt(TAG_Y, position.y())
+                .putInt(TAG_Z, position.z())
+                .putBoolean(TAG_IS_MOVABLE, true);
         if (customName != null) {
-            builder.putString("CustomName", customName);
+            builder.putString(TAG_CUSTOM_NAME, customName);
         }
         var event = new CBlockEntitySaveNBTEvent(builder);
         manager.callEvent(event);
@@ -67,12 +75,12 @@ public class BlockEntityBaseComponentImpl implements BlockEntityBaseComponent {
 
     @Override
     public void loadNBT(NbtMap nbt) {
-        nbt.listenForString("CustomName", customName -> this.customName = customName);
+        nbt.listenForString(TAG_CUSTOM_NAME, customName -> this.customName = customName);
 
         var pos = new Position3i(position);
-        pos.x = nbt.getInt("x", position.x());
-        pos.y = nbt.getInt("y", position.y());
-        pos.z = nbt.getInt("z", position.z());
+        pos.x = nbt.getInt(TAG_X, position.x());
+        pos.y = nbt.getInt(TAG_Y, position.y());
+        pos.z = nbt.getInt(TAG_Z, position.z());
         position = pos;
 
         var event = new CBlockEntityLoadNBTEvent(nbt);
