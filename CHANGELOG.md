@@ -29,6 +29,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - Introduced tag name constants for where a large number of NBT saving and reading are involved. This improved the
   maintainability of the project.
+- Removed `BlockFace#getBlockFaceByStairDirectionValue` method, some fields in `VoxelShapes` are also private for better
+  maintainability now.
 
 ### Fixed
 
