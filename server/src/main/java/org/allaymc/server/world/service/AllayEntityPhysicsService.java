@@ -55,10 +55,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final FloatBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new FloatBooleanImmutablePair(0, false);
 
     public static final float MOTION_THRESHOLD;
-    public static final float STEPPING_OFFSET;
-    public static final float FAT_AABB_MARGIN;
     public static final float BLOCK_COLLISION_MOTION;
 
+    private static final float STEPPING_OFFSET = 0.05f;
+    private static final float FAT_AABB_MARGIN = 0.0005f;
     private static final float MOMENTUM_FACTOR = 0.91f;
     private static final float GROUND_VELOCITY_FACTOR = 0.1f;
     private static final float AIR_VELOCITY_FACTOR = 0.02f;
@@ -75,8 +75,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     static {
         var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
         MOTION_THRESHOLD = settings.motionThreshold();
-        STEPPING_OFFSET = settings.steppingOffset();
-        FAT_AABB_MARGIN = settings.fatAABBMargin();
         BLOCK_COLLISION_MOTION = settings.blockCollisionMotion();
     }
 
