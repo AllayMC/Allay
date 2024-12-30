@@ -18,6 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Added an extra argument to `Dimension#breakBlock` method to control if the block breaking particle should be
   played.
+- (API) Added `LiquidHardenEvent#setHardenedBlockState` method to allow changing the hardened block state.
 
 ### Changed
 

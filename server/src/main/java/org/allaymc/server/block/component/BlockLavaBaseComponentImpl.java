@@ -120,7 +120,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
                     return false;
                 }
 
-                dimension.setBlockState(pos, hardenedBlockState);
+                dimension.setBlockState(pos, event.getHardenedBlockState());
                 dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
                 return true;
             }
@@ -144,7 +144,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             return false;
         }
 
-        dimension.setBlockState(pos, hardenedBlockState);
+        dimension.setBlockState(pos, event.getHardenedBlockState());
         dimension.addLevelSoundEvent(MathUtils.center(pos), SoundEvent.FIZZ);
         return true;
     }
