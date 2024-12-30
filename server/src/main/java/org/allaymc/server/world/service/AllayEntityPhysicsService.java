@@ -4,8 +4,10 @@ import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
@@ -17,8 +19,11 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.service.AABBOverlapFilter;
 import org.allaymc.api.world.service.EntityPhysicsService;
+import org.allaymc.server.block.component.BlockLiquidBaseComponentImpl;
+import org.allaymc.server.block.impl.BlockLiquidBehaviorImpl;
 import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
@@ -59,6 +64,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     private static final float AIR_VELOCITY_FACTOR = 0.02f;
     private static final float DRAG_FACTOR = 0.98f;
 
+    private static final float WATER_FLOW_MOTION = 0.014f;
+    private static final float LAVA_FLOW_MOTION = 0.002333333f;
+    private static final float LAVA_FLOW_MOTION_IN_NETHER = 0.007f;
+
     private static final int X = 0;
     private static final int Y = 1;
     private static final int Z = 2;
@@ -89,18 +98,29 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         cacheEntityCollisionResult();
         var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
         entities.values().parallelStream().forEach(entity -> {
-            if (!entity.computeMovementServerSide()) return;
-            if (!entity.isCurrentChunkLoaded()) return;
-            if (entity.getLocation().y() < dimension.getDimensionInfo().minHeight()) return;
-            // TODO: liquid motion etc...
+            if (!entity.computeMovementServerSide() ||
+                !entity.isCurrentChunkLoaded() ||
+                entity.getLocation().y() < dimension.getDimensionInfo().minHeight()) {
+                return;
+            }
+
             var collidedBlocks = dimension.getCollidingBlockStates(entity.getOffsetAABB());
             if (collidedBlocks == null) {
                 // 1. The entity is not stuck in the block
-                if (entity.computeEntityCollisionMotion()) computeEntityCollisionMotion(entity);
+                if (entity.computeEntityCollisionMotion()) {
+                    computeEntityCollisionMotion(entity);
+                }
+                var hasLiquidMotion = false;
+                if (entity.computeLiquidMotion()) {
+                    hasLiquidMotion = computeLiquidMotion(entity);
+                }
                 entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
-                if (applyMotion(entity)) updatedEntities.put(entity.getRuntimeId(), entity);
+                if (applyMotion(entity)) {
+                    updatedEntities.put(entity.getRuntimeId(), entity);
+                }
+
                 // Apply friction, gravity etc...
-                updateMotion(entity);
+                updateMotion(entity, hasLiquidMotion);
             } else if (entity.computeBlockCollisionMotion()) {
                 // 2. The entity is stuck in the block
                 // Do not calculate other motion exclude block collision motion
@@ -198,7 +218,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         for (var other : collidedEntities) {
             // https://github.com/lovexyn0827/Discovering-Minecraft/blob/master/Minecraft%E5%AE%9E%E4%BD%93%E8%BF%90%E5%8A%A8%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%BA%94%E7%94%A8/5-Chapter-5.md
             var ol = other.getLocation();
-            var direction = new Vector3f(entity.getLocation()).sub(other.getLocation(), new Vector3f()).normalize();
+            var direction = MathUtils.normalizeIfNotZero(new Vector3f(entity.getLocation()).sub(other.getLocation(), new Vector3f()));
             var distance = max(abs(ol.x() - location.x()), abs(ol.z() - location.z()));
             if (distance <= 0.01) continue;
 
@@ -217,24 +237,89 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     /**
+     * Compute the liquid motion for the entity.
+     *
+     * @param entity the entity to compute liquid motion.
+     *
+     * @return {@code true} if the entity has liquid motion, otherwise {@code false}.
+     */
+    protected boolean computeLiquidMotion(Entity entity) {
+        // In calculateFlowVector() method, Dimension#getBlockState() will also being called,
+        // and because the lambda is running in Chunk#batchProcess, calling such method
+        // inside the lambda will cause a deadlock (the lock is not reentrant), so we
+        // need to get the block states first and store them for further use.
+        var liquids = new ArrayList<LiquidWithPos>();
+        dimension.forEachBlockStates(entity.getOffsetAABB(), 0, (x, y, z, block) -> {
+            if (block.getBehavior() instanceof BlockLiquidBehaviorImpl) {
+                liquids.add(new LiquidWithPos(x, y, z, block));
+            }
+        });
+        if (liquids.isEmpty()) {
+            return false;
+        }
+
+        var hasWaterMotion = false;
+        var hasLavaMotion = false;
+        var waterMotion = new Vector3f();
+        var lavaMotion = new Vector3f();
+
+        var entityY = entity.getLocation().y();
+        for (var liquid : liquids) {
+            var liquidBehavior = (BlockLiquidBehaviorImpl) liquid.blockState.getBehavior();
+            var flowVector = ((BlockLiquidBaseComponentImpl) liquidBehavior.getBaseComponent()).calculateFlowVector(dimension, liquid.x, liquid.y, liquid.z, liquid.blockState);
+            if (flowVector.lengthSquared() <= 0) {
+                continue;
+            }
+
+            var d = BlockLiquidBaseComponent.getDepth(liquid.blockState) * 0.125f + liquid.y - entityY;
+            if (d <= 0) {
+                continue;
+            }
+            if (d < 0.4) {
+                flowVector.mul(d);
+            }
+
+            if (liquidBehavior.isSameLiquidType(BlockTypes.WATER)) {
+                hasWaterMotion = true;
+                waterMotion.add(flowVector);
+            } else if (liquidBehavior.isSameLiquidType(BlockTypes.LAVA)) {
+                hasLavaMotion = true;
+                lavaMotion.add(flowVector);
+            }
+        }
+        if (!hasWaterMotion && !hasLavaMotion) {
+            return false;
+        }
+
+        var finalMotion = new Vector3f();
+        if (hasWaterMotion) {
+            finalMotion.add(waterMotion.normalize().mul(WATER_FLOW_MOTION));
+        }
+        if (hasLavaMotion) {
+            finalMotion.add(lavaMotion.normalize().mul(dimension.getDimensionInfo() == DimensionInfo.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
+        }
+
+        entity.addMotion(finalMotion);
+        return true;
+    }
+
+    /**
      * @see <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
      */
-    protected void updateMotion(Entity entity) {
+    protected void updateMotion(Entity entity, boolean hasLiquidMotion) {
         var motion = entity.getMotion();
         var blockStateStandingOn = entity.getBlockStateStandingOn();
 
         // 1. Multiplier factors
         var movementFactor = entity.getMovementFactor();
-
         var speedLevel = entity.getEffectLevel(EffectTypes.SPEED);
         var slownessLevel = entity.getEffectLevel(EffectTypes.SLOWNESS);
-
         var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
-
-        var slipperinessMultiplier = blockStateStandingOn != null ?
-                blockStateStandingOn.getBlockStateData().friction() :
-                DEFAULT_FRICTION;
-
+        float slipperinessMultiplier = 1;
+        if (!hasLiquidMotion) {
+            // Entity that has liquid motion won't be affected by the friction of the block it stands on
+            slipperinessMultiplier = blockStateStandingOn != null ? blockStateStandingOn.getBlockStateData().friction() : DEFAULT_FRICTION;
+        }
         var momentumMx = motion.x() * slipperinessMultiplier * MOMENTUM_FACTOR;
         var momentumMz = motion.z() * slipperinessMultiplier * MOMENTUM_FACTOR;
 
@@ -246,11 +331,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
 
         var yaw = entity.getLocation().yaw();
-
         var newMx = (float) (momentumMx + acceleration * sin(yaw));
         var newMz = (float) (momentumMz + acceleration * cos(yaw));
 
-        // Skip sprint jump boost because this service does not handle player
+        // Skip sprint jump boost because this service does not handle player's movement
 
         var newMy = (motion.y() - (entity.hasGravity() ? entity.getGravity() : 0f)) * DRAG_FACTOR;
         entity.setMotion(checkMotionThreshold(new Vector3f(newMx, newMy, newMz)));
@@ -582,4 +666,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected record ClientMove(EntityPlayer player, Location3fc newLoc) {}
+
+    protected record LiquidWithPos(int x, int y, int z, BlockState blockState) {}
 }

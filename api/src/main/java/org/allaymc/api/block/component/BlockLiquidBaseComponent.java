@@ -38,7 +38,7 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
         if (isFalling(blockState) || isSource(blockState)) {
             return 8;
         }
-        return 8 - blockState.getPropertyValue(BlockPropertyTypes.LIQUID_DEPTH) & 0b0111;
+        return 8 - (blockState.getPropertyValue(BlockPropertyTypes.LIQUID_DEPTH) & 0b0111);
     }
 
     /**
@@ -61,7 +61,7 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      * @return the block state of the liquid block with given depth and falling state.
      */
     default BlockState getLiquidBlockState(int depth, boolean falling) {
-        return getBlockType().ofState(BlockPropertyTypes.LIQUID_DEPTH.createValue(falling ? 0b1000 | 8 - depth : 8 - depth));
+        return getBlockType().ofState(BlockPropertyTypes.LIQUID_DEPTH.createValue(falling ? 0b1000 | (8 - depth) : 8 - depth));
     }
 
     /**

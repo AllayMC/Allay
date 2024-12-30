@@ -35,6 +35,11 @@ public final class EntityTypeInitializer {
                     public boolean hasFallDamage() {
                         return false;
                     }
+
+                    @Override
+                    public boolean hasDrowningDamage() {
+                        return false;
+                    }
                 }, EntityDamageComponentImpl.class)
                 .addComponent(
                         () -> new EntityAttributeComponentImpl(

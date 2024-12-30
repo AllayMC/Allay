@@ -322,8 +322,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         baseComponent.setLocationBeforeSpawn(new Location3f(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
         dimension.addPlayer(thisPlayer);
 
-        var spawnWorld = dimension.getWorld();
-        var startGamePacket = encodeStartGamePacket(spawnWorld, playerData, dimension);
+        var startGamePacket = encodeStartGamePacket(dimension.getWorld(), playerData, dimension);
         sendPacket(startGamePacket);
 
         clientSession.getPeer().getCodecHelper().setItemDefinitions(

@@ -26,7 +26,7 @@ public abstract class BlockBehaviorImpl extends ComponentClass implements BlockB
     }
 
     @Delegate
-    protected BlockBaseComponent getBaseComponent() {
+    public BlockBaseComponent getBaseComponent() {
         return baseComponent;
     }
 

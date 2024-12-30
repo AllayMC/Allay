@@ -85,6 +85,13 @@ public interface EntityDamageComponent extends EntityComponent {
     boolean hasFireDamage();
 
     /**
+     * Check if the entity has drowning damage.
+     *
+     * @return {@code true} if the entity has drowning damage, {@code false} otherwise.
+     */
+    boolean hasDrowningDamage();
+
+    /**
      * Check if this entity can against fire damage even if
      * it does not have fire resistance effect.
      * <p>

@@ -493,6 +493,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void setMotion(Vector3fc motion) {
+        if (MathUtils.hasNaN(motion)) {
+            // Sometimes there may be bugs in the physics engine, which will cause the motion to be NaN.
+            // This check help us find the bug quickly as we usually can't realize that a strange bug
+            // is caused by NaN motion.
+            log.error("Entity {} is set by a motion which contains NaN: {}", runtimeId, motion);
+            return;
+        }
         this.lastMotion = this.motion;
         this.motion = new Vector3f(motion);
     }
@@ -522,7 +529,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             var rand = ThreadLocalRandom.current();
             var rx = rand.nextFloat(1) - 0.5f;
             var rz = rand.nextFloat(1) - 0.5f;
-            vec = new Vector3f(rx, 0, rz).normalize().mul(kb);
+            vec = MathUtils.normalizeIfNotZero(new Vector3f(rx, 0, rz)).mul(kb);
         } else {
             vec = getLocation().sub(source, new Vector3f()).normalize().mul(kb);
             vec.y = 0;

@@ -19,6 +19,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added an extra argument to `Dimension#breakBlock` method to control if the block breaking particle should be
   played.
 - (API) Added `LiquidHardenEvent#setHardenedBlockState` method to allow changing the hardened block state.
+- (API) Introduced `MathUtils#normalizeIfNotZero` method to normalize a vector only if it is not zero, this method
+  prevents NaN caused by `Vector3fc#normalize` method.
+- (API) Introduced `EntityBaseComponent#computeLiquidMotion` method to control whether an entity has liquid motion.
+- (API) Introduced `EntityDamageComponent#hasDrowningDamage` method to control whether an entity has drowning damage.
+- Added liquid motion for water and lava. Now entity will be moved by liquid flow if it is in the liquid.
 
 ### Changed
 
@@ -29,11 +34,18 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Corrected the return type of `Dimension#breakBlock(Vector3ic, ItemStack, Entity)` from `void` to `boolean`. Some
   overloads for this method are also added.
+- (API) Fixed incorrect bit operations in `BlockLiquidBaseComponent#getLiquidBlockState` and
+  `BlockLiquidBaseComponent#getLiquidBlockState#getDepth`,
+  although it seems that they do not cause any issues.
 - Block breaking particle won't be sent if block is broken by flowing liquid.
 - Water placed in nether dimension will disappear immediately now.
 - `Pos`, `Motion` and `Rotation` in entity nbt are now saved as list tag instead of compound tag to match vanilla.
   This also fixed the bug that entities being spawned in incorrect position when placing structure using `/structure`
   command. Please note that this change is not backward compatible and will break the old world and player data.
+- Fixed several NaNs caused by `Vector3fc#normalize` methods in the physics engine, and now setting the motion of an
+  entity to a vector which contains NaN will result in an error.
+- EntityItem now won't have drowning damage when it is in water, this bug causes entity item died after a period of time
+  in water.
 
 ## 0.1.1 (API 0.2.0)
 

@@ -186,6 +186,11 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
     }
 
     @Override
+    public boolean hasDrowningDamage() {
+        return !thisEntity.hasEffect(EffectTypes.WATER_BREATHING);
+    }
+
+    @Override
     public boolean setOnFireTicks(int newOnFireTicks) {
         if (!hasFireDamage()) {
             return false;
@@ -248,6 +253,10 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @EventHandler
     protected void onDrown(CEntityDrownEvent event) {
+        if (!hasDrowningDamage()) {
+            return;
+        }
+
         attack(DamageContainer.drown(2));
     }
 
