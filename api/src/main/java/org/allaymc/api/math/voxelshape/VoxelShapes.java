@@ -18,8 +18,9 @@ import java.util.Map;
 public final class VoxelShapes {
 
     // Stairs
-    public static final Map<BlockFace, VoxelShape> UPWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
-    public static final Map<BlockFace, VoxelShape> DOWNWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
+    private static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE = {BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH};
+    private static final Map<BlockFace, VoxelShape> UPWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
+    private static final Map<BlockFace, VoxelShape> DOWNWARDS_STAIR_SHAPES = new EnumMap<>(BlockFace.class);
 
     private static final VoxelShape UPWARDS_STAIR_SHAPE = VoxelShape.builder()
             .solid(0, 0, 0, 1, 1, 1)
@@ -39,7 +40,7 @@ public final class VoxelShapes {
 
     public static VoxelShape buildStairShape(BlockState stairBlockState) {
         var isDownwards = stairBlockState.getPropertyValue(BlockPropertyTypes.UPSIDE_DOWN_BIT);
-        var face = BlockFace.getBlockFaceByStairDirectionValue(stairBlockState.getPropertyValue(BlockPropertyTypes.WEIRDO_DIRECTION));
+        var face = STAIR_DIRECTION_VALUE_TO_BLOCK_FACE[stairBlockState.getPropertyValue(BlockPropertyTypes.WEIRDO_DIRECTION)];
         return isDownwards ? DOWNWARDS_STAIR_SHAPES.get(face) : UPWARDS_STAIR_SHAPES.get(face);
     }
 
