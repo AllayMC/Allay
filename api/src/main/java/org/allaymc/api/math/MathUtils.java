@@ -1,5 +1,7 @@
 package org.allaymc.api.math;
 
+import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.math.location.Location3fc;
 import org.joml.*;
 
 import java.lang.Math;
@@ -235,6 +237,30 @@ public final class MathUtils {
      */
     public static boolean hasNaN(Vector3dc v) {
         return Double.isNaN(v.x()) || Double.isNaN(v.y()) || Double.isNaN(v.z());
+    }
+
+    /**
+     * Check if the location contains NaN.
+     *
+     * @param l the location to check.
+     *
+     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     */
+    public static boolean hasNaN(Location3fc l) {
+        return Float.isNaN(l.x()) || Float.isNaN(l.y()) || Float.isNaN(l.z()) ||
+               Double.isNaN(l.pitch()) || Double.isNaN(l.yaw()) || Double.isNaN(l.headYaw());
+    }
+
+    /**
+     * Check if the location contains NaN.
+     *
+     * @param l the location to check.
+     *
+     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     */
+    public static boolean hasNaN(Location3dc l) {
+        return Double.isNaN(l.x()) || Double.isNaN(l.y()) || Double.isNaN(l.z()) ||
+               Double.isNaN(l.pitch()) || Double.isNaN(l.yaw()) || Double.isNaN(l.headYaw());
     }
 
     /**

@@ -287,6 +287,11 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return PacketSignal.HANDLED;
         }
 
+        if (!validateClientLocation(player, packet.getPosition(), packet.getRotation())) {
+            // Ignore this auth packet if the pos provided by client is not valid
+            return PacketSignal.HANDLED;
+        }
+
         // The pos which client sends to the server is higher than the actual coordinates (one base offset)
         handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
@@ -295,6 +300,18 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             checkInteractDistance(player);
         }
         return PacketSignal.UNHANDLED;
+    }
+
+    protected boolean validateClientLocation(EntityPlayer player, Vector3f pos, Vector3f rot) {
+        var valid = !Float.isNaN(pos.getX()) && !Float.isNaN(pos.getY()) && !Float.isNaN(pos.getZ()) &&
+                    !Float.isNaN(rot.getX()) && !Float.isNaN(rot.getY()) && !Float.isNaN(rot.getZ());
+        if (!valid) {
+            // Sometimes, the PlayerAuthInput packet is in fact sent with NaN/INF after being teleported (to another
+            // world). For this reason, we don't actually return an error if this happens, because this will result
+            // in the player being kicked. Just log it and replace the NaN value with the one we have tracked server-side.
+            log.debug("Found NaN in PlayerAuthInputPacket sent by player {}", player.getOriginName());
+        }
+        return valid;
     }
 
     protected void handleSingleItemStackRequest(EntityPlayer player, ItemStackRequest request, long receiveTime) {

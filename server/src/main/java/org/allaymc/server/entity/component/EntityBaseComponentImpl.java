@@ -290,6 +290,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void setLocation(Location3fc location, boolean calculateFallDistance) {
+        if (MathUtils.hasNaN(location)) {
+            throw new IllegalArgumentException("Trying to set the location of entity " + runtimeId + " to a new location which contains NaN: " + location);
+        }
         if (calculateFallDistance && !this.onGround) {
             if (this.fallDistance < 0) {
                 // Entity start falling
@@ -494,11 +497,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public void setMotion(Vector3fc motion) {
         if (MathUtils.hasNaN(motion)) {
-            // Sometimes there may be bugs in the physics engine, which will cause the motion to be NaN.
-            // This check help us find the bug quickly as we usually can't realize that a strange bug
-            // is caused by NaN motion.
-            log.error("Entity {} is set by a motion which contains NaN: {}", runtimeId, motion);
-            return;
+            throw new IllegalArgumentException("Trying to set the motion of entity " + runtimeId + " to a new motion which contains NaN: " + motion);
         }
         this.lastMotion = this.motion;
         this.motion = new Vector3f(motion);

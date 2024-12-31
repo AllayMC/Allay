@@ -350,7 +350,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         location.dimension().removePlayer(thisPlayer, () -> {
             targetDim.getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
             setLocationBeforeSpawn(target);
-            sendLocationToSelf(EntityTeleportEvent.Reason.UNKNOWN);
+            sendLocationToSelf(reason);
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
                 var packet = new ChangeDimensionPacket();
                 packet.setDimension(targetDim.getDimensionInfo().dimensionId());
