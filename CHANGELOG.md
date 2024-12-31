@@ -51,6 +51,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   entity to a vector which contains NaN will result in an error.
 - EntityItem now won't have drowning damage when it is in water, this bug causes entity item died after a period of time
   in water.
+- `ServerboundLoadingScreenPacket` won't spam warnings in the console when switching dimension now.
 
 ## 0.1.1 (API 0.2.0)
 
