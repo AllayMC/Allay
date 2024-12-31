@@ -16,6 +16,6 @@ public class BlockIronDoorBaseComponentImpl extends BlockDoorBaseComponentImpl {
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        return true;
+        return false;
     }
 }
