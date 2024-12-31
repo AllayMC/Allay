@@ -14,7 +14,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.1.2](https://github.com/AllayMC/Allay/compare/0.1.2...HEAD)</small>
 
-## 0.1.2 (API 0.3.0)
+## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 
 <small>[Compare with 0.1.1](https://github.com/AllayMC/Allay/compare/0.1.1...0.1.2)</small>
 
@@ -62,7 +62,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug that sometimes there may be `NaN` values in `PlayerAuthInputPacket`, this bug is also confirmed in
   df-mc ([issue#425](https://github.com/df-mc/dragonfly/issues/425)).
 
-## 0.1.1 (API 0.2.0)
+## [0.1.1](https://github.com/AllayMC/Allay/releases/tag/0.1.1) (API 0.2.0) - 2024-12-29
 
 <small>[Compare with 0.1.0](https://github.com/AllayMC/Allay/compare/0.1.0...0.1.1)</small>
 
