@@ -14,7 +14,7 @@ val isDevBuild = false
  * This is not the same as the version of allay-api.
  * Please note that they are two things.
  */
-version = "0.1.2" + if (isDevBuild) "-dev" else ""
+version = "0.1.3" + if (isDevBuild) "-dev" else ""
 
 plugins {
     id("jacoco")
