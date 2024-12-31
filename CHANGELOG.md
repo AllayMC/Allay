@@ -24,6 +24,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced `EntityBaseComponent#computeLiquidMotion` method to control whether an entity has liquid motion.
 - (API) Introduced `EntityDamageComponent#hasDrowningDamage` method to control whether an entity has drowning damage.
 - Added liquid motion for water and lava. Now entity will be moved by liquid flow if it is in the liquid.
+- Pos sent by the client will only be handled when the pos is changed, as `PlayerAuthInputPacket` is sent every tick but
+  the player may not move every tick.
 
 ### Changed
 
@@ -34,6 +36,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   touched by users.
 - Introduced tag name constants for where a large number of NBT saving and reading are involved. This improved the
   maintainability of the project.
+- Introduced better names for some of the fields in `PlayerAuthInputPacketProcessor`, this improved the readability of
+  the code.
 
 ### Fixed
 
