@@ -120,7 +120,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param itemStack    The item in the player's hand.
      * @param interactInfo The player interaction info.
      *
-     * @return Whether the operation is vali`d.
+     * @return Whether the operation is valid.
      * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return {@code true}
      * If {@code false} is returned, the useItemOn method of the player's item will continue to be called
      */
