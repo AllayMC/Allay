@@ -42,8 +42,8 @@ dependencies {
     implementation(libs.oshi)
     implementation(libs.flatlaf)
     implementation(libs.formsrt)
-    implementation(libs.rng.simple)
-    implementation(libs.rng.sampling)
+    implementation(libs.bundles.rng)
+    implementation(libs.sentry)
 
     testImplementation(libs.bundles.junit)
     testAnnotationProcessor(libs.lombok)

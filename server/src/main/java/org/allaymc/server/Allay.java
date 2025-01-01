@@ -1,6 +1,7 @@
 package org.allaymc.server;
 
 import io.netty.util.ResourceLeakDetector;
+import io.sentry.Sentry;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.AllayAPI;
@@ -65,6 +66,10 @@ public final class Allay {
 
     public static void main(String[] args) {
         long initialTime = System.currentTimeMillis();
+        if (GitProperties.isDevBuild()) {
+            // Enable sentry only in non-dev build
+            Sentry.close();
+        }
         ResourceLeakDetector.setLevel(Server.SETTINGS.networkSettings().resourceLeakDetectorLevel());
         // Disable scientific notation in joml
         System.setProperty("joml.format", "false");
@@ -119,7 +124,6 @@ public final class Allay {
         } catch (Exception ignore) {}
         return true;
     }
-
 
     /**
      * NOTICE: The i18n implementation must be registered before initializing allay,

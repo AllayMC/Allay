@@ -295,6 +295,11 @@ public class GameTestCommand extends SimpleCommand {
                     player.sendText("InternalSkyLight: " + lightService.getInternalSkyLight(x, y, z));
                     player.sendText("QueuedUpdateCount: " + lightService.getQueuedUpdateCount());
                     return context.success();
-                }, SenderType.PLAYER);
+                }, SenderType.PLAYER)
+                .root()
+                .key("triggerexception")
+                .exec(context -> {
+                    throw new RuntimeException("Triggered exception");
+                });
     }
 }
