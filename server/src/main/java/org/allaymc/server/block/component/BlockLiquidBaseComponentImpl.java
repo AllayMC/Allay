@@ -12,11 +12,12 @@ import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.LiquidDecayEvent;
 import org.allaymc.api.eventbus.event.block.LiquidFlowEvent;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -94,9 +95,74 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         updateLiquid(dimension, pos, liquid, blockStateWithPos.layer());
     }
 
-    @Override
-    public void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {
-        // TODO
+    /**
+     * This method is used in {@link org.allaymc.server.world.service.AllayEntityPhysicsService}
+     */
+    public Vector3f calculateFlowVector(Dimension dimension, int x, int y, int z, BlockState current) {
+        // TODO: cache the flow vector for better performance
+        var vx = 0;
+        var vy = 0;
+        var vz = 0;
+        var decay = getEffectiveFlowDecay(current);
+
+        for (var face : BlockFace.getHorizontalBlockFaces()) {
+            var offset = face.getOffset();
+
+            var sideX = x + offset.x();
+            var sideY = y + offset.y();
+            var sideZ = z + offset.z();
+            var sideBlock = dimension.getBlockState(sideX, sideY, sideZ);
+            var blockDecay = getEffectiveFlowDecay(sideBlock);
+
+            if (blockDecay < 0) {
+                if (!sideBlock.getBlockStateData().liquidReactionOnTouch().canLiquidFlowInto()) {
+                    continue;
+                }
+
+                blockDecay = getEffectiveFlowDecay(dimension.getBlockState(sideX, sideY - 1, sideZ));
+
+                if (blockDecay >= 0) {
+                    var realDecay = blockDecay - (decay - 8);
+                    vx += offset.x() * realDecay;
+                    vy += offset.y() * realDecay;
+                    vz += offset.z() * realDecay;
+                }
+
+                continue;
+            }
+
+            var realDecay = blockDecay - decay;
+            vx += offset.x() * realDecay;
+            vy += offset.y() * realDecay;
+            vz += offset.z() * realDecay;
+        }
+
+        var vector = new Vector3f(vx, vy, vz);
+
+        if (isFalling(current)) {
+            for (var face : BlockFace.getHorizontalBlockFaces()) {
+                var offset = face.getOffset();
+                if (!canFlowInto(dimension, x + offset.x(), y + offset.y(), z + offset.z(), true) &&
+                    !canFlowInto(dimension, x + offset.x(), y + offset.y() + 1, z + offset.z(), true)) {
+                    // normalize() should only be called when the vector is not zero,
+                    // otherwise it will produce a vector with three NaN values.
+                    MathUtils.normalizeIfNotZero(vector);
+                    vector.add(0, -6, 0);
+                    break;
+                }
+            }
+        }
+
+        // Same to above
+        return MathUtils.normalizeIfNotZero(vector);
+    }
+
+    protected int getEffectiveFlowDecay(BlockState liquid) {
+        if (!isSameLiquidType(liquid.getBlockType())) {
+            return -1;
+        }
+
+        return isFalling(liquid) ? 0 : 8 - getDepth(liquid);
     }
 
     /**
@@ -289,7 +355,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         if (removedOnTouch) {
             switch (liquidReactionOnTouch) {
                 case BROKEN -> dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
-                case POPPED -> dimension.breakBlock(pos, null, null);
+                case POPPED -> dimension.breakBlock(pos, null, null, false);
             }
         }
         setLiquidInWorld(dimension, pos, getLiquidBlockState(newDepth, falling));
@@ -391,16 +457,25 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     }
 
     /**
+     * @see #canFlowInto(Dimension, int, int, int, boolean)
+     */
+    protected boolean canFlowInto(Dimension dimension, Vector3ic pos, boolean sideways) {
+        return canFlowInto(dimension, pos.x(), pos.y(), pos.z(), sideways);
+    }
+
+    /**
      * Checks if a liquid can flow into the block present in the world at a specific block position.
      *
      * @param dimension The dimension the block is in.
-     * @param pos       The position of the block to flow into.
+     * @param x         The x coordinate of the block.
+     * @param y         The y coordinate of the block.
+     * @param z         The z coordinate of the block.
      * @param sideways  Whether the flow is sideways or downwards.
      *
      * @return Whether the liquid can flow into the block.
      */
-    protected boolean canFlowInto(Dimension dimension, Vector3ic pos, boolean sideways) {
-        var existing = dimension.getBlockState(pos);
+    protected boolean canFlowInto(Dimension dimension, int x, int y, int z, boolean sideways) {
+        var existing = dimension.getBlockState(x, y, z);
         if (existing.getBlockType() == BlockTypes.AIR ||
             existing.getBlockStateData().liquidReactionOnTouch().removedOnTouch()) {
             return true;

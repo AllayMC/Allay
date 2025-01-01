@@ -8,6 +8,7 @@ import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
+import org.cloudburstmc.nbt.NbtType;
 import org.joml.Vector3fc;
 
 /**
@@ -70,34 +71,17 @@ public class EntityInitInfo implements ComponentInitInfo {
         }
 
         public Builder pos(float x, float y, float z) {
-            nbtBuilder.putCompound("Pos",
-                    NbtMap.builder()
-                            .putFloat("x", x)
-                            .putFloat("y", y)
-                            .putFloat("z", z)
-                            .build()
-            );
+            nbtBuilder.putList("Pos", NbtType.FLOAT, x, y, z);
             return this;
         }
 
         public Builder rot(float yaw, float pitch) {
-            nbtBuilder.putCompound("Rotation",
-                    NbtMap.builder()
-                            .putFloat("yaw", yaw)
-                            .putFloat("pitch", pitch)
-                            .build()
-            );
+            nbtBuilder.putList("Rotation", NbtType.FLOAT, yaw, pitch);
             return this;
         }
 
         public Builder motion(float dx, float dy, float dz) {
-            nbtBuilder.putCompound("Motion",
-                    NbtMap.builder()
-                            .putFloat("dx", dx)
-                            .putFloat("dy", dy)
-                            .putFloat("dz", dz)
-                            .build()
-            );
+            nbtBuilder.putList("Motion", NbtType.FLOAT, dx, dy, dz);
             return this;
         }
 

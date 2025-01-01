@@ -1,7 +1,7 @@
 /**
  * The current version of allay-api
  */
-version = "0.1.0"
+version = "0.4.0"
 
 dependencies {
     api(libs.network) {

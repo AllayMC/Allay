@@ -17,7 +17,7 @@ public class BlockLiquidBehaviorImpl extends BlockBehaviorImpl implements BlockL
 
     @Delegate
     @Override
-    protected BlockLiquidBaseComponent getBaseComponent() {
+    public BlockLiquidBaseComponent getBaseComponent() {
         return (BlockLiquidBaseComponent) super.getBaseComponent();
     }
 }

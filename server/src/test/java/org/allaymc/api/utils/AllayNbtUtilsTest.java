@@ -1,6 +1,7 @@
 package org.allaymc.api.utils;
 
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,18 +43,19 @@ class AllayNbtUtilsTest {
     @Test
     void testWriteVector3f() {
         var nbt = NbtMap.builder();
-        AllayNbtUtils.writeVector3f(nbt, "test", "x", "y", "z", new org.joml.Vector3f(1, 2, 3));
+        AllayNbtUtils.writeVector3f(nbt, "test", new org.joml.Vector3f(1, 2, 3));
         var nbtMap = nbt.build();
-        assertEquals(1, nbtMap.getCompound("test").getFloat("x"));
-        assertEquals(2, nbtMap.getCompound("test").getFloat("y"));
-        assertEquals(3, nbtMap.getCompound("test").getFloat("z"));
+        var list = nbtMap.getList("test", NbtType.FLOAT);
+        assertEquals(1, list.get(0));
+        assertEquals(2, list.get(1));
+        assertEquals(3, list.get(2));
     }
 
     @Test
     void testReadVector3f() {
         var nbt = NbtMap.builder();
-        nbt.putCompound("test", NbtMap.builder().putFloat("x", 1).putFloat("y", 2).putFloat("z", 3).build());
-        var vector3f = AllayNbtUtils.readVector3f(nbt.build(), "test", "x", "y", "z");
+        nbt.putList("test", NbtType.FLOAT, 1f, 2f, 3f);
+        var vector3f = AllayNbtUtils.readVector3f(nbt.build(), "test");
         assertEquals(1, vector3f.x);
         assertEquals(2, vector3f.y);
         assertEquals(3, vector3f.z);

@@ -42,6 +42,16 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     }
 
     @Override
+    public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
+        if (oldBlockState.dimension().getDimensionInfo() == DimensionInfo.NETHER) {
+            setLiquidInWorld(oldBlockState.dimension(), oldBlockState.pos(), null);
+            return;
+        }
+
+        super.afterPlaced(oldBlockState, newBlockState, placementInfo);
+    }
+
+    @Override
     public void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.onReplace(currentBlockState, newBlockState, placementInfo);
 
@@ -118,7 +128,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
             return false;
         }
 
-        dimension.setBlockState(flownIntoBy.pos(), hardenedBlockState);
+        dimension.setBlockState(flownIntoBy.pos(), event.getHardenedBlockState());
         dimension.addLevelSoundEvent(MathUtils.center(flownIntoBy.pos()), SoundEvent.FIZZ);
         return true;
     }

@@ -26,6 +26,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.allaymc.api.server.Server;
+import org.allaymc.api.utils.AllayNbtUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
@@ -71,9 +72,18 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
-    public static final int DEFAULT_DEAD_TIMER = 20;
-
+    protected static final int DEFAULT_DEAD_TIMER = 20;
     protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(0);
+
+    protected static final String TAG_IDENTIFIER = "identifier";
+    protected static final String TAG_ON_GROUND = "OnGround";
+    // This tag is also used in EntityPlayerNetworkComponentImpl, so make it public for reuse
+    public static final String TAG_POS = "Pos";
+    protected static final String TAG_MOTION = "Motion";
+    protected static final String TAG_ROTATION = "Rotation";
+    protected static final String TAG_TAGS = "Tags";
+    protected static final String TAG_ACTIVE_EFFECTS = "ActiveEffects";
+    protected static final String TAG_UNIQUE_ID = "UniqueID";
 
     private static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
 
@@ -280,6 +290,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void setLocation(Location3fc location, boolean calculateFallDistance) {
+        if (MathUtils.hasNaN(location)) {
+            throw new IllegalArgumentException("Trying to set the location of entity " + runtimeId + " to a new location which contains NaN: " + location);
+        }
         if (calculateFallDistance && !this.onGround) {
             if (this.fallDistance < 0) {
                 // Entity start falling
@@ -483,6 +496,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     @Override
     public void setMotion(Vector3fc motion) {
+        if (MathUtils.hasNaN(motion)) {
+            throw new IllegalArgumentException("Trying to set the motion of entity " + runtimeId + " to a new motion which contains NaN: " + motion);
+        }
         this.lastMotion = this.motion;
         this.motion = new Vector3f(motion);
     }
@@ -512,7 +528,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             var rand = ThreadLocalRandom.current();
             var rx = rand.nextFloat(1) - 0.5f;
             var rz = rand.nextFloat(1) - 0.5f;
-            vec = new Vector3f(rx, 0, rz).normalize().mul(kb);
+            vec = MathUtils.normalizeIfNotZero(new Vector3f(rx, 0, rz)).mul(kb);
         } else {
             vec = getLocation().sub(source, new Vector3f()).normalize().mul(kb);
             vec.y = 0;
@@ -653,30 +669,16 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     @Override
     public NbtMap saveNBT() {
         var builder = NbtMap.builder();
-        builder.putString("identifier", entityType.getIdentifier().toString())
-                .putCompound("Pos",
-                        NbtMap.builder()
-                                .putFloat("x", location.x())
-                                .putFloat("y", location.y())
-                                .putFloat("z", location.z())
-                                .build())
-                .putCompound("Rotation",
-                        NbtMap.builder()
-                                .putFloat("yaw", (float) location.yaw())
-                                .putFloat("pitch", (float) location.pitch())
-                                .build())
-                .putCompound("Motion",
-                        NbtMap.builder()
-                                .putFloat("dx", motion.x())
-                                .putFloat("dy", motion.y())
-                                .putFloat("dz", motion.z())
-                                .build())
-                .putBoolean("OnGround", onGround);
+        builder.putString(TAG_IDENTIFIER, entityType.getIdentifier().toString());
+        builder.putBoolean(TAG_ON_GROUND, onGround);
+        AllayNbtUtils.writeVector3f(builder, TAG_POS, location);
+        AllayNbtUtils.writeVector3f(builder, TAG_MOTION, motion);
+        AllayNbtUtils.writeVector2f(builder, TAG_ROTATION, (float) location.yaw(), (float) location.pitch());
         if (!tags.isEmpty()) {
-            builder.putList("Tags", NbtType.STRING, new ArrayList<>(tags));
+            builder.putList(TAG_TAGS, NbtType.STRING, new ArrayList<>(tags));
         }
         if (!effects.isEmpty()) {
-            builder.putList("ActiveEffects", NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
+            builder.putList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, effects.values().stream().map(EffectInstance::saveNBT).toList());
         }
         saveUniqueId(builder);
         var event = new CEntitySaveNBTEvent(builder);
@@ -685,30 +687,30 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void saveUniqueId(NbtMapBuilder builder) {
-        builder.putLong("UniqueID", uniqueId);
+        builder.putLong(TAG_UNIQUE_ID, uniqueId);
     }
 
     @Override
     public void loadNBT(NbtMap nbt) {
-        if (nbt.containsKey("Pos")) {
-            var pos = readVector3f(nbt, "Pos", "x", "y", "z");
+        if (nbt.containsKey(TAG_POS)) {
+            var pos = readVector3f(nbt, TAG_POS);
             location.set(pos.x, pos.y, pos.z);
         }
 
-        if (nbt.containsKey("Rotation")) {
-            var rot = readVector2f(nbt, "Rotation", "yaw", "pitch");
+        if (nbt.containsKey(TAG_MOTION)) {
+            var motion = readVector3f(nbt, TAG_MOTION);
+            this.motion.set(motion);
+        }
+
+        if (nbt.containsKey(TAG_ROTATION)) {
+            var rot = readVector2f(nbt, TAG_ROTATION);
             location.setYaw(rot.x);
             location.setPitch(rot.y);
         }
 
-        if (nbt.containsKey("Motion")) {
-            var motion = readVector3f(nbt, "Motion", "dx", "dy", "dz");
-            this.motion.set(motion);
-        }
-
-        nbt.listenForBoolean("OnGround", onGround -> this.onGround = onGround);
-        nbt.listenForList("Tags", NbtType.STRING, tags -> this.tags.addAll(tags));
-        nbt.listenForList("ActiveEffects", NbtType.COMPOUND, activeEffects -> {
+        nbt.listenForBoolean(TAG_ON_GROUND, onGround -> this.onGround = onGround);
+        nbt.listenForList(TAG_TAGS, NbtType.STRING, tags -> this.tags.addAll(tags));
+        nbt.listenForList(TAG_ACTIVE_EFFECTS, NbtType.COMPOUND, activeEffects -> {
             for (NbtMap activeEffect : activeEffects) {
                 var effectInstance = EffectInstance.fromNBT(activeEffect);
                 addEffect(effectInstance);
@@ -721,8 +723,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void loadUniqueId(NbtMap nbt) {
-        if (nbt.containsKey("UniqueID")) {
-            this.uniqueId = nbt.getLong("UniqueID");
+        if (nbt.containsKey(TAG_UNIQUE_ID)) {
+            this.uniqueId = nbt.getLong(TAG_UNIQUE_ID);
             return;
         }
 

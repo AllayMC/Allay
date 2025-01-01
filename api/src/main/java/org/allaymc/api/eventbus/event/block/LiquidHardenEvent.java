@@ -1,6 +1,7 @@
 package org.allaymc.api.eventbus.event.block;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.eventbus.event.CancellableEvent;
@@ -19,6 +20,7 @@ public class LiquidHardenEvent extends BlockEvent implements CancellableEvent {
     /**
      * Represent the harden block state which will replaced the liquid being hardened.
      */
+    @Setter
     protected BlockState hardenedBlockState;
 
     public LiquidHardenEvent(BlockStateWithPos blockState, BlockState cause, BlockState hardenedBlockState) {

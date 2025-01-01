@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.cloudburstmc.nbt.NBTOutputStream;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
+import org.cloudburstmc.nbt.NbtType;
 import org.joml.*;
 
 import java.io.ByteArrayInputStream;
@@ -81,15 +82,15 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT map.
      * @param rootName the root name.
-     * @param f1       the x field.
-     * @param f2       the y field.
-     * @param f3       the z field.
      *
      * @return the vector3.
      */
-    public static Vector3f readVector3f(NbtMap nbt, String rootName, String f1, String f2, String f3) {
-        var pos = nbt.getCompound(rootName);
-        return new Vector3f(pos.getFloat(f1), pos.getFloat(f2), pos.getFloat(f3));
+    public static Vector3f readVector3f(NbtMap nbt, String rootName) {
+        var pos = nbt.getList(rootName, NbtType.FLOAT);
+        if (pos == null) {
+            return new Vector3f(0, 0, 0);
+        }
+        return new Vector3f(pos.get(0), pos.get(1), pos.get(2));
     }
 
     /**
@@ -97,13 +98,10 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT builder.
      * @param rootName the root name.
-     * @param f1       the x field.
-     * @param f2       the y field.
-     * @param f3       the z field.
      * @param vector3f the vector3.
      */
-    public static void writeVector3f(NbtMapBuilder nbt, String rootName, String f1, String f2, String f3, Vector3fc vector3f) {
-        writeVector3f(nbt, rootName, f1, f2, f3, vector3f.x(), vector3f.y(), vector3f.z());
+    public static void writeVector3f(NbtMapBuilder nbt, String rootName, Vector3fc vector3f) {
+        writeVector3f(nbt, rootName, vector3f.x(), vector3f.y(), vector3f.z());
     }
 
     /**
@@ -111,20 +109,12 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT builder.
      * @param rootName the root name.
-     * @param f1       the x field.
-     * @param f2       the y field.
-     * @param f3       the z field.
      * @param x        the x value.
      * @param y        the y value.
      * @param z        the z value.
      */
-    public static void writeVector3f(NbtMapBuilder nbt, String rootName, String f1, String f2, String f3, float x, float y, float z) {
-        var pos = NbtMap.builder()
-                .putFloat(f1, x)
-                .putFloat(f2, y)
-                .putFloat(f3, z)
-                .build();
-        nbt.putCompound(rootName, pos);
+    public static void writeVector3f(NbtMapBuilder nbt, String rootName, float x, float y, float z) {
+        nbt.putList(rootName, NbtType.FLOAT, x, y, z);
     }
 
     /**
@@ -132,15 +122,15 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT map.
      * @param rootName the root name.
-     * @param f1       the x field.
-     * @param f2       the y field.
-     * @param f3       the z field.
      *
      * @return the vector3.
      */
-    public static Vector3i readVector3i(NbtMap nbt, String rootName, String f1, String f2, String f3) {
-        var pos = nbt.getCompound(rootName);
-        return new Vector3i(pos.getInt(f1), pos.getInt(f2), pos.getInt(f3));
+    public static Vector3i readVector3i(NbtMap nbt, String rootName) {
+        var pos = nbt.getList(rootName, NbtType.INT);
+        if (pos == null) {
+            return new Vector3i(0, 0, 0);
+        }
+        return new Vector3i(pos.get(0), pos.get(1), pos.get(2));
     }
 
     /**
@@ -148,18 +138,10 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT builder.
      * @param rootName the root name.
-     * @param f1       the x field.
-     * @param f2       the y field.
-     * @param f3       the z field.
      * @param vector3i the vector3.
      */
-    public static void writeVector3i(NbtMapBuilder nbt, String rootName, String f1, String f2, String f3, Vector3ic vector3i) {
-        var pos = NbtMap.builder()
-                .putInt(f1, vector3i.x())
-                .putInt(f2, vector3i.y())
-                .putInt(f3, vector3i.z())
-                .build();
-        nbt.putCompound(rootName, pos);
+    public static void writeVector3i(NbtMapBuilder nbt, String rootName, Vector3ic vector3i) {
+        nbt.putList(rootName, NbtType.INT, vector3i.x(), vector3i.y(), vector3i.z());
     }
 
     /**
@@ -167,14 +149,22 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT map.
      * @param rootName the root name.
-     * @param f1       the x field.
-     * @param f2       the y field.
      *
      * @return the vector2.
      */
-    public static Vector2f readVector2f(NbtMap nbt, String rootName, String f1, String f2) {
-        var pos = nbt.getCompound(rootName);
-        return new Vector2f(pos.getFloat(f1), pos.getFloat(f2));
+    public static Vector2f readVector2f(NbtMap nbt, String rootName) {
+        var pos = nbt.getList(rootName, NbtType.FLOAT);
+        if (pos == null) {
+            return new Vector2f(0, 0);
+        }
+        return new Vector2f(pos.get(0), pos.get(1));
+    }
+
+    /**
+     * @see #writeVector2f(NbtMapBuilder, String, Vector2fc)
+     */
+    public static void writeVector2f(NbtMapBuilder nbt, String rootName, float x, float y) {
+        nbt.putList(rootName, NbtType.FLOAT, x, y);
     }
 
     /**
@@ -182,15 +172,9 @@ public final class AllayNbtUtils {
      *
      * @param nbt      the NBT builder.
      * @param rootName the root name.
-     * @param f1       the x field.
-     * @param f2       the y field.
      * @param vector2f the vector2.
      */
-    public static void writeVector2f(NbtMapBuilder nbt, String rootName, String f1, String f2, Vector2fc vector2f) {
-        var pos = NbtMap.builder()
-                .putFloat(f1, vector2f.x())
-                .putFloat(f2, vector2f.y())
-                .build();
-        nbt.putCompound(rootName, pos);
+    public static void writeVector2f(NbtMapBuilder nbt, String rootName, Vector2fc vector2f) {
+        nbt.putList(rootName, NbtType.FLOAT, vector2f.x(), vector2f.y());
     }
 }

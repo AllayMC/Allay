@@ -27,16 +27,23 @@ import static org.allaymc.api.item.ItemHelper.fromNBT;
  */
 @Slf4j
 public class BaseContainer implements Container {
+
+    protected static final String TAG_SLOT = "Slot";
+
     protected final FullContainerType<? extends Container> containerType;
-    protected final BiMap<Byte, ContainerViewer> viewers = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
+    protected final BiMap<Byte, ContainerViewer> viewers;
     protected final ItemStack[] content;
-    protected final Set<Consumer<ContainerViewer>> onOpenListeners = new HashSet<>();
-    protected final Set<Consumer<ContainerViewer>> onCloseListeners = new HashSet<>();
-    protected final Int2ObjectMap<Set<Consumer<ItemStack>>> onSlotChangeListeners = new Int2ObjectOpenHashMap<>();
+    protected final Set<Consumer<ContainerViewer>> onOpenListeners;
+    protected final Set<Consumer<ContainerViewer>> onCloseListeners;
+    protected final Int2ObjectMap<Set<Consumer<ItemStack>>> onSlotChangeListeners;
 
     public BaseContainer(FullContainerType<? extends Container> containerType) {
         this.containerType = containerType;
+        this.viewers = HashBiMap.create(new Byte2ObjectOpenHashMap<>());
         this.content = new ItemStack[containerType.size()];
+        this.onOpenListeners = new HashSet<>();
+        this.onCloseListeners = new HashSet<>();
+        this.onSlotChangeListeners = new Int2ObjectOpenHashMap<>();
         Arrays.fill(this.content, ItemAirStack.AIR_STACK);
     }
 
@@ -179,7 +186,7 @@ public class BaseContainer implements Container {
             // TODO: WasPickedUp?
             var nbt = itemStack.saveNBT()
                     .toBuilder()
-                    .putByte("Slot", (byte) slot)
+                    .putByte(TAG_SLOT, (byte) slot)
                     .build();
             list.add(nbt);
         }
@@ -189,11 +196,11 @@ public class BaseContainer implements Container {
     @Override
     public void loadNBT(List<NbtMap> nbtList) {
         for (var nbt : nbtList) {
-            if (!nbt.containsKey("Slot")) {
+            if (!nbt.containsKey(TAG_SLOT)) {
                 log.warn("Item NBT does not contain a slot key! Skipping item...");
                 continue;
             }
-            int slot = nbt.getByte("Slot");
+            int slot = nbt.getByte(TAG_SLOT);
             ItemStack itemStack = fromNBT(nbt);
             content[slot] = itemStack;
         }

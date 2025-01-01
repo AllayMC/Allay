@@ -34,23 +34,25 @@ import static org.cloudburstmc.protocol.bedrock.data.LevelEvent.*;
 @Slf4j
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
-    // Since block actions are processed asynchronously, a tolerance of 3 ticks is normal
     // TODO: Accurate breaking time calculations when player keeping jumping
     // The current implementation will work fine in most cases
     // But it doesn't work out the same breaking time as the client when player keep jumping
     // It is hard for us to calculate the exact breaking time when player keep jumping
     protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = Integer.MAX_VALUE;
 
-    protected int breakBlockX = Integer.MAX_VALUE;
-    protected int breakBlockY = Integer.MAX_VALUE;
-    protected int breakBlockZ = Integer.MAX_VALUE;
+    protected int blockToBreakX = Integer.MAX_VALUE;
+    protected int blockToBreakY = Integer.MAX_VALUE;
+    protected int blockToBreakZ = Integer.MAX_VALUE;
 
-    protected int breakFaceId;
-    protected BlockState breakBlock;
+    protected int faceToBreak;
+    protected BlockState blockToBreak;
 
-    protected long startBreakTime; // Ticks
-    protected double needBreakTime; // Seconds
-    protected double stopBreakTime; // Ticks
+    // Ticks
+    protected long startBreakingTime;
+    // Seconds
+    protected double timeNeededToBreak;
+    // Ticks
+    protected double stopBreakingTime;
 
     private static boolean isInvalidGameType(EntityPlayer player) {
         return player.getGameType() == GameType.CREATIVE ||
@@ -96,7 +98,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
                     }
 
                     // HACK: The client for some reason sends a meaningless BLOCK_CONTINUE_DESTROY before BLOCK_PREDICT_DESTROY, presumably a bug, so ignore it here
-                    if (breakBlockX == pos.getX() && breakBlockY == pos.getY() && breakBlockZ == pos.getZ()) {
+                    if (blockToBreakX == pos.getX() && blockToBreakY == pos.getY() && blockToBreakZ == pos.getZ()) {
                         continue;
                     }
 
@@ -123,85 +125,85 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     }
 
     protected boolean isBreakingBlock() {
-        return breakBlock != null;
+        return blockToBreak != null;
     }
 
     protected void startBreak(EntityPlayer player, int x, int y, int z, int blockFaceId, long startBreakingTime) {
-        if (breakBlock != null) {
+        if (blockToBreak != null) {
             log.debug("Player {} tried to start breaking a block while already breaking one", player.getOriginName());
             stopBreak(player);
         }
 
-        if (breakBlockX == x && breakBlockY == y && breakBlockZ == z) {
+        if (blockToBreakX == x && blockToBreakY == y && blockToBreakZ == z) {
             log.debug("Player {} tried to start breaking the same block twice", player.getOriginName());
             return;
         }
 
-        breakBlock = player.getDimension().getBlockState(x, y, z);
-        if (breakBlock.getBlockStateData().hardness() == -1) {
+        blockToBreak = player.getDimension().getBlockState(x, y, z);
+        if (blockToBreak.getBlockStateData().hardness() == -1) {
             log.debug("Player {} tried to break an unbreakable block", player.getOriginName());
             return;
         }
 
-        breakBlockX = x;
-        breakBlockY = y;
-        breakBlockZ = z;
+        blockToBreakX = x;
+        blockToBreakY = y;
+        blockToBreakZ = z;
 
-        breakFaceId = blockFaceId;
+        faceToBreak = blockFaceId;
 
-        needBreakTime = breakBlock.getBlockType().getBlockBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
-        stopBreakTime = startBreakingTime + needBreakTime * 20.0d;
+        timeNeededToBreak = blockToBreak.getBlockType().getBlockBehavior().calculateBreakTime(blockToBreak, player.getItemInHand(), player);
+        stopBreakingTime = startBreakingTime + timeNeededToBreak * 20.0d;
 
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_START_BREAK);
         pk.setPosition(Vector3f.from(x, y, z));
-        pk.setData(toNetworkBreakTime(needBreakTime));
+        pk.setData(toNetworkBreakTime(timeNeededToBreak));
         player.getCurrentChunk().addChunkPacket(pk);
         sendBreakingPracticeAndTime(player, startBreakingTime);
     }
 
     protected int toNetworkBreakTime(double breakTime) {
         if (breakTime == 0) return 65535;
-        return (int) (65535 / (needBreakTime * 20));
+        return (int) (65535 / (timeNeededToBreak * 20));
     }
 
     protected void stopBreak(EntityPlayer player) {
         var pk = new LevelEventPacket();
         pk.setType(BLOCK_STOP_BREAK);
-        pk.setPosition(Vector3f.from(breakBlockX, breakBlockY, breakBlockZ));
+        pk.setPosition(Vector3f.from(blockToBreakX, blockToBreakY, blockToBreakZ));
         player.getCurrentChunk().addChunkPacket(pk);
 
-        breakBlockX = Integer.MAX_VALUE;
-        breakBlockY = Integer.MAX_VALUE;
-        breakBlockZ = Integer.MAX_VALUE;
+        blockToBreakX = Integer.MAX_VALUE;
+        blockToBreakY = Integer.MAX_VALUE;
+        blockToBreakZ = Integer.MAX_VALUE;
 
-        breakFaceId = 0;
-        breakBlock = null;
+        faceToBreak = 0;
+        blockToBreak = null;
 
-        startBreakTime = 0;
-        needBreakTime = 0;
-        stopBreakTime = 0;
+        startBreakingTime = 0;
+        timeNeededToBreak = 0;
+        stopBreakingTime = 0;
     }
 
     protected void completeBreak(EntityPlayer player, int x, int y, int z) {
-        if (breakBlockX != x || breakBlockY != y || breakBlockZ != z) {
+        if (blockToBreakX != x || blockToBreakY != y || blockToBreakZ != z) {
             log.debug("Player {} tried to complete breaking a different block", player.getOriginName());
             return;
         }
 
         var currentTime = player.getWorld().getTick();
-        if (Math.abs(currentTime - stopBreakTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
+        if (Math.abs(currentTime - stopBreakingTime) <= BLOCK_BREAKING_TIME_FAULT_TOLERANCE) {
             var world = player.getDimension();
             var itemInHand = player.getItemInHand();
-            world.breakBlock(breakBlockX, breakBlockY, breakBlockZ, itemInHand, player);
-            itemInHand.onBreakBlock(breakBlock, player);
+            world.breakBlock(blockToBreakX, blockToBreakY, blockToBreakZ, itemInHand, player);
+            itemInHand.onBreakBlock(blockToBreak, player);
             if (itemInHand.isBroken()) {
                 player.clearItemInHand();
             } else {
                 player.notifyItemInHandChange();
             }
         } else {
-            log.debug("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakTime, currentTime);
+            log.debug("Mismatch block breaking complete time! Expected: {}gt, actual: {}gt", stopBreakingTime, currentTime);
         }
 
         stopBreak(player);
@@ -212,36 +214,36 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         var pk1 = new LevelEventPacket();
         pk1.setType(PARTICLE_CRACK_BLOCK);
-        var blockFaceOffset = Objects.requireNonNull(BlockFace.fromId(breakFaceId)).getOffset();
-        pk1.setPosition(Vector3f.from(breakBlockX + 0.5f + blockFaceOffset.x(), breakBlockY + 0.5f + blockFaceOffset.y(), breakBlockZ + 0.5f + blockFaceOffset.z()));
-        pk1.setData(breakBlock.blockStateHash());
+        var blockFaceOffset = Objects.requireNonNull(BlockFace.fromId(faceToBreak)).getOffset();
+        pk1.setPosition(Vector3f.from(blockToBreakX + 0.5f + blockFaceOffset.x(), blockToBreakY + 0.5f + blockFaceOffset.y(), blockToBreakZ + 0.5f + blockFaceOffset.z()));
+        pk1.setData(blockToBreak.blockStateHash());
 
         var pk2 = new LevelEventPacket();
         pk2.setType(BLOCK_UPDATE_BREAK);
-        pk2.setPosition(Vector3f.from(breakBlockX, breakBlockY, breakBlockZ));
-        pk2.setData(toNetworkBreakTime(needBreakTime));
+        pk2.setPosition(Vector3f.from(blockToBreakX, blockToBreakY, blockToBreakZ));
+        pk2.setData(toNetworkBreakTime(timeNeededToBreak));
 
         player.getCurrentChunk().addChunkPacket(pk1);
         player.getCurrentChunk().addChunkPacket(pk2);
     }
 
     protected void checkInteractDistance(EntityPlayer player) {
-        if (!player.canReach(breakBlockX + 0.5f, breakBlockY + 0.5f, breakBlockZ + 0.5f)) {
+        if (!player.canReach(blockToBreakX + 0.5f, blockToBreakY + 0.5f, blockToBreakZ + 0.5f)) {
             log.debug("Player {} tried to interact with a block out of reach", player.getOriginName());
             stopBreak(player);
         }
     }
 
     protected void updateBreakingTime(EntityPlayer player, long currentTime) {
-        var newBreakingTime = breakBlock.getBehavior().calculateBreakTime(breakBlock, player.getItemInHand(), player);
-        if (needBreakTime == newBreakingTime) {
+        var newBreakingTime = blockToBreak.getBehavior().calculateBreakTime(blockToBreak, player.getItemInHand(), player);
+        if (timeNeededToBreak == newBreakingTime) {
             return;
         }
 
         // Breaking time has changed, make adjustments
-        var timeLeft = stopBreakTime - currentTime;
-        stopBreakTime = currentTime + timeLeft * (needBreakTime / newBreakingTime);
-        needBreakTime = newBreakingTime;
+        var timeLeft = stopBreakingTime - currentTime;
+        stopBreakingTime = currentTime + timeLeft * (timeNeededToBreak / newBreakingTime);
+        timeNeededToBreak = newBreakingTime;
     }
 
     protected void handleInputData(EntityPlayer player, Set<PlayerAuthInputData> inputData) {
@@ -287,14 +289,40 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
             return PacketSignal.HANDLED;
         }
 
-        // The pos which client sends to the server is higher than the actual coordinates (one base offset)
-        handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
+        if (!validateClientLocation(player, packet.getPosition(), packet.getRotation())) {
+            // Ignore this auth packet if the pos provided by client is not valid
+            return PacketSignal.HANDLED;
+        }
+
+        if (isLocationChanged(player, packet.getPosition(), packet.getRotation())) {
+            // The pos which client sends to the server is higher than the actual coordinates (one base offset)
+            handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
+        }
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
         if (isBreakingBlock()) {
             sendBreakingPracticeAndTime(player, receiveTime);
             checkInteractDistance(player);
         }
         return PacketSignal.UNHANDLED;
+    }
+
+    protected boolean validateClientLocation(EntityPlayer player, Vector3f pos, Vector3f rot) {
+        var valid = !Float.isNaN(pos.getX()) && !Float.isNaN(pos.getY()) && !Float.isNaN(pos.getZ()) &&
+                    !Float.isNaN(rot.getX()) && !Float.isNaN(rot.getY()) && !Float.isNaN(rot.getZ());
+        if (!valid) {
+            // Sometimes, the PlayerAuthInput packet is in fact sent with NaN/INF after being teleported (to another
+            // world). For this reason, we don't actually return an error if this happens, because this will result
+            // in the player being kicked. Just log it and replace the NaN value with the one we have tracked server-side.
+            log.debug("Found NaN in PlayerAuthInputPacket sent by player {}", player.getOriginName());
+        }
+        return valid;
+    }
+
+    protected boolean isLocationChanged(EntityPlayer player, Vector3f pos, Vector3f rot) {
+        // The PlayerAuthInput packet is sent every tick, so don't do anything if the position and rotation were unchanged.
+        var location = player.getLocation();
+        return Float.compare(location.x(), pos.getX()) != 0 || Float.compare(location.y() + player.getBaseOffset(), pos.getY()) != 0 || Float.compare(location.z(), pos.getZ()) != 0 ||
+               Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0 || Double.compare(location.headYaw(), rot.getZ()) != 0;
     }
 
     protected void handleSingleItemStackRequest(EntityPlayer player, ItemStackRequest request, long receiveTime) {

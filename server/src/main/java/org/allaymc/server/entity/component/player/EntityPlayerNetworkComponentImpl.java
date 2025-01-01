@@ -298,6 +298,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
         // Validate and set player pos
         Dimension dimension;
         Vector3fc currentPos;
+
         var logOffWorld = server.getWorldPool().getWorld(playerData.getWorld());
         if (logOffWorld == null || logOffWorld.getDimension(playerData.getDimension()) == null) {
             // The world or dimension where player logged off doesn't exist
@@ -306,25 +307,22 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             currentPos = new org.joml.Vector3f(server.getWorldPool().getGlobalSpawnPoint());
             // The old pos stored in playerNBT is invalid, we should replace it with the new one!
             var builder = playerData.getNbt().toBuilder();
-            writeVector3f(builder, "Pos", "x", "y", "z", currentPos);
+            writeVector3f(builder, EntityPlayerBaseComponentImpl.TAG_POS, currentPos);
             playerData.setNbt(builder.build());
             // Save new player data back to storage
             server.getPlayerStorage().savePlayerData(thisPlayer.getUUID(), playerData);
         } else {
             dimension = logOffWorld.getDimension(playerData.getDimension());
             // Read current pos from playerNBT
-            currentPos = readVector3f(playerData.getNbt(), "Pos", "x", "y", "z");
+            currentPos = readVector3f(playerData.getNbt(), EntityPlayerBaseComponentImpl.TAG_POS);
         }
+
         // Load the current point chunk firstly so that we can add player entity into the chunk
-        dimension.getChunkService().getOrLoadChunkSync(
-                (int) currentPos.x() >> 4,
-                (int) currentPos.z() >> 4
-        );
+        dimension.getChunkService().getOrLoadChunkSync((int) currentPos.x() >> 4, (int) currentPos.z() >> 4);
         baseComponent.setLocationBeforeSpawn(new Location3f(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
         dimension.addPlayer(thisPlayer);
 
-        var spawnWorld = dimension.getWorld();
-        var startGamePacket = encodeStartGamePacket(spawnWorld, playerData, dimension);
+        var startGamePacket = encodeStartGamePacket(dimension.getWorld(), playerData, dimension);
         sendPacket(startGamePacket);
 
         clientSession.getPeer().getCodecHelper().setItemDefinitions(

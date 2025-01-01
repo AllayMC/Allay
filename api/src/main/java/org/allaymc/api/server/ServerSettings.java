@@ -223,16 +223,9 @@ public class ServerSettings extends OkaeriConfig {
             @CustomKey("motion-threshold")
             private float motionThreshold = 0.003f;
 
-            @Comment("Walk assist offset")
-            @CustomKey("stepping-offset")
-            private float steppingOffset = 0.05f;
-
             @Comment("This usually determines how quickly an entity item is moved when getting stuck in a block")
             @CustomKey("block-collision-motion")
             private float blockCollisionMotion = 0.2f;
-
-            @CustomKey("fat-aabb-margin")
-            private float fatAABBMargin = 0.0005f;
 
             @Comment("Delta move packet will reduce the network pressure if there are a lot of entities")
             @CustomKey("use-delta-move-packet")

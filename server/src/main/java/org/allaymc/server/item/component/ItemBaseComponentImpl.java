@@ -55,6 +55,14 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Identifier.Component
     public static final Identifier IDENTIFIER = new Identifier("minecraft:item_base_component");
 
+    // The following tag is in extra tag.
+    protected static final String TAG_DAMAGE = "Damage";
+    protected static final String TAG_DISPLAY = "display";
+    protected static final String TAG_NAME = "Name";
+    protected static final String TAG_LORE = "Lore";
+    protected static final String TAG_ENCHANTMENT = "ench";
+    protected static final String TAG_CUSTOM_NBT = "CustomNBT";
+
     private static int STACK_NETWORK_ID_COUNTER = 1;
 
     @Dependency
@@ -81,7 +89,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Setter
     protected List<String> lore = new ArrayList<>();
     protected Map<EnchantmentType, EnchantmentInstance> enchantments = new HashMap<>();
-    //TODO: item lock type
+    // TODO: item lock type
+    // TODO: replace custom nbt content with pdc
     @Getter
     @Setter
     protected NbtMap customNBTContent = NbtMap.EMPTY;
@@ -113,18 +122,18 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
 
     @Override
     public void loadExtraTag(NbtMap extraTag) {
-        this.durability = extraTag.getInt("Damage", 0);
-        extraTag.listenForCompound("display", displayNbt -> {
-            this.customName = displayNbt.getString("Name");
-            this.lore = displayNbt.getList("Lore", NbtType.STRING);
+        this.durability = extraTag.getInt(TAG_DAMAGE, 0);
+        extraTag.listenForCompound(TAG_DISPLAY, displayNbt -> {
+            this.customName = displayNbt.getString(TAG_NAME);
+            this.lore = displayNbt.getList(TAG_LORE, NbtType.STRING);
         });
 
-        extraTag.listenForList("ench", NbtType.COMPOUND, enchsNbt -> enchsNbt.forEach(enchNbt -> {
+        extraTag.listenForList(TAG_ENCHANTMENT, NbtType.COMPOUND, enchsNbt -> enchsNbt.forEach(enchNbt -> {
             var enchantment = EnchantmentHelper.fromNBT(enchNbt);
             this.enchantments.put(enchantment.getType(), enchantment);
         }));
 
-        extraTag.listenForCompound("CustomNBT", customNbt -> this.customNBTContent = customNbt);
+        extraTag.listenForCompound(TAG_CUSTOM_NBT, customNbt -> this.customNBTContent = customNbt);
 
         var event = new CItemLoadExtraTagEvent(extraTag);
         manager.callEvent(event);
@@ -134,32 +143,32 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     public NbtMap saveExtraTag() {
         var nbtBuilder = NbtMap.builder();
         if (durability != 0) {
-            nbtBuilder.putInt("Damage", durability);
+            nbtBuilder.putInt(TAG_DAMAGE, durability);
         }
 
         var displayBuilder = NbtMap.builder();
         if (!this.customName.isEmpty()) {
-            displayBuilder.put("Name", this.customName);
+            displayBuilder.put(TAG_NAME, this.customName);
         }
         if (!this.lore.isEmpty()) {
-            displayBuilder.putList("Lore", NbtType.STRING, this.lore);
+            displayBuilder.putList(TAG_LORE, NbtType.STRING, this.lore);
         }
         if (!displayBuilder.isEmpty()) {
-            nbtBuilder.putCompound("display", displayBuilder.build());
+            nbtBuilder.putCompound(TAG_DISPLAY, displayBuilder.build());
         }
 
         if (!enchantments.isEmpty()) {
             var enchantmentNBT = this.enchantments.values().stream()
                     .map(EnchantmentInstance::saveNBT)
                     .toList();
-            nbtBuilder.putList("ench", NbtType.COMPOUND, enchantmentNBT);
+            nbtBuilder.putList(TAG_ENCHANTMENT, NbtType.COMPOUND, enchantmentNBT);
         }
 
         // TODO: item lock type
 
         // Custom NBT content
         if (!customNBTContent.isEmpty()) {
-            nbtBuilder.put("CustomNBT", customNBTContent);
+            nbtBuilder.put(TAG_CUSTOM_NBT, customNBTContent);
         }
 
         var event = new CItemSaveExtraTagEvent(nbtBuilder);

@@ -10,11 +10,59 @@ and any changes to API will have a prefix `(API)`.
 
 Unless otherwise specified, any version comparison below is the comparison of server version, not API version.
 
-## 0.1.2 (API 0.3.0) - Unreleased
+## 0.1.3 (API 0.4.0) - Unreleased
 
-<small>[Compare with 0.1.1](https://github.com/AllayMC/Allay/compare/0.1.1...HEAD)</small>
+<small>[Compare with 0.1.2](https://github.com/AllayMC/Allay/compare/0.1.2...HEAD)</small>
 
-## 0.1.1 (API 0.2.0)
+## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
+
+<small>[Compare with 0.1.1](https://github.com/AllayMC/Allay/compare/0.1.1...0.1.2)</small>
+
+### Added
+
+- (API) Added an extra argument to `Dimension#breakBlock` method to control if the block breaking particle should be
+  played.
+- (API) Added `LiquidHardenEvent#setHardenedBlockState` method to allow changing the hardened block state.
+- (API) Introduced `MathUtils#normalizeIfNotZero` method to normalize a vector only if it is not zero, this method
+  prevents NaN caused by `Vector3fc#normalize` method.
+- (API) Introduced `EntityBaseComponent#computeLiquidMotion` method to control whether an entity has liquid motion.
+- (API) Introduced `EntityDamageComponent#hasDrowningDamage` method to control whether an entity has drowning damage.
+- Added liquid motion for water and lava. Now entity will be moved by liquid flow if it is in the liquid.
+- Pos sent by the client will only be handled when the pos is changed, as `PlayerAuthInputPacket` is sent every tick but
+  the player may not move every tick.
+
+### Changed
+
+- (API) Removed `BlockFace#getBlockFaceByStairDirectionValue` method, some fields in `VoxelShapes` are also private for
+  better
+  maintainability now.
+- (API) Remove `fat-aabb-margin` and `stepping-offset` fields from server settings as these properties shouldn't be
+  touched by users.
+- Introduced tag name constants for where a large number of NBT saving and reading are involved. This improved the
+  maintainability of the project.
+- Introduced better names for some of the fields in `PlayerAuthInputPacketProcessor`, this improved the readability of
+  the code.
+
+### Fixed
+
+- (API) Corrected the return type of `Dimension#breakBlock(Vector3ic, ItemStack, Entity)` from `void` to `boolean`. Some
+  overloads for this method are also added.
+- (API) Fixed incorrect bit operations in `BlockLiquidBaseComponent#getLiquidBlockState` and
+  `BlockLiquidBaseComponent#getLiquidBlockState#getDepth`, although it seems that they do not cause any issues.
+- Block breaking particle won't be sent if block is broken by flowing liquid.
+- Water placed in nether dimension will disappear immediately now.
+- `Pos`, `Motion` and `Rotation` in entity nbt are now saved as list tag instead of compound tag to match vanilla.
+  This also fixed the bug that entities being spawned in incorrect position when placing structure using `/structure`
+  command. Please note that this change is not backward compatible and will break the old world and player data.
+- Fixed several NaNs caused by `Vector3fc#normalize` methods in the physics engine, and now setting the motion/location
+  of an entity to a vector which contains NaN will result in an exception.
+- EntityItem now won't have drowning damage when it is in water, this bug causes entity item died after a period of time
+  in water.
+- `ServerboundLoadingScreenPacket` won't spam warnings in the console when switching dimension now.
+- Fixed the bug that sometimes there may be `NaN` values in `PlayerAuthInputPacket`, this bug is also confirmed in
+  df-mc ([issue#425](https://github.com/df-mc/dragonfly/issues/425)).
+
+## [0.1.1](https://github.com/AllayMC/Allay/releases/tag/0.1.1) (API 0.2.0) - 2024-12-29
 
 <small>[Compare with 0.1.0](https://github.com/AllayMC/Allay/compare/0.1.0...0.1.1)</small>
 

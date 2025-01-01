@@ -30,10 +30,8 @@ public enum BlockFace {
     WEST(1, new Vector3i(-1, 0, 0)),
     EAST(3, new Vector3i(1, 0, 0));
 
-    private static final BlockFace[] STAIR_DIRECTION_VALUE_TO_BLOCK_FACE = new BlockFace[]{
-            BlockFace.EAST, BlockFace.WEST,
-            BlockFace.SOUTH, BlockFace.NORTH
-    };
+    private static final BlockFace[] HORIZONTAL_BLOCK_FACES = {NORTH, EAST, SOUTH, WEST};
+    private static final BlockFace[] VERTICAL_BLOCK_FACES = {UP, DOWN};
 
     private final int horizontalIndex;
     private final Vector3ic offset;
@@ -63,7 +61,7 @@ public enum BlockFace {
      * @return the horizontal block faces.
      */
     public static BlockFace[] getHorizontalBlockFaces() {
-        return new BlockFace[]{NORTH, EAST, SOUTH, WEST};
+        return HORIZONTAL_BLOCK_FACES;
     }
 
     /**
@@ -72,11 +70,7 @@ public enum BlockFace {
      * @return the vertical block faces.
      */
     public static BlockFace[] getVerticalBlockFaces() {
-        return new BlockFace[]{UP, DOWN};
-    }
-
-    public static BlockFace getBlockFaceByStairDirectionValue(int value) {
-        return STAIR_DIRECTION_VALUE_TO_BLOCK_FACE[value];
+        return VERTICAL_BLOCK_FACES;
     }
 
     /**

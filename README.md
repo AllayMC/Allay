@@ -147,7 +147,7 @@ For anything else, please join our Discord group to discuss.
 
 ## License
 
-Copyright **© 2023-2024 AllayMC**, all rights reserved.
+Copyright **© 2023-2025 AllayMC**, all rights reserved.
 
 If not otherwise specified, project content is open source under the LGPL-3.0 license.
 

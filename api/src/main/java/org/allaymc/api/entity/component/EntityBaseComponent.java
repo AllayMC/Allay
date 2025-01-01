@@ -340,6 +340,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Check if the entity has liquid motion.
+     *
+     * @return {@code true} if the entity has liquid motion.
+     */
+    default boolean computeLiquidMotion() {
+        return true;
+    }
+
+    /**
      * Called when the entity collides with another entity.
      *
      * @param other the entity collides with.

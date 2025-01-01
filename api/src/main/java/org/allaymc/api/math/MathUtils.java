@@ -1,5 +1,7 @@
 package org.allaymc.api.math;
 
+import org.allaymc.api.math.location.Location3dc;
+import org.allaymc.api.math.location.Location3fc;
 import org.joml.*;
 
 import java.lang.Math;
@@ -171,19 +173,106 @@ public final class MathUtils {
         return StrictMath.abs(pitch) < 1E-10 ? 0 : pitch;
     }
 
-    public static float fastSin(float p) {
-        return SIN_LOOK_UP_TABLE[((int) (p * 10430.378F) & 0xFFFF)];
+    /**
+     * Calculate sin value quickly by looking up a pre-calculated table.
+     *
+     * @param radian the radian.
+     *
+     * @return the sin value.
+     */
+    public static float fastSin(float radian) {
+        return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F) & 0xFFFF)];
     }
 
-    public static float fastSin(double p) {
-        return SIN_LOOK_UP_TABLE[((int) (p * 10430.378F) & 0xFFFF)];
+    /**
+     * Calculate sin value quickly by looking up a pre-calculated table.
+     *
+     * @param radian the radian.
+     *
+     * @return the sin value.
+     */
+    public static float fastSin(double radian) {
+        return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F) & 0xFFFF)];
     }
 
-    public static float fastCos(float p) {
-        return SIN_LOOK_UP_TABLE[((int) (p * 10430.378F + 16384.0F) & 0xFFFF)];
+    /**
+     * Calculate cos value quickly by looking up a pre-calculated table.
+     *
+     * @param radian the radian.
+     *
+     * @return the cos value.
+     */
+    public static float fastCos(float radian) {
+        return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F + 16384.0F) & 0xFFFF)];
     }
 
-    public static float fastCos(double p) {
-        return SIN_LOOK_UP_TABLE[((int) (p * 10430.378F + 16384.0F) & 0xFFFF)];
+    /**
+     * Calculate cos value quickly by looking up a pre-calculated table.
+     *
+     * @param radian the radian.
+     *
+     * @return the cos value.
+     */
+    public static float fastCos(double radian) {
+        return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F + 16384.0F) & 0xFFFF)];
+    }
+
+    /**
+     * Check if the vector contains NaN.
+     *
+     * @param v the vector to check.
+     *
+     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     */
+    public static boolean hasNaN(Vector3fc v) {
+        return Float.isNaN(v.x()) || Float.isNaN(v.y()) || Float.isNaN(v.z());
+    }
+
+    /**
+     * Check if the vector contains NaN.
+     *
+     * @param v the vector to check.
+     *
+     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     */
+    public static boolean hasNaN(Vector3dc v) {
+        return Double.isNaN(v.x()) || Double.isNaN(v.y()) || Double.isNaN(v.z());
+    }
+
+    /**
+     * Check if the location contains NaN.
+     *
+     * @param l the location to check.
+     *
+     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     */
+    public static boolean hasNaN(Location3fc l) {
+        return Float.isNaN(l.x()) || Float.isNaN(l.y()) || Float.isNaN(l.z()) ||
+               Double.isNaN(l.pitch()) || Double.isNaN(l.yaw()) || Double.isNaN(l.headYaw());
+    }
+
+    /**
+     * Check if the location contains NaN.
+     *
+     * @param l the location to check.
+     *
+     * @return {@code true} if the vector contains NaN, {@code false} otherwise.
+     */
+    public static boolean hasNaN(Location3dc l) {
+        return Double.isNaN(l.x()) || Double.isNaN(l.y()) || Double.isNaN(l.z()) ||
+               Double.isNaN(l.pitch()) || Double.isNaN(l.yaw()) || Double.isNaN(l.headYaw());
+    }
+
+    /**
+     * Normalize the vector if it is not zero.
+     * <p>
+     * If the vector is zero, it can't be normalized, otherwise a vector with three NaN values will be produced.
+     *
+     * @param v the vector.
+     *
+     * @return the normalized vector.
+     */
+    public static Vector3f normalizeIfNotZero(Vector3f v) {
+        return v.lengthSquared() > 0 ? v.normalize(v) : v;
     }
 }
