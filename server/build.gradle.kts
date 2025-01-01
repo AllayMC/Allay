@@ -7,7 +7,7 @@ import java.io.ByteArrayOutputStream
  * This value should be changed to false before release the next stable version,
  * and after releasing, change it back to true.
  */
-val isDevBuild = false
+val isDevBuild = true
 /**
  * The current version of allay-server
  *
