@@ -82,6 +82,8 @@ lombok = { group = "org.projectlombok", name = "lombok", version = "1.18.36" }
 # Random generator
 rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "commons-rng" }
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
+# Sentry
+sentry = { group = "io.sentry", name = "sentry-log4j2", version = "7.19.1" }
 
 [bundles]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
@@ -94,6 +96,7 @@ fastutil = [
     "fastutil-short-sets", "fastutil-short-object-maps", "fastutil-byte-object-maps", "fastutil-io"
 ]
 leveldb = ["leveldb", "leveldb-api"]
+rng = ["rng-simple", "rng-sampling"]
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version = "8.3.5" }

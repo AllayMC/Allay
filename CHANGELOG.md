@@ -17,6 +17,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
+- Introduced [sentry](https://www.sentry.io) to capture exception and upload them to sentry server automatically, which
+  helps us to track and fix bug more efficiently.
 
 ### Changed
 
