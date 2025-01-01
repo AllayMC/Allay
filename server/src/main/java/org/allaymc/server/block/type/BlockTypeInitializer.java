@@ -28,6 +28,8 @@ import org.allaymc.server.block.component.sign.BlockStandingSignBaseComponentImp
 import org.allaymc.server.block.component.sign.BlockWallSignBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockColoredTorchBaseComponentImpl;
 import org.allaymc.server.block.component.torch.BlockTorchBaseComponentImpl;
+import org.allaymc.server.block.component.trapdoor.BlockIronTrapdoorBaseComponentImpl;
+import org.allaymc.server.block.component.trapdoor.BlockTrapdoorBaseComponentImpl;
 import org.allaymc.server.block.impl.*;
 
 import java.time.Duration;
@@ -1000,6 +1002,34 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.SOUL_FIRE)
                 .setProperties(BlockPropertyTypes.AGE_16)
                 .setBaseComponentSupplier(BlockSoulFireBaseComponentImpl::new)
+                .build();
+    }
+    public static BlockType<BlockTrapdoorBehavior> buildTrapdoor(BlockId blockId) {
+        return AllayBlockType.builder(BlockTrapdoorBehaviorImpl.class)
+                .vanillaBlock(blockId)
+                .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
+                .setBaseComponentSupplier(BlockTrapdoorBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initTrapdoor() {
+        BlockTypes.ACACIA_TRAPDOOR = buildTrapdoor(BlockId.ACACIA_TRAPDOOR);
+        BlockTypes.BAMBOO_TRAPDOOR = buildTrapdoor(BlockId.BAMBOO_TRAPDOOR);
+        BlockTypes.BIRCH_TRAPDOOR = buildTrapdoor(BlockId.BIRCH_TRAPDOOR);
+        BlockTypes.CHERRY_TRAPDOOR = buildTrapdoor(BlockId.CHERRY_TRAPDOOR);
+        BlockTypes.CRIMSON_TRAPDOOR = buildTrapdoor(BlockId.CRIMSON_TRAPDOOR);
+        BlockTypes.DARK_OAK_TRAPDOOR = buildTrapdoor(BlockId.DARK_OAK_TRAPDOOR);
+        BlockTypes.JUNGLE_TRAPDOOR = buildTrapdoor(BlockId.JUNGLE_TRAPDOOR);
+        BlockTypes.MANGROVE_TRAPDOOR = buildTrapdoor(BlockId.MANGROVE_TRAPDOOR);
+        BlockTypes.TRAPDOOR = buildTrapdoor(BlockId.TRAPDOOR);
+        BlockTypes.SPRUCE_TRAPDOOR = buildTrapdoor(BlockId.SPRUCE_TRAPDOOR);
+        BlockTypes.WARPED_TRAPDOOR = buildTrapdoor(BlockId.WARPED_TRAPDOOR);
+        BlockTypes.PALE_OAK_TRAPDOOR = buildTrapdoor(BlockId.PALE_OAK_TRAPDOOR);
+
+        BlockTypes.IRON_TRAPDOOR = AllayBlockType.builder(BlockTrapdoorBehaviorImpl.class)
+                .vanillaBlock(BlockId.IRON_TRAPDOOR)
+                .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
+                .setBaseComponentSupplier(BlockIronTrapdoorBaseComponentImpl::new)
                 .build();
     }
 }

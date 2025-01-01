@@ -1,4 +1,4 @@
-package org.allaymc.server.block.component.door;
+package org.allaymc.server.block.component.trapdoor;
 
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
@@ -7,10 +7,10 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 
 /**
- * @author IWareQ
+ * @author harry-xi
  */
-public class BlockIronDoorBaseComponentImpl extends BlockDoorBaseComponentImpl {
-    public BlockIronDoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockIronTrapdoorBaseComponentImpl extends BlockTrapdoorBaseComponentImpl {
+    public BlockIronTrapdoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 

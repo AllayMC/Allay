@@ -11,10 +11,11 @@ import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.Sound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -119,7 +120,8 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
         dimension.updateBlockProperty(OPEN_BIT, isOpen, pos);
         dimension.updateBlockProperty(OPEN_BIT, isOpen, otherPos);
 
-        dimension.addLevelSoundEvent(pos.x(), pos.y(), pos.z(), isOpen ? SoundEvent.DOOR_OPEN : SoundEvent.DOOR_CLOSE);
+        // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
+        dimension.addSound(MathUtils.center(pos), isOpen ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
         return true;
     }
 

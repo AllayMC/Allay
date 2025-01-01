@@ -14,6 +14,18 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.1.2](https://github.com/AllayMC/Allay/compare/0.1.2...HEAD)</small>
 
+### Added
+
+- Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
+
+### Changed
+
+- (API) Removed `BlockFace#toStairDirectionValue`, this method shouldn't exist in api module.
+
+### Fixed
+
+- Fixed the bug that interacting with door doesn't have any sound.
+
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 
 <small>[Compare with 0.1.1](https://github.com/AllayMC/Allay/compare/0.1.1...0.1.2)</small>
