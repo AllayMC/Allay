@@ -225,22 +225,6 @@ public enum BlockFace {
     }
 
     /**
-     * Get the stair direction value which represents this block face.
-     *
-     * @return the stair direction value.
-     */
-    @ApiStatus.Experimental
-    public int toStairDirectionValue() {
-        return switch (this) {
-            case EAST -> 0;
-            case WEST -> 1;
-            case SOUTH -> 2;
-            case NORTH -> 3;
-            default -> throw new IllegalStateException("Unexpected value: " + this);
-        };
-    }
-
-    /**
      * Get the Minecraft cardinal direction which represents this block face.
      *
      * @return the Minecraft cardinal direction.

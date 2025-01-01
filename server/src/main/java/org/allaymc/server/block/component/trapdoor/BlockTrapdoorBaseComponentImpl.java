@@ -9,23 +9,26 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.Sound;
 import org.allaymc.server.block.component.BlockBaseComponentImpl;
-import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.DIRECTION_4;
 import static org.allaymc.api.block.property.type.BlockPropertyTypes.OPEN_BIT;
 
+/**
+ * @author harry-xi
+ */
 public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
     protected static final BiMap<BlockFace, Integer> TRAPDOOR_DIRECTION = HashBiMap.create(4);
 
     static {
-        TRAPDOOR_DIRECTION.put(BlockFace.EAST, 1);
-        TRAPDOOR_DIRECTION.put(BlockFace.SOUTH, 3);
         TRAPDOOR_DIRECTION.put(BlockFace.WEST, 0);
+        TRAPDOOR_DIRECTION.put(BlockFace.EAST, 1);
         TRAPDOOR_DIRECTION.put(BlockFace.NORTH, 2);
+        TRAPDOOR_DIRECTION.put(BlockFace.SOUTH, 3);
     }
 
     public BlockTrapdoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
@@ -53,13 +56,19 @@ public class BlockTrapdoorBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        if (super.onInteract(itemStack, dimension, interactInfo)) return true;
-        if (interactInfo == null) return false;
-        Vector3i pos = (Vector3i) interactInfo.clickedBlockPos();
+        if (super.onInteract(itemStack, dimension, interactInfo)) {
+            return true;
+        }
+        if (interactInfo == null) {
+            return false;
+        }
+
+        var pos = interactInfo.clickedBlockPos();
         var blockState = dimension.getBlockState(pos);
         var isOpen = !blockState.getPropertyValue(OPEN_BIT);
         dimension.updateBlockProperty(OPEN_BIT, isOpen, pos);
-        dimension.addLevelSoundEvent(pos.x(), pos.y(), pos.z(), isOpen ? SoundEvent.DOOR_OPEN : SoundEvent.DOOR_CLOSE);
+        // Shouldn't use addLevelSoundEvent here, which has no effect on client for no reason
+        dimension.addSound(MathUtils.center(pos), isOpen ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
         return true;
     }
 }

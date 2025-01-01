@@ -26,11 +26,26 @@ public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
 
         var blockFace = placementInfo.blockFace();
         var stairFace = placementInfo.player().getHorizontalFace();
-        blockState = blockState.setProperty(BlockPropertyTypes.WEIRDO_DIRECTION, stairFace.toStairDirectionValue());
+        blockState = blockState.setProperty(BlockPropertyTypes.WEIRDO_DIRECTION, toStairDirectionValue(stairFace));
         if ((placementInfo.clickedPos().y() > 0.5 && blockFace != BlockFace.UP) || blockFace == BlockFace.DOWN) {
             blockState = blockState.setProperty(BlockPropertyTypes.UPSIDE_DOWN_BIT, true);
         }
         dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState, placementInfo);
         return true;
+    }
+
+    /**
+     * Get the stair direction value which represents this block face.
+     *
+     * @return the stair direction value.
+     */
+    protected static int toStairDirectionValue(BlockFace blockFace) {
+        return switch (blockFace) {
+            case EAST -> 0;
+            case WEST -> 1;
+            case SOUTH -> 2;
+            case NORTH -> 3;
+            default -> throw new IllegalStateException("Unexpected value: " + blockFace);
+        };
     }
 }

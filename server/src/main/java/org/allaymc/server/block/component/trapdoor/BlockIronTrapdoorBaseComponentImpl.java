@@ -6,6 +6,9 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.world.Dimension;
 
+/**
+ * @author harry-xi
+ */
 public class BlockIronTrapdoorBaseComponentImpl extends BlockTrapdoorBaseComponentImpl {
     public BlockIronTrapdoorBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
