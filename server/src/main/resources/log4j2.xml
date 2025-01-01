@@ -14,10 +14,7 @@
             </Policies>
         </RollingRandomAccessFile>
         <Sentry name="Sentry"
-                dsn="https://3b05ad2e5f307e5ce587efe63b444e0a@o4508567898685440.ingest.us.sentry.io/4508567997972480"
-                minimumBreadcrumbLevel="INFO"
-                minimumEventLevel="WARN"
-        />
+                dsn="https://3b05ad2e5f307e5ce587efe63b444e0a@o4508567898685440.ingest.us.sentry.io/4508567997972480"/>
     </Appenders>
     <Loggers>
         <Root level="INFO">
