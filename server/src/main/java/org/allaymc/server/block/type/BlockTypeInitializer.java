@@ -1004,6 +1004,7 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockSoulFireBaseComponentImpl::new)
                 .build();
     }
+
     public static BlockType<BlockTrapdoorBehavior> buildTrapdoor(BlockId blockId) {
         return AllayBlockType.builder(BlockTrapdoorBehaviorImpl.class)
                 .vanillaBlock(blockId)
@@ -1030,6 +1031,19 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.IRON_TRAPDOOR)
                 .setProperties(BlockPropertyTypes.DIRECTION_4, BlockPropertyTypes.OPEN_BIT, BlockPropertyTypes.UPSIDE_DOWN_BIT)
                 .setBaseComponentSupplier(BlockIronTrapdoorBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initSponge() {
+        BlockTypes.SPONGE = AllayBlockType
+                .builder(BlockSpongeBehaviorImpl.class)
+                .vanillaBlock(BlockId.SPONGE)
+                .setBaseComponentSupplier(BlockSpongeBaseComponentImpl::new)
+                .build();
+        BlockTypes.WET_SPONGE = AllayBlockType
+                .builder(BlockWetSpongeBehaviorImpl.class)
+                .vanillaBlock(BlockId.WET_SPONGE)
+                .setBaseComponentSupplier(BlockWetSpongeBaseComponentImpl::new)
                 .build();
     }
 }
