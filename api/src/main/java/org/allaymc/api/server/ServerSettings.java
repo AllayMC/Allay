@@ -84,6 +84,11 @@ public class ServerSettings extends OkaeriConfig {
         @Comment("Decide the maximum count of threads in compute thread pool")
         @Comment("If the value <= 0, the count will be same to the count of available processors")
         private int maxComputeThreadCount = 0;
+
+        @CustomKey("force-enable-sentry")
+        @Comment("Sentry is an error tracking and performance monitoring platform, which is disabled by")
+        @Comment("default in development build, however you can force turn it on by setting this to true")
+        private boolean forceEnableSentry = false;
     }
 
     @Getter

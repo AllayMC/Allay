@@ -66,7 +66,7 @@ public final class Allay {
 
     public static void main(String[] args) {
         long initialTime = System.currentTimeMillis();
-        if (GitProperties.isDevBuild()) {
+        if (GitProperties.isDevBuild() && !Server.SETTINGS.genericSettings().forceEnableSentry()) {
             // Enable sentry only in non-dev build
             Sentry.close();
         }
