@@ -16,6 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
+- (API) Introduced `AllayAPI#isDevBuild` to let plugin know if the current server is a dev build.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
 - Introduced [sentry](https://www.sentry.io) to capture exception and upload them to sentry server automatically, which

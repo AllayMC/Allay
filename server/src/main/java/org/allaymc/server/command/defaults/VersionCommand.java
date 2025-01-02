@@ -27,7 +27,7 @@ public class VersionCommand extends SimpleCommand {
                     GitProperties.getBuildVersion(),
                     GitProperties.getBuildApiVersion()
             );
-            if (GitProperties.isDevBuild()) {
+            if (AllayAPI.getInstance().isDevBuild()) {
                 context.addOutput(I18n.get().tr(TrKeys.A_SERVER_IS_DEV_VERSION));
             }
             return context.success();

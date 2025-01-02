@@ -158,14 +158,14 @@ public final class Allay {
         // Misc
         api.bind(BossBar.Factory.class, () -> AllayBossBar::new);
 
-        api.implement("allay");
+        api.implement("allay", GitProperties.isDevBuild());
         log.info(I18n.get().tr(
                 TrKeys.A_COMMAND_VERSION_OUTPUT,
                 AllayAPI.getInstance().getCoreName(),
                 GitProperties.getBuildVersion(),
                 GitProperties.getBuildApiVersion()
         ));
-        if (GitProperties.isDevBuild()) {
+        if (AllayAPI.getInstance().isDevBuild()) {
             log.warn(I18n.get().tr(TrKeys.A_SERVER_IS_DEV_VERSION));
         }
     }
@@ -233,7 +233,10 @@ public final class Allay {
 
     @VisibleForTesting
     public static void initI18n() {
-        if (I18n.get() != null) return;
+        if (I18n.get() != null) {
+            return;
+        }
+
         AllayAPI.getInstance().bindI18n(new AllayI18n(new AllayI18nLoader(), Server.SETTINGS.genericSettings().language()));
     }
 }

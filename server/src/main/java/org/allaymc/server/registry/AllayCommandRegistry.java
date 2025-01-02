@@ -1,6 +1,7 @@
 package org.allaymc.server.registry;
 
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.command.CommandResult;
@@ -12,7 +13,6 @@ import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.defaults.*;
-import org.allaymc.server.utils.GitProperties;
 import org.cloudburstmc.protocol.bedrock.packet.AvailableCommandsPacket;
 
 import java.util.HashMap;
@@ -73,7 +73,7 @@ public class AllayCommandRegistry extends CommandRegistry {
         register(new ExecuteCommand());
         register(new HelpCommand());
         register(new StructureCommand());
-        if (GitProperties.isDevBuild()) {
+        if (AllayAPI.getInstance().isDevBuild()) {
             register(new GameTestCommand());
         }
     }

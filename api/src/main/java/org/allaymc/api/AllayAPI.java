@@ -37,7 +37,14 @@ public final class AllayAPI {
     private final Map<Class<?>, Consumer<?>> consumers = new HashMap<>();
     private boolean i18nSet = false;
     private boolean implemented = false;
+    /**
+     * The name of the core which implements the AllayAPI.
+     */
     private String coreName;
+    /**
+     * Whether the build of the implementation is a development build.
+     */
+    private boolean isDevBuild;
 
     private AllayAPI() {
         registerDefaultAPIRequirements();
@@ -61,8 +68,11 @@ public final class AllayAPI {
      */
     @SuppressWarnings("unchecked")
     @ApiStatus.Internal
-    public void implement(String coreName) throws MissingImplementationException {
-        if (!i18nSet) throw new MissingImplementationException("Missing i18n implementation!");
+    public void implement(String coreName, boolean isDevBuild) throws MissingImplementationException {
+        if (!i18nSet) {
+            throw new MissingImplementationException("Missing i18n implementation!");
+        }
+
         for (var entry : bindings.entrySet()) {
             if (entry.getValue() == null) {
                 throw new MissingImplementationException("Missing binding for " + entry.getKey().getName());
@@ -81,7 +91,8 @@ public final class AllayAPI {
         }
 
         this.coreName = coreName;
-        implemented = true;
+        this.isDevBuild = isDevBuild;
+        this.implemented = true;
     }
 
     @ApiStatus.Internal
