@@ -588,6 +588,7 @@ public class Metrics {
             metrics.addCustomChart(new Metrics.SingleLineChart("players", server::getOnlinePlayerCount));
             metrics.addCustomChart(new Metrics.SimplePie("minecraft_version", ProtocolInfo::getMinecraftVersionStr));
             metrics.addCustomChart(new Metrics.SimplePie("allay_api_version", GitProperties::getBuildApiVersion));
+            metrics.addCustomChart(new Metrics.SimplePie("allay_server_version", GitProperties::getBuildVersion));
             metrics.addCustomChart(new Metrics.SimplePie("max_memory", () -> String.format("%.2f", Runtime.getRuntime().maxMemory() / (1024d * 1024d * 1024d)) + "G"));
             metrics.addCustomChart(new Metrics.SimplePie("xbox_auth", () -> Server.SETTINGS.networkSettings().xboxAuth() ? "Required" : "Not required"));
 
