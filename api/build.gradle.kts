@@ -19,7 +19,11 @@ dependencies {
     api(libs.commonslang3)
     api(libs.semver4j)
     api(libs.joml)
-    api(libs.joml.primitives)
+    api(libs.joml.primitives) {
+        // Use the latest version of joml, as joml primitives
+        // lib uses an old version of joml for no reason
+        exclude(group = "org.joml", module = "joml")
+    }
     api(libs.okaeri.configs.yaml.snakeyaml) {
         exclude(group = "org.yaml", module = "snakeyaml") // Use the latest version
     }
