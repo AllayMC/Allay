@@ -117,12 +117,14 @@ public interface BlockBaseComponent extends BlockComponent {
     boolean isDroppable(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     /**
+     * Called when a player interacts with the block.
+     *
      * @param itemStack    The item in the player's hand.
      * @param interactInfo The player interaction info.
      *
      * @return Whether the operation is valid.
      * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return {@code true}
-     * If {@code false} is returned, the useItemOn method of the player's item will continue to be called
+     * If {@code false} is returned, the useItemOn method of the player's item will continue to be called.
      */
     boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo);
 
@@ -208,10 +210,10 @@ public interface BlockBaseComponent extends BlockComponent {
     /**
      * Called when an entity falls on the block.
      *
-     * @param entity     the entity who falls on the block.
-     * @param blockState the block state the entity falls on.
+     * @param entity the entity who falls on the block.
+     * @param block  the block state the entity falls on.
      */
-    default void onEntityFallOn(Entity entity, BlockState blockState) {}
+    default void onEntityFallOn(Entity entity, BlockStateWithPos block) {}
 
     /**
      * Get the block's fall damage reduction factor.

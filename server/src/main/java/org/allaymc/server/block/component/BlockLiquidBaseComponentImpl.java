@@ -1,14 +1,11 @@
 package org.allaymc.server.block.component;
 
-import it.unimi.dsi.fastutil.ints.IntObjectImmutablePair;
-import it.unimi.dsi.fastutil.ints.IntObjectPair;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -88,7 +85,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                     if (!event.call()) {
                         return;
                     }
-                    setLiquidInWorld(dimension, pos, newLiquid);
+                    dimension.setLiquid(pos, newLiquid);
                 }
             }
         }
@@ -184,7 +181,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             if (!event.call()) {
                 return;
             }
-            setLiquidInWorld(dimension, pos, newLiquid);
+            dimension.setLiquid(pos, newLiquid);
             return;
         }
 
@@ -252,7 +249,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             }
 
             var neighborPos = face.offsetPos(pos);
-            var neighbor = getLiquidInWorld(dimension, neighborPos);
+            var neighbor = dimension.getLiquid(neighborPos);
             var neighborLiquidLayer = neighbor.leftInt();
             var neighborLiquid = neighbor.right();
             if (neighborLiquid == null || !isSameLiquidType(neighborLiquid.getBlockType())) {
@@ -313,7 +310,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                     return false;
                 }
 
-                setLiquidInWorld(dimension, pos, getLiquidBlockState(newDepth, falling));
+                dimension.setLiquid(pos, getLiquidBlockState(newDepth, falling));
                 return true;
             }
 
@@ -332,7 +329,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                 // We can't flow into if the existing block can't contain liquid
                 liquidReactionOnTouch.canLiquidFlowInto();
         if (canContainLiquid) {
-            if (getLiquidInWorld(dimension, pos).right() != null) {
+            if (dimension.getLiquid(pos).right() != null) {
                 // We've got a liquid displacer, and it's got a liquid within it, so we can't flow into this.
                 return false;
             }
@@ -358,7 +355,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
                 case POPPED -> dimension.breakBlock(pos, null, null, false);
             }
         }
-        setLiquidInWorld(dimension, pos, getLiquidBlockState(newDepth, falling));
+        dimension.setLiquid(pos, getLiquidBlockState(newDepth, falling));
         return true;
     }
 
@@ -490,105 +487,6 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
         }
 
         return canBeContained() && existing.getBlockStateData().liquidReactionOnTouch().canLiquidFlowInto();
-    }
-
-    protected static final IntObjectPair<BlockState> PAIR_LIQUID_NOT_FOUND = new IntObjectImmutablePair<>(-1, null);
-
-    /**
-     * Attempts to return a liquid block at the position passed. This
-     * liquid may be in the foreground or in any other layer. If found,
-     * the liquid is returned. If not, the boolean returned is false.
-     *
-     * @param dimension The dimension the block is in.
-     * @param pos       The position to check for a liquid block.
-     *
-     * @return The liquid block at the position and the layer it is in, or (-1, null) if no liquid was found.
-     */
-    protected static IntObjectPair<BlockState> getLiquidInWorld(Dimension dimension, Vector3ic pos) {
-        var layer0 = dimension.getBlockState(pos);
-        if (layer0.getBehavior() instanceof BlockLiquidBaseComponent) {
-            return new IntObjectImmutablePair<>(0, layer0);
-        }
-
-        if (!layer0.getBlockStateData().canContainLiquid()) {
-            return PAIR_LIQUID_NOT_FOUND;
-        }
-
-        var layer1 = dimension.getBlockState(pos, 1);
-        if (layer1.getBehavior() instanceof BlockLiquidBaseComponent) {
-            return new IntObjectImmutablePair<>(1, layer1);
-        }
-
-        return PAIR_LIQUID_NOT_FOUND;
-    }
-
-    /**
-     * Set a liquid at a specific position in the dimension. Unlike {@link Dimension#setBlockState},
-     * this method will not necessarily overwrite any existing blocks. It
-     * will instead be in the same position as a block currently there, unless
-     * there already is a liquid at that position, in which case it will be
-     * overwritten. If null is passed for the liquid, any liquid currently present
-     * will be removed.
-     *
-     * @param dimension The dimension the block is in.
-     * @param pos       The position to set the Liquid at.
-     * @param liquid    The liquid to set at the position, or {@code null} to remove any Liquid.
-     */
-    protected static void setLiquidInWorld(Dimension dimension, Vector3ic pos, BlockState liquid) {
-        if (!dimension.isInWorld(pos.x(), pos.y(), pos.z())) {
-            return;
-        }
-
-        if (liquid == null) {
-            removeLiquidInWorld(dimension, pos);
-            return;
-        }
-
-        var existingBlockState = dimension.getBlockState(pos);
-        if (!existingBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
-            var blockStateData = existingBlockState.getBlockStateData();
-            if (!(isSource(liquid) ? blockStateData.canContainLiquidSource() : blockStateData.canContainLiquid())) {
-                return;
-            }
-        }
-
-        if (removeLiquidInWorld(dimension, pos)) {
-            dimension.setBlockState(pos, liquid, 0);
-        } else {
-            dimension.setBlockState(pos, liquid, 1);
-        }
-    }
-
-    /**
-     * Remove any liquid blocks that may be present at a specific
-     * block position. The bool returned specifies if no blocks
-     * were left on layer 0.
-     *
-     * @param dimension The dimension the block is in.
-     * @param pos       The position to remove the liquid from.
-     *
-     * @return If no blocks were left on layer 0.
-     */
-    protected static boolean removeLiquidInWorld(Dimension dimension, Vector3ic pos) {
-        var layer0 = dimension.getBlockState(pos);
-        if (layer0.getBlockType() == BlockTypes.AIR) {
-            return true;
-        }
-
-        if (layer0.getBehavior() instanceof BlockLiquidBaseComponent) {
-            dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
-            return true;
-        }
-
-        if (layer0.getBlockStateData().canContainLiquid()) {
-            var layer1 = dimension.getBlockState(pos, 1);
-            if (layer1.getBehavior() instanceof BlockLiquidBaseComponent) {
-                dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState(), 1);
-                return false;
-            }
-        }
-
-        return false;
     }
 
     /**

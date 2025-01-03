@@ -23,17 +23,16 @@ import static java.lang.Math.min;
 @AllArgsConstructor
 public enum BlockFace {
 
-    DOWN(-1, new Vector3i(0, -1, 0)),
-    UP(-1, new Vector3i(0, 1, 0)),
-    NORTH(2, new Vector3i(0, 0, -1)),
-    SOUTH(0, new Vector3i(0, 0, 1)),
-    WEST(1, new Vector3i(-1, 0, 0)),
-    EAST(3, new Vector3i(1, 0, 0));
+    DOWN(new Vector3i(0, -1, 0)),
+    UP(new Vector3i(0, 1, 0)),
+    NORTH(new Vector3i(0, 0, -1)),
+    SOUTH(new Vector3i(0, 0, 1)),
+    WEST(new Vector3i(-1, 0, 0)),
+    EAST(new Vector3i(1, 0, 0));
 
     private static final BlockFace[] HORIZONTAL_BLOCK_FACES = {NORTH, EAST, SOUTH, WEST};
     private static final BlockFace[] VERTICAL_BLOCK_FACES = {UP, DOWN};
 
-    private final int horizontalIndex;
     private final Vector3ic offset;
 
     /**

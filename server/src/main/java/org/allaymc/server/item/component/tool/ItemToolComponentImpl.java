@@ -23,12 +23,18 @@ public class ItemToolComponentImpl implements ItemToolComponent {
     @EventHandler
     protected void onBreakBlock(CItemBreakBlockEvent event) {
         var entity = event.getBreaker();
-        if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) return;
+        if (entity instanceof EntityPlayer player && player.getGameType() == GameType.CREATIVE) {
+            return;
+        }
 
         var hardness = event.getBlock().getBlockStateData().hardness();
-        if (hardness == 0) return;
+        if (hardness == 0) {
+            return;
+        }
 
-        if (!event.getBlock().getBehavior().canDamageItem(itemStack)) return;
+        if (!event.getBlock().getBehavior().canDamageItem(itemStack)) {
+            return;
+        }
 
         baseComponent.tryReduceDurability(1);
     }

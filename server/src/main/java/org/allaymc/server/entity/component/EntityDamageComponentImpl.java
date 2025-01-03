@@ -243,7 +243,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
             return;
         }
 
-        var blockStateStandingOn = thisEntity.getBlockStateStandingOn();
+        var blockStateStandingOn = thisEntity.getBlockStateStandingOn().blockState();
         float rawDamage = (event.getFallDistance() - 3) - baseComponent.getEffectLevel(EffectTypes.JUMP_BOOST);
         var damage = Math.round(rawDamage * (1 - blockStateStandingOn.getBehavior().getFallDamageReductionFactor()));
         if (damage > 0) {

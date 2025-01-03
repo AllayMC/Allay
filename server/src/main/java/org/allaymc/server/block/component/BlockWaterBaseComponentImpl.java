@@ -35,7 +35,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         if (current.dimension().getDimensionInfo() == DimensionInfo.NETHER) {
-            setLiquidInWorld(current.dimension(), current.pos(), null);
+            current.dimension().setLiquid(current.pos(), null);
             return;
         }
 
@@ -45,7 +45,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
     @Override
     public void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         if (oldBlockState.dimension().getDimensionInfo() == DimensionInfo.NETHER) {
-            setLiquidInWorld(oldBlockState.dimension(), oldBlockState.pos(), null);
+            oldBlockState.dimension().setLiquid(oldBlockState.pos(), null);
             return;
         }
 

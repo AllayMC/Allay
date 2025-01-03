@@ -306,7 +306,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      */
     protected void updateMotion(Entity entity, boolean hasLiquidMotion) {
         var motion = entity.getMotion();
-        var blockStateStandingOn = entity.getBlockStateStandingOn();
+        var blockStateStandingOn = entity.getBlockStateStandingOn().blockState();
 
         // 1. Multiplier factors
         var movementFactor = entity.getMovementFactor();

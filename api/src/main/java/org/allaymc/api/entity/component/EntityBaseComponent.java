@@ -1,8 +1,8 @@
 package org.allaymc.api.entity.component;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.tag.BlockTags;
-import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.entity.Entity;
@@ -18,6 +18,7 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.location.Location3f;
 import org.allaymc.api.math.location.Location3fc;
 import org.allaymc.api.math.location.Location3ic;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.World;
@@ -879,18 +880,29 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Get the block state which the entity is standing on.
+     * Get the block which the entity is standing on.
      *
-     * @return the block state which the entity is standing on.
+     * @return the block which the entity is standing on, or air if the entity is not standing on any block (and the pos will be {@code null}).
      */
-    default BlockState getBlockStateStandingOn() {
-        var air = BlockTypes.AIR.getDefaultState();
-        if (!isOnGround()) return air;
-
+    default BlockStateWithPos getBlockStateStandingOn() {
         var loc = getLocation();
+        var air = BlockTypes.AIR.getDefaultState();
+        if (!isOnGround()) {
+            return new BlockStateWithPos(air, null);
+        }
+
         var currentBlockState = getDimension().getBlockState(loc.x(), loc.y(), loc.z());
-        if (currentBlockState != air) return currentBlockState;
-        else return getDimension().getBlockState(loc.x(), loc.y() - 1, loc.z());
+        if (currentBlockState != air) {
+            return new BlockStateWithPos(
+                    currentBlockState,
+                    new Position3i((int) Math.floor(loc.x()), (int) Math.floor(loc.y()), (int) Math.floor(loc.z()), getDimension())
+            );
+        } else {
+            return new BlockStateWithPos(
+                    getDimension().getBlockState(loc.x(), loc.y() - 1, loc.z()),
+                    new Position3i((int) Math.floor(loc.x()), (int) Math.floor(loc.y() - 1), (int) Math.floor(loc.z()), getDimension())
+            );
+        }
     }
 
     default boolean canStandSafely(Position3ic pos) {

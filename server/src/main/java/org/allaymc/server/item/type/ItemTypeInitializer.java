@@ -10,6 +10,11 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.server.item.component.*;
 import org.allaymc.server.item.component.food.*;
+import org.allaymc.server.item.component.seeds.ItemBeetrootSeedsBaseComponentImpl;
+import org.allaymc.server.item.component.seeds.ItemMelonSeedsBaseComponentImpl;
+import org.allaymc.server.item.component.seeds.ItemPumpkinSeedsBaseComponentImpl;
+import org.allaymc.server.item.component.seeds.ItemWheatSeedsBaseComponentImpl;
+import org.allaymc.server.item.component.tool.ItemHoeComponentImpl;
 import org.allaymc.server.item.component.tool.ItemSwordComponentImpl;
 import org.allaymc.server.item.component.tool.ItemToolComponentImpl;
 import org.allaymc.server.item.impl.*;
@@ -155,6 +160,7 @@ public final class ItemTypeInitializer {
                         $ -> new ItemFoodComponentImpl(1, 0.6f),
                         ItemFoodComponentImpl.class
                 )
+                .addComponent(ItemPotatoBaseComponentImpl::new, ItemPotatoBaseComponentImpl.class)
                 .build();
         ItemTypes.MUSHROOM_STEW = AllayItemType
                 .builder(ItemMushroomStewStackImpl.class)
@@ -259,6 +265,7 @@ public final class ItemTypeInitializer {
                         $ -> new ItemFoodComponentImpl(3, 3.6f),
                         ItemFoodComponentImpl.class
                 )
+                .addComponent(ItemCarrotBaseComponentImpl::new, ItemCarrotBaseComponentImpl.class)
                 .build();
         ItemTypes.BREAD = AllayItemType
                 .builder(ItemBreadStackImpl.class)
@@ -565,7 +572,7 @@ public final class ItemTypeInitializer {
         return AllayItemType
                 .builder(ItemHoeStackImpl.class)
                 .vanillaItem(itemId)
-                .addComponent(ItemToolComponentImpl::new, ItemToolComponentImpl.class)
+                .addComponent(ItemHoeComponentImpl::new, ItemHoeComponentImpl.class)
                 .build();
     }
 
@@ -942,6 +949,29 @@ public final class ItemTypeInitializer {
                 .builder(ItemFlintAndSteelStackImpl.class)
                 .vanillaItem(ItemId.FLINT_AND_STEEL)
                 .addComponent(ItemFlintAndSteelBaseComponentImpl::new, ItemFlintAndSteelBaseComponentImpl.class)
+                .build();
+    }
+
+    public static void initSeeds() {
+        ItemTypes.WHEAT_SEEDS = AllayItemType
+                .builder(ItemWheatSeedsStackImpl.class)
+                .vanillaItem(ItemId.WHEAT_SEEDS)
+                .addComponent(ItemWheatSeedsBaseComponentImpl::new, ItemWheatSeedsBaseComponentImpl.class)
+                .build();
+        ItemTypes.BEETROOT_SEEDS = AllayItemType
+                .builder(ItemBeetrootSeedsStackImpl.class)
+                .vanillaItem(ItemId.BEETROOT_SEEDS)
+                .addComponent(ItemBeetrootSeedsBaseComponentImpl::new, ItemBeetrootSeedsBaseComponentImpl.class)
+                .build();
+        ItemTypes.MELON_SEEDS = AllayItemType
+                .builder(ItemMelonSeedsStackImpl.class)
+                .vanillaItem(ItemId.MELON_SEEDS)
+                .addComponent(ItemMelonSeedsBaseComponentImpl::new, ItemMelonSeedsBaseComponentImpl.class)
+                .build();
+        ItemTypes.PUMPKIN_SEEDS = AllayItemType
+                .builder(ItemPumpkinSeedsStackImpl.class)
+                .vanillaItem(ItemId.PUMPKIN_SEEDS)
+                .addComponent(ItemPumpkinSeedsBaseComponentImpl::new, ItemPumpkinSeedsBaseComponentImpl.class)
                 .build();
     }
 }

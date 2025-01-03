@@ -19,21 +19,37 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced `AllayAPI#isDevBuild` to let plugin know if the current server is a dev build.
 - (API) Introduced `BlockCustomTags#WATER` and `BlockCustomTags#LAVA` to allow checking if a block is water or lava
   easier. This is because there are two types of water (`minecraft:water` and `minecraft:flowing_water`) and lava (
-  `minecraft:lava` and `minecraft:flowing_lava`) in Minecraft.
-- (API) `BlockTags`, `BlockCustomTags`, `ItemTags` and `ItemCustomTags` are now annotated with
-  `@MinecraftVersionSensitive` as these tags may change between different versions.
+  `minecraft:lava` and `minecraft:flowing_lava`) in vanilla.
+- (API) Introduced `Dimension#getLiquid`, `Dimension#setLiquid` and `Dimension#removeLiquid` methods to help plugin
+  operate liquid easier.
+- (API) Introduced `Dimension#addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent, int extraData)` and
+  `Dimension#addLevelSoundEvent(Vector3fc pos, SoundEvent soundEvent, int extraData)`.
+- (API) Added `EntityTrampleFarmlandEvent`. EntityTrampleFarmlandEvent is called when a farmland is trampled by an
+  entity.
+- (API) Added `BlockGrowEvent` which will be called when crops grow.
+- (API) Added two overloads `LightService#getInternalLight(Vector3ic)` and `LightService#getSkyLight(Vector3ic)`, they
+  have the same functionality as `LightService#getXXXLight(int, int, int)`.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
+- Implemented farmland and hoe.
+- Implemented most of the crops, including wheat, potato, carrot, beetroot, melon and pumpkin.
 - Introduced [sentry](https://www.sentry.io) to capture exception and upload them to sentry server automatically, which
   helps us to track and fix bug more efficiently. Sentry is only enabled in non-dev version.
 
 ### Changed
 
 - (API) Removed `BlockFace#toStairDirectionValue`, this method shouldn't exist in api module.
+- (API) `BlockTags`, `BlockCustomTags`, `ItemTags` and `ItemCustomTags` are now annotated with
+  `@MinecraftVersionSensitive` as these tags may change between different versions.
+- (API) The second parameter of `BlockBaseComponent#onEntityFallOn` now accepts `BlockStateWithPos` instead of
+  `BlockState`.
+- (API) `EntityBaseComponent#getBlockStateStandingOn` now return `BlockStateWithPos` instead of `BlockState`.
+- (API) Removed `BlockFace#horizontalIndex` which is useless.
 
 ### Fixed
 
 - Fixed the bug that interacting with door doesn't have any sound.
+- Waxing copper-made block using honeycomb won't call `BlockFadeEvent` now.
 
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 

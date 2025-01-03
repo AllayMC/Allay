@@ -19,6 +19,7 @@ import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
 import org.allaymc.server.block.component.copper.BlockCopperBaseComponentImpl;
 import org.allaymc.server.block.component.copper.BlockCopperStairsBaseComponentImpl;
+import org.allaymc.server.block.component.crops.*;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
 import org.allaymc.server.block.component.door.BlockIronDoorBaseComponentImpl;
 import org.allaymc.server.block.component.grass.BlockShortGrassBaseComponentImpl;
@@ -1044,6 +1045,68 @@ public final class BlockTypeInitializer {
                 .builder(BlockWetSpongeBehaviorImpl.class)
                 .vanillaBlock(BlockId.WET_SPONGE)
                 .setBaseComponentSupplier(BlockWetSpongeBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initFarmLand() {
+        BlockTypes.FARMLAND = AllayBlockType
+                .builder(BlockFarmlandBehaviorImpl.class)
+                .vanillaBlock(BlockId.FARMLAND)
+                .setProperties(BlockPropertyTypes.MOISTURIZED_AMOUNT)
+                .setBaseComponentSupplier(BlockFarmLandBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initCrops() {
+        BlockTypes.WHEAT = AllayBlockType
+                .builder(BlockWheatBehaviorImpl.class)
+                .vanillaBlock(BlockId.WHEAT)
+                .setProperties(BlockPropertyTypes.GROWTH)
+                .setBaseComponentSupplier(BlockWheatBaseComponentImpl::new)
+                .build();
+        BlockTypes.POTATOES = AllayBlockType
+                .builder(BlockPotatoesBehaviorImpl.class)
+                .vanillaBlock(BlockId.POTATOES)
+                .setProperties(BlockPropertyTypes.GROWTH)
+                .setBaseComponentSupplier(BlockPotatoesBaseComponentImpl::new)
+                .build();
+        BlockTypes.CARROTS = AllayBlockType
+                .builder(BlockCarrotsBehaviorImpl.class)
+                .vanillaBlock(BlockId.CARROTS)
+                .setProperties(BlockPropertyTypes.GROWTH)
+                .setBaseComponentSupplier(BlockCarrotsBaseComponentImpl::new)
+                .build();
+        BlockTypes.BEETROOT = AllayBlockType
+                .builder(BlockBeetrootBehaviorImpl.class)
+                .vanillaBlock(BlockId.BEETROOT)
+                .setProperties(BlockPropertyTypes.GROWTH)
+                .setBaseComponentSupplier(BlockBeetrootBaseComponentImpl::new)
+                .build();
+        BlockTypes.MELON_STEM = AllayBlockType
+                .builder(BlockMelonStemBehaviorImpl.class)
+                .vanillaBlock(BlockId.MELON_STEM)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH)
+                .setBaseComponentSupplier(blockType -> new BlockMelonStemBaseComponentImpl(blockType, BlockId.MELON_BLOCK))
+                .build();
+        BlockTypes.PUMPKIN_STEM = AllayBlockType
+                .builder(BlockPumpkinBehaviorImpl.class)
+                .vanillaBlock(BlockId.PUMPKIN_STEM)
+                .setProperties(BlockPropertyTypes.FACING_DIRECTION, BlockPropertyTypes.GROWTH)
+                .setBaseComponentSupplier(blockType -> new BlockMelonStemBaseComponentImpl(blockType, BlockId.PUMPKIN))
+                .build();
+    }
+
+    public static void initMelonBlock() {
+        BlockTypes.MELON_BLOCK = AllayBlockType
+                .builder(BlockMelonBlockBehaviorImpl.class)
+                .vanillaBlock(BlockId.MELON_BLOCK)
+                .setBaseComponentSupplier(BlockMelonBlockBaseComponentImpl::new)
+                .build();
+        BlockTypes.PUMPKIN = AllayBlockType
+                .builder(BlockPumpkinBehaviorImpl.class)
+                .vanillaBlock(BlockId.PUMPKIN)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .setBaseComponentSupplier(BlockPumpkinBaseComponentImpl::new)
                 .build();
     }
 }

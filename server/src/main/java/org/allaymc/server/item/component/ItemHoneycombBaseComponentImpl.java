@@ -3,7 +3,6 @@ package org.allaymc.server.item.component;
 import org.allaymc.api.block.component.BlockOxidationComponent;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
-import org.allaymc.api.eventbus.event.block.BlockFadeEvent;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
@@ -39,14 +38,9 @@ public class ItemHoneycombBaseComponentImpl extends ItemBaseComponentImpl {
                 new Position3i(clickedBlockPos, dimension),
                 0
         );
-        var blockFadeEvent = new BlockFadeEvent(oldBlockState, nextBlockType.copyPropertyValuesFrom(oldBlockState.blockState()));
-        if (blockFadeEvent.call()) {
-            dimension.setBlockState(clickedBlockPos, blockFadeEvent.getNewBlockState());
-            interactInfo.player().tryConsumeItemInHand();
-            dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_WAX_ON);
-            return true;
-        }
-
-        return false;
+        dimension.setBlockState(clickedBlockPos, nextBlockType.copyPropertyValuesFrom(oldBlockState.blockState()));
+        interactInfo.player().tryConsumeItemInHand();
+        dimension.addLevelEvent(clickedBlockPos, LevelEvent.PARTICLE_WAX_ON);
+        return true;
     }
 }

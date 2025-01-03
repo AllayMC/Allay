@@ -1,12 +1,17 @@
 package org.allaymc.api.world;
 
 import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.ints.IntObjectImmutablePair;
+import it.unimi.dsi.fastutil.ints.IntObjectPair;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import org.allaymc.api.block.component.BlockLiquidBaseComponent;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -21,8 +26,6 @@ import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.service.*;
 import org.apache.commons.lang3.function.TriFunction;
-import org.cloudburstmc.math.vector.Vector3f;
-import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
@@ -31,6 +34,7 @@ import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3fc;
+import org.joml.Vector3i;
 import org.joml.Vector3ic;
 import org.joml.primitives.AABBfc;
 
@@ -39,6 +43,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
+import static org.allaymc.api.block.component.BlockLiquidBaseComponent.isSource;
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
 /**
@@ -61,7 +66,7 @@ public interface Dimension {
      */
     static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
         var updateBlockPacket = new UpdateBlockPacket();
-        updateBlockPacket.setBlockPosition(Vector3i.from(x, y, z));
+        updateBlockPacket.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.from(x, y, z));
         updateBlockPacket.setDefinition(newBlockState.toNetworkBlockDefinitionRuntime());
         updateBlockPacket.setDataLayer(layer);
         updateBlockPacket.getFlags().addAll(UpdateBlockPacket.FLAG_ALL_PRIORITY);
@@ -591,24 +596,50 @@ public interface Dimension {
         if (chunk == null) return;
 
         var packet = new LevelEventPacket();
-        packet.setPosition(Vector3f.from(x, y, z));
+        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
         packet.setType(eventType);
         packet.setData(data);
         chunk.sendChunkPacket(packet);
     }
 
+    /**
+     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     */
     default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent) {
         addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
     }
 
+    /**
+     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     */
+    default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent, int extraData) {
+        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent, extraData);
+    }
+
+    /**
+     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     */
     default void addLevelSoundEvent(Vector3fc pos, SoundEvent soundEvent) {
         addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
     }
 
+    /**
+     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     */
+    default void addLevelSoundEvent(Vector3fc pos, SoundEvent soundEvent, int extraData) {
+        addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent, extraData);
+    }
+
+    /**
+     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     */
     default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent) {
         addLevelSoundEvent(x, y, z, soundEvent, -1);
     }
 
+    /**
+     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     */
     default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent, int extraData) {
         addLevelSoundEvent(x, y, z, soundEvent, extraData, "", false, false);
     }
@@ -631,7 +662,7 @@ public interface Dimension {
 
         var packet = new LevelSoundEventPacket();
         packet.setSound(soundEvent);
-        packet.setPosition(Vector3f.from(x, y, z));
+        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
         packet.setExtraData(extraData);
         packet.setIdentifier(identifier);
         packet.setBabySound(babySound);
@@ -879,7 +910,7 @@ public interface Dimension {
         packet.setSound(sound);
         packet.setVolume(volume);
         packet.setPitch(pitch);
-        packet.setPosition(Vector3f.from(x, y, z));
+        packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
 
         getChunkService().getChunkByDimensionPos((int) x, (int) z).addChunkPacket(packet);
     }
@@ -1153,5 +1184,122 @@ public interface Dimension {
         }
 
         chunk.setBiome(x & 15, y, z & 15, biome);
+    }
+
+    IntObjectPair<BlockState> PAIR_LIQUID_NOT_FOUND = new IntObjectImmutablePair<>(-1, null);
+
+    /**
+     * @see #getLiquid(Vector3ic)
+     */
+    default IntObjectPair<BlockState> getLiquid(int x, int y, int z) {
+        return getLiquid(new Vector3i(x, y, z));
+    }
+
+    /**
+     * Attempts to return a liquid block at the position passed. This
+     * liquid may be in the foreground or in any other layer. If found,
+     * the liquid is returned. If not, the boolean returned is false.
+     *
+     * @param pos the position to check for a liquid block.
+     *
+     * @return the liquid block at the position and the layer it is in, or (-1, null) if no liquid was found.
+     */
+    default IntObjectPair<BlockState> getLiquid(Vector3ic pos) {
+        var layer0 = getBlockState(pos);
+        if (layer0.getBehavior() instanceof BlockLiquidBaseComponent) {
+            return new IntObjectImmutablePair<>(0, layer0);
+        }
+
+        if (!layer0.getBlockStateData().canContainLiquid()) {
+            return PAIR_LIQUID_NOT_FOUND;
+        }
+
+        var layer1 = getBlockState(pos, 1);
+        if (layer1.getBehavior() instanceof BlockLiquidBaseComponent) {
+            return new IntObjectImmutablePair<>(1, layer1);
+        }
+
+        return PAIR_LIQUID_NOT_FOUND;
+    }
+
+    /**
+     * @see #setLiquid(Vector3ic, BlockState)
+     */
+    default void setLiquid(int x, int y, int z, BlockState liquid) {
+        setLiquid(new Vector3i(x, y, z), liquid);
+    }
+
+    /**
+     * Set a liquid at a specific position in the dimension. Unlike {@link Dimension#setBlockState},
+     * this method will not necessarily overwrite any existing blocks. It
+     * will instead be in the same position as a block currently there, unless
+     * there already is a liquid at that position, in which case it will be
+     * overwritten. If null is passed for the liquid, any liquid currently present
+     * will be removed.
+     *
+     * @param pos    the position to set the Liquid at.
+     * @param liquid the liquid to set at the position, or {@code null} to remove any liquid.
+     */
+    default void setLiquid(Vector3ic pos, BlockState liquid) {
+        if (!isInWorld(pos.x(), pos.y(), pos.z())) {
+            return;
+        }
+
+        if (liquid == null) {
+            removeLiquid(pos);
+            return;
+        }
+
+        var existingBlockState = getBlockState(pos);
+        if (!existingBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+            var blockStateData = existingBlockState.getBlockStateData();
+            if (!(isSource(liquid) ? blockStateData.canContainLiquidSource() : blockStateData.canContainLiquid())) {
+                return;
+            }
+        }
+
+        if (removeLiquid(pos)) {
+            setBlockState(pos, liquid, 0);
+        } else {
+            setBlockState(pos, liquid, 1);
+        }
+    }
+
+    /**
+     * @see #removeLiquid(Vector3ic)
+     */
+    default boolean removeLiquid(int x, int y, int z) {
+        return removeLiquid(new Vector3i(x, y, z));
+    }
+
+    /**
+     * Remove any liquid blocks that may be present at a specific
+     * block position. The bool returned specifies if no blocks
+     * were left on layer 0.
+     *
+     * @param pos the position to remove the liquid from.
+     *
+     * @return {@code true} if no blocks were left on layer 0.
+     */
+    default boolean removeLiquid(Vector3ic pos) {
+        var layer0 = getBlockState(pos);
+        if (layer0.getBlockType() == BlockTypes.AIR) {
+            return true;
+        }
+
+        if (layer0.getBehavior() instanceof BlockLiquidBaseComponent) {
+            setBlockState(pos, BlockTypes.AIR.getDefaultState());
+            return true;
+        }
+
+        if (layer0.getBlockStateData().canContainLiquid()) {
+            var layer1 = getBlockState(pos, 1);
+            if (layer1.getBehavior() instanceof BlockLiquidBaseComponent) {
+                setBlockState(pos, BlockTypes.AIR.getDefaultState(), 1);
+                return false;
+            }
+        }
+
+        return false;
     }
 }

@@ -739,8 +739,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             return;
         }
 
-        var blockUnder = getDimension().getBlockState((int) location.x, (int) (location.y - 1), (int) location.z);
-        blockUnder.getBehavior().onEntityFallOn(thisEntity, blockUnder);
+        var blockUnder = getBlockStateStandingOn();
+        blockUnder.blockState().getBehavior().onEntityFallOn(thisEntity, blockUnder);
 
         this.manager.callEvent(new CEntityFallEvent(event.getFallDistance()));
         this.fallDistance = 0;
