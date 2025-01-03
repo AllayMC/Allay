@@ -38,7 +38,6 @@ dependencies {
     implementation(libs.netty.epoll)
     implementation(libs.netty.kqueue)
     implementation(libs.fastreflect)
-    implementation(libs.reflections)
     implementation(libs.oshi)
     implementation(libs.flatlaf)
     implementation(libs.formsrt)

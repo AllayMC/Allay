@@ -46,6 +46,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   `BlockState`.
 - (API) `EntityBaseComponent#getBlockStateStandingOn` now return `BlockStateWithPos` instead of `BlockState`.
 - (API) Removed `BlockFace#horizontalIndex` which is useless.
+- Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 
 ### Fixed
 

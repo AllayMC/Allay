@@ -59,7 +59,6 @@ mcterminal = { group = "net.minecrell", name = "terminalconsoleappender", versio
 # Code generating
 javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.6.0" }
 # Reflections
-reflections = { group = "org.reflections", name = "reflections", version = "0.10.2" }
 fastreflect = { group = "com.github.AllayMC", name = "fast-reflection", version = "8733a599fa" }
 # Math computing
 joml = { group = "org.joml", name = "joml", version = "1.10.8" }
