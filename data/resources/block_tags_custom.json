@@ -125,5 +125,13 @@
   "allay:soul_fire_converter": [
     "minecraft:soul_sand",
     "minecraft:soul_soil"
+  ],
+  "allay:water": [
+    "minecraft:water",
+    "minecraft:flowing_water"
+  ],
+  "allay:lava": [
+    "minecraft:lava",
+    "minecraft:flowing_lava"
   ]
 }

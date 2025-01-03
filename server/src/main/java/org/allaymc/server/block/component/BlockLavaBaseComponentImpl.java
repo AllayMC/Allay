@@ -38,7 +38,7 @@ public class BlockLavaBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public boolean isSameLiquidType(BlockType<?> blockType) {
-        return blockType == BlockTypes.LAVA || blockType == BlockTypes.FLOWING_LAVA;
+        return blockType.hasBlockTag(BlockCustomTags.LAVA);
     }
 
     @Override

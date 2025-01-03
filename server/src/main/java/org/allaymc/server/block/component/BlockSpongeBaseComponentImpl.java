@@ -4,6 +4,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -54,7 +55,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
     protected boolean performAbsorbWater(BlockStateWithPos center) {
         var waterFound = false;
         for (var face : BlockFace.values()) {
-            if (BlockTypes.WATER.getBlockBehavior().isSameLiquidType(center.offsetPos(face).blockState().getBlockType())) {
+            if (center.offsetPos(face).blockState().getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
                 waterFound = true;
                 break;
             }
@@ -71,7 +72,7 @@ public class BlockSpongeBaseComponentImpl extends BlockBaseComponentImpl {
         while (waterRemoved < MAX_REMOVED_WATER_COUNT && (entry = entries.poll()) != null) {
             for (var face : BlockFace.values()) {
                 var side = entry.block.offsetPos(face);
-                if (BlockTypes.WATER.getBlockBehavior().isSameLiquidType(side.blockState().getBlockType())) {
+                if (side.blockState().getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
                     center.dimension().setBlockState(side.pos(), BlockTypes.AIR.getDefaultState());
                     ++waterRemoved;
                     if (entry.distance < 6) {

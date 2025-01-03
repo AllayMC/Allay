@@ -4,6 +4,7 @@ import org.allaymc.api.block.BlockBehavior;
 import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
+import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
@@ -28,7 +29,7 @@ public class BlockWaterBaseComponentImpl extends BlockLiquidBaseComponentImpl {
 
     @Override
     public boolean isSameLiquidType(BlockType<?> blockType) {
-        return blockType == BlockTypes.WATER || blockType == BlockTypes.FLOWING_WATER;
+        return blockType.hasBlockTag(BlockCustomTags.WATER);
     }
 
     @Override

@@ -17,6 +17,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Added
 
 - (API) Introduced `AllayAPI#isDevBuild` to let plugin know if the current server is a dev build.
+- (API) Introduced `BlockCustomTags#WATER` and `BlockCustomTags#LAVA` to allow checking if a block is water or lava
+  easier. This is because there are two types of water (`minecraft:water` and `minecraft:flowing_water`) and lava (
+  `minecraft:lava` and `minecraft:flowing_lava`) in Minecraft.
+- (API) `BlockTags`, `BlockCustomTags`, `ItemTags` and `ItemCustomTags` are now annotated with
+  `@MinecraftVersionSensitive` as these tags may change between different versions.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
 - Introduced [sentry](https://www.sentry.io) to capture exception and upload them to sentry server automatically, which
