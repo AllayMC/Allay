@@ -146,7 +146,7 @@ public final class ScoreboardService {
         scoreboards.values().forEach(scoreboard -> scoreboard.removeLine(scorer));
     }
 
-    public class ServerEventListener {
+    private class ServerEventListener {
         @EventHandler
         public void onEntityDespawn(EntityDespawnEvent event) {
             var entity = event.getEntity();
