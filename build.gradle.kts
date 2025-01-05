@@ -3,6 +3,16 @@ plugins {
     id("maven-publish")
 }
 
+ext {
+    /**
+     * Indicates whether the current build is a development build.
+     *
+     * This value should be changed to false before release the next stable version,
+     * and after releasing, change it back to true.
+     */
+    set("isDevBuild", true)
+}
+
 tasks.jar {
     enabled = false
 }

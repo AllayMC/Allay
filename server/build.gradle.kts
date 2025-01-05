@@ -2,19 +2,12 @@ import com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCach
 import java.io.ByteArrayOutputStream
 
 /**
- * Indicates whether the current build is a development build.
- *
- * This value should be changed to false before release the next stable version,
- * and after releasing, change it back to true.
- */
-val isDevBuild = true
-/**
  * The current version of allay-server
  *
  * This is not the same as the version of allay-api.
  * Please note that they are two things.
  */
-version = "0.1.3" + if (isDevBuild) "-dev" else ""
+version = "0.1.3" + if (rootProject.ext.get("isDevBuild") as Boolean) "-dev" else ""
 
 plugins {
     id("jacoco")
@@ -52,7 +45,7 @@ gitProperties {
     gitPropertiesName = "git.properties"
     gitPropertiesResourceDir.set(file("${rootProject.projectDir}/data/resources"))
     gitProperties {
-        customProperty("git.build.is_dev_build", isDevBuild)
+        customProperty("git.build.is_dev_build", rootProject.ext.get("isDevBuild") as Boolean)
         /**
          * The version of allay-api.
          *
