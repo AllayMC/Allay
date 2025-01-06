@@ -21,20 +21,52 @@ public interface PluginDescriptor {
         Preconditions.checkNotNull(Semver.coerce(descriptor.getVersion()), "Plugin version cannot be coerced (Use https://semver.org/)");
     }
 
+    /**
+     * Get the name of the plugin.
+     *
+     * @return the name of the plugin.
+     */
     String getName();
 
+    /**
+     * Get the entrance of the plugin.
+     *
+     * @return the entrance of the plugin.
+     */
     String getEntrance();
 
-    // Plugins can leave this information unavailable
+    /**
+     * Get the description of the plugin.
+     *
+     * @return the description of the plugin.
+     */
     String getDescription();
 
+    /**
+     * Get the version of the plugin.
+     *
+     * @return the version of the plugin.
+     */
     String getVersion();
 
+    /**
+     * Get the authors of the plugin.
+     *
+     * @return the authors of the plugin.
+     */
     List<String> getAuthors();
 
-    // Plugins can leave this information unavailable
+    /**
+     * Get the dependencies of the plugin.
+     *
+     * @return the dependencies of the plugin.
+     */
     List<PluginDependency> getDependencies();
 
-    // Plugins can leave this information unavailable
+    /**
+     * Get the website of the plugin.
+     *
+     * @return the website of the plugin.
+     */
     String getWebsite();
 }

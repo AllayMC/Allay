@@ -14,24 +14,12 @@ import java.util.List;
 public class SimplePluginDescriptor implements PluginDescriptor {
     private String entrance;
     private String name;
-    private String description;
     private String version;
     private List<String> authors;
-    private List<PluginDependency> dependencies;
-    private String website;
-
-    public String getDescription() {
-        if (description == null) description = "";
-        return description;
-    }
-
-    public List<PluginDependency> getDependencies() {
-        if (dependencies == null) dependencies = Collections.emptyList();
-        return dependencies;
-    }
-
-    public String getWebsite() {
-        if (website == null) website = "";
-        return website;
-    }
+    // Optional
+    private String description = "";
+    // Optional
+    private List<PluginDependency> dependencies = Collections.emptyList();
+    // Optional
+    private String website = "";
 }
