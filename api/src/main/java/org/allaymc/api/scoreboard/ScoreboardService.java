@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
 import org.allaymc.api.eventbus.event.player.PlayerJoinEvent;
 import org.allaymc.api.eventbus.event.player.PlayerQuitEvent;
@@ -40,7 +39,34 @@ public final class ScoreboardService {
 
     public ScoreboardService(Server server, ScoreboardStorage storage) {
         this.storage = storage;
-        server.getEventBus().registerListener(new ServerEventListener());
+        var eventBus = server.getEventBus();
+        eventBus.registerListenerFor(EntityDespawnEvent.class, event -> {
+            var entity = event.getEntity();
+            // Do not handle player
+            if (entity instanceof EntityPlayer) return;
+            removeScorerFromAllScoreboards(new EntityScorer(entity));
+        });
+        eventBus.registerListenerFor(PlayerJoinEvent.class, event -> {
+            var player = event.getPlayer();
+            addViewer(player);
+            var scorer = new PlayerScorer(player);
+            scoreboards.values().forEach(scoreboard -> {
+                if (scoreboard.containLine(scorer)) {
+                    viewers.forEach(viewer -> viewer.updateScore(scoreboard.getLine(scorer)));
+                }
+            });
+        });
+        eventBus.registerListenerFor(PlayerQuitEvent.class, event -> {
+            var player = event.getPlayer();
+            if (!player.isInitialized()) return;
+            var scorer = new PlayerScorer(player);
+            scoreboards.values().forEach(scoreboard -> {
+                if (scoreboard.containLine(scorer)) {
+                    viewers.forEach(viewer -> viewer.removeScoreboardLine(scoreboard.getLine(scorer)));
+                }
+            });
+            removeViewer(player);
+        });
     }
 
     public boolean add(Scoreboard scoreboard) {
@@ -144,40 +170,5 @@ public final class ScoreboardService {
 
     public void removeScorerFromAllScoreboards(Scorer scorer) {
         scoreboards.values().forEach(scoreboard -> scoreboard.removeLine(scorer));
-    }
-
-    private class ServerEventListener {
-        @EventHandler
-        public void onEntityDespawn(EntityDespawnEvent event) {
-            var entity = event.getEntity();
-            // Do not handle player
-            if (entity instanceof EntityPlayer) return;
-            removeScorerFromAllScoreboards(new EntityScorer(entity));
-        }
-
-        @EventHandler
-        public void onPlayerJoin(PlayerJoinEvent event) {
-            var player = event.getPlayer();
-            addViewer(player);
-            var scorer = new PlayerScorer(player);
-            scoreboards.values().forEach(scoreboard -> {
-                if (scoreboard.containLine(scorer)) {
-                    viewers.forEach(viewer -> viewer.updateScore(scoreboard.getLine(scorer)));
-                }
-            });
-        }
-
-        @EventHandler
-        public void onPlayerQuit(PlayerQuitEvent event) {
-            var player = event.getPlayer();
-            if (!player.isInitialized()) return;
-            var scorer = new PlayerScorer(player);
-            scoreboards.values().forEach(scoreboard -> {
-                if (scoreboard.containLine(scorer)) {
-                    viewers.forEach(viewer -> viewer.removeScoreboardLine(scoreboard.getLine(scorer)));
-                }
-            });
-            removeViewer(player);
-        }
     }
 }

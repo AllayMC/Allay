@@ -46,7 +46,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   `BlockState`.
 - (API) `EntityBaseComponent#getBlockStateStandingOn` now return `BlockStateWithPos` instead of `BlockState`.
 - (API) Removed `BlockFace#horizontalIndex` which is useless.
-- (API) Made `ScoreboardService#ServerEventListener` private as it is not supposed to be touched by plugin.
+- (API) Removed `ScoreboardService#ServerEventListener` as it is not supposed to be touched by plugin.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
 
