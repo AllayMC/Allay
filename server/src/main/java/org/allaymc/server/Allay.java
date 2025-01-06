@@ -60,7 +60,7 @@ import java.util.HashMap;
 public final class Allay {
 
     public static final DynamicURLClassLoader EXTRA_RESOURCE_CLASS_LOADER = new DynamicURLClassLoader(Allay.class.getClassLoader());
-    private static final ExtensionManager EXTENSION_MANAGER = new ExtensionManager(Path.of("extensions"));
+    public static final ExtensionManager EXTENSION_MANAGER = new ExtensionManager(Path.of("extensions"));
 
     public static Dashboard DASHBOARD;
 

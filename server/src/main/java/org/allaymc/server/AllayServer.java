@@ -218,8 +218,9 @@ public final class AllayServer implements Server {
 
         Metrics.AllayMetrics.startMetrics();
         if (SETTINGS.genericSettings().enableGui()) {
-            Allay.DASHBOARD.serverStarted();
+            Allay.DASHBOARD.afterServerStarted();
         }
+        Allay.EXTENSION_MANAGER.afterServerStarted();
         this.gameLoop.startLoop();
     }
 

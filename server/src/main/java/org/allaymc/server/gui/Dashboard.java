@@ -248,7 +248,7 @@ public final class Dashboard {
         };
     }
 
-    public void serverStarted() {
+    public void afterServerStarted() {
         Runnable guiUpdateTask = () -> {
             // Update ram graph
             final long freeMemory = Runtime.getRuntime().freeMemory();

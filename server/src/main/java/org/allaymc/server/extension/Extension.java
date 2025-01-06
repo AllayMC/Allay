@@ -5,4 +5,8 @@ package org.allaymc.server.extension;
  */
 public abstract class Extension {
     public abstract void main(String[] args);
+
+    public void afterServerStarted() {
+        // noop
+    }
 }

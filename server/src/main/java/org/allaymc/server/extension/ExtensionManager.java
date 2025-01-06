@@ -24,6 +24,7 @@ public final class ExtensionManager {
     private static final PathMatcher PATH_MATCHER = FileSystems.getDefault().getPathMatcher("glob:**.jar");
 
     private final Path source;
+    private final List<Extension> extensionInstances = new ArrayList<>();
 
     public ExtensionManager(Path source) {
         this.source = source;
@@ -35,16 +36,19 @@ public final class ExtensionManager {
             Files.createDirectory(source);
         }
 
-        List<Runnable> entrances = new ArrayList<>();
         try (var stream = Files.walk(source)) {
             stream.filter(path -> PATH_MATCHER.matches(path) && Files.isRegularFile(path))
-                    .forEach(extensionPath -> loadExtension(extensionPath, args, entrances));
+                    .forEach(extensionPath -> loadExtension(extensionPath, args));
         }
 
-        entrances.forEach(Runnable::run);
+        this.extensionInstances.forEach(extension -> extension.main(args));
     }
 
-    private void loadExtension(Path extensionPath, String[] args, List<Runnable> entrances) {
+    public void afterServerStarted() {
+        this.extensionInstances.forEach(Extension::afterServerStarted);
+    }
+
+    private void loadExtension(Path extensionPath, String[] args) {
         log.info(I18n.get().tr(TrKeys.A_EXTENSION_LOADING, extensionPath));
         Allay.EXTRA_RESOURCE_CLASS_LOADER.addJar(extensionPath);
 
@@ -62,11 +66,12 @@ public final class ExtensionManager {
         Extension extensionInstance;
         try {
             extensionInstance = (Extension) mainClass.getConstructor().newInstance();
+            extensionInstance.main(args);
         } catch (Exception e) {
             throw new ExtensionException(I18n.get().tr(TrKeys.A_EXTENSION_CONSTRUCT_INSTANCE_ERROR, extensionPath, e));
         }
 
-        entrances.add(() -> extensionInstance.main(args));
+        extensionInstances.add(extensionInstance);
     }
 
     @SneakyThrows
