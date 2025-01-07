@@ -2,6 +2,8 @@ package org.allaymc.server.world.service;
 
 import com.google.common.base.Preconditions;
 import io.netty.util.internal.PlatformDependent;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import org.allaymc.api.block.data.BlockFace;
@@ -14,7 +16,6 @@ import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.service.LightService;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
-import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.HeightMap;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -40,11 +41,11 @@ public class AllayLightService implements LightService {
     // TODO(memory): use a more memory-efficient queue, for example a long queue
     protected final BlockingQueueWrapper<Runnable> queue;
     protected final LongSet chunks;
-    protected final Long2ObjectNonBlockingMap<ChunkSectionNibbleArray[]> lightDampening;
-    protected final Long2ObjectNonBlockingMap<ChunkSectionNibbleArray[]> blockLight;
+    protected final Long2ObjectMap<ChunkSectionNibbleArray[]> lightDampening;
+    protected final Long2ObjectMap<ChunkSectionNibbleArray[]> blockLight;
     protected final LightPropagator blockLightPropagator;
-    protected Long2ObjectNonBlockingMap<HeightMap> lightHeightMap;
-    protected Long2ObjectNonBlockingMap<ChunkSectionNibbleArray[]> skyLight;
+    protected Long2ObjectMap<HeightMap> lightHeightMap;
+    protected Long2ObjectMap<ChunkSectionNibbleArray[]> skyLight;
     protected LightPropagator skyLightPropagator;
 
     public AllayLightService(Dimension dimension) {
@@ -60,13 +61,16 @@ public class AllayLightService implements LightService {
         this.sectionCount = dimensionInfo.chunkSectionCount();
         this.hasSkyLight = dimensionInfo.hasSkyLight();
         this.queue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
+        // TODO: check if LongOpenHashSet can be used in multi-threaded environment,
+        // it seems that reading in one thread while another thread is writing
+        // will cause IndexOutOfBoundsException
         this.chunks = new LongOpenHashSet();
-        this.lightDampening = new Long2ObjectNonBlockingMap<>();
-        this.blockLight = new Long2ObjectNonBlockingMap<>();
+        this.lightDampening = new Long2ObjectOpenHashMap<>();
+        this.blockLight = new Long2ObjectOpenHashMap<>();
         this.blockLightPropagator = new LightPropagator(new BlockLightAccessor());
         if (hasSkyLight) {
-            this.lightHeightMap = new Long2ObjectNonBlockingMap<>();
-            this.skyLight = new Long2ObjectNonBlockingMap<>();
+            this.lightHeightMap = new Long2ObjectOpenHashMap<>();
+            this.skyLight = new Long2ObjectOpenHashMap<>();
             this.skyLightPropagator = new LightPropagator(new SkyLightAccessor());
         }
     }
@@ -274,13 +278,13 @@ public class AllayLightService implements LightService {
         return get(lightDampening, x, y, z, 0);
     }
 
-    protected int getWithoutCheck(Long2ObjectNonBlockingMap<ChunkSectionNibbleArray[]> target, int x, int y, int z) {
+    protected int getWithoutCheck(Long2ObjectMap<ChunkSectionNibbleArray[]> target, int x, int y, int z) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         var array = target.get(hash);
         return array[(y - minHeight) >> 4].get(x & 15, y & 15, z & 15);
     }
 
-    protected int get(Long2ObjectNonBlockingMap<ChunkSectionNibbleArray[]> target, int x, int y, int z, int defaultValue) {
+    protected int get(Long2ObjectMap<ChunkSectionNibbleArray[]> target, int x, int y, int z, int defaultValue) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         if (!chunks.contains(hash)) {
             return defaultValue;
@@ -312,7 +316,7 @@ public class AllayLightService implements LightService {
         }
     }
 
-    protected void set(Long2ObjectNonBlockingMap<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
+    protected void set(Long2ObjectMap<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         if (!chunks.contains(hash)) {
             return;
@@ -321,7 +325,7 @@ public class AllayLightService implements LightService {
         array[(y - minHeight) >> 4].set(x & 15, y & 15, z & 15, value);
     }
 
-    protected void setWithoutCheck(Long2ObjectNonBlockingMap<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
+    protected void setWithoutCheck(Long2ObjectMap<ChunkSectionNibbleArray[]> target, int x, int y, int z, int value) {
         var hash = HashUtils.hashXZ(x >> 4, z >> 4);
         var array = target.get(hash);
         array[(y - minHeight) >> 4].set(x & 15, y & 15, z & 15, value);
