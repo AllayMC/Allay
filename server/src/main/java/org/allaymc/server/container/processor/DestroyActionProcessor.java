@@ -2,7 +2,6 @@ package org.allaymc.server.container.processor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.DestroyAction;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestAction;
@@ -23,11 +22,6 @@ import static org.allaymc.api.item.type.ItemTypes.AIR;
 public class DestroyActionProcessor implements ContainerActionProcessor<DestroyAction> {
     @Override
     public ActionResponse handle(DestroyAction action, EntityPlayer player, int currentActionIndex, ItemStackRequestAction[] actions, Map<Object, Object> dataPool) {
-        if (player.getGameType() != GameType.CREATIVE) {
-            log.warn("only creative mode can destroy item");
-            return error();
-        }
-
         var container = player.getContainerBySlotType(action.getSource().getContainerName().getContainer());
         var count = action.getCount();
         var slot = container.fromNetworkSlotIndex(action.getSource().getSlot());

@@ -3,7 +3,7 @@ package org.allaymc.api.container.impl;
 import lombok.Getter;
 import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.item.recipe.input.CraftingInput;
-import org.joml.Vector3ic;
+import org.allaymc.api.math.position.Position3ic;
 
 /**
  * @author daoge_cmd
@@ -32,12 +32,12 @@ public class CraftingGridContainer extends CraftingContainer {
     }
 
     @Override
-    public Vector3ic getBlockPos() {
+    public Position3ic getBlockPos() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setBlockPos(Vector3ic blockPos) {
+    public void setBlockPos(Position3ic blockPos) {
         throw new UnsupportedOperationException();
     }
 }

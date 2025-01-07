@@ -1109,4 +1109,13 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockPumpkinBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initBeacon() {
+        BlockTypes.BEACON = AllayBlockType
+                .builder(BlockBeaconBehaviorImpl.class)
+                .vanillaBlock(BlockId.BEACON)
+                .bindBlockEntity(BlockEntityTypes.BEACON)
+                .setBaseComponentSupplier(BlockBeaconBaseComponentImpl::new)
+                .build();
+    }
 }

@@ -16,4 +16,5 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityHangingSign> HANGING_SIGN;
     public static BlockEntityType<BlockEntityEnchantTable> ENCHANT_TABLE;
     public static BlockEntityType<BlockEntityJukebox> JUKEBOX;
+    public static BlockEntityType<BlockEntityBeacon> BEACON;
 }

@@ -1,5 +1,6 @@
 package org.allaymc.server;
 
+import org.allaymc.api.MissingImplementationException;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.Weather;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
@@ -23,7 +24,9 @@ public class LightServiceJMHTest {
     private AllayLightService lightService;
 
     @Setup
-    public void setup() {
+    public void setup() throws MissingImplementationException {
+        Allay.initI18n();
+        Allay.initAllay();
         lightService = new AllayLightService(DimensionInfo.THE_END, () -> 0, () -> Set.of(Weather.CLEAR));
         for (int x = -3; x <= 3; x++) {
             for (int z = -3; z <= 3; z++) {

@@ -94,4 +94,12 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityEnchantTableBaseComponentImpl::new, BlockEntityEnchantTableBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initBeacon() {
+        BlockEntityTypes.BEACON = AllayBlockEntityType
+                .builder(BlockEntityBeaconImpl.class)
+                .name(BlockEntityId.BEACON)
+                .addComponent(BlockEntityBeaconBaseComponentImpl::new, BlockEntityBeaconBaseComponentImpl.class)
+                .build();
+    }
 }

@@ -14,6 +14,8 @@ public interface BlockCustomTags {
 
     BlockTag SOUL_FIRE_CONVERTER = create("allay:soul_fire_converter");
 
+    BlockTag BEACON_BASE = create("allay:beacon_base");
+
     BlockTag REPLACEABLE = create("allay:replaceable");
 
     BlockTag WOOL = create("allay:wool");

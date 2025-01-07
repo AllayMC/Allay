@@ -1,1 +1,9 @@
-{}
+{
+  "allay:beacon_payment": [
+    "minecraft:iron_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:diamond",
+    "minecraft:emerald",
+    "minecraft:netherite_ingot"
+  ]
+}

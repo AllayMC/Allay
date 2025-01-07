@@ -29,6 +29,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `BlockGrowEvent` which will be called when crops grow.
 - (API) Added two overloads `LightService#getInternalLight(Vector3ic)` and `LightService#getSkyLight(Vector3ic)`, they
   have the same functionality as `LightService#getXXXLight(int, int, int)`.
+- (API) Implemented beacon block, and several related interfaces are added to api module.
+- (API) `BlockContainer#getBlockPos` and `BlockContainer#setBlockPos` now return/require `Position3ic` instead of
+  `Vector3ic`, this enables us to get the dimension information of a `BlockContainer`.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
 - Implemented farmland and hoe.
@@ -50,6 +53,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed `ScoreboardService#ServerEventListener` as it is not supposed to be touched by plugin.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
+- Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is
+  meaningless.
 
 ### Fixed
 
@@ -57,6 +62,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   to be added.
 - Fixed the bug that interacting with door doesn't have any sound.
 - Waxing copper-made block using honeycomb won't call `BlockFadeEvent` now.
+- Fixed the bug that player can still open enchant table even if he is sneaking.
 
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 

@@ -1,7 +1,6 @@
 package org.allaymc.server.container;
 
-import org.allaymc.server.container.processor.ContainerActionProcessor;
-import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
+import org.allaymc.server.container.processor.*;
 import org.cloudburstmc.protocol.bedrock.data.inventory.itemstack.request.action.ItemStackRequestActionType;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -12,21 +11,33 @@ import java.util.Map;
 /**
  * @author daoge_cmd
  */
-public class SimpleContainerActionProcessorHolder implements ContainerActionProcessorHolder {
+public final class ContainerActionProcessorHolder {
     private static final EnumMap<ItemStackRequestActionType, ContainerActionProcessor<?>> PROCESSORS = new EnumMap<>(ItemStackRequestActionType.class);
 
-    @Override
+    public ContainerActionProcessorHolder() {
+        registerProcessor(new CraftCreativeActionProcessor());
+        registerProcessor(new PlaceActionProcessor());
+        registerProcessor(new TakeActionProcessor());
+        registerProcessor(new DestroyActionProcessor());
+        registerProcessor(new DropActionProcessor());
+        registerProcessor(new SwapActionProcessor());
+        registerProcessor(new CraftRecipeActionProcessor());
+        registerProcessor(new ConsumeActionProcessor());
+        registerProcessor(new CreateActionProcessor());
+        registerProcessor(new CraftResultDeprecatedActionProcessor());
+        registerProcessor(new MineBlockActionProcessor());
+        registerProcessor(new BeaconPaymentActionProcessor());
+    }
+
     public <R extends ContainerActionProcessor<?>> R getProcessor(ItemStackRequestActionType type) {
         return (R) PROCESSORS.get(type);
     }
 
-    @Override
     public void registerProcessor(ContainerActionProcessor<?> processor) {
         PROCESSORS.put(processor.getType(), processor);
     }
 
     @UnmodifiableView
-    @Override
     public Map<ItemStackRequestActionType, ContainerActionProcessor<?>> getProcessors() {
         return Collections.unmodifiableMap(PROCESSORS);
     }

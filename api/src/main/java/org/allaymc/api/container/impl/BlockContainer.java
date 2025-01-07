@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.allaymc.api.container.BaseContainer;
 import org.allaymc.api.container.Container;
 import org.allaymc.api.container.FullContainerType;
-import org.joml.Vector3ic;
+import org.allaymc.api.math.position.Position3ic;
 
 /**
  * @author IWareQ
@@ -13,7 +13,7 @@ import org.joml.Vector3ic;
 public class BlockContainer extends BaseContainer {
     @Getter
     @Setter
-    protected Vector3ic blockPos;
+    protected Position3ic blockPos;
 
     public BlockContainer(FullContainerType<? extends Container> containerType) {
         super(containerType);

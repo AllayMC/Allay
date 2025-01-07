@@ -9,36 +9,21 @@ import org.allaymc.api.utils.Identifier;
  */
 public interface EffectType {
     /**
-     * Creates a new instance of this effect with the given amplifier and default duration.
-     *
-     * @param amplifier The amplifier of the effect.
-     *
-     * @return A new instance of this effect.
+     * @see #createInstance(int, int, boolean, boolean)
      */
     default EffectInstance createInstance(int amplifier) {
         return createInstance(amplifier, 15);
     }
 
     /**
-     * Creates a new instance of this effect with the given amplifier and duration.
-     *
-     * @param amplifier The amplifier of the effect.
-     * @param duration  The duration of the effect.
-     *
-     * @return A new instance of this effect.
+     * @see #createInstance(int, int, boolean, boolean)
      */
     default EffectInstance createInstance(int amplifier, int duration) {
         return createInstance(amplifier, duration, true);
     }
 
     /**
-     * Creates a new instance of this effect with the given amplifier, duration, and visibility.
-     *
-     * @param amplifier The amplifier of the effect.
-     * @param duration  The duration of the effect.
-     * @param visible   Whether the effect is visible.
-     *
-     * @return A new instance of this effect.
+     * @see #createInstance(int, int, boolean, boolean)
      */
     default EffectInstance createInstance(int amplifier, int duration, boolean visible) {
         return createInstance(amplifier, duration, false, visible);
@@ -48,8 +33,8 @@ public interface EffectType {
      * Creates a new instance of this effect with the given amplifier, duration, ambient and visibility.
      *
      * @param amplifier The amplifier of the effect.
-     * @param duration  The duration of the effect.
-     * @param ambient   Whether the effect is ambient.
+     * @param duration  The duration of the effect in ticks.
+     * @param ambient   Whether the effect is ambient. Note that ambient 0 is level 1, and ambient 1 is level 2.
      * @param visible   Whether the effect is visible.
      *
      * @return A new instance of this effect.

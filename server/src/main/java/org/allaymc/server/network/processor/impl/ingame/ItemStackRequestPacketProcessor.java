@@ -4,10 +4,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.server.container.SimpleContainerActionProcessorHolder;
+import org.allaymc.server.container.ContainerActionProcessorHolder;
 import org.allaymc.server.container.processor.ActionResponse;
 import org.allaymc.server.container.processor.ContainerActionProcessor;
-import org.allaymc.server.container.processor.ContainerActionProcessorHolder;
 import org.allaymc.server.network.processor.PacketProcessor;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.FullContainerName;
@@ -28,11 +27,7 @@ import java.util.*;
  */
 @Slf4j
 public class ItemStackRequestPacketProcessor extends PacketProcessor<ItemStackRequestPacket> {
-    protected final ContainerActionProcessorHolder processorHolder = new SimpleContainerActionProcessorHolder();
-
-    public ItemStackRequestPacketProcessor() {
-        ContainerActionProcessorHolder.registerDefaultContainerActionProcessors(this.processorHolder);
-    }
+    protected final ContainerActionProcessorHolder processorHolder = new ContainerActionProcessorHolder();
 
     @Override
     public void handleSync(EntityPlayer player, ItemStackRequestPacket packet, long receiveTime) {

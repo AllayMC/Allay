@@ -12,6 +12,8 @@ import java.util.Map;
 public interface ItemCustomTags {
     Map<String, ItemTag> NAME_TO_TAG = new HashMap<>();
 
+    ItemTag BEACON_PAYMENT = create("allay:beacon_payment");
+
     static ItemTag create(String name) {
         var tag = new ItemTag(name);
         NAME_TO_TAG.put(name, tag);

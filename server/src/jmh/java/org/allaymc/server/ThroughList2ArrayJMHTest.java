@@ -25,6 +25,7 @@ public class ThroughList2ArrayJMHTest {
 
     @Setup
     public void setup() throws MissingImplementationException {
+        Allay.initI18n();
         Allay.initAllay();
         data1[0] = BlockPropertyTypes.AGE_16.createValue(5);
         data1[1] = BlockPropertyTypes.ACTIVE.createValue(false);

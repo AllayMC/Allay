@@ -122,6 +122,13 @@ public record FullContainerType<T extends Container>(
             .mapRangedNetworkSlotIndex(14, 15, 0)
             .build();
 
+    public static final FullContainerType<BeaconContainer> BEACON = builder()
+            .id(ContainerType.BEACON)
+            .size(1)
+            .mapAllSlotToType(ContainerSlotType.BEACON_PAYMENT)
+            .mapNetworkSlotIndex(27, BeaconContainer.BEACON_PAYMENT_SLOT)
+            .build();
+
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;
