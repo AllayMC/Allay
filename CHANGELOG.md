@@ -53,6 +53,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Fixed
 
+- (API) `BlockHangingSignBehavior` now extends `BlockEntityHolderComponent<BlockEntityHangingSign>` which was forgotten
+  to be added.
 - Fixed the bug that interacting with door doesn't have any sound.
 - Waxing copper-made block using honeycomb won't call `BlockFadeEvent` now.
 
