@@ -9,10 +9,9 @@ install and run your first Allay server.
 
 ## Install Java
 
-Allay is written and running in java 21, so you need to install java 21.
-There are several version of java, and we recommend you to use [GraalVM](https://www.graalvm.org/) for the best
-performance,
-and [OpenJDK](https://adoptopenjdk.net/) is also a good choice if you want to have a stable experience.
+Allay is written and running in java 21, so you need to install java 21. There are several version of java,
+and we recommend you to use [GraalVM](https://www.graalvm.org/) for the best performance. [OpenJDK](https://adoptopenjdk.net/) is
+also a good choice if you want to have a stable experience.
 
 !!! tip
 
