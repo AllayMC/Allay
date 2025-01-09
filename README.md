@@ -19,7 +19,7 @@ The next-generation Minecraft: Bedrock Edition server software aims to be reliab
 [![GitHub License](https://img.shields.io/github/license/allaymc/allay)](LICENSE)
 </div>
 
-## Introduction
+## 📖 Introduction
 
 Allay is a third-party server software for Minecraft: Bedrock Edition written from scratch, with the goal of being
 reliable, fast and feature-rich.
@@ -28,18 +28,18 @@ reliable, fast and feature-rich.
 > Please note that this project is still at a very early stage and has not yet been released officially, and interfaces
 > may be added or removed without notice. Please do not use Allay in a production environment!
 
-## Why Allay?
+## 🎯 Why Allay?
 
-- **Fast** Allay is a very fast. Compared to almost all other server software, Allay is far more performant in almost all aspects. The written from
+- **Fast**: Allay is a very fast. Compared to almost all other server software, Allay is far more performant in almost all aspects. The written from
 scratch codebase allows us to re-examine performance critical points and solve problems in the most efficient way.
-- **Reliable** Allay is designed to be reliable. To achieve this goal, we have written a lot of unit tests to ensure the stability of the project.
-- **Hassle-free** Allay is designed to be user-friendly. Allay is ready to use right out of the box. We also have complete documentation to guide
+- **Reliable**: Allay is designed to be reliable. To achieve this goal, we have written a lot of unit tests to ensure the stability of the project.
+- **Hassle-free**: Allay is designed to be user-friendly. Allay is ready to use right out of the box. We also have complete documentation to guide
 you in your deployment. 
-- **Developer-friendly** Our api is seperated from the implementation and is well-documented. No more wasting time looking at the implementation.
-- **Feature-rich** One of our goal is to be feature-rich. Thanks to the architecture of Allay, adding new features is very easy for us.
-- **Cross-platform:** Benefit from JVM, allay can run on almost any platform.
+- **Developer-friendly**: Our api is seperated from the implementation and is well-documented. No more wasting time looking at the implementation.
+- **Feature-rich**: One of our goal is to be feature-rich. Thanks to the architecture of Allay, adding new features is very easy for us.
+- **Cross-platform:**: Benefit from JVM, allay can run on almost any platform.
 
-## Getting Started
+## 🛠️ Getting Started
 
 Allay is written and running in java 21, so you need to install java 21. There are
 several version of java, and we recommend you to use [GraalVM](https://www.graalvm.org/) for the best performance,
@@ -47,7 +47,7 @@ and [OpenJDK](https://adoptopenjdk.net/) is also a good choice if you want to ha
 
 After you have installed java 21, there are two ways to install Allay:
 
-### Use AllayLauncher
+### ⚡ Use AllayLauncher
 
 [AllayLauncher](https://github.com/AllayMC/AllayLauncher) is the launcher for allay. It has some cool features such as auto-updating, daemon mode
 and java checker. To use it, just run the following command based on your OS:
@@ -64,7 +64,7 @@ Windows (PowerShell):
 Invoke-Expression (Invoke-WebRequest -Uri "https://raw.githubusercontent.com/AllayMC/AllayLauncher/refs/heads/main/scripts/install_windows.ps1").Content
 ```
 
-### Install Allay Manually
+### 🔨 Install Allay Manually
 
 If you platform does not support AllayLauncher, don't be worry! You can also install Allay manually. Just
 download the `allay-server-*-shaded.jar` file from our release page. Move it to the folder you want and run:
@@ -73,7 +73,7 @@ download the `allay-server-*-shaded.jar` file from our release page. Move it to 
 java -jar allay-server-*-shaded.jar
 ```
 
-## Plugins
+## 🌟 Plugins
 
 Allay supports running plugins written in Java, Kotlin, Scala (JVM based language).
 
@@ -109,7 +109,7 @@ Currently, we use jitpack to publish our artifacts. If you want to use a specifi
 you can check the version list in [jitpack](https://jitpack.io/#AllayMC/Allay) and replace
 `master-SNAPSHOT` with the version you want.
 
-## Contribute
+## 🙌 Contributing
 
 Contributions are welcomed! And please read [CONTRIBUTING.md](CONTRIBUTING.md) before contributing.
 There are several ways you can contribute:
@@ -129,7 +129,7 @@ Your feedback can make this project better. If you find a problem/have a new ide
 the [issues page](https://github.com/AllayMC/Allay/issues). Ensure to include a detailed description of the 
 bug and steps to reproduce it.
 
-## License
+## 🎫 License
 
 Copyright **© 2023-2025 AllayMC**, all rights reserved. If not otherwise specified, project content is open source under
 the LGPL-3.0 license. The contents of the following folders are open-sourced under the MIT license:
@@ -137,7 +137,7 @@ the LGPL-3.0 license. The contents of the following folders are open-sourced und
 - data
 - codegen
 
-## Special Thanks
+## ❤ Special Thanks
 
 - [Endstone](https://github.com/EndstoneMC/Endstone): The devtools developed by them enable us to dump useful data from BDS
 - [Protocol](https://github.com/CloudburstMC/Protocol): The protocol & raknet implementation used by Allay
@@ -160,7 +160,7 @@ monitoring and profiling Java and .NET applications. YourKit is the creator of
 the [YourKit Java Profiler](https://www.yourkit.com/java/profiler/), [YourKit .NET Profiler](https://www.yourkit.com/.net/profiler/),
 and [YourKit YouMonitor](https://www.yourkit.com/youmonitor/).
 
-## Stargazers over time
+## 👀 Stargazers over time
 
 [![Stargazers over time](https://starchart.cc/AllayMC/Allay.svg)](https://starchart.cc/AllayMC/Allay)
 
