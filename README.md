@@ -33,8 +33,8 @@ reliable, fast and feature-rich.
 - **Fast**: Allay is a very fast. Compared to almost all other server software, Allay is far more performant in almost all aspects. The written from
 scratch codebase allows us to re-examine performance critical points and solve problems in the most efficient way.
 - **Reliable**: Allay is designed to be reliable. To achieve this goal, we have written a lot of unit tests to ensure the stability of the project.
-- **Hassle-free**: Allay is designed to be user-friendly. Allay is ready to use right out of the box. We also have complete documentation to guide
-you in your deployment. 
+- **Hassle-free**: Allay is designed to be user-friendly and is ready to use right out of the box. We also have complete documentation to guide you 
+in your deployment. 
 - **Developer-friendly**: Our api is seperated from the implementation and is well-documented. No more wasting time looking at the implementation.
 - **Feature-rich**: One of our goal is to be feature-rich. Thanks to the architecture of Allay, adding new features is very easy for us.
 - **Cross-platform:**: Benefit from JVM, allay can run on almost any platform.
