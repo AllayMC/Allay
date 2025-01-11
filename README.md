@@ -30,7 +30,7 @@ reliable, fast and feature-rich.
 
 ## 🎯 Why Allay?
 
-- **Fast**: Allay is a very fast. Compared to almost all other server software, Allay is far more performant in almost all aspects. The written from
+- **Fast**: Allay is very fast. Compared to almost all other server software, Allay is far more performant in almost all aspects. The written from
 scratch codebase allows us to re-examine performance critical points and solve problems in the most efficient way.
 - **Reliable**: Allay is designed to be reliable. To achieve this goal, we have written a lot of unit tests to ensure the stability of the project.
 - **Hassle-free**: Allay is designed to be user-friendly and is ready to use right out of the box. We also have complete documentation to guide you 
