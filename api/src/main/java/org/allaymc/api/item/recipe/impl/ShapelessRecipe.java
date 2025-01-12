@@ -1,4 +1,4 @@
-package org.allaymc.api.item.recipe;
+package org.allaymc.api.item.recipe.impl;
 
 import lombok.Builder;
 import lombok.Getter;

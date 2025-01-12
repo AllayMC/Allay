@@ -228,16 +228,6 @@ public interface TrKeys {
     String A_EXTENSION_MAINCLASS_TYPEINVALID = "allay:extension.mainclass.typeinvalid";
 
     /**
-     * Loaded %1 furnace recipes
-     */
-    String A_FURNACERECIPE_LOADED = "allay:furnacerecipe.loaded";
-
-    /**
-     * Loading furnace recipes...
-     */
-    String A_FURNACERECIPE_LOADING = "allay:furnacerecipe.loading";
-
-    /**
      * Chunk
      */
     String A_GUI_CHUNK = "allay:gui.chunk";
@@ -561,6 +551,26 @@ public interface TrKeys {
      * Loading recipes...
      */
     String A_RECIPE_LOADING = "allay:recipe.loading";
+
+    /**
+     * Loading furnace recipes...
+     */
+    String A_RECIPE_FURNACE_LOADING = "allay:recipe.furnace.loading";
+
+    /**
+     * Loaded %1 furnace recipes
+     */
+    String A_RECIPE_FURNACE_LOADED = "allay:recipe.furnace.loaded";
+
+    /**
+     * Loading potion mix recipes...
+     */
+    String A_RECIPE_POTIONMIX_LOADING = "allay:recipe.potionmix.loading";
+
+    /**
+     * Loaded %1 potion mix recipes
+     */
+    String A_RECIPE_POTIONMIX_LOADED = "allay:recipe.potionmix.loaded";
 
     /**
      * §eYou are running a development version. The development version may have unexpected bugs, please do not use it in a production environment!

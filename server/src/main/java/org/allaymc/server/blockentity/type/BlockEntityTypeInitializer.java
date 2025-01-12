@@ -102,4 +102,13 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(BlockEntityBeaconBaseComponentImpl::new, BlockEntityBeaconBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initBrewingStand() {
+        BlockEntityTypes.BREWING_STAND = AllayBlockEntityType
+                .builder(BlockEntityBrewingStandImpl.class)
+                .name(BlockEntityId.BREWING_STAND)
+                .addComponent(BlockEntityBrewingStandBaseComponentImpl::new, BlockEntityBrewingStandBaseComponentImpl.class)
+                .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BrewingStandContainer::new), BlockEntityContainerHolderComponentImpl.class)
+                .build();
+    }
 }

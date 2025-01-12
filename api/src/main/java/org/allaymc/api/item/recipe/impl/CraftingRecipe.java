@@ -1,9 +1,13 @@
-package org.allaymc.api.item.recipe;
+package org.allaymc.api.item.recipe.impl;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
+import org.allaymc.api.item.recipe.IdentifiedRecipe;
+import org.allaymc.api.item.recipe.NetworkRecipe;
+import org.allaymc.api.item.recipe.TaggedRecipe;
+import org.allaymc.api.item.recipe.UniqueRecipe;
 import org.allaymc.api.utils.Identifier;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
 import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeData;
@@ -18,7 +22,7 @@ import java.util.UUID;
  * @author daoge_cmd
  */
 @Getter
-public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueRecipe, IdentifiedRecipe, NetworkRecipe {
+public abstract class CraftingRecipe implements BaseRecipe, TaggedRecipe, UniqueRecipe, IdentifiedRecipe, NetworkRecipe {
     protected Identifier identifier;
     protected ItemStack[] outputs;
     protected String tag;
@@ -40,7 +44,7 @@ public abstract class CraftingRecipe implements Recipe, TaggedRecipe, UniqueReci
     }
 
     @Override
-    public RecipeData toNetworkRecipeData() {
+    public RecipeData toNetworkData() {
         return networkRecipeDataCache;
     }
 

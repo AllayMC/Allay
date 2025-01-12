@@ -15,7 +15,7 @@ import org.allaymc.api.eventbus.event.container.FurnaceConsumeFuelEvent;
 import org.allaymc.api.eventbus.event.container.FurnaceSmeltEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.recipe.FurnaceRecipe;
+import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceInput;
 import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
@@ -242,7 +242,6 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
 
     protected void sendFurnaceContainerData() {
         var container = containerHolderComponent.getContainer();
-        if (container.getViewers().isEmpty()) return;
         // NOTICE: This is not an error, ask mojang for the reason why you should "/ getIdealSpeed()"
         container.sendContainerData(ContainerSetDataPacket.FURNACE_TICK_COUNT, (int) (cookTime / getIdealSpeed()));
         container.sendContainerData(ContainerSetDataPacket.FURNACE_LIT_TIME, burnTime);

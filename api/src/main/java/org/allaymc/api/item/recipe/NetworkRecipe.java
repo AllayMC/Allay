@@ -1,5 +1,7 @@
 package org.allaymc.api.item.recipe;
 
+import org.allaymc.api.item.recipe.impl.BaseRecipe;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -7,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author daoge_cmd
  */
-public interface NetworkRecipe extends Recipe {
+public interface NetworkRecipe extends BaseRecipe {
     AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(1);
 
     static int assignNetworkId() {

@@ -9,10 +9,10 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 
 /**
- * @author daoge_cmd
+ * @author IWareQ
  */
-public class BlockBeaconBaseComponentImpl extends BlockBaseComponentImpl {
-    public BlockBeaconBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
+public class BlockBrewingStandBaseComponentImpl extends BlockBaseComponentImpl {
+    public BlockBrewingStandBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
@@ -27,9 +27,9 @@ public class BlockBeaconBaseComponentImpl extends BlockBaseComponentImpl {
             return false;
         }
 
-        var beaconContainer = player.getContainer(FullContainerType.BEACON);
-        beaconContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
-        beaconContainer.addViewer(player);
+        var brewingStandContainer = player.getContainer(FullContainerType.BREWING_STAND);
+        brewingStandContainer.setBlockPos(new Position3i(interactInfo.clickedBlockPos(), interactInfo.player().getDimension()));
+        brewingStandContainer.addViewer(player);
         return true;
     }
 }

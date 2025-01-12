@@ -11,7 +11,6 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
-import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
@@ -33,6 +32,7 @@ import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
@@ -52,6 +52,8 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
  * @author daoge_cmd | Cool_Loong
  */
 public interface Dimension {
+
+    IntObjectPair<BlockState> PAIR_LIQUID_NOT_FOUND = new IntObjectImmutablePair<>(-1, null);
 
     /**
      * Create a block update packet.
@@ -195,7 +197,7 @@ public interface Dimension {
     }
 
     default void setBlockState(Vector3fc pos, BlockState blockState, int layer) {
-        pos = pos.floor(new org.joml.Vector3f());
+        pos = pos.floor(new Vector3f());
         setBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), blockState, layer);
     }
 
@@ -287,7 +289,7 @@ public interface Dimension {
     }
 
     default BlockState getBlockState(Vector3fc pos, int layer) {
-        pos = pos.floor(new org.joml.Vector3f());
+        pos = pos.floor(new Vector3f());
         return getBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), layer);
     }
 
@@ -671,7 +673,7 @@ public interface Dimension {
     }
 
     default void updateAroundIgnoreFace(int x, int y, int z, BlockFace... ignoreFaces) {
-        updateAroundIgnoreFace(new org.joml.Vector3i(x, y, z), ignoreFaces);
+        updateAroundIgnoreFace(new Vector3i(x, y, z), ignoreFaces);
     }
 
     /**
@@ -720,7 +722,7 @@ public interface Dimension {
      * @param face the face of the block.
      */
     default void updateAtFace(int x, int y, int z, BlockFace face) {
-        updateAtFace(new org.joml.Vector3i(x, y, z), face);
+        updateAtFace(new Vector3i(x, y, z), face);
     }
 
     /**
@@ -885,11 +887,44 @@ public interface Dimension {
     }
 
     default void addSound(Vector3fc pos, String sound) {
-        addSound(pos.x(), pos.y(), pos.z(), sound);
+        addSound(pos, sound, 1);
+    }
+
+    default void addSound(Vector3fc pos, String sound, float volume) {
+        addSound(pos, sound, volume, 1);
+    }
+
+    default void addSound(Vector3fc pos, String sound, float volume, float pitch) {
+        addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
+    }
+
+    default void addSound(Vector3ic pos, String sound) {
+        addSound(pos, sound, 1);
+    }
+
+    default void addSound(Vector3ic pos, String sound, float volume) {
+        addSound(pos, sound, volume, 1);
+    }
+
+    default void addSound(Vector3ic pos, String sound, float volume, float pitch) {
+        addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
     }
 
     default void addSound(float x, float y, float z, String sound) {
-        addSound(x, y, z, sound, 1, 1);
+        addSound(x, y, z, sound, 1);
+    }
+
+    /**
+     * Add a sound at the specified pos.
+     *
+     * @param x      the x coordinate of the pos.
+     * @param y      the y coordinate of the pos.
+     * @param z      the z coordinate of the pos.
+     * @param sound  the sound.
+     * @param volume the volume of the sound.
+     */
+    default void addSound(float x, float y, float z, String sound, float volume) {
+        addSound(x, y, z, sound, volume, 1);
     }
 
     /**
@@ -925,7 +960,7 @@ public interface Dimension {
      */
     default void dropItem(ItemStack itemStack, Vector3fc pos) {
         var rand = ThreadLocalRandom.current();
-        dropItem(itemStack, pos, new org.joml.Vector3f(rand.nextFloat(0.2f) - 0.1f, 0.2f, rand.nextFloat(0.2f) - 0.1f));
+        dropItem(itemStack, pos, new Vector3f(rand.nextFloat(0.2f) - 0.1f, 0.2f, rand.nextFloat(0.2f) - 0.1f));
     }
 
     default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion) {
@@ -978,7 +1013,7 @@ public interface Dimension {
      */
     default void dropXpOrb(Vector3fc pos, int xp) {
         var rand = ThreadLocalRandom.current();
-        var motion = new org.joml.Vector3f(
+        var motion = new Vector3f(
                 (rand.nextFloat() * 0.2f - 0.1f) * 2f,
                 rand.nextFloat() * 0.4f,
                 (rand.nextFloat() * 0.2f - 0.1f) * 2f
@@ -1097,7 +1132,7 @@ public interface Dimension {
             var pz = z + rand.nextInt(-range, range + 1);
             var py = getHeight(px, pz) + 1;
             if (predicate.test(new Position3i(px, py, pz, this))) {
-                return new org.joml.Vector3i(px, py, pz);
+                return new Vector3i(px, py, pz);
             }
         }
         return null;
@@ -1185,8 +1220,6 @@ public interface Dimension {
 
         chunk.setBiome(x & 15, y, z & 15, biome);
     }
-
-    IntObjectPair<BlockState> PAIR_LIQUID_NOT_FOUND = new IntObjectImmutablePair<>(-1, null);
 
     /**
      * @see #getLiquid(Vector3ic)
@@ -1283,19 +1316,19 @@ public interface Dimension {
      */
     default boolean removeLiquid(Vector3ic pos) {
         var layer0 = getBlockState(pos);
-        if (layer0.getBlockType() == BlockTypes.AIR) {
+        if (layer0.getBlockType() == AIR) {
             return true;
         }
 
         if (layer0.getBehavior() instanceof BlockLiquidBaseComponent) {
-            setBlockState(pos, BlockTypes.AIR.getDefaultState());
+            setBlockState(pos, AIR.getDefaultState());
             return true;
         }
 
         if (layer0.getBlockStateData().canContainLiquid()) {
             var layer1 = getBlockState(pos, 1);
             if (layer1.getBehavior() instanceof BlockLiquidBaseComponent) {
-                setBlockState(pos, BlockTypes.AIR.getDefaultState(), 1);
+                setBlockState(pos, AIR.getDefaultState(), 1);
                 return false;
             }
         }

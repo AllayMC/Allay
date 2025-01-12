@@ -1,9 +1,11 @@
-package org.allaymc.api.item.recipe;
+package org.allaymc.api.item.recipe.impl;
 
 import lombok.Builder;
 import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.descriptor.DefaultDescriptor;
+import org.allaymc.api.item.recipe.IdentifiedRecipe;
+import org.allaymc.api.item.recipe.TaggedRecipe;
 import org.allaymc.api.item.recipe.input.FurnaceInput;
 import org.allaymc.api.item.recipe.input.Input;
 import org.allaymc.api.item.type.ItemType;
@@ -17,7 +19,7 @@ import org.cloudburstmc.protocol.bedrock.data.inventory.crafting.recipe.RecipeDa
  *
  * @author daoge_cmd
  */
-public class FurnaceRecipe implements Recipe, TaggedRecipe, IdentifiedRecipe {
+public class FurnaceRecipe implements BaseRecipe, TaggedRecipe, IdentifiedRecipe {
     public static final String FURNACE_TAG = "furnace";
     public static final String BLAST_FURNACE_TAG = "blast_furnace";
     public static final String SMOKER_TAG = "smoker";
@@ -76,7 +78,7 @@ public class FurnaceRecipe implements Recipe, TaggedRecipe, IdentifiedRecipe {
     }
 
     @Override
-    public RecipeData toNetworkRecipeData() {
+    public RecipeData toNetworkData() {
         return FurnaceRecipeData.of(
                 getType(), ingredient.getItemType().getRuntimeId(),
                 0, output.toNetworkItemData(), tag

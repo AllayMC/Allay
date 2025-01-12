@@ -12,8 +12,9 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.data.ItemData;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.enchantment.EnchantmentType;
-import org.allaymc.api.item.recipe.FurnaceRecipe;
 import org.allaymc.api.item.recipe.NetworkRecipe;
+import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
+import org.allaymc.api.item.recipe.impl.PotionMixRecipe;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.pack.Pack;
 import org.allaymc.api.utils.Identifier;
@@ -22,6 +23,7 @@ import org.allaymc.api.world.storage.WorldStorage;
 
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -60,7 +62,7 @@ public final class Registries {
     // Recipe
     public static IntMappedRegistry<NetworkRecipe> RECIPES;
     public static SimpleMappedRegistry<Identifier, FurnaceRecipe> FURNACE_RECIPES;
-    // TODO: PotionMixData
+    public static SimpleMappedRegistry<Identifier, PotionMixRecipe> POTION_MIX_RECIPES;
     // TODO: ContainerMixData
     // TODO: MaterialReducer
 

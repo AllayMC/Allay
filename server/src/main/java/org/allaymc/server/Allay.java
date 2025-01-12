@@ -223,6 +223,7 @@ public final class Allay {
         // Recipe
         Registries.RECIPES = IntMappedRegistry.create(new RecipeRegistryLoader());
         Registries.FURNACE_RECIPES = SimpleMappedRegistry.create(new FurnaceRecipeRegistryLoader());
+        Registries.POTION_MIX_RECIPES = SimpleMappedRegistry.create(new PotionMixRecipeRegistryLoader());
 
         // Pack
         Registries.PACKS = SimpleMappedRegistry.create(new PackRegistryLoader());

@@ -5,6 +5,8 @@ import lombok.Getter;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.type.ItemType;
 
+import java.util.Objects;
+
 /**
  * Represents a default item descriptor.
  * <p>
@@ -31,11 +33,31 @@ public class DefaultDescriptor implements ItemDescriptor {
                (meta == WILDCARD_META || itemStack.getMeta() == meta);
     }
 
+    public ItemStack createItemStack() {
+        return itemType.createItemStack(1, meta);
+    }
+
     @Override
     public org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.ItemDescriptor toNetwork() {
         return new org.cloudburstmc.protocol.bedrock.data.inventory.descriptor.DefaultDescriptor(
                 itemType.toNetworkDefinition(),
                 meta
         );
+    }
+
+    @Override
+    public String toString() {
+        return itemType.getIdentifier() + ":" + meta;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof DefaultDescriptor that)) return false;
+        return meta == that.meta && Objects.equals(itemType, that.itemType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(itemType, meta);
     }
 }

@@ -6,7 +6,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.item.recipe.FurnaceRecipe;
+import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
 import org.allaymc.api.registry.RegistryLoader;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
@@ -22,7 +22,7 @@ import java.util.Objects;
 public class FurnaceRecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier, FurnaceRecipe>> {
     @Override
     public Map<Identifier, FurnaceRecipe> load(Void $) {
-        log.info(I18n.get().tr(TrKeys.A_FURNACERECIPE_LOADING));
+        log.info(I18n.get().tr(TrKeys.A_RECIPE_FURNACE_LOADING));
         var furnaceRecipes = new Object2ObjectOpenHashMap<Identifier, FurnaceRecipe>();
         var stream = Objects.requireNonNull(Utils.getResource("recipes.json"));
 
@@ -34,7 +34,7 @@ public class FurnaceRecipeRegistryLoader implements RegistryLoader<Void, Map<Ide
             furnaceRecipes.put(recipe.getIdentifier(), recipe);
         }
 
-        log.info(I18n.get().tr(TrKeys.A_FURNACERECIPE_LOADED, furnaceRecipes.size()));
+        log.info(I18n.get().tr(TrKeys.A_RECIPE_FURNACE_LOADED, furnaceRecipes.size()));
         return furnaceRecipes;
     }
 

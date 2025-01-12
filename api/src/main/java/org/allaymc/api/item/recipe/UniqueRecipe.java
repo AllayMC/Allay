@@ -1,5 +1,7 @@
 package org.allaymc.api.item.recipe;
 
+import org.allaymc.api.item.recipe.impl.BaseRecipe;
+
 import java.util.UUID;
 
 /**
@@ -7,7 +9,7 @@ import java.util.UUID;
  *
  * @author daoge_cmd
  */
-public interface UniqueRecipe extends Recipe {
+public interface UniqueRecipe extends BaseRecipe {
     /**
      * Get the UUID of the recipe.
      *

@@ -29,6 +29,6 @@ public class BlockEntityEnchantTableBaseComponentImpl extends BlockEntityBaseCom
     @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
-        nbt.listenForFloat("rott", value -> bookRot = value);
+        nbt.listenForFloat(TAG_ROTT, value -> bookRot = value);
     }
 }

@@ -1118,4 +1118,14 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockBeaconBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initBrewingStand() {
+        BlockTypes.BREWING_STAND = AllayBlockType
+                .builder(BlockBrewingStandBehaviorImpl.class)
+                .vanillaBlock(BlockId.BREWING_STAND)
+                .bindBlockEntity(BlockEntityTypes.BREWING_STAND)
+                .setBaseComponentSupplier(BlockBrewingStandBaseComponentImpl::new)
+                .setProperties(BlockPropertyTypes.BREWING_STAND_SLOT_A_BIT, BlockPropertyTypes.BREWING_STAND_SLOT_B_BIT, BlockPropertyTypes.BREWING_STAND_SLOT_C_BIT)
+                .build();
+    }
 }

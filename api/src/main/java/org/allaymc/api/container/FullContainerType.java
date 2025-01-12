@@ -129,6 +129,14 @@ public record FullContainerType<T extends Container>(
             .mapNetworkSlotIndex(27, BeaconContainer.BEACON_PAYMENT_SLOT)
             .build();
 
+    public static final FullContainerType<BrewingStandContainer> BREWING_STAND = builder()
+            .id(ContainerType.BREWING_STAND)
+            .size(5)
+            .mapSlotToType(BrewingStandContainer.REAGENT_SLOT, ContainerSlotType.BREWING_INPUT)
+            .mapRangedSlotToType(1, 3, ContainerSlotType.BREWING_RESULT)
+            .mapSlotToType(BrewingStandContainer.FUEL_SLOT, ContainerSlotType.BREWING_FUEL)
+            .build();
+
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;
@@ -179,25 +187,38 @@ public record FullContainerType<T extends Container>(
         }
 
         public FullContainerTypeBuilder mapRangedSlotToType(int left, int right, ContainerSlotType type) {
-            if (slotTypeTable == null) throw new IllegalStateException("The size must be set firstly!");
-            if (left > right) throw new IllegalArgumentException("Left must smaller than right!");
-            if (left > slotTypeTable.length || right > slotTypeTable.length)
+            if (slotTypeTable == null) {
+                throw new IllegalStateException("The size must be set firstly!");
+            }
+            if (left > right) {
+                throw new IllegalArgumentException("Left must smaller than right!");
+            }
+            if (left > slotTypeTable.length || right > slotTypeTable.length) {
                 throw new IllegalArgumentException("Left or right bigger than size!");
+            }
 
             heldSlotTypes.add(type);
-            for (int i = left; i <= right; i++) slotTypeTable[i] = type;
+            for (int i = left; i <= right; i++) {
+                slotTypeTable[i] = type;
+            }
             return this;
         }
 
         public FullContainerTypeBuilder mapAllSlotToType(ContainerSlotType type) {
-            if (slotTypeTable == null) throw new IllegalStateException("The size must be set firstly!");
+            if (slotTypeTable == null) {
+                throw new IllegalStateException("The size must be set firstly!");
+            }
+
             heldSlotTypes.add(type);
             Arrays.fill(slotTypeTable, type);
             return this;
         }
 
         public FullContainerTypeBuilder mapSlotToType(int slot, ContainerSlotType type) {
-            if (slotTypeTable == null) throw new IllegalStateException("The size must be set firstly!");
+            if (slotTypeTable == null) {
+                throw new IllegalStateException("The size must be set firstly!");
+            }
+
             heldSlotTypes.add(type);
             slotTypeTable[slot] = type;
             return this;
@@ -214,8 +235,13 @@ public record FullContainerType<T extends Container>(
         }
 
         public FullContainerTypeBuilder mapRangedNetworkSlotIndex(int left, int right, int slot) {
-            if (left > right) throw new IllegalArgumentException("Left must smaller than right!");
-            for (int i = left, j = 0; i <= right; i++, j++) networkSlotIndexMapper.put(i, slot + j);
+            if (left > right) {
+                throw new IllegalArgumentException("Left must smaller than right!");
+            }
+
+            for (int i = left, j = 0; i <= right; i++, j++) {
+                networkSlotIndexMapper.put(i, slot + j);
+            }
             return this;
         }
 

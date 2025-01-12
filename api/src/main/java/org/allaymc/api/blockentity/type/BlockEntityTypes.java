@@ -17,4 +17,5 @@ public final class BlockEntityTypes {
     public static BlockEntityType<BlockEntityEnchantTable> ENCHANT_TABLE;
     public static BlockEntityType<BlockEntityJukebox> JUKEBOX;
     public static BlockEntityType<BlockEntityBeacon> BEACON;
+    public static BlockEntityType<BlockEntityBrewingStand> BREWING_STAND;
 }
