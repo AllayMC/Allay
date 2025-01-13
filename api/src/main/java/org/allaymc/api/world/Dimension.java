@@ -886,30 +886,51 @@ public interface Dimension {
         getPlayers().forEach(player -> player.sendPacket(packet));
     }
 
+    /**
+     * @see #addSound(float, float, float, String, float)
+     */
     default void addSound(Vector3fc pos, String sound) {
         addSound(pos, sound, 1);
     }
 
+    /**
+     * @see #addSound(float, float, float, String, float)
+     */
     default void addSound(Vector3fc pos, String sound, float volume) {
         addSound(pos, sound, volume, 1);
     }
 
+    /**
+     * @see #addSound(float, float, float, String, float)
+     */
     default void addSound(Vector3fc pos, String sound, float volume, float pitch) {
         addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
     }
 
+    /**
+     * @see #addSound(float, float, float, String, float)
+     */
     default void addSound(Vector3ic pos, String sound) {
         addSound(pos, sound, 1);
     }
 
+    /**
+     * @see #addSound(float, float, float, String, float)
+     */
     default void addSound(Vector3ic pos, String sound, float volume) {
         addSound(pos, sound, volume, 1);
     }
 
+    /**
+     * @see #addSound(float, float, float, String, float)
+     */
     default void addSound(Vector3ic pos, String sound, float volume, float pitch) {
         addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
     }
 
+    /**
+     * @see #addSound(float, float, float, String, float)
+     */
     default void addSound(float x, float y, float z, String sound) {
         addSound(x, y, z, sound, 1);
     }
