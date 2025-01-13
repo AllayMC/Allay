@@ -78,6 +78,7 @@ public class ServerSettings extends OkaeriConfig {
         private boolean isWhitelisted = false;
 
         @Comment("Whether to display the GUI")
+        @CustomKey("enable-gui")
         private boolean enableGui = true;
 
         @CustomKey("max-compute-thread-count")

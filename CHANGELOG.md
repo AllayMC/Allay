@@ -32,8 +32,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented beacon block, and several related interfaces are added to api module.
 - (API) `BlockContainer#getBlockPos` and `BlockContainer#setBlockPos` now return/require `Position3ic` instead of
   `Vector3ic`, this enables us to get the dimension information of a `BlockContainer`.
-- (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`, `BrewingStandContainer`,
-  `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module. See commit history for more details.
+- (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`,
+  `BrewingStandContainer`, `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module. See commit
+  history for more details.
 - (API) Introduced a number of overloads of `Dimension#addSound`.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
@@ -54,12 +55,13 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) `EntityBaseComponent#getBlockStateStandingOn` now return `BlockStateWithPos` instead of `BlockState`.
 - (API) Removed `BlockFace#horizontalIndex` which is useless.
 - (API) Removed `ScoreboardService#ServerEventListener` as it is not supposed to be touched by plugin.
-- (API) Methods `BlockEntityFurnaceBaseComponent#getStoredXP` and `BlockEntityFurnaceBaseComponent#setStoredXP` now accept
-  `int` instead of `float`.
+- (API) Methods `BlockEntityFurnaceBaseComponent#getStoredXP` and `BlockEntityFurnaceBaseComponent#setStoredXP` now
+  accept `int` instead of `float`.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
 - Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is
   meaningless.
+- Changed `enableGui` to `enable-gui` in `server-settings.yml`
 
 ### Fixed
 
