@@ -62,6 +62,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is
   meaningless.
 - Changed `enableGui` to `enable-gui` in `server-settings.yml`
+- Disabled packet limit only in dev build.
 
 ### Fixed
 
@@ -71,6 +72,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Waxing copper-made block using honeycomb won't call `BlockFadeEvent` now.
 - Fixed the bug that player can still open enchant table even if he is sneaking.
 - Fixed the bug that brewing stand fast brew and lagging brew animation.
+- Fixed translation for potion mix loading.
 
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 
@@ -100,7 +102,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
   maintainability of the project.
 - Introduced better names for some of the fields in `PlayerAuthInputPacketProcessor`, this improved the readability of
   the code.
-- Disabled packet limit only in dev build.
 
 ### Fixed
 
