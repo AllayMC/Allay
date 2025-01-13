@@ -529,14 +529,14 @@ public final class BlockTypeInitializer {
             case OXIDIZED ->
                     waxed ? BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
         };
-        BlockTypes.CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.DOUBLE_CUT_COPPER_SLAB, BlockId.CUT_COPPER_SLAB, OxidationLevel.UNAFFECTED, cutCopperSlab);
-        BlockTypes.EXPOSED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB, BlockId.EXPOSED_CUT_COPPER_SLAB, OxidationLevel.EXPOSED, cutCopperSlab);
-        BlockTypes.WEATHERED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WEATHERED_DOUBLE_CUT_COPPER_SLAB, BlockId.WEATHERED_CUT_COPPER_SLAB, OxidationLevel.WEATHERED, cutCopperSlab);
-        BlockTypes.OXIDIZED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB, BlockId.OXIDIZED_CUT_COPPER_SLAB, OxidationLevel.OXIDIZED, cutCopperSlab);
-        BlockTypes.WAXED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_CUT_COPPER_SLAB, OxidationLevel.UNAFFECTED, cutCopperSlab);
-        BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_EXPOSED_CUT_COPPER_SLAB, OxidationLevel.EXPOSED, cutCopperSlab);
-        BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_WEATHERED_CUT_COPPER_SLAB, OxidationLevel.WEATHERED, cutCopperSlab);
-        BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB, OxidationLevel.OXIDIZED, cutCopperSlab);
+        BlockTypes.DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.DOUBLE_CUT_COPPER_SLAB, BlockId.CUT_COPPER_SLAB, OxidationLevel.UNAFFECTED, cutCopperSlab);
+        BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB, BlockId.EXPOSED_CUT_COPPER_SLAB, OxidationLevel.EXPOSED, cutCopperSlab);
+        BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WEATHERED_DOUBLE_CUT_COPPER_SLAB, BlockId.WEATHERED_CUT_COPPER_SLAB, OxidationLevel.WEATHERED, cutCopperSlab);
+        BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB, BlockId.OXIDIZED_CUT_COPPER_SLAB, OxidationLevel.OXIDIZED, cutCopperSlab);
+        BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_CUT_COPPER_SLAB, OxidationLevel.UNAFFECTED, cutCopperSlab);
+        BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_EXPOSED_CUT_COPPER_SLAB, OxidationLevel.EXPOSED, cutCopperSlab);
+        BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_WEATHERED_CUT_COPPER_SLAB, OxidationLevel.WEATHERED, cutCopperSlab);
+        BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB, OxidationLevel.OXIDIZED, cutCopperSlab);
     }
 
     public static BlockType<BlockSlabBehavior> buildSlab(BlockId id, BlockId doubleSlabId) {

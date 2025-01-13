@@ -12,7 +12,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> ACACIA_DOOR;
 
-    public static BlockType<BlockSlabBehavior> ACACIA_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> ACACIA_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> ACACIA_FENCE;
 
@@ -58,7 +58,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockAndesiteBehavior> ANDESITE;
 
-    public static BlockType<BlockSlabBehavior> ANDESITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> ANDESITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> ANDESITE_SLAB;
 
@@ -84,7 +84,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> BAMBOO_DOOR;
 
-    public static BlockType<BlockSlabBehavior> BAMBOO_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BAMBOO_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> BAMBOO_FENCE;
 
@@ -94,7 +94,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBambooMosaicBehavior> BAMBOO_MOSAIC;
 
-    public static BlockType<BlockSlabBehavior> BAMBOO_MOSAIC_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BAMBOO_MOSAIC_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> BAMBOO_MOSAIC_SLAB;
 
@@ -142,7 +142,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> BIRCH_DOOR;
 
-    public static BlockType<BlockSlabBehavior> BIRCH_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BIRCH_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> BIRCH_FENCE;
 
@@ -196,7 +196,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBlackstoneBehavior> BLACKSTONE;
 
-    public static BlockType<BlockSlabBehavior> BLACKSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BLACKSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> BLACKSTONE_SLAB;
 
@@ -250,7 +250,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBrickBlockBehavior> BRICK_BLOCK;
 
-    public static BlockType<BlockSlabBehavior> BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> BRICK_SLAB;
 
@@ -338,7 +338,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> CHERRY_DOOR;
 
-    public static BlockType<BlockSlabBehavior> CHERRY_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> CHERRY_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> CHERRY_FENCE;
 
@@ -414,7 +414,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCobbledDeepslateBehavior> COBBLED_DEEPSLATE;
 
-    public static BlockType<BlockSlabBehavior> COBBLED_DEEPSLATE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> COBBLED_DEEPSLATE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> COBBLED_DEEPSLATE_SLAB;
 
@@ -424,7 +424,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCobblestoneBehavior> COBBLESTONE;
 
-    public static BlockType<BlockSlabBehavior> COBBLESTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> COBBLESTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> COBBLESTONE_SLAB;
 
@@ -484,7 +484,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> CRIMSON_DOOR;
 
-    public static BlockType<BlockSlabBehavior> CRIMSON_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> CRIMSON_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> CRIMSON_FENCE;
 
@@ -526,13 +526,13 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> CUT_RED_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> CUT_RED_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> CUT_RED_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> CUT_RED_SANDSTONE_SLAB;
 
     public static BlockType<BlockSandstoneBehavior> CUT_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> CUT_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> CUT_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> CUT_SANDSTONE_SLAB;
 
@@ -566,7 +566,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> DARK_OAK_DOOR;
 
-    public static BlockType<BlockSlabBehavior> DARK_OAK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DARK_OAK_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> DARK_OAK_FENCE;
 
@@ -594,7 +594,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDarkPrismarineBehavior> DARK_PRISMARINE;
 
-    public static BlockType<BlockSlabBehavior> DARK_PRISMARINE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DARK_PRISMARINE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> DARK_PRISMARINE_SLAB;
 
@@ -654,7 +654,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDeepslateBehavior> DEEPSLATE;
 
-    public static BlockType<BlockSlabBehavior> DEEPSLATE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DEEPSLATE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> DEEPSLATE_BRICK_SLAB;
 
@@ -680,7 +680,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDeepslateRedstoneOreBehavior> DEEPSLATE_REDSTONE_ORE;
 
-    public static BlockType<BlockSlabBehavior> DEEPSLATE_TILE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DEEPSLATE_TILE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> DEEPSLATE_TILE_SLAB;
 
@@ -706,7 +706,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDioriteBehavior> DIORITE;
 
-    public static BlockType<BlockSlabBehavior> DIORITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DIORITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> DIORITE_SLAB;
 
@@ -720,7 +720,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDispenserBehavior> DISPENSER;
 
-    public static BlockType<BlockCopperSlabBehavior> DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockDragonEggBehavior> DRAGON_EGG;
 
@@ -992,7 +992,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockEndStoneBehavior> END_STONE;
 
-    public static BlockType<BlockSlabBehavior> END_STONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> END_STONE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> END_STONE_BRICK_SLAB;
 
@@ -1018,7 +1018,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperStairsBehavior> EXPOSED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockCopperSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockFarmlandBehavior> FARMLAND;
 
@@ -1076,7 +1076,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockGraniteBehavior> GRANITE;
 
-    public static BlockType<BlockSlabBehavior> GRANITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> GRANITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> GRANITE_SLAB;
 
@@ -1268,7 +1268,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> JUNGLE_DOOR;
 
-    public static BlockType<BlockSlabBehavior> JUNGLE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> JUNGLE_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> JUNGLE_FENCE;
 
@@ -1470,7 +1470,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> MANGROVE_DOOR;
 
-    public static BlockType<BlockSlabBehavior> MANGROVE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> MANGROVE_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> MANGROVE_FENCE;
 
@@ -1518,7 +1518,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockMossyCobblestoneBehavior> MOSSY_COBBLESTONE;
 
-    public static BlockType<BlockSlabBehavior> MOSSY_COBBLESTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> MOSSY_COBBLESTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> MOSSY_COBBLESTONE_SLAB;
 
@@ -1526,7 +1526,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockWallBehavior> MOSSY_COBBLESTONE_WALL;
 
-    public static BlockType<BlockSlabBehavior> MOSSY_STONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> MOSSY_STONE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> MOSSY_STONE_BRICK_SLAB;
 
@@ -1540,7 +1540,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockMudBehavior> MUD;
 
-    public static BlockType<BlockSlabBehavior> MUD_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> MUD_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> MUD_BRICK_SLAB;
 
@@ -1558,7 +1558,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockNetherBrickBehavior> NETHER_BRICK;
 
-    public static BlockType<BlockSlabBehavior> NETHER_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> NETHER_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> NETHER_BRICK_FENCE;
 
@@ -1582,7 +1582,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockNetherreactorBehavior> NETHERREACTOR;
 
-    public static BlockType<BlockSlabBehavior> NORMAL_STONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> NORMAL_STONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> NORMAL_STONE_SLAB;
 
@@ -1590,7 +1590,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockNoteblockBehavior> NOTEBLOCK;
 
-    public static BlockType<BlockSlabBehavior> OAK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> OAK_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> OAK_FENCE;
 
@@ -1662,7 +1662,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperStairsBehavior> OXIDIZED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockCopperSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockPackedIceBehavior> PACKED_ICE;
 
@@ -1678,7 +1678,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> PALE_OAK_DOOR;
 
-    public static BlockType<BlockSlabBehavior> PALE_OAK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PALE_OAK_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> PALE_OAK_FENCE;
 
@@ -1712,7 +1712,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPeonyBehavior> PEONY;
 
-    public static BlockType<BlockSlabBehavior> PETRIFIED_OAK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PETRIFIED_OAK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> PETRIFIED_OAK_SLAB;
 
@@ -1760,7 +1760,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedAndesiteBehavior> POLISHED_ANDESITE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_ANDESITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_ANDESITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_ANDESITE_SLAB;
 
@@ -1770,7 +1770,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedBlackstoneBehavior> POLISHED_BLACKSTONE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_BRICK_SLAB;
 
@@ -1782,7 +1782,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockButtonBehavior> POLISHED_BLACKSTONE_BUTTON;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_BLACKSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockPolishedBlackstonePressurePlateBehavior> POLISHED_BLACKSTONE_PRESSURE_PLATE;
 
@@ -1794,7 +1794,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedDeepslateBehavior> POLISHED_DEEPSLATE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_DEEPSLATE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_DEEPSLATE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_DEEPSLATE_SLAB;
 
@@ -1804,7 +1804,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedDioriteBehavior> POLISHED_DIORITE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_DIORITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_DIORITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_DIORITE_SLAB;
 
@@ -1812,7 +1812,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedGraniteBehavior> POLISHED_GRANITE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_GRANITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_GRANITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_GRANITE_SLAB;
 
@@ -1820,7 +1820,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedTuffBehavior> POLISHED_TUFF;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_TUFF_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_TUFF_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_TUFF_SLAB;
 
@@ -1842,7 +1842,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPrismarineBehavior> PRISMARINE;
 
-    public static BlockType<BlockSlabBehavior> PRISMARINE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PRISMARINE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> PRISMARINE_BRICK_SLAB;
 
@@ -1850,7 +1850,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockStairsBehavior> PRISMARINE_BRICKS_STAIRS;
 
-    public static BlockType<BlockSlabBehavior> PRISMARINE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PRISMARINE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> PRISMARINE_SLAB;
 
@@ -1886,7 +1886,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPurpurBlockBehavior> PURPUR_BLOCK;
 
-    public static BlockType<BlockSlabBehavior> PURPUR_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PURPUR_DOUBLE_SLAB;
 
     public static BlockType<BlockPurpurPillarBehavior> PURPUR_PILLAR;
 
@@ -1898,7 +1898,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBricksBehavior> QUARTZ_BRICKS;
 
-    public static BlockType<BlockSlabBehavior> QUARTZ_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> QUARTZ_DOUBLE_SLAB;
 
     public static BlockType<BlockQuartzOreBehavior> QUARTZ_ORE;
 
@@ -1934,7 +1934,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockRedNetherBrickBehavior> RED_NETHER_BRICK;
 
-    public static BlockType<BlockSlabBehavior> RED_NETHER_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> RED_NETHER_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> RED_NETHER_BRICK_SLAB;
 
@@ -1946,7 +1946,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> RED_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> RED_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> RED_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> RED_SANDSTONE_SLAB;
 
@@ -1986,7 +1986,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockResinBlockBehavior> RESIN_BLOCK;
 
-    public static BlockType<BlockSlabBehavior> RESIN_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> RESIN_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> RESIN_BRICK_SLAB;
 
@@ -2006,7 +2006,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SANDSTONE_SLAB;
 
@@ -2054,7 +2054,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmoothQuartzBehavior> SMOOTH_QUARTZ;
 
-    public static BlockType<BlockSlabBehavior> SMOOTH_QUARTZ_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SMOOTH_QUARTZ_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_QUARTZ_SLAB;
 
@@ -2062,7 +2062,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> SMOOTH_RED_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> SMOOTH_RED_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SMOOTH_RED_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_RED_SANDSTONE_SLAB;
 
@@ -2070,7 +2070,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> SMOOTH_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> SMOOTH_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SMOOTH_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_SANDSTONE_SLAB;
 
@@ -2078,7 +2078,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmoothStoneBehavior> SMOOTH_STONE;
 
-    public static BlockType<BlockSlabBehavior> SMOOTH_STONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SMOOTH_STONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_STONE_SLAB;
 
@@ -2108,7 +2108,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> SPRUCE_DOOR;
 
-    public static BlockType<BlockSlabBehavior> SPRUCE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SPRUCE_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> SPRUCE_FENCE;
 
@@ -2148,7 +2148,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockStoneBehavior> STONE;
 
-    public static BlockType<BlockSlabBehavior> STONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> STONE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> STONE_BRICK_SLAB;
 
@@ -2260,7 +2260,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTuffBehavior> TUFF;
 
-    public static BlockType<BlockSlabBehavior> TUFF_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> TUFF_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> TUFF_BRICK_SLAB;
 
@@ -2270,7 +2270,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBricksBehavior> TUFF_BRICKS;
 
-    public static BlockType<BlockSlabBehavior> TUFF_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> TUFF_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> TUFF_SLAB;
 
@@ -2310,7 +2310,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> WARPED_DOOR;
 
-    public static BlockType<BlockSlabBehavior> WARPED_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> WARPED_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> WARPED_FENCE;
 
@@ -2366,7 +2366,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperStairsBehavior> WAXED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockCopperSlabBehavior> WAXED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WAXED_EXPOSED_CHISELED_COPPER;
 
@@ -2386,7 +2386,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperStairsBehavior> WAXED_EXPOSED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockCopperSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WAXED_OXIDIZED_CHISELED_COPPER;
 
@@ -2406,7 +2406,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperStairsBehavior> WAXED_OXIDIZED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockCopperSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WAXED_WEATHERED_CHISELED_COPPER;
 
@@ -2426,7 +2426,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperStairsBehavior> WAXED_WEATHERED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockCopperSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WEATHERED_CHISELED_COPPER;
 
@@ -2446,7 +2446,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperStairsBehavior> WEATHERED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockCopperSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockWebBehavior> WEB;
 
