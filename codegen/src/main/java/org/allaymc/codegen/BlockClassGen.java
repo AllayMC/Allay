@@ -220,6 +220,8 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*ShulkerBoxBehavior"), "BlockShulkerBoxBehavior");
         registerMergedBlock(Pattern.compile("Block(?!.*Copper).*?StairsBehavior"), "BlockStairsBehavior");
         registerMergedBlock(Pattern.compile("Block(?=.*Copper).*?StairsBehavior"), "BlockCopperStairsBehavior");
+        registerMergedBlock(Pattern.compile("Block(?!.*Copper).*?SlabBehavior"), "BlockSlabBehavior");
+        registerMergedBlock(Pattern.compile("Block(?=.*Copper).*?SlabBehavior"), "BlockCopperSlabBehavior");
         registerMergedBlock(Pattern.compile(".*ColoredTorch.*Behavior"), "BlockColoredTorchBehavior");
         registerMergedBlock(Pattern.compile(".*RedstoneTorchBehavior"), "BlockRedstoneTorchBehavior");
         registerMergedBlock(Pattern.compile(".*BlastFurnaceBehavior"), "BlockBlastFurnaceBehavior");
@@ -254,7 +256,6 @@ public class BlockClassGen extends BaseClassGen {
         registerMergedBlock(Pattern.compile(".*CandleCakeBehavior"), "BlockCandleCakeBehavior");
         registerMergedBlock(Pattern.compile(".*LightBlock.*Behavior"), "BlockLightBlockBehavior");
         registerMergedBlock(Pattern.compile(".*CarpetBehavior"), "BlockCarpetBehavior");
-        registerMergedBlock(Pattern.compile(".*Slab\\d?Behavior"), "BlockSlabBehavior");
         registerMergedBlock(Pattern.compile(".*SaplingBehavior"), "BlockSaplingBehavior");
         registerMergedBlock(Pattern.compile(".*CoralFan.*"), "BlockCoralFanBehavior");
         registerMergedBlock(Pattern.compile(".*CoralWallFanBehavior"), "BlockCoralWallFanBehavior");

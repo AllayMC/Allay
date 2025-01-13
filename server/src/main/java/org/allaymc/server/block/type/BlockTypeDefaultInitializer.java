@@ -1709,7 +1709,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CUT_COPPER_SLAB == null) {
             BlockTypes.CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -2368,7 +2368,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -3264,7 +3264,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_CUT_COPPER_SLAB == null) {
             BlockTypes.EXPOSED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -3278,7 +3278,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5332,7 +5332,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_CUT_COPPER_SLAB == null) {
             BlockTypes.OXIDIZED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5346,7 +5346,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7694,7 +7694,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7708,7 +7708,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7760,7 +7760,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7774,7 +7774,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7826,7 +7826,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7840,7 +7840,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7892,7 +7892,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7906,7 +7906,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7958,7 +7958,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_CUT_COPPER_SLAB == null) {
             BlockTypes.WEATHERED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7972,7 +7972,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();

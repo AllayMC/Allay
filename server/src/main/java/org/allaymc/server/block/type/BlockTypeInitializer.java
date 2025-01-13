@@ -18,6 +18,7 @@ import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
 import org.allaymc.server.block.component.copper.BlockCopperBaseComponentImpl;
+import org.allaymc.server.block.component.copper.BlockCopperSlabBaseComponentImpl;
 import org.allaymc.server.block.component.copper.BlockCopperStairsBaseComponentImpl;
 import org.allaymc.server.block.component.crops.*;
 import org.allaymc.server.block.component.door.BlockDoorBaseComponentImpl;
@@ -478,22 +479,61 @@ public final class BlockTypeInitializer {
     }
 
     private static BlockType<BlockStairsBehavior> buildStairs(BlockId id) {
-        return builderStairs(BlockStairsBehaviorImpl.class, id).setBaseComponentSupplier(BlockStairsBaseComponentImpl::new).build();
+        return stairsBuilder(BlockStairsBehaviorImpl.class, id).setBaseComponentSupplier(BlockStairsBaseComponentImpl::new).build();
     }
 
     private static BlockType<BlockCopperStairsBehavior> buildCopperStairs(BlockId id, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
-        return builderStairs(BlockCopperStairsBehaviorImpl.class, id)
+        return stairsBuilder(BlockCopperStairsBehaviorImpl.class, id)
                 .setBaseComponentSupplier(BlockCopperStairsBaseComponentImpl::new)
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();
     }
 
-    private static <T extends BlockBehavior> AllayBlockType.Builder builderStairs(Class<T> clazz, BlockId id) {
+    private static <T extends BlockBehavior> AllayBlockType.Builder stairsBuilder(Class<T> clazz, BlockId id) {
         return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(id)
                 .setProperties(BlockPropertyTypes.UPSIDE_DOWN_BIT, BlockPropertyTypes.WEIRDO_DIRECTION)
                 .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape(VoxelShapes::buildStairShape));
+    }
+
+    public static void initSlab() {
+        // TODO
+
+        BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperSlab = (level, waxed) -> switch (level) {
+            case UNAFFECTED -> waxed ? BlockTypes.WAXED_CUT_COPPER_SLAB : BlockTypes.CUT_COPPER_SLAB;
+            case EXPOSED -> waxed ? BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB : BlockTypes.EXPOSED_CUT_COPPER_SLAB;
+            case WEATHERED -> waxed ? BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB : BlockTypes.WEATHERED_CUT_COPPER_SLAB;
+            case OXIDIZED -> waxed ? BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB : BlockTypes.OXIDIZED_CUT_COPPER_SLAB;
+        };
+        BlockTypes.CUT_COPPER_SLAB = buildCopperSlab(BlockId.CUT_COPPER_SLAB, BlockId.DOUBLE_CUT_COPPER_SLAB, OxidationLevel.UNAFFECTED, cutCopperSlab);
+        BlockTypes.EXPOSED_CUT_COPPER_SLAB = buildCopperSlab(BlockId.EXPOSED_CUT_COPPER_SLAB, BlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB, OxidationLevel.EXPOSED, cutCopperSlab);
+        BlockTypes.WEATHERED_CUT_COPPER_SLAB = buildCopperSlab(BlockId.WEATHERED_CUT_COPPER_SLAB, BlockId.WEATHERED_DOUBLE_CUT_COPPER_SLAB, OxidationLevel.WEATHERED, cutCopperSlab);
+        BlockTypes.OXIDIZED_CUT_COPPER_SLAB = buildCopperSlab(BlockId.OXIDIZED_CUT_COPPER_SLAB, BlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB, OxidationLevel.OXIDIZED, cutCopperSlab);
+        BlockTypes.WAXED_CUT_COPPER_SLAB = buildCopperSlab(BlockId.WAXED_CUT_COPPER_SLAB, BlockId.WAXED_DOUBLE_CUT_COPPER_SLAB, OxidationLevel.UNAFFECTED, cutCopperSlab);
+        BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB = buildCopperSlab(BlockId.WAXED_EXPOSED_CUT_COPPER_SLAB, BlockId.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB, OxidationLevel.EXPOSED, cutCopperSlab);
+        BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB = buildCopperSlab(BlockId.WAXED_WEATHERED_CUT_COPPER_SLAB, BlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB, OxidationLevel.WEATHERED, cutCopperSlab);
+        BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = buildCopperSlab(BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB, BlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB, OxidationLevel.OXIDIZED, cutCopperSlab);
+    }
+
+    public static BlockType<BlockSlabBehavior> buildSlab(BlockId id, BlockId doubleSlabId) {
+        return slabBuilder(BlockSlabBehaviorImpl.class, id)
+                .setBaseComponentSupplier(blockType -> new BlockSlabBaseComponentImpl(blockType, doubleSlabId))
+                .build();
+    }
+
+    public static BlockType<BlockCopperSlabBehavior> buildCopperSlab(BlockId id, BlockId doubleSlabId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+        return slabBuilder(BlockCopperSlabBehaviorImpl.class, id)
+                .setBaseComponentSupplier(blockType -> new BlockCopperSlabBaseComponentImpl(blockType, doubleSlabId))
+                .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .build();
+    }
+
+    public static <T extends BlockBehavior> AllayBlockType.Builder slabBuilder(Class<T> clazz, BlockId id) {
+        return AllayBlockType
+                .builder(clazz)
+                .vanillaBlock(id)
+                .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF);
     }
 
     public static void initColoredTorch() {
@@ -685,7 +725,7 @@ public final class BlockTypeInitializer {
         BlockTypes.WARPED_DOOR = buildDoor(BlockId.WARPED_DOOR);
         BlockTypes.PALE_OAK_DOOR = buildDoor(BlockId.PALE_OAK_DOOR);
 
-        BlockTypes.IRON_DOOR = builderDoor(BlockIronDoorBehaviorImpl.class, BlockId.IRON_DOOR, BlockIronDoorBaseComponentImpl::new).build();
+        BlockTypes.IRON_DOOR = doorBuilder(BlockIronDoorBehaviorImpl.class, BlockId.IRON_DOOR, BlockIronDoorBaseComponentImpl::new).build();
 
         // TODO: fix base door behavior
 //        BiFunction<OxidationLevel, Boolean, BlockType<?>> copperDoor = (level, waxed) -> switch (level) {
@@ -705,7 +745,7 @@ public final class BlockTypeInitializer {
     }
 
     private static <T extends BlockBehavior> BlockType<T> buildDoor(BlockId blockId) {
-        return builderDoor(BlockDoorBehaviorImpl.class, blockId, BlockDoorBaseComponentImpl::new).build();
+        return doorBuilder(BlockDoorBehaviorImpl.class, blockId, BlockDoorBaseComponentImpl::new).build();
     }
 
 //    private static <T extends BlockBehavior> BlockType<T> buildCopperDoor(BlockId blockId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
@@ -714,7 +754,7 @@ public final class BlockTypeInitializer {
 //                .build();
 //    }
 
-    private static AllayBlockType.Builder builderDoor(Class<? extends BlockBehavior> clazz, BlockId blockId, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
+    private static AllayBlockType.Builder doorBuilder(Class<? extends BlockBehavior> clazz, BlockId blockId, Function<BlockType<?>, BlockBaseComponent> blockBaseComponentSupplier) {
         return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(blockId)

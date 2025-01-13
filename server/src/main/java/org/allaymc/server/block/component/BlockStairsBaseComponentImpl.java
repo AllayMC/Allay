@@ -34,6 +34,11 @@ public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
         return true;
     }
 
+    @Override
+    public boolean canLiquidFlowIntoSide(BlockState blockState, BlockFace blockFace) {
+        return !blockState.getBlockStateData().shape().isFull(blockFace);
+    }
+
     /**
      * Get the stair direction value which represents this block face.
      *
