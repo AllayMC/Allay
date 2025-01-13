@@ -54,6 +54,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) `EntityBaseComponent#getBlockStateStandingOn` now return `BlockStateWithPos` instead of `BlockState`.
 - (API) Removed `BlockFace#horizontalIndex` which is useless.
 - (API) Removed `ScoreboardService#ServerEventListener` as it is not supposed to be touched by plugin.
+- (API) Methods `BlockEntityFurnaceBaseComponent#getStoredXP` and `BlockEntityFurnaceBaseComponent#setStoredXP` now accept
+  `int` instead of `float`.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
 - Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is

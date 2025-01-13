@@ -28,6 +28,8 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
 import org.joml.Vector3f;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 /**
  * @author daoge_cmd
  */
@@ -35,6 +37,10 @@ import org.joml.Vector3f;
 public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponentImpl implements BlockEntityFurnaceBaseComponent {
 
     public static final int MAX_COOK_TIME = 200;
+    public static final String TAG_BURN_TIME = "BurnTime";
+    public static final String TAG_COOK_TIME = "CookTime";
+    public static final String TAG_BURN_DURATION = "BurnDuration";
+    public static final String TAG_STORED_XP_INT = "StoredXPInt";
 
     @Dependency
     protected BlockEntityContainerHolderComponent containerHolderComponent;
@@ -49,7 +55,7 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected int burnDuration; // unit: gt
     @Getter
     @Setter
-    protected float storedXP;
+    protected int storedXP;
 
     protected int currentIngredientStackNetworkId = Integer.MAX_VALUE;
     protected FurnaceRecipe currentFurnaceRecipe = null;
@@ -103,10 +109,10 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     @Override
     public NbtMap saveNBT() {
         return super.saveNBT().toBuilder()
-                .putShort("BurnTime", (short) burnTime)
-                .putShort("CookTime", (short) cookTime)
-                .putShort("BurnDuration", (short) burnDuration)
-                .putFloat("StoredXP", storedXP)
+                .putShort(TAG_BURN_TIME, (short) burnTime)
+                .putShort(TAG_COOK_TIME, (short) cookTime)
+                .putShort(TAG_BURN_DURATION, (short) burnDuration)
+                .putInt(TAG_STORED_XP_INT, storedXP)
                 .build();
     }
 
@@ -114,10 +120,10 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
 
-        nbt.listenForShort("BurnTime", value -> burnTime = value);
-        nbt.listenForShort("CookTime", value -> cookTime = value);
-        nbt.listenForShort("BurnDuration", value -> burnDuration = value);
-        nbt.listenForFloat("StoredXP", value -> storedXP = value);
+        nbt.listenForShort(TAG_BURN_TIME, value -> burnTime = value);
+        nbt.listenForShort(TAG_COOK_TIME, value -> cookTime = value);
+        nbt.listenForShort(TAG_BURN_DURATION, value -> burnDuration = value);
+        nbt.listenForInt(TAG_STORED_XP_INT, value -> storedXP = value);
     }
 
     @Override
@@ -198,7 +204,16 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
             container.notifySlotChange(FurnaceContainer.RESULT_SLOT);
         }
 
-        storedXP += output.getItemData().furnaceXPMultiplier();
+        // Calculate the amount of experience to grant
+        // Round the experience down to the nearest integer, and the remaining
+        // XP is a chance to be granted an additional experience point
+        var xp = output.getItemData().furnaceXPMultiplier();
+        int earned = (int) Math.floor(xp);
+        var chance = xp - earned;
+        if (chance > 0 && ThreadLocalRandom.current().nextFloat() < chance) {
+            earned++;
+        }
+        storedXP += earned;
     }
 
     protected boolean checkIngredient(ItemStack ingredient) {

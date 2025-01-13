@@ -32,14 +32,14 @@ public interface BlockEntityFurnaceBaseComponent extends BlockEntityBaseComponen
      *
      * @return the stored XP
      */
-    float getStoredXP();
+    int getStoredXP();
 
     /**
      * Sets the stored XP.
      *
      * @param storedXP the stored XP to set
      */
-    void setStoredXP(float storedXP);
+    void setStoredXP(int storedXP);
 
     /**
      * Gets the unlit block type.
