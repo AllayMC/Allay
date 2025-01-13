@@ -3,7 +3,6 @@ package org.allaymc.server.blockentity.component.furnace;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.block.property.type.BlockPropertyType;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
@@ -130,11 +129,12 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     public void setLit(boolean lit) {
         var currentBlockState = getDimension().getBlockState(position);
         var newBlockType = lit ? getLitBlockType() : getUnlitBlockType();
-        if (currentBlockState.getBlockType() == newBlockType) return;
+        if (currentBlockState.getBlockType() == newBlockType) {
+            return;
+        }
 
-        var propertyValues = currentBlockState.getPropertyValues().values().toArray(BlockPropertyType.BlockPropertyValue<?, ?, ?>[]::new);
         getDimension().setBlockState(
-                position, newBlockType.ofState(propertyValues),
+                position, newBlockType.copyPropertyValuesFrom(currentBlockState),
                 0, true, true, false
         );
     }
