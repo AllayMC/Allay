@@ -1,412 +1,7 @@
 package org.allaymc.api.block.type;
 
 import org.allaymc.api.annotation.MinecraftVersionSensitive;
-import org.allaymc.api.block.interfaces.BlockAcaciaPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockActivatorRailBehavior;
-import org.allaymc.api.block.interfaces.BlockAirBehavior;
-import org.allaymc.api.block.interfaces.BlockAlliumBehavior;
-import org.allaymc.api.block.interfaces.BlockAllowBehavior;
-import org.allaymc.api.block.interfaces.BlockAmethystBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockAmethystClusterBehavior;
-import org.allaymc.api.block.interfaces.BlockAncientDebrisBehavior;
-import org.allaymc.api.block.interfaces.BlockAndesiteBehavior;
-import org.allaymc.api.block.interfaces.BlockAnvilBehavior;
-import org.allaymc.api.block.interfaces.BlockAzaleaBehavior;
-import org.allaymc.api.block.interfaces.BlockAzureBluetBehavior;
-import org.allaymc.api.block.interfaces.BlockBambooBehavior;
-import org.allaymc.api.block.interfaces.BlockBambooMosaicBehavior;
-import org.allaymc.api.block.interfaces.BlockBambooPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockBarrelBehavior;
-import org.allaymc.api.block.interfaces.BlockBarrierBehavior;
-import org.allaymc.api.block.interfaces.BlockBasaltBehavior;
-import org.allaymc.api.block.interfaces.BlockBeaconBehavior;
-import org.allaymc.api.block.interfaces.BlockBedBehavior;
-import org.allaymc.api.block.interfaces.BlockBedrockBehavior;
-import org.allaymc.api.block.interfaces.BlockBeeNestBehavior;
-import org.allaymc.api.block.interfaces.BlockBeehiveBehavior;
-import org.allaymc.api.block.interfaces.BlockBeetrootBehavior;
-import org.allaymc.api.block.interfaces.BlockBellBehavior;
-import org.allaymc.api.block.interfaces.BlockBigDripleafBehavior;
-import org.allaymc.api.block.interfaces.BlockBirchPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockBlackstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockBlastFurnaceBehavior;
-import org.allaymc.api.block.interfaces.BlockBlueIceBehavior;
-import org.allaymc.api.block.interfaces.BlockBlueOrchidBehavior;
-import org.allaymc.api.block.interfaces.BlockBoneBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockBookshelfBehavior;
-import org.allaymc.api.block.interfaces.BlockBorderBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockBrewingStandBehavior;
-import org.allaymc.api.block.interfaces.BlockBrickBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockBricksBehavior;
-import org.allaymc.api.block.interfaces.BlockBrownMushroomBehavior;
-import org.allaymc.api.block.interfaces.BlockBrownMushroomBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockBubbleColumnBehavior;
-import org.allaymc.api.block.interfaces.BlockBuddingAmethystBehavior;
-import org.allaymc.api.block.interfaces.BlockButtonBehavior;
-import org.allaymc.api.block.interfaces.BlockCactusBehavior;
-import org.allaymc.api.block.interfaces.BlockCakeBehavior;
-import org.allaymc.api.block.interfaces.BlockCalciteBehavior;
-import org.allaymc.api.block.interfaces.BlockCalibratedSculkSensorBehavior;
-import org.allaymc.api.block.interfaces.BlockCameraBehavior;
-import org.allaymc.api.block.interfaces.BlockCampfireBehavior;
-import org.allaymc.api.block.interfaces.BlockCandleBehavior;
-import org.allaymc.api.block.interfaces.BlockCandleCakeBehavior;
-import org.allaymc.api.block.interfaces.BlockCarpetBehavior;
-import org.allaymc.api.block.interfaces.BlockCarrotsBehavior;
-import org.allaymc.api.block.interfaces.BlockCartographyTableBehavior;
-import org.allaymc.api.block.interfaces.BlockCarvedPumpkinBehavior;
-import org.allaymc.api.block.interfaces.BlockCauldronBehavior;
-import org.allaymc.api.block.interfaces.BlockCaveVinesBehavior;
-import org.allaymc.api.block.interfaces.BlockCaveVinesBodyWithBerriesBehavior;
-import org.allaymc.api.block.interfaces.BlockCaveVinesHeadWithBerriesBehavior;
-import org.allaymc.api.block.interfaces.BlockChainBehavior;
-import org.allaymc.api.block.interfaces.BlockChainCommandBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockChalkboardBehavior;
-import org.allaymc.api.block.interfaces.BlockChemicalHeatBehavior;
-import org.allaymc.api.block.interfaces.BlockCherryPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockChestBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledBookshelfBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledPolishedBlackstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledQuartzBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockChiseledTuffBehavior;
-import org.allaymc.api.block.interfaces.BlockChorusFlowerBehavior;
-import org.allaymc.api.block.interfaces.BlockChorusPlantBehavior;
-import org.allaymc.api.block.interfaces.BlockClayBehavior;
-import org.allaymc.api.block.interfaces.BlockClientRequestPlaceholderBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockClosedEyeblossomBehavior;
-import org.allaymc.api.block.interfaces.BlockCoalBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockCoalOreBehavior;
-import org.allaymc.api.block.interfaces.BlockCoarseDirtBehavior;
-import org.allaymc.api.block.interfaces.BlockCobbledDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockCobblestoneBehavior;
-import org.allaymc.api.block.interfaces.BlockCocoaBehavior;
-import org.allaymc.api.block.interfaces.BlockColoredTorchBehavior;
-import org.allaymc.api.block.interfaces.BlockCommandBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockComposterBehavior;
-import org.allaymc.api.block.interfaces.BlockCompoundCreatorBehavior;
-import org.allaymc.api.block.interfaces.BlockConcreteBehavior;
-import org.allaymc.api.block.interfaces.BlockConcretePowderBehavior;
-import org.allaymc.api.block.interfaces.BlockConduitBehavior;
-import org.allaymc.api.block.interfaces.BlockCopperBehavior;
-import org.allaymc.api.block.interfaces.BlockCopperBulbBehavior;
-import org.allaymc.api.block.interfaces.BlockCopperDoorBehavior;
-import org.allaymc.api.block.interfaces.BlockCopperGrateBehavior;
-import org.allaymc.api.block.interfaces.BlockCopperOreBehavior;
-import org.allaymc.api.block.interfaces.BlockCopperStairsBehavior;
-import org.allaymc.api.block.interfaces.BlockCopperTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.BlockCoralBehavior;
-import org.allaymc.api.block.interfaces.BlockCoralBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockCoralFanBehavior;
-import org.allaymc.api.block.interfaces.BlockCoralWallFanBehavior;
-import org.allaymc.api.block.interfaces.BlockCornflowerBehavior;
-import org.allaymc.api.block.interfaces.BlockCrackedDeepslateTilesBehavior;
-import org.allaymc.api.block.interfaces.BlockCrafterBehavior;
-import org.allaymc.api.block.interfaces.BlockCraftingTableBehavior;
-import org.allaymc.api.block.interfaces.BlockCreakingHeartBehavior;
-import org.allaymc.api.block.interfaces.BlockCrimsonFungusBehavior;
-import org.allaymc.api.block.interfaces.BlockCrimsonNyliumBehavior;
-import org.allaymc.api.block.interfaces.BlockCrimsonPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockCrimsonRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockCryingObsidianBehavior;
-import org.allaymc.api.block.interfaces.BlockDandelionBehavior;
-import org.allaymc.api.block.interfaces.BlockDarkOakPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockDarkPrismarineBehavior;
-import org.allaymc.api.block.interfaces.BlockDaylightDetectorBehavior;
-import org.allaymc.api.block.interfaces.BlockDaylightDetectorInvertedBehavior;
-import org.allaymc.api.block.interfaces.BlockDeadbushBehavior;
-import org.allaymc.api.block.interfaces.BlockDecoratedPotBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateCoalOreBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateCopperOreBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateDiamondOreBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateEmeraldOreBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateGoldOreBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateIronOreBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateLapisOreBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateRedstoneOreBehavior;
-import org.allaymc.api.block.interfaces.BlockDeepslateTilesBehavior;
-import org.allaymc.api.block.interfaces.BlockDenyBehavior;
-import org.allaymc.api.block.interfaces.BlockDeprecatedPurpurBlock1Behavior;
-import org.allaymc.api.block.interfaces.BlockDeprecatedPurpurBlock2Behavior;
-import org.allaymc.api.block.interfaces.BlockDetectorRailBehavior;
-import org.allaymc.api.block.interfaces.BlockDiamondBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockDiamondOreBehavior;
-import org.allaymc.api.block.interfaces.BlockDioriteBehavior;
-import org.allaymc.api.block.interfaces.BlockDirtBehavior;
-import org.allaymc.api.block.interfaces.BlockDirtWithRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockDispenserBehavior;
-import org.allaymc.api.block.interfaces.BlockDoorBehavior;
-import org.allaymc.api.block.interfaces.BlockDragonEggBehavior;
-import org.allaymc.api.block.interfaces.BlockDriedKelpBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockDripstoneBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockDropperBehavior;
-import org.allaymc.api.block.interfaces.BlockElementBehavior;
-import org.allaymc.api.block.interfaces.BlockEmeraldBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockEmeraldOreBehavior;
-import org.allaymc.api.block.interfaces.BlockEnchantingTableBehavior;
-import org.allaymc.api.block.interfaces.BlockEndGatewayBehavior;
-import org.allaymc.api.block.interfaces.BlockEndPortalBehavior;
-import org.allaymc.api.block.interfaces.BlockEndPortalFrameBehavior;
-import org.allaymc.api.block.interfaces.BlockEndRodBehavior;
-import org.allaymc.api.block.interfaces.BlockEndStoneBehavior;
-import org.allaymc.api.block.interfaces.BlockEnderChestBehavior;
-import org.allaymc.api.block.interfaces.BlockFarmlandBehavior;
-import org.allaymc.api.block.interfaces.BlockFenceBehavior;
-import org.allaymc.api.block.interfaces.BlockFenceGateBehavior;
-import org.allaymc.api.block.interfaces.BlockFernBehavior;
-import org.allaymc.api.block.interfaces.BlockFireBehavior;
-import org.allaymc.api.block.interfaces.BlockFletchingTableBehavior;
-import org.allaymc.api.block.interfaces.BlockFlowerPotBehavior;
-import org.allaymc.api.block.interfaces.BlockFloweringAzaleaBehavior;
-import org.allaymc.api.block.interfaces.BlockFrameBehavior;
-import org.allaymc.api.block.interfaces.BlockFrogSpawnBehavior;
-import org.allaymc.api.block.interfaces.BlockFrostedIceBehavior;
-import org.allaymc.api.block.interfaces.BlockFurnaceBehavior;
-import org.allaymc.api.block.interfaces.BlockGildedBlackstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockGlassBehavior;
-import org.allaymc.api.block.interfaces.BlockGlassPaneBehavior;
-import org.allaymc.api.block.interfaces.BlockGlowFrameBehavior;
-import org.allaymc.api.block.interfaces.BlockGlowLichenBehavior;
-import org.allaymc.api.block.interfaces.BlockGlowingobsidianBehavior;
-import org.allaymc.api.block.interfaces.BlockGlowstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockGoldBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockGoldOreBehavior;
-import org.allaymc.api.block.interfaces.BlockGoldenRailBehavior;
-import org.allaymc.api.block.interfaces.BlockGraniteBehavior;
-import org.allaymc.api.block.interfaces.BlockGrassBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockGrassPathBehavior;
-import org.allaymc.api.block.interfaces.BlockGravelBehavior;
-import org.allaymc.api.block.interfaces.BlockGrindstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockHangingRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockHangingSignBehavior;
-import org.allaymc.api.block.interfaces.BlockHardenedClayBehavior;
-import org.allaymc.api.block.interfaces.BlockHayBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockHeadBehavior;
-import org.allaymc.api.block.interfaces.BlockHeavyCoreBehavior;
-import org.allaymc.api.block.interfaces.BlockHeavyWeightedPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockHoneyBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockHoneycombBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockHopperBehavior;
-import org.allaymc.api.block.interfaces.BlockIceBehavior;
-import org.allaymc.api.block.interfaces.BlockInfestedCobblestoneBehavior;
-import org.allaymc.api.block.interfaces.BlockInfestedDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockInfestedStoneBehavior;
-import org.allaymc.api.block.interfaces.BlockInfoUpdate2Behavior;
-import org.allaymc.api.block.interfaces.BlockInfoUpdateBehavior;
-import org.allaymc.api.block.interfaces.BlockInvisibleBedrockBehavior;
-import org.allaymc.api.block.interfaces.BlockIronBarsBehavior;
-import org.allaymc.api.block.interfaces.BlockIronBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockIronDoorBehavior;
-import org.allaymc.api.block.interfaces.BlockIronOreBehavior;
-import org.allaymc.api.block.interfaces.BlockIronTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.BlockJigsawBehavior;
-import org.allaymc.api.block.interfaces.BlockJukeboxBehavior;
-import org.allaymc.api.block.interfaces.BlockJunglePressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockKelpBehavior;
-import org.allaymc.api.block.interfaces.BlockLabTableBehavior;
-import org.allaymc.api.block.interfaces.BlockLadderBehavior;
-import org.allaymc.api.block.interfaces.BlockLanternBehavior;
-import org.allaymc.api.block.interfaces.BlockLapisBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockLapisOreBehavior;
-import org.allaymc.api.block.interfaces.BlockLargeAmethystBudBehavior;
-import org.allaymc.api.block.interfaces.BlockLargeFernBehavior;
-import org.allaymc.api.block.interfaces.BlockLeavesBehavior;
-import org.allaymc.api.block.interfaces.BlockLecternBehavior;
-import org.allaymc.api.block.interfaces.BlockLeverBehavior;
-import org.allaymc.api.block.interfaces.BlockLightBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockLightWeightedPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockLightningRodBehavior;
-import org.allaymc.api.block.interfaces.BlockLilacBehavior;
-import org.allaymc.api.block.interfaces.BlockLilyOfTheValleyBehavior;
-import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
-import org.allaymc.api.block.interfaces.BlockLitDeepslateRedstoneOreBehavior;
-import org.allaymc.api.block.interfaces.BlockLitPumpkinBehavior;
-import org.allaymc.api.block.interfaces.BlockLitRedstoneLampBehavior;
-import org.allaymc.api.block.interfaces.BlockLitRedstoneOreBehavior;
-import org.allaymc.api.block.interfaces.BlockLodestoneBehavior;
-import org.allaymc.api.block.interfaces.BlockLoomBehavior;
-import org.allaymc.api.block.interfaces.BlockMagmaBehavior;
-import org.allaymc.api.block.interfaces.BlockMangrovePressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockMangrovePropaguleBehavior;
-import org.allaymc.api.block.interfaces.BlockMangroveRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockMaterialReducerBehavior;
-import org.allaymc.api.block.interfaces.BlockMediumAmethystBudBehavior;
-import org.allaymc.api.block.interfaces.BlockMelonBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockMelonStemBehavior;
-import org.allaymc.api.block.interfaces.BlockMobSpawnerBehavior;
-import org.allaymc.api.block.interfaces.BlockMossBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockMossyCobblestoneBehavior;
-import org.allaymc.api.block.interfaces.BlockMovingBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockMudBehavior;
-import org.allaymc.api.block.interfaces.BlockMuddyMangroveRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockMushroomStemBehavior;
-import org.allaymc.api.block.interfaces.BlockMyceliumBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherBrickBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherGoldOreBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherSproutsBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherWartBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherWartBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockNetheriteBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherrackBehavior;
-import org.allaymc.api.block.interfaces.BlockNetherreactorBehavior;
-import org.allaymc.api.block.interfaces.BlockNoteblockBehavior;
-import org.allaymc.api.block.interfaces.BlockObserverBehavior;
-import org.allaymc.api.block.interfaces.BlockObsidianBehavior;
-import org.allaymc.api.block.interfaces.BlockOchreFroglightBehavior;
-import org.allaymc.api.block.interfaces.BlockOpenEyeblossomBehavior;
-import org.allaymc.api.block.interfaces.BlockOrangeTulipBehavior;
-import org.allaymc.api.block.interfaces.BlockOxeyeDaisyBehavior;
-import org.allaymc.api.block.interfaces.BlockPackedIceBehavior;
-import org.allaymc.api.block.interfaces.BlockPackedMudBehavior;
-import org.allaymc.api.block.interfaces.BlockPaleHangingMossBehavior;
-import org.allaymc.api.block.interfaces.BlockPaleMossBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockPaleOakPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockPearlescentFroglightBehavior;
-import org.allaymc.api.block.interfaces.BlockPeonyBehavior;
-import org.allaymc.api.block.interfaces.BlockPinkPetalsBehavior;
-import org.allaymc.api.block.interfaces.BlockPinkTulipBehavior;
-import org.allaymc.api.block.interfaces.BlockPistonArmCollisionBehavior;
-import org.allaymc.api.block.interfaces.BlockPistonBehavior;
-import org.allaymc.api.block.interfaces.BlockPitcherCropBehavior;
-import org.allaymc.api.block.interfaces.BlockPitcherPlantBehavior;
-import org.allaymc.api.block.interfaces.BlockPlanksBehavior;
-import org.allaymc.api.block.interfaces.BlockPodzolBehavior;
-import org.allaymc.api.block.interfaces.BlockPointedDripstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedAndesiteBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedBasaltBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedBlackstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedBlackstonePressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedDioriteBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedGraniteBehavior;
-import org.allaymc.api.block.interfaces.BlockPolishedTuffBehavior;
-import org.allaymc.api.block.interfaces.BlockPoppyBehavior;
-import org.allaymc.api.block.interfaces.BlockPortalBehavior;
-import org.allaymc.api.block.interfaces.BlockPotatoesBehavior;
-import org.allaymc.api.block.interfaces.BlockPowderSnowBehavior;
-import org.allaymc.api.block.interfaces.BlockPoweredComparatorBehavior;
-import org.allaymc.api.block.interfaces.BlockPoweredRepeaterBehavior;
-import org.allaymc.api.block.interfaces.BlockPrismarineBehavior;
-import org.allaymc.api.block.interfaces.BlockPumpkinBehavior;
-import org.allaymc.api.block.interfaces.BlockPumpkinStemBehavior;
-import org.allaymc.api.block.interfaces.BlockPurpurBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockPurpurPillarBehavior;
-import org.allaymc.api.block.interfaces.BlockQuartzBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockQuartzOreBehavior;
-import org.allaymc.api.block.interfaces.BlockQuartzPillarBehavior;
-import org.allaymc.api.block.interfaces.BlockRailBehavior;
-import org.allaymc.api.block.interfaces.BlockRawCopperBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRawGoldBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRawIronBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRedMushroomBehavior;
-import org.allaymc.api.block.interfaces.BlockRedMushroomBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRedNetherBrickBehavior;
-import org.allaymc.api.block.interfaces.BlockRedSandBehavior;
-import org.allaymc.api.block.interfaces.BlockRedTulipBehavior;
-import org.allaymc.api.block.interfaces.BlockRedstoneBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockRedstoneLampBehavior;
-import org.allaymc.api.block.interfaces.BlockRedstoneOreBehavior;
-import org.allaymc.api.block.interfaces.BlockRedstoneTorchBehavior;
-import org.allaymc.api.block.interfaces.BlockRedstoneWireBehavior;
-import org.allaymc.api.block.interfaces.BlockReedsBehavior;
-import org.allaymc.api.block.interfaces.BlockReinforcedDeepslateBehavior;
-import org.allaymc.api.block.interfaces.BlockRepeatingCommandBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockReserved6Behavior;
-import org.allaymc.api.block.interfaces.BlockResinBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockResinClumpBehavior;
-import org.allaymc.api.block.interfaces.BlockRespawnAnchorBehavior;
-import org.allaymc.api.block.interfaces.BlockRoseBushBehavior;
-import org.allaymc.api.block.interfaces.BlockSandBehavior;
-import org.allaymc.api.block.interfaces.BlockSandstoneBehavior;
-import org.allaymc.api.block.interfaces.BlockSaplingBehavior;
-import org.allaymc.api.block.interfaces.BlockScaffoldingBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkCatalystBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkSensorBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkShriekerBehavior;
-import org.allaymc.api.block.interfaces.BlockSculkVeinBehavior;
-import org.allaymc.api.block.interfaces.BlockSeaLanternBehavior;
-import org.allaymc.api.block.interfaces.BlockSeaPickleBehavior;
-import org.allaymc.api.block.interfaces.BlockSeagrassBehavior;
-import org.allaymc.api.block.interfaces.BlockShortGrassBehavior;
-import org.allaymc.api.block.interfaces.BlockShroomlightBehavior;
-import org.allaymc.api.block.interfaces.BlockShulkerBoxBehavior;
-import org.allaymc.api.block.interfaces.BlockSignBehavior;
-import org.allaymc.api.block.interfaces.BlockSlabBehavior;
-import org.allaymc.api.block.interfaces.BlockSlimeBehavior;
-import org.allaymc.api.block.interfaces.BlockSmallAmethystBudBehavior;
-import org.allaymc.api.block.interfaces.BlockSmallDripleafBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockSmithingTableBehavior;
-import org.allaymc.api.block.interfaces.BlockSmokerBehavior;
-import org.allaymc.api.block.interfaces.BlockSmoothBasaltBehavior;
-import org.allaymc.api.block.interfaces.BlockSmoothQuartzBehavior;
-import org.allaymc.api.block.interfaces.BlockSmoothStoneBehavior;
-import org.allaymc.api.block.interfaces.BlockSnifferEggBehavior;
-import org.allaymc.api.block.interfaces.BlockSnowBehavior;
-import org.allaymc.api.block.interfaces.BlockSnowLayerBehavior;
-import org.allaymc.api.block.interfaces.BlockSoulCampfireBehavior;
-import org.allaymc.api.block.interfaces.BlockSoulLanternBehavior;
-import org.allaymc.api.block.interfaces.BlockSoulSandBehavior;
-import org.allaymc.api.block.interfaces.BlockSoulSoilBehavior;
-import org.allaymc.api.block.interfaces.BlockSoulTorchBehavior;
-import org.allaymc.api.block.interfaces.BlockSpongeBehavior;
-import org.allaymc.api.block.interfaces.BlockSporeBlossomBehavior;
-import org.allaymc.api.block.interfaces.BlockSprucePressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockStairsBehavior;
-import org.allaymc.api.block.interfaces.BlockStandingBannerBehavior;
-import org.allaymc.api.block.interfaces.BlockStickyPistonArmCollisionBehavior;
-import org.allaymc.api.block.interfaces.BlockStickyPistonBehavior;
-import org.allaymc.api.block.interfaces.BlockStoneBehavior;
-import org.allaymc.api.block.interfaces.BlockStonePressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockStonecutterBehavior;
-import org.allaymc.api.block.interfaces.BlockStonecutterBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockStructureBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockStructureVoidBehavior;
-import org.allaymc.api.block.interfaces.BlockSunflowerBehavior;
-import org.allaymc.api.block.interfaces.BlockSuspiciousGravelBehavior;
-import org.allaymc.api.block.interfaces.BlockSuspiciousSandBehavior;
-import org.allaymc.api.block.interfaces.BlockSweetBerryBushBehavior;
-import org.allaymc.api.block.interfaces.BlockTallGrassBehavior;
-import org.allaymc.api.block.interfaces.BlockTargetBehavior;
-import org.allaymc.api.block.interfaces.BlockTerracottaBehavior;
-import org.allaymc.api.block.interfaces.BlockTntBehavior;
-import org.allaymc.api.block.interfaces.BlockTorchBehavior;
-import org.allaymc.api.block.interfaces.BlockTorchflowerBehavior;
-import org.allaymc.api.block.interfaces.BlockTorchflowerCropBehavior;
-import org.allaymc.api.block.interfaces.BlockTrapdoorBehavior;
-import org.allaymc.api.block.interfaces.BlockTrappedChestBehavior;
-import org.allaymc.api.block.interfaces.BlockTrialSpawnerBehavior;
-import org.allaymc.api.block.interfaces.BlockTripWireBehavior;
-import org.allaymc.api.block.interfaces.BlockTripwireHookBehavior;
-import org.allaymc.api.block.interfaces.BlockTuffBehavior;
-import org.allaymc.api.block.interfaces.BlockTurtleEggBehavior;
-import org.allaymc.api.block.interfaces.BlockTwistingVinesBehavior;
-import org.allaymc.api.block.interfaces.BlockUnderwaterTntBehavior;
-import org.allaymc.api.block.interfaces.BlockUnderwaterTorchBehavior;
-import org.allaymc.api.block.interfaces.BlockUnknownBehavior;
-import org.allaymc.api.block.interfaces.BlockUnpoweredComparatorBehavior;
-import org.allaymc.api.block.interfaces.BlockUnpoweredRepeaterBehavior;
-import org.allaymc.api.block.interfaces.BlockVaultBehavior;
-import org.allaymc.api.block.interfaces.BlockVerdantFroglightBehavior;
-import org.allaymc.api.block.interfaces.BlockVineBehavior;
-import org.allaymc.api.block.interfaces.BlockWallBannerBehavior;
-import org.allaymc.api.block.interfaces.BlockWallBehavior;
-import org.allaymc.api.block.interfaces.BlockWarpedFungusBehavior;
-import org.allaymc.api.block.interfaces.BlockWarpedNyliumBehavior;
-import org.allaymc.api.block.interfaces.BlockWarpedPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockWarpedRootsBehavior;
-import org.allaymc.api.block.interfaces.BlockWarpedWartBlockBehavior;
-import org.allaymc.api.block.interfaces.BlockWaterlilyBehavior;
-import org.allaymc.api.block.interfaces.BlockWebBehavior;
-import org.allaymc.api.block.interfaces.BlockWeepingVinesBehavior;
-import org.allaymc.api.block.interfaces.BlockWetSpongeBehavior;
-import org.allaymc.api.block.interfaces.BlockWheatBehavior;
-import org.allaymc.api.block.interfaces.BlockWhiteTulipBehavior;
-import org.allaymc.api.block.interfaces.BlockWitherRoseBehavior;
-import org.allaymc.api.block.interfaces.BlockWoodBehavior;
-import org.allaymc.api.block.interfaces.BlockWoodenPressurePlateBehavior;
-import org.allaymc.api.block.interfaces.BlockWoolBehavior;
+import org.allaymc.api.block.interfaces.*;
 
 /**
  * Automatically generated by {@code org.allaymc.codegen.BlockClassGen}
@@ -417,7 +12,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> ACACIA_DOOR;
 
-    public static BlockType<BlockSlabBehavior> ACACIA_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> ACACIA_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> ACACIA_FENCE;
 
@@ -463,7 +58,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockAndesiteBehavior> ANDESITE;
 
-    public static BlockType<BlockSlabBehavior> ANDESITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> ANDESITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> ANDESITE_SLAB;
 
@@ -489,7 +84,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> BAMBOO_DOOR;
 
-    public static BlockType<BlockSlabBehavior> BAMBOO_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BAMBOO_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> BAMBOO_FENCE;
 
@@ -499,7 +94,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBambooMosaicBehavior> BAMBOO_MOSAIC;
 
-    public static BlockType<BlockSlabBehavior> BAMBOO_MOSAIC_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BAMBOO_MOSAIC_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> BAMBOO_MOSAIC_SLAB;
 
@@ -547,7 +142,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> BIRCH_DOOR;
 
-    public static BlockType<BlockSlabBehavior> BIRCH_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BIRCH_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> BIRCH_FENCE;
 
@@ -601,7 +196,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBlackstoneBehavior> BLACKSTONE;
 
-    public static BlockType<BlockSlabBehavior> BLACKSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BLACKSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> BLACKSTONE_SLAB;
 
@@ -655,7 +250,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBrickBlockBehavior> BRICK_BLOCK;
 
-    public static BlockType<BlockSlabBehavior> BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> BRICK_SLAB;
 
@@ -743,7 +338,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> CHERRY_DOOR;
 
-    public static BlockType<BlockSlabBehavior> CHERRY_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> CHERRY_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> CHERRY_FENCE;
 
@@ -819,7 +414,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCobbledDeepslateBehavior> COBBLED_DEEPSLATE;
 
-    public static BlockType<BlockSlabBehavior> COBBLED_DEEPSLATE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> COBBLED_DEEPSLATE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> COBBLED_DEEPSLATE_SLAB;
 
@@ -829,7 +424,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockCobblestoneBehavior> COBBLESTONE;
 
-    public static BlockType<BlockSlabBehavior> COBBLESTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> COBBLESTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> COBBLESTONE_SLAB;
 
@@ -889,7 +484,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> CRIMSON_DOOR;
 
-    public static BlockType<BlockSlabBehavior> CRIMSON_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> CRIMSON_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> CRIMSON_FENCE;
 
@@ -925,19 +520,19 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> CUT_COPPER;
 
-    public static BlockType<BlockSlabBehavior> CUT_COPPER_SLAB;
+    public static BlockType<BlockCopperSlabBehavior> CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperStairsBehavior> CUT_COPPER_STAIRS;
 
     public static BlockType<BlockSandstoneBehavior> CUT_RED_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> CUT_RED_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> CUT_RED_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> CUT_RED_SANDSTONE_SLAB;
 
     public static BlockType<BlockSandstoneBehavior> CUT_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> CUT_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> CUT_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> CUT_SANDSTONE_SLAB;
 
@@ -971,7 +566,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> DARK_OAK_DOOR;
 
-    public static BlockType<BlockSlabBehavior> DARK_OAK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DARK_OAK_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> DARK_OAK_FENCE;
 
@@ -999,7 +594,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDarkPrismarineBehavior> DARK_PRISMARINE;
 
-    public static BlockType<BlockSlabBehavior> DARK_PRISMARINE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DARK_PRISMARINE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> DARK_PRISMARINE_SLAB;
 
@@ -1059,7 +654,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDeepslateBehavior> DEEPSLATE;
 
-    public static BlockType<BlockSlabBehavior> DEEPSLATE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DEEPSLATE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> DEEPSLATE_BRICK_SLAB;
 
@@ -1085,7 +680,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDeepslateRedstoneOreBehavior> DEEPSLATE_REDSTONE_ORE;
 
-    public static BlockType<BlockSlabBehavior> DEEPSLATE_TILE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DEEPSLATE_TILE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> DEEPSLATE_TILE_SLAB;
 
@@ -1111,7 +706,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDioriteBehavior> DIORITE;
 
-    public static BlockType<BlockSlabBehavior> DIORITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> DIORITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> DIORITE_SLAB;
 
@@ -1125,7 +720,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDispenserBehavior> DISPENSER;
 
-    public static BlockType<BlockSlabBehavior> DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockDragonEggBehavior> DRAGON_EGG;
 
@@ -1397,7 +992,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockEndStoneBehavior> END_STONE;
 
-    public static BlockType<BlockSlabBehavior> END_STONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> END_STONE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> END_STONE_BRICK_SLAB;
 
@@ -1419,11 +1014,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> EXPOSED_CUT_COPPER;
 
-    public static BlockType<BlockSlabBehavior> EXPOSED_CUT_COPPER_SLAB;
+    public static BlockType<BlockCopperSlabBehavior> EXPOSED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperStairsBehavior> EXPOSED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockFarmlandBehavior> FARMLAND;
 
@@ -1481,7 +1076,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockGraniteBehavior> GRANITE;
 
-    public static BlockType<BlockSlabBehavior> GRANITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> GRANITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> GRANITE_SLAB;
 
@@ -1673,7 +1268,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> JUNGLE_DOOR;
 
-    public static BlockType<BlockSlabBehavior> JUNGLE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> JUNGLE_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> JUNGLE_FENCE;
 
@@ -1875,7 +1470,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> MANGROVE_DOOR;
 
-    public static BlockType<BlockSlabBehavior> MANGROVE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> MANGROVE_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> MANGROVE_FENCE;
 
@@ -1923,7 +1518,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockMossyCobblestoneBehavior> MOSSY_COBBLESTONE;
 
-    public static BlockType<BlockSlabBehavior> MOSSY_COBBLESTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> MOSSY_COBBLESTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> MOSSY_COBBLESTONE_SLAB;
 
@@ -1931,7 +1526,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockWallBehavior> MOSSY_COBBLESTONE_WALL;
 
-    public static BlockType<BlockSlabBehavior> MOSSY_STONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> MOSSY_STONE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> MOSSY_STONE_BRICK_SLAB;
 
@@ -1945,7 +1540,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockMudBehavior> MUD;
 
-    public static BlockType<BlockSlabBehavior> MUD_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> MUD_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> MUD_BRICK_SLAB;
 
@@ -1963,7 +1558,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockNetherBrickBehavior> NETHER_BRICK;
 
-    public static BlockType<BlockSlabBehavior> NETHER_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> NETHER_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> NETHER_BRICK_FENCE;
 
@@ -1987,7 +1582,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockNetherreactorBehavior> NETHERREACTOR;
 
-    public static BlockType<BlockSlabBehavior> NORMAL_STONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> NORMAL_STONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> NORMAL_STONE_SLAB;
 
@@ -1995,7 +1590,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockNoteblockBehavior> NOTEBLOCK;
 
-    public static BlockType<BlockSlabBehavior> OAK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> OAK_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> OAK_FENCE;
 
@@ -2063,11 +1658,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> OXIDIZED_CUT_COPPER;
 
-    public static BlockType<BlockSlabBehavior> OXIDIZED_CUT_COPPER_SLAB;
+    public static BlockType<BlockCopperSlabBehavior> OXIDIZED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperStairsBehavior> OXIDIZED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockPackedIceBehavior> PACKED_ICE;
 
@@ -2083,7 +1678,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> PALE_OAK_DOOR;
 
-    public static BlockType<BlockSlabBehavior> PALE_OAK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PALE_OAK_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> PALE_OAK_FENCE;
 
@@ -2117,7 +1712,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPeonyBehavior> PEONY;
 
-    public static BlockType<BlockSlabBehavior> PETRIFIED_OAK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PETRIFIED_OAK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> PETRIFIED_OAK_SLAB;
 
@@ -2165,7 +1760,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedAndesiteBehavior> POLISHED_ANDESITE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_ANDESITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_ANDESITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_ANDESITE_SLAB;
 
@@ -2175,7 +1770,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedBlackstoneBehavior> POLISHED_BLACKSTONE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_BRICK_SLAB;
 
@@ -2187,7 +1782,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockButtonBehavior> POLISHED_BLACKSTONE_BUTTON;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_BLACKSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_BLACKSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockPolishedBlackstonePressurePlateBehavior> POLISHED_BLACKSTONE_PRESSURE_PLATE;
 
@@ -2199,7 +1794,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedDeepslateBehavior> POLISHED_DEEPSLATE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_DEEPSLATE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_DEEPSLATE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_DEEPSLATE_SLAB;
 
@@ -2209,7 +1804,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedDioriteBehavior> POLISHED_DIORITE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_DIORITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_DIORITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_DIORITE_SLAB;
 
@@ -2217,7 +1812,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedGraniteBehavior> POLISHED_GRANITE;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_GRANITE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_GRANITE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_GRANITE_SLAB;
 
@@ -2225,7 +1820,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPolishedTuffBehavior> POLISHED_TUFF;
 
-    public static BlockType<BlockSlabBehavior> POLISHED_TUFF_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> POLISHED_TUFF_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> POLISHED_TUFF_SLAB;
 
@@ -2247,7 +1842,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPrismarineBehavior> PRISMARINE;
 
-    public static BlockType<BlockSlabBehavior> PRISMARINE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PRISMARINE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> PRISMARINE_BRICK_SLAB;
 
@@ -2255,7 +1850,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockStairsBehavior> PRISMARINE_BRICKS_STAIRS;
 
-    public static BlockType<BlockSlabBehavior> PRISMARINE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PRISMARINE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> PRISMARINE_SLAB;
 
@@ -2291,7 +1886,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockPurpurBlockBehavior> PURPUR_BLOCK;
 
-    public static BlockType<BlockSlabBehavior> PURPUR_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> PURPUR_DOUBLE_SLAB;
 
     public static BlockType<BlockPurpurPillarBehavior> PURPUR_PILLAR;
 
@@ -2303,7 +1898,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBricksBehavior> QUARTZ_BRICKS;
 
-    public static BlockType<BlockSlabBehavior> QUARTZ_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> QUARTZ_DOUBLE_SLAB;
 
     public static BlockType<BlockQuartzOreBehavior> QUARTZ_ORE;
 
@@ -2339,7 +1934,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockRedNetherBrickBehavior> RED_NETHER_BRICK;
 
-    public static BlockType<BlockSlabBehavior> RED_NETHER_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> RED_NETHER_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> RED_NETHER_BRICK_SLAB;
 
@@ -2351,7 +1946,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> RED_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> RED_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> RED_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> RED_SANDSTONE_SLAB;
 
@@ -2391,7 +1986,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockResinBlockBehavior> RESIN_BLOCK;
 
-    public static BlockType<BlockSlabBehavior> RESIN_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> RESIN_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> RESIN_BRICK_SLAB;
 
@@ -2411,7 +2006,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SANDSTONE_SLAB;
 
@@ -2459,7 +2054,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmoothQuartzBehavior> SMOOTH_QUARTZ;
 
-    public static BlockType<BlockSlabBehavior> SMOOTH_QUARTZ_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SMOOTH_QUARTZ_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_QUARTZ_SLAB;
 
@@ -2467,7 +2062,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> SMOOTH_RED_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> SMOOTH_RED_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SMOOTH_RED_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_RED_SANDSTONE_SLAB;
 
@@ -2475,7 +2070,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSandstoneBehavior> SMOOTH_SANDSTONE;
 
-    public static BlockType<BlockSlabBehavior> SMOOTH_SANDSTONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SMOOTH_SANDSTONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_SANDSTONE_SLAB;
 
@@ -2483,7 +2078,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockSmoothStoneBehavior> SMOOTH_STONE;
 
-    public static BlockType<BlockSlabBehavior> SMOOTH_STONE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SMOOTH_STONE_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> SMOOTH_STONE_SLAB;
 
@@ -2513,7 +2108,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> SPRUCE_DOOR;
 
-    public static BlockType<BlockSlabBehavior> SPRUCE_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> SPRUCE_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> SPRUCE_FENCE;
 
@@ -2553,7 +2148,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockStoneBehavior> STONE;
 
-    public static BlockType<BlockSlabBehavior> STONE_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> STONE_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> STONE_BRICK_SLAB;
 
@@ -2665,7 +2260,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockTuffBehavior> TUFF;
 
-    public static BlockType<BlockSlabBehavior> TUFF_BRICK_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> TUFF_BRICK_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> TUFF_BRICK_SLAB;
 
@@ -2675,7 +2270,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockBricksBehavior> TUFF_BRICKS;
 
-    public static BlockType<BlockSlabBehavior> TUFF_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> TUFF_DOUBLE_SLAB;
 
     public static BlockType<BlockSlabBehavior> TUFF_SLAB;
 
@@ -2715,7 +2310,7 @@ public final class BlockTypes {
 
     public static BlockType<BlockDoorBehavior> WARPED_DOOR;
 
-    public static BlockType<BlockSlabBehavior> WARPED_DOUBLE_SLAB;
+    public static BlockType<BlockDoubleSlabBehavior> WARPED_DOUBLE_SLAB;
 
     public static BlockType<BlockFenceBehavior> WARPED_FENCE;
 
@@ -2767,11 +2362,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_CUT_COPPER;
 
-    public static BlockType<BlockSlabBehavior> WAXED_CUT_COPPER_SLAB;
+    public static BlockType<BlockCopperSlabBehavior> WAXED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperStairsBehavior> WAXED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockSlabBehavior> WAXED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WAXED_EXPOSED_CHISELED_COPPER;
 
@@ -2787,11 +2382,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_EXPOSED_CUT_COPPER;
 
-    public static BlockType<BlockSlabBehavior> WAXED_EXPOSED_CUT_COPPER_SLAB;
+    public static BlockType<BlockCopperSlabBehavior> WAXED_EXPOSED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperStairsBehavior> WAXED_EXPOSED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WAXED_OXIDIZED_CHISELED_COPPER;
 
@@ -2807,11 +2402,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_OXIDIZED_CUT_COPPER;
 
-    public static BlockType<BlockSlabBehavior> WAXED_OXIDIZED_CUT_COPPER_SLAB;
+    public static BlockType<BlockCopperSlabBehavior> WAXED_OXIDIZED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperStairsBehavior> WAXED_OXIDIZED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WAXED_WEATHERED_CHISELED_COPPER;
 
@@ -2827,11 +2422,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WAXED_WEATHERED_CUT_COPPER;
 
-    public static BlockType<BlockSlabBehavior> WAXED_WEATHERED_CUT_COPPER_SLAB;
+    public static BlockType<BlockCopperSlabBehavior> WAXED_WEATHERED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperStairsBehavior> WAXED_WEATHERED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperBehavior> WEATHERED_CHISELED_COPPER;
 
@@ -2847,11 +2442,11 @@ public final class BlockTypes {
 
     public static BlockType<BlockCopperBehavior> WEATHERED_CUT_COPPER;
 
-    public static BlockType<BlockSlabBehavior> WEATHERED_CUT_COPPER_SLAB;
+    public static BlockType<BlockCopperSlabBehavior> WEATHERED_CUT_COPPER_SLAB;
 
     public static BlockType<BlockCopperStairsBehavior> WEATHERED_CUT_COPPER_STAIRS;
 
-    public static BlockType<BlockSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+    public static BlockType<BlockDoubleCopperSlabBehavior> WEATHERED_DOUBLE_CUT_COPPER_SLAB;
 
     public static BlockType<BlockWebBehavior> WEB;
 

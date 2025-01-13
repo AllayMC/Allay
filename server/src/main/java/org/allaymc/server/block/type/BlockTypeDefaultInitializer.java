@@ -26,7 +26,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ACACIA_DOUBLE_SLAB == null) {
             BlockTypes.ACACIA_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.ACACIA_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -179,7 +179,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.ANDESITE_DOUBLE_SLAB == null) {
             BlockTypes.ANDESITE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.ANDESITE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -268,7 +268,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BAMBOO_DOUBLE_SLAB == null) {
             BlockTypes.BAMBOO_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.BAMBOO_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -301,7 +301,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BAMBOO_MOSAIC_DOUBLE_SLAB == null) {
             BlockTypes.BAMBOO_MOSAIC_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.BAMBOO_MOSAIC_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -466,7 +466,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BIRCH_DOUBLE_SLAB == null) {
             BlockTypes.BIRCH_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.BIRCH_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -644,7 +644,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BLACKSTONE_DOUBLE_SLAB == null) {
             BlockTypes.BLACKSTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.BLACKSTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -819,7 +819,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.BRICK_DOUBLE_SLAB == null) {
             BlockTypes.BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -1111,7 +1111,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CHERRY_DOUBLE_SLAB == null) {
             BlockTypes.CHERRY_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.CHERRY_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -1357,7 +1357,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COBBLED_DEEPSLATE_DOUBLE_SLAB == null) {
             BlockTypes.COBBLED_DEEPSLATE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.COBBLED_DEEPSLATE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -1391,7 +1391,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.COBBLESTONE_DOUBLE_SLAB == null) {
             BlockTypes.COBBLESTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.COBBLESTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -1590,7 +1590,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CRIMSON_DOUBLE_SLAB == null) {
             BlockTypes.CRIMSON_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.CRIMSON_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -1709,7 +1709,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CUT_COPPER_SLAB == null) {
             BlockTypes.CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -1729,7 +1729,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CUT_RED_SANDSTONE_DOUBLE_SLAB == null) {
             BlockTypes.CUT_RED_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.CUT_RED_SANDSTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -1749,7 +1749,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.CUT_SANDSTONE_DOUBLE_SLAB == null) {
             BlockTypes.CUT_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.CUT_SANDSTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -1859,7 +1859,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DARK_OAK_DOUBLE_SLAB == null) {
             BlockTypes.DARK_OAK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.DARK_OAK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -1954,7 +1954,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DARK_PRISMARINE_DOUBLE_SLAB == null) {
             BlockTypes.DARK_PRISMARINE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.DARK_PRISMARINE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -2153,7 +2153,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DEEPSLATE_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.DEEPSLATE_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -2235,7 +2235,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DEEPSLATE_TILE_DOUBLE_SLAB == null) {
             BlockTypes.DEEPSLATE_TILE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.DEEPSLATE_TILE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -2321,7 +2321,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DIORITE_DOUBLE_SLAB == null) {
             BlockTypes.DIORITE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.DIORITE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -2368,7 +2368,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -3191,7 +3191,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.END_STONE_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.END_STONE_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.END_STONE_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -3264,7 +3264,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_CUT_COPPER_SLAB == null) {
             BlockTypes.EXPOSED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -3278,7 +3278,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -3467,7 +3467,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.GRANITE_DOUBLE_SLAB == null) {
             BlockTypes.GRANITE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.GRANITE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -4065,7 +4065,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.JUNGLE_DOUBLE_SLAB == null) {
             BlockTypes.JUNGLE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.JUNGLE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -4714,7 +4714,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MANGROVE_DOUBLE_SLAB == null) {
             BlockTypes.MANGROVE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.MANGROVE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -4874,7 +4874,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MOSSY_COBBLESTONE_DOUBLE_SLAB == null) {
             BlockTypes.MOSSY_COBBLESTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.MOSSY_COBBLESTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -4902,7 +4902,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MOSSY_STONE_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.MOSSY_STONE_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.MOSSY_STONE_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -4948,7 +4948,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.MUD_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.MUD_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.MUD_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5008,7 +5008,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.NETHER_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.NETHER_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.NETHER_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5085,7 +5085,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.NORMAL_STONE_DOUBLE_SLAB == null) {
             BlockTypes.NORMAL_STONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.NORMAL_STONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5112,7 +5112,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OAK_DOUBLE_SLAB == null) {
             BlockTypes.OAK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.OAK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5332,7 +5332,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_CUT_COPPER_SLAB == null) {
             BlockTypes.OXIDIZED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5346,7 +5346,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5399,7 +5399,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PALE_OAK_DOUBLE_SLAB == null) {
             BlockTypes.PALE_OAK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.PALE_OAK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5516,7 +5516,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PETRIFIED_OAK_DOUBLE_SLAB == null) {
             BlockTypes.PETRIFIED_OAK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.PETRIFIED_OAK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5673,7 +5673,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_ANDESITE_DOUBLE_SLAB == null) {
             BlockTypes.POLISHED_ANDESITE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.POLISHED_ANDESITE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5707,7 +5707,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5748,7 +5748,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_BLACKSTONE_DOUBLE_SLAB == null) {
             BlockTypes.POLISHED_BLACKSTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.POLISHED_BLACKSTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5789,7 +5789,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_DEEPSLATE_DOUBLE_SLAB == null) {
             BlockTypes.POLISHED_DEEPSLATE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.POLISHED_DEEPSLATE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5823,7 +5823,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_DIORITE_DOUBLE_SLAB == null) {
             BlockTypes.POLISHED_DIORITE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.POLISHED_DIORITE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5850,7 +5850,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_GRANITE_DOUBLE_SLAB == null) {
             BlockTypes.POLISHED_GRANITE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.POLISHED_GRANITE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5877,7 +5877,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.POLISHED_TUFF_DOUBLE_SLAB == null) {
             BlockTypes.POLISHED_TUFF_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.POLISHED_TUFF_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5951,7 +5951,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PRISMARINE_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.PRISMARINE_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.PRISMARINE_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -5978,7 +5978,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PRISMARINE_DOUBLE_SLAB == null) {
             BlockTypes.PRISMARINE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.PRISMARINE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6096,7 +6096,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.PURPUR_DOUBLE_SLAB == null) {
             BlockTypes.PURPUR_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.PURPUR_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6137,7 +6137,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.QUARTZ_DOUBLE_SLAB == null) {
             BlockTypes.QUARTZ_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.QUARTZ_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6254,7 +6254,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RED_NETHER_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.RED_NETHER_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.RED_NETHER_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6294,7 +6294,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RED_SANDSTONE_DOUBLE_SLAB == null) {
             BlockTypes.RED_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.RED_SANDSTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6422,7 +6422,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.RESIN_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.RESIN_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.RESIN_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6489,7 +6489,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SANDSTONE_DOUBLE_SLAB == null) {
             BlockTypes.SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.SANDSTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6650,7 +6650,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SMOOTH_QUARTZ_DOUBLE_SLAB == null) {
             BlockTypes.SMOOTH_QUARTZ_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.SMOOTH_QUARTZ_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6677,7 +6677,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB == null) {
             BlockTypes.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6704,7 +6704,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SMOOTH_SANDSTONE_DOUBLE_SLAB == null) {
             BlockTypes.SMOOTH_SANDSTONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.SMOOTH_SANDSTONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6731,7 +6731,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SMOOTH_STONE_DOUBLE_SLAB == null) {
             BlockTypes.SMOOTH_STONE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.SMOOTH_STONE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6831,7 +6831,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.SPRUCE_DOUBLE_SLAB == null) {
             BlockTypes.SPRUCE_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.SPRUCE_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -6968,7 +6968,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.STONE_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.STONE_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.STONE_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7351,7 +7351,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.TUFF_BRICK_DOUBLE_SLAB == null) {
             BlockTypes.TUFF_BRICK_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.TUFF_BRICK_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7385,7 +7385,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.TUFF_DOUBLE_SLAB == null) {
             BlockTypes.TUFF_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.TUFF_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7523,7 +7523,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WARPED_DOUBLE_SLAB == null) {
             BlockTypes.WARPED_DOUBLE_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WARPED_DOUBLE_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7694,7 +7694,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7708,7 +7708,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7760,7 +7760,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7774,7 +7774,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7826,7 +7826,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7840,7 +7840,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7892,7 +7892,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7906,7 +7906,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7958,7 +7958,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_CUT_COPPER_SLAB == null) {
             BlockTypes.WEATHERED_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
@@ -7972,7 +7972,7 @@ public final class BlockTypeDefaultInitializer {
         }
         if (BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB == null) {
             BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB = AllayBlockType
-                    .builder(BlockSlabBehaviorImpl.class)
+                    .builder(BlockDoubleCopperSlabBehaviorImpl.class)
                     .vanillaBlock(BlockId.WEATHERED_DOUBLE_CUT_COPPER_SLAB)
                     .setProperties(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF)
                     .build();
