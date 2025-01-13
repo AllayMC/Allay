@@ -67,17 +67,17 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
 
         container.addOnSlotChangeListener(BrewingStandContainer.REAGENT_SLOT, item -> {
             brewTime = item == ItemAirStack.AIR_STACK ? 0 : MAX_BREW_TIME;
-            sendContainerData(true);
+            sendBrewingStandContainerData(true);
         });
     }
 
     @Override
     public void tick(long currentTick) {
-        tick0();
-        sendContainerData(brewTime % 40 == 0);
+        tickBrewingStand();
+        sendBrewingStandContainerData(brewTime % 40 == 0);
     }
 
-    protected void tick0() {
+    protected void tickBrewingStand() {
         if (!checkFuel()) {
             return;
         }
@@ -151,7 +151,7 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         return Registries.POTION_MIX_RECIPES.get(PotionMixRecipe.buildIdentifier(ingredient, reagent));
     }
 
-    protected void sendContainerData(boolean sendBrewTime) {
+    protected void sendBrewingStandContainerData(boolean sendBrewTime) {
         var container = containerHolderComponent.getContainer();
         if (sendBrewTime) {
             container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_BREW_TIME, brewTime);
