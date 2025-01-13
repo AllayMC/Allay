@@ -552,13 +552,13 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
-    public static BlockType<BlockSlabBehavior> buildDoubleSlab(BlockId id, BlockId singleSlabId) {
+    public static BlockType<BlockDoubleSlabBehavior> buildDoubleSlab(BlockId id, BlockId singleSlabId) {
         return slabBuilder(BlockSlabBehaviorImpl.class, id)
                 .setBaseComponentSupplier(blockType -> new BlockDoubleSlabBaseComponentImpl(blockType, singleSlabId))
                 .build();
     }
 
-    public static BlockType<BlockCopperSlabBehavior> buildCopperDoubleSlab(BlockId id, BlockId singleSlabId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+    public static BlockType<BlockDoubleCopperSlabBehavior> buildCopperDoubleSlab(BlockId id, BlockId singleSlabId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
         return slabBuilder(BlockCopperSlabBehaviorImpl.class, id)
                 .setBaseComponentSupplier(blockType -> new BlockCopperDoubleSlabBaseComponentImpl(blockType, singleSlabId))
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
