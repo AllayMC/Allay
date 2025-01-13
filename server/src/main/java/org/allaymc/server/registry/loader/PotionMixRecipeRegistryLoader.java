@@ -22,7 +22,7 @@ import java.util.Objects;
 public class PotionMixRecipeRegistryLoader implements RegistryLoader<Void, Map<Identifier, PotionMixRecipe>> {
     @Override
     public Map<Identifier, PotionMixRecipe> load(Void $) {
-        log.info(TrKeys.A_RECIPE_POTIONMIX_LOADING);
+        log.info(I18n.get().tr(TrKeys.A_RECIPE_POTIONMIX_LOADING));
         var stream = Objects.requireNonNull(Utils.getResource("recipes.json"));
 
         var obj = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();

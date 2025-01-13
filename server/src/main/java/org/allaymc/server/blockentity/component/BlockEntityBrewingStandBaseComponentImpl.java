@@ -67,33 +67,38 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
 
         container.addOnSlotChangeListener(BrewingStandContainer.REAGENT_SLOT, item -> {
             brewTime = item == ItemAirStack.AIR_STACK ? 0 : MAX_BREW_TIME;
-            sendBrewingStandContainerData(true);
         });
     }
 
     @Override
     public void tick(long currentTick) {
-        tickBrewingStand();
-        sendBrewingStandContainerData(brewTime % 40 == 0);
+        BrewingStandContainer container = containerHolderComponent.getContainer();
+        tickBrewingStand(container);
+        container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_FUEL_AMOUNT, fuelAmount);
+        container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_FUEL_TOTAL, fuelTotal);
     }
 
-    protected void tickBrewingStand() {
-        if (!checkFuel()) {
+    protected void tickBrewingStand(BrewingStandContainer container) {
+        if (!checkFuel(container)) {
             return;
         }
 
-        BrewingStandContainer container = containerHolderComponent.getContainer();
         var reagent = container.getReagent();
         var a = findRecipe(container.getResult(0), reagent);
         var b = findRecipe(container.getResult(1), reagent);
         var c = findRecipe(container.getResult(2), reagent);
 
         if (a == null && b == null && c == null) {
-            brewTime = 0;
+            brewTime = MAX_BREW_TIME;
+            container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_BREW_TIME, 0); // We should reset brew animation
             return;
         }
 
         if (brewTime > 0) {
+            if (brewTime % 40 == 0) {
+                container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_BREW_TIME, brewTime);
+            }
+
             brewTime--;
             return;
         }
@@ -123,12 +128,10 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
         getDimension().addSound(position, Sound.RANDOM_POTION_BREWED);
     }
 
-    protected boolean checkFuel() {
+    protected boolean checkFuel(BrewingStandContainer container) {
         if (fuelAmount > 0) {
             return true;
         }
-
-        BrewingStandContainer container = containerHolderComponent.getContainer();
 
         var fuel = container.getFuel();
         if (fuel.getItemType() != ItemTypes.BLAZE_POWDER) {
@@ -149,15 +152,6 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
 
     protected PotionMixRecipe findRecipe(ItemStack ingredient, ItemStack reagent) {
         return Registries.POTION_MIX_RECIPES.get(PotionMixRecipe.buildIdentifier(ingredient, reagent));
-    }
-
-    protected void sendBrewingStandContainerData(boolean sendBrewTime) {
-        var container = containerHolderComponent.getContainer();
-        if (sendBrewTime) {
-            container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_BREW_TIME, brewTime);
-        }
-        container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_FUEL_AMOUNT, fuelAmount);
-        container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_FUEL_TOTAL, fuelTotal);
     }
 
     @Override
