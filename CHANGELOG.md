@@ -32,6 +32,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented beacon block, and several related interfaces are added to api module.
 - (API) `BlockContainer#getBlockPos` and `BlockContainer#setBlockPos` now return/require `Position3ic` instead of
   `Vector3ic`, this enables us to get the dimension information of a `BlockContainer`.
+- (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`, `BrewingStandContainer`,
+  `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module. See commit history for more details.
+- (API) Introduced a number of overloads of `Dimension#addSound`.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
 - Implemented farmland and hoe.
