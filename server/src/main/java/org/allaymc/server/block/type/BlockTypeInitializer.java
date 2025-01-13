@@ -18,6 +18,7 @@ import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
 import org.allaymc.server.block.component.button.BlockWoodenButtonBaseComponentImpl;
 import org.allaymc.server.block.component.copper.BlockCopperBaseComponentImpl;
+import org.allaymc.server.block.component.copper.BlockCopperDoubleSlabBaseComponentImpl;
 import org.allaymc.server.block.component.copper.BlockCopperSlabBaseComponentImpl;
 import org.allaymc.server.block.component.copper.BlockCopperStairsBaseComponentImpl;
 import org.allaymc.server.block.component.crops.*;
@@ -516,6 +517,28 @@ public final class BlockTypeInitializer {
         BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = buildCopperSlab(BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB, BlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB, OxidationLevel.OXIDIZED, cutCopperSlab);
     }
 
+    public static void initDoubleSlab() {
+        // TODO
+
+        BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperSlab = (level, waxed) -> switch (level) {
+            case UNAFFECTED -> waxed ? BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.DOUBLE_CUT_COPPER_SLAB;
+            case EXPOSED ->
+                    waxed ? BlockTypes.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.EXPOSED_DOUBLE_CUT_COPPER_SLAB;
+            case WEATHERED ->
+                    waxed ? BlockTypes.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.WEATHERED_DOUBLE_CUT_COPPER_SLAB;
+            case OXIDIZED ->
+                    waxed ? BlockTypes.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.OXIDIZED_DOUBLE_CUT_COPPER_SLAB;
+        };
+        BlockTypes.CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.DOUBLE_CUT_COPPER_SLAB, BlockId.CUT_COPPER_SLAB, OxidationLevel.UNAFFECTED, cutCopperSlab);
+        BlockTypes.EXPOSED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.EXPOSED_DOUBLE_CUT_COPPER_SLAB, BlockId.EXPOSED_CUT_COPPER_SLAB, OxidationLevel.EXPOSED, cutCopperSlab);
+        BlockTypes.WEATHERED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WEATHERED_DOUBLE_CUT_COPPER_SLAB, BlockId.WEATHERED_CUT_COPPER_SLAB, OxidationLevel.WEATHERED, cutCopperSlab);
+        BlockTypes.OXIDIZED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.OXIDIZED_DOUBLE_CUT_COPPER_SLAB, BlockId.OXIDIZED_CUT_COPPER_SLAB, OxidationLevel.OXIDIZED, cutCopperSlab);
+        BlockTypes.WAXED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_CUT_COPPER_SLAB, OxidationLevel.UNAFFECTED, cutCopperSlab);
+        BlockTypes.WAXED_EXPOSED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_EXPOSED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_EXPOSED_CUT_COPPER_SLAB, OxidationLevel.EXPOSED, cutCopperSlab);
+        BlockTypes.WAXED_WEATHERED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_WEATHERED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_WEATHERED_CUT_COPPER_SLAB, OxidationLevel.WEATHERED, cutCopperSlab);
+        BlockTypes.WAXED_OXIDIZED_CUT_COPPER_SLAB = buildCopperDoubleSlab(BlockId.WAXED_OXIDIZED_DOUBLE_CUT_COPPER_SLAB, BlockId.WAXED_OXIDIZED_CUT_COPPER_SLAB, OxidationLevel.OXIDIZED, cutCopperSlab);
+    }
+
     public static BlockType<BlockSlabBehavior> buildSlab(BlockId id, BlockId doubleSlabId) {
         return slabBuilder(BlockSlabBehaviorImpl.class, id)
                 .setBaseComponentSupplier(blockType -> new BlockSlabBaseComponentImpl(blockType, doubleSlabId))
@@ -529,7 +552,21 @@ public final class BlockTypeInitializer {
                 .build();
     }
 
+    public static BlockType<BlockSlabBehavior> buildDoubleSlab(BlockId id, BlockId singleSlabId) {
+        return slabBuilder(BlockSlabBehaviorImpl.class, id)
+                .setBaseComponentSupplier(blockType -> new BlockDoubleSlabBaseComponentImpl(blockType, singleSlabId))
+                .build();
+    }
+
+    public static BlockType<BlockCopperSlabBehavior> buildCopperDoubleSlab(BlockId id, BlockId singleSlabId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
+        return slabBuilder(BlockCopperSlabBehaviorImpl.class, id)
+                .setBaseComponentSupplier(blockType -> new BlockCopperDoubleSlabBaseComponentImpl(blockType, singleSlabId))
+                .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
+                .build();
+    }
+
     public static <T extends BlockBehavior> AllayBlockType.Builder slabBuilder(Class<T> clazz, BlockId id) {
+        // Both slab and double slab have MINECRAFT_VERTICAL_HALF property
         return AllayBlockType
                 .builder(clazz)
                 .vanillaBlock(id)
