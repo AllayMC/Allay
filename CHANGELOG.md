@@ -29,11 +29,12 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `BlockGrowEvent` which will be called when crops grow.
 - (API) Added two overloads `LightService#getInternalLight(Vector3ic)` and `LightService#getSkyLight(Vector3ic)`, they
   have the same functionality as `LightService#getXXXLight(int, int, int)`.
-- (API) Implemented beacon block, and several related interfaces are added to api module.
 - (API) `BlockContainer#getBlockPos` and `BlockContainer#setBlockPos` now return/require `Position3ic` instead of
   `Vector3ic`, this enables us to get the dimension information of a `BlockContainer`.
 - (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`, `BrewingStandContainer`,
   `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module. See commit history for more details.
+- (API) Implemented slab, and several related interfaces are added to api module.
+- (API) Introduced `BlockBaseComponent#combine` method which is used by slab. For the details of this method, see the javadoc.
 - (API) Introduced a number of overloads of `Dimension#addSound`.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.

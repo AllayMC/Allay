@@ -301,12 +301,11 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             player = placementInfo.player();
         }
 
+        var blockType = blockState.getBlockType();
         var oldBlockState = dimension.getBlockState(placeBlockPos);
         if (!oldBlockState.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
-            return false;
+            return blockType.getBlockBehavior().combine(dimension, blockState, placeBlockPos, placementInfo);
         }
-
-        var blockType = blockState.getBlockType();
 
         var event = new BlockPlaceEvent(
                 new BlockStateWithPos(blockState, new Position3i(placeBlockPos, dimension), 0),

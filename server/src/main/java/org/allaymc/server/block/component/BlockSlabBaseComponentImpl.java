@@ -25,6 +25,11 @@ public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implement
 
     @Override
     public boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo) {
+        if (placementInfo == null) {
+            dimension.setBlockState(placeBlockPos.x(), placeBlockPos.y(), placeBlockPos.z(), blockState);
+            return true;
+        }
+
         var face = placementInfo.blockFace();
         var clickedBlockPos = placementInfo.clickedBlockPos();
         var clickedPos = placementInfo.clickedPos();
@@ -49,6 +54,23 @@ public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implement
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean combine(Dimension dimension, BlockState blockState, Vector3ic combineBlockPos, PlayerInteractInfo placementInfo) {
+        var combineBlock = dimension.getBlockState(combineBlockPos);
+        if (combineBlock.getBlockType() != this.blockType) {
+            return false;
+        }
+
+        var value = combineBlock.getPropertyValue(BlockPropertyTypes.MINECRAFT_VERTICAL_HALF);
+        if (value != (placementInfo.clickedPos().y() > 0.5f ? MinecraftVerticalHalf.TOP : MinecraftVerticalHalf.BOTTOM)) {
+            // They are complementary
+            dimension.setBlockState(combineBlockPos, getDoubleSlabBlockType().getDefaultState());
+            return true;
+        }
+
+        return false;
     }
 
     @Override

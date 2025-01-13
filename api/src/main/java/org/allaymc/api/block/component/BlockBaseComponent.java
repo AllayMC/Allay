@@ -69,7 +69,10 @@ public interface BlockBaseComponent extends BlockComponent {
     }
 
     /**
-     * Try to place a block.
+     * Try to place a block at the specified position and with optional placement info.
+     * <p>
+     * When this method is called, the caller ensures that the current block in `placeBlockPos`
+     * is a block that has REPLACEABLE tag.
      *
      * @param dimension     The dimension where the block is placed.
      * @param blockState    The block that is being placed.
@@ -79,6 +82,23 @@ public interface BlockBaseComponent extends BlockComponent {
      * @return {@code true} if the block is placed successfully, {@code false} if failed.
      */
     boolean place(Dimension dimension, BlockState blockState, Vector3ic placeBlockPos, PlayerInteractInfo placementInfo);
+
+    /**
+     * Try to combine a block with another block which is already in the dimension and does not have REPLACEABLE tag.
+     * <p>
+     * This method is used by slab blocks for example. Two slab blocks can be combined to one double slab blocks.
+     * In most cases two blocks cannot be combined, so the default implementation just return {@code false}.
+     *
+     * @param dimension       The dimension where the block is placed.
+     * @param blockState      The block that is going to be combined with another block which is already in the dimension.
+     * @param combineBlockPos The pos of the block that is being combined with.
+     * @param placementInfo   The player placement info, can be {@code null}.
+     *
+     * @return {@code true} if the block is combined successfully, {@code false} if failed.
+     */
+    default boolean combine(Dimension dimension, BlockState blockState, Vector3ic combineBlockPos, PlayerInteractInfo placementInfo) {
+        return false;
+    }
 
     /**
      * Called when place a block.
