@@ -53,7 +53,7 @@ public class BlockSlabBaseComponentImpl extends BlockBaseComponentImpl implement
 
     @Override
     public boolean canLiquidFlowIntoSide(BlockState blockState, BlockFace blockFace) {
-        return blockState.getBlockStateData().collisionShape().isFull(blockFace);
+        return !blockState.getBlockStateData().collisionShape().isFull(blockFace);
     }
 
     @Override
