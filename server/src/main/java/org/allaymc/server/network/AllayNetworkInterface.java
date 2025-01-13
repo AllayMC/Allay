@@ -15,6 +15,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.DatagramChannel;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.AllayAPI;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.eventbus.event.network.ClientConnectEvent;
 import org.allaymc.api.i18n.I18n;
@@ -75,7 +76,7 @@ public class AllayNetworkInterface implements NetworkInterface {
         this.channel = new ServerBootstrap()
                 .channelFactory(RakChannelFactory.server(datagramChannelClass))
                 .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
-                .option(RakChannelOption.RAK_PACKET_LIMIT, 1000) // This option fixed localhost blocking address
+                .option(RakChannelOption.RAK_PACKET_LIMIT, AllayAPI.getInstance().isDevBuild() ? Integer.MAX_VALUE : 120) // This option fixed localhost blocking address
                 .group(eventLoopGroup)
                 .childHandler(new BedrockServerInitializer() {
                     @Override

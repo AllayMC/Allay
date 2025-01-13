@@ -100,6 +100,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   maintainability of the project.
 - Introduced better names for some of the fields in `PlayerAuthInputPacketProcessor`, this improved the readability of
   the code.
+- Disabled packet limit only in dev build.
 
 ### Fixed
 
