@@ -499,7 +499,60 @@ public final class BlockTypeInitializer {
     }
 
     public static void initSlab() {
-        // TODO
+        BlockTypes.ACACIA_SLAB = buildSlab(BlockId.ACACIA_SLAB, BlockId.ACACIA_DOUBLE_SLAB);
+        BlockTypes.ANDESITE_SLAB = buildSlab(BlockId.ANDESITE_SLAB, BlockId.ANDESITE_DOUBLE_SLAB);
+        BlockTypes.BAMBOO_MOSAIC_SLAB = buildSlab(BlockId.BAMBOO_MOSAIC_SLAB, BlockId.BAMBOO_MOSAIC_DOUBLE_SLAB);
+        BlockTypes.BAMBOO_SLAB = buildSlab(BlockId.BAMBOO_SLAB, BlockId.BAMBOO_DOUBLE_SLAB);
+        BlockTypes.BIRCH_SLAB = buildSlab(BlockId.BIRCH_SLAB, BlockId.BIRCH_DOUBLE_SLAB);
+        BlockTypes.BLACKSTONE_SLAB = buildSlab(BlockId.BLACKSTONE_SLAB, BlockId.BLACKSTONE_DOUBLE_SLAB);
+        BlockTypes.BRICK_SLAB = buildSlab(BlockId.BRICK_SLAB, BlockId.BRICK_DOUBLE_SLAB);
+        BlockTypes.CHERRY_SLAB = buildSlab(BlockId.CHERRY_SLAB, BlockId.CHERRY_DOUBLE_SLAB);
+        BlockTypes.COBBLED_DEEPSLATE_SLAB = buildSlab(BlockId.COBBLED_DEEPSLATE_SLAB, BlockId.COBBLED_DEEPSLATE_DOUBLE_SLAB);
+        BlockTypes.COBBLESTONE_SLAB = buildSlab(BlockId.COBBLESTONE_SLAB, BlockId.COBBLESTONE_DOUBLE_SLAB);
+        BlockTypes.CRIMSON_SLAB = buildSlab(BlockId.CRIMSON_SLAB, BlockId.CRIMSON_DOUBLE_SLAB);
+        BlockTypes.CUT_RED_SANDSTONE_SLAB = buildSlab(BlockId.CUT_RED_SANDSTONE_SLAB, BlockId.CUT_RED_SANDSTONE_DOUBLE_SLAB);
+        BlockTypes.CUT_SANDSTONE_SLAB = buildSlab(BlockId.CUT_SANDSTONE_SLAB, BlockId.CUT_SANDSTONE_DOUBLE_SLAB);
+        BlockTypes.DARK_OAK_SLAB = buildSlab(BlockId.DARK_OAK_SLAB, BlockId.DARK_OAK_DOUBLE_SLAB);
+        BlockTypes.DARK_PRISMARINE_SLAB = buildSlab(BlockId.DARK_PRISMARINE_SLAB, BlockId.DARK_PRISMARINE_DOUBLE_SLAB);
+        BlockTypes.DEEPSLATE_BRICK_SLAB = buildSlab(BlockId.DEEPSLATE_BRICK_SLAB, BlockId.DEEPSLATE_BRICK_DOUBLE_SLAB);
+        BlockTypes.DEEPSLATE_TILE_SLAB = buildSlab(BlockId.DEEPSLATE_TILE_SLAB, BlockId.DEEPSLATE_TILE_DOUBLE_SLAB);
+        BlockTypes.DIORITE_SLAB = buildSlab(BlockId.DIORITE_SLAB, BlockId.DIORITE_DOUBLE_SLAB);
+        BlockTypes.END_STONE_BRICK_SLAB = buildSlab(BlockId.END_STONE_BRICK_SLAB, BlockId.END_STONE_BRICK_DOUBLE_SLAB);
+        BlockTypes.GRANITE_SLAB = buildSlab(BlockId.GRANITE_SLAB, BlockId.GRANITE_DOUBLE_SLAB);
+        BlockTypes.JUNGLE_SLAB = buildSlab(BlockId.JUNGLE_SLAB, BlockId.JUNGLE_DOUBLE_SLAB);
+        BlockTypes.MANGROVE_SLAB = buildSlab(BlockId.MANGROVE_SLAB, BlockId.MANGROVE_DOUBLE_SLAB);
+        BlockTypes.MOSSY_COBBLESTONE_SLAB = buildSlab(BlockId.MOSSY_COBBLESTONE_SLAB, BlockId.MOSSY_COBBLESTONE_DOUBLE_SLAB);
+        BlockTypes.MOSSY_STONE_BRICK_SLAB = buildSlab(BlockId.MOSSY_STONE_BRICK_SLAB, BlockId.MOSSY_STONE_BRICK_DOUBLE_SLAB);
+        BlockTypes.MUD_BRICK_SLAB = buildSlab(BlockId.MUD_BRICK_SLAB, BlockId.MUD_BRICK_DOUBLE_SLAB);
+        BlockTypes.NETHER_BRICK_SLAB = buildSlab(BlockId.NETHER_BRICK_SLAB, BlockId.NETHER_BRICK_DOUBLE_SLAB);
+        BlockTypes.NORMAL_STONE_SLAB = buildSlab(BlockId.NORMAL_STONE_SLAB, BlockId.NORMAL_STONE_DOUBLE_SLAB);
+        BlockTypes.OAK_SLAB = buildSlab(BlockId.OAK_SLAB, BlockId.OAK_DOUBLE_SLAB);
+        BlockTypes.PALE_OAK_SLAB = buildSlab(BlockId.PALE_OAK_SLAB, BlockId.PALE_OAK_DOUBLE_SLAB);
+        BlockTypes.PETRIFIED_OAK_SLAB = buildSlab(BlockId.PETRIFIED_OAK_SLAB, BlockId.PETRIFIED_OAK_DOUBLE_SLAB);
+        BlockTypes.POLISHED_ANDESITE_SLAB = buildSlab(BlockId.POLISHED_ANDESITE_SLAB, BlockId.POLISHED_ANDESITE_DOUBLE_SLAB);
+        BlockTypes.POLISHED_BLACKSTONE_BRICK_SLAB = buildSlab(BlockId.POLISHED_BLACKSTONE_BRICK_SLAB, BlockId.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB);
+        BlockTypes.POLISHED_BLACKSTONE_SLAB = buildSlab(BlockId.POLISHED_BLACKSTONE_SLAB, BlockId.POLISHED_BLACKSTONE_DOUBLE_SLAB);
+        BlockTypes.POLISHED_DEEPSLATE_SLAB = buildSlab(BlockId.POLISHED_DEEPSLATE_SLAB, BlockId.POLISHED_DEEPSLATE_DOUBLE_SLAB);
+        BlockTypes.POLISHED_DIORITE_SLAB = buildSlab(BlockId.POLISHED_DIORITE_SLAB, BlockId.POLISHED_DIORITE_DOUBLE_SLAB);
+        BlockTypes.POLISHED_GRANITE_SLAB = buildSlab(BlockId.POLISHED_GRANITE_SLAB, BlockId.POLISHED_GRANITE_DOUBLE_SLAB);
+        BlockTypes.POLISHED_TUFF_SLAB = buildSlab(BlockId.POLISHED_TUFF_SLAB, BlockId.POLISHED_TUFF_DOUBLE_SLAB);
+        BlockTypes.PRISMARINE_BRICK_SLAB = buildSlab(BlockId.PRISMARINE_BRICK_SLAB, BlockId.PRISMARINE_BRICK_DOUBLE_SLAB);
+        BlockTypes.PRISMARINE_SLAB = buildSlab(BlockId.PRISMARINE_SLAB, BlockId.PRISMARINE_DOUBLE_SLAB);
+        BlockTypes.PURPUR_SLAB = buildSlab(BlockId.PURPUR_SLAB, BlockId.PURPUR_DOUBLE_SLAB);
+        BlockTypes.QUARTZ_SLAB = buildSlab(BlockId.QUARTZ_SLAB, BlockId.QUARTZ_DOUBLE_SLAB);
+        BlockTypes.RED_NETHER_BRICK_SLAB = buildSlab(BlockId.RED_NETHER_BRICK_SLAB, BlockId.RED_NETHER_BRICK_DOUBLE_SLAB);
+        BlockTypes.RED_SANDSTONE_SLAB = buildSlab(BlockId.RED_SANDSTONE_SLAB, BlockId.RED_SANDSTONE_DOUBLE_SLAB);
+        BlockTypes.RESIN_BRICK_SLAB = buildSlab(BlockId.RESIN_BRICK_SLAB, BlockId.RESIN_BRICK_DOUBLE_SLAB);
+        BlockTypes.SANDSTONE_SLAB = buildSlab(BlockId.SANDSTONE_SLAB, BlockId.SANDSTONE_DOUBLE_SLAB);
+        BlockTypes.SMOOTH_QUARTZ_SLAB = buildSlab(BlockId.SMOOTH_QUARTZ_SLAB, BlockId.SMOOTH_QUARTZ_DOUBLE_SLAB);
+        BlockTypes.SMOOTH_RED_SANDSTONE_SLAB = buildSlab(BlockId.SMOOTH_RED_SANDSTONE_SLAB, BlockId.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB);
+        BlockTypes.SMOOTH_SANDSTONE_SLAB = buildSlab(BlockId.SMOOTH_SANDSTONE_SLAB, BlockId.SMOOTH_SANDSTONE_DOUBLE_SLAB);
+        BlockTypes.SMOOTH_STONE_SLAB = buildSlab(BlockId.SMOOTH_STONE_SLAB, BlockId.SMOOTH_STONE_DOUBLE_SLAB);
+        BlockTypes.SPRUCE_SLAB = buildSlab(BlockId.SPRUCE_SLAB, BlockId.SPRUCE_DOUBLE_SLAB);
+        BlockTypes.STONE_BRICK_SLAB = buildSlab(BlockId.STONE_BRICK_SLAB, BlockId.STONE_BRICK_DOUBLE_SLAB);
+        BlockTypes.TUFF_BRICK_SLAB = buildSlab(BlockId.TUFF_BRICK_SLAB, BlockId.TUFF_BRICK_DOUBLE_SLAB);
+        BlockTypes.TUFF_SLAB = buildSlab(BlockId.TUFF_SLAB, BlockId.TUFF_DOUBLE_SLAB);
+        BlockTypes.WARPED_SLAB = buildSlab(BlockId.WARPED_SLAB, BlockId.WARPED_DOUBLE_SLAB);
 
         BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperSlab = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_CUT_COPPER_SLAB : BlockTypes.CUT_COPPER_SLAB;
@@ -518,7 +571,60 @@ public final class BlockTypeInitializer {
     }
 
     public static void initDoubleSlab() {
-        // TODO
+        BlockTypes.ACACIA_DOUBLE_SLAB = buildDoubleSlab(BlockId.ACACIA_DOUBLE_SLAB, BlockId.ACACIA_SLAB);
+        BlockTypes.ANDESITE_DOUBLE_SLAB = buildDoubleSlab(BlockId.ANDESITE_DOUBLE_SLAB, BlockId.ANDESITE_SLAB);
+        BlockTypes.BAMBOO_DOUBLE_SLAB = buildDoubleSlab(BlockId.BAMBOO_DOUBLE_SLAB, BlockId.BAMBOO_SLAB);
+        BlockTypes.BAMBOO_MOSAIC_DOUBLE_SLAB = buildDoubleSlab(BlockId.BAMBOO_MOSAIC_DOUBLE_SLAB, BlockId.BAMBOO_MOSAIC_SLAB);
+        BlockTypes.BIRCH_DOUBLE_SLAB = buildDoubleSlab(BlockId.BIRCH_DOUBLE_SLAB, BlockId.BIRCH_SLAB);
+        BlockTypes.BLACKSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.BLACKSTONE_DOUBLE_SLAB, BlockId.BLACKSTONE_SLAB);
+        BlockTypes.BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.BRICK_DOUBLE_SLAB, BlockId.BRICK_SLAB);
+        BlockTypes.CHERRY_DOUBLE_SLAB = buildDoubleSlab(BlockId.CHERRY_DOUBLE_SLAB, BlockId.CHERRY_SLAB);
+        BlockTypes.COBBLED_DEEPSLATE_DOUBLE_SLAB = buildDoubleSlab(BlockId.COBBLED_DEEPSLATE_DOUBLE_SLAB, BlockId.COBBLED_DEEPSLATE_SLAB);
+        BlockTypes.COBBLESTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.COBBLESTONE_DOUBLE_SLAB, BlockId.COBBLESTONE_SLAB);
+        BlockTypes.CRIMSON_DOUBLE_SLAB = buildDoubleSlab(BlockId.CRIMSON_DOUBLE_SLAB, BlockId.CRIMSON_SLAB);
+        BlockTypes.CUT_RED_SANDSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.CUT_RED_SANDSTONE_DOUBLE_SLAB, BlockId.CUT_RED_SANDSTONE_SLAB);
+        BlockTypes.CUT_SANDSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.CUT_SANDSTONE_DOUBLE_SLAB, BlockId.CUT_SANDSTONE_SLAB);
+        BlockTypes.DARK_OAK_DOUBLE_SLAB = buildDoubleSlab(BlockId.DARK_OAK_DOUBLE_SLAB, BlockId.DARK_OAK_SLAB);
+        BlockTypes.DARK_PRISMARINE_DOUBLE_SLAB = buildDoubleSlab(BlockId.DARK_PRISMARINE_DOUBLE_SLAB, BlockId.DARK_PRISMARINE_SLAB);
+        BlockTypes.DEEPSLATE_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.DEEPSLATE_BRICK_DOUBLE_SLAB, BlockId.DEEPSLATE_BRICK_SLAB);
+        BlockTypes.DEEPSLATE_TILE_DOUBLE_SLAB = buildDoubleSlab(BlockId.DEEPSLATE_TILE_DOUBLE_SLAB, BlockId.DEEPSLATE_TILE_SLAB);
+        BlockTypes.DIORITE_DOUBLE_SLAB = buildDoubleSlab(BlockId.DIORITE_DOUBLE_SLAB, BlockId.DIORITE_SLAB);
+        BlockTypes.END_STONE_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.END_STONE_BRICK_DOUBLE_SLAB, BlockId.END_STONE_BRICK_SLAB);
+        BlockTypes.GRANITE_DOUBLE_SLAB = buildDoubleSlab(BlockId.GRANITE_DOUBLE_SLAB, BlockId.GRANITE_SLAB);
+        BlockTypes.JUNGLE_DOUBLE_SLAB = buildDoubleSlab(BlockId.JUNGLE_DOUBLE_SLAB, BlockId.JUNGLE_SLAB);
+        BlockTypes.MANGROVE_DOUBLE_SLAB = buildDoubleSlab(BlockId.MANGROVE_DOUBLE_SLAB, BlockId.MANGROVE_SLAB);
+        BlockTypes.MOSSY_COBBLESTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.MOSSY_COBBLESTONE_DOUBLE_SLAB, BlockId.MOSSY_COBBLESTONE_SLAB);
+        BlockTypes.MOSSY_STONE_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.MOSSY_STONE_BRICK_DOUBLE_SLAB, BlockId.MOSSY_STONE_BRICK_SLAB);
+        BlockTypes.MUD_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.MUD_BRICK_DOUBLE_SLAB, BlockId.MUD_BRICK_SLAB);
+        BlockTypes.NETHER_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.NETHER_BRICK_DOUBLE_SLAB, BlockId.NETHER_BRICK_SLAB);
+        BlockTypes.NORMAL_STONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.NORMAL_STONE_DOUBLE_SLAB, BlockId.NORMAL_STONE_SLAB);
+        BlockTypes.OAK_DOUBLE_SLAB = buildDoubleSlab(BlockId.OAK_DOUBLE_SLAB, BlockId.OAK_SLAB);
+        BlockTypes.PALE_OAK_DOUBLE_SLAB = buildDoubleSlab(BlockId.PALE_OAK_DOUBLE_SLAB, BlockId.PALE_OAK_SLAB);
+        BlockTypes.PETRIFIED_OAK_DOUBLE_SLAB = buildDoubleSlab(BlockId.PETRIFIED_OAK_DOUBLE_SLAB, BlockId.PETRIFIED_OAK_SLAB);
+        BlockTypes.POLISHED_ANDESITE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_ANDESITE_DOUBLE_SLAB, BlockId.POLISHED_ANDESITE_SLAB);
+        BlockTypes.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB, BlockId.POLISHED_BLACKSTONE_BRICK_SLAB);
+        BlockTypes.POLISHED_BLACKSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_BLACKSTONE_DOUBLE_SLAB, BlockId.POLISHED_BLACKSTONE_SLAB);
+        BlockTypes.POLISHED_DEEPSLATE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_DEEPSLATE_DOUBLE_SLAB, BlockId.POLISHED_DEEPSLATE_SLAB);
+        BlockTypes.POLISHED_DIORITE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_DIORITE_DOUBLE_SLAB, BlockId.POLISHED_DIORITE_SLAB);
+        BlockTypes.POLISHED_GRANITE_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_GRANITE_DOUBLE_SLAB, BlockId.POLISHED_GRANITE_SLAB);
+        BlockTypes.POLISHED_TUFF_DOUBLE_SLAB = buildDoubleSlab(BlockId.POLISHED_TUFF_DOUBLE_SLAB, BlockId.POLISHED_TUFF_SLAB);
+        BlockTypes.PRISMARINE_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.PRISMARINE_BRICK_DOUBLE_SLAB, BlockId.PRISMARINE_BRICK_SLAB);
+        BlockTypes.PRISMARINE_DOUBLE_SLAB = buildDoubleSlab(BlockId.PRISMARINE_DOUBLE_SLAB, BlockId.PRISMARINE_SLAB);
+        BlockTypes.PURPUR_DOUBLE_SLAB = buildDoubleSlab(BlockId.PURPUR_DOUBLE_SLAB, BlockId.PURPUR_SLAB);
+        BlockTypes.QUARTZ_DOUBLE_SLAB = buildDoubleSlab(BlockId.QUARTZ_DOUBLE_SLAB, BlockId.QUARTZ_SLAB);
+        BlockTypes.RED_NETHER_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.RED_NETHER_BRICK_DOUBLE_SLAB, BlockId.RED_NETHER_BRICK_SLAB);
+        BlockTypes.RED_SANDSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.RED_SANDSTONE_DOUBLE_SLAB, BlockId.RED_SANDSTONE_SLAB);
+        BlockTypes.RESIN_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.RESIN_BRICK_DOUBLE_SLAB, BlockId.RESIN_BRICK_SLAB);
+        BlockTypes.SANDSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.SANDSTONE_DOUBLE_SLAB, BlockId.SANDSTONE_SLAB);
+        BlockTypes.SMOOTH_QUARTZ_DOUBLE_SLAB = buildDoubleSlab(BlockId.SMOOTH_QUARTZ_DOUBLE_SLAB, BlockId.SMOOTH_QUARTZ_SLAB);
+        BlockTypes.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB, BlockId.SMOOTH_RED_SANDSTONE_SLAB);
+        BlockTypes.SMOOTH_SANDSTONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.SMOOTH_SANDSTONE_DOUBLE_SLAB, BlockId.SMOOTH_SANDSTONE_SLAB);
+        BlockTypes.SMOOTH_STONE_DOUBLE_SLAB = buildDoubleSlab(BlockId.SMOOTH_STONE_DOUBLE_SLAB, BlockId.SMOOTH_STONE_SLAB);
+        BlockTypes.SPRUCE_DOUBLE_SLAB = buildDoubleSlab(BlockId.SPRUCE_DOUBLE_SLAB, BlockId.SPRUCE_SLAB);
+        BlockTypes.STONE_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.STONE_BRICK_DOUBLE_SLAB, BlockId.STONE_BRICK_SLAB);
+        BlockTypes.TUFF_BRICK_DOUBLE_SLAB = buildDoubleSlab(BlockId.TUFF_BRICK_DOUBLE_SLAB, BlockId.TUFF_BRICK_SLAB);
+        BlockTypes.TUFF_DOUBLE_SLAB = buildDoubleSlab(BlockId.TUFF_DOUBLE_SLAB, BlockId.TUFF_SLAB);
+        BlockTypes.WARPED_DOUBLE_SLAB = buildDoubleSlab(BlockId.WARPED_DOUBLE_SLAB, BlockId.WARPED_SLAB);
 
         BiFunction<OxidationLevel, Boolean, BlockType<?>> cutCopperSlab = (level, waxed) -> switch (level) {
             case UNAFFECTED -> waxed ? BlockTypes.WAXED_DOUBLE_CUT_COPPER_SLAB : BlockTypes.DOUBLE_CUT_COPPER_SLAB;
@@ -553,13 +659,13 @@ public final class BlockTypeInitializer {
     }
 
     public static BlockType<BlockDoubleSlabBehavior> buildDoubleSlab(BlockId id, BlockId singleSlabId) {
-        return slabBuilder(BlockSlabBehaviorImpl.class, id)
+        return slabBuilder(BlockDoubleSlabBehaviorImpl.class, id)
                 .setBaseComponentSupplier(blockType -> new BlockDoubleSlabBaseComponentImpl(blockType, singleSlabId))
                 .build();
     }
 
     public static BlockType<BlockDoubleCopperSlabBehavior> buildCopperDoubleSlab(BlockId id, BlockId singleSlabId, OxidationLevel oxidationLevel, BiFunction<OxidationLevel, Boolean, BlockType<?>> blockTypeFunction) {
-        return slabBuilder(BlockCopperSlabBehaviorImpl.class, id)
+        return slabBuilder(BlockDoubleCopperSlabBehaviorImpl.class, id)
                 .setBaseComponentSupplier(blockType -> new BlockCopperDoubleSlabBaseComponentImpl(blockType, singleSlabId))
                 .addComponent(new BlockOxidationComponentImpl(oxidationLevel, blockTypeFunction))
                 .build();

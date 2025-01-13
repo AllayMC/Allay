@@ -36,7 +36,7 @@ public class BlockStairsBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean canLiquidFlowIntoSide(BlockState blockState, BlockFace blockFace) {
-        return !blockState.getBlockStateData().shape().isFull(blockFace);
+        return !blockState.getBlockStateData().collisionShape().isFull(blockFace);
     }
 
     /**
