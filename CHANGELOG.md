@@ -73,6 +73,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   meaningless.
 - Changed `enableGui` to `enable-gui` in `server-settings.yml`
 - Disabled packet limit only in dev build.
+- Optimized the performance of physics calculation when there are a lot of entities.
 
 ### Fixed
 
