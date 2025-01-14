@@ -31,11 +31,28 @@ public record Structure(
     private static final int FORMAT_VERSION = 1;
     private static final BlockState STRUCTURE_VOID_DEFAULT_STATE = BlockTypes.STRUCTURE_VOID.getDefaultState();
 
-    public static Structure pickStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
-        return pickStructure(dimension, x, y, z, sizeX, sizeY, sizeZ, true);
+    /**
+     * @see #pick(Dimension, int, int, int, int, int, int, boolean)
+     */
+    public static Structure pick(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ) {
+        return pick(dimension, x, y, z, sizeX, sizeY, sizeZ, true);
     }
 
-    public static Structure pickStructure(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ, boolean saveEntities) {
+    /**
+     * Pick a structure from the dimension.
+     *
+     * @param dimension    the dimension to pick the structure from.
+     * @param x            the x coordinate of the structure.
+     * @param y            the y coordinate of the structure.
+     * @param z            the z coordinate of the structure.
+     * @param sizeX        the size of the structure in x direction.
+     * @param sizeY        the size of the structure in y direction.
+     * @param sizeZ        the size of the structure in z direction.
+     * @param saveEntities whether to save the entities in the structure.
+     *
+     * @return the picked structure.
+     */
+    public static Structure pick(Dimension dimension, int x, int y, int z, int sizeX, int sizeY, int sizeZ, boolean saveEntities) {
         var blockStates = new BlockState[2][sizeX][sizeY][sizeZ];
         var blockEntities = new HashMap<Vector3ic, NbtMap>();
         var entities = new ArrayList<NbtMap>();
@@ -76,6 +93,13 @@ public record Structure(
         return new Structure(blockStates, blockEntities, entities, sizeX, sizeY, sizeZ, x, y, z);
     }
 
+    /**
+     * Load structure data from nbt.
+     *
+     * @param nbt the nbt data to load.
+     *
+     * @return the loaded structure.
+     */
     public static Structure formNBT(NbtMap nbt) {
         if (nbt.getInt("format_version") != FORMAT_VERSION) {
             throw new StructureException("format_version should be " + FORMAT_VERSION);
@@ -149,6 +173,14 @@ public record Structure(
         );
     }
 
+    /**
+     * Place the structure in the dimension.
+     *
+     * @param dimension the dimension to place the structure in.
+     * @param x         the x coordinate to place the structure.
+     * @param y         the y coordinate to place the structure.
+     * @param z         the z coordinate to place the structure.
+     */
     public void place(Dimension dimension, int x, int y, int z) {
         for (int lx = 0; lx < sizeX; lx++) {
             for (int ly = 0; ly < sizeY; ly++) {
@@ -195,6 +227,11 @@ public record Structure(
         }
     }
 
+    /**
+     * Save the structure data to nbt.
+     *
+     * @return the nbt data of the structure.
+     */
     public NbtMap toNBT() {
         var capacity = sizeX * sizeY * sizeZ;
         var layer0 = new Integer[capacity];

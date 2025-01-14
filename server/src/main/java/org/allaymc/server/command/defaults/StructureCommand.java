@@ -46,7 +46,7 @@ public class StructureCommand extends SimpleCommand {
                         context.addError("Invalid size");
                         return context.fail();
                     }
-                    var structure = Structure.pickStructure(
+                    var structure = Structure.pick(
                             player.getDimension(),
                             (int) start.x, (int) start.y, (int) start.z,
                             sizeX, sizeY, sizeZ,
