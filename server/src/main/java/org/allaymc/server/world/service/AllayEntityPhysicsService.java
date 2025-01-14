@@ -37,6 +37,7 @@ import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.lang.Math.*;
@@ -134,9 +135,20 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     protected void cacheEntityCollisionResult() {
         entityCollisionCache.clear();
-        entities.values().forEach(entity -> {
+        var map = new ConcurrentHashMap<Entity, List<Entity>>();
+        // Compute colliding entities in parallel, because computeCollidingEntities()
+        // will be an expensive method if there are a lot of entities. Method
+        // computeCollidingEntities() should be safe to call in parallel
+        entities.values().parallelStream().forEach(entity -> {
             var collidedEntities = computeCollidingEntities(entity, true);
-            if (collidedEntities.isEmpty()) return;
+            if (collidedEntities.isEmpty()) {
+                return;
+            }
+            map.put(entity, collidedEntities);
+        });
+        map.forEach((entity, collidedEntities) -> {
+            // These two operations is not thread-safe, so simply do them synchronously
+            // as the two operations shouldn't be slow
             entityCollisionCache.put(entity.getRuntimeId(), collidedEntities);
             collidedEntities.forEach(entity::onCollideWith);
         });
