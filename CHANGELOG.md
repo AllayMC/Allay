@@ -77,6 +77,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) `BlockHangingSignBehavior` now extends `BlockEntityHolderComponent<BlockEntityHangingSign>` which was forgotten
   to be added.
+- Fixed several bugs that can led falling block keep existing even if it is already on ground or can't move.
 - Fixed the `ClassCastException` when breaking shulker box.
 - Fixed the bug that interacting with door doesn't have any sound.
 - Waxing copper-made block using honeycomb won't call `BlockFadeEvent` now.

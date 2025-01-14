@@ -162,8 +162,8 @@ public class Explosion {
                 lz += ray.z();
 
                 var delta = (resistance / 5.0f + 0.3f) * 0.3f;
-                // resistance may be very big (Float.MAX_VALUE) if the block is an unbreakable block,
-                // so we should operate it carefully to avoid precision overflow
+                // resistance may be very big if the block is an unbreakable block such as
+                // bedrock, so we should operate it carefully to avoid precision overflow
                 if (blastForce < delta) {
                     // In this case, blastForce - delta will result in a negative value
                     blastForce = 0;

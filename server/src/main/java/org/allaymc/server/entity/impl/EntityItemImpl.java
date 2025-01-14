@@ -21,7 +21,6 @@ public class EntityItemImpl extends EntityImpl implements EntityItem {
     public EntityItemImpl(EntityInitInfo initInfo,
                           List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 
     @Delegate

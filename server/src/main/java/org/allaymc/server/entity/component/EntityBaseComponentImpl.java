@@ -523,14 +523,14 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             }
         }
         Vector3f vec;
-        if (getLocation().distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
+        if (location.distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
             // Generate a random kb direction if distance <= 0.01m
             var rand = ThreadLocalRandom.current();
             var rx = rand.nextFloat(1) - 0.5f;
             var rz = rand.nextFloat(1) - 0.5f;
             vec = MathUtils.normalizeIfNotZero(new Vector3f(rx, 0, rz)).mul(kb);
         } else {
-            vec = getLocation().sub(source, new Vector3f()).normalize().mul(kb);
+            vec = location.sub(source, new Vector3f()).normalize().mul(kb);
             vec.y = 0;
         }
         return new Vector3f(
