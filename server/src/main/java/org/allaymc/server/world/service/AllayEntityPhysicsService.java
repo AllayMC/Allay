@@ -291,10 +291,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         var finalMotion = new Vector3f();
         if (hasWaterMotion) {
-            finalMotion.add(waterMotion.normalize().mul(WATER_FLOW_MOTION));
+            // Multiple water flow vector may cancel each other out and let the final motion
+            // result in zero vector, so we still need to use normalizeIfNotZero() here to
+            // prevent NaN
+            finalMotion.add(MathUtils.normalizeIfNotZero(waterMotion).mul(WATER_FLOW_MOTION));
         }
         if (hasLavaMotion) {
-            finalMotion.add(lavaMotion.normalize().mul(dimension.getDimensionInfo() == DimensionInfo.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
+            // Same to above
+            finalMotion.add(MathUtils.normalizeIfNotZero(lavaMotion).mul(dimension.getDimensionInfo() == DimensionInfo.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
         }
 
         entity.addMotion(finalMotion);

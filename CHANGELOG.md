@@ -41,6 +41,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   history for more details.
 - (API) Implemented picking block with block entity data. The following methods are added: `ItemBaseComponent#getBlockEntityNBT`,
   `ItemBaseComponent#setBlockEntityNBT`, `ItemBaseComponent#clearBlockEntityNBT` and `ItemBaseComponent#hasBlockEntityNBT`.
+- (API) Implemented TNT. There is now a new class called `Explosion` which can be used by plugin to make custom explosion.
 - (API) Introduced a number of overloads of `Dimension#addSound`.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
@@ -82,8 +83,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug that interacting with door doesn't have any sound.
 - Waxing copper-made block using honeycomb won't call `BlockFadeEvent` now.
 - Fixed the bug that player can still open enchant table even if he is sneaking.
-- Fixed the bug that brewing stand fast brew and lagging brew animation.
-- Fixed translation for potion mix loading.
+- Fixed NaN motion caused by liquid in some very special cases.
 
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 
