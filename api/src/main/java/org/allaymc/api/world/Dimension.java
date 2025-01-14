@@ -816,6 +816,9 @@ public interface Dimension {
         return chunk.getBlockEntity(x & 15, y, z & 15);
     }
 
+    /**
+     * @see #getBlockEntity(int, int, int)
+     */
     default BlockEntity getBlockEntity(Vector3ic pos) {
         return getBlockEntity(pos.x(), pos.y(), pos.z());
     }

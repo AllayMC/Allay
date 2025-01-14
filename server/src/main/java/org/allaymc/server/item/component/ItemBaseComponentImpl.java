@@ -61,6 +61,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected static final String TAG_NAME = "Name";
     protected static final String TAG_LORE = "Lore";
     protected static final String TAG_ENCHANTMENT = "ench";
+    protected static final String TAG_BLOCK_ENTITY = "BlockEntityTag";
     protected static final String TAG_CUSTOM_NBT = "CustomNBT";
 
     private static int STACK_NETWORK_ID_COUNTER = 1;
@@ -94,6 +95,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Getter
     @Setter
     protected NbtMap customNBTContent = NbtMap.EMPTY;
+    @Getter
+    @Setter
+    protected NbtMap blockEntityNBT;
     @Getter
     @Setter
     protected int stackNetworkId;
@@ -133,6 +137,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             this.enchantments.put(enchantment.getType(), enchantment);
         }));
 
+        extraTag.listenForCompound(TAG_BLOCK_ENTITY, nbt -> this.blockEntityNBT = nbt);
+
         extraTag.listenForCompound(TAG_CUSTOM_NBT, customNbt -> this.customNBTContent = customNbt);
 
         var event = new CItemLoadExtraTagEvent(extraTag);
@@ -162,6 +168,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
                     .map(EnchantmentInstance::saveNBT)
                     .toList();
             nbtBuilder.putList(TAG_ENCHANTMENT, NbtType.COMPOUND, enchantmentNBT);
+        }
+
+        if (blockEntityNBT != null) {
+            nbtBuilder.putCompound(TAG_BLOCK_ENTITY, blockEntityNBT);
         }
 
         // TODO: item lock type
@@ -316,13 +326,36 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }
 
         var result = blockType.getBlockBehavior().place(dimension, blockState, placeBlockPos, placementInfo);
-        if (result && player != null) {
+        if (result) {
             dimension.addLevelSoundEvent(placeBlockPos.x() + 0.5f, placeBlockPos.y() + 0.5f, placeBlockPos.z() + 0.5f, SoundEvent.PLACE, blockState.blockStateHash());
-            tryConsumeItem(player);
-            var e = new CItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack);
-            manager.callEvent(e);
+            tryApplyBlockEntityNBT(dimension, placeBlockPos);
+            if (player != null) {
+                tryConsumeItem(player);
+            }
+            manager.callEvent(new CItemPlacedAsBlockEvent(dimension, placeBlockPos, thisItemStack));
         }
+
         return result;
+    }
+
+    protected void tryApplyBlockEntityNBT(Dimension dimension, Vector3ic placeBlockPos) {
+        if (this.blockEntityNBT == null) {
+            return;
+        }
+
+        var blockEntity = dimension.getBlockEntity(placeBlockPos);
+        // Block entity should also being spawned when placing block
+        // if the block entity is implemented
+        if (blockEntity == null) {
+            return;
+        }
+
+        // The position data should be removed
+        var builder = blockEntityNBT.toBuilder();
+        builder.remove("x");
+        builder.remove("y");
+        builder.remove("z");
+        blockEntity.loadNBT(this.blockEntityNBT);
     }
 
     protected void tryConsumeItem(EntityPlayer player) {

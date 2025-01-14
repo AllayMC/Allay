@@ -39,6 +39,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`,
   `BrewingStandContainer`, `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module. See commit
   history for more details.
+- (API) Implemented picking block with block entity data. The following methods are added: `ItemBaseComponent#getBlockEntityNBT`,
+  `ItemBaseComponent#setBlockEntityNBT`, `ItemBaseComponent#clearBlockEntityNBT` and `ItemBaseComponent#hasBlockEntityNBT`.
 - (API) Introduced a number of overloads of `Dimension#addSound`.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.

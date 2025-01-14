@@ -14,14 +14,14 @@ import org.allaymc.api.item.ItemStack;
 public class PlayerBlockPickEvent extends PlayerEvent implements CancellableEvent {
     protected BlockStateWithPos clickedBlock;
     @Setter
-    protected boolean addUserData;
+    protected boolean includeBlockEntity;
     @Setter
     protected ItemStack itemBlock;
 
-    public PlayerBlockPickEvent(EntityPlayer player, BlockStateWithPos clickedBlock, boolean addUserData, ItemStack itemBlock) {
+    public PlayerBlockPickEvent(EntityPlayer player, BlockStateWithPos clickedBlock, boolean includeBlockEntity, ItemStack itemBlock) {
         super(player);
         this.clickedBlock = clickedBlock;
-        this.addUserData = addUserData;
+        this.includeBlockEntity = includeBlockEntity;
         this.itemBlock = itemBlock;
     }
 }

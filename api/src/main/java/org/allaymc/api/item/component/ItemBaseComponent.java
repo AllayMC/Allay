@@ -581,4 +581,41 @@ public interface ItemBaseComponent extends ItemComponent {
                 .filter(enchantmentType -> enchantmentType.isIncompatibleWith(type))
                 .collect(Collectors.toSet());
     }
+
+    /**
+     * Get the block entity nbt in the item.
+     * <p>
+     * The block entity nbt will be stored in the item if player pick a block with ctrl pressed,
+     * and the nbt will be used when the player place the block. Note that not every block has
+     * block entity, so setting block entity nbt in an item whose block doesn't have block entity
+     * will have no effect.
+     *
+     * @return the block entity nbt in the item, or {@code null} if the item doesn't have block entity nbt.
+     */
+    NbtMap getBlockEntityNBT();
+
+    /**
+     * Set the block entity nbt in the item.
+     * <p>
+     * The position information in the nbt will be simply removed when placing block.
+     *
+     * @param blockEntityNBT the block entity nbt to set, can be {@code null} to clean the block entity nbt.
+     */
+    void setBlockEntityNBT(NbtMap blockEntityNBT);
+
+    /**
+     * Clear the block entity nbt in the item.
+     */
+    default void clearBlockEntityNBT() {
+        setBlockEntityNBT(null);
+    }
+
+    /**
+     * Check if the item has block entity nbt.
+     *
+     * @return {@code true} if the item has block entity nbt, {@code false} otherwise.
+     */
+    default boolean hasBlockEntityNBT() {
+        return getBlockEntityNBT() != null;
+    }
 }
