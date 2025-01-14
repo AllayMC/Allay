@@ -3,7 +3,7 @@ package org.allaymc.server.item.component;
 import lombok.Setter;
 import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.item.component.ItemItemStorableComponent;
+import org.allaymc.api.item.component.ItemStuffStorableComponent;
 import org.allaymc.server.item.component.event.CItemLoadExtraTagEvent;
 import org.allaymc.server.item.component.event.CItemPlacedAsBlockEvent;
 import org.allaymc.server.item.component.event.CItemSaveExtraTagEvent;
@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * @author daoge_cmd
  */
-public class ItemItemStorableComponentImpl implements ItemItemStorableComponent {
+public class ItemStuffStorableComponentImpl implements ItemStuffStorableComponent {
     @Setter
     protected List<NbtMap> storedItems = List.of();
 

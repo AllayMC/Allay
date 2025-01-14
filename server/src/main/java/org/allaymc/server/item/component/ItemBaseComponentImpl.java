@@ -355,7 +355,7 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         builder.remove("x");
         builder.remove("y");
         builder.remove("z");
-        blockEntity.loadNBT(this.blockEntityNBT);
+        blockEntity.loadNBT(builder.build());
     }
 
     protected void tryConsumeItem(EntityPlayer player) {

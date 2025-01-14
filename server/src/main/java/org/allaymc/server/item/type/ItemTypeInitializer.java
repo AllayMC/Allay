@@ -580,92 +580,92 @@ public final class ItemTypeInitializer {
         ItemTypes.BLACK_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.BLACK_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.BLUE_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.BLUE_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.BROWN_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.BROWN_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.CYAN_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.CYAN_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.GRAY_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.GRAY_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.GREEN_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.GREEN_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.LIGHT_BLUE_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.LIGHT_BLUE_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.LIGHT_GRAY_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.LIGHT_GRAY_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.LIME_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.LIME_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.MAGENTA_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.MAGENTA_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.ORANGE_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.ORANGE_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.PINK_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.PINK_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.PURPLE_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.PURPLE_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.RED_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.RED_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.UNDYED_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.UNDYED_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.WHITE_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.WHITE_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
         ItemTypes.YELLOW_SHULKER_BOX = AllayItemType
                 .builder(ItemShulkerBoxStackImpl.class)
                 .vanillaItem(ItemId.YELLOW_SHULKER_BOX)
-                .addComponent(ItemItemStorableComponentImpl::new, ItemItemStorableComponentImpl.class)
+                .addComponent(ItemStuffStorableComponentImpl::new, ItemStuffStorableComponentImpl.class)
                 .build();
     }
 

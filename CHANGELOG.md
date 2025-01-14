@@ -64,6 +64,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Methods `BlockEntityFurnaceBaseComponent#getStoredXP` and `BlockEntityFurnaceBaseComponent#setStoredXP` now
   accept `int` instead of `float`.
 - (API) Renamed `Structure#pickStructure` to `Structure#pick`.
+- (API) Renamed `ItemItemStorableComponentImpl` to `ItemStuffStorableComponentImpl`, and now `ItemShulkerBoxStack`
+  extends `ItemStuffStorableComponent`.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
 - Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is
@@ -75,6 +77,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) `BlockHangingSignBehavior` now extends `BlockEntityHolderComponent<BlockEntityHangingSign>` which was forgotten
   to be added.
+- Fixed the `ClassCastException` when breaking shulker box.
 - Fixed the bug that interacting with door doesn't have any sound.
 - Waxing copper-made block using honeycomb won't call `BlockFadeEvent` now.
 - Fixed the bug that player can still open enchant table even if he is sneaking.
