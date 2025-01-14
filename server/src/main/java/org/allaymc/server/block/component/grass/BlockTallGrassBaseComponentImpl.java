@@ -75,7 +75,7 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
 
     @Override
     public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
-        if (usedItem.getItemType() == ItemTypes.SHEARS) {
+        if (usedItem != null && usedItem.getItemType() == ItemTypes.SHEARS) {
             return Set.of(shearDrop.getItemType().createItemStack(2));
         }
 

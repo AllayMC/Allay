@@ -20,6 +20,7 @@ import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.JSONUtils;
 import org.allaymc.api.utils.TextFormat;
+import org.allaymc.api.world.Explosion;
 import org.allaymc.server.block.type.BlockLootTable;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
@@ -300,6 +301,15 @@ public class GameTestCommand extends SimpleCommand {
                 .key("triggerexception")
                 .exec(context -> {
                     throw new RuntimeException("Triggered exception");
-                });
+                })
+                .root()
+                .key("explode")
+                .floatNum("size", 4).optional()
+                .bool("spawnfire").optional()
+                .exec((context, player) -> {
+                    var explosion = new Explosion(context.getResult(1), context.getResult(2));
+                    explosion.explode(player.getDimension(), context.getSender().getCmdExecuteLocation());
+                    return context.success();
+                }, SenderType.PLAYER);
     }
 }

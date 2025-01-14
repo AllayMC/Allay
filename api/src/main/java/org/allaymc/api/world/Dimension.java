@@ -975,18 +975,16 @@ public interface Dimension {
     }
 
     /**
-     * Drop an item at the specified pos.
-     * <p>
-     * This method will add a random motion to the item entity.
-     *
-     * @param itemStack the item stack to drop.
-     * @param pos       the pos to drop the item.
+     * @see #dropItem(ItemStack, Vector3fc, Vector3fc, int)
      */
     default void dropItem(ItemStack itemStack, Vector3fc pos) {
         var rand = ThreadLocalRandom.current();
         dropItem(itemStack, pos, new Vector3f(rand.nextFloat(0.2f) - 0.1f, 0.2f, rand.nextFloat(0.2f) - 0.1f));
     }
 
+    /**
+     * @see #dropItem(ItemStack, Vector3fc, Vector3fc, int)
+     */
     default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion) {
         dropItem(itemStack, pos, motion, 10);
     }
