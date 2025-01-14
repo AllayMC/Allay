@@ -104,12 +104,20 @@ public final class VoxelShape {
      * @return the translated voxel shape.
      */
     public VoxelShape translate(Vector3fc vec) {
-        Set<AABBfc> newSolids = solids.stream()
-                .map(solid -> solid.translate(vec, new AABBf()))
-                .collect(Collectors.toSet());
-        Set<AABBfc> newVacancies = vacancies.stream()
-                .map(vacancy -> vacancy.translate(vec, new AABBf()))
-                .collect(Collectors.toSet());
+        // This method is frequently called in physics calculation,
+        // So performance in mind
+
+        // Set the size of the set as we know that how many entries
+        // will be put into this set to speed up.
+        var newSolids = new HashSet<AABBfc>(solids.size());
+        // Simply use for-each instead of stream to get better performance
+        for (var solid : solids) {
+            newSolids.add(solid.translate(vec, new AABBf()));
+        }
+        var newVacancies = new HashSet<AABBfc>(vacancies.size());
+        for (var vacancy : vacancies) {
+            newVacancies.add(vacancy.translate(vec, new AABBf()));
+        }
         return new VoxelShape(newSolids, newVacancies);
     }
 
