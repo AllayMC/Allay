@@ -35,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module. See commit history for more details.
 - (API) Implemented slab, and several related interfaces are added to api module.
 - (API) Introduced `BlockBaseComponent#combine` method which is used by slab. For the details of this method, see the javadoc.
+- (API) Implemented beacon block, and several related interfaces are added to api module.
 - (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`,
   `BrewingStandContainer`, `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module. See commit
   history for more details.
