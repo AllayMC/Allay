@@ -570,7 +570,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         addEntityPacket.setRuntimeEntityId(runtimeId);
         addEntityPacket.setUniqueEntityId(runtimeId);
         addEntityPacket.setIdentifier(entityType.getIdentifier().toString());
-        addEntityPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
+        addEntityPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getNetworkOffset(), location.z()));
         addEntityPacket.setMotion(org.cloudburstmc.math.vector.Vector3f.from(motion.x(), motion.y(), motion.z()));
         addEntityPacket.setRotation(Vector2f.from(location.pitch(), location.yaw()));
         addEntityPacket.getMetadata().putAll(metadata.getEntityDataMap());
@@ -610,7 +610,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected BedrockPacket createAbsoluteMovePacket(Location3fc newLoc, boolean teleporting) {
         var pk = new MoveEntityAbsolutePacket();
         pk.setRuntimeEntityId(getRuntimeId());
-        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(newLoc.x(), newLoc.y() + getBaseOffset(), newLoc.z()));
+        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(newLoc.x(), newLoc.y() + getNetworkOffset(), newLoc.z()));
         pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(newLoc.pitch(), newLoc.yaw(), newLoc.headYaw()));
         pk.setOnGround(onGround);
         pk.setTeleported(teleporting);
@@ -628,7 +628,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
         if (moveFlags.contains(HAS_Y)) {
             pk.setY(newLoc.y());
-            locLastSent.y = newLoc.y() + getBaseOffset();
+            locLastSent.y = newLoc.y() + getNetworkOffset();
         }
         if (moveFlags.contains(HAS_Z)) {
             pk.setZ(newLoc.z());

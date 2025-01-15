@@ -45,6 +45,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced a number of overloads of `Dimension#addSound`.
 - (API) Introduced method `EntityAttributeComponent#supportAttribute` to check if the entity support specified attribute type.
 - (API) Introduced methods `DamageContainer#blockExplosion` and `DamageContainer#entityExplosion` to create explosion related damage.
+- (API) Introduced methods `EntityBaseComponent#getDragFactorOnGround` and `EntityBaseComponent#getDragFactorInAir`, which can be used to
+  customize the drag factor of an entity.
+- (API) Introduced event `EntityExplodeEvent` which will be called when tnt or creeper(WIP) is about to explode.
+- (API) Introduced method `EntityBaseComponent#isTouchingWater` to check if an entity is touching water.
+- (API) Implemented TNT entity, and several related interfaces are added to api module.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
 - Implemented farmland and hoe.
@@ -71,6 +76,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   extends `ItemStuffStorableComponent`.
 - (API) Removed methods `EntityAttributeComponent#supportHealth` and `EntityAttributeComponent#supportAbsorption`.
   Consider using new method `EntityAttributeComponent#supportAttribute`.
+- (API) Renamed method `EntityBaseComponent#getBaseOffset` to `EntityBaseComponent#getNetworkOffset` for better
+  understanding.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
 - Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is

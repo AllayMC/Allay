@@ -16,6 +16,6 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl {
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        super.onInteract(itemStack, dimension, interactInfo);
+        return super.onInteract(itemStack, dimension, interactInfo);
     }
 }

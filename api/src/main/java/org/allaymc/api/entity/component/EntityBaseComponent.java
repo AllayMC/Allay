@@ -577,11 +577,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Get the base offset of this entity.
+     * Get the network offset of this entity.
+     * <p>
+     * The network offset is the additional offset in y coordinate when sent over network.
+     * This is mostly the case for older entities such as players and TNT.
      *
      * @return the base offset of this entity.
      */
-    default float getBaseOffset() {
+    default float getNetworkOffset() {
         return 0f;
     }
 
@@ -864,7 +867,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     /**
      * Check if the entity's eyes is in water.
      *
-     * @return {@code true} if the entity is in water, otherwise {@code false}.
+     * @return {@code true} if the entity's eyes is in water, otherwise {@code false}.
      */
     default boolean isEyesInWater() {
         var dim = getDimension();
@@ -873,6 +876,20 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
 
         return eyesBlockState.getBlockType().hasBlockTag(BlockTags.WATER) &&
                eyesBlockState.getBlockStateData().computeOffsetShape(MathUtils.floor(eyeLoc)).intersectsPoint(eyeLoc);
+    }
+
+    /**
+     * Check if the entity is touching water.
+     *
+     * @return {@code true} if the entity is touching water, otherwise {@code false}.
+     */
+    default boolean isTouchingWater() {
+        var dim = getDimension();
+        var loc = getLocation();
+        var blockState = dim.getBlockState(loc);
+
+        return blockState.getBlockType().hasBlockTag(BlockTags.WATER) &&
+               blockState.getBlockStateData().computeOffsetShape(MathUtils.floor(loc)).intersectsPoint(loc);
     }
 
     /**

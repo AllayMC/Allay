@@ -296,7 +296,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         if (isLocationChanged(player, packet.getPosition(), packet.getRotation())) {
             // The pos which client sends to the server is higher than the actual coordinates (one base offset)
-            handleMovement(player, packet.getPosition().sub(0, player.getBaseOffset(), 0), packet.getRotation());
+            handleMovement(player, packet.getPosition().sub(0, player.getNetworkOffset(), 0), packet.getRotation());
         }
         handleBlockAction(player, packet.getPlayerActions(), receiveTime);
         if (isBreakingBlock()) {
@@ -321,7 +321,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected boolean isLocationChanged(EntityPlayer player, Vector3f pos, Vector3f rot) {
         // The PlayerAuthInput packet is sent every tick, so don't do anything if the position and rotation were unchanged.
         var location = player.getLocation();
-        return Float.compare(location.x(), pos.getX()) != 0 || Float.compare(location.y() + player.getBaseOffset(), pos.getY()) != 0 || Float.compare(location.z(), pos.getZ()) != 0 ||
+        return Float.compare(location.x(), pos.getX()) != 0 || Float.compare(location.y() + player.getNetworkOffset(), pos.getY()) != 0 || Float.compare(location.z(), pos.getZ()) != 0 ||
                Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0 || Double.compare(location.headYaw(), rot.getZ()) != 0;
     }
 

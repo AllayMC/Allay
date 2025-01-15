@@ -114,7 +114,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     }
 
     @Override
-    public float getBaseOffset() {
+    public float getNetworkOffset() {
         return 0.49f;
     }
 }

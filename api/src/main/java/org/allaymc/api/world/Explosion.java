@@ -81,6 +81,14 @@ public class Explosion {
      * For example if the explosion is caused by a creeper, then this field will be the creeper.
      */
     protected Entity entity;
+    /**
+     * Whether this explosion will destroy blocks. Tnt that are underwater won't destroy blocks.
+     */
+    protected boolean destroyBlocks;
+    /**
+     * Whether this explosion will affect entities. This including damage and add motion to entities.
+     */
+    protected boolean affectEntities;
 
     /**
      * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
@@ -132,6 +140,9 @@ public class Explosion {
         this.itemDropChance = itemDropChance;
         this.sound = sound;
         this.particle = particle;
+        this.entity = null;
+        this.destroyBlocks = true;
+        this.affectEntities = true;
     }
 
     /**
@@ -165,49 +176,53 @@ public class Explosion {
                 (float) Math.ceil(x + d + 1) + 2, (float) Math.ceil(y + d + 1) + 2, (float) Math.ceil(z + d + 1) + 2
         );
 
-        var affectedEntities = dimension.getEntityPhysicsService().computeCollidingEntities(aabb);
-        for (var affectedEntity : affectedEntities) {
-            var pos = affectedEntity.getLocation();
-            var dist = pos.sub(x, y, z, new Vector3f()).length();
-            if (dist > d || dist == 0) {
-                continue;
-            }
+        if (affectEntities) {
+            var affectedEntities = dimension.getEntityPhysicsService().computeCollidingEntities(aabb);
+            for (var affectedEntity : affectedEntities) {
+                var pos = affectedEntity.getLocation();
+                var dist = pos.sub(x, y, z, new Vector3f()).length();
+                if (dist > d || dist == 0) {
+                    continue;
+                }
 
-            var impact = (1 - dist / d) * exposure(dimension, explosionPos, affectedEntity);
-            var diff = pos.sub(explosionPos, new Vector3f());
-            affectedEntity.knockback(explosionPos, impact, false, diff.y / diff.length() * impact);
-            if (affectedEntity instanceof EntityDamageComponent damageComponent) {
-                var damage = (float) Math.floor((impact * impact + impact) * 3.5 * size * 2 + 1);
-                if (entity == null) {
-                    damageComponent.attack(DamageContainer.blockExplosion(damage));
-                } else {
-                    damageComponent.attack(DamageContainer.entityExplosion(entity, damage));
+                var impact = (1 - dist / d) * exposure(dimension, explosionPos, affectedEntity);
+                var diff = pos.sub(explosionPos, new Vector3f());
+                affectedEntity.knockback(explosionPos, impact, false, diff.y / diff.length() * impact);
+                if (affectedEntity instanceof EntityDamageComponent damageComponent) {
+                    var damage = (float) Math.floor((impact * impact + impact) * 3.5 * size * 2 + 1);
+                    if (entity == null) {
+                        damageComponent.attack(DamageContainer.blockExplosion(damage));
+                    } else {
+                        damageComponent.attack(DamageContainer.entityExplosion(entity, damage));
+                    }
                 }
             }
         }
 
         var affectedBlocks = new ArrayList<Vector3ic>();
-        for (var ray : RAYS) {
-            var lx = x;
-            var ly = y;
-            var lz = z;
-            for (var blastForce = size * (0.7f + rand.nextFloat() * 0.6f); blastForce > 0; blastForce -= 0.225f) {
-                var current = new Vector3i((int) Math.floor(lx), (int) Math.floor(ly), (int) Math.floor(lz));
-                var currentBlock = dimension.getBlockState(current);
-                var resistance = currentBlock.getBlockStateData().explosionResistance();
-                lx += ray.x();
-                ly += ray.y();
-                lz += ray.z();
+        if (destroyBlocks) {
+            for (var ray : RAYS) {
+                var lx = x;
+                var ly = y;
+                var lz = z;
+                for (var blastForce = size * (0.7f + rand.nextFloat() * 0.6f); blastForce > 0; blastForce -= 0.225f) {
+                    var current = new Vector3i((int) Math.floor(lx), (int) Math.floor(ly), (int) Math.floor(lz));
+                    var currentBlock = dimension.getBlockState(current);
+                    var resistance = currentBlock.getBlockStateData().explosionResistance();
+                    lx += ray.x();
+                    ly += ray.y();
+                    lz += ray.z();
 
-                var delta = (resistance / 5.0f + 0.3f) * 0.3f;
-                // resistance may be very big if the block is an unbreakable block such as
-                // bedrock, so we should operate it carefully to avoid precision overflow
-                if (blastForce < delta) {
-                    // In this case, blastForce - delta will result in a negative value
-                    blastForce = 0;
-                } else {
-                    blastForce -= delta;
-                    affectedBlocks.add(current);
+                    var delta = (resistance / 5.0f + 0.3f) * 0.3f;
+                    // resistance may be very big if the block is an unbreakable block such as
+                    // bedrock, so we should operate it carefully to avoid precision overflow
+                    if (blastForce < delta) {
+                        // In this case, blastForce - delta will result in a negative value
+                        blastForce = 0;
+                    } else {
+                        blastForce -= delta;
+                        affectedBlocks.add(current);
+                    }
                 }
             }
         }
