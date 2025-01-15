@@ -1311,4 +1311,13 @@ public final class BlockTypeInitializer {
                 .setProperties(BlockPropertyTypes.BREWING_STAND_SLOT_A_BIT, BlockPropertyTypes.BREWING_STAND_SLOT_B_BIT, BlockPropertyTypes.BREWING_STAND_SLOT_C_BIT)
                 .build();
     }
+
+    public static void initTnt() {
+        BlockTypes.TNT = AllayBlockType
+                .builder(BlockTntBehaviorImpl.class)
+                .vanillaBlock(BlockId.TNT)
+                .setProperties(BlockPropertyTypes.EXPLODE_BIT)
+                .setBaseComponentSupplier(BlockTntBaseComponentImpl::new)
+                .build();
+    }
 }

@@ -43,6 +43,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   `ItemBaseComponent#setBlockEntityNBT`, `ItemBaseComponent#clearBlockEntityNBT` and `ItemBaseComponent#hasBlockEntityNBT`.
 - (API) Implemented TNT. There is now a new class called `Explosion` which can be used by plugin to make custom explosion.
 - (API) Introduced a number of overloads of `Dimension#addSound`.
+- (API) Introduced method `EntityAttributeComponent#supportAttribute` to check if the entity support specified attribute type.
+- (API) Introduced methods `DamageContainer#blockExplosion` and `DamageContainer#entityExplosion` to create explosion related damage.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
 - Implemented farmland and hoe.
@@ -67,6 +69,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed `Structure#pickStructure` to `Structure#pick`.
 - (API) Renamed `ItemItemStorableComponentImpl` to `ItemStuffStorableComponentImpl`, and now `ItemShulkerBoxStack`
   extends `ItemStuffStorableComponent`.
+- (API) Removed methods `EntityAttributeComponent#supportHealth` and `EntityAttributeComponent#supportAbsorption`.
+  Consider using new method `EntityAttributeComponent#supportAttribute`.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
 - Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is

@@ -936,12 +936,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         networkComponent.sendPacket(packet);
     }
 
-    @Override
-    public void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
-        var kbMotion = calculateKnockbackMotion(source, kb, ignoreKnockbackResistance);
-        setMotion(kbMotion);
-    }
-
     public void setMotionValueOnly(Vector3fc motion) {
         this.motion = new Vector3f(motion);
     }

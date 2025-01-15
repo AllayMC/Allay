@@ -304,11 +304,13 @@ public class GameTestCommand extends SimpleCommand {
                 })
                 .root()
                 .key("explode")
+                .pos("pos").optional()
                 .floatNum("size", 4).optional()
                 .bool("spawnfire").optional()
                 .exec((context, player) -> {
-                    var explosion = new Explosion(context.getResult(1), context.getResult(2));
-                    explosion.explode(player.getDimension(), context.getSender().getCmdExecuteLocation());
+                    var explosion = new Explosion(context.getResult(2), context.getResult(3));
+                    Vector3f pos = context.getResult(1);
+                    explosion.explode(player.getDimension(), pos);
                     return context.success();
                 }, SenderType.PLAYER);
     }

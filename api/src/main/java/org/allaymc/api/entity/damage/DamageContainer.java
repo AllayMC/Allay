@@ -137,8 +137,38 @@ public class DamageContainer {
         return new DamageContainer(null, FIRE_TICK, sourceDamage);
     }
 
+    /**
+     * Create a lava damage container.
+     *
+     * @param sourceDamage the source damage.
+     *
+     * @return the damage container.
+     */
     public static DamageContainer lava(float sourceDamage) {
         return new DamageContainer(null, LAVA, sourceDamage);
+    }
+
+    /**
+     * Create a block explosion damage container.
+     *
+     * @param sourceDamage the source damage.
+     *
+     * @return the damage container.
+     */
+    public static DamageContainer blockExplosion(float sourceDamage) {
+        return new DamageContainer(null, BLOCK_EXPLOSION, sourceDamage);
+    }
+
+    /**
+     * Create an entity explosion damage container.
+     *
+     * @param attacker     the entity that exploded.
+     * @param sourceDamage the source damage.
+     *
+     * @return the damage container.
+     */
+    public static DamageContainer entityExplosion(Entity attacker, float sourceDamage) {
+        return new DamageContainer(attacker, ENTITY_EXPLOSION, sourceDamage);
     }
 
     /**

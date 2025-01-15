@@ -242,7 +242,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void checkDead() {
         // TODO: move these code to EntityAttributeComponentImpl
-        if (attributeComponent == null || !attributeComponent.supportHealth()) return;
+        if (attributeComponent == null || !attributeComponent.supportAttribute(AttributeType.HEALTH)) return;
         if (attributeComponent.getHealth() == 0 && !dead) {
             onDie();
         }
@@ -511,15 +511,19 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
-        motion = calculateKnockbackMotion(source, kb, ignoreKnockbackResistance);
+    public void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance, float kby) {
+        setMotion(calculateKnockbackMotion(source, kb, ignoreKnockbackResistance, kby));
     }
 
-    protected Vector3f calculateKnockbackMotion(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
+    protected Vector3f calculateKnockbackMotion(Vector3fc source, float kb, boolean ignoreKnockbackResistance, float kby) {
         if (!ignoreKnockbackResistance) {
-            var resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+            var resistance = 0.0f;
+            if (attributeComponent != null && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
+                resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+            }
             if (resistance > 0) {
                 kb *= 1 - resistance;
+                kby *= 1 - resistance;
             }
         }
         Vector3f vec;
@@ -535,7 +539,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
         return new Vector3f(
                 motion.x / 2f + vec.x,
-                min(motion.y / 2 + kb, kb),
+                min(motion.y / 2 + kby, kby),
                 motion.z / 2f + vec.z
         );
     }

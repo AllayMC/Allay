@@ -725,32 +725,35 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * Knockback the entity.
-     *
-     * @param source the source of the knockback.
+     * @see #knockback(Vector3fc, float, boolean, float)
      */
     default void knockback(Vector3fc source) {
         knockback(source, DEFAULT_KNOCKBACK);
     }
 
     /**
-     * Knockback the entity.
-     *
-     * @param source the source of the knockback.
-     * @param kb     the knockback strength to apply.
+     * @see #knockback(Vector3fc, float, boolean, float)
      */
     default void knockback(Vector3fc source, float kb) {
         knockback(source, kb, false);
     }
 
     /**
-     * Knockback the entity.
+     * @see #knockback(Vector3fc, float, boolean, float)
+     */
+    default void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
+        knockback(source, kb, ignoreKnockbackResistance, kb);
+    }
+
+    /**
+     * Knockback the entity with specified kb value.
      *
      * @param source                    the source of the knockback.
      * @param kb                        the knockback strength to apply.
      * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored.
+     * @param kby                       the knockback strength in y-axis.
      */
-    void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance);
+    void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance, float kby);
 
     /**
      * Apply the entity event to the entity.
