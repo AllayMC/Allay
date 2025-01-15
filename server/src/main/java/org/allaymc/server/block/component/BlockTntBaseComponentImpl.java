@@ -1,21 +1,68 @@
 package org.allaymc.server.block.component;
 
 import org.allaymc.api.block.BlockBehavior;
+import org.allaymc.api.block.component.BlockTntBaseComponent;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
+import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.initinfo.EntityInitInfo;
+import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.server.entity.component.EntityTntBaseComponentImpl;
+import org.cloudburstmc.nbt.NbtMap;
+import org.joml.Vector3f;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author daoge_cmd
  */
-public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl {
+public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements BlockTntBaseComponent {
     public BlockTntBaseComponentImpl(BlockType<? extends BlockBehavior> blockType) {
         super(blockType);
     }
 
     @Override
     public boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo) {
-        return super.onInteract(itemStack, dimension, interactInfo);
+        super.onInteract(itemStack, dimension, interactInfo);
+
+        var blockStateWithPos = new BlockStateWithPos(interactInfo.getClickedBlockState(), new Position3i(interactInfo.clickedBlockPos(), dimension));
+
+        if (itemStack.getItemType() == ItemTypes.FIRE_CHARGE) {
+            itemStack.reduceCount(1);
+            prime(blockStateWithPos);
+            return true;
+        }
+
+        if (itemStack.hasEnchantment(EnchantmentTypes.FIRE_ASPECT)) {
+            itemStack.tryReduceDurability(1);
+            prime(blockStateWithPos);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void prime(BlockStateWithPos blockStateWithPos, int fuse) {
+        var dimension = blockStateWithPos.dimension();
+        var pos = blockStateWithPos.pos();
+        dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
+        var angle = ThreadLocalRandom.current().nextFloat() * Math.PI * 2;
+        var motion = new Vector3f((float) (-Math.sin(angle) * 0.02f), 0.2f, (float) (-Math.cos(angle) * 0.02f));
+        var entity = EntityTypes.TNT.createEntity(
+                EntityInitInfo.builder()
+                        .dimension(dimension)
+                        .pos(pos.x() + 0.5f, pos.y(), pos.z() + 0.5f)
+                        .motion(motion)
+                        .nbt(NbtMap.builder().putShort(EntityTntBaseComponentImpl.TAG_FUSE, (short) fuse).build())
+                        .build()
+        );
+        dimension.getEntityService().addEntity(entity);
     }
 }

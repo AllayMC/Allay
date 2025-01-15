@@ -108,7 +108,7 @@ public class Explosion {
      * @see #Explosion(float, boolean, float, SoundEvent, ParticleType)
      */
     public Explosion(float size, boolean spawnFire) {
-        this(size, spawnFire, 1 / size);
+        this(size, spawnFire, 1.0f / size);
     }
 
     /**
@@ -229,8 +229,16 @@ public class Explosion {
 
         for (var pos : affectedBlocks) {
             var block = dimension.getBlockState(pos);
-            // TODO: logic for Explodable block
-            if (block.getBlockType() == BlockTypes.AIR) {
+            var blockType = block.getBlockType();
+            if (blockType == BlockTypes.AIR) {
+                continue;
+            }
+            if (blockType == BlockTypes.TNT) {
+                // Explosion can prime tnt around
+                BlockTypes.TNT.getBlockBehavior().prime(
+                        new BlockStateWithPos(block, new Position3i(pos, dimension)),
+                        10 + rand.nextInt(20)
+                );
                 continue;
             }
 

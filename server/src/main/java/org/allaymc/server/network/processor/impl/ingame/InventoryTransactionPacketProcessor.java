@@ -60,8 +60,8 @@ public class InventoryTransactionPacketProcessor extends PacketProcessor<Invento
                                 break;
                             }
                             if (!interactedBlock.getBehavior().onInteract(itemInHand, dimension, interactInfo)) {
-                                // Player interaction with the block was unsuccessful, possibly the plugin rolled back the event, need to override the client block change
-                                // Override the block change that was clicked
+                                // Player interaction with the block was unsuccessful, possibly because the plugin rolled back the event.
+                                // In that case, we need to override the client block change by sending block update
                                 var blockStateClicked = dimension.getBlockState(clickBlockPos);
                                 dimension.sendBlockUpdateTo(blockStateClicked, clickBlockPos, 0, player);
 

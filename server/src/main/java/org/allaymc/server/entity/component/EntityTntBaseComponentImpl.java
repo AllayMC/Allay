@@ -19,7 +19,7 @@ import org.joml.primitives.AABBfc;
  */
 public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implements EntityTntBaseComponent {
 
-    protected static final String TAG_FUSE = "Fuse";
+    public static final String TAG_FUSE = "Fuse";
 
     @Getter
     @Setter
@@ -56,7 +56,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
             var event = new EntityExplodeEvent(thisEntity, explosion);
             if (event.call()) {
                 this.despawn();
-                explosion.explode(getDimension(), location.x, location.y, location.z);
+                explosion.explode(getDimension(), location.x, location.y + 0.06125f, location.z);
             }
         } else {
             fuse--;
@@ -94,5 +94,16 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     @Override
     public AABBfc getAABB() {
         return new AABBf(-0.49f, 0.0f, -0.49f, 0.49f, 0.98f, 0.49f);
+    }
+
+    @Override
+    public float getStepHeight() {
+        // Entity tnt can't step
+        return 0.0f;
+    }
+
+    @Override
+    public boolean computeEntityCollisionMotion() {
+        return false;
     }
 }

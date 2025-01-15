@@ -37,6 +37,12 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
         // no matter if the fire is spawned successfully
         tryReduceDurability(1);
 
+        var clickedBlock = interactInfo.getClickedBlockState();
+        if (clickedBlock.getBlockType() == BlockTypes.TNT) {
+            BlockTypes.TNT.getBlockBehavior().prime(new BlockStateWithPos(clickedBlock, new Position3i(interactInfo.clickedBlockPos(), dimension)));
+            return true;
+        }
+
         if (interactInfo.blockFace() == BlockFace.UP) {
             // Try to place fire on the ground
             var supportBlockState = dimension.getBlockState(BlockFace.DOWN.offsetPos(placeBlockPos));
