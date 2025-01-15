@@ -613,6 +613,31 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
+     * Get the drag factor when on ground of this entity.
+     * <p>
+     * This factor will be multiplied to the motion along x and z axis every tick.
+     * The bigger the factor is, the quicker the entity will stop in x-axis and z-axis.
+     *
+     * @return the drag factor when on ground of this entity.
+     */
+    default float getDragFactorOnGround() {
+        return 0.1f;
+    }
+
+    /**
+     * Get the drag factor when in air of this entity.
+     * <p>
+     * This value is similar to {@link #getDragFactorOnGround}, however this value
+     * will be used to reduce motion along x-axis and z-axis when the entity is not on ground.
+     * This value will always be used for motion along y-axis.
+     *
+     * @return the drag factor when in air of this entity.
+     */
+    default float getDragFactorInAir() {
+        return 0.02f;
+    }
+
+    /**
      * Check if the entity has gravity.
      *
      * @return {@code true} if the entity has gravity, otherwise {@code false}.

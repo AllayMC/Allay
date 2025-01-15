@@ -61,9 +61,6 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     private static final float STEPPING_OFFSET = 0.05f;
     private static final float FAT_AABB_MARGIN = 0.0005f;
     private static final float MOMENTUM_FACTOR = 0.91f;
-    private static final float GROUND_VELOCITY_FACTOR = 0.1f;
-    private static final float AIR_VELOCITY_FACTOR = 0.02f;
-    private static final float DRAG_FACTOR = 0.98f;
 
     private static final float WATER_FLOW_MOTION = 0.014f;
     private static final float LAVA_FLOW_MOTION = 0.002333333f;
@@ -338,7 +335,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var momentumMz = motion.z() * slipperinessMultiplier * MOMENTUM_FACTOR;
 
         // 2. Complete Formulas
-        var velocityFactor = entity.isOnGround() ? GROUND_VELOCITY_FACTOR : AIR_VELOCITY_FACTOR;
+        var velocityFactor = entity.isOnGround() ? entity.getDragFactorOnGround() : entity.getDragFactorInAir();
         var acceleration = velocityFactor * movementFactor;
         if (entity.isOnGround()) {
             acceleration *= (float) (effectFactor * pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
@@ -350,7 +347,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         // Skip sprint jump boost because this service does not handle player's movement
 
-        var newMy = (motion.y() - (entity.hasGravity() ? entity.getGravity() : 0f)) * DRAG_FACTOR;
+        var newMy = (motion.y() - (entity.hasGravity() ? entity.getGravity() : 0f)) * (1 - entity.getDragFactorInAir());
         entity.setMotion(checkMotionThreshold(new Vector3f(newMx, newMy, newMz)));
     }
 
