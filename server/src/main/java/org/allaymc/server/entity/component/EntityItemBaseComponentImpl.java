@@ -55,8 +55,9 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     public NbtMap saveNBT() {
         var builder = super.saveNBT().toBuilder();
 
-        if (itemStack != null)
+        if (itemStack != null) {
             builder.putCompound("Item", itemStack.saveNBT()).build();
+        }
 
         return builder.build();
     }
@@ -71,6 +72,11 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     @Override
     public AABBfc getAABB() {
         return new AABBf(-0.125f, 0.0f, -0.125f, 0.125f, 0.25f, 0.125f);
+    }
+
+    @Override
+    public float getNetworkOffset() {
+        return 0.125f;
     }
 
     @Override

@@ -88,8 +88,8 @@ public interface EntityPlayer extends
         var dimension = playerLoc.dimension();
         dimension.dropItem(
                 itemStack,
-                playerLoc.add(0, this.getEyeHeight() - 0.25f, 0, new Vector3f()),
-                MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.5f),
+                playerLoc.add(0, this.getEyeHeight() - 0.4f, 0, new Vector3f()),
+                MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.4f),
                 40
         );
     }

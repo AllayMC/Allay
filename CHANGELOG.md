@@ -87,6 +87,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Changed `enableGui` to `enable-gui` in `server-settings.yml`
 - Disabled packet limit only in dev build.
 - Optimized the performance of physics calculation when there are a lot of entities.
+- Changed the gravity of item and xp orb entity to 0.04f to better match vanilla behavior.
 
 ### Fixed
 
@@ -102,6 +103,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug that player's pos sometimes get frozen after teleport. This is caused by the issue that sometimes client doesn't send 
   back teleport ack after server sends teleport packet to client.
 - Fixed the bug that flint and steel durability reduced in creative mode.
+- Fixed the network offset of item entity. Its visual position should now be normal.
 
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 

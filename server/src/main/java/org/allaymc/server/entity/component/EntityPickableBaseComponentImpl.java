@@ -35,7 +35,10 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
 
         if (age != -1) {
             age++;
-            if (age >= MAX_AGE) despawn();
+            if (age >= MAX_AGE) {
+                despawn();
+                return;
+            }
         }
 
         if (pickupDelay > 0) pickupDelay--;
@@ -62,5 +65,10 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
     @Override
     public boolean computeBlockCollisionMotion() {
         return true;
+    }
+
+    @Override
+    public float getGravity() {
+        return 0.04f;
     }
 }
