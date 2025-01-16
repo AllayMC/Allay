@@ -123,9 +123,26 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     @Getter
     @Setter
     protected boolean usingItemOnBlock;
+    /**
+     * expectedTeleportPos is used to solve the desynchronization of data at both ends.
+     * Because PlayerAuthInputPacket will be sent from the client to the server at a rate of 20 per second.
+     * After teleporting, the server still receives the PlayerAuthInputPacket sent by the client before teleporting.
+     * The following is a simple simulation (initial player position is (0, 1000, 0)):
+     * <p>
+     * [C->S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                           <br>
+     * [S] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
+     * [S->C] Send new pos (0, 100, 0) `pk2`                                                  <br>
+     * [S] Receive `pk1`, set player pos to (0, 999 ,0)                                       <br>
+     * [C] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
+     * [C->S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                           <br>
+     * [S] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
+     * <p>
+     *
+     * @see <a href="https://github.com/AllayMC/Allay/issues/517">teleport method should reset fall distance</a>
+     */
     @Getter
     @Setter
-    protected boolean awaitingTeleportACK;
+    protected Vector3fc expectedTeleportPos;
     // Set enchantment seed to a random value
     // and if player has enchantment seed previously,
     // this random value will be covered
@@ -303,26 +320,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         }
     }
 
-    /**
-     * awaitingTeleportACK is used to solve the desynchronization of data at both ends.
-     * Because PlayerAuthInputPacket will be sent from the client to the server at a rate of 20 per second.
-     * After teleporting, the server still receives the PlayerAuthInputPacket sent by the client before teleporting.
-     * The following is a simple simulation (initial player position is (0, 1000, 0)):
-     * <p>
-     * [C->S] Send PlayerAuthInputPacket with pos (0, 999, 0) `pk1`                           <br>
-     * [S] Set player pos to ground (0, 100, 0) without fall distance calculation             <br>
-     * [S->C] Send new pos (0, 100, 0) `pk2`                                                  <br>
-     * [S] Receive `pk1`, set player pos to (0, 999 ,0)                                       <br>
-     * [C] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
-     * [C->S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                           <br>
-     * [S] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
-     * <p>
-     *
-     * @see <a href="https://github.com/AllayMC/Allay/issues/517">teleport method should reset fall distance</a>
-     */
     @Override
-    protected void beforeTeleport() {
-        this.awaitingTeleportACK = true;
+    protected void beforeTeleport(Location3fc target) {
+        this.expectedTeleportPos = new Vector3f(target);
     }
 
     @Override
@@ -350,16 +350,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         location.dimension().removePlayer(thisPlayer, () -> {
             targetDim.getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
             setLocationBeforeSpawn(target);
-            sendLocationToSelf(reason);
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
+                awaitingDimensionChangeACK = true;
                 var packet = new ChangeDimensionPacket();
                 packet.setDimension(targetDim.getDimensionInfo().dimensionId());
                 packet.setPosition(MathUtils.JOMLVecToCBVec(target));
                 packet.setRespawn(!thisPlayer.isAlive());
                 networkComponent.sendPacket(packet);
-                awaitingDimensionChangeACK = true;
             }
-            targetDim.addPlayer(thisPlayer);
+            targetDim.addPlayer(thisPlayer, () -> sendLocationToSelf(reason));
         });
     }
 
@@ -1009,5 +1008,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         new PlayerToggleCrawlEvent(thisPlayer, crawling).call();
 
         setAndSendEntityFlag(EntityFlag.CRAWLING, crawling);
+    }
+
+    public boolean isAwaitingTeleportACK() {
+        return expectedTeleportPos != null;
+    }
+
+    public void ackTeleported() {
+        this.expectedTeleportPos = null;
     }
 }

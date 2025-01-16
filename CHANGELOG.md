@@ -99,6 +99,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug that player can still open enchant table even if he is sneaking.
 - Fixed NaN motion caused by liquid in some very special cases.
 - Fixed the bug that entity will still get ticked after called `removeEntity()`.
+- Fixed the bug that player's pos sometimes get frozen after teleport. This is caused by the issue that sometimes client doesn't send 
+  back teleport ack after server sends teleport packet to client.
 
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 

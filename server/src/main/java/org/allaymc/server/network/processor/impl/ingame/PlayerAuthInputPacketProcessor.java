@@ -34,11 +34,12 @@ import static org.cloudburstmc.protocol.bedrock.data.LevelEvent.*;
 @Slf4j
 public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthInputPacket> {
 
-    // TODO: Accurate breaking time calculations when player keeping jumping
+    // TODO: Accurate breaking time calculations when player keeping jumping, maybe use BLOCK_BREAKING_DELAY_ENABLED?
     // The current implementation will work fine in most cases
     // But it doesn't work out the same breaking time as the client when player keep jumping
     // It is hard for us to calculate the exact breaking time when player keep jumping
     protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = Integer.MAX_VALUE;
+    public static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
 
     protected int blockToBreakX = Integer.MAX_VALUE;
     protected int blockToBreakY = Integer.MAX_VALUE;
@@ -282,11 +283,15 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         }
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
-        if (packet.getInputData().contains(PlayerAuthInputData.HANDLE_TELEPORT)) {
-            baseComponent.setAwaitingTeleportACK(false);
-        }
         if (baseComponent.isAwaitingTeleportACK()) {
-            return PacketSignal.HANDLED;
+            var diff = baseComponent.getExpectedTeleportPos().sub(MathUtils.CBVecToJOMLVec(packet.getPosition().sub(0, player.getNetworkOffset(), 0)), new org.joml.Vector3f()).length();
+            if (diff > TELEPORT_ACK_DIFF_TOLERANCE) {
+                // The player has moved before it received the teleport packet. Ignore this movement entirely and
+                // wait for the client to sync itself back to the server. Once we get a movement that is close
+                // enough to the teleport position, we'll allow the player to move around again.
+                return PacketSignal.HANDLED;
+            }
+            baseComponent.ackTeleported();
         }
 
         if (!validateClientLocation(player, packet.getPosition(), packet.getRotation())) {

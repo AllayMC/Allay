@@ -430,7 +430,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         target = event.getTo();
-        beforeTeleport();
+        beforeTeleport(target);
         this.fallDistance = 0;
         if (this.location.dimension() == target.dimension()) {
             // Teleporting in the current same dimension,
@@ -441,7 +441,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
     }
 
-    protected void beforeTeleport() {
+    protected void beforeTeleport(Location3fc target) {
         // This method is used by EntityPlayer
     }
 
