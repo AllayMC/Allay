@@ -33,9 +33,11 @@ public class ItemFlintAndSteelBaseComponentImpl extends ItemBaseComponentImpl {
             return false;
         }
 
-        // The durability will always be reduced
-        // no matter if the fire is spawned successfully
-        tryReduceDurability(1);
+        if (player.getGameType() != GameType.CREATIVE) {
+            // The durability will always be reduced
+            // no matter if the fire is spawned successfully
+            tryReduceDurability(1);
+        }
 
         var clickedBlock = interactInfo.getClickedBlockState();
         if (clickedBlock.getBlockType() == BlockTypes.TNT) {
