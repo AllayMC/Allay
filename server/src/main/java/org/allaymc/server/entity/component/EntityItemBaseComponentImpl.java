@@ -40,7 +40,7 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     @Override
     public void onCollideWith(Entity other) {
         // check can merge
-        if (itemStack != null && other.getEntityType() == EntityTypes.ITEM) {
+        if (itemStack != null && other.getEntityType() == EntityTypes.ITEM && other.isAlive()) {
             var otherEntityItem = (EntityItem) other;
             var otherItemStack = otherEntityItem.getItemStack();
             if (otherItemStack != null && otherItemStack.canMerge(itemStack)) {

@@ -130,7 +130,7 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
 
     @Override
     public void setHealth(float value) {
-        if (!supportHealth()) {
+        if (!supportAttribute(AttributeType.HEALTH)) {
             // Check if health is supported by the entity here
             // To make sure that if health is not supported, event won't be called
             throw unsupportedAttributeTypeException(AttributeType.HEALTH);

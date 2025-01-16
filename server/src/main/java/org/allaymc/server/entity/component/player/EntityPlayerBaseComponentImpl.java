@@ -620,7 +620,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         var pk = new MovePlayerPacket();
         pk.setRuntimeEntityId(runtimeId);
         var location = getLocation();
-        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
+        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getNetworkOffset(), location.z()));
         pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
         pk.setMode(MovePlayerPacket.Mode.TELEPORT);
         pk.setTeleportationCause(convertTeleportReasonToNetworkCause(reason));
@@ -934,12 +934,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected void sendMobEffectPacket(MobEffectPacket packet) {
         super.sendMobEffectPacket(packet);
         networkComponent.sendPacket(packet);
-    }
-
-    @Override
-    public void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
-        var kbMotion = calculateKnockbackMotion(source, kb, ignoreKnockbackResistance);
-        setMotion(kbMotion);
     }
 
     public void setMotionValueOnly(Vector3fc motion) {

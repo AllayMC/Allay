@@ -76,12 +76,14 @@ public interface EntityAttributeComponent extends EntityComponent {
     void setAttributeValue(AttributeType attributeType, float value);
 
     /**
-     * Check if entity supports health attribute.
+     * Check if entity support specified attribute type.
      *
-     * @return {@code true} if entity supports health attribute, {@code false} otherwise.
+     * @param attributeType the attribute type to check.
+     *
+     * @return {@code true} if entity supports the specified attribute type, {@code false} otherwise.
      */
-    default boolean supportHealth() {
-        return getAttribute(AttributeType.HEALTH) != null;
+    default boolean supportAttribute(AttributeType attributeType) {
+        return getAttribute(attributeType) != null;
     }
 
     /**
@@ -136,15 +138,6 @@ public interface EntityAttributeComponent extends EntityComponent {
      */
     default void kill() {
         setHealth(0);
-    }
-
-    /**
-     * Check if entity supports absorption attribute.
-     *
-     * @return {@code true} if entity supports absorption attribute, {@code false} otherwise.
-     */
-    default boolean supportAbsorption() {
-        return getAttribute(AttributeType.ABSORPTION) != null;
     }
 
     /**

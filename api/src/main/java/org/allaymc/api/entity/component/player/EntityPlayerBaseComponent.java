@@ -188,7 +188,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      * @return The base offset of the player.
      */
     @Override
-    default float getBaseOffset() {
+    default float getNetworkOffset() {
         return 1.62f;
     }
 

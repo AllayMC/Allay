@@ -5,6 +5,7 @@ import org.allaymc.api.component.interfaces.ComponentManager;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityBaseComponent;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.attribute.AttributeType;
 import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.effect.type.EffectTypes;
@@ -114,7 +115,7 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     protected void applyEffects(DamageContainer damage) {
         // Damage absorption
-        if (attributeComponent.supportAbsorption()) {
+        if (attributeComponent.supportAttribute(AttributeType.ABSORPTION)) {
             var absorption = attributeComponent.getAbsorption();
             if (absorption > 0) {
                 attributeComponent.setAbsorption(Math.max(0, absorption - damage.getFinalDamage()));
@@ -159,6 +160,10 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
+        if (!thisEntity.isAlive()) {
+            return false;
+        }
+
         // Fire resistance effect
         if (hasFireDamage() &&
             (damage.getDamageType() == DamageContainer.DamageType.FIRE ||

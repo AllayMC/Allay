@@ -41,7 +41,15 @@ Unless otherwise specified, any version comparison below is the comparison of se
   history for more details.
 - (API) Implemented picking block with block entity data. The following methods are added: `ItemBaseComponent#getBlockEntityNBT`,
   `ItemBaseComponent#setBlockEntityNBT`, `ItemBaseComponent#clearBlockEntityNBT` and `ItemBaseComponent#hasBlockEntityNBT`.
+- (API) Implemented TNT. There is now a new class called `Explosion` which can be used by plugin to make custom explosion.
 - (API) Introduced a number of overloads of `Dimension#addSound`.
+- (API) Introduced method `EntityAttributeComponent#supportAttribute` to check if the entity support specified attribute type.
+- (API) Introduced methods `DamageContainer#blockExplosion` and `DamageContainer#entityExplosion` to create explosion related damage.
+- (API) Introduced methods `EntityBaseComponent#getDragFactorOnGround` and `EntityBaseComponent#getDragFactorInAir`, which can be used to
+  customize the drag factor of an entity.
+- (API) Introduced event `EntityExplodeEvent` which will be called when tnt or creeper(WIP) is about to explode.
+- (API) Introduced method `EntityBaseComponent#isTouchingWater` to check if an entity is touching water.
+- (API) Implemented TNT entity and block. Several related interfaces are added to api module.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
 - Implemented farmland and hoe.
@@ -66,23 +74,31 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed `Structure#pickStructure` to `Structure#pick`.
 - (API) Renamed `ItemItemStorableComponentImpl` to `ItemStuffStorableComponentImpl`, and now `ItemShulkerBoxStack`
   extends `ItemStuffStorableComponent`.
+- (API) Removed methods `EntityAttributeComponent#supportHealth` and `EntityAttributeComponent#supportAbsorption`.
+  Consider using new method `EntityAttributeComponent#supportAttribute`.
+- (API) Renamed method `EntityBaseComponent#getBaseOffset` to `EntityBaseComponent#getNetworkOffset` for better
+  understanding.
+- (API) Removed method `Dimension#setBlockStates`. This method is considered to be unsafe as it will only set the block state,
+  block entity won't be created if the block has block entity. Further research is currently needed.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
 - Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is
   meaningless.
 - Changed `enableGui` to `enable-gui` in `server-settings.yml`
 - Disabled packet limit only in dev build.
+- Optimized the performance of physics calculation when there are a lot of entities.
 
 ### Fixed
 
 - (API) `BlockHangingSignBehavior` now extends `BlockEntityHolderComponent<BlockEntityHangingSign>` which was forgotten
   to be added.
+- Fixed several bugs that can led falling block keep existing even if it is already on ground or can't move.
 - Fixed the `ClassCastException` when breaking shulker box.
 - Fixed the bug that interacting with door doesn't have any sound.
 - Waxing copper-made block using honeycomb won't call `BlockFadeEvent` now.
 - Fixed the bug that player can still open enchant table even if he is sneaking.
-- Fixed the bug that brewing stand fast brew and lagging brew animation.
-- Fixed translation for potion mix loading.
+- Fixed NaN motion caused by liquid in some very special cases.
+- Fixed the bug that entity will still get ticked after called `removeEntity()`.
 
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 

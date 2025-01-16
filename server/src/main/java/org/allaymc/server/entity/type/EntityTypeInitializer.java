@@ -87,4 +87,12 @@ public final class EntityTypeInitializer {
                 )
                 .build();
     }
+
+    public static void initTnt() {
+        EntityTypes.TNT = AllayEntityType
+                .builder(EntityTntImpl.class)
+                .vanillaEntity(EntityId.TNT)
+                .addComponent(EntityTntBaseComponentImpl::new, EntityTntBaseComponentImpl.class)
+                .build();
+    }
 }

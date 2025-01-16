@@ -13,7 +13,6 @@ public class EntityFallingBlockImpl extends EntityImpl implements EntityFallingB
     public EntityFallingBlockImpl(EntityInitInfo initInfo,
                                   List<ComponentProvider<? extends Component>> componentProviders) {
         super(initInfo, componentProviders);
-        ;
     }
 
     @Delegate

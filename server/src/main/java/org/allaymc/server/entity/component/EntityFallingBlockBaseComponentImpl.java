@@ -2,14 +2,17 @@ package org.allaymc.server.entity.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.tag.BlockCustomTags;
 import org.allaymc.api.block.type.BlockState;
+import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.component.EntityFallingBlockBaseComponent;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
+import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
 
@@ -26,6 +29,10 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
 
     public EntityFallingBlockBaseComponentImpl(EntityInitInfo info) {
         super(info);
+        // The initial onGround state for falling block is false
+        // And it will be either turned into block or item based
+        // on the block which the falling block fell on
+        this.onGround = false;
     }
 
     @Override
@@ -35,29 +42,49 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
 
         metadata.set(EntityFlag.FIRE_IMMUNE, true);
         metadata.set(EntityDataTypes.VARIANT, blockState.blockStateHash());
-        metadata.set(EntityFlag.HAS_COLLISION, false);
     }
 
     @Override
-    public void onFall() {
+    public void tick(long currentTick) {
+        super.tick(currentTick);
+        tickFalling();
+    }
+
+    protected void tickFalling() {
         if (this.willBeDespawnedNextTick()) {
             // The falling block entity already became block
             return;
         }
 
-        super.onFall();
         var dimension = getDimension();
+        var currentBlock = dimension.getBlockState(location);
 
-        var blockReplaced = dimension.getBlockState(location);
-        var floorLoc = location.floor();
-        if (blockReplaced.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
-            dimension.breakBlock((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), null, null);
+        if (onGround) {
+            if (!getBlockStateStandingOn().blockState().getBlockStateData().shape().isFull(BlockFace.UP)) {
+                // Falling on a block which is not full in upper face, for example torch.
+                // In this case, the falling block should be turned into item instead of block
+                dimension.dropItem(currentBlock.toItemStack(), location);
+            } else {
+                // Set block state immediately when falling on ground to prevent
+                // the falling block entity above from getting into the ground.
+                dimension.setBlockState(location, blockState);
+            }
+            despawn();
+        } else {
+            if (currentBlock.getBlockType() == BlockTypes.AIR) {
+                return;
+            }
+
+            var floorLoc = location.floor(new Vector3f());
+            if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
+                dimension.breakBlock((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), null, null);
+            } else {
+                // The falling block get into a non-replaceable block for some reason
+                // In this case, just let the falling block become item
+                dimension.dropItem(currentBlock.toItemStack(), location);
+                despawn();
+            }
         }
-
-        // Set block state immediately when falling on ground to prevent
-        // the falling block entity above from getting into the ground.
-        dimension.setBlockState(location, blockState);
-        dimension.getEntityService().removeEntity(thisEntity);
     }
 
     @Override
@@ -87,7 +114,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     }
 
     @Override
-    public float getBaseOffset() {
+    public float getNetworkOffset() {
         return 0.49f;
     }
 }

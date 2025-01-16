@@ -242,7 +242,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void checkDead() {
         // TODO: move these code to EntityAttributeComponentImpl
-        if (attributeComponent == null || !attributeComponent.supportHealth()) return;
+        if (attributeComponent == null || !attributeComponent.supportAttribute(AttributeType.HEALTH)) return;
         if (attributeComponent.getHealth() == 0 && !dead) {
             onDie();
         }
@@ -251,10 +251,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             if (deadTimer == 0) {
                 // Spawn dead particle
                 spawnDeadParticle();
-                despawn();
-                // After call 'removeEntity()', this entity won't be ticked in next tick
-                // So we set dead back to false
-                dead = false;
+                getDimension().getEntityService().removeEntity(thisEntity, () -> dead = false);
             }
         }
     }
@@ -511,31 +508,35 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
-        motion = calculateKnockbackMotion(source, kb, ignoreKnockbackResistance);
+    public void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance, float kby) {
+        setMotion(calculateKnockbackMotion(source, kb, ignoreKnockbackResistance, kby));
     }
 
-    protected Vector3f calculateKnockbackMotion(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
+    protected Vector3f calculateKnockbackMotion(Vector3fc source, float kb, boolean ignoreKnockbackResistance, float kby) {
         if (!ignoreKnockbackResistance) {
-            var resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+            var resistance = 0.0f;
+            if (attributeComponent != null && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
+                resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+            }
             if (resistance > 0) {
                 kb *= 1 - resistance;
+                kby *= 1 - resistance;
             }
         }
         Vector3f vec;
-        if (getLocation().distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
+        if (location.distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
             // Generate a random kb direction if distance <= 0.01m
             var rand = ThreadLocalRandom.current();
             var rx = rand.nextFloat(1) - 0.5f;
             var rz = rand.nextFloat(1) - 0.5f;
             vec = MathUtils.normalizeIfNotZero(new Vector3f(rx, 0, rz)).mul(kb);
         } else {
-            vec = getLocation().sub(source, new Vector3f()).normalize().mul(kb);
+            vec = location.sub(source, new Vector3f()).normalize().mul(kb);
             vec.y = 0;
         }
         return new Vector3f(
                 motion.x / 2f + vec.x,
-                min(motion.y / 2 + kb, kb),
+                min(motion.y / 2 + kby, kby),
                 motion.z / 2f + vec.z
         );
     }
@@ -566,7 +567,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         addEntityPacket.setRuntimeEntityId(runtimeId);
         addEntityPacket.setUniqueEntityId(runtimeId);
         addEntityPacket.setIdentifier(entityType.getIdentifier().toString());
-        addEntityPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getBaseOffset(), location.z()));
+        addEntityPacket.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getNetworkOffset(), location.z()));
         addEntityPacket.setMotion(org.cloudburstmc.math.vector.Vector3f.from(motion.x(), motion.y(), motion.z()));
         addEntityPacket.setRotation(Vector2f.from(location.pitch(), location.yaw()));
         addEntityPacket.getMetadata().putAll(metadata.getEntityDataMap());
@@ -606,7 +607,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected BedrockPacket createAbsoluteMovePacket(Location3fc newLoc, boolean teleporting) {
         var pk = new MoveEntityAbsolutePacket();
         pk.setRuntimeEntityId(getRuntimeId());
-        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(newLoc.x(), newLoc.y() + getBaseOffset(), newLoc.z()));
+        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(newLoc.x(), newLoc.y() + getNetworkOffset(), newLoc.z()));
         pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(newLoc.pitch(), newLoc.yaw(), newLoc.headYaw()));
         pk.setOnGround(onGround);
         pk.setTeleported(teleporting);
@@ -624,7 +625,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
         if (moveFlags.contains(HAS_Y)) {
             pk.setY(newLoc.y());
-            locLastSent.y = newLoc.y() + getBaseOffset();
+            locLastSent.y = newLoc.y() + getNetworkOffset();
         }
         if (moveFlags.contains(HAS_Z)) {
             pk.setZ(newLoc.z());
