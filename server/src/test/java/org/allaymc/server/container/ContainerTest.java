@@ -78,4 +78,11 @@ public class ContainerTest {
         container.setItemStack(2, AIR_STACK);
         assertFalse(slotFlag.get());
     }
+
+    @Test
+    void testContainerException() {
+        assertThrows(NullPointerException.class, () -> {
+            container.setItemStack(0, null);
+        });
+    }
 }

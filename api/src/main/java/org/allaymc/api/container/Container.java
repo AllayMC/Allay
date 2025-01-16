@@ -165,7 +165,8 @@ public interface Container {
      * Set the item stack of the slot.
      *
      * @param slot      the slot.
-     * @param itemStack the item stack.
+     * @param itemStack the item stack. If it is {@link ItemAirStack#AIR_STACK}, the slot will be cleared.
+     *                  Passing {@code null} value will result in an exception.
      */
     void setItemStack(int slot, ItemStack itemStack);
 

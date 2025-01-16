@@ -32,7 +32,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) `BlockContainer#getBlockPos` and `BlockContainer#setBlockPos` now return/require `Position3ic` instead of
   `Vector3ic`, this enables us to get the dimension information of a `BlockContainer`.
 - (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`, `BrewingStandContainer`,
-  `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module. See commit history for more details.
+  `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module, see commit history for more details. Added `BrewingStandBrewEvent`,
+  `BrewingStandConsumeFuelEvent` and `BrewingStandStartBrewEvent` events.
 - (API) Implemented slab, and several related interfaces are added to api module.
 - (API) Introduced `BlockBaseComponent#combine` method which is used by slab. For the details of this method, see the javadoc.
 - (API) Implemented beacon block, and several related interfaces are added to api module.

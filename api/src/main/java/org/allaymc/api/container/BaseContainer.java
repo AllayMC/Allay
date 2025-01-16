@@ -1,5 +1,6 @@
 package org.allaymc.api.container;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
@@ -10,7 +11,6 @@ import org.allaymc.api.eventbus.event.container.ContainerCloseEvent;
 import org.allaymc.api.eventbus.event.container.ContainerOpenEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
-import org.allaymc.api.item.type.ItemTypes;
 import org.cloudburstmc.nbt.NbtList;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtType;
@@ -81,10 +81,7 @@ public class BaseContainer implements Container {
 
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
-        if (itemStack == null || itemStack.getItemType() == ItemTypes.AIR && itemStack != ItemAirStack.AIR_STACK) {
-            // NOTICE: Please use clearSlot() instead of using this method if you want to clear a slot!
-            itemStack = ItemAirStack.AIR_STACK;
-        }
+        Preconditions.checkNotNull(itemStack, "Passing null value to Container#setItemStack is not allowed!");
         content[slot] = itemStack;
         notifySlotChange(slot);
     }
