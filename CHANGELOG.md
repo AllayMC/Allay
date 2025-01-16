@@ -104,6 +104,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   back teleport ack after server sends teleport packet to client.
 - Fixed the bug that flint and steel durability reduced in creative mode.
 - Fixed the network offset of item entity. Its visual position should now be normal.
+- Liquid won't be broken into item by falling block now.
 
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 

@@ -9,8 +9,10 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.block.type.BlockTypes;
+import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.block.LiquidDecayEvent;
 import org.allaymc.api.eventbus.event.block.LiquidFlowEvent;
+import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
@@ -19,7 +21,9 @@ import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.allaymc.api.block.component.BlockLiquidBaseComponent.*;
 
@@ -41,6 +45,11 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     @Override
     public boolean canCollideWithEntity() {
         return true;
+    }
+
+    @Override
+    public Set<ItemStack> getDrops(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
+        return Collections.emptySet();
     }
 
     @Override
