@@ -78,6 +78,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   Consider using new method `EntityAttributeComponent#supportAttribute`.
 - (API) Renamed method `EntityBaseComponent#getBaseOffset` to `EntityBaseComponent#getNetworkOffset` for better
   understanding.
+- (API) Removed method `Dimension#setBlockStates`. This method is considered to be unsafe as it will only set the block state,
+  block entity won't be created if the block has block entity. Further research is currently needed.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
 - Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is

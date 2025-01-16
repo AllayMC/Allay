@@ -17,10 +17,15 @@ import org.joml.Vector3fc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBfc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Represents an explosion.
@@ -178,20 +183,29 @@ public class Explosion {
 
         if (affectEntities) {
             var affectedEntities = dimension.getEntityPhysicsService().computeCollidingEntities(aabb);
+            // Skip the entity that caused the explosion
+            affectedEntities.remove(entity);
+            var impactMap = affectedEntities.parallelStream()
+                    .collect(Collectors.<Entity, Entity, Float>toMap(
+                            affectedEntity -> affectedEntity,
+                            affectedEntity -> {
+                                var pos = affectedEntity.getLocation();
+                                var dist = pos.sub(x, y, z, new Vector3f()).length();
+                                if (dist > d || dist == 0) {
+                                    return 0.0f;
+                                }
+
+                                // Method exposure() is slow, let's calculate it in parallel
+                                return (1.0f - dist / d) * exposure(dimension, explosionPos, affectedEntity.getOffsetAABB());
+                            }
+                    ));
             for (var affectedEntity : affectedEntities) {
-                if (affectedEntity == entity) {
-                    // Skip the entity that caused the explosion
+                var impact = impactMap.get(affectedEntity);
+                if (impact == 0.0f) {
                     continue;
                 }
 
-                var pos = affectedEntity.getLocation();
-                var dist = pos.sub(x, y, z, new Vector3f()).length();
-                if (dist > d || dist == 0) {
-                    continue;
-                }
-
-                var impact = (1 - dist / d) * exposure(dimension, explosionPos, affectedEntity);
-                var diff = pos.sub(explosionPos, new Vector3f());
+                var diff = affectedEntity.getLocation().sub(explosionPos, new Vector3f());
                 affectedEntity.knockback(explosionPos, impact, false, diff.y / diff.length() * impact);
                 if (affectedEntity instanceof EntityDamageComponent damageComponent) {
                     var damage = (float) Math.floor((impact * impact + impact) * 3.5 * size * 2 + 1);
@@ -204,38 +218,49 @@ public class Explosion {
             }
         }
 
-        var affectedBlocks = new ArrayList<Vector3ic>();
+        List<Vector3ic> affectedBlocks;
         if (destroyBlocks) {
-            for (var ray : RAYS) {
-                var lx = x;
-                var ly = y;
-                var lz = z;
-                for (var blastForce = size * (0.7f + rand.nextFloat() * 0.6f); blastForce > 0; blastForce -= 0.225f) {
-                    var current = new Vector3i((int) Math.floor(lx), (int) Math.floor(ly), (int) Math.floor(lz));
-                    var liquid = dimension.getLiquid(current).second();
-                    var resistance = 0.0f;
-                    if (liquid != null) {
-                        // If a block contains water, the resistance will become the liquid's resistance
-                        resistance = liquid.getBlockStateData().explosionResistance();
-                    } else {
-                        resistance = dimension.getBlockState(current).getBlockStateData().explosionResistance();
-                    }
-                    lx += ray.x();
-                    ly += ray.y();
-                    lz += ray.z();
+            affectedBlocks = Arrays.stream(RAYS)
+                    .parallel()
+                    .flatMap(ray -> {
+                        var localList = new ArrayList<Vector3ic>();
+                        var lx = x;
+                        var ly = y;
+                        var lz = z;
+                        // Get the random instance for each thread
+                        var localRand = ThreadLocalRandom.current();
+                        for (var blastForce = size * (0.7f + localRand.nextFloat() * 0.6f); blastForce > 0; blastForce -= 0.225f) {
+                            var current = new Vector3i((int) Math.floor(lx), (int) Math.floor(ly), (int) Math.floor(lz));
+                            var resistance = 0.0f;
+                            // Do not use getLiquid(), which is much slower. Just get the block in layer 1 and
+                            // check if it is water by comparing it with BlockTypes.WATER and BlockTypes.FLOWING_WATER
+                            var layer1 = dimension.getBlockState(current, 1).getBlockType();
+                            if (layer1 == BlockTypes.WATER || layer1 == BlockTypes.FLOWING_WATER) {
+                                resistance = 100;
+                            } else {
+                                resistance = dimension.getBlockState(current).getBlockStateData().explosionResistance();
+                            }
+                            lx += ray.x();
+                            ly += ray.y();
+                            lz += ray.z();
 
-                    var delta = (resistance / 5.0f + 0.3f) * 0.3f;
-                    // resistance may be very big if the block is an unbreakable block such as
-                    // bedrock, so we should operate it carefully to avoid precision overflow
-                    if (blastForce < delta) {
-                        // In this case, blastForce - delta will result in a negative value
-                        blastForce = 0;
-                    } else {
-                        blastForce -= delta;
-                        affectedBlocks.add(current);
-                    }
-                }
-            }
+                            var delta = (resistance / 5.0f + 0.3f) * 0.3f;
+                            // resistance may be very big if the block is an unbreakable block such as
+                            // bedrock, so we should operate it carefully to avoid precision overflow
+                            if (blastForce < delta) {
+                                // In this case, blastForce - delta will result in a negative value
+                                blastForce = 0;
+                            } else {
+                                blastForce -= delta;
+                                localList.add(current);
+                            }
+                        }
+
+                        return localList.stream();
+                    })
+                    .toList();
+        } else {
+            affectedBlocks = Collections.emptyList();
         }
 
         for (var pos : affectedBlocks) {
@@ -283,9 +308,7 @@ public class Explosion {
     /**
      * Calculate the exposure of an explosion to an entity, used to calculate the impact of an explosion.
      */
-    protected float exposure(Dimension dimension, Vector3fc origin, Entity entity) {
-        var box = entity.getOffsetAABB();
-
+    protected float exposure(Dimension dimension, Vector3fc origin, AABBfc box) {
         Vector3fc boxMin = new Vector3f(box.minX(), box.minY(), box.minZ());
         Vector3fc boxMax = new Vector3f(box.maxX(), box.maxY(), box.maxZ());
         var diff = boxMax.sub(boxMin, new Vector3f()).mul(2.0f).add(1, 1, 1);
