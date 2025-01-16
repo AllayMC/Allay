@@ -116,7 +116,7 @@ public final class PacketProcessorHolder {
         this.registerProcessor(ClientStatus.IN_GAME, new SetPlayerInventoryOptionsPacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new BossEventPacketProcessor());
         this.registerProcessor(ClientStatus.IN_GAME, new EntityPickRequestPacketProcessor());
-        this.registerProcessor(ClientStatus.LOGGED_IN, new ServerboundLoadingScreenPacketProcessor());
+        this.registerProcessor(ClientStatus.IN_GAME, new ServerboundLoadingScreenPacketProcessor());
     }
 
     public void registerProcessor(ClientStatus status, PacketProcessor<? extends BedrockPacket> processor) {
