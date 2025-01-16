@@ -321,6 +321,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
     @Override
     protected void beforeTeleport(Location3fc target) {
+        super.beforeTeleport(target);
         this.expectedTeleportPos = new Vector3f(target);
     }
 
@@ -347,7 +348,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
             ((AllayWorld) targetDim.getWorld()).sendWeather(thisPlayer);
         }
         location.dimension().removePlayer(thisPlayer, () -> {
-            targetDim.getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
             setLocationBeforeSpawn(target);
             if (currentDim.getDimensionInfo().dimensionId() != targetDim.getDimensionInfo().dimensionId()) {
                 awaitingDimensionChangeACK = true;

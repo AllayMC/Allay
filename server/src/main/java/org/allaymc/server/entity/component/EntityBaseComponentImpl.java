@@ -430,9 +430,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
 
         target = event.getTo();
-        this.fallDistance = 0;
-        // Reset motion before teleporting
-        this.setMotion(0, 0, 0);
         beforeTeleport(target);
         if (this.location.dimension() == target.dimension()) {
             // Teleporting in the current same dimension,
@@ -444,12 +441,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void beforeTeleport(Location3fc target) {
-        // This method is used by EntityPlayer
+        this.fallDistance = 0;
+        this.setMotion(0, 0, 0);
+        // Ensure that the new chunk is loaded
+        target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
     }
 
     protected void teleportInDimension(Location3fc target) {
-        // Ensure that the new chunk is loaded
-        target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
         // This method should always return true because we have loaded the chunk
         setLocationAndCheckChunk(target, false);
         broadcastMoveToViewers(target, true);
@@ -458,7 +456,6 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected void teleportOverDimension(Location3fc target) {
         // Teleporting to another dimension, there will be more works to be done
         this.location.dimension().getEntityService().removeEntity(thisEntity, () -> {
-            target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
             setLocationBeforeSpawn(target);
             target.dimension().getEntityService().addEntity(thisEntity);
         });
