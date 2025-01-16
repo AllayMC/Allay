@@ -49,7 +49,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   customize the drag factor of an entity.
 - (API) Introduced event `EntityExplodeEvent` which will be called when tnt or creeper(WIP) is about to explode.
 - (API) Introduced method `EntityBaseComponent#isTouchingWater` to check if an entity is touching water.
-- (API) Implemented TNT entity and block. Several related interfaces are added to api module.
+- (API) Implemented TNT entity, block and related features. Several related interfaces are added to api module.
 - Implemented trapdoor except redstone feature (Redstone feature requires the implementation of redstone system).
 - Implemented sponge and wet sponge.
 - Implemented farmland and hoe.

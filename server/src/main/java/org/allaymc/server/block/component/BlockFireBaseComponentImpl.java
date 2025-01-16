@@ -220,10 +220,9 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
                 }
             }
 
-            // TODO: prime tnt
-//            if (block instanceof BlockTnt blockTnt) {
-//                blockTnt.prime();
-//            }
+            if (targetBlockState.getBlockType() == BlockTypes.TNT) {
+                BlockTypes.TNT.getBlockBehavior().prime(target);
+            }
         }
     }
 
