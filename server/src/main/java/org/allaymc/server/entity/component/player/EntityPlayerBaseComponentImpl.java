@@ -24,7 +24,6 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.EventHandler;
-import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.eventbus.event.player.*;
 import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
@@ -326,15 +325,15 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    protected void teleportInDimension(Location3fc target, EntityTeleportEvent.Reason reason) {
-        super.teleportInDimension(target, reason);
+    protected void teleportInDimension(Location3fc target) {
+        super.teleportInDimension(target);
         // For player, we also need to send move packet to client
         // However, there is no need to send motion packet as we are teleporting the player
-        sendLocationToSelf(reason);
+        sendLocationToSelf();
     }
 
     @Override
-    protected void teleportOverDimension(Location3fc target, EntityTeleportEvent.Reason reason) {
+    protected void teleportOverDimension(Location3fc target) {
         var currentDim = location.dimension();
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
@@ -358,7 +357,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 packet.setRespawn(!thisPlayer.isAlive());
                 networkComponent.sendPacket(packet);
             }
-            targetDim.addPlayer(thisPlayer, () -> sendLocationToSelf(reason));
+            targetDim.addPlayer(thisPlayer, this::sendLocationToSelf);
         });
     }
 
@@ -613,26 +612,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         this.spawnPoint = spawnPoint;
     }
 
-    public void sendLocationToSelf(EntityTeleportEvent.Reason reason) {
-        // Use MovePlayerPacket so that client will send
-        // back teleport ack in PlayerAuthInputPacket
-        var pk = new MovePlayerPacket();
-        pk.setRuntimeEntityId(runtimeId);
-        var location = getLocation();
-        pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(location.x(), location.y() + getNetworkOffset(), location.z()));
-        pk.setRotation(org.cloudburstmc.math.vector.Vector3f.from(location.pitch(), location.yaw(), location.headYaw()));
-        pk.setMode(MovePlayerPacket.Mode.TELEPORT);
-        pk.setTeleportationCause(convertTeleportReasonToNetworkCause(reason));
-        networkComponent.sendPacket(pk);
-    }
-
-    protected static MovePlayerPacket.TeleportationCause convertTeleportReasonToNetworkCause(EntityTeleportEvent.Reason reason) {
-        return switch (reason) {
-            case PROJECTILE -> MovePlayerPacket.TeleportationCause.PROJECTILE;
-            case CHORUS_FRUIT -> MovePlayerPacket.TeleportationCause.CHORUS_FRUIT;
-            case COMMAND -> MovePlayerPacket.TeleportationCause.COMMAND;
-            default -> MovePlayerPacket.TeleportationCause.UNKNOWN;
-        };
+    public void sendLocationToSelf() {
+        // NOTICE: do not use MovePlayerPacket. Sometimes this packet does not have any effect,
+        // especially when teleporting player to another world or a far away place.
+        networkComponent.sendPacket(createMovePacket(location, true));
     }
 
     @Override
