@@ -9,6 +9,9 @@ import org.allaymc.api.blockentity.component.BlockEntityContainerHolderComponent
 import org.allaymc.api.blockentity.initinfo.BlockEntityInitInfo;
 import org.allaymc.api.blockentity.interfaces.BlockEntityBrewingStand;
 import org.allaymc.api.container.impl.BrewingStandContainer;
+import org.allaymc.api.eventbus.event.container.BrewingStandBrewEvent;
+import org.allaymc.api.eventbus.event.container.BrewingStandConsumeFuelEvent;
+import org.allaymc.api.eventbus.event.container.BrewingStandStartBrewEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.interfaces.ItemAirStack;
 import org.allaymc.api.item.recipe.impl.PotionMixRecipe;
@@ -94,6 +97,15 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
             return;
         }
 
+        if (brewTime == MAX_BREW_TIME) {
+            var event = new BrewingStandStartBrewEvent(thisBlockEntity, brewTime);
+            if (!event.call()) {
+                return;
+            }
+
+            brewTime = event.getBrewingTime();
+        }
+
         if (brewTime > 0) {
             if (brewTime % 40 == 0) {
                 container.sendContainerData(ContainerSetDataPacket.BREWING_STAND_BREW_TIME, brewTime);
@@ -107,14 +119,21 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
             return;
         }
 
-        if (a != null) {
-            container.setResult(0, a.getOutput().copy());
+        var result = new ItemStack[3];
+        if (a != null) result[0] = a.getOutput().copy();
+        if (b != null) result[1] = b.getOutput().copy();
+        if (c != null) result[2] = c.getOutput().copy();
+
+        var event = new BrewingStandBrewEvent(thisBlockEntity, result);
+        if (!event.call()) {
+            return;
         }
-        if (b != null) {
-            container.setResult(1, b.getOutput().copy());
-        }
-        if (c != null) {
-            container.setResult(2, c.getOutput().copy());
+
+        for (int i = 0; i < event.getResult().length; i++) {
+            var itemStack = event.getResult()[i];
+            if (itemStack != null) {
+                container.setResult(i, itemStack);
+            }
         }
 
         if (reagent.getCount() > 1) {
@@ -135,6 +154,11 @@ public class BlockEntityBrewingStandBaseComponentImpl extends BlockEntityBaseCom
 
         var fuel = container.getFuel();
         if (fuel.getItemType() != ItemTypes.BLAZE_POWDER) {
+            return false;
+        }
+
+        var event = new BrewingStandConsumeFuelEvent(thisBlockEntity, fuel);
+        if (!event.call()) {
             return false;
         }
 

@@ -81,7 +81,7 @@ public class BaseContainer implements Container {
 
     @Override
     public void setItemStack(int slot, ItemStack itemStack) {
-        if (itemStack.getItemType() == ItemTypes.AIR && itemStack != ItemAirStack.AIR_STACK) {
+        if (itemStack == null || itemStack.getItemType() == ItemTypes.AIR && itemStack != ItemAirStack.AIR_STACK) {
             // NOTICE: Please use clearSlot() instead of using this method if you want to clear a slot!
             itemStack = ItemAirStack.AIR_STACK;
         }
