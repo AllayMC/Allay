@@ -179,6 +179,11 @@ public class Explosion {
         if (affectEntities) {
             var affectedEntities = dimension.getEntityPhysicsService().computeCollidingEntities(aabb);
             for (var affectedEntity : affectedEntities) {
+                if (affectedEntity == entity) {
+                    // Skip the entity that caused the explosion
+                    continue;
+                }
+
                 var pos = affectedEntity.getLocation();
                 var dist = pos.sub(x, y, z, new Vector3f()).length();
                 if (dist > d || dist == 0) {
@@ -207,8 +212,14 @@ public class Explosion {
                 var lz = z;
                 for (var blastForce = size * (0.7f + rand.nextFloat() * 0.6f); blastForce > 0; blastForce -= 0.225f) {
                     var current = new Vector3i((int) Math.floor(lx), (int) Math.floor(ly), (int) Math.floor(lz));
-                    var currentBlock = dimension.getBlockState(current);
-                    var resistance = currentBlock.getBlockStateData().explosionResistance();
+                    var liquid = dimension.getLiquid(current).second();
+                    var resistance = 0.0f;
+                    if (liquid != null) {
+                        // If a block contains water, the resistance will become the liquid's resistance
+                        resistance = liquid.getBlockStateData().explosionResistance();
+                    } else {
+                        resistance = dimension.getBlockState(current).getBlockStateData().explosionResistance();
+                    }
                     lx += ray.x();
                     ly += ray.y();
                     lz += ray.z();

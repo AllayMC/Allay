@@ -53,6 +53,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
 
             var explosion = new Explosion();
             explosion.setDestroyBlocks(!isTouchingWater());
+            explosion.setEntity(thisEntity);
             var event = new EntityExplodeEvent(thisEntity, explosion);
             if (event.call()) {
                 this.despawn();
