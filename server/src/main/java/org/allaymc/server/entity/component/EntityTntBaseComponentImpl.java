@@ -57,7 +57,7 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
             var event = new EntityExplodeEvent(thisEntity, explosion);
             if (event.call()) {
                 this.despawn();
-                Thread.ofVirtual().start(() -> explosion.explode(getDimension(), location.x, location.y + 0.06125f, location.z));
+                explosion.explode(getDimension(), location.x, location.y + 0.06125f, location.z);
             }
         } else {
             fuse--;

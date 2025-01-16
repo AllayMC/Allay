@@ -98,6 +98,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Waxing copper-made block using honeycomb won't call `BlockFadeEvent` now.
 - Fixed the bug that player can still open enchant table even if he is sneaking.
 - Fixed NaN motion caused by liquid in some very special cases.
+- Fixed the bug that entity will still get ticked after called `removeEntity()`.
 
 ## [0.1.2](https://github.com/AllayMC/Allay/releases/tag/0.1.2) (API 0.3.0) - 2024-12-31
 

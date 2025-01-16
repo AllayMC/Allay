@@ -7,6 +7,8 @@ import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityDamageComponent;
+import org.allaymc.api.entity.component.attribute.AttributeType;
+import org.allaymc.api.entity.component.attribute.EntityAttributeComponent;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
@@ -186,7 +188,7 @@ public class Explosion {
             // Skip the entity that caused the explosion
             affectedEntities.remove(entity);
             var impactMap = affectedEntities.parallelStream()
-                    .collect(Collectors.<Entity, Entity, Float>toMap(
+                    .collect(Collectors.<Entity, Entity, Float>toConcurrentMap(
                             affectedEntity -> affectedEntity,
                             affectedEntity -> {
                                 var pos = affectedEntity.getLocation();
@@ -205,8 +207,11 @@ public class Explosion {
                     continue;
                 }
 
-                var diff = affectedEntity.getLocation().sub(explosionPos, new Vector3f());
-                affectedEntity.knockback(explosionPos, impact, false, diff.y / diff.length() * impact);
+                var kbResistance = 0.0f;
+                if (affectedEntity instanceof EntityAttributeComponent attributeComponent && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
+                    kbResistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
+                }
+                affectedEntity.addMotion(MathUtils.normalizeIfNotZero(affectedEntity.getLocation().sub(explosionPos, new Vector3f())).mul(impact * (1.0f - kbResistance)));
                 if (affectedEntity instanceof EntityDamageComponent damageComponent) {
                     var damage = (float) Math.floor((impact * impact + impact) * 3.5 * size * 2 + 1);
                     if (entity == null) {
@@ -273,7 +278,7 @@ public class Explosion {
                 // Explosion can prime tnt around
                 BlockTypes.TNT.getBlockBehavior().prime(
                         new BlockStateWithPos(block, new Position3i(pos, dimension)),
-                        10 + rand.nextInt(20)
+                        10 + rand.nextInt(30)
                 );
                 continue;
             }

@@ -251,10 +251,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             if (deadTimer == 0) {
                 // Spawn dead particle
                 spawnDeadParticle();
-                despawn();
-                // After call 'removeEntity()', this entity won't be ticked in next tick
-                // So we set dead back to false
-                dead = false;
+                getDimension().getEntityService().removeEntity(thisEntity, () -> dead = false);
             }
         }
     }

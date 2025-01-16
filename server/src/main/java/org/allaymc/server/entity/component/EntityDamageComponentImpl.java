@@ -160,6 +160,10 @@ public class EntityDamageComponentImpl implements EntityDamageComponent {
 
     @Override
     public boolean canBeAttacked(DamageContainer damage) {
+        if (!thisEntity.isAlive()) {
+            return false;
+        }
+
         // Fire resistance effect
         if (hasFireDamage() &&
             (damage.getDamageType() == DamageContainer.DamageType.FIRE ||
