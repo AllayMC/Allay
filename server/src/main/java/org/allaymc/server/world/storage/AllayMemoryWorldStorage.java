@@ -15,11 +15,11 @@ import java.util.concurrent.CompletableFuture;
 
 public class AllayMemoryWorldStorage implements WorldStorage {
     private final String worldName;
-    Map<Long,Chunk>[] dims = new Long2ObjectOpenHashMap[]{
+    private final Map<Long,Chunk>[] dims = new Long2ObjectOpenHashMap[]{
             new Long2ObjectOpenHashMap<Chunk>(),
             new Long2ObjectOpenHashMap<Chunk>(),
             new Long2ObjectOpenHashMap<Chunk>()};
-    WorldData worldData;
+    private WorldData worldData;
 
     public AllayMemoryWorldStorage(Path path) {
         this.worldName = path.getName(path.getNameCount() - 1).toString();
@@ -71,7 +71,7 @@ public class AllayMemoryWorldStorage implements WorldStorage {
         return worldData;
     }
 
-    static private long getKey(int chunkX, int chunkZ) {
+    private static long getKey(int chunkX, int chunkZ) {
         return (long) chunkX << 32 | (long) chunkZ;
     }
 }

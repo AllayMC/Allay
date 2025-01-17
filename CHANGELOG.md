@@ -16,7 +16,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Added
 
-- Support storage world in memory by using `storage-type:MEMORY`.
+- Supported storage world in memory by using `storage-type:MEMORY`.
 
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 
