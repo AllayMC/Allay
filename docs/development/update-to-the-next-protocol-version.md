@@ -127,4 +127,4 @@ The update is now complete.
 
 ## Update Changelog
 
-After the update is complete, you need to update the changelog. The changelog is stored in `CHANGELOG.md`.
+After the update is completed, you need to update the changelog. The changelog is stored in `CHANGELOG.md`.
