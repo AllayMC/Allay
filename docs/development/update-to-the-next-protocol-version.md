@@ -9,7 +9,7 @@ In practice, many special situations may arise, and you should not rely entirely
 
 ## Update Endstone
 
-Allay use **Endstone DevTools** to export the necessary large amounts of data from BDS.
+Allay uses the **Endstone DevTools** to export the necessary data from BDS.
 Therefore, before updating Allay, we need to update [Endstone](https://github.com/EndstoneMC/endstone).
 
 ## Update the First Batch of Resource Files
