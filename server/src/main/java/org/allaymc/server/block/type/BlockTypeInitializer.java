@@ -1320,4 +1320,14 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockTntBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initEnderChest() {
+        BlockTypes.ENDER_CHEST = AllayBlockType
+                .builder(BlockEnderChestBehaviorImpl.class)
+                .vanillaBlock(BlockId.ENDER_CHEST)
+                .setProperties(BlockPropertyTypes.MINECRAFT_CARDINAL_DIRECTION)
+                .bindBlockEntity(BlockEntityTypes.ENDER_CHEST)
+                .setBaseComponentSupplier(BlockEnderChestBaseComponentImpl::new)
+                .build();
+    }
 }

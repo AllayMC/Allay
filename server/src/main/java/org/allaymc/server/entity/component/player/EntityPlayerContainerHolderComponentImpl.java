@@ -27,7 +27,8 @@ public class EntityPlayerContainerHolderComponentImpl extends EntityContainerHol
                 new PlayerCreatedOutputContainer(),
                 new CraftingGridContainer(),
                 new CraftingTableContainer(),
-                new BeaconContainer()
+                new BeaconContainer(),
+                new EnderChestContainer()
         );
         var enchantTableContainer = new EnchantTableContainer();
         enchantTableContainer.addOnSlotChangeListener(EnchantTableContainer.INPUT_SLOT, item -> {
