@@ -111,4 +111,12 @@ public final class BlockEntityTypeInitializer {
                 .addComponent(() -> new BlockEntityContainerHolderComponentImpl(BrewingStandContainer::new), BlockEntityContainerHolderComponentImpl.class)
                 .build();
     }
+
+    public static void initEnderChest() {
+        BlockEntityTypes.ENDER_CHEST = AllayBlockEntityType
+                .builder(BlockEntityEnderChestImpl.class)
+                .name(BlockEntityId.ENDER_CHEST)
+                .addComponent(BlockEntityEnderChestBaseComponentImpl::new, BlockEntityEnderChestBaseComponentImpl.class)
+                .build();
+    }
 }

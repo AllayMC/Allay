@@ -9,7 +9,7 @@ In practice, many special situations may arise, and you should not rely entirely
 
 ## Update Endstone
 
-Allay use **Endstone DevTools** to export the necessary large amounts of data from BDS.
+Allay uses the **Endstone DevTools** to export the necessary data from BDS.
 Therefore, before updating Allay, we need to update [Endstone](https://github.com/EndstoneMC/endstone).
 
 ## Update the First Batch of Resource Files
@@ -127,4 +127,4 @@ The update is now complete.
 
 ## Update Changelog
 
-After the update is complete, you need to update the changelog. The changelog is stored in `CHANGELOG.md`.
+After the update is completed, you need to update the changelog. The changelog is stored in `CHANGELOG.md`.
