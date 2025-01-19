@@ -14,6 +14,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.1.3](https://github.com/AllayMC/Allay/compare/0.1.3...HEAD)</small>
 
+### Changed
+
+- It will skip loading failed worlds when loading worlds.
+- It will sleep a short time for gui users when abnormal exit.
+
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 
 <small>[Compare with 0.1.2](https://github.com/AllayMC/Allay/compare/0.1.2...0.1.3)</small>
