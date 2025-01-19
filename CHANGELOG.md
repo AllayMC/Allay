@@ -16,8 +16,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Changed
 
-- It will skip loading failed worlds when loading worlds.
-- It will sleep a short time for gui users when abnormal exit.
+- World will be skipped if failed to be load.
+- Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 
