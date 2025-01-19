@@ -40,7 +40,13 @@ public final class AllayWorldPool implements WorldPool {
     }
 
     public void loadWorlds() {
-        worldConfig.worlds().forEach(this::loadWorld);
+        worldConfig.worlds().forEach((name, setting) -> {
+            try {
+                this.loadWorld(name, setting);
+            } catch (Exception e) {
+                log.error("Error when loading world {} skipped.", name, e);
+            }
+        });
     }
 
     public void shutdown() {
