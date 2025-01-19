@@ -12,6 +12,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ## 0.1.4 (API 0.5.0) - Unreleased
 
+<small>[Compare with 0.1.3](https://github.com/AllayMC/Allay/compare/0.1.3...HEAD)</small>
+
 ### Added
 
 - (API) Implemented ender chest, and several related interfaces & objects including `BlockEntityEnderChest`,
@@ -20,8 +22,6 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Changed
 
 - (API) Renamed `FullContainerTypeBuilder` to `Builder`
-
-<small>[Compare with 0.1.3](https://github.com/AllayMC/Allay/compare/0.1.3...HEAD)</small>
 
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 
