@@ -53,6 +53,8 @@ import org.jetbrains.annotations.VisibleForTesting;
 import java.nio.file.Path;
 import java.util.HashMap;
 
+import static java.lang.Thread.sleep;
+
 /**
  * @author daoge_cmd
  */
@@ -64,7 +66,7 @@ public final class Allay {
 
     public static Dashboard DASHBOARD;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         long initialTime = System.currentTimeMillis();
         if (GitProperties.isDevBuild() && !Server.SETTINGS.genericSettings().forceEnableSentry()) {
             // Enable sentry only in non-dev build
@@ -98,6 +100,9 @@ public final class Allay {
             initAllay();
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
+            if(DASHBOARD != null) {
+                sleep(5000);
+            }
             System.exit(1);
         }
 
@@ -107,6 +112,9 @@ public final class Allay {
             log.error("Error while starting the server!", t);
             // The server may not be initialized correctly
             // So we can't call Server::shutdown() to stop the server
+            if(DASHBOARD != null) {
+                sleep(5000);
+            }
             System.exit(1);
         }
 

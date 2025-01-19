@@ -15,7 +15,13 @@ public class AllayTestExtension implements BeforeAllCallback {
     @Override
     public void beforeAll(ExtensionContext context) {
         if (!AllayAPI.getInstance().isImplemented()) {
-            Thread.ofPlatform().name("Test Main Thread").start(() -> Allay.main(new String[]{}));
+            Thread.ofPlatform().name("Test Main Thread").start(() -> {
+                try {
+                    Allay.main(new String[]{});
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
             while (Server.getInstance() == null || Server.getInstance().isStarting()) {
                 try {
                     Thread.sleep(100);
