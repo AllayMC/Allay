@@ -137,7 +137,7 @@ the LGPL-3.0 license. The contents of the following folders are open-sourced und
 - data
 - codegen
 
-## ❤ Special Thanks
+## ❤️ Special Thanks
 
 - [Endstone](https://github.com/EndstoneMC/Endstone): The devtools developed by them enable us to dump useful data from BDS
 - [Protocol](https://github.com/CloudburstMC/Protocol): The protocol & raknet implementation used by Allay

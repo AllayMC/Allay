@@ -2,7 +2,6 @@ package org.allaymc.server.entity.component;
 
 import org.allaymc.api.container.BaseContainerHolder;
 import org.allaymc.api.container.Container;
-import org.allaymc.api.container.FullContainerType;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.component.EntityContainerHolderComponent;
 import org.allaymc.api.eventbus.EventHandler;
@@ -11,10 +10,8 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.event.CEntityDieEvent;
-import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3f;
 
-import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -30,21 +27,6 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
 
     public EntityContainerHolderComponentImpl(Container... containers) {
         super(containers);
-    }
-
-    @Override
-    public @UnmodifiableView Map<FullContainerType<?>, Container> getContainers() {
-        return super.getContainers();
-    }
-
-    @Override
-    public <T extends Container> T getContainer(FullContainerType<T> type) {
-        return super.getContainer(type);
-    }
-
-    @Override
-    public void addContainer(Container container) {
-        super.addContainer(container);
     }
 
     @EventHandler

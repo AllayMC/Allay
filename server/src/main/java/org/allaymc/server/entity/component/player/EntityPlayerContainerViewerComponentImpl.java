@@ -46,15 +46,20 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
 
     @Override
     public byte assignContainerId() {
-        if (idCounter + 1 >= 100) idCounter = 1;
+        if (idCounter + 1 >= 100) {
+            idCounter = 1;
+        }
+
         return idCounter++;
     }
 
     @Override
     public void sendContents(Container container) {
         var id = idToContainer.inverse().get(container);
-        if (id == null)
+        if (id == null) {
             throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
+        }
+
         sendContentsWithSpecificContainerId(container, id);
     }
 
@@ -82,8 +87,10 @@ public class EntityPlayerContainerViewerComponentImpl implements EntityContainer
     @Override
     public void sendContent(Container container, int slot) {
         var id = idToContainer.inverse().get(container);
-        if (id == null)
+        if (id == null) {
             throw new IllegalArgumentException("This viewer did not open the container " + container.getContainerType());
+        }
+
         sendContentsWithSpecificContainerId(container, id, slot);
     }
 

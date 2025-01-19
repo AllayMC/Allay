@@ -96,11 +96,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     protected static final String TAG_SPAWN_POINT = "SpawnPoint";
     protected static final String TAG_WORLD = "World";
     protected static final String TAG_DIMENSION = "Dimension";
+    protected static final String TAG_ENDER_ITEMS = "EnderItems";
 
     @Dependency
     protected EntityPlayerContainerHolderComponent containerHolderComponent;
     @Dependency
     protected EntityPlayerNetworkComponent networkComponent;
+
     @Getter
     protected GameType gameType = Server.SETTINGS.genericSettings().defaultGameType();
     @Getter
@@ -135,7 +137,6 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
      * [C] Receive `pk2`, set player pos to (0, 100, 0)                                       <br>
      * [C->S] Send PlayerAuthInputPacket with pos (0, 100, 0) `pk3`                           <br>
      * [S] Receive `pk3`, set player pos from (0, 999, 0) to (0, 100, 0), deltaY=899 -> death
-     * <p>
      *
      * @see <a href="https://github.com/AllayMC/Allay/issues/517">teleport method should reset fall distance</a>
      */
@@ -490,6 +491,10 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                         TAG_ARMOR,
                         NbtType.COMPOUND,
                         containerHolderComponent.getContainer(FullContainerType.ARMOR).saveNBT())
+                .putList(
+                        TAG_ENDER_ITEMS,
+                        NbtType.COMPOUND,
+                        containerHolderComponent.getContainer(FullContainerType.ENDER_CHEST).saveNBT())
                 .putInt(TAG_ENCHANTMENT_SEED, enchantmentSeed)
                 .putInt(TAG_GAME_TYPE, gameType.ordinal())
                 .putCompound(TAG_SPAWN_POINT, saveSpawnPoint())
@@ -516,6 +521,9 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         );
         nbt.listenForList(TAG_ARMOR, NbtType.COMPOUND, armorNbt ->
                 containerHolderComponent.getContainer(FullContainerType.ARMOR).loadNBT(armorNbt)
+        );
+        nbt.listenForList(TAG_ENDER_ITEMS, NbtType.COMPOUND, enderItemsNbt ->
+                containerHolderComponent.getContainer(FullContainerType.ENDER_CHEST).loadNBT(enderItemsNbt)
         );
         nbt.listenForInt(TAG_ENCHANTMENT_SEED, this::setEnchantmentSeed);
         nbt.listenForInt(TAG_GAME_TYPE, id -> setGameType(GameType.from(id)));

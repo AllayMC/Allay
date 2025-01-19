@@ -137,19 +137,27 @@ public record FullContainerType<T extends Container>(
             .mapSlotToType(BrewingStandContainer.FUEL_SLOT, ContainerSlotType.BREWING_FUEL)
             .build();
 
+    public static final FullContainerType<EnderChestContainer> ENDER_CHEST = builder()
+            .id(ContainerType.CONTAINER)
+            .size(27)
+            .mapAllSlotToType(ContainerSlotType.LEVEL_ENTITY)
+            .build();
+
     public FullContainerType(int id, ContainerSlotType[] slotTypeTable, Set<ContainerSlotType> heldSlotTypes, BiMap<Integer, Integer> networkSlotIndexMapper) {
         this.id = id;
         this.slotTypeTable = slotTypeTable;
         // There shouldn't be null entry in slotTypeTable
         for (var slotType : slotTypeTable) {
-            if (slotType == null) throw new IllegalArgumentException("Slot type table shouldn't contain null entry!");
+            if (slotType == null) {
+                throw new IllegalArgumentException("Slot type table shouldn't contain null entry!");
+            }
         }
         this.heldSlotTypes = heldSlotTypes;
         this.networkSlotIndexMapper = networkSlotIndexMapper;
     }
 
-    public static FullContainerTypeBuilder builder() {
-        return new FullContainerTypeBuilder();
+    public static Builder builder() {
+        return new Builder();
     }
 
     public ContainerType toNetworkType() {
@@ -161,32 +169,32 @@ public record FullContainerType<T extends Container>(
     }
 
     public int size() {
-        return slotTypeTable().length;
+        return slotTypeTable.length;
     }
 
-    public static class FullContainerTypeBuilder {
+    public static class Builder {
         private final Set<ContainerSlotType> heldSlotTypes = EnumSet.noneOf(ContainerSlotType.class);
         private final BiMap<Integer, Integer> networkSlotIndexMapper = HashBiMap.create();
 
         private int id = UNKNOWN_NETWORK_ID;
         private ContainerSlotType[] slotTypeTable;
 
-        public FullContainerTypeBuilder id(int id) {
+        public Builder id(int id) {
             this.id = id;
             return this;
         }
 
-        public FullContainerTypeBuilder id(ContainerType containerType) {
+        public Builder id(ContainerType containerType) {
             this.id = containerType.getId();
             return this;
         }
 
-        public FullContainerTypeBuilder size(int size) {
+        public Builder size(int size) {
             this.slotTypeTable = new ContainerSlotType[size];
             return this;
         }
 
-        public FullContainerTypeBuilder mapRangedSlotToType(int left, int right, ContainerSlotType type) {
+        public Builder mapRangedSlotToType(int left, int right, ContainerSlotType type) {
             if (slotTypeTable == null) {
                 throw new IllegalStateException("The size must be set firstly!");
             }
@@ -198,13 +206,11 @@ public record FullContainerType<T extends Container>(
             }
 
             heldSlotTypes.add(type);
-            for (int i = left; i <= right; i++) {
-                slotTypeTable[i] = type;
-            }
+            Arrays.fill(slotTypeTable, left, right + 1, type);
             return this;
         }
 
-        public FullContainerTypeBuilder mapAllSlotToType(ContainerSlotType type) {
+        public Builder mapAllSlotToType(ContainerSlotType type) {
             if (slotTypeTable == null) {
                 throw new IllegalStateException("The size must be set firstly!");
             }
@@ -214,7 +220,7 @@ public record FullContainerType<T extends Container>(
             return this;
         }
 
-        public FullContainerTypeBuilder mapSlotToType(int slot, ContainerSlotType type) {
+        public Builder mapSlotToType(int slot, ContainerSlotType type) {
             if (slotTypeTable == null) {
                 throw new IllegalStateException("The size must be set firstly!");
             }
@@ -224,17 +230,17 @@ public record FullContainerType<T extends Container>(
             return this;
         }
 
-        public FullContainerTypeBuilder holdSlotType(ContainerSlotType type) {
+        public Builder holdSlotType(ContainerSlotType type) {
             heldSlotTypes.add(type);
             return this;
         }
 
-        public FullContainerTypeBuilder mapNetworkSlotIndex(int networkSlotIndex, int slot) {
+        public Builder mapNetworkSlotIndex(int networkSlotIndex, int slot) {
             networkSlotIndexMapper.put(networkSlotIndex, slot);
             return this;
         }
 
-        public FullContainerTypeBuilder mapRangedNetworkSlotIndex(int left, int right, int slot) {
+        public Builder mapRangedNetworkSlotIndex(int left, int right, int slot) {
             if (left > right) {
                 throw new IllegalArgumentException("Left must smaller than right!");
             }
@@ -247,7 +253,7 @@ public record FullContainerType<T extends Container>(
 
         public <T extends Container> FullContainerType<T> build() {
             var allaySlotToNetworkSlot = networkSlotIndexMapper.inverse();
-            // By default, the slot that is not specified to be mapped to the network slot is mapped to itself
+            // By default, the slot not specified to be mapped to the network slot is mapped to itself
             for (int i = 0; i < slotTypeTable.length; i++) {
                 if (!allaySlotToNetworkSlot.containsKey(i)) {
                     networkSlotIndexMapper.put(i, i);

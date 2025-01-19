@@ -15,7 +15,7 @@ public interface BlockEntityContainerHolderComponent extends ContainerHolder, Bl
     @UnmodifiableView
     default Map<FullContainerType<?>, Container> getContainers() {
         Container container = getContainer();
-        return Map.of(container.getContainerType(), getContainer());
+        return Map.of(container.getContainerType(), container);
     }
 
     @Override

@@ -42,8 +42,9 @@ public class BaseContainerHolder implements ContainerHolder {
 
     @Override
     public void addContainer(Container container) {
-        if (typeToContainer.containsKey(container.getContainerType()))
+        if (typeToContainer.containsKey(container.getContainerType())) {
             throw new ContainerException("Inventory " + container.getClass().getSimpleName() + " already exists");
+        }
 
         typeToContainer.put(container.getContainerType(), container);
         container.getContainerType().heldSlotTypes().forEach(slotType -> slotTypeToFullType.put(slotType, container.getContainerType()));

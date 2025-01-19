@@ -12,7 +12,10 @@ public class ContainerClosePacketProcessor extends PacketProcessor<ContainerClos
     @Override
     public void handleSync(EntityPlayer player, ContainerClosePacket packet, long receiveTime) {
         var opened = player.getOpenedContainer(packet.getId());
-        if (opened == null) throw new IllegalStateException("Player is not viewing an inventory");
+        if (opened == null) {
+            throw new IllegalStateException("Player is not viewing an inventory");
+        }
+
         opened.removeViewer(player);
     }
 

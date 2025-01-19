@@ -14,8 +14,14 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 <small>[Compare with 0.1.3](https://github.com/AllayMC/Allay/compare/0.1.3...HEAD)</small>
 
+### Added
+
+- (API) Implemented ender chest, and several related interfaces & objects including `BlockEntityEnderChest`,
+  `EnderChestContainer`, are added to api module, see commit history for more details.
+
 ### Changed
 
+- (API) Renamed `FullContainerTypeBuilder` to `Builder`
 - World will be skipped if failed to be load.
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 
@@ -40,23 +46,29 @@ Unless otherwise specified, any version comparison below is the comparison of se
   have the same functionality as `LightService#getXXXLight(int, int, int)`.
 - (API) `BlockContainer#getBlockPos` and `BlockContainer#setBlockPos` now return/require `Position3ic` instead of
   `Vector3ic`, this enables us to get the dimension information of a `BlockContainer`.
-- (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`, `BrewingStandContainer`,
-  `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module, see commit history for more details. Added `BrewingStandBrewEvent`,
-  `BrewingStandConsumeFuelEvent` and `BrewingStandStartBrewEvent` events.
+- (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`,
+  `BrewingStandContainer`, `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module, see commit
+  history for more details. Added `BrewingStandBrewEvent`, `BrewingStandConsumeFuelEvent` and
+  `BrewingStandStartBrewEvent` events.
 - (API) Implemented slab, and several related interfaces are added to api module.
-- (API) Introduced `BlockBaseComponent#combine` method which is used by slab. For the details of this method, see the javadoc.
+- (API) Introduced `BlockBaseComponent#combine` method which is used by slab. For the details of this method, see the
+  javadoc.
 - (API) Implemented beacon block, and several related interfaces are added to api module.
 - (API) Implemented brewing stand, and several related interfaces & objects including `BlockEntityBrewingStand`,
   `BrewingStandContainer`, `Registries#POTION_MIX_RECIPES`, `PotionMixRecipe` are added to api module. See commit
   history for more details.
-- (API) Implemented picking block with block entity data. The following methods are added: `ItemBaseComponent#getBlockEntityNBT`,
-  `ItemBaseComponent#setBlockEntityNBT`, `ItemBaseComponent#clearBlockEntityNBT` and `ItemBaseComponent#hasBlockEntityNBT`.
-- (API) Implemented TNT. There is now a new class called `Explosion` which can be used by plugin to make custom explosion.
+- (API) Implemented picking block with block entity data. The following methods are added:
+  `ItemBaseComponent#getBlockEntityNBT`, `ItemBaseComponent#setBlockEntityNBT`, `ItemBaseComponent#clearBlockEntityNBT`
+  and `ItemBaseComponent#hasBlockEntityNBT`.
+- (API) Implemented TNT. There is now a new class called `Explosion` which can be used by plugin to make custom
+  explosion.
 - (API) Introduced a number of overloads of `Dimension#addSound`.
-- (API) Introduced method `EntityAttributeComponent#supportAttribute` to check if the entity support specified attribute type.
-- (API) Introduced methods `DamageContainer#blockExplosion` and `DamageContainer#entityExplosion` to create explosion related damage.
-- (API) Introduced methods `EntityBaseComponent#getDragFactorOnGround` and `EntityBaseComponent#getDragFactorInAir`, which can be used to
-  customize the drag factor of an entity.
+- (API) Introduced method `EntityAttributeComponent#supportAttribute` to check if the entity support specified attribute
+  type.
+- (API) Introduced methods `DamageContainer#blockExplosion` and `DamageContainer#entityExplosion` to create explosion
+  related damage.
+- (API) Introduced methods `EntityBaseComponent#getDragFactorOnGround` and `EntityBaseComponent#getDragFactorInAir`,
+  which can be used to customize the drag factor of an entity.
 - (API) Introduced event `EntityExplodeEvent` which will be called when tnt or creeper(WIP) is about to explode.
 - (API) Introduced method `EntityBaseComponent#isTouchingWater` to check if an entity is touching water.
 - (API) Implemented TNT entity, block and related features. Several related interfaces are added to api module.
@@ -88,8 +100,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   Consider using new method `EntityAttributeComponent#supportAttribute`.
 - (API) Renamed method `EntityBaseComponent#getBaseOffset` to `EntityBaseComponent#getNetworkOffset` for better
   understanding.
-- (API) Removed method `Dimension#setBlockStates`. This method is considered to be unsafe as it will only set the block state,
-  block entity won't be created if the block has block entity. Further research is currently needed.
+- (API) Removed method `Dimension#setBlockStates`. This method is considered to be unsafe as it will only set the block
+  state, block entity won't be created if the block has block entity. Further research is currently needed.
 - Removed useless class `PackageClassLoaderUtils`, dependency `org.reflections.reflections` is also removed.
 - Added `-dev` suffix to api version in development build.
 - Changed `ContainerActionProcessorHolder` to a final class instead of an interface, because this abstraction is
@@ -110,8 +122,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug that player can still open enchant table even if he is sneaking.
 - Fixed NaN motion caused by liquid in some very special cases.
 - Fixed the bug that entity will still get ticked after called `removeEntity()`.
-- Fixed the bug that player's pos sometimes get frozen after teleport. This is caused by the issue that sometimes client doesn't send 
-  back teleport ack after server sends teleport packet to client.
+- Fixed the bug that player's pos sometimes get frozen after teleport. This is caused by the issue that sometimes client
+  doesn't send back teleport ack after server sends teleport packet to client.
 - Fixed the bug that flint and steel durability reduced in creative mode.
 - Fixed the network offset of item entity. Its visual position should now be normal.
 - Liquid won't be broken into item by falling block now.
