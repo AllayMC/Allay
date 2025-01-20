@@ -46,7 +46,7 @@ disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
 commonsio = { group = "commons-io", name = "commons-io", version = "2.18.0" }
 # Cache
-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.1.8" }
+caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version = "3.2.0" }
 # LevelDB
 leveldb = { group = "com.hivemc.leveldb", name = "leveldb", version.ref = "leveldb" }
 leveldb-api = { group = "com.hivemc.leveldb", name = "leveldb-api", version.ref = "leveldb" }
