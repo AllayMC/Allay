@@ -59,7 +59,10 @@ public final class AllayChunkService implements ChunkService {
     private int removeUnneededChunkCycle = Server.SETTINGS.worldSettings().removeUnneededChunkCycle();
 
     public void startTick() {
-        ((AllayWorldGenerator) worldGenerator).startTick();
+        if (worldGenerator instanceof AllayWorldGenerator allayWorldGenerator) {
+            // This make plugins able to create their own world generator implementation
+            allayWorldGenerator.startTick();
+        }
     }
 
     public void tick(long currentTick) {

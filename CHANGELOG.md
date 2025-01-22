@@ -25,6 +25,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - World will be skipped if failed to be load.
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 
+### Fixed
+
+- Plugins are able to create their own world generator implementation now. In previous versions a ClassCastException would be thrown when
+  initializing the dimension.
+
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 
 <small>[Compare with 0.1.2](https://github.com/AllayMC/Allay/compare/0.1.2...0.1.3)</small>
