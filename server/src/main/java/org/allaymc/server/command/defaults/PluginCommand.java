@@ -39,7 +39,7 @@ public class PluginCommand extends SimpleCommand {
                         return context.fail();
                     }
 
-                    var plugin = manager.getPlugin(name).plugin();
+                    var plugin = manager.getEnabledPlugin(name).plugin();
                     if (!plugin.isReloadable()) {
                         context.addError("Plugin " + name + " is not reloadable!");
                         return context.fail();

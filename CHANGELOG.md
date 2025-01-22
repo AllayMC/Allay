@@ -25,10 +25,12 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `WorldSettings.WorldSetting#runtimeOnly`, If set this to true, the information of this world will not be saved
   to world-settings.yml, therefore it won't be loaded after the server restarted. This is useful for world created for game
   room by plugin and will be deleted when shutdown.
+- (API) Added `PluginManager#registerCustomSource` and `PluginManager#registerCustomLoaderFactory`, custom plugin loaders
+  and sources can be registered by plugin now.
 
 ### Changed
 
-- (API) Renamed `FullContainerTypeBuilder` to `Builder`
+- (API) Renamed `FullContainerTypeBuilder` to `Builder`.
 - World will be skipped if failed to be load.
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 - Server won't crash if failed to load the descriptor of a plugin now. An error message will be print to the console instead.
@@ -39,6 +41,10 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Plugins are able to create their own world generator implementation now. In previous versions a ClassCastException would be thrown when
   initializing the dimension.
 - Explosion now calculates entity exposure correctly. In previous version any non-air block will block the explosion ray.
+
+### Removed
+
+- Removed `Extension#afterServerStarted` method.
 
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 

@@ -44,10 +44,6 @@ public final class ExtensionManager {
         this.extensionInstances.forEach(extension -> extension.main(args));
     }
 
-    public void afterServerStarted() {
-        this.extensionInstances.forEach(Extension::afterServerStarted);
-    }
-
     private void loadExtension(Path extensionPath, String[] args) {
         log.info(I18n.get().tr(TrKeys.A_EXTENSION_LOADING, extensionPath));
         Allay.EXTRA_RESOURCE_CLASS_LOADER.addJar(extensionPath);

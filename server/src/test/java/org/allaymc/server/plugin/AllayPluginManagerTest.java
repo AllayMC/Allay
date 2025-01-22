@@ -37,7 +37,7 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .end()
                 .build();
         checkCircularDependencies(descriptors);
-        assertFalse(this.pluginsSortedList.contains("a"));
+        assertFalse(this.sortedPluginList.contains("a"));
     }
 
     @Test
@@ -54,9 +54,9 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .end()
                 .build();
         checkCircularDependencies(descriptors);
-        assertFalse(this.pluginsSortedList.contains("c"));
-        assertTrue(this.pluginsSortedList.contains("a"));
-        assertTrue(this.pluginsSortedList.contains("b"));
+        assertFalse(this.sortedPluginList.contains("c"));
+        assertTrue(this.sortedPluginList.contains("a"));
+        assertTrue(this.sortedPluginList.contains("b"));
     }
 
     @Test
@@ -73,9 +73,9 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .end()
                 .build();
         checkCircularDependencies(descriptors);
-        assertFalse(this.pluginsSortedList.contains("c"));
-        assertTrue(this.pluginsSortedList.contains("a"));
-        assertTrue(this.pluginsSortedList.contains("b"));
+        assertFalse(this.sortedPluginList.contains("c"));
+        assertTrue(this.sortedPluginList.contains("a"));
+        assertTrue(this.sortedPluginList.contains("b"));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .end()
                 .build();
         checkCircularDependencies(descriptors);
-        assertFalse(this.pluginsSortedList.contains("a"));
+        assertFalse(this.sortedPluginList.contains("a"));
     }
 
     @Test
@@ -100,9 +100,9 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .end()
                 .build();
         checkCircularDependencies(descriptors);
-        assertTrue(this.pluginsSortedList.contains("a"));
-        assertTrue(this.pluginsSortedList.contains("b"));
-        assertTrue(this.pluginsSortedList.contains("c"));
+        assertTrue(this.sortedPluginList.contains("a"));
+        assertTrue(this.sortedPluginList.contains("b"));
+        assertTrue(this.sortedPluginList.contains("c"));
     }
 
     @Test

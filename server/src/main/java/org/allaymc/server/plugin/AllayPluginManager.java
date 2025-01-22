@@ -1,10 +1,12 @@
 package org.allaymc.server.plugin;
 
+import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.plugin.*;
 import org.allaymc.server.datastruct.dag.DAGCycleException;
+import org.allaymc.server.datastruct.dag.DirectedAcyclicGraph;
 import org.allaymc.server.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.server.plugin.jar.JarPluginLoader;
 import org.semver4j.RangesListFactory;
@@ -20,52 +22,86 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AllayPluginManager implements PluginManager {
 
-    protected static Set<PluginSource> sources = new HashSet<>();
-    protected static Set<PluginLoader.Factory> loaderFactories = new HashSet<>();
+    protected Set<PluginSource> sources;
+    protected Set<PluginSource> customSources;
+    protected Set<PluginLoader.Factory> loaderFactories;
+    protected Set<PluginLoader.Factory> customLoaderFactories;
 
-    protected Map<String, PluginContainer> plugins = new HashMap<>();
-    protected HashDirectedAcyclicGraph<String> dag = new HashDirectedAcyclicGraph<>();
-    protected Map<String, PluginContainer> enabledPlugins = new HashMap<>();
-    protected List<String> pluginsSortedList;
-    protected Map<String, PluginDescriptor> descriptors;
-    protected Map<String, PluginLoader> loaders;
+    protected Map<String, PluginContainer> plugins;
+    protected Map<String, PluginContainer> enabledPlugins;
+    protected DirectedAcyclicGraph<String> dag;
+    protected List<String> sortedPluginList;
+
+    protected State state;
 
     public AllayPluginManager() {
+        this.sources = new HashSet<>();
+        this.customSources = new HashSet<>();
+        this.loaderFactories = new HashSet<>();
+        this.customLoaderFactories = new HashSet<>();
+        this.plugins = new HashMap<>();
+        this.enabledPlugins = new HashMap<>();
+        this.dag = new HashDirectedAcyclicGraph<>();
+        this.state = State.NEW;
+
         registerSource(new DefaultPluginSource());
         registerLoaderFactory(new JarPluginLoader.Factory());
     }
 
-    public static void registerLoaderFactory(PluginLoader.Factory loaderFactory) {
-        loaderFactories.add(loaderFactory);
+    protected void registerSource(PluginSource pluginSource) {
+        this.state.ensureNotBiggerThan(State.LOADED);
+        this.sources.add(pluginSource);
     }
 
-    public static void registerSource(PluginSource pluginSource) {
-        sources.add(pluginSource);
+    @Override
+    public void registerCustomSource(PluginSource customPluginSource) {
+        this.state.ensureNotBiggerThan(State.LOADED);
+        this.customSources.add(customPluginSource);
+    }
+
+    protected void registerLoaderFactory(PluginLoader.Factory loaderFactory) {
+        this.state.ensureNotBiggerThan(State.LOADED);
+        this.loaderFactories.add(loaderFactory);
+    }
+
+    @Override
+    public void registerCustomLoaderFactory(PluginLoader.Factory customLoaderFactory) {
+        this.state.ensureNotBiggerThan(State.LOADED);
+        this.customLoaderFactories.add(customLoaderFactory);
     }
 
     public void loadPlugins() {
-        if (descriptors == null) {
-            descriptors = new HashMap<>();
-            loaders = new HashMap<>();
+        this.state.ensureEquals(State.NEW);
 
-            // 1. Load possible plugin paths from plugin sources
-            var paths = findPluginPaths();
-
-            // 2. Find and use plugin loader to load plugin descriptor for each plugin path
-            findLoadersAndLoadDescriptors(paths, descriptors, loaders);
-
-            // 3. Check for circular dependencies
-            checkCircularDependencies(descriptors);
-        }
-
+        // 1. Load possible plugin paths from plugin sources
+        var paths = findPluginPaths(this.sources);
+        var descriptors = new HashMap<String, PluginDescriptor>();
+        var loaders = new HashMap<String, PluginLoader>();
+        // 2. Find and use plugin loader to load plugin descriptor for each plugin path
+        findLoadersAndLoadDescriptors(paths, descriptors, loaders);
+        // 3. Check for circular dependencies
+        checkCircularDependencies(descriptors);
         // 4. Load plugins (parent -> child)
         onLoad(descriptors, loaders);
+
+        // 5. Load plugins through custom sources and loaders
+        // Plugins may add custom sources and loaders during
+        // their onLoad() method
+        loadPluginsCustom();
+
+        this.state = State.LOADED;
+    }
+
+    protected Set<Path> findPluginPaths(Set<PluginSource> sources) {
+        return sources.stream().flatMap(source -> source.find().stream()).collect(Collectors.toSet());
     }
 
     protected void findLoadersAndLoadDescriptors(Set<Path> paths, Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
         for (var path : paths) {
             var loader = findLoader(path);
-            if (loader == null) continue;
+            if (loader == null) {
+                continue;
+            }
 
             PluginDescriptor descriptor;
             try {
@@ -86,20 +122,44 @@ public class AllayPluginManager implements PluginManager {
         }
     }
 
+    protected void checkCircularDependencies(Map<String, ? extends PluginDescriptor> descriptors) {
+        // Add all plugin names to dag firstly
+        dag.addAll(descriptors.keySet());
+        for (var descriptor : descriptors.values()) {
+            for (var dependency : descriptor.getDependencies()) {
+                var name = dependency.name();
+                // add dependency plugin to DAG
+                dag.add(name);
+                try {
+                    dag.setBefore(name, descriptor.getName());//set ref
+                } catch (DAGCycleException e) {
+                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_CIRCULAR, descriptor.getName(), e.getMessage() != null ? e.getMessage() : ""));
+                    dag.remove(descriptor.getName());
+                }
+            }
+        }
+
+        sortedPluginList = dag.getSortedList();
+    }
+
     protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
-        var iterator = pluginsSortedList.iterator();
+        var iterator = sortedPluginList.iterator();
         start:
         while (iterator.hasNext()) {
             var str = iterator.next();
             var descriptor = descriptors.get(str);
-            if (descriptor == null) continue;
+            if (descriptor == null) {
+                continue;
+            }
 
             var loader = loaders.get(str);
             for (var dependency : descriptor.getDependencies()) {
                 var dependencyContainer = plugins.get(dependency.name());
 
                 if (dependencyContainer == null) {
-                    if (dependency.optional()) continue start;
+                    if (dependency.optional()) {
+                        continue start;
+                    }
 
                     log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_MISSING, descriptor.getName(), dependency.name()));
                     iterator.remove();
@@ -130,44 +190,34 @@ public class AllayPluginManager implements PluginManager {
         }
     }
 
-    protected void checkCircularDependencies(Map<String, ? extends PluginDescriptor> descriptors) {
-        // Add all plugin names to dag firstly
-        dag.addAll(descriptors.keySet());
-        for (var descriptor : descriptors.values()) {
-            for (var dependency : descriptor.getDependencies()) {
-                var name = dependency.name();
-                // add dependency plugin to DAG
-                dag.add(name);
-                try {
-                    dag.setBefore(name, descriptor.getName());//set ref
-                } catch (DAGCycleException e) {
-                    log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_CIRCULAR, descriptor.getName(), e.getMessage() != null ? e.getMessage() : ""));
-                    dag.remove(descriptor.getName());
-                }
-            }
-        }
-
-        pluginsSortedList = dag.getSortedList();
+    protected void loadPluginsCustom() {
+        var paths = findPluginPaths(this.customSources);
+        var descriptors = new HashMap<String, PluginDescriptor>();
+        var loaders = new HashMap<String, PluginLoader>();
+        findLoadersAndLoadDescriptors(paths, descriptors, loaders);
+        checkCircularDependencies(descriptors);
+        onLoad(descriptors, loaders);
     }
 
     protected boolean isUnexpectedDependencyVersion(PluginDescriptor dependency, PluginDependency requirement) {
         var requireVersion = requirement.version();
-        if (requireVersion == null || requireVersion.isBlank()) return false;
+        if (requireVersion == null || requireVersion.isBlank()) {
+            return false;
+        }
 
         var dependencyVersion = dependency.getVersion();
         var dependencySemver = Semver.coerce(dependencyVersion);
         var versionRanges = RangesListFactory.create(requireVersion);
-        assert dependencySemver != null;  // already checked at org.allaymc.api.plugin.PluginDescriptor.checkDescriptorValid
+        // Already checked at org.allaymc.api.plugin.PluginDescriptor.checkDescriptorValid
+        Preconditions.checkNotNull(dependencySemver);
         return !dependencySemver.satisfies(versionRanges);
     }
 
-    protected Set<Path> findPluginPaths() {
-        return sources.stream().flatMap(source -> source.find().stream()).collect(Collectors.toSet());
-    }
-
     public void enablePlugins() {
-        for (var s : pluginsSortedList) {
-            var pluginContainer = getPlugin(s);
+        this.state.ensureEquals(State.LOADED);
+
+        for (var pluginName : sortedPluginList) {
+            var pluginContainer = getPlugin(pluginName);
             if (pluginContainer == null) {
                 // Plugin failed to be loaded
                 continue;
@@ -183,13 +233,17 @@ public class AllayPluginManager implements PluginManager {
 
             enabledPlugins.put(pluginContainer.descriptor().getName(), pluginContainer);
         }
+
+        this.state = State.ENABLED;
     }
 
     public void disablePlugins() {
-        for (var s : pluginsSortedList.reversed()) {
-            if (!isPluginEnabled(s)) continue;
+        this.state.ensureEquals(State.ENABLED);
 
-            var pluginContainer = getPlugin(s);
+        for (var pluginName : sortedPluginList.reversed()) {
+            if (!isPluginEnabled(pluginName)) continue;
+
+            var pluginContainer = getPlugin(pluginName);
             log.info(I18n.get().tr(TrKeys.A_PLUGIN_DISABLING, pluginContainer.descriptor().getName()));
             try {
                 var plugin = pluginContainer.plugin();
@@ -198,6 +252,8 @@ public class AllayPluginManager implements PluginManager {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_DISABLE_ERROR, pluginContainer.descriptor().getName()), t);
             }
         }
+
+        this.state = State.DISABLED;
     }
 
     @Override
@@ -231,5 +287,50 @@ public class AllayPluginManager implements PluginManager {
                 .findFirst()
                 .map(loaderFactory -> loaderFactory.create(pluginPath))
                 .orElse(null);
+    }
+
+    protected enum State {
+        /**
+         * The manager is just created.
+         */
+        NEW,
+        /**
+         * Plugins have been loaded but not enabled.
+         */
+        LOADED,
+        /**
+         * Loaded plugins have been enabled if they can be enabled.
+         */
+        ENABLED,
+        /**
+         * Enabled plugins have been disabled.
+         */
+        DISABLED;
+
+        /**
+         * Ensure the state is not bigger than the given state.
+         *
+         * @param state the state to compare with.
+         *
+         * @throws IllegalStateException if the state is bigger than the given state.
+         */
+        public void ensureNotBiggerThan(State state) {
+            if (this.ordinal() > state.ordinal()) {
+                throw new IllegalStateException();
+            }
+        }
+
+        /**
+         * Ensure the state is equals to the given state.
+         *
+         * @param state the state to compare with.
+         *
+         * @throws IllegalStateException if the state is not equals to the given state.
+         */
+        public void ensureEquals(State state) {
+            if (state != this) {
+                throw new IllegalStateException();
+            }
+        }
     }
 }

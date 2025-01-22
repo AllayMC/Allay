@@ -94,7 +94,7 @@ public final class Dashboard {
                     if (pluginTable.getSelectedRow() == -1) return;
                     // Get the plugin
                     String pluginName = (String) pluginTable.getValueAt(pluginTable.getSelectedRow(), 0);
-                    var pluginDescriptor = Server.getInstance().getPluginManager().getPlugin(pluginName).descriptor();
+                    var pluginDescriptor = Server.getInstance().getPluginManager().getEnabledPlugin(pluginName).descriptor();
                     JOptionPane.showMessageDialog(null,
                             I18n.get().tr(TrKeys.A_GUI_PLUGIN_NAME) + ": " + pluginDescriptor.getName() + "\n" +
                             I18n.get().tr(TrKeys.A_GUI_PLUGIN_ENTRANCE) + ": " + pluginDescriptor.getEntrance() + "\n" +

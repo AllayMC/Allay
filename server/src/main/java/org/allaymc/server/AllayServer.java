@@ -220,7 +220,6 @@ public final class AllayServer implements Server {
         if (SETTINGS.genericSettings().enableGui()) {
             Allay.DASHBOARD.afterServerStarted();
         }
-        Allay.EXTENSION_MANAGER.afterServerStarted();
         this.gameLoop.startLoop();
     }
 

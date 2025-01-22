@@ -9,14 +9,14 @@ import java.util.Map;
  */
 public interface PluginManager {
     /**
-     * Get all discovered plugins.
+     * Get all loaded plugins.
      *
      * @return the discovered plugins
      */
     Map<String, PluginContainer> getPlugins();
 
     /**
-     * Get a discovered plugin by name.
+     * Get a loaded plugin by name.
      *
      * @param name the name of the plugin.
      *
@@ -48,4 +48,22 @@ public interface PluginManager {
      * @return {@code true} if the plugin is enabled, {@code false} otherwise.
      */
     boolean isPluginEnabled(String name);
+
+    /**
+     * Register a custom plugin source.
+     * <p>
+     * Plugin can register custom plugin source in {@link Plugin#onLoad()} method.
+     *
+     * @param customPluginSource the custom plugin source to register.
+     */
+    void registerCustomSource(PluginSource customPluginSource);
+
+    /**
+     * Register a custom plugin loader factory.
+     * <p>
+     * Plugin can register custom plugin loader factory in {@link Plugin#onLoad()} method.
+     *
+     * @param customLoaderFactory the custom plugin loader factory to register.
+     */
+    void registerCustomLoaderFactory(PluginLoader.Factory customLoaderFactory);
 }
