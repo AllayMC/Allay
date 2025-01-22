@@ -78,6 +78,7 @@
   "plugin.construct.instance.error": "Error while constructing plugin instance for plugin %1. Error: %2",
   "plugin.entrance.missing": "Can't find the entrance of plugin %1",
   "plugin.jar.entrance.typeinvalid": "The entrance class of plugin %1 is not a subclass of Plugin",
+  "plugin.descriptor.error": "Error while loading the descriptor of plugin %1: %2",
   "extension.loading": "loading extension %1",
   "extension.construct.instance.error": "Error while constructing extension instance for extension %1. Error: %2",
   "extension.entrance.missing": "Can't find the entrance of extension %1",

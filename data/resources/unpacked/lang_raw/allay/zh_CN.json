@@ -79,6 +79,7 @@
   "plugin.construct.instance.error": "创建插件 %1 实例时发生错误 %2",
   "plugin.entrance.missing": "无法找到插件 %1 的入口",
   "plugin.jar.mainclass.typeinvalid": "插件 %1 的主类未继承Plugin",
+  "plugin.descriptor.error": "加载插件 %1 的描述符时发生错误: %2",
   "extension.loading": "正在加载扩展 %1",
   "extension.construct.instance.error": "创建扩展 %1 实例时发生错误 %2",
   "extension.entrance.missing": "无法找到扩展 %1 的入口",

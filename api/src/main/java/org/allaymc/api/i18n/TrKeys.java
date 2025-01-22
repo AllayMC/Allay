@@ -498,6 +498,11 @@ public interface TrKeys {
     String A_PLUGIN_DEPENDENCY_VERSION_MISMATCH = "allay:plugin.dependency.version.mismatch";
 
     /**
+     * Error while loading the descriptor of plugin %1: %2
+     */
+    String A_PLUGIN_DESCRIPTOR_ERROR = "allay:plugin.descriptor.error";
+
+    /**
      * Error while disabling plugin %1. Error: %2
      */
     String A_PLUGIN_DISABLE_ERROR = "allay:plugin.disable.error";
@@ -543,6 +548,16 @@ public interface TrKeys {
     String A_PLUGIN_LOADING = "allay:plugin.loading";
 
     /**
+     * Loaded %1 furnace recipes
+     */
+    String A_RECIPE_FURNACE_LOADED = "allay:recipe.furnace.loaded";
+
+    /**
+     * Loading furnace recipes...
+     */
+    String A_RECIPE_FURNACE_LOADING = "allay:recipe.furnace.loading";
+
+    /**
      * Loaded %1 recipes
      */
     String A_RECIPE_LOADED = "allay:recipe.loaded";
@@ -553,24 +568,14 @@ public interface TrKeys {
     String A_RECIPE_LOADING = "allay:recipe.loading";
 
     /**
-     * Loading furnace recipes...
+     * Loaded %1 potion mix recipes
      */
-    String A_RECIPE_FURNACE_LOADING = "allay:recipe.furnace.loading";
-
-    /**
-     * Loaded %1 furnace recipes
-     */
-    String A_RECIPE_FURNACE_LOADED = "allay:recipe.furnace.loaded";
+    String A_RECIPE_POTIONMIX_LOADED = "allay:recipe.potionmix.loaded";
 
     /**
      * Loading potion mix recipes...
      */
     String A_RECIPE_POTIONMIX_LOADING = "allay:recipe.potionmix.loading";
-
-    /**
-     * Loaded %1 potion mix recipes
-     */
-    String A_RECIPE_POTIONMIX_LOADED = "allay:recipe.potionmix.loaded";
 
     /**
      * §eYou are running a development version. The development version may have unexpected bugs, please do not use it in a production environment!

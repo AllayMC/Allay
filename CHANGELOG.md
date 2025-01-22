@@ -24,6 +24,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Renamed `FullContainerTypeBuilder` to `Builder`
 - World will be skipped if failed to be load.
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
+- Server won't crash if failed to load the descriptor of a plugin now. An error message will be print to the console instead. 
 
 ### Fixed
 

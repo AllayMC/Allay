@@ -67,7 +67,14 @@ public class AllayPluginManager implements PluginManager {
             var loader = findLoader(path);
             if (loader == null) continue;
 
-            var descriptor = loader.loadDescriptor();
+            PluginDescriptor descriptor;
+            try {
+                descriptor = loader.loadDescriptor();
+            } catch (Throwable t) {
+                log.error(I18n.get().tr(TrKeys.A_PLUGIN_DESCRIPTOR_ERROR, path.getFileName(), t.getMessage() != null ? t.getMessage() : ""), t);
+                continue;
+            }
+
             var name = descriptor.getName();
             if (descriptors.containsKey(name)) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_DUPLICATE, name));
