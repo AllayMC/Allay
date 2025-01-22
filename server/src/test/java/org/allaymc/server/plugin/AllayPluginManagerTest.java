@@ -3,7 +3,6 @@ package org.allaymc.server.plugin;
 import org.allaymc.api.plugin.PluginDependency;
 import org.allaymc.server.datastruct.dag.HashDirectedAcyclicGraph;
 import org.allaymc.testutils.AllayTestExtension;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -24,24 +23,19 @@ public class AllayPluginManagerTest extends AllayPluginManager {
         return new DescriptorMapBuilder();
     }
 
-    @BeforeEach
-    void cleanUp() {
-        dag = new HashDirectedAcyclicGraph<>();
-    }
-
     @Test
-    void testCheckCircularDependenciesV1() {
+    void testCalculateLoadingOrderV1() {
         var descriptors = builder()
                 .add("a")
                 .dependOn("a")
                 .end()
                 .build();
-        checkCircularDependencies(descriptors);
+        calculateLoadingOrder(new HashDirectedAcyclicGraph<>(), descriptors);
         assertFalse(this.sortedPluginList.contains("a"));
     }
 
     @Test
-    void testCheckCircularDependenciesV2() {
+    void testCalculateLoadingOrderV2() {
         var descriptors = builder()
                 .add("a")
                 .dependOn("b")
@@ -53,14 +47,14 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .dependOn("a")
                 .end()
                 .build();
-        checkCircularDependencies(descriptors);
+        calculateLoadingOrder(new HashDirectedAcyclicGraph<>(), descriptors);
         assertFalse(this.sortedPluginList.contains("c"));
         assertTrue(this.sortedPluginList.contains("a"));
         assertTrue(this.sortedPluginList.contains("b"));
     }
 
     @Test
-    void testCheckCircularDependenciesV3() {
+    void testCalculateLoadingOrderV3() {
         var descriptors = builder()
                 .add("a")
                 .dependOn("b")
@@ -72,20 +66,20 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .softDependOn("a")
                 .end()
                 .build();
-        checkCircularDependencies(descriptors);
+        calculateLoadingOrder(new HashDirectedAcyclicGraph<>(), descriptors);
         assertFalse(this.sortedPluginList.contains("c"));
         assertTrue(this.sortedPluginList.contains("a"));
         assertTrue(this.sortedPluginList.contains("b"));
     }
 
     @Test
-    void testCheckCircularDependenciesV4() {
+    void testCalculateLoadingOrderV4() {
         var descriptors = builder()
                 .add("a")
                 .softDependOn("a")
                 .end()
                 .build();
-        checkCircularDependencies(descriptors);
+        calculateLoadingOrder(new HashDirectedAcyclicGraph<>(), descriptors);
         assertFalse(this.sortedPluginList.contains("a"));
     }
 
@@ -99,7 +93,7 @@ public class AllayPluginManagerTest extends AllayPluginManager {
                 .softDependOn("c")
                 .end()
                 .build();
-        checkCircularDependencies(descriptors);
+        calculateLoadingOrder(new HashDirectedAcyclicGraph<>(), descriptors);
         assertTrue(this.sortedPluginList.contains("a"));
         assertTrue(this.sortedPluginList.contains("b"));
         assertTrue(this.sortedPluginList.contains("c"));

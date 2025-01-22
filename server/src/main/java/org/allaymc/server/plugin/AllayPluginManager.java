@@ -29,7 +29,6 @@ public class AllayPluginManager implements PluginManager {
 
     protected Map<String, PluginContainer> plugins;
     protected Map<String, PluginContainer> enabledPlugins;
-    protected DirectedAcyclicGraph<String> dag;
     protected List<String> sortedPluginList;
 
     protected State state;
@@ -41,7 +40,6 @@ public class AllayPluginManager implements PluginManager {
         this.customLoaderFactories = new HashSet<>();
         this.plugins = new HashMap<>();
         this.enabledPlugins = new HashMap<>();
-        this.dag = new HashDirectedAcyclicGraph<>();
         this.state = State.NEW;
 
         registerSource(new DefaultPluginSource());
@@ -73,32 +71,51 @@ public class AllayPluginManager implements PluginManager {
     public void loadPlugins() {
         this.state.ensureEquals(State.NEW);
 
-        // 1. Load possible plugin paths from plugin sources
-        var paths = findPluginPaths(this.sources);
-        var descriptors = new HashMap<String, PluginDescriptor>();
-        var loaders = new HashMap<String, PluginLoader>();
+        // 1. Load possible plugin foundPaths from plugin sources
+        var dag = new HashDirectedAcyclicGraph<String>();
+        var foundPaths = findPluginPaths(this.sources);
+        var foundDescriptors = new HashMap<String, PluginDescriptor>();
+        var foundLoaders = new HashMap<String, PluginLoader>();
         // 2. Find and use plugin loader to load plugin descriptor for each plugin path
-        findLoadersAndLoadDescriptors(paths, descriptors, loaders);
+        findLoadersAndLoadDescriptors(foundPaths, foundDescriptors, foundLoaders, this.loaderFactories);
         // 3. Check for circular dependencies
-        checkCircularDependencies(descriptors);
+        calculateLoadingOrder(dag, foundDescriptors);
         // 4. Load plugins (parent -> child)
-        onLoad(descriptors, loaders);
+        onLoad(foundDescriptors, foundLoaders);
 
         // 5. Load plugins through custom sources and loaders
         // Plugins may add custom sources and loaders during
         // their onLoad() method
-        loadPluginsCustom();
+        loadPluginsCustom(dag, foundPaths);
 
         this.state = State.LOADED;
     }
 
+    /**
+     * Find plugin paths from the given plugin sources.
+     *
+     * @param sources the plugin sources to find plugin paths from.
+     *
+     * @return a set of plugin paths found from the given plugin sources.
+     */
     protected Set<Path> findPluginPaths(Set<PluginSource> sources) {
         return sources.stream().flatMap(source -> source.find().stream()).collect(Collectors.toSet());
     }
 
-    protected void findLoadersAndLoadDescriptors(Set<Path> paths, Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
-        for (var path : paths) {
-            var loader = findLoader(path);
+    /**
+     * Try to find plugin loader for each plugin path. If found, try to load descriptor through the found plugin loader.
+     *
+     * @param foundPaths       the plugin paths to find loaders and load descriptors from.
+     * @param foundDescriptors the map that to store the found plugin descriptors.
+     * @param foundLoaders     the map that to store the found plugin loaders.
+     * @param loaderFactories  the plugin loader factories to find loader from.
+     */
+    protected void findLoadersAndLoadDescriptors(
+            Set<Path> foundPaths, Map<String, PluginDescriptor> foundDescriptors,
+            Map<String, PluginLoader> foundLoaders, Set<PluginLoader.Factory> loaderFactories
+    ) {
+        for (var path : foundPaths) {
+            var loader = findLoaderIn(loaderFactories, path);
             if (loader == null) {
                 continue;
             }
@@ -112,17 +129,24 @@ public class AllayPluginManager implements PluginManager {
             }
 
             var name = descriptor.getName();
-            if (descriptors.containsKey(name)) {
+            if (foundDescriptors.containsKey(name)) {
                 log.error(I18n.get().tr(TrKeys.A_PLUGIN_DUPLICATE, name));
                 continue;
             }
 
-            descriptors.put(name, descriptor);
-            loaders.put(name, loader);
+            foundDescriptors.put(name, descriptor);
+            foundLoaders.put(name, loader);
         }
     }
 
-    protected void checkCircularDependencies(Map<String, ? extends PluginDescriptor> descriptors) {
+    /**
+     * Add given descriptors to the dag and calculate the loading order. Circular dependencies
+     * will also be checked. By the end, {@link #sortedPluginList} will be updated.
+     *
+     * @param dag         the directed acyclic graph to store the plugin dependencies.
+     * @param descriptors the plugin descriptors that should be added to the directed acyclic graph.
+     */
+    protected void calculateLoadingOrder(DirectedAcyclicGraph<String> dag, Map<String, ? extends PluginDescriptor> descriptors) {
         // Add all plugin names to dag firstly
         dag.addAll(descriptors.keySet());
         for (var descriptor : descriptors.values()) {
@@ -131,7 +155,7 @@ public class AllayPluginManager implements PluginManager {
                 // add dependency plugin to DAG
                 dag.add(name);
                 try {
-                    dag.setBefore(name, descriptor.getName());//set ref
+                    dag.setBefore(name, descriptor.getName());
                 } catch (DAGCycleException e) {
                     log.error(I18n.get().tr(TrKeys.A_PLUGIN_DEPENDENCY_CIRCULAR, descriptor.getName(), e.getMessage() != null ? e.getMessage() : ""));
                     dag.remove(descriptor.getName());
@@ -139,10 +163,19 @@ public class AllayPluginManager implements PluginManager {
             }
         }
 
-        sortedPluginList = dag.getSortedList();
+        this.sortedPluginList = dag.getSortedList();
     }
 
-    protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> loaders) {
+    /**
+     * Load plugins based on the given descriptors and loaders.
+     * <p>
+     * The loading order is based on {@link #sortedPluginList}, so before calling this method, make sure to call
+     * {@link #calculateLoadingOrder(DirectedAcyclicGraph, Map)}
+     *
+     * @param descriptors  the descriptors of the plugins that need to be loaded.
+     * @param foundLoaders the loaders of the plugins that need to be loaded.
+     */
+    protected void onLoad(Map<String, PluginDescriptor> descriptors, Map<String, PluginLoader> foundLoaders) {
         var iterator = sortedPluginList.iterator();
         start:
         while (iterator.hasNext()) {
@@ -152,7 +185,7 @@ public class AllayPluginManager implements PluginManager {
                 continue;
             }
 
-            var loader = loaders.get(str);
+            var loader = foundLoaders.get(str);
             for (var dependency : descriptor.getDependencies()) {
                 var dependencyContainer = plugins.get(dependency.name());
 
@@ -190,13 +223,16 @@ public class AllayPluginManager implements PluginManager {
         }
     }
 
-    protected void loadPluginsCustom() {
+    protected void loadPluginsCustom(DirectedAcyclicGraph<String> dag, Set<Path> existingPaths) {
         var paths = findPluginPaths(this.customSources);
-        var descriptors = new HashMap<String, PluginDescriptor>();
-        var loaders = new HashMap<String, PluginLoader>();
-        findLoadersAndLoadDescriptors(paths, descriptors, loaders);
-        checkCircularDependencies(descriptors);
-        onLoad(descriptors, loaders);
+        paths.addAll(existingPaths);
+        var foundDescriptors = new HashMap<String, PluginDescriptor>();
+        var foundLoaders = new HashMap<String, PluginLoader>();
+        // findLoadersAndLoadDescriptors will only find loader in this.customLoaderFactories,
+        // so already loaded plugin won't be loaded twice
+        findLoadersAndLoadDescriptors(paths, foundDescriptors, foundLoaders, this.customLoaderFactories);
+        calculateLoadingOrder(dag, foundDescriptors);
+        onLoad(foundDescriptors, foundLoaders);
     }
 
     protected boolean isUnexpectedDependencyVersion(PluginDescriptor dependency, PluginDependency requirement) {
@@ -281,7 +317,7 @@ public class AllayPluginManager implements PluginManager {
         return enabledPlugins.containsKey(name);
     }
 
-    protected PluginLoader findLoader(Path pluginPath) {
+    protected PluginLoader findLoaderIn(Set<PluginLoader.Factory> loaderFactories, Path pluginPath) {
         return loaderFactories.stream()
                 .filter(loaderFactory -> loaderFactory.canLoad(pluginPath))
                 .findFirst()
