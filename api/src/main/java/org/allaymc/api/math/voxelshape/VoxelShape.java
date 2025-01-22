@@ -4,9 +4,12 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector3fc;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
+import org.joml.primitives.Rayf;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -284,6 +287,100 @@ public final class VoxelShape {
         }
 
         return true;
+    }
+
+    /**
+     * @see #intersectsRay(Vector3fc, Vector3fc)
+     */
+    public boolean intersectsRay(float sx, float sy, float sz, float ex, float ey, float ez) {
+        return intersectsRay(new Vector3f(sx, sy, sz), new Vector3f(ex, ey, ez));
+    }
+
+    /**
+     * Determine whether the given ray intersects this voxel shape.
+     *
+     * @param start the start point of the ray.
+     * @param end   the end point of the ray.
+     *
+     * @return {@code true} if the ray intersects this voxel shape, otherwise {@code false}.
+     */
+    public boolean intersectsRay(Vector3fc start, Vector3fc end) {
+        var ray = new Rayf(start, end.sub(start, new Vector3f()));
+
+        if (vacancies.isEmpty()) {
+            // This would be quicker if no vacancy exists
+            return solids.stream().anyMatch(solid -> solid.intersectsRay(ray));
+        }
+
+        var solidIntervals = mergeIntervals(intersectsRay(solids, ray));
+        var vacancyIntervals = mergeIntervals(intersectsRay(vacancies, ray));
+
+        // For each solid intervals, check if they can be fully covered by vacancy intervals
+        for (var solidInterval : solidIntervals) {
+            float currentStart = solidInterval.x;
+            boolean isCovered = false;
+
+            for (var vacancyInterval : vacancyIntervals) {
+                // Check if vacancy interval cover the starting point of the currently uncovered part of solid interval
+                if (vacancyInterval.x <= currentStart && vacancyInterval.y >= currentStart) {
+                    // Update the current starting point to the end point of the vacancy interval
+                    currentStart = Math.max(currentStart, vacancyInterval.y);
+                    // If the current starting point has exceeded the end point of the solid interval, it means it is completely covered.
+                    if (currentStart >= solidInterval.y) {
+                        isCovered = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!isCovered) {
+                // Return false directly if any of the solid interval is not fully covered
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private List<Vector2f> mergeIntervals(List<Vector2f> intervals) {
+        // Sort by interval starting point
+        intervals.sort((a, b) -> Float.compare(a.x, b.x));
+        List<Vector2f> merged = new ArrayList<>();
+
+        for (Vector2f interval : intervals) {
+            // If merged is empty or the current interval does not overlap with the previous merged interval
+            if (merged.isEmpty() || merged.getLast().y < interval.x) {
+                // Add current interval
+                merged.add(new Vector2f(interval));
+            } else {
+                // Merge interval
+                merged.getLast().y = Math.max(merged.getLast().y, interval.y);
+            }
+        }
+
+        return merged;
+    }
+
+    private List<Vector2f> intersectsRay(Set<AABBfc> aabbs, Rayf ray) {
+        var set = new ArrayList<Vector2f>();
+        for (var aabb : aabbs) {
+            var result = new Vector2f();
+            if (aabb.intersectsRay(ray, result)) {
+                set.add(order(result));
+            }
+        }
+
+        return set;
+    }
+
+    private Vector2f order(Vector2f vec) {
+        if (vec.x > vec.y) {
+            float temp = vec.x;
+            vec.x = vec.y;
+            vec.y = temp;
+        }
+
+        return vec;
     }
 
     private List<float[]> getEdgeRegions(BlockFace face, float edgeWidth) {

@@ -326,8 +326,8 @@ public class Explosion {
         float xOffset = (1.0f - (float) Math.floor(diff.x()) / diff.x()) / 2.0f;
         float zOffset = (1.0f - (float) Math.floor(diff.z()) / diff.z()) / 2.0f;
 
-        int checks = 0;
-        int misses = 0;
+        float checks = 0;
+        float misses = 0;
         for (var x = 0.0f; x <= 1.0f; x += step.x()) {
             for (var y = 0.0f; y <= 1.0f; y += step.y()) {
                 for (var z = 0.0f; z <= 1.0f; z += step.z()) {
@@ -340,7 +340,7 @@ public class Explosion {
                     final boolean[] collided = new boolean[1];
                     traverseBlocks(origin, point, pos -> {
                         var block = dimension.getBlockState(pos);
-                        if (block.getBlockType() != BlockTypes.AIR) {
+                        if (block.getBlockStateData().computeOffsetCollisionShape(pos).intersectsRay(origin, point)) {
                             collided[0] = true;
                             return false;
                         }
@@ -357,7 +357,7 @@ public class Explosion {
             }
         }
 
-        return ((float) misses) / ((float) checks);
+        return misses / checks;
     }
 
     /**

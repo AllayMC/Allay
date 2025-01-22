@@ -251,4 +251,62 @@ class VoxelShapeTest {
                 .build();
         assertFalse(vs5.isEdgeFull(BlockFace.UP));
     }
+
+    @Test
+    void testIntersectsRay() {
+        var vs1 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .build();
+        assertTrue(vs1.intersectsRay(0, 0, 0, 1, 1, 1));
+
+        var vs2 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.1f, 0.1f, 0.1f, 0.9f, 0.9f, 0.9f)
+                .build();
+        assertTrue(vs2.intersectsRay(0, 0, 0, 1, 1, 1));
+
+        var vs3 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.4f, 0, 0.4f, 0.6f, 1, 0.6f)
+                .build();
+        assertFalse(vs3.intersectsRay(0.5f, 0, 0.5f, 0.5f, 1, 0.5f));
+
+        var vs4 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0, 0, 0, 1, 1, 1)
+                .build();
+        assertFalse(vs4.intersectsRay(0, 0, 0, 1, 1, 1));
+
+        var vs5 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0, 0, 0, 1, 0.4f, 1)
+                .vacancy(0, 0.6f, 0, 1, 1, 1)
+                .build();
+        assertTrue(vs5.intersectsRay(0, 0, 0, 1, 1, 1));
+
+        var vs6 = VoxelShape
+                .builder()
+                .vacancy(0, 0.4f, 0, 1, 0.6f, 1)
+                .solid(0, 0, 0, 1, 0.4f, 1)
+                .solid(0, 0.6f, 0, 1, 1, 1)
+                .build();
+        assertTrue(vs6.intersectsRay(0, 0, 0, 1, 1, 1));
+        assertFalse(vs6.intersectsRay(0, 0.4f, 0, 1, 0.4f, 1));
+        assertFalse(vs6.intersectsRay(0, 0.41f, 0, 1, 0.41f, 1));
+        assertFalse(vs6.intersectsRay(0, 0.59f, 0, 1, 0.59f, 1));
+        assertFalse(vs6.intersectsRay(0, 0.6f, 0, 1, 0.6f, 1));
+
+        var vs7 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 0.9f, 1)
+                .solid(0, 0.1f, 0, 1, 1, 1)
+                .vacancy(0.4f, 0, 0.4f, 0.6f, 1, 0.6f)
+                .build();
+        assertFalse(vs7.intersectsRay(0.5f, 0, 0.5f, 0.5f, 1, 0.5f));
+    }
 }

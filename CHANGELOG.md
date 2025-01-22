@@ -18,6 +18,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - (API) Implemented ender chest, and several related interfaces & objects including `BlockEntityEnderChest`,
   `EnderChestContainer`, are added to api module, see commit history for more details.
+- (API) Added `VoxelShape#intersectsRay` method, which can determine whether the given ray intersects the voxel shape.
 
 ### Changed
 
@@ -31,6 +32,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - Plugins are able to create their own world generator implementation now. In previous versions a ClassCastException would be thrown when
   initializing the dimension.
+- Explosion now calculates entity exposure correctly. In previous version any non-air block will block the explosion ray.
 
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 
