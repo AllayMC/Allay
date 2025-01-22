@@ -53,6 +53,9 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
  */
 public interface Dimension {
 
+    /**
+     * The return value of {@link #getLiquid(int, int, int)} if no liquid is found.
+     */
     IntObjectPair<BlockState> PAIR_LIQUID_NOT_FOUND = new IntObjectImmutablePair<>(-1, null);
 
     /**
@@ -160,6 +163,9 @@ public interface Dimension {
                 .orElse(null);
     }
 
+    /**
+     * @see #addPlayer(EntityPlayer, Runnable)
+     */
     default void addPlayer(EntityPlayer player) {
         addPlayer(player, () -> {});
     }
@@ -172,6 +178,9 @@ public interface Dimension {
      */
     void addPlayer(EntityPlayer player, Runnable runnable);
 
+    /**
+     * @see #removePlayer(EntityPlayer, Runnable)
+     */
     default void removePlayer(EntityPlayer player) {
         removePlayer(player, () -> {});
     }
@@ -192,71 +201,122 @@ public interface Dimension {
     @UnmodifiableView
     Set<EntityPlayer> getPlayers();
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(Vector3fc pos, BlockState blockState) {
         setBlockState(pos, blockState, 0);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(Vector3fc pos, BlockState blockState, int layer) {
         pos = pos.floor(new Vector3f());
         setBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), blockState, layer);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(float x, float y, float z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(float x, float y, float z, BlockState blockState, int layer) {
         setBlockState((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z), blockState, layer);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(int x, int y, int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0, true, true);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(Vector3ic pos, BlockState blockState) {
         setBlockState(pos, blockState, 0, true, true);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
         setBlockState(x, y, z, blockState, layer, true, true);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(Vector3ic pos, BlockState blockState, int layer) {
         setBlockState(pos, blockState, layer, true, true);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send) {
         setBlockState(x, y, z, blockState, layer, send, true);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send) {
         setBlockState(pos, blockState, layer, send, true);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update) {
         setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update) {
         setBlockState(x, y, z, blockState, layer, send, update, true, null);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior) {
         setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update, callBlockBehavior);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior) {
         setBlockState(x, y, z, blockState, layer, send, update, callBlockBehavior, null);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(int x, int y, int z, BlockState blockState, PlayerInteractInfo placementInfo) {
         setBlockState(x, y, z, blockState, 0, true, true, true, placementInfo);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(int x, int y, int z, BlockState blockState, int layer, PlayerInteractInfo placementInfo) {
         setBlockState(x, y, z, blockState, layer, true, true, true, placementInfo);
     }
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
+     */
     default void setBlockState(Vector3ic pos, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo) {
         setBlockState(pos.x(), pos.y(), pos.z(), blockState, layer, send, update, callBlockBehavior, placementInfo);
     }
@@ -276,39 +336,74 @@ public interface Dimension {
      */
     void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send, boolean update, boolean callBlockBehavior, PlayerInteractInfo placementInfo);
 
+    /**
+     * @see #sendBlockUpdateTo(BlockState, int, int, int, int, EntityPlayer)
+     */
     default void sendBlockUpdateTo(BlockState blockState, Vector3ic pos, int layer, EntityPlayer player) {
         sendBlockUpdateTo(blockState, pos.x(), pos.y(), pos.z(), layer, player);
     }
 
+    /**
+     * Send block update in a specified pos to a specified player with the given block state.
+     * This is useful for plugin to create fake block client side.
+     *
+     * @param blockState the block state to send.
+     * @param x          the x coordinate of the block.
+     * @param y          the y coordinate of the block.
+     * @param z          the z coordinate of the block.
+     * @param layer      the layer which contains the block.
+     * @param player     the player to send the block update.
+     */
     default void sendBlockUpdateTo(BlockState blockState, int x, int y, int z, int layer, EntityPlayer player) {
         player.sendPacket(createUpdateBlockPacket(blockState, x, y, z, layer));
     }
 
+    /**
+     * @see #getBlockState(int, int, int, int)
+     */
     default BlockState getBlockState(Vector3fc pos) {
         return getBlockState(pos, 0);
     }
 
+    /**
+     * @see #getBlockState(int, int, int, int)
+     */
     default BlockState getBlockState(Vector3fc pos, int layer) {
         pos = pos.floor(new Vector3f());
         return getBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), layer);
     }
 
+    /**
+     * @see #getBlockState(int, int, int, int)
+     */
     default BlockState getBlockState(float x, float y, float z) {
         return getBlockState(x, y, z, 0);
     }
 
+    /**
+     * @see #getBlockState(int, int, int, int)
+     */
     default BlockState getBlockState(float x, float y, float z, int layer) {
         return getBlockState((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z), layer);
     }
 
+    /**
+     * @see #getBlockState(int, int, int, int)
+     */
     default BlockState getBlockState(Vector3ic pos) {
         return getBlockState(pos, 0);
     }
 
+    /**
+     * @see #getBlockState(int, int, int, int)
+     */
     default BlockState getBlockState(Vector3ic pos, int layer) {
         return getBlockState(pos.x(), pos.y(), pos.z(), layer);
     }
 
+    /**
+     * @see #getBlockState(int, int, int, int)
+     */
     default BlockState getBlockState(int x, int y, int z) {
         return getBlockState(x, y, z, 0);
     }
@@ -1027,7 +1122,6 @@ public interface Dimension {
 
     /**
      * Drop a xp orb at the specified pos with the specified xp amount.
-     * <p>
      * This method will add a random motion to the xp orb entity.
      *
      * @param pos the pos to drop the xp orb.
@@ -1043,6 +1137,13 @@ public interface Dimension {
         dropXpOrb(pos, xp, motion);
     }
 
+    /**
+     * Drop a xp orb at the specified pos with the specified xp amount and motion. pickupDelay will be 10.
+     *
+     * @param pos    the pos to drop the xp orb.
+     * @param xp     the amount of xp to drop.
+     * @param motion the motion of the xp orb entity.
+     */
     default void dropXpOrb(Vector3fc pos, int xp, Vector3fc motion) {
         dropXpOrb(pos, xp, motion, 10);
     }
@@ -1133,6 +1234,9 @@ public interface Dimension {
         return getBlockState(x, getHeight(x, z), z);
     }
 
+    /**
+     * @see #findSuitableGroundPosAround(Predicate, int, int, int, int)
+     */
     default Vector3ic findSuitableGroundPosAround(Predicate<Position3ic> predicate, int x, int z, @Range(from = 0, to = Integer.MAX_VALUE) int range) {
         return findSuitableGroundPosAround(predicate, x, z, range, 10);
     }
@@ -1161,11 +1265,7 @@ public interface Dimension {
     }
 
     /**
-     * Check if the specified pos can see the sky.
-     *
-     * @param pos the pos.
-     *
-     * @return {@code true} if the specified pos can see the sky, otherwise {@code false}.
+     * @see #canPosSeeSky(int, int, int)
      */
     default boolean canPosSeeSky(Vector3ic pos) {
         return canPosSeeSky(pos.x(), pos.y(), pos.z());
@@ -1185,11 +1285,7 @@ public interface Dimension {
     }
 
     /**
-     * Get the biome at the specified pos.
-     *
-     * @param pos the pos.
-     *
-     * @return biome the biome.
+     * @see #getBiome(int, int, int)
      */
     default BiomeType getBiome(Vector3ic pos) {
         return getBiome(pos.x(), pos.y(), pos.z());
@@ -1217,10 +1313,7 @@ public interface Dimension {
     }
 
     /**
-     * Set the biome at the specified pos.
-     *
-     * @param pos   the pos.
-     * @param biome the biome to set.
+     * @see #setBiome(int, int, int, BiomeType)
      */
     default void setBiome(Vector3ic pos, BiomeType biome) {
         setBiome(pos.x(), pos.y(), pos.z(), biome);
@@ -1257,7 +1350,7 @@ public interface Dimension {
      *
      * @param pos the position to check for a liquid block.
      *
-     * @return the liquid block at the position and the layer it is in, or (-1, null) if no liquid was found.
+     * @return the liquid block at the position and the layer it is in, or {@link #PAIR_LIQUID_NOT_FOUND} if no liquid is found.
      */
     default IntObjectPair<BlockState> getLiquid(Vector3ic pos) {
         var layer0 = getBlockState(pos);
