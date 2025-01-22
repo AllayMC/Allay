@@ -1,7 +1,6 @@
 package org.allaymc.server.world.service;
 
 import io.netty.util.internal.PlatformDependent;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.entity.EntityDespawnEvent;
@@ -17,10 +16,14 @@ import java.util.Queue;
  * @author Cool_Loong
  */
 @Slf4j
-@RequiredArgsConstructor
 public class AllayEntityService implements EntityService {
     protected final AllayEntityPhysicsService entityPhysicsService;
-    protected final Queue<EntityUpdateOperation> entityUpdateOperationQueue = PlatformDependent.newMpscQueue();
+    protected final Queue<EntityUpdateOperation> entityUpdateOperationQueue;
+
+    public AllayEntityService(AllayEntityPhysicsService entityPhysicsService) {
+        this.entityPhysicsService = entityPhysicsService;
+        this.entityUpdateOperationQueue = PlatformDependent.newMpscQueue();
+    }
 
     public void tick() {
         while (!entityUpdateOperationQueue.isEmpty()) {
@@ -47,8 +50,9 @@ public class AllayEntityService implements EntityService {
         entityPhysicsService.removeEntity(entity);
 
         entity.despawnFromAll();
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeDespawnedNextTick(false);
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setSpawned(false);
+        var baseComponent = ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent());
+        baseComponent.setWillBeDespawnedNextTick(false);
+        baseComponent.setSpawned(false);
     }
 
     private void addEntityImmediately(Entity entity) {
@@ -63,8 +67,9 @@ public class AllayEntityService implements EntityService {
         entity.spawnTo(chunk.getPlayerChunkLoaders());
 
         entityPhysicsService.addEntity(entity);
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeSpawnedNextTick(false);
-        ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setSpawned(true);
+        var baseComponent = ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent());
+        baseComponent.setWillBeSpawnedNextTick(false);
+        baseComponent.setSpawned(true);
     }
 
     @Override
@@ -75,11 +80,7 @@ public class AllayEntityService implements EntityService {
         }
 
         ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeSpawnedNextTick(true);
-        entityUpdateOperationQueue.add(new EntityUpdateOperation(
-                entity,
-                EntityUpdateType.ADD,
-                callback
-        ));
+        entityUpdateOperationQueue.add(new EntityUpdateOperation(entity, EntityUpdateType.ADD, callback));
     }
 
     @Override
@@ -90,11 +91,7 @@ public class AllayEntityService implements EntityService {
         }
 
         ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).setWillBeDespawnedNextTick(true);
-        entityUpdateOperationQueue.add(new EntityUpdateOperation(
-                entity,
-                EntityUpdateType.REMOVE,
-                callback
-        ));
+        entityUpdateOperationQueue.add(new EntityUpdateOperation(entity, EntityUpdateType.REMOVE, callback));
     }
 
     protected enum EntityUpdateType {
