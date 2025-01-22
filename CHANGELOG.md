@@ -19,6 +19,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Implemented ender chest, and several related interfaces & objects including `BlockEntityEnderChest`,
   `EnderChestContainer`, are added to api module, see commit history for more details.
 - (API) Added `VoxelShape#intersectsRay` method, which can determine whether the given ray intersects the voxel shape.
+- (API) Added multiple `BlockUpdateService#scheduleRandomBlockUpdate` method overloads, which can schedule a random block
+  update at a specified position. These methods are used by fire block currently to make it able to change fire spreading
+  speed by changing random block update speed.
 
 ### Changed
 

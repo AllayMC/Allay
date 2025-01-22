@@ -9,6 +9,7 @@ import org.allaymc.api.block.interfaces.BlockLiquidBehavior;
 import org.allaymc.api.eventbus.event.block.BlockNeighborUpdateEvent;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
+import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.service.BlockUpdateService;
 import org.joml.Vector3ic;
 
@@ -38,6 +39,11 @@ public class AllayBlockUpdateService implements BlockUpdateService {
         }
 
         chunk.addScheduledUpdate(pos.x() & 15, pos.y(), pos.z() & 15, delay, layer);
+    }
+
+    @Override
+    public void scheduleRandomBlockUpdate(Vector3ic pos, int delay, int layer) {
+        scheduleBlockUpdate(pos, (int) ((float) delay / (float) dimension.getWorld().getWorldData().<Integer>getGameRuleValue(GameRule.RANDOM_TICK_SPEED)), layer);
     }
 
     @Override

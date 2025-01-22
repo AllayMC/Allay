@@ -40,7 +40,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
     @Override
     public void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo) {
         super.onPlace(currentBlockState, newBlockState, placementInfo);
-        currentBlockState.dimension().getBlockUpdateService().scheduleBlockUpdate(currentBlockState.pos(), FIRE_SCHEDULED_UPDATE_DELAY);
+        currentBlockState.dimension().getBlockUpdateService().scheduleRandomBlockUpdate(currentBlockState.pos(), FIRE_SCHEDULED_UPDATE_DELAY);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
                 dimension.setBlockState(pos, event.getNewBlockState());
             }
         } else if (dimension.getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.DO_FIRE_TICK) && !dimension.getBlockUpdateService().hasScheduledBlockUpdate(pos)) {
-            dimension.getBlockUpdateService().scheduleBlockUpdate(pos, FIRE_SCHEDULED_UPDATE_DELAY);
+            dimension.getBlockUpdateService().scheduleRandomBlockUpdate(pos, FIRE_SCHEDULED_UPDATE_DELAY);
         }
     }
 
@@ -99,7 +99,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
             dimension.setBlockState(pos, newBlockState);
         }
 
-        dimension.getBlockUpdateService().scheduleBlockUpdate(pos, FIRE_SCHEDULED_UPDATE_DELAY + random.nextInt(10));
+        dimension.getBlockUpdateService().scheduleRandomBlockUpdate(pos, FIRE_SCHEDULED_UPDATE_DELAY + random.nextInt(10));
 
         var burnForever = canFireBurnForever(downBlockState);
 
@@ -191,7 +191,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
 
                         if (event.call()) {
                             dimension.setBlockState(lx, ly, lz, BlockTypes.FIRE.ofState(BlockPropertyTypes.AGE_16.createValue(newAge)));
-                            dimension.getBlockUpdateService().scheduleBlockUpdate(new Vector3i(lx, ly, lz), FIRE_SCHEDULED_UPDATE_DELAY);
+                            dimension.getBlockUpdateService().scheduleRandomBlockUpdate(new Vector3i(lx, ly, lz), FIRE_SCHEDULED_UPDATE_DELAY);
                         }
                     }
                 }
@@ -211,7 +211,7 @@ public class BlockFireBaseComponentImpl extends BlockBaseComponentImpl {
                 var event = new BlockIgniteEvent(target, source, null, BlockIgniteEvent.BlockIgniteCause.SPREAD);
                 if (event.call()) {
                     dimension.setBlockState(target.pos(), BlockTypes.FIRE.ofState(BlockPropertyTypes.AGE_16.createValue(currentFireAge)));
-                    dimension.getBlockUpdateService().scheduleBlockUpdate(target.pos(), FIRE_SCHEDULED_UPDATE_DELAY);
+                    dimension.getBlockUpdateService().scheduleRandomBlockUpdate(target.pos(), FIRE_SCHEDULED_UPDATE_DELAY);
                 }
             } else {
                 var event = new BlockBurnEvent(target);
