@@ -128,7 +128,12 @@ public final class AllayWorldPool implements WorldPool {
             log.error("Cannot find world generator {}", settings.generatorType());
             factory = Registries.WORLD_GENERATOR_FACTORIES.get("VOID");
         }
-        return factory.apply(settings.generatorPreset());
+        try {
+            return factory.apply(settings.generatorPreset());
+        } catch (Throwable t) {
+            log.error("Error while creating {} type world generator with the preset {}", settings.generatorType(), settings.generatorPreset());
+            return Registries.WORLD_GENERATOR_FACTORIES.get("VOID").apply(null);
+        }
     }
 
     private void loadWorldConfig() {
