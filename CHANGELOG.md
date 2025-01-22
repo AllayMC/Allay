@@ -22,6 +22,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added multiple `BlockUpdateService#scheduleRandomBlockUpdate` method overloads, which can schedule a random block
   update at a specified position. These methods are used by fire block currently to make it able to change fire spreading
   speed by changing random block update speed.
+- (API) Added `WorldSettings.WorldSetting#runtimeOnly`, If set this to true, the information of this world will not be saved
+  to world-settings.yml, therefore it won't be loaded after the server restarted. This is useful for world created for game
+  room by plugin and will be deleted when shutdown.
 
 ### Changed
 

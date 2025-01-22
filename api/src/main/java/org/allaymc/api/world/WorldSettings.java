@@ -40,14 +40,25 @@ public class WorldSettings extends OkaeriConfig {
     @Accessors(fluent = true)
     public static class WorldSetting extends OkaeriConfig {
         @Setter
+        @Comment("If set to false, the world will not be loaded")
         @CustomKey("enable")
         @Builder.Default
         private boolean enable = true;
+
+        @Setter
+        @Comment("If set to true, the information of this world will not be saved to world-settings.yml,")
+        @Comment("therefore it won't be loaded after the server restarted. This is useful for world created")
+        @Comment("for game room by plugin and will be deleted when shutdown")
+        @CustomKey("runtime-only")
+        private boolean runtimeOnly;
+
         @CustomKey("storage-type")
         private String storageType;
         private DimensionSettings overworld;
+
         @Comment("If you don't want to have nether / the end in this world, left it null")
         private DimensionSettings nether;
+
         @CustomKey("the-end")
         private DimensionSettings theEnd;
 
@@ -59,6 +70,7 @@ public class WorldSettings extends OkaeriConfig {
             @CustomKey("generator-type")
             @Builder.Default
             private String generatorType = "VOID";
+
             @CustomKey("generator-preset")
             @Builder.Default
             private String generatorPreset = "";

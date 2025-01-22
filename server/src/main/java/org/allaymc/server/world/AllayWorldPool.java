@@ -98,10 +98,12 @@ public final class AllayWorldPool implements WorldPool {
 
         if (addWorld(world)) {
             log.info(I18n.get().tr(TrKeys.A_WORLD_LOADED, name));
-            if (!worldConfig.worlds().containsKey(name)) {
-                worldConfig.worlds().put(name, setting);
-                worldConfig.save();
+            if (setting.runtimeOnly() || worldConfig.worlds().containsKey(name)) {
+                // Runtime only world won't be saved to world-settings.yml
+                return;
             }
+            worldConfig.worlds().put(name, setting);
+            worldConfig.save();
         }
     }
 
