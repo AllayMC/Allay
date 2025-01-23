@@ -213,7 +213,14 @@ public class Explosion {
                 }
                 affectedEntity.addMotion(MathUtils.normalizeIfNotZero(affectedEntity.getLocation().sub(explosionPos, new Vector3f())).mul(impact * (1.0f - kbResistance)));
                 if (affectedEntity instanceof EntityDamageComponent damageComponent) {
-                    var damage = (float) Math.floor((impact * impact + impact) * 3.5 * size * 2 + 1);
+                    var m = switch (dimension.getWorld().getWorldData().getDifficulty()) {
+                        case PEACEFUL -> 0.0f;
+                        case EASY -> 3.5f;
+                        case NORMAL -> 7.0f;
+                        case HARD -> 10.5f;
+                    };
+                    var power = size / 2.0f;
+                    var damage = (float) Math.floor((impact * impact + impact) * m * power + 1.0f);
                     if (entity == null) {
                         damageComponent.attack(DamageContainer.blockExplosion(damage));
                     } else {
