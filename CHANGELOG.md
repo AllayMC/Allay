@@ -42,7 +42,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Plugins are able to create their own world generator implementation now. In previous versions a ClassCastException would be thrown when
   initializing the dimension.
 - Explosion now calculates entity exposure correctly. In previous version any non-air block will block the explosion ray.
-- Explosion damage now scales with game difficulty, and a bug was fixed that cause the damage two times bigger than the correct damage.
+- Explosion damage now scales with game difficulty.
 - Fixed a rare NPE exception that may occur if player disconnect when joining the server.
 
 ### Removed

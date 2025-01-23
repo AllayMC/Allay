@@ -222,8 +222,7 @@ public class Explosion {
                         case NORMAL -> 7.0f;
                         case HARD -> 10.5f;
                     };
-                    var power = size / 2.0f;
-                    var damage = (float) Math.floor((impact * impact + impact) * m * power + 1.0f);
+                    var damage = (impact * impact + impact) * m * size / 2.0f + 1.0f;
                     if (entity == null) {
                         damageComponent.attack(DamageContainer.blockExplosion(damage));
                     } else {
