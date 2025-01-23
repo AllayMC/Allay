@@ -211,7 +211,10 @@ public class Explosion {
                 if (affectedEntity instanceof EntityAttributeComponent attributeComponent && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
                     kbResistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
                 }
-                affectedEntity.addMotion(MathUtils.normalizeIfNotZero(affectedEntity.getLocation().sub(explosionPos, new Vector3f())).mul(impact * (1.0f - kbResistance)));
+                var direction = affectedEntity.getLocation().sub(explosionPos, new Vector3f());
+                if (direction.lengthSquared() > 0) {
+                    affectedEntity.addMotion(direction.normalize().mul(impact * (1.0f - kbResistance)));
+                }
                 if (affectedEntity instanceof EntityDamageComponent damageComponent) {
                     var m = switch (dimension.getWorld().getWorldData().getDifficulty()) {
                         case PEACEFUL -> 0.0f;
