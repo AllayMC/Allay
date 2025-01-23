@@ -214,17 +214,24 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
         updateBreakingTime(player, currentTime);
 
         var pk1 = new LevelEventPacket();
-        pk1.setType(PARTICLE_CRACK_BLOCK);
-        var blockFaceOffset = Objects.requireNonNull(BlockFace.fromId(faceToBreak)).getOffset();
-        pk1.setPosition(Vector3f.from(blockToBreakX + 0.5f + blockFaceOffset.x(), blockToBreakY + 0.5f + blockFaceOffset.y(), blockToBreakZ + 0.5f + blockFaceOffset.z()));
+        var type = switch (Objects.requireNonNull(BlockFace.fromId(faceToBreak))) {
+            case UP -> PARTICLE_BREAK_BLOCK_UP;
+            case DOWN -> PARTICLE_BREAK_BLOCK_DOWN;
+            case NORTH -> PARTICLE_BREAK_BLOCK_NORTH;
+            case SOUTH -> PARTICLE_BREAK_BLOCK_SOUTH;
+            case WEST -> PARTICLE_BREAK_BLOCK_WEST;
+            case EAST -> PARTICLE_BREAK_BLOCK_EAST;
+        };
+        pk1.setType(type);
+        pk1.setPosition(Vector3f.from(blockToBreakX + 0.5f, blockToBreakY + 0.5f, blockToBreakZ + 0.5f));
         pk1.setData(blockToBreak.blockStateHash());
+        player.getCurrentChunk().addChunkPacket(pk1);
 
         var pk2 = new LevelEventPacket();
         pk2.setType(BLOCK_UPDATE_BREAK);
         pk2.setPosition(Vector3f.from(blockToBreakX, blockToBreakY, blockToBreakZ));
         pk2.setData(toNetworkBreakTime(timeNeededToBreak));
 
-        player.getCurrentChunk().addChunkPacket(pk1);
         player.getCurrentChunk().addChunkPacket(pk2);
     }
 

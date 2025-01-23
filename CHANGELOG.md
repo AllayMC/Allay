@@ -44,6 +44,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Explosion now calculates entity exposure correctly. In previous version any non-air block will block the explosion ray.
 - Explosion damage now scales with game difficulty.
 - Fixed a rare NPE exception that may occur if player disconnect when joining the server.
+- Fixed missing block breaking particle when breaking block.
 
 ### Removed
 
