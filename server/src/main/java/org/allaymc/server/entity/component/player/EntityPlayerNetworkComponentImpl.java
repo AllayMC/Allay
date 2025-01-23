@@ -220,7 +220,8 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         world.getWorldData().sendTimeOfDay(thisPlayer);
         ((AllayWorld) world).sendWeather(thisPlayer);
-        // Save player data the first time
+
+        // Save player data the first time it joins
         server.getPlayerStorage().savePlayerData(thisPlayer);
     }
 

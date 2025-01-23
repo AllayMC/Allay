@@ -942,6 +942,16 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
+    public void setLocationBeforeSpawn(Location3fc location) {
+        if (this.location.dimension() != null && location.dimension() == null) {
+            // Different from normal entity, reset the dimension of player entity back to null is not allowed
+            throw new IllegalArgumentException("Reset dimension back to null is not allowed for player!");
+        }
+
+        super.setLocationBeforeSpawn(location);
+    }
+
+    @Override
     public void sendMetadata() {
         super.sendMetadata();
         networkComponent.sendPacket(createSetEntityDataPacket());

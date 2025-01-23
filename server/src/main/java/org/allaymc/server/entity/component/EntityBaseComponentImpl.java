@@ -290,6 +290,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         if (MathUtils.hasNaN(location)) {
             throw new IllegalArgumentException("Trying to set the location of entity " + runtimeId + " to a new location which contains NaN: " + location);
         }
+
         if (calculateFallDistance && !this.onGround) {
             if (this.fallDistance < 0) {
                 // Entity start falling

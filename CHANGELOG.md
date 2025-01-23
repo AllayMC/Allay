@@ -35,6 +35,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 - Server won't crash if failed to load the descriptor of a plugin now. An error message will be print to the console instead.
 - Server won't crash if failed to create world generator. Void world generator will be used instead.
+- It is not allowed to reset the dimension of player back to null now, and doing such thing will result in an exception.
 
 ### Fixed
 
@@ -42,6 +43,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   initializing the dimension.
 - Explosion now calculates entity exposure correctly. In previous version any non-air block will block the explosion ray.
 - Explosion damage now scales with game difficulty, and a bug was fixed that cause the damage two times bigger than the correct damage.
+- Fixed a rare NPE exception that may occur if player disconnect when joining the server.
 
 ### Removed
 

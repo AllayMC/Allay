@@ -300,9 +300,15 @@ public final class AllayServer implements Server {
             // the server without waiting for the status change to IN_GAME, which is why the session remains and the
             // server thinks that the player is still on the server, but after such manipulations, the player client
             // will crash every time he logs on to the server
-            player.getDimension().removePlayer(player);
-            playerStorage.savePlayerData(player);
-            removeFromPlayerList(player);
+            if (player.getDimension() != null) {
+                // The dimension of the player may be null, that because the client is still handling resource packs
+                // and is not added or going to be added (willBeSpawnedNextTick == true) to any dimension. After handled
+                // resources packs, the dimension of the player should always be non-null regardless the status of the
+                // player because there is a check in EntityPlayerBaseComponentImpl#setLocationBeforeSpawn()
+                player.getDimension().removePlayer(player);
+                playerStorage.savePlayerData(player);
+                removeFromPlayerList(player);
+            }
         }
 
         ((AllayNetworkInterface) networkInterface).setPlayerCount(players.size());
