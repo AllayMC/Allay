@@ -39,7 +39,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     // But it doesn't work out the same breaking time as the client when player keep jumping
     // It is hard for us to calculate the exact breaking time when player keep jumping
     protected static final int BLOCK_BREAKING_TIME_FAULT_TOLERANCE = Integer.MAX_VALUE;
-    public static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
+    protected static final int TELEPORT_ACK_DIFF_TOLERANCE = 1;
 
     protected int blockToBreakX = Integer.MAX_VALUE;
     protected int blockToBreakY = Integer.MAX_VALUE;

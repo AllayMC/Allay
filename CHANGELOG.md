@@ -36,6 +36,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Server won't crash if failed to load the descriptor of a plugin now. An error message will be print to the console instead.
 - Server won't crash if failed to create world generator. Void world generator will be used instead.
 - It is not allowed to reset the dimension of player back to null now, and doing such thing will result in an exception.
+- Changed `PlayerAuthInputPacketProcessor#TELEPORT_ACK_DIFF_TOLERANCE` from `public` to `protected`.
 
 ### Fixed
 
