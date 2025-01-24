@@ -29,6 +29,9 @@ with mkdocs_gen_files.open("plugins.md", "w") as f:
 
     fp("---")
     fp("comments: true")
+    fp("hide:")
+    fp("  - navigation")
+    fp("  - toc")
     fp("---")
     el()
 
