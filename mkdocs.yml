@@ -27,6 +27,9 @@ plugins:
   - git-committers:
       repository: AllayMC/Allay
       branch: master
+  - gen-files:
+      scripts:
+        - docs/gen_plugins.py
 
 theme:
   name: 'material'
@@ -126,7 +129,7 @@ nav:
   - Getting Started:
       - Installation: getting-started/installation.md
 
-  - Plugins: plugins/plugins.md
+  - Plugins: plugins.md
 
   - Tutorials:
       - Create Your First Plugin: tutorials/create-your-first-plugin.md
