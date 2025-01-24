@@ -20,3 +20,18 @@ github = "https://github.com/PolyhedralDev/Terra"
 description = "Execute server command through http interface."
 authors = ["daoge_cmd"]
 github = "https://github.com/AllayMC/RemoteCommand"
+
+[allaymc-kotlinx]
+description = "Kotlin-style Extension Library and Shared Standard Library for Allay Server"
+authors = ["MineBuilder"]
+github = "https://github.com/MineBuilders/allaymc-kotlinx"
+
+[allaymc-nodejs-runtime]
+description = "A Node.js runtime for Allay!"
+authors = ["MineBuilder"]
+github = "https://github.com/MineBuilders/allaymc-nodejs-runtime"
+
+[allaymc-kts-host]
+description = "Load Kotlin Script in Allay!"
+authors = ["MineBuilder"]
+github = "https://github.com/MineBuilders/allaymc-kts-host"
