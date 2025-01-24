@@ -1,0 +1,22 @@
+# You are free to add your plugins and themes to the site, just open a new PR
+# To add a plugin, you should edit this file and add your plugin to the end of proper list.
+
+[ServerInfo]
+description = "Show some information through scoreboard & bossbar."
+authors = ["daoge_cmd"]
+github = "https://github.com/AllayMC/ServerInfo"
+
+[Spark]
+description = "A performance profiler for Minecraft clients, servers, and proxies."
+authors = ["Luck", "IWareQ", "daoge_cmd"]
+github = "https://github.com/AllayMC/spark-extra-platforms"
+
+[Terra]
+description = "Voxel world generation modding platform."
+authors = ["daoge_cmd", "IWareQ", "dfsek", "duplexsystem", "Astrash", "solonovamax", "Sancires", "Aureus", "RogueShade"]
+github = "https://github.com/PolyhedralDev/Terra"
+
+[RemoteCommand]
+description = "Execute server command through http interface."
+authors = ["daoge_cmd"]
+github = "https://github.com/AllayMC/RemoteCommand"

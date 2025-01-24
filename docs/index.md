@@ -19,6 +19,14 @@ reliable, fast and feature-rich.
 
     [**:octicons-arrow-right-24: Getting Started**](getting-started/installation)
 
+-   **Explore available plugins**
+
+    ---
+
+    Discover the wide range of plugins available for allay.
+
+    [**:octicons-arrow-right-24: Tutorials**](plugins)
+
 -   **Write your first plugin**
 
     ---
@@ -26,5 +34,13 @@ reliable, fast and feature-rich.
     Our step-by-step tutorial takes you from zero to hero as you create your first plugin.
 
     [**:octicons-arrow-right-24: Tutorials**](tutorials/create-your-first-plugin)
+
+-   **Advanced plugin knowledge**
+
+    ---
+
+    Already proficient in basic plugin development? Dive into more advanced topics!
+
+    [**:octicons-arrow-right-24: Tutorials**](changelog)
 
 </div>
