@@ -2,6 +2,9 @@ package org.allaymc.api.form.type;
 
 import com.google.gson.Gson;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.cloudburstmc.protocol.bedrock.data.ModalFormCancelReason;
+
+import java.util.function.Consumer;
 
 /**
  * The base class for form.
@@ -12,7 +15,7 @@ public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
 
     protected static final Gson GSON = new Gson();
 
-    protected transient Runnable onClose = () -> {};
+    protected transient Consumer<ModalFormCancelReason> onClose = reason -> {};
     protected transient Object response;
 
     /**
@@ -27,12 +30,26 @@ public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
     /**
      * Handle the response from the player.
      * <p>
-     * This method will be called when server receive the response packet from client.
-     * Usually the user won't need to use this method.
+     * If the player just close the form due to some reason (e.g. the player is opening his inventory), {@link #handleClose(ModalFormCancelReason)}
+     * will be called instead of this method.
      *
-     * @param data the response data from the player. Can be {@code null} if the player only close the form without other actions.
+     * @param data the response data from the player.
      */
     public abstract void handleResponse(String data);
+
+    /**
+     * Handle the close of the form. This method will be called when the player close the form.
+     *
+     * @param reason the reason why the form is closed.
+     */
+    public abstract void handleClose(ModalFormCancelReason reason);
+
+    /**
+     * @see #onClose(Consumer)
+     */
+    public Form onClose(Runnable onClose) {
+        return onClose(reason -> onClose.run());
+    }
 
     /**
      * Add a callback that will be called when player only close the form without other actions.
@@ -41,10 +58,11 @@ public abstract sealed class Form permits SimpleForm, ModalForm, CustomForm {
      *
      * @return the form.
      */
-    public Form onClose(Runnable onClose) {
+    public Form onClose(Consumer<ModalFormCancelReason> onClose) {
         this.onClose = onClose;
         return this;
     }
+
 
     /**
      * Convert this form to a JSON string.

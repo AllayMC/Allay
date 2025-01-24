@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.form.element.Button;
 import org.allaymc.api.form.element.ImageData;
+import org.cloudburstmc.protocol.bedrock.data.ModalFormCancelReason;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,11 +139,6 @@ public final class SimpleForm extends Form {
      */
     @Override
     public void handleResponse(String data) {
-        if (data == null) {
-            response = null;
-            onClose.run();
-            return;
-        }
         int buttonIndex;
         try {
             buttonIndex = Integer.parseInt(data);
@@ -158,6 +154,14 @@ public final class SimpleForm extends Form {
         onResponse.accept(button);
         button.getOnClick().accept(button);
         response = button;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void handleClose(ModalFormCancelReason reason) {
+        onClose.accept(reason);
     }
 
     /**

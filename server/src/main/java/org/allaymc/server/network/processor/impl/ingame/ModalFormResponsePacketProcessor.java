@@ -29,7 +29,12 @@ public class ModalFormResponsePacketProcessor extends PacketProcessor<ModalFormR
             isServerSettingsForm = true;
         }
 
-        form.handleResponse(packet.getFormData() != null ? packet.getFormData().trim() : null);
+        var formData = packet.getFormData();
+        if (formData != null) {
+            form.handleResponse(formData.trim());
+        } else {
+            form.handleClose(packet.getCancelReason().orElseThrow());
+        }
         if (isServerSettingsForm) {
             ((CustomForm) form).syncDefaultValueToResponse();
         }

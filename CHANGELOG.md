@@ -27,6 +27,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
   room by plugin and will be deleted when shutdown.
 - (API) Added `PluginManager#registerCustomSource` and `PluginManager#registerCustomLoaderFactory`, custom plugin loaders
   and sources can be registered by plugin now.
+- (API) Added `Form#onClose(Consumer<ModalFormCancelReason>)` method that can be used to set a callback which will be called
+  with the close reason when the form is closed. The old `Form#onClose` method is still available that just ignores the reason.
 
 ### Changed
 

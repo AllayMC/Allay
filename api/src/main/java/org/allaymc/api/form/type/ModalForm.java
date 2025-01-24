@@ -2,6 +2,7 @@ package org.allaymc.api.form.type;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
+import org.cloudburstmc.protocol.bedrock.data.ModalFormCancelReason;
 
 import java.util.function.Consumer;
 
@@ -144,13 +145,14 @@ public final class ModalForm extends Form {
     @Override
     public void handleResponse(String data) {
         response = data;
-        if (data == null) {
-            onClose.run();
-            return;
-        }
         onResponse.accept(data);
         if (data.equals("true")) onTrue.run();
         else onFalse.run();
+    }
+
+    @Override
+    public void handleClose(ModalFormCancelReason reason) {
+        onClose.accept(reason);
     }
 
     /**

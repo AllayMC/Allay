@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.form.element.*;
+import org.cloudburstmc.protocol.bedrock.data.ModalFormCancelReason;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
@@ -329,13 +330,17 @@ public final class CustomForm extends Form {
      */
     @Override
     public void handleResponse(String data) {
-        if (data == null) {
-            onClose.run();
-            return;
-        }
         List<String> responses = GSON.fromJson(data, new TypeToken<List<String>>() {}.getType());
-        onResponse.accept(responses);
-        response = responses;
+        this.onResponse.accept(responses);
+        this.response = responses;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void handleClose(ModalFormCancelReason reason) {
+        onClose.accept(reason);
     }
 
     /**
