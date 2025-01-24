@@ -126,6 +126,8 @@ nav:
   - Getting Started:
       - Installation: getting-started/installation.md
 
+  - Plugins: plugins/plugins.md
+
   - Tutorials:
       - Create Your First Plugin: tutorials/create-your-first-plugin.md
       - Register Commands: tutorials/register-commands.md

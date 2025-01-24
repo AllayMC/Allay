@@ -19,6 +19,14 @@ reliable, fast and feature-rich.
 
     [**:octicons-arrow-right-24: Getting Started**](getting-started/installation)
 
+-   **Explore available plugins**
+
+    ---
+
+    Discover the wide range of plugins available for allay.
+
+    [**:octicons-arrow-right-24: Tutorials**](plugins/plugins)
+
 -   **Write your first plugin**
 
     ---
