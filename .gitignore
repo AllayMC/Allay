@@ -1,14 +1,15 @@
 .gradle
 .jacoco
-.idea/**
 
-# Code style files should be included
+# Cache directory for mkdocs
+.cache
+
+# Code style files and inspection profiles should be included
+.idea/**
 !/.idea/codeStyles
 !/.idea/codeStyles/*
 !/.idea/codeStyles/codeStyleConfig.xml
 !/.idea/codeStyles/Project.xml
-
-# Inspection profiles should be included
 !/.idea/inspectionProfiles
 !/.idea/inspectionProfiles/Project_Default.xml
 
@@ -20,6 +21,7 @@
 # Working dir
 .run/**
 !.run/Allay.run.xml
+
 # Test working dir
 .test/**
 !.test/.keep
