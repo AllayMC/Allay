@@ -1,10 +1,12 @@
 package org.allaymc.server.world.service;
 
 import com.google.common.collect.Sets;
-import it.unimi.dsi.fastutil.longs.*;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongArrayFIFOQueue;
+import it.unimi.dsi.fastutil.longs.LongComparator;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.eventbus.event.world.ChunkLoadEvent;
@@ -41,22 +43,36 @@ import static org.allaymc.api.world.chunk.ChunkState.FINISHED;
  * @author daoge_cmd
  */
 @Slf4j
-@RequiredArgsConstructor
 public final class AllayChunkService implements ChunkService {
 
     private static final int TICK_RADIUS_SQUARED = (int) Math.pow(Server.SETTINGS.worldSettings().tickRadius(), 2);
 
-    private final Map<Long, Chunk> loadedChunks = new Long2ObjectNonBlockingMap<>();
-    private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new Long2ObjectNonBlockingMap<>();
-    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers = new Object2ObjectOpenHashMap<>();
+    // NOTICE: this setter is made for testing
+    @Setter
+    private int removeUnneededChunkCycle;
+
+    private final Map<Long, Chunk> loadedChunks;
+    private final Map<Long, CompletableFuture<Chunk>> loadingChunks;
+    private final Set<Long> keepLoadingChunks;
+    private final Map<Long, Integer> unusedChunkClearCountDown;
+    private final Map<ChunkLoader, ChunkLoaderManager> chunkLoaderManagers;
+
     private final Dimension dimension;
     @Getter
     private final WorldGenerator worldGenerator;
     private final WorldStorage worldStorage;
-    private final Map<Long, Integer> unusedChunkClearCountDown = new Long2IntOpenHashMap();
-    private final Set<Long> keepLoadingChunks = Sets.newConcurrentHashSet();
-    @Setter
-    private int removeUnneededChunkCycle = Server.SETTINGS.worldSettings().removeUnneededChunkCycle();
+
+    public AllayChunkService(Dimension dimension, WorldGenerator worldGenerator, WorldStorage worldStorage) {
+        this.dimension = dimension;
+        this.worldGenerator = worldGenerator;
+        this.worldStorage = worldStorage;
+        this.removeUnneededChunkCycle = Server.SETTINGS.worldSettings().removeUnneededChunkCycle();
+        this.loadedChunks = new Long2ObjectNonBlockingMap<>();
+        this.loadingChunks = new Long2ObjectNonBlockingMap<>();
+        this.keepLoadingChunks = Sets.newConcurrentHashSet();
+        this.unusedChunkClearCountDown = new Long2ObjectNonBlockingMap<>();
+        this.chunkLoaderManagers = new Object2ObjectOpenHashMap<>();
+    }
 
     public void startTick() {
         if (worldGenerator instanceof AllayWorldGenerator allayWorldGenerator) {
@@ -116,6 +132,11 @@ public final class AllayChunkService implements ChunkService {
         }
     }
 
+    @Override
+    public void removeUnusedChunksImmediately() {
+        unusedChunkClearCountDown.replaceAll((chunkHash, countDown) -> 0);
+    }
+
     private void removeUnusedChunks() {
         unusedChunkClearCountDown.entrySet().removeIf(entry -> {
             var chunk = getChunk(entry.getKey());
@@ -125,7 +146,8 @@ public final class AllayChunkService implements ChunkService {
         unusedChunkClearCountDown.replaceAll((chunkHash, countDown) -> countDown - 1);
         // Remove countdown ended unused chunks
         unusedChunkClearCountDown.entrySet().removeIf(entry -> {
-            var shouldRemove = entry.getValue() == 0;
+            // It is possible that the value be smaller than zero, however it is not a problem
+            var shouldRemove = entry.getValue() <= 0;
             if (shouldRemove && !unloadChunk(entry.getKey()).getNow(true)) {
                 // Chunk cannot be unloaded, may because ChunkUnloadEvent is cancelled
                 // If chunk unloading is cancelled by a plugin, unloadChunk()

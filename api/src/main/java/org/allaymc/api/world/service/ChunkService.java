@@ -1,5 +1,6 @@
 package org.allaymc.api.world.service;
 
+import org.allaymc.api.server.ServerSettings;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.chunk.ChunkSource;
@@ -230,4 +231,16 @@ public interface ChunkService extends ChunkSource {
      */
     @UnmodifiableView
     Collection<CompletableFuture<Chunk>> getLoadingChunks();
+
+    /**
+     * Remove chunks that are unused immediately.
+     * <p>
+     * An unused chunk is a chunk that is loaded but is not in any chunk loader's
+     * range. Usually these chunks will still keep loaded for a period of time
+     * (the time is specified by {@link ServerSettings.WorldSettings#removeUnneededChunkCycle()}).
+     * <p>
+     * Calling this method will set the countdown of all unused chunks to zero, which
+     * will make these chunks be unloaded during the next tick.
+     */
+    void removeUnusedChunksImmediately();
 }
