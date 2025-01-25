@@ -35,3 +35,8 @@ github = "https://github.com/MineBuilders/allaymc-nodejs-runtime"
 description = "Load Kotlin Script in Allay!"
 authors = ["MineBuilder"]
 github = "https://github.com/MineBuilders/allaymc-kts-host"
+
+[AllayScalaLibrary]
+description = "Scala standard library and scala toolkit packages for allay."
+authors = ["scala"]
+github = "https://github.com/ScAllay/AllayScalaLibrary"
