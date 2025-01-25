@@ -19,6 +19,7 @@ import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemBaseComponent;
 import org.allaymc.api.item.component.data.ItemDataComponent;
+import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.item.enchantment.EnchantmentHelper;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
@@ -43,6 +44,7 @@ import org.joml.Vector3ic;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.allaymc.api.item.ItemHelper.*;
 
@@ -62,9 +64,10 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     protected static final String TAG_LORE = "Lore";
     protected static final String TAG_ENCHANTMENT = "ench";
     protected static final String TAG_BLOCK_ENTITY = "BlockEntityTag";
+    protected static final String TAG_LOCK_MODE = "minecraft:item_lock";
     protected static final String TAG_CUSTOM_NBT = "CustomNBT";
 
-    private static int STACK_NETWORK_ID_COUNTER = 1;
+    private static final AtomicInteger STACK_NETWORK_ID_COUNTER = new AtomicInteger(1);
 
     @Dependency
     protected ItemDataComponent itemDataComponent;
@@ -90,7 +93,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
     @Setter
     protected List<String> lore = new ArrayList<>();
     protected Map<EnchantmentType, EnchantmentInstance> enchantments = new HashMap<>();
-    // TODO: item lock type
+    @Getter
+    @Setter
+    protected ItemLockMode lockMode = ItemLockMode.NONE;
     // TODO: replace custom nbt content with pdc
     @Getter
     @Setter
@@ -111,12 +116,12 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             Preconditions.checkArgument(specifiedNetworkId > 0, "Specified ItemStack network id must be greater than 0");
             this.stackNetworkId = specifiedNetworkId;
         } else if (initInfo.autoAssignStackNetworkId()) {
-            this.stackNetworkId = STACK_NETWORK_ID_COUNTER++;
+            this.stackNetworkId = STACK_NETWORK_ID_COUNTER.getAndIncrement();
         }
     }
 
     public static int getCurrentStackNetworkIdCounter() {
-        return STACK_NETWORK_ID_COUNTER;
+        return STACK_NETWORK_ID_COUNTER.get();
     }
 
     @OnInitFinish
@@ -138,6 +143,8 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
         }));
 
         extraTag.listenForCompound(TAG_BLOCK_ENTITY, nbt -> this.blockEntityNBT = nbt);
+
+        extraTag.listenForByte(TAG_LOCK_MODE, lockMode -> this.lockMode = ItemLockMode.values()[lockMode]);
 
         extraTag.listenForCompound(TAG_CUSTOM_NBT, customNbt -> this.customNBTContent = customNbt);
 
@@ -174,7 +181,9 @@ public class ItemBaseComponentImpl implements ItemBaseComponent {
             nbtBuilder.putCompound(TAG_BLOCK_ENTITY, blockEntityNBT);
         }
 
-        // TODO: item lock type
+        if (lockMode != ItemLockMode.NONE) {
+            nbtBuilder.putByte(TAG_LOCK_MODE, (byte) lockMode.ordinal());
+        }
 
         // Custom NBT content
         if (!customNBTContent.isEmpty()) {

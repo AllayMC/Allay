@@ -31,6 +31,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
   with the close reason when the form is closed. The old `Form#onClose` method is still available that just ignores the reason.
 - (API) Added `ChunkService#removeUnusedChunksImmediately` method that can remove unused chunks immediately. Also, the `/gc` command
   will call this method in all dimensions now.
+- (API) Added `ItemBaseComponent#getLockMode` and `ItemBaseComponent#setLockMode` methods to get and set the lock mode of an item.
 
 ### Changed
 

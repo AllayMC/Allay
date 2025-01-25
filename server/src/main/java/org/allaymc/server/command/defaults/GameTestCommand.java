@@ -14,6 +14,7 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.LangCode;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.data.ItemId;
+import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.AllayStringUtils;
@@ -314,6 +315,16 @@ public class GameTestCommand extends SimpleCommand {
                         pos = new Vector3f(context.getSender().getCmdExecuteLocation());
                     }
                     explosion.explode(player.getDimension(), pos);
+                    return context.success();
+                }, SenderType.PLAYER)
+                .root()
+                .key("lockitem")
+                .enumClass("mode", ItemLockMode.class)
+                .exec((context, player) -> {
+                    var item = player.getItemInHand();
+                    item.setLockMode(context.getResult(1));
+                    player.notifyItemInHandChange();
+                    player.sendText("Item is locked in " + context.getResult(1) + " mode!");
                     return context.success();
                 }, SenderType.PLAYER);
     }

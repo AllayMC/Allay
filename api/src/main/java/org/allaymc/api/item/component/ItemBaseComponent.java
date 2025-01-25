@@ -8,6 +8,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
+import org.allaymc.api.item.data.ItemLockMode;
 import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.type.AbstractEnchantmentProtectionType;
@@ -618,4 +619,18 @@ public interface ItemBaseComponent extends ItemComponent {
     default boolean hasBlockEntityNBT() {
         return getBlockEntityNBT() != null;
     }
+
+    /**
+     * Get the lock mode of the item.
+     *
+     * @return The lock mode of the item.
+     */
+    ItemLockMode getLockMode();
+
+    /**
+     * Set the lock mode of the item.
+     *
+     * @param lockMode The lock mode of the item.
+     */
+    void setLockMode(ItemLockMode lockMode);
 }
