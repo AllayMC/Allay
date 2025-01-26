@@ -172,6 +172,17 @@ public class DamageContainer {
     }
 
     /**
+     * Create a contact damage container.
+     *
+     * @param sourceDamage the source damage.
+     *
+     * @return the damage container.
+     */
+    public static DamageContainer contact(float sourceDamage) {
+        return new DamageContainer(null, CONTACT, sourceDamage);
+    }
+
+    /**
      * Get the attacker.
      *
      * @param <T> the type of the attacker.

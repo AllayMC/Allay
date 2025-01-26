@@ -13,6 +13,7 @@ import org.allaymc.api.blockentity.type.BlockEntityTypes;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.item.type.ItemTypes;
+import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.math.voxelshape.VoxelShapes;
 import org.allaymc.server.block.component.*;
 import org.allaymc.server.block.component.button.BlockButtonBaseComponentImpl;
@@ -1337,6 +1338,18 @@ public final class BlockTypeInitializer {
                 .vanillaBlock(BlockId.REEDS)
                 .setProperties(BlockPropertyTypes.AGE_16)
                 .setBaseComponentSupplier(BlockReedsBaseComponentImpl::new)
+                .build();
+    }
+
+    public static void initCactus() {
+        BlockTypes.CACTUS = AllayBlockType
+                .builder(BlockCactusBehaviorImpl.class)
+                .vanillaBlock(BlockId.CACTUS)
+                .setProperties(BlockPropertyTypes.AGE_16)
+                .setBaseComponentSupplier(BlockCactusBaseComponentImpl::new)
+                // The height of cactus' collision shape is 0.9375 instead of 1.0,
+                // and that's different from its shape (height is 1.0).
+                .addComponent(BlockStateDataComponentImpl.ofRedefinedCollisionShape($ -> VoxelShape.builder().solid(0.0625f, 0.0f, 0.0625f, 0.9375f, 0.9375f, 0.9375f).build()))
                 .build();
     }
 }

@@ -113,7 +113,7 @@ public class BlockReedsBaseComponentImpl extends BlockBaseComponentImpl {
      */
     protected boolean canGrowHere(Dimension dimension, Vector3ic pos, boolean recursive) {
         var downBlockType = dimension.getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType();
-        if (downBlockType == BlockTypes.REEDS && recursive) {
+        if (recursive && downBlockType == BlockTypes.REEDS) {
             return canGrowHere(dimension, BlockFace.DOWN.offsetPos(pos), true);
         }
 
