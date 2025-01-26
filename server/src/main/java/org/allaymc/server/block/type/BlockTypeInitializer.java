@@ -1330,4 +1330,13 @@ public final class BlockTypeInitializer {
                 .setBaseComponentSupplier(BlockEnderChestBaseComponentImpl::new)
                 .build();
     }
+
+    public static void initReeds() {
+        BlockTypes.REEDS = AllayBlockType
+                .builder(BlockReedsBehaviorImpl.class)
+                .vanillaBlock(BlockId.REEDS)
+                .setProperties(BlockPropertyTypes.AGE_16)
+                .setBaseComponentSupplier(BlockReedsBaseComponentImpl::new)
+                .build();
+    }
 }
