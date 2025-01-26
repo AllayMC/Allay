@@ -141,6 +141,7 @@ nav:
 
   - Advanced:
       - Use Color Codes: advanced/use-color-codes.md
+      - Block and Item Id: advanced/block-and-item-id.md
 
   - Development:
       - Update to The Next Protocol Version: development/update-to-the-next-protocol-version.md
