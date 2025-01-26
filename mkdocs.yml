@@ -145,5 +145,6 @@ nav:
   - Development:
       - Update to The Next Protocol Version: development/update-to-the-next-protocol-version.md
       - Version of Allay: development/version-of-allay.md
+      - Chunk Freezing Issue: development/chunk-freezing-issue.md
 
   - Changelog: changelog.md

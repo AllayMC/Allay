@@ -2,10 +2,12 @@
 comments: true
 ---
 
+# Chunk Freezing Issue
+
 Chunk freezing has been an issue for a long time, and we have been looking for the root cause and solutions. Below is a
 summary of the current progress.
 
-## Overview of the Problem
+## Overview of the Issue
 
 Players occasionally experience certain chunks not loading while exploring, specifically where problematic chunks appear
 transparent but have collision boxes. Nearby chunks are also likely to be affected and exhibit similar symptoms.
@@ -29,7 +31,7 @@ We tried various adjustments, including changing the sending order of NCP and Le
 attempting to send an NCP every gt (inspired by df-mc). Unfortunately, these attempts did not yield significant results,
 only slightly reducing the occurrence of the issue.
 
-## Is it LCP's Fault?
+## Is It LevelChunkPacket's Fault?
 
 Cool_Loong later pointed out that there might be issues with Allay's chunk packet encoding, and we indeed found two
 issues:
@@ -55,18 +57,18 @@ Subsequent tests further validated this idea.
 
 Based on the above hypothesis, we attempted to explain the various phenomena of this issue:
 
-### Why does the network thread freeze during chunk freezing?
+### Why Does Client Network Thread Freeze During Chunk Freezing?
 
 As hypothesized, the client has issues parsing some chunk packets, throwing exceptions in the network thread, preventing
 normal logic from running and ultimately causing the network thread to freeze.
 
-### Why is SYNC chunk sending less prone to chunk freezing than ASYNC?
+### Why Sync Chunk Sending Less Prone to Chunk Freezing than Async?
 
 With synchronous chunk sending, the sequence is relatively fixed, so the sending rate should be stable. However, with
 asynchronous sending, a large number of chunks (or two chunk packets almost simultaneously) might be sent at once,
 causing a very high instant chunk sending rate, meeting the conditions for triggering chunk freezing.
 
-### Why does enabling the sub-chunk sending system slightly increase the likelihood of chunk freezing?
+### Why Does Enabling the SubChunk Sending System Slightly Increase the Likelihood of Chunk Freezing?
 
 The sub-chunk sending system sends a large number of sub-chunk packets (mass packet sending).
 
