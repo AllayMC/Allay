@@ -22,9 +22,9 @@ The register order of blocks and items in vanilla:
 
 1. Register all `pure item` and `actual block item`.
 2. Register all blocks, and try to register `hard block item` with the same id of block for each block, and there are two cases:
-   1. There is no `actual block item` that already registered with the same id, which means that this block only have one correspond block item.
+    - There is no `actual block item` that already registered with the same id, which means that this block only have one correspond block item.
       We can say that the `hard block item` is equal to the `actual block item` of this block.
-   2. There is an `actual block item` that already registered with the same id, which means that the `hard block item` and `actual block item`
+    - There is an `actual block item` that already registered with the same id, which means that the `hard block item` and `actual block item`
       of this block is different. **However, the `hard block item` will still be registered, and to solve the conflict, a perfix `item.` will
       be added to the path of the id**.
 
