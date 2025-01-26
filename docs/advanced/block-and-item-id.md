@@ -46,7 +46,7 @@ Normally, for a block, you can find an item of the same block ID. But there are 
 ## How Allay Handles Block and Item Id
 
 To unify naming and reduce confusion. In Allay, we ensure that the `hard block item`'s id of the registered block is the same as the block's id
-without an id conflict. If you want to register extra block item for your block, please make sure that it has the same id of the blcok you want
+without an id conflict. If you want to register extra block item for your block, please make sure that it has the same id of the block you want
 to register extra block item for. Later when registering the block, Allay will consider the item you registered as the `actual block item`, and
 register the `hard block item` with a `item.` prefix.
 
