@@ -40,7 +40,7 @@ snakeyaml = { group = "org.yaml", name = "snakeyaml", version = "2.3" }
 # Util library
 commonslang3 = { group = "org.apache.commons", name = "commons-lang3", version = "3.17.0" }
 annotations = { group = "org.jetbrains", name = "annotations", version = "26.0.2" }
-semver4j = { group = "org.semver4j", name = "semver4j", version = "5.5.0" }
+semver4j = { group = "org.semver4j", name = "semver4j", version = "5.6.0" }
 # Concurrency
 disruptor = { group = "com.lmax", name = "disruptor", version = "4.0.0" }
 # IO
