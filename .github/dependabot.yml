@@ -4,6 +4,9 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      gradle-dependencies:
+        patterns: [ "*" ]
 
   - package-ecosystem: "github-actions"
     directory: "/"
