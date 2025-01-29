@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufOutputStream;
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import lombok.extern.slf4j.Slf4j;
-import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.server.datastruct.bitarray.BitArray;
 import org.allaymc.server.datastruct.bitarray.BitArrayVersion;
 import org.cloudburstmc.nbt.NbtUtils;
@@ -22,6 +21,7 @@ import java.util.List;
 @Slf4j
 public final class Palette<V> {
 
+    private static final int SECTION_SIZE = 16 * 16 * 16;
     private static final byte COPY_LAST_FLAG_HEADER = (byte) (0x7F << 1) | 1;
     private static final BitArrayVersion INITIAL_VERSION = BitArrayVersion.V0;
 
@@ -37,7 +37,7 @@ public final class Palette<V> {
     }
 
     public Palette(V first, List<V> palette, BitArrayVersion version) {
-        this.bitArray = version.createArray(Chunk.SECTION_SIZE);
+        this.bitArray = version.createArray(SECTION_SIZE);
         this.palette = palette;
         // Please note that the first entry shouldn't be changed
         this.palette.add(first);
@@ -114,7 +114,7 @@ public final class Palette<V> {
         this.palette.clear();
 
         if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(Chunk.SECTION_SIZE, null);
+            this.bitArray = version.createArray(SECTION_SIZE, null);
             this.palette.add(deserializer.deserialize(byteBuf));
             return;
         }
@@ -170,7 +170,7 @@ public final class Palette<V> {
         var paletteSize = 1;
 
         if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(Chunk.SECTION_SIZE, null);
+            this.bitArray = version.createArray(SECTION_SIZE, null);
             this.palette.add(deserializer.deserialize(byteBuf.readIntLE()));
             return;
         }
@@ -231,10 +231,10 @@ public final class Palette<V> {
         var newPalette = new ReferenceArrayList<V>();
         // Make sure the first entry won't be changed
         newPalette.add(palette.getFirst());
-        var indexMapping = new int[Chunk.SECTION_SIZE];
+        var indexMapping = new int[SECTION_SIZE];
         var paletteIndex = 1;
 
-        for (int index = 0; index < Chunk.SECTION_SIZE; index++) {
+        for (int index = 0; index < SECTION_SIZE; index++) {
             var entry = get(index);
             var newIndex = newPalette.indexOf(entry);
             if (newIndex == -1) {
@@ -244,8 +244,8 @@ public final class Palette<V> {
             indexMapping[index] = newIndex;
         }
 
-        var newbitArray = BitArrayVersion.getMinimalVersion(paletteIndex).createArray(Chunk.SECTION_SIZE);
-        for (int index = 0; index < Chunk.SECTION_SIZE; index++) {
+        var newbitArray = BitArrayVersion.getMinimalVersion(paletteIndex).createArray(SECTION_SIZE);
+        for (int index = 0; index < SECTION_SIZE; index++) {
             newbitArray.set(index, indexMapping[index]);
         }
 
@@ -254,16 +254,16 @@ public final class Palette<V> {
     }
 
     private void readWords(ByteBuf byteBuf, BitArrayVersion version) {
-        var wordCount = version.getWordsForSize(Chunk.SECTION_SIZE);
+        var wordCount = version.getWordsForSize(SECTION_SIZE);
         var words = new int[wordCount];
         Arrays.setAll(words, i -> byteBuf.readIntLE());
 
-        this.bitArray = version.createArray(Chunk.SECTION_SIZE, words);
+        this.bitArray = version.createArray(SECTION_SIZE, words);
     }
 
     private void onResize(BitArrayVersion version) {
-        var newBitArray = version.createArray(Chunk.SECTION_SIZE);
-        for (int i = 0; i < Chunk.SECTION_SIZE; i++) {
+        var newBitArray = version.createArray(SECTION_SIZE);
+        for (int i = 0; i < SECTION_SIZE; i++) {
             newBitArray.set(i, this.bitArray.get(i));
         }
 

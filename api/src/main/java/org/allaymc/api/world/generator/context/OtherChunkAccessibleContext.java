@@ -3,7 +3,6 @@ package org.allaymc.api.world.generator.context;
 import lombok.Getter;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
-import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.ChunkSource;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 
@@ -39,10 +38,6 @@ public abstract class OtherChunkAccessibleContext extends Context {
         if (chunk == null) return;
 
         chunk.setBlockState(x & 15, y, z & 15, blockState, layer);
-        if (chunk.isLoaded()) {
-            // The chunk has been loaded into the world, so we need to send a block update packet
-            chunk.addChunkPacket(Dimension.createUpdateBlockPacket(blockState, x, y, z, layer));
-        }
     }
 
     public BlockState getBlockState(int x, int y, int z) {

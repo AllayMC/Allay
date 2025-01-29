@@ -24,12 +24,6 @@ import java.util.stream.Collectors;
  */
 @ThreadSafe
 public interface Chunk extends UnsafeChunk {
-    /**
-     * Check if the chunk is loaded.
-     *
-     * @return {@code true} if the chunk is loaded, {@code false} otherwise
-     */
-    boolean isLoaded();
 
     /**
      * Get the chunk loaders that load this chunk

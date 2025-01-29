@@ -33,10 +33,14 @@ Unless otherwise specified, any version comparison below is the comparison of se
   will call this method in all dimensions now.
 - (API) Added `ItemBaseComponent#getLockMode` and `ItemBaseComponent#setLockMode` methods to get and set the lock mode of an item.
 - Implemented reeds (also called sugar cane) and cactus.
+- Implemented `UpdateSubChunkBlocksPacket` related logic, which will make client load large range block updates much quicker (e.g.
+  using `/fill` command to fill a large area).
 
 ### Changed
 
 - (API) Renamed `FullContainerTypeBuilder` to `Builder`.
+- (API) Moved method `Chunk#isLoaded` to `UnsafeChunk#isLoaded`.
+- (API) Made method `Dimension#createUpdateBlockPacket` private, consider using `Dimension#sendBlockUpdateTo` method instead.
 - World will be skipped if failed to be load.
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 - Server won't crash if failed to load the descriptor of a plugin now. An error message will be print to the console instead.
@@ -56,6 +60,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 ### Removed
 
 - Removed `Extension#afterServerStarted` method.
+- Removed `UnsafeChunk#SECTION_SIZE`.
 
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 

@@ -69,7 +69,7 @@ public interface Dimension {
      *
      * @return the created block update packet.
      */
-    static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
+    private static UpdateBlockPacket createUpdateBlockPacket(BlockState newBlockState, int x, int y, int z, int layer) {
         var updateBlockPacket = new UpdateBlockPacket();
         updateBlockPacket.setBlockPosition(org.cloudburstmc.math.vector.Vector3i.from(x, y, z));
         updateBlockPacket.setDefinition(newBlockState.toNetworkBlockDefinitionRuntime());
@@ -603,13 +603,18 @@ public interface Dimension {
         if (oldBlockState == newBlockState) return;
 
         chunk.setBlockState(xIndex, y, zIndex, newBlockState, layer);
-        chunk.sendChunkPacket(createUpdateBlockPacket(newBlockState, x, y, z, layer));
     }
 
+    /**
+     * @see #getCollidingBlockStates(AABBfc, int, boolean)
+     */
     default BlockState[][][] getCollidingBlockStates(AABBfc aabb) {
         return getCollidingBlockStates(aabb, 0);
     }
 
+    /**
+     * @see #getCollidingBlockStates(AABBfc, int, boolean)
+     */
     default BlockState[][][] getCollidingBlockStates(AABBfc aabb, int layer) {
         return getCollidingBlockStates(aabb, layer, false);
     }

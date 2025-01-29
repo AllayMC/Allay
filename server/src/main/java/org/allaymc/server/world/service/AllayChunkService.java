@@ -82,7 +82,6 @@ public final class AllayChunkService implements ChunkService {
     }
 
     public void tick(long currentTick) {
-        sendChunkPackets();
         tickChunkLoaders();
         removeUnusedChunks();
         tickChunks(currentTick);
@@ -117,7 +116,7 @@ public final class AllayChunkService implements ChunkService {
         return shouldTick;
     }
 
-    private void sendChunkPackets() {
+    public void sendChunkPackets() {
         loadedChunks.values().forEach(Chunk::sendChunkPackets);
     }
 
@@ -197,7 +196,10 @@ public final class AllayChunkService implements ChunkService {
     @Override
     public CompletableFuture<Chunk> getOrLoadChunk(int x, int z) {
         var chunk = getChunk(x, z);
-        if (chunk != null) return CompletableFuture.completedFuture(chunk);
+        if (chunk != null) {
+            return CompletableFuture.completedFuture(chunk);
+        }
+
         return loadChunk(x, z);
     }
 
@@ -226,12 +228,19 @@ public final class AllayChunkService implements ChunkService {
     @Override
     public CompletableFuture<Chunk> loadChunk(int x, int z) {
         var hashXZ = HashUtils.hashXZ(x, z);
-        if (isChunkLoaded(hashXZ)) throw new IllegalStateException("Chunk is already loaded");
+        if (isChunkLoaded(hashXZ)) {
+            // This is possible when multi threads try to load the same chunk
+            // and the chunk loading speed is very quick that the chunk is loaded
+            // when some threads even haven't check if the chunk is loaded
+            return CompletableFuture.completedFuture(getChunk(hashXZ));
+        }
 
         var future = new CompletableFuture<Chunk>();
         // Only one thread can successfully put future into loadingChunks, other threads will get the successfully written thread's future
         var presentValue = loadingChunks.putIfAbsent(hashXZ, future);
-        if (presentValue != null) return presentValue;
+        if (presentValue != null) {
+            return presentValue;
+        }
 
         new ChunkPreLoadEvent(dimension, x, z).call();
 
@@ -507,8 +516,9 @@ public final class AllayChunkService implements ChunkService {
                 var chunkHash = chunkSendingQueue.dequeueLong();
                 var chunk = getChunk(chunkHash);
                 if (chunk == null) {
-                    if (isChunkUnloaded(chunkHash))
+                    if (isChunkUnloaded(chunkHash)) {
                         loadChunk(HashUtils.getXFromHashXZ(chunkHash), HashUtils.getZFromHashXZ(chunkHash));
+                    }
                     chunkSendingQueue.enqueue(chunkHash);
                     continue;
                 }
