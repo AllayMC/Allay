@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.util.internal.PlatformDependent;
-import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.dto.BlockStateWithPos;
@@ -61,9 +60,6 @@ public class AllayChunk implements Chunk {
     // The provided boolean value indicated whether the chunk is set successfully
     @Setter
     protected Consumer<Boolean> chunkSetCallback;
-    // Whether the chunk has been loaded into the world
-    @Getter
-    protected boolean loaded = false;
     protected int autoSaveTimer = 0;
     protected int updateLCG = ThreadLocalRandom.current().nextInt();
 
@@ -244,11 +240,11 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
+    public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send) {
         checkXYZ(x, y, z);
         var stamp = blockLock.writeLock();
         try {
-            unsafeChunk.setBlockState(x, y, z, blockState, layer);
+            unsafeChunk.setBlockState(x, y, z, blockState, layer, send);
         } finally {
             blockLock.unlockWrite(stamp);
         }
@@ -402,6 +398,11 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
+    public boolean isLoaded() {
+        return unsafeChunk.isLoaded();
+    }
+
+    @Override
     public ChunkState getState() {
         return unsafeChunk.getState();
     }
@@ -505,7 +506,6 @@ public class AllayChunk implements Chunk {
             ((AllayLightService) dimension.getLightService()).onBlockChange(x + (unsafeChunk.x << 4), y, z + (unsafeChunk.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
         });
         ((AllayLightService) dimension.getLightService()).onChunkLoad(this);
-        loaded = true;
     }
 
     @Override
@@ -526,7 +526,29 @@ public class AllayChunk implements Chunk {
 
     @Override
     public void sendChunkPackets() {
-        if (chunkPacketQueue.isEmpty()) return;
+        if (chunkLoaders.isEmpty()) {
+            unsafeChunk.clearBlockChanges();
+            chunkPacketQueue.clear();
+            return;
+        }
+
+        // Send block updates
+        var pks = unsafeChunk.encodeAndClearBlockChanges();
+        // pks == null -> no block changes
+        if (pks != null) {
+            for (var pk : pks) {
+                if (pk == null) {
+                    continue;
+                }
+
+                sendChunkPacket(pk);
+            }
+        }
+
+        // Send other chunk packets
+        if (chunkPacketQueue.isEmpty()) {
+            return;
+        }
         ChunkPacketEntry entry;
         while ((entry = chunkPacketQueue.poll()) != null) {
             sendChunkPacket(entry.packet(), entry.chunkLoaderPredicate());

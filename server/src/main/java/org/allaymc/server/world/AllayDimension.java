@@ -65,6 +65,10 @@ public class AllayDimension implements Dimension {
     }
 
     public void tick(long currentTick) {
+        // There may be new chunk packets during sleeping, let's send them first
+        this.chunkService.sendChunkPackets();
+
+        // Ticking
         this.entityService.tick();
         this.chunkService.tick(currentTick);
         this.entityPhysicsService.tick();
@@ -72,6 +76,9 @@ public class AllayDimension implements Dimension {
         if (!Server.SETTINGS.worldSettings().calculateLightAsync()) {
             this.lightService.tick();
         }
+
+        // Send the new chunk packets again after most of the work is done
+        this.chunkService.sendChunkPackets();
     }
 
     public void shutdown() {
@@ -122,13 +129,10 @@ public class AllayDimension implements Dimension {
             blockState.getBehavior().onPlace(oldBlockStateWithPos, blockState, placementInfo);
             oldBlockState.getBehavior().onReplace(oldBlockStateWithPos, blockState, placementInfo);
         }
-        chunk.setBlockState(xIndex, y, zIndex, blockState, layer);
+        chunk.setBlockState(xIndex, y, zIndex, blockState, layer, send);
 
         if (update) {
             updateAround(x, y, z);
-        }
-        if (send) {
-            chunk.sendChunkPacket(Dimension.createUpdateBlockPacket(blockState, x, y, z, layer));
         }
 
         if (callBlockBehavior) {

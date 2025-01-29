@@ -28,7 +28,6 @@ import java.util.Map;
  */
 @NotThreadSafe
 public interface UnsafeChunk {
-    int SECTION_SIZE = 16 * 16 * 16;
 
     /**
      * Calculate the index of the pos in the chunk.
@@ -46,6 +45,13 @@ public interface UnsafeChunk {
         // The chunk order is x-z-y in bedrock edition, however the chunk order in java version is y-z-x
         return (x << 8) + (z << 4) + y;
     }
+
+    /**
+     * Check if the chunk is loaded.
+     *
+     * @return {@code true} if the chunk is loaded, {@code false} otherwise
+     */
+    boolean isLoaded();
 
     /**
      * Get the state of the chunk.
@@ -173,8 +179,18 @@ public interface UnsafeChunk {
      * @param blockState the block state to set.
      * @param layer      the layer of the block.
      */
-    void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer);
+    void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer, boolean send);
 
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int)
+     */
+    default void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState, int layer) {
+        setBlockState(x, y, z, blockState, layer, true);
+    }
+
+    /**
+     * @see #setBlockState(int, int, int, BlockState, int)
+     */
     default void setBlockState(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0);
     }

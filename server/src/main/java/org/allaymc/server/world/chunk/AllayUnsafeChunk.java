@@ -1,6 +1,7 @@
 package org.allaymc.server.world.chunk;
 
 import com.google.common.base.Preconditions;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.block.type.BlockState;
@@ -19,7 +20,10 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.world.HeightMap;
+import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.protocol.bedrock.data.BlockChangeEntry;
+import org.cloudburstmc.protocol.bedrock.packet.UpdateSubChunkBlocksPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -34,6 +38,13 @@ import java.util.stream.Collectors;
  * @author Cool_Loong | daoge_cmd
  */
 public class AllayUnsafeChunk implements UnsafeChunk {
+
+    // Constants used in UpdateSubChunkBlocksPacket
+    private static final int BLOCK_UPDATE_NEIGHBORS = 0b0001;
+    private static final int BLOCK_UPDATE_NETWORK = 0b0010;
+    private static final int BLOCK_UPDATE_NO_GRAPHICS = 0b0100;
+    private static final int BLOCK_UPDATE_PRIORITY = 0b1000;
+
     private static final AtomicReferenceFieldUpdater<AllayUnsafeChunk, ChunkState> STATE_FIELD = AtomicReferenceFieldUpdater.newUpdater(AllayUnsafeChunk.class, ChunkState.class, "state");
 
     @Getter
@@ -47,8 +58,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final Long2ObjectNonBlockingMap<Entity> entities;
     protected final Int2ObjectNonBlockingMap<BlockEntity> blockEntities;
     protected final Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
+    protected final Int2ObjectOpenHashMap<BlockChangeEntry> blockChangeEntries;
+    protected final Int2ObjectOpenHashMap<BlockChangeEntry> extraBlockChangeEntries;
     @Getter
     protected volatile ChunkState state;
+    @Getter
+    protected volatile boolean loaded;
 
     protected List<NbtMap> entityNbtList;
     protected List<NbtMap> blockEntityNbtList;
@@ -79,6 +94,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.sections = sections;
         this.heightMap = heightMap;
         this.scheduledUpdates = scheduledUpdates;
+        this.blockChangeEntries = new Int2ObjectOpenHashMap<>();
+        this.extraBlockChangeEntries = new Int2ObjectOpenHashMap<>();
         this.entities = new Long2ObjectNonBlockingMap<>();
         this.blockEntities = new Int2ObjectNonBlockingMap<>();
         this.state = state;
@@ -123,6 +140,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             }
             entityNbtList = null;
         }
+
+        loaded = true;
     }
 
     private void checkXYZ(int x, int y, int z) {
@@ -204,32 +223,89 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public void setBlockState(int x, int y, int z, BlockState blockState, int layer) {
+    public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send) {
         checkXYZ(x, y, z);
-        var sectionY = y >> 4;
-        this.getSection(sectionY).setBlockState(x, y & 0xf, z, blockState, layer);
-        if (layer != 0) return;
+        var section = this.getSection(y >> 4);
+        section.setBlockState(x, y & 0xf, z, blockState, layer);
 
-        // Update height map
-        var index = HeightMap.computeIndex(x, z);
-        var currentHeight = getHeightUnsafe(index);
-        if (blockState.getBlockType() == BlockTypes.AIR && currentHeight == y) {
-            // If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
-            int newHeight = dimensionInfo.minHeight();
-            for (int i = y - 1; i >= dimensionInfo.minHeight(); i--) {
-                if (getBlockState(x, i, z, 0).getBlockType() != BlockTypes.AIR) {
-                    newHeight = i;
-                    break;
+        if (layer == 0) {
+            // Update height map
+            var index = HeightMap.computeIndex(x, z);
+            var currentHeight = getHeightUnsafe(index);
+            if (blockState.getBlockType() == BlockTypes.AIR && currentHeight == y) {
+                // If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
+                int newHeight = dimensionInfo.minHeight();
+                for (int i = y - 1; i >= dimensionInfo.minHeight(); i--) {
+                    if (getBlockState(x, i, z, 0).getBlockType() != BlockTypes.AIR) {
+                        newHeight = i;
+                        break;
+                    }
                 }
+                setHeightUnsafe(index, newHeight);
+            } else if (currentHeight < y) {
+                setHeightUnsafe(index, y);
             }
-            setHeightUnsafe(index, newHeight);
-        } else if (currentHeight < y) {
-            setHeightUnsafe(index, y);
         }
 
         if (blockChangeCallback != null) {
             blockChangeCallback.onBlockChange(x, y, z, blockState, layer);
         }
+
+        if (send && loaded) {
+            // updateFlags is a combination of flags that specify the way the block is updated client-side. It is a
+            // combination of the flags above, but typically sending only the BLOCK_UPDATE_NETWORK flag is sufficient.
+            var changeEntry = new BlockChangeEntry(
+                    Vector3i.from((this.x << 4) + x, y, (this.z << 4) + z), blockState.toNetworkBlockDefinitionRuntime(),
+                    BLOCK_UPDATE_NETWORK, -1, BlockChangeEntry.MessageType.NONE
+            );
+            var hash = HashUtils.hashChunkXYZ(x, y, z);
+            switch (layer) {
+                case 0 -> blockChangeEntries.put(hash, changeEntry);
+                case 1 -> extraBlockChangeEntries.put(hash, changeEntry);
+                default -> throw new IllegalArgumentException("Unsupported layer: " + layer);
+            }
+        }
+    }
+
+    public void clearBlockChanges() {
+        blockChangeEntries.clear();
+        extraBlockChangeEntries.clear();
+    }
+
+    public UpdateSubChunkBlocksPacket[] encodeAndClearBlockChanges() {
+        if (blockChangeEntries.isEmpty() && extraBlockChangeEntries.isEmpty()) {
+            return null;
+        }
+
+        var pks = new UpdateSubChunkBlocksPacket[sections.length];
+        encodeBlockChangesInLayer(pks, blockChangeEntries, false);
+        encodeBlockChangesInLayer(pks, extraBlockChangeEntries, true);
+        clearBlockChanges();
+
+        return pks;
+    }
+
+    protected void encodeBlockChangesInLayer(UpdateSubChunkBlocksPacket[] pks, Int2ObjectOpenHashMap<BlockChangeEntry> entries, boolean isExtraLayer) {
+        entries.forEach((encoded, entry) -> {
+            var y = HashUtils.getYFromHashChunkXYZ(encoded);
+            var sectionY = y >> 4;
+            var index = sectionY - dimensionInfo.minSectionY();
+            UpdateSubChunkBlocksPacket pk;
+
+            if ((pk = pks[index]) == null) {
+                pk = new UpdateSubChunkBlocksPacket();
+                pk.setChunkX(this.x << 4);
+                pk.setChunkY(sectionY << 4);
+                pk.setChunkZ(this.z << 4);
+                pks[index] = pk;
+            }
+
+            if (isExtraLayer) {
+                pk.getExtraBlocks().add(entry);
+            } else {
+                pk.getStandardBlocks().add(entry);
+            }
+        });
     }
 
     @Override
