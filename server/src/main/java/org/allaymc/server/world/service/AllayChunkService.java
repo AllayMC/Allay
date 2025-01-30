@@ -23,7 +23,6 @@ import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
-import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -94,7 +93,7 @@ public final class AllayChunkService implements ChunkService {
             }
 
             try {
-                ((AllayChunk) chunk).tick(currentTick, dimension, worldStorage);
+                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).tick(currentTick, dimension, worldStorage);
             } catch (Throwable t) {
                 log.error("Error while ticking chunk({}, {})!", chunk.getX(), chunk.getZ(), t);
             }
@@ -117,7 +116,7 @@ public final class AllayChunkService implements ChunkService {
     }
 
     public void sendChunkPackets() {
-        loadedChunks.values().forEach(Chunk::sendChunkPackets);
+        loadedChunks.values().forEach(chunk -> ((AllayUnsafeChunk) chunk.toUnsafeChunk()).sendChunkPackets());
     }
 
     private void tickChunkLoaders() {
@@ -259,14 +258,14 @@ public final class AllayChunkService implements ChunkService {
         }).thenAccept(preparedChunk -> {
             boolean success = true;
             try {
-                ((AllayChunk) preparedChunk).beforeSetChunk(dimension);
+                ((AllayUnsafeChunk) preparedChunk.toUnsafeChunk()).beforeSetChunk(dimension);
                 setChunk(x, z, preparedChunk);
             } catch (Throwable t) {
                 log.error("Error while setting chunk ({},{}) !", x, z, t);
                 success = false;
             } finally {
                 loadingChunks.remove(hashXZ);
-                ((AllayChunk) preparedChunk).afterSetChunk(dimension, success);
+                ((AllayUnsafeChunk) preparedChunk.toUnsafeChunk()).afterSetChunk(dimension, success);
                 if (success) {
                     future.complete(preparedChunk);
                     new ChunkLoadEvent(dimension, preparedChunk).call();
@@ -544,8 +543,8 @@ public final class AllayChunkService implements ChunkService {
                     var lcpStream = chunkReadyToSend.values().stream();
                     lcpStream.sorted(chunkDistanceComparator).forEachOrdered(chunk -> {
                         var lcp = useSubChunkSendingSystem ?
-                                ((AllayChunk) chunk).createSubChunkLevelChunkPacket() :
-                                ((AllayChunk) chunk).createFullLevelChunkPacketChunk();
+                                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).createSubChunkLevelChunkPacket() :
+                                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).createFullLevelChunkPacketChunk();
                         chunkLoader.sendPacket(lcp);
                         chunkLoader.onChunkInRangeSend(chunk);
                     });
@@ -580,7 +579,7 @@ public final class AllayChunkService implements ChunkService {
             private void tick() {
                 while (!chunkSendingQueue.isEmpty()) {
                     var chunk = chunkSendingQueue.poll();
-                    var lcp = ((AllayChunk) chunk).createFullLevelChunkPacketChunk();
+                    var lcp = ((AllayUnsafeChunk) chunk.toUnsafeChunk()).createFullLevelChunkPacketChunk();
                     chunkLoader.sendPacket(lcp);
                     chunkLoader.onChunkInRangeSend(chunk);
                 }

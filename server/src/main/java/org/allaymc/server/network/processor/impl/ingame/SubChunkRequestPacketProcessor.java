@@ -10,8 +10,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.server.network.processor.PacketProcessor;
-import org.allaymc.server.world.chunk.AllayChunk;
-import org.allaymc.server.world.chunk.ChunkSection;
+import org.allaymc.server.world.chunk.AllayChunkSection;
+import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.HeightMapDataType;
@@ -46,7 +46,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
             Vector3i offset,
             HeightMapDataType type,
             ByteBuf heightMapData,
-            ChunkSection subchunk,
+            AllayChunkSection subchunk,
             Collection<BlockEntity> subChunkBlockEntities
     ) {
         var subChunkData = new SubChunkData();
@@ -155,7 +155,7 @@ public class SubChunkRequestPacketProcessor extends PacketProcessor<SubChunkRequ
                 heightMapData = Unpooled.wrappedBuffer(hMap);
             }
 
-            var subChunk = ((AllayChunk) chunk).getSection(sectionY);
+            var subChunk = ((AllayUnsafeChunk) chunk.toUnsafeChunk()).getSection(sectionY);
             SubChunkRequestResult subChunkRequestResult;
             if (subChunk.isAirSection()) subChunkRequestResult = SubChunkRequestResult.SUCCESS_ALL_AIR;
             else subChunkRequestResult = SubChunkRequestResult.SUCCESS;

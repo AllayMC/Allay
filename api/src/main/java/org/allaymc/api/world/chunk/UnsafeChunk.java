@@ -1,28 +1,33 @@
 package org.allaymc.api.world.chunk;
 
-import com.google.common.base.Preconditions;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.entity.Entity;
+import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
- * The UnsafeChunk is located inside the {@link Chunk}, which is not thread-safe.
+ * Unsafe is similar to {@link Chunk} but is not thread-safe.
  * <p>
- * Compared to {@link Chunk}, unsafe chunk works more like a simple data container,
- * which means that it is very fast but is not thread-safe.
- * <p>
- * If you are sure that the instance won't be accessed by multiple threads,
- * you can operate on unsafe chunk directly. However, this may become very dangerous
- * if you do not have enough experience in multithreaded programming.
+ * Compared to {@link Chunk}, unsafe chunk is very fast but is not thread-safe.
+ * All the methods in this class should be considered as thread-unsafe, although
+ * some of them may be thread-safe depending on the implementation. If you are sure
+ * that the instance won't be accessed by multiple threads, you can operate on unsafe
+ * chunk directly. However, this may become very dangerous if you do not have enough
+ * experience in multithreaded programming.
  *
  * @author Cool_Loong | daoge_cmd
  */
@@ -30,28 +35,85 @@ import java.util.Map;
 public interface UnsafeChunk {
 
     /**
-     * Calculate the index of the pos in the chunk.
-     *
-     * @param x the x coordinate of the pos.
-     * @param y the y coordinate of the pos.
-     * @param z the z coordinate of the pos.
-     *
-     * @return the index of the pos in the chunk.
-     */
-    static int index(int x, int y, int z) {
-        Preconditions.checkArgument(x >= 0 && x <= 15);
-        Preconditions.checkArgument(y >= 0 && y <= 15);
-        Preconditions.checkArgument(z >= 0 && z <= 15);
-        // The chunk order is x-z-y in bedrock edition, however the chunk order in java version is y-z-x
-        return (x << 8) + (z << 4) + y;
-    }
-
-    /**
      * Check if the chunk is loaded.
      *
      * @return {@code true} if the chunk is loaded, {@code false} otherwise
      */
     boolean isLoaded();
+
+    /**
+     * Get the chunk loaders that load this chunk
+     *
+     * @return the chunk loaders
+     */
+    @UnmodifiableView
+    Set<ChunkLoader> getChunkLoaders();
+
+    /**
+     * Get the player chunk loaders that load this chunk
+     *
+     * @return the player chunk loaders
+     */
+    @UnmodifiableView
+    default Set<EntityPlayer> getPlayerChunkLoaders() {
+        return getChunkLoaders().stream()
+                .filter(EntityPlayer.class::isInstance)
+                .map(EntityPlayer.class::cast)
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Add a chunk loader to this chunk.
+     *
+     * @param chunkLoader the chunk loader to add
+     */
+    void addChunkLoader(ChunkLoader chunkLoader);
+
+    /**
+     * Remove a chunk loader from this chunk.
+     *
+     * @param chunkLoader the chunk loader to remove
+     */
+    void removeChunkLoader(ChunkLoader chunkLoader);
+
+    /**
+     * Get the number of chunk loaders that load this chunk.
+     *
+     * @return the number of chunk loaders
+     */
+    int getChunkLoaderCount();
+
+    /**
+     * Add a chunk packet to the chunk.
+     * <p>
+     * Chunk packet will be sent to all chunk loaders every tick.
+     *
+     * @param packet the packet to add
+     */
+    void addChunkPacket(BedrockPacket packet);
+
+    /**
+     * Add a chunk packet to the chunk.
+     * <p>
+     * Chunk packet will be sent to chunk loaders that match the predicate every tick.
+     *
+     * @param packet               the packet to add
+     * @param chunkLoaderPredicate the predicate to match chunk loaders
+     */
+    void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
+
+    /**
+     * Send packet to all chunk loaders.
+     */
+    void sendChunkPacket(BedrockPacket packet);
+
+    /**
+     * Send packet to chunk loaders that match the predicate.
+     *
+     * @param packet               the packet to send
+     * @param chunkLoaderPredicate the predicate to match chunk loaders
+     */
+    void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate);
 
     /**
      * Get the state of the chunk.
@@ -97,6 +159,24 @@ public interface UnsafeChunk {
      */
     @UnmodifiableView
     Map<Long, Entity> getEntities();
+
+    /**
+     * Spawn entities in this chunk to the specified player.
+     *
+     * @param player the player to spawn entities to
+     */
+    default void spawnEntitiesTo(EntityPlayer player) {
+        getEntities().values().forEach(player::spawnEntity);
+    }
+
+    /**
+     * Despawn entities in this chunk from the specified player.
+     *
+     * @param player the player to despawn entities from
+     */
+    default void despawnEntitiesFrom(EntityPlayer player) {
+        getEntities().values().forEach(player::despawnEntity);
+    }
 
     /**
      * Remove the block entity in this chunk.
@@ -255,6 +335,23 @@ public interface UnsafeChunk {
     BiomeType getBiome(@Range(from = 0, to = 15) int x, int y, @Range(from = 0, to = 15) int z);
 
     /**
+     * Get a specific chunk section in this chunk.
+     *
+     * @param sectionY the sectionY of the chunk section.
+     *
+     * @return the section, should never be {@code null}
+     */
+    ChunkSection getSection(int sectionY);
+
+    /**
+     * Get all chunk sections in this chunk.
+     *
+     * @return all chunk sections in this chunk.
+     */
+    @UnmodifiableView
+    List<ChunkSection> getSections();
+
+    /**
      * Get the hash of the chunk.
      *
      * @return the hash of the chunk.
@@ -262,4 +359,11 @@ public interface UnsafeChunk {
     default long computeChunkHash() {
         return HashUtils.hashXZ(getX(), getZ());
     }
+
+    /**
+     * Convert this unsafe chunk to a {@link Chunk} which is safe in multithreaded environment.
+     *
+     * @return the safe chunk.
+     */
+    Chunk toSafeChunk();
 }

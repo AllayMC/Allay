@@ -21,7 +21,6 @@ import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.server.AllayServer;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
-import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
 import java.util.Collections;
@@ -130,7 +129,7 @@ public class AllayWorldGenerator implements WorldGenerator {
                 statusPopulatedToFinished(chunk);
                 var chunkHash = HashUtils.hashXZ(chunk.getX(), chunk.getZ());
                 // Remove recorded futures
-                ((AllayChunk) chunk).setChunkSetCallback(success -> {
+                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setChunkSetCallback(success -> {
                     // The stored futures should always being removed
                     chunkNoiseFutures.remove(chunkHash);
                     chunkFutures.remove(chunkHash);
@@ -234,7 +233,7 @@ public class AllayWorldGenerator implements WorldGenerator {
             }
         }
 
-        ((AllayChunk) chunk).setState(ChunkState.NOISED);
+        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(ChunkState.NOISED);
         return chunk;
     }
 
@@ -251,7 +250,7 @@ public class AllayWorldGenerator implements WorldGenerator {
             }
         }
 
-        ((AllayChunk) chunk).setState(ChunkState.POPULATED);
+        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(ChunkState.POPULATED);
     }
 
     private void statusPopulatedToFinished(Chunk chunk) {
@@ -267,8 +266,8 @@ public class AllayWorldGenerator implements WorldGenerator {
             }
         }
 
-        ((AllayChunk) chunk).setState(ChunkState.ENTITY_SPAWNED);
-        ((AllayChunk) chunk).setState(ChunkState.FINISHED);
+        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(ChunkState.ENTITY_SPAWNED);
+        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(ChunkState.FINISHED);
     }
 
     protected static final class AllayWorldGeneratorBuilder implements WorldGenerator.WorldGeneratorBuilder {

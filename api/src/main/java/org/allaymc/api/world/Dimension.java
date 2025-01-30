@@ -23,6 +23,7 @@ import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
+import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.service.*;
 import org.apache.commons.lang3.function.TriFunction;
 import org.cloudburstmc.protocol.bedrock.data.LevelEventType;
@@ -484,42 +485,39 @@ public interface Dimension {
 
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
+        var startY = y >> 4;
+        var endY = (y + sizeY - 1) >> 4;
         var startZ = z >> 4;
         var endZ = (z + sizeZ - 1) >> 4;
         for (int chunkX = startX; chunkX <= endX; chunkX++) {
             var cX = chunkX << 4;
             var localStartX = Math.max(x - cX, 0);
             var localEndX = Math.min(x + sizeX - cX, 16);
+
             for (int chunkZ = startZ; chunkZ <= endZ; chunkZ++) {
                 var cZ = chunkZ << 4;
                 var localStartZ = Math.max(z - cZ, 0);
                 var localEndZ = Math.min(z + sizeZ - cZ, 16);
 
-                var chunk = getChunkService().getChunk(chunkX, chunkZ);
-                if (chunk != null) {
-                    chunk.batchProcess(c -> {
+                var chunk = getChunkService().getOrLoadChunkSync(chunkX, chunkZ);
+                for (int sectionY = startY; sectionY <= endY; sectionY++) {
+                    var cY = sectionY << 4;
+                    var localStartY = Math.max(y - cY, 0);
+                    var localEndY = Math.min(y + sizeY - cY, 16);
+
+                    chunk.applyOperationInSection(sectionY, section -> {
                         for (int localX = localStartX; localX < localEndX; localX++) {
-                            for (int globalY = y; globalY < y + sizeY; globalY++) {
+                            for (int localY = localStartY; localY < localEndY; localY++) {
                                 for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
                                     var globalX = cX + localX;
+                                    var globalY = cY + localY;
                                     var globalZ = cZ + localZ;
-                                    var blockState = c.getBlockState(localX, globalY, localZ, layer);
+                                    var blockState = section.getBlockState(localX, localY, localZ, layer);
                                     blockStateConsumer.apply(globalX, globalY, globalZ, blockState);
                                 }
                             }
                         }
-                    });
-                } else {
-                    var air = AIR.getDefaultState();
-                    for (int localX = localStartX; localX < localEndX; localX++) {
-                        for (int globalY = y; globalY < y + sizeY; globalY++) {
-                            for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
-                                var globalX = cX + localX;
-                                var globalZ = cZ + localZ;
-                                blockStateConsumer.apply(globalX, globalY, globalZ, air);
-                            }
-                        }
-                    }
+                    }, OperationType.READ, OperationType.NONE);
                 }
             }
         }
@@ -535,7 +533,8 @@ public interface Dimension {
      * @param sizeY              the size of the region in the y-axis.
      * @param sizeZ              the size of the region in the z-axis.
      * @param layer              the layer which the block will be set
-     * @param blockStateSupplier the block state supplier. The supplier will be called with the global x, y, z coordinates of the pos, and it should return the block state to set.
+     * @param blockStateSupplier the block state supplier. The supplier will be called with the global x, y, z coordinates of the pos,
+     *                           and it should return the block state to set. If the supplier returns {@code null}, the block state will keep unchanged.
      */
     default void setBlockStates(int x, int y, int z, int sizeX, int sizeY, int sizeZ, int layer, TriFunction<Integer, Integer, Integer, BlockState> blockStateSupplier) {
         if (sizeX < 1 || sizeY < 1 || sizeZ < 1) {
@@ -544,39 +543,56 @@ public interface Dimension {
 
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
+        var startY = y >> 4;
+        var endY = (y + sizeY - 1) >> 4;
         var startZ = z >> 4;
         var endZ = (z + sizeZ - 1) >> 4;
         for (int chunkX = startX; chunkX <= endX; chunkX++) {
             var cX = chunkX << 4;
             var localStartX = Math.max(x - cX, 0);
             var localEndX = Math.min(x + sizeX - cX, 16);
+
             for (int chunkZ = startZ; chunkZ <= endZ; chunkZ++) {
                 var cZ = chunkZ << 4;
                 var localStartZ = Math.max(z - cZ, 0);
                 var localEndZ = Math.min(z + sizeZ - cZ, 16);
 
-                var chunk = getChunkService().getChunk(chunkX, chunkZ);
-                if (chunk != null) {
-                    chunk.batchProcess(c -> {
+                var chunk = getChunkService().getOrLoadChunkSync(chunkX, chunkZ);
+                for (int sectionY = startY; sectionY <= endY; sectionY++) {
+                    var cY = sectionY << 4;
+                    var localStartY = Math.max(y - cY, 0);
+                    var localEndY = Math.min(y + sizeY - cY, 16);
+
+                    chunk.applyOperationInSection(sectionY, section -> {
                         for (int localX = localStartX; localX < localEndX; localX++) {
-                            for (int globalY = y; globalY < y + sizeY; globalY++) {
+                            for (int localY = localStartY; localY < localEndY; localY++) {
                                 for (int localZ = localStartZ; localZ < localEndZ; localZ++) {
                                     var globalX = cX + localX;
+                                    var globalY = cY + localY;
                                     var globalZ = cZ + localZ;
-                                    c.setBlockState(localX, globalY, localZ, blockStateSupplier.apply(globalX, globalY, globalZ), layer);
+                                    var blockState = blockStateSupplier.apply(globalX, globalY, globalZ);
+                                    if (blockState != null) {
+                                        section.setBlockState(localX, localY, localZ, blockState, layer);
+                                    }
                                 }
                             }
                         }
-                    });
+                    }, OperationType.WRITE, OperationType.NONE);
                 }
             }
         }
     }
 
+    /**
+     * @see #updateBlockProperty(BlockPropertyType, Object, int, int, int, int)
+     */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, int x, int y, int z) {
         updateBlockProperty(propertyType, value, x, y, z, 0);
     }
 
+    /**
+     * @see #updateBlockProperty(BlockPropertyType, Object, int, int, int, int)
+     */
     default <DATATYPE> void updateBlockProperty(BlockPropertyType<DATATYPE> propertyType, DATATYPE value, Vector3ic pos) {
         updateBlockProperty(propertyType, value, pos.x(), pos.y(), pos.z(), 0);
     }

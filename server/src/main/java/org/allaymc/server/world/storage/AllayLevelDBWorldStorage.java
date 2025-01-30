@@ -19,7 +19,7 @@ import org.allaymc.api.world.biome.BiomeId;
 import org.allaymc.api.world.biome.BiomeType;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
-import org.allaymc.api.world.chunk.UnsafeChunk;
+import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
@@ -29,8 +29,8 @@ import org.allaymc.server.datastruct.palette.PaletteUtils;
 import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.HeightMap;
 import org.allaymc.server.world.chunk.AllayChunkBuilder;
+import org.allaymc.server.world.chunk.AllayChunkSection;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import org.allaymc.server.world.chunk.ChunkSection;
 import org.allaymc.server.world.chunk.ScheduledUpdateInfo;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.allaymc.updater.block.BlockStateUpdaters;
@@ -190,12 +190,13 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                             .writeByte(VanillaChunkState.DONE.ordinal())
                             .array()
             );
-            chunk.batchProcess(c -> {
-                serializeSections(writeBatch, (AllayUnsafeChunk) c);
-                serializeHeightAndBiome(writeBatch, (AllayUnsafeChunk) c);
-                serializeEntitiesAndBlockEntities(writeBatch, (AllayUnsafeChunk) c);
-                serializeScheduledUpdates(writeBatch, (AllayUnsafeChunk) c);
-            });
+            chunk.applyOperation(c -> {
+                var allayUnsafeChunk = (AllayUnsafeChunk) c;
+                serializeSections(writeBatch, allayUnsafeChunk);
+                serializeHeightAndBiome(writeBatch, allayUnsafeChunk);
+                serializeEntitiesAndBlockEntities(writeBatch, allayUnsafeChunk);
+                serializeScheduledUpdates(writeBatch, allayUnsafeChunk);
+            }, OperationType.READ, OperationType.READ, OperationType.READ);
             this.db.write(writeBatch);
         } catch (IOException e) {
             throw new WorldStorageException(e);
@@ -354,13 +355,13 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static void serializeSections(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
         for (int ySection = chunk.getDimensionInfo().minSectionY(); ySection <= chunk.getDimensionInfo().maxSectionY(); ySection++) {
-            ChunkSection section = chunk.getSection(ySection);
+            AllayChunkSection section = chunk.getSection(ySection);
             ByteBuf buffer = ByteBufAllocator.DEFAULT.ioBuffer();
             try {
-                buffer.writeByte(ChunkSection.CURRENT_CHUNK_SECTION_VERSION);
-                buffer.writeByte(ChunkSection.LAYER_COUNT);
+                buffer.writeByte(AllayChunkSection.CURRENT_CHUNK_SECTION_VERSION);
+                buffer.writeByte(AllayChunkSection.LAYER_COUNT);
                 buffer.writeByte(ySection);
-                for (int i = 0; i < ChunkSection.LAYER_COUNT; i++) {
+                for (int i = 0; i < AllayChunkSection.LAYER_COUNT; i++) {
                     section.blockLayers()[i].writeToStoragePersistent(buffer, BlockState::getBlockStateTag);
                 }
                 writeBatch.put(LevelDBKey.CHUNK_SECTION_PREFIX.getKey(chunk.getX(), chunk.getZ(), ySection, chunk.getDimensionInfo()), Utils.convertByteBuf2Array(buffer));
@@ -372,7 +373,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
     private static void deserializeSections(DB db, AllayChunkBuilder builder) {
         DimensionInfo dimensionInfo = builder.getDimensionInfo();
-        ChunkSection[] sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
+        AllayChunkSection[] sections = new AllayChunkSection[dimensionInfo.chunkSectionCount()];
         var minSectionY = dimensionInfo.minSectionY();
         for (int ySection = minSectionY; ySection <= dimensionInfo.maxSectionY(); ySection++) {
             byte[] sectionData = db.get(LevelDBKey.CHUNK_SECTION_PREFIX.getKey(builder.getChunkX(), builder.getChunkZ(), ySection, dimensionInfo));
@@ -382,7 +383,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
             var byteBuf = Unpooled.wrappedBuffer(sectionData);
             byte subChunkVersion = byteBuf.readByte();
-            int layers = ChunkSection.LAYER_COUNT;
+            int layers = AllayChunkSection.LAYER_COUNT;
             switch (subChunkVersion) {
                 case 9, 8:
                     // Layers
@@ -392,19 +393,19 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                         byteBuf.readByte();
                     }
                 case 1:
-                    ChunkSection section;
-                    if (layers <= ChunkSection.LAYER_COUNT) {
+                    AllayChunkSection section;
+                    if (layers <= AllayChunkSection.LAYER_COUNT) {
                         // This is the normal situation where the chunk section is loaded correctly,
                         // and we use the single-arg constructor of ChunkSection directly to avoid
                         // using Arrays.fill(), which will be slower
-                        section = new ChunkSection((byte) ySection);
+                        section = new AllayChunkSection((byte) ySection);
                     } else {
                         // Currently only two layers are used in minecraft, so that might mean this chunk is corrupted
                         // However we can still load it c:
                         log.warn("Loading chunk section ({}, {}, {}) with {} layers, which might mean that this chunk is corrupted!", builder.getChunkX(), ySection, builder.getChunkZ(), layers);
                         @SuppressWarnings("rawtypes") Palette[] palettes = new Palette[layers];
                         Arrays.fill(palettes, new Palette<>(BlockTypes.AIR.getDefaultState()));
-                        section = new ChunkSection((byte) ySection, palettes);
+                        section = new AllayChunkSection((byte) ySection, palettes);
                     }
                     for (int layer = 0; layer < layers; layer++) {
                         section.blockLayers()[layer].readFromStoragePersistent(byteBuf, AllayLevelDBWorldStorage::fastBlockStateDeserializer);
@@ -452,10 +453,10 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         return BlockTypes.UNKNOWN.getDefaultState();
     }
 
-    private static ChunkSection[] fillNullSections(ChunkSection[] sections, DimensionInfo dimensionInfo) {
+    private static AllayChunkSection[] fillNullSections(AllayChunkSection[] sections, DimensionInfo dimensionInfo) {
         for (int i = 0; i < sections.length; i++) {
             if (sections[i] == null) {
-                sections[i] = new ChunkSection((byte) (i + dimensionInfo.minSectionY()));
+                sections[i] = new AllayChunkSection((byte) (i + dimensionInfo.minSectionY()));
             }
         }
         return sections;
@@ -476,7 +477,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
             // Serialize biome
             Palette<BiomeType> lastPalette = null;
             for (int y = chunk.getDimensionInfo().minSectionY(); y <= chunk.getDimensionInfo().maxSectionY(); y++) {
-                ChunkSection section = chunk.getSection(y);
+                AllayChunkSection section = chunk.getSection(y);
                 section.biomes().writeToStorageRuntime(heightAndBiomesBuffer, BiomeType::getId, lastPalette);
                 lastPalette = section.biomes();
             }
@@ -504,7 +505,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 Palette<BiomeType> lastPalette = null;
                 var minSectionY = builder.getDimensionInfo().minSectionY();
                 for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
-                    ChunkSection section = builder.getSections()[y - minSectionY];
+                    AllayChunkSection section = builder.getSections()[y - minSectionY];
                     if (section == null) continue;
                     section.biomes().readFromStorageRuntime(heightAndBiomesBuffer, AllayLevelDBWorldStorage::getBiomeByIdNonNull, lastPalette);
                     lastPalette = section.biomes();
@@ -527,13 +528,13 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
 
             var minSectionY = builder.getDimensionInfo().minSectionY();
             for (int y = minSectionY; y <= builder.getDimensionInfo().maxSectionY(); y++) {
-                ChunkSection section = builder.getSections()[y - minSectionY];
+                AllayChunkSection section = builder.getSections()[y - minSectionY];
                 if (section == null) continue;
                 final Palette<BiomeType> biomePalette = section.biomes();
                 for (int x = 0; x < 16; x++) {
                     for (int z = 0; z < 16; z++) {
                         for (int sy = 0; sy < 16; sy++) {
-                            biomePalette.set(UnsafeChunk.index(x, sy, z), getBiomeByIdNonNull(biomes[x + 16 * z]));
+                            biomePalette.set(HashUtils.hashChunkSectionXYZ(x, sy, z), getBiomeByIdNonNull(biomes[x + 16 * z]));
                         }
                     }
                 }
@@ -616,7 +617,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
     }
 
     private static void serializeScheduledUpdates(WriteBatch writeBatch, AllayUnsafeChunk chunk) {
-        var scheduledUpdates = chunk.getScheduledUpdatesUnsafe().values();
+        var scheduledUpdates = chunk.getScheduledUpdates().values();
         byte[] key = LevelDBKey.ALLAY_SCHEDULED_UPDATES.getKey(chunk.getX(), chunk.getZ(), chunk.getDimensionInfo());
         if (scheduledUpdates.isEmpty()) {
             writeBatch.delete(key);
