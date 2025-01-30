@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * @author daoge_cmd
  */
-class AllayChunkSectionNibbleArrayTest {
+class ChunkSectionNibbleArrayTest {
     @Test
     void testSetAndGet() {
         var array = new ChunkSectionNibbleArray(new byte[2048]);
