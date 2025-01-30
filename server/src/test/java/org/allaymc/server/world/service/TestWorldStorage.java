@@ -5,7 +5,6 @@ import org.allaymc.api.world.WorldData;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.storage.WorldStorage;
-import org.allaymc.server.world.chunk.AllayChunk;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
 import java.util.concurrent.CompletableFuture;
@@ -17,7 +16,7 @@ public class TestWorldStorage implements WorldStorage {
     @Override
     public CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         var chunk = AllayUnsafeChunk.builder().newChunk(chunkX, chunkZ, dimensionInfo).toSafeChunk();
-        ((AllayChunk) chunk).setState(ChunkState.FINISHED);
+        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(ChunkState.FINISHED);
         return CompletableFuture.completedFuture(chunk);
     }
 

@@ -1,74 +1,104 @@
 package org.allaymc.server.world.chunk;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Sets;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.ByteBufOutputStream;
+import io.netty.buffer.Unpooled;
+import io.netty.util.internal.PlatformDependent;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.allaymc.api.block.dto.BlockStateWithPos;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockTypes;
 import org.allaymc.api.blockentity.BlockEntity;
 import org.allaymc.api.blockentity.BlockEntityHelper;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.EntityHelper;
+import org.allaymc.api.eventbus.event.block.BlockRandomUpdateEvent;
+import org.allaymc.api.eventbus.event.block.BlockScheduleUpdateEvent;
+import org.allaymc.api.math.position.Position3i;
+import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.biome.BiomeType;
-import org.allaymc.api.world.chunk.Chunk;
-import org.allaymc.api.world.chunk.ChunkState;
-import org.allaymc.api.world.chunk.UnsafeChunk;
+import org.allaymc.api.world.chunk.*;
+import org.allaymc.api.world.gamerule.GameRule;
+import org.allaymc.api.world.storage.WorldStorage;
+import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
+import org.allaymc.server.blockentity.impl.BlockEntityImpl;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
+import org.allaymc.server.entity.component.EntityBaseComponentImpl;
+import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.world.HeightMap;
+import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
+import org.cloudburstmc.nbt.NbtUtils;
 import org.cloudburstmc.protocol.bedrock.data.BlockChangeEntry;
+import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
+import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateSubChunkBlocksPacket;
 import org.jetbrains.annotations.Range;
-import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * @author Cool_Loong | daoge_cmd
  */
+@Slf4j
 public class AllayUnsafeChunk implements UnsafeChunk {
 
-    // Constants used in UpdateSubChunkBlocksPacket
-    private static final int BLOCK_UPDATE_NEIGHBORS = 0b0001;
-    private static final int BLOCK_UPDATE_NETWORK = 0b0010;
-    private static final int BLOCK_UPDATE_NO_GRAPHICS = 0b0100;
-    private static final int BLOCK_UPDATE_PRIORITY = 0b1000;
+    protected static final int LCG_CONSTANT = 1013904223;
 
-    private static final AtomicReferenceFieldUpdater<AllayUnsafeChunk, ChunkState> STATE_FIELD = AtomicReferenceFieldUpdater.newUpdater(AllayUnsafeChunk.class, ChunkState.class, "state");
+    // Constants used in UpdateSubChunkBlocksPacket
+    protected static final int BLOCK_UPDATE_NEIGHBORS = 0b0001;
+    protected static final int BLOCK_UPDATE_NETWORK = 0b0010;
+    protected static final int BLOCK_UPDATE_NO_GRAPHICS = 0b0100;
+    protected static final int BLOCK_UPDATE_PRIORITY = 0b1000;
 
     @Getter
     protected final int x, z;
     @Getter
     protected final DimensionInfo dimensionInfo;
-    @Getter
-    protected final ChunkSection[] sections;
+    protected final AllayChunkSection[] sections;
     @Getter
     protected final HeightMap heightMap;
-    protected final Long2ObjectNonBlockingMap<Entity> entities;
-    protected final Int2ObjectNonBlockingMap<BlockEntity> blockEntities;
+    @Getter
     protected final Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
-    protected final Int2ObjectOpenHashMap<BlockChangeEntry> blockChangeEntries;
-    protected final Int2ObjectOpenHashMap<BlockChangeEntry> extraBlockChangeEntries;
     @Getter
+    @Setter
     protected volatile ChunkState state;
-    @Getter
-    protected volatile boolean loaded;
-
     protected List<NbtMap> entityNbtList;
     protected List<NbtMap> blockEntityNbtList;
+
+    protected final Int2ObjectOpenHashMap<BlockChangeEntry> blockChangeEntries;
+    protected final Int2ObjectOpenHashMap<BlockChangeEntry> extraBlockChangeEntries;
+    protected final Long2ObjectNonBlockingMap<Entity> entities;
+    protected final Int2ObjectNonBlockingMap<BlockEntity> blockEntities;
+    protected final Set<ChunkLoader> chunkLoaders;
+    protected final Queue<ChunkPacketEntry> chunkPacketQueue;
+    protected final AllayChunk safeChunk;
+
+    // The callback to be called when the chunk is loaded into the world
+    // The provided boolean value indicated whether the chunk is set successfully
+    @Setter
+    protected Consumer<Boolean> chunkSetCallback;
     @Setter
     protected BlockChangeCallback blockChangeCallback;
+    @Getter
+    protected volatile boolean loaded;
+    protected int autoSaveTimer = 0;
+    protected int updateLCG = ThreadLocalRandom.current().nextInt();
 
     /**
      * Create a new {@link AllayUnsafeChunk}.
@@ -84,7 +114,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
      */
     AllayUnsafeChunk(
             int x, int z, DimensionInfo dimensionInfo,
-            ChunkSection[] sections, HeightMap heightMap,
+            AllayChunkSection[] sections, HeightMap heightMap,
             Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates,
             ChunkState state, List<NbtMap> entityNbtList,
             List<NbtMap> blockEntityNbtList) {
@@ -94,13 +124,16 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.sections = sections;
         this.heightMap = heightMap;
         this.scheduledUpdates = scheduledUpdates;
+        this.state = state;
+        this.entityNbtList = entityNbtList;
+        this.blockEntityNbtList = blockEntityNbtList;
         this.blockChangeEntries = new Int2ObjectOpenHashMap<>();
         this.extraBlockChangeEntries = new Int2ObjectOpenHashMap<>();
         this.entities = new Long2ObjectNonBlockingMap<>();
         this.blockEntities = new Int2ObjectNonBlockingMap<>();
-        this.state = state;
-        this.entityNbtList = entityNbtList;
-        this.blockEntityNbtList = blockEntityNbtList;
+        this.chunkLoaders = Sets.newConcurrentHashSet();
+        this.chunkPacketQueue = PlatformDependent.newMpscQueue();
+        this.safeChunk = new AllayChunk(this);
     }
 
     public static AllayChunkBuilder builder() {
@@ -110,6 +143,101 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     private static void checkXZ(int x, int z) {
         Preconditions.checkArgument(x >= 0 && x <= 15);
         Preconditions.checkArgument(z >= 0 && z <= 15);
+    }
+
+    private void checkY(int y) {
+        Preconditions.checkArgument(y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight());
+    }
+
+    private void checkXYZ(int x, int y, int z) {
+        Preconditions.checkArgument(x >= 0 && x <= 15);
+        checkY(y);
+        Preconditions.checkArgument(z >= 0 && z <= 15);
+    }
+
+    public void tick(long currentTick, Dimension dimension, WorldStorage worldStorage) {
+        blockEntities.values().forEach(blockEntity -> ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).tick(currentTick));
+        entities.values().forEach(entity -> ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).tick(currentTick));
+        tickScheduledUpdates(dimension);
+        tickRandomUpdates(dimension);
+        checkAutoSave(worldStorage);
+    }
+
+    protected void tickScheduledUpdates(Dimension dimension) {
+        List<ScheduledUpdateInfo> positions = new ArrayList<>(scheduledUpdates.size() / 4);
+        for (var entry : scheduledUpdates.fastEntrySet()) {
+            if (entry.getValue().getDelay() <= 0) {
+                positions.add(entry.getValue());
+                scheduledUpdates.remove(entry.getIntKey());
+            } else {
+                entry.getValue().decreaseDelay();
+            }
+        }
+
+        positions.forEach(info -> {
+            var chunkXYZ = info.getChunkXYZ();
+            var localX = HashUtils.getXFromHashChunkXYZ(chunkXYZ);
+            var y = HashUtils.getYFromHashChunkXYZ(chunkXYZ);
+            var localZ = HashUtils.getZFromHashChunkXYZ(chunkXYZ);
+            var layer = info.getLayer();
+
+            var blockState = getBlockState(localX, y, localZ, layer);
+            var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (this.x << 4), y, localZ + (this.z << 4), dimension), layer);
+            if (!new BlockScheduleUpdateEvent(blockStateWithPos).call()) {
+                return;
+            }
+
+            blockState.getBehavior().onScheduledUpdate(blockStateWithPos);
+        });
+    }
+
+    protected void tickRandomUpdates(Dimension dimension) {
+        int randomTickSpeed = dimension.getWorld().getWorldData().getGameRuleValue(GameRule.RANDOM_TICK_SPEED);
+        if (randomTickSpeed <= 0) {
+            return;
+        }
+
+        for (var section : sections) {
+            if (section.isAirSection()) {
+                continue;
+            }
+            // Check the entry list of this section, and
+            // if there is no block that support random tick
+            // in this section, we can just skip this section
+            if (section.blockLayers()[0].allEntriesMatch(blockState -> !blockState.getBehavior().canRandomUpdate())) {
+                continue;
+            }
+
+            int sectionY = section.sectionY();
+            for (int i = 0; i < randomTickSpeed * 3; i++) {
+                int lcg = nextUpdateLCG();
+                int localX = lcg & 0x0f;
+                int localZ = lcg >>> 8 & 0x0f;
+                int localY = lcg >>> 16 & 0x0f;
+                // TODO: instead of get the block state from palette and check if it supports random tick,
+                // we can add a bitset to every chunk section to mark whether a block pos contains a block
+                // that supports random tick, this would be much quicker
+                var blockState = getBlockState(localX, sectionY * 16 + localY, localZ, 0);
+                if (blockState.getBehavior().canRandomUpdate()) {
+                    var blockStateWithPos = new BlockStateWithPos(blockState, new Position3i(localX + (this.x << 4), localY + (sectionY << 4), localZ + (this.z << 4), dimension), 0);
+                    if (new BlockRandomUpdateEvent(blockStateWithPos).call()) {
+                        blockState.getBehavior().onRandomUpdate(blockStateWithPos);
+                    }
+                }
+            }
+        }
+    }
+
+    public int nextUpdateLCG() {
+        return (this.updateLCG = (this.updateLCG * 3) ^ LCG_CONSTANT);
+    }
+
+    protected void checkAutoSave(WorldStorage worldStorage) {
+        autoSaveTimer++;
+        if (autoSaveTimer >= Server.SETTINGS.storageSettings().chunkAutoSaveCycle()) {
+            worldStorage.writeChunk(safeChunk);
+            autoSaveTimer = 0;
+        }
     }
 
     public void beforeSetChunk(Dimension dimension) {
@@ -128,6 +256,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     public void afterSetChunk(Dimension dimension, boolean success) {
+        if (chunkSetCallback != null) {
+            chunkSetCallback.accept(success);
+        }
         if (!success) {
             return;
         }
@@ -141,29 +272,28 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             entityNbtList = null;
         }
 
+        setBlockChangeCallback((x, y, z, blockState, layer) -> {
+            if (layer != 0) {
+                return;
+            }
+            ((AllayLightService) dimension.getLightService()).onBlockChange(x + (this.x << 4), y, z + (this.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
+        });
+        ((AllayLightService) dimension.getLightService()).onChunkLoad(toSafeChunk());
+
         loaded = true;
     }
 
-    private void checkXYZ(int x, int y, int z) {
-        Preconditions.checkArgument(x >= 0 && x <= 15);
-        Preconditions.checkArgument(y >= dimensionInfo.minHeight() && y <= dimensionInfo.maxHeight());
-        Preconditions.checkArgument(z >= 0 && z <= 15);
-    }
-
-    /**
-     * Get Chunk section.
-     *
-     * @param sectionY the sectionY.
-     *
-     * @return the section, or {@code null} if not exist.
-     */
-    public ChunkSection getSection(int sectionY) {
+    @Override
+    public AllayChunkSection getSection(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
         return sections[sectionY - this.getDimensionInfo().minSectionY()];
     }
 
+    @Override
+    public List<ChunkSection> getSections() {
+        return List.of(sections);
+    }
 
-    @UnmodifiableView
     @Override
     public Collection<BlockEntity> getSectionBlockEntities(int sectionY) {
         Preconditions.checkArgument(sectionY >= -32 && sectionY <= 31);
@@ -185,14 +315,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return scheduledUpdateInfo != null && scheduledUpdateInfo.getLayer() == layer;
     }
 
-    public Int2ObjectNonBlockingMap<ScheduledUpdateInfo> getScheduledUpdatesUnsafe() {
-        return scheduledUpdates;
-    }
-
     @Override
     public short getHeight(int x, int z) {
-        Preconditions.checkArgument(x >= 0 && x <= 15);
-        Preconditions.checkArgument(z >= 0 && z <= 15);
+        checkXZ(x, z);
         return getHeightUnsafe(HeightMap.computeIndex(x, z));
     }
 
@@ -202,9 +327,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public void setHeight(int x, int z, short height) {
-        Preconditions.checkArgument(x >= 0 && x <= 15);
-        Preconditions.checkArgument(z >= 0 && z <= 15);
-        Preconditions.checkArgument(height >= -512 && height <= 511);
+        checkXYZ(x, height, z);
         setHeightUnsafe(HeightMap.computeIndex(x, z), height);
     }
 
@@ -310,6 +433,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     @Override
     public void setBiome(int x, int y, int z, BiomeType biomeType) {
+        checkXYZ(x, y, z);
         this.getSection(y >> 4).setBiomeType(x, y & 0xf, z, biomeType);
     }
 
@@ -338,10 +462,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return Collections.unmodifiableMap(entities);
     }
 
-    public Long2ObjectNonBlockingMap<Entity> getEntitiesUnsafe() {
-        return entities;
-    }
-
     @Override
     public void addBlockEntity(BlockEntity blockEntity) {
         Preconditions.checkNotNull(blockEntity);
@@ -362,23 +482,152 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public @UnmodifiableView Map<Integer, BlockEntity> getBlockEntities() {
+    public Map<Integer, BlockEntity> getBlockEntities() {
         return Collections.unmodifiableMap(blockEntities);
     }
 
-    public Int2ObjectNonBlockingMap<BlockEntity> getBlockEntitiesUnsafe() {
-        return blockEntities;
-    }
-
+    @Override
     public Chunk toSafeChunk() {
-        return new AllayChunk(this);
+        return safeChunk;
     }
 
-    public void setState(ChunkState next) {
-        ChunkState curr;
-        do {
-            curr = STATE_FIELD.get(this);
-            Preconditions.checkState(curr.ordinal() <= next.ordinal(), "invalid state transition: %s => %s", curr, next);
-        } while (!STATE_FIELD.compareAndSet(this, curr, next));
+    public void sendChunkPackets() {
+        if (chunkLoaders.isEmpty()) {
+            clearBlockChanges();
+            chunkPacketQueue.clear();
+            return;
+        }
+
+        // Send block updates
+        var pks = encodeAndClearBlockChanges();
+        // pks == null -> no block changes
+        if (pks != null) {
+            for (var pk : pks) {
+                if (pk == null) {
+                    continue;
+                }
+
+                sendChunkPacket(pk);
+            }
+        }
+
+        // Send other chunk packets
+        if (chunkPacketQueue.isEmpty()) {
+            return;
+        }
+        ChunkPacketEntry entry;
+        while ((entry = chunkPacketQueue.poll()) != null) {
+            sendChunkPacket(entry.packet(), entry.chunkLoaderPredicate());
+        }
     }
+
+    @Override
+    public void addChunkPacket(BedrockPacket packet) {
+        chunkPacketQueue.add(new ChunkPacketEntry(packet, null));
+    }
+
+    @Override
+    public void addChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {
+        chunkPacketQueue.add(new ChunkPacketEntry(packet, chunkLoaderPredicate));
+    }
+
+    @Override
+    public Set<ChunkLoader> getChunkLoaders() {
+        return Collections.unmodifiableSet(chunkLoaders);
+    }
+
+    @Override
+    public void addChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.add(chunkLoader);
+    }
+
+    @Override
+    public void removeChunkLoader(ChunkLoader chunkLoader) {
+        chunkLoaders.remove(chunkLoader);
+    }
+
+    @Override
+    public int getChunkLoaderCount() {
+        return chunkLoaders.size();
+    }
+
+    @Override
+    public void sendChunkPacket(BedrockPacket packet) {
+        chunkLoaders.forEach(chunkLoader -> chunkLoader.sendPacket(packet));
+    }
+
+    @Override
+    public void sendChunkPacket(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {
+        chunkLoaders.stream()
+                .filter(chunkLoader -> chunkLoaderPredicate == null || chunkLoaderPredicate.test(chunkLoader))
+                .forEach(chunkLoader -> chunkLoader.sendPacket(packet));
+    }
+
+    public LevelChunkPacket createSubChunkLevelChunkPacket() {
+        var levelChunkPacket = new LevelChunkPacket();
+        levelChunkPacket.setDimension(getDimensionInfo().dimensionId());
+        levelChunkPacket.setChunkX(this.getX());
+        levelChunkPacket.setChunkZ(this.getZ());
+        levelChunkPacket.setCachingEnabled(false);
+        levelChunkPacket.setRequestSubChunks(true);
+        // This value is used in the subchunk system to control the maximum value of sectionY requested by the client.
+        levelChunkPacket.setSubChunkLimit(getDimensionInfo().chunkSectionCount());
+        levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
+        return levelChunkPacket;
+    }
+
+    public LevelChunkPacket createFullLevelChunkPacketChunk() {
+        var levelChunkPacket = new LevelChunkPacket();
+        levelChunkPacket.setDimension(getDimensionInfo().dimensionId());
+        levelChunkPacket.setChunkX(this.getX());
+        levelChunkPacket.setChunkZ(this.getZ());
+        levelChunkPacket.setCachingEnabled(false);
+        levelChunkPacket.setRequestSubChunks(false);
+        levelChunkPacket.setSubChunksLength(getDimensionInfo().chunkSectionCount());
+        try {
+            levelChunkPacket.setData(writeToNetwork());
+        } catch (Throwable t) {
+            levelChunkPacket.setData(Unpooled.EMPTY_BUFFER);
+        }
+        return levelChunkPacket;
+    }
+
+    private ByteBuf writeToNetwork() {
+        var byteBuf = ByteBufAllocator.DEFAULT.buffer();
+        try {
+            writeToNetwork0(byteBuf);
+            return byteBuf;
+        } catch (Throwable t) {
+            log.error("Error while encoding chunk(x={}, z={})!", getX(), getZ(), t);
+            byteBuf.release();
+            throw t;
+        }
+    }
+
+    private void writeToNetwork0(ByteBuf byteBuf) {
+        // Write blocks
+        for (int i = getDimensionInfo().minSectionY(); i <= getDimensionInfo().maxSectionY(); i++) {
+            getSection(i).writeToNetwork(byteBuf);
+        }
+
+        // Write biomes
+        for (var section : sections) {
+            section.biomes().writeToNetwork(byteBuf, BiomeType::getId);
+        }
+        byteBuf.writeByte(0); // edu- border blocks
+
+        // Write block entities
+        var blockEntities = getBlockEntities().values();
+        if (!blockEntities.isEmpty()) {
+            try (var writer = NbtUtils.createNetworkWriter(new ByteBufOutputStream(byteBuf))) {
+                for (var blockEntity : blockEntities) {
+                    writer.writeTag(blockEntity.saveNBT());
+                }
+            } catch (Throwable t) {
+                log.error("Error while encoding block entities in chunk {}, {}", getX(), getZ(), t);
+            }
+        }
+    }
+
+    protected record ChunkPacketEntry(BedrockPacket packet, Predicate<ChunkLoader> chunkLoaderPredicate) {}
 }

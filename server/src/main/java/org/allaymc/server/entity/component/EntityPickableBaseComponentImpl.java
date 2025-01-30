@@ -45,6 +45,11 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
     }
 
     @Override
+    protected boolean hasDeadTimer() {
+        return false;
+    }
+
+    @Override
     public void loadNBT(NbtMap nbt) {
         super.loadNBT(nbt);
 

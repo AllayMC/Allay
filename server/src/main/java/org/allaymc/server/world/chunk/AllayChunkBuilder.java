@@ -20,16 +20,16 @@ public class AllayChunkBuilder {
     private int chunkX;
     private int chunkZ;
     private DimensionInfo dimensionInfo;
-    private ChunkSection[] sections;
+    private AllayChunkSection[] sections;
     private HeightMap heightMap;
     private List<NbtMap> entitiyList;
     private List<NbtMap> blockEntitiyList;
     private Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
 
-    private static ChunkSection[] createEmptySections(DimensionInfo dimensionInfo) {
-        var sections = new ChunkSection[dimensionInfo.chunkSectionCount()];
+    private static AllayChunkSection[] createEmptySections(DimensionInfo dimensionInfo) {
+        var sections = new AllayChunkSection[dimensionInfo.chunkSectionCount()];
         for (int i = 0; i < sections.length; i++) {
-            sections[i] = new ChunkSection((byte) (i + dimensionInfo.minSectionY()));
+            sections[i] = new AllayChunkSection((byte) (i + dimensionInfo.minSectionY()));
         }
         return sections;
     }
@@ -55,7 +55,7 @@ public class AllayChunkBuilder {
         return this;
     }
 
-    public AllayChunkBuilder sections(ChunkSection[] sections) {
+    public AllayChunkBuilder sections(AllayChunkSection[] sections) {
         Preconditions.checkNotNull(dimensionInfo);
         Preconditions.checkArgument(sections.length == dimensionInfo.chunkSectionCount());
         for (int index = 0; index < sections.length; index++) {

@@ -35,7 +35,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.event.*;
-import org.allaymc.server.world.chunk.AllayChunk;
+import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -247,13 +247,21 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             onDie();
         }
         if (dead) {
-            if (deadTimer > 0) deadTimer--;
-            if (deadTimer == 0) {
-                // Spawn dead particle
-                spawnDeadParticle();
+            if (hasDeadTimer()) {
+                if (deadTimer > 0) deadTimer--;
+                if (deadTimer == 0) {
+                    // Spawn dead particle
+                    spawnDeadParticle();
+                    getDimension().getEntityService().removeEntity(thisEntity, () -> dead = false);
+                }
+            } else {
                 getDimension().getEntityService().removeEntity(thisEntity, () -> dead = false);
             }
         }
+    }
+
+    protected boolean hasDeadTimer() {
+        return true;
     }
 
     protected void onDie() {
@@ -261,7 +269,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
         manager.callEvent(CEntityDieEvent.INSTANCE);
         dead = true;
-        deadTimer = DEFAULT_DEAD_TIMER;
+        if (hasDeadTimer()) {
+            deadTimer = DEFAULT_DEAD_TIMER;
+        }
+
         applyEntityEvent(EntityEventType.DEATH, 0);
         effects.values().forEach(effect -> effect.getType().onEntityDies(thisEntity, effect));
         removeAllEffects();
@@ -395,11 +406,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             // It is possible that the oldChunk is null
             // For example, when spawning an entity, the entity's old location is meaningless
             if (oldChunk != null) {
-                ((AllayChunk) oldChunk).removeEntity(runtimeId);
+                ((AllayUnsafeChunk) oldChunk.toUnsafeChunk()).removeEntity(runtimeId);
             }
         }
 
-        ((AllayChunk) newChunk).addEntity(thisEntity);
+        ((AllayUnsafeChunk) newChunk.toUnsafeChunk()).addEntity(thisEntity);
         Set<EntityPlayer> oldChunkPlayers = oldChunk != null ? oldChunk.getPlayerChunkLoaders() : Collections.emptySet();
         Set<EntityPlayer> samePlayers = new HashSet<>(newChunk.getPlayerChunkLoaders());
         samePlayers.retainAll(oldChunkPlayers);

@@ -8,7 +8,7 @@ import org.allaymc.api.eventbus.event.entity.EntitySpawnEvent;
 import org.allaymc.api.world.service.EntityService;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
-import org.allaymc.server.world.chunk.AllayChunk;
+import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 
 import java.util.Queue;
 
@@ -41,15 +41,15 @@ public class AllayEntityService implements EntityService {
     private void removeEntityImmediately(Entity entity) {
         new EntityDespawnEvent(entity).call();
 
-        var chunk = (AllayChunk) entity.getCurrentChunk();
-        if (chunk == null) {
+        var unsafeChunk = (AllayUnsafeChunk) entity.getCurrentChunk().toUnsafeChunk();
+        if (unsafeChunk == null) {
             throw new IllegalStateException("Trying to despawn an entity from an unload chunk!");
         }
 
-        chunk.removeEntity(entity.getRuntimeId());
+        unsafeChunk.removeEntity(entity.getRuntimeId());
         entityPhysicsService.removeEntity(entity);
-
         entity.despawnFromAll();
+
         var baseComponent = ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent());
         baseComponent.setWillBeDespawnedNextTick(false);
         baseComponent.setSpawned(false);
@@ -58,15 +58,15 @@ public class AllayEntityService implements EntityService {
     private void addEntityImmediately(Entity entity) {
         new EntitySpawnEvent(entity).call();
 
-        var chunk = (AllayChunk) entity.getCurrentChunk();
-        if (chunk == null) {
+        var unsafeChunk = (AllayUnsafeChunk) entity.getCurrentChunk().toUnsafeChunk();
+        if (unsafeChunk == null) {
             throw new IllegalStateException("Entity can't spawn in unloaded chunk!");
         }
 
-        chunk.addEntity(entity);
-        entity.spawnTo(chunk.getPlayerChunkLoaders());
-
+        unsafeChunk.addEntity(entity);
         entityPhysicsService.addEntity(entity);
+        entity.spawnTo(unsafeChunk.getPlayerChunkLoaders());
+
         var baseComponent = ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent());
         baseComponent.setWillBeSpawnedNextTick(false);
         baseComponent.setSpawned(true);
