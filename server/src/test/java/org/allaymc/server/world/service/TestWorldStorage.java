@@ -16,7 +16,7 @@ public class TestWorldStorage implements WorldStorage {
     @Override
     public CompletableFuture<Chunk> readChunk(int chunkX, int chunkZ, DimensionInfo dimensionInfo) {
         var chunk = AllayUnsafeChunk.builder().newChunk(chunkX, chunkZ, dimensionInfo).toSafeChunk();
-        ((AllayUnsafeChunk) chunk).setState(ChunkState.FINISHED);
+        ((AllayUnsafeChunk) chunk.toUnsafeChunk()).setState(ChunkState.FINISHED);
         return CompletableFuture.completedFuture(chunk);
     }
 

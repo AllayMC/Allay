@@ -2,6 +2,8 @@ package org.allaymc.server.world.service;
 
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
+import org.allaymc.api.world.World;
+import org.allaymc.server.world.AllayWorldData;
 import org.allaymc.server.world.generator.AllayWorldGenerator;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.*;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AllayChunkServiceTest {
     static Dimension mockDimension = Mockito.mock(Dimension.class);
+    static World mockWorld = Mockito.mock(World.class);
     static AllayChunkService chunkService;
     static TestChunkLoader chunkLoader1 = new TestChunkLoader();
 
@@ -26,6 +29,9 @@ public class AllayChunkServiceTest {
         Mockito.when(mockDimension.getDimensionInfo()).thenReturn(DimensionInfo.OVERWORLD);
         var testLightService = new TestLightService();
         Mockito.when(mockDimension.getLightService()).thenReturn(testLightService);
+        Mockito.when(mockDimension.getWorld()).thenReturn(mockWorld);
+        var defaultWorldData = AllayWorldData.builder().build();
+        Mockito.when(mockWorld.getWorldData()).thenReturn(defaultWorldData);
         chunkService = new AllayChunkService(mockDimension, AllayWorldGenerator.builder().name("TEST").build(), new TestWorldStorage());
     }
 
