@@ -65,7 +65,7 @@ public class ServerSettings extends OkaeriConfig {
 
         @CustomKey("default-permission")
         @Comment("Possible values: VISITOR, MEMBER, OPERATOR")
-        private PlayerPermission defaultPermission = PlayerPermission.OPERATOR;
+        private PlayerPermission defaultPermission = PlayerPermission.MEMBER;
 
         @Comment("The language used by console")
         private LangCode language = LangCode.en_US;
