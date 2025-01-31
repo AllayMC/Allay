@@ -69,6 +69,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed missing block breaking particle when breaking block.
 - Item entity will be despawned immediately instead of having a `dead timer` when its health become 0. It's dead smoke is also removed.
 - Fixed the bug that unusable enchantment types may be shown in enchantment table.
+- Fixed the bug that `/give` command will stack item that cannot be stacked like sword.
 
 ### Removed
 

@@ -49,10 +49,21 @@ public class GiveCommand extends SimpleCommand {
                     }
 
                     for (var player : players) {
-                        var itemStack = itemType.createItemStack(amount, data);
-                        player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
-                        if (itemStack.getCount() != 0) {
-                            player.dropItemInPlayerPos(itemStack);
+                        var maxStackSize = itemType.createItemStack().getItemData().maxStackSize();
+                        while (amount != 0) {
+                            int currentAmount;
+                            if (amount > maxStackSize) {
+                                currentAmount = maxStackSize;
+                                amount -= maxStackSize;
+                            } else {
+                                currentAmount = amount;
+                                amount = 0;
+                            }
+                            var itemStack = itemType.createItemStack(currentAmount, data);
+                            player.getContainer(FullContainerType.PLAYER_INVENTORY).tryAddItem(itemStack);
+                            if (itemStack.getCount() != 0) {
+                                player.dropItemInPlayerPos(itemStack);
+                            }
                         }
                         player.sendTr(TrKeys.M_COMMANDS_GIVE_SUCCESSRECIPIENT, itemType.getIdentifier().toString(), amount);
                     }
