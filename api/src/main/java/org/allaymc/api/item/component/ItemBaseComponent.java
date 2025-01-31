@@ -559,9 +559,11 @@ public interface ItemBaseComponent extends ItemComponent {
     }
 
     /**
-     * Check if the specified enchantment type is compatible with this item.
+     * Check if the specified enchantment type is compatible with the enchantment types
+     * that this item already has. It won't check if the enchantment can be applied to
+     * this item type.
      *
-     * @param type The enchantment type.
+     * @param type The enchantment type to check.
      *
      * @return {@code true} if the enchantment is compatible, {@code false} otherwise.
      */

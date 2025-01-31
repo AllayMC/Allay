@@ -1,5 +1,6 @@
 package org.allaymc.api.item.enchantment.type;
 
+import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
@@ -9,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  */
 public class EnchantmentEfficiencyType extends EnchantmentType {
     public EnchantmentEfficiencyType() {
-        super(new Identifier("minecraft:efficiency"), 15, 5, Rarity.COMMON);
+        super(new Identifier("minecraft:efficiency"), 15, 5, Rarity.COMMON, ApplicableType.DIGGER_OR_SHEARS);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.allaymc.api.item.enchantment.type;
 
+import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
@@ -9,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  */
 public class EnchantmentThornsType extends EnchantmentType {
     public EnchantmentThornsType() {
-        super(new Identifier("minecraft:thorns"), 5, 3, Rarity.VERY_RARE);
+        super(new Identifier("minecraft:thorns"), 5, 3, Rarity.VERY_RARE, ApplicableType.ARMOR_WITHOUT_ELYTRA);
     }
 
     @Override

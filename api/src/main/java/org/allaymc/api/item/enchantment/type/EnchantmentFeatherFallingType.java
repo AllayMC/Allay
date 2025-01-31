@@ -1,6 +1,7 @@
 package org.allaymc.api.item.enchantment.type;
 
 import org.allaymc.api.entity.damage.DamageContainer;
+import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
 
@@ -9,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  */
 public class EnchantmentFeatherFallingType extends AbstractEnchantmentProtectionType {
     public EnchantmentFeatherFallingType() {
-        super(new Identifier("minecraft:feather_falling"), 2, 4, Rarity.UNCOMMON);
+        super(new Identifier("minecraft:feather_falling"), 2, 4, Rarity.UNCOMMON, ApplicableType.BOOTS);
     }
 
     @Override

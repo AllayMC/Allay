@@ -1,5 +1,6 @@
 package org.allaymc.api.item.enchantment.type;
 
+import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
@@ -9,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  */
 public class EnchantmentSilkTouchType extends EnchantmentType {
     public EnchantmentSilkTouchType() {
-        super(new Identifier("minecraft:silk_touch"), 16, 1, Rarity.VERY_RARE);
+        super(new Identifier("minecraft:silk_touch"), 16, 1, Rarity.VERY_RARE, ApplicableType.DIGGER_OR_SHEARS);
     }
 
     @Override

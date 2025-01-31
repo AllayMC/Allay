@@ -214,6 +214,7 @@ public final class EnchantmentOptionGenerator {
                 .stream()
                 .filter(item::checkEnchantmentCompatibility)
                 .filter(EnchantmentType::isAvailableInEnchantTable)
+                .filter(type -> type.canBeAppliedTo(item.getItemType()))
                 .toList();
     }
 

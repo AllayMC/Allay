@@ -6,6 +6,7 @@ import org.allaymc.api.item.data.ArmorTier;
 import org.allaymc.api.item.data.ToolTier;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.interfaces.ItemAirStack;
+import org.allaymc.api.item.tag.ItemCustomTags;
 import org.allaymc.api.item.tag.ItemTags;
 import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
@@ -156,6 +157,17 @@ public final class ItemHelper {
      */
     public static boolean isArmor(ItemType<?> itemType) {
         return itemType.hasItemTag(ItemTags.IS_ARMOR);
+    }
+
+    /**
+     * Check if an item is a head.
+     *
+     * @param itemType The {@link ItemType} of the item.
+     *
+     * @return {@code true} if the item is a head, {@code false} otherwise.
+     */
+    public static boolean isHead(ItemType<?> itemType) {
+        return itemType.hasItemTag(ItemCustomTags.HEAD);
     }
 
     /**

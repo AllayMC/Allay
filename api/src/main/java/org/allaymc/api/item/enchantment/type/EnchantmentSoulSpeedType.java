@@ -1,5 +1,6 @@
 package org.allaymc.api.item.enchantment.type;
 
+import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
@@ -9,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  */
 public class EnchantmentSoulSpeedType extends EnchantmentType {
     public EnchantmentSoulSpeedType() {
-        super(new Identifier("minecraft:soul_speed"), 36, 3, Rarity.VERY_RARE);
+        super(new Identifier("minecraft:soul_speed"), 36, 3, Rarity.VERY_RARE, ApplicableType.LEGGINGS);
     }
 
     @Override

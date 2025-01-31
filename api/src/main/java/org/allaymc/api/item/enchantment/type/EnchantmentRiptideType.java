@@ -1,5 +1,6 @@
 package org.allaymc.api.item.enchantment.type;
 
+import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
@@ -9,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  */
 public class EnchantmentRiptideType extends EnchantmentType {
     public EnchantmentRiptideType() {
-        super(new Identifier("minecraft:riptide"), 30, 3, Rarity.RARE);
+        super(new Identifier("minecraft:riptide"), 30, 3, Rarity.RARE, ApplicableType.TRIDENT);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.allaymc.api.item.enchantment.type;
 
+import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
@@ -9,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  */
 public class EnchantmentPowerType extends EnchantmentType {
     public EnchantmentPowerType() {
-        super(new Identifier("minecraft:power"), 19, 5, Rarity.COMMON);
+        super(new Identifier("minecraft:power"), 19, 5, Rarity.COMMON, ApplicableType.BOW);
     }
 
     @Override

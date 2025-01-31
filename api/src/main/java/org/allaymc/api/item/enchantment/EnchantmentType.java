@@ -3,6 +3,7 @@ package org.allaymc.api.item.enchantment;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
@@ -20,23 +21,33 @@ public abstract class EnchantmentType {
     protected final int id;
     protected final int maxLevel;
     protected final Rarity rarity;
-    @Getter(AccessLevel.NONE)
-    protected final Map<Integer, EnchantmentInstance> instances = new Int2ObjectOpenHashMap<>();
+    protected final ApplicableType applicableType;
 
-    protected EnchantmentType(
-            Identifier identifier,
-            int id,
-            int maxLevel,
-            Rarity rarity
-    ) {
+    @Getter(AccessLevel.NONE)
+    protected final Map<Integer, EnchantmentInstance> instances;
+
+    protected EnchantmentType(Identifier identifier, int id, int maxLevel, Rarity rarity) {
+        this(identifier, id, maxLevel, rarity, ApplicableType.ANY);
+    }
+
+    protected EnchantmentType(Identifier identifier, int id, int maxLevel, Rarity rarity, ApplicableType applicableType) {
         this.identifier = identifier;
         // Use int types in formal parameters to avoid forcing the nasty int -> short type in subclasses
         this.id = id;
         this.maxLevel = maxLevel;
         this.rarity = rarity;
+        this.applicableType = applicableType;
+        this.instances = new Int2ObjectOpenHashMap<>();
         Registries.ENCHANTMENTS.register(this.id, identifier, this);
     }
 
+    /**
+     * Create an instance of the enchantment.
+     *
+     * @param level The level of the instance.
+     *
+     * @return The instance of the enchantment.
+     */
     public EnchantmentInstance createInstance(int level) {
         return instances.computeIfAbsent(level, l -> new EnchantmentInstance(this, l));
     }
@@ -101,6 +112,26 @@ public abstract class EnchantmentType {
      */
     public boolean isAvailableInEnchantTable() {
         return true;
+    }
+
+    /**
+     * Check if the enchantment can be applied to an item type.
+     *
+     * @param itemType The item type.
+     *
+     * @return {@code true} if the enchantment can be applied to the item type, {@code false} otherwise.
+     */
+    public boolean canBeAppliedTo(ItemType<?> itemType) {
+        return applicableType.canBeAppliedTo(itemType);
+    }
+
+    /**
+     * Get the applicable type of the enchantment.
+     *
+     * @return The applicable type of the enchantment.
+     */
+    public ApplicableType getApplicableType() {
+        return applicableType;
     }
 
     /**

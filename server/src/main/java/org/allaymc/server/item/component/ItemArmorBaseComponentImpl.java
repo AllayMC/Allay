@@ -6,6 +6,7 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemHelper;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.component.ItemArmorBaseComponent;
+import org.allaymc.api.item.data.ArmorType;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.item.type.ItemType;
@@ -20,6 +21,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author daoge_cmd
  */
 public class ItemArmorBaseComponentImpl extends ItemBaseComponentImpl implements ItemArmorBaseComponent {
+
     protected ArmorType armorType;
 
     public ItemArmorBaseComponentImpl(ItemStackInitInfo initInfo, ArmorType armorType) {

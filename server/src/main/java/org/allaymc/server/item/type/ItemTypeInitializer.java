@@ -3,7 +3,7 @@ package org.allaymc.server.item.type;
 import lombok.experimental.UtilityClass;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.entity.data.EntityId;
-import org.allaymc.api.item.component.ItemArmorBaseComponent.ArmorType;
+import org.allaymc.api.item.data.ArmorType;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.interfaces.*;
 import org.allaymc.api.item.type.ItemType;

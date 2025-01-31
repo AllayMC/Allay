@@ -33,6 +33,9 @@ Unless otherwise specified, any version comparison below is the comparison of se
   will call this method in all dimensions now.
 - (API) Added `ItemBaseComponent#getLockMode` and `ItemBaseComponent#setLockMode` methods to get and set the lock mode of an item.
 - (API) Added `ChunkSection`, chunk section can be obtained from chunk.
+- (API) Added `EnchantmentType#canBeAppliedTo`, `EnchantmentType#getAppliableType` and `ApplicableType`, these methods can be used to
+  check if an enchantment type can be applied to a specific item type.
+- (API) Introduce new item tag `allay:head` and helper method `ItemHelper#isHead` which can be used to check if an item is a head item. 
 - Implemented reeds (also called sugar cane) and cactus.
 - Implemented `UpdateSubChunkBlocksPacket` related logic, which will make client load large range block updates much quicker (e.g.
   using `/fill` command to fill a large area).
@@ -49,6 +52,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Refactored `Chunk` and `UnsafeChunk`, now `Chunk` works more likely a wrapper for `UnsafeChunk` that provides
   safe access to chunk data in multi-threads environment.
 - (API) Replaced `Chunk#batchProcess` method with new `Chunk#applyOperation` and `Chunk#applyOperationInSection` methods.
+- (API) Moved inner class `ItemArmorBaseComponent#ArmorType` to package `org.allaymc.api.item.data`.
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 - Server won't crash if failed to load the descriptor of a plugin now. An error message will be print to the console instead.
 - Server won't crash if failed to create world generator. Void world generator will be used instead.
@@ -64,6 +68,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed a rare NPE exception that may occur if player disconnect when joining the server.
 - Fixed missing block breaking particle when breaking block.
 - Item entity will be despawned immediately instead of having a `dead timer` when its health become 0. It's dead smoke is also removed.
+- Fixed the bug that unusable enchantment types may be shown in enchantment table.
 
 ### Removed
 

@@ -1,5 +1,6 @@
 package org.allaymc.api.item.enchantment.type;
 
+import org.allaymc.api.item.enchantment.ApplicableType;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.enchantment.Rarity;
 import org.allaymc.api.utils.Identifier;
@@ -9,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
  */
 public class EnchantmentBaneOfArthropodsType extends EnchantmentType {
     public EnchantmentBaneOfArthropodsType() {
-        super(new Identifier("minecraft:bane_of_arthropods"), 11, 5, Rarity.UNCOMMON);
+        super(new Identifier("minecraft:bane_of_arthropods"), 11, 5, Rarity.UNCOMMON, ApplicableType.SWORD_OR_AXE);
     }
 
     @Override
