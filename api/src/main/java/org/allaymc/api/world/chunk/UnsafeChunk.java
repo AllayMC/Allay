@@ -295,15 +295,6 @@ public interface UnsafeChunk {
     }
 
     /**
-     * Set height of the specified position.
-     *
-     * @param x      the x coordinate of the position.
-     * @param z      the z coordinate of the position.
-     * @param height the height.
-     */
-    void setHeight(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, short height);
-
-    /**
      * Get height of the specified position.
      *
      * @param x the x coordinate of the position.

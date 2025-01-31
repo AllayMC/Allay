@@ -14,6 +14,8 @@ import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.Weather;
 import org.allaymc.api.world.chunk.Chunk;
+import org.allaymc.api.world.chunk.OperationType;
+import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.service.LightService;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
@@ -103,7 +105,7 @@ public class AllayLightService implements LightService {
      *
      * @param chunk the chunk.
      */
-    protected void addChunk(Chunk chunk) {
+    protected void addChunk(UnsafeChunk chunk) {
         ChunkSectionNibbleArray[] chunkLightDampening = createNibbleArrays();
         var chunkLightHeightMap = hasSkyLight ? new HeightMap((short) dimensionInfo.minHeight()) : null;
         for (int y = maxHeight; y >= minHeight; y--) {
@@ -123,7 +125,9 @@ public class AllayLightService implements LightService {
                         queue.offer(() -> blockLightPropagator.setLightAndPropagate(finalX, finalY, finalZ, 0, lightEmission));
                     }
                     var lightDampening = blockStateData.lightDampening();
-                    if (lightDampening == 0) continue;
+                    if (lightDampening == 0) {
+                        continue;
+                    }
 
                     chunkLightDampening[(y - minHeight) >> 4].set(x, y & 0xf, z, lightDampening);
                     if (chunkLightHeightMap != null && chunkLightHeightMap.get(x, z) == minHeight) {
@@ -252,7 +256,7 @@ public class AllayLightService implements LightService {
     }
 
     public void onChunkLoad(Chunk chunk) {
-        queue.offer(() -> addChunk(chunk));
+        queue.offer(() -> chunk.applyOperation(this::addChunk, OperationType.READ, OperationType.NONE));
     }
 
     public void onChunkUnload(Chunk chunk) {

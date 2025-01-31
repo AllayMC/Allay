@@ -196,7 +196,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
                 serializeHeightAndBiome(writeBatch, allayUnsafeChunk);
                 serializeEntitiesAndBlockEntities(writeBatch, allayUnsafeChunk);
                 serializeScheduledUpdates(writeBatch, allayUnsafeChunk);
-            }, OperationType.READ, OperationType.READ, OperationType.READ);
+            }, OperationType.READ, OperationType.READ);
             this.db.write(writeBatch);
         } catch (IOException e) {
             throw new WorldStorageException(e);

@@ -24,7 +24,7 @@ public interface Chunk extends UnsafeChunk {
      * @param block     the operation type of block.
      * @param biome     the operation type of biome.
      */
-    void applyOperation(Consumer<UnsafeChunk> operation, OperationType block, OperationType biome, OperationType height);
+    void applyOperation(Consumer<UnsafeChunk> operation, OperationType block, OperationType biome);
 
     /**
      * Apply the section in the chunk with the specified operation.

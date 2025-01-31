@@ -70,6 +70,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Getter
     protected final DimensionInfo dimensionInfo;
     protected final AllayChunkSection[] sections;
+    // TODO: thread unsafe
     @Getter
     protected final HeightMap heightMap;
     @Getter
@@ -271,13 +272,12 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             entityNbtList = null;
         }
 
-        setBlockChangeCallback((x, y, z, blockState, layer) -> {
-            if (layer != 0) {
-                return;
-            }
-            ((AllayLightService) dimension.getLightService()).onBlockChange(x + (this.x << 4), y, z + (this.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
-        });
         ((AllayLightService) dimension.getLightService()).onChunkLoad(toSafeChunk());
+        setBlockChangeCallback((x, y, z, blockState, layer) -> {
+            if (layer == 0) {
+                ((AllayLightService) dimension.getLightService()).onBlockChange(x + (this.x << 4), y, z + (this.z << 4), blockState.getBlockStateData().lightEmission(), blockState.getBlockStateData().lightDampening());
+            }
+        });
 
         loaded = true;
     }
@@ -324,7 +324,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         return this.heightMap.get(index);
     }
 
-    @Override
     public void setHeight(int x, int z, short height) {
         checkXYZ(x, height, z);
         setHeightUnsafe(HeightMap.computeIndex(x, z), height);

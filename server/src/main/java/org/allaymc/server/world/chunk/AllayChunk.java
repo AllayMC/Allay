@@ -10,7 +10,6 @@ import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.chunk.UnsafeChunk;
 
 import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Consumer;
 
 /**
@@ -22,7 +21,6 @@ public class AllayChunk implements Chunk {
     @Delegate(types = UnsafeChunk.class)
     protected final AllayUnsafeChunk unsafeChunk;
 
-    protected final ReadWriteLock heightLock;
     protected final ChunkSectionLocks blockLocks;
     protected final ChunkSectionLocks biomeLocks;
 
@@ -31,29 +29,13 @@ public class AllayChunk implements Chunk {
 
         // Init locks
         var dimensionInfo = unsafeChunk.getDimensionInfo();
-        this.heightLock = new ReentrantReadWriteLock();
         this.blockLocks = new ChunkSectionLocks(dimensionInfo);
         this.biomeLocks = new ChunkSectionLocks(dimensionInfo);
     }
 
     @Override
     public short getHeight(int x, int z) {
-        heightLock.readLock().lock();
-        try {
-            return unsafeChunk.getHeight(x, z);
-        } finally {
-            heightLock.readLock().unlock();
-        }
-    }
-
-    @Override
-    public void setHeight(int x, int z, short height) {
-        heightLock.writeLock().lock();
-        try {
-            unsafeChunk.setHeight(x, z, height);
-        } finally {
-            heightLock.writeLock().unlock();
-        }
+        return unsafeChunk.getHeight(x, z);
     }
 
     @Override
@@ -101,16 +83,14 @@ public class AllayChunk implements Chunk {
     }
 
     @Override
-    public void applyOperation(Consumer<UnsafeChunk> operation, OperationType block, OperationType biome, OperationType height) {
+    public void applyOperation(Consumer<UnsafeChunk> operation, OperationType block, OperationType biome) {
         tryLockAllSections(block, blockLocks);
         tryLockAllSections(biome, biomeLocks);
-        tryLock(height, heightLock);
         try {
             operation.accept(unsafeChunk);
         } finally {
             tryUnlockAllSections(block, blockLocks);
             tryUnlockAllSections(biome, biomeLocks);
-            tryUnlock(height, heightLock);
         }
     }
 
