@@ -7,7 +7,6 @@ import io.netty.buffer.ByteBufAllocator;
 import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.Unpooled;
 import io.netty.util.internal.PlatformDependent;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -81,11 +80,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected List<NbtMap> entityNbtList;
     protected List<NbtMap> blockEntityNbtList;
 
-    protected final Int2ObjectOpenHashMap<BlockChangeEntry> blockChangeEntries;
-    protected final Int2ObjectOpenHashMap<BlockChangeEntry> extraBlockChangeEntries;
     protected final Long2ObjectNonBlockingMap<Entity> entities;
     protected final Int2ObjectNonBlockingMap<BlockEntity> blockEntities;
     protected final Set<ChunkLoader> chunkLoaders;
+    protected final Queue<BlockChangeEntry> blockChangeEntries;
+    protected final Queue<BlockChangeEntry> extraBlockChangeEntries;
     protected final Queue<ChunkPacketEntry> chunkPacketQueue;
     protected final AllayChunk safeChunk;
 
@@ -127,11 +126,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.state = state;
         this.entityNbtList = entityNbtList;
         this.blockEntityNbtList = blockEntityNbtList;
-        this.blockChangeEntries = new Int2ObjectOpenHashMap<>();
-        this.extraBlockChangeEntries = new Int2ObjectOpenHashMap<>();
         this.entities = new Long2ObjectNonBlockingMap<>();
         this.blockEntities = new Int2ObjectNonBlockingMap<>();
         this.chunkLoaders = Sets.newConcurrentHashSet();
+        this.blockChangeEntries = PlatformDependent.newMpscQueue();
+        this.extraBlockChangeEntries = PlatformDependent.newMpscQueue();
         this.chunkPacketQueue = PlatformDependent.newMpscQueue();
         this.safeChunk = new AllayChunk(this);
     }
@@ -381,10 +380,9 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                     Vector3i.from((this.x << 4) + x, y, (this.z << 4) + z), blockState.toNetworkBlockDefinitionRuntime(),
                     BLOCK_UPDATE_NETWORK, -1, BlockChangeEntry.MessageType.NONE
             );
-            var hash = HashUtils.hashChunkXYZ(x, y, z);
             switch (layer) {
-                case 0 -> blockChangeEntries.put(hash, changeEntry);
-                case 1 -> extraBlockChangeEntries.put(hash, changeEntry);
+                case 0 -> blockChangeEntries.offer(changeEntry);
+                case 1 -> extraBlockChangeEntries.offer(changeEntry);
                 default -> throw new IllegalArgumentException("Unsupported layer: " + layer);
             }
         }
@@ -403,15 +401,14 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         var pks = new UpdateSubChunkBlocksPacket[sections.length];
         encodeBlockChangesInLayer(pks, blockChangeEntries, false);
         encodeBlockChangesInLayer(pks, extraBlockChangeEntries, true);
-        clearBlockChanges();
 
         return pks;
     }
 
-    protected void encodeBlockChangesInLayer(UpdateSubChunkBlocksPacket[] pks, Int2ObjectOpenHashMap<BlockChangeEntry> entries, boolean isExtraLayer) {
-        entries.forEach((encoded, entry) -> {
-            var y = HashUtils.getYFromHashChunkXYZ(encoded);
-            var sectionY = y >> 4;
+    protected void encodeBlockChangesInLayer(UpdateSubChunkBlocksPacket[] pks, Queue<BlockChangeEntry> queue, boolean isExtraLayer) {
+        BlockChangeEntry entry;
+        while ((entry = queue.poll()) != null) {
+            var sectionY = entry.getPosition().getY() >> 4;
             var index = sectionY - dimensionInfo.minSectionY();
             UpdateSubChunkBlocksPacket pk;
 
@@ -428,7 +425,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
             } else {
                 pk.getStandardBlocks().add(entry);
             }
-        });
+        }
     }
 
     @Override
