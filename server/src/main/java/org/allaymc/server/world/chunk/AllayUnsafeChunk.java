@@ -34,7 +34,6 @@ import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
-import org.allaymc.server.world.HeightMap;
 import org.allaymc.server.world.service.AllayLightService;
 import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
@@ -44,6 +43,7 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateSubChunkBlocksPacket;
 import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -70,8 +70,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Getter
     protected final DimensionInfo dimensionInfo;
     protected final AllayChunkSection[] sections;
-    // TODO: thread unsafe
-    @Getter
     protected final HeightMap heightMap;
     @Getter
     protected final Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
@@ -81,6 +79,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected List<NbtMap> entityNbtList;
     protected List<NbtMap> blockEntityNbtList;
 
+    protected final ChunkBitMap heightMapDirtyFlags;
     protected final Long2ObjectNonBlockingMap<Entity> entities;
     protected final Int2ObjectNonBlockingMap<BlockEntity> blockEntities;
     protected final Set<ChunkLoader> chunkLoaders;
@@ -127,6 +126,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.state = state;
         this.entityNbtList = entityNbtList;
         this.blockEntityNbtList = blockEntityNbtList;
+        this.heightMapDirtyFlags = new ChunkBitMap();
         this.entities = new Long2ObjectNonBlockingMap<>();
         this.blockEntities = new Int2ObjectNonBlockingMap<>();
         this.chunkLoaders = Sets.newConcurrentHashSet();
@@ -315,25 +315,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     }
 
     @Override
-    public short getHeight(int x, int z) {
-        checkXZ(x, z);
-        return getHeightUnsafe(HeightMap.computeIndex(x, z));
-    }
-
-    protected short getHeightUnsafe(int index) {
-        return this.heightMap.get(index);
-    }
-
-    public void setHeight(int x, int z, short height) {
-        checkXYZ(x, height, z);
-        setHeightUnsafe(HeightMap.computeIndex(x, z), height);
-    }
-
-    protected void setHeightUnsafe(int index, int height) {
-        this.heightMap.set(index, (short) height);
-    }
-
-    @Override
     public BlockState getBlockState(int x, int y, int z, int layer) {
         if (y < dimensionInfo.minHeight() || y > dimensionInfo.maxHeight()) {
             return BlockTypes.AIR.getDefaultState();
@@ -346,26 +327,11 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     @Override
     public void setBlockState(int x, int y, int z, BlockState blockState, int layer, boolean send) {
         checkXYZ(x, y, z);
-        var section = this.getSection(y >> 4);
-        section.setBlockState(x, y & 0xf, z, blockState, layer);
+        this.getSection(y >> 4).setBlockState(x, y & 0xf, z, blockState, layer);
 
         if (layer == 0) {
-            // Update height map
-            var index = HeightMap.computeIndex(x, z);
-            var currentHeight = getHeightUnsafe(index);
-            if (blockState.getBlockType() == BlockTypes.AIR && currentHeight == y) {
-                // If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
-                int newHeight = dimensionInfo.minHeight();
-                for (int i = y - 1; i >= dimensionInfo.minHeight(); i--) {
-                    if (getBlockState(x, i, z, 0).getBlockType() != BlockTypes.AIR) {
-                        newHeight = i;
-                        break;
-                    }
-                }
-                setHeightUnsafe(index, newHeight);
-            } else if (currentHeight < y) {
-                setHeightUnsafe(index, y);
-            }
+            // Mark the height map at this position as dirty
+            heightMapDirtyFlags.set(x, z, true);
         }
 
         if (blockChangeCallback != null) {
@@ -385,6 +351,73 @@ public class AllayUnsafeChunk implements UnsafeChunk {
                 default -> throw new IllegalArgumentException("Unsupported layer: " + layer);
             }
         }
+    }
+
+    @Override
+    public short getHeight(int x, int z) {
+        checkXZ(x, z);
+        short height;
+        if (heightMapDirtyFlags.get(x, z)) {
+            height = (short) calculateHeight(x, z);
+            setHeightUnsafe(HeightMap.computeIndex(x, z), height);
+            heightMapDirtyFlags.set(x, z, false);
+            return height;
+        } else {
+            return getHeightUnsafe(HeightMap.computeIndex(x, z));
+        }
+    }
+
+    protected short getHeightUnsafe(int index) {
+        return this.heightMap.get(index);
+    }
+
+    @VisibleForTesting
+    public void setHeight(int x, int z, short height) {
+        checkXYZ(x, height, z);
+        setHeightUnsafe(HeightMap.computeIndex(x, z), height);
+    }
+
+    protected void setHeightUnsafe(int index, short height) {
+        this.heightMap.set(index, height);
+    }
+
+    public HeightMap calculateAndGetHeightMap() {
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                if (heightMapDirtyFlags.get(x, z)) {
+                    setHeightUnsafe(HeightMap.computeIndex(x, z), (short) calculateHeight(x, z));
+                    heightMapDirtyFlags.set(x, z, false);
+                }
+            }
+        }
+
+        return heightMap;
+    }
+
+    protected int calculateHeight(int x, int z) {
+        // If there are no blocks in the (x, z) position, the height will be the min height of the current dimension
+        var newHeight = dimensionInfo.minHeight();
+        for (int sectionY = dimensionInfo.maxSectionY(); sectionY >= dimensionInfo.minSectionY(); sectionY--) {
+            var section = getSection(sectionY);
+            if (section.isAirSection()) {
+                continue;
+            }
+
+            boolean found = false;
+            for (int localY = 15; localY >= 0; localY--) {
+                if (section.getBlockState(x, localY, z, 0).getBlockType() != BlockTypes.AIR) {
+                    newHeight = localY + (sectionY << 4);
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                break;
+            }
+        }
+
+        return newHeight;
     }
 
     public void clearBlockChanges() {

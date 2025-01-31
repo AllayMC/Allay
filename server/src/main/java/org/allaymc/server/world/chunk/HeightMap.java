@@ -1,7 +1,8 @@
-package org.allaymc.server.world;
+package org.allaymc.server.world.chunk;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.jetbrains.annotations.Range;
 
 import java.util.Arrays;
 
@@ -44,7 +45,7 @@ public final class HeightMap {
      *
      * @return the height of the pos.
      */
-    public short get(int x, int z) {
+    public short get(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z) {
         return heights[computeIndex(x, z)];
     }
 
@@ -66,7 +67,7 @@ public final class HeightMap {
      * @param z      the z coordinate of the pos.
      * @param height the height of the pos.
      */
-    public void set(int x, int z, short height) {
+    public void set(@Range(from = 0, to = 15) int x, @Range(from = 0, to = 15) int z, short height) {
         heights[computeIndex(x, z)] = height;
     }
 

@@ -75,6 +75,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 - Removed `Extension#afterServerStarted` method.
 - Removed `UnsafeChunk#SECTION_SIZE`.
+- Removed `UnsafeChunk#setHeight`, it is an unexpected behavior to set height of a chunk without block change.
 
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 

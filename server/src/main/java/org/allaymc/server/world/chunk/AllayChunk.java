@@ -35,7 +35,9 @@ public class AllayChunk implements Chunk {
 
     @Override
     public short getHeight(int x, int z) {
-        return unsafeChunk.getHeight(x, z);
+        short[] height = new short[1];
+        applyOperation(chunk -> height[0] = chunk.getHeight(x, z), OperationType.READ, OperationType.NONE);
+        return height[0];
     }
 
     @Override

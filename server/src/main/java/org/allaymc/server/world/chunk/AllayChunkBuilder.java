@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
-import org.allaymc.server.world.HeightMap;
 import org.cloudburstmc.nbt.NbtMap;
 
 import java.util.List;

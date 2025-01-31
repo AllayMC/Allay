@@ -27,11 +27,7 @@ import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.datastruct.palette.PaletteException;
 import org.allaymc.server.datastruct.palette.PaletteUtils;
 import org.allaymc.server.world.AllayWorldData;
-import org.allaymc.server.world.HeightMap;
-import org.allaymc.server.world.chunk.AllayChunkBuilder;
-import org.allaymc.server.world.chunk.AllayChunkSection;
-import org.allaymc.server.world.chunk.AllayUnsafeChunk;
-import org.allaymc.server.world.chunk.ScheduledUpdateInfo;
+import org.allaymc.server.world.chunk.*;
 import org.allaymc.server.world.gamerule.AllayGameRules;
 import org.allaymc.updater.block.BlockStateUpdaters;
 import org.cloudburstmc.nbt.*;
@@ -471,7 +467,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         ByteBuf heightAndBiomesBuffer = ByteBufAllocator.DEFAULT.ioBuffer();
         try {
             // Serialize height map
-            for (short height : chunk.getHeightMap().getHeights()) {
+            for (short height : chunk.calculateAndGetHeightMap().getHeights()) {
                 heightAndBiomesBuffer.writeShortLE(height - chunk.getDimensionInfo().minHeight());
             }
             // Serialize biome

@@ -19,8 +19,8 @@ import org.allaymc.api.world.chunk.UnsafeChunk;
 import org.allaymc.api.world.service.LightService;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
-import org.allaymc.server.world.HeightMap;
 import org.allaymc.server.world.chunk.AllayChunkSection;
+import org.allaymc.server.world.chunk.HeightMap;
 import org.jetbrains.annotations.Range;
 
 import java.util.Set;
