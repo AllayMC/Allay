@@ -18,7 +18,7 @@ import org.allaymc.api.world.service.LightService;
 import org.allaymc.server.datastruct.ChunkSectionNibbleArray;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.HeightMap;
-import org.allaymc.server.world.chunk.AllayUnsafeChunk;
+import org.allaymc.server.world.chunk.AllayChunkSection;
 import org.jetbrains.annotations.Range;
 
 import java.util.Set;
@@ -106,9 +106,8 @@ public class AllayLightService implements LightService {
     protected void addChunk(Chunk chunk) {
         ChunkSectionNibbleArray[] chunkLightDampening = createNibbleArrays();
         var chunkLightHeightMap = hasSkyLight ? new HeightMap((short) dimensionInfo.minHeight()) : null;
-        AllayUnsafeChunk unsafeChunk = (AllayUnsafeChunk) chunk.toUnsafeChunk();
         for (int y = maxHeight; y >= minHeight; y--) {
-            var section = unsafeChunk.getSection(y >> 4);
+            var section = (AllayChunkSection) chunk.getSection(y >> 4);
             if (section.isAirSection()) {
                 y -= 15;
                 continue;
