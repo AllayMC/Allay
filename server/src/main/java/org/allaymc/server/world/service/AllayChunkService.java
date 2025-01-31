@@ -22,9 +22,10 @@ import org.allaymc.api.world.chunk.ChunkLoader;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.storage.WorldStorage;
-import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.generator.AllayWorldGenerator;
+import org.jctools.maps.NonBlockingHashMapLong;
+import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.joml.Vector3i;
 
@@ -66,10 +67,10 @@ public final class AllayChunkService implements ChunkService {
         this.worldGenerator = worldGenerator;
         this.worldStorage = worldStorage;
         this.removeUnneededChunkCycle = Server.SETTINGS.worldSettings().removeUnneededChunkCycle();
-        this.loadedChunks = new Long2ObjectNonBlockingMap<>();
-        this.loadingChunks = new Long2ObjectNonBlockingMap<>();
-        this.keepLoadingChunks = Sets.newConcurrentHashSet();
-        this.unusedChunkClearCountDown = new Long2ObjectNonBlockingMap<>();
+        this.loadedChunks = new NonBlockingHashMapLong<>();
+        this.loadingChunks = new NonBlockingHashMapLong<>();
+        this.keepLoadingChunks = new NonBlockingHashSet<>();
+        this.unusedChunkClearCountDown = new NonBlockingHashMapLong<>();
         this.chunkLoaderManagers = new Object2ObjectOpenHashMap<>();
     }
 

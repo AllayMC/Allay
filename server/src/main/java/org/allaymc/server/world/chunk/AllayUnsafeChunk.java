@@ -30,8 +30,6 @@ import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.server.blockentity.component.BlockEntityBaseComponentImpl;
 import org.allaymc.server.blockentity.impl.BlockEntityImpl;
-import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
-import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.world.service.AllayLightService;
@@ -42,6 +40,8 @@ import org.cloudburstmc.protocol.bedrock.data.BlockChangeEntry;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.LevelChunkPacket;
 import org.cloudburstmc.protocol.bedrock.packet.UpdateSubChunkBlocksPacket;
+import org.jctools.maps.NonBlockingHashMap;
+import org.jctools.maps.NonBlockingHashMapLong;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.VisibleForTesting;
 
@@ -72,7 +72,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected final AllayChunkSection[] sections;
     protected final HeightMap heightMap;
     @Getter
-    protected final Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
+    protected final NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates;
     @Getter
     @Setter
     protected volatile ChunkState state;
@@ -80,8 +80,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     protected List<NbtMap> blockEntityNbtList;
 
     protected final ChunkBitMap heightMapDirtyFlags;
-    protected final Long2ObjectNonBlockingMap<Entity> entities;
-    protected final Int2ObjectNonBlockingMap<BlockEntity> blockEntities;
+    protected final NonBlockingHashMapLong<Entity> entities;
+    protected final NonBlockingHashMap<Integer, BlockEntity> blockEntities;
     protected final Set<ChunkLoader> chunkLoaders;
     protected final Queue<BlockChangeEntry> blockChangeEntries;
     protected final Queue<BlockChangeEntry> extraBlockChangeEntries;
@@ -114,7 +114,7 @@ public class AllayUnsafeChunk implements UnsafeChunk {
     AllayUnsafeChunk(
             int x, int z, DimensionInfo dimensionInfo,
             AllayChunkSection[] sections, HeightMap heightMap,
-            Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates,
+            NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates,
             ChunkState state, List<NbtMap> entityNbtList,
             List<NbtMap> blockEntityNbtList) {
         this.x = x;
@@ -127,8 +127,8 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         this.entityNbtList = entityNbtList;
         this.blockEntityNbtList = blockEntityNbtList;
         this.heightMapDirtyFlags = new ChunkBitMap();
-        this.entities = new Long2ObjectNonBlockingMap<>();
-        this.blockEntities = new Int2ObjectNonBlockingMap<>();
+        this.entities = new NonBlockingHashMapLong<>();
+        this.blockEntities = new NonBlockingHashMap<>();
         this.chunkLoaders = Sets.newConcurrentHashSet();
         this.blockChangeEntries = PlatformDependent.newMpscQueue();
         this.extraBlockChangeEntries = PlatformDependent.newMpscQueue();
@@ -165,10 +165,10 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     protected void tickScheduledUpdates(Dimension dimension) {
         List<ScheduledUpdateInfo> positions = new ArrayList<>(scheduledUpdates.size() / 4);
-        for (var entry : scheduledUpdates.fastEntrySet()) {
+        for (var entry : scheduledUpdates.entrySet()) {
             if (entry.getValue().getDelay() <= 0) {
                 positions.add(entry.getValue());
-                scheduledUpdates.remove(entry.getIntKey());
+                scheduledUpdates.remove(entry.getKey());
             } else {
                 entry.getValue().decreaseDelay();
             }

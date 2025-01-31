@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.formsrt)
     implementation(libs.bundles.rng)
     implementation(libs.sentry)
+    implementation(libs.jctools)
 
     testImplementation(libs.bundles.junit)
     testAnnotationProcessor(libs.lombok)

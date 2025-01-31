@@ -22,7 +22,6 @@ import org.allaymc.api.world.chunk.ChunkState;
 import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.storage.WorldStorage;
 import org.allaymc.api.world.storage.WorldStorageException;
-import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.server.datastruct.palette.Palette;
 import org.allaymc.server.datastruct.palette.PaletteException;
 import org.allaymc.server.datastruct.palette.PaletteUtils;
@@ -38,6 +37,7 @@ import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
 import org.iq80.leveldb.WriteBatch;
 import org.iq80.leveldb.impl.Iq80DBFactory;
+import org.jctools.maps.NonBlockingHashMap;
 import org.joml.Vector3i;
 
 import java.io.*;
@@ -640,7 +640,7 @@ public class AllayLevelDBWorldStorage implements WorldStorage {
         if (scheduledUpdatesBytes == null) return;
 
         var nbtMaps = deserializeNbtTagsFromBytes(scheduledUpdatesBytes);
-        var scheduledUpdates = new Int2ObjectNonBlockingMap<ScheduledUpdateInfo>(nbtMaps.size());
+        var scheduledUpdates = new NonBlockingHashMap<Integer, ScheduledUpdateInfo>(nbtMaps.size());
         for (var nbtMap : nbtMaps) {
             var scheduledUpdateInfo = ScheduledUpdateInfo.fromNBT(nbtMap);
             scheduledUpdates.put(scheduledUpdateInfo.getChunkXYZ(), scheduledUpdateInfo);

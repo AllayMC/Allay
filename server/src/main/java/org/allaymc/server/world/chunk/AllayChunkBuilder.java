@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import lombok.Getter;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.api.world.chunk.ChunkState;
-import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.cloudburstmc.nbt.NbtMap;
+import org.jctools.maps.NonBlockingHashMap;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class AllayChunkBuilder {
     private HeightMap heightMap;
     private List<NbtMap> entitiyList;
     private List<NbtMap> blockEntitiyList;
-    private Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates;
+    private NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates;
 
     private static AllayChunkSection[] createEmptySections(DimensionInfo dimensionInfo) {
         var sections = new AllayChunkSection[dimensionInfo.chunkSectionCount()];
@@ -81,7 +81,7 @@ public class AllayChunkBuilder {
         return this;
     }
 
-    public AllayChunkBuilder scheduledUpdates(Int2ObjectNonBlockingMap<ScheduledUpdateInfo> scheduledUpdates) {
+    public AllayChunkBuilder scheduledUpdates(NonBlockingHashMap<Integer, ScheduledUpdateInfo> scheduledUpdates) {
         this.scheduledUpdates = scheduledUpdates;
         return this;
     }
@@ -92,7 +92,7 @@ public class AllayChunkBuilder {
         if (state == null) state = ChunkState.FINISHED;
         if (sections == null) sections = createEmptySections(dimensionInfo);
         if (heightMap == null) heightMap = new HeightMap((short) dimensionInfo.minHeight());
-        if (scheduledUpdates == null) scheduledUpdates = new Int2ObjectNonBlockingMap<>();
+        if (scheduledUpdates == null) scheduledUpdates = new NonBlockingHashMap<>();
 
         return new AllayUnsafeChunk(
                 chunkX, chunkZ, dimensionInfo,
@@ -106,7 +106,7 @@ public class AllayChunkBuilder {
                 chunkX, chunkZ, dimensionInfo,
                 createEmptySections(dimensionInfo),
                 new HeightMap((short) dimensionInfo.minHeight()),
-                new Int2ObjectNonBlockingMap<>(),
+                new NonBlockingHashMap<>(),
                 ChunkState.NEW, null, null
         );
     }

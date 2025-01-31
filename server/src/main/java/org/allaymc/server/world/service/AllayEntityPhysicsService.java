@@ -25,13 +25,13 @@ import org.allaymc.api.world.service.EntityPhysicsService;
 import org.allaymc.server.block.component.BlockLiquidBaseComponentImpl;
 import org.allaymc.server.block.impl.BlockLiquidBehaviorImpl;
 import org.allaymc.server.datastruct.aabb.AABBTree;
-import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.entity.component.EntityBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.impl.ingame.PlayerAuthInputPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
+import org.jctools.maps.NonBlockingHashMapLong;
 import org.joml.Vector3f;
 import org.joml.primitives.AABBf;
 import org.joml.primitives.AABBfc;
@@ -92,7 +92,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public void tick() {
         handleClientMoveQueue();
         cacheEntityCollisionResult();
-        var updatedEntities = new Long2ObjectNonBlockingMap<Entity>();
+        var updatedEntities = new NonBlockingHashMapLong<Entity>();
         entities.values().parallelStream().forEach(entity -> {
             if (!entity.computeMovementServerSide() ||
                 !entity.isCurrentChunkLoaded() ||

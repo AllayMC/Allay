@@ -19,11 +19,11 @@ import org.allaymc.api.world.generator.function.EntitySpawner;
 import org.allaymc.api.world.generator.function.Noiser;
 import org.allaymc.api.world.generator.function.Populator;
 import org.allaymc.server.AllayServer;
-import org.allaymc.server.datastruct.collections.nb.Long2ObjectNonBlockingMap;
 import org.allaymc.server.datastruct.collections.queue.BlockingQueueWrapper;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
+import org.jctools.maps.NonBlockingHashMapLong;
+import org.jctools.maps.NonBlockingHashSet;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -48,10 +48,10 @@ public class AllayWorldGenerator implements WorldGenerator {
     private final List<Populator> populators;
     private final List<EntitySpawner> entitySpawners;
     private final Consumer<Dimension> onDimensionSet;
-    private final Map<Long, CompletableFuture<Chunk>> chunkNoiseFutures = new Long2ObjectNonBlockingMap<>();
-    private final Map<Long, CompletableFuture<Chunk>> chunkFutures = new Long2ObjectNonBlockingMap<>();
+    private final Map<Long, CompletableFuture<Chunk>> chunkNoiseFutures = new NonBlockingHashMapLong<>();
+    private final Map<Long, CompletableFuture<Chunk>> chunkFutures = new NonBlockingHashMapLong<>();
     private final BlockingQueueWrapper<PopulationQueueEntry> populationQueue = BlockingQueueWrapper.wrap(PlatformDependent.newMpscQueue());
-    private final Set<Long> populationLocks = Collections.newSetFromMap(new Long2ObjectNonBlockingMap<>());
+    private final Set<Long> populationLocks = new NonBlockingHashSet<>();
     private final ExecutorService computeThreadPool = AllayServer.getInstance().getComputeThreadPool();
 
     @Getter

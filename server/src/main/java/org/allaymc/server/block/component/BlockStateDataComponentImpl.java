@@ -8,8 +8,8 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
-import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.apache.commons.lang3.function.TriFunction;
+import org.jctools.maps.NonBlockingHashMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +96,7 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
     }
 
     private static class CachedAttributeAccessor implements Function<BlockState, BlockStateData> {
-        private final Map<Integer, BlockStateData> attributeMap = new Int2ObjectNonBlockingMap<>();
+        private final Map<Integer, BlockStateData> attributeMap = new NonBlockingHashMap<>();
         private final Function<BlockState, BlockStateData> directAttributeAccessor;
 
         public CachedAttributeAccessor(Function<BlockState, BlockStateData> directAttributeAccessor) {

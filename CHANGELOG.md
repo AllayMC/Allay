@@ -73,9 +73,11 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Removed
 
+- (API) Removed `UnsafeChunk#SECTION_SIZE`.
+- (API) Removed `UnsafeChunk#setHeight`, it is an unexpected behavior to set height of a chunk without block change.
 - Removed `Extension#afterServerStarted` method.
-- Removed `UnsafeChunk#SECTION_SIZE`.
-- Removed `UnsafeChunk#setHeight`, it is an unexpected behavior to set height of a chunk without block change.
+- Removed `org.allaymc.server.datastruct.collections.nb.*`, we now use the implementations provided by JCTools. Consider using `NonBlockingHashMap`
+  and `NonBlockingHashMapLong` if your plugins use these classes.
 
 ## [0.1.3](https://github.com/AllayMC/Allay/releases/tag/0.1.3) (API 0.4.0) - 2025-1-17
 

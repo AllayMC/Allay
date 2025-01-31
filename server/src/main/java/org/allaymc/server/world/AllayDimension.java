@@ -18,11 +18,11 @@ import org.allaymc.server.world.service.*;
 import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.packet.LevelEventPacket;
+import org.jctools.maps.NonBlockingHashSet;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.allaymc.api.block.type.BlockTypes.AIR;
 
@@ -33,14 +33,14 @@ import static org.allaymc.api.block.type.BlockTypes.AIR;
 @Getter
 public class AllayDimension implements Dimension {
 
+    protected final AllayWorld world;
+    protected final DimensionInfo dimensionInfo;
     protected final AllayChunkService chunkService;
     protected final AllayEntityPhysicsService entityPhysicsService;
-    protected final AllayBlockUpdateService blockUpdateService;
     protected final AllayEntityService entityService;
+    protected final AllayBlockUpdateService blockUpdateService;
     protected final AllayLightService lightService;
-    protected final DimensionInfo dimensionInfo;
-    protected final AllayWorld world;
-    protected final Set<EntityPlayer> players = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    protected final Set<EntityPlayer> players;
 
     public AllayDimension(AllayWorld world, WorldGenerator worldGenerator, DimensionInfo dimensionInfo) {
         this.world = world;
@@ -51,6 +51,7 @@ public class AllayDimension implements Dimension {
         this.entityService = new AllayEntityService(entityPhysicsService);
         this.blockUpdateService = new AllayBlockUpdateService(this);
         this.lightService = new AllayLightService(this);
+        this.players = new NonBlockingHashSet<>();
     }
 
     public void startTick() {

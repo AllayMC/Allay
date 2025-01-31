@@ -7,9 +7,9 @@ import org.allaymc.api.item.enchantment.EnchantmentInstance;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.registry.Registries;
-import org.allaymc.server.datastruct.collections.nb.Int2ObjectNonBlockingMap;
 import org.allaymc.server.utils.AllayRandom;
 import org.cloudburstmc.protocol.bedrock.data.inventory.EnchantOptionData;
+import org.jctools.maps.NonBlockingHashMapLong;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +28,7 @@ public final class EnchantmentOptionGenerator {
     public static final int NETWORK_ID_COUNTER_INITIAL_VALUE = 100000;
 
     // TODO: possible OOM attack here
-    private static final Int2ObjectNonBlockingMap<AllayEnchantOptionData> ENCHANT_OPTIONS = new Int2ObjectNonBlockingMap<>();
+    private static final NonBlockingHashMapLong<AllayEnchantOptionData> ENCHANT_OPTIONS = new NonBlockingHashMapLong<>();
     private static final AtomicInteger NETWORK_ID_COUNTER = new AtomicInteger(NETWORK_ID_COUNTER_INITIAL_VALUE);
     private static final int MAX_BOOKSHELF_COUNT = 15;
 
