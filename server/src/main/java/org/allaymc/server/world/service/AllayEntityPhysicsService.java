@@ -59,7 +59,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final float BLOCK_COLLISION_MOTION;
 
     private static final float STEPPING_OFFSET = 0.05f;
-    private static final float FAT_AABB_MARGIN = 0.0005f;
+    private static final float FAT_AABB_MARGIN = 0.00001f;
     private static final float MOMENTUM_FACTOR = 0.91f;
 
     private static final float WATER_FLOW_MOTION = 0.014f;
