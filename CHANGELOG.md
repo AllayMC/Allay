@@ -72,6 +72,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Item entity will be despawned immediately instead of having a `dead timer` when its health become 0. It's dead smoke is also removed.
 - Fixed the bug that unusable enchantment types may be shown in enchantment table.
 - Fixed the bug that `/give` command will stack item that cannot be stacked like sword.
+- Fixed the bug that damage that smaller than 1 will never kill an entity even if the entity has only 1 health.
 
 ### Removed
 

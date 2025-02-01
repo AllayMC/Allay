@@ -138,8 +138,8 @@ public class EntityAttributeComponentImpl implements EntityAttributeComponent {
         if (value > 0 && value < 1) {
             // Client will think he is dead if the health is less than 1
             // But server doesn't think so, which would causes bug
-            // So we need to set the health to 1 if it's less than 1 and bigger than 0
-            value = 1;
+            // So we need to set the health to 0 if it's less than 1 and bigger than 0
+            value = 0;
         } else {
             value = max(0, min(value, this.getMaxHealth()));
         }
