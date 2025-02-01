@@ -13,6 +13,7 @@ import org.allaymc.api.entity.effect.type.EffectTypes;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
 import org.allaymc.api.world.Dimension;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3ic;
 
 import java.util.Set;
@@ -37,6 +38,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param neighbor The neighbor block that triggered the update.
      * @param face     The face of the current block that is being updated.
      */
+    @ApiStatus.OverrideOnly
     void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face);
 
     /**
@@ -44,6 +46,7 @@ public interface BlockBaseComponent extends BlockComponent {
      *
      * @param current the block that encountered the random update.
      */
+    @ApiStatus.OverrideOnly
     void onRandomUpdate(BlockStateWithPos current);
 
     /**
@@ -101,6 +104,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param newBlockState     The block that is replacing the current block.
      * @param placementInfo     The player placement info, can be {@code null}.
      */
+    @ApiStatus.OverrideOnly
     void onPlace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
@@ -110,6 +114,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param newBlockState The block that is replacing the current block.
      * @param placementInfo The player placement info, can be {@code null}.
      */
+    @ApiStatus.OverrideOnly
     void afterPlaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
@@ -133,6 +138,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * For example, right-clicking on the crafting table is normally considered a valid operation, so this method will return {@code true}
      * If {@code false} is returned, the useItemOn method of the player's item will continue to be called.
      */
+    @ApiStatus.OverrideOnly
     boolean onInteract(ItemStack itemStack, Dimension dimension, PlayerInteractInfo interactInfo);
 
     /**
@@ -142,6 +148,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param newBlockState     The block that is replacing the current block.
      * @param placementInfo     The player placement info, can be null.
      */
+    @ApiStatus.OverrideOnly
     void onReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
@@ -151,6 +158,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param newBlockState the block that is replacing the current block.
      * @param placementInfo the player placement info, can be null.
      */
+    @ApiStatus.OverrideOnly
     void afterReplaced(BlockStateWithPos oldBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
@@ -163,6 +171,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param newBlockState     the block that is replacing the current block.
      * @param placementInfo     the player placement info, can be null.
      */
+    @ApiStatus.OverrideOnly
     void afterNeighborLayerReplace(BlockStateWithPos currentBlockState, BlockState newBlockState, PlayerInteractInfo placementInfo);
 
     /**
@@ -172,6 +181,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param usedItem   the item that was used to break the block, can be {@code null}.
      * @param entity     the player who broke the block, can be {@code null}.
      */
+    @ApiStatus.OverrideOnly
     void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity);
 
     /**
@@ -179,6 +189,7 @@ public interface BlockBaseComponent extends BlockComponent {
      *
      * @param blockStateWithPos the block that received the scheduled update.
      */
+    @ApiStatus.OverrideOnly
     default void onScheduledUpdate(BlockStateWithPos blockStateWithPos) {}
 
     /**
@@ -220,6 +231,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param entity the entity who falls on the block.
      * @param block  the block state the entity falls on.
      */
+    @ApiStatus.OverrideOnly
     default void onEntityFallOn(Entity entity, BlockStateWithPos block) {}
 
     /**
@@ -266,6 +278,7 @@ public interface BlockBaseComponent extends BlockComponent {
      * @param blockStateWithPos the block that collides with the entity.
      * @param entity            the entity that collides with the block.
      */
+    @ApiStatus.OverrideOnly
     default void onCollideWithEntity(BlockStateWithPos blockStateWithPos, Entity entity) {}
 
     /**
