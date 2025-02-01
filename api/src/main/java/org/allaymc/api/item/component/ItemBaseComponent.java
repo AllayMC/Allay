@@ -559,6 +559,17 @@ public interface ItemBaseComponent extends ItemComponent {
     }
 
     /**
+     * Check if all enchantments are available to this item when trying to enchant it in enchant
+     * table. If return {@code true}, enchantment option generator will ignore the return value
+     * of {@link EnchantmentType#canBeAppliedTo(ItemType)}. This method is usually used in book.
+     *
+     * @return {@code true} if all enchantments are available, {@code false} otherwise.
+     */
+    default boolean isAllEnchantmentsAvailableInEnchantTable() {
+        return false;
+    }
+
+    /**
      * Check if the specified enchantment type is compatible with the enchantment types
      * that this item already has. It won't check if the enchantment can be applied to
      * this item type.

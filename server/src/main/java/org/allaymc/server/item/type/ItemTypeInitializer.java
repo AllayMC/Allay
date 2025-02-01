@@ -974,4 +974,12 @@ public final class ItemTypeInitializer {
                 .addComponent(ItemPumpkinSeedsBaseComponentImpl::new, ItemPumpkinSeedsBaseComponentImpl.class)
                 .build();
     }
+
+    public static void initBook() {
+        ItemTypes.BOOK = AllayItemType
+                .builder(ItemBookStackImpl.class)
+                .vanillaItem(ItemId.BOOK)
+                .addComponent(ItemBookBaseComponentImpl::new, ItemBookBaseComponentImpl.class)
+                .build();
+    }
 }

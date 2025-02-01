@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.allaymc.api.item.type.ItemType;
+import org.allaymc.api.item.type.ItemTypes;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 
@@ -122,6 +123,11 @@ public abstract class EnchantmentType {
      * @return {@code true} if the enchantment can be applied to the item type, {@code false} otherwise.
      */
     public boolean canBeAppliedTo(ItemType<?> itemType) {
+        if (itemType == ItemTypes.BOOK) {
+            // Book can always be enchanted
+            return true;
+        }
+
         return applicableType.canBeAppliedTo(itemType);
     }
 

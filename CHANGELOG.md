@@ -35,7 +35,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Added `ChunkSection`, chunk section can be obtained from chunk.
 - (API) Added `EnchantmentType#canBeAppliedTo`, `EnchantmentType#getAppliableType` and `ApplicableType`, these methods can be used to
   check if an enchantment type can be applied to a specific item type.
-- (API) Introduce new item tag `allay:head` and helper method `ItemHelper#isHead` which can be used to check if an item is a head item. 
+- (API) Introduce new item tag `allay:head` and helper method `ItemHelper#isHead` which can be used to check if an item is a head item.
+- (API) Introduce `ItemStack#isAllEnchantmentsAvailableInEnchantTable` method. This method is used in book item.
 - Implemented reeds (also called sugar cane) and cactus.
 - Implemented `UpdateSubChunkBlocksPacket` related logic, which will make client load large range block updates much quicker (e.g.
   using `/fill` command to fill a large area).
