@@ -109,6 +109,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 return;
             }
 
+            // FIXME: fix bug caused by floating point number error here: 1.3f - 0.3f = 0.99999994
             var collidedBlocks = dimension.getCollidingBlockStates(entity.getOffsetAABB());
             if (collidedBlocks == null) {
                 // 1. The entity is not stuck in the block
@@ -270,7 +271,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             if (!(block.getBehavior() instanceof BlockLiquidBehaviorImpl liquidBehavior)) {
                 return;
             }
-            
+
             var flowVector = ((BlockLiquidBaseComponentImpl) liquidBehavior.getBaseComponent()).calculateFlowVector(dimension, x, y, z, block);
             if (flowVector.lengthSquared() <= 0) {
                 return;
