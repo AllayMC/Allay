@@ -68,11 +68,6 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
     }
 
     @Override
-    public boolean computeBlockCollisionMotion() {
-        return true;
-    }
-
-    @Override
     public float getGravity() {
         return 0.04f;
     }

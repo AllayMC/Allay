@@ -59,7 +59,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     public static final float BLOCK_COLLISION_MOTION;
     /**
      * When the min distance of entity to the collision shape of block is smaller than FAT_AABB_MARGIN,
-     * the entity will be considered as collided with the block. This is what the vanilla actually does.
+     * the entity will be considered as collided with the block. This is used to prevent floating point
+     * number overflow problem and is what the vanilla actually does.
      * <p>
      * This value is actually the value of the y coordinate decimal point when the player stands on the
      * full block (such as the grass block)
@@ -418,7 +419,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      */
     private float applyMotion0(float stepHeight, Location3f pos, float motion, AABBf aabb, boolean enableStepping, int axis) {
         if (motion == 0) return motion;
-        if (axis < X || axis > Z) throw new IllegalArgumentException("Invalid axis: " + axis);
+        if (axis < X || axis > Z) {
+            throw new IllegalArgumentException("Invalid axis: " + axis);
+        }
 
         var resultAABB = new AABBf(aabb);
         var resultPos = new Vector3f(pos);
@@ -456,33 +459,36 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * @throws IllegalArgumentException if an invalid axis is provided.
      */
     private Pair<Float, Boolean> moveAlongAxisAndStopWhenCollision(AABBf aabb, float motion, Vector3f recorder, int axis) {
-        if (motion == 0) return EMPTY_FLOAT_BOOLEAN_PAIR;
+        if (motion == 0) {
+            return EMPTY_FLOAT_BOOLEAN_PAIR;
+        }
 
         var extendAxis = new AABBf(aabb);
 
         // Move towards the negative(motion < 0) or positive(motion > 0) axis direction
         var shouldTowardsNegative = motion < 0;
         switch (axis) {
-            case X:
+            case X -> {
                 var lengthX = extendAxis.lengthX();
                 extendAxis.minX += shouldTowardsNegative ? motion : lengthX;
                 extendAxis.maxX += shouldTowardsNegative ? -lengthX : motion;
-                break;
-            case Y:
+            }
+            case Y -> {
                 var lengthY = extendAxis.lengthY();
                 extendAxis.minY += shouldTowardsNegative ? motion : lengthY;
                 extendAxis.maxY += shouldTowardsNegative ? -lengthY : motion;
-                break;
-            case Z:
+            }
+            case Z -> {
                 var lengthZ = extendAxis.lengthZ();
                 extendAxis.minZ += shouldTowardsNegative ? motion : lengthZ;
                 extendAxis.maxZ += shouldTowardsNegative ? -lengthZ : motion;
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid axis provided");
+            }
+            default -> throw new IllegalArgumentException("Invalid axis provided");
         }
 
-        if (notValidEntityArea(extendAxis)) return EMPTY_FLOAT_BOOLEAN_PAIR;
+        if (notValidEntityArea(extendAxis)) {
+            return EMPTY_FLOAT_BOOLEAN_PAIR;
+        }
 
         var deltaAxis = motion;
         var collision = false;
@@ -501,8 +507,12 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 deltaAxis = 0;
             } else {
                 deltaAxis = min(abs(coordinate - minAxis), abs(coordinate - maxAxis));
-                if (shouldTowardsNegative) deltaAxis = -deltaAxis;
-                if (abs(deltaAxis) <= FAT_AABB_MARGIN) deltaAxis = 0;
+                if (shouldTowardsNegative) {
+                    deltaAxis = -deltaAxis;
+                }
+                if (abs(deltaAxis) <= FAT_AABB_MARGIN) {
+                    deltaAxis = 0;
+                }
             }
 
             motion = 0;

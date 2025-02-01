@@ -337,7 +337,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return {@code true} if the entity has block collision motion.
      */
     default boolean computeBlockCollisionMotion() {
-        return false;
+        return true;
     }
 
     /**
