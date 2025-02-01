@@ -24,7 +24,7 @@ public class AlwaysDayCommand extends SimpleCommand {
                     var world = context.getSender().getCmdExecuteLocation().dimension().getWorld();
                     boolean lock = context.getResult(0);
 
-                    world.getWorldData().setGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE, lock);
+                    world.getWorldData().setGameRuleValue(GameRule.DO_DAYLIGHT_CYCLE, !lock);
                     world.getWorldData().setTimeOfDay(WorldData.TIME_NOON - 1000);
 
                     if (lock) {

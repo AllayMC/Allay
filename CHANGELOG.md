@@ -74,6 +74,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug that `/give` command will stack item that cannot be stacked like sword.
 - Fixed the bug that damage that smaller than 1 will never kill an entity even if the entity has only 1 health.
 - Fixed the bug caused by incorrect initial value of runtime id counter. The initial value should be 1 instead of 0.
+- Fixed the bug that `/alwaysday` command actually do the opposite thing.
 
 ### Removed
 
