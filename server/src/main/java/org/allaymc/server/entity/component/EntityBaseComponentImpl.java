@@ -74,7 +74,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     public static final Identifier IDENTIFIER = new Identifier("minecraft:entity_base_component");
 
     protected static final int DEFAULT_DEAD_TIMER = 20;
-    protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(0);
+    // NOTICE: the runtime id is counted from 1 not 0
+    protected static final AtomicLong RUNTIME_ID_COUNTER = new AtomicLong(1);
 
     protected static final String TAG_IDENTIFIER = "identifier";
     protected static final String TAG_ON_GROUND = "OnGround";
