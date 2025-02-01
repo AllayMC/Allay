@@ -57,9 +57,16 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     public static final float MOTION_THRESHOLD;
     public static final float BLOCK_COLLISION_MOTION;
+    /**
+     * When the min distance of entity to the collision shape of block is smaller than FAT_AABB_MARGIN,
+     * the entity will be considered as collided with the block. This is what the vanilla actually does.
+     * <p>
+     * This value is actually the value of the y coordinate decimal point when the player stands on the
+     * full block (such as the grass block)
+     */
+    public static final float FAT_AABB_MARGIN = 0.00001f;
 
     private static final float STEPPING_OFFSET = 0.05f;
-    private static final float FAT_AABB_MARGIN = 0.00001f;
     private static final float MOMENTUM_FACTOR = 0.91f;
 
     private static final float WATER_FLOW_MOTION = 0.014f;
@@ -592,7 +599,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 // ClientMove is not calculated by the server, but we need to calculate the onGround status
                 // If it's a server-calculated move, the onGround status will be calculated in applyMotion()
                 var aabb = clientMove.player.getOffsetAABB();
-                aabb.minY -= FAT_AABB_MARGIN;
+                // Here we should subtract twice FAT_AABB_MARGIN, because the client pos has an extra FAT_AABB_MARGIN in y coordinate
+                aabb.minY -= 2 * FAT_AABB_MARGIN;
                 ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent()).setOnGround(dimension.getCollidingBlockStates(aabb) != null);
             }
         }

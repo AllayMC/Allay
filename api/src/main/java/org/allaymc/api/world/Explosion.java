@@ -179,9 +179,10 @@ public class Explosion {
         var rand = ThreadLocalRandom.current();
         var d = size * 2;
         var aabb = new AABBf(
-                (float) Math.floor(x - d - 1) - 2, (float) Math.floor(y - d - 1) - 2, (float) Math.floor(z - d - 1) - 2,
-                (float) Math.ceil(x + d + 1) + 2, (float) Math.ceil(y + d + 1) + 2, (float) Math.ceil(z + d + 1) + 2
+                (float) Math.floor(x - d - 1), (float) Math.floor(y - d - 1), (float) Math.floor(z - d - 1),
+                (float) Math.ceil(x + d + 1), (float) Math.ceil(y + d + 1), (float) Math.ceil(z + d + 1)
         );
+        MathUtils.grow(aabb, 2);
 
         if (affectEntities) {
             var affectedEntities = dimension.getEntityPhysicsService().computeCollidingEntities(aabb);

@@ -3,6 +3,7 @@ package org.allaymc.api.math;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3fc;
 import org.joml.*;
+import org.joml.primitives.AABBf;
 
 import java.lang.Math;
 
@@ -361,5 +362,23 @@ public final class MathUtils {
      */
     public static Vector3f normalizeIfNotZero(Vector3f v) {
         return v.lengthSquared() > 0 ? v.normalize(v) : v;
+    }
+
+    /**
+     * Grow an AABB by a certain amount.
+     *
+     * @param aabb   the AABB to grow.
+     * @param growth the amount to grow by.
+     *
+     * @return the grown AABB.
+     */
+    public static AABBf grow(AABBf aabb, float growth) {
+        aabb.minX -= growth;
+        aabb.minY -= growth;
+        aabb.minZ -= growth;
+        aabb.maxX += growth;
+        aabb.maxY += growth;
+        aabb.maxZ += growth;
+        return aabb;
     }
 }

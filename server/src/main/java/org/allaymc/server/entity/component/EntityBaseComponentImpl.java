@@ -36,6 +36,7 @@ import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
+import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.cloudburstmc.math.vector.Vector2f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
@@ -190,20 +191,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     protected void computeAndNotifyCollidedBlocks() {
-        var aabb = getOffsetAABB();
+        var aabb = MathUtils.grow(getOffsetAABB(), 2 * AllayEntityPhysicsService.FAT_AABB_MARGIN);
         var dimension = getDimension();
         dimension.forEachBlockStates(aabb, 0, (x, y, z, blockState) -> {
             var blockStateData = blockState.getBlockStateData();
-            // NOTICE: use shape here instead of collision shape!
-            // That's because entity colliding with block means that
-            // the entity get into the shape of the block. For example
-            // an entity can pass through a button block, which does not
-            // have collision shape but has shape.
-            if (blockState.getBehavior().canCollideWithEntity() && blockStateData.shape().translate(x, y, z).intersectsAABB(aabb)) {
-                blockState.getBehavior().onCollideWithEntity(
-                        new BlockStateWithPos(blockState, new Position3i(x, y, z, dimension), 0),
-                        thisEntity
-                );
+            if (blockState.getBehavior().canCollideWithEntity() && blockStateData.collisionShape().translate(x, y, z).intersectsAABB(aabb)) {
+                blockState.getBehavior().onCollideWithEntity(new BlockStateWithPos(blockState, new Position3i(x, y, z, dimension), 0), thisEntity);
             }
         });
     }
