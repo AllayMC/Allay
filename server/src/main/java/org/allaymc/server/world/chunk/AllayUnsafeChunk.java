@@ -155,12 +155,19 @@ public class AllayUnsafeChunk implements UnsafeChunk {
         Preconditions.checkArgument(z >= 0 && z <= 15);
     }
 
-    public void tick(long currentTick, Dimension dimension, WorldStorage worldStorage) {
+    public void tick(long currentTick, Dimension dimension) {
         blockEntities.values().forEach(blockEntity -> ((BlockEntityBaseComponentImpl) ((BlockEntityImpl) blockEntity).getBaseComponent()).tick(currentTick));
         entities.values().forEach(entity -> ((EntityBaseComponentImpl) ((EntityImpl) entity).getBaseComponent()).tick(currentTick));
         tickScheduledUpdates(dimension);
         tickRandomUpdates(dimension);
-        checkAutoSave(worldStorage);
+    }
+
+    public void checkAutoSave(WorldStorage worldStorage) {
+        autoSaveTimer++;
+        if (autoSaveTimer >= Server.SETTINGS.storageSettings().chunkAutoSaveCycle()) {
+            worldStorage.writeChunk(safeChunk);
+            autoSaveTimer = 0;
+        }
     }
 
     protected void tickScheduledUpdates(Dimension dimension) {
@@ -230,14 +237,6 @@ public class AllayUnsafeChunk implements UnsafeChunk {
 
     public int nextUpdateLCG() {
         return (this.updateLCG = (this.updateLCG * 3) ^ LCG_CONSTANT);
-    }
-
-    protected void checkAutoSave(WorldStorage worldStorage) {
-        autoSaveTimer++;
-        if (autoSaveTimer >= Server.SETTINGS.storageSettings().chunkAutoSaveCycle()) {
-            worldStorage.writeChunk(safeChunk);
-            autoSaveTimer = 0;
-        }
     }
 
     public void beforeSetChunk(Dimension dimension) {

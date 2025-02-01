@@ -19,6 +19,7 @@ import org.allaymc.api.utils.HashUtils;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
+import org.allaymc.api.world.chunk.OperationType;
 import org.allaymc.api.world.generator.WorldGenerator;
 import org.allaymc.api.world.service.ChunkService;
 import org.allaymc.api.world.storage.WorldStorage;
@@ -94,7 +95,8 @@ public final class AllayChunkService implements ChunkService {
             }
 
             try {
-                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).tick(currentTick, dimension, worldStorage);
+                chunk.applyOperation(unsafeChunk -> ((AllayUnsafeChunk) unsafeChunk).tick(currentTick, dimension), OperationType.WRITE, OperationType.WRITE);
+                ((AllayUnsafeChunk) chunk.toUnsafeChunk()).checkAutoSave(worldStorage);
             } catch (Throwable t) {
                 log.error("Error while ticking chunk({}, {})!", chunk.getX(), chunk.getZ(), t);
             }
