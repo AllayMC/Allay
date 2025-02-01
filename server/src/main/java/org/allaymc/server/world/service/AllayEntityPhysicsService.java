@@ -39,6 +39,7 @@ import org.joml.primitives.AABBfc;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static java.lang.Math.*;
 import static org.allaymc.api.block.component.data.BlockStateData.DEFAULT_FRICTION;
@@ -259,61 +260,50 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * @return {@code true} if the entity has liquid motion, otherwise {@code false}.
      */
     protected boolean computeLiquidMotion(Entity entity) {
-        // In calculateFlowVector() method, Dimension#getBlockState() will also being called,
-        // and because the lambda is running in Chunk#batchProcess, calling such method
-        // inside the lambda will cause a deadlock (the lock is not reentrant), so we
-        // need to get the block states first and store them for further use.
-        var liquids = new ArrayList<LiquidWithPos>();
-        dimension.forEachBlockStates(entity.getOffsetAABB(), 0, (x, y, z, block) -> {
-            if (block.getBehavior() instanceof BlockLiquidBehaviorImpl) {
-                liquids.add(new LiquidWithPos(x, y, z, block));
-            }
-        });
-        if (liquids.isEmpty()) {
-            return false;
-        }
-
-        var hasWaterMotion = false;
-        var hasLavaMotion = false;
+        var hasWaterMotion = new AtomicBoolean(false);
+        var hasLavaMotion = new AtomicBoolean(false);
         var waterMotion = new Vector3f();
         var lavaMotion = new Vector3f();
-
         var entityY = entity.getLocation().y();
-        for (var liquid : liquids) {
-            var liquidBehavior = (BlockLiquidBehaviorImpl) liquid.blockState.getBehavior();
-            var flowVector = ((BlockLiquidBaseComponentImpl) liquidBehavior.getBaseComponent()).calculateFlowVector(dimension, liquid.x, liquid.y, liquid.z, liquid.blockState);
+
+        dimension.forEachBlockStates(entity.getOffsetAABB(), 0, (x, y, z, block) -> {
+            if (!(block.getBehavior() instanceof BlockLiquidBehaviorImpl liquidBehavior)) {
+                return;
+            }
+            
+            var flowVector = ((BlockLiquidBaseComponentImpl) liquidBehavior.getBaseComponent()).calculateFlowVector(dimension, x, y, z, block);
             if (flowVector.lengthSquared() <= 0) {
-                continue;
+                return;
             }
 
-            var d = BlockLiquidBaseComponent.getDepth(liquid.blockState) * 0.125f + liquid.y - entityY;
+            var d = BlockLiquidBaseComponent.getDepth(block) * 0.125f + y - entityY;
             if (d <= 0) {
-                continue;
+                return;
             }
             if (d < 0.4) {
                 flowVector.mul(d);
             }
 
             if (liquidBehavior.getBlockType().hasBlockTag(BlockCustomTags.WATER)) {
-                hasWaterMotion = true;
+                hasWaterMotion.set(true);
                 waterMotion.add(flowVector);
             } else if (liquidBehavior.getBlockType().hasBlockTag(BlockCustomTags.LAVA)) {
-                hasLavaMotion = true;
+                hasLavaMotion.set(true);
                 lavaMotion.add(flowVector);
             }
-        }
-        if (!hasWaterMotion && !hasLavaMotion) {
+        });
+
+        if (!hasWaterMotion.get() && !hasLavaMotion.get()) {
             return false;
         }
 
         var finalMotion = new Vector3f();
-        if (hasWaterMotion) {
-            // Multiple water flow vector may cancel each other out and let the final motion
-            // result in zero vector, so we still need to use normalizeIfNotZero() here to
-            // prevent NaN
+        if (hasWaterMotion.get()) {
+            // Multiple water flow vector may cancel each other out and let the final motion result
+            // in zero vector, so we still need to use normalizeIfNotZero() here to prevent NaN
             finalMotion.add(MathUtils.normalizeIfNotZero(waterMotion).mul(WATER_FLOW_MOTION));
         }
-        if (hasLavaMotion) {
+        if (hasLavaMotion.get()) {
             // Same to above
             finalMotion.add(MathUtils.normalizeIfNotZero(lavaMotion).mul(dimension.getDimensionInfo() == DimensionInfo.NETHER ? LAVA_FLOW_MOTION_IN_NETHER : LAVA_FLOW_MOTION));
         }
@@ -695,6 +685,4 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected record ClientMove(EntityPlayer player, Location3fc newLoc) {}
-
-    protected record LiquidWithPos(int x, int y, int z, BlockState blockState) {}
 }
