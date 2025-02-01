@@ -40,7 +40,9 @@ public enum Weather {
      * @return the start level event packet for this weather, or {@code null} if the start level event is {@code null}.
      */
     public LevelEventPacket createStartLevelEventPacket() {
-        if (startLevelEvent == null) return null;
+        if (startLevelEvent == null) {
+            return null;
+        }
 
         var pk = new LevelEventPacket();
         pk.setType(startLevelEvent);
@@ -55,7 +57,9 @@ public enum Weather {
      * @return the stop level event packet for this weather, or {@code null} if the stop level event is {@code null}.
      */
     public LevelEventPacket createStopLevelEventPacket() {
-        if (stopLevelEvent == null) return null;
+        if (stopLevelEvent == null) {
+            return null;
+        }
 
         var pk = new LevelEventPacket();
         pk.setType(stopLevelEvent);

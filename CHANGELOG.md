@@ -78,6 +78,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Removed `UnsafeChunk#SECTION_SIZE`.
 - (API) Removed `UnsafeChunk#setHeight`, it is an unexpected behavior to set height of a chunk without block change.
 - (API) Removed `BlockBaseComponent#canKeepExisting` method to eliminate ambiguity.
+- (API) Removed `PlayerStorage#tick` and `PlayerStorage#shutdown` methods, these methods shouldn't be in api module.
 - Removed `Extension#afterServerStarted` method.
 - Removed `org.allaymc.server.datastruct.collections.nb.*`, we now use the implementations provided by JCTools. Consider using `NonBlockingHashMap`
   and `NonBlockingHashMapLong` if your plugins use these classes.

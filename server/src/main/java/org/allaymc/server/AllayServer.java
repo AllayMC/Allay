@@ -40,6 +40,7 @@ import org.allaymc.api.utils.TextFormat;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.client.storage.AllayEmptyPlayerStorage;
 import org.allaymc.server.client.storage.AllayNBTFilePlayerStorage;
+import org.allaymc.server.client.storage.AllayPlayerStorage;
 import org.allaymc.server.eventbus.AllayEventBus;
 import org.allaymc.server.metrics.Metrics;
 import org.allaymc.server.network.AllayNetworkInterface;
@@ -225,7 +226,7 @@ public final class AllayServer implements Server {
 
     private void tick(long currentTick) {
         this.scheduler.tick();
-        this.playerStorage.tick(currentTick);
+        ((AllayPlayerStorage) this.playerStorage).tick(currentTick);
     }
 
     @Override
@@ -259,7 +260,7 @@ public final class AllayServer implements Server {
         this.banInfo.save();
         this.whitelist.save();
         this.scoreboardService.save();
-        this.playerStorage.shutdown();
+        ((AllayPlayerStorage) this.playerStorage).shutdown();
 
         // Shutdown all worlds
         this.worldPool.shutdown();

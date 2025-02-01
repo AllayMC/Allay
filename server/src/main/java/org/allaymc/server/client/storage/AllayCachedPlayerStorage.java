@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author daoge_cmd
  */
-public class AllayCachedPlayerStorage implements PlayerStorage {
+public class AllayCachedPlayerStorage extends AllayPlayerStorage {
 
     public static final int CACHE_TIME = 20 * 60 * 5; // 5 minute
 

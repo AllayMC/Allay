@@ -58,6 +58,7 @@ public interface ChunkLoader extends PacketReceiver {
     /**
      * A method which will be called after a chunk is sent.
      */
+    @ApiStatus.OverrideOnly
     void onChunkInRangeSend(Chunk chunk);
 
     /**
@@ -65,6 +66,7 @@ public interface ChunkLoader extends PacketReceiver {
      *
      * @param entity the entity to spawn.
      */
+    @ApiStatus.OverrideOnly
     void spawnEntity(Entity entity);
 
     /**
@@ -72,6 +74,7 @@ public interface ChunkLoader extends PacketReceiver {
      *
      * @param entity the entity to despawn.
      */
+    @ApiStatus.OverrideOnly
     void despawnEntity(Entity entity);
 
     /**

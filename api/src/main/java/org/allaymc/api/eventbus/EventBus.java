@@ -77,6 +77,9 @@ public interface EventBus {
      */
     <E extends Event> E callEvent(E event);
 
+    /**
+     * The factory for creating event buses.
+     */
     interface Factory {
         EventBus create();
     }

@@ -8,17 +8,6 @@ import java.util.UUID;
  * @author daoge_cmd
  */
 public interface PlayerStorage {
-    /**
-     * This method is called every tick.
-     *
-     * @param currentTick The current game tick.
-     */
-    default void tick(long currentTick) {}
-
-    /**
-     * This method is called when the server is shutting down.
-     */
-    default void shutdown() {}
 
     /**
      * Reads the player data for the given UUID.

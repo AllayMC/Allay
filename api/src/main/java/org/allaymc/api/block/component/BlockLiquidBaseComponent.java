@@ -5,6 +5,7 @@ import org.allaymc.api.block.property.type.BlockPropertyTypes;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.world.DimensionInfo;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * BlockLiquidBaseComponent is the base component for liquid blocks.
@@ -100,6 +101,7 @@ public interface BlockLiquidBaseComponent extends BlockBaseComponent {
      *
      * @return {@code true} if the block was hardened, {@code false} otherwise.
      */
+    @ApiStatus.OverrideOnly
     default boolean tryHarden(BlockStateWithPos current, BlockStateWithPos flownIntoBy) {
         return false;
     }

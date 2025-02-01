@@ -1,5 +1,7 @@
 package org.allaymc.api.plugin;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.nio.file.Path;
 
 /**
@@ -21,6 +23,7 @@ public interface PluginLoader {
      *
      * @return the plugin descriptor.
      */
+    @ApiStatus.OverrideOnly
     PluginDescriptor loadDescriptor();
 
     /**
@@ -28,6 +31,7 @@ public interface PluginLoader {
      *
      * @return the plugin container.
      */
+    @ApiStatus.OverrideOnly
     PluginContainer loadPlugin();
 
     /**
@@ -36,6 +40,7 @@ public interface PluginLoader {
      * <p>
      * Each plugin loader factory will be responsible for loading a specific type of plugin.
      */
+    @ApiStatus.OverrideOnly
     interface Factory {
 
         /**

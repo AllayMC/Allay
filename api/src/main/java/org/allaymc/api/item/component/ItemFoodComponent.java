@@ -1,6 +1,7 @@
 package org.allaymc.api.item.component;
 
 import org.allaymc.api.entity.interfaces.EntityPlayer;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Represents a food item component.
@@ -13,6 +14,7 @@ public interface ItemFoodComponent extends ItemComponent {
      *
      * @param player The player who eats the food.
      */
+    @ApiStatus.OverrideOnly
     void onEaten(EntityPlayer player);
 
     /**

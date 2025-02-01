@@ -13,6 +13,6 @@ public abstract sealed class CustomFormElement permits
     /**
      * Only used for server settings form
      */
-    @ApiStatus.Internal
+    @ApiStatus.OverrideOnly
     public abstract void syncDefaultValueToResponse(String response);
 }

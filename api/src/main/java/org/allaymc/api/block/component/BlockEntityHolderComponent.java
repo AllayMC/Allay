@@ -13,21 +13,21 @@ import java.util.Objects;
  */
 public interface BlockEntityHolderComponent<T extends BlockEntity> extends BlockComponent {
     /**
-     * Get the block entity type
+     * Get the block entity type.
      *
-     * @return the block entity type
+     * @return the block entity type.
      */
     BlockEntityType<?> getBlockEntityType();
 
     /**
-     * Get the block entity in a specific location
+     * Get the block entity in a specific location.
      *
-     * @param x         block entity's x coordinate
-     * @param y         block entity's y coordinate
-     * @param z         block entity's z coordinate
-     * @param dimension the dimension which the block entity is in
+     * @param x         block entity's x coordinate.
+     * @param y         block entity's y coordinate.
+     * @param z         block entity's z coordinate.
+     * @param dimension the dimension which the block entity is in.
      *
-     * @return the block entity, or null if block entity is not found
+     * @return the block entity, or null if block entity is not found.
      */
     default T getBlockEntity(int x, int y, int z, Dimension dimension) {
         var blockEntity = dimension.getBlockEntity(x, y, z);
@@ -44,30 +44,42 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         return (T) blockEntity;
     }
 
+    /**
+     * @see #getBlockEntity(int, int, int, Dimension)
+     */
     default T getBlockEntity(Position3ic pos) {
         return getBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
+    /**
+     * @see #createBlockEntity(int, int, int, Dimension, boolean)
+     */
     default void createBlockEntity(Position3ic pos) {
         createBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
+    /**
+     * @see #createBlockEntity(int, int, int, Dimension, boolean)
+     */
     default void createBlockEntity(int x, int y, int z, Dimension dimension) {
         createBlockEntity(x, y, z, dimension, true);
     }
 
+    /**
+     * @see #createBlockEntity(int, int, int, Dimension, boolean)
+     */
     default void createBlockEntity(Position3ic pos, boolean sendToClient) {
         createBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension(), sendToClient);
     }
 
     /**
-     * Create block entity at a specific location
+     * Create block entity at a specific location.
      *
-     * @param x            block entity's x coordinate
-     * @param y            block entity's y coordinate
-     * @param z            block entity's z coordinate
-     * @param dimension    the dimension which the block entity will be in
-     * @param sendToClient whether to send the block entity data packet to the client
+     * @param x            block entity's x coordinate.
+     * @param y            block entity's y coordinate.
+     * @param z            block entity's z coordinate.
+     * @param dimension    the dimension which the block entity will be in.
+     * @param sendToClient whether to send the block entity data packet to the client.
      */
     default void createBlockEntity(int x, int y, int z, Dimension dimension, boolean sendToClient) {
         Objects.requireNonNull(dimension);
@@ -86,19 +98,22 @@ public interface BlockEntityHolderComponent<T extends BlockEntity> extends Block
         }
     }
 
+    /**
+     * @see #removeBlockEntity(int, int, int, Dimension)
+     */
     default void removeBlockEntity(Position3ic pos) {
         removeBlockEntity(pos.x(), pos.y(), pos.z(), pos.dimension());
     }
 
     /**
-     * Remove a block entity in a specific location
+     * Remove a block entity in a specific location.
      *
-     * @param x         block entity's x coordinate
-     * @param y         block entity's y coordinate
-     * @param z         block entity's z coordinate
-     * @param dimension the dimension which the block entity is in
+     * @param x         block entity's x coordinate.
+     * @param y         block entity's y coordinate.
+     * @param z         block entity's z coordinate.
+     * @param dimension the dimension which the block entity is in.
      *
-     * @throws IllegalStateException if chunk isn't loaded or the block entity not exists
+     * @throws IllegalStateException if chunk isn't loaded or the block entity not exists.
      */
     default void removeBlockEntity(int x, int y, int z, Dimension dimension) {
         Objects.requireNonNull(dimension);

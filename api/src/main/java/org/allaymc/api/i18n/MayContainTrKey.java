@@ -7,6 +7,8 @@ import java.lang.annotation.Target;
 
 /**
  * This annotation is used to mark the text which may contains translation key.
+ * Usually used in method parameters to inform the callers that they can use
+ * translation key in these parameters.
  *
  * @author daoge_cmd
  */

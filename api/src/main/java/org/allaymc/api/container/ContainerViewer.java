@@ -134,5 +134,6 @@ public interface ContainerViewer {
      * @param property   the property to send.
      * @param value      the value to send.
      */
+    @ApiStatus.OverrideOnly
     void sendContainerData(byte assignedId, int property, int value);
 }

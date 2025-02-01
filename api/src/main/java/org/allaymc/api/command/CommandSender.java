@@ -9,6 +9,7 @@ import org.allaymc.api.permission.Permissible;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * @author daoge_cmd
@@ -41,6 +42,7 @@ public interface CommandSender extends TextReceiver, Permissible {
      *
      * @param result The result of the command execution.
      */
+    @ApiStatus.OverrideOnly
     default void handleResult(CommandResult result) {
         if (result.context() == null) return;
         if (!getCmdExecuteLocation().dimension().getWorld().getWorldData().<Boolean>getGameRuleValue(GameRule.SEND_COMMAND_FEEDBACK)) {

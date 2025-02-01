@@ -2,7 +2,6 @@ package org.allaymc.api.form.element;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
-import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
@@ -38,7 +37,6 @@ public final class Dropdown extends CustomFormElement {
     }
 
     @Override
-    @ApiStatus.Internal
     public void syncDefaultValueToResponse(String response) {
         this.defaultOptionIndex = Integer.parseInt(response);
     }

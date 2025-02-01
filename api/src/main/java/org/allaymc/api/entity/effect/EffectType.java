@@ -3,6 +3,7 @@ package org.allaymc.api.entity.effect;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.damage.DamageContainer;
 import org.allaymc.api.utils.Identifier;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * @author daoge_cmd
@@ -47,6 +48,7 @@ public interface EffectType {
      * @param entity         The entity the effect is on.
      * @param effectInstance The instance of the effect.
      */
+    @ApiStatus.OverrideOnly
     default void onTick(Entity entity, EffectInstance effectInstance) {}
 
     /**
@@ -55,6 +57,7 @@ public interface EffectType {
      * @param entity         The entity the effect is on.
      * @param effectInstance The instance of the effect.
      */
+    @ApiStatus.OverrideOnly
     default void onAdd(Entity entity, EffectInstance effectInstance) {}
 
     /**
@@ -63,6 +66,7 @@ public interface EffectType {
      * @param entity         The entity the effect is on.
      * @param effectInstance The instance of the effect.
      */
+    @ApiStatus.OverrideOnly
     default void onRemove(Entity entity, EffectInstance effectInstance) {}
 
     /**
@@ -72,6 +76,7 @@ public interface EffectType {
      * @param effectInstance The instance of the effect.
      * @param lastDamage     The last damage taken by the entity.
      */
+    @ApiStatus.OverrideOnly
     default void onEntityDamage(Entity entity, EffectInstance effectInstance, DamageContainer lastDamage) {}
 
     /**
@@ -80,6 +85,7 @@ public interface EffectType {
      * @param entity         The entity the effect is on.
      * @param effectInstance The instance of the effect.
      */
+    @ApiStatus.OverrideOnly
     default void onEntityDies(Entity entity, EffectInstance effectInstance) {}
 
     /**

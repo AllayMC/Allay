@@ -69,6 +69,9 @@ public interface EntityPhysicsService {
      */
     List<Entity> computeCollidingEntities(AABBfc aabb, AABBOverlapFilter<Entity> predicate);
 
+    /**
+     * @see #computeCollidingEntities(VoxelShape, boolean)
+     */
     default List<Entity> computeCollidingEntities(VoxelShape voxelShape) {
         return computeCollidingEntities(voxelShape, false);
     }

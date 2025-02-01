@@ -2,7 +2,6 @@ package org.allaymc.api.form.element;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
-import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Represents a slider element in a {@link org.allaymc.api.form.type.CustomForm}.
@@ -44,7 +43,6 @@ public final class Slider extends CustomFormElement {
     }
 
     @Override
-    @ApiStatus.Internal
     public void syncDefaultValueToResponse(String response) {
         this.defaultValue = Float.parseFloat(response);
     }

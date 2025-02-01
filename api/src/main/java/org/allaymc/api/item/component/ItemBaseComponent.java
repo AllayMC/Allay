@@ -16,6 +16,7 @@ import org.allaymc.api.item.type.ItemType;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ItemData;
+import org.jetbrains.annotations.ApiStatus;
 import org.joml.Vector3ic;
 
 import java.util.Collection;
@@ -265,6 +266,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * @param placeBlockPos The position of the block being right-clicked.
      * @param interactInfo  Information about the interaction.
      */
+    @ApiStatus.OverrideOnly
     void rightClickItemOn(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
 
     /**
@@ -282,6 +284,7 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @return true if successfully used
      */
+    @ApiStatus.OverrideOnly
     boolean useItemOnBlock(Dimension dimension, Vector3ic placeBlockPos, PlayerInteractInfo interactInfo);
 
     /**
@@ -303,36 +306,39 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @param player The player who clicked.
      */
+    @ApiStatus.OverrideOnly
     default void clickItemInAir(EntityPlayer player) {}
 
     /**
      * Called before the player prepares to use the item.
      *
-     * @param player The player preparing to use the item.
+     * @param player the player preparing to use the item.
      *
-     * @return Whether this item can be used.
+     * @return whether this item can be used.
      */
     boolean canUseItemInAir(EntityPlayer player);
 
     /**
      * Called when the player thinks he has finished using an item.
      *
-     * @param player   The player using the item.
-     * @param usedTime The time spent.
+     * @param player   the player using the item.
+     * @param usedTime the time spent.
      *
-     * @return Whether the item was used.
+     * @return whether the item was used.
      */
+    @ApiStatus.OverrideOnly
     boolean useItemInAir(EntityPlayer player, long usedTime);
 
     /**
      * Called when the player releases the item after holding right-click for a period.
      */
+    @ApiStatus.OverrideOnly
     default void releaseUsingItem(EntityPlayer player, long usedTime) {}
 
     /**
      * Check if the item can merge with the specified item stack.
      *
-     * @param itemStack The item stack to merge.
+     * @param itemStack the item stack to merge.
      *
      * @return {@code true} if the item can merge, {@code false} otherwise.
      */
@@ -474,6 +480,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * @param block   The block being broken
      * @param breaker The entity breaking the block
      */
+    @ApiStatus.OverrideOnly
     void onBreakBlock(BlockState block, Entity breaker);
 
     /**
@@ -482,6 +489,7 @@ public interface ItemBaseComponent extends ItemComponent {
      * @param attacker The entity attacking.
      * @param victim   The entity being attacked.
      */
+    @ApiStatus.OverrideOnly
     void onAttackEntity(Entity attacker, Entity victim);
 
     /**
@@ -492,6 +500,7 @@ public interface ItemBaseComponent extends ItemComponent {
      *
      * @return {@code true} if the interaction is successful, {@code false} otherwise.
      */
+    @ApiStatus.OverrideOnly
     default boolean interactEntity(Entity performer, Entity victim) {
         return false;
     }

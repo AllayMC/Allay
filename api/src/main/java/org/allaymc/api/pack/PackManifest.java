@@ -15,6 +15,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
+ * Represents the manifest for a pack.
+ *
  * @author IWareQ, Cloudburst Server
  */
 @Data
@@ -31,10 +33,19 @@ public class PackManifest {
     private List<Module> modules = Collections.emptyList();
     private List<Capability> capabilities = Collections.emptyList();
 
+    /**
+     * Load pack manifest using the given loader.
+     *
+     * @param loader the loader to be used for loading the manifest.
+     *
+     * @return the loaded pack manifest, or {@code null} if the manifest does not exist or could not be loaded.
+     */
     public static PackManifest load(PackLoader loader) {
         Objects.requireNonNull(loader);
 
-        if (!loader.hasFile(PATH)) return null;
+        if (!loader.hasFile(PATH)) {
+            return null;
+        }
 
         try {
             return JSONUtils.from(loader.getFile(PATH), PackManifest.class);
@@ -44,8 +55,15 @@ public class PackManifest {
         }
     }
 
+    /**
+     * Check if the pack manifest is valid.
+     *
+     * @return {@code true} if the pack manifest is valid, {@code false} otherwise.
+     */
     public boolean isValid() {
-        if (this.formatVersion == null || this.header == null || this.modules == null) return false;
+        if (this.formatVersion == null || this.header == null || this.modules == null) {
+            return false;
+        }
 
         return this.header.description != null &&
                this.header.name != null &&

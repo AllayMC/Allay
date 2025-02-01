@@ -23,52 +23,139 @@ public final class MathUtils {
         }
     }
 
-    private MathUtils() {throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");}
+    private MathUtils() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
+    /**
+     * Convert cloudburst vector to joml vector.
+     *
+     * @param cbVec cloudburst vector.
+     *
+     * @return joml vector.
+     */
     public static Vector3ic CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3i cbVec) {
         return new Vector3i(cbVec.getX(), cbVec.getY(), cbVec.getZ());
     }
 
-    public static org.cloudburstmc.math.vector.Vector3i JOMLVecToCBVec(Vector3ic JOMLVec) {
-        return org.cloudburstmc.math.vector.Vector3i.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
-    }
-
+    /**
+     * Convert cloudburst vector to joml vector.
+     *
+     * @param cbVec cloudburst vector.
+     *
+     * @return joml vector.
+     */
     public static Vector3dc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3d cbVec) {
         return new Vector3d(cbVec.getX(), cbVec.getY(), cbVec.getZ());
     }
 
-    public static org.cloudburstmc.math.vector.Vector3d JOMLVecToCBVec(Vector3dc JOMLVec) {
-        return org.cloudburstmc.math.vector.Vector3d.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
-    }
-
+    /**
+     * Convert cloudburst vector to joml vector.
+     *
+     * @param cbVec cloudburst vector.
+     *
+     * @return joml vector.
+     */
     public static Vector3fc CBVecToJOMLVec(org.cloudburstmc.math.vector.Vector3f cbVec) {
         return new Vector3f(cbVec.getX(), cbVec.getY(), cbVec.getZ());
     }
 
+    /**
+     * Convert joml vector to cloudburst vector.
+     *
+     * @param JOMLVec joml vector.
+     *
+     * @return cloudburst vector.
+     */
+    public static org.cloudburstmc.math.vector.Vector3i JOMLVecToCBVec(Vector3ic JOMLVec) {
+        return org.cloudburstmc.math.vector.Vector3i.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
+    }
+
+    /**
+     * Convert joml vector to cloudburst vector.
+     *
+     * @param JOMLVec joml vector.
+     *
+     * @return cloudburst vector.
+     */
+    public static org.cloudburstmc.math.vector.Vector3d JOMLVecToCBVec(Vector3dc JOMLVec) {
+        return org.cloudburstmc.math.vector.Vector3d.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
+    }
+
+    /**
+     * Convert joml vector to cloudburst vector.
+     *
+     * @param JOMLVec joml vector.
+     *
+     * @return cloudburst vector.
+     */
     public static org.cloudburstmc.math.vector.Vector3f JOMLVecToCBVec(Vector3fc JOMLVec) {
         return org.cloudburstmc.math.vector.Vector3f.from(JOMLVec.x(), JOMLVec.y(), JOMLVec.z());
     }
 
+    /**
+     * Floor a vector.
+     *
+     * @param vector3d the vector to floor.
+     *
+     * @return the floored vector.
+     */
     public static Vector3i floor(Vector3dc vector3d) {
         return new Vector3i((int) Math.floor(vector3d.x()), (int) Math.floor(vector3d.y()), (int) Math.floor(vector3d.z()));
     }
 
+    /**
+     * Floor a vector.
+     *
+     * @param vector3f the vector to floor.
+     *
+     * @return the floored vector.
+     */
     public static Vector3i floor(Vector3fc vector3f) {
         return new Vector3i((int) Math.floor(vector3f.x()), (int) Math.floor(vector3f.y()), (int) Math.floor(vector3f.z()));
     }
 
+    /**
+     * Ceil a vector.
+     *
+     * @param vector3d the vector to ceil.
+     *
+     * @return the ceiled vector.
+     */
     public static Vector3i ceil(Vector3dc vector3d) {
         return new Vector3i((int) Math.ceil(vector3d.x()), (int) Math.ceil(vector3d.y()), (int) Math.ceil(vector3d.z()));
     }
 
+    /**
+     * Ceil a vector.
+     *
+     * @param vector3f the vector to ceil.
+     *
+     * @return the ceiled vector.
+     */
     public static Vector3i ceil(Vector3fc vector3f) {
         return new Vector3i((int) Math.ceil(vector3f.x()), (int) Math.ceil(vector3f.y()), (int) Math.ceil(vector3f.z()));
     }
 
+    /**
+     * Center a vector (Adding 0.5 to the coordinates of the vector).
+     *
+     * @param vector3i the vector to center.
+     *
+     * @return the centered vector.
+     */
     public static Vector3f center(Vector3ic vector3i) {
         return new Vector3f(vector3i.x() + 0.5f, vector3i.y() + 0.5f, vector3i.z() + 0.5f);
     }
 
+    /**
+     * Round a double to a certain precision.
+     *
+     * @param d         the double to round.
+     * @param precision the precision.
+     *
+     * @return the rounded double.
+     */
     public static double round(double d, int precision) {
         double pow = Math.pow(10, precision);
         return ((double) Math.round(d * pow)) / pow;
@@ -77,9 +164,9 @@ public final class MathUtils {
     /**
      * Fast inverse square root (float).
      *
-     * @param x value.
+     * @param x the value.
      *
-     * @return result.
+     * @return the result.
      */
     public static float fastFloatInverseSqrt(float x) {
         float xHalf = 0.5f * x;
@@ -93,9 +180,9 @@ public final class MathUtils {
     /**
      * Fast inverse square root (double).
      *
-     * @param x value.
+     * @param x the value.
      *
-     * @return result.
+     * @return the result.
      */
     public static double fastDoubleInverseSqrt(double x) {
         double xHalf = 0.5d * x;
@@ -109,9 +196,9 @@ public final class MathUtils {
     /**
      * Check if the value is in the range.
      *
-     * @param l     left.
-     * @param value value.
-     * @param r     right.
+     * @param l     the left.
+     * @param value the value to check.
+     * @param r     the right.
      *
      * @return {@code true} if the value is in the range, otherwise {@code false}.
      */
@@ -122,10 +209,10 @@ public final class MathUtils {
     /**
      * Calculate equivalent direction vector by yaw and pitch.
      *
-     * @param yaw   yaw
-     * @param pitch pitch
+     * @param yaw   the yaw.
+     * @param pitch the pitch.
      *
-     * @return direction vector.
+     * @return the direction vector.
      */
     public static Vector3f getDirectionVector(double yaw, double pitch) {
         var pitch0 = toRadians(pitch + 90);
@@ -139,9 +226,9 @@ public final class MathUtils {
     /**
      * Calculate yaw from the direction vector.
      *
-     * @param vector direction vector.
+     * @param vector the direction vector.
      *
-     * @return yaw.
+     * @return the yaw.
      */
     public static double getYawFromVector(Vector3fc vector) {
         double length = vector.x() * vector.x() + vector.z() * vector.z();
@@ -156,9 +243,9 @@ public final class MathUtils {
     /**
      * Calculate the pitch by the direction vector.
      *
-     * @param vector direction vector.
+     * @param vector the direction vector.
      *
-     * @return pitch.
+     * @return the pitch.
      */
     public static double getPitchFromVector(Vector3fc vector) {
         double length =

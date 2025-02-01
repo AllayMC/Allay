@@ -11,6 +11,7 @@ import org.cloudburstmc.math.vector.Vector3i;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BlockEntityDataPacket;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Objects;
 
@@ -71,6 +72,7 @@ public interface BlockEntityBaseComponent extends BlockEntityComponent {
      * @param player The player who made the change.
      * @param nbt    The NBT data of the change.
      */
+    @ApiStatus.OverrideOnly
     default void applyClientChange(EntityPlayer player, NbtMap nbt) {
         loadNBT(nbt);
     }

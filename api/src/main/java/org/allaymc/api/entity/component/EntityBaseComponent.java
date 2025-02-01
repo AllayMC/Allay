@@ -114,9 +114,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * This method is usually used when you want to spawn the entity at a specific location.
      * Then you need to set the entity's location before spawn the entity.
      *
-     * @param location the location you want to set
+     * @param location the location you want to set.
      *
-     * @throws IllegalStateException if the entity is already spawned
+     * @throws IllegalStateException if the entity is already spawned.
      */
     void setLocationBeforeSpawn(Location3fc location);
 
@@ -950,6 +950,9 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         }
     }
 
+    /**
+     * @see #canStandSafely(int, int, int, Dimension)
+     */
     default boolean canStandSafely(Position3ic pos) {
         return canStandSafely(pos.x(), pos.y(), pos.z(), getDimension());
     }
@@ -968,7 +971,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         if (!blockUnder.getBlockStateData().isSolid()) {
             return false;
         }
-        return dimension.getBlockState(x, y, z).getBlockType() == BlockTypes.AIR &&
-               dimension.getBlockState(x, y + 1, z).getBlockType() == BlockTypes.AIR;
+        var aabb = getAABB().translate(x + 0.5f, y + 0.5f, z + 0.5f, new AABBf());
+        return dimension.getCollidingBlockStates(aabb) == null;
     }
 }

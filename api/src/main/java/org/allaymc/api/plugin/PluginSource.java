@@ -9,5 +9,10 @@ import java.util.Set;
  * @author daoge_cmd
  */
 public interface PluginSource {
+    /**
+     * Find all plugin paths in the source.
+     *
+     * @return a set of paths to the plugins
+     */
     Set<Path> find();
 }

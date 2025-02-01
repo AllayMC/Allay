@@ -63,7 +63,9 @@ public class PackRegistryLoader implements RegistryLoader<Void, Map<UUID, Pack>>
         Map<PackLoader, PackManifest> loader2manifest = new HashMap<>();
         for (var loader : foundedLoaders) {
             var manifest = PackManifest.load(loader);
-            if (manifest == null || !manifest.isValid()) continue;
+            if (manifest == null || !manifest.isValid()) {
+                continue;
+            }
 
             log.info(I18n.get().tr(TrKeys.A_PACK_LOADING_ENTRY, manifest.getHeader().getName()));
             loader2manifest.put(loader, manifest);
