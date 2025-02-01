@@ -47,19 +47,23 @@ public class BlockTallGrassBaseComponentImpl extends BlockShortGrassBaseComponen
     }
 
     @Override
-    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        var keep = true;
         if (face == BlockFace.UP) {
             if (!current.blockState().getPropertyValue(UPPER_BLOCK_BIT)) {
-                return isSamePlant(neighbor.blockState());
+                keep = isSamePlant(neighbor.blockState());
             }
         } else if (face == BlockFace.DOWN) {
             if (current.blockState().getPropertyValue(UPPER_BLOCK_BIT)) {
-                return isSamePlant(neighbor.blockState());
+                keep = isSamePlant(neighbor.blockState());
+            } else {
+                keep = canPlaceOn(neighbor.blockState().getBlockType());
             }
-            return canPlaceOn(neighbor.blockState().getBlockType());
         }
 
-        return true;
+        if (!keep) {
+            current.pos().dimension().breakBlock(current.pos());
+        }
     }
 
     protected boolean isSamePlant(BlockState otherBlock) {

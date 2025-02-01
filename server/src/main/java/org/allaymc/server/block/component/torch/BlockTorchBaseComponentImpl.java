@@ -61,11 +61,18 @@ public class BlockTorchBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (face == BlockFace.UP) return true;
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
+
+        if (face == BlockFace.UP) {
+            return;
+        }
+
         var torchFacingDirection = current.blockState().getPropertyValue(BlockPropertyTypes.TORCH_FACING_DIRECTION);
         var blockFace = map.inverse().get(torchFacingDirection);
         var block = current.pos().dimension().getBlockState(blockFace.opposite().offsetPos(current.pos()));
-        return block.getBlockStateData().isSolid();
+        if (!block.getBlockStateData().isSolid()) {
+            current.pos().dimension().breakBlock(current.pos());
+        }
     }
 }

@@ -40,12 +40,17 @@ public class BlockButtonBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
+
         // Check if the neighbor is block below
         if (current.blockState().getPropertyValue(FACING_DIRECTION) != face.opposite().ordinal()) {
-            return true;
+            return;
         }
-        return neighbor.blockState().getBlockStateData().isSolid();
+
+        if (!neighbor.blockState().getBlockStateData().isSolid()) {
+            current.pos().dimension().breakBlock(current.pos());
+        }
     }
 
     @Override

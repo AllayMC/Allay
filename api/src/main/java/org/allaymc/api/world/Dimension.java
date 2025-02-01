@@ -1195,8 +1195,22 @@ public interface Dimension {
     /**
      * @see #breakBlock(int, int, int, ItemStack, Entity, boolean)
      */
+    default boolean breakBlock(Vector3ic pos) {
+        return breakBlock(pos.x(), pos.y(), pos.z(), null, null);
+    }
+
+    /**
+     * @see #breakBlock(int, int, int, ItemStack, Entity, boolean)
+     */
     default boolean breakBlock(Vector3ic pos, ItemStack usedItem, Entity entity) {
         return breakBlock(pos.x(), pos.y(), pos.z(), usedItem, entity);
+    }
+
+    /**
+     * @see #breakBlock(int, int, int, ItemStack, Entity, boolean)
+     */
+    default boolean breakBlock(int x, int y, int z) {
+        return breakBlock(x, y, z, null, null);
     }
 
     /**

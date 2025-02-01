@@ -49,11 +49,23 @@ public class BlockHangingSignBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (!current.blockState().getPropertyValue(BlockPropertyTypes.HANGING)) return true;
-        if (face != BlockFace.UP) return true;
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
+
+        if (!current.blockState().getPropertyValue(BlockPropertyTypes.HANGING) || face != BlockFace.UP) {
+            return;
+        }
+
+        var keep = true;
         var upperBlock = neighbor.blockState();
-        if (!upperBlock.getBlockStateData().isSolid()) return false;
-        return upperBlock.getBlockStateData().collisionShape().isCenterFull(BlockFace.DOWN);
+        if (!upperBlock.getBlockStateData().isSolid()) {
+            keep = false;
+        } else {
+            keep = upperBlock.getBlockStateData().collisionShape().isCenterFull(BlockFace.DOWN);
+        }
+
+        if (!keep) {
+            current.pos().dimension().breakBlock(current.pos());
+        }
     }
 }

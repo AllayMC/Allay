@@ -48,9 +48,6 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
         manager.callEvent(new CBlockOnNeighborUpdateEvent(current, neighbor, face));
-        if (!canKeepExisting(current, neighbor, face)) {
-            current.pos().dimension().breakBlock(current.pos(), null, null);
-        }
     }
 
     @Override

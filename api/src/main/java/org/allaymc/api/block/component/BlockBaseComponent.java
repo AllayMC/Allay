@@ -31,19 +31,6 @@ public interface BlockBaseComponent extends BlockComponent {
     BlockType<? extends BlockBehavior> getBlockType();
 
     /**
-     * Check if the block can remain in its current position when a neighboring block updates.
-     *
-     * @param current  The current block.
-     * @param neighbor The neighboring block that is causing the update.
-     * @param face     The face of the current block that is being updated.
-     *
-     * @return {@code true} if the block can remain in its current position, {@code false} if the block should be broken.
-     */
-    default boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        return true;
-    }
-
-    /**
      * Call when a blockState causes another blockState to update.
      *
      * @param current  The current block.

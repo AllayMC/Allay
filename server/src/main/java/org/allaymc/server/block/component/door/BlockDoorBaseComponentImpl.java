@@ -91,16 +91,21 @@ public class BlockDoorBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
+
+        var keep = true;
         if (face == BlockFace.UP) {
-            return current.blockState().getPropertyValue(UPPER_BLOCK_BIT) || neighbor.blockState().getBlockType() == getBlockType();
+            keep = current.blockState().getPropertyValue(UPPER_BLOCK_BIT) || neighbor.blockState().getBlockType() == getBlockType();
         } else if (face == BlockFace.DOWN) {
-            return current.blockState().getPropertyValue(UPPER_BLOCK_BIT)
+            keep = current.blockState().getPropertyValue(UPPER_BLOCK_BIT)
                     ? neighbor.blockState().getBlockType() == getBlockType()
                     : neighbor.blockState().getBlockStateData().isSolid();
         }
 
-        return true;
+        if (!keep) {
+            current.pos().dimension().breakBlock(current.pos());
+        }
     }
 
     @Override

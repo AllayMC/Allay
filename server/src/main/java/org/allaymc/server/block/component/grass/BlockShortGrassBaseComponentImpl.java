@@ -24,9 +24,16 @@ public class BlockShortGrassBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (face != BlockFace.DOWN) return true;
-        return canPlaceOn(neighbor.blockState().getBlockType());
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
+
+        if (face != BlockFace.DOWN) {
+            return;
+        }
+
+        if (!canPlaceOn(neighbor.blockState().getBlockType())) {
+            current.pos().dimension().breakBlock(current.pos());
+        }
     }
 
     protected boolean canPlaceOn(BlockType<?> blockType) {

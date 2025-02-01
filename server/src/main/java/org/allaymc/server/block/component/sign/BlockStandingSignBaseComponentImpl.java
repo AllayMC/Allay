@@ -24,9 +24,16 @@ public class BlockStandingSignBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (face != BlockFace.DOWN) return true;
-        return neighbor.blockState().getBlockStateData().isSolid();
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
+
+        if (face != BlockFace.DOWN) {
+            return;
+        }
+
+        if (!neighbor.blockState().getBlockStateData().isSolid()) {
+            current.pos().dimension().breakBlock(current.pos());
+        }
     }
 
     @Override

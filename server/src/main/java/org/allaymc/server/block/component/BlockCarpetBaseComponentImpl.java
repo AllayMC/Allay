@@ -15,9 +15,13 @@ public class BlockCarpetBaseComponentImpl extends BlockBaseComponentImpl {
     }
 
     @Override
-    public boolean canKeepExisting(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+    public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
+        super.onNeighborUpdate(current, neighbor, face);
+
         var pos = current.pos();
         var down = pos.dimension().getBlockState(BlockFace.DOWN.offsetPos(pos)).getBlockType();
-        return down != BlockTypes.AIR;
+        if (down == BlockTypes.AIR) {
+            current.pos().dimension().breakBlock(current.pos());
+        }
     }
 }

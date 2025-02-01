@@ -30,7 +30,7 @@ public class BlockMelonStemBaseComponentImpl extends BlockCropsBaseComponentImpl
 
     @Override
     public void onNeighborUpdate(BlockStateWithPos current, BlockStateWithPos neighbor, BlockFace face) {
-        if (!canKeepExisting(current, neighbor, face)) {
+        if (face == BlockFace.DOWN && neighbor.blockState().getBlockType() != BlockTypes.FARMLAND) {
             current.pos().dimension().breakBlock(current.pos(), null, null);
         } else {
             var stemFace = BlockFace.fromId(current.blockState().getPropertyValue(BlockPropertyTypes.FACING_DIRECTION));
