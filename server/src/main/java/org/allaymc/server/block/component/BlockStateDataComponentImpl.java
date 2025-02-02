@@ -6,8 +6,8 @@ import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
+import org.allaymc.server.registry.InternalRegistries;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jctools.maps.NonBlockingHashMap;
 
@@ -77,7 +77,7 @@ public class BlockStateDataComponentImpl implements BlockStateDataComponent {
         return ofMappedBlockStateHashLazyLoad(blockType -> {
             var vanillaId = BlockId.fromIdentifier(blockType.getIdentifier());
             Objects.requireNonNull(vanillaId);
-            var attributeMap = Registries.BLOCK_STATE_DATA.get(vanillaId);
+            var attributeMap = InternalRegistries.BLOCK_STATE_DATA.get(vanillaId);
             Objects.requireNonNull(attributeMap);
             var newAttributeMap = new HashMap<Integer, BlockStateData>();
             attributeMap.forEach((blockStateHash, attribute) ->

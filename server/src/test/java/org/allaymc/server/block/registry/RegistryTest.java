@@ -3,6 +3,7 @@ package org.allaymc.server.block.registry;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +25,7 @@ public class RegistryTest {
     @Test
     void testBlockAttributeRegistry() {
         //Special case
-        assertNotNull(Registries.BLOCK_STATE_DATA.get(BlockId.UNKNOWN).get(-2));
+        assertNotNull(InternalRegistries.BLOCK_STATE_DATA.get(BlockId.UNKNOWN).get(-2));
     }
 
     @Test

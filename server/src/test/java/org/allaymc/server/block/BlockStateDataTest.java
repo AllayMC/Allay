@@ -5,6 +5,7 @@ import org.allaymc.api.block.component.data.BlockStateData;
 import org.allaymc.api.block.data.BlockId;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.registry.Registries;
+import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.testutils.AllayTestExtension;
 import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
@@ -78,7 +79,7 @@ class BlockStateDataTest {
         for (var vanillaBlockId : BlockId.values()) {
             BlockType<?> type = Registries.BLOCKS.get(vanillaBlockId.getIdentifier());
             assertNotNull(type);
-            var blockStateDataMap = Registries.BLOCK_STATE_DATA.get(vanillaBlockId);
+            var blockStateDataMap = InternalRegistries.BLOCK_STATE_DATA.get(vanillaBlockId);
             assertNotNull(blockStateDataMap);
             for (var state : type.getBlockStateHashMap().values()) {
                 var expected = blockStateDataMap.get(state.blockStateHash());

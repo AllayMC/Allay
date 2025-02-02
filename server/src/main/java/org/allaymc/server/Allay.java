@@ -41,6 +41,7 @@ import org.allaymc.server.i18n.AllayI18n;
 import org.allaymc.server.i18n.AllayI18nLoader;
 import org.allaymc.server.permission.tree.AllayPermissionTree;
 import org.allaymc.server.registry.AllayCommandRegistry;
+import org.allaymc.server.registry.InternalRegistries;
 import org.allaymc.server.registry.loader.*;
 import org.allaymc.server.registry.populator.*;
 import org.allaymc.server.scheduler.AllayScheduler;
@@ -100,7 +101,7 @@ public final class Allay {
             initAllay();
         } catch (Exception e) {
             log.error("Cannot init Allay API!", e);
-            if(DASHBOARD != null) {
+            if (DASHBOARD != null) {
                 sleep(5000);
             }
             System.exit(1);
@@ -112,7 +113,7 @@ public final class Allay {
             log.error("Error while starting the server!", t);
             // The server may not be initialized correctly
             // So we can't call Server::shutdown() to stop the server
-            if(DASHBOARD != null) {
+            if (DASHBOARD != null) {
                 sleep(5000);
             }
             System.exit(1);
@@ -200,7 +201,7 @@ public final class Allay {
         );
 
         // Block
-        Registries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataLoader());
+        InternalRegistries.BLOCK_STATE_DATA = SimpleMappedRegistry.create(new BlockStateDataLoader());
         Registries.BLOCK_STATE_PALETTE = IntMappedRegistry.create(RegistryLoaders.empty(Int2ObjectOpenHashMap::new));
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, BlockType<?>>()),

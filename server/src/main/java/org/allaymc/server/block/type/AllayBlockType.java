@@ -30,6 +30,7 @@ import org.allaymc.server.block.component.BlockStateDataComponentImpl;
 import org.allaymc.server.component.interfaces.ComponentProvider;
 import org.allaymc.server.item.impl.ItemBlockImpl;
 import org.allaymc.server.item.type.AllayItemType;
+import org.allaymc.server.registry.InternalRegistries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -369,7 +370,7 @@ public final class AllayBlockType<T extends BlockBehavior> implements BlockType<
             this.isCustomBlock = false;
             this.identifier = blockId.getIdentifier();
 
-            var dataMap = Registries.BLOCK_STATE_DATA.get(blockId);
+            var dataMap = InternalRegistries.BLOCK_STATE_DATA.get(blockId);
             if (dataMap == null)
                 throw new BlockTypeBuildException("Cannot find vanilla block data component for " + blockId + " from vanilla block data registry!");
             components.put(BlockStateDataComponentImpl.IDENTIFIER, BlockStateDataComponentImpl.ofMappedBlockStateHash(dataMap));
