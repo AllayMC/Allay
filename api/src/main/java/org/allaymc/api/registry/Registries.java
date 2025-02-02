@@ -7,8 +7,6 @@ import org.allaymc.api.command.CommandRegistry;
 import org.allaymc.api.entity.effect.EffectType;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.item.component.data.ItemData;
-import org.allaymc.api.item.data.ItemId;
 import org.allaymc.api.item.enchantment.EnchantmentType;
 import org.allaymc.api.item.recipe.NetworkRecipe;
 import org.allaymc.api.item.recipe.impl.FurnaceRecipe;
@@ -31,8 +29,6 @@ import java.util.function.Function;
 public final class Registries {
     // Item
     public static DoubleKeyMappedRegistry<Integer, Identifier, EnchantmentType> ENCHANTMENTS;
-    // NOTICE: Only vanilla item data is stored in the item data registry.
-    public static SimpleMappedRegistry<ItemId, ItemData> ITEM_DATA;
     public static SimpleMappedRegistry<Identifier, ItemType<?>> ITEMS;
 
     // BlockEntity

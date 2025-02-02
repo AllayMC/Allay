@@ -31,7 +31,7 @@ public class RegistryTest {
     @Test
     void testItemAttributeRegistry() {
         for (var id : ItemId.values()) {
-            assertNotNull(Registries.ITEM_DATA.get(id));
+            assertNotNull(InternalRegistries.ITEM_DATA.get(id));
         }
     }
 

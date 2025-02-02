@@ -186,7 +186,7 @@ public final class Allay {
                 r -> Registries.ENCHANTMENTS = r,
                 new EnchantmentTypeRegistryPopulator()
         );
-        Registries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataLoader());
+        InternalRegistries.ITEM_DATA = SimpleMappedRegistry.create(new ItemDataLoader());
         SimpleMappedRegistry.create(
                 RegistryLoaders.empty(() -> new HashMap<Identifier, ItemType<?>>()),
                 r -> Registries.ITEMS = r,
