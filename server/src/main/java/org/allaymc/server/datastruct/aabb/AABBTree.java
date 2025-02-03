@@ -2,7 +2,6 @@ package org.allaymc.server.datastruct.aabb;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
-import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.service.AABBOverlapFilter;
 import org.allaymc.api.world.service.HasAABB;
 import org.allaymc.api.world.service.HasLongId;
@@ -11,7 +10,7 @@ import org.joml.Matrix4fc;
 import org.joml.RayAabIntersection;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
-import org.joml.primitives.Rayf;
+import org.joml.primitives.Rayfc;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -367,7 +366,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
     }
 
     public void detectOverlaps(AABBdc overlapWith, AABBOverlapFilter<T> filter, List<T> result) {
-        traverseTree(aabb -> MathUtils.intersectsAABB(aabb, overlapWith), filter, result);
+        traverseTree(aabb -> aabb.intersectsAABB(overlapWith), filter, result);
     }
 
     public void detectCollisionPairs(List<CollisionPair<T>> result) {
@@ -400,13 +399,13 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
         traverseTree(aabb -> frustumIntersection.testAab((float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(), (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()), filter, result);
     }
 
-    public void detectRayIntersection(Rayf ray, List<T> result) {
+    public void detectRayIntersection(Rayfc ray, List<T> result) {
         detectRayIntersection(ray, defaultAABBOverlapFilter, result);
     }
 
     // TODO: Use Rayfc here
-    public void detectRayIntersection(Rayf ray, AABBOverlapFilter<T> filter, List<T> result) {
-        rayIntersection.set(ray.oX, ray.oY, ray.oZ, ray.dX, ray.dY, ray.dZ);
+    public void detectRayIntersection(Rayfc ray, AABBOverlapFilter<T> filter, List<T> result) {
+        rayIntersection.set(ray.oX(), ray.oY(), ray.oZ(), ray.dX(), ray.dY(), ray.dZ());
         traverseTree(aabb -> rayIntersection.test((float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(), (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()), filter, result);
     }
 

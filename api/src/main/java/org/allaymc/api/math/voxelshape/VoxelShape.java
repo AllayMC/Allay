@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
-import org.allaymc.api.math.MathUtils;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
@@ -135,7 +134,7 @@ public final class VoxelShape {
     public boolean intersectsAABB(AABBdc other) {
         var aabb = unionAABB();
         // TODO: This is a bug in JOML-primitives
-        if (!MathUtils.intersectsAABB(aabb, other)) return false;
+        if (!aabb.intersectsAABB(other)) return false;
 
         other.intersection(aabb, aabb);
         if (vacancies.stream().anyMatch(vacancy -> vacancy.containsAABB(aabb))) return false;

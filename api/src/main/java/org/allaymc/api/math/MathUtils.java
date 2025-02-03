@@ -4,7 +4,6 @@ import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3fc;
 import org.joml.*;
 import org.joml.primitives.AABBd;
-import org.joml.primitives.AABBdc;
 import org.joml.primitives.AABBf;
 
 import java.lang.Math;
@@ -413,14 +412,5 @@ public final class MathUtils {
         aabb.maxY += growth;
         aabb.maxZ += growth;
         return aabb;
-    }
-
-    /**
-     * NOTICE: This is a temporary method due to a bug in JOML-primitives, and will be removed after
-     * <a href="https://github.com/JOML-CI/joml-primitives/pull/4">this pr</a> got merged.
-     */
-    public static boolean intersectsAABB(AABBdc aabb1, AABBdc aabb2) {
-        return aabb1.maxX() > aabb2.minX() && aabb1.maxY() > aabb2.minY() && aabb1.maxZ() > aabb2.minZ() &&
-               aabb1.minX() < aabb2.maxX() && aabb1.minY() < aabb2.maxY() && aabb1.minZ() < aabb2.maxZ();
     }
 }

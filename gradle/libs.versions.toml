@@ -62,7 +62,7 @@ javapoet = { module = "com.palantir.javapoet:javapoet", version = "0.6.0" }
 fastreflect = { group = "com.github.AllayMC", name = "fast-reflection", version = "8733a599fa" }
 # Math computing
 joml = { group = "org.joml", name = "joml", version = "1.10.8" }
-joml-primitives = { group = "org.joml", name = "joml-primitives", version = "1.10.0" }
+joml-primitives = { group = "org.allaymc", name = "joml-primitives", version = "404d04f6b7" }
 # Netty
 netty-epoll = { group = "io.netty", name = "netty-transport-classes-epoll", version.ref = "netty" }
 netty-kqueue = { group = "io.netty", name = "netty-transport-classes-kqueue", version.ref = "netty" }
