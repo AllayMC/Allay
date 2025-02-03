@@ -63,8 +63,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * the entity will be considered as collided with the block. This is used to prevent floating point
      * number overflow problem and is what the vanilla actually does.
      * <p>
-     * This value is actually the value of the y coordinate decimal point when the player stands on the
-     * full block (such as the grass block)
+     * This value is actually the value of the client-side y coordinate decimal point when the player
+     * stands on the full block (such as the grass block).
      */
     public static final double FAT_AABB_MARGIN = 0.00001;
 
@@ -444,7 +444,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis.
      *
      * @return A pair containing the remaining movement distance along the axis after collision detection (Double)
-     * and a boolean indicating whether a collision occurred (Boolean).
+     * and a boolean indicating whether a collision occurred (Boolean) or whether the entity will be on ground (if axis == Y).
      * If no movement was specified (motion = 0), an empty pair is returned.
      *
      * @throws IllegalArgumentException if an invalid axis is provided.
@@ -481,41 +481,58 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             return EMPTY_FLOAT_BOOLEAN_PAIR;
         }
 
-        var deltaAxis = motion;
+        var deltaInAxis = motion;
         var collision = false;
 
         var blocks = dimension.getCollidingBlockStates(extendAxis);
         if (blocks != null) {
-            collision = axis != Y || shouldTowardsNegative;
+            // There is a collision if `blocks` is not null
+            if (axis == Y) {
+                // When the axis is Y, `collision` indicates whether the entity will be on the ground
+                collision = shouldTowardsNegative;
+            } else {
+                collision = true;
+            }
 
-            // There is a collision
-            var minAxis = floor(extendAxis.getMin(axis));
-            var maxAxis = computeMax(minAxis, axis, blocks);
+            var minInAxis = floor(extendAxis.getMin(axis));
+            var maxInAxis = computeMax(minInAxis, axis, blocks);
             // Calculate the ray axis starting coordinate
             var coordinate = shouldTowardsNegative ? aabb.getMin(axis) : aabb.getMax(axis);
-            if (isInRange(minAxis, coordinate, maxAxis)) {
-                // Stuck into the block
-                deltaAxis = 0;
+            if (isInRange(minInAxis, coordinate, maxInAxis)) {
+                // Entity is stuck into blocks
+                deltaInAxis = 0;
             } else {
-                deltaAxis = min(abs(coordinate - minAxis), abs(coordinate - maxAxis));
+                deltaInAxis = min(abs(coordinate - minInAxis), abs(coordinate - maxInAxis));
                 if (shouldTowardsNegative) {
-                    deltaAxis = -deltaAxis;
+                    deltaInAxis = -deltaInAxis;
                 }
-                if (abs(deltaAxis) <= FAT_AABB_MARGIN) {
-                    deltaAxis = 0;
+            }
+
+            if (deltaInAxis != 0) {
+                // Make a certain distance (FAT_AABB_MARGIN) between the entity and the block
+                var signum = signum(deltaInAxis);
+                var deltaInAxisWithFAM = deltaInAxis + (signum > 0 ? -FAT_AABB_MARGIN : FAT_AABB_MARGIN);
+                if (signum != signum(deltaInAxisWithFAM)) {
+                    deltaInAxis = 0;
+                } else {
+                    deltaInAxis = deltaInAxisWithFAM;
                 }
             }
 
             motion = 0;
         }
 
-        // Move the collision box
-        if (axis == X) aabb.translate(deltaAxis, 0, 0);
-        else if (axis == Y) aabb.translate(0, deltaAxis, 0);
-        else aabb.translate(0, 0, deltaAxis);
+        if (deltaInAxis != 0) {
+            // Move the collision box
+            switch (axis) {
+                case X -> aabb.translate(deltaInAxis, 0, 0);
+                case Y -> aabb.translate(0, deltaInAxis, 0);
+                default -> aabb.translate(0, 0, deltaInAxis);
+            }
+            // Update the coordinates
+            recorder.setComponent(axis, recorder.get(axis) + deltaInAxis);
+        }
 
-        // Update the coordinates
-        recorder.setComponent(axis, recorder.get(axis) + deltaAxis);
         return new DoubleBooleanImmutablePair(motion, collision);
     }
 
@@ -549,7 +566,10 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 BlockState[] sub2 = sub1[oy];
                 for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
                     BlockState blockState = sub2[oz];
-                    if (blockState == null) continue;
+                    if (blockState == null) {
+                        continue;
+                    }
+
                     double current;
                     var unionAABB = blockState.getBlockStateData().collisionShape().unionAABB();
                     switch (axis) {
@@ -558,7 +578,9 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                         case Z -> current = unionAABB.lengthZ() + start + oz;
                         default -> throw new IllegalArgumentException("Invalid axis provided");
                     }
-                    if (current > max) max = current;
+                    if (current > max) {
+                        max = current;
+                    }
                 }
             }
         }
