@@ -521,7 +521,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
     // Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
     protected boolean notValidEntityArea(AABBd extendAABB) {
-        return (extendAABB.minY < dimension.getDimensionInfo().minHeight()) &&
+        return !(extendAABB.minY >= dimension.getDimensionInfo().minHeight()) &&
                !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
                !dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
     }

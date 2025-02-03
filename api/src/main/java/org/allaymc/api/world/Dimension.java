@@ -483,6 +483,8 @@ public interface Dimension {
             return;
         }
 
+        var dimensionInfo = getDimensionInfo();
+
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
         var startY = y >> 4;
@@ -501,6 +503,10 @@ public interface Dimension {
 
                 var chunk = getChunkService().getOrLoadChunkSync(chunkX, chunkZ);
                 for (int sectionY = startY; sectionY <= endY; sectionY++) {
+                    if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
+                        continue;
+                    }
+
                     var cY = sectionY << 4;
                     var localStartY = Math.max(y - cY, 0);
                     var localEndY = Math.min(y + sizeY - cY, 16);
@@ -541,6 +547,8 @@ public interface Dimension {
             return;
         }
 
+        var dimensionInfo = getDimensionInfo();
+
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
         var startY = y >> 4;
@@ -559,6 +567,10 @@ public interface Dimension {
 
                 var chunk = getChunkService().getOrLoadChunkSync(chunkX, chunkZ);
                 for (int sectionY = startY; sectionY <= endY; sectionY++) {
+                    if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
+                        continue;
+                    }
+
                     var cY = sectionY << 4;
                     var localStartY = Math.max(y - cY, 0);
                     var localEndY = Math.min(y + sizeY - cY, 16);
