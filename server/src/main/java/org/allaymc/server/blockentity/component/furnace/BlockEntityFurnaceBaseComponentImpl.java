@@ -25,7 +25,7 @@ import org.allaymc.server.component.annotation.Dependency;
 import org.allaymc.server.component.annotation.OnInitFinish;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.ContainerSetDataPacket;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -235,12 +235,12 @@ public class BlockEntityFurnaceBaseComponentImpl extends BlockEntityBaseComponen
     protected void tryDropStoredXP() {
         if (storedXP < 1) return;
 
-        var pos = new Vector3f(
-                position.x() + 0.5f,
-                position.y() + 1.5f,
-                position.z() + 0.5f
+        var pos = new Vector3d(
+                position.x() + 0.5,
+                position.y() + 1.5,
+                position.z() + 0.5
         );
-        getDimension().dropXpOrb(pos, (int) storedXP);
+        getDimension().dropXpOrb(pos, storedXP);
         storedXP = 0;
     }
 

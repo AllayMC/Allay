@@ -10,7 +10,6 @@ import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.world.DimensionInfo;
 import org.cloudburstmc.protocol.bedrock.data.ParticleType;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.joml.Vector3f;
 
 /**
  * @author daoge_cmd
@@ -27,7 +26,7 @@ public class BlockWetSpongeBaseComponentImpl extends BlockBaseComponentImpl {
         if (oldBlockState.dimension().getDimensionInfo() == DimensionInfo.NETHER) {
             oldBlockState.dimension().setBlockState(oldBlockState.pos(), BlockTypes.SPONGE.getDefaultState());
             oldBlockState.dimension().addLevelSoundEvent(MathUtils.center(oldBlockState.pos()), SoundEvent.FIZZ);
-            oldBlockState.dimension().addParticle(new Vector3f(oldBlockState.pos()).add(0.5f, 1.0f, 0.5f), ParticleType.EXPLODE);
+            oldBlockState.dimension().addParticle(MathUtils.center(oldBlockState.pos()), ParticleType.EXPLODE);
         }
     }
 }

@@ -3,8 +3,6 @@ package org.allaymc.api.world;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
 
 import java.util.Map;
 
@@ -76,17 +74,5 @@ public interface WorldPool {
     default Location3ic getGlobalSpawnPoint() {
         var vec = getDefaultWorld().getWorldData().getSpawnPoint();
         return new Location3i(vec.x(), vec.y(), vec.z(), getDefaultWorld().getOverWorld());
-    }
-
-    /**
-     * Get the global spawn point of the server.
-     * <p>
-     * Global spawn point is the location of the player who joins the server for the first time.
-     *
-     * @return the global spawn point of the server.
-     */
-    default Vector3fc getGlobalSpawnPointVec3f() {
-        var vec = getDefaultWorld().getWorldData().getSpawnPoint();
-        return new Vector3f(vec.x(), vec.y(), vec.z());
     }
 }

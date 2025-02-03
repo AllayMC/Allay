@@ -3,8 +3,8 @@ package org.allaymc.server.datastruct.aabbtree;
 import lombok.Getter;
 import org.allaymc.api.world.service.HasAABB;
 import org.allaymc.api.world.service.HasLongId;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 /**
  * @author daoge_cmd
@@ -12,15 +12,15 @@ import org.joml.primitives.AABBfc;
 @Getter
 public class TestEntity implements HasAABB, HasLongId {
 
-    private final float x, y, z;
-    private final float width, height, length;
+    private final double x, y, z;
+    private final double width, height, length;
     private final int id;
 
-    public TestEntity(int id, float x, float y, float width, float height) {
+    public TestEntity(int id, double x, double y, double width, double height) {
         this(id, x, y, 0, width, height, 0);
     }
 
-    public TestEntity(int id, float x, float y, float z, float width, float height, float length) {
+    public TestEntity(int id, double x, double y, double z, double width, double height, double length) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -31,18 +31,18 @@ public class TestEntity implements HasAABB, HasLongId {
     }
 
     @Override
-    public AABBfc getOffsetAABB() {
-        var dest = new AABBf();
+    public AABBdc getOffsetAABB() {
+        var dest = new AABBd();
         dest.setMin(x, y, z);
         dest.setMax(x + width, y + height, z + length);
         return dest;
     }
 
     @Override
-    public AABBfc getAABB() {
-        return new AABBf(
-                -width / 2f, 0, -length / 2f,
-                width / 2f, height, length / 2f
+    public AABBdc getAABB() {
+        return new AABBd(
+                -width / 2, 0, -length / 2,
+                width / 2, height, length / 2
         );
     }
 

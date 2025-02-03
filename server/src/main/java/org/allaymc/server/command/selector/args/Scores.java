@@ -6,7 +6,7 @@ import org.allaymc.api.command.selector.SelectorType;
 import org.allaymc.api.command.selector.args.CachedSimpleSelectorArgument;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.scoreboard.scorer.EntityScorer;
 import org.allaymc.api.scoreboard.scorer.PlayerScorer;
 import org.allaymc.api.scoreboard.scorer.Scorer;
@@ -28,7 +28,7 @@ public class Scores extends CachedSimpleSelectorArgument {
     protected static final String SCORE_SCOPE_SEPARATOR = "..";
 
     @Override
-    protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
+    protected Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         List<ScoreCondition> conditions = new ArrayList<>();
         for (var entry : AllayStringUtils.fastSplit(SCORE_SEPARATOR, arguments[0].substring(1, arguments[0].length() - 1))) {

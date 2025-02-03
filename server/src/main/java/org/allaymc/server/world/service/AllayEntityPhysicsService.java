@@ -1,7 +1,7 @@
 package org.allaymc.server.world.service;
 
 import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.floats.FloatBooleanImmutablePair;
+import it.unimi.dsi.fastutil.doubles.DoubleBooleanImmutablePair;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.block.component.BlockLiquidBaseComponent;
@@ -14,8 +14,8 @@ import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.entity.EntityMoveEvent;
 import org.allaymc.api.eventbus.event.player.PlayerMoveEvent;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.voxelshape.VoxelShape;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.Dimension;
@@ -32,9 +32,9 @@ import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.network.processor.impl.ingame.PlayerAuthInputPacketProcessor;
 import org.cloudburstmc.protocol.bedrock.packet.PlayerAuthInputPacket;
 import org.jctools.maps.NonBlockingHashMapLong;
-import org.joml.Vector3f;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
+import org.joml.Vector3d;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,10 +54,10 @@ import static org.allaymc.api.math.MathUtils.isInRange;
 @Slf4j
 public class AllayEntityPhysicsService implements EntityPhysicsService {
 
-    public static final FloatBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new FloatBooleanImmutablePair(0, false);
+    public static final DoubleBooleanImmutablePair EMPTY_FLOAT_BOOLEAN_PAIR = new DoubleBooleanImmutablePair(0, false);
 
-    public static final float MOTION_THRESHOLD;
-    public static final float BLOCK_COLLISION_MOTION;
+    public static final double MOTION_THRESHOLD;
+    public static final double BLOCK_COLLISION_MOTION;
     /**
      * When the min distance of entity to the collision shape of block is smaller than FAT_AABB_MARGIN,
      * the entity will be considered as collided with the block. This is used to prevent floating point
@@ -66,14 +66,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * This value is actually the value of the y coordinate decimal point when the player stands on the
      * full block (such as the grass block)
      */
-    public static final float FAT_AABB_MARGIN = 0.00001f;
+    public static final double FAT_AABB_MARGIN = 0.00001;
 
-    private static final float STEPPING_OFFSET = 0.05f;
-    private static final float MOMENTUM_FACTOR = 0.91f;
+    private static final double STEPPING_OFFSET = 0.05;
+    private static final double MOMENTUM_FACTOR = 0.91;
 
-    private static final float WATER_FLOW_MOTION = 0.014f;
-    private static final float LAVA_FLOW_MOTION = 0.002333333f;
-    private static final float LAVA_FLOW_MOTION_IN_NETHER = 0.007f;
+    private static final double WATER_FLOW_MOTION = 0.014;
+    private static final double LAVA_FLOW_MOTION = 0.002333333;
+    private static final double LAVA_FLOW_MOTION_IN_NETHER = 0.007;
 
     private static final int X = 0;
     private static final int Y = 1;
@@ -120,7 +120,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 if (entity.computeLiquidMotion()) {
                     hasLiquidMotion = computeLiquidMotion(entity);
                 }
-                entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
+                entity.setMotion(checkMotionThreshold(new Vector3d(entity.getMotion())));
                 if (applyMotion(entity)) {
                     updatedEntities.put(entity.getRuntimeId(), entity);
                 }
@@ -131,7 +131,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 // 2. The entity is stuck in the block
                 // Do not calculate other motion exclude block collision motion
                 computeBlockCollisionMotion(entity, collidedBlocks);
-                entity.setMotion(checkMotionThreshold(new Vector3f(entity.getMotion())));
+                entity.setMotion(checkMotionThreshold(new Vector3d(entity.getMotion())));
                 if (forceApplyMotion(entity)) {
                     updatedEntities.put(entity.getRuntimeId(), entity);
                 }
@@ -168,7 +168,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var minY = (int) floor(aabb.minY());
         var minZ = (int) floor(aabb.minZ());
         int targetX = 0, targetY = 0, targetZ = 0;
-        float V = 0;
+        double V = 0;
         for (int ox = 0, blocksLength = collidedBlocks.length; ox < blocksLength; ox++) {
             BlockState[][] sub1 = collidedBlocks[ox];
             for (int oy = 0, sub1Length = sub1.length; oy < sub1Length; oy++) {
@@ -201,7 +201,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         // 2. Centered on the block pos we found (1), find out the best moving direction
         BlockFace movingDirection = null;
         var values = BlockFace.values();
-        float distanceSqrt = Integer.MAX_VALUE;
+        double distanceSqrt = Integer.MAX_VALUE;
         for (int i = values.length - 1; i >= 0; i--) {
             var blockFace = values[i];
             var offsetVec = blockFace.offsetPos(targetX, targetY, targetZ);
@@ -228,20 +228,20 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var collidedEntities = getCachedEntityCollidingResult(entity);
         collidedEntities.removeIf(e -> !e.computeEntityCollisionMotion());
 
-        var collisionMotion = new Vector3f(0, 0, 0);
+        var collisionMotion = new Vector3d(0, 0, 0);
 
         var location = entity.getLocation();
         var pushSpeedReduction = entity.getPushSpeedReduction();
         for (var other : collidedEntities) {
             // https://github.com/lovexyn0827/Discovering-Minecraft/blob/master/Minecraft%E5%AE%9E%E4%BD%93%E8%BF%90%E5%8A%A8%E7%A0%94%E7%A9%B6%E4%B8%8E%E5%BA%94%E7%94%A8/5-Chapter-5.md
             var ol = other.getLocation();
-            var direction = MathUtils.normalizeIfNotZero(new Vector3f(entity.getLocation()).sub(other.getLocation(), new Vector3f()));
+            var direction = MathUtils.normalizeIfNotZero(new Vector3d(entity.getLocation()).sub(other.getLocation(), new Vector3d()));
             var distance = max(abs(ol.x() - location.x()), abs(ol.z() - location.z()));
             if (distance <= 0.01) continue;
 
             var k = 0.05f * pushSpeedReduction;
             if (distance <= 1) {
-                k *= MathUtils.fastFloatInverseSqrt(distance);
+                k *= MathUtils.fastDoubleInverseSqrt(distance);
             } else {
                 k /= distance;
             }
@@ -263,8 +263,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     protected boolean computeLiquidMotion(Entity entity) {
         var hasWaterMotion = new AtomicBoolean(false);
         var hasLavaMotion = new AtomicBoolean(false);
-        var waterMotion = new Vector3f();
-        var lavaMotion = new Vector3f();
+        var waterMotion = new Vector3d();
+        var lavaMotion = new Vector3d();
         var entityY = entity.getLocation().y();
 
         dimension.forEachBlockStates(entity.getOffsetAABB(), 0, (x, y, z, block) -> {
@@ -298,7 +298,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             return false;
         }
 
-        var finalMotion = new Vector3f();
+        var finalMotion = new Vector3d();
         if (hasWaterMotion.get()) {
             // Multiple water flow vector may cancel each other out and let the final motion result
             // in zero vector, so we still need to use normalizeIfNotZero() here to prevent NaN
@@ -325,7 +325,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var speedLevel = entity.getEffectLevel(EffectTypes.SPEED);
         var slownessLevel = entity.getEffectLevel(EffectTypes.SLOWNESS);
         var effectFactor = (1f + 0.2f * speedLevel) * (1f - 0.15f * slownessLevel);
-        float slipperinessMultiplier = 1;
+        double slipperinessMultiplier = 1;
         if (!hasLiquidMotion) {
             // Entity that has liquid motion won't be affected by the friction of the block it stands on
             slipperinessMultiplier = blockStateStandingOn != null ? blockStateStandingOn.getBlockStateData().friction() : DEFAULT_FRICTION;
@@ -337,20 +337,20 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         var velocityFactor = entity.isOnGround() ? entity.getDragFactorOnGround() : entity.getDragFactorInAir();
         var acceleration = velocityFactor * movementFactor;
         if (entity.isOnGround()) {
-            acceleration *= (float) (effectFactor * pow(DEFAULT_FRICTION / slipperinessMultiplier, 3));
+            acceleration *= effectFactor * pow(DEFAULT_FRICTION / slipperinessMultiplier, 3);
         }
 
         var yaw = entity.getLocation().yaw();
-        var newMx = (float) (momentumMx + acceleration * sin(yaw));
-        var newMz = (float) (momentumMz + acceleration * cos(yaw));
+        var newMx = momentumMx + acceleration * sin(yaw);
+        var newMz = momentumMz + acceleration * cos(yaw);
 
         // Skip sprint jump boost because this service does not handle player's movement
 
         var newMy = (motion.y() - (entity.hasGravity() ? entity.getGravity() : 0f)) * (1 - entity.getDragFactorInAir());
-        entity.setMotion(checkMotionThreshold(new Vector3f(newMx, newMy, newMz)));
+        entity.setMotion(checkMotionThreshold(new Vector3d(newMx, newMy, newMz)));
     }
 
-    protected Vector3f checkMotionThreshold(Vector3f motion) {
+    protected Vector3d checkMotionThreshold(Vector3d motion) {
         if (abs(motion.x) < MOTION_THRESHOLD) motion.x = 0;
         if (abs(motion.y) < MOTION_THRESHOLD) motion.y = 0;
         if (abs(motion.z) < MOTION_THRESHOLD) motion.z = 0;
@@ -358,13 +358,13 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     protected boolean forceApplyMotion(Entity entity) {
-        var loc = new Location3f(entity.getLocation());
+        var loc = new Location3d(entity.getLocation());
         loc.add(entity.getMotion());
         return updateEntityLocation(entity, loc);
     }
 
     protected boolean applyMotion(Entity entity) {
-        var pos = new Location3f(entity.getLocation());
+        var pos = new Location3d(entity.getLocation());
         var motion = entity.getMotion();
         var mx = motion.x();
         var my = motion.y();
@@ -385,7 +385,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             mx = applyMotion0(entity.getStepHeight(), pos, mx, aabb, isOnGround, X);
         }
 
-        entity.setMotion(new Vector3f(mx, my, mz));
+        entity.setMotion(new Vector3d(mx, my, mz));
         if (!pos.equals(entity.getLocation()) && updateEntityLocation(entity, pos)) {
             // Update onGround status after updated entity location
             // to make sure that some block (for example: water) can reset
@@ -408,14 +408,14 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      *
      * @return The remaining component of the object's movement velocity along the specified axis after considering possible collisions and intersections.
      */
-    private float applyMotion0(float stepHeight, Location3f pos, float motion, AABBf aabb, boolean enableStepping, int axis) {
+    private double applyMotion0(double stepHeight, Location3d pos, double motion, AABBd aabb, boolean enableStepping, int axis) {
         if (motion == 0) return motion;
         if (axis < X || axis > Z) {
             throw new IllegalArgumentException("Invalid axis: " + axis);
         }
 
-        var resultAABB = new AABBf(aabb);
-        var resultPos = new Vector3f(pos);
+        var resultAABB = new AABBd(aabb);
+        var resultPos = new Vector3d(pos);
 
         // The first time directly moves
         var result = moveAlongAxisAndStopWhenCollision(resultAABB, motion, resultPos, axis);
@@ -443,18 +443,18 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * @param recorder The vector to record the movement along the axis.
      * @param axis     The axis along which to move the AABB. Use 0 for the X-axis, 1 for the Y-axis, and 2 for the Z-axis.
      *
-     * @return A pair containing the remaining movement distance along the axis after collision detection (Float)
+     * @return A pair containing the remaining movement distance along the axis after collision detection (Double)
      * and a boolean indicating whether a collision occurred (Boolean).
      * If no movement was specified (motion = 0), an empty pair is returned.
      *
      * @throws IllegalArgumentException if an invalid axis is provided.
      */
-    private Pair<Float, Boolean> moveAlongAxisAndStopWhenCollision(AABBf aabb, float motion, Vector3f recorder, int axis) {
+    private Pair<Double, Boolean> moveAlongAxisAndStopWhenCollision(AABBd aabb, double motion, Vector3d recorder, int axis) {
         if (motion == 0) {
             return EMPTY_FLOAT_BOOLEAN_PAIR;
         }
 
-        var extendAxis = new AABBf(aabb);
+        var extendAxis = new AABBd(aabb);
 
         // Move towards the negative(motion < 0) or positive(motion > 0) axis direction
         var shouldTowardsNegative = motion < 0;
@@ -489,7 +489,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             collision = axis != Y || shouldTowardsNegative;
 
             // There is a collision
-            var minAxis = (float) floor(extendAxis.getMin(axis));
+            var minAxis = floor(extendAxis.getMin(axis));
             var maxAxis = computeMax(minAxis, axis, blocks);
             // Calculate the ray axis starting coordinate
             var coordinate = shouldTowardsNegative ? aabb.getMin(axis) : aabb.getMax(axis);
@@ -516,20 +516,20 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
         // Update the coordinates
         recorder.setComponent(axis, recorder.get(axis) + deltaAxis);
-        return new FloatBooleanImmutablePair(motion, collision);
+        return new DoubleBooleanImmutablePair(motion, collision);
     }
 
     // Do not use dimension.isAABBInDimension(extendX|Y|Z) because entity should be able to move even if y > maxHeight
-    protected boolean notValidEntityArea(AABBf extendAABB) {
+    protected boolean notValidEntityArea(AABBd extendAABB) {
         return (extendAABB.minY < dimension.getDimensionInfo().minHeight()) &&
                !dimension.getChunkService().isChunkLoaded((int) extendAABB.minX >> 4, (int) extendAABB.minZ >> 4) &&
                !dimension.getChunkService().isChunkLoaded((int) extendAABB.maxX >> 4, (int) extendAABB.maxZ >> 4);
     }
 
-    protected boolean tryStepping(Vector3f pos, AABBf aabb, float stepHeight, boolean positive, boolean xAxis) {
+    protected boolean tryStepping(Vector3d pos, AABBd aabb, double stepHeight, boolean positive, boolean xAxis) {
         var offset = positive ? STEPPING_OFFSET : -STEPPING_OFFSET;
-        var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBf());
-        var recorder = new Vector3f();
+        var offsetAABB = aabb.translate(xAxis ? offset : 0, 0, xAxis ? 0 : offset, new AABBd());
+        var recorder = new Vector3d();
         moveAlongAxisAndStopWhenCollision(offsetAABB, stepHeight, recorder, Y);
         moveAlongAxisAndStopWhenCollision(offsetAABB, -stepHeight, recorder, Y);
         if (recorder.y == 0 || dimension.getCollidingBlockStates(offsetAABB) != null) {
@@ -541,8 +541,8 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
     }
 
-    protected float computeMax(float start, int axis, BlockState[][][] blocks) {
-        float max = start;
+    protected double computeMax(double start, int axis, BlockState[][][] blocks) {
+        double max = start;
         for (int ox = 0, blocksLength = blocks.length; ox < blocksLength; ox++) {
             BlockState[][] sub1 = blocks[ox];
             for (int oy = 0, sub1Length = sub1.length; oy < sub1Length; oy++) {
@@ -550,7 +550,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 for (int oz = 0, sub2Length = sub2.length; oz < sub2Length; oz++) {
                     BlockState blockState = sub2[oz];
                     if (blockState == null) continue;
-                    float current;
+                    double current;
                     var unionAABB = blockState.getBlockStateData().collisionShape().unionAABB();
                     switch (axis) {
                         case X -> current = unionAABB.lengthX() + start + ox;
@@ -592,7 +592,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
                 }
 
                 // Calculate delta pos (motion)
-                var motion = event.getTo().sub(player.getLocation(), new Vector3f());
+                var motion = event.getTo().sub(player.getLocation(), new Vector3d());
                 baseComponent.setMotionValueOnly(motion);
                 if (updateEntityLocation(player, clientMove.newLoc())) {
                     entityAABBTree.update(player);
@@ -607,7 +607,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         }
     }
 
-    protected boolean updateEntityLocation(Entity entity, Location3fc newLoc) {
+    protected boolean updateEntityLocation(Entity entity, Location3dc newLoc) {
         var event = new EntityMoveEvent(entity, entity.getLocation(), newLoc);
         if (!event.call()) {
             return false;
@@ -652,7 +652,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
      * Please note that this method usually been called asynchronously <p/>
      * See {@link PlayerAuthInputPacketProcessor#handleAsync(EntityPlayer, PlayerAuthInputPacket, long)}
      */
-    public void offerClientMove(EntityPlayer player, Location3fc newLoc) {
+    public void offerClientMove(EntityPlayer player, Location3dc newLoc) {
         if (!entities.containsKey(player.getRuntimeId()) || player.getLocation().equals(newLoc)) {
             return;
         }
@@ -661,7 +661,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
     }
 
     @Override
-    public List<Entity> computeCollidingEntities(AABBfc aabb, AABBOverlapFilter<Entity> predicate) {
+    public List<Entity> computeCollidingEntities(AABBdc aabb, AABBOverlapFilter<Entity> predicate) {
         var result = new LinkedList<Entity>();
         entityAABBTree.detectOverlaps(aabb, predicate, result);
         return result;
@@ -685,5 +685,5 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
         return result;
     }
 
-    protected record ClientMove(EntityPlayer player, Location3fc newLoc) {}
+    protected record ClientMove(EntityPlayer player, Location3dc newLoc) {}
 }

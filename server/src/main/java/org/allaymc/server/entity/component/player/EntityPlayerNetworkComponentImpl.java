@@ -19,7 +19,7 @@ import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.recipe.Recipe;
-import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.ProtocolInfo;
 import org.allaymc.api.pack.Pack;
@@ -320,7 +320,7 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
 
         // Load the current point chunk firstly so that we can add player entity into the chunk
         dimension.getChunkService().getOrLoadChunkSync((int) currentPos.x() >> 4, (int) currentPos.z() >> 4);
-        baseComponent.setLocationBeforeSpawn(new Location3f(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
+        baseComponent.setLocationBeforeSpawn(new Location3d(currentPos.x(), currentPos.y(), currentPos.z(), dimension));
         dimension.addPlayer(thisPlayer);
 
         var startGamePacket = encodeStartGamePacket(dimension.getWorld(), playerData, dimension);

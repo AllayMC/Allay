@@ -6,7 +6,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.form.Forms;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.utils.TextFormat;
@@ -66,7 +66,7 @@ public class WorldCommand extends SimpleCommand {
                     }
                     var dim = world.getDimension(dimInfo.dimensionId());
 
-                    entity.teleport(new Location3f(0, 64, 0, dim));
+                    entity.teleport(new Location3d(0, 64, 0, dim));
                     context.addOutput(TrKeys.A_COMMAND_WORLD_TP_SUCCESS, worldName, dimName);
                     return context.success();
                 }, SenderType.ENTITY)

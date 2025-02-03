@@ -11,7 +11,7 @@ import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.args.SelectorArgument;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
-import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.utils.AllayStringUtils;
 import org.allaymc.server.command.selector.args.*;
 
@@ -92,7 +92,7 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         }
 
         // Get the cloned location information of the executor
-        var senderLocation = new Location3f(sender.getCmdExecuteLocation());
+        var senderLocation = new Location3d(sender.getCmdExecuteLocation());
         // Get the selector type
         var selectorType = parseSelectorType(matcher.group(1));
         // Determine the entity detection range according to the selector type first
@@ -163,9 +163,9 @@ public class AllayEntitySelectorAPI implements EntitySelectorAPI {
         // Select the closest player
         if (selectorType == NEAREST_PLAYER && entities.size() != 1) {
             Entity nearest = null;
-            var min = Float.MAX_VALUE;
+            var min = Double.MAX_VALUE;
             for (var entity : entities) {
-                var distanceSquared = 0f;
+                var distanceSquared = 0.0;
                 if ((distanceSquared = senderLocation.distanceSquared(entity.getLocation())) < min) {
                     min = distanceSquared;
                     nearest = entity;

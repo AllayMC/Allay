@@ -3,7 +3,7 @@ package org.allaymc.server.network.processor.impl.ingame;
 import lombok.extern.slf4j.Slf4j;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.eventbus.event.player.PlayerRespawnEvent;
-import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -102,13 +102,13 @@ public class PlayerActionPacketProcessor extends PacketProcessor<PlayerActionPac
     private void prepareForRespawn(EntityPlayer player, Location3ic spawnPoint) {
         var spawnDimension = spawnPoint.dimension();
         spawnDimension.getChunkService().getOrLoadChunkSync(spawnPoint.x() >> 4, spawnPoint.z() >> 4);
-        player.setLocationBeforeSpawn(new Location3f(spawnPoint));
+        player.setLocationBeforeSpawn(new Location3d(spawnPoint));
     }
 
     private void afterRespawn(EntityPlayer player, Location3ic spawnPoint) {
         var spawnDimension = spawnPoint.dimension();
         // Teleport to prevent the player from falling into strange places
-        player.teleport(new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), spawnDimension));
+        player.teleport(new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), spawnDimension));
         player.setSprinting(false);
         player.setSneaking(false);
         player.removeAllEffects();

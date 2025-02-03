@@ -3,7 +3,7 @@ package org.allaymc.server.datastruct.aabb;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.world.service.HasAABB;
-import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBd;
 
 /**
  * @author daoge_cmd
@@ -19,7 +19,7 @@ public final class AABBTreeNode<E extends HasAABB> {
     private static final int MAX_NUM_OF_CHILDREN_PER_NODE = 2;
 
     private final int[] children = new int[MAX_NUM_OF_CHILDREN_PER_NODE];
-    private final AABBf aabb = new AABBf();
+    private final AABBd aabb = new AABBd();
 
     private int parent = INVALID_NODE_INDEX;
     private int index = INVALID_NODE_INDEX;
@@ -61,8 +61,8 @@ public final class AABBTreeNode<E extends HasAABB> {
     public void resetForReuse() {
         assignChildren(INVALID_NODE_INDEX, INVALID_NODE_INDEX);
 
-        aabb.setMin(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
-        aabb.setMax(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
+        aabb.setMin(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);
+        aabb.setMax(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY);
 
         this.parent = INVALID_NODE_INDEX;
         this.height = 0;

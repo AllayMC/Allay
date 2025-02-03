@@ -4,7 +4,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TextReceiver;
 import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.permission.Permissible;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.gamerule.GameRule;
@@ -35,7 +35,7 @@ public interface CommandSender extends TextReceiver, Permissible {
      *
      * @return The location where the command was executed.
      */
-    Location3fc getCmdExecuteLocation();
+    Location3dc getCmdExecuteLocation();
 
     /**
      * Handle the result of the command execution.

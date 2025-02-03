@@ -6,7 +6,7 @@ import org.allaymc.api.command.SenderType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class SetBlockCommand extends SimpleCommand {
                 .blockPropertyValues("blockPropertyValues")
                 .optional()
                 .exec((context, entity) -> {
-                    Vector3f pos = context.getResult(0);
+                    Vector3d pos = context.getResult(0);
                     BlockType<?> blockType = context.getResult(1);
                     List<BlockPropertyType.BlockPropertyValue<?, ?, ?>> blockPropertyValues = context.getResult(2);
 

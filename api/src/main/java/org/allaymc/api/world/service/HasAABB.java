@@ -1,6 +1,6 @@
 package org.allaymc.api.world.service;
 
-import org.joml.primitives.AABBfc;
+import org.joml.primitives.AABBdc;
 
 /**
  * HasAABB represents an object that has an AABB.
@@ -12,10 +12,10 @@ public interface HasAABB {
     /**
      * @return the AABB of the object.
      */
-    AABBfc getAABB();
+    AABBdc getAABB();
 
     /**
      * @return the offset AABB of the object.
      */
-    AABBfc getOffsetAABB();
+    AABBdc getOffsetAABB();
 }

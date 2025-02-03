@@ -3,7 +3,7 @@ package org.allaymc.server.entity.type;
 import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntitySheep;
 import org.allaymc.api.entity.type.EntityTypes;
-import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.testutils.AllayTestExtension;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,6 +28,6 @@ class AllayEntityTypeTest {
 
     @Test
     void testCommon() {
-        assertEquals(new Location3f(0f, 1f, 2f, 0, 0, 0, mockDimension), sheep.getLocation());
+        assertEquals(new Location3d(0f, 1f, 2f, 0, 0, 0, mockDimension), sheep.getLocation());
     }
 }

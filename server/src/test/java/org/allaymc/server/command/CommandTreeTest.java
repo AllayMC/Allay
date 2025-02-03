@@ -4,11 +4,11 @@ import org.allaymc.api.command.Command;
 import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.tree.CommandContext;
 import org.allaymc.api.command.tree.CommandNodeFactory;
-import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.server.command.tree.AllayCommandNodeFactory;
 import org.allaymc.server.command.tree.AllayCommandTree;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CommandTreeTest {
     static Command mockCmd = Mockito.mock(Command.class);
     static CommandSender mockSender = Mockito.mock(CommandSender.class);
-    static Location3f cmdExecLoc = new Location3f(0, 0, 0, null);
+    static Location3d cmdExecLoc = new Location3d(0, 0, 0, null);
 
     @BeforeAll
     static void init() {
@@ -158,24 +158,24 @@ public class CommandTreeTest {
     @Test
     void testPosNode() {
         var tree = AllayCommandTree.create(mockCmd);
-        Vector3f dest = new Vector3f();
+        Vector3d dest = new Vector3d();
         tree.getRoot()
                 .pos("pos")
                 .exec(context -> {
-                    dest.set((Vector3f) context.getResult(0));
+                    dest.set((Vector3d) context.getResult(0));
                     return context.success();
                 });
         tree.parse(mockSender, new String[]{"11", "45", "14"});
-        assertEquals(new Vector3f(11, 45, 14), dest);
+        assertEquals(new Vector3d(11, 45, 14), dest);
         cmdExecLoc.set(19, 19, 810);
         tree.parse(mockSender, new String[]{"~1", "~2", "~3"});
-        assertEquals(new Vector3f(19 + 1, 19 + 2, 810 + 3), dest);
+        assertEquals(new Vector3d(19 + 1, 19 + 2, 810 + 3), dest);
         tree.parse(mockSender, new String[]{"~-1", "~-2", "~-3"});
-        assertEquals(new Vector3f(19 - 1, 19 - 2, 810 - 3), dest);
+        assertEquals(new Vector3d(19 - 1, 19 - 2, 810 - 3), dest);
         tree.parse(mockSender, new String[]{"~1.5", "~2.5", "~3.5"});
-        assertEquals(new Vector3f(19 + 1.5f, 19 + 2.5f, 810 + 3.5f), dest);
+        assertEquals(new Vector3d(19 + 1.5f, 19 + 2.5f, 810 + 3.5f), dest);
         tree.parse(mockSender, new String[]{"19", "19", "810"});
-        assertEquals(new Vector3f(19, 19, 810), dest);
+        assertEquals(new Vector3d(19, 19, 810), dest);
     }
 
     @Test

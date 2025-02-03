@@ -4,12 +4,13 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.data.BlockFace;
-import org.joml.Vector2f;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
-import org.joml.primitives.Rayf;
+import org.allaymc.api.math.MathUtils;
+import org.joml.Vector2d;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
+import org.joml.primitives.Rayd;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,8 +29,8 @@ public final class VoxelShape {
 
     public static final VoxelShape EMPTY = new VoxelShape(Collections.emptySet(), Collections.emptySet());
 
-    private final Set<AABBfc> solids;
-    private final Set<AABBfc> vacancies;
+    private final Set<AABBdc> solids;
+    private final Set<AABBdc> vacancies;
 
     public static VoxelShapeBuilder builder() {
         return new VoxelShapeBuilder();
@@ -40,15 +41,15 @@ public final class VoxelShape {
      *
      * @return the minimum AABB that can contain this voxel shape.
      */
-    public AABBf unionAABB() {
-        float
-                minX = Float.MAX_VALUE,
-                minY = Float.MAX_VALUE,
-                minZ = Float.MAX_VALUE;
-        float
-                maxX = -Float.MAX_VALUE,
-                maxY = -Float.MAX_VALUE,
-                maxZ = -Float.MAX_VALUE;
+    public AABBd unionAABB() {
+        double
+                minX = Double.MAX_VALUE,
+                minY = Double.MAX_VALUE,
+                minZ = Double.MAX_VALUE;
+        double
+                maxX = -Double.MAX_VALUE,
+                maxY = -Double.MAX_VALUE,
+                maxZ = -Double.MAX_VALUE;
         for (var solid : solids) {
             if (solid.minX() < minX) minX = solid.minX();
             if (solid.minY() < minY) minY = solid.minY();
@@ -57,7 +58,7 @@ public final class VoxelShape {
             if (solid.maxY() > maxY) maxY = solid.maxY();
             if (solid.maxZ() > maxZ) maxZ = solid.maxZ();
         }
-        return new AABBf(
+        return new AABBd(
                 minX, minY, minZ,
                 maxX, maxY, maxZ
         );
@@ -71,10 +72,10 @@ public final class VoxelShape {
      * @return the rotated voxel shape.
      */
     public VoxelShape rotate(BlockFace face) {
-        Set<AABBfc> newSolids = solids.stream()
+        Set<AABBdc> newSolids = solids.stream()
                 .map(face::rotateAABB)
                 .collect(Collectors.toSet());
-        Set<AABBfc> newVacancies = vacancies.stream()
+        Set<AABBdc> newVacancies = vacancies.stream()
                 .map(face::rotateAABB)
                 .collect(Collectors.toSet());
         return new VoxelShape(newSolids, newVacancies);
@@ -89,12 +90,12 @@ public final class VoxelShape {
      *
      * @return the translated voxel shape.
      */
-    public VoxelShape translate(float x, float y, float z) {
-        Set<AABBfc> newSolids = solids.stream()
-                .map(solid -> solid.translate(x, y, z, new AABBf()))
+    public VoxelShape translate(double x, double y, double z) {
+        Set<AABBdc> newSolids = solids.stream()
+                .map(solid -> solid.translate(x, y, z, new AABBd()))
                 .collect(Collectors.toSet());
-        Set<AABBfc> newVacancies = vacancies.stream()
-                .map(vacancy -> vacancy.translate(x, y, z, new AABBf()))
+        Set<AABBdc> newVacancies = vacancies.stream()
+                .map(vacancy -> vacancy.translate(x, y, z, new AABBd()))
                 .collect(Collectors.toSet());
         return new VoxelShape(newSolids, newVacancies);
     }
@@ -106,20 +107,20 @@ public final class VoxelShape {
      *
      * @return the translated voxel shape.
      */
-    public VoxelShape translate(Vector3fc vec) {
+    public VoxelShape translate(Vector3dc vec) {
         // This method is frequently called in physics calculation,
         // So performance in mind
 
         // Set the size of the set as we know that how many entries
         // will be put into this set to speed up.
-        var newSolids = new HashSet<AABBfc>(solids.size());
+        var newSolids = new HashSet<AABBdc>(solids.size());
         // Simply use for-each instead of stream to get better performance
         for (var solid : solids) {
-            newSolids.add(solid.translate(vec, new AABBf()));
+            newSolids.add(solid.translate(vec, new AABBd()));
         }
-        var newVacancies = new HashSet<AABBfc>(vacancies.size());
+        var newVacancies = new HashSet<AABBdc>(vacancies.size());
         for (var vacancy : vacancies) {
-            newVacancies.add(vacancy.translate(vec, new AABBf()));
+            newVacancies.add(vacancy.translate(vec, new AABBd()));
         }
         return new VoxelShape(newSolids, newVacancies);
     }
@@ -131,9 +132,10 @@ public final class VoxelShape {
      *
      * @return true if this voxel shape intersects with the specified AABB, otherwise false.
      */
-    public boolean intersectsAABB(AABBfc other) {
+    public boolean intersectsAABB(AABBdc other) {
         var aabb = unionAABB();
-        if (!aabb.intersectsAABB(other)) return false;
+        // TODO: This is a bug in JOML-primitives
+        if (!MathUtils.intersectsAABB(aabb, other)) return false;
 
         other.intersection(aabb, aabb);
         if (vacancies.stream().anyMatch(vacancy -> vacancy.containsAABB(aabb))) return false;
@@ -147,7 +149,7 @@ public final class VoxelShape {
      *
      * @return {@code true} if this voxel shape intersects with the specified point, otherwise {@code false}.
      */
-    public boolean intersectsPoint(Vector3fc vec) {
+    public boolean intersectsPoint(Vector3dc vec) {
         if (vacancies.stream().anyMatch(vacancy -> vacancy.containsPoint(vec))) return false;
         return solids.stream().anyMatch(solid -> solid.containsPoint(vec));
     }
@@ -161,7 +163,7 @@ public final class VoxelShape {
      *
      * @return {@code true} if this voxel shape intersects with the specified point, otherwise {@code false}.
      */
-    public boolean intersectsPoint(float x, float y, float z) {
+    public boolean intersectsPoint(double x, double y, double z) {
         if (vacancies.stream().anyMatch(vacancy -> vacancy.containsPoint(x, y, z))) return false;
         return solids.stream().anyMatch(solid -> solid.containsPoint(x, y, z));
     }
@@ -175,23 +177,23 @@ public final class VoxelShape {
      */
     public boolean isFull(BlockFace face) {
         // Check if vacancies cause any gaps on the face
-        for (AABBfc vacancy : vacancies) {
+        for (AABBdc vacancy : vacancies) {
             if (isAlignedWithFace(vacancy, face)) {
-                float[] uvMinMax = getUVMinMax(vacancy, face);
+                double[] uvMinMax = getUVMinMax(vacancy, face);
                 // As long as there is any gap, the face is incomplete
-                if (uvMinMax[0] < 1f || uvMinMax[1] > 0f || uvMinMax[2] < 1f || uvMinMax[3] > 0f) {
+                if (uvMinMax[0] < 1 || uvMinMax[1] > 0f || uvMinMax[2] < 1 || uvMinMax[3] > 0f) {
                     return false;
                 }
             }
         }
 
-        float minU = Float.MAX_VALUE, maxU = -Float.MAX_VALUE;
-        float minV = Float.MAX_VALUE, maxV = -Float.MAX_VALUE;
+        double minU = Double.MAX_VALUE, maxU = -Double.MAX_VALUE;
+        double minV = Double.MAX_VALUE, maxV = -Double.MAX_VALUE;
 
         // Calculate the range covered by solids
-        for (AABBfc solid : solids) {
+        for (AABBdc solid : solids) {
             if (isAlignedWithFace(solid, face)) {
-                float[] uvMinMax = getUVMinMax(solid, face);
+                double[] uvMinMax = getUVMinMax(solid, face);
                 minU = Math.min(minU, uvMinMax[0]);
                 maxU = Math.max(maxU, uvMinMax[1]);
                 minV = Math.min(minV, uvMinMax[2]);
@@ -201,7 +203,7 @@ public final class VoxelShape {
 
         // If the solids do not completely cover the face, return false
         // If the face is fully covered by solids with no gaps, return true
-        return minU == 0f && maxU == 1f && minV == 0f && maxV == 1f;
+        return minU == 0 && maxU == 1 && minV == 0 && maxV == 1;
     }
 
     /**
@@ -213,14 +215,14 @@ public final class VoxelShape {
      */
     public boolean isCenterFull(BlockFace face) {
         // The boundaries of the center region, from 3/8 to 5/8
-        float centerMinUV = (float) 3 / 8;
-        float centerMaxUV = (float) 5 / 8;
+        double centerMinUV = (double) 3 / 8;
+        double centerMaxUV = (double) 5 / 8;
 
         // First, check if any vacancy affects the center region
         boolean vacancyAffectsCenter = vacancies.stream()
                 .filter(vacancy -> isAlignedWithFace(vacancy, face))
                 .anyMatch(vacancy -> {
-                    float[] uvMinMax = getUVMinMax(vacancy, face);
+                    double[] uvMinMax = getUVMinMax(vacancy, face);
                     return uvMinMax[0] < centerMaxUV && uvMinMax[1] > centerMinUV &&
                            uvMinMax[2] < centerMaxUV && uvMinMax[3] > centerMinUV;
                 });
@@ -234,7 +236,7 @@ public final class VoxelShape {
         return solids.stream()
                 .filter(solid -> isAlignedWithFace(solid, face))
                 .anyMatch(solid -> {
-                    float[] uvMinMax = getUVMinMax(solid, face);
+                    double[] uvMinMax = getUVMinMax(solid, face);
                     return uvMinMax[0] <= centerMinUV && uvMinMax[1] >= centerMaxUV &&
                            uvMinMax[2] <= centerMinUV && uvMinMax[3] >= centerMaxUV;
                 });
@@ -260,10 +262,10 @@ public final class VoxelShape {
      */
     public boolean isEdgeFull(BlockFace face) {
         // Define the width of the edge region
-        float edgeWidth = 0.125f;
+        double edgeWidth = 0.125;
 
         // Get the boundaries of all edge regions
-        List<float[]> edgeRegions = getEdgeRegions(face, edgeWidth);
+        List<double[]> edgeRegions = getEdgeRegions(face, edgeWidth);
 
         // Check if any vacancy affects any edge region
         boolean vacancyAffectsEdge = vacancies.stream()
@@ -276,7 +278,7 @@ public final class VoxelShape {
         }
 
         // Check if any solid fully covers each edge region
-        for (float[] edge : edgeRegions) {
+        for (double[] edge : edgeRegions) {
             boolean edgeCovered = solids.stream()
                     .filter(solid -> isAlignedWithFace(solid, face))
                     .anyMatch(solid -> isRegionFullyCovered(solid, face, edge[0], edge[1], edge[2], edge[3]));
@@ -290,10 +292,10 @@ public final class VoxelShape {
     }
 
     /**
-     * @see #intersectsRay(Vector3fc, Vector3fc)
+     * @see #intersectsRay(Vector3dc, Vector3dc)
      */
-    public boolean intersectsRay(float sx, float sy, float sz, float ex, float ey, float ez) {
-        return intersectsRay(new Vector3f(sx, sy, sz), new Vector3f(ex, ey, ez));
+    public boolean intersectsRay(double sx, double sy, double sz, double ex, double ey, double ez) {
+        return intersectsRay(new Vector3d(sx, sy, sz), new Vector3d(ex, ey, ez));
     }
 
     /**
@@ -304,8 +306,8 @@ public final class VoxelShape {
      *
      * @return {@code true} if the ray intersects this voxel shape, otherwise {@code false}.
      */
-    public boolean intersectsRay(Vector3fc start, Vector3fc end) {
-        var ray = new Rayf(start, end.sub(start, new Vector3f()));
+    public boolean intersectsRay(Vector3dc start, Vector3dc end) {
+        var ray = new Rayd(start, end.sub(start, new Vector3d()));
 
         if (vacancies.isEmpty()) {
             // This would be quicker if no vacancy exists
@@ -317,7 +319,7 @@ public final class VoxelShape {
 
         // For each solid intervals, check if they can be fully covered by vacancy intervals
         for (var solidInterval : solidIntervals) {
-            float currentStart = solidInterval.x;
+            double currentStart = solidInterval.x;
             boolean isCovered = false;
 
             for (var vacancyInterval : vacancyIntervals) {
@@ -342,16 +344,16 @@ public final class VoxelShape {
         return false;
     }
 
-    private List<Vector2f> mergeIntervals(List<Vector2f> intervals) {
+    private List<Vector2d> mergeIntervals(List<Vector2d> intervals) {
         // Sort by interval starting point
-        intervals.sort((a, b) -> Float.compare(a.x, b.x));
-        List<Vector2f> merged = new ArrayList<>();
+        intervals.sort((a, b) -> Double.compare(a.x, b.x));
+        List<Vector2d> merged = new ArrayList<>();
 
-        for (Vector2f interval : intervals) {
+        for (Vector2d interval : intervals) {
             // If merged is empty or the current interval does not overlap with the previous merged interval
             if (merged.isEmpty() || merged.getLast().y < interval.x) {
                 // Add current interval
-                merged.add(new Vector2f(interval));
+                merged.add(new Vector2d(interval));
             } else {
                 // Merge interval
                 merged.getLast().y = Math.max(merged.getLast().y, interval.y);
@@ -361,10 +363,10 @@ public final class VoxelShape {
         return merged;
     }
 
-    private List<Vector2f> intersectsRay(Set<AABBfc> aabbs, Rayf ray) {
-        var set = new ArrayList<Vector2f>();
+    private List<Vector2d> intersectsRay(Set<AABBdc> aabbs, Rayd ray) {
+        var set = new ArrayList<Vector2d>();
         for (var aabb : aabbs) {
-            var result = new Vector2f();
+            var result = new Vector2d();
             if (aabb.intersectsRay(ray, result)) {
                 set.add(order(result));
             }
@@ -373,9 +375,9 @@ public final class VoxelShape {
         return set;
     }
 
-    private Vector2f order(Vector2f vec) {
+    private Vector2d order(Vector2d vec) {
         if (vec.x > vec.y) {
-            float temp = vec.x;
+            double temp = vec.x;
             vec.x = vec.y;
             vec.y = temp;
         }
@@ -383,11 +385,11 @@ public final class VoxelShape {
         return vec;
     }
 
-    private List<float[]> getEdgeRegions(BlockFace face, float edgeWidth) {
-        List<float[]> edgeRegions = new ArrayList<>();
+    private List<double[]> getEdgeRegions(BlockFace face, double edgeWidth) {
+        List<double[]> edgeRegions = new ArrayList<>();
 
         // Define templates for the four edge regions
-        float[][] templateEdges = {
+        double[][] templateEdges = {
                 {0, edgeWidth, 0, 1},                        // First edge
                 {1 - edgeWidth, 1, 0, 1},                    // Corresponding opposite edge
                 {edgeWidth, 1 - edgeWidth, 0, edgeWidth},    // Third edge
@@ -400,14 +402,14 @@ public final class VoxelShape {
             case UP, DOWN -> edgeRegions.addAll(Arrays.asList(templateEdges));
             case NORTH, SOUTH -> {
                 // X-Y plane, swap V and U
-                for (float[] edge : templateEdges) {
-                    edgeRegions.add(new float[]{edge[0], edge[1], edge[2], edge[3]});
+                for (double[] edge : templateEdges) {
+                    edgeRegions.add(new double[]{edge[0], edge[1], edge[2], edge[3]});
                 }
             }
             case WEST, EAST -> {
                 // Y-Z plane, swap U and V
-                for (float[] edge : templateEdges) {
-                    edgeRegions.add(new float[]{edge[2], edge[3], edge[0], edge[1]});
+                for (double[] edge : templateEdges) {
+                    edgeRegions.add(new double[]{edge[2], edge[3], edge[0], edge[1]});
                 }
             }
         }
@@ -415,40 +417,40 @@ public final class VoxelShape {
         return edgeRegions;
     }
 
-    private boolean intersectsRegion(AABBfc aabb, BlockFace face, float minU, float maxU, float minV, float maxV) {
-        float[] uvMinMax = getUVMinMax(aabb, face);
+    private boolean intersectsRegion(AABBdc aabb, BlockFace face, double minU, double maxU, double minV, double maxV) {
+        double[] uvMinMax = getUVMinMax(aabb, face);
         return uvMinMax[0] < maxU && uvMinMax[1] > minU &&
                uvMinMax[2] < maxV && uvMinMax[3] > minV;
     }
 
-    private boolean isRegionFullyCovered(AABBfc aabb, BlockFace face, float minU, float maxU, float minV, float maxV) {
-        float[] uvMinMax = getUVMinMax(aabb, face);
+    private boolean isRegionFullyCovered(AABBdc aabb, BlockFace face, double minU, double maxU, double minV, double maxV) {
+        double[] uvMinMax = getUVMinMax(aabb, face);
         return uvMinMax[0] <= minU && uvMinMax[1] >= maxU &&
                uvMinMax[2] <= minV && uvMinMax[3] >= maxV;
     }
 
-    private boolean isAlignedWithFace(AABBfc solid, BlockFace face) {
+    private boolean isAlignedWithFace(AABBdc solid, BlockFace face) {
         return switch (face) {
-            case UP -> solid.maxY() == 1f;
-            case DOWN -> solid.minY() == 0f;
-            case NORTH -> solid.minZ() == 0f;
-            case SOUTH -> solid.maxZ() == 1f;
-            case WEST -> solid.minX() == 0f;
-            case EAST -> solid.maxX() == 1f;
+            case UP -> solid.maxY() == 1;
+            case DOWN -> solid.minY() == 0;
+            case NORTH -> solid.minZ() == 0;
+            case SOUTH -> solid.maxZ() == 1;
+            case WEST -> solid.minX() == 0;
+            case EAST -> solid.maxX() == 1;
         };
     }
 
-    private float[] getUVMinMax(AABBfc solid, BlockFace face) {
+    private double[] getUVMinMax(AABBdc solid, BlockFace face) {
         return switch (face) {
-            case UP, DOWN -> new float[]{solid.minX(), solid.maxX(), solid.minZ(), solid.maxZ()};
-            case NORTH, SOUTH -> new float[]{solid.minX(), solid.maxX(), solid.minY(), solid.maxY()};
-            case WEST, EAST -> new float[]{solid.minZ(), solid.maxZ(), solid.minY(), solid.maxY()};
+            case UP, DOWN -> new double[]{solid.minX(), solid.maxX(), solid.minZ(), solid.maxZ()};
+            case NORTH, SOUTH -> new double[]{solid.minX(), solid.maxX(), solid.minY(), solid.maxY()};
+            case WEST, EAST -> new double[]{solid.minZ(), solid.maxZ(), solid.minY(), solid.maxY()};
         };
     }
 
     public static class VoxelShapeBuilder {
-        private final Set<AABBfc> solids = new HashSet<>();
-        private final Set<AABBfc> vacancies = new HashSet<>();
+        private final Set<AABBdc> solids = new HashSet<>();
+        private final Set<AABBdc> vacancies = new HashSet<>();
 
         /**
          * Add a solid area to the voxel shape.
@@ -457,7 +459,7 @@ public final class VoxelShape {
          *
          * @return this builder.
          */
-        public VoxelShapeBuilder solid(AABBfc solid) {
+        public VoxelShapeBuilder solid(AABBdc solid) {
             solids.add(solid);
             return this;
         }
@@ -474,8 +476,8 @@ public final class VoxelShape {
          *
          * @return this builder.
          */
-        public VoxelShapeBuilder solid(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
-            return solid(new AABBf(minX, minY, minZ, maxX, maxY, maxZ));
+        public VoxelShapeBuilder solid(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+            return solid(new AABBd(minX, minY, minZ, maxX, maxY, maxZ));
         }
 
         /**
@@ -485,7 +487,7 @@ public final class VoxelShape {
          *
          * @return this builder.
          */
-        public VoxelShapeBuilder vacancy(AABBfc vacancy) {
+        public VoxelShapeBuilder vacancy(AABBdc vacancy) {
             vacancies.add(vacancy);
             return this;
         }
@@ -502,8 +504,8 @@ public final class VoxelShape {
          *
          * @return this builder.
          */
-        public VoxelShapeBuilder vacancy(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {
-            return vacancy(new AABBf(minX, minY, minZ, maxX, maxY, maxZ));
+        public VoxelShapeBuilder vacancy(double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+            return vacancy(new AABBd(minX, minY, minZ, maxX, maxY, maxZ));
         }
 
         /**

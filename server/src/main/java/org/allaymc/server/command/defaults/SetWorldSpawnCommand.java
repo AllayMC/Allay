@@ -5,7 +5,7 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
 import org.allaymc.api.world.DimensionInfo;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 
 /**
@@ -25,7 +25,7 @@ public class SetWorldSpawnCommand extends SimpleCommand {
                         context.addError("%" + TrKeys.M_COMMANDS_SETWORLDSPAWN_WRONGDIMENSION);
                         return context.fail();
                     }
-                    Vector3f pos = context.getResult(0);
+                    Vector3d pos = context.getResult(0);
                     var newSpawnPoint = new Vector3i((int) pos.x(), (int) pos.y(), (int) pos.z());
                     entity.getWorld().getWorldData().setSpawnPoint(newSpawnPoint);
                     context.addOutput(TrKeys.M_COMMANDS_SETWORLDSPAWN_SUCCESS, newSpawnPoint.x(), newSpawnPoint.y(), newSpawnPoint.z());

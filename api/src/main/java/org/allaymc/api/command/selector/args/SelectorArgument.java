@@ -4,8 +4,8 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.SelectorType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      *
      * @throws SelectorSyntaxException if an error occurs while parsing the arguments.
      */
-    default Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3f basePos, String... arguments) throws SelectorSyntaxException {
+    default Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3d basePos, String... arguments) throws SelectorSyntaxException {
         return null;
     }
 
@@ -52,7 +52,7 @@ public interface SelectorArgument extends Comparable<SelectorArgument> {
      *
      * @throws SelectorSyntaxException if an error occurs while parsing the arguments.
      */
-    default Function<List<Entity>, List<Entity>> getFilter(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
+    default Function<List<Entity>, List<Entity>> getFilter(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException {
         return null;
     }
 

@@ -12,9 +12,9 @@ import org.allaymc.api.registry.Registries;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.joml.Vector3f;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
+import org.joml.Vector3d;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import java.util.Objects;
 
@@ -75,7 +75,7 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
                 return;
             }
 
-            var floorLoc = location.floor(new Vector3f());
+            var floorLoc = location.floor(new Vector3d());
             if (currentBlock.getBlockType().hasBlockTag(BlockCustomTags.REPLACEABLE)) {
                 dimension.breakBlock((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), null, null);
             } else {
@@ -104,13 +104,13 @@ public class EntityFallingBlockBaseComponentImpl extends EntityBaseComponentImpl
     }
 
     @Override
-    public AABBfc getAABB() {
-        return new AABBf(-0.49f, 0, -0.49f, 0.49f, 0.98f, 0.49f);
+    public AABBdc getAABB() {
+        return new AABBd(-0.49, 0, -0.49, 0.49, 0.98, 0.49);
     }
 
     @Override
-    public float getGravity() {
-        return 0.04f;
+    public double getGravity() {
+        return 0.04;
     }
 
     @Override

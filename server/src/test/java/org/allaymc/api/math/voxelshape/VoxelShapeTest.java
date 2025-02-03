@@ -1,8 +1,8 @@
 package org.allaymc.api.math.voxelshape;
 
 import org.allaymc.api.block.data.BlockFace;
-import org.joml.Vector3f;
-import org.joml.primitives.AABBf;
+import org.joml.Vector3d;
+import org.joml.primitives.AABBd;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -16,17 +16,17 @@ class VoxelShapeTest {
         var vs = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.5f, 0.5f, 0, 1, 1, 1)
+                .vacancy(0.5, 0.5, 0, 1, 1, 1)
                 .build();
-        assertFalse(vs.intersectsPoint(0.75f, 0.75f, 0.5f));
-        var aabb = new AABBf(0.51f, 0.51f, 0.01f, 0.99f, 0.99f, 0.99f);
+        assertFalse(vs.intersectsPoint(0.75, 0.75, 0.5));
+        var aabb = new AABBd(0.51, 0.51, 0.01, 0.99, 0.99, 0.99);
         assertFalse(vs.intersectsAABB(aabb));
 
         var vs2 = vs.rotate(BlockFace.SOUTH);
-        assertFalse(vs2.intersectsPoint(0.5f, 0.75f, 0.75f));
+        assertFalse(vs2.intersectsPoint(0.5, 0.75, 0.75));
 
         var vs3 = vs.rotate(BlockFace.NORTH);
-        assertFalse(vs3.intersectsPoint(0.5f, 0.75f, 0.25f));
+        assertFalse(vs3.intersectsPoint(0.5, 0.75, 0.25));
     }
 
     @Test
@@ -34,15 +34,15 @@ class VoxelShapeTest {
         var vs = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.1f, 0.1f, 0.1f, 0.9f, 0.9f, 0.9f)
+                .vacancy(0.1, 0.1, 0.1, 0.9, 0.9, 0.9)
                 .build();
 
-        assertFalse(vs.intersectsPoint(0.5f, 0.5f, 0.5f));
-        assertTrue(vs.intersectsPoint(0.5f, 0.5f, 0.05f));
-        assertFalse(vs.intersectsPoint(new Vector3f(0.5f, 0.5f, 0.5f)));
-        assertTrue(vs.intersectsPoint(new Vector3f(0.5f, 0.5f, 0.05f)));
+        assertFalse(vs.intersectsPoint(0.5, 0.5, 0.5));
+        assertTrue(vs.intersectsPoint(0.5, 0.5, 0.05));
+        assertFalse(vs.intersectsPoint(new Vector3d(0.5, 0.5, 0.5)));
+        assertTrue(vs.intersectsPoint(new Vector3d(0.5, 0.5, 0.05)));
 
-        var aabb = new AABBf(0.2f, 0.2f, 0.2f, 0.8f, 0.8f, 0.8f);
+        var aabb = new AABBd(0.2, 0.2, 0.2, 0.8, 0.8, 0.8);
         assertFalse(vs.intersectsAABB(aabb));
     }
 
@@ -51,10 +51,10 @@ class VoxelShapeTest {
         var vs = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.1f, 0.1f, 0.1f, 0.9f, 0.9f, 0.9f)
+                .vacancy(0.1, 0.1, 0.1, 0.9, 0.9, 0.9)
                 .build();
         validateTranslateResult(vs.translate(1, 1, 1));
-        validateTranslateResult(vs.translate(new Vector3f(1, 1, 1)));
+        validateTranslateResult(vs.translate(new Vector3d(1, 1, 1)));
     }
 
     void validateTranslateResult(VoxelShape vs) {
@@ -66,12 +66,12 @@ class VoxelShapeTest {
         assertEquals(2, solid.maxY());
         assertEquals(2, solid.maxZ());
         var vacancy = vs.getVacancies().iterator().next();
-        assertEquals(1.1f, vacancy.minX());
-        assertEquals(1.1f, vacancy.minY());
-        assertEquals(1.1f, vacancy.minZ());
-        assertEquals(1.9f, vacancy.maxX());
-        assertEquals(1.9f, vacancy.maxY());
-        assertEquals(1.9f, vacancy.maxZ());
+        assertEquals(1.1, vacancy.minX());
+        assertEquals(1.1, vacancy.minY());
+        assertEquals(1.1, vacancy.minZ());
+        assertEquals(1.9, vacancy.maxX());
+        assertEquals(1.9, vacancy.maxY());
+        assertEquals(1.9, vacancy.maxZ());
     }
 
     @Test
@@ -88,7 +88,7 @@ class VoxelShapeTest {
         var vs2 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.4f, 0, 0.4f, 0.6f, 1, 0.6f)
+                .vacancy(0.4, 0, 0.4, 0.6, 1, 0.6)
                 .build();
 
         assertFalse(vs2.isFull(BlockFace.UP));
@@ -100,7 +100,7 @@ class VoxelShapeTest {
         var vs3 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.4f, 0.4f, 0.4f, 0.6f, 0.6f, 0.6f)
+                .vacancy(0.4, 0.4, 0.4, 0.6, 0.6, 0.6)
                 .build();
 
         for (var face : BlockFace.values()) {
@@ -109,7 +109,7 @@ class VoxelShapeTest {
 
         var vs4 = VoxelShape
                 .builder()
-                .solid(0, 0, 0, 0.5f, 1, 1)
+                .solid(0, 0, 0, 0.5, 1, 1)
                 .build();
 
         assertFalse(vs4.isFull(BlockFace.UP));
@@ -151,7 +151,7 @@ class VoxelShapeTest {
         var vs2 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.45f, 0, 0.45f, 0.55f, 1, 0.55f)
+                .vacancy(0.45, 0, 0.45, 0.55, 1, 0.55)
                 .build();
 
         assertFalse(vs2.isCenterFull(BlockFace.UP));
@@ -163,7 +163,7 @@ class VoxelShapeTest {
         var vs3 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.35f, 0.35f, 0.35f, 0.65f, 0.65f, 0.65f)
+                .vacancy(0.35, 0.35, 0.35, 0.65, 0.65, 0.65)
                 .build();
 
         for (var face : BlockFace.values()) {
@@ -172,7 +172,7 @@ class VoxelShapeTest {
 
         var vs4 = VoxelShape
                 .builder()
-                .solid(0.375f, 0, 0.375f, 0.625f, 1, 0.625f)
+                .solid(0.375, 0, 0.375, 0.625, 1, 0.625)
                 .build();
 
         assertTrue(vs4.isCenterFull(BlockFace.UP));
@@ -195,14 +195,14 @@ class VoxelShapeTest {
         var vs2 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.4f, 0, 0.4f, 0.6f, 1, 0.6f)
+                .vacancy(0.4, 0, 0.4, 0.6, 1, 0.6)
                 .build();
         assertFalse(vs2.isFullBlock());
 
         // 部分支撑面不完整
         var vs3 = VoxelShape
                 .builder()
-                .solid(0, 0, 0, 1, 0.5f, 1)
+                .solid(0, 0, 0, 1, 0.5, 1)
                 .build();
         assertFalse(vs3.isFullBlock());
     }
@@ -220,7 +220,7 @@ class VoxelShapeTest {
         var vs2 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.0f, 0.0f, 0.0f, 0.125f, 1, 0.125f)
+                .vacancy(0.0, 0.0, 0.0, 0.125, 1, 0.125)
                 .build();
         for (var face : BlockFace.getVerticalBlockFaces()) {
             assertFalse(vs2.isEdgeFull(face));
@@ -228,7 +228,7 @@ class VoxelShapeTest {
 
         var vs3 = VoxelShape
                 .builder()
-                .solid(0, 0, 0, 0.125f, 1, 1)
+                .solid(0, 0, 0, 0.125, 1, 1)
                 .build();
         assertTrue(vs3.isEdgeFull(BlockFace.WEST));
         assertFalse(vs3.isEdgeFull(BlockFace.EAST));
@@ -240,14 +240,14 @@ class VoxelShapeTest {
         var vs4 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.2f, 0.8f, 0.2f, 0.8f, 1, 0.8f)
+                .vacancy(0.2, 0.8, 0.2, 0.8, 1, 0.8)
                 .build();
         assertTrue(vs4.isEdgeFull(BlockFace.UP));
 
         var vs5 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.1f, 0.8f, 0.1f, 0.9f, 1, 0.9f)
+                .vacancy(0.1, 0.8, 0.1, 0.9, 1, 0.9)
                 .build();
         assertFalse(vs5.isEdgeFull(BlockFace.UP));
     }
@@ -263,16 +263,16 @@ class VoxelShapeTest {
         var vs2 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.1f, 0.1f, 0.1f, 0.9f, 0.9f, 0.9f)
+                .vacancy(0.1, 0.1, 0.1, 0.9, 0.9, 0.9)
                 .build();
         assertTrue(vs2.intersectsRay(0, 0, 0, 1, 1, 1));
 
         var vs3 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0.4f, 0, 0.4f, 0.6f, 1, 0.6f)
+                .vacancy(0.4, 0, 0.4, 0.6, 1, 0.6)
                 .build();
-        assertFalse(vs3.intersectsRay(0.5f, 0, 0.5f, 0.5f, 1, 0.5f));
+        assertFalse(vs3.intersectsRay(0.5, 0, 0.5, 0.5, 1, 0.5));
 
         var vs4 = VoxelShape
                 .builder()
@@ -284,29 +284,29 @@ class VoxelShapeTest {
         var vs5 = VoxelShape
                 .builder()
                 .solid(0, 0, 0, 1, 1, 1)
-                .vacancy(0, 0, 0, 1, 0.4f, 1)
-                .vacancy(0, 0.6f, 0, 1, 1, 1)
+                .vacancy(0, 0, 0, 1, 0.4, 1)
+                .vacancy(0, 0.6, 0, 1, 1, 1)
                 .build();
         assertTrue(vs5.intersectsRay(0, 0, 0, 1, 1, 1));
 
         var vs6 = VoxelShape
                 .builder()
-                .vacancy(0, 0.4f, 0, 1, 0.6f, 1)
-                .solid(0, 0, 0, 1, 0.4f, 1)
-                .solid(0, 0.6f, 0, 1, 1, 1)
+                .vacancy(0, 0.4, 0, 1, 0.6, 1)
+                .solid(0, 0, 0, 1, 0.4, 1)
+                .solid(0, 0.6, 0, 1, 1, 1)
                 .build();
         assertTrue(vs6.intersectsRay(0, 0, 0, 1, 1, 1));
-        assertFalse(vs6.intersectsRay(0, 0.4f, 0, 1, 0.4f, 1));
-        assertFalse(vs6.intersectsRay(0, 0.41f, 0, 1, 0.41f, 1));
-        assertFalse(vs6.intersectsRay(0, 0.59f, 0, 1, 0.59f, 1));
-        assertFalse(vs6.intersectsRay(0, 0.6f, 0, 1, 0.6f, 1));
+        assertFalse(vs6.intersectsRay(0, 0.4, 0, 1, 0.4, 1));
+        assertFalse(vs6.intersectsRay(0, 0.41, 0, 1, 0.41, 1));
+        assertFalse(vs6.intersectsRay(0, 0.59, 0, 1, 0.59, 1));
+        assertFalse(vs6.intersectsRay(0, 0.6, 0, 1, 0.6, 1));
 
         var vs7 = VoxelShape
                 .builder()
-                .solid(0, 0, 0, 1, 0.9f, 1)
-                .solid(0, 0.1f, 0, 1, 1, 1)
-                .vacancy(0.4f, 0, 0.4f, 0.6f, 1, 0.6f)
+                .solid(0, 0, 0, 1, 0.9, 1)
+                .solid(0, 0.1, 0, 1, 1, 1)
+                .vacancy(0.4, 0, 0.4, 0.6, 1, 0.6)
                 .build();
-        assertFalse(vs7.intersectsRay(0.5f, 0, 0.5f, 0.5f, 1, 0.5f));
+        assertFalse(vs7.intersectsRay(0.5, 0, 0.5, 0.5, 1, 0.5));
     }
 }

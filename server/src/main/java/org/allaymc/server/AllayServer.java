@@ -22,8 +22,8 @@ import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.MayContainTrKey;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.network.ClientStatus;
 import org.allaymc.api.network.NetworkInterface;
 import org.allaymc.api.permission.DefaultPermissions;
@@ -530,8 +530,8 @@ public final class AllayServer implements Server {
     }
 
     @Override
-    public Location3fc getCmdExecuteLocation() {
-        return new Location3f(0, 0, 0, getWorldPool().getDefaultWorld().getOverWorld());
+    public Location3dc getCmdExecuteLocation() {
+        return new Location3d(0, 0, 0, getWorldPool().getDefaultWorld().getOverWorld());
     }
 
     @Override

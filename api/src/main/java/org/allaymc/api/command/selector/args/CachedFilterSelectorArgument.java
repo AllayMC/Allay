@@ -7,7 +7,7 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.SelectorType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3dc;
 
 import java.util.List;
 import java.util.Set;
@@ -27,7 +27,7 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
     }
 
     @Override
-    public Function<List<Entity>, List<Entity>> getFilter(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
+    public Function<List<Entity>, List<Entity>> getFilter(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException {
         var value = cache.getIfPresent(Sets.newHashSet(arguments));
         if (value == null) {
             value = cache(selectorType, sender, basePos, arguments);
@@ -56,7 +56,7 @@ public abstract class CachedFilterSelectorArgument implements SelectorArgument {
      *
      * @throws SelectorSyntaxException if there is an error parsing the arguments.
      */
-    protected abstract Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException;
+    protected abstract Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException;
 
     /**
      * Provides the cache service used to store filter functions.

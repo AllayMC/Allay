@@ -3,7 +3,7 @@ package org.allaymc.server.datastruct.aabbtree;
 import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.datastruct.aabb.AABBTreeNode;
 import org.allaymc.server.datastruct.aabb.CollisionPair;
-import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBd;
 import org.joml.primitives.Rayf;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ public class AABBTreeTest {
     public void shouldAddAnObjectToTheTree() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
 
         // When
         tree.add(entity);
@@ -34,7 +34,7 @@ public class AABBTreeTest {
     public void shouldNotAddTheSameObjectTwice() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
 
         // When
         tree.add(entity);
@@ -51,8 +51,8 @@ public class AABBTreeTest {
     public void shouldAddTwoObjectsToTheTreeByCreatingABranch() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
 
         // When
         tree.add(entity1);
@@ -70,8 +70,8 @@ public class AABBTreeTest {
     public void shouldCorrectlyCalculateHeights() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
 
         // When
         tree.add(entity1);
@@ -88,9 +88,9 @@ public class AABBTreeTest {
     public void shouldCorrectlyCalculateHeightsInAMoreComplexCase() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity3 = new TestEntity(3, 5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
+        TestEntity entity3 = new TestEntity(3, 5.0, 0.0, 10.0, 10.0);
 
         // When
         tree.add(entity1);
@@ -113,11 +113,11 @@ public class AABBTreeTest {
     public void shouldCorrectlyCalculateHeightsInAnEvenMoreComplexCase() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity3 = new TestEntity(3, 5.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity4 = new TestEntity(4, 15.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity5 = new TestEntity(5, -25.0f, 10.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
+        TestEntity entity3 = new TestEntity(3, 5.0, 0.0, 10.0, 10.0);
+        TestEntity entity4 = new TestEntity(4, 15.0, 0.0, 10.0, 10.0);
+        TestEntity entity5 = new TestEntity(5, -25.0, 10.0, 10.0, 10.0);
 
         // When
         tree.add(entity1);
@@ -146,9 +146,9 @@ public class AABBTreeTest {
     public void shouldCorrectlyCalculateHeightsAfterRemovingAnObject() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity3 = new TestEntity(3, 5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
+        TestEntity entity3 = new TestEntity(3, 5.0, 0.0, 10.0, 10.0);
         tree.add(entity1);
         tree.add(entity2);
         tree.add(entity3);
@@ -169,7 +169,7 @@ public class AABBTreeTest {
     public void shouldRemoveAnObjectFromTheTree() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
         tree.add(entity);
 
         // When
@@ -183,7 +183,7 @@ public class AABBTreeTest {
     public void shouldRemovingAnObjectMarkANodeFree() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
         tree.add(entity);
 
         // When
@@ -198,8 +198,8 @@ public class AABBTreeTest {
     public void shouldRemovingAnObjectInAMoreComplexTreeMarkNodesFree() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
         tree.add(entity1);
         tree.add(entity2);
 
@@ -216,8 +216,8 @@ public class AABBTreeTest {
     public void shouldContainsReturnTrueIfAnObjectIsAddedToTheTree() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
 
         // When
         tree.add(entity1);
@@ -231,8 +231,8 @@ public class AABBTreeTest {
     public void shouldClearTheTree() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
         tree.add(entity1);
 
         // When
@@ -249,10 +249,10 @@ public class AABBTreeTest {
     @Test
     public void shouldNotDetectAABBOverlaps() {
         // Given
-        AABBf testForOverlap = new AABBf(1.0f, 10.5f, 0.0f, 2.0f, 10.0f, 0.0f);
+        AABBd testForOverlap = new AABBd(1.0, 10.5, 0.0, 2.0, 10.0, 0.0);
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
         tree.add(entity1);
         tree.add(entity2);
 
@@ -267,10 +267,10 @@ public class AABBTreeTest {
     @Test
     public void shouldDetectAABBOverlaps() {
         // Given
-        AABBf testForOverlap = new AABBf(1.0f, 5.1f, 0.0f, 2.0f, 10.0f, 0.0f);
+        AABBd testForOverlap = new AABBd(1.0, 5.1, 0.0, 2.0, 10.0, 0.0);
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, -20.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, -20.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
         tree.add(entity1);
         tree.add(entity2);
 
@@ -286,10 +286,10 @@ public class AABBTreeTest {
     @Test
     public void shouldDetectAABBOverlapsWithFiltering() {
         // Given
-        AABBf testForOverlap = new AABBf(1.0f, 5.1f, 0.0f, 2.0f, 10.0f, 0.0f);
+        AABBd testForOverlap = new AABBd(1.0, 5.1, 0.0, 2.0, 10.0, 0.0);
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
         tree.add(entity1);
         tree.add(entity2);
 
@@ -309,9 +309,9 @@ public class AABBTreeTest {
     public void shouldDetectCollidingPairs() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity3 = new TestEntity(3, 11.0f, 0.0f, 10.0f, 10.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
+        TestEntity entity3 = new TestEntity(3, 11.0, 0.0, 10.0, 10.0);
         tree.add(entity1);
         tree.add(entity2);
         tree.add(entity3);
@@ -331,10 +331,10 @@ public class AABBTreeTest {
     public void shouldDetectCollidingPairsWithFiltering() {
         // Given
         AABBTree<TestEntity> tree = givenTree();
-        TestEntity entity1 = new TestEntity(1, 0.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity3 = new TestEntity(3, 11.0f, 0.0f, 10.0f, 10.0f);
-        TestEntity entity4 = new TestEntity(4, -6.0f, 0.0f, 3.0f, 1.0f);
+        TestEntity entity1 = new TestEntity(1, 0.0, 0.0, 10.0, 10.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 10.0, 10.0);
+        TestEntity entity3 = new TestEntity(3, 11.0, 0.0, 10.0, 10.0);
+        TestEntity entity4 = new TestEntity(4, -6.0, 0.0, 3.0, 1.0);
         tree.add(entity1);
         tree.add(entity2);
         tree.add(entity3);
@@ -359,8 +359,8 @@ public class AABBTreeTest {
         // Given
         AABBTree<TestEntity> tree = givenTree();
         Rayf ray = new Rayf(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f);
-        TestEntity entity1 = new TestEntity(1, 2.0f, 0.0f, 3.0f, 3.0f);
-        TestEntity entity2 = new TestEntity(2, -5.0f, 0.0f, 3.0f, 2.0f);
+        TestEntity entity1 = new TestEntity(1, 2.0, 0.0, 3.0, 3.0);
+        TestEntity entity2 = new TestEntity(2, -5.0, 0.0, 3.0, 2.0);
         tree.add(entity1);
         tree.add(entity2);
 
@@ -376,7 +376,7 @@ public class AABBTreeTest {
     @Test
     public void shouldRestoreNodeToInitialStateOnReuse() {
         // Given
-        TestEntity entity = new TestEntity(1, 0.0f, 0.0f, 1.0f, 1.0f);
+        TestEntity entity = new TestEntity(1, 0.0, 0.0, 1.0, 1.0);
         AABBTreeNode<TestEntity> node = new AABBTreeNode<>();
 
         // When
@@ -391,7 +391,7 @@ public class AABBTreeTest {
         // Then
         assertEquals(INVALID_NODE_INDEX, node.getLeftChild());
         assertEquals(INVALID_NODE_INDEX, node.getRightChild());
-        assertEquals(new AABBf(), node.getAabb());
+        assertEquals(new AABBd(), node.getAabb());
         assertEquals(INVALID_NODE_INDEX, node.getParent());
         assertEquals(0, node.getHeight());
         assertNull(node.getData());

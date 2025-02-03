@@ -14,6 +14,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.item.enchantment.type.EnchantmentTypes;
+import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.utils.Utils;
 import org.allaymc.api.world.Dimension;
@@ -22,7 +23,6 @@ import org.allaymc.server.block.type.BlockLootTable;
 import org.allaymc.server.component.annotation.Manager;
 import org.allaymc.server.loottable.context.BreakBlockContext;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
-import org.joml.Vector3f;
 import org.joml.Vector3ic;
 
 import java.util.Set;
@@ -122,7 +122,7 @@ public class BlockBaseComponentImpl implements BlockBaseComponent {
     public void onBreak(BlockStateWithPos blockState, ItemStack usedItem, Entity entity) {
         if (!isDroppable(blockState, usedItem, entity)) return;
 
-        var dropPos = new Vector3f(blockState.pos()).add(0.5f, 0.5f, 0.5f);
+        var dropPos = MathUtils.center(blockState.pos());
         var dimension = blockState.pos().dimension();
         if (usedItem != null && usedItem.hasEnchantment(EnchantmentTypes.SILK_TOUCH)) {
             // Silk Touch, directly drop the block itself

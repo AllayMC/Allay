@@ -6,7 +6,7 @@ import org.allaymc.api.block.dto.PlayerInteractInfo;
 import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.blockentity.interfaces.BlockEntityJukebox;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.math.position.Position3f;
+import org.allaymc.api.math.position.Position3d;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.component.annotation.Dependency;
@@ -36,7 +36,7 @@ public class BlockJukeboxBaseComponentImpl extends BlockBaseComponentImpl {
                 jukebox.setMusicDiscItem(null);
                 jukebox.stop();
 
-                dimension.dropItem(musicDisc, new Position3f(blockEntity.getPosition()).add(0, 1, 0));
+                dimension.dropItem(musicDisc, new Position3d(blockEntity.getPosition()).add(0, 1, 0));
             } else {
                 jukebox.setMusicDiscItem(player.getItemInHand());
                 player.clearItemInHand();

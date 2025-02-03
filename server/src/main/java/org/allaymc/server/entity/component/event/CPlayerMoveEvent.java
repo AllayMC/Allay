@@ -3,7 +3,7 @@ package org.allaymc.server.entity.component.event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.eventbus.event.Event;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3dc;
 
 /**
  * @author daoge_cmd
@@ -11,5 +11,5 @@ import org.allaymc.api.math.location.Location3fc;
 @AllArgsConstructor
 @Getter
 public class CPlayerMoveEvent extends Event {
-    protected Location3fc newLoc;
+    protected Location3dc newLoc;
 }

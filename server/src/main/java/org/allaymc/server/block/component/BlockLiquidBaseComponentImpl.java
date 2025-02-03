@@ -16,7 +16,7 @@ import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
 
@@ -104,7 +104,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
     /**
      * This method is used in {@link org.allaymc.server.world.service.AllayEntityPhysicsService}
      */
-    public Vector3f calculateFlowVector(Dimension dimension, int x, int y, int z, BlockState current) {
+    public Vector3d calculateFlowVector(Dimension dimension, int x, int y, int z, BlockState current) {
         // TODO: cache the flow vector for better performance
         var vx = 0;
         var vy = 0;
@@ -143,7 +143,7 @@ public abstract class BlockLiquidBaseComponentImpl extends BlockBaseComponentImp
             vz += offset.z() * realDecay;
         }
 
-        var vector = new Vector3f(vx, vy, vz);
+        var vector = new Vector3d(vx, vy, vz);
 
         if (isFalling(current)) {
             for (var face : BlockFace.getHorizontalBlockFaces()) {

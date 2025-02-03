@@ -29,9 +29,8 @@ import org.allaymc.api.form.type.CustomForm;
 import org.allaymc.api.form.type.Form;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.permission.tree.PermissionTree;
@@ -57,6 +56,7 @@ import org.allaymc.server.entity.component.event.CPlayerMoveEvent;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
 import org.allaymc.server.world.AllayWorld;
 import org.allaymc.server.world.gamerule.AllayGameRules;
+import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -71,9 +71,9 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
-import org.joml.primitives.AABBf;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.primitives.AABBd;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -142,7 +142,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
      */
     @Getter
     @Setter
-    protected Vector3fc expectedTeleportPos;
+    protected Vector3dc expectedTeleportPos;
     // Set enchantment seed to a random value
     // and if player has enchantment seed previously,
     // this random value will be covered
@@ -283,13 +283,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
 
         var dimension = location.dimension();
         // pick up items
-        var pickUpArea = new AABBf(
-                location.x - 1.425f,
-                location.y - 1.425f,
-                location.z - 1.425f,
-                location.x + 1.425f,
-                location.y + 1.425f,
-                location.z + 1.425f
+        var pickUpArea = new AABBd(
+                location.x - 1.425,
+                location.y - 1.425,
+                location.z - 1.425,
+                location.x + 1.425,
+                location.y + 1.425,
+                location.z + 1.425
         );
         var entityItems = dimension.getEntityPhysicsService().computeCollidingEntities(pickUpArea, true)
                 .stream()
@@ -321,13 +321,13 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    protected void beforeTeleport(Location3fc target) {
+    protected void beforeTeleport(Location3dc target) {
         super.beforeTeleport(target);
-        this.expectedTeleportPos = new Vector3f(target);
+        this.expectedTeleportPos = new Vector3d(target);
     }
 
     @Override
-    protected void teleportInDimension(Location3fc target) {
+    protected void teleportInDimension(Location3dc target) {
         super.teleportInDimension(target);
         // For player, we also need to send move packet to client
         // However, there is no need to send motion packet as we are teleporting the player
@@ -335,7 +335,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    protected void teleportOverDimension(Location3fc target) {
+    protected void teleportOverDimension(Location3dc target) {
         var currentDim = location.dimension();
         var targetDim = target.dimension();
         if (currentDim.getWorld() != targetDim.getWorld()) {
@@ -354,7 +354,7 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
                 awaitingDimensionChangeACK = true;
                 var packet = new ChangeDimensionPacket();
                 packet.setDimension(targetDim.getDimensionInfo().dimensionId());
-                packet.setPosition(MathUtils.JOMLVecToCBVec(target));
+                packet.setPosition(Vector3f.from(target.x(), target.y(), target.z()));
                 packet.setRespawn(!thisPlayer.isAlive());
                 networkComponent.sendPacket(packet);
             }
@@ -383,8 +383,8 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
-        var loc = new Location3f(newLoc);
+    public void broadcastMoveToViewers(Location3dc newLoc, boolean teleporting) {
+        var loc = new Location3d(newLoc);
         // base offset seems not being used in move packet
         // loc.add(0, getBaseOffset(), 0f);
 
@@ -751,11 +751,11 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
     }
 
     @Override
-    public void applyAction(AnimatePacket.Action action, float rowingTime) {
+    public void applyAction(AnimatePacket.Action action, double rowingTime) {
         var packet = new AnimatePacket();
         packet.setRuntimeEntityId(getRuntimeId());
         packet.setAction(action);
-        packet.setRowingTime(rowingTime);
+        packet.setRowingTime((float) rowingTime);
         sendPacketToViewers(packet);
         // Player should also send the packet to itself
         networkComponent.sendPacket(packet);
@@ -926,23 +926,23 @@ public class EntityPlayerBaseComponentImpl extends EntityBaseComponentImpl imple
         networkComponent.sendPacket(packet);
     }
 
-    public void setMotionValueOnly(Vector3fc motion) {
-        this.motion = new Vector3f(motion);
+    public void setMotionValueOnly(Vector3dc motion) {
+        this.motion = new Vector3d(motion);
     }
 
     @Override
-    public void setMotion(Vector3fc motion) {
+    public void setMotion(Vector3dc motion) {
         // For player, motion effect is calculated by the client rather than the server
         // We only need to send SetEntityMotionPacket to client when
         // we want to apply motion on a player
         var packet = new SetEntityMotionPacket();
-        packet.setMotion(MathUtils.JOMLVecToCBVec(motion));
+        packet.setMotion(Vector3f.from(motion.x(), motion.y(), motion.z()));
         packet.setRuntimeEntityId(runtimeId);
         networkComponent.sendPacket(packet);
     }
 
     @Override
-    public void setLocationBeforeSpawn(Location3fc location) {
+    public void setLocationBeforeSpawn(Location3dc location) {
         if (this.location.dimension() != null && location.dimension() == null) {
             // Different from normal entity, reset the dimension of player entity back to null is not allowed
             throw new IllegalArgumentException("Reset dimension back to null is not allowed for player!");

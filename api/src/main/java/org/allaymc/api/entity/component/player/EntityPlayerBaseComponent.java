@@ -14,8 +14,8 @@ import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.joml.Vector3ic;
 
 import java.util.Map;
@@ -395,7 +395,7 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return Whether the player can reach the point.
      */
-    default boolean canReach(Vector3fc pos) {
+    default boolean canReach(Vector3dc pos) {
         return canReach(pos.x(), pos.y(), pos.z());
     }
 
@@ -408,19 +408,19 @@ public interface EntityPlayerBaseComponent extends EntityBaseComponent, ChunkLoa
      *
      * @return Whether the player can reach the point.
      */
-    default boolean canReach(float x, float y, float z) {
+    default boolean canReach(double x, double y, double z) {
         if (isDead()) return false;
         var maxDistance = getMaxInteractDistance();
         // Check whether there is a point that inside of the player's AABB
         // And can reach the provided pos
         var aabb = getOffsetAABB();
-        float[] aabbXs = new float[]{aabb.minX(), aabb.maxX()};
-        float[] aabbYs = new float[]{aabb.minY(), aabb.maxY()};
-        float[] aabbZs = new float[]{aabb.minZ(), aabb.maxZ()};
+        double[] aabbXs = new double[]{aabb.minX(), aabb.maxX()};
+        double[] aabbYs = new double[]{aabb.minY(), aabb.maxY()};
+        double[] aabbZs = new double[]{aabb.minZ(), aabb.maxZ()};
         for (var aabbX : aabbXs) {
             for (var aabbY : aabbYs) {
                 for (var aabbZ : aabbZs) {
-                    if (new Vector3f(aabbX, aabbY, aabbZ).distanceSquared(x, y, z) <= maxDistance * maxDistance) {
+                    if (new Vector3d(aabbX, aabbY, aabbZ).distanceSquared(x, y, z) <= maxDistance * maxDistance) {
                         return true;
                     }
                 }

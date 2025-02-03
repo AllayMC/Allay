@@ -68,7 +68,7 @@ public class EntityPickableBaseComponentImpl extends EntityBaseComponentImpl imp
     }
 
     @Override
-    public float getGravity() {
-        return 0.04f;
+    public double getGravity() {
+        return 0.04;
     }
 }
