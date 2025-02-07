@@ -499,7 +499,11 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
 
             var extAABBStartCoordinate = shouldTowardsNegative ? extAABBInAxis.getMax(axis) : extAABBInAxis.getMin(axis);
             var collisionCoordinate = computeCollisionCoordinate(aabb, extAABBInAxis, blocks, axis, shouldTowardsNegative);
-            deltaInAxis = abs(extAABBStartCoordinate - collisionCoordinate);
+            // abs(collisionCoordinate) != Double.MAX_VALUE means that the entity is stuck into the blocks. Collision
+            // coordinate cannot being calculated because blocks that are intersected with the entity will be ignored
+            if (abs(collisionCoordinate) != Double.MAX_VALUE) {
+                deltaInAxis = abs(extAABBStartCoordinate - collisionCoordinate);
+            }
 
             // Make a certain distance (FAT_AABB_MARGIN) between the entity and the blocks
             if (deltaInAxis < FAT_AABB_MARGIN) {
@@ -601,6 +605,7 @@ public class AllayEntityPhysicsService implements EntityPhysicsService {
             }
         }
 
+        // FIXME: abs(coordinate) == Double.MAX_VALUE
         return coordinate;
     }
 
