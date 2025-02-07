@@ -5,7 +5,7 @@ import org.allaymc.api.block.type.BlockType;
 import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.i18n.TrKeys;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.util.List;
 
@@ -26,8 +26,8 @@ public class FillCommand extends SimpleCommand {
                 .blockPropertyValues("blockPropertyValues")
                 .optional()
                 .exec(context -> {
-                    var from = context.<Vector3f>getResult(0).floor();
-                    var to = context.<Vector3f>getResult(1).ceil();
+                    var from = context.<Vector3d>getResult(0).floor();
+                    var to = context.<Vector3d>getResult(1).ceil();
                     var dim = context.getSender().getCmdExecuteLocation().dimension();
                     if (!dim.isInWorld(from.x(), from.y(), from.z()) || !dim.isInWorld(to.x(), to.y(), to.z())) {
                         context.addError("%" + TrKeys.M_COMMANDS_FILL_OUTOFWORLD);

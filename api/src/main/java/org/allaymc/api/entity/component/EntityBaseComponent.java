@@ -15,8 +15,8 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.EntityTeleportEvent;
 import org.allaymc.api.item.ItemStack;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3ic;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
@@ -35,10 +35,10 @@ import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
 import org.cloudburstmc.protocol.bedrock.packet.EntityEventPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import java.util.Map;
 import java.util.Set;
@@ -48,12 +48,12 @@ import java.util.Set;
  */
 public interface EntityBaseComponent extends EntityComponent, CommandSender, HasAABB, HasLongId {
 
-    float SPRINTING_MOVEMENT_FACTOR = 1.3f;
-    float WALKING_MOVEMENT_FACTOR = 1f;
-    float SNEAKING_MOVEMENT_FACTOR = 0.3f;
-    float STOP_MOVEMENT_FACTOR = 0f;
-    float DEFAULT_PUSH_SPEED_REDUCTION = 1f;
-    float DEFAULT_KNOCKBACK = 0.4f;
+    double SPRINTING_MOVEMENT_FACTOR = 1.3;
+    double WALKING_MOVEMENT_FACTOR = 1;
+    double SNEAKING_MOVEMENT_FACTOR = 0.3;
+    double STOP_MOVEMENT_FACTOR = 0;
+    double DEFAULT_PUSH_SPEED_REDUCTION = 1;
+    double DEFAULT_KNOCKBACK = 0.4;
 
     /**
      * Gets the type of this entity.
@@ -106,7 +106,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the location of this entity.
      */
-    Location3fc getLocation();
+    Location3dc getLocation();
 
     /**
      * Set the location before the entity is spawned.
@@ -118,7 +118,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @throws IllegalStateException if the entity is already spawned.
      */
-    void setLocationBeforeSpawn(Location3fc location);
+    void setLocationBeforeSpawn(Location3dc location);
 
     /**
      * Gets the dimension of this entity.
@@ -185,7 +185,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param location the location to teleport the entity to.
      */
-    default void teleport(Location3fc location) {
+    default void teleport(Location3dc location) {
         teleport(location, EntityTeleportEvent.Reason.UNKNOWN);
     }
 
@@ -195,7 +195,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param location the location to teleport the entity to.
      * @param reason   the reason of the teleport.
      */
-    void teleport(Location3fc location, EntityTeleportEvent.Reason reason);
+    void teleport(Location3dc location, EntityTeleportEvent.Reason reason);
 
     /**
      * Teleport the entity to the specified location asynchronously.
@@ -204,7 +204,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param location the location to teleport the entity to.
      */
-    default void teleportAsync(Location3fc location) {
+    default void teleportAsync(Location3dc location) {
         Thread.ofVirtual().start(() -> teleport(location));
     }
 
@@ -214,7 +214,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param location the location to teleport the entity to.
      */
     default void teleport(Location3ic location) {
-        teleport(new Location3f(location));
+        teleport(new Location3d(location));
     }
 
     /**
@@ -225,7 +225,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param location the location to teleport the entity to.
      */
     default void teleportAsync(Location3ic location) {
-        teleportAsync(new Location3f(location));
+        teleportAsync(new Location3d(location));
     }
 
     /**
@@ -293,15 +293,15 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the aabb of this entity.
      */
-    AABBfc getAABB();
+    AABBdc getAABB();
 
     /**
      * Get the offset aabb of this entity.
      *
      * @return the offset aabb of this entity.
      */
-    default AABBf getOffsetAABB() {
-        return getAABB().translate(getLocation(), new AABBf());
+    default AABBd getOffsetAABB() {
+        return getAABB().translate(getLocation(), new AABBd());
     }
 
     /**
@@ -370,14 +370,14 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the motion of this entity.
      */
-    Vector3fc getMotion();
+    Vector3dc getMotion();
 
     /**
      * Set the motion of this entity.
      *
      * @param motion the motion to set.
      */
-    void setMotion(Vector3fc motion);
+    void setMotion(Vector3dc motion);
 
     /**
      * Set the motion of this entity.
@@ -386,8 +386,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param my the motion y to set.
      * @param mz the motion z to set.
      */
-    default void setMotion(float mx, float my, float mz) {
-        setMotion(new Vector3f(mx, my, mz));
+    default void setMotion(double mx, double my, double mz) {
+        setMotion(new Vector3d(mx, my, mz));
     }
 
     /**
@@ -395,8 +395,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @param add the motion to add.
      */
-    default void addMotion(Vector3fc add) {
-        setMotion(getMotion().add(add, new Vector3f()));
+    default void addMotion(Vector3dc add) {
+        setMotion(getMotion().add(add, new Vector3d()));
     }
 
     /**
@@ -406,8 +406,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param my the motion y to add.
      * @param mz the motion z to add.
      */
-    default void addMotion(float mx, float my, float mz) {
-        setMotion(getMotion().add(mx, my, mz, new Vector3f()));
+    default void addMotion(double mx, double my, double mz) {
+        setMotion(getMotion().add(mx, my, mz, new Vector3d()));
     }
 
     /**
@@ -415,7 +415,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the last motion of this entity.
      */
-    Vector3fc getLastMotion();
+    Vector3dc getLastMotion();
 
     /**
      * Check if the entity is on the ground.
@@ -512,7 +512,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the fall distance of this entity.
      */
-    float getFallDistance();
+    double getFallDistance();
 
     /**
      * Called when the entity falls.
@@ -585,7 +585,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @return the base offset of this entity.
      */
     default float getNetworkOffset() {
-        return 0f;
+        return 0;
     }
 
     /**
@@ -602,8 +602,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the step height of this entity.
      */
-    default float getStepHeight() {
-        return 0.6f;
+    default double getStepHeight() {
+        return 0.6;
     }
 
     /**
@@ -611,8 +611,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the gravity of this entity.
      */
-    default float getGravity() {
-        return 0.08f;
+    default double getGravity() {
+        return 0.08;
     }
 
     /**
@@ -623,8 +623,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the drag factor when on ground of this entity.
      */
-    default float getDragFactorOnGround() {
-        return 0.1f;
+    default double getDragFactorOnGround() {
+        return 0.1;
     }
 
     /**
@@ -636,8 +636,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the drag factor when in air of this entity.
      */
-    default float getDragFactorInAir() {
-        return 0.02f;
+    default double getDragFactorInAir() {
+        return 0.02;
     }
 
     /**
@@ -663,8 +663,8 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the eye height of this entity.
      */
-    default float getEyeHeight() {
-        return (getAABB().maxY() - getAABB().minY()) * 0.9f;
+    default double getEyeHeight() {
+        return (getAABB().maxY() - getAABB().minY()) * 0.9;
     }
 
     /**
@@ -676,7 +676,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @see <a href="https://www.mcpk.wiki/wiki/Horizontal_Movement_Formulas">Horizontal Movement Formulas</a>
      */
-    default float getMovementFactor() {
+    default double getMovementFactor() {
         return STOP_MOVEMENT_FACTOR;
     }
 
@@ -685,7 +685,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      *
      * @return the push speed reduction of this entity.
      */
-    default float getPushSpeedReduction() {
+    default double getPushSpeedReduction() {
         return DEFAULT_PUSH_SPEED_REDUCTION;
     }
 
@@ -753,23 +753,23 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
     }
 
     /**
-     * @see #knockback(Vector3fc, float, boolean, float)
+     * @see #knockback(Vector3dc, double, boolean, double)
      */
-    default void knockback(Vector3fc source) {
+    default void knockback(Vector3dc source) {
         knockback(source, DEFAULT_KNOCKBACK);
     }
 
     /**
-     * @see #knockback(Vector3fc, float, boolean, float)
+     * @see #knockback(Vector3dc, double, boolean, double)
      */
-    default void knockback(Vector3fc source, float kb) {
+    default void knockback(Vector3dc source, double kb) {
         knockback(source, kb, false);
     }
 
     /**
-     * @see #knockback(Vector3fc, float, boolean, float)
+     * @see #knockback(Vector3dc, double, boolean, double)
      */
-    default void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance) {
+    default void knockback(Vector3dc source, double kb, boolean ignoreKnockbackResistance) {
         knockback(source, kb, ignoreKnockbackResistance, kb);
     }
 
@@ -781,7 +781,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param ignoreKnockbackResistance {@code true} if the knockback resistance should be ignored.
      * @param kby                       the knockback strength in y-axis.
      */
-    void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance, float kby);
+    void knockback(Vector3dc source, double kb, boolean ignoreKnockbackResistance, double kby);
 
     /**
      * Apply the entity event to the entity.
@@ -812,11 +812,11 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      * @param action     the action of the action.
      * @param rowingTime the rowing time of the action.
      */
-    default void applyAction(AnimatePacket.Action action, float rowingTime) {
+    default void applyAction(AnimatePacket.Action action, double rowingTime) {
         var pk = new AnimatePacket();
         pk.setRuntimeEntityId(getRuntimeId());
         pk.setAction(action);
-        pk.setRowingTime(rowingTime);
+        pk.setRowingTime((float) rowingTime);
         sendPacketToViewers(pk);
     }
 
@@ -871,7 +871,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
      */
     default boolean isEyesInWater() {
         var dim = getDimension();
-        var eyeLoc = getLocation().add(0, getEyeHeight(), 0, new Vector3f());
+        var eyeLoc = getLocation().add(0, getEyeHeight(), 0, new Vector3d());
         var eyesBlockState = dim.getBlockState(eyeLoc);
 
         return eyesBlockState.getBlockType().hasBlockTag(BlockTags.WATER) &&
@@ -971,7 +971,7 @@ public interface EntityBaseComponent extends EntityComponent, CommandSender, Has
         if (!blockUnder.getBlockStateData().isSolid()) {
             return false;
         }
-        var aabb = getAABB().translate(x + 0.5f, y + 0.5f, z + 0.5f, new AABBf());
+        var aabb = getAABB().translate(x + 0.5, y + 0.5, z + 0.5, new AABBd());
         return dimension.getCollidingBlockStates(aabb) == null;
     }
 }

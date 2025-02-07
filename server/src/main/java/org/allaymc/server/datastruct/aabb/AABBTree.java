@@ -8,9 +8,9 @@ import org.allaymc.api.world.service.HasLongId;
 import org.joml.FrustumIntersection;
 import org.joml.Matrix4fc;
 import org.joml.RayAabIntersection;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
-import org.joml.primitives.Rayf;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
+import org.joml.primitives.Rayfc;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -231,13 +231,13 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
         AABBTreeNode<T> nodeToAdd = getNodeAt(node);
         AABBTreeNode<T> parentNode = getNodeAt(root);
 
-        AABBf nodeToAddAABB = nodeToAdd.getAabb();
+        AABBd nodeToAddAABB = nodeToAdd.getAabb();
 
         while (!parentNode.isLeaf()) {
             AABBTreeNode<T> leftChild = getNodeAt(parentNode.getLeftChild());
             AABBTreeNode<T> rightChild = getNodeAt(parentNode.getRightChild());
-            AABBf aabbA = leftChild.getAabb();
-            AABBf aabbB = rightChild.getAabb();
+            AABBd aabbA = leftChild.getAabb();
+            AABBd aabbB = rightChild.getAabb();
 
             AABBTreeHeuristicFunction.HeuristicResult heuristicResult = insertionHeuristicFunction
                     .getInsertionHeuristic(aabbA, aabbB, nodeToAdd.getData(), nodeToAddAABB);
@@ -261,7 +261,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
                                               List<CollisionPair<T>> result) {
         Deque<Integer> stack = new ArrayDeque<>();
         stack.offer(root);
-        AABBf overlapWith = nodeToTest.getAabb();
+        AABBd overlapWith = nodeToTest.getAabb();
 
         while (!stack.isEmpty()) {
             int nodeIndex = stack.pop();
@@ -270,7 +270,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             }
 
             AABBTreeNode<T> node = getNodeAt(nodeIndex);
-            AABBf nodeAABB = node.getAabb();
+            AABBd nodeAABB = node.getAabb();
             if (nodeAABB.intersectsAABB(overlapWith)) {
                 if (node.isLeaf() && node.getIndex() != nodeToTest.getIndex()) {
                     T nodeData = node.getData();
@@ -361,11 +361,11 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
         syncUpHierarchy(nodeGrandparent);
     }
 
-    public void detectOverlaps(AABBfc overlapWith, List<T> result) {
+    public void detectOverlaps(AABBdc overlapWith, List<T> result) {
         detectOverlaps(overlapWith, defaultAABBOverlapFilter, result);
     }
 
-    public void detectOverlaps(AABBfc overlapWith, AABBOverlapFilter<T> filter, List<T> result) {
+    public void detectOverlaps(AABBdc overlapWith, AABBOverlapFilter<T> filter, List<T> result) {
         traverseTree(aabb -> aabb.intersectsAABB(overlapWith), filter, result);
     }
 
@@ -396,19 +396,20 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
 
     public void detectInFrustum(Matrix4fc worldViewProjection, AABBOverlapFilter<T> filter, List<T> result) {
         frustumIntersection.set(worldViewProjection, false);
-        traverseTree(aabb -> frustumIntersection.testAab(aabb.minX(), aabb.minY(), aabb.minZ(), aabb.maxX(), aabb.maxY(), aabb.maxZ()), filter, result);
+        traverseTree(aabb -> frustumIntersection.testAab((float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(), (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()), filter, result);
     }
 
-    public void detectRayIntersection(Rayf ray, List<T> result) {
+    public void detectRayIntersection(Rayfc ray, List<T> result) {
         detectRayIntersection(ray, defaultAABBOverlapFilter, result);
     }
 
-    public void detectRayIntersection(Rayf ray, AABBOverlapFilter<T> filter, List<T> result) {
-        rayIntersection.set(ray.oX, ray.oY, ray.oZ, ray.dX, ray.dY, ray.dZ);
-        traverseTree(aabb -> rayIntersection.test(aabb.minX(), aabb.minY(), aabb.minZ(), aabb.maxX(), aabb.maxY(), aabb.maxZ()), filter, result);
+    // TODO: Use Rayfc here
+    public void detectRayIntersection(Rayfc ray, AABBOverlapFilter<T> filter, List<T> result) {
+        rayIntersection.set(ray.oX(), ray.oY(), ray.oZ(), ray.dX(), ray.dY(), ray.dZ());
+        traverseTree(aabb -> rayIntersection.test((float) aabb.minX(), (float) aabb.minY(), (float) aabb.minZ(), (float) aabb.maxX(), (float) aabb.maxY(), (float) aabb.maxZ()), filter, result);
     }
 
-    private void traverseTree(Predicate<AABBfc> nodeTest, AABBOverlapFilter<T> filter, List<T> result) {
+    private void traverseTree(Predicate<AABBdc> nodeTest, AABBOverlapFilter<T> filter, List<T> result) {
         result.clear();
         if (root == AABBTreeNode.INVALID_NODE_INDEX) {
             return;
@@ -423,7 +424,7 @@ public final class AABBTree<T extends HasAABB & HasLongId> {
             if (nodeIndex == AABBTreeNode.INVALID_NODE_INDEX) continue;
 
             AABBTreeNode<T> node = getNodeAt(nodeIndex);
-            AABBf nodeAABB = node.getAabb();
+            AABBd nodeAABB = node.getAabb();
             if (nodeTest.test(nodeAABB)) {
                 if (node.isLeaf()) {
                     T nodeData = node.getData();

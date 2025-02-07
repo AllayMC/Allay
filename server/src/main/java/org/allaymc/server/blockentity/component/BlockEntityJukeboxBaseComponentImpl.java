@@ -10,7 +10,7 @@ import org.allaymc.api.item.component.ItemMusicDiscComponent;
 import org.allaymc.server.block.component.event.CBlockOnReplaceEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.SoundEvent;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -48,10 +48,10 @@ public class BlockEntityJukeboxBaseComponentImpl extends BlockEntityBaseComponen
         var rand = ThreadLocalRandom.current();
 
         if (this.musicDiscItem != null) {
-            dimension.dropItem(this.musicDiscItem, new Vector3f(
-                    pos.x() + rand.nextFloat(0.5f) + 0.25f,
-                    pos.y() + rand.nextFloat(0.5f) + 0.25f,
-                    pos.z() + rand.nextFloat(0.5f) + 0.25f
+            dimension.dropItem(this.musicDiscItem, new Vector3d(
+                    pos.x() + rand.nextDouble(0.5) + 0.25,
+                    pos.y() + rand.nextDouble(0.5) + 0.25,
+                    pos.z() + rand.nextDouble(0.5) + 0.25
             ));
             this.musicDiscItem = null;
             this.stop();

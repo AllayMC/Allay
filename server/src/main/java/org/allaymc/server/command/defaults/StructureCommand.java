@@ -6,7 +6,7 @@ import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.utils.Structure;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtUtils;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,8 +36,8 @@ public class StructureCommand extends SimpleCommand {
                 .pos("end")
                 .exec((context, player) -> {
                     String fileName = context.getResult(1);
-                    Vector3f start = ((Vector3f) context.getResult(2)).floor();
-                    Vector3f end = ((Vector3f) context.getResult(3)).floor();
+                    Vector3d start = ((Vector3d) context.getResult(2)).floor();
+                    Vector3d end = ((Vector3d) context.getResult(3)).floor();
                     var sizeX = (int) (end.x - start.x + 1);
                     var sizeY = (int) (end.y - start.y + 1);
                     var sizeZ = (int) (end.z - start.z + 1);
@@ -78,7 +78,7 @@ public class StructureCommand extends SimpleCommand {
                 .pos("pos")
                 .exec((context, player) -> {
                     String fileName = context.getResult(1);
-                    Vector3f pos = ((Vector3f) context.getResult(2)).floor();
+                    Vector3d pos = ((Vector3d) context.getResult(2)).floor();
                     NbtMap nbt;
                     var filePath = STRUCTURE_DIR.resolve(fileName + STRUCTURE_FILE_EXT);
 

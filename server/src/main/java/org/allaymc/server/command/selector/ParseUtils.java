@@ -51,6 +51,26 @@ public class ParseUtils {
     }
 
     /**
+     * Parse the offset double value
+     *
+     * @param value Text
+     * @param base  Base value
+     *
+     * @return Offset value
+     */
+    public static double parseOffsetDouble(String value, double base) throws SelectorSyntaxException {
+        try {
+            if (value.startsWith("~")) {
+                return value.length() != 1 ? base + Double.parseDouble(value.substring(1)) : base;
+            } else {
+                return Double.parseDouble(value);
+            }
+        } catch (NumberFormatException e) {
+            throw new SelectorSyntaxException("Error parsing target selector", e);
+        }
+    }
+
+    /**
      * Check if the parameter is reversed
      *
      * @param value Given string

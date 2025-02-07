@@ -5,8 +5,8 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.math.location.Location3f;
-import org.joml.Vector3f;
+import org.allaymc.api.math.location.Location3d;
+import org.joml.Vector3d;
 
 import java.util.List;
 
@@ -23,18 +23,18 @@ public class TeleportCommand extends SimpleCommand {
     public void prepareCommandTree(CommandTree tree) {
         tree.getRoot()
                 .pos("pos")
-                .exec((context,sender) -> {
-                    Vector3f pos = context.getResult(0);
-                    var loc = new Location3f(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
+                .exec((context, sender) -> {
+                    Vector3d pos = context.getResult(0);
+                    var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
 
                     sender.teleport(loc);
                     context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, sender.getDisplayName(), pos.x, pos.y, pos.z);
 
                     return context.success();
-                },SenderType.ENTITY)
+                }, SenderType.ENTITY)
                 .root()
                 .target("destination")
-                .exec((context,sender) -> {
+                .exec((context, sender) -> {
                     List<Entity> destination = context.getResult(0);
 
                     if (destination.isEmpty()) {
@@ -53,14 +53,14 @@ public class TeleportCommand extends SimpleCommand {
                     context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS, sender.getDisplayName(), destEntity.getDisplayName());
 
                     return context.success();
-                },SenderType.ENTITY)
+                }, SenderType.ENTITY)
                 .root()
                 .target("victims")
                 .pos("pos")
                 .exec(context -> {
                     List<Entity> victims = context.getResult(0);
-                    Vector3f pos = context.getResult(1);
-                    var loc = new Location3f(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
+                    Vector3d pos = context.getResult(1);
+                    var loc = new Location3d(pos.x, pos.y, pos.z, context.getSender().getCmdExecuteLocation().dimension());
                     for (Entity victim : victims) {
                         victim.teleport(loc);
                         context.addOutput(TrKeys.M_COMMANDS_TP_SUCCESS_COORDINATES, victim.getDisplayName(), pos.x, pos.y, pos.z);

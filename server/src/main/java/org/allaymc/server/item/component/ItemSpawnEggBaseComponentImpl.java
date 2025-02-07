@@ -7,7 +7,6 @@ import org.allaymc.api.item.initinfo.ItemStackInitInfo;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.Dimension;
-import org.joml.Vector3f;
 import org.joml.Vector3ic;
 
 /**
@@ -31,15 +30,15 @@ public class ItemSpawnEggBaseComponentImpl extends ItemBaseComponentImpl {
             this.customEntityId = new Identifier(identifier.toString().replace("_spawn_egg", ""));
         }
 
+        var clickedPos = interactInfo.clickedPos();
+        var clickedBlockPos = interactInfo.clickedBlockPos();
         var entity = Registries.ENTITIES.get(this.customEntityId).createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
-                        .pos(interactInfo.clickedPos().add(
-                                interactInfo.clickedBlockPos().x(),
-                                interactInfo.clickedBlockPos().y(),
-                                interactInfo.clickedBlockPos().z(),
-                                new Vector3f()
-                        ))
+                        .pos(
+                                (double) clickedPos.x() + clickedBlockPos.x(),
+                                (double) clickedPos.y() + clickedBlockPos.y(),
+                                (double) clickedPos.z() + clickedBlockPos.z())
                         .build()
         );
         dimension.getEntityService().addEntity(entity);

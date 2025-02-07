@@ -1,7 +1,7 @@
 package org.allaymc.api.world.chunk;
 
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.network.PacketReceiver;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -19,7 +19,7 @@ public interface ChunkLoader extends PacketReceiver {
      *
      * @return the location of the chunk loader.
      */
-    Location3fc getLocation();
+    Location3dc getLocation();
 
     /**
      * Check if the loader is active.

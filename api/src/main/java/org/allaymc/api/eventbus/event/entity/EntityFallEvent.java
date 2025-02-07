@@ -11,9 +11,9 @@ import org.allaymc.api.eventbus.event.CancellableEvent;
 @Getter
 @Setter
 public class EntityFallEvent extends EntityEvent implements CancellableEvent {
-    protected float fallDistance;
+    protected double fallDistance;
 
-    public EntityFallEvent(Entity entity, float fallDistance) {
+    public EntityFallEvent(Entity entity, double fallDistance) {
         super(entity);
         this.fallDistance = fallDistance;
     }

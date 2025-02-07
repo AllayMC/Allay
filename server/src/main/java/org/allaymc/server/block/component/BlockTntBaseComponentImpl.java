@@ -15,7 +15,7 @@ import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.world.Dimension;
 import org.allaymc.server.entity.component.EntityTntBaseComponentImpl;
 import org.cloudburstmc.nbt.NbtMap;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -54,11 +54,11 @@ public class BlockTntBaseComponentImpl extends BlockBaseComponentImpl implements
         var pos = blockStateWithPos.pos();
         dimension.setBlockState(pos, BlockTypes.AIR.getDefaultState());
         var angle = ThreadLocalRandom.current().nextFloat() * Math.PI * 2;
-        var motion = new Vector3f((float) (-Math.sin(angle) * 0.02f), 0.2f, (float) (-Math.cos(angle) * 0.02f));
+        var motion = new Vector3d(-Math.sin(angle) * 0.02, 0.2, -Math.cos(angle) * 0.02);
         var entity = EntityTypes.TNT.createEntity(
                 EntityInitInfo.builder()
                         .dimension(dimension)
-                        .pos(pos.x() + 0.5f, pos.y(), pos.z() + 0.5f)
+                        .pos(pos.x() + 0.5, pos.y(), pos.z() + 0.5)
                         .motion(motion)
                         .nbt(NbtMap.builder().putShort(EntityTntBaseComponentImpl.TAG_FUSE, (short) fuse).build())
                         .build()

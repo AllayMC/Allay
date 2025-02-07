@@ -33,11 +33,11 @@ import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.Range;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
-import org.joml.primitives.AABBfc;
+import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -205,29 +205,29 @@ public interface Dimension {
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3fc pos, BlockState blockState) {
+    default void setBlockState(Vector3dc pos, BlockState blockState) {
         setBlockState(pos, blockState, 0);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(Vector3fc pos, BlockState blockState, int layer) {
-        pos = pos.floor(new Vector3f());
+    default void setBlockState(Vector3dc pos, BlockState blockState, int layer) {
+        pos = pos.floor(new Vector3d());
         setBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), blockState, layer);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(float x, float y, float z, BlockState blockState) {
+    default void setBlockState(double x, double y, double z, BlockState blockState) {
         setBlockState(x, y, z, blockState, 0);
     }
 
     /**
      * @see #setBlockState(int, int, int, BlockState, int, boolean, boolean, boolean, PlayerInteractInfo)
      */
-    default void setBlockState(float x, float y, float z, BlockState blockState, int layer) {
+    default void setBlockState(double x, double y, double z, BlockState blockState, int layer) {
         setBlockState((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z), blockState, layer);
     }
 
@@ -362,29 +362,29 @@ public interface Dimension {
     /**
      * @see #getBlockState(int, int, int, int)
      */
-    default BlockState getBlockState(Vector3fc pos) {
+    default BlockState getBlockState(Vector3dc pos) {
         return getBlockState(pos, 0);
     }
 
     /**
      * @see #getBlockState(int, int, int, int)
      */
-    default BlockState getBlockState(Vector3fc pos, int layer) {
-        pos = pos.floor(new Vector3f());
+    default BlockState getBlockState(Vector3dc pos, int layer) {
+        pos = pos.floor(new Vector3d());
         return getBlockState((int) pos.x(), (int) pos.y(), (int) pos.z(), layer);
     }
 
     /**
      * @see #getBlockState(int, int, int, int)
      */
-    default BlockState getBlockState(float x, float y, float z) {
+    default BlockState getBlockState(double x, double y, double z) {
         return getBlockState(x, y, z, 0);
     }
 
     /**
      * @see #getBlockState(int, int, int, int)
      */
-    default BlockState getBlockState(float x, float y, float z, int layer) {
+    default BlockState getBlockState(double x, double y, double z, int layer) {
         return getBlockState((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z), layer);
     }
 
@@ -456,7 +456,7 @@ public interface Dimension {
     /**
      * @see #forEachBlockStates(int, int, int, int, int, int, int, PosAndBlockStateConsumer)
      */
-    default void forEachBlockStates(AABBfc aabb, int layer, PosAndBlockStateConsumer blockStateConsumer) {
+    default void forEachBlockStates(AABBdc aabb, int layer, PosAndBlockStateConsumer blockStateConsumer) {
         var maxX = (int) Math.ceil(aabb.maxX());
         var maxY = (int) Math.ceil(aabb.maxY());
         var maxZ = (int) Math.ceil(aabb.maxZ());
@@ -483,6 +483,8 @@ public interface Dimension {
             return;
         }
 
+        var dimensionInfo = getDimensionInfo();
+
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
         var startY = y >> 4;
@@ -501,6 +503,10 @@ public interface Dimension {
 
                 var chunk = getChunkService().getOrLoadChunkSync(chunkX, chunkZ);
                 for (int sectionY = startY; sectionY <= endY; sectionY++) {
+                    if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
+                        continue;
+                    }
+
                     var cY = sectionY << 4;
                     var localStartY = Math.max(y - cY, 0);
                     var localEndY = Math.min(y + sizeY - cY, 16);
@@ -541,6 +547,8 @@ public interface Dimension {
             return;
         }
 
+        var dimensionInfo = getDimensionInfo();
+
         var startX = x >> 4;
         var endX = (x + sizeX - 1) >> 4;
         var startY = y >> 4;
@@ -559,6 +567,10 @@ public interface Dimension {
 
                 var chunk = getChunkService().getOrLoadChunkSync(chunkX, chunkZ);
                 for (int sectionY = startY; sectionY <= endY; sectionY++) {
+                    if (sectionY < dimensionInfo.minSectionY() || sectionY > dimensionInfo.maxSectionY()) {
+                        continue;
+                    }
+
                     var cY = sectionY << 4;
                     var localStartY = Math.max(y - cY, 0);
                     var localEndY = Math.min(y + sizeY - cY, 16);
@@ -622,16 +634,16 @@ public interface Dimension {
     }
 
     /**
-     * @see #getCollidingBlockStates(AABBfc, int, boolean)
+     * @see #getCollidingBlockStates(AABBdc, int, boolean)
      */
-    default BlockState[][][] getCollidingBlockStates(AABBfc aabb) {
+    default BlockState[][][] getCollidingBlockStates(AABBdc aabb) {
         return getCollidingBlockStates(aabb, 0);
     }
 
     /**
-     * @see #getCollidingBlockStates(AABBfc, int, boolean)
+     * @see #getCollidingBlockStates(AABBdc, int, boolean)
      */
-    default BlockState[][][] getCollidingBlockStates(AABBfc aabb, int layer) {
+    default BlockState[][][] getCollidingBlockStates(AABBdc aabb, int layer) {
         return getCollidingBlockStates(aabb, layer, false);
     }
 
@@ -644,7 +656,7 @@ public interface Dimension {
      *
      * @return the block states that collide with the specified AABB, or {@code null} if no block collides.
      */
-    default BlockState[][][] getCollidingBlockStates(AABBfc aabb, int layer, boolean ignoreCollision) {
+    default BlockState[][][] getCollidingBlockStates(AABBdc aabb, int layer, boolean ignoreCollision) {
         var maxX = (int) Math.ceil(aabb.maxX());
         var maxY = (int) Math.ceil(aabb.maxY());
         var maxZ = (int) Math.ceil(aabb.maxZ());
@@ -666,37 +678,37 @@ public interface Dimension {
     }
 
     /**
-     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     * @see #addLevelEvent(double, double, double, LevelEventType, int)
      */
     default void addLevelEvent(Vector3ic pos, LevelEventType eventType) {
         addLevelEvent(pos, eventType, 0);
     }
 
     /**
-     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     * @see #addLevelEvent(double, double, double, LevelEventType, int)
      */
     default void addLevelEvent(Vector3ic pos, LevelEventType eventType, int data) {
         addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
     }
 
     /**
-     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     * @see #addLevelEvent(double, double, double, LevelEventType, int)
      */
-    default void addLevelEvent(Vector3fc pos, LevelEventType eventType) {
+    default void addLevelEvent(Vector3dc pos, LevelEventType eventType) {
         addLevelEvent(pos, eventType, 0);
     }
 
     /**
-     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     * @see #addLevelEvent(double, double, double, LevelEventType, int)
      */
-    default void addLevelEvent(Vector3fc pos, LevelEventType eventType, int data) {
+    default void addLevelEvent(Vector3dc pos, LevelEventType eventType, int data) {
         addLevelEvent(pos.x(), pos.y(), pos.z(), eventType, data);
     }
 
     /**
-     * @see #addLevelEvent(float, float, float, LevelEventType, int)
+     * @see #addLevelEvent(double, double, double, LevelEventType, int)
      */
-    default void addLevelEvent(float x, float y, float z, LevelEventType eventType) {
+    default void addLevelEvent(double x, double y, double z, LevelEventType eventType) {
         addLevelEvent(x, y, z, eventType, 0);
     }
 
@@ -709,7 +721,7 @@ public interface Dimension {
      * @param eventType the level event type.
      * @param data      the data of the level event.
      */
-    default void addLevelEvent(float x, float y, float z, LevelEventType eventType, int data) {
+    default void addLevelEvent(double x, double y, double z, LevelEventType eventType, int data) {
         var chunk = getChunkService().getChunkByDimensionPos((int) x, (int) z);
         if (chunk == null) return;
 
@@ -721,44 +733,44 @@ public interface Dimension {
     }
 
     /**
-     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
      */
     default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent) {
         addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
     }
 
     /**
-     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
      */
     default void addLevelSoundEvent(Vector3ic pos, SoundEvent soundEvent, int extraData) {
         addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent, extraData);
     }
 
     /**
-     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
      */
-    default void addLevelSoundEvent(Vector3fc pos, SoundEvent soundEvent) {
+    default void addLevelSoundEvent(Vector3dc pos, SoundEvent soundEvent) {
         addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent);
     }
 
     /**
-     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
      */
-    default void addLevelSoundEvent(Vector3fc pos, SoundEvent soundEvent, int extraData) {
+    default void addLevelSoundEvent(Vector3dc pos, SoundEvent soundEvent, int extraData) {
         addLevelSoundEvent(pos.x(), pos.y(), pos.z(), soundEvent, extraData);
     }
 
     /**
-     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
      */
-    default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent) {
+    default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent) {
         addLevelSoundEvent(x, y, z, soundEvent, -1);
     }
 
     /**
-     * @see #addLevelSoundEvent(float, float, float, SoundEvent, int, String, boolean, boolean)
+     * @see #addLevelSoundEvent(double, double, double, SoundEvent, int, String, boolean, boolean)
      */
-    default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent, int extraData) {
+    default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent, int extraData) {
         addLevelSoundEvent(x, y, z, soundEvent, extraData, "", false, false);
     }
 
@@ -774,7 +786,7 @@ public interface Dimension {
      * @param babySound              whether the sound is a baby sound.
      * @param relativeVolumeDisabled whether the relative volume is disabled.
      */
-    default void addLevelSoundEvent(float x, float y, float z, SoundEvent soundEvent, int extraData, String identifier, boolean babySound, boolean relativeVolumeDisabled) {
+    default void addLevelSoundEvent(double x, double y, double z, SoundEvent soundEvent, int extraData, String identifier, boolean babySound, boolean relativeVolumeDisabled) {
         var chunk = getChunkService().getChunk((int) x >> 4, (int) z >> 4);
         if (chunk == null) return;
 
@@ -889,7 +901,7 @@ public interface Dimension {
      *
      * @return {@code true} if the y coordinate is in the range of this dimension, otherwise {@code false}.
      */
-    default boolean isYInRange(float y) {
+    default boolean isYInRange(double y) {
         return y >= getDimensionInfo().minHeight() && y <= getDimensionInfo().maxHeight();
     }
 
@@ -902,7 +914,7 @@ public interface Dimension {
      *
      * @return {@code true} if the pos is in a valid and loaded region, otherwise {@code false}.
      */
-    default boolean isInWorld(float x, float y, float z) {
+    default boolean isInWorld(double x, double y, double z) {
         return isYInRange(y) && getChunkService().isChunkLoaded((int) x >> 4, (int) z >> 4);
     }
 
@@ -913,7 +925,7 @@ public interface Dimension {
      *
      * @return {@code true} if the aabb is in a valid and loaded region, otherwise {@code false}.
      */
-    default boolean isAABBInWorld(AABBfc aabb) {
+    default boolean isAABBInWorld(AABBdc aabb) {
         return isInWorld(aabb.maxX(), aabb.maxY(), aabb.maxZ()) && isInWorld(aabb.minX(), aabb.minY(), aabb.minZ());
     }
 
@@ -949,37 +961,37 @@ public interface Dimension {
     }
 
     /**
-     * @see #addParticle(float, float, float, ParticleType, int)
+     * @see #addParticle(double, double, double, ParticleType, int)
      */
     default void addParticle(Vector3ic pos, ParticleType particleType) {
         addParticle(pos, particleType, 0);
     }
 
     /**
-     * @see #addParticle(float, float, float, ParticleType, int)
+     * @see #addParticle(double, double, double, ParticleType, int)
      */
     default void addParticle(Vector3ic pos, ParticleType particleType, int data) {
         addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
     }
 
     /**
-     * @see #addParticle(float, float, float, ParticleType, int)
+     * @see #addParticle(double, double, double, ParticleType, int)
      */
-    default void addParticle(Vector3fc pos, ParticleType particleType) {
+    default void addParticle(Vector3dc pos, ParticleType particleType) {
         addParticle(pos, particleType, 0);
     }
 
     /**
-     * @see #addParticle(float, float, float, ParticleType, int)
+     * @see #addParticle(double, double, double, ParticleType, int)
      */
-    default void addParticle(Vector3fc pos, ParticleType particleType, int data) {
+    default void addParticle(Vector3dc pos, ParticleType particleType, int data) {
         addParticle(pos.x(), pos.y(), pos.z(), particleType, data);
     }
 
     /**
-     * @see #addParticle(float, float, float, ParticleType, int)
+     * @see #addParticle(double, double, double, ParticleType, int)
      */
-    default void addParticle(float x, float y, float z, ParticleType particleType) {
+    default void addParticle(double x, double y, double z, ParticleType particleType) {
         this.addParticle(x, y, z, particleType, 0);
     }
 
@@ -992,7 +1004,7 @@ public interface Dimension {
      * @param particleType the type of the particle to be added.
      * @param data         the data associated with the particle.
      */
-    default void addParticle(float x, float y, float z, ParticleType particleType, int data) {
+    default void addParticle(double x, double y, double z, ParticleType particleType, int data) {
         addLevelEvent(x, y, z, particleType, data);
     }
 
@@ -1006,51 +1018,51 @@ public interface Dimension {
     }
 
     /**
-     * @see #addSound(float, float, float, String, float)
+     * @see #addSound(double, double, double, String, double)
      */
-    default void addSound(Vector3fc pos, String sound) {
+    default void addSound(Vector3dc pos, String sound) {
         addSound(pos, sound, 1);
     }
 
     /**
-     * @see #addSound(float, float, float, String, float)
+     * @see #addSound(double, double, double, String, double)
      */
-    default void addSound(Vector3fc pos, String sound, float volume) {
+    default void addSound(Vector3dc pos, String sound, double volume) {
         addSound(pos, sound, volume, 1);
     }
 
     /**
-     * @see #addSound(float, float, float, String, float)
+     * @see #addSound(double, double, double, String, double)
      */
-    default void addSound(Vector3fc pos, String sound, float volume, float pitch) {
+    default void addSound(Vector3dc pos, String sound, double volume, double pitch) {
         addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
     }
 
     /**
-     * @see #addSound(float, float, float, String, float)
+     * @see #addSound(double, double, double, String, double)
      */
     default void addSound(Vector3ic pos, String sound) {
         addSound(pos, sound, 1);
     }
 
     /**
-     * @see #addSound(float, float, float, String, float)
+     * @see #addSound(double, double, double, String, double)
      */
-    default void addSound(Vector3ic pos, String sound, float volume) {
+    default void addSound(Vector3ic pos, String sound, double volume) {
         addSound(pos, sound, volume, 1);
     }
 
     /**
-     * @see #addSound(float, float, float, String, float)
+     * @see #addSound(double, double, double, String, double)
      */
-    default void addSound(Vector3ic pos, String sound, float volume, float pitch) {
+    default void addSound(Vector3ic pos, String sound, double volume, double pitch) {
         addSound(pos.x(), pos.y(), pos.z(), sound, volume, pitch);
     }
 
     /**
-     * @see #addSound(float, float, float, String, float)
+     * @see #addSound(double, double, double, String, double)
      */
-    default void addSound(float x, float y, float z, String sound) {
+    default void addSound(double x, double y, double z, String sound) {
         addSound(x, y, z, sound, 1);
     }
 
@@ -1063,7 +1075,7 @@ public interface Dimension {
      * @param sound  the sound.
      * @param volume the volume of the sound.
      */
-    default void addSound(float x, float y, float z, String sound, float volume) {
+    default void addSound(double x, double y, double z, String sound, double volume) {
         addSound(x, y, z, sound, volume, 1);
     }
 
@@ -1077,31 +1089,31 @@ public interface Dimension {
      * @param volume the volume of the sound.
      * @param pitch  the pitch of the sound.
      */
-    default void addSound(float x, float y, float z, String sound, float volume, float pitch) {
+    default void addSound(double x, double y, double z, String sound, double volume, double pitch) {
         Preconditions.checkArgument(volume >= 0 && volume <= 1, "Sound volume must be between 0 and 1");
         Preconditions.checkArgument(pitch >= 0, "Sound pitch must be higher than 0");
 
         var packet = new PlaySoundPacket();
         packet.setSound(sound);
-        packet.setVolume(volume);
-        packet.setPitch(pitch);
+        packet.setVolume((float) volume);
+        packet.setPitch((float) pitch);
         packet.setPosition(org.cloudburstmc.math.vector.Vector3f.from(x, y, z));
 
         getChunkService().getChunkByDimensionPos((int) x, (int) z).addChunkPacket(packet);
     }
 
     /**
-     * @see #dropItem(ItemStack, Vector3fc, Vector3fc, int)
+     * @see #dropItem(ItemStack, Vector3dc, Vector3dc, int)
      */
-    default void dropItem(ItemStack itemStack, Vector3fc pos) {
+    default void dropItem(ItemStack itemStack, Vector3dc pos) {
         var rand = ThreadLocalRandom.current();
-        dropItem(itemStack, pos, new Vector3f(rand.nextFloat(0.2f) - 0.1f, 0.2f, rand.nextFloat(0.2f) - 0.1f));
+        dropItem(itemStack, pos, new Vector3d(rand.nextDouble(0.2) - 0.1, 0.2, rand.nextDouble(0.2) - 0.1));
     }
 
     /**
-     * @see #dropItem(ItemStack, Vector3fc, Vector3fc, int)
+     * @see #dropItem(ItemStack, Vector3dc, Vector3dc, int)
      */
-    default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion) {
+    default void dropItem(ItemStack itemStack, Vector3dc pos, Vector3dc motion) {
         dropItem(itemStack, pos, motion, 10);
     }
 
@@ -1113,7 +1125,7 @@ public interface Dimension {
      * @param motion      the motion of the item entity.
      * @param pickupDelay the pickup delay of the item entity.
      */
-    default void dropItem(ItemStack itemStack, Vector3fc pos, Vector3fc motion, int pickupDelay) {
+    default void dropItem(ItemStack itemStack, Vector3dc pos, Vector3dc motion, int pickupDelay) {
         var entityItem = EntityTypes.ITEM.createEntity(
                 EntityInitInfo.builder()
                         .dimension(this)
@@ -1135,7 +1147,7 @@ public interface Dimension {
      * @param pos the pos to drop the xp orbs.
      * @param xp  the amount of xp to drop.
      */
-    default void splitAndDropXpOrb(Vector3fc pos, int xp) {
+    default void splitAndDropXpOrb(Vector3dc pos, int xp) {
         for (var split : EntityXpOrb.splitIntoOrbSizes(xp)) {
             dropXpOrb(pos, split);
         }
@@ -1148,12 +1160,12 @@ public interface Dimension {
      * @param pos the pos to drop the xp orb.
      * @param xp  the amount of xp to drop.
      */
-    default void dropXpOrb(Vector3fc pos, int xp) {
+    default void dropXpOrb(Vector3dc pos, int xp) {
         var rand = ThreadLocalRandom.current();
-        var motion = new Vector3f(
-                (rand.nextFloat() * 0.2f - 0.1f) * 2f,
-                rand.nextFloat() * 0.4f,
-                (rand.nextFloat() * 0.2f - 0.1f) * 2f
+        var motion = new Vector3d(
+                (rand.nextDouble() * 0.2 - 0.1) * 2,
+                rand.nextDouble() * 0.4,
+                (rand.nextDouble() * 0.2 - 0.1) * 2
         );
         dropXpOrb(pos, xp, motion);
     }
@@ -1165,7 +1177,7 @@ public interface Dimension {
      * @param xp     the amount of xp to drop.
      * @param motion the motion of the xp orb entity.
      */
-    default void dropXpOrb(Vector3fc pos, int xp, Vector3fc motion) {
+    default void dropXpOrb(Vector3dc pos, int xp, Vector3dc motion) {
         dropXpOrb(pos, xp, motion, 10);
     }
 
@@ -1177,14 +1189,14 @@ public interface Dimension {
      * @param motion      the motion of the xp orb entity.
      * @param pickupDelay the pickup delay of the xp orb entity.
      */
-    default void dropXpOrb(Vector3fc pos, int xp, Vector3fc motion, int pickupDelay) {
+    default void dropXpOrb(Vector3dc pos, int xp, Vector3dc motion, int pickupDelay) {
         var rand = ThreadLocalRandom.current();
         var entityXpOrb = EntityTypes.XP_ORB.createEntity(
                 EntityInitInfo.builder()
                         .dimension(this)
                         .pos(pos)
                         .motion(motion)
-                        .rot(rand.nextFloat() * 360f, 0)
+                        .rot(rand.nextDouble() * 360, 0)
                         .build()
         );
         entityXpOrb.setExperienceValue(xp);

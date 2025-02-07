@@ -17,7 +17,7 @@ import org.allaymc.server.blockentity.component.event.CBlockEntitySaveNBTEvent;
 import org.allaymc.server.component.annotation.Dependency;
 import org.cloudburstmc.nbt.NbtType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
@@ -98,10 +98,10 @@ public class BlockEntityContainerHolderComponentImpl implements BlockEntityConta
         container.removeAllViewers();
         for (var itemStack : container.getItemStacks()) {
             if (itemStack == ItemAirStack.AIR_STACK) continue;
-            dimension.dropItem(itemStack, new Vector3f(
-                    pos.x() + rand.nextFloat(0.5f) + 0.25f,
-                    pos.y() + rand.nextFloat(0.5f) + 0.25f,
-                    pos.z() + rand.nextFloat(0.5f) + 0.25f
+            dimension.dropItem(itemStack, new Vector3d(
+                    pos.x() + rand.nextDouble(0.5) + 0.25,
+                    pos.y() + rand.nextDouble(0.5) + 0.25,
+                    pos.z() + rand.nextDouble(0.5) + 0.25
             ));
         }
 

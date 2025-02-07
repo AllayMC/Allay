@@ -3,8 +3,8 @@ package org.allaymc.server.world.service;
 import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.world.chunk.Chunk;
 import org.allaymc.api.world.chunk.ChunkLoader;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
@@ -28,7 +28,7 @@ public class TestChunkLoader implements ChunkLoader {
     protected boolean loaderActive = true;
     @Getter
     @Setter
-    protected Location3fc location = new Location3f(0, 0, 0, null);
+    protected Location3dc location = new Location3d(0, 0, 0, null);
 
     @Override
     public void sendPacket(BedrockPacket packet) {

@@ -16,7 +16,7 @@ import org.allaymc.api.math.MathUtils;
 import org.cloudburstmc.protocol.bedrock.data.GameType;
 import org.cloudburstmc.protocol.bedrock.data.inventory.ContainerSlotType;
 import org.cloudburstmc.protocol.bedrock.packet.AnimatePacket;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import static org.allaymc.api.item.type.ItemTypes.AIR;
 
@@ -88,7 +88,7 @@ public interface EntityPlayer extends
         var dimension = playerLoc.dimension();
         dimension.dropItem(
                 itemStack,
-                playerLoc.add(0, this.getEyeHeight() - 0.4f, 0, new Vector3f()),
+                playerLoc.add(0, this.getEyeHeight() - 0.4f, 0, new Vector3d()),
                 MathUtils.getDirectionVector(playerLoc.yaw(), playerLoc.pitch()).mul(0.4f),
                 40
         );

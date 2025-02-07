@@ -11,8 +11,8 @@ import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.LevelEvent;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 /**
  * @author daoge_cmd
@@ -83,8 +83,8 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     }
 
     @Override
-    public float getGravity() {
-        return 0.04f;
+    public double getGravity() {
+        return 0.04;
     }
 
     @Override
@@ -93,14 +93,14 @@ public class EntityTntBaseComponentImpl extends EntityBaseComponentImpl implemen
     }
 
     @Override
-    public AABBfc getAABB() {
-        return new AABBf(-0.49f, 0.0f, -0.49f, 0.49f, 0.98f, 0.49f);
+    public AABBdc getAABB() {
+        return new AABBd(-0.49, 0.0, -0.49, 0.49, 0.98, 0.49);
     }
 
     @Override
-    public float getStepHeight() {
+    public double getStepHeight() {
         // Entity tnt can't step
-        return 0.0f;
+        return 0.0;
     }
 
     @Override

@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.component.interfaces.ComponentInitInfo;
 import org.allaymc.api.entity.type.EntityType;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.world.Dimension;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
-import org.joml.Vector3fc;
+import org.joml.Vector3dc;
 
 /**
  * Represents the initialization information for an entity.
@@ -59,33 +59,33 @@ public class EntityInitInfo implements ComponentInitInfo {
             return this;
         }
 
-        public Builder loc(Location3fc loc) {
+        public Builder loc(Location3dc loc) {
             pos(loc.x(), loc.y(), loc.z());
             rot((float) loc.yaw(), (float) loc.pitch());
             this.dimension = loc.dimension();
             return this;
         }
 
-        public Builder pos(Vector3fc pos) {
+        public Builder pos(Vector3dc pos) {
             return pos(pos.x(), pos.y(), pos.z());
         }
 
-        public Builder pos(float x, float y, float z) {
-            nbtBuilder.putList("Pos", NbtType.FLOAT, x, y, z);
+        public Builder pos(double x, double y, double z) {
+            nbtBuilder.putList("Pos", NbtType.FLOAT, (float) x, (float) y, (float) z);
             return this;
         }
 
-        public Builder rot(float yaw, float pitch) {
-            nbtBuilder.putList("Rotation", NbtType.FLOAT, yaw, pitch);
+        public Builder rot(double yaw, double pitch) {
+            nbtBuilder.putList("Rotation", NbtType.FLOAT, (float) yaw, (float) pitch);
             return this;
         }
 
-        public Builder motion(float dx, float dy, float dz) {
-            nbtBuilder.putList("Motion", NbtType.FLOAT, dx, dy, dz);
+        public Builder motion(double dx, double dy, double dz) {
+            nbtBuilder.putList("Motion", NbtType.FLOAT, (float) dx, (float) dy, (float) dz);
             return this;
         }
 
-        public Builder motion(Vector3fc m) {
+        public Builder motion(Vector3dc m) {
             return motion(m.x(), m.y(), m.z());
         }
 

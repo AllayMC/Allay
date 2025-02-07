@@ -54,12 +54,12 @@ class BlockStateDataTest {
         assertEquals(0, blockStateData.burnOdds());
         assertFalse(blockStateData.canContainLiquidSource());
         var unionAABB = blockStateData.collisionShape().unionAABB();
-        assertEquals(0.0005f, unionAABB.minX());
-        assertEquals(0.0005f, unionAABB.minY());
-        assertEquals(0.0005f, unionAABB.minZ());
-        assertEquals(0.9995f, unionAABB.maxX());
-        assertEquals(0.1825f, unionAABB.maxY());
-        assertEquals(0.9995f, unionAABB.maxZ());
+        assertEquals(0.0005, unionAABB.minX());
+        assertEquals(0.0005, unionAABB.minY());
+        assertEquals(0.0005, unionAABB.minZ());
+        assertEquals(0.9995, unionAABB.maxX());
+        assertEquals(0.1825, unionAABB.maxY());
+        assertEquals(0.9995, unionAABB.maxZ());
         assertEquals(1.25f, blockStateData.hardness());
         assertEquals(1.25f, blockStateData.explosionResistance());
         assertEquals(0, blockStateData.flameOdds());

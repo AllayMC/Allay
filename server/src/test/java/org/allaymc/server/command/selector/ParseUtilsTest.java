@@ -33,6 +33,17 @@ class ParseUtilsTest {
         assertEquals(0.0f, parseOffsetFloat("~-1.0", base));
     }
 
+    @SneakyThrows
+    @Test
+    void testParseOffsetDouble() {
+        var base = 1.0;
+        assertEquals(1.0, parseOffsetDouble("1.0", base));
+        assertEquals(1.0, parseOffsetDouble("1.0", 2.0));
+        assertEquals(1.0, parseOffsetDouble("~", base));
+        assertEquals(2.0, parseOffsetDouble("~1.0", base));
+        assertEquals(0.0, parseOffsetDouble("~-1.0", base));
+    }
+
     @Test
     void testCheckReversed() {
         assertFalse(checkReversed("xxx"));

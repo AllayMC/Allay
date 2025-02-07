@@ -5,7 +5,7 @@ import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.SelectorType;
 import org.allaymc.api.command.selector.args.CachedFilterSelectorArgument;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.server.command.selector.ParseUtils;
 
 import java.util.Collections;
@@ -18,7 +18,7 @@ import java.util.function.Function;
  */
 public class C extends CachedFilterSelectorArgument {
     @Override
-    public Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException {
+    public Function<List<Entity>, List<Entity>> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException {
         ParseUtils.singleArgument(arguments, getKeyName());
         ParseUtils.cannotReversed(arguments[0]);
 

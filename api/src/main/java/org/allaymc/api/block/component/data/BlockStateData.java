@@ -10,9 +10,9 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.joml.Vector3fc;
+import org.joml.Vector3dc;
 import org.joml.Vector3ic;
-import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBd;
 
 import java.awt.*;
 
@@ -36,18 +36,16 @@ public class BlockStateData {
     protected static Gson SERIALIZER = new GsonBuilder()
             .registerTypeAdapter(VoxelShape.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 var array = json.getAsJsonArray();
-                var minX = array.get(0).getAsFloat();
-                var minY = array.get(1).getAsFloat();
-                var minZ = array.get(2).getAsFloat();
-                var maxX = array.get(3).getAsFloat();
-                var maxY = array.get(4).getAsFloat();
-                var maxZ = array.get(5).getAsFloat();
+                var minX = array.get(0).getAsDouble();
+                var minY = array.get(1).getAsDouble();
+                var minZ = array.get(2).getAsDouble();
+                var maxX = array.get(3).getAsDouble();
+                var maxY = array.get(4).getAsDouble();
+                var maxZ = array.get(5).getAsDouble();
                 if (minX == 0 && minY == 0 && minZ == 0 && maxX == 0 && maxY == 0 && maxZ == 0) {
                     return VoxelShape.EMPTY;
                 }
-                return VoxelShape.builder().solid(
-                        new AABBf(minX, minY, minZ, maxX, maxY, maxZ)
-                ).build();
+                return VoxelShape.builder().solid(new AABBd(minX, minY, minZ, maxX, maxY, maxZ)).build();
             })
             .registerTypeAdapter(Color.class, (JsonDeserializer<Object>) (json, typeOfT, context) -> {
                 // Example: #4c4c4cff
@@ -167,11 +165,11 @@ public class BlockStateData {
         return !collisionShape.getSolids().isEmpty();
     }
 
-    public VoxelShape computeOffsetCollisionShape(float x, float y, float z) {
+    public VoxelShape computeOffsetCollisionShape(double x, double y, double z) {
         return collisionShape.translate(x, y, z);
     }
 
-    public VoxelShape computeOffsetCollisionShape(Vector3fc vector) {
+    public VoxelShape computeOffsetCollisionShape(Vector3dc vector) {
         return computeOffsetCollisionShape(vector.x(), vector.y(), vector.z());
     }
 
@@ -179,11 +177,11 @@ public class BlockStateData {
         return computeOffsetCollisionShape(vector.x(), vector.y(), vector.z());
     }
 
-    public VoxelShape computeOffsetShape(float x, float y, float z) {
+    public VoxelShape computeOffsetShape(double x, double y, double z) {
         return shape.translate(x, y, z);
     }
 
-    public VoxelShape computeOffsetShape(Vector3fc vector) {
+    public VoxelShape computeOffsetShape(Vector3dc vector) {
         return computeOffsetShape(vector.x(), vector.y(), vector.z());
     }
 

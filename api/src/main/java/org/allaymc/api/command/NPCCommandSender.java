@@ -5,7 +5,7 @@ import org.allaymc.api.entity.Entity;
 import org.allaymc.api.entity.interfaces.EntityNpc;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrContainer;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandOriginData;
@@ -35,7 +35,7 @@ public class NPCCommandSender implements CommandSender {
     }
 
     @Override
-    public Location3fc getCmdExecuteLocation() {
+    public Location3dc getCmdExecuteLocation() {
         return npc.getLocation();
     }
 

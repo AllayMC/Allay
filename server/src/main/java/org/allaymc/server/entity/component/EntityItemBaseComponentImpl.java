@@ -8,12 +8,12 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.interfaces.EntityItem;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.item.ItemStack;
-import org.allaymc.api.math.MathUtils;
+import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.packet.AddItemEntityPacket;
 import org.cloudburstmc.protocol.bedrock.packet.BedrockPacket;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import static org.allaymc.api.item.ItemHelper.fromNBT;
 
@@ -75,8 +75,8 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
     }
 
     @Override
-    public AABBfc getAABB() {
-        return new AABBf(-0.125f, 0.0f, -0.125f, 0.125f, 0.25f, 0.125f);
+    public AABBdc getAABB() {
+        return new AABBd(-0.125, 0.0, -0.125, 0.125, 0.25, 0.125);
     }
 
     @Override
@@ -90,8 +90,8 @@ public class EntityItemBaseComponentImpl extends EntityPickableBaseComponentImpl
         packet.setRuntimeEntityId(runtimeId);
         packet.setUniqueEntityId(runtimeId);
         packet.setItemInHand(itemStack.toNetworkItemData());
-        packet.setPosition(MathUtils.JOMLVecToCBVec(location));
-        packet.setMotion(MathUtils.JOMLVecToCBVec(motion));
+        packet.setPosition(Vector3f.from(location.x, location.y, location.z));
+        packet.setMotion(Vector3f.from(motion.x, motion.y, motion.z));
         packet.getMetadata().putAll(metadata.getEntityDataMap());
         return packet;
     }

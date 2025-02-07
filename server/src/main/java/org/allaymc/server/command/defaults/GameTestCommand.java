@@ -25,8 +25,8 @@ import org.allaymc.api.world.Explosion;
 import org.allaymc.server.block.type.BlockLootTable;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.command.CommandData;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -115,7 +115,7 @@ public class GameTestCommand extends SimpleCommand {
                     }
 
                     var loc = player.getLocation();
-                    var floorLoc = loc.floor(new Vector3f());
+                    var floorLoc = loc.floor(new Vector3d());
                     loc.dimension().setBlockState((int) floorLoc.x(), (int) floorLoc.y(), (int) floorLoc.z(), blockType.getDefaultState());
                     return context.success();
                 }, SenderType.PLAYER)
@@ -214,7 +214,7 @@ public class GameTestCommand extends SimpleCommand {
                 .intNum("xp")
                 .exec((context, player) -> {
                     player.getDimension().splitAndDropXpOrb(
-                            player.getLocation().add(0, -1, 0, new Vector3f()),
+                            player.getLocation().add(0, -1, 0, new Vector3d()),
                             context.getResult(1)
                     );
                     return context.success();
@@ -229,8 +229,8 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("printblockunder")
                 .exec((context, player) -> {
-                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3f()), 0).toString());
-                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3f()), 1).toString());
+                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3d()), 0).toString());
+                    player.sendText(player.getDimension().getBlockState(player.getLocation().sub(0, 1, 0, new Vector3d()), 1).toString());
                     return context.success();
                 }, SenderType.PLAYER)
                 .root()
@@ -241,7 +241,7 @@ public class GameTestCommand extends SimpleCommand {
                 .intNum("c")
                 .blockType("block")
                 .exec((context, player) -> {
-                    var pos = MathUtils.floor((Vector3fc) context.getResult(1));
+                    var pos = MathUtils.floor((Vector3dc) context.getResult(1));
                     int a = context.getResult(2);
                     int b = context.getResult(3);
                     int c = context.getResult(4);
@@ -278,7 +278,7 @@ public class GameTestCommand extends SimpleCommand {
                 .root()
                 .key("getheight")
                 .exec((context, player) -> {
-                    var floorLoc = player.getLocation().floor(new Vector3f());
+                    var floorLoc = player.getLocation().floor(new Vector3d());
                     player.sendText("Height is " + player.getDimension().getHeight((int) floorLoc.x, (int) floorLoc.z));
                     return context.success();
                 }, SenderType.PLAYER)
@@ -286,7 +286,7 @@ public class GameTestCommand extends SimpleCommand {
                 .key("getlightdata")
                 .pos("pos")
                 .exec((context, player) -> {
-                    var floorLoc = ((Vector3f) context.getResult(1)).floor();
+                    var floorLoc = ((Vector3d) context.getResult(1)).floor();
                     int x = (int) floorLoc.x;
                     int y = (int) floorLoc.y;
                     int z = (int) floorLoc.z;
@@ -310,9 +310,9 @@ public class GameTestCommand extends SimpleCommand {
                 .bool("spawnfire").optional()
                 .exec((context, player) -> {
                     var explosion = new Explosion(context.getResult(2), context.getResult(3));
-                    Vector3f pos = context.getResult(1);
+                    Vector3d pos = context.getResult(1);
                     if (pos == null) {
-                        pos = new Vector3f(context.getSender().getCmdExecuteLocation());
+                        pos = new Vector3d(context.getSender().getCmdExecuteLocation());
                     }
                     explosion.explode(player.getDimension(), pos);
                     return context.success();

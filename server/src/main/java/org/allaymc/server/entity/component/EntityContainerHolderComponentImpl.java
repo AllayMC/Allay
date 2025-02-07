@@ -10,7 +10,7 @@ import org.allaymc.api.utils.Identifier;
 import org.allaymc.api.world.gamerule.GameRule;
 import org.allaymc.server.component.annotation.ComponentObject;
 import org.allaymc.server.entity.component.event.CEntityDieEvent;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -41,15 +41,15 @@ public class EntityContainerHolderComponentImpl extends BaseContainerHolder impl
                 if (itemStack == ItemAirStack.AIR_STACK) continue;
                 dimension.dropItem(
                         itemStack,
-                        new Vector3f(
-                                pos.x() + rand.nextFloat(0.5f) + 0.25f,
-                                pos.y() + rand.nextFloat(0.5f) + 0.25f,
-                                pos.z() + rand.nextFloat(0.5f) + 0.25f
+                        new Vector3d(
+                                pos.x() + rand.nextDouble(0.5) + 0.25,
+                                pos.y() + rand.nextDouble(0.5) + 0.25,
+                                pos.z() + rand.nextDouble(0.5) + 0.25
                         ),
-                        new Vector3f(
-                                rand.nextFloat(1f) - 0.5f,
-                                0.5f,
-                                rand.nextFloat(1f) - 0.5f
+                        new Vector3d(
+                                rand.nextDouble(1) - 0.5,
+                                0.5,
+                                rand.nextDouble(1) - 0.5
                         ),
                         40
                 );

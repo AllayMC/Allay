@@ -2,7 +2,7 @@ package org.allaymc.server;
 
 import org.allaymc.server.datastruct.aabb.AABBTree;
 import org.allaymc.server.datastruct.aabbtree.TestEntity;
-import org.joml.primitives.AABBf;
+import org.joml.primitives.AABBd;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ public class AABBTreeJMHTest {
     private final int RANGE = 500;
     private AABBTree<TestEntity> aabbTree;
     private TestEntity[] testEntities;
-    private AABBf[] testEntityAABBs;
-    private AABBf[] testAABBs;
+    private AABBd[] testEntityAABBs;
+    private AABBd[] testAABBs;
     private int indexCounter = 0;
 
     @Setup
@@ -37,11 +37,11 @@ public class AABBTreeJMHTest {
             testEntities[i] = createRandomTestEntity(i);
             aabbTree.add(testEntities[i]);
         }
-        testEntityAABBs = new AABBf[TEST_ENTITY_COUNT];
+        testEntityAABBs = new AABBd[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {
-            testEntityAABBs[i] = new AABBf().set(testEntities[i].getOffsetAABB());
+            testEntityAABBs[i] = new AABBd().set(testEntities[i].getOffsetAABB());
         }
-        testAABBs = new AABBf[TEST_ENTITY_COUNT];
+        testAABBs = new AABBd[TEST_ENTITY_COUNT];
         for (int i = 0; i < TEST_ENTITY_COUNT; i++) {
             testAABBs[i] = createRandomAABB();
         }
@@ -50,23 +50,23 @@ public class AABBTreeJMHTest {
     public TestEntity createRandomTestEntity(int id) {
         return new TestEntity(
                 id,
-                ThreadLocalRandom.current().nextFloat() * RANGE,
-                ThreadLocalRandom.current().nextFloat() * RANGE,
-                ThreadLocalRandom.current().nextFloat() * RANGE,
-                ThreadLocalRandom.current().nextFloat() * ENTITY_SIZE,
-                ThreadLocalRandom.current().nextFloat() * ENTITY_SIZE,
-                ThreadLocalRandom.current().nextFloat() * ENTITY_SIZE
+                ThreadLocalRandom.current().nextDouble() * RANGE,
+                ThreadLocalRandom.current().nextDouble() * RANGE,
+                ThreadLocalRandom.current().nextDouble() * RANGE,
+                ThreadLocalRandom.current().nextDouble() * ENTITY_SIZE,
+                ThreadLocalRandom.current().nextDouble() * ENTITY_SIZE,
+                ThreadLocalRandom.current().nextDouble() * ENTITY_SIZE
         );
     }
 
-    public AABBf createRandomAABB() {
-        var x = ThreadLocalRandom.current().nextFloat() * RANGE;
-        var y = ThreadLocalRandom.current().nextFloat() * RANGE;
-        var z = ThreadLocalRandom.current().nextFloat() * RANGE;
-        var width = ThreadLocalRandom.current().nextFloat() * ENTITY_SIZE;
-        var height = ThreadLocalRandom.current().nextFloat() * ENTITY_SIZE;
-        var length = ThreadLocalRandom.current().nextFloat() * ENTITY_SIZE;
-        return new AABBf(
+    public AABBd createRandomAABB() {
+        var x = ThreadLocalRandom.current().nextDouble() * RANGE;
+        var y = ThreadLocalRandom.current().nextDouble() * RANGE;
+        var z = ThreadLocalRandom.current().nextDouble() * RANGE;
+        var width = ThreadLocalRandom.current().nextDouble() * ENTITY_SIZE;
+        var height = ThreadLocalRandom.current().nextDouble() * ENTITY_SIZE;
+        var length = ThreadLocalRandom.current().nextDouble() * ENTITY_SIZE;
+        return new AABBd(
                 x, y, z,
                 x + width, y + height, z + length
         );
@@ -99,7 +99,7 @@ public class AABBTreeJMHTest {
         }
     }
 
-    public void forEachDetect(AABBf aabb, List<AABBf> result) {
+    public void forEachDetect(AABBd aabb, List<AABBd> result) {
         for (var entityAABB : testEntityAABBs) {
             if (entityAABB.intersectsAABB(aabb))
                 result.add(entityAABB);

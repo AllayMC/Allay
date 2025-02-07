@@ -5,10 +5,10 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.math.MathUtils;
+import org.allaymc.api.math.location.Location3i;
 import org.allaymc.api.world.DimensionInfo;
-import org.joml.Vector3f;
+import org.joml.Vector3d;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class SpawnPointCommand extends SimpleCommand {
                     }
 
                     List<EntityPlayer> players = context.getResult(0);
-                    Vector3f pos = context.getResult(1);
+                    Vector3d pos = context.getResult(1);
 
                     for (EntityPlayer player : players) {
                         player.setSpawnPoint(new Location3i(

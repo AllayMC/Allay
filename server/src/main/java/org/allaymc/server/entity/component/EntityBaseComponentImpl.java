@@ -20,8 +20,8 @@ import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.eventbus.event.entity.*;
 import org.allaymc.api.i18n.TrContainer;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.permission.DefaultPermissions;
 import org.allaymc.api.permission.tree.PermissionTree;
@@ -38,6 +38,7 @@ import org.allaymc.server.entity.component.event.*;
 import org.allaymc.server.world.chunk.AllayUnsafeChunk;
 import org.allaymc.server.world.service.AllayEntityPhysicsService;
 import org.cloudburstmc.math.vector.Vector2f;
+import org.cloudburstmc.math.vector.Vector3f;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.nbt.NbtMapBuilder;
 import org.cloudburstmc.nbt.NbtType;
@@ -49,10 +50,10 @@ import org.cloudburstmc.protocol.bedrock.data.entity.EntityEventType;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityFlag;
 import org.cloudburstmc.protocol.bedrock.packet.*;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -90,8 +91,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     private static final CommandOriginData ENTITY_COMMAND_ORIGIN_DATA = new CommandOriginData(CommandOriginType.ENTITY, UUID.randomUUID(), "", 0);
 
     @Getter
-    protected final Location3f location;
-    protected final Location3f locLastSent = new Location3f(0, 0, 0, null);
+    protected final Location3d location;
+    protected final Location3d locLastSent = new Location3d(0, 0, 0, null);
     @Getter
     protected final long runtimeId = RUNTIME_ID_COUNTER.getAndIncrement();
     @Getter
@@ -110,9 +111,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected Map<Long, EntityPlayer> viewers = new Long2ObjectOpenHashMap<>();
     protected Map<EffectType, EffectInstance> effects = new HashMap<>();
     @Getter
-    protected Vector3f motion = new Vector3f();
+    protected Vector3d motion = new Vector3d();
     @Getter
-    protected Vector3f lastMotion = new Vector3f();
+    protected Vector3d lastMotion = new Vector3d();
     @Getter
     protected boolean onGround = true;
     @Setter
@@ -126,14 +127,14 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected boolean dead;
     protected int deadTimer;
     @Getter
-    protected float fallDistance;
+    protected double fallDistance;
     @Getter
     @Setter
     protected String displayName;
     protected Set<String> tags = new HashSet<>();
 
     public EntityBaseComponentImpl(EntityInitInfo info) {
-        this.location = new Location3f(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
+        this.location = new Location3d(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE, info.dimension());
         this.entityType = info.getEntityType();
         this.metadata = new Metadata();
         setDisplayName(entityType.getIdentifier().toString());
@@ -162,9 +163,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 .putFloat("MinX", 0)
                 .putFloat("MinY", 0)
                 .putFloat("MinZ", 0)
-                .putFloat("MaxX", aabb.maxX() - aabb.minX())
-                .putFloat("MaxY", aabb.maxY() - aabb.minY())
-                .putFloat("MaxZ", aabb.maxZ() - aabb.minZ())
+                .putFloat("MaxX", (float) (aabb.maxX() - aabb.minX()))
+                .putFloat("MaxY", (float) (aabb.maxY() - aabb.minY()))
+                .putFloat("MaxZ", (float) (aabb.maxZ() - aabb.minZ()))
                 .putFloat("PivotX", 0)
                 .putFloat("PivotY", 0)
                 .putFloat("PivotZ", 0)
@@ -274,9 +275,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
 
     protected void spawnDeadParticle() {
         var offsetAABB = getOffsetAABB();
-        for (float x = offsetAABB.minX(); x <= offsetAABB.maxX(); x += 0.5f) {
-            for (float z = offsetAABB.minZ(); z <= offsetAABB.maxZ(); z += 0.5f) {
-                for (float y = offsetAABB.minY(); y <= offsetAABB.maxY(); y += 0.5f) {
+        for (double x = offsetAABB.minX(); x <= offsetAABB.maxX(); x += 0.5) {
+            for (double z = offsetAABB.minZ(); z <= offsetAABB.maxZ(); z += 0.5) {
+                for (double y = offsetAABB.minY(); y <= offsetAABB.maxY(); y += 0.5) {
                     this.getDimension().addParticle(x, y, z, ParticleType.EXPLODE);
                 }
             }
@@ -284,14 +285,14 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void setLocationBeforeSpawn(Location3fc location) {
+    public void setLocationBeforeSpawn(Location3dc location) {
         if (!canBeSpawnedIgnoreLocation()) {
             throw new IllegalStateException("Trying to set location of an entity which cannot being spawned!");
         }
         setLocation(location, false);
     }
 
-    protected void setLocation(Location3fc location, boolean calculateFallDistance) {
+    protected void setLocation(Location3dc location, boolean calculateFallDistance) {
         if (MathUtils.hasNaN(location)) {
             throw new IllegalArgumentException("Trying to set the location of entity " + runtimeId + " to a new location which contains NaN: " + location);
         }
@@ -314,10 +315,10 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         this.location.setDimension(location.dimension());
     }
 
-    private void tryResetFallDistance(Location3fc location) {
+    private void tryResetFallDistance(Location3dc location) {
         var blockState0 = location.dimension().getBlockState(location);
         var blockState1 = location.dimension().getBlockState(location, 1);
-        var newEntityAABB = getAABB().translate(location, new AABBf());
+        var newEntityAABB = getAABB().translate(location, new AABBd());
 
         if (!blockState0.getBlockStateData().hasCollision() &&
             blockState1.getBehavior().canResetFallDamage() &&
@@ -365,11 +366,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return willBeSpawnedNextTick;
     }
 
-    public boolean setLocationAndCheckChunk(Location3fc newLoc) {
+    public boolean setLocationAndCheckChunk(Location3dc newLoc) {
         return setLocationAndCheckChunk(newLoc, true);
     }
 
-    public boolean setLocationAndCheckChunk(Location3fc newLoc, boolean calculateFallDistance) {
+    public boolean setLocationAndCheckChunk(Location3dc newLoc, boolean calculateFallDistance) {
         if (checkChunk(this.location, newLoc)) {
             setLocation(newLoc, calculateFallDistance);
             return true;
@@ -377,7 +378,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return false;
     }
 
-    protected boolean checkChunk(Location3fc oldLoc, Location3fc newLoc) {
+    protected boolean checkChunk(Location3dc oldLoc, Location3dc newLoc) {
         var oldChunkX = (int) oldLoc.x() >> 4;
         var oldChunkZ = (int) oldLoc.z() >> 4;
         var newChunkX = (int) newLoc.x() >> 4;
@@ -418,7 +419,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void teleport(Location3fc target, EntityTeleportEvent.Reason reason) {
+    public void teleport(Location3dc target, EntityTeleportEvent.Reason reason) {
         Objects.requireNonNull(target.dimension());
         if (this.location.dimension() == null) {
             log.warn("Trying to teleport an entity whose dimension is null! Entity: {}", thisEntity);
@@ -430,7 +431,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
             return;
         }
 
-        var event = new EntityTeleportEvent(thisEntity, this.location, new Location3f(target), reason);
+        var event = new EntityTeleportEvent(thisEntity, this.location, new Location3d(target), reason);
         if (!event.call()) {
             return;
         }
@@ -446,20 +447,20 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         }
     }
 
-    protected void beforeTeleport(Location3fc target) {
+    protected void beforeTeleport(Location3dc target) {
         this.fallDistance = 0;
         this.setMotion(0, 0, 0);
         // Ensure that the new chunk is loaded
         target.dimension().getChunkService().getOrLoadChunkSync((int) target.x() >> 4, (int) target.z() >> 4);
     }
 
-    protected void teleportInDimension(Location3fc target) {
+    protected void teleportInDimension(Location3dc target) {
         // This method should always return true because we have loaded the chunk
         setLocationAndCheckChunk(target, false);
         broadcastMoveToViewers(target, true);
     }
 
-    protected void teleportOverDimension(Location3fc target) {
+    protected void teleportOverDimension(Location3dc target) {
         // Teleporting to another dimension, there will be more works to be done
         this.location.dimension().getEntityService().removeEntity(thisEntity, () -> {
             setLocationBeforeSpawn(target);
@@ -485,9 +486,9 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public AABBfc getAABB() {
+    public AABBdc getAABB() {
         // Default aabb is player's
-        return new AABBf(-0.3f, 0.0f, -0.3f, 0.3f, 1.8f, 0.3f);
+        return new AABBd(-0.3, 0.0, -0.3, 0.3, 1.8, 0.3);
     }
 
     @Override
@@ -497,12 +498,12 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void setMotion(Vector3fc motion) {
+    public void setMotion(Vector3dc motion) {
         if (MathUtils.hasNaN(motion)) {
             throw new IllegalArgumentException("Trying to set the motion of entity " + runtimeId + " to a new motion which contains NaN: " + motion);
         }
         this.lastMotion = this.motion;
-        this.motion = new Vector3f(motion);
+        this.motion = new Vector3d(motion);
     }
 
     public void setOnGround(boolean onGround) {
@@ -513,13 +514,13 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public void knockback(Vector3fc source, float kb, boolean ignoreKnockbackResistance, float kby) {
+    public void knockback(Vector3dc source, double kb, boolean ignoreKnockbackResistance, double kby) {
         setMotion(calculateKnockbackMotion(source, kb, ignoreKnockbackResistance, kby));
     }
 
-    protected Vector3f calculateKnockbackMotion(Vector3fc source, float kb, boolean ignoreKnockbackResistance, float kby) {
+    protected Vector3d calculateKnockbackMotion(Vector3dc source, double kb, boolean ignoreKnockbackResistance, double kby) {
         if (!ignoreKnockbackResistance) {
-            var resistance = 0.0f;
+            var resistance = 0.0;
             if (attributeComponent != null && attributeComponent.supportAttribute(AttributeType.KNOCKBACK_RESISTANCE)) {
                 resistance = attributeComponent.getAttributeValue(AttributeType.KNOCKBACK_RESISTANCE);
             }
@@ -528,21 +529,21 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
                 kby *= 1 - resistance;
             }
         }
-        Vector3f vec;
+        Vector3d vec;
         if (location.distanceSquared(source) <= 0.0001 /* 0.01 * 0.01 */) {
             // Generate a random kb direction if distance <= 0.01m
             var rand = ThreadLocalRandom.current();
-            var rx = rand.nextFloat(1) - 0.5f;
-            var rz = rand.nextFloat(1) - 0.5f;
-            vec = MathUtils.normalizeIfNotZero(new Vector3f(rx, 0, rz)).mul(kb);
+            var rx = rand.nextDouble(1) - 0.5;
+            var rz = rand.nextDouble(1) - 0.5;
+            vec = MathUtils.normalizeIfNotZero(new Vector3d(rx, 0, rz)).mul(kb);
         } else {
-            vec = location.sub(source, new Vector3f()).normalize().mul(kb);
+            vec = location.sub(source, new Vector3d()).normalize().mul(kb);
             vec.y = 0;
         }
-        return new Vector3f(
-                motion.x / 2f + vec.x,
+        return new Vector3d(
+                motion.x / 2 + vec.x,
                 min(motion.y / 2 + kby, kby),
-                motion.z / 2f + vec.z
+                motion.z / 2 + vec.z
         );
     }
 
@@ -589,14 +590,14 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         viewers.values().forEach(client -> client.sendPacketImmediately(packet));
     }
 
-    public void broadcastMoveToViewers(Location3fc newLoc, boolean teleporting) {
+    public void broadcastMoveToViewers(Location3dc newLoc, boolean teleporting) {
         var movementPk = createMovePacket(newLoc, teleporting);
         var motionPk = createMotionPacket();
         sendPacketToViewers(movementPk);
         sendPacketToViewers(motionPk);
     }
 
-    protected BedrockPacket createMovePacket(Location3fc newLoc, boolean teleporting) {
+    protected BedrockPacket createMovePacket(Location3dc newLoc, boolean teleporting) {
         return Server.SETTINGS.entitySettings().physicsEngineSettings().useDeltaMovePacket() ?
                 createDeltaMovePacket(newLoc, teleporting) :
                 createAbsoluteMovePacket(newLoc, teleporting);
@@ -605,11 +606,11 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     protected BedrockPacket createMotionPacket() {
         var pk = new SetEntityMotionPacket();
         pk.setRuntimeEntityId(getRuntimeId());
-        pk.setMotion(MathUtils.JOMLVecToCBVec(motion));
+        pk.setMotion(Vector3f.from(motion.x, motion.y, motion.z));
         return pk;
     }
 
-    protected BedrockPacket createAbsoluteMovePacket(Location3fc newLoc, boolean teleporting) {
+    protected BedrockPacket createAbsoluteMovePacket(Location3dc newLoc, boolean teleporting) {
         var pk = new MoveEntityAbsolutePacket();
         pk.setRuntimeEntityId(getRuntimeId());
         pk.setPosition(org.cloudburstmc.math.vector.Vector3f.from(newLoc.x(), newLoc.y() + getNetworkOffset(), newLoc.z()));
@@ -619,21 +620,21 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return pk;
     }
 
-    protected BedrockPacket createDeltaMovePacket(Location3fc newLoc, boolean teleporting) {
+    protected BedrockPacket createDeltaMovePacket(Location3dc newLoc, boolean teleporting) {
         var pk = new MoveEntityDeltaPacket();
         pk.setRuntimeEntityId(getRuntimeId());
         var moveFlags = computeMoveFlags(newLoc);
         pk.getFlags().addAll(moveFlags);
         if (moveFlags.contains(HAS_X)) {
-            pk.setX(newLoc.x());
+            pk.setX((float) newLoc.x());
             locLastSent.x = newLoc.x();
         }
         if (moveFlags.contains(HAS_Y)) {
-            pk.setY(newLoc.y());
+            pk.setY((float) newLoc.y());
             locLastSent.y = newLoc.y() + getNetworkOffset();
         }
         if (moveFlags.contains(HAS_Z)) {
-            pk.setZ(newLoc.z());
+            pk.setZ((float) newLoc.z());
             locLastSent.z = newLoc.z();
         }
         if (moveFlags.contains(HAS_PITCH)) {
@@ -657,7 +658,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         return pk;
     }
 
-    protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Location3fc newLoc) {
+    protected Set<MoveEntityDeltaPacket.Flag> computeMoveFlags(Location3dc newLoc) {
         var flags = EnumSet.noneOf(MoveEntityDeltaPacket.Flag.class);
         var settings = Server.SETTINGS.entitySettings().physicsEngineSettings();
         var diffPositionThreshold = settings.diffPositionThreshold();
@@ -677,8 +678,8 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
         var builder = NbtMap.builder();
         builder.putString(TAG_IDENTIFIER, entityType.getIdentifier().toString());
         builder.putBoolean(TAG_ON_GROUND, onGround);
-        AllayNbtUtils.writeVector3f(builder, TAG_POS, location);
-        AllayNbtUtils.writeVector3f(builder, TAG_MOTION, motion);
+        AllayNbtUtils.writeVector3f(builder, TAG_POS, (float) location.x, (float) location.y, (float) location.z);
+        AllayNbtUtils.writeVector3f(builder, TAG_MOTION, (float) motion.x, (float) motion.y, (float) motion.z);
         AllayNbtUtils.writeVector2f(builder, TAG_ROTATION, (float) location.yaw(), (float) location.pitch());
         if (!tags.isEmpty()) {
             builder.putList(TAG_TAGS, NbtType.STRING, new ArrayList<>(tags));
@@ -852,7 +853,7 @@ public class EntityBaseComponentImpl implements EntityBaseComponent {
     }
 
     @Override
-    public Location3fc getCmdExecuteLocation() {
+    public Location3dc getCmdExecuteLocation() {
         return getLocation();
     }
 

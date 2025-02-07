@@ -5,7 +5,7 @@ import org.allaymc.api.block.data.BlockFace;
 import org.allaymc.api.block.type.BlockState;
 import org.allaymc.api.entity.interfaces.EntityPlayer;
 import org.allaymc.api.math.MathUtils;
-import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.server.entity.component.player.EntityPlayerBaseComponentImpl;
 import org.allaymc.server.entity.component.player.EntityPlayerNetworkComponentImpl;
 import org.allaymc.server.entity.impl.EntityPlayerImpl;
@@ -64,7 +64,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
     protected void handleMovement(EntityPlayer player, Vector3f newPos, Vector3f newRot) {
         var world = player.getLocation().dimension();
-        ((AllayEntityPhysicsService) world.getEntityPhysicsService()).offerClientMove(player, new Location3f(
+        ((AllayEntityPhysicsService) world.getEntityPhysicsService()).offerClientMove(player, new Location3d(
                 newPos.getX(), newPos.getY(), newPos.getZ(),
                 newRot.getX(), newRot.getY(), newRot.getZ(),
                 world
@@ -291,7 +291,8 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
 
         var baseComponent = ((EntityPlayerBaseComponentImpl) ((EntityPlayerImpl) player).getBaseComponent());
         if (baseComponent.isAwaitingTeleportACK()) {
-            var diff = baseComponent.getExpectedTeleportPos().sub(MathUtils.CBVecToJOMLVec(packet.getPosition().sub(0, player.getNetworkOffset(), 0)), new org.joml.Vector3f()).length();
+            var clientPos = MathUtils.CBVecToJOMLVec(packet.getPosition().sub(0, player.getNetworkOffset(), 0));
+            var diff = baseComponent.getExpectedTeleportPos().sub(clientPos.x(), clientPos.y(), clientPos.z(), new org.joml.Vector3d()).length();
             if (diff > TELEPORT_ACK_DIFF_TOLERANCE) {
                 // The player has moved before it received the teleport packet. Ignore this movement entirely and
                 // wait for the client to sync itself back to the server. Once we get a movement that is close
@@ -333,7 +334,7 @@ public class PlayerAuthInputPacketProcessor extends PacketProcessor<PlayerAuthIn
     protected boolean isLocationChanged(EntityPlayer player, Vector3f pos, Vector3f rot) {
         // The PlayerAuthInput packet is sent every tick, so don't do anything if the position and rotation were unchanged.
         var location = player.getLocation();
-        return Float.compare(location.x(), pos.getX()) != 0 || Float.compare(location.y() + player.getNetworkOffset(), pos.getY()) != 0 || Float.compare(location.z(), pos.getZ()) != 0 ||
+        return Double.compare(location.x(), pos.getX()) != 0 || Double.compare(location.y() + player.getNetworkOffset(), pos.getY()) != 0 || Double.compare(location.z(), pos.getZ()) != 0 ||
                Double.compare(location.pitch(), rot.getX()) != 0 || Double.compare(location.yaw(), rot.getY()) != 0 || Double.compare(location.headYaw(), rot.getZ()) != 0;
     }
 

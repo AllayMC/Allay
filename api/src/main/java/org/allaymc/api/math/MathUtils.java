@@ -3,6 +3,7 @@ package org.allaymc.api.math;
 import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.location.Location3fc;
 import org.joml.*;
+import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBf;
 
 import java.lang.Math;
@@ -16,11 +17,11 @@ import static java.lang.StrictMath.*;
  */
 public final class MathUtils {
 
-    private static final float[] SIN_LOOK_UP_TABLE = new float[65536];
+    private static final double[] SIN_LOOK_UP_TABLE = new double[65536];
 
     static {
         for (int i = 0; i < 65536; i++) {
-            SIN_LOOK_UP_TABLE[i] = (float) Math.sin(i * Math.PI * 2.0D / 65536.0d);
+            SIN_LOOK_UP_TABLE[i] = Math.sin(i * Math.PI * 2.0D / 65536.0d);
         }
     }
 
@@ -145,8 +146,8 @@ public final class MathUtils {
      *
      * @return the centered vector.
      */
-    public static Vector3f center(Vector3ic vector3i) {
-        return new Vector3f(vector3i.x() + 0.5f, vector3i.y() + 0.5f, vector3i.z() + 0.5f);
+    public static Vector3d center(Vector3ic vector3i) {
+        return new Vector3d(vector3i.x() + 0.5, vector3i.y() + 0.5, vector3i.z() + 0.5);
     }
 
     /**
@@ -203,7 +204,7 @@ public final class MathUtils {
      *
      * @return {@code true} if the value is in the range, otherwise {@code false}.
      */
-    public static boolean isInRange(float l, float value, float r) {
+    public static boolean isInRange(double l, double value, double r) {
         return l <= value && value <= r;
     }
 
@@ -215,13 +216,13 @@ public final class MathUtils {
      *
      * @return the direction vector.
      */
-    public static Vector3f getDirectionVector(double yaw, double pitch) {
+    public static Vector3d getDirectionVector(double yaw, double pitch) {
         var pitch0 = toRadians(pitch + 90);
         var yaw0 = toRadians(yaw + 90);
         var x = sin(pitch0) * cos(yaw0);
         var z = sin(pitch0) * sin(yaw0);
         var y = cos(pitch0);
-        return new Vector3f((float) x, (float) y, (float) z).normalize();
+        return new Vector3d(x, y, z).normalize();
     }
 
     /**
@@ -231,7 +232,7 @@ public final class MathUtils {
      *
      * @return the yaw.
      */
-    public static double getYawFromVector(Vector3fc vector) {
+    public static double getYawFromVector(Vector3dc vector) {
         double length = vector.x() * vector.x() + vector.z() * vector.z();
         // Prevent NAN
         if (length == 0) {
@@ -248,7 +249,7 @@ public final class MathUtils {
      *
      * @return the pitch.
      */
-    public static double getPitchFromVector(Vector3fc vector) {
+    public static double getPitchFromVector(Vector3dc vector) {
         double length =
                 vector.x() * vector.x() +
                 vector.z() * vector.z() +
@@ -268,7 +269,7 @@ public final class MathUtils {
      *
      * @return the sin value.
      */
-    public static float fastSin(float radian) {
+    public static double fastSin(float radian) {
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F) & 0xFFFF)];
     }
 
@@ -279,7 +280,7 @@ public final class MathUtils {
      *
      * @return the sin value.
      */
-    public static float fastSin(double radian) {
+    public static double fastSin(double radian) {
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F) & 0xFFFF)];
     }
 
@@ -290,7 +291,7 @@ public final class MathUtils {
      *
      * @return the cos value.
      */
-    public static float fastCos(float radian) {
+    public static double fastCos(float radian) {
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F + 16384.0F) & 0xFFFF)];
     }
 
@@ -301,7 +302,7 @@ public final class MathUtils {
      *
      * @return the cos value.
      */
-    public static float fastCos(double radian) {
+    public static double fastCos(double radian) {
         return SIN_LOOK_UP_TABLE[((int) (radian * 10430.378F + 16384.0F) & 0xFFFF)];
     }
 
@@ -365,6 +366,19 @@ public final class MathUtils {
     }
 
     /**
+     * Normalize the vector if it is not zero.
+     * <p>
+     * If the vector is zero, it can't be normalized, otherwise a vector with three NaN values will be produced.
+     *
+     * @param v the vector.
+     *
+     * @return the normalized vector.
+     */
+    public static Vector3d normalizeIfNotZero(Vector3d v) {
+        return v.lengthSquared() > 0 ? v.normalize(v) : v;
+    }
+
+    /**
      * Grow an AABB by a certain amount.
      *
      * @param aabb   the AABB to grow.
@@ -373,6 +387,24 @@ public final class MathUtils {
      * @return the grown AABB.
      */
     public static AABBf grow(AABBf aabb, float growth) {
+        aabb.minX -= growth;
+        aabb.minY -= growth;
+        aabb.minZ -= growth;
+        aabb.maxX += growth;
+        aabb.maxY += growth;
+        aabb.maxZ += growth;
+        return aabb;
+    }
+
+    /**
+     * Grow an AABB by a certain amount.
+     *
+     * @param aabb   the AABB to grow.
+     * @param growth the amount to grow by.
+     *
+     * @return the grown AABB.
+     */
+    public static AABBd grow(AABBd aabb, double growth) {
         aabb.minX -= growth;
         aabb.minY -= growth;
         aabb.minZ -= growth;

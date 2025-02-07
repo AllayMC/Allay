@@ -5,21 +5,21 @@ import lombok.Getter;
 import lombok.Setter;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.eventbus.event.CancellableEvent;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 
 /**
  * @author daoge_cmd
  */
 @Getter
 public class EntityTeleportEvent extends EntityEvent implements CancellableEvent {
-    protected Location3fc from;
+    protected Location3dc from;
     @Setter
-    protected Location3f to;
+    protected Location3d to;
     @Getter
     protected Reason reason;
 
-    public EntityTeleportEvent(Entity entity, Location3fc from, Location3f to, Reason reason) {
+    public EntityTeleportEvent(Entity entity, Location3dc from, Location3d to, Reason reason) {
         super(entity);
         this.from = from;
         this.to = to;

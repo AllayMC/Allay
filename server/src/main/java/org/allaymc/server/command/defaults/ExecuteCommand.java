@@ -5,13 +5,13 @@ import org.allaymc.api.command.SimpleCommand;
 import org.allaymc.api.command.tree.CommandTree;
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.math.location.Location3f;
+import org.allaymc.api.math.location.Location3d;
 import org.allaymc.api.registry.Registries;
 import org.allaymc.api.server.Server;
 import org.allaymc.api.world.DimensionInfo;
 import org.allaymc.server.command.ProxyCommandSender;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 import java.util.List;
 
@@ -58,8 +58,8 @@ public class ExecuteCommand extends SimpleCommand {
                     List<String> remain = context.getResult(2);
 
                     var proxySender = new ProxyCommandSender(context.getSender());
-                    var newLoc = new Location3f(context.getSender().getCmdExecuteLocation());
-                    var newLocFloor = newLoc.floor(new Vector3f());
+                    var newLoc = new Location3d(context.getSender().getCmdExecuteLocation());
+                    var newLocFloor = newLoc.floor(new Vector3d());
                     if (axes.contains("x")) {
                         newLoc.x = newLocFloor.x;
                     }
@@ -102,12 +102,12 @@ public class ExecuteCommand extends SimpleCommand {
                 .pos("pos")
                 .remain("subcommand")
                 .exec(context -> {
-                    Vector3fc pos = context.getResult(1);
+                    Vector3dc pos = context.getResult(1);
                     List<String> remain = context.getResult(2);
                     var sender = context.getSender();
                     var proxySender = new ProxyCommandSender(sender);
                     var loc = sender.getCmdExecuteLocation();
-                    var newLoc = new Location3f(loc);
+                    var newLoc = new Location3d(loc);
                     newLoc.set(pos);
                     proxySender.setCmdExecuteLocation(newLoc);
                     var result = tree.parse(proxySender, remain.toArray(String[]::new));
@@ -139,7 +139,7 @@ public class ExecuteCommand extends SimpleCommand {
                     var sender = context.getSender();
                     var proxySender = new ProxyCommandSender(sender);
                     var loc = sender.getCmdExecuteLocation();
-                    var newLoc = new Location3f(loc);
+                    var newLoc = new Location3d(loc);
                     newLoc.setDimension(dim);
                     proxySender.setCmdExecuteLocation(newLoc);
                     var result = tree.parse(proxySender, remain.toArray(String[]::new));

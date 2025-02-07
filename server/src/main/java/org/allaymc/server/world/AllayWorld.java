@@ -13,8 +13,8 @@ import org.allaymc.api.eventbus.event.world.WeatherChangeEvent;
 import org.allaymc.api.eventbus.event.world.WorldDataSaveEvent;
 import org.allaymc.api.i18n.I18n;
 import org.allaymc.api.i18n.TrKeys;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 import org.allaymc.api.math.position.Position3i;
 import org.allaymc.api.math.position.Position3ic;
 import org.allaymc.api.scheduler.Scheduler;
@@ -433,9 +433,9 @@ public class AllayWorld implements World {
     protected class SpawnPointChunkLoader implements ChunkLoader {
 
         @Override
-        public Location3fc getLocation() {
+        public Location3dc getLocation() {
             var spawnPoint = worldData.getSpawnPoint();
-            return new Location3f(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
+            return new Location3d(spawnPoint.x(), spawnPoint.y(), spawnPoint.z(), getOverWorld());
         }
 
         @Override

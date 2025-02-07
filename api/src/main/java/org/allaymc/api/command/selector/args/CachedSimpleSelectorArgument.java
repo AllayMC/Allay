@@ -7,8 +7,8 @@ import org.allaymc.api.command.CommandSender;
 import org.allaymc.api.command.selector.SelectorSyntaxException;
 import org.allaymc.api.command.selector.SelectorType;
 import org.allaymc.api.entity.Entity;
-import org.allaymc.api.math.location.Location3f;
-import org.allaymc.api.math.location.Location3fc;
+import org.allaymc.api.math.location.Location3d;
+import org.allaymc.api.math.location.Location3dc;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +27,7 @@ public abstract class CachedSimpleSelectorArgument implements SelectorArgument {
     }
 
     @Override
-    public Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3f basePos, String... arguments) throws SelectorSyntaxException {
+    public Predicate<Entity> getPredicate(SelectorType selectorType, CommandSender sender, Location3d basePos, String... arguments) throws SelectorSyntaxException {
         var value = cache.getIfPresent(Sets.newHashSet(arguments));
         if (value == null) {
             value = cache(selectorType, sender, basePos, arguments);
@@ -50,7 +50,7 @@ public abstract class CachedSimpleSelectorArgument implements SelectorArgument {
      *
      * @throws SelectorSyntaxException if the arguments cannot be parsed.
      */
-    protected abstract Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3fc basePos, String... arguments) throws SelectorSyntaxException;
+    protected abstract Predicate<Entity> cache(SelectorType selectorType, CommandSender sender, Location3dc basePos, String... arguments) throws SelectorSyntaxException;
 
     /**
      * Provides the cache service used to store predicates.

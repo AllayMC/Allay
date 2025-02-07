@@ -11,8 +11,8 @@ import org.allaymc.api.eventbus.EventHandler;
 import org.allaymc.server.entity.component.event.CEntityTryDamageEvent;
 import org.cloudburstmc.nbt.NbtMap;
 import org.cloudburstmc.protocol.bedrock.data.entity.EntityDataTypes;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 /**
  * @author daoge_cmd
@@ -100,8 +100,8 @@ public class EntityXpOrbBaseComponentImpl extends EntityPickableBaseComponentImp
     }
 
     @Override
-    public AABBfc getAABB() {
-        return new AABBf(-0.05f, 0f, -0.05f, 0.05f, 0.1f, 0.05f);
+    public AABBdc getAABB() {
+        return new AABBd(-0.05, 0, -0.05, 0.05, 0.1, 0.05);
     }
 
     @EventHandler

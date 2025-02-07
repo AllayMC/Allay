@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.allaymc.api.block.property.enums.MinecraftCardinalDirection;
 import org.jetbrains.annotations.ApiStatus;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 import org.joml.Vector3i;
 import org.joml.Vector3ic;
-import org.joml.primitives.AABBf;
-import org.joml.primitives.AABBfc;
+import org.joml.primitives.AABBd;
+import org.joml.primitives.AABBdc;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -103,12 +103,12 @@ public enum BlockFace {
      *
      * @return the rotated AABB.
      */
-    public AABBf rotateAABB(AABBfc aabb) {
-        var c1 = new Vector3f(aabb.minX(), aabb.minY(), aabb.minZ());
-        var c2 = new Vector3f(aabb.maxX(), aabb.maxY(), aabb.maxZ());
+    public AABBd rotateAABB(AABBdc aabb) {
+        var c1 = new Vector3d(aabb.minX(), aabb.minY(), aabb.minZ());
+        var c2 = new Vector3d(aabb.maxX(), aabb.maxY(), aabb.maxZ());
         var nc1 = rotateVector(c1);
         var nc2 = rotateVector(c2);
-        return new AABBf(
+        return new AABBd(
                 min(nc1.x, nc2.x),
                 min(nc1.y, nc2.y),
                 min(nc1.z, nc2.z),
@@ -126,12 +126,12 @@ public enum BlockFace {
      * @return the rotated vector.
      */
     @SuppressWarnings("SuspiciousNameCombination")
-    public Vector3f rotateVector(Vector3fc vec) {
-        Vector3f result = new Vector3f(vec);
+    public Vector3d rotateVector(Vector3dc vec) {
+        Vector3d result = new Vector3d(vec);
         // Translate to rotation point (0.5, 0.5, 0.5)
-        result.sub(0.5f, 0.5f, 0.5f);
+        result.sub(0.5, 0.5, 0.5);
 
-        float temp;
+        double temp;
         switch (this) {
             case EAST -> {
                 // No rotation needed as EAST is the default orientation
@@ -163,7 +163,7 @@ public enum BlockFace {
         }
 
         // Translate back to original point
-        result.add(0.5f, 0.5f, 0.5f);
+        result.add(0.5, 0.5, 0.5);
 
         return result;
     }

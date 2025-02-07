@@ -7,8 +7,8 @@ import org.allaymc.api.entity.initinfo.EntityInitInfo;
 import org.allaymc.api.entity.type.EntityType;
 import org.allaymc.api.entity.type.EntityTypes;
 import org.allaymc.api.i18n.TrKeys;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
+import org.joml.Vector3d;
+import org.joml.Vector3dc;
 
 /**
  * @author daoge_cmd
@@ -34,11 +34,11 @@ public class SummonCommand extends SimpleCommand {
                         context.addError("%" + TrKeys.M_COMMANDS_SUMMON_FAILED);
                         return context.fail();
                     }
-                    Vector3fc pos = context.getResult(1);
+                    Vector3dc pos = context.getResult(1);
                     if (pos == null) {
                         pos = sender.getCmdExecuteLocation();
                     }
-                    var floorPos = pos.floor(new Vector3f());
+                    var floorPos = pos.floor(new Vector3d());
                     if (dim.getChunkService().getChunkByDimensionPos((int) floorPos.x(), (int) floorPos.z()) == null) {
                         context.addError("%" + TrKeys.M_COMMANDS_SUMMON_OUTOFWORLD);
                         return context.fail();

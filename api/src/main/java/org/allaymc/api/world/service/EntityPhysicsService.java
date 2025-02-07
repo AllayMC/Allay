@@ -2,7 +2,7 @@ package org.allaymc.api.world.service;
 
 import org.allaymc.api.entity.Entity;
 import org.allaymc.api.math.voxelshape.VoxelShape;
-import org.joml.primitives.AABBfc;
+import org.joml.primitives.AABBdc;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public interface EntityPhysicsService {
      *
      * @return The entities that are colliding with the specified aabb.
      */
-    default List<Entity> computeCollidingEntities(AABBfc aabb) {
+    default List<Entity> computeCollidingEntities(AABBdc aabb) {
         return computeCollidingEntities(aabb, entity -> true);
     }
 
@@ -55,7 +55,7 @@ public interface EntityPhysicsService {
      *
      * @return The entities that are colliding with the specified aabb.
      */
-    default List<Entity> computeCollidingEntities(AABBfc aabb, boolean ignoreEntityHasCollision) {
+    default List<Entity> computeCollidingEntities(AABBdc aabb, boolean ignoreEntityHasCollision) {
         return computeCollidingEntities(aabb, entity -> ignoreEntityHasCollision || entity.hasEntityCollision());
     }
 
@@ -67,7 +67,7 @@ public interface EntityPhysicsService {
      *
      * @return The entities that are colliding with the specified aabb and pass the predicate.
      */
-    List<Entity> computeCollidingEntities(AABBfc aabb, AABBOverlapFilter<Entity> predicate);
+    List<Entity> computeCollidingEntities(AABBdc aabb, AABBOverlapFilter<Entity> predicate);
 
     /**
      * @see #computeCollidingEntities(VoxelShape, boolean)
