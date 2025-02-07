@@ -45,6 +45,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 
 ### Changed
 
+- (API) We now used `double`  instead of `float` in entity location, motion, aabb and some other classes which require high precision.
+  This should improve the accuracy of entity movement and collision detection.
 - (API) Renamed `FullContainerTypeBuilder` to `Builder`.
 - (API) Moved method `Chunk#isLoaded` to `UnsafeChunk#isLoaded`.
 - (API) Made method `Dimension#createUpdateBlockPacket` private, consider using `Dimension#sendBlockUpdateTo` method instead.
@@ -55,6 +57,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Replaced `Chunk#batchProcess` method with new `Chunk#applyOperation` and `Chunk#applyOperationInSection` methods.
 - (API) Moved inner class `ItemArmorBaseComponent#ArmorType` to package `org.allaymc.api.item.data`.
 - (API) Changed the default value of `ServerSettings#GenericSettings#defaultPermission` to `PlayerPermission.MEMBER`.
+- (API) `VoxelShape` have being refactored. Now it doesn't allow using `vacancy`, this change is required by physics engine to fix some bugs.
 - Main thread will sleep a short time if gui is enabled when the server exits abnormally. This gives user time to see what goes wrong.
 - Server won't crash if failed to load the descriptor of a plugin now. An error message will be print to the console instead.
 - Server won't crash if failed to create world generator. Void world generator will be used instead.
@@ -75,6 +78,7 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - Fixed the bug that damage that smaller than 1 will never kill an entity even if the entity has only 1 health.
 - Fixed the bug caused by incorrect initial value of runtime id counter. The initial value should be 1 instead of 0.
 - Fixed the bug that `/alwaysday` command actually do the opposite thing.
+- Several bugs in physics engine, including wrong collision detection and wrong movement calculation are fixed.
 
 ### Removed
 
