@@ -350,7 +350,7 @@ public class Explosion {
                     final boolean[] collided = new boolean[1];
                     traverseBlocks(origin, point, pos -> {
                         var block = dimension.getBlockState(pos);
-                        if (block.getBlockStateData().computeOffsetCollisionShape(pos).intersectsRay(origin, point)) {
+                        if (block.getBlockStateData().computeOffsetCollisionShape(pos).intersectsRay(origin, point.sub(origin, new Vector3d()))) {
                             collided[0] = true;
                             return false;
                         }

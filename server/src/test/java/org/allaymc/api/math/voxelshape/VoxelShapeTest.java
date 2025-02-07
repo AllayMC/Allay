@@ -1,6 +1,7 @@
 package org.allaymc.api.math.voxelshape;
 
 import org.allaymc.api.block.data.BlockFace;
+import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.primitives.AABBd;
 import org.junit.jupiter.api.Test;
@@ -272,7 +273,7 @@ class VoxelShapeTest {
                 .solid(0, 0, 0, 1, 1, 1)
                 .vacancy(0.4, 0, 0.4, 0.6, 1, 0.6)
                 .build();
-        assertFalse(vs3.intersectsRay(0.5, 0, 0.5, 0.5, 1, 0.5));
+        assertFalse(vs3.intersectsRay(0.5, 0, 0.5, 0, 1, 0));
 
         var vs4 = VoxelShape
                 .builder()
@@ -296,10 +297,10 @@ class VoxelShapeTest {
                 .solid(0, 0.6, 0, 1, 1, 1)
                 .build();
         assertTrue(vs6.intersectsRay(0, 0, 0, 1, 1, 1));
-        assertFalse(vs6.intersectsRay(0, 0.4, 0, 1, 0.4, 1));
-        assertFalse(vs6.intersectsRay(0, 0.41, 0, 1, 0.41, 1));
-        assertFalse(vs6.intersectsRay(0, 0.59, 0, 1, 0.59, 1));
-        assertFalse(vs6.intersectsRay(0, 0.6, 0, 1, 0.6, 1));
+        assertFalse(vs6.intersectsRay(0, 0.4, 0, 1, 0, 1));
+        assertFalse(vs6.intersectsRay(0, 0.41, 0, 1, 0, 1));
+        assertFalse(vs6.intersectsRay(0, 0.59, 0, 1, 0, 1));
+        assertFalse(vs6.intersectsRay(0, 0.6, 0, 1, 0, 1));
 
         var vs7 = VoxelShape
                 .builder()
@@ -307,6 +308,47 @@ class VoxelShapeTest {
                 .solid(0, 0.1, 0, 1, 1, 1)
                 .vacancy(0.4, 0, 0.4, 0.6, 1, 0.6)
                 .build();
-        assertFalse(vs7.intersectsRay(0.5, 0, 0.5, 0.5, 1, 0.5));
+        assertFalse(vs7.intersectsRay(0.5, 0, 0.5, 0, 1, 0));
+    }
+
+    @Test
+    void testIntersectsRayWithResult() {
+        var result = new Vector2d();
+
+        var vs1 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .build();
+        assertTrue(vs1.intersectsRay(0, 0, 0, 1, 1, 1, result));
+        assertEquals(0, result.x);
+        assertEquals(1, result.y);
+
+        var vs2 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0.1, 0.1, 0.1, 0.9, 0.9, 0.9)
+                .build();
+        assertTrue(vs2.intersectsRay(0, 0, 0, 1, 1, 1, result));
+        assertEquals(0, result.x);
+        assertEquals(1, result.y);
+
+        result.set(0, 0);
+        var vs3 = VoxelShape
+                .builder()
+                .solid(0, 0, 0, 1, 1, 1)
+                .vacancy(0, 0, 0, 1, 1, 1)
+                .build();
+        assertFalse(vs3.intersectsRay(0, 0, 0, 1, 1, 1, result));
+        assertEquals(0, result.x);
+        assertEquals(0, result.y);
+
+        var vs4 = VoxelShape
+                .builder()
+                .solid(0, 0.2, 0, 1, 0.8, 1)
+                .vacancy(0, 0.4, 0, 1, 0.6, 1)
+                .build();
+        assertTrue(vs4.intersectsRay(0, 0, 0, 0, 1, 0, result));
+        assertEquals(0.2, result.x);
+        assertEquals(0.8, result.y);
     }
 }

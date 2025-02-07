@@ -10,6 +10,7 @@ import org.joml.Vector3dc;
 import org.joml.primitives.AABBd;
 import org.joml.primitives.AABBdc;
 import org.joml.primitives.Rayd;
+import org.joml.primitives.Raydc;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -133,7 +134,6 @@ public final class VoxelShape {
      */
     public boolean intersectsAABB(AABBdc other) {
         var aabb = unionAABB();
-        // TODO: This is a bug in JOML-primitives
         if (!aabb.intersectsAABB(other)) return false;
 
         other.intersection(aabb, aabb);
@@ -269,8 +269,7 @@ public final class VoxelShape {
         // Check if any vacancy affects any edge region
         boolean vacancyAffectsEdge = vacancies.stream()
                 .filter(vacancy -> isAlignedWithFace(vacancy, face))
-                .anyMatch(vacancy -> edgeRegions.stream()
-                        .anyMatch(edge -> intersectsRegion(vacancy, face, edge[0], edge[1], edge[2], edge[3])));
+                .anyMatch(vacancy -> edgeRegions.stream().anyMatch(edge -> intersectsRegion(vacancy, face, edge[0], edge[1], edge[2], edge[3])));
 
         if (vacancyAffectsEdge) {
             return false;
@@ -291,43 +290,46 @@ public final class VoxelShape {
     }
 
     /**
-     * @see #intersectsRay(Vector3dc, Vector3dc)
+     * @see #intersectsRay(Raydc)
      */
-    public boolean intersectsRay(double sx, double sy, double sz, double ex, double ey, double ez) {
-        return intersectsRay(new Vector3d(sx, sy, sz), new Vector3d(ex, ey, ez));
+    public boolean intersectsRay(double ox, double oy, double oz, double dx, double dy, double dz) {
+        return intersectsRay(new Vector3d(ox, oy, oz), new Vector3d(dx, dy, dz));
+    }
+
+    /**
+     * @see #intersectsRay(Raydc)
+     */
+    public boolean intersectsRay(Vector3dc origin, Vector3dc direction) {
+        return intersectsRay(new Rayd(origin, direction));
     }
 
     /**
      * Determine whether the given ray intersects this voxel shape.
      *
-     * @param start the start point of the ray.
-     * @param end   the end point of the ray.
+     * @param ray the ray to check.
      *
      * @return {@code true} if the ray intersects this voxel shape, otherwise {@code false}.
      */
-    public boolean intersectsRay(Vector3dc start, Vector3dc end) {
-        var ray = new Rayd(start, end.sub(start, new Vector3d()));
-
+    public boolean intersectsRay(Raydc ray) {
         if (vacancies.isEmpty()) {
             // This would be quicker if no vacancy exists
             return solids.stream().anyMatch(solid -> solid.intersectsRay(ray));
         }
 
-        var solidIntervals = mergeIntervals(intersectsRay(solids, ray));
-        var vacancyIntervals = mergeIntervals(intersectsRay(vacancies, ray));
+        var solidIntervals = mergeAndSortIntervals(intersectsRay(solids, ray));
+        var vacancyIntervals = mergeAndSortIntervals(intersectsRay(vacancies, ray));
 
         // For each solid intervals, check if they can be fully covered by vacancy intervals
         for (var solidInterval : solidIntervals) {
-            double currentStart = solidInterval.x;
             boolean isCovered = false;
 
             for (var vacancyInterval : vacancyIntervals) {
                 // Check if vacancy interval cover the starting point of the currently uncovered part of solid interval
-                if (vacancyInterval.x <= currentStart && vacancyInterval.y >= currentStart) {
+                if (vacancyInterval.x <= solidInterval.x && vacancyInterval.y >= solidInterval.x) {
                     // Update the current starting point to the end point of the vacancy interval
-                    currentStart = Math.max(currentStart, vacancyInterval.y);
+                    solidInterval.x = Math.max(solidInterval.x, vacancyInterval.y);
                     // If the current starting point has exceeded the end point of the solid interval, it means it is completely covered.
-                    if (currentStart >= solidInterval.y) {
+                    if (solidInterval.x >= solidInterval.y) {
                         isCovered = true;
                         break;
                     }
@@ -343,9 +345,101 @@ public final class VoxelShape {
         return false;
     }
 
-    private List<Vector2d> mergeIntervals(List<Vector2d> intervals) {
+    /**
+     * @see #intersectsRay(Raydc, Vector2d)
+     */
+    public boolean intersectsRay(double ox, double oy, double oz, double dx, double dy, double dz, Vector2d result) {
+        return intersectsRay(new Vector3d(ox, oy, oz), new Vector3d(dx, dy, dz), result);
+    }
+
+    /**
+     * @see #intersectsRay(Raydc, Vector2d)
+     */
+    public boolean intersectsRay(Vector3dc origin, Vector3dc direction, Vector2d result) {
+        return intersectsRay(new Rayd(origin, direction), result);
+    }
+
+    /**
+     * Determine whether the given ray intersects this voxel shape. This method is similar to
+     * {@link #intersectsRay(Raydc)} but will save the intersection result.
+     *
+     * @param ray    the ray to check.
+     * @param result a vector which will hold the resulting values of the parameter <i>t</i> in the ray equation <i>p(t) = origin + t * dir</i>
+     *               of the near and far point of intersection if the ray intersects this VoxelShape. Notes that {@code result.y()} will be bigger
+     *               than {@code result.x()}.
+     *
+     * @return {@code true} if the ray intersects this voxel shape, otherwise {@code false}.
+     */
+    public boolean intersectsRay(Raydc ray, Vector2d result) {
+        if (vacancies.isEmpty()) {
+            // This would be quicker if no vacancy exists
+            result.set(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+            var hasIntersection = false;
+            for (var solid : solids) {
+                var vec = new Vector2d();
+                if (solid.intersectsRay(ray, vec)) {
+                    order(vec);
+                    hasIntersection = true;
+                    if (vec.x < result.x) {
+                        result.x = vec.x;
+                    }
+                    if (vec.y > result.y) {
+                        result.y = vec.y;
+                    }
+                }
+            }
+
+            return hasIntersection;
+        }
+
+        var solidIntervals = mergeAndSortIntervals(intersectsRay(solids, ray));
+        var vacancyIntervals = mergeAndSortIntervals(intersectsRay(vacancies, ray));
+
+        // For each solid intervals, check if they can be fully covered by vacancy intervals
+        for (var iterator = solidIntervals.iterator(); iterator.hasNext(); ) {
+            var solidInterval = iterator.next();
+            for (var vacancyInterval : vacancyIntervals) {
+                // Check if vacancy interval cover the starting point of the currently uncovered part of solid interval
+                if (vacancyInterval.x <= solidInterval.x && vacancyInterval.y >= solidInterval.x) {
+                    // Update the current starting point to the end point of the vacancy interval
+                    solidInterval.x = Math.max(solidInterval.x, vacancyInterval.y);
+                    // If the current starting point has exceeded the end point of the solid interval, it means it is completely covered.
+                    if (solidInterval.x >= solidInterval.y) {
+                        iterator.remove();
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (solidIntervals.isEmpty()) {
+            return false;
+        } else {
+            result.set(Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY);
+            for (var solidInterval : solidIntervals) {
+                if (solidInterval.x < result.x) {
+                    result.x = solidInterval.x;
+                }
+                if (solidInterval.y > result.y) {
+                    result.y = solidInterval.y;
+                }
+            }
+
+            return true;
+        }
+    }
+
+    /**
+     * Merge overlapping intervals into a single interval. This method will also sort the merged intervals by their
+     * left boundary. Therefore, we guarantee that vector that has bigger index will have a bigger left boundary.
+     *
+     * @param intervals the intervals to merge.
+     *
+     * @return the merged and sorted intervals.
+     */
+    private List<Vector2d> mergeAndSortIntervals(List<Vector2d> intervals) {
         // Sort by interval starting point
-        intervals.sort((a, b) -> Double.compare(a.x, b.x));
+        intervals.sort(Comparator.comparingDouble(a -> a.x));
         List<Vector2d> merged = new ArrayList<>();
 
         for (Vector2d interval : intervals) {
@@ -362,7 +456,7 @@ public final class VoxelShape {
         return merged;
     }
 
-    private List<Vector2d> intersectsRay(Set<AABBdc> aabbs, Rayd ray) {
+    private List<Vector2d> intersectsRay(Set<AABBdc> aabbs, Raydc ray) {
         var set = new ArrayList<Vector2d>();
         for (var aabb : aabbs) {
             var result = new Vector2d();
@@ -375,12 +469,13 @@ public final class VoxelShape {
     }
 
     private Vector2d order(Vector2d vec) {
-        if (vec.x > vec.y) {
-            double temp = vec.x;
-            vec.x = vec.y;
-            vec.y = temp;
-        }
+        return vec.x > vec.y ? swap(vec) : vec;
+    }
 
+    private Vector2d swap(Vector2d vec) {
+        double temp = vec.x;
+        vec.x = vec.y;
+        vec.y = temp;
         return vec;
     }
 
