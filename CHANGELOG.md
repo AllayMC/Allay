@@ -39,6 +39,8 @@ Unless otherwise specified, any version comparison below is the comparison of se
 - (API) Introduced `ItemStack#isAllEnchantmentsAvailableInEnchantTable` method. This method is used in book item.
 - (API) Introduced `EntityBaseComponent#getStatus` which can get the status of an entity. This status replaced the old boolean flags
   such as `spawned`, `dead`, `willBeSpawnedNextTick` and provide better stability and extensibility.
+- (API) Added `ClientConnectEvent#setDisconnectReason` and `PlayerLoginEvent#setDisconnectReason` methods to set the disconnect reason
+  that will be shown to the client when cancelling these events.
 - Implemented reeds (also called sugar cane) and cactus.
 - Implemented `UpdateSubChunkBlocksPacket` related logic, which will make client load large range block updates much quicker (e.g.
   using `/fill` command to fill a large area).

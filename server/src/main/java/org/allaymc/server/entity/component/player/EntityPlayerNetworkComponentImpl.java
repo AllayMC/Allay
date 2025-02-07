@@ -403,9 +403,9 @@ public class EntityPlayerNetworkComponentImpl implements EntityPlayerNetworkComp
             return;
         }
 
-        var event = new PlayerLoginEvent(thisPlayer);
+        var event = new PlayerLoginEvent(thisPlayer, TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
         if (!event.call()) {
-            disconnect(TrKeys.M_DISCONNECTIONSCREEN_NOREASON);
+            disconnect(event.getDisconnectReason());
             return;
         }
 

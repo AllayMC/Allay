@@ -93,9 +93,9 @@ public class AllayNetworkInterface implements NetworkInterface {
                             return;
                         }
 
-                        var event = new ClientConnectEvent(session);
+                        var event = new ClientConnectEvent(session, "disconnect.disconnected");
                         if (!event.call()) {
-                            session.disconnect();
+                            session.disconnect(event.getDisconnectReason());
                             return;
                         }
 
